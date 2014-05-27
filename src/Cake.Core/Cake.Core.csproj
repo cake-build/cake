@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8074B833-11B8-459F-BB98-BFBA2BC5C698}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Cake.Core</RootNamespace>
+    <AssemblyName>Cake.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CakeContext.cs" />
+    <Compile Include="CakeEngine.cs" />
+    <Compile Include="CakeTask.cs" />
+    <Compile Include="Graph\CakeGraph.cs" />
+    <Compile Include="Graph\CakeGraphBuilder.cs" />
+    <Compile Include="Graph\CakeGraphEdge.cs" />
+    <Compile Include="IO\Directory.cs" />
+    <Compile Include="IO\File.cs" />
+    <Compile Include="IO\FileSystem.cs" />
+    <Compile Include="IO\Globber.cs" />
+    <Compile Include="IO\Globbing\Node.cs" />
+    <Compile Include="IO\Globbing\Nodes\IdentifierNode.cs" />
+    <Compile Include="IO\Globbing\Nodes\RootNode.cs" />
+    <Compile Include="IO\Globbing\Nodes\Roots\RelativeRoot.cs" />
+    <Compile Include="IO\Globbing\Nodes\Roots\UnixRoot.cs" />
+    <Compile Include="IO\Globbing\Nodes\Roots\WindowsRoot.cs" />
+    <Compile Include="IO\Globbing\Nodes\SegmentNode.cs" />
+    <Compile Include="IO\Globbing\Nodes\WildcardNode.cs" />
+    <Compile Include="IO\Globbing\Nodes\WildcardSegmentNode.cs" />
+    <Compile Include="IO\Globbing\Parser.cs" />
+    <Compile Include="IO\Globbing\Scanner.cs" />
+    <Compile Include="IO\Globbing\Token.cs" />
+    <Compile Include="IO\Globbing\TokenKind.cs" />
+    <Compile Include="IO\IDirectory.cs" />
+    <Compile Include="IO\IFile.cs" />
+    <Compile Include="IO\IFileSystem.cs" />
+    <Compile Include="IO\Machine.cs" />
+    <Compile Include="IO\Path.cs" />
+    <Compile Include="IO\DirectoryPath.cs" />
+    <Compile Include="IO\FilePath.cs" />
+    <Compile Include="IO\PathComparer.cs" />
+    <Compile Include="IO\SearchScope.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

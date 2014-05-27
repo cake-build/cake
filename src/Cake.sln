@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake", "Cake\Cake.csproj", "{066B4595-3C61-476B-9B21-7B302D02AE9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.Core", "Cake.Core\Cake.Core.csproj", "{8074B833-11B8-459F-BB98-BFBA2BC5C698}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.Tests", "Cake.Tests\Cake.Tests.csproj", "{75F86C7D-AF8D-4948-91A4-8D54A6F8655D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.ScriptCs", "Cake.ScriptCs\Cake.ScriptCs.csproj", "{DAC2A328-61D2-404A-86FF-6FF7CEE17299}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ScriptCs", "ScriptCs", "{C82505C7-F84E-4A82-8AB2-B9FE9B0CB1F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Roslyn", "Roslyn", "{D29930D2-A59D-4344-A100-121021ECD268}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{066B4595-3C61-476B-9B21-7B302D02AE9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{066B4595-3C61-476B-9B21-7B302D02AE9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{066B4595-3C61-476B-9B21-7B302D02AE9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{066B4595-3C61-476B-9B21-7B302D02AE9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8074B833-11B8-459F-BB98-BFBA2BC5C698}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8074B833-11B8-459F-BB98-BFBA2BC5C698}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8074B833-11B8-459F-BB98-BFBA2BC5C698}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8074B833-11B8-459F-BB98-BFBA2BC5C698}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75F86C7D-AF8D-4948-91A4-8D54A6F8655D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75F86C7D-AF8D-4948-91A4-8D54A6F8655D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75F86C7D-AF8D-4948-91A4-8D54A6F8655D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75F86C7D-AF8D-4948-91A4-8D54A6F8655D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAC2A328-61D2-404A-86FF-6FF7CEE17299}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAC2A328-61D2-404A-86FF-6FF7CEE17299}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAC2A328-61D2-404A-86FF-6FF7CEE17299}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAC2A328-61D2-404A-86FF-6FF7CEE17299}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{066B4595-3C61-476B-9B21-7B302D02AE9D} = {D29930D2-A59D-4344-A100-121021ECD268}
+		{DAC2A328-61D2-404A-86FF-6FF7CEE17299} = {C82505C7-F84E-4A82-8AB2-B9FE9B0CB1F2}
+	EndGlobalSection
+EndGlobal
