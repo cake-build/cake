@@ -46,8 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ScriptPack.cs" />
-    <Compile Include="ScriptPackContext.cs" />
+    <Compile Include="CakeScriptPack.cs" />
+    <Compile Include="CakeScript.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

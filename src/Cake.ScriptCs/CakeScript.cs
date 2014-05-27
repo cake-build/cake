@@ -3,11 +3,11 @@ using ScriptCs.Contracts;
 
 namespace Cake.ScriptCs
 {
-    public sealed class ScriptPackContext : IScriptPackContext
+    public sealed class CakeScript : IScriptPackContext
     {
         private readonly CakeEngine _engine;
 
-        public ScriptPackContext(CakeEngine engine)
+        public CakeScript(CakeEngine engine)
         {
             _engine = engine;
         }
