@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>@project@</id>
+    <version>@build.number@</version>
+    <authors>Patrik Svensson</authors>
+    <owners>Patrik Svensson</owners>
+    <description>Use this library if you want to host Cake tasks.</description>
+    <summary>Cake (C# Make) is a build automation system inspired by Fake.</summary>
+    <licenseUrl>https://github.com/Lunt/Lunt/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/Lunt/Lunt</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <releaseNotes>@releaseNotes@</releaseNotes>
+    <copyright>Copyright (c) Patrik Svensson 2014</copyright>
+    <tags>Cake Build</tags>
+  </metadata>
+</package>

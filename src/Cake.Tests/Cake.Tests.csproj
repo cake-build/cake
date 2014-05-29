@@ -64,6 +64,9 @@
     <Compile Include="IO\Paths\FilePathTests.cs" />
     <Compile Include="IO\PathTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>    
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
