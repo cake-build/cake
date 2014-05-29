@@ -19,7 +19,7 @@ let version = releaseNotes.AssemblyVersion
 let semVersion = releaseNotes.AssemblyVersion + (if buildLabel <> "" then ("-" + buildLabel) else "")
 
 // Define directories.
-let buildDir = "./src/Cake.Core/bin" @@ buildMode
+let buildDir = "./src/Cake.ScriptCs/bin" @@ buildMode
 let buildResultDir = "./build" @@ "v" + semVersion + "/"
 let testResultsDir = buildResultDir @@ "test-results"
 let nugetRoot = buildResultDir @@ "nuget/"
@@ -90,15 +90,8 @@ Target "Run-Unit-Tests" (fun _ ->
 Target "Copy-Files" (fun _ ->
     Block "Copying files" (fun _ ->
         CopyFile binDir (buildDir + "/Cake.Core.dll")
+        CopyFile binDir (buildDir + "/Cake.ScriptCs.dll")
         CopyFiles binDir ["LICENSE"; "README.md"; "ReleaseNotes.md"]
-    )
-)
-
-Target "Package-Files" (fun _ ->
-    Block "Packagin files" (fun _ ->
-        !! (binDir + "**/*") 
-            --(binDir + "**/ReleaseNotes.md")
-            |> Zip binDir (buildResultDir + "Cake-bin-" + releaseNotes.AssemblyVersion + ".zip")
     )
 )
 
@@ -111,7 +104,6 @@ Target "Create-Core-NuGet-Package" (fun _ ->
         CopyFile coreLibDir (binDir @@ "Cake.Core.dll")
         CopyFile coreRootDir (binDir @@ "LICENSE")
         CopyFile coreRootDir (binDir @@ "README.md")
-        CopyFile coreRootDir (binDir @@ "ReleaseNotes.md")
 
         NuGet (fun p ->
             {p with
@@ -122,6 +114,29 @@ Target "Create-Core-NuGet-Package" (fun _ ->
                 ReleaseNotes = toLines releaseNotes.Notes
                 AccessKey = getBuildParamOrDefault "nugetkey" ""
                 Publish = hasBuildParam "nugetkey" }) "./Cake.Core.nuspec"
+    )
+)
+
+Target "Create-ScriptCs-NuGet-Package" (fun _ ->
+    Block "Creating NuGet package" (fun _ ->
+        let coreRootDir = nugetRoot @@ "Cake.ScriptCs"
+        let coreLibDir = coreRootDir @@ "lib/net45/"
+        CleanDirs [coreRootDir; coreLibDir]
+
+        CopyFile coreLibDir (binDir @@ "Cake.Core.dll")
+        CopyFile coreLibDir (binDir @@ "Cake.ScriptCs.dll")
+        CopyFile coreRootDir (binDir @@ "LICENSE")
+        CopyFile coreRootDir (binDir @@ "README.md")
+
+        NuGet (fun p ->
+            {p with
+                Project = "Cake.ScriptCs"                           
+                OutputPath = nugetRoot
+                WorkingDir = coreRootDir
+                Version = releaseNotes.AssemblyVersion
+                ReleaseNotes = toLines releaseNotes.Notes
+                AccessKey = getBuildParamOrDefault "nugetkey" ""
+                Publish = hasBuildParam "nugetkey" }) "./Cake.ScriptCs.nuspec"
     )
 )
 
@@ -138,6 +153,7 @@ Target "Help" (fun _ ->
     printfn "  * Copy-Files"
     printfn "  * Package-Files"
     printfn "  * Create-Core-NuGet-Package"
+    printfn "  * Create-ScriptCs-NuGet-Package"
     printfn "  * All (calls all previous)"
     printfn "")
 
@@ -150,8 +166,8 @@ Target "All" DoNothing
    ==> "Build"
    ==> "Run-Unit-Tests"
    ==> "Copy-Files"
-   //==> "Package-Files"
    ==> "Create-Core-NuGet-Package"
+   ==> "Create-ScriptCs-NuGet-Package"   
    ==> "All"
 
 // Set the default target to the last node in the

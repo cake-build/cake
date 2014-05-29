@@ -10,5 +10,10 @@ namespace Cake.ScriptCs
             var engine = new CakeEngine();
             return new CakeScript(engine);
         }
+
+        public override void Initialize(IScriptPackSession session)
+        {
+            session.ImportNamespace("Cake.Core");
+        }
     }
 }

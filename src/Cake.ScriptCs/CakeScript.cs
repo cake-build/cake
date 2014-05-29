@@ -3,7 +3,7 @@ using ScriptCs.Contracts;
 
 namespace Cake.ScriptCs
 {
-    public sealed class CakeScript : IScriptPackContext
+    public sealed class CakeScript : IScriptPackContext, ICakeEngine
     {
         private readonly CakeEngine _engine;
 

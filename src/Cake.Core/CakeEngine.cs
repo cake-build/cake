@@ -4,7 +4,7 @@ using Cake.Core.IO;
 
 namespace Cake.Core
 {
-    public sealed class CakeEngine
+    public sealed class CakeEngine : ICakeEngine
     {
         private readonly IFileSystem _fileSystem;
         private readonly List<CakeTask> _tasks;

@@ -45,6 +45,7 @@
     <Compile Include="Graph\CakeGraph.cs" />
     <Compile Include="Graph\CakeGraphBuilder.cs" />
     <Compile Include="Graph\CakeGraphEdge.cs" />
+    <Compile Include="ICakeEngine.cs" />
     <Compile Include="IO\Directory.cs" />
     <Compile Include="IO\File.cs" />
     <Compile Include="IO\FileSystem.cs" />
@@ -74,7 +75,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
-    </Compile>    
+    </Compile>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
