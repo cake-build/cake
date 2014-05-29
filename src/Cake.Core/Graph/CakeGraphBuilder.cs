@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Cake.Core.Graph
 {
@@ -21,6 +22,13 @@ namespace Cake.Core.Graph
                 foreach (var dependency in task.Dependencies)
                 {
                     var taskDependency = graph.Find(dependency);
+                    if (taskDependency == null)
+                    {
+                        const string format = "Task '{0}' is dependent on task '{1}' which do not exist.";
+                        var message = string.Format(format, task.Name, dependency);
+                        throw new InvalidOperationException(message);
+                    }
+
                     graph.Connect(taskDependency, task);
                 }
             }

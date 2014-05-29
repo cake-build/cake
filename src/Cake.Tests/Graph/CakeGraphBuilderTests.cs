@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.Graph;
@@ -36,6 +37,22 @@ namespace Cake.Tests.Graph
 
                 // Then
                 Assert.NotNull(result);
+            }
+
+            [Fact]
+            public void Should_Throw_Exception_When_Depending_On_Task_That_Does_Not_Exist()
+            {
+                // Given
+                var tasks = new List<CakeTask>
+                {
+                    new CakeTask("A").IsDependentOn("C")
+                };
+
+                // When
+                var exception = Assert.Throws<InvalidOperationException>(() => CakeGraphBuilder.Build(tasks));
+
+                // Then
+                Assert.Equal("Task 'A' is dependent on task 'C' which do not exist.", exception.Message);
             }
         }
     }
