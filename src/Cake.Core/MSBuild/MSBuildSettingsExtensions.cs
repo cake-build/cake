@@ -8,7 +8,7 @@
             return settings;
         }
 
-        public static MSBuildSettings WithParameter(this MSBuildSettings settings, string name, string value)
+        public static MSBuildSettings WithProperty(this MSBuildSettings settings, string name, string value)
         {
             settings.Properties.Add(name, value);
             return settings;

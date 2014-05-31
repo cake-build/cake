@@ -52,7 +52,7 @@ namespace Cake.Tests.MSBuild
             }
         }
 
-        public sealed class TheParametersProperty
+        public sealed class ThePropertiesProperty
         {
             [Fact]
             public void Should_Return_A_Dictionary_That_Is_Case_Insensitive()

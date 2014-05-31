@@ -37,20 +37,20 @@ namespace Cake.Tests.MSBuild
             }
         }
 
-        public sealed class TheWithParameterMethod
+        public sealed class TheWithPropertyMethod
         {
             [Fact]
-            public void Should_Add_Parameter_To_Configuration()
+            public void Should_Add_Property_To_Configuration()
             {
                 // Given
                 var solution = new FilePath("/src/Solution.sln");
                 var configuration = new MSBuildSettings(solution);
 
                 // When
-                configuration.WithParameter("ParameterName", "Value");
+                configuration.WithProperty("PropertyName", "Value");
 
                 // Then
-                Assert.True(configuration.Properties.ContainsKey("ParameterName"));
+                Assert.True(configuration.Properties.ContainsKey("PropertyName"));
             }
 
             [Fact]
@@ -61,7 +61,7 @@ namespace Cake.Tests.MSBuild
                 var configuration = new MSBuildSettings(solution);
 
                 // When
-                var result = configuration.WithParameter("ParameterName", "Value");
+                var result = configuration.WithProperty("PropertyName", "Value");
 
                 // Then
                 Assert.Equal(configuration, result);

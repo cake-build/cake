@@ -67,15 +67,15 @@ namespace Cake.Tests.MSBuild
             }
 
             [Fact]
-            public void Should_Append_Parameters_To_Process_Arguments()
+            public void Should_Append_Property_To_Process_Arguments()
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture();
                 var runner = fixture.CreateRunner();
 
                 var settings = new MSBuildSettings("./src/Solution.sln");
-                settings.WithParameter("A", "B");
-                settings.WithParameter("C", "D");
+                settings.WithProperty("A", "B");
+                settings.WithProperty("C", "D");
 
                 // When
                 runner.Run(fixture.Context, settings);
