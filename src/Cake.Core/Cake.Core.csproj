@@ -43,6 +43,7 @@
     <Compile Include="CakeEngine.cs" />
     <Compile Include="CakeException.cs" />
     <Compile Include="CakeTask.cs" />
+    <Compile Include="Extensions\CakeTaskExtensions.cs" />
     <Compile Include="Graph\CakeGraph.cs" />
     <Compile Include="Graph\CakeGraphBuilder.cs" />
     <Compile Include="Graph\CakeGraphEdge.cs" />

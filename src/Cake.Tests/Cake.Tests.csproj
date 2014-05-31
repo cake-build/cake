@@ -51,6 +51,7 @@
     <Compile Include="CakeContextTests.cs" />
     <Compile Include="CakeEngineTests.cs" />
     <Compile Include="CakeTaskTests.cs" />
+    <Compile Include="Extensions\CakeTaskExtensionsTests.cs" />
     <Compile Include="Fakes\FakeDirectory.cs" />
     <Compile Include="Fakes\FakeFile.cs" />
     <Compile Include="Fakes\FakeFileStream.cs" />
