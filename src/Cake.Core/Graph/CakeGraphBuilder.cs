@@ -26,7 +26,7 @@ namespace Cake.Core.Graph
                     {
                         const string format = "Task '{0}' is dependent on task '{1}' which do not exist.";
                         var message = string.Format(format, task.Name, dependency);
-                        throw new InvalidOperationException(message);
+                        throw new CakeException(message);
                     }
 
                     graph.Connect(taskDependency, task);

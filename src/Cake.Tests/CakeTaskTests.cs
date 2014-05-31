@@ -63,7 +63,7 @@ namespace Cake.Tests
                 var exception = Record.Exception(() => task.IsDependentOn("other"));
 
                 // Then
-                Assert.IsType<InvalidOperationException>(exception);
+                Assert.IsType<CakeException>(exception);
                 Assert.Equal("The task 'task' already have a dependency on 'other'.", exception.Message);
             }
         }

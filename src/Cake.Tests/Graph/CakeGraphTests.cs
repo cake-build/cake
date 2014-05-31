@@ -50,7 +50,7 @@ namespace Cake.Tests.Graph
                 var exception = Record.Exception(() => graph.Add(node));
 
                 // Then
-                Assert.IsType<InvalidOperationException>(exception);
+                Assert.IsType<CakeException>(exception);
                 Assert.Equal("Node has already been added to graph.", exception.Message);
             }
         }
@@ -132,7 +132,7 @@ namespace Cake.Tests.Graph
                 var exception = Record.Exception(() => graph.Connect(start, start));
 
                 // Then
-                Assert.IsType<InvalidOperationException>(exception);
+                Assert.IsType<CakeException>(exception);
                 Assert.Equal("Reflexive edges in graph are not allowed.", exception.Message);
             }
 
@@ -149,7 +149,7 @@ namespace Cake.Tests.Graph
                 var exception = Record.Exception(() => graph.Connect(end, start));
 
                 // Then
-                Assert.IsType<InvalidOperationException>(exception);
+                Assert.IsType<CakeException>(exception);
                 Assert.Equal("Unidirectional edges in graph are not allowed.", exception.Message);
             }
         }
@@ -255,7 +255,7 @@ namespace Cake.Tests.Graph
 
                 var exception = Record.Exception(() => graph.Traverse("C"));
 
-                Assert.IsType<InvalidOperationException>(exception);
+                Assert.IsType<CakeException>(exception);
                 Assert.Equal("Graph contains circular references.", exception.Message);
             }
         }

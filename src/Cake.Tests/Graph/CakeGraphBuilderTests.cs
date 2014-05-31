@@ -49,7 +49,7 @@ namespace Cake.Tests.Graph
                 };
 
                 // When
-                var exception = Assert.Throws<InvalidOperationException>(() => CakeGraphBuilder.Build(tasks));
+                var exception = Assert.Throws<CakeException>(() => CakeGraphBuilder.Build(tasks));
 
                 // Then
                 Assert.Equal("Task 'A' is dependent on task 'C' which do not exist.", exception.Message);

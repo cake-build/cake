@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="CakeContext.cs" />
     <Compile Include="CakeEngine.cs" />
+    <Compile Include="CakeException.cs" />
     <Compile Include="CakeTask.cs" />
     <Compile Include="Graph\CakeGraph.cs" />
     <Compile Include="Graph\CakeGraphBuilder.cs" />

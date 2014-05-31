@@ -53,7 +53,7 @@ namespace Cake.Core
             {
                 const string format = "The task '{0}' already have a dependency on '{1}'.";
                 var message = string.Format(format, _name, name);
-                throw new InvalidOperationException(message);
+                throw new CakeException(message);
             }
             _dependencies.Add(name);
             return this;

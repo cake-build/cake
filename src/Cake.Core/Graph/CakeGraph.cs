@@ -33,7 +33,7 @@ namespace Cake.Core.Graph
             }
             if (_nodes.Any(x => x.Name == node.Name))
             {                
-                throw new InvalidOperationException("Node has already been added to graph.");
+                throw new CakeException("Node has already been added to graph.");
             }
             _nodes.Add(node);   
         }
@@ -42,11 +42,11 @@ namespace Cake.Core.Graph
         {
             if (start.Name == end.Name)
             {
-                throw new InvalidOperationException("Reflexive edges in graph are not allowed.");
+                throw new CakeException("Reflexive edges in graph are not allowed.");
             }
             if (_edges.Any(x => x.Start.Name == end.Name && x.End.Name == start.Name))
             {
-                throw new InvalidOperationException("Unidirectional edges in graph are not allowed.");
+                throw new CakeException("Unidirectional edges in graph are not allowed.");
             }
             if (_edges.Any(x => x.Start.Name == start.Name && x.End.Name == end.Name))
             {
@@ -95,7 +95,7 @@ namespace Cake.Core.Graph
             }
             else if (!result.Contains(node))
             {
-                throw new InvalidOperationException("Graph contains circular references.");
+                throw new CakeException("Graph contains circular references.");
             }
         }
     }
