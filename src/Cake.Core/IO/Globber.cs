@@ -16,20 +16,26 @@ namespace Cake.Core.IO
     public sealed class Globber
     {
         private readonly IFileSystem _fileSystem;
+        private readonly ICakeEnvironment _environment;
 
-        public Globber(IFileSystem fileSystem)
+        public Globber(IFileSystem fileSystem, ICakeEnvironment environment)
         {
             if (fileSystem == null)
             {
                 throw new ArgumentNullException("fileSystem");
             }
+            if (environment == null)
+            {
+                throw new ArgumentNullException("environment");
+            }
             _fileSystem = fileSystem;
+            _environment = environment;
         }
 
         public IEnumerable<Path> Glob(string pattern)
         {
             var scanner = new Scanner(pattern);
-            var parser = new Parser(scanner, _fileSystem);
+            var parser = new Parser(scanner, _environment);
             var path = parser.Parse();
 
             var rootNodes = new List<Node>();
@@ -67,7 +73,7 @@ namespace Cake.Core.IO
             // Walk the root and return the unique results.
             var segments = new Stack<Node>(((IEnumerable<Node>)path).Reverse());
             var results = Walk(rootDirectory, segments);
-            return new HashSet<Path>(results, new PathComparer(_fileSystem.IsUnix)).ToArray();
+            return new HashSet<Path>(results, new PathComparer(_environment.IsUnix())).ToArray();
         }
 
         private Node FixRootNode(List<Node> rootNodes)
@@ -80,7 +86,7 @@ namespace Cake.Core.IO
                 if (string.IsNullOrWhiteSpace(windowsRoot.Drive))
                 {
                     // Get the drive from the working directory.
-                    var workingDirectory = _fileSystem.WorkingDirectory;
+                    var workingDirectory = _environment.WorkingDirectory;
                     var root = workingDirectory.FullPath.Split(new[] { '/' }).First();
                     return new IdentifierNode(root);
                 }
@@ -91,7 +97,7 @@ namespace Cake.Core.IO
             if (relativeRoot != null)
             {
                 // Get the drive from the working directory.
-                var workingDirectory = _fileSystem.WorkingDirectory;
+                var workingDirectory = _environment.WorkingDirectory;
                 return new IdentifierNode(workingDirectory.FullPath);
             }
 

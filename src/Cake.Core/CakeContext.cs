@@ -3,22 +3,29 @@ using Cake.Core.IO;
 
 namespace Cake.Core
 {
-    public sealed class CakeContext
+    internal sealed class CakeContext : ICakeContext
     {
         private readonly IFileSystem _fileSystem;
+        private readonly ICakeEnvironment _environment;
 
         public IFileSystem FileSystem
         {
             get { return _fileSystem; }
         }
 
-        public CakeContext(IFileSystem fileSystem)
+        public ICakeEnvironment Environment
+        {
+            get { return _environment; }
+        }
+
+        public CakeContext(IFileSystem fileSystem, ICakeEnvironment environment)
         {
             if (fileSystem == null)
             {
                 throw new ArgumentNullException("fileSystem");
             }
             _fileSystem = fileSystem;
+            _environment = environment;
         }
     }
 }

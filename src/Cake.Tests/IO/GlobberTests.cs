@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using Cake.Core;
 using Cake.Core.IO;
 using Cake.Tests.Fixtures;
+using NSubstitute;
 using Xunit;
 
 namespace Cake.Tests.IO
@@ -14,11 +16,24 @@ namespace Cake.Tests.IO
             public void Should_Throw_If_File_System_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => new Globber(null));
+                var environment = Substitute.For<ICakeEnvironment>();
+                var result = Record.Exception(() => new Globber(null, environment));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
                 Assert.Equal("fileSystem", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Environment_Is_Null()
+            {
+                // Given, When
+                var fileSystem = Substitute.For<IFileSystem>();
+                var result = Record.Exception(() => new Globber(fileSystem, null));
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("environment", ((ArgumentNullException)result).ParamName);
             }
         }
 
@@ -29,7 +44,7 @@ namespace Cake.Tests.IO
             {
                 // Given
                 var fixture = new GlobberFixture();
-                var globber = new Globber(fixture.FileSystem);
+                var globber = new Globber(fixture.FileSystem, fixture.Environment);
 
                 // When
                 var result = Record.Exception(() => globber.Glob(null));
@@ -44,7 +59,7 @@ namespace Cake.Tests.IO
             {
                 // Given
                 var fixture = new GlobberFixture();
-                var globber = new Globber(fixture.FileSystem);
+                var globber = new Globber(fixture.FileSystem, fixture.Environment);
 
                 // When
                 var result = globber.Glob("/Temp/**/*.txt").ToArray();
@@ -60,7 +75,7 @@ namespace Cake.Tests.IO
             {
                 // Given
                 var fixture = new GlobberFixture();
-                var globber = new Globber(fixture.FileSystem);
+                var globber = new Globber(fixture.FileSystem, fixture.Environment);
 
                 // When
                 var result = globber.Glob("Hello/World/Text.txt").ToArray();
@@ -75,8 +90,9 @@ namespace Cake.Tests.IO
             public void Will_Fix_Root_If_Drive_Is_Missing_By_Using_The_Drive_From_The_Working_Directory()
             {
                 // Given
-                var fixture = new GlobberFixture(isUnix: false) {FileSystem = {WorkingDirectory = "C:/Working/"}};
-                var globber = new Globber(fixture.FileSystem);
+                var fixture = new GlobberFixture(isUnix: false);
+                fixture.Environment.WorkingDirectory.Returns("C:/Working/");
+                var globber = new Globber(fixture.FileSystem, fixture.Environment);
 
                 // When
                 var result = globber.Glob("/Temp/Hello/World/Text.txt").ToArray();
@@ -91,7 +107,7 @@ namespace Cake.Tests.IO
             {
                 // Given
                 var fixture = new GlobberFixture(isUnix: false);
-                var globber = new Globber(fixture.FileSystem);
+                var globber = new Globber(fixture.FileSystem, fixture.Environment);
 
                 // When
                 var result = Record.Exception(() => globber.Glob("//Hello/World/Text.txt"));

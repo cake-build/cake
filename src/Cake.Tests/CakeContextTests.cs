@@ -14,7 +14,7 @@ namespace Cake.Tests
             public void Should_Throw_If_File_System_Is_Null()
             {
                 // Given, When
-                var exception = Record.Exception(() => new CakeContext(null));
+                var exception = Record.Exception(() => new CakeContext(null, null));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(exception);
@@ -29,7 +29,7 @@ namespace Cake.Tests
             {
                 // Given, When
                 var fileSystem = Substitute.For<IFileSystem>();
-                var context = new CakeContext(fileSystem);
+                var context = new CakeContext(fileSystem, null);
 
                 // Then
                 Assert.Equal(fileSystem, context.FileSystem);

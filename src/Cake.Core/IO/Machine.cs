@@ -4,6 +4,11 @@ namespace Cake.Core.IO
 {
     public static class Machine
     {
+        public static bool Is64BitOperativeSystem()
+        {
+            return Environment.Is64BitOperatingSystem;
+        }
+
         public static bool IsUnix()
         {
             var platform = (int)Environment.OSVersion.Platform;

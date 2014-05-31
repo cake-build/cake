@@ -56,6 +56,7 @@
     <Compile Include="Fakes\FakeFileStream.cs" />
     <Compile Include="Fakes\FakeFileSystem.cs" />
     <Compile Include="Fixtures\GlobberFixture.cs" />
+    <Compile Include="Fixtures\MSBuildRunnerFixture.cs" />
     <Compile Include="Graph\CakeGraphBuilderTests.cs" />
     <Compile Include="Graph\CakeGraphTests.cs" />
     <Compile Include="IO\GlobberTests.cs" />
@@ -63,6 +64,9 @@
     <Compile Include="IO\Paths\DirectoryPathTests.cs" />
     <Compile Include="IO\Paths\FilePathTests.cs" />
     <Compile Include="IO\PathTests.cs" />
+    <Compile Include="MSBuild\MSBuildRunnerTests.cs" />
+    <Compile Include="MSBuild\MSBuildSettingsExtensionsTests.cs" />
+    <Compile Include="MSBuild\MSBuildSettingsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>

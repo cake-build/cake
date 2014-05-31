@@ -5,9 +5,20 @@ using Cake.Core.IO;
 namespace Cake.Core
 {
     public sealed class CakeEngine : ICakeEngine
-    {
+    {        
         private readonly IFileSystem _fileSystem;
+        private readonly ICakeEnvironment _environment;
         private readonly List<CakeTask> _tasks;
+
+        public IFileSystem FileSystem
+        {
+            get { return _fileSystem; }
+        }
+
+        public ICakeEnvironment Environment
+        {
+            get { return _environment; }
+        }
 
         public IReadOnlyList<CakeTask> Tasks
         {
@@ -15,13 +26,14 @@ namespace Cake.Core
         }
 
         public CakeEngine()
-            : this(null)
+            : this(null, null)
         {
         }
 
-        public CakeEngine(IFileSystem fileSystem)
+        public CakeEngine(IFileSystem fileSystem, ICakeEnvironment environment)
         {            
             _fileSystem = fileSystem ?? new FileSystem();
+            _environment = environment ?? new CakeEnvironment();
             _tasks = new List<CakeTask>();
         }
 
@@ -35,20 +47,10 @@ namespace Cake.Core
         public void Run(string target)
         {
             var graph = CakeGraphBuilder.Build(_tasks);
-
-            var context = new CakeContext(_fileSystem);
+            var context = CreateContext();
             foreach (var task in graph.Traverse(target))
             {
-                var shouldExecute = true;
-                foreach (var criteria in task.Criterias)
-                {
-                    if (!criteria(context))
-                    {
-                        shouldExecute = false;
-                        break;
-                    }
-                }
-                if (shouldExecute)
+                if (ShouldTaskExecute(task, context))
                 {
                     foreach (var action in task.Actions)
                     {
@@ -56,6 +58,24 @@ namespace Cake.Core
                     }
                 }
             }
+        }
+
+        private CakeContext CreateContext()
+        {
+            var context = new CakeContext(_fileSystem, _environment);
+            return context;
+        }
+
+        private static bool ShouldTaskExecute(CakeTask task, ICakeContext context)
+        {
+            foreach (var criteria in task.Criterias)
+            {
+                if (!criteria(context))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

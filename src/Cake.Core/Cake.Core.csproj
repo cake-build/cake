@@ -46,7 +46,10 @@
     <Compile Include="Graph\CakeGraph.cs" />
     <Compile Include="Graph\CakeGraphBuilder.cs" />
     <Compile Include="Graph\CakeGraphEdge.cs" />
+    <Compile Include="ICakeContext.cs" />
     <Compile Include="ICakeEngine.cs" />
+    <Compile Include="CakeEnvironment.cs" />
+    <Compile Include="ICakeEnvironment.cs" />
     <Compile Include="IO\Directory.cs" />
     <Compile Include="IO\File.cs" />
     <Compile Include="IO\FileSystem.cs" />
@@ -67,12 +70,21 @@
     <Compile Include="IO\IDirectory.cs" />
     <Compile Include="IO\IFile.cs" />
     <Compile Include="IO\IFileSystem.cs" />
+    <Compile Include="IO\IProcess.cs" />
+    <Compile Include="IO\IProcessRunner.cs" />
     <Compile Include="IO\Machine.cs" />
     <Compile Include="IO\Path.cs" />
     <Compile Include="IO\DirectoryPath.cs" />
     <Compile Include="IO\FilePath.cs" />
     <Compile Include="IO\PathComparer.cs" />
+    <Compile Include="IO\ProcessRunner.cs" />
+    <Compile Include="IO\ProcessWrapper.cs" />
     <Compile Include="IO\SearchScope.cs" />
+    <Compile Include="IO\SpecialPath.cs" />
+    <Compile Include="Extensions\MSBuildExtensions.cs" />
+    <Compile Include="MSBuild\MSBuildRunner.cs" />
+    <Compile Include="MSBuild\MSBuildSettings.cs" />
+    <Compile Include="MSBuild\MSBuildSettingsExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>

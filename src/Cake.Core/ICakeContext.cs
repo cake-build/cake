@@ -2,12 +2,9 @@
 
 namespace Cake.Core
 {
-    public interface ICakeEngine
+    public interface ICakeContext
     {
         IFileSystem FileSystem { get; }
         ICakeEnvironment Environment { get; }
-
-        CakeTask Task(string name);
-        void Run(string target);
     }
 }

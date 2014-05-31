@@ -14,6 +14,7 @@ namespace Cake.ScriptCs
         public override void Initialize(IScriptPackSession session)
         {
             session.ImportNamespace("Cake.Core");
+            session.ImportNamespace("Cake.Core.Extensions");
         }
     }
 }

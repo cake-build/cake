@@ -3,9 +3,21 @@ using ScriptCs.Contracts;
 
 namespace Cake.ScriptCs
 {
+    using Core.IO;
+
     public sealed class CakeScript : IScriptPackContext, ICakeEngine
     {
         private readonly CakeEngine _engine;
+
+        public IFileSystem FileSystem
+        {
+            get { return _engine.FileSystem; }
+        }
+
+        public ICakeEnvironment Environment
+        {
+            get { return _engine.Environment; }
+        }
 
         public CakeScript(CakeEngine engine)
         {

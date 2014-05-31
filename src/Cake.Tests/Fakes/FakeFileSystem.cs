@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Cake.Core.IO;
 
@@ -8,12 +9,6 @@ namespace Cake.Tests.Fakes
     {
         private readonly Dictionary<DirectoryPath, FakeDirectory> _directories;
         private readonly Dictionary<FilePath, FakeFile> _files;
-        private readonly bool _isUnix;
-
-        public bool IsUnix
-        {
-            get { return _isUnix; }
-        }
 
         public Dictionary<DirectoryPath, FakeDirectory> Directories
         {
@@ -29,9 +24,8 @@ namespace Cake.Tests.Fakes
 
         public FakeFileSystem(bool isUnix)
         {
-            _isUnix = isUnix;
-            _directories = new Dictionary<DirectoryPath, FakeDirectory>(new PathComparer(IsUnix));
-            _files = new Dictionary<FilePath, FakeFile>(new PathComparer(IsUnix));
+            _directories = new Dictionary<DirectoryPath, FakeDirectory>(new PathComparer(isUnix));
+            _files = new Dictionary<FilePath, FakeFile>(new PathComparer(isUnix));
             WorkingDirectory = "/Working";
         }
 
@@ -62,6 +56,11 @@ namespace Cake.Tests.Fakes
         public IDirectory GetDirectory(DirectoryPath path)
         {
             return GetDirectory(path, creatable: true);
+        }
+
+        public DirectoryPath GetSpecialFolderPath(Environment.SpecialFolder folder)
+        {
+            throw new NotImplementedException();
         }
 
         public IDirectory GetCreatedDirectory(DirectoryPath path)

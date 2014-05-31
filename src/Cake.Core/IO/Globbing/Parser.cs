@@ -13,13 +13,13 @@ namespace Cake.Core.IO.Globbing
     internal sealed class Parser
     {
         private readonly Scanner _scanner;
-        private readonly IFileSystem _fileSystem;
+        private readonly ICakeEnvironment _environment;
         private Token _currentToken;
 
-        public Parser(Scanner scanner, IFileSystem fileSystem)
+        public Parser(Scanner scanner, ICakeEnvironment environment)
         {
             _scanner = scanner;
-            _fileSystem = fileSystem;
+            _environment = environment;
             _currentToken = null;
         }
 
@@ -53,7 +53,7 @@ namespace Cake.Core.IO.Globbing
 
         private RootNode ParseRoot()
         {
-            if (_fileSystem.IsUnix)
+            if (_environment.IsUnix())
             {
                 // Starts with a separator?
                 if (_currentToken.Kind == TokenKind.PathSeparator)
