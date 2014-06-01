@@ -44,6 +44,8 @@
     <Compile Include="CakeException.cs" />
     <Compile Include="CakeTask.cs" />
     <Compile Include="Extensions\CakeTaskExtensions.cs" />
+    <Compile Include="Extensions\GlobberExtensions.cs" />
+    <Compile Include="Extensions\XUnitExtensions.cs" />
     <Compile Include="Graph\CakeGraph.cs" />
     <Compile Include="Graph\CakeGraphBuilder.cs" />
     <Compile Include="Graph\CakeGraphEdge.cs" />
@@ -71,6 +73,7 @@
     <Compile Include="IO\IDirectory.cs" />
     <Compile Include="IO\IFile.cs" />
     <Compile Include="IO\IFileSystem.cs" />
+    <Compile Include="IO\IGlobber.cs" />
     <Compile Include="IO\IProcess.cs" />
     <Compile Include="IO\IProcessRunner.cs" />
     <Compile Include="IO\Machine.cs" />
@@ -90,6 +93,8 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="XUnit\XUnitRunner.cs" />
+    <Compile Include="XUnit\XUnitSettings.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

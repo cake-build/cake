@@ -6,6 +6,7 @@ namespace Cake.Core
     {
         IFileSystem FileSystem { get; }
         ICakeEnvironment Environment { get; }
+        IGlobber Globber { get; }
 
         CakeTask Task(string name);
         void Run(string target);

@@ -58,6 +58,7 @@
     <Compile Include="Fakes\FakeFileSystem.cs" />
     <Compile Include="Fixtures\GlobberFixture.cs" />
     <Compile Include="Fixtures\MSBuildRunnerFixture.cs" />
+    <Compile Include="Fixtures\XUnitRunnerFixture.cs" />
     <Compile Include="Graph\CakeGraphBuilderTests.cs" />
     <Compile Include="Graph\CakeGraphTests.cs" />
     <Compile Include="IO\GlobberTests.cs" />
@@ -72,6 +73,8 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="XUnit\XUnitRunnerTests.cs" />
+    <Compile Include="XUnit\XUnitSettingsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

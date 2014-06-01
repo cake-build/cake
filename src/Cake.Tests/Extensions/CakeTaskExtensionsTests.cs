@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Cake.Core;
-using Cake.Core.Extensions;
 using Xunit;
+using Cake.Core.Extensions;
 
 namespace Cake.Tests.Extensions
 {

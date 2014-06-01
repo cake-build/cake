@@ -37,7 +37,7 @@ namespace Cake.Tests.IO
             }
         }
 
-        public sealed class TheGlobMethod
+        public sealed class TheMatchMethod
         {
             [Fact]
             public void Should_Throw_If_Pattern_Is_Empty()
@@ -47,7 +47,7 @@ namespace Cake.Tests.IO
                 var globber = new Globber(fixture.FileSystem, fixture.Environment);
 
                 // When
-                var result = Record.Exception(() => globber.Glob(null));
+                var result = Record.Exception(() => globber.Match(null));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -62,7 +62,7 @@ namespace Cake.Tests.IO
                 var globber = new Globber(fixture.FileSystem, fixture.Environment);
 
                 // When
-                var result = globber.Glob("/Temp/**/*.txt").ToArray();
+                var result = globber.Match("/Temp/**/*.txt").ToArray();
 
                 // Then
                 Assert.Equal(2, result.Length);
@@ -78,7 +78,7 @@ namespace Cake.Tests.IO
                 var globber = new Globber(fixture.FileSystem, fixture.Environment);
 
                 // When
-                var result = globber.Glob("Hello/World/Text.txt").ToArray();
+                var result = globber.Match("Hello/World/Text.txt").ToArray();
 
                 // Then
                 Assert.Equal(1, result.Length);
@@ -95,7 +95,7 @@ namespace Cake.Tests.IO
                 var globber = new Globber(fixture.FileSystem, fixture.Environment);
 
                 // When
-                var result = globber.Glob("/Temp/Hello/World/Text.txt").ToArray();
+                var result = globber.Match("/Temp/Hello/World/Text.txt").ToArray();
 
                 // Then
                 Assert.Equal(1, result.Length);
@@ -110,7 +110,7 @@ namespace Cake.Tests.IO
                 var globber = new Globber(fixture.FileSystem, fixture.Environment);
 
                 // When
-                var result = Record.Exception(() => globber.Glob("//Hello/World/Text.txt"));
+                var result = Record.Exception(() => globber.Match("//Hello/World/Text.txt"));
 
                 // Then
                 Assert.IsType<NotSupportedException>(result);

@@ -9,29 +9,41 @@ Cake (C# Make) is a build automation system inspired by [Fake](http://fsharp.git
 ```CSharp
 var cake = Require<CakeScript>();
 
-var shouldRunBuild = new Random(DateTime.Now.Millisecond).Next() % 2 == 0;
+var configuration = Env.ScriptArgs.Count > 0 ? Env.ScriptArgs[0] : null;
+if(configuration == null)
+{
+	configuration = "Debug";
+}
 
-// Define a task
-cake.Task("Hello").Does(c =>
+// Task: Show welcome message.
+cake.Task("Hello").Does(context =>
 {
 	Console.ForegroundColor = ConsoleColor.Yellow;
-	Console.WriteLine("Hello World!");	
+	Console.WriteLine("Welcome!");	
 	Console.ResetColor();
 });
 
-// Define the build task.
+// Task: Build the solution.
 cake.Task("Build")
    .IsDependentOn("Hello")
-   .WithCriteria(c => shouldRunBuild)
-   .Does(c =>
+   .Does(context =>
 {
-	c.MSBuild("./src/Lunt.sln", settings => 
-		settings.WithParameter("Magic","1")
+	context.MSBuild("./src/Cake.sln", settings => 
+		settings.WithProperty("Magic","1")
 			.WithTarget("Build")
-			.SetConfiguration("Debug")
+			.SetConfiguration(configuration)
 		);
 });
 
-// Run the build
-cake.Run("Build");
+// Task: Run xUnit tests.
+cake.Task("Run-Unit-Tests")
+   .IsDependentOn("Build")
+   .Does(context =>
+{
+	context.XUnit(
+		context.GetFiles("./src/**/bin/" + configuration + "/*.Tests.dll"));
+});
+
+// Run the script.
+cake.Run("Run-Unit-Tests");
 ```

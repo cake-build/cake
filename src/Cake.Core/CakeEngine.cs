@@ -8,6 +8,7 @@ namespace Cake.Core
     {        
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
+        private readonly IGlobber _globber;
         private readonly List<CakeTask> _tasks;
 
         public IFileSystem FileSystem
@@ -25,6 +26,11 @@ namespace Cake.Core
             get { return _tasks; }
         }
 
+        public IGlobber Globber
+        {
+            get { return _globber; }
+        }
+
         public CakeEngine()
             : this(null, null)
         {
@@ -34,6 +40,7 @@ namespace Cake.Core
         {            
             _fileSystem = fileSystem ?? new FileSystem();
             _environment = environment ?? new CakeEnvironment();
+            _globber = new Globber(_fileSystem, _environment);
             _tasks = new List<CakeTask>();
         }
 
@@ -62,7 +69,7 @@ namespace Cake.Core
 
         private CakeContext CreateContext()
         {
-            var context = new CakeContext(_fileSystem, _environment);
+            var context = new CakeContext(_fileSystem, _environment, _globber);
             return context;
         }
 

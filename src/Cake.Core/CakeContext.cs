@@ -7,6 +7,7 @@ namespace Cake.Core
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
+        private readonly IGlobber _globber;
 
         public IFileSystem FileSystem
         {
@@ -18,14 +19,28 @@ namespace Cake.Core
             get { return _environment; }
         }
 
-        public CakeContext(IFileSystem fileSystem, ICakeEnvironment environment)
+        public IGlobber Globber
+        {
+            get { return _globber; }
+        }
+
+        public CakeContext(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber)
         {
             if (fileSystem == null)
             {
                 throw new ArgumentNullException("fileSystem");
             }
+            if (environment == null)
+            {
+                throw new ArgumentNullException("environment");
+            }
+            if (globber == null)
+            {
+                throw new ArgumentNullException("globber");
+            }
             _fileSystem = fileSystem;
             _environment = environment;
+            _globber = globber;
         }
     }
 }

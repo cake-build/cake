@@ -104,6 +104,22 @@ namespace Cake.Tests.MSBuild
             }
 
             [Fact]
+            public void Should_Set_Working_Directory()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture();
+                var runner = fixture.CreateRunner();
+                var settings = new MSBuildSettings("./src/Solution.sln");
+
+                // When
+                runner.Run(fixture.Context, settings);
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
+                    p => p.WorkingDirectory == "/Working"));
+            }
+
+            [Fact]
             public void Should_Throw_If_Process_Was_Not_Started()
             {
                 // Given

@@ -19,6 +19,11 @@ namespace Cake.ScriptCs
             get { return _engine.Environment; }
         }
 
+        public IGlobber Globber
+        {
+             get { return _engine.Globber; }
+        }
+
         public CakeScript(CakeEngine engine)
         {
             _engine = engine;

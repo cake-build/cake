@@ -13,7 +13,7 @@ using Cake.Core.IO.Globbing.Nodes.Roots;
 
 namespace Cake.Core.IO
 {
-    public sealed class Globber
+    public sealed class Globber : IGlobber
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
@@ -32,7 +32,7 @@ namespace Cake.Core.IO
             _environment = environment;
         }
 
-        public IEnumerable<Path> Glob(string pattern)
+        public IEnumerable<Path> Match(string pattern)
         {
             var scanner = new Scanner(pattern);
             var parser = new Parser(scanner, _environment);
