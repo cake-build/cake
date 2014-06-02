@@ -90,7 +90,7 @@ namespace Cake.Core
                 {
                     foreach (var action in task.Actions)
                     {
-                        action(this);
+                        action();
                     }
                 }
             }
@@ -100,7 +100,7 @@ namespace Cake.Core
         {
             foreach (var criteria in task.Criterias)
             {
-                if (!criteria(context))
+                if (!criteria())
                 {
                     return false;
                 }

@@ -6,7 +6,7 @@ namespace Cake.ScriptCs
 {
     using Core.IO;
 
-    public sealed class CakeScript : IScriptPackContext, ICakeEngine
+    public sealed class CakeScript : IScriptPackContext, ICakeEngine, ICakeContext
     {
         private readonly CakeEngine _engine;
 

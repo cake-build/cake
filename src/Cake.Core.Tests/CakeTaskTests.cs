@@ -90,7 +90,7 @@ namespace Cake.Core.Tests
                 var task = new CakeTask("task");
 
                 // When
-                task.WithCriteria(c => true);
+                task.WithCriteria(() => true);
 
                 // Then
                 Assert.Equal(1, task.Criterias.Count);
@@ -120,7 +120,7 @@ namespace Cake.Core.Tests
                 var task = new CakeTask("task");
 
                 // When
-                task.Does(c => { });
+                task.Does(() => { });
 
                 // Then
                 Assert.Equal(1, task.Actions.Count);

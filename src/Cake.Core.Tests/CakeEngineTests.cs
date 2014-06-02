@@ -132,9 +132,9 @@ namespace Cake.Core.Tests
                 // Given
                 var result = new List<string>();
                 var engine = new CakeEngineFixture().CreateEngine();
-                engine.Task("A").Does(x => result.Add("A"));
-                engine.Task("B").IsDependentOn("A").Does(x => result.Add("B"));
-                engine.Task("C").IsDependentOn("B").Does(x => result.Add("C"));
+                engine.Task("A").Does(() => result.Add("A"));
+                engine.Task("B").IsDependentOn("A").Does(() => result.Add("B"));
+                engine.Task("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
                 engine.Run("C");
@@ -152,9 +152,9 @@ namespace Cake.Core.Tests
                 // Given
                 var result = new List<string>();
                 var engine = new CakeEngineFixture().CreateEngine();
-                engine.Task("A").Does(x => result.Add("A"));
-                engine.Task("B").IsDependentOn("A").WithCriteria(c => false).Does(x => result.Add("B"));
-                engine.Task("C").IsDependentOn("B").Does(x => result.Add("C"));
+                engine.Task("A").Does(() => result.Add("A"));
+                engine.Task("B").IsDependentOn("A").WithCriteria(() => false).Does(() => result.Add("B"));
+                engine.Task("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
                 engine.Run("C");
@@ -171,9 +171,9 @@ namespace Cake.Core.Tests
                 // Given
                 var result = new List<string>();
                 var engine = new CakeEngineFixture().CreateEngine();
-                engine.Task("A").Does(x => result.Add("A"));
-                engine.Task("B").IsDependentOn("A").WithCriteria(c => true).Does(x => result.Add("B"));
-                engine.Task("C").IsDependentOn("B").Does(x => result.Add("C"));
+                engine.Task("A").Does(() => result.Add("A"));
+                engine.Task("B").IsDependentOn("A").WithCriteria(() => true).Does(() => result.Add("B"));
+                engine.Task("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
                 engine.Run("C");

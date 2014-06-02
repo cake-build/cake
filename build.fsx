@@ -146,23 +146,6 @@ Target "Create-ScriptCs-NuGet-Package" (fun _ ->
     )
 )
 
-Target "Help" (fun _ ->
-    printfn ""
-    printfn "  Please specify the target by calling 'build <Target>'"
-    printfn "  Targets for building:"
-    printfn ""
-    printfn "  * Clean"
-    printfn "  * Update-TeamCity-Build-Number"
-    printfn "  * Set-Versions"
-    printfn "  * Build"
-    printfn "  * Run-Unit-Tests"
-    printfn "  * Copy-Files"
-    printfn "  * Package-Files"
-    printfn "  * Create-Core-NuGet-Package"
-    printfn "  * Create-ScriptCs-NuGet-Package"
-    printfn "  * All (calls all previous)"
-    printfn "")
-
 Target "All" DoNothing
 
 // Setup the target dependency graph.
