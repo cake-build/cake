@@ -90,6 +90,8 @@ Target "Run-Unit-Tests" (fun _ ->
 Target "Copy-Files" (fun _ ->
     Block "Copying files" (fun _ ->
         CopyFile binDir (buildDir + "/Cake.Core.dll")
+        CopyFile binDir (buildDir + "/Cake.MSBuild.dll")
+        CopyFile binDir (buildDir + "/Cake.XUnit.dll")
         CopyFile binDir (buildDir + "/Cake.ScriptCs.dll")
         CopyFiles binDir ["LICENSE"; "README.md"; "ReleaseNotes.md"]
     )
@@ -102,6 +104,8 @@ Target "Create-Core-NuGet-Package" (fun _ ->
         CleanDirs [coreRootDir; coreLibDir]
 
         CopyFile coreLibDir (binDir @@ "Cake.Core.dll")
+        CopyFile coreLibDir (binDir @@ "Cake.MSBuild.dll")
+        CopyFile coreLibDir (binDir @@ "Cake.XUnit.dll")
         CopyFile coreRootDir (binDir @@ "LICENSE")
         CopyFile coreRootDir (binDir @@ "README.md")
 
@@ -124,6 +128,8 @@ Target "Create-ScriptCs-NuGet-Package" (fun _ ->
         CleanDirs [coreRootDir; coreLibDir]
 
         CopyFile coreLibDir (binDir @@ "Cake.Core.dll")
+        CopyFile coreLibDir (binDir @@ "Cake.MSBuild.dll")
+        CopyFile coreLibDir (binDir @@ "Cake.XUnit.dll")
         CopyFile coreLibDir (binDir @@ "Cake.ScriptCs.dll")
         CopyFile coreRootDir (binDir @@ "LICENSE")
         CopyFile coreRootDir (binDir @@ "README.md")
