@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
+using Cake.Core.IO;
+using Cake.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
 
@@ -9,14 +12,84 @@ namespace Cake.Tests
 {
     public sealed class CakeEngineTests
     {
+        public sealed class TheConstructor
+        {
+            [Fact]
+            public void Should_Throw_If_File_System_Is_Null()
+            {
+                // Given
+                var fixture = new CakeEngineFixture {FileSystem = null};
+
+                // When
+                var result = Record.Exception(() => fixture.CreateEngine());
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("fileSystem", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Environment_Is_Null()
+            {
+                // Given
+                var fixture = new CakeEngineFixture { Environment = null };
+
+                // When
+                var result = Record.Exception(() => fixture.CreateEngine());
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("environment", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Log_Is_Null()
+            {
+                // Given
+                var fixture = new CakeEngineFixture { Log = null };
+
+                // When
+                var result = Record.Exception(() => fixture.CreateEngine());
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("log", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Create_Default_Globber_If_The_Provided_One_Is_Null()
+            {
+                // Given
+                var fixture = new CakeEngineFixture { Globber = null };
+
+                // When
+                var engine = fixture.CreateEngine();
+
+                // Then
+                Assert.NotNull(engine.Globber);
+            }
+
+            [Fact]
+            public void Should_Keep_Provided_Globber_If_It_Is_Not_Null()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+
+                // When
+                var engine = fixture.CreateEngine();
+
+                // Then
+                Assert.Equal(fixture.Globber, engine.Globber);
+            }
+        }
+            
         public sealed class TheTaskMethod
         {
             [Fact]
             public void Should_Return_A_New_Task()
             {
                 // Given
-                var log = Substitute.For<ILogger>();
-                var engine = new CakeEngine(log);
+                var engine = new CakeEngineFixture().CreateEngine();
 
                 // When
                 var result = engine.Task("task");
@@ -30,8 +103,7 @@ namespace Cake.Tests
             public void Should_Register_Created_Task()
             {
                 // Given
-                var log = Substitute.For<ILogger>();
-                var engine = new CakeEngine(log);
+                var engine = new CakeEngineFixture().CreateEngine();
 
                 // When
                 var result = engine.Task("task");
@@ -44,8 +116,7 @@ namespace Cake.Tests
             public void Should_Throw_If_Another_Task_With_The_Same_Name_Already_Been_Added()
             {
                 // Given
-                var log = Substitute.For<ILogger>();
-                var engine = new CakeEngine(log);
+                var engine = new CakeEngineFixture().CreateEngine();
                 engine.Task("task");
 
                 // When
@@ -64,8 +135,7 @@ namespace Cake.Tests
             {
                 // Given
                 var result = new List<string>();
-                var log = Substitute.For<ILogger>();
-                var engine = new CakeEngine(log);
+                var engine = new CakeEngineFixture().CreateEngine();
                 engine.Task("A").Does(x => result.Add("A"));
                 engine.Task("B").IsDependentOn("A").Does(x => result.Add("B"));
                 engine.Task("C").IsDependentOn("B").Does(x => result.Add("C"));
@@ -85,8 +155,7 @@ namespace Cake.Tests
             {
                 // Given
                 var result = new List<string>();
-                var log = Substitute.For<ILogger>();
-                var engine = new CakeEngine(log);
+                var engine = new CakeEngineFixture().CreateEngine();
                 engine.Task("A").Does(x => result.Add("A"));
                 engine.Task("B").IsDependentOn("A").WithCriteria(c => false).Does(x => result.Add("B"));
                 engine.Task("C").IsDependentOn("B").Does(x => result.Add("C"));
@@ -105,8 +174,7 @@ namespace Cake.Tests
             {
                 // Given
                 var result = new List<string>();
-                var log = Substitute.For<ILogger>();
-                var engine = new CakeEngine(log);
+                var engine = new CakeEngineFixture().CreateEngine();
                 engine.Task("A").Does(x => result.Add("A"));
                 engine.Task("B").IsDependentOn("A").WithCriteria(c => true).Does(x => result.Add("B"));
                 engine.Task("C").IsDependentOn("B").Does(x => result.Add("C"));

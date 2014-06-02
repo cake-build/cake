@@ -1,5 +1,6 @@
 ﻿using Cake.Core;
 using Cake.Core.Diagnostics;
+using Cake.Core.IO;
 using ScriptCs.Contracts;
 
 namespace Cake.ScriptCs
@@ -8,8 +9,11 @@ namespace Cake.ScriptCs
     {
         public override IScriptPackContext GetContext()
         {
+            var fileSystem = new FileSystem();
+            var environment = new CakeEnvironment();
             var log = new ConsoleLog();
-            var engine = new CakeEngine(log);
+            var globber = new Globber(fileSystem, environment);
+            var engine = new CakeEngine(fileSystem, environment, log, globber);
             return new CakeScript(engine);
         }
 

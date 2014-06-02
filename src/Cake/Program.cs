@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using Cake.Core;
 using Cake.Core.Diagnostics;
+using Cake.Core.IO;
 using Roslyn.Scripting;
 using Roslyn.Scripting.CSharp;
 
@@ -28,10 +28,9 @@ namespace Cake
                 // Read the code from the file.
                 var code = File.ReadAllText(file);
 
-                var log = new NullLog();
-                var host = new CakeEngine(log);
+                var engine = CreateEngine();
                 var script = new ScriptEngine();
-                var session = CreateSession(script, host);
+                var session = CreateSession(script, engine);
 
                 // Execute the script.
                 return Execute(session, code);
@@ -42,6 +41,15 @@ namespace Cake
                 Console.WriteLine(ex.Message);
                 return 1;
             }
+        }
+
+        private static CakeEngine CreateEngine()
+        {
+            var fileSystem = new FileSystem();
+            var environment = new CakeEnvironment();
+            var log = new NullLog();
+            var globber = new Globber(fileSystem, environment);
+            return new CakeEngine(fileSystem, environment, log, globber);
         }
 
         private static Session CreateSession(ScriptEngine script, CakeEngine host)

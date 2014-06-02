@@ -39,7 +39,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CakeContext.cs" />
     <Compile Include="CakeEngine.cs" />
     <Compile Include="CakeException.cs" />
     <Compile Include="CakeTask.cs" />

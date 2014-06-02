@@ -3,7 +3,7 @@ using Cake.Core.IO;
 
 namespace Cake.Core
 {
-    internal sealed class CakeEnvironment : ICakeEnvironment
+    public sealed class CakeEnvironment : ICakeEnvironment
     {
         public DirectoryPath WorkingDirectory { get; set; }
 

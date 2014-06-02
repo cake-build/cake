@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cake.Core.Diagnostics;
 using Cake.Core.Graph;
@@ -6,7 +7,7 @@ using Cake.Core.IO;
 
 namespace Cake.Core
 {
-    public sealed class CakeEngine : ICakeEngine
+    public sealed class CakeEngine : ICakeEngine, ICakeContext
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
@@ -39,17 +40,24 @@ namespace Cake.Core
             get { return _log; }
         }
 
-        public CakeEngine(ILogger log)
-            : this(null, null, log)
+        public CakeEngine(IFileSystem fileSystem, ICakeEnvironment environment, ILogger log, IGlobber globber)
         {
-        }
-
-        public CakeEngine(IFileSystem fileSystem, ICakeEnvironment environment, ILogger log)
-        {            
-            _fileSystem = fileSystem ?? new FileSystem();
-            _environment = environment ?? new CakeEnvironment();
+            if (fileSystem == null)
+            {
+                throw new ArgumentNullException("fileSystem");
+            }
+            if (environment == null)
+            {
+                throw new ArgumentNullException("environment");
+            }
+            if (log == null)
+            {
+                throw new ArgumentNullException("log");
+            }
+            _fileSystem = fileSystem;
+            _environment = environment;
             _log = log;
-            _globber = new Globber(_fileSystem, _environment);
+            _globber = globber ?? new Globber(_fileSystem, _environment);
             _tasks = new List<CakeTask>();
         }
 
@@ -68,23 +76,16 @@ namespace Cake.Core
         public void Run(string target)
         {
             var graph = CakeGraphBuilder.Build(_tasks);
-            var context = CreateContext();           
             foreach (var task in graph.Traverse(target))
             {
-                if (ShouldTaskExecute(task, context))
+                if (ShouldTaskExecute(task, this))
                 {
                     foreach (var action in task.Actions)
                     {
-                        action(context);
+                        action(this);
                     }
                 }
             }
-        }
-
-        private CakeContext CreateContext()
-        {
-            var context = new CakeContext(_fileSystem, _environment, _globber, _log);
-            return context;
         }
 
         private static bool ShouldTaskExecute(CakeTask task, ICakeContext context)

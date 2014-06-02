@@ -1,6 +1,6 @@
 ﻿namespace Cake.Core.IO
 {
-    internal sealed class FileSystem : IFileSystem
+    public sealed class FileSystem : IFileSystem
     {
         public IFile GetFile(FilePath path)
         {
