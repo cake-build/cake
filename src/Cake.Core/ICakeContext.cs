@@ -1,4 +1,5 @@
-﻿using Cake.Core.IO;
+﻿using Cake.Core.Diagnostics;
+using Cake.Core.IO;
 
 namespace Cake.Core
 {
@@ -7,5 +8,6 @@ namespace Cake.Core
         IFileSystem FileSystem { get; }
         ICakeEnvironment Environment { get; }
         IGlobber Globber { get; }
+        ILogger Log { get; }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Cake.Core;
+using Cake.Core.Diagnostics;
+using NSubstitute;
 using Xunit;
 using Cake.Core.Extensions;
 
@@ -16,7 +18,8 @@ namespace Cake.Tests.Extensions
                 {
                     // Given
                     var result = new List<string>();
-                    var engine = new CakeEngine();
+                    var log = Substitute.For<ILogger>();
+                    var engine = new CakeEngine(log);
                     engine.Task("A").Does(x => result.Add("A"));
                     engine.Task("B").IsDependentOn("A").WithCriteria(() => false).Does(x => result.Add("B"));
                     engine.Task("C").IsDependentOn("B").Does(x => result.Add("C"));
@@ -38,7 +41,8 @@ namespace Cake.Tests.Extensions
                 {
                     // Given
                     var result = new List<string>();
-                    var engine = new CakeEngine();
+                    var log = Substitute.For<ILogger>();
+                    var engine = new CakeEngine(log);
                     engine.Task("A").Does(x => result.Add("A"));
                     engine.Task("B").IsDependentOn("A").WithCriteria(false).Does(x => result.Add("B"));
                     engine.Task("C").IsDependentOn("B").Does(x => result.Add("C"));

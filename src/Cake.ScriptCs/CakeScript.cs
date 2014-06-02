@@ -1,4 +1,5 @@
 ﻿using Cake.Core;
+using Cake.Core.Diagnostics;
 using ScriptCs.Contracts;
 
 namespace Cake.ScriptCs
@@ -22,6 +23,11 @@ namespace Cake.ScriptCs
         public IGlobber Globber
         {
              get { return _engine.Globber; }
+        }
+
+        public ILogger Log
+        {
+            get { return _engine.Log; }
         }
 
         public CakeScript(CakeEngine engine)

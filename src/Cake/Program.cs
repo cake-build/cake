@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Roslyn.Scripting;
 using Roslyn.Scripting.CSharp;
 
@@ -26,7 +28,8 @@ namespace Cake
                 // Read the code from the file.
                 var code = File.ReadAllText(file);
 
-                var host = new CakeEngine();
+                var log = new NullLog();
+                var host = new CakeEngine(log);
                 var script = new ScriptEngine();
                 var session = CreateSession(script, host);
 

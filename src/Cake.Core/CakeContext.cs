@@ -1,4 +1,5 @@
 ﻿using System;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Core
@@ -8,6 +9,7 @@ namespace Cake.Core
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
+        private readonly ILogger _log;
 
         public IFileSystem FileSystem
         {
@@ -24,7 +26,12 @@ namespace Cake.Core
             get { return _globber; }
         }
 
-        public CakeContext(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber)
+        public ILogger Log
+        {
+            get { return _log; }
+        }
+
+        public CakeContext(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, ILogger log)
         {
             if (fileSystem == null)
             {
@@ -38,9 +45,14 @@ namespace Cake.Core
             {
                 throw new ArgumentNullException("globber");
             }
+            if (log == null)
+            {
+                throw new ArgumentNullException("log");
+            }
             _fileSystem = fileSystem;
             _environment = environment;
             _globber = globber;
+            _log = log;
         }
     }
 }

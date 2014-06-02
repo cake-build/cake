@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Cake.Core.Diagnostics;
 using Cake.Core.Graph;
 using Cake.Core.IO;
 
 namespace Cake.Core
 {
     public sealed class CakeEngine : ICakeEngine
-    {        
+    {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
+        private readonly ILogger _log;
         private readonly List<CakeTask> _tasks;
 
         public IFileSystem FileSystem
@@ -32,15 +34,21 @@ namespace Cake.Core
             get { return _globber; }
         }
 
-        public CakeEngine()
-            : this(null, null)
+        public ILogger Log
+        {
+            get { return _log; }
+        }
+
+        public CakeEngine(ILogger log)
+            : this(null, null, log)
         {
         }
 
-        public CakeEngine(IFileSystem fileSystem, ICakeEnvironment environment)
+        public CakeEngine(IFileSystem fileSystem, ICakeEnvironment environment, ILogger log)
         {            
             _fileSystem = fileSystem ?? new FileSystem();
             _environment = environment ?? new CakeEnvironment();
+            _log = log;
             _globber = new Globber(_fileSystem, _environment);
             _tasks = new List<CakeTask>();
         }
@@ -60,7 +68,7 @@ namespace Cake.Core
         public void Run(string target)
         {
             var graph = CakeGraphBuilder.Build(_tasks);
-            var context = CreateContext();
+            var context = CreateContext();           
             foreach (var task in graph.Traverse(target))
             {
                 if (ShouldTaskExecute(task, context))
@@ -75,7 +83,7 @@ namespace Cake.Core
 
         private CakeContext CreateContext()
         {
-            var context = new CakeContext(_fileSystem, _environment, _globber);
+            var context = new CakeContext(_fileSystem, _environment, _globber, _log);
             return context;
         }
 

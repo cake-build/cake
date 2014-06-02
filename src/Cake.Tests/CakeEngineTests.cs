@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
+using Cake.Core.Diagnostics;
+using NSubstitute;
 using Xunit;
 
 namespace Cake.Tests
@@ -13,7 +15,8 @@ namespace Cake.Tests
             public void Should_Return_A_New_Task()
             {
                 // Given
-                var engine = new CakeEngine();
+                var log = Substitute.For<ILogger>();
+                var engine = new CakeEngine(log);
 
                 // When
                 var result = engine.Task("task");
@@ -27,7 +30,8 @@ namespace Cake.Tests
             public void Should_Register_Created_Task()
             {
                 // Given
-                var engine = new CakeEngine();
+                var log = Substitute.For<ILogger>();
+                var engine = new CakeEngine(log);
 
                 // When
                 var result = engine.Task("task");
@@ -40,7 +44,8 @@ namespace Cake.Tests
             public void Should_Throw_If_Another_Task_With_The_Same_Name_Already_Been_Added()
             {
                 // Given
-                var engine = new CakeEngine();
+                var log = Substitute.For<ILogger>();
+                var engine = new CakeEngine(log);
                 engine.Task("task");
 
                 // When
@@ -59,7 +64,8 @@ namespace Cake.Tests
             {
                 // Given
                 var result = new List<string>();
-                var engine = new CakeEngine();
+                var log = Substitute.For<ILogger>();
+                var engine = new CakeEngine(log);
                 engine.Task("A").Does(x => result.Add("A"));
                 engine.Task("B").IsDependentOn("A").Does(x => result.Add("B"));
                 engine.Task("C").IsDependentOn("B").Does(x => result.Add("C"));
@@ -79,7 +85,8 @@ namespace Cake.Tests
             {
                 // Given
                 var result = new List<string>();
-                var engine = new CakeEngine();
+                var log = Substitute.For<ILogger>();
+                var engine = new CakeEngine(log);
                 engine.Task("A").Does(x => result.Add("A"));
                 engine.Task("B").IsDependentOn("A").WithCriteria(c => false).Does(x => result.Add("B"));
                 engine.Task("C").IsDependentOn("B").Does(x => result.Add("C"));
@@ -98,7 +105,8 @@ namespace Cake.Tests
             {
                 // Given
                 var result = new List<string>();
-                var engine = new CakeEngine();
+                var log = Substitute.For<ILogger>();
+                var engine = new CakeEngine(log);
                 engine.Task("A").Does(x => result.Add("A"));
                 engine.Task("B").IsDependentOn("A").WithCriteria(c => true).Does(x => result.Add("B"));
                 engine.Task("C").IsDependentOn("B").Does(x => result.Add("C"));
