@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Linq;
-using Cake.Core;
 using Cake.Core.IO;
-using Cake.Tests.Fixtures;
+using Cake.Core.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
 
-namespace Cake.Tests.IO
+namespace Cake.Core.Tests.IO
 {
     public sealed class GlobberTests
     {

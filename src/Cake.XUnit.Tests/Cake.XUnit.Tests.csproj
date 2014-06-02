@@ -46,10 +46,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Fixtures\XUnitRunnerFixture.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XUnitExtensions.cs" />
     <Compile Include="XUnitRunnerTests.cs" />
     <Compile Include="XUnitSettingsTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>    
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -2,7 +2,7 @@
 using Xunit;
 using Xunit.Extensions;
 
-namespace Cake.Tests.IO.Paths
+namespace Cake.Core.Tests.IO.Paths
 {
     public sealed class FilePathTests
     {

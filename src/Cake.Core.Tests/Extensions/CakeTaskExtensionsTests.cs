@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using Cake.Tests.Fixtures;
-using Xunit;
 using Cake.Core.Extensions;
+using Cake.Core.Tests.Fixtures;
+using Xunit;
 
-namespace Cake.Tests.Extensions
+namespace Cake.Core.Tests.Extensions
 {
     public sealed class CakeTaskExtensionsTests
     {

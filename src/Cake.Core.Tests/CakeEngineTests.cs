@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cake.Core;
-using Cake.Tests.Fixtures;
+using Cake.Core.Tests.Fixtures;
 using Xunit;
 
-namespace Cake.Tests
+namespace Cake.Core.Tests
 {
     public sealed class CakeEngineTests
     {

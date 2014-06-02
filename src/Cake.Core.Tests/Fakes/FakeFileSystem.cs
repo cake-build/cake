@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Cake.Core.IO;
 
-namespace Cake.Tests.Fakes
+namespace Cake.Core.Tests.Fakes
 {
     public sealed class FakeFileSystem : IFileSystem
     {

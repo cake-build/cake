@@ -1,7 +1,7 @@
 ﻿using Cake.Core.Diagnostics;
 using Xunit;
 
-namespace Cake.Tests.Diagnostics
+namespace Cake.Core.Tests.Diagnostics
 {
     public class LoggerExtensionsTests
     {

@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Cake.Core;
 using Cake.Core.Graph;
 using Xunit;
 
-namespace Cake.Tests.Graph
+namespace Cake.Core.Tests.Graph
 {
     public sealed class CakeGraphBuilderTests
     {

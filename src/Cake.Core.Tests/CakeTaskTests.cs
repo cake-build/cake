@@ -1,9 +1,8 @@
 ﻿using System;
-using Cake.Core;
 using Xunit;
 using Xunit.Extensions;
 
-namespace Cake.Tests
+namespace Cake.Core.Tests
 {
     public sealed class CakeTaskTests
     {

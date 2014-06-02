@@ -1,9 +1,8 @@
-﻿using Cake.Core;
-using Cake.Core.Diagnostics;
+﻿using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using NSubstitute;
 
-namespace Cake.Tests.Fixtures
+namespace Cake.Core.Tests.Fixtures
 {
     public sealed class CakeEngineFixture
     {

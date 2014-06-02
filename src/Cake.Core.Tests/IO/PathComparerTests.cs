@@ -3,7 +3,7 @@ using Cake.Core.IO;
 using Xunit;
 using Xunit.Extensions;
 
-namespace Cake.Tests.IO
+namespace Cake.Core.Tests.IO
 {
     public sealed class PathComparerTests
     {
