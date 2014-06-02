@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Cake.Core.IO;
-using Cake.Core.XUnit;
 using Xunit;
 
-namespace Cake.Tests.XUnit
+namespace Cake.XUnit.Tests
 {
     public sealed class XUnitSettingsTests
     {

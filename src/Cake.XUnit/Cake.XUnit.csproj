@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DAC2A328-61D2-404A-86FF-6FF7CEE17299}</ProjectGuid>
+    <ProjectGuid>{00470437-65FC-4F59-BBE5-0B8ABCAF55FE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cake.ScriptCs</RootNamespace>
-    <AssemblyName>Cake.ScriptCs</AssemblyName>
+    <RootNamespace>Cake.XUnit</RootNamespace>
+    <AssemblyName>Cake.XUnit</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,14 +28,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ScriptCs.Contracts">
-      <HintPath>..\packages\ScriptCs.Contracts.0.9.0\lib\net45\ScriptCs.Contracts.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -46,29 +39,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CakeScriptPack.cs" />
-    <Compile Include="CakeScript.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="..\SolutionInfo.cs">
-      <Link>Properties\SolutionInfo.cs</Link>
-    </Compile>
+    <Compile Include="XUnitExtensions.cs" />
+    <Compile Include="XUnitRunner.cs" />
+    <Compile Include="XUnitSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
       <Project>{8074b833-11b8-459f-bb98-bfba2bc5c698}</Project>
       <Name>Cake.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Cake.MSBuild\Cake.MSBuild.csproj">
-      <Project>{2c98be45-d5b5-4931-993b-e3ae3499d378}</Project>
-      <Name>Cake.MSBuild</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Cake.XUnit\Cake.XUnit.csproj">
-      <Project>{00470437-65fc-4f59-bbe5-0b8abcaf55fe}</Project>
-      <Name>Cake.XUnit</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

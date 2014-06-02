@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.XUnit;
 
-namespace Cake.Core.Extensions
+namespace Cake.XUnit.Tests
 {
     public static class XUnitExtensions
     {

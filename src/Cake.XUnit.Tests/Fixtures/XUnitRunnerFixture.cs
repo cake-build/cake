@@ -1,10 +1,9 @@
 ﻿using System.Diagnostics;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.XUnit;
 using NSubstitute;
 
-namespace Cake.Tests.Fixtures
+namespace Cake.XUnit.Tests.Fixtures
 {
     public sealed class XUnitRunnerFixture
     {

@@ -7,8 +7,8 @@
     <ProjectGuid>{75F86C7D-AF8D-4948-91A4-8D54A6F8655D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cake.Tests</RootNamespace>
-    <AssemblyName>Cake.Tests</AssemblyName>
+    <RootNamespace>Cake.Core.Tests</RootNamespace>
+    <AssemblyName>Cake.Core.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -58,8 +58,6 @@
     <Compile Include="Fakes\FakeFileSystem.cs" />
     <Compile Include="Fixtures\CakeEngineFixture.cs" />
     <Compile Include="Fixtures\GlobberFixture.cs" />
-    <Compile Include="Fixtures\MSBuildRunnerFixture.cs" />
-    <Compile Include="Fixtures\XUnitRunnerFixture.cs" />
     <Compile Include="Graph\CakeGraphBuilderTests.cs" />
     <Compile Include="Graph\CakeGraphTests.cs" />
     <Compile Include="IO\GlobberTests.cs" />
@@ -67,15 +65,10 @@
     <Compile Include="IO\Paths\DirectoryPathTests.cs" />
     <Compile Include="IO\Paths\FilePathTests.cs" />
     <Compile Include="IO\PathTests.cs" />
-    <Compile Include="MSBuild\MSBuildRunnerTests.cs" />
-    <Compile Include="MSBuild\MSBuildSettingsExtensionsTests.cs" />
-    <Compile Include="MSBuild\MSBuildSettingsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="XUnit\XUnitRunnerTests.cs" />
-    <Compile Include="XUnit\XUnitSettingsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -86,7 +79,9 @@
       <Name>Cake.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="XUnit\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

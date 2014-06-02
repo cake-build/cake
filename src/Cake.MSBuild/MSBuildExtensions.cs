@@ -1,8 +1,8 @@
 ﻿using System;
+using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.MSBuild;
 
-namespace Cake.Core.Extensions
+namespace Cake.MSBuild
 {
     public static class MSBuildExtensions
     {

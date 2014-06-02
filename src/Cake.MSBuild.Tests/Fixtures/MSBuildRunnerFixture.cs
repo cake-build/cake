@@ -1,10 +1,9 @@
 ﻿using System.Diagnostics;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.MSBuild;
 using NSubstitute;
 
-namespace Cake.Tests.Fixtures
+namespace Cake.MSBuild.Tests.Fixtures
 {
     public sealed class MSBuildRunnerFixture
     {

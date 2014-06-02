@@ -2,12 +2,11 @@
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.XUnit;
-using Cake.Tests.Fixtures;
+using Cake.XUnit.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
 
-namespace Cake.Tests.XUnit
+namespace Cake.XUnit.Tests
 {
     public sealed class XUnitRunnerTests
     {

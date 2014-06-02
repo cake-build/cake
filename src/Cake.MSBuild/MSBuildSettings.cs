@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Cake.Core.IO;
 
-namespace Cake.Core.MSBuild
+namespace Cake.MSBuild
 {
     public sealed class MSBuildSettings
     {

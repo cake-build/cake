@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Cake.Core.IO;
 
-namespace Cake.Core.XUnit
+namespace Cake.XUnit
 {
     public sealed class XUnitSettings
     {

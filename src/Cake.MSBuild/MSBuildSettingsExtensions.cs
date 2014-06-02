@@ -1,4 +1,4 @@
-﻿namespace Cake.Core.MSBuild
+﻿namespace Cake.MSBuild
 {
     public static class MSBuildSettingsExtensions
     {

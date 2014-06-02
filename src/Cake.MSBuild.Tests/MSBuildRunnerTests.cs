@@ -1,13 +1,12 @@
 ﻿using System.Diagnostics;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.MSBuild;
-using Cake.Tests.Fixtures;
+using Cake.MSBuild.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
 using Xunit.Extensions;
 
-namespace Cake.Tests.MSBuild
+namespace Cake.MSBuild.Tests
 {
     public sealed class MSBuildRunnerTests
     {

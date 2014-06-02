@@ -20,11 +20,11 @@ namespace Cake.ScriptCs
         public override void Initialize(IScriptPackSession session)
         {
             session.ImportNamespace("Cake.Core");
-            session.ImportNamespace("Cake.Core.IO");
-            session.ImportNamespace("Cake.Core.Extensions");
-            session.ImportNamespace("Cake.Core.MSBuild");
-            session.ImportNamespace("Cake.Core.XUnit");
             session.ImportNamespace("Cake.Core.Diagnostics");
+            session.ImportNamespace("Cake.Core.Extensions");
+            session.ImportNamespace("Cake.Core.IO");
+            session.ImportNamespace("Cake.MSBuild");
+            session.ImportNamespace("Cake.XUnit");            
         }
     }
 }

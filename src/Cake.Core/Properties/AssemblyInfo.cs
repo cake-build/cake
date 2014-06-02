@@ -14,4 +14,6 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Make internals visible to unit test assembly.
-[assembly: InternalsVisibleTo("Cake.Tests")]
+[assembly: InternalsVisibleTo("Cake.Core.Tests")]
+[assembly: InternalsVisibleTo("Cake.MSBuild")]
+[assembly: InternalsVisibleTo("Cake.XUnit")]

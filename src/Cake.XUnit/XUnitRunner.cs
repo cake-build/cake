@@ -1,20 +1,16 @@
 ﻿using System.Diagnostics;
 using System.Linq;
+using Cake.Core;
 using Cake.Core.Extensions;
 using Cake.Core.IO;
 
-namespace Cake.Core.XUnit
+namespace Cake.XUnit
 {
     public sealed class XUnitRunner
     {
         private readonly IProcessRunner _runner;
 
-        public XUnitRunner()
-            : this(null)
-        {          
-        }
-
-        public XUnitRunner(IProcessRunner runner)
+        public XUnitRunner(IProcessRunner runner = null)
         {
             _runner = runner ?? new ProcessRunner();
         }

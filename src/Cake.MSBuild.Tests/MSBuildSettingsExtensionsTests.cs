@@ -1,8 +1,7 @@
 ﻿using Cake.Core.IO;
-using Cake.Core.MSBuild;
 using Xunit;
 
-namespace Cake.Tests.MSBuild
+namespace Cake.MSBuild.Tests
 {
     public sealed class MSBuildSettingsExtensionsTests
     {

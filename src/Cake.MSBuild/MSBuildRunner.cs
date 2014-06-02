@@ -1,20 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Cake.Core;
 using Cake.Core.IO;
 
-namespace Cake.Core.MSBuild
+namespace Cake.MSBuild
 {
     public sealed class MSBuildRunner
     {
         private readonly IProcessRunner _runner;
 
-        public MSBuildRunner()
-            : this(null)
-        {
-        }
-
-        public MSBuildRunner(IProcessRunner runner)
+        public MSBuildRunner(IProcessRunner runner = null)
         {
             _runner = runner ?? new ProcessRunner();
         }
