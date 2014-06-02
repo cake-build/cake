@@ -1,9 +1,5 @@
 ﻿using System.Collections.Generic;
-using Cake.Core;
-using Cake.Core.Diagnostics;
-using Cake.Core.IO;
 using Cake.Tests.Fixtures;
-using NSubstitute;
 using Xunit;
 using Cake.Core.Extensions;
 

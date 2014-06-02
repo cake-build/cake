@@ -76,6 +76,14 @@ namespace Cake.Core
         public void Run(string target)
         {
             var graph = CakeGraphBuilder.Build(_tasks);
+
+            // Make sure target exist.
+            if (graph.Find(target) == null)
+            {
+                const string format = "The target '{0}' was not found.";
+                throw new CakeException(string.Format(format, target));
+            }
+
             foreach (var task in graph.Traverse(target))
             {
                 if (ShouldTaskExecute(task, this))

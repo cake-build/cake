@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
-using Cake.Core.Diagnostics;
-using Cake.Core.IO;
 using Cake.Tests.Fixtures;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Tests
@@ -187,6 +184,20 @@ namespace Cake.Tests
                 Assert.Equal("A", result[0]);
                 Assert.Equal("B", result[1]);
                 Assert.Equal("C", result[2]);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Target_Was_Not_Found()
+            {
+                // Given
+                var engine = new CakeEngineFixture().CreateEngine();
+
+                // When
+                var result = Record.Exception(() => engine.Run("Run-Some-Tests"));
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("The target 'Run-Some-Tests' was not found.", result.Message);
             }
         }
     }
