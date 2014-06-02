@@ -16,7 +16,7 @@ if(configuration == null)
 }
 
 // Task: Show welcome message.
-cake.Task("Hello").Does(context =>
+cake.Task("Hello").Does(() =>
 {
 	Console.ForegroundColor = ConsoleColor.Yellow;
 	Console.WriteLine("Welcome!");	
@@ -26,22 +26,22 @@ cake.Task("Hello").Does(context =>
 // Task: Build the solution.
 cake.Task("Build")
    .IsDependentOn("Hello")
-   .Does(context =>
+   .Does(() =>
 {
-	context.MSBuild("./src/Cake.sln", settings => 
+	cake.MSBuild("./src/Cake.sln", settings => 
 		settings.WithProperty("Magic","1")
 			.WithTarget("Build")
 			.SetConfiguration(configuration)
 		);
 });
 
-// Task: Run xUnit tests.
+// Task: Run xUnit unit tests.
 cake.Task("Run-Unit-Tests")
    .IsDependentOn("Build")
-   .Does(context =>
+   .Does(() =>
 {
-	context.XUnit(
-		context.GetFiles("./src/**/bin/" + configuration + "/*.Tests.dll"));
+	cake.XUnit(
+		cake.GetFiles("./src/**/bin/" + configuration + "/*.Tests.dll"));
 });
 
 // Run the script.
