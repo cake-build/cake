@@ -35,6 +35,21 @@ namespace Cake.Tests
                 // Then
                 Assert.True(engine.Tasks.Contains(result));         
             }
+
+            [Fact]
+            public void Should_Throw_If_Another_Task_With_The_Same_Name_Already_Been_Added()
+            {
+                // Given
+                var engine = new CakeEngine();
+                engine.Task("task");
+
+                // When
+                var result = Record.Exception(() => engine.Task("task"));
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("Another task with the name 'task' has already been added.", result.Message);
+            }
         }
 
         public sealed class TheRunMethod

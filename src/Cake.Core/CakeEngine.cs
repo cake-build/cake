@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Cake.Core.Graph;
 using Cake.Core.IO;
 
@@ -46,6 +47,11 @@ namespace Cake.Core
 
         public CakeTask Task(string name)
         {
+            if (_tasks.Any(x => x.Name == name))
+            {
+                const string format = "Another task with the name '{0}' has already been added.";
+                throw new CakeException(string.Format(format, name));
+            }
             var task = new CakeTask(name);
             _tasks.Add(task);
             return task;
