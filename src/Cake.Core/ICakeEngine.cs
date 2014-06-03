@@ -3,13 +3,8 @@ using Cake.Core.IO;
 
 namespace Cake.Core
 {
-    public interface ICakeEngine
+    public interface ICakeEngine : ICakeContext
     {
-        IFileSystem FileSystem { get; }
-        ICakeEnvironment Environment { get; }
-        IGlobber Globber { get; }
-        ILogger Log { get; }
-
         CakeTask Task(string name);
         void Run(string target);
     }

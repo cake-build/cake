@@ -7,7 +7,7 @@ using Cake.Core.IO;
 
 namespace Cake.Core
 {
-    public sealed class CakeEngine : ICakeEngine, ICakeContext
+    public sealed class CakeEngine : ICakeEngine
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
