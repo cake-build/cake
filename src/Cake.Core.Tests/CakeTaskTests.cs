@@ -80,7 +80,7 @@ namespace Cake.Core.Tests
 
                 // Then
                 Assert.IsType<ArgumentNullException>(exception);
-                Assert.Equal("criteria", ((ArgumentNullException) exception).ParamName);
+                Assert.Equal("criteria", ((ArgumentNullException)exception).ParamName);
             }
 
             [Fact]
@@ -99,31 +99,64 @@ namespace Cake.Core.Tests
 
         public sealed class TheDoesMethod
         {
-            [Fact]
-            public void Should_Throw_If_Action_Is_Null()
+            public class WithoutContext
             {
-                // Given
-                var task = new CakeTask("task");
+                [Fact]
+                private void Should_Throw_If_Action_Is_Null()
+                {
+                    // Given
+                    var task = new CakeTask("task");
 
-                // When
-                var exception = Record.Exception(() => task.Does(null));
+                    // When
+                    var exception = Record.Exception(() => task.Does((Action)null));
 
-                // Then
-                Assert.IsType<ArgumentNullException>(exception);
-                Assert.Equal("action", ((ArgumentNullException)exception).ParamName);
+                    // Then
+                    Assert.IsType<ArgumentNullException>(exception);
+                    Assert.Equal("action", ((ArgumentNullException)exception).ParamName);
+                }
+
+                [Fact]
+                public void Should_Add_Action()
+                {
+                    // Given
+                    var task = new CakeTask("task");
+
+                    // When
+                    task.Does(() => { });
+
+                    // Then
+                    Assert.Equal(1, task.Actions.Count);
+                }
             }
 
-            [Fact]
-            public void Should_Add_Action()
+            public class WithContext
             {
-                // Given
-                var task = new CakeTask("task");
+                [Fact]
+                private void Should_Throw_If_Action_Is_Null()
+                {
+                    // Given
+                    var task = new CakeTask("task");
 
-                // When
-                task.Does(() => { });
+                    // When
+                    var exception = Record.Exception(() => task.Does((Action<ICakeContext>)null));
 
-                // Then
-                Assert.Equal(1, task.Actions.Count);
+                    // Then
+                    Assert.IsType<ArgumentNullException>(exception);
+                    Assert.Equal("action", ((ArgumentNullException)exception).ParamName);
+                }
+
+                [Fact]
+                public void Should_Add_Action()
+                {
+                    // Given
+                    var task = new CakeTask("task");
+
+                    // When
+                    task.Does(c => { });
+
+                    // Then
+                    Assert.Equal(1, task.Actions.Count);
+                }
             }
         }
     }

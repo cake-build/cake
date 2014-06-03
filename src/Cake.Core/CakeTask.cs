@@ -9,7 +9,7 @@ namespace Cake.Core
         private readonly string _name;
         private readonly List<string> _dependencies;
         private readonly List<Func<bool>> _criterias;
-        private readonly List<Action> _actions;
+        private readonly List<Action<ICakeContext>> _actions;
 
         public string Name
         {
@@ -26,7 +26,7 @@ namespace Cake.Core
             get { return _criterias; }
         }
 
-        public IReadOnlyList<Action> Actions
+        public IReadOnlyList<Action<ICakeContext>> Actions
         {
             get { return _actions; }
         }
@@ -44,7 +44,7 @@ namespace Cake.Core
             _name = name;
             _dependencies = new List<string>();
             _criterias = new List<Func<bool>>();
-            _actions = new List<Action>();
+            _actions = new List<Action<ICakeContext>>();
         }
 
         public CakeTask IsDependentOn(string name)
@@ -70,6 +70,15 @@ namespace Cake.Core
         }
 
         public CakeTask Does(Action action)
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException("action");
+            }
+            return Does(context => action());
+        }
+
+        public CakeTask Does(Action<ICakeContext> action)
         {
             if (action == null)
             {

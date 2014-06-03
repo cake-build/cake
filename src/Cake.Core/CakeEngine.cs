@@ -90,7 +90,7 @@ namespace Cake.Core
                 {
                     foreach (var action in task.Actions)
                     {
-                        action();
+                        action(this);
                     }
                 }
             }
