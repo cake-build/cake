@@ -19,7 +19,7 @@ namespace Cake.XUnit.Tests
                 var fixture = new XUnitRunnerFixture();
                 fixture.Globber.Match("./tools/**/xunit.console.clr4.exe").Returns(Enumerable.Empty<Path>());
                 var runner = fixture.CreateRunner();
-                var settings = new XUnitSettings(new FilePath[] { "./Test1", "./Test2" });
+                var settings = new XUnitSettings("./Test1");
 
                 // When
                 var result = Record.Exception(() => runner.Run(fixture.Context, settings));
@@ -35,14 +35,14 @@ namespace Cake.XUnit.Tests
                 // Given
                 var fixture = new XUnitRunnerFixture();                                
                 var runner = fixture.CreateRunner();
-                var settings = new XUnitSettings(new FilePath[] { "./Test1", "./Test2" });
+                var settings = new XUnitSettings("./Test1");
 
                 // When
                 runner.Run(fixture.Context, settings);
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "\"Test1\" \"Test2\""));
+                    p => p.Arguments == "\"Test1\""));
             }
 
             [Fact]
@@ -51,7 +51,7 @@ namespace Cake.XUnit.Tests
                 // Given
                 var fixture = new XUnitRunnerFixture();
                 var runner = fixture.CreateRunner();
-                var settings = new XUnitSettings(new FilePath[] { "./Test1", "./Test2" });
+                var settings = new XUnitSettings("./Test1");
 
                 // When
                 runner.Run(fixture.Context, settings);
@@ -68,7 +68,7 @@ namespace Cake.XUnit.Tests
                 var fixture = new XUnitRunnerFixture();
                 fixture.ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns((IProcess)null);
                 var runner = fixture.CreateRunner();
-                var settings = new XUnitSettings(new FilePath[] { "./Test1", "./Test2" });
+                var settings = new XUnitSettings("./Test1");
 
                 // When
                 var result = Record.Exception(() => runner.Run(fixture.Context, settings));
@@ -79,29 +79,13 @@ namespace Cake.XUnit.Tests
             }
 
             [Fact]
-            public void Should_Throw_If_No_Assemblies_Were_Provided()
-            {
-                // Given
-                var fixture = new XUnitRunnerFixture();
-                var runner = fixture.CreateRunner();
-                var settings = new XUnitSettings(new FilePath[] { });
-
-                // When
-                var result = Record.Exception(() => runner.Run(fixture.Context, settings));
-
-                // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("No assembly paths specified.", result.Message);   
-            }
-
-            [Fact]
             public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
             {
                 // Given
                 var fixture = new XUnitRunnerFixture();
                 fixture.Process.GetExitCode().Returns(1);
                 var runner = fixture.CreateRunner();
-                var settings = new XUnitSettings(new FilePath[] { "./Test1", "./Test2" });
+                var settings = new XUnitSettings("./Test1");
 
                 // When
                 var result = Record.Exception(() => runner.Run(fixture.Context, settings));

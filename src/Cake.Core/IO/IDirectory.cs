@@ -6,7 +6,8 @@ namespace Cake.Core.IO
     {
         DirectoryPath Path { get; }
         bool Exists { get; }
-        bool Create();
+        void Create();
+        void Delete(bool recursive);
 
         IEnumerable<IDirectory> GetDirectories(string filter, SearchScope scope);
         IEnumerable<IFile> GetFiles(string filter, SearchScope scope);

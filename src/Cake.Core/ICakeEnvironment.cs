@@ -8,5 +8,6 @@ namespace Cake.Core
         bool Is64BitOperativeSystem();
         bool IsUnix();        
         DirectoryPath GetSpecialPath(SpecialPath path);
+        DirectoryPath GetApplicationRoot();
     }
 }

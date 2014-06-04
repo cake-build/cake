@@ -8,14 +8,14 @@ namespace Cake.Core.Tests.Fixtures
     {
         public IFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
-        public ILogger Log { get; set; }
+        public ICakeLog Log { get; set; }
         public IGlobber Globber { get; set; }
 
         public CakeEngineFixture()
         {
             FileSystem = Substitute.For<IFileSystem>();
             Environment = Substitute.For<ICakeEnvironment>();
-            Log = Substitute.For<ILogger>();
+            Log = Substitute.For<ICakeLog>();
             Globber = Substitute.For<IGlobber>();
         }
 

@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using Cake.Core;
-using Cake.Core.Extensions;
 using Cake.Core.IO;
 
 namespace Cake.XUnit
@@ -26,18 +25,13 @@ namespace Cake.XUnit
             }
 
             // Get the assemblies to build.
-            var assemblies = settings.GetAssemblyPaths().ToArray();
-            if (assemblies.Length == 0)
-            {
-                throw new CakeException("No assembly paths specified.");
-            }
-            var parameters = assemblies.Select(x => string.Concat("\"", x.FullPath, "\"")).ToArray();
+            var assembly = string.Concat("\"", settings.Assembly.FullPath, "\"");
 
             // Create the process start info.
             var info = new ProcessStartInfo(runnerPath.FullPath)
             {
                 WorkingDirectory = context.Environment.WorkingDirectory.FullPath,
-                Arguments = string.Join(" ", parameters),
+                Arguments = assembly,
                 UseShellExecute = false
             };
 

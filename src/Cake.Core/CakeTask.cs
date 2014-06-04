@@ -59,6 +59,11 @@ namespace Cake.Core
             return this;
         }
 
+        public CakeTask WithCriteria(bool criteria)
+        {
+            return WithCriteria(() => criteria);
+        }
+
         public CakeTask WithCriteria(Func<bool> criteria)
         {
             if (criteria == null)

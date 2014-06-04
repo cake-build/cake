@@ -31,13 +31,21 @@ namespace Cake.Core.Tests.Fakes
             _creatable = creatable;
         }
 
-        public bool Create()
+        public void Create()
         {
             if (_creatable)
             {
                 _exist = true;
             }
-            return _creatable;
+        }
+
+        public void Delete(bool recursive)
+        {
+            if (recursive)
+            {
+                throw new NotSupportedException();
+            }
+            _exist = false;
         }
 
         public IEnumerable<IDirectory> GetDirectories(string filter, SearchScope scope)

@@ -28,6 +28,11 @@ namespace Cake.Core.IO
             _file = new FileInfo(path.FullPath);
         }
 
+        public void Copy(FilePath destination)
+        {
+            _file.CopyTo(destination.FullPath);
+        }
+
         public Stream Open(FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
         {
             return _file.Open(fileMode, fileAccess, fileShare);

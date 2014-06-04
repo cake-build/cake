@@ -9,7 +9,7 @@ namespace Cake.Core.IO
         {
         }
 
-        public FilePath Combine(FilePath path)
+        public FilePath GetFilePath(FilePath path)
         {
             if (path == null)
             {

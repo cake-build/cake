@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -26,17 +25,14 @@ namespace Cake.Core.IO
             _directory = new DirectoryInfo(_path.FullPath);
         }
 
-        public bool Create()
+        public void Create()
         {
-            try
-            {
-                _directory.Create();
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            _directory.Create();
+        }
+
+        public void Delete(bool recursive)
+        {
+            _directory.Delete(recursive);
         }
 
         public IEnumerable<IDirectory> GetDirectories(string filter, SearchScope scope)

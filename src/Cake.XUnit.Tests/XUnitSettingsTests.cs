@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using Cake.Core.IO;
 using Xunit;
 
 namespace Cake.XUnit.Tests
@@ -17,25 +15,7 @@ namespace Cake.XUnit.Tests
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("assemblyPaths", ((ArgumentNullException) result).ParamName);
-            }
-        }
-
-        public sealed class TheGetAssemblyPathsMethod
-        {
-            [Fact]
-            public void Should_Return_The_Assembly_Paths_Provided_To_The_Constructor()
-            {
-                // Given
-                var assemblyPaths = new FilePath[] {"A", "B"};
-                var settings = new XUnitSettings(assemblyPaths);
-
-                // When
-                var paths = settings.GetAssemblyPaths().ToArray();
-
-                // Then
-                Assert.Contains(assemblyPaths[0], paths);
-                Assert.Contains(assemblyPaths[1], paths);
+                Assert.Equal("assemblyPath", ((ArgumentNullException) result).ParamName);
             }
         }
     }

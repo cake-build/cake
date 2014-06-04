@@ -88,14 +88,14 @@ namespace Cake.MSBuild
         {
             // Get the bin path.
             var programFilesPath = GetProgramFilesPath(context);
-            var binPath = programFilesPath.Combine((DirectoryPath)"MSBuild/12.0/Bin");
+            var binPath = programFilesPath.Combine("MSBuild/12.0/Bin");
             if (context.Environment.Is64BitOperativeSystem())
             {
-                binPath = binPath.Combine((DirectoryPath)"amd64");
+                binPath = binPath.Combine("amd64");
             }
 
             // Get the MSBuild path.
-            return binPath.Combine((FilePath)"MSBuild.exe");
+            return binPath.GetFilePath("MSBuild.exe");
         }
 
         private static DirectoryPath GetProgramFilesPath(ICakeContext context)

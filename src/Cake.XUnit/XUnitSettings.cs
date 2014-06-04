@@ -1,25 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using Cake.Core.IO;
 
 namespace Cake.XUnit
 {
     public sealed class XUnitSettings
     {
-        private readonly List<FilePath> _assemblies;
+        private readonly FilePath _assembly;
 
-        public XUnitSettings(IEnumerable<FilePath> assemblyPaths)
+        public FilePath Assembly
         {
-            if (assemblyPaths == null)
-            {
-                throw new ArgumentNullException("assemblyPaths");
-            }
-            _assemblies = new List<FilePath>(assemblyPaths);
+            get { return _assembly; }
         }
 
-        public IEnumerable<FilePath> GetAssemblyPaths()
+        public XUnitSettings(FilePath assemblyPath)
         {
-            return _assemblies;
+            if (assemblyPath == null)
+            {
+                throw new ArgumentNullException("assemblyPath");
+            }
+            _assembly = assemblyPath;
         }
     }
 }

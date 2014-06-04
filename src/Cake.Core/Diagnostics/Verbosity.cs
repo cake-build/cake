@@ -1,5 +1,8 @@
-﻿namespace Cake.Core.Diagnostics
+﻿using System.ComponentModel;
+
+namespace Cake.Core.Diagnostics
 {
+    [TypeConverter(typeof(VerbosityTypeConverter))]
     public enum Verbosity
     {
         Quiet = 0,

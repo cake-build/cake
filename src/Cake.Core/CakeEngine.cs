@@ -12,7 +12,7 @@ namespace Cake.Core
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
-        private readonly ILogger _log;
+        private readonly ICakeLog _log;
         private readonly List<CakeTask> _tasks;
 
         public IFileSystem FileSystem
@@ -35,12 +35,12 @@ namespace Cake.Core
             get { return _globber; }
         }
 
-        public ILogger Log
+        public ICakeLog Log
         {
             get { return _log; }
         }
 
-        public CakeEngine(IFileSystem fileSystem, ICakeEnvironment environment, ILogger log, IGlobber globber)
+        public CakeEngine(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log, IGlobber globber)
         {
             if (fileSystem == null)
             {
@@ -86,17 +86,19 @@ namespace Cake.Core
 
             foreach (var task in graph.Traverse(target))
             {
-                if (ShouldTaskExecute(task, this))
+                if (ShouldTaskExecute(task))
                 {
+                    _log.Verbose("Executing task: {0}...", task.Name);
                     foreach (var action in task.Actions)
                     {
                         action(this);
                     }
+                    _log.Verbose("Finished executing task: {0}", task.Name);
                 }
             }
         }
 
-        private static bool ShouldTaskExecute(CakeTask task, ICakeContext context)
+        private static bool ShouldTaskExecute(CakeTask task)
         {
             foreach (var criteria in task.Criterias)
             {

@@ -8,6 +8,6 @@ namespace Cake.Core
         IFileSystem FileSystem { get; }
         ICakeEnvironment Environment { get; }
         IGlobber Globber { get; }
-        ILogger Log { get; }
+        ICakeLog Log { get; }
     }
 }

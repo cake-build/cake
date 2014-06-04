@@ -1,5 +1,6 @@
 ﻿using System;
 using Cake.Core.IO;
+using System.Reflection;
 
 namespace Cake.Core
 {
@@ -29,6 +30,12 @@ namespace Cake.Core
                 return new DirectoryPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86));
             }
             throw new NotSupportedException();
+        }
+
+        public DirectoryPath GetApplicationRoot()
+        {
+            var path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            return new DirectoryPath(path);
         }
     }
 }

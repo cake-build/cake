@@ -32,6 +32,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Web.XmlTransform">
+      <HintPath>..\packages\Microsoft.Web.Xdt.2.1.1\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.Core, Version=2.8.50506.491, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Nuget.Core.2.8.2\lib\net40-Client\NuGet.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Roslyn.Compilers">
       <HintPath>..\packages\Roslyn.Compilers.Common.1.2.20906.2\lib\net45\Roslyn.Compilers.dll</HintPath>
     </Reference>
@@ -47,20 +54,47 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arguments\ArgumentDescription.cs" />
+    <Compile Include="Arguments\ArgumentParser.cs" />
+    <Compile Include="Arguments\IArgumentParser.cs" />
+    <Compile Include="Bootstrapping\INuGetInstaller.cs" />
+    <Compile Include="Bootstrapping\NuGetInstaller.cs" />
+    <Compile Include="CakeApplication.cs" />
+    <Compile Include="Bootstrapping\ICakeBootstrapper.cs" />
+    <Compile Include="Bootstrapping\CakeBootstrapper.cs" />
+    <Compile Include="CakeOptions.cs" />
+    <Compile Include="Diagnostics\CakeLogAdapter.cs" />
+    <Compile Include="Diagnostics\ColoredConsoleBuildLog.cs" />
+    <Compile Include="Diagnostics\ColoredConsolePalette.cs" />
+    <Compile Include="Diagnostics\Formatting\FormatParser.cs" />
+    <Compile Include="Diagnostics\Formatting\FormatToken.cs" />
+    <Compile Include="Diagnostics\Formatting\LiteralToken.cs" />
+    <Compile Include="Diagnostics\Formatting\PropertyToken.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
-    </Compile>    
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    </Compile>
+    <Compile Include="Scripting\IScriptRunner.cs" />
+    <Compile Include="Scripting\ScriptHost.cs" />
+    <Compile Include="Scripting\ScriptRunner.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
       <Project>{8074b833-11b8-459f-bb98-bfba2bc5c698}</Project>
       <Name>Cake.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Cake.MSBuild\Cake.MSBuild.csproj">
+      <Project>{2c98be45-d5b5-4931-993b-e3ae3499d378}</Project>
+      <Name>Cake.MSBuild</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cake.XUnit\Cake.XUnit.csproj">
+      <Project>{00470437-65fc-4f59-bbe5-0b8abcaf55fe}</Project>
+      <Name>Cake.XUnit</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

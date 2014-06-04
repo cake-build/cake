@@ -8,6 +8,8 @@ namespace Cake.Core.IO
         bool Exists { get; }
         long Length { get; }
 
+        void Copy(FilePath destination);
+
         Stream Open(FileMode fileMode, FileAccess fileAccess, FileShare fileShare);
     }
 }
