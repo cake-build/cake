@@ -50,7 +50,7 @@ namespace Cake
             var code = ReadSource(options.Script);
 
             // Update the working directory.
-            _environment.WorkingDirectory = options.Script.GetDirectory();
+            _environment.WorkingDirectory = GetAbsoluteScriptDirectory(options.Script);
 
             // Add all references.
             var references = new List<Assembly>
@@ -98,6 +98,20 @@ namespace Cake
             }
 
             // Execute the code.
+        }
+
+        private DirectoryPath GetAbsoluteScriptDirectory(FilePath scriptPath)
+        {
+            // Get the script location.
+            var scriptLocation = scriptPath.GetDirectory();
+            if (scriptLocation.IsRelative)
+            {
+                // Concatinate the starting working directory
+                // with the script file path.
+                scriptLocation = _environment.WorkingDirectory
+                    .GetFilePath(scriptPath).GetDirectory();
+            }
+            return scriptLocation;
         }
 
         private ScriptHost CreateScriptHost()

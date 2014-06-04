@@ -52,10 +52,9 @@ namespace Cake.Tests.Unit
                 // Given
                 var fixture = new CakeApplicationFixture();
                 fixture.File.Exists.Returns(false);
-                var application = fixture.CreateApplication();
 
                 // When
-                var result = Record.Exception(() => application.Run(new CakeOptions { Script = "/Build/script.csx" }));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -68,10 +67,9 @@ namespace Cake.Tests.Unit
                 // Given
                 var fixture = new CakeApplicationFixture();
                 fixture.Environment.GetApplicationRoot().Returns("/Application");
-                var application = fixture.CreateApplication();
 
                 // When
-                application.Run(new CakeOptions { Script = "/Build/script.csx" });
+                fixture.Run();
 
                 // Then
                 fixture.Bootstrapper.Received(1).Bootstrap(
@@ -83,10 +81,9 @@ namespace Cake.Tests.Unit
             {
                 // Given
                 var fixture = new CakeApplicationFixture();
-                var application = fixture.CreateApplication();
 
                 // When
-                application.Run(new CakeOptions { Script = "/Build/script.csx" });
+                fixture.Run();
 
                 // Then
                 Assert.Equal("/Build", fixture.Environment.WorkingDirectory.FullPath);
@@ -97,10 +94,9 @@ namespace Cake.Tests.Unit
             {
                 // Given
                 var fixture = new CakeApplicationFixture();
-                var application = fixture.CreateApplication();
 
                 // When
-                application.Run(new CakeOptions { Script = "/Build/script.csx" });
+                fixture.Run();
 
                 // Then
                 fixture.ScriptRunner.Received(1).Run(
@@ -108,6 +104,34 @@ namespace Cake.Tests.Unit
                     Arg.Any<IEnumerable<Assembly>>(),
                     Arg.Any<IEnumerable<string>>(), 
                     Arg.Is<string>(x => x == "var lol = 123;"));
+            }
+
+            [Fact]
+            public void Should_Set_Working_Directory_To_Script_Directory()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+
+                // When
+                fixture.Run();
+
+                // Then
+                fixture.Environment.Received().WorkingDirectory 
+                    = Arg.Is<DirectoryPath>(x => x.FullPath == "/Build");
+            }
+
+            [Fact]
+            public void Should_Append_Script_Directory_To_Initial_Working_Directory_If_Script_Directory_Is_Relative()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture("Build/script.csx");
+
+                // When
+                fixture.Run();
+
+                // Then
+                fixture.Environment.Received().WorkingDirectory
+                    = Arg.Is<DirectoryPath>(x => x.FullPath == "/Working/Build");
             }
 
             [Theory]
@@ -125,10 +149,9 @@ namespace Cake.Tests.Unit
             {
                 // Given
                 var fixture = new CakeApplicationFixture();
-                var application = fixture.CreateApplication();
 
                 // When
-                application.Run(new CakeOptions { Script = "/Build/script.csx" });
+                fixture.Run();
 
                 // Then
                 fixture.ScriptRunner.Received(1).Run(
@@ -157,10 +180,9 @@ namespace Cake.Tests.Unit
             {
                 // Given
                 var fixture = new CakeApplicationFixture();
-                var application = fixture.CreateApplication();
 
                 // When
-                application.Run(new CakeOptions { Script = "/Build/script.csx" });
+                fixture.Run();
 
                 // Then
                 fixture.ScriptRunner.Received(1).Run(
