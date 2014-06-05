@@ -16,7 +16,7 @@ C:\Project> NuGet.exe "install" "Cake" "-OutputDirectory" "Tools" "-ExcludeVersi
 var isTeamCityBuild = HasArgument("teamCity");
 var configuration = Argument("configuration", defaultValue: "Debug");
 
-// Access the log via script host and print some.
+// Access the log via script host and print some debug info.
 Log.Debug("teamCity={0}", isTeamCityBuild);
 Log.Debug("configuration={0}", configuration);
 
