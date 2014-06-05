@@ -7,7 +7,7 @@ using Cake.Extensions;
 
 namespace Cake.Arguments
 {
-    internal sealed class ArgumentParser : IArgumentParser
+    internal sealed class ArgumentParser
     {
         private readonly ICakeLog _log;
 
@@ -107,7 +107,11 @@ namespace Cake.Arguments
             {
                 // Parse verbosity.
                 var converter = TypeDescriptor.GetConverter(typeof(Verbosity));
-                options.Verbosity = (Verbosity)converter.ConvertFromInvariantString(value);
+                var verbosity = converter.ConvertFromInvariantString(value);
+                if (verbosity != null)
+                {
+                    options.Verbosity = (Verbosity)verbosity;   
+                }                    
             }
 
             if (options.Arguments.ContainsKey(name))

@@ -55,7 +55,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arguments\ArgumentParser.cs" />
-    <Compile Include="Arguments\IArgumentParser.cs" />
     <Compile Include="Bootstrapping\INuGetInstaller.cs" />
     <Compile Include="Bootstrapping\NuGetInstaller.cs" />
     <Compile Include="CakeApplication.cs" />
@@ -76,8 +75,11 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Scripting\IScriptRunner.cs" />
-    <Compile Include="Scripting\ScriptHost.cs" />
     <Compile Include="Scripting\ScriptRunner.cs" />
+    <Compile Include="Scripting\ScriptHost.cs" />
+    <Compile Include="Scripting\ScriptHost.Arguments.cs">
+      <DependentUpon>ScriptHost.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">

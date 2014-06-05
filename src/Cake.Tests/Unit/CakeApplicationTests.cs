@@ -161,8 +161,6 @@ namespace Cake.Tests.Unit
                     Arg.Any<string>());
             }
 
-            //System", "System.Collections.Generic", "System.Linq", "System.Text", "System.Threading.Tasks", "System.IO
-
             [Theory]
             [InlineData("System")]
             [InlineData("System.Collections.Generic")]

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using Cake.Core.IO;
 
@@ -20,13 +19,10 @@ namespace Cake.Core.Tests.Fakes
             get { return _files; }
         }
 
-        public DirectoryPath WorkingDirectory { get; set; }
-
         public FakeFileSystem(bool isUnix)
         {
             _directories = new Dictionary<DirectoryPath, FakeDirectory>(new PathComparer(isUnix));
             _files = new Dictionary<FilePath, FakeFile>(new PathComparer(isUnix));
-            WorkingDirectory = "/Working";
         }
 
         public IFile GetFile(FilePath path)
@@ -56,11 +52,6 @@ namespace Cake.Core.Tests.Fakes
         public IDirectory GetDirectory(DirectoryPath path)
         {
             return GetDirectory(path, creatable: true);
-        }
-
-        public DirectoryPath GetSpecialFolderPath(Environment.SpecialFolder folder)
-        {
-            throw new NotImplementedException();
         }
 
         public IDirectory GetCreatedDirectory(DirectoryPath path)

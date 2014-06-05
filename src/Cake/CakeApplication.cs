@@ -96,8 +96,6 @@ namespace Cake
             {
                 return reader.ReadToEnd();
             }
-
-            // Execute the code.
         }
 
         private DirectoryPath GetAbsoluteScriptDirectory(FilePath scriptPath)
