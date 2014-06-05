@@ -13,33 +13,45 @@ C:\Project> NuGet.exe "install" "Cake" "-OutputDirectory" "Tools" "-ExcludeVersi
 ###2. Create build script
 
 ```CSharp
-var configuration = "Debug";
+var isTeamCityBuild = HasArgument("teamCity");
+var configuration = Argument("configuration", defaultValue: "Debug");
 
-Task("Build")
-	.Does(c =>
+// Access the log via script host and print some.
+Log.Debug("teamCity={0}", isTeamCityBuild);
+Log.Debug("configuration={0}", configuration);
+
+Task("Hello")
+    .WithCriteria(isTeamCityBuild)
+    .Does(c =>
 {
-	// Build project using MSBuild
-	c.MSBuild("./src/Cake.sln", settings => 
-		settings.WithProperty("Magic","1")
-			.WithTarget("Build")
-			.SetConfiguration(configuration)
-		);
+    // Access log via context.
+    c.Log.Information("Hello TeamCity!");
 });
 
-Task("Run-Unit-Tests")
-	.IsDependentOn("Build")
-	.WithCriteria(() => DateTime.Now.Second % 2 == 0)
-	.Does(c =>
+Task("Build")
+    .IsDependentOn("Hello")
+    .Does(c =>
 {
-	// Run unit tests.
-	c.XUnit("./src/**/bin/" + configuration + "/*.Tests.dll");
+    // Build project using MSBuild
+    c.MSBuild("./src/Cake.sln", s => 
+        s.WithProperty("Magic","1")
+         .WithTarget("Build")
+         .SetConfiguration(configuration));
+});
+
+Task("Run-Tests")
+    .IsDependentOn("Build")
+    .Does(c =>
+{
+    // Run unit tests.
+    c.XUnit("./src/**/bin/" + configuration + "/*.Tests.dll");
 });
 
 // Run the script.
-Run("Run-Unit-Tests");
+Run("Run-Tests");
 ```
 
 ###3. Run build script
 
 ```
-C:\Project\Tools\Cake> Cake ../../build.csx
+C:\Project\Tools\Cake> Cake.exe "../../build.csx" -verbosity=diagnostic -teamCity

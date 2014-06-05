@@ -9,5 +9,6 @@ namespace Cake.Core
         ICakeEnvironment Environment { get; }
         IGlobber Globber { get; }
         ICakeLog Log { get; }
+        ICakeArguments Arguments { get; }
     }
 }

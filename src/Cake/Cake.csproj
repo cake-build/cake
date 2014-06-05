@@ -54,7 +54,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Arguments\ArgumentDescription.cs" />
     <Compile Include="Arguments\ArgumentParser.cs" />
     <Compile Include="Arguments\IArgumentParser.cs" />
     <Compile Include="Bootstrapping\INuGetInstaller.cs" />
@@ -70,6 +69,7 @@
     <Compile Include="Diagnostics\Formatting\FormatToken.cs" />
     <Compile Include="Diagnostics\Formatting\LiteralToken.cs" />
     <Compile Include="Diagnostics\Formatting\PropertyToken.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">

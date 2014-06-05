@@ -10,6 +10,7 @@ namespace Cake.Core.Tests.Fixtures
         public ICakeEnvironment Environment { get; set; }
         public ICakeLog Log { get; set; }
         public IGlobber Globber { get; set; }
+        public ICakeArguments Arguments { get; set; }
 
         public CakeEngineFixture()
         {
@@ -17,11 +18,12 @@ namespace Cake.Core.Tests.Fixtures
             Environment = Substitute.For<ICakeEnvironment>();
             Log = Substitute.For<ICakeLog>();
             Globber = Substitute.For<IGlobber>();
+            Arguments = Substitute.For<ICakeArguments>();
         }
 
         public CakeEngine CreateEngine()
         {
-            return new CakeEngine(FileSystem, Environment, Log, Globber);
+            return new CakeEngine(FileSystem, Environment, Log, Arguments, Globber);
         }
     }
 }

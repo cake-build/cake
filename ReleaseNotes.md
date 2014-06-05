@@ -1,3 +1,6 @@
+### New in 0.0.4 (Released 2014/06/05)
+* Added script argument support.
+
 ### New in 0.0.3 (Released 2014/06/04)
 * Bug fix for when resolving working directory.
 

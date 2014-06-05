@@ -74,6 +74,23 @@ namespace Cake.Tests.Unit.Scripting
             }
         }
 
+        public sealed class TheArgumentsProperty
+        {
+            [Fact]
+            public void Should_Proxy_Call_To_Engine()
+            {
+                // Given
+                var fixture = new ScriptHostFixture();
+                var host = fixture.CreateHost();
+
+                // When
+                var result = host.Arguments;
+
+                // Then
+                Assert.Equal(fixture.Engine.Arguments, result);
+            }    
+        }
+
         public sealed class TheTaskMethod
         {
             [Fact]

@@ -1,4 +1,6 @@
-﻿using Cake.Core;
+﻿using System;
+using System.ComponentModel;
+using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
@@ -28,6 +30,11 @@ namespace Cake.Scripting
             get { return _engine.Log; }
         }
 
+        public ICakeArguments Arguments
+        {
+            get { return _engine.Arguments; }
+        }
+
         public ScriptHost(ICakeEngine engine)
         {
             _engine = engine;
@@ -41,6 +48,35 @@ namespace Cake.Scripting
         public void Run(string target)
         {
             _engine.Run(target);
+        }
+
+        public bool HasArgument(string key)
+        {
+            return Arguments.HasArgument(key);
+        }
+
+        public T Argument<T>(string key)
+        {
+            var value = Arguments.GetArgument(key);
+            if (value == null)
+            {
+                throw new CakeException("Argument was not set.");
+            }
+            return Convert<T>(value);
+        }
+
+        public T Argument<T>(string key, T defaultValue)
+        {
+            var value = Arguments.GetArgument(key);
+            return value == null 
+                ? defaultValue 
+                : Convert<T>(value);
+        }
+
+        private static T Convert<T>(string value)
+        {
+            var converter = TypeDescriptor.GetConverter(typeof (T));
+            return (T)converter.ConvertFromInvariantString(value);
         }
     }
 }

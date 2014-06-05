@@ -13,6 +13,7 @@ namespace Cake.Core
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
         private readonly ICakeLog _log;
+        private readonly ICakeArguments _arguments;
         private readonly List<CakeTask> _tasks;
 
         public IFileSystem FileSystem
@@ -40,7 +41,13 @@ namespace Cake.Core
             get { return _log; }
         }
 
-        public CakeEngine(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log, IGlobber globber)
+        public ICakeArguments Arguments
+        {
+            get { return _arguments; }
+        }
+
+        public CakeEngine(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log, 
+            ICakeArguments arguments, IGlobber globber = null)
         {
             if (fileSystem == null)
             {
@@ -57,6 +64,7 @@ namespace Cake.Core
             _fileSystem = fileSystem;
             _environment = environment;
             _log = log;
+            _arguments = arguments ?? new CakeArguments();
             _globber = globber ?? new Globber(_fileSystem, _environment);
             _tasks = new List<CakeTask>();
         }

@@ -48,6 +48,8 @@
     <Compile Include="Diagnostics\NullLog.cs" />
     <Compile Include="Diagnostics\Verbosity.cs" />
     <Compile Include="Diagnostics\VerbosityTypeConverter.cs" />
+    <Compile Include="CakeArguments.cs" />
+    <Compile Include="ICakeArguments.cs" />
     <Compile Include="IO\GlobberExtensions.cs" />
     <Compile Include="Graph\CakeGraph.cs" />
     <Compile Include="Graph\CakeGraphBuilder.cs" />

@@ -27,18 +27,32 @@ namespace Cake.Tests.Unit.Arguments
             }
 
             [Fact]
-            public void Should_Log_And_Return_Null_If_Parser_Encounters_Unknown_Switch()
+            public void Should_Add_Unknown_Arguments_To_Argument_List()
             {
                 // Given
                 var log = new FakeLog();
                 var parser = new ArgumentParser(log);
 
                 // When
-                var result = parser.Parse(new[] { "-unknown" });
+                var result = parser.Parse(new[] { "build.csx", "-unknown" });
+
+                // Then
+                Assert.True(result.Arguments.ContainsKey("unknown"));
+            }
+
+            [Fact]
+            public void Should_Return_Error_If_Multiple_Arguments_With_The_Same_Name_Exist()
+            {
+                // Given
+                var log = new FakeLog();
+                var parser = new ArgumentParser(log);
+
+                // When
+                var result = parser.Parse(new[] { "build.csx", "-unknown", "-unknown" });
 
                 // Then
                 Assert.Null(result);
-                Assert.Equal("Unknown option: unknown", log.Messages[0]);
+                Assert.True(log.Messages.Contains("Multiple arguments with the same name (unknown)."));
             }
 
             [Theory]
@@ -69,7 +83,7 @@ namespace Cake.Tests.Unit.Arguments
                 var parser = new ArgumentParser(log);
 
                 // When
-                var result = parser.Parse(new[] { input });
+                var result = parser.Parse(new[] { "build.csx", input });
 
                 // Then
                 Assert.Equal(value, result.Verbosity);
@@ -77,7 +91,7 @@ namespace Cake.Tests.Unit.Arguments
 
             [Theory]
             [InlineData("build.csx")]
-            [InlineData("-verbosity=quiet build.csx")]
+            [InlineData("build.csx -verbosity=quiet")]
             public void Can_Parse_Script(string input)
             {
                 // Given

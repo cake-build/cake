@@ -12,7 +12,7 @@ using Cake.Scripting;
 namespace Cake
 {
     public sealed class CakeApplication
-    {
+    {        
         private readonly ICakeBootstrapper _bootstrapper;
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
@@ -77,7 +77,7 @@ namespace Cake
             };
 
             // Execute the script.
-            _runner.Run(CreateScriptHost(), references, namespaces, code);
+            _runner.Run(CreateScriptHost(options), references, namespaces, code);
         }
 
         private string ReadSource(FilePath path)
@@ -114,10 +114,11 @@ namespace Cake
             return scriptLocation;
         }
 
-        private ScriptHost CreateScriptHost()
+        private ScriptHost CreateScriptHost(CakeOptions options)
         {
             return new ScriptHost(new CakeEngine(
-                _fileSystem, _environment, _log, null));
+                _fileSystem, _environment, _log,
+                new CakeArguments(options.Arguments)));
         }
     }
 }
