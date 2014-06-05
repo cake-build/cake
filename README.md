@@ -2,6 +2,12 @@
 
 Cake (C# Make) is a build automation system inspired by [Fake](http://fsharp.github.io/FAKE/).
 
+##Roadmap
+
+The Cake engine is pretty much done, but there are still improvements to be made. I'm still experimenting with the script API to make it as easy and intuitive as possible, so expect changes along the road.
+
+Currently only basic MSBuild and xUnit support are implemented, but more features such as NuGet, ILMerge, NUnit, MSTest and compression support are planned. The full roadmap can be found [here](https://github.com/patriksvensson/cake/issues/milestones).
+
 ##Example
 
 ###1. Download Cake
