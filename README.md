@@ -7,7 +7,7 @@ Cake (C# Make) is a build automation system inspired by [Fake](http://fsharp.git
 ###1. Download Cake
 
 ```
-C:\Project> NuGet.exe "install" "Cake" "-OutputDirectory" "Tools" "-ExcludeVersion"
+C:\Project> NuGet.exe install Cake -OutputDirectory Tools -ExcludeVersion
 ```
 
 ###2. Create build script
@@ -54,4 +54,4 @@ Run("Run-Tests");
 ###3. Run build script
 
 ```
-C:\Project\Tools\Cake> Cake.exe "../../build.csx" -verbosity=diagnostic -teamCity
+C:\Project\Tools\Cake> Cake.exe ../../build.csx -verbosity=diagnostic -teamCity
