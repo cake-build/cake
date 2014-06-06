@@ -12,13 +12,13 @@ namespace Cake.MSBuild.Tests
             {
                 // Given
                 var solution = new FilePath("/src/Solution.sln");
-                var configuration = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings(solution);
 
                 // When
-                configuration.WithTarget("Target");
+                settings.WithTarget("Target");
 
                 // Then
-                Assert.True(configuration.Targets.Contains("Target"));
+                Assert.True(settings.Targets.Contains("Target"));
             }
 
             [Fact]
@@ -26,13 +26,75 @@ namespace Cake.MSBuild.Tests
             {
                 // Given
                 var solution = new FilePath("/src/Solution.sln");
-                var configuration = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings(solution);
 
                 // When
-                var result = configuration.WithTarget("Target");          
+                var result = settings.WithTarget("Target");          
 
                 // Then
-                Assert.Equal(configuration, result);
+                Assert.Equal(settings, result);
+            }
+        }
+
+        public sealed class TheUseToolVersionMethod
+        {
+            [Fact]
+            public void Should_Set_Tool_Version()
+            {
+                // Given
+                var solution = new FilePath("/src/Solution.sln");
+                var settings = new MSBuildSettings(solution);
+
+                // When
+                settings.UseToolVersion(MSBuildToolVersion.NET35);
+
+                // Then
+                Assert.Equal(MSBuildToolVersion.NET35, settings.ToolVersion);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var solution = new FilePath("/src/Solution.sln");
+                var settings = new MSBuildSettings(solution);
+
+                // When
+                var result = settings.UseToolVersion(MSBuildToolVersion.NET35);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
+        public sealed class TheSetPlatformTargetMethod
+        {
+            [Fact]
+            public void Should_Set_Platform_Target()
+            {
+                // Given
+                var solution = new FilePath("/src/Solution.sln");
+                var settings = new MSBuildSettings(solution);
+
+                // When
+                settings.SetPlatformTarget(PlatformTarget.x64);
+
+                // Then
+                Assert.Equal(PlatformTarget.x64, settings.PlatformTarget);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var solution = new FilePath("/src/Solution.sln");
+                var settings = new MSBuildSettings(solution);
+
+                // When
+                var result = settings.SetPlatformTarget(PlatformTarget.x64);
+
+                // Then
+                Assert.Equal(settings, result);
             }
         }
 
@@ -43,13 +105,13 @@ namespace Cake.MSBuild.Tests
             {
                 // Given
                 var solution = new FilePath("/src/Solution.sln");
-                var configuration = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings(solution);
 
                 // When
-                configuration.WithProperty("PropertyName", "Value");
+                settings.WithProperty("PropertyName", "Value");
 
                 // Then
-                Assert.True(configuration.Properties.ContainsKey("PropertyName"));
+                Assert.True(settings.Properties.ContainsKey("PropertyName"));
             }
 
             [Fact]
@@ -57,13 +119,13 @@ namespace Cake.MSBuild.Tests
             {
                 // Given
                 var solution = new FilePath("/src/Solution.sln");
-                var configuration = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings(solution);
 
                 // When
-                var result = configuration.WithProperty("PropertyName", "Value");
+                var result = settings.WithProperty("PropertyName", "Value");
 
                 // Then
-                Assert.Equal(configuration, result);
+                Assert.Equal(settings, result);
             }
         }
 
@@ -74,13 +136,13 @@ namespace Cake.MSBuild.Tests
             {
                 // Given
                 var solution = new FilePath("/src/Solution.sln");
-                var configuration = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings(solution);
 
                 // When
-                configuration.SetConfiguration("TheConfiguration");
+                settings.SetConfiguration("TheConfiguration");
 
                 // Then
-                Assert.Equal("TheConfiguration", configuration.Configuration);  
+                Assert.Equal("TheConfiguration", settings.Configuration);  
             }
 
             [Fact]
@@ -88,13 +150,13 @@ namespace Cake.MSBuild.Tests
             {
                 // Given
                 var solution = new FilePath("/src/Solution.sln");
-                var configuration = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings(solution);
 
                 // When
-                var result = configuration.SetConfiguration("TheConfiguration");
+                var result = settings.SetConfiguration("TheConfiguration");
 
                 // Then
-                Assert.Equal(configuration, result);
+                Assert.Equal(settings, result);
             }
         }
     }

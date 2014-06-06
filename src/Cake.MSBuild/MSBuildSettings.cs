@@ -8,7 +8,7 @@ namespace Cake.MSBuild
     {
         private readonly FilePath _solution;
         private readonly HashSet<string> _targets;
-        private readonly Dictionary<string, string> _properties;
+        private readonly Dictionary<string, string> _properties;        
 
         public FilePath Solution
         {
@@ -25,6 +25,8 @@ namespace Cake.MSBuild
             get { return _properties; }
         }
 
+        public PlatformTarget PlatformTarget { get; set; }
+        public MSBuildToolVersion ToolVersion { get; set; }
         public string Configuration { get; set; }
 
         public MSBuildSettings(FilePath solution)
@@ -38,6 +40,8 @@ namespace Cake.MSBuild
             _targets = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _properties = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
+            PlatformTarget = PlatformTarget.MSIL;
+            ToolVersion = MSBuildToolVersion.VS2013;
             Configuration = string.Empty;
         }
     }

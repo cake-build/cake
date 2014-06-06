@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
@@ -13,7 +14,8 @@ namespace Cake.MSBuild.Tests.Fixtures
         public IProcess Process { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
 
-        public MSBuildRunnerFixture(bool is64BitOperativeSystem = false)
+        public MSBuildRunnerFixture(bool is64BitOperativeSystem = false,
+            bool msBuildFileExist = true)
         {
             Process = Substitute.For<IProcess>();
 
@@ -21,12 +23,24 @@ namespace Cake.MSBuild.Tests.Fixtures
             ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns(Process);
 
             Environment = Substitute.For<ICakeEnvironment>();
-            Environment.Is64BitOperativeSystem().Returns(is64BitOperativeSystem);           
+            Environment.Is64BitOperativeSystem().Returns(is64BitOperativeSystem);
             Environment.GetSpecialPath(SpecialPath.ProgramFilesX86).Returns("/Program86");
+            Environment.GetSpecialPath(SpecialPath.Windows).Returns("/Windows");
             Environment.WorkingDirectory.Returns("/Working");
+
+            FileSystem = Substitute.For<IFileSystem>();
+            FileSystem.GetFile(Arg.Is<FilePath>(p => p.FullPath.EndsWith("MSBuild.exe")))
+                .Returns(c => {
+                    // All requested files exist.
+                    var file = Substitute.For<IFile>();
+                    file.Exists.Returns(msBuildFileExist);
+                    file.Path.Returns(c.Arg<FilePath>());
+                    return file;
+                });
 
             Context = Substitute.For<ICakeContext>();
             Context.Environment.Returns(Environment);
+            Context.FileSystem.Returns(FileSystem);
         }
 
         public MSBuildRunner CreateRunner()

@@ -1,3 +1,7 @@
+### New in 0.0.5 (Released 2014/06/06)
+* Added support for MSBuild tool version.
+* Added support for MSBuild platform target.
+
 ### New in 0.0.4 (Released 2014/06/05)
 * Added script argument support.
 

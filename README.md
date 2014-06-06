@@ -39,10 +39,12 @@ Task("Build")
     .Does(c =>
 {
     // Build project using MSBuild
-    c.MSBuild("./src/Cake.sln", s => 
-        s.WithProperty("Magic","1")
-         .WithTarget("Build")
-         .SetConfiguration(configuration));
+    c.MSBuild("./src/Cake.sln", settings => 
+        settings.SetPlatformTarget(PlatformTarget.x86)
+            .UseToolVersion(MSBuildToolVersion.NET45)
+            .WithProperty("Magic","1")
+            .WithTarget("Build")
+            .SetConfiguration(configuration));
 });
 
 Task("Run-Tests")

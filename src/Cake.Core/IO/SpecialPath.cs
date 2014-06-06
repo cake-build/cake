@@ -2,6 +2,7 @@
 {
     public enum SpecialPath
     {
-        ProgramFilesX86
+        ProgramFilesX86,
+        Windows,
     }
 }

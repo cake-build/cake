@@ -29,7 +29,12 @@ namespace Cake.Core
             {
                 return new DirectoryPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86));
             }
-            throw new NotSupportedException();
+            if (path == SpecialPath.Windows)
+            {
+                return new DirectoryPath(Environment.GetFolderPath(Environment.SpecialFolder.Windows));
+            }
+            const string format = "The special path '{0}' is not supported.";
+            throw new NotSupportedException(string.Format(format, path.ToString()));
         }
 
         public DirectoryPath GetApplicationRoot()

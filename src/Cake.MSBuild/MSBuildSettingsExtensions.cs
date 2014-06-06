@@ -8,6 +8,18 @@
             return settings;
         }
 
+        public static MSBuildSettings UseToolVersion(this MSBuildSettings settings, MSBuildToolVersion version)
+        {
+            settings.ToolVersion = version;
+            return settings;
+        }
+
+        public static MSBuildSettings SetPlatformTarget(this MSBuildSettings settings, PlatformTarget target)
+        {
+            settings.PlatformTarget = target;
+            return settings;
+        }
+
         public static MSBuildSettings WithProperty(this MSBuildSettings settings, string name, string value)
         {
             settings.Properties.Add(name, value);

@@ -43,9 +43,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MSBuildExtensions.cs" />
+    <Compile Include="MSBuildResolver.cs" />
     <Compile Include="MSBuildRunner.cs" />
     <Compile Include="MSBuildSettings.cs" />
     <Compile Include="MSBuildSettingsExtensions.cs" />
+    <Compile Include="MSBuildVersion.cs" />
+    <Compile Include="MSBuildToolVersion.cs" />
+    <Compile Include="PlatformTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>

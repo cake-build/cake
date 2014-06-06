@@ -18,6 +18,32 @@ namespace Cake.MSBuild.Tests
                 Assert.IsType<ArgumentNullException>(exception);
                 Assert.Equal("solution", ((ArgumentNullException)exception).ParamName);
             }
+
+            [Fact]
+            public void Should_Set_Default_Tools_Version_To_VS2013()
+            {
+                // Given
+                var path = new FilePath("./Project.sln");
+
+                // When
+                var settings = new MSBuildSettings(path);
+
+                // Then
+                Assert.Equal(MSBuildToolVersion.VS2013, settings.ToolVersion);
+            }
+
+            [Fact]
+            public void Should_Set_Default_Platform_Target_To_MSIL()
+            {
+                // Given
+                var path = new FilePath("./Project.sln");
+
+                // When
+                var settings = new MSBuildSettings(path);
+
+                // Then
+                Assert.Equal(PlatformTarget.MSIL, settings.PlatformTarget);
+            }
         }
 
         public sealed class TheSolutionProperty

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.MSBuild
@@ -18,7 +19,12 @@ namespace Cake.MSBuild
         public void Run(ICakeContext context, MSBuildSettings settings)
         {
             // Get the MSBuild path.
-            var msBuildPath = GetMSBuildPath(context);
+            var msBuildPath = MSBuildResolver.GetMSBuildPath(context, settings.ToolVersion, settings.PlatformTarget);
+            if (!context.FileSystem.GetFile(msBuildPath).Exists)
+            {
+                var message = string.Format("Could not find MSBuild at {0}", msBuildPath);
+                throw new CakeException(message);
+            }
 
             // Start the process.
             var processInfo = GetProcessStartInfo(settings, context, msBuildPath);
@@ -82,25 +88,6 @@ namespace Cake.MSBuild
                 Arguments = string.Join(" ", parameters),
                 UseShellExecute = false
             };
-        }
-
-        private static FilePath GetMSBuildPath(ICakeContext context)
-        {
-            // Get the bin path.
-            var programFilesPath = GetProgramFilesPath(context);
-            var binPath = programFilesPath.Combine("MSBuild/12.0/Bin");
-            if (context.Environment.Is64BitOperativeSystem())
-            {
-                binPath = binPath.Combine("amd64");
-            }
-
-            // Get the MSBuild path.
-            return binPath.GetFilePath("MSBuild.exe");
-        }
-
-        private static DirectoryPath GetProgramFilesPath(ICakeContext context)
-        {
-            return context.Environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
         }
     }
 }
