@@ -74,6 +74,9 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="Scripting\Host\ScriptHost.Globbing.cs" />
+    <Compile Include="Scripting\Host\ScriptHost.XUnit.cs" />
+    <Compile Include="Scripting\Host\ScriptHost.MSBuild.cs" />
     <Compile Include="Scripting\IScriptRunner.cs" />
     <Compile Include="Scripting\Host\ScriptHost.Directory.cs" />
     <Compile Include="Scripting\ScriptRunner.cs" />
