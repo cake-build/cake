@@ -2,6 +2,8 @@
 
 Cake (C# Make) is a build automation system inspired by [Fake](http://fsharp.github.io/FAKE/).
 
+[![TeamCity CI Build Status](http://builds.nullreferenceexception.se/app/rest/builds/buildType:id:Cake_Continuous/statusIcon)](http://builds.nullreferenceexception.se/viewType.html?buildTypeId=Cake_Continuous&guest=1)
+
 ##Roadmap
 
 The Cake engine is pretty much done, but there are still improvements to be made. I'm still experimenting with the script API to make it as easy and intuitive as possible, so expect changes along the road.
@@ -63,3 +65,4 @@ Run("Run-Tests");
 
 ```
 C:\Project\Tools\Cake> Cake.exe ../../build.csx -verbosity=diagnostic -teamCity
+```
