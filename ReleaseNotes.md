@@ -1,3 +1,7 @@
+### New in 0.0.6 (Released 2014/06/06)
+* Added basic IO functionality such as cleaning and deleting directories.
+* Added script host methods for built in functionality (MSBuild, xUnit and Globbing).
+
 ### New in 0.0.5 (Released 2014/06/06)
 * Added support for MSBuild tool version.
 * Added support for MSBuild platform target.

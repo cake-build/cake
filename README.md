@@ -22,39 +22,53 @@ C:\Project> NuGet.exe install Cake -OutputDirectory Tools -ExcludeVersion
 
 ```CSharp
 var isTeamCityBuild = HasArgument("teamCity");
-var configuration = Argument("configuration", defaultValue: "Debug");
+var configuration = Argument("configuration", defaultValue: "Release");
 
 // Access the log via script host and print some debug info.
 Log.Debug("teamCity={0}", isTeamCityBuild);
 Log.Debug("configuration={0}", configuration);
 
+////////////////////////////////////////////////////////////////////////////
+// All functionality is implemented as extension methods for ICakeContext.
+// For convenience, all built in functionality (such as MSBuild, xUnit etc) 
+// is also exposed directly on the script host for convenience.
+////////////////////////////////////////////////////////////////////////////
+
 Task("Hello")
     .WithCriteria(isTeamCityBuild)
-    .Does(c =>
+    .Does(context =>
 {
-    // Access log via context.
-    c.Log.Information("Hello TeamCity!");
+    // Access log via context.    
+    context.Log.Information("Hello TeamCity!");
+});
+
+Task("Clean")
+    .IsDependentOn("Hello")
+    .Does(() =>
+{
+    // Delete the bin directories (via script host).
+    CleanDirectories("./src/**/bin/" + configuration);
 });
 
 Task("Build")
-    .IsDependentOn("Hello")
-    .Does(c =>
+    .IsDependentOn("Clean")
+    .Does(() =>
 {
-    // Build project using MSBuild
-    c.MSBuild("./src/Cake.sln", settings => 
+    // Build project using MSBuild (via script host)
+    MSBuild("./src/Cake.sln", settings => 
         settings.SetPlatformTarget(PlatformTarget.x86)
             .UseToolVersion(MSBuildToolVersion.NET45)
             .WithProperty("Magic","1")
             .WithTarget("Build")
-            .SetConfiguration(configuration));
+            .SetConfiguration(configuration));         
 });
 
 Task("Run-Tests")
     .IsDependentOn("Build")
-    .Does(c =>
+    .Does(() =>
 {
-    // Run unit tests.
-    c.XUnit("./src/**/bin/" + configuration + "/*.Tests.dll");
+    // Run unit tests (via script host)
+    XUnit("./src/**/bin/" + configuration + "/*.Tests.dll");
 });
 
 // Run the script.
