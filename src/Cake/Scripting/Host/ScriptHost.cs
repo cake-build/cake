@@ -2,7 +2,7 @@
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
-namespace Cake.Scripting
+namespace Cake.Scripting.Host
 {
     public sealed partial class ScriptHost : ICakeEngine
     {

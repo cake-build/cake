@@ -9,7 +9,8 @@ namespace Cake.Core.IO
         long Length { get; }
 
         void Copy(FilePath destination);
+        void Delete();
 
-        Stream Open(FileMode fileMode, FileAccess fileAccess, FileShare fileShare);
+        Stream Open(FileMode fileMode, FileAccess fileAccess, FileShare fileShare);        
     }
 }

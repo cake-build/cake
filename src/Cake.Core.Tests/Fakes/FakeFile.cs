@@ -114,5 +114,10 @@ namespace Cake.Core.Tests.Fakes
             }
             throw new NotSupportedException();
         }
+
+        public void Delete()
+        {
+            _exists = false;
+        }
     }
 }

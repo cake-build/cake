@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
+using Cake.Scripting.Host;
 using Roslyn.Scripting.CSharp;
 
 namespace Cake.Scripting

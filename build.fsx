@@ -90,7 +90,8 @@ Target "Run-Unit-Tests" (fun _ ->
 Target "Copy-Files" (fun _ ->
     Block "Copying files" (fun _ ->
         CopyFile binDir (buildDir + "/Cake.exe")
-        CopyFile binDir (buildDir + "/Cake.Core.dll")        
+        CopyFile binDir (buildDir + "/Cake.Core.dll")
+        CopyFile binDir (buildDir + "/Cake.IO.dll")
         CopyFile binDir (buildDir + "/Cake.MSBuild.dll")
         CopyFile binDir (buildDir + "/Cake.XUnit.dll")        
         CopyFile binDir (buildDir + "/NuGet.Core.dll")
@@ -98,13 +99,14 @@ Target "Copy-Files" (fun _ ->
     )
 )
 
-Target "Create-Cake-NuGet-Package" (fun _ ->
+Target "Create-NuGet-Package" (fun _ ->
     Block "Creating Cake NuGet package" (fun _ ->
         let coreRootDir = nugetRoot @@ "Cake"
         CleanDirs [coreRootDir]
 
         CopyFile coreRootDir (binDir @@ "Cake.exe")
         CopyFile coreRootDir (binDir @@ "Cake.Core.dll")
+        CopyFile coreRootDir (binDir @@ "Cake.IO.dll")
         CopyFile coreRootDir (binDir @@ "Cake.MSBuild.dll")
         CopyFile coreRootDir (binDir @@ "Cake.XUnit.dll")
         CopyFile coreRootDir (binDir @@ "NuGet.Core.dll")
@@ -123,30 +125,6 @@ Target "Create-Cake-NuGet-Package" (fun _ ->
     )
 )
 
-Target "Create-Core-NuGet-Package" (fun _ ->
-    Block "Creating Cake.Core NuGet package" (fun _ ->
-        let coreRootDir = nugetRoot @@ "Cake.Core"
-        let coreLibDir = coreRootDir @@ "lib/net45/"
-        CleanDirs [coreRootDir; coreLibDir]
-
-        CopyFile coreLibDir (binDir @@ "Cake.Core.dll")
-        CopyFile coreLibDir (binDir @@ "Cake.MSBuild.dll")
-        CopyFile coreLibDir (binDir @@ "Cake.XUnit.dll")
-        CopyFile coreRootDir (binDir @@ "LICENSE")
-        CopyFile coreRootDir (binDir @@ "README.md")
-
-        NuGet (fun p ->
-            {p with
-                Project = "Cake.Core"                           
-                OutputPath = nugetRoot
-                WorkingDir = coreRootDir
-                Version = releaseNotes.AssemblyVersion
-                ReleaseNotes = toLines releaseNotes.Notes
-                AccessKey = getBuildParamOrDefault "nugetkey" ""
-                Publish = hasBuildParam "nugetkey" }) "./Cake.Core.nuspec"
-    )
-)
-
 Target "All" DoNothing
 
 // Setup the target dependency graph.
@@ -156,8 +134,7 @@ Target "All" DoNothing
    ==> "Build"
    ==> "Run-Unit-Tests"
    ==> "Copy-Files"
-   ==> "Create-Cake-NuGet-Package"
-   ==> "Create-Core-NuGet-Package"
+   ==> "Create-NuGet-Package"
    ==> "All"
 
 // Set the default target to the last node in the

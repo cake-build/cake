@@ -43,7 +43,14 @@ namespace Cake.Core.Tests.Fakes
         {
             if (recursive)
             {
-                throw new NotSupportedException();
+                foreach (var directory in GetDirectories("*", SearchScope.Current))
+                {
+                    directory.Delete(true);
+                }
+                foreach (var file in GetFiles("*", SearchScope.Current))
+                {
+                    file.Delete();
+                }
             }
             _exist = false;
         }
@@ -52,7 +59,7 @@ namespace Cake.Core.Tests.Fakes
         {
             var result = new List<IDirectory>();
             var children = _fileSystem.Directories.Where(x => x.Key.FullPath.StartsWith(_path.FullPath + "/", StringComparison.OrdinalIgnoreCase));
-            foreach (var child in children)
+            foreach (var child in children.Where(c => c.Value.Exists))
             {
                 var relative = child.Key.FullPath.Substring(_path.FullPath.Length + 1);
                 if (!relative.Contains("/"))
@@ -67,7 +74,7 @@ namespace Cake.Core.Tests.Fakes
         {
             var result = new List<IFile>();
             var children = _fileSystem.Files.Where(x => x.Key.FullPath.StartsWith(_path.FullPath + "/", StringComparison.OrdinalIgnoreCase));
-            foreach (var child in children)
+            foreach (var child in children.Where(c => c.Value.Exists))
             {
                 var relative = child.Key.FullPath.Substring(_path.FullPath.Length + 1);
                 if (!relative.Contains("/"))

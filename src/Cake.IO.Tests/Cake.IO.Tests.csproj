@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{066B4595-3C61-476B-9B21-7B302D02AE9D}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{64B76577-A4CE-4AE9-8C38-041376F202FE}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cake</RootNamespace>
-    <AssemblyName>Cake</AssemblyName>
+    <RootNamespace>Cake.IO.Tests</RootNamespace>
+    <AssemblyName>Cake.IO.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,18 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Web.XmlTransform">
-      <HintPath>..\packages\Microsoft.Web.Xdt.2.1.1\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
-    </Reference>
-    <Reference Include="NuGet.Core, Version=2.8.50506.491, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Nuget.Core.2.8.2\lib\net40-Client\NuGet.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Roslyn.Compilers">
-      <HintPath>..\packages\Roslyn.Compilers.Common.1.2.20906.2\lib\net45\Roslyn.Compilers.dll</HintPath>
-    </Reference>
-    <Reference Include="Roslyn.Compilers.CSharp">
-      <HintPath>..\packages\Roslyn.Compilers.CSharp.1.2.20906.2\lib\net45\Roslyn.Compilers.CSharp.dll</HintPath>
+    <Reference Include="NSubstitute">
+      <HintPath>..\packages\NSubstitute.1.7.2.0\lib\NET45\NSubstitute.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -52,33 +40,30 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="xunit">
+      <HintPath>..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Arguments\ArgumentParser.cs" />
-    <Compile Include="Bootstrapping\INuGetInstaller.cs" />
-    <Compile Include="Bootstrapping\NuGetInstaller.cs" />
-    <Compile Include="CakeApplication.cs" />
-    <Compile Include="Bootstrapping\ICakeBootstrapper.cs" />
-    <Compile Include="Bootstrapping\CakeBootstrapper.cs" />
-    <Compile Include="CakeOptions.cs" />
-    <Compile Include="Diagnostics\CakeLogAdapter.cs" />
-    <Compile Include="Diagnostics\ColoredConsoleBuildLog.cs" />
-    <Compile Include="Diagnostics\ColoredConsolePalette.cs" />
-    <Compile Include="Diagnostics\Formatting\FormatParser.cs" />
-    <Compile Include="Diagnostics\Formatting\FormatToken.cs" />
-    <Compile Include="Diagnostics\Formatting\LiteralToken.cs" />
-    <Compile Include="Diagnostics\Formatting\PropertyToken.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="..\Cake.Core.Tests\Fakes\FakeDirectory.cs">
+      <Link>Fakes\FakeDirectory.cs</Link>
+    </Compile>
+    <Compile Include="..\Cake.Core.Tests\Fakes\FakeFile.cs">
+      <Link>Fakes\FakeFile.cs</Link>
+    </Compile>
+    <Compile Include="..\Cake.Core.Tests\Fakes\FakeFileStream.cs">
+      <Link>Fakes\FakeFileStream.cs</Link>
+    </Compile>
+    <Compile Include="..\Cake.Core.Tests\Fakes\FakeFileSystem.cs">
+      <Link>Fakes\FakeFileSystem.cs</Link>
+    </Compile>
+    <Compile Include="DirectoryCleanerTests.cs" />
+    <Compile Include="DirectoryDeleterTests.cs" />
+    <Compile Include="Fixtures\FileSystemFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Scripting\IScriptRunner.cs" />
-    <Compile Include="Scripting\Host\ScriptHost.Directory.cs" />
-    <Compile Include="Scripting\ScriptRunner.cs" />
-    <Compile Include="Scripting\Host\ScriptHost.cs" />
-    <Compile Include="Scripting\Host\ScriptHost.Arguments.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
@@ -88,14 +73,6 @@
     <ProjectReference Include="..\Cake.IO\Cake.IO.csproj">
       <Project>{d3519fa7-ac32-422c-b8fe-7246ad2fe562}</Project>
       <Name>Cake.IO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Cake.MSBuild\Cake.MSBuild.csproj">
-      <Project>{2c98be45-d5b5-4931-993b-e3ae3499d378}</Project>
-      <Name>Cake.MSBuild</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Cake.XUnit\Cake.XUnit.csproj">
-      <Project>{00470437-65fc-4f59-bbe5-0b8abcaf55fe}</Project>
-      <Name>Cake.XUnit</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,7 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Diagnostics;
 using Cake.Scripting;
+using Cake.Scripting.Host;
 
 namespace Cake
 {

@@ -33,6 +33,11 @@ namespace Cake.Core.IO
             _file.CopyTo(destination.FullPath);
         }
 
+        public void Delete()
+        {
+            _file.Delete();
+        }
+
         public Stream Open(FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
         {
             return _file.Open(fileMode, fileAccess, fileShare);

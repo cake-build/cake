@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using Cake.Core;
 
-namespace Cake.Scripting
+namespace Cake.Scripting.Host
 {
     public sealed partial class ScriptHost
     {

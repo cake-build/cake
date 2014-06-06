@@ -6,7 +6,11 @@ namespace Cake.Core
 {
     public sealed class CakeEnvironment : ICakeEnvironment
     {
-        public DirectoryPath WorkingDirectory { get; set; }
+        public DirectoryPath WorkingDirectory
+        {
+            get { return Environment.CurrentDirectory; }
+            set { SetWorkingDirectory(value); }
+        }
 
         public CakeEnvironment()
         {
@@ -41,6 +45,15 @@ namespace Cake.Core
         {
             var path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             return new DirectoryPath(path);
+        }
+
+        private static void SetWorkingDirectory(DirectoryPath path)
+        {
+            if (path.IsRelative)
+            {
+                throw new CakeException("Working directory can not be set to a relative path.");
+            }
+            Environment.CurrentDirectory = path.FullPath;
         }
     }
 }
