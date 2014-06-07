@@ -1,4 +1,6 @@
-﻿using Cake.Core;
+﻿using System.Diagnostics;
+using System.Linq;
+using Cake.Core;
 using Cake.Scripting;
 using System;
 using Xunit;
@@ -28,6 +30,22 @@ namespace Cake.Tests.Unit.Scripting
         }
 
         public static void NonGeneric_ExtensionMethodWithGenericParameter(this ICakeContext context, Action<int> value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void Generic_ExtensionMethod<TTest>(this ICakeContext context)
+        {
+            Debug.Assert(typeof (TTest) != null); // Resharper
+            throw new NotImplementedException();
+        }
+
+        public static void Generic_ExtensionMethodWithParameter<TTest>(this ICakeContext context, TTest value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static TTest Generic_ExtensionMethodWithGenericReturnValue<TTest>(this ICakeContext context, TTest value)
         {
             throw new NotImplementedException();
         }
@@ -134,6 +152,54 @@ namespace Cake.Tests.Unit.Scripting
                                         "(GetContext());}";
 
                 var method = typeof(StaticClass).GetMethod("NonGeneric_ExtensionMethodWithReturnValue");
+
+                // When
+                var result = ScriptCodeGenerator.Generate(method);
+
+                // Then
+                Assert.Equal(expected, result);
+            }
+
+            [Fact]
+            public void Should_Return_Correctly_Generated_Wrapper_For_Generic_Type_Without_Arguments()
+            {
+                const string expected = "public void Generic_ExtensionMethod<TTest>(){" +
+                                        "Cake.Tests.Unit.Scripting.StaticClass.Generic_ExtensionMethod<TTest>" +
+                                        "(GetContext());}";
+
+                var method = typeof (StaticClass).GetMethods().SingleOrDefault(x => x.Name == "Generic_ExtensionMethod");
+
+                // When
+                var result = ScriptCodeGenerator.Generate(method);
+
+                // Then
+                Assert.Equal(expected, result);
+            }
+
+            [Fact]
+            public void Should_Return_Correctly_Generated_Wrapper_For_Generic_Type_With_Argument()
+            {
+                const string expected = "public void Generic_ExtensionMethodWithParameter<TTest>(TTest value){" +
+                                        "Cake.Tests.Unit.Scripting.StaticClass.Generic_ExtensionMethodWithParameter<TTest>" +
+                                        "(GetContext(),value);}";
+
+                var method = typeof(StaticClass).GetMethods().SingleOrDefault(x => x.Name == "Generic_ExtensionMethodWithParameter");
+
+                // When
+                var result = ScriptCodeGenerator.Generate(method);
+
+                // Then
+                Assert.Equal(expected, result);
+            }
+
+            [Fact]
+            public void Should_Return_Correctly_Generated_Wrapper_For_Generic_Type_With_Generic_Return_Value()
+            {
+                const string expected = "public TTest Generic_ExtensionMethodWithGenericReturnValue<TTest>(TTest value){" +
+                                        "return Cake.Tests.Unit.Scripting.StaticClass.Generic_ExtensionMethodWithGenericReturnValue<TTest>" +
+                                        "(GetContext(),value);}";
+
+                var method = typeof(StaticClass).GetMethods().SingleOrDefault(x => x.Name == "Generic_ExtensionMethodWithGenericReturnValue");
 
                 // When
                 var result = ScriptCodeGenerator.Generate(method);

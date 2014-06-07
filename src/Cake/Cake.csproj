@@ -80,8 +80,7 @@
     <Compile Include="Scripting\ScriptCodeGenerator.cs" />
     <Compile Include="Scripting\ScriptExtensionFinder.cs" />
     <Compile Include="Scripting\ScriptRunner.cs" />
-    <Compile Include="Scripting\Host\ScriptHost.cs" />
-    <Compile Include="Scripting\Host\ScriptHost.Arguments.cs" />
+    <Compile Include="Scripting\ScriptHost.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">

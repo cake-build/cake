@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Scripting.Host;
+using Cake.Scripting;
 using Cake.Tests.Fixtures;
 using NSubstitute;
 using Xunit;

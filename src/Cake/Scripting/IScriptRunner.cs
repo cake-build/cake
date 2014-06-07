@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using Cake.Scripting.Host;
 
 namespace Cake.Scripting
 {

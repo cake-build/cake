@@ -1,7 +1,7 @@
 ﻿using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Scripting.Host;
+using Cake.Scripting;
 using NSubstitute;
 
 namespace Cake.Tests.Fixtures

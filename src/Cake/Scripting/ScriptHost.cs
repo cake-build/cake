@@ -2,9 +2,9 @@
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
-namespace Cake.Scripting.Host
+namespace Cake.Scripting
 {
-    public sealed partial class ScriptHost : ICakeEngine
+    public sealed class ScriptHost : ICakeEngine
     {
         private readonly ICakeEngine _engine;
 

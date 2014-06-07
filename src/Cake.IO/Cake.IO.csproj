@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArgumentExtensions.cs" />
     <Compile Include="DirectoryCleaner.cs" />
     <Compile Include="DirectoryDeleter.cs" />
     <Compile Include="DirectoryExtensions.cs" />

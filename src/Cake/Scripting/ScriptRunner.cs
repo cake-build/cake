@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using Cake.Core.Diagnostics;
 using Cake.Extensions;
-using Cake.Scripting.Host;
 using Roslyn.Scripting;
 using Roslyn.Scripting.CSharp;
 

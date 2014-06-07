@@ -13,6 +13,10 @@ namespace Cake.Extensions
 
         public static string GetFullName(this Type type, bool includeNamespace = true)
         {
+            if (type.IsGenericParameter)
+            {
+                return type.Name;
+            }
             return type.IsGenericType
                 ? GetGenericTypeName(type, includeNamespace)
                 : includeNamespace ? type.FullName : type.Name;

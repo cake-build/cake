@@ -1,18 +1,18 @@
 ﻿using System.ComponentModel;
 using Cake.Core;
 
-namespace Cake.Scripting.Host
+namespace Cake.IO
 {
-    public sealed partial class ScriptHost
+    public static class ArgumentExtensions
     {
-        public bool HasArgument(string key)
+        public static bool HasArgument(this ICakeContext context, string key)
         {
-            return Arguments.HasArgument(key);
+            return context.Arguments.HasArgument(key);
         }
 
-        public T Argument<T>(string key)
+        public static T Argument<T>(this ICakeContext context, string key)
         {
-            var value = Arguments.GetArgument(key);
+            var value = context.Arguments.GetArgument(key);
             if (value == null)
             {
                 throw new CakeException("Argument was not set.");
@@ -20,9 +20,9 @@ namespace Cake.Scripting.Host
             return Convert<T>(value);
         }
 
-        public T Argument<T>(string key, T defaultValue)
+        public static T Argument<T>(this ICakeContext context, string key, T defaultValue)
         {
-            var value = Arguments.GetArgument(key);
+            var value = context.Arguments.GetArgument(key);
             return value == null
                 ? defaultValue
                 : Convert<T>(value);

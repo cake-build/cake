@@ -43,6 +43,13 @@ namespace Cake.Scripting
             builder.Append(GetReturnType(method));
             builder.Append(" ");
             builder.Append(method.Name);
+
+            if (method.IsGenericMethod)
+            {
+                // Add generic arguments to proxy signature.
+                BuildGenericArguments(method, builder);
+            }
+
             builder.Append("(");
             builder.Append(GetProxyParameters(parameters));
             builder.Append(")");
@@ -56,6 +63,13 @@ namespace Cake.Scripting
 
             // Call extension method.
             builder.Append(method.GetFullName());
+
+            if (method.IsGenericMethod)
+            {
+                // Add generic arguments to method call.
+                BuildGenericArguments(method, builder);
+            }
+
             builder.Append("(");
             builder.Append(GetCallArguments(parameters));
             builder.Append(");");
@@ -89,6 +103,18 @@ namespace Cake.Scripting
             var result = new List<string> { "GetContext()" };
             result.AddRange(parameters.Select(x => x.Name));
             return string.Join(",", result);
+        }
+
+        private static void BuildGenericArguments(MethodInfo method, StringBuilder builder)
+        {
+            builder.Append("<");
+            var genericArguments = new List<string>();
+            foreach (var argument in method.GetGenericArguments())
+            {
+                genericArguments.Add(argument.Name);
+            }
+            builder.Append(string.Join(", ", genericArguments));
+            builder.Append(">");
         }
     }
 }
