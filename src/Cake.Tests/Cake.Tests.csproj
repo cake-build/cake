@@ -54,6 +54,7 @@
     <Compile Include="Unit\CakeOptionsTests.cs" />
     <Compile Include="Unit\Diagnostics\CakeLogAdapterTests.cs" />
     <Compile Include="Unit\Diagnostics\FormatParserTests.cs" />
+    <Compile Include="Unit\Scripting\ScriptCodeGeneratorTests.cs" />
     <Compile Include="Unit\Scripting\ScriptHostTests.cs" />
     <Compile Include="Fakes\FakeLog.cs" />
     <Compile Include="Fixtures\CakeApplicationFixture.cs" />

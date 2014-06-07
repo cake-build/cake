@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Linq;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.MSBuild

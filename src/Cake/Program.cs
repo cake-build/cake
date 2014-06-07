@@ -15,7 +15,7 @@ namespace Cake
             {
                 if (args.Length == 0)
                 {
-                    Console.WriteLine("Usage: Cake.exe [-verbosity=value] <script>");
+                    Console.WriteLine("Usage: Cake.exe <script> [-verbosity=value] [scriptarguments]");
                     return 0;
                 }
 
@@ -27,7 +27,6 @@ namespace Cake
                 var application = new CakeApplication(log: log);
                 application.Run(options);
 
-                // Return success.
                 return 0;
             }
             catch (Exception ex)

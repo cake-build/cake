@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -24,7 +23,7 @@ namespace Cake.IO
                 throw new IOException(string.Format(format, root.Path));
             }
 
-            context.Log.Information("Deleting contents of {0}", path);
+            context.Log.Verbose("Deleting contents of {0}", path);
 
             // Delete all files.
             foreach (var file in root.GetFiles("*", SearchScope.Recursive))

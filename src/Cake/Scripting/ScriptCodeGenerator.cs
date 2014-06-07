@@ -1,0 +1,94 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Text;
+using Cake.Core;
+using Cake.Extensions;
+
+namespace Cake.Scripting
+{
+    internal static class ScriptCodeGenerator
+    {
+        public static string Generate(MethodInfo method)
+        {
+            if (method == null)
+            {
+                throw new ArgumentNullException("method");
+            }
+            Debug.Assert(method.DeclaringType != null); // Resharper
+            if (!method.DeclaringType.IsStatic())
+            {
+                const string format = "The type '{0}' is not static.";
+                throw new CakeException(string.Format(format, method.DeclaringType.FullName));
+            }
+            if (!method.IsDefined(typeof(ExtensionAttribute)))
+            {
+                const string format = "The method '{0}' is not an extension method.";
+                throw new CakeException(string.Format(format, method.Name));
+            }
+            return GenerateCode(method);
+        }
+
+        private static string GenerateCode(MethodInfo method)
+        {
+            var isFunction = method.ReturnType != typeof(void);
+            var builder = new StringBuilder();
+            var parameters = method.GetParameters().Skip(1).ToArray();
+
+            // Generate method signature.
+            builder.Append("public ");
+            builder.Append(GetReturnType(method));
+            builder.Append(" ");
+            builder.Append(method.Name);
+            builder.Append("(");
+            builder.Append(GetProxyParameters(parameters));
+            builder.Append(")");
+            builder.Append("{");
+
+            if (isFunction)
+            {
+                // Add return keyword.
+                builder.Append("return ");
+            }
+
+            // Call extension method.
+            builder.Append(method.GetFullName());
+            builder.Append("(");
+            builder.Append(GetCallArguments(parameters));
+            builder.Append(");");
+
+            // End method.
+            builder.Append("}");
+
+            return builder.ToString();
+        }
+
+        private static string GetReturnType(MethodInfo method)
+        {
+            return method.ReturnType == typeof(void)
+                ? "void"
+                : method.ReturnType.GetFullName();
+        }
+
+        private static string GetProxyParameters(IEnumerable<ParameterInfo> parameters)
+        {
+            var result = new List<string>();
+            foreach (var parameter in parameters)
+            {
+                var typeName = parameter.ParameterType.GetFullName();
+                result.Add(string.Concat(typeName, " ", parameter.Name));
+            }
+            return string.Join(",", result);
+        }
+
+        private static string GetCallArguments(IEnumerable<ParameterInfo> parameters)
+        {
+            var result = new List<string> { "GetContext()" };
+            result.AddRange(parameters.Select(x => x.Name));
+            return string.Join(",", result);
+        }
+    }
+}

@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Runtime.InteropServices;
 using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;

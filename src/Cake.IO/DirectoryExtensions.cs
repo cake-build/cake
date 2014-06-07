@@ -1,10 +1,5 @@
-﻿using System.IO;
-using Cake.Core;
-using System;
+﻿using Cake.Core;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Cake.Core.IO;
 
 namespace Cake.IO

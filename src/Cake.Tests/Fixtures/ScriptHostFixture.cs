@@ -1,7 +1,6 @@
 ﻿using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Scripting;
 using Cake.Scripting.Host;
 using NSubstitute;
 

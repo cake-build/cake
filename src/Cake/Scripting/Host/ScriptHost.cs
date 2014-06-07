@@ -47,5 +47,10 @@ namespace Cake.Scripting.Host
         {
             _engine.Run(target);
         }
+
+        public ICakeContext GetContext()
+        {
+            return this;
+        }
     }
 }

@@ -27,7 +27,7 @@ namespace Cake
             _log = new CakeLogAdapter(log ?? new ColoredConsoleBuildLog());
             _bootstrapper = bootstrapper ?? new CakeBootstrapper(_fileSystem, _log);
             _environment = environment ?? new CakeEnvironment();
-            _runner = runner ?? new ScriptRunner();
+            _runner = runner ?? new ScriptRunner(_log);
         }
 
         public void Run(CakeOptions options)
@@ -65,7 +65,8 @@ namespace Cake
                 typeof(Program).Assembly, // Cake
                 typeof(ICakeContext).Assembly,  // Cake.Core
                 typeof(MSBuild.MSBuildRunner).Assembly, // Cake.MSBuild
-                typeof(XUnit.XUnitRunner).Assembly // Cake.XUnit
+                typeof(XUnit.XUnitRunner).Assembly, // Cake.XUnit
+                typeof(IO.DirectoryExtensions).Assembly // Cake.IO
             };
 
             // Add all namespaces.
@@ -73,7 +74,7 @@ namespace Cake
             {
                 "System", "System.Collections.Generic", "System.Linq",
                 "System.Text", "System.Threading.Tasks", "System.IO",
-                "Cake", "Cake.Core", "Cake.Core.IO",
+                "Cake", "Cake.Core", "Cake.Core.IO", "Cake.IO",
                 "Cake.Core.Diagnostics", "Cake.MSBuild", "Cake.XUnit"
             };
 
