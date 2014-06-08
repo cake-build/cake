@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.IO.Compression
@@ -11,9 +12,10 @@ namespace Cake.IO.Compression
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
+        private readonly ICakeLog _log;
         private readonly StringComparison _comparison;        
 
-        public Zipper(IFileSystem fileSystem, ICakeEnvironment environment)
+        public Zipper(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log)
         {
             if (fileSystem == null)
             {
@@ -23,8 +25,13 @@ namespace Cake.IO.Compression
             {
                 throw new ArgumentNullException("environment");
             }
+            if (log == null)
+            {
+                throw new ArgumentNullException("log");
+            }
             _fileSystem = fileSystem;
             _environment = environment;
+            _log = log;
             _comparison = environment.IsUnix() ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
         }
 
@@ -47,25 +54,22 @@ namespace Cake.IO.Compression
             rootPath = rootPath.MakeAbsolute(_environment);
             outputPath = outputPath.MakeAbsolute(_environment);
 
-            //
+            // Get the output file.
             var outputFile = _fileSystem.GetFile(outputPath);
-            if (outputFile.Exists)
-            {
-                const string format = "The output file '{0}' already exist.";
-                throw new CakeException(string.Format(format, outputFile.Path));
-            }
 
             // Open up a stream to the output file.
+            _log.Verbose("Creating zip file: {0}", outputPath.FullPath);
             using (var outputStream = outputFile.Open(FileMode.Create, FileAccess.Write, FileShare.None))
             using (var archive = new ZipArchive(outputStream, ZipArchiveMode.Create))
             {
                 foreach (var inputPath in filePaths)
-                {
+                {                    
                     var file = _fileSystem.GetFile(inputPath.MakeAbsolute(_environment));
                     using (var inputStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
                     {
                         // Get the relative filename to the rootPath.
-                        var relativeFilePath = GetRelativeFilePath(rootPath, inputPath);                   
+                        var relativeFilePath = GetRelativeFilePath(rootPath, inputPath);
+                        _log.Verbose("Adding file: {0}", relativeFilePath);
 
                         // Create the zip archive entry.
                         var entry = archive.CreateEntry(relativeFilePath.FullPath);
@@ -77,6 +81,7 @@ namespace Cake.IO.Compression
                     }
                 }
             }
+            _log.Verbose("Zip successfully created: {0}", outputPath.FullPath);
         }
 
         private FilePath GetRelativeFilePath(DirectoryPath root, FilePath file)

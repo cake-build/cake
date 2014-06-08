@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tests.Fakes;
 using Cake.IO.Compression;
@@ -23,9 +24,10 @@ namespace Cake.IO.Tests.Compression
             {
                 // Given
                 var environment = Substitute.For<ICakeEnvironment>();
+                var log = Substitute.For<ICakeLog>();
 
                 // When
-                var result = Record.Exception(() => new Zipper(null, environment));
+                var result = Record.Exception(() => new Zipper(null, environment, log));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -37,13 +39,29 @@ namespace Cake.IO.Tests.Compression
             {
                 // Given
                 var fileSystem = Substitute.For<IFileSystem>();
+                var log = Substitute.For<ICakeLog>();
 
                 // When
-                var result = Record.Exception(() => new Zipper(fileSystem, null));
+                var result = Record.Exception(() => new Zipper(fileSystem, null, log));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
                 Assert.Equal("environment", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Log_Is_Null()
+            {
+                // Given
+                var fileSystem = Substitute.For<IFileSystem>();
+                var environment = Substitute.For<ICakeEnvironment>();
+
+                // When
+                var result = Record.Exception(() => new Zipper(fileSystem, environment, null));
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("log", ((ArgumentNullException)result).ParamName);
             }
         }
 
@@ -55,7 +73,8 @@ namespace Cake.IO.Tests.Compression
                 // Given
                 var fileSystem = Substitute.For<IFileSystem>();
                 var environment = Substitute.For<ICakeEnvironment>();
-                var zipper = new Zipper(fileSystem, environment);
+                var log = Substitute.For<ICakeLog>();
+                var zipper = new Zipper(fileSystem, environment, log);
 
                 // When
                 var result = Record.Exception(() => zipper.Zip(null, "/file.zip", new FilePath[] {"/Root/file.txt"}));
@@ -71,7 +90,8 @@ namespace Cake.IO.Tests.Compression
                 // Given
                 var fileSystem = Substitute.For<IFileSystem>();
                 var environment = Substitute.For<ICakeEnvironment>();
-                var zipper = new Zipper(fileSystem, environment);
+                var log = Substitute.For<ICakeLog>();
+                var zipper = new Zipper(fileSystem, environment, log);
 
                 // When
                 var result = Record.Exception(() => zipper.Zip("/Root", null, new FilePath[] { "/Root/file.txt" }));
@@ -87,7 +107,8 @@ namespace Cake.IO.Tests.Compression
                 // Given
                 var fileSystem = Substitute.For<IFileSystem>();
                 var environment = Substitute.For<ICakeEnvironment>();
-                var zipper = new Zipper(fileSystem, environment);
+                var log = Substitute.For<ICakeLog>();
+                var zipper = new Zipper(fileSystem, environment, log);
 
                 // When
                 var result = Record.Exception(() => zipper.Zip("/Root", "/file.txt", null));
@@ -104,7 +125,8 @@ namespace Cake.IO.Tests.Compression
                 var fileSystem = new FakeFileSystem(false);
                 fileSystem.GetCreatedFile("/NotRoot/file.txt");
                 var environment = Substitute.For<ICakeEnvironment>();
-                var zipper = new Zipper(fileSystem, environment);
+                var log = Substitute.For<ICakeLog>();
+                var zipper = new Zipper(fileSystem, environment, log);
 
                 // When
                 var result = Record.Exception(() => zipper.Zip("/Root", "/file.zip", new FilePath[] { "/NotRoot/file.txt" }));
@@ -115,31 +137,14 @@ namespace Cake.IO.Tests.Compression
             }
 
             [Fact]
-            public void Should_Throw_If_Output_Path_Already_Exist()
-            {
-                // Given
-                var fileSystem = new FakeFileSystem(false);
-                fileSystem.GetCreatedFile("/file.zip");
-                var environment = Substitute.For<ICakeEnvironment>();
-                var zipper = new Zipper(fileSystem, environment);
-
-                // When
-                var result = Record.Exception(() => zipper.Zip("/Root", "/file.zip", new FilePath[] { "/Root/file.txt" }));
-
-                // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("The output file '/file.zip' already exist.", result.Message);
-            }
-
-            [Fact]
             public void Should_Zip_Provided_Files()
             {
                 // Given
                 var fileSystem = new FakeFileSystem(false);
-                fileSystem.GetCreatedFile("/Root/file.txt", "HelloWorld"); 
-                
+                fileSystem.GetCreatedFile("/Root/file.txt", "HelloWorld");                
                 var environment = Substitute.For<ICakeEnvironment>();
-                var zipper = new Zipper(fileSystem, environment);
+                var log = Substitute.For<ICakeLog>();
+                var zipper = new Zipper(fileSystem, environment, log);
 
                 // When
                 zipper.Zip("/Root", "/file.zip", new FilePath[] {"/Root/file.txt"});
@@ -155,7 +160,8 @@ namespace Cake.IO.Tests.Compression
                 var fileSystem = new FakeFileSystem(false);
                 fileSystem.GetCreatedFile("/Root/Stuff/file.txt", "HelloWorld");
                 var environment = Substitute.For<ICakeEnvironment>();
-                var zipper = new Zipper(fileSystem, environment);
+                var log = Substitute.For<ICakeLog>();
+                var zipper = new Zipper(fileSystem, environment, log);
                 zipper.Zip("/Root", "/file.zip", new FilePath[] { "/Root/Stuff/file.txt" });
 
                 // When
