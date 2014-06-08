@@ -41,6 +41,17 @@ namespace Cake.Core.Tests.Fakes
             return file;
         }
 
+        public IFile GetCreatedFile(FilePath path, string content)
+        {
+            var file = GetFile(path);
+            var stream = file.Open(FileMode.Create, FileAccess.Write, FileShare.None);
+            var writer = new StreamWriter(stream);
+            writer.Write(content);
+            writer.Close();
+            stream.Close();
+            return file;
+        }
+
         public void DeleteDirectory(DirectoryPath path)
         {
             if (Directories.ContainsKey(path))

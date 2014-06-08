@@ -3,7 +3,7 @@ using Cake.Core.IO;
 using Xunit;
 using Xunit.Extensions;
 
-namespace Cake.Core.Tests.Unit.IO.Paths
+namespace Cake.Core.Tests.Unit.IO
 {
     public sealed class DirectoryPathTests
     {

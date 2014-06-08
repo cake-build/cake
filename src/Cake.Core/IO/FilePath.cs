@@ -1,4 +1,7 @@
-﻿namespace Cake.Core.IO
+﻿using System;
+using System.Linq;
+
+namespace Cake.Core.IO
 {
     public sealed class FilePath : Path
     {
@@ -37,6 +40,13 @@
         public FilePath ChangeExtension(string extension)
         {
             return new FilePath(System.IO.Path.ChangeExtension(FullPath, extension));
+        }
+
+        public FilePath MakeAbsolute(ICakeEnvironment environment)
+        {
+            return IsRelative
+                ? environment.WorkingDirectory.GetFilePath(this)
+                : new FilePath(FullPath);
         }
 
         public static implicit operator FilePath(string path)

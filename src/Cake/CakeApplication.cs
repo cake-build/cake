@@ -73,7 +73,7 @@ namespace Cake
             {
                 "System", "System.Collections.Generic", "System.Linq",
                 "System.Text", "System.Threading.Tasks", "System.IO",
-                "Cake", "Cake.Core", "Cake.Core.IO", "Cake.IO",
+                "Cake", "Cake.Core", "Cake.Core.IO", "Cake.IO", "Cake.IO.Compression",
                 "Cake.Core.Diagnostics", "Cake.MSBuild", "Cake.XUnit"
             };
 

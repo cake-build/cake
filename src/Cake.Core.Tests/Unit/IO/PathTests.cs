@@ -85,6 +85,18 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.Equal("my awesome shaders/basic", path.FullPath);
             }
+
+            [Fact]
+            public void Should_Throw_If_Path_Contains_Illegal_Characters()
+            {
+                // Given
+                var result = Record.Exception(() => new TestingPath("hello/**/world.txt"));
+
+                // Then
+                Assert.IsType<ArgumentException>(result);
+                Assert.Equal("path", ((ArgumentException)result).ParamName);
+                Assert.Equal(string.Format("Illegal characters in directory path (*).{0}Parameter name: path", Environment.NewLine), result.Message);
+            }
         }
 
         public sealed class TheSegmentsProperty

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Cake.Core.IO
 {
@@ -35,6 +36,13 @@ namespace Cake.Core.IO
             }
             var combinedPath = System.IO.Path.Combine(FullPath, path.FullPath);
             return new DirectoryPath(combinedPath);
+        }
+
+        public DirectoryPath MakeAbsolute(ICakeEnvironment environment)
+        {
+            return IsRelative 
+                ? environment.WorkingDirectory.Combine(this) 
+                : new DirectoryPath(FullPath);
         }
 
         public static implicit operator DirectoryPath(string path)
