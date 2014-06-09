@@ -11,12 +11,12 @@ namespace Cake.Core.Tests.Unit.IO
         {
             [Theory]
 #if !UNIX
-            //[InlineData("c:/assets/shaders/", "simple.frag", "c:/assets/shaders/simple.frag")]
+            [InlineData("c:/assets/shaders/", "simple.frag", "c:/assets/shaders/simple.frag")]
             [InlineData("c:/", "simple.frag", "c:/simple.frag")]
 #endif
-            //[InlineData("assets/shaders", "simple.frag", "assets/shaders/simple.frag")]
-            //[InlineData("assets/shaders/", "simple.frag", "assets/shaders/simple.frag")]
-            //[InlineData("/assets/shaders/", "simple.frag", "/assets/shaders/simple.frag")]
+            [InlineData("assets/shaders", "simple.frag", "assets/shaders/simple.frag")]
+            [InlineData("assets/shaders/", "simple.frag", "assets/shaders/simple.frag")]
+            [InlineData("/assets/shaders/", "simple.frag", "/assets/shaders/simple.frag")]
             public void Should_Combine_Paths(string first, string second, string expected)
             {
                 // Given
