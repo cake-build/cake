@@ -5,14 +5,14 @@ namespace Cake.Core.IO
 {
     public static class GlobberExtensions
     {
-        public static IEnumerable<FilePath> GetFiles(this ICakeContext context, string pattern)
+        public static IEnumerable<FilePath> GetFiles(this IGlobber globber, string pattern)
         {
-            return context.Globber.Match(pattern).OfType<FilePath>();
+            return globber.Match(pattern).OfType<FilePath>();
         }
 
-        public static IEnumerable<DirectoryPath> GetDirectories(this ICakeContext context, string pattern)
+        public static IEnumerable<DirectoryPath> GetDirectories(this IGlobber globber, string pattern)
         {
-            return context.Globber.Match(pattern).OfType<DirectoryPath>();
+            return globber.Match(pattern).OfType<DirectoryPath>();
         }
     }
 }

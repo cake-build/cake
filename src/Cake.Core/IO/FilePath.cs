@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Cake.Core.IO
+﻿namespace Cake.Core.IO
 {
     public sealed class FilePath : Path
     {

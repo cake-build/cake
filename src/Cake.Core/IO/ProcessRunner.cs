@@ -2,7 +2,7 @@
 
 namespace Cake.Core.IO
 {
-    internal sealed class ProcessRunner : IProcessRunner
+    public sealed class ProcessRunner : IProcessRunner
     {
         public IProcess Start(ProcessStartInfo info)
         {

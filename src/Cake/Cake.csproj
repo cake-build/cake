@@ -69,7 +69,6 @@
     <Compile Include="Diagnostics\Formatting\LiteralToken.cs" />
     <Compile Include="Diagnostics\Formatting\PropertyToken.cs" />
     <Compile Include="Extensions\MethodInfoExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -94,6 +93,10 @@
     <ProjectReference Include="..\Cake.MSBuild\Cake.MSBuild.csproj">
       <Project>{2c98be45-d5b5-4931-993b-e3ae3499d378}</Project>
       <Name>Cake.MSBuild</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cake.NuGet\Cake.NuGet.csproj">
+      <Project>{f71bfb70-d8aa-4fc2-9e2a-47b83f12fa05}</Project>
+      <Name>Cake.NuGet</Name>
     </ProjectReference>
     <ProjectReference Include="..\Cake.XUnit\Cake.XUnit.csproj">
       <Project>{00470437-65fc-4f59-bbe5-0b8abcaf55fe}</Project>

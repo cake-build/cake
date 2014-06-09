@@ -18,7 +18,7 @@ namespace Cake.XUnit
         {
             // Find the xUnit console runner.
             var query = string.Format("./tools/**/xunit.console.clr4.exe");
-            var runnerPath = context.GetFiles(query).FirstOrDefault();
+            var runnerPath = context.Globber.GetFiles(query).FirstOrDefault();
             if (runnerPath == null)
             {
                 throw new CakeException("Could not find xUnit runner.");

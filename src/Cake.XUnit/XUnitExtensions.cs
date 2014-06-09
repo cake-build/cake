@@ -9,7 +9,7 @@ namespace Cake.XUnit
         public static void XUnit(this ICakeContext context, string pattern)
         {
             var runner = new XUnitRunner();
-            var assemblies = context.GetFiles(pattern);
+            var assemblies = context.Globber.GetFiles(pattern);
             foreach (var assembly in assemblies)
             {
                 var settings = new XUnitSettings(assembly);

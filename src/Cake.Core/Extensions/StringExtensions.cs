@@ -1,9 +1,18 @@
 ﻿using System;
 
-namespace Cake.Extensions
+namespace Cake.Core.Extensions
 {
-    internal static class StringExtensions
+    public static class StringExtensions
     {
+        public static string Quote(this string value)
+        {
+            if (!IsQuoted(value))
+            {
+                value = string.Concat("\"", value, "\"");
+            }
+            return value;
+        }
+
         public static string UnQuote(this string value)
         {
             if (IsQuoted(value))

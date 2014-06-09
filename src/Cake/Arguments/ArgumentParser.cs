@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Extensions;
+using Cake.Core.Extensions;
 
 namespace Cake.Arguments
 {

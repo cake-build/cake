@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D3519FA7-AC32-422C-B8FE-7246AD2FE562}</ProjectGuid>
+    <ProjectGuid>{5A46F557-2FC1-4338-93BC-21BF2B8EB26C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cake.IO</RootNamespace>
-    <AssemblyName>Cake.IO</AssemblyName>
+    <RootNamespace>Cake.NuGet.Tests</RootNamespace>
+    <AssemblyName>Cake.NuGet.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,32 +30,52 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NSubstitute">
+      <HintPath>..\packages\NSubstitute.1.7.2.0\lib\NET45\NSubstitute.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="xunit">
+      <HintPath>..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArgumentExtensions.cs" />
-    <Compile Include="Compression\Zipper.cs" />
-    <Compile Include="Compression\ZipExtensions.cs" />
-    <Compile Include="DirectoryCleaner.cs" />
-    <Compile Include="DirectoryDeleter.cs" />
-    <Compile Include="DirectoryExtensions.cs" />
-    <Compile Include="GlobbingExtensions.cs" />
+    <Compile Include="..\Cake.Core.Tests\Fakes\FakeDirectory.cs">
+      <Link>Fakes\FakeDirectory.cs</Link>
+    </Compile>
+    <Compile Include="..\Cake.Core.Tests\Fakes\FakeFile.cs">
+      <Link>Fakes\FakeFile.cs</Link>
+    </Compile>
+    <Compile Include="..\Cake.Core.Tests\Fakes\FakeFileStream.cs">
+      <Link>Fakes\FakeFileStream.cs</Link>
+    </Compile>
+    <Compile Include="..\Cake.Core.Tests\Fakes\FakeFileSystem.cs">
+      <Link>Fakes\FakeFileSystem.cs</Link>
+    </Compile>
+    <Compile Include="Fixtures\NuGetFixture.cs" />
+    <Compile Include="NuGetPackerTests.cs" />
+    <Compile Include="NuGetPackSettingsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
-      <Project>{8074B833-11B8-459F-BB98-BFBA2BC5C698}</Project>
+      <Project>{8074b833-11b8-459f-bb98-bfba2bc5c698}</Project>
       <Name>Cake.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cake.NuGet\Cake.NuGet.csproj">
+      <Project>{f71bfb70-d8aa-4fc2-9e2a-47b83f12fa05}</Project>
+      <Name>Cake.NuGet</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -65,7 +65,8 @@ namespace Cake
                 typeof(ICakeContext).Assembly,  // Cake.Core
                 typeof(MSBuild.MSBuildRunner).Assembly, // Cake.MSBuild
                 typeof(XUnit.XUnitRunner).Assembly, // Cake.XUnit
-                typeof(IO.DirectoryExtensions).Assembly // Cake.IO
+                typeof(IO.DirectoryExtensions).Assembly, // Cake.IO
+                typeof(NuGet.NuGetPacker).Assembly // Cake.NuGet
             };
 
             // Add all namespaces.
@@ -74,7 +75,7 @@ namespace Cake
                 "System", "System.Collections.Generic", "System.Linq",
                 "System.Text", "System.Threading.Tasks", "System.IO",
                 "Cake", "Cake.Core", "Cake.Core.IO", "Cake.IO", "Cake.IO.Compression",
-                "Cake.Core.Diagnostics", "Cake.MSBuild", "Cake.XUnit"
+                "Cake.Core.Diagnostics", "Cake.MSBuild", "Cake.XUnit", "Cake.NuGet"
             };
 
             // Execute the script.
