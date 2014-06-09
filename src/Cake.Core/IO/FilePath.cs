@@ -42,7 +42,7 @@
         public FilePath MakeAbsolute(ICakeEnvironment environment)
         {
             return IsRelative
-                ? environment.WorkingDirectory.GetFilePath(this)
+                ? environment.WorkingDirectory.CombineWithFilePath(this)
                 : new FilePath(FullPath);
         }
 

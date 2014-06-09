@@ -6,11 +6,6 @@ namespace Cake.IO
 {
     public static class DirectoryExtensions
     {
-        public static void DeleteDirectory(this ICakeContext context, DirectoryPath path, bool recursive = false)
-        {
-            DirectoryDeleter.Delete(context, path, recursive);
-        }
-
         public static void DeleteDirectories(this ICakeContext context, IEnumerable<DirectoryPath> directories, bool recursive = true)
         {
             foreach (var directory in directories)
@@ -19,9 +14,9 @@ namespace Cake.IO
             }
         }
 
-        public static void CleanDirectory(this ICakeContext context, DirectoryPath path)
+        public static void DeleteDirectory(this ICakeContext context, DirectoryPath path, bool recursive = false)
         {
-            DirectoryCleaner.Clean(context, path);
+            DirectoryDeleter.Delete(context, path, recursive);
         }
 
         public static void CleanDirectories(this ICakeContext context, string pattern)
@@ -34,8 +29,13 @@ namespace Cake.IO
         {
             foreach (var directory in directories)
             {
-                DirectoryCleaner.Clean(context, directory);
+                CleanDirectory(context, directory);
             }
+        }
+
+        public static void CleanDirectory(this ICakeContext context, DirectoryPath path)
+        {
+            DirectoryCleaner.Clean(context, path);
         }
     }
 }

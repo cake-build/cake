@@ -37,8 +37,8 @@ namespace Cake.Bootstrapping
             _log.Verbose("Copying files...");
             foreach (var nugetPath in _nugetPaths)
             {                
-                var source = _fileSystem.GetFile(installRoot.GetFilePath(nugetPath));
-                var destination = _fileSystem.GetFile(root.GetFilePath(nugetPath.GetFilename()));
+                var source = _fileSystem.GetFile(installRoot.CombineWithFilePath(nugetPath));
+                var destination = _fileSystem.GetFile(root.CombineWithFilePath(nugetPath.GetFilename()));
 
                 _log.Information("Copying {0}...", source.Path.GetFilename());
 

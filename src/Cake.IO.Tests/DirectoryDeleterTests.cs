@@ -20,7 +20,7 @@ namespace Cake.IO.Tests
 
                 // When
                 var result = Record.Exception(() =>
-                    DirectoryDeleter.Delete(context, "/Temp/DoNotExist", recursive: false));
+                    DirectoryExtensions.DeleteDirectory(context, "/Temp/DoNotExist"));
 
                 // Then
                 Assert.IsType<IOException>(result);
@@ -37,7 +37,7 @@ namespace Cake.IO.Tests
 
                 // When
                 var result = Record.Exception(() =>
-                    DirectoryDeleter.Delete(context, "/Temp/HasDirectories", recursive: false));
+                    DirectoryExtensions.DeleteDirectory(context, "/Temp/HasDirectories"));
 
                 // Then
                 Assert.IsType<IOException>(result);
@@ -54,7 +54,7 @@ namespace Cake.IO.Tests
 
                 // When
                 var result = Record.Exception(() =>
-                    DirectoryDeleter.Delete(context, "/Temp/HasFiles", recursive: false));
+                    DirectoryExtensions.DeleteDirectory(context, "/Temp/HasFiles"));
 
                 // Then
                 Assert.IsType<IOException>(result);
@@ -70,7 +70,7 @@ namespace Cake.IO.Tests
                 context.FileSystem.Returns(fixture.FileSystem);
 
                 // When
-                DirectoryDeleter.Delete(context, "/Temp/Hello/Empty", recursive: false);
+                DirectoryExtensions.DeleteDirectory(context, "/Temp/Hello/Empty");
 
                 // Then
                 Assert.False(fixture.FileSystem.GetDirectory("/Temp/Hello/Empty").Exists);
@@ -85,7 +85,7 @@ namespace Cake.IO.Tests
                 context.FileSystem.Returns(fixture.FileSystem);
 
                 // When
-                DirectoryDeleter.Delete(context, "/Temp/Hello", recursive: true);
+                DirectoryExtensions.DeleteDirectory(context, "/Temp/Hello", true);
 
                 // Then
                 Assert.False(fixture.FileSystem.GetDirectory("/Temp/Hello").Exists);

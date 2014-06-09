@@ -23,7 +23,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var path = new DirectoryPath(first);
 
                 // When
-                var result = path.GetFilePath(new FilePath(second));
+                var result = path.CombineWithFilePath(new FilePath(second));
 
                 // Then
                 Assert.Equal(expected, result.FullPath);
@@ -36,7 +36,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var path = new DirectoryPath("assets");
 
                 // When
-                var result = Record.Exception(() => path.GetFilePath(null));
+                var result = Record.Exception(() => path.CombineWithFilePath(null));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -50,7 +50,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var path = new DirectoryPath("assets");
 
                 // When
-                var result = Record.Exception(() => path.GetFilePath(new FilePath("/other/asset.txt")));
+                var result = Record.Exception(() => path.CombineWithFilePath(new FilePath("/other/asset.txt")));
 
                 // Then
                 Assert.IsType<InvalidOperationException>(result);

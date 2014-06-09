@@ -37,7 +37,7 @@ namespace Cake.Bootstrapping
         {
             foreach (var roslynAssembly in _roslynAssemblies)
             {
-                var file = _fileSystem.GetFile(root.GetFilePath(roslynAssembly));
+                var file = _fileSystem.GetFile(root.CombineWithFilePath(roslynAssembly));
                 if (!file.Exists)
                 {
                     return false;

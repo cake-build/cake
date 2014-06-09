@@ -16,7 +16,7 @@ namespace Cake.MSBuild
             }
 
             // Get the MSBuild path.
-            return binPath.GetFilePath("MSBuild.exe");
+            return binPath.CombineWithFilePath("MSBuild.exe");
         }
 
         private static DirectoryPath GetMSBuildPath(ICakeEnvironment environment, MSBuildVersion version, PlatformTarget target)

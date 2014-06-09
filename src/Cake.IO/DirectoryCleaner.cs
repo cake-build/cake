@@ -6,7 +6,7 @@ using Cake.Core.IO;
 
 namespace Cake.IO
 {
-    public static class DirectoryCleaner
+    internal static class DirectoryCleaner
     {
         public static void Clean(ICakeContext context, DirectoryPath path)
         {

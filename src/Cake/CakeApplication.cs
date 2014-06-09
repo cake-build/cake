@@ -109,7 +109,7 @@ namespace Cake
                 // Concatinate the starting working directory
                 // with the script file path.
                 scriptLocation = _environment.WorkingDirectory
-                    .GetFilePath(scriptPath).GetDirectory();
+                    .CombineWithFilePath(scriptPath).GetDirectory();
             }
             return scriptLocation;
         }

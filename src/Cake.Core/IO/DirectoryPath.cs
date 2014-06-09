@@ -8,8 +8,14 @@ namespace Cake.Core.IO
             : base(path)
         {
         }
-
+ 
         public FilePath GetFilePath(FilePath path)
+        {
+            var combinedPath = System.IO.Path.Combine(FullPath, path.GetFilename().FullPath);
+            return new FilePath(combinedPath);
+        }
+
+        public FilePath CombineWithFilePath(FilePath path)
         {
             if (path == null)
             {

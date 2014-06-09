@@ -6,7 +6,7 @@ using Cake.Core.IO;
 
 namespace Cake.IO
 {
-    public static class DirectoryDeleter
+    internal static class DirectoryDeleter
     {
         public static void Delete(ICakeContext context, DirectoryPath path, bool recursive)
         {

@@ -46,6 +46,8 @@
     <Compile Include="DirectoryCleaner.cs" />
     <Compile Include="DirectoryDeleter.cs" />
     <Compile Include="DirectoryExtensions.cs" />
+    <Compile Include="FileCopier.cs" />
+    <Compile Include="FileExtensions.cs" />
     <Compile Include="GlobbingExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">

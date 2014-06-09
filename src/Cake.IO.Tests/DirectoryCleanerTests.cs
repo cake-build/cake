@@ -20,8 +20,8 @@ namespace Cake.IO.Tests
                 context.FileSystem.Returns(Substitute.For<IFileSystem>());
 
                 // When
-                var result = Record.Exception(() => 
-                    DirectoryCleaner.Clean(context, null));
+                var result = Record.Exception(() =>
+                    DirectoryExtensions.CleanDirectory(context, null));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -38,7 +38,7 @@ namespace Cake.IO.Tests
                 context.FileSystem.Returns(fixture.FileSystem);
 
                 // When
-                DirectoryCleaner.Clean(context, directory);
+                DirectoryExtensions.CleanDirectory(context, directory);
 
                 // Then
                 Assert.Empty(fixture.FileSystem.GetDirectory(directory).GetFiles("*", SearchScope.Recursive));
@@ -54,7 +54,7 @@ namespace Cake.IO.Tests
                 context.FileSystem.Returns(fixture.FileSystem);
 
                 // When
-                DirectoryCleaner.Clean(context, directory);
+                DirectoryExtensions.CleanDirectory(context, directory);
 
                 // Then
                 Assert.Empty(fixture.FileSystem.GetDirectory(directory).GetDirectories("*", SearchScope.Recursive));
@@ -70,7 +70,7 @@ namespace Cake.IO.Tests
                 context.FileSystem.Returns(fixture.FileSystem);
 
                 // When
-                DirectoryCleaner.Clean(context, directory);
+                DirectoryExtensions.CleanDirectory(context, directory);
 
                 // Then
                 Assert.True(fixture.FileSystem.GetDirectory(directory).Exists);
@@ -86,8 +86,8 @@ namespace Cake.IO.Tests
                 context.FileSystem.Returns(fixture.FileSystem);
 
                 // When
-                var result = Record.Exception(() => 
-                    DirectoryCleaner.Clean(context, directory));
+                var result = Record.Exception(() =>
+                    DirectoryExtensions.CleanDirectory(context, directory));
 
                 // Then
                 Assert.IsType<IOException>(result);
