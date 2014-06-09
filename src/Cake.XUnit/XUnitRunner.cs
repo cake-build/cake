@@ -1,36 +1,47 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Cake.Core;
+using Cake.Core.Extensions;
 using Cake.Core.IO;
 
 namespace Cake.XUnit
 {
     public sealed class XUnitRunner
     {
+        private readonly ICakeEnvironment _environment;
+        private readonly IGlobber _globber;
         private readonly IProcessRunner _runner;
 
-        public XUnitRunner(IProcessRunner runner = null)
+        public XUnitRunner(ICakeEnvironment environment, IGlobber globber, IProcessRunner runner = null)
         {
+            _environment = environment;
+            _globber = globber;
             _runner = runner ?? new ProcessRunner();
         }
 
-        public void Run(ICakeContext context, XUnitSettings settings)
+        public void Run(FilePath assemblyPath)
         {
+            if (assemblyPath == null)
+            {
+                throw new ArgumentNullException("assemblyPath");
+            }
+
             // Find the xUnit console runner.
             var query = string.Format("./tools/**/xunit.console.clr4.exe");
-            var runnerPath = context.Globber.GetFiles(query).FirstOrDefault();
+            var runnerPath = _globber.GetFiles(query).FirstOrDefault();
             if (runnerPath == null)
             {
                 throw new CakeException("Could not find xUnit runner.");
             }
 
             // Get the assemblies to build.
-            var assembly = string.Concat("\"", settings.Assembly.FullPath, "\"");
+            var assembly = assemblyPath.FullPath.Quote();
 
             // Create the process start info.
             var info = new ProcessStartInfo(runnerPath.FullPath)
             {
-                WorkingDirectory = context.Environment.WorkingDirectory.FullPath,
+                WorkingDirectory = _environment.WorkingDirectory.FullPath,
                 Arguments = assembly,
                 UseShellExecute = false
             };

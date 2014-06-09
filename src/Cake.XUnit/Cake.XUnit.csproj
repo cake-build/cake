@@ -41,7 +41,6 @@
   <ItemGroup>
     <Compile Include="XUnitExtensions.cs" />
     <Compile Include="XUnitRunner.cs" />
-    <Compile Include="XUnitSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>

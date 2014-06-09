@@ -10,14 +10,12 @@ namespace Cake.NuGet
 {
     public sealed class NuGetPacker
     {
-        private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
         private readonly IProcessRunner _processRunner;
 
-        public NuGetPacker(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
+        public NuGetPacker(ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
         {
-            _fileSystem = fileSystem;
             _environment = environment;
             _globber = globber;
             _processRunner = processRunner;
@@ -32,14 +30,6 @@ namespace Cake.NuGet
             if (settings == null)
             {
                 throw new ArgumentNullException("settings");
-            }
-
-            // Get the nuspec file.
-            var nuspecFile = _fileSystem.GetFile(nuspecFilePath);
-            if (!nuspecFile.Exists)
-            {
-                const string format = "The nuspec file {0} do not exist.";
-                throw new CakeException(string.Format(format, nuspecFilePath));
             }
 
             // Find the NuGet executable.

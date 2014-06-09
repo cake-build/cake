@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
@@ -13,16 +14,27 @@ namespace Cake.XUnit.Tests
         public sealed class TheRunMethod
         {
             [Fact]
+            public void Should_Throw_If_Assembly_Path_Is_Null()
+            {
+                var fixture = new XUnitRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                var result = Record.Exception(() => runner.Run(null));
+
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("assemblyPath", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
             public void Should_Throw_If_XUnit_Runner_Was_Not_Found()
             {
                 // Given
                 var fixture = new XUnitRunnerFixture();
                 fixture.Globber.Match("./tools/**/xunit.console.clr4.exe").Returns(Enumerable.Empty<Path>());
                 var runner = fixture.CreateRunner();
-                var settings = new XUnitSettings("./Test1");
 
                 // When
-                var result = Record.Exception(() => runner.Run(fixture.Context, settings));
+                var result = Record.Exception(() => runner.Run("./Test1"));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -35,10 +47,9 @@ namespace Cake.XUnit.Tests
                 // Given
                 var fixture = new XUnitRunnerFixture();                                
                 var runner = fixture.CreateRunner();
-                var settings = new XUnitSettings("./Test1");
 
                 // When
-                runner.Run(fixture.Context, settings);
+                runner.Run("./Test1");
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
@@ -51,10 +62,9 @@ namespace Cake.XUnit.Tests
                 // Given
                 var fixture = new XUnitRunnerFixture();
                 var runner = fixture.CreateRunner();
-                var settings = new XUnitSettings("./Test1");
 
                 // When
-                runner.Run(fixture.Context, settings);
+                runner.Run("./Test1");
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
@@ -68,10 +78,9 @@ namespace Cake.XUnit.Tests
                 var fixture = new XUnitRunnerFixture();
                 fixture.ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns((IProcess)null);
                 var runner = fixture.CreateRunner();
-                var settings = new XUnitSettings("./Test1");
 
                 // When
-                var result = Record.Exception(() => runner.Run(fixture.Context, settings));
+                var result = Record.Exception(() => runner.Run("./Test1"));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -85,10 +94,9 @@ namespace Cake.XUnit.Tests
                 var fixture = new XUnitRunnerFixture();
                 fixture.Process.GetExitCode().Returns(1);
                 var runner = fixture.CreateRunner();
-                var settings = new XUnitSettings("./Test1");
 
                 // When
-                var result = Record.Exception(() => runner.Run(fixture.Context, settings));
+                var result = Record.Exception(() => runner.Run("./Test1"));
 
                 // Then
                 Assert.IsType<CakeException>(result);

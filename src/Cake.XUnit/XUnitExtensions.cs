@@ -8,22 +8,16 @@ namespace Cake.XUnit
     {
         public static void XUnit(this ICakeContext context, string pattern)
         {
-            var runner = new XUnitRunner();
             var assemblies = context.Globber.GetFiles(pattern);
-            foreach (var assembly in assemblies)
-            {
-                var settings = new XUnitSettings(assembly);
-                runner.Run(context, settings);   
-            }
+            XUnit(context, assemblies);
         }
 
         public static void XUnit(this ICakeContext context, IEnumerable<FilePath> assemblies)
         {
-            var runner = new XUnitRunner();
+            var runner = new XUnitRunner(context.Environment, context.Globber);
             foreach (var assembly in assemblies)
             {
-                var settings = new XUnitSettings(assembly);
-                runner.Run(context, settings);                   
+                runner.Run(assembly);                   
             }
         }
     }

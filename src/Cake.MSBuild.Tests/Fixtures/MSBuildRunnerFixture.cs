@@ -9,7 +9,6 @@ namespace Cake.MSBuild.Tests.Fixtures
     {
         public IFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
-        public ICakeContext Context { get; set; }
         public IProcess Process { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
 
@@ -36,15 +35,11 @@ namespace Cake.MSBuild.Tests.Fixtures
                     file.Path.Returns(c.Arg<FilePath>());
                     return file;
                 });
-
-            Context = Substitute.For<ICakeContext>();
-            Context.Environment.Returns(Environment);
-            Context.FileSystem.Returns(FileSystem);
         }
 
         public MSBuildRunner CreateRunner()
         {
-            return new MSBuildRunner(ProcessRunner);
+            return new MSBuildRunner(FileSystem, Environment, ProcessRunner);
         }
     }
 }

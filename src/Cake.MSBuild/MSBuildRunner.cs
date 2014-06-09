@@ -8,25 +8,29 @@ namespace Cake.MSBuild
 {
     public sealed class MSBuildRunner
     {
+        private readonly IFileSystem _fileSystem;
+        private readonly ICakeEnvironment _environment;
         private readonly IProcessRunner _runner;
 
-        public MSBuildRunner(IProcessRunner runner = null)
+        public MSBuildRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner runner = null)
         {
+            _fileSystem = fileSystem;
+            _environment = environment;
             _runner = runner ?? new ProcessRunner();
         }
 
-        public void Run(ICakeContext context, MSBuildSettings settings)
+        public void Run(MSBuildSettings settings)
         {
             // Get the MSBuild path.
-            var msBuildPath = MSBuildResolver.GetMSBuildPath(context, settings.ToolVersion, settings.PlatformTarget);
-            if (!context.FileSystem.GetFile(msBuildPath).Exists)
+            var msBuildPath = MSBuildResolver.GetMSBuildPath(_environment, settings.ToolVersion, settings.PlatformTarget);
+            if (!_fileSystem.GetFile(msBuildPath).Exists)
             {
                 var message = string.Format("Could not find MSBuild at {0}", msBuildPath);
                 throw new CakeException(message);
             }
 
             // Start the process.
-            var processInfo = GetProcessStartInfo(settings, context, msBuildPath);
+            var processInfo = GetProcessStartInfo(settings, msBuildPath);
             var process = _runner.Start(processInfo);
             if (process == null)
             {
@@ -43,7 +47,7 @@ namespace Cake.MSBuild
             }
         }
 
-        private static ProcessStartInfo GetProcessStartInfo(MSBuildSettings settings, ICakeContext context, FilePath msBuildPath)
+        private ProcessStartInfo GetProcessStartInfo(MSBuildSettings settings, FilePath msBuildPath)
         {
             var parameters = new List<string>();
             var properties = new List<string>();
@@ -83,7 +87,7 @@ namespace Cake.MSBuild
 
             return new ProcessStartInfo(msBuildPath.FullPath)
             {
-                WorkingDirectory = context.Environment.WorkingDirectory.FullPath,
+                WorkingDirectory = _environment.WorkingDirectory.FullPath,
                 Arguments = string.Join(" ", parameters),
                 UseShellExecute = false
             };

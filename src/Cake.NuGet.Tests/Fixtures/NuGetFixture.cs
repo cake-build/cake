@@ -1,14 +1,12 @@
 ﻿using System.Diagnostics;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Tests.Fakes;
 using NSubstitute;
 
 namespace Cake.NuGet.Tests.Fixtures
 {
     public class NuGetFixture
     {
-        public FakeFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
         public IGlobber Globber { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
@@ -16,9 +14,6 @@ namespace Cake.NuGet.Tests.Fixtures
 
         public NuGetFixture()
         {
-            FileSystem = new FakeFileSystem(false);
-            FileSystem.GetCreatedFile("./existing.nuspec");
-
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory.Returns("/Working");
 
@@ -33,7 +28,7 @@ namespace Cake.NuGet.Tests.Fixtures
 
         public NuGetPacker CreatePacker()
         {
-            return new NuGetPacker(FileSystem, Environment, Globber, ProcessRunner);
+            return new NuGetPacker(Environment, Globber, ProcessRunner);
         }
     }
 }

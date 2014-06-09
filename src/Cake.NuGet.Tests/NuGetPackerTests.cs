@@ -44,21 +44,6 @@ namespace Cake.NuGet.Tests
             }
 
             [Fact]
-            public void Should_Throw_If_Nuspec_File_Do_Not_Exist()
-            {
-                // Given
-                var fixture = new NuGetFixture();
-                var packer = fixture.CreatePacker();
-
-                // When
-                var result = Record.Exception(() => packer.Pack("./nonnexisting.nuspec", new NuGetPackSettings()));
-
-                // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("The nuspec file nonnexisting.nuspec do not exist.", result.Message);
-            }
-
-            [Fact]
             public void Should_Throw_If_NuGet_Executable_Was_Not_Found()
             {
                 // Given

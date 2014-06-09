@@ -15,7 +15,9 @@ namespace Cake.MSBuild
         {
             var settings = new MSBuildSettings(solution);
             configurator(settings);
-            new MSBuildRunner().Run(context, settings);
+
+            var runner = new MSBuildRunner(context.FileSystem, context.Environment);
+            runner.Run(settings);
         }
     }
 }

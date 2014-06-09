@@ -9,10 +9,8 @@ namespace Cake.XUnit.Tests.Fixtures
     {
         public IProcess Process { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
-        public IFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
         public IGlobber Globber { get; set; }
-        public ICakeContext Context { get; set; }
 
         public XUnitRunnerFixture()
         {
@@ -22,23 +20,16 @@ namespace Cake.XUnit.Tests.Fixtures
             ProcessRunner = Substitute.For<IProcessRunner>();
             ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns(Process);
 
-            FileSystem = Substitute.For<IFileSystem>();
-
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory = "/Working";
 
             Globber = Substitute.For<IGlobber>();
-            Globber.Match("./tools/**/xunit.console.clr4.exe").Returns(new[] { (FilePath)"/Working/tools/xunit.console.clr4.exe" });
-
-            Context = Substitute.For<ICakeContext>();
-            Context.FileSystem.Returns(FileSystem);
-            Context.Environment.Returns(Environment);
-            Context.Globber.Returns(Globber);            
+            Globber.Match("./tools/**/xunit.console.clr4.exe").Returns(new[] { (FilePath)"/Working/tools/xunit.console.clr4.exe" });     
         }
 
         public XUnitRunner CreateRunner()
         {
-            return new XUnitRunner(ProcessRunner);
+            return new XUnitRunner(Environment, Globber, ProcessRunner);
         }
     }
 }

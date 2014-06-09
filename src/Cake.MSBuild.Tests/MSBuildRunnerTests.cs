@@ -38,7 +38,7 @@ namespace Cake.MSBuild.Tests
                 var runner = fixture.CreateRunner();
 
                 // When
-                runner.Run(fixture.Context, new MSBuildSettings("./src/Solution.sln")
+                runner.Run(new MSBuildSettings("./src/Solution.sln")
                 {
                     PlatformTarget = target,
                     ToolVersion = version
@@ -69,7 +69,7 @@ namespace Cake.MSBuild.Tests
                 var runner = fixture.CreateRunner();
 
                 // When
-                runner.Run(fixture.Context, new MSBuildSettings("./src/Solution.sln")
+                runner.Run(new MSBuildSettings("./src/Solution.sln")
                 {
                     ToolVersion = version,
                     PlatformTarget = target
@@ -118,7 +118,7 @@ namespace Cake.MSBuild.Tests
                 var runner = fixture.CreateRunner();
 
                 // When
-                runner.Run(fixture.Context, new MSBuildSettings("./src/Solution.sln")
+                runner.Run(new MSBuildSettings("./src/Solution.sln")
                 {
                     ToolVersion = version,
                     PlatformTarget = target
@@ -155,7 +155,7 @@ namespace Cake.MSBuild.Tests
                 var runner = fixture.CreateRunner();
 
                 // When
-                runner.Run(fixture.Context, new MSBuildSettings("./src/Solution.sln")
+                runner.Run(new MSBuildSettings("./src/Solution.sln")
                 {
                     ToolVersion = version,
                     PlatformTarget = target
@@ -174,7 +174,7 @@ namespace Cake.MSBuild.Tests
                 var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run(fixture.Context, 
+                var result = Record.Exception(() => runner.Run( 
                     new MSBuildSettings("./src/Solution.sln") {
                         PlatformTarget = PlatformTarget.x86,
                         ToolVersion = MSBuildToolVersion.NET20
@@ -192,10 +192,8 @@ namespace Cake.MSBuild.Tests
                 var fixture = new MSBuildRunnerFixture();
                 var runner = fixture.CreateRunner();
 
-                var settings = new MSBuildSettings("./src/Solution.sln");
-
                 // When
-                runner.Run(fixture.Context, settings);
+                runner.Run(new MSBuildSettings("./src/Solution.sln"));
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
@@ -214,7 +212,7 @@ namespace Cake.MSBuild.Tests
                 settings.WithTarget("B");
 
                 // When
-                runner.Run(fixture.Context, settings);
+                runner.Run(settings);
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
@@ -233,7 +231,7 @@ namespace Cake.MSBuild.Tests
                 settings.WithProperty("C", "D");
 
                 // When
-                runner.Run(fixture.Context, settings);
+                runner.Run(settings);
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
@@ -251,7 +249,7 @@ namespace Cake.MSBuild.Tests
                 settings.SetConfiguration("Release");
 
                 // When
-                runner.Run(fixture.Context, settings);
+                runner.Run(settings);
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
@@ -267,7 +265,7 @@ namespace Cake.MSBuild.Tests
                 var settings = new MSBuildSettings("./src/Solution.sln");
 
                 // When
-                runner.Run(fixture.Context, settings);
+                runner.Run(settings);
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
@@ -283,7 +281,7 @@ namespace Cake.MSBuild.Tests
                 var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run(fixture.Context, new MSBuildSettings("./src/Solution.sln")));
+                var result = Record.Exception(() => runner.Run(new MSBuildSettings("./src/Solution.sln")));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -299,7 +297,7 @@ namespace Cake.MSBuild.Tests
                 var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run(fixture.Context, new MSBuildSettings("./src/Solution.sln")));
+                var result = Record.Exception(() => runner.Run(new MSBuildSettings("./src/Solution.sln")));
 
                 // Then
                 Assert.IsType<CakeException>(result);
