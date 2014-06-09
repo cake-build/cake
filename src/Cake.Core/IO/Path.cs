@@ -45,6 +45,10 @@ namespace Cake.Core.IO
                 _path = _path.Substring(2);
             }
 
+            // Remove trailing slashes.
+            _path = _path.TrimEnd(new[] {'/', '\\'});
+
+            // Relative path?
             _isRelative = !System.IO.Path.IsPathRooted(_path);
 
             // Extract path segments.

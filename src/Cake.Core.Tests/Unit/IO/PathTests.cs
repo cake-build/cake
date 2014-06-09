@@ -97,6 +97,22 @@ namespace Cake.Core.Tests.Unit.IO
                 Assert.Equal("path", ((ArgumentException)result).ParamName);
                 Assert.Equal(string.Format("Illegal characters in directory path (*).{0}Parameter name: path", Environment.NewLine), result.Message);
             }
+
+            [Theory]
+            [InlineData("/Hello/World/", "/Hello/World")]
+            [InlineData("\\Hello\\World\\", "/Hello/World")]
+            [InlineData("file.txt/", "file.txt")]
+            [InlineData("file.txt\\", "file.txt")]
+            [InlineData("Temp/file.txt/", "Temp/file.txt")]
+            [InlineData("Temp\\file.txt\\", "Temp/file.txt")]
+            public void Should_Remove_Trailing_Slashes(string value, string expected)
+            {
+                // Given, When
+                var path = new TestingPath(value);
+
+                // Then
+                Assert.Equal(expected, path.FullPath);
+            }
         }
 
         public sealed class TheSegmentsProperty
