@@ -48,6 +48,13 @@ namespace Cake.Core.IO
             // Remove trailing slashes.
             _path = _path.TrimEnd(new[] {'/', '\\'});
 
+#if !UNIX            
+            if (_path.EndsWith(":", StringComparison.OrdinalIgnoreCase))
+            {
+                _path = string.Concat(_path, "/");
+            }
+#endif
+
             // Relative path?
             _isRelative = !System.IO.Path.IsPathRooted(_path);
 
