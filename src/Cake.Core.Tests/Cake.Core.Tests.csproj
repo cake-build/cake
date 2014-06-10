@@ -61,6 +61,7 @@
     <Compile Include="Fixtures\GlobberFixture.cs" />
     <Compile Include="Unit\Graph\CakeGraphBuilderTests.cs" />
     <Compile Include="Unit\Graph\CakeGraphTests.cs" />
+    <Compile Include="Unit\IO\FileSystemExtensionsTest.cs" />
     <Compile Include="Unit\IO\GlobberTests.cs" />
     <Compile Include="Unit\IO\PathComparerTests.cs" />
     <Compile Include="Unit\IO\DirectoryPathTests.cs" />

@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.IO
@@ -46,9 +42,8 @@ namespace Cake.IO
 
             var targetDirectoryPath = targetFilePath.GetDirectory().MakeAbsolute(context.Environment);
 
-            // Make sure the target directory exist.
-            var targetDirectory = context.FileSystem.GetDirectory(targetDirectoryPath);
-            if (targetDirectory == null || !targetDirectory.Exists)
+            // Make sure the target directory exist.            
+            if (!context.FileSystem.Exist(targetDirectoryPath))
             {
                 const string format = "The directory '{0}' do not exist.";
                 throw new DirectoryNotFoundException(string.Format(format, targetDirectoryPath.FullPath));
@@ -71,7 +66,6 @@ namespace Cake.IO
             CopyFiles(context, files, targetDirectoryPath);
         }
 
-
         public static void CopyFiles(ICakeContext context, IEnumerable<FilePath> filePaths, DirectoryPath targetDirectoryPath)
         {
             if (context == null)
@@ -87,36 +81,36 @@ namespace Cake.IO
                 throw new ArgumentNullException("targetDirectoryPath");
             }
 
-            // Make sure the target directory exist.
-            var absolutTargetDirectoryPath = targetDirectoryPath.MakeAbsolute(context.Environment);
-            var targetDirectory = context.FileSystem.GetDirectory(absolutTargetDirectoryPath);
-            if (targetDirectory == null || !targetDirectory.Exists)
+            var absoluteTargetDirectoryPath = targetDirectoryPath.MakeAbsolute(context.Environment);
+
+            // Make sure the target directory exist.            
+            if (!context.FileSystem.Exist(absoluteTargetDirectoryPath))
             {
                 const string format = "The directory '{0}' do not exist.";
-                throw new DirectoryNotFoundException(string.Format(format, absolutTargetDirectoryPath.FullPath));
+                throw new DirectoryNotFoundException(string.Format(format, absoluteTargetDirectoryPath.FullPath));                
             }
 
             // Iterate all files and copy them.
             foreach (var filePath in filePaths)
             {
-                CopyFileCore(context, filePath, absolutTargetDirectoryPath.GetFilePath(filePath));
+                CopyFileCore(context, filePath, absoluteTargetDirectoryPath.GetFilePath(filePath));
             }
         }
 
         private static void CopyFileCore(ICakeContext context, FilePath filePath, FilePath targetFilePath)
         {
-            var absolutFilePath = filePath.MakeAbsolute(context.Environment);
+            var absoluteFilePath = filePath.MakeAbsolute(context.Environment);
 
             // Get the file.
-            var file = context.FileSystem.GetFile(absolutFilePath);
-            if (file == null || !file.Exists)
+            if(!context.FileSystem.Exist(absoluteFilePath))
             {
                 const string format = "The file '{0}' do not exist.";
-                throw new FileNotFoundException(string.Format(format, absolutFilePath.FullPath),
-                    absolutFilePath.FullPath);
+                throw new FileNotFoundException(string.Format(format, absoluteFilePath.FullPath),
+                    absoluteFilePath.FullPath);
             }
 
             // Copy the file.
+            var file = context.FileSystem.GetFile(absoluteFilePath);
             file.Copy(targetFilePath.MakeAbsolute(context.Environment));
         } 
     }

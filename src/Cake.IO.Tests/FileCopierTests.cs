@@ -158,8 +158,8 @@ namespace Cake.IO.Tests
                 FileExtensions.CopyFile(fixture.Context, "./file1.txt", "./target/file1.txt");
 
                 // Then
-                fixture.FileSystem.Received(1).GetFile(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/file1.txt"));
+                fixture.TargetFiles[0].Received(1).Copy(
+                    Arg.Is<FilePath>(p => p.FullPath == "/Working/target/file1.txt"));
             }
         }
 
@@ -256,7 +256,8 @@ namespace Cake.IO.Tests
                     FileExtensions.CopyFiles(fixture.Context, fixture.SourceFilePaths, "./target");
 
                     // Then
-                    fixture.FileSystem.Received(2).GetFile(Arg.Any<FilePath>());
+                    fixture.TargetFiles[0].Received(1).Copy(Arg.Any<FilePath>());
+                    fixture.TargetFiles[1].Received(1).Copy(Arg.Any<FilePath>());
                 }
             }
 
@@ -348,7 +349,8 @@ namespace Cake.IO.Tests
                     FileExtensions.CopyFiles(fixture.Context, "*", "./target");
 
                     // Then
-                    fixture.FileSystem.Received(2).GetFile(Arg.Any<FilePath>());
+                    fixture.TargetFiles[0].Received(1).Copy(Arg.Any<FilePath>());
+                    fixture.TargetFiles[1].Received(1).Copy(Arg.Any<FilePath>());
                 }
             }
         }

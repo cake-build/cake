@@ -20,7 +20,7 @@ namespace Cake.IO
             if (!root.Exists)
             {
                 const string format = "The directory '{0}' do not exist.";
-                throw new IOException(string.Format(format, root.Path));
+                throw new DirectoryNotFoundException(string.Format(format, root.Path));
             }
 
             context.Log.Verbose("Deleting contents of {0}", path);

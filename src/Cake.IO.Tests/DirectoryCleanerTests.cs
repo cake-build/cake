@@ -90,7 +90,7 @@ namespace Cake.IO.Tests
                     DirectoryExtensions.CleanDirectory(context, directory));
 
                 // Then
-                Assert.IsType<IOException>(result);
+                Assert.IsType<DirectoryNotFoundException>(result);
                 Assert.Equal("The directory '/NonExisting' do not exist.", result.Message);
             }
         }
