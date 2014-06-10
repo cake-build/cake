@@ -46,7 +46,8 @@ Task("Clean")
     .IsDependentOn("Hello")
     .Does(() =>
 {
-    // Delete the bin directories (via script host).
+    // Delete the bin directories.
+    CleanDirectories("./build")
     CleanDirectories("./src/**/bin/" + configuration);
 });
 
@@ -54,7 +55,7 @@ Task("Build")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-    // Build project using MSBuild (via script host)
+    // Build project using MSBuild.
     MSBuild("./src/Cake.sln", settings => 
         settings.SetPlatformTarget(PlatformTarget.x86)
             .UseToolVersion(MSBuildToolVersion.NET45)
@@ -63,16 +64,41 @@ Task("Build")
             .SetConfiguration(configuration));         
 });
 
-Task("Run-Tests")
+Task("Unit-Tests")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    // Run unit tests (via script host)
+    // Run unit tests.
     XUnit("./src/**/bin/" + configuration + "/*.Tests.dll");
 });
 
+Task("Pack")
+    .IsDependentOn("Unit-Tests")
+    .Does(() =>
+{   
+    var root = "./src/Cake/bin/" + configuration;
+    var output = "./build/" + configuration + ".zip";
+    var files = root + "/*";
+
+    // Package the bin folder.
+    Zip(root, output, files);
+});
+
+Task("NuGet")
+    .IsDependentOn("Pack")
+    .Does(() =>
+{
+    NuGetPack("./Cake.nuspec", new NuGetPackSettings
+    {
+        Version = "0.1.0",
+        BasePath = "./src/Cake/bin/" + configuration,
+        OutputDirectory = "./build",
+        NoPackageAnalysis = true
+    });
+});
+
 // Run the script.
-Run("Run-Tests");
+Run("NuGet");
 ```
 
 ###3. Run build script

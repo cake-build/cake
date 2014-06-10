@@ -1,3 +1,8 @@
+### New in 0.0.7 (Released 2014/06/10)
+* Added zip compression support.
+* Added NuGet packing support.
+* Added file copy convenience methods.
+
 ### New in 0.0.6 (Released 2014/06/06)
 * Added basic IO functionality such as cleaning and deleting directories.
 * Added script host methods for built in functionality (MSBuild, xUnit and Globbing).
