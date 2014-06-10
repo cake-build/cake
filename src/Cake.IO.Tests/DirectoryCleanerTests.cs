@@ -77,7 +77,7 @@ namespace Cake.IO.Tests
             }
 
             [Fact]
-            public void Should_Throw_If_Provided_Directory_Do_Not_Exist()
+            public void Should_Create_Directory_If_Missing()
             {
                 // Given
                 var directory = new DirectoryPath("/NonExisting");
@@ -86,12 +86,10 @@ namespace Cake.IO.Tests
                 context.FileSystem.Returns(fixture.FileSystem);
 
                 // When
-                var result = Record.Exception(() =>
-                    DirectoryExtensions.CleanDirectory(context, directory));
+                DirectoryExtensions.CleanDirectory(context, directory);
 
                 // Then
-                Assert.IsType<DirectoryNotFoundException>(result);
-                Assert.Equal("The directory '/NonExisting' do not exist.", result.Message);
+                Assert.True(fixture.FileSystem.Exist((DirectoryPath)"/NonExisting"));
             }
         }
     }
