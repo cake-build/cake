@@ -44,7 +44,7 @@ namespace Cake.Bootstrapping
 
                 if (!destination.Exists)
                 {
-                    source.Copy(destination.Path);
+                    source.Copy(destination.Path, true);
                 }
             }
 

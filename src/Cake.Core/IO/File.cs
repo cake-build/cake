@@ -28,9 +28,9 @@ namespace Cake.Core.IO
             _file = new FileInfo(path.FullPath);
         }
 
-        public void Copy(FilePath destination)
+        public void Copy(FilePath destination, bool overwrite)
         {
-            _file.CopyTo(destination.FullPath);
+            _file.CopyTo(destination.FullPath, overwrite);
         }
 
         public void Delete()

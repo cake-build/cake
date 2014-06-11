@@ -50,7 +50,7 @@ namespace Cake.Core.Tests.Fakes
             _exists = false;
         }
 
-        public void Copy(FilePath destination)
+        public void Copy(FilePath destination, bool overwrite)
         {
             throw new NotImplementedException();
         }
