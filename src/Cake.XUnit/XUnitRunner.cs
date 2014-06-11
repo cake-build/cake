@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Cake.Core;
@@ -20,7 +21,7 @@ namespace Cake.XUnit
             _runner = runner ?? new ProcessRunner();
         }
 
-        public void Run(FilePath assemblyPath)
+        public void Run(FilePath assemblyPath, XUnitSettings settings)
         {
             if (assemblyPath == null)
             {
@@ -35,16 +36,21 @@ namespace Cake.XUnit
                 throw new CakeException("Could not find xUnit runner.");
             }
 
-            // Get the assemblies to build.
-            var assembly = assemblyPath.FullPath.Quote();
-
-            // Create the process start info.
-            var info = new ProcessStartInfo(runnerPath.FullPath)
+            // Make sure we got output directory set when generating reports.
+            if (settings.OutputDirectory == null || string.IsNullOrWhiteSpace(settings.OutputDirectory.FullPath))
             {
-                WorkingDirectory = _environment.WorkingDirectory.FullPath,
-                Arguments = assembly,
-                UseShellExecute = false
-            };
+                if (settings.HtmlReport)
+                {
+                    throw new CakeException("Cannot generate HTML report when no output directory has been set.");
+                }
+                if (settings.XmlReport)
+                {
+                    throw new CakeException("Cannot generate XML report when no output directory has been set.");
+                }
+            }
+
+            // Get the process start info.
+            var info = GetProcessStartInfo(assemblyPath, settings, runnerPath);
 
             // Run the process.
             var process = _runner.Start(info);
@@ -61,6 +67,46 @@ namespace Cake.XUnit
             {
                 throw new CakeException("Failing xUnit tests.");
             }
+        }
+
+        private ProcessStartInfo GetProcessStartInfo(FilePath assemblyPath, XUnitSettings settings, FilePath runnerPath)
+        {
+            var parameters = new List<string>();
+
+            // Add the assembly to build.
+            parameters.Add(assemblyPath.MakeAbsolute(_environment).FullPath.Quote());
+
+            // No shadow copy?
+            if (!settings.ShadowCopy)
+            {
+                parameters.Add("/noshadow".Quote());
+            }
+
+            // Generate HTML report?
+            if (settings.HtmlReport)
+            {
+                var assemblyFilename = assemblyPath.GetFilename().AppendExtension(".html");
+                var outputPath = settings.OutputDirectory.GetFilePath(assemblyFilename);
+                parameters.Add("/html".Quote());
+                parameters.Add(outputPath.FullPath.Quote());
+            }
+
+            // Generate XML report?
+            if (settings.XmlReport)
+            {
+                var assemblyFilename = assemblyPath.GetFilename().AppendExtension(".xml");
+                var outputPath = settings.OutputDirectory.GetFilePath(assemblyFilename);
+                parameters.Add("/xml".Quote());
+                parameters.Add(outputPath.FullPath.Quote());
+            }
+
+            // Create the process start info.
+            return new ProcessStartInfo(runnerPath.FullPath)
+            {
+                WorkingDirectory = _environment.WorkingDirectory.FullPath,
+                Arguments = string.Join(" ", parameters),
+                UseShellExecute = false
+            };
         }
     }
 }

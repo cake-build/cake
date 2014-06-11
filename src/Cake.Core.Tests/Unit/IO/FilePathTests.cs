@@ -81,6 +81,25 @@ namespace Cake.Core.Tests.Unit.IO
             }
         }
 
+        public sealed class TheAppendExtensionMethod
+        {
+            [Theory]
+            [InlineData("dat", "temp/hello.txt.dat")]
+            [InlineData(".dat", "temp/hello.txt.dat")]
+            public void Can_Append_Extension_To_Path(string extension, string expected)
+            {
+                // Given
+                var path = new FilePath("temp/hello.txt");
+
+                // When
+                path = path.AppendExtension(extension);
+
+                // Then
+                Assert.Equal(expected, path.ToString());
+            }
+        }
+
+
         public sealed class TheGetFilenameMethod
         {
             [Fact]

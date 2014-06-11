@@ -19,7 +19,7 @@ namespace Cake.XUnit.Tests
                 var fixture = new XUnitRunnerFixture();
                 var runner = fixture.CreateRunner();
 
-                var result = Record.Exception(() => runner.Run(null));
+                var result = Record.Exception(() => runner.Run(null, new XUnitSettings()));
 
                 Assert.IsType<ArgumentNullException>(result);
                 Assert.Equal("assemblyPath", ((ArgumentNullException)result).ParamName);
@@ -34,7 +34,7 @@ namespace Cake.XUnit.Tests
                 var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test1"));
+                var result = Record.Exception(() => runner.Run("./Test1", new XUnitSettings()));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -49,11 +49,11 @@ namespace Cake.XUnit.Tests
                 var runner = fixture.CreateRunner();
 
                 // When
-                runner.Run("./Test1");
+                runner.Run("./Test1.dll", new XUnitSettings());
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "\"Test1\""));
+                    p => p.Arguments == "\"/Working/Test1.dll\""));
             }
 
             [Fact]
@@ -64,7 +64,7 @@ namespace Cake.XUnit.Tests
                 var runner = fixture.CreateRunner();
 
                 // When
-                runner.Run("./Test1");
+                runner.Run("./Test1", new XUnitSettings());
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
@@ -80,7 +80,7 @@ namespace Cake.XUnit.Tests
                 var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test1"));
+                var result = Record.Exception(() => runner.Run("./Test1", new XUnitSettings()));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -96,11 +96,103 @@ namespace Cake.XUnit.Tests
                 var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test1"));
+                var result = Record.Exception(() => runner.Run("./Test1", new XUnitSettings()));
 
                 // Then
                 Assert.IsType<CakeException>(result);
                 Assert.Equal("Failing xUnit tests.", result.Message);                  
+            }
+
+            [Fact]
+            public void Should_Throw_If_HtmlReport_Is_Set_But_OutputDirectory_Is_Null()
+            {
+                // Given
+                var fixture = new XUnitRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                var result = Record.Exception(() => runner.Run("./Test1", new XUnitSettings
+                {
+                    HtmlReport = true
+                }));
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("Cannot generate HTML report when no output directory has been set.", result.Message); 
+            }
+
+            [Fact]
+            public void Should_Generate_Html_Report_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new XUnitRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run("./Test1.dll", new XUnitSettings
+                {
+                    OutputDirectory = "/Output",
+                    HtmlReport = true
+                });
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
+                    p => p.Arguments == "\"/Working/Test1.dll\" \"/html\" \"/Output/Test1.dll.html\""));
+            }
+
+            [Fact]
+            public void Should_Throw_If_XmlReport_Is_Set_But_OutputDirectory_Is_Null()
+            {
+                // Given
+                var fixture = new XUnitRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                var result = Record.Exception(() => runner.Run("./Test1", new XUnitSettings
+                {
+                    XmlReport = true
+                }));
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("Cannot generate XML report when no output directory has been set.", result.Message);
+            }
+
+            [Fact]
+            public void Should_Generate_Xml_Report_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new XUnitRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run("./Test1.dll", new XUnitSettings
+                {
+                    OutputDirectory = "/Output",
+                    XmlReport = true
+                });
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
+                    p => p.Arguments == "\"/Working/Test1.dll\" \"/xml\" \"/Output/Test1.dll.xml\""));
+            }
+
+            [Fact]
+            public void Should_Not_Use_Shadow_Copying_If_Disabled_In_Settings()
+            {
+                // Given
+                var fixture = new XUnitRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run("./Test1.dll", new XUnitSettings
+                {
+                    ShadowCopy = false
+                });
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
+                    p => p.Arguments == "\"/Working/Test1.dll\" \"/noshadow\""));
             }
         }
     }

@@ -51,6 +51,7 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="XUnitSettingsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
