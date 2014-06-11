@@ -19,7 +19,9 @@ namespace Cake.IO
             var root = context.FileSystem.GetDirectory(path);
             if (!root.Exists)
             {
+                context.Log.Verbose("Creating directory {0}", path);
                 root.Create();
+                return;
             }
 
             context.Log.Verbose("Deleting contents of {0}", path);
