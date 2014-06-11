@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="CakeEngine.cs" />
     <Compile Include="CakeException.cs" />
+    <Compile Include="CakeReport.cs" />
     <Compile Include="CakeTask.cs" />
     <Compile Include="Diagnostics\ICakeLog.cs" />
     <Compile Include="Diagnostics\LogExtensions.cs" />

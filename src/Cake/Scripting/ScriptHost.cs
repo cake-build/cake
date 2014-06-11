@@ -7,6 +7,7 @@ namespace Cake.Scripting
     public sealed class ScriptHost : ICakeEngine
     {
         private readonly ICakeEngine _engine;
+        private CakeReport _lastReport;
 
         public IFileSystem FileSystem
         {
@@ -43,9 +44,14 @@ namespace Cake.Scripting
             return _engine.Task(name);
         }
 
-        public void Run(string target)
+        public CakeReport Run(string target)
         {
-            _engine.Run(target);
+            var report = _engine.Run(target);
+            if (!report.IsEmpty)
+            {
+                CakeReportPrinter.Write(report);   
+            }            
+            return report;
         }
 
         public ICakeContext GetContext()

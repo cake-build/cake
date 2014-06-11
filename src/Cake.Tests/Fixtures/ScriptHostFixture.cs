@@ -29,6 +29,7 @@ namespace Cake.Tests.Fixtures
             Engine.Log.Returns(Log);
             Engine.Globber.Returns(Globber);
             Engine.Arguments.Returns(Arguments);
+            Engine.Run(Arg.Any<string>()).Returns(new CakeReport());
         }
 
         public ScriptHost CreateHost()

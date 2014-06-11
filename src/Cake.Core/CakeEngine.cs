@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Cake.Core.Diagnostics;
 using Cake.Core.Graph;
@@ -81,7 +82,7 @@ namespace Cake.Core
             return task;
         }
 
-        public void Run(string target)
+        public CakeReport Run(string target)
         {
             var graph = CakeGraphBuilder.Build(_tasks);
 
@@ -92,18 +93,30 @@ namespace Cake.Core
                 throw new CakeException(string.Format(format, target));
             }
 
+            var stopWatch = new Stopwatch();
+            var report = new CakeReport();
+
             foreach (var task in graph.Traverse(target))
             {
                 if (ShouldTaskExecute(task))
                 {
                     _log.Verbose("Executing task: {0}...", task.Name);
+                    
+                    stopWatch.Reset();
+                    stopWatch.Start();
+
                     foreach (var action in task.Actions)
                     {
                         action(this);
                     }
+
+                    report.Add(task.Name, stopWatch.Elapsed);
+
                     _log.Verbose("Finished executing task: {0}", task.Name);
                 }
             }
+
+            return report;
         }
 
         private static bool ShouldTaskExecute(CakeTask task)
