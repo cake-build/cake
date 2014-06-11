@@ -1,3 +1,8 @@
+### New in 0.1.0 (Released 2014/06/11)
+* Added extensions methods for opening files.
+* Added task report.
+* Minor fix for cleaning directories.
+
 ### New in 0.0.8 (Released 2014/06/10)
 * Added xUnit options.
 * Copying files now overwrite the destination files.
