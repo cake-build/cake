@@ -130,6 +130,24 @@ namespace Cake.NuGet.Tests
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
                     p => p.Arguments == "pack \"existing.nuspec\" -NoPackageAnalysis"));
             }
+
+            [Fact]
+            public void Should_Add_Symbols_Flag_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new NuGetFixture();
+                var packer = fixture.CreatePacker();
+
+                // When
+                packer.Pack("./existing.nuspec", new NuGetPackSettings
+                {
+                    Symbols = true
+                });
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
+                    p => p.Arguments == "pack \"existing.nuspec\" -Symbols"));
+            }
         }
     }
 }

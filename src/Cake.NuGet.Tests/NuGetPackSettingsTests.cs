@@ -15,6 +15,16 @@ namespace Cake.NuGet.Tests
                 // Then
                 Assert.False(settings.NoPackageAnalysis);
             }
+
+            [Fact]
+            public void Should_Set_Symbols_To_False_By_Default()
+            {
+                // Given, When
+                var settings = new NuGetPackSettings();
+
+                // Then
+                Assert.False(settings.Symbols);
+            }
         }
     }
 }

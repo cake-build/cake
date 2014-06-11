@@ -92,6 +92,12 @@ namespace Cake.NuGet
                 parameters.Add("-NoPackageAnalysis");
             }
 
+            // Symbols?
+            if (settings.Symbols)
+            {
+                parameters.Add("-Symbols");
+            }
+
             return new ProcessStartInfo(nugetExePath.FullPath)
             {
                 WorkingDirectory = _environment.WorkingDirectory.FullPath,
