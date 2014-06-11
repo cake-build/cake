@@ -1,3 +1,7 @@
+### New in 0.0.8 (Released 2014/06/10)
+* Added xUnit options.
+* Copying files now overwrite the destination files.
+
 ### New in 0.0.7 (Released 2014/06/10)
 * Added zip compression support.
 * Added NuGet packing support.
