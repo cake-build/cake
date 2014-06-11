@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;

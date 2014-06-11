@@ -7,7 +7,6 @@ namespace Cake.Scripting
     public sealed class ScriptHost : ICakeEngine
     {
         private readonly ICakeEngine _engine;
-        private CakeReport _lastReport;
 
         public IFileSystem FileSystem
         {
