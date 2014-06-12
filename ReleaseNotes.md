@@ -1,3 +1,7 @@
+### New in 0.1.1 (Released 2014/06/12)
+* Added NuGet Symbol support.
+* Restructured solution. Removed individual assemblies and introduced Cake.Common.dll.
+
 ### New in 0.1.0 (Released 2014/06/11)
 * Added extensions methods for opening files.
 * Added task report.

@@ -8,7 +8,7 @@ Cake (C# Make) is a build automation system inspired by [Fake](http://fsharp.git
 
 The Cake engine is pretty much done, but there are still improvements to be made. I'm still experimenting with the script API to make it as easy and intuitive as possible, so expect changes along the road.
 
-Currently only basic MSBuild and xUnit support are implemented, but more features such as NuGet, ILMerge, NUnit, MSTest and compression support are planned. The full roadmap can be found [here](https://github.com/patriksvensson/cake/issues/milestones).
+Currently basic MSBuild, xUnit, NuGet, compression and basic file system operations are implemented, but more features such as ILMerge, NUnit, MSTest support are planned. The full roadmap can be found [here](https://github.com/patriksvensson/cake/issues/milestones).
 
 ##Example
 
@@ -46,8 +46,8 @@ Task("Clean")
     .IsDependentOn("Hello")
     .Does(() =>
 {
-    // Delete the bin directories.
-    CleanDirectories("./build")
+    // Clean directories.
+    CleanDirectory("./build")
     CleanDirectories("./src/**/bin/" + configuration);
 });
 
@@ -88,6 +88,7 @@ Task("NuGet")
     .IsDependentOn("Pack")
     .Does(() =>
 {
+    // Create NuGet package.
     NuGetPack("./Cake.nuspec", new NuGetPackSettings
     {
         Version = "0.1.0",
