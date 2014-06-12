@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Cake.Bootstrapping;
+using Cake.Common.IO;
+using Cake.Common.MSBuild;
+using Cake.Common.NuGet;
+using Cake.Common.XUnit;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -63,10 +67,7 @@ namespace Cake
                 typeof(System.Xml.Linq.XDocument).Assembly, // System.Xml.Linq
                 typeof(Program).Assembly, // Cake
                 typeof(ICakeContext).Assembly,  // Cake.Core
-                typeof(MSBuild.MSBuildRunner).Assembly, // Cake.MSBuild
-                typeof(XUnit.XUnitRunner).Assembly, // Cake.XUnit
-                typeof(IO.DirectoryExtensions).Assembly, // Cake.IO
-                typeof(NuGet.NuGetPacker).Assembly // Cake.NuGet
+                typeof(DirectoryExtensions).Assembly, // Cake.Common.MSBuild
             };
 
             // Add all namespaces.
@@ -74,8 +75,9 @@ namespace Cake
             {
                 "System", "System.Collections.Generic", "System.Linq",
                 "System.Text", "System.Threading.Tasks", "System.IO",
-                "Cake", "Cake.Core", "Cake.Core.IO", "Cake.IO", "Cake.IO.Compression",
-                "Cake.Core.Diagnostics", "Cake.MSBuild", "Cake.XUnit", "Cake.NuGet"
+                "Cake", "Cake.Core", "Cake.Core.IO", "Cake.Common.IO", 
+                "Cake.Common.IO.Compression", "Cake.Core.Diagnostics", 
+                "Cake.Common.MSBuild", "Cake.Common.XUnit", "Cake.Common.NuGet"
             };
 
             // Execute the script.

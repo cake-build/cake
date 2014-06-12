@@ -143,8 +143,7 @@ namespace Cake.Tests.Unit
             [InlineData("System.Xml.Linq")]
             [InlineData("Cake")]
             [InlineData("Cake.Core")]
-            [InlineData("Cake.MSBuild")]
-            [InlineData("Cake.XUnit")]
+            [InlineData("Cake.Common")]
             public void Should_Provide_Script_Runner_With_References(string assemblyName)
             {
                 // Given
@@ -172,8 +171,11 @@ namespace Cake.Tests.Unit
             [InlineData("Cake.Core")]
             [InlineData("Cake.Core.IO")]
             [InlineData("Cake.Core.Diagnostics")]
-            [InlineData("Cake.MSBuild")]
-            [InlineData("Cake.XUnit")]
+            [InlineData("Cake.Common.IO")]
+            [InlineData("Cake.Common.IO.Compression")]
+            [InlineData("Cake.Common.MSBuild")]
+            [InlineData("Cake.Common.XUnit")]
+            [InlineData("Cake.Common.NuGet")]
             public void Should_Provide_Script_Runner_With_Namespaces(string @namespace)
             {
                 // Given

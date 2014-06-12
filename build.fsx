@@ -91,10 +91,7 @@ Target "Copy-Files" (fun _ ->
     Block "Copying files" (fun _ ->
         CopyFile binDir (buildDir + "/Cake.exe")
         CopyFile binDir (buildDir + "/Cake.Core.dll")
-        CopyFile binDir (buildDir + "/Cake.IO.dll")
-        CopyFile binDir (buildDir + "/Cake.MSBuild.dll")
-        CopyFile binDir (buildDir + "/Cake.XUnit.dll")
-        CopyFile binDir (buildDir + "/Cake.NuGet.dll")
+        CopyFile binDir (buildDir + "/Cake.Common.dll")
         CopyFile binDir (buildDir + "/NuGet.Core.dll")
         CopyFiles binDir ["LICENSE"; "README.md"; "ReleaseNotes.md"]
     )
@@ -107,10 +104,7 @@ Target "Create-NuGet-Package" (fun _ ->
 
         CopyFile coreRootDir (binDir @@ "Cake.exe")
         CopyFile coreRootDir (binDir @@ "Cake.Core.dll")
-        CopyFile coreRootDir (binDir @@ "Cake.IO.dll")        
-        CopyFile coreRootDir (binDir @@ "Cake.MSBuild.dll")
-        CopyFile coreRootDir (binDir @@ "Cake.XUnit.dll")
-        CopyFile coreRootDir (binDir @@ "Cake.NuGet.dll")
+        CopyFile coreRootDir (binDir @@ "Cake.Common.dll")
         CopyFile coreRootDir (binDir @@ "NuGet.Core.dll")
         CopyFile coreRootDir (binDir @@ "LICENSE")
 
