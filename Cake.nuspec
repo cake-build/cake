@@ -7,8 +7,9 @@
     <owners>Patrik Svensson</owners>
     <description>The Cake script runner.</description>
     <summary>Cake (C# Make) is a build automation system inspired by Fake.</summary>
-    <licenseUrl>https://github.com/patriksvensson/cake/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/patriksvensson/cake</projectUrl>
+    <licenseUrl>https://github.com/cake-build/cake/blob/develop/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/cake-build/cake</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <releaseNotes>@releaseNotes@</releaseNotes>
     <copyright>Copyright (c) Patrik Svensson 2014</copyright>
