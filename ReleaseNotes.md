@@ -1,3 +1,6 @@
+### New in 0.1.2 (Released 2014/06/12)
+* Fixed bug where globbing did not take OS case sensitivity into account.
+
 ### New in 0.1.1 (Released 2014/06/12)
 * Added NuGet Symbol support.
 * Restructured solution. Removed individual assemblies and introduced Cake.Common.dll.
