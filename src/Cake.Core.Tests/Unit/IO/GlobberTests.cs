@@ -4,6 +4,7 @@ using Cake.Core.IO;
 using Cake.Core.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Cake.Core.Tests.Unit.IO
 {
@@ -115,7 +116,23 @@ namespace Cake.Core.Tests.Unit.IO
                 Assert.IsType<NotSupportedException>(result);
                 Assert.Equal("UNC paths are not supported.", result.Message);
             }
-#endif  
+#endif
+
+            [Theory]
+            [InlineData(true, false)]
+            [InlineData(false, true)]
+            public void Should_Ignore_Case_Sensitivity_On_Case_Insensitive_Operative_System(bool isUnix, bool shouldFindFile)
+            {
+                // Given
+                var fixture = new GlobberFixture(isUnix: isUnix);
+                var globber = new Globber(fixture.FileSystem, fixture.Environment);
+
+                // When
+                var result = globber.Match("/Temp/**/text.txt").ToArray();
+
+                // Then
+                Assert.Equal(shouldFindFile, result.Length == 1);
+            }
         }
     }
 }

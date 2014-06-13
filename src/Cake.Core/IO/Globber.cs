@@ -17,6 +17,7 @@ namespace Cake.Core.IO
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
+        private readonly RegexOptions _options;
 
         public Globber(IFileSystem fileSystem, ICakeEnvironment environment)
         {
@@ -30,6 +31,13 @@ namespace Cake.Core.IO
             }
             _fileSystem = fileSystem;
             _environment = environment;
+            _options = RegexOptions.Singleline;
+
+            if (!_environment.IsUnix())
+            {
+                // On non unix systems, we should ignore case.
+                _options |= RegexOptions.IgnoreCase;
+            }
         }
 
         public IEnumerable<Path> Match(string pattern)
@@ -109,7 +117,7 @@ namespace Cake.Core.IO
             var results = new List<Path>();
             var segment = segments.Pop();
 
-            var expression = new Regex(segment.Render() + "$", RegexOptions.Singleline);
+            var expression = new Regex("^" + segment.Render() + "$", _options);
             var isDirectoryWildcard = false;
 
             if (segment is WildcardSegmentNode)
