@@ -100,12 +100,8 @@ Task("NuGet")
     });
 });
 
-// Get the build target from the arguments.
-// Default to NuGet if no target parameter was provided.
-var buildTarget = Argument("target", defaultValue: "NuGet");
-
-// Run the build target.
-Run(buildTarget);
+// Run the provided build target or default to NuGet.
+Run(Argument("target", defaultValue: "NuGet"));
 ```
 
 ###3. Run build script
