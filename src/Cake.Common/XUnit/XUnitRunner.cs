@@ -29,12 +29,7 @@ namespace Cake.Common.XUnit
             }
 
             // Find the xUnit console runner.
-            var query = string.Format("./tools/**/xunit.console.clr4.exe");
-            var runnerPath = _globber.GetFiles(query).FirstOrDefault();
-            if (runnerPath == null)
-            {
-                throw new CakeException("Could not find xUnit runner.");
-            }
+            var toolPath = GetToolPath(settings);
 
             // Make sure we got output directory set when generating reports.
             if (settings.OutputDirectory == null || string.IsNullOrWhiteSpace(settings.OutputDirectory.FullPath))
@@ -50,7 +45,7 @@ namespace Cake.Common.XUnit
             }
 
             // Get the process start info.
-            var info = GetProcessStartInfo(assemblyPath, settings, runnerPath);
+            var info = GetProcessStartInfo(assemblyPath, settings, toolPath);
 
             // Run the process.
             var process = _runner.Start(info);
@@ -67,6 +62,22 @@ namespace Cake.Common.XUnit
             {
                 throw new CakeException("Failing xUnit tests.");
             }
+        }
+
+        private FilePath GetToolPath(XUnitSettings settings)
+        {
+            if (settings.ToolPath != null)
+            {
+                return settings.ToolPath.MakeAbsolute(_environment);
+            }
+
+            var expression = string.Format("./tools/**/xunit.console.clr4.exe");
+            var runnerPath = _globber.GetFiles(expression).FirstOrDefault();
+            if (runnerPath == null)
+            {
+                throw new CakeException("Could not find xUnit runner.");
+            }
+            return runnerPath;
         }
 
         private ProcessStartInfo GetProcessStartInfo(FilePath assemblyPath, XUnitSettings settings, FilePath runnerPath)

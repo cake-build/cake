@@ -33,15 +33,10 @@ namespace Cake.Common.NuGet
             }
 
             // Find the NuGet executable.
-            var query = string.Format("./tools/**/NuGet.exe");
-            var nugetExePath = _globber.GetFiles(query).FirstOrDefault();
-            if (nugetExePath == null)
-            {
-                throw new CakeException("Could not find NuGet.exe.");
-            }
+            var toolPath = GetToolPath(settings);
 
             // Start the process.
-            var processInfo = GetProcessStartInfo(nugetExePath, nuspecFilePath, settings);
+            var processInfo = GetProcessStartInfo(toolPath, nuspecFilePath, settings);
             var process = _processRunner.Start(processInfo);
             if (process == null)
             {
@@ -56,6 +51,21 @@ namespace Cake.Common.NuGet
             {
                 throw new CakeException("NuGet packager failed.");
             }
+        }
+
+        private FilePath GetToolPath(NuGetPackSettings settings)
+        {
+            if (settings.ToolPath != null)
+            {
+                return settings.ToolPath.MakeAbsolute(_environment);
+            }
+            var expression = string.Format("./tools/**/NuGet.exe");
+            var nugetExePath = _globber.GetFiles(expression).FirstOrDefault();
+            if (nugetExePath == null)
+            {
+                throw new CakeException("Could not find NuGet.exe.");
+            }
+            return nugetExePath;
         }
 
         private ProcessStartInfo GetProcessStartInfo(FilePath nugetExePath, FilePath nuspecFilePath, NuGetPackSettings settings)

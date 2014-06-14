@@ -25,7 +25,7 @@ namespace Cake.Common.Tests.Fixtures
             Environment.WorkingDirectory = "/Working";
 
             Globber = Substitute.For<IGlobber>();
-            Globber.Match("./tools/**/xunit.console.clr4.exe").Returns(new[] { (FilePath)"/Working/tools/xunit.console.clr4.exe" });     
+            Globber.Match("./tools/**/xunit.console.clr4.exe").Returns(new[] { (FilePath)"/Working/tools/xunit.console.clr4.exe" });
         }
 
         public XUnitRunner CreateRunner()

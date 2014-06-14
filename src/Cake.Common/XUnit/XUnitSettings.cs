@@ -8,6 +8,7 @@ namespace Cake.Common.XUnit
         public DirectoryPath OutputDirectory { get; set; }
         public bool XmlReport { get; set; }
         public bool HtmlReport { get; set; }
+        public FilePath ToolPath { get; set; }
 
         public XUnitSettings()
         {

@@ -7,6 +7,7 @@ using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Cake.Common.Tests.Unit.NuGet
 {
@@ -58,6 +59,41 @@ namespace Cake.Common.Tests.Unit.NuGet
                 // Then
                 Assert.IsType<CakeException>(result);
                 Assert.Equal("Could not find NuGet.exe.", result.Message);
+            }
+
+            [Theory]
+            [InlineData("C:/nuget/nuget.exe", "C:/nuget/nuget.exe")]
+            [InlineData("./tools/nuget/nuget.exe", "/Working/tools/nuget/nuget.exe")]
+            public void Should_Use_Nuget_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
+            {
+                // Given
+                var fixture = new NuGetFixture();
+                var packer = fixture.CreatePacker();
+
+                // When
+                packer.Pack("./existing.nuspec", new NuGetPackSettings
+                {
+                    ToolPath = toolPath
+                });
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
+                    p => p.FileName == expected));
+            }
+
+            [Fact]
+            public void Should_Find_XUnit_Runner_If_Tool_Path_Not_Provided()
+            {
+                // Given
+                var fixture = new NuGetFixture();
+                var packer = fixture.CreatePacker();
+
+                // When
+                packer.Pack("./existing.nuspec", new NuGetPackSettings());
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
+                    p => p.FileName == "/Working/tools/NuGet.exe"));
             }
 
             [Fact]

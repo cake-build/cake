@@ -9,5 +9,6 @@ namespace Cake.Common.NuGet
         public string Version { get; set; }
         public bool NoPackageAnalysis { get; set; }
         public bool Symbols { get; set; }
+        public FilePath ToolPath { get; set; }
     }
 }

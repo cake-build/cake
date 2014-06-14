@@ -7,6 +7,7 @@ using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Cake.Common.Tests.Unit.XUnit
 {
@@ -40,6 +41,41 @@ namespace Cake.Common.Tests.Unit.XUnit
                 // Then
                 Assert.IsType<CakeException>(result);
                 Assert.Equal("Could not find xUnit runner.", result.Message);
+            }
+
+            [Theory]            
+            [InlineData("C:/xUnit/xunit.exe", "C:/xUnit/xunit.exe")]
+            [InlineData("./tools/xUnit/xunit.exe", "/Working/tools/xUnit/xunit.exe")]
+            public void Should_Use_XUnit_Runner_From_Tool_Path_If_Provided(string toolPath, string expected)
+            {
+                // Given
+                var fixture = new XUnitRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run("./Test1.dll", new XUnitSettings
+                {
+                    ToolPath = toolPath
+                });
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
+                    p => p.FileName == expected));
+            }
+
+            [Fact]
+            public void Should_Find_XUnit_Runner_If_Tool_Path_Not_Provided()
+            {
+                // Given
+                var fixture = new XUnitRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run("./Test1.dll", new XUnitSettings());
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
+                    p => p.FileName == "/Working/tools/xunit.console.clr4.exe"));
             }
 
             [Fact]
