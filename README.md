@@ -8,7 +8,9 @@ Cake (C# Make) is a build automation system inspired by [Fake](http://fsharp.git
 
 The Cake engine is pretty much done, but there are still improvements to be made. I'm still experimenting with the script API to make it as easy and intuitive as possible, so expect changes along the road.
 
-Currently basic MSBuild, xUnit, NuGet, compression and basic file system operations are implemented, but more features such as ILMerge, NUnit, MSTest support are planned. The full roadmap can be found [here](https://github.com/patriksvensson/cake/issues/milestones).
+Currently basic MSBuild, xUnit, NuGet, compression and basic file system operations are implemented, but more features such as ILMerge, NUnit, MSTest support are planned. The full roadmap can be found [here](https://github.com/cake-build/cake/issues/milestones).
+
+For more information and examples of how to use Cake, see the [Wiki](https://github.com/cake-build/cake/wiki).
 
 ##Example
 
@@ -98,12 +100,16 @@ Task("NuGet")
     });
 });
 
-// Run the script.
-Run("NuGet");
+// Get the build target from the arguments.
+// Default to NuGet if no target parameter was provided.
+var buildTarget = Argument("target", defaultValue: "NuGet");
+
+// Run the build target.
+Run(buildTarget);
 ```
 
 ###3. Run build script
 
 ```
-C:\Project\Tools\Cake> Cake.exe ../../build.csx -verbosity=diagnostic -teamCity
+C:\Project\Tools\Cake> Cake.exe ../../build.csx -verbosity=diagnostic -teamCity -target=Pack
 ```
