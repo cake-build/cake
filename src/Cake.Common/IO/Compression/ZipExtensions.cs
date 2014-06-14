@@ -8,7 +8,7 @@ namespace Cake.Common.IO.Compression
     {
         public static void Zip(this ICakeContext context, DirectoryPath rootPath, FilePath outputPath)
         {
-            var filePaths = context.GetFiles(string.Concat(rootPath, "/*"));
+            var filePaths = context.GetFiles(string.Concat(rootPath, "/**/*"));
             Zip(context, rootPath, outputPath, filePaths);
         }
 
