@@ -1,4 +1,7 @@
-### New in 0.1.2 (Released 2014/06/12)
+### New in 0.1.3 (Released 2014/06/14)
+* Fixed compression bug where sub directories were not properly included in zip file.
+
+### New in 0.1.2 (Released 2014/06/13)
 * Fixed bug where globbing did not take OS case sensitivity into account.
 
 ### New in 0.1.1 (Released 2014/06/12)
