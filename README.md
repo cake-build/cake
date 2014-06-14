@@ -49,7 +49,7 @@ Task("Clean")
     .Does(() =>
 {
     // Clean directories.
-    CleanDirectory("./build")
+    CleanDirectory("./build");
     CleanDirectories("./src/**/bin/" + configuration);
 });
 
