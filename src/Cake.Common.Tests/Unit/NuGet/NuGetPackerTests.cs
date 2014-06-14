@@ -64,7 +64,7 @@ namespace Cake.Common.Tests.Unit.NuGet
             [Theory]
             [InlineData("C:/nuget/nuget.exe", "C:/nuget/nuget.exe")]
             [InlineData("./tools/nuget/nuget.exe", "/Working/tools/nuget/nuget.exe")]
-            public void Should_Use_Nuget_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
+            public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
                 var fixture = new NuGetFixture();
@@ -82,7 +82,7 @@ namespace Cake.Common.Tests.Unit.NuGet
             }
 
             [Fact]
-            public void Should_Find_XUnit_Runner_If_Tool_Path_Not_Provided()
+            public void Should_Find_NuGet_Executable_If_Tool_Path_Not_Provided()
             {
                 // Given
                 var fixture = new NuGetFixture();
