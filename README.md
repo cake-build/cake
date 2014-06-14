@@ -23,6 +23,8 @@ C:\Project> NuGet.exe install Cake -OutputDirectory Tools -ExcludeVersion
 ###2. Create build script
 
 ```CSharp
+var target = Argument("target", defaultValue: "NuGet");
+
 var isTeamCityBuild = HasArgument("teamCity");
 var configuration = Argument("configuration", defaultValue: "Release");
 
@@ -100,8 +102,8 @@ Task("NuGet")
     });
 });
 
-// Run the provided build target or default to NuGet.
-Run(Argument("target", defaultValue: "NuGet"));
+// Run the script.
+Run(target);
 ```
 
 ###3. Run build script
