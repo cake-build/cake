@@ -124,7 +124,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Ignore_Case_Sensitivity_On_Case_Insensitive_Operative_System(bool isUnix, bool shouldFindFile)
             {
                 // Given
-                var fixture = new GlobberFixture(isUnix: isUnix);
+                var fixture = new GlobberFixture(isUnix);
                 var globber = new Globber(fixture.FileSystem, fixture.Environment);
 
                 // When

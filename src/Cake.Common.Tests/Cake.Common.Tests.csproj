@@ -65,7 +65,8 @@
     <Compile Include="Fixtures\FileSystemFixture.cs" />
     <Compile Include="Fixtures\MSBuildRunnerFixture.cs" />
     <Compile Include="Fixtures\NuGetFixture.cs" />
-    <Compile Include="Fixtures\XUnitRunnerFixture.cs" />   
+    <Compile Include="Fixtures\NUnitRunnerFixture.cs" />
+    <Compile Include="Fixtures\XUnitRunnerFixture.cs" />
     <Compile Include="Unit\IO\Compression\ZipperTests.cs" />
     <Compile Include="Unit\IO\DirectoryCleanerTests.cs" />
     <Compile Include="Unit\IO\DirectoryDeleterTests.cs" />
@@ -75,6 +76,8 @@
     <Compile Include="Unit\MSBuild\MSBuildSettingsTests.cs" />
     <Compile Include="Unit\NuGet\NuGetPackerTests.cs" />
     <Compile Include="Unit\NuGet\NuGetPackSettingsTests.cs" />
+    <Compile Include="Unit\NUnit\NUnitRunnerTests.cs" />
+    <Compile Include="Unit\NUnit\NUnitSettingsTests.cs" />
     <Compile Include="Unit\XUnit\XUnitRunnerTests.cs" />
     <Compile Include="Unit\XUnit\XUnitSettingsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -95,6 +98,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

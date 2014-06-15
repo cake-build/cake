@@ -60,6 +60,9 @@
     <Compile Include="NuGet\NuGetExtensions.cs" />
     <Compile Include="NuGet\NuGetPacker.cs" />
     <Compile Include="NuGet\NuGetPackSettings.cs" />
+    <Compile Include="NUnit\NUnitExtensions.cs" />
+    <Compile Include="NUnit\NUnitRunner.cs" />
+    <Compile Include="NUnit\NUnitSettings.cs" />
     <Compile Include="XUnit\XUnitExtensions.cs" />
     <Compile Include="XUnit\XUnitRunner.cs" />
     <Compile Include="XUnit\XUnitSettings.cs" />
