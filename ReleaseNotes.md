@@ -1,3 +1,6 @@
+### New in 0.1.4 (Released 2014/06/15)
+* Added NUnit support.
+
 ### New in 0.1.3 (Released 2014/06/14)
 * Fixed compression bug where sub directories were not properly included in zip file.
 
