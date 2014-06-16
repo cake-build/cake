@@ -1,3 +1,6 @@
+### New in 0.1.5 (Released 2014/06/17)
+* Added ILMerge support.
+
 ### New in 0.1.4 (Released 2014/06/15)
 * Added NUnit support.
 
