@@ -70,16 +70,25 @@ namespace Cake.Core
             _tasks = new List<CakeTask>();
         }
 
-        public CakeTask Task(string name)
+        public CakeTaskBuilder<T> Build<T>()
+            where T : CakeTask, new()
+        {
+            var task = new T();
+            _tasks.Add(task);
+            var builder = new CakeTaskBuilder<T>(task);
+            return builder;
+        }
+
+        public CakeTaskBuilder<ActionTask> Task(string name)
         {
             if (_tasks.Any(x => x.Name == name))
             {
                 const string format = "Another task with the name '{0}' has already been added.";
                 throw new CakeException(string.Format(format, name));
             }
-            var task = new CakeTask(name);
+            var task = new ActionTask(name);
             _tasks.Add(task);
-            return task;
+            return new CakeTaskBuilder<ActionTask>(task);
         }
 
         public CakeReport Run(string target)
@@ -100,18 +109,10 @@ namespace Cake.Core
             {
                 if (ShouldTaskExecute(task))
                 {
-                    _log.Verbose("Executing task: {0}...", task.Name);
+                    _log.Verbose("Executing task: {0}...", task.Name);    
+            
+                    ExecuteTask(stopWatch, task, report);
                     
-                    stopWatch.Reset();
-                    stopWatch.Start();
-
-                    foreach (var action in task.Actions)
-                    {
-                        action(this);
-                    }
-
-                    report.Add(task.Name, stopWatch.Elapsed);
-
                     _log.Verbose("Finished executing task: {0}", task.Name);
                 }
             }
@@ -129,6 +130,19 @@ namespace Cake.Core
                 }
             }
             return true;
+        }
+
+        private void ExecuteTask(Stopwatch stopWatch, CakeTask task, CakeReport report)
+        {
+            // Reset the stop watch.
+            stopWatch.Reset();
+            stopWatch.Start();
+
+            // Execute the task.
+            task.Execute(this);
+
+            // Add the task results to the report.
+            report.Add(task.Name, stopWatch.Elapsed);
         }
     }
 }

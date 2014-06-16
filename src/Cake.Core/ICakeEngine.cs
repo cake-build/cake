@@ -2,7 +2,7 @@
 {
     public interface ICakeEngine : ICakeContext
     {
-        CakeTask Task(string name);
+        CakeTaskBuilder<ActionTask> Task(string name);
         CakeReport Run(string target);
     }
 }

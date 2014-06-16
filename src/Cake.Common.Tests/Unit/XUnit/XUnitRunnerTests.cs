@@ -36,7 +36,7 @@ namespace Cake.Common.Tests.Unit.XUnit
                 var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test1", new XUnitSettings()));
+                var result = Record.Exception(() => runner.Run("./Test1.dll", new XUnitSettings()));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -101,7 +101,7 @@ namespace Cake.Common.Tests.Unit.XUnit
                 var runner = fixture.CreateRunner();
 
                 // When
-                runner.Run("./Test1", new XUnitSettings());
+                runner.Run("./Test1.dll", new XUnitSettings());
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
@@ -117,7 +117,7 @@ namespace Cake.Common.Tests.Unit.XUnit
                 var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test1", new XUnitSettings()));
+                var result = Record.Exception(() => runner.Run("./Test1.dll", new XUnitSettings()));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -133,7 +133,7 @@ namespace Cake.Common.Tests.Unit.XUnit
                 var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test1", new XUnitSettings()));
+                var result = Record.Exception(() => runner.Run("./Test1.dll", new XUnitSettings()));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -148,7 +148,7 @@ namespace Cake.Common.Tests.Unit.XUnit
                 var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test1", new XUnitSettings
+                var result = Record.Exception(() => runner.Run("./Test1.dll", new XUnitSettings
                 {
                     HtmlReport = true
                 }));
@@ -185,7 +185,7 @@ namespace Cake.Common.Tests.Unit.XUnit
                 var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test1", new XUnitSettings
+                var result = Record.Exception(() => runner.Run("./Test1.dll", new XUnitSettings
                 {
                     XmlReport = true
                 }));

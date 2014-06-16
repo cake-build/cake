@@ -27,7 +27,7 @@ namespace Cake.Core.Tests.Unit.Graph
             public void Should_Add_Node_To_Graph()
             {
                 // Given
-                var node = new CakeTask("start");
+                var node = new ActionTask("start");
                 var graph = new CakeGraph();
 
                 // When
@@ -41,7 +41,7 @@ namespace Cake.Core.Tests.Unit.Graph
             public void Should_Throw_If_Node_Already_Is_Present_In_Graph()
             {
                 // Given
-                var node = new CakeTask("start");
+                var node = new ActionTask("start");
                 var graph = new CakeGraph();
                 graph.Add(node);
 
@@ -61,8 +61,8 @@ namespace Cake.Core.Tests.Unit.Graph
             {
                 // Given
                 var graph = new CakeGraph();
-                var start = new CakeTask("start");
-                var end = new CakeTask("end");
+                var start = new ActionTask("start");
+                var end = new ActionTask("end");
 
                 // When
                 graph.Connect(start, end);
@@ -77,8 +77,8 @@ namespace Cake.Core.Tests.Unit.Graph
             {
                 // Given
                 var graph = new CakeGraph();
-                var start = new CakeTask("start");
-                var end = new CakeTask("end");
+                var start = new ActionTask("start");
+                var end = new ActionTask("end");
                 graph.Add(end);
 
                 // When
@@ -93,8 +93,8 @@ namespace Cake.Core.Tests.Unit.Graph
             {
                 // Given
                 var graph = new CakeGraph();
-                var start = new CakeTask("start");
-                var end = new CakeTask("end");
+                var start = new ActionTask("start");
+                var end = new ActionTask("end");
                 graph.Add(start);
 
                 // When
@@ -109,8 +109,8 @@ namespace Cake.Core.Tests.Unit.Graph
             {
                 // Given
                 var graph = new CakeGraph();
-                var start = new CakeTask("start");
-                var end = new CakeTask("end");
+                var start = new ActionTask("start");
+                var end = new ActionTask("end");
                 graph.Connect(start, end);
 
                 // When
@@ -125,7 +125,7 @@ namespace Cake.Core.Tests.Unit.Graph
             {
                 // Given
                 var graph = new CakeGraph();
-                var start = new CakeTask("start");
+                var start = new ActionTask("start");
 
                 // When
                 var exception = Record.Exception(() => graph.Connect(start, start));
@@ -140,8 +140,8 @@ namespace Cake.Core.Tests.Unit.Graph
             {
                 // Given
                 var graph = new CakeGraph();
-                var start = new CakeTask("start");
-                var end = new CakeTask("end");
+                var start = new ActionTask("start");
+                var end = new ActionTask("end");
                 graph.Connect(start, end);
 
                 // When
@@ -160,7 +160,7 @@ namespace Cake.Core.Tests.Unit.Graph
             {
                 // Given
                 var graph = new CakeGraph();
-                var start = new CakeTask("start");
+                var start = new ActionTask("start");
                 graph.Add(start);
 
                 // When
@@ -175,7 +175,7 @@ namespace Cake.Core.Tests.Unit.Graph
             {
                 // Given
                 var graph = new CakeGraph();
-                graph.Add(new CakeTask("start"));
+                graph.Add(new ActionTask("start"));
 
                 // When
                 var result = graph.Find("other");
@@ -192,9 +192,9 @@ namespace Cake.Core.Tests.Unit.Graph
             {
                 // Given
                 var graph = new CakeGraph();
-                graph.Connect(new CakeTask("A"), new CakeTask("B"));
-                graph.Connect(new CakeTask("C"), new CakeTask("D"));
-                graph.Connect(new CakeTask("B"), new CakeTask("C"));
+                graph.Connect(new ActionTask("A"), new ActionTask("B"));
+                graph.Connect(new ActionTask("C"), new ActionTask("D"));
+                graph.Connect(new ActionTask("B"), new ActionTask("C"));
 
                 // When
                 var result = graph.Traverse("E").ToArray();
@@ -208,9 +208,9 @@ namespace Cake.Core.Tests.Unit.Graph
             {
                 // Given
                 var graph = new CakeGraph();
-                graph.Connect(new CakeTask("A"), new CakeTask("B"));
-                graph.Connect(new CakeTask("C"), new CakeTask("D"));
-                graph.Connect(new CakeTask("B"), new CakeTask("C"));
+                graph.Connect(new ActionTask("A"), new ActionTask("B"));
+                graph.Connect(new ActionTask("C"), new ActionTask("D"));
+                graph.Connect(new ActionTask("B"), new ActionTask("C"));
 
                 // When
                 var result = graph.Traverse("D").ToArray();
@@ -228,10 +228,10 @@ namespace Cake.Core.Tests.Unit.Graph
             {
                 // Given
                 var graph = new CakeGraph();
-                graph.Connect(new CakeTask("A"), new CakeTask("B"));
-                graph.Connect(new CakeTask("B"), new CakeTask("C"));
-                graph.Connect(new CakeTask("B"), new CakeTask("D"));
-                graph.Connect(new CakeTask("D"), new CakeTask("E"));                
+                graph.Connect(new ActionTask("A"), new ActionTask("B"));
+                graph.Connect(new ActionTask("B"), new ActionTask("C"));
+                graph.Connect(new ActionTask("B"), new ActionTask("D"));
+                graph.Connect(new ActionTask("D"), new ActionTask("E"));                
 
                 // When
                 var result = graph.Traverse("E").ToArray();                
@@ -248,9 +248,9 @@ namespace Cake.Core.Tests.Unit.Graph
             public void Should_Throw_If_Encountering_Circular_Reference()
             {
                 var graph = new CakeGraph();
-                graph.Connect(new CakeTask("A"), new CakeTask("B"));
-                graph.Connect(new CakeTask("B"), new CakeTask("C"));
-                graph.Connect(new CakeTask("C"), new CakeTask("A"));
+                graph.Connect(new ActionTask("A"), new ActionTask("B"));
+                graph.Connect(new ActionTask("B"), new ActionTask("C"));
+                graph.Connect(new ActionTask("C"), new ActionTask("A"));
 
                 var exception = Record.Exception(() => graph.Traverse("C"));
 

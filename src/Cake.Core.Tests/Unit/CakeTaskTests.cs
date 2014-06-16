@@ -12,7 +12,7 @@ namespace Cake.Core.Tests.Unit
             public void Should_Throw_If_Name_Is_Null()
             {
                 // Given, When
-                var exception = Record.Exception(() => new CakeTask(null));
+                var exception = Record.Exception(() => new ActionTask(null));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(exception);
@@ -27,7 +27,7 @@ namespace Cake.Core.Tests.Unit
             public void Should_Throw_If_Name_Is_Empty(string name)
             {
                 // Given, When
-                var exception = Record.Exception(() => new CakeTask(name));
+                var exception = Record.Exception(() => new ActionTask(name));
 
                 // Then
                 Assert.IsType<ArgumentException>(exception);
@@ -35,16 +35,17 @@ namespace Cake.Core.Tests.Unit
             }
         }
 
-        public sealed class TheIsDependentOnMethod
+        public sealed class TheAddDependencyMethod
         {
             [Fact]
             public void Should_Add_Dependency_If_Not_Already_Present()
             {
                 // Given
-                var task = new CakeTask("task");
+                var task = new ActionTask("task");
+
 
                 // When
-                task.IsDependentOn("other");
+                task.AddDependency("other");
 
                 // Then
                 Assert.Equal(1, task.Dependencies.Count);
@@ -55,11 +56,11 @@ namespace Cake.Core.Tests.Unit
             public void Should_Throw_If_Dependency_Already_Exist()
             {
                 // Given
-                var task = new CakeTask("task");
-                task.IsDependentOn("other");
+                var task = new ActionTask("task");
+                task.AddDependency("other");
 
                 // When
-                var exception = Record.Exception(() => task.IsDependentOn("other"));
+                var exception = Record.Exception(() => task.AddDependency("other"));
 
                 // Then
                 Assert.IsType<CakeException>(exception);
@@ -67,115 +68,33 @@ namespace Cake.Core.Tests.Unit
             }
         }
 
-        public sealed class TheWithCriteriaMethod
+        public sealed class TheAddCriteriaMethod
         {
-            public sealed class ThatAcceptsBoolean
+            [Fact]
+            public void Should_Throw_If_Criteria_Is_Null()
             {
-                [Fact]
-                public void Should_Add_Criteria()
-                {
-                    // Given
-                    var task = new CakeTask("Task");
+                // Given
+                var task = new ActionTask("task");
 
-                    // When
-                    task.WithCriteria(false);
+                // When
+                var exception = Record.Exception(() => task.AddCriteria(null));
 
-                    // Then
-                    Assert.Equal(1, task.Criterias.Count);
-                }
+                // Then
+                Assert.IsType<ArgumentNullException>(exception);
+                Assert.Equal("criteria", ((ArgumentNullException)exception).ParamName);
             }
 
-            public sealed class ThatAcceptsLambda
+            [Fact]
+            public void Should_Add_Criteria()
             {
-                [Fact]
-                public void Should_Throw_If_Criteria_Is_Null()
-                {
-                    // Given
-                    var task = new CakeTask("task");
+                // Given
+                var task = new ActionTask("task");
 
-                    // When
-                    var exception = Record.Exception(() => task.WithCriteria(null));
+                // When
+                task.AddCriteria(() => true);
 
-                    // Then
-                    Assert.IsType<ArgumentNullException>(exception);
-                    Assert.Equal("criteria", ((ArgumentNullException) exception).ParamName);
-                }
-
-                [Fact]
-                public void Should_Add_Criteria()
-                {
-                    // Given
-                    var task = new CakeTask("task");
-
-                    // When
-                    task.WithCriteria(() => true);
-
-                    // Then
-                    Assert.Equal(1, task.Criterias.Count);
-                }
-            }
-        }
-
-        public sealed class TheDoesMethod
-        {
-            public class WithoutContext
-            {
-                [Fact]
-                private void Should_Throw_If_Action_Is_Null()
-                {
-                    // Given
-                    var task = new CakeTask("task");
-
-                    // When
-                    var exception = Record.Exception(() => task.Does((Action)null));
-
-                    // Then
-                    Assert.IsType<ArgumentNullException>(exception);
-                    Assert.Equal("action", ((ArgumentNullException)exception).ParamName);
-                }
-
-                [Fact]
-                public void Should_Add_Action()
-                {
-                    // Given
-                    var task = new CakeTask("task");
-
-                    // When
-                    task.Does(() => { });
-
-                    // Then
-                    Assert.Equal(1, task.Actions.Count);
-                }
-            }
-
-            public class WithContext
-            {
-                [Fact]
-                private void Should_Throw_If_Action_Is_Null()
-                {
-                    // Given
-                    var task = new CakeTask("task");
-
-                    // When
-                    var exception = Record.Exception(() => task.Does((Action<ICakeContext>)null));
-
-                    // Then
-                    Assert.IsType<ArgumentNullException>(exception);
-                    Assert.Equal("action", ((ArgumentNullException)exception).ParamName);
-                }
-
-                [Fact]
-                public void Should_Add_Action()
-                {
-                    // Given
-                    var task = new CakeTask("task");
-
-                    // When
-                    task.Does(c => { });
-
-                    // Then
-                    Assert.Equal(1, task.Actions.Count);
-                }
+                // Then
+                Assert.Equal(1, task.Criterias.Count);
             }
         }
     }

@@ -36,7 +36,7 @@ namespace Cake.Common.Tests.Unit.NUnit
                 var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test1", new NUnitSettings()));
+                var result = Record.Exception(() => runner.Run("./Test1.dll", new NUnitSettings()));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -101,7 +101,7 @@ namespace Cake.Common.Tests.Unit.NUnit
                 var runner = fixture.CreateRunner();
 
                 // When
-                runner.Run("./Test1", new NUnitSettings());
+                runner.Run("./Test1.dll", new NUnitSettings());
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
@@ -117,7 +117,7 @@ namespace Cake.Common.Tests.Unit.NUnit
                 var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test1", new NUnitSettings()));
+                var result = Record.Exception(() => runner.Run("./Test1.dll", new NUnitSettings()));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -133,7 +133,7 @@ namespace Cake.Common.Tests.Unit.NUnit
                 var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test1", new NUnitSettings()));
+                var result = Record.Exception(() => runner.Run("./Test1.dll", new NUnitSettings()));
 
                 // Then
                 Assert.IsType<CakeException>(result);

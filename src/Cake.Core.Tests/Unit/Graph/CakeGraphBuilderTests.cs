@@ -13,7 +13,7 @@ namespace Cake.Core.Tests.Unit.Graph
             public void Should_Add_All_Tasks_As_Nodes_In_Graph()
             {
                 // Given, When
-                var tasks = new List<CakeTask> {new CakeTask("A"), new CakeTask("B")};
+                var tasks = new List<CakeTask> { new ActionTask("A"), new ActionTask("B") };
                 var graph = CakeGraphBuilder.Build(tasks);
 
                 // Then
@@ -24,9 +24,13 @@ namespace Cake.Core.Tests.Unit.Graph
             public void Should_Create_Edges_Between_Dependencies()
             {
                 // Given
+                var task1 = new ActionTask("A");
+                var task2 = new ActionTask("B");
+                task2.AddDependency("A");
+
                 var tasks = new List<CakeTask>
                 {
-                    new CakeTask("A"), new CakeTask("B").IsDependentOn("A")
+                    task1, task2
                 };
                 var graph = CakeGraphBuilder.Build(tasks);
 
@@ -41,10 +45,9 @@ namespace Cake.Core.Tests.Unit.Graph
             public void Should_Throw_Exception_When_Depending_On_Task_That_Does_Not_Exist()
             {
                 // Given
-                var tasks = new List<CakeTask>
-                {
-                    new CakeTask("A").IsDependentOn("C")
-                };
+                var task = new ActionTask("A");
+                task.AddDependency("C");
+                var tasks = new List<CakeTask> { task };
 
                 // When
                 var exception = Assert.Throws<CakeException>(() => CakeGraphBuilder.Build(tasks));

@@ -4,12 +4,11 @@ using System.Linq;
 
 namespace Cake.Core
 {
-    public sealed class CakeTask
+    public abstract class CakeTask
     {
         private readonly string _name;
         private readonly List<string> _dependencies;
         private readonly List<Func<bool>> _criterias;
-        private readonly List<Action<ICakeContext>> _actions;
 
         public string Name
         {
@@ -26,12 +25,7 @@ namespace Cake.Core
             get { return _criterias; }
         }
 
-        public IReadOnlyList<Action<ICakeContext>> Actions
-        {
-            get { return _actions; }
-        }
-
-        public CakeTask(string name)
+        protected CakeTask(string name)
         {
             if (name == null)
             {
@@ -44,10 +38,10 @@ namespace Cake.Core
             _name = name;
             _dependencies = new List<string>();
             _criterias = new List<Func<bool>>();
-            _actions = new List<Action<ICakeContext>>();
         }
 
-        public CakeTask IsDependentOn(string name)
+
+        public void AddDependency(string name)
         {
             if (_dependencies.Any(x => x == name))
             {
@@ -56,41 +50,17 @@ namespace Cake.Core
                 throw new CakeException(message);
             }
             _dependencies.Add(name);
-            return this;
         }
 
-        public CakeTask WithCriteria(bool criteria)
-        {
-            return WithCriteria(() => criteria);
-        }
-
-        public CakeTask WithCriteria(Func<bool> criteria)
+        public void AddCriteria(Func<bool> criteria)
         {
             if (criteria == null)
             {
                 throw new ArgumentNullException("criteria");
             }
             _criterias.Add(criteria);
-            return this;
         }
 
-        public CakeTask Does(Action action)
-        {
-            if (action == null)
-            {
-                throw new ArgumentNullException("action");
-            }
-            return Does(context => action());
-        }
-
-        public CakeTask Does(Action<ICakeContext> action)
-        {
-            if (action == null)
-            {
-                throw new ArgumentNullException("action");
-            }
-            _actions.Add(action);
-            return this;
-        }
+        public abstract void Execute(ICakeContext context);
     }
 }

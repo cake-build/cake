@@ -48,8 +48,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Unit\ActionTaskTests.cs" />
     <Compile Include="Unit\CakeArgumentsTests.cs" />
     <Compile Include="Unit\CakeEngineTests.cs" />
+    <Compile Include="Unit\CakeTaskBuilderExtensionsTests.cs" />
+    <Compile Include="Unit\CakeTaskBuilderTests.cs" />
     <Compile Include="Unit\CakeTaskTests.cs" />
     <Compile Include="Unit\Diagnostics\LogExtensionsTests.cs" />
     <Compile Include="Unit\Diagnostics\VerbosityTypeConverterTests.cs" />

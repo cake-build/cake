@@ -38,7 +38,7 @@ namespace Cake.Scripting
             _engine = engine;
         }
 
-        public CakeTask Task(string name)
+        public CakeTaskBuilder<ActionTask> Task(string name)
         {
             return _engine.Task(name);
         }

@@ -92,7 +92,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.NotNull(result);
-                Assert.Equal("task", result.Name);
+                Assert.Equal("task", result.Task.Name);
             }
 
             [Fact]
@@ -105,7 +105,7 @@ namespace Cake.Core.Tests.Unit
                 var result = engine.Task("task");
 
                 // Then
-                Assert.True(engine.Tasks.Contains(result));         
+                Assert.True(engine.Tasks.Contains(result.Task));         
             }
 
             [Fact]
