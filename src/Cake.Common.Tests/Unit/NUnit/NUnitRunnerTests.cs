@@ -40,7 +40,7 @@ namespace Cake.Common.Tests.Unit.NUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Could not find NUnit runner.", result.Message);
+                Assert.Equal("Could not find nunit-console.exe.", result.Message);
             }
 
             [Theory]

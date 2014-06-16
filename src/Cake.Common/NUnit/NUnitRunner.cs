@@ -62,7 +62,7 @@ namespace Cake.Common.NUnit
             var runnerPath = _globber.GetFiles(expression).FirstOrDefault();
             if (runnerPath == null)
             {
-                throw new CakeException("Could not find NUnit runner.");
+                throw new CakeException("Could not find nunit-console.exe.");
             }
             return runnerPath;
         }

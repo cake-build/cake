@@ -40,7 +40,7 @@ namespace Cake.Common.Tests.Unit.XUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Could not find xUnit runner.", result.Message);
+                Assert.Equal("Could not find xunit.console.clr4.exe.", result.Message);
             }
 
             [Theory]            

@@ -40,6 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ILMerge\ILMergeExtensions.cs" />
+    <Compile Include="ILMerge\ILMergeRunner.cs" />
+    <Compile Include="ILMerge\ILMergeSettings.cs" />
+    <Compile Include="ILMerge\TargetKind.cs" />
     <Compile Include="IO\ArgumentExtensions.cs" />
     <Compile Include="IO\Compression\ZipExtensions.cs" />
     <Compile Include="IO\Compression\Zipper.cs" />

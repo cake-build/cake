@@ -63,10 +63,13 @@
     </Compile>
     <Compile Include="Fixtures\FileCopyFixture.cs" />
     <Compile Include="Fixtures\FileSystemFixture.cs" />
+    <Compile Include="Fixtures\ILMergeRunnerFixture.cs" />
     <Compile Include="Fixtures\MSBuildRunnerFixture.cs" />
     <Compile Include="Fixtures\NuGetFixture.cs" />
     <Compile Include="Fixtures\NUnitRunnerFixture.cs" />
     <Compile Include="Fixtures\XUnitRunnerFixture.cs" />
+    <Compile Include="Unit\ILMerge\ILMergeRunnerTests.cs" />
+    <Compile Include="Unit\ILMerge\ILMergeSettingsTests.cs" />
     <Compile Include="Unit\IO\Compression\ZipperTests.cs" />
     <Compile Include="Unit\IO\DirectoryCleanerTests.cs" />
     <Compile Include="Unit\IO\DirectoryDeleterTests.cs" />

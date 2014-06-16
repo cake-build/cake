@@ -75,7 +75,7 @@ namespace Cake.Common.XUnit
             var runnerPath = _globber.GetFiles(expression).FirstOrDefault();
             if (runnerPath == null)
             {
-                throw new CakeException("Could not find xUnit runner.");
+                throw new CakeException("Could not find xunit.console.clr4.exe.");
             }
             return runnerPath;
         }

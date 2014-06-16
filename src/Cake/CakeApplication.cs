@@ -75,7 +75,7 @@ namespace Cake
                 "Cake", "Cake.Core", "Cake.Core.IO", "Cake.Common.IO", 
                 "Cake.Common.IO.Compression", "Cake.Core.Diagnostics", 
                 "Cake.Common.MSBuild", "Cake.Common.XUnit", 
-                "Cake.Common.NuGet", "Cake.Common.NUnit"
+                "Cake.Common.NuGet", "Cake.Common.NUnit", "Cake.Common.ILMerge"
             };
 
             // Execute the script.
