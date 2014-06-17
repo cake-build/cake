@@ -1,3 +1,6 @@
+### New in 0.1.6 (Released 2014/06/18)
+* Added MSTest support.
+
 ### New in 0.1.5 (Released 2014/06/17)
 * Added ILMerge support.
 
