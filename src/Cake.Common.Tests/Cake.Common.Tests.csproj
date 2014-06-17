@@ -66,6 +66,7 @@
     <Compile Include="Fixtures\ILMergeRunnerFixture.cs" />
     <Compile Include="Fixtures\MSBuildRunnerFixture.cs" />
     <Compile Include="Fixtures\NuGetFixture.cs" />
+    <Compile Include="Fixtures\MSTestRunnerFixture.cs" />
     <Compile Include="Fixtures\NUnitRunnerFixture.cs" />
     <Compile Include="Fixtures\XUnitRunnerFixture.cs" />
     <Compile Include="Unit\ILMerge\ILMergeRunnerTests.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Unit\MSBuild\MSBuildRunnerTests.cs" />
     <Compile Include="Unit\MSBuild\MSBuildSettingsExtensionsTests.cs" />
     <Compile Include="Unit\MSBuild\MSBuildSettingsTests.cs" />
+    <Compile Include="Unit\MSTest\MSTestRunnerTests.cs" />
     <Compile Include="Unit\NuGet\NuGetPackerTests.cs" />
     <Compile Include="Unit\NuGet\NuGetPackSettingsTests.cs" />
     <Compile Include="Unit\NUnit\NUnitRunnerTests.cs" />

@@ -61,6 +61,9 @@
     <Compile Include="MSBuild\MSBuildToolVersion.cs" />
     <Compile Include="MSBuild\MSBuildVersion.cs" />
     <Compile Include="MSBuild\PlatformTarget.cs" />
+    <Compile Include="MSTest\MSTestExtensions.cs" />
+    <Compile Include="MSTest\MSTestRunner.cs" />
+    <Compile Include="MSTest\MSTestSettings.cs" />
     <Compile Include="NuGet\NuGetExtensions.cs" />
     <Compile Include="NuGet\NuGetPacker.cs" />
     <Compile Include="NuGet\NuGetPackSettings.cs" />
