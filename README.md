@@ -23,20 +23,10 @@ C:\Project> NuGet.exe install Cake -OutputDirectory Tools -ExcludeVersion
 ###2. Create build script
 
 ```CSharp
-var target = Argument("target", defaultValue: "NuGet");
+var target = Argument("target", "NuGet");
+var configuration = Argument("configuration", "Release");
 
-var isTeamCityBuild = HasArgument("teamCity");
-var configuration = Argument("configuration", defaultValue: "Release");
-
-// Access the log via script host and print some debug info.
-Log.Debug("teamCity={0}", isTeamCityBuild);
-Log.Debug("configuration={0}", configuration);
-
-////////////////////////////////////////////////////////////////////////////
-// All functionality is implemented as extension methods for ICakeContext.
-// For convenience, all built in functionality (such as MSBuild, xUnit etc) 
-// is also exposed directly on the script host for convenience.
-////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////
 
 Task("Hello")
     .WithCriteria(isTeamCityBuild)
@@ -93,8 +83,7 @@ Task("NuGet")
     .Does(() =>
 {
     // Create NuGet package.
-    NuGetPack("./Cake.nuspec", new NuGetPackSettings
-    {
+    NuGetPack("./Cake.nuspec", new NuGetPackSettings {
         Version = "0.1.0",
         BasePath = "./src/Cake/bin/" + configuration,
         OutputDirectory = "./build",
@@ -102,12 +91,13 @@ Task("NuGet")
     });
 });
 
-// Run the script.
+/////////////////////////////////////////////////
+
 Run(target);
 ```
 
 ###3. Run build script
 
 ```
-C:\Project\Tools\Cake> Cake.exe ../../build.csx -verbosity=diagnostic -teamCity -target=Pack
+C:\Project\Tools\Cake> Cake.exe ../../build.csx -verbosity=diagnostic -target=Pack
 ```
