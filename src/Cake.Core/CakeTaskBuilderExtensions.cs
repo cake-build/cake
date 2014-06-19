@@ -39,5 +39,12 @@ namespace Cake.Core
             builder.Task.AddAction(action);
             return builder;
         }
+
+        public static CakeTaskBuilder<ActionTask> ContinueOnError(this CakeTaskBuilder<ActionTask> builder)
+        {
+            builder.Task.ContinueOnError = true;
+            return builder;
+        }
+
     }
 }

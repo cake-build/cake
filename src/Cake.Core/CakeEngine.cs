@@ -137,9 +137,20 @@ namespace Cake.Core
             // Reset the stop watch.
             stopWatch.Reset();
             stopWatch.Start();
-
-            // Execute the task.
-            task.Execute(this);
+            
+            try
+            {
+                // Execute the task.
+                task.Execute(this);
+            }
+            catch (Exception ex)
+            {
+                _log.Error("An error occured in task {0}.", ex.Message);
+                if (!task.ContinueOnError)
+                {
+                    throw;   
+                }                
+            }            
 
             // Add the task results to the report.
             report.Add(task.Name, stopWatch.Elapsed);

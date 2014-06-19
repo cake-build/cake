@@ -14,7 +14,7 @@ namespace Cake.Core.Tests.Unit
             public void Should_Throw_If_File_System_Is_Null()
             {
                 // Given
-                var fixture = new CakeEngineFixture {FileSystem = null};
+                var fixture = new CakeEngineFixture { FileSystem = null };
 
                 // When
                 var result = Record.Exception(() => fixture.CreateEngine());
@@ -78,7 +78,7 @@ namespace Cake.Core.Tests.Unit
                 Assert.Equal(fixture.Globber, engine.Globber);
             }
         }
-            
+
         public sealed class TheTaskMethod
         {
             [Fact]
@@ -105,7 +105,7 @@ namespace Cake.Core.Tests.Unit
                 var result = engine.Task("task");
 
                 // Then
-                Assert.True(engine.Tasks.Contains(result.Task));         
+                Assert.True(engine.Tasks.Contains(result.Task));
             }
 
             [Fact]
@@ -197,6 +197,32 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.IsType<CakeException>(result);
                 Assert.Equal("The target 'Run-Some-Tests' was not found.", result.Message);
+            }
+
+            [Fact]
+            public void Should_Not_Catch_Exceptions_From_Task_If_Not_Explicitly_Told_So()
+            {
+                // Given
+                var engine = new CakeEngineFixture().CreateEngine();
+                engine.Task("A").Does(() => { throw new InvalidOperationException("Whoopsie"); });
+
+                // When
+                var result = Record.Exception(() => engine.RunTarget("A"));
+
+                // Then
+                Assert.IsType<InvalidOperationException>(result);
+                Assert.Equal("Whoopsie", result.Message);
+            }
+
+            [Fact]
+            public void Should_Catch_Exceptions_If_Explicitly_Told_So()
+            {
+                // Given
+                var engine = new CakeEngineFixture().CreateEngine();                
+                engine.Task("A").ContinueOnError().Does(() => { throw new InvalidOperationException(); });
+
+                // When, Then
+                var result = engine.RunTarget("A");
             }
         }
     }

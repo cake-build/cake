@@ -25,6 +25,8 @@ namespace Cake.Core
             get { return _criterias; }
         }
 
+        public bool ContinueOnError { get; set; }
+
         protected CakeTask(string name)
         {
             if (name == null)

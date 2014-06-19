@@ -111,5 +111,22 @@ namespace Cake.Core.Tests.Unit
                 }
             }
         }
+
+        public sealed class TheContinueOnErrorMethod
+        {
+            [Fact]
+            public void Should_Set_The_Property()
+            {
+                // Given
+                var task = new ActionTask("task");
+                var builder = new CakeTaskBuilder<ActionTask>(task);
+
+                // When
+                builder.ContinueOnError();
+
+                // Then
+                Assert.True(builder.Task.ContinueOnError);
+            }
+        }
     }
 }
