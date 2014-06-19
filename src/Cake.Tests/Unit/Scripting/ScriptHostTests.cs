@@ -108,7 +108,7 @@ namespace Cake.Tests.Unit.Scripting
             }            
         }
 
-        public sealed class TheRunMethod
+        public sealed class TheRunTargetMethod
         {
             [Fact]
             public void Should_Proxy_Call_To_Engine()
@@ -118,10 +118,10 @@ namespace Cake.Tests.Unit.Scripting
                 var host = fixture.CreateHost();
 
                 // When
-                host.Run("Target");
+                host.RunTarget("Target");
 
                 // Then
-                fixture.Engine.Received(1).Run("Target");
+                fixture.Engine.Received(1).RunTarget("Target");
             }
         }
     }

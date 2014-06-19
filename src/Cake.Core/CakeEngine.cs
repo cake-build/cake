@@ -91,7 +91,7 @@ namespace Cake.Core
             return new CakeTaskBuilder<ActionTask>(task);
         }
 
-        public CakeReport Run(string target)
+        public CakeReport RunTarget(string target)
         {
             var graph = CakeGraphBuilder.Build(_tasks);
 

@@ -3,6 +3,6 @@
     public interface ICakeEngine : ICakeContext
     {
         CakeTaskBuilder<ActionTask> Task(string name);
-        CakeReport Run(string target);
+        CakeReport RunTarget(string target);
     }
 }

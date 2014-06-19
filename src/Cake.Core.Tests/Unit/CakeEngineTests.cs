@@ -124,7 +124,7 @@ namespace Cake.Core.Tests.Unit
             }
         }
 
-        public sealed class TheRunMethod
+        public sealed class TheRunTargetMethod
         {
             [Fact]
             public void Should_Execute_Tasks_In_Order()
@@ -137,7 +137,7 @@ namespace Cake.Core.Tests.Unit
                 engine.Task("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
-                engine.Run("C");
+                engine.RunTarget("C");
 
                 // Then
                 Assert.Equal(3, result.Count);
@@ -157,7 +157,7 @@ namespace Cake.Core.Tests.Unit
                 engine.Task("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
-                engine.Run("C");
+                engine.RunTarget("C");
 
                 // Then
                 Assert.Equal(2, result.Count);
@@ -176,7 +176,7 @@ namespace Cake.Core.Tests.Unit
                 engine.Task("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
-                engine.Run("C");
+                engine.RunTarget("C");
 
                 // Then
                 Assert.Equal(3, result.Count);
@@ -192,7 +192,7 @@ namespace Cake.Core.Tests.Unit
                 var engine = new CakeEngineFixture().CreateEngine();
 
                 // When
-                var result = Record.Exception(() => engine.Run("Run-Some-Tests"));
+                var result = Record.Exception(() => engine.RunTarget("Run-Some-Tests"));
 
                 // Then
                 Assert.IsType<CakeException>(result);

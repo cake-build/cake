@@ -43,9 +43,9 @@ namespace Cake.Scripting
             return _engine.Task(name);
         }
 
-        public CakeReport Run(string target)
+        public CakeReport RunTarget(string target)
         {
-            var report = _engine.Run(target);
+            var report = _engine.RunTarget(target);
             if (!report.IsEmpty)
             {
                 CakeReportPrinter.Write(report);   
