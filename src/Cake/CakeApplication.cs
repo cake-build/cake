@@ -73,9 +73,10 @@ namespace Cake
                 "System", "System.Collections.Generic", "System.Linq",
                 "System.Text", "System.Threading.Tasks", "System.IO",
                 "Cake", "Cake.Core", "Cake.Core.IO", "Cake.Common.IO", 
-                "Cake.Common.IO.Compression", "Cake.Core.Diagnostics", 
-                "Cake.Common.MSBuild", "Cake.Common.XUnit", 
-                "Cake.Common.NuGet", "Cake.Common.NUnit", "Cake.Common.ILMerge"
+                "Cake.Common.IO", "Cake.Core.Diagnostics", 
+                "Cake.Common.Tools.MSBuild", "Cake.Common.Tools.XUnit", 
+                "Cake.Common.Tools.NuGet", "Cake.Common.Tools.NUnit",
+                "Cake.Common.Tools.ILMerge"
             };
 
             // Execute the script.

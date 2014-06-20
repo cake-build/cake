@@ -172,10 +172,11 @@ namespace Cake.Tests.Unit
             [InlineData("Cake.Core.IO")]
             [InlineData("Cake.Core.Diagnostics")]
             [InlineData("Cake.Common.IO")]
-            [InlineData("Cake.Common.IO.Compression")]
-            [InlineData("Cake.Common.MSBuild")]
-            [InlineData("Cake.Common.XUnit")]
-            [InlineData("Cake.Common.NuGet")]
+            [InlineData("Cake.Common.Tools.MSBuild")]
+            [InlineData("Cake.Common.Tools.XUnit")]
+            [InlineData("Cake.Common.Tools.NuGet")]
+            [InlineData("Cake.Common.Tools.NUnit")]
+            [InlineData("Cake.Common.Tools.ILMerge")]
             public void Should_Provide_Script_Runner_With_Namespaces(string @namespace)
             {
                 // Given

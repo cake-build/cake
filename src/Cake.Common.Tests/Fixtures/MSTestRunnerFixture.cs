@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
-using Cake.Common.MSTest;
-using Cake.Common.NUnit;
+using Cake.Common.Tools.MSTest;
 using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;

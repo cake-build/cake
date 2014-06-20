@@ -222,7 +222,7 @@ namespace Cake.Core.Tests.Unit
                 engine.Task("A").ContinueOnError().Does(() => { throw new InvalidOperationException(); });
 
                 // When, Then
-                var result = engine.RunTarget("A");
+                engine.RunTarget("A");
             }
         }
     }

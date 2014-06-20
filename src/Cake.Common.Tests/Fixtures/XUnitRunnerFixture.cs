@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using Cake.Common.XUnit;
+using Cake.Common.Tools.XUnit;
 using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;

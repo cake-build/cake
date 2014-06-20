@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using Cake.Common.ILMerge;
+using Cake.Common.Tools.ILMerge;
 using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
