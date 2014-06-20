@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using Cake.Core;
+using Cake.Core.Annotations;
 using Cake.Scripting;
 using System;
 using Xunit;
@@ -14,37 +15,49 @@ namespace Cake.Tests.Unit.Scripting
             throw new NotImplementedException();
         }
 
+        public static void NotAScriptMethod(this ICakeContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeScriptMethod]
         public static void NonGeneric_ExtensionMethodWithNoParameters(this ICakeContext context)
         {
             throw new NotImplementedException();
         }
 
+        [CakeScriptMethod]
         public static string NonGeneric_ExtensionMethodWithReturnValue(this ICakeContext context)
         {
             throw new NotImplementedException();
         }
 
+        [CakeScriptMethod]
         public static void NonGeneric_ExtensionMethodWithParameter(this ICakeContext context, int value)
         {
             throw new NotImplementedException();
         }
 
+        [CakeScriptMethod]
         public static void NonGeneric_ExtensionMethodWithGenericParameter(this ICakeContext context, Action<int> value)
         {
             throw new NotImplementedException();
         }
 
+        [CakeScriptMethod]
         public static void Generic_ExtensionMethod<TTest>(this ICakeContext context)
         {
             Debug.Assert(typeof (TTest) != null); // Resharper
             throw new NotImplementedException();
         }
 
+        [CakeScriptMethod]
         public static void Generic_ExtensionMethodWithParameter<TTest>(this ICakeContext context, TTest value)
         {
             throw new NotImplementedException();
         }
 
+        [CakeScriptMethod]
         public static TTest Generic_ExtensionMethodWithGenericReturnValue<TTest>(this ICakeContext context, TTest value)
         {
             throw new NotImplementedException();
@@ -82,7 +95,7 @@ namespace Cake.Tests.Unit.Scripting
             }
 
             [Fact]
-            public void Should_Throw_If_Method_Is_Not_An_Extension_Method_Static()
+            public void Should_Throw_If_Method_Is_Not_An_Extension_Method()
             {
                 // Given
                 var method = typeof(StaticClass).GetMethod("NotAnExtensionMethod");
@@ -93,6 +106,21 @@ namespace Cake.Tests.Unit.Scripting
                 // Then
                 Assert.IsType<CakeException>(result);
                 Assert.Equal("The method 'NotAnExtensionMethod' is not an extension method.",
+                    result.Message);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Method_Is_Not_An_Cake_Script_Method()
+            {
+                // Given
+                var method = typeof(StaticClass).GetMethod("NotAScriptMethod");
+
+                // When
+                var result = Record.Exception(() => ScriptCodeGenerator.Generate(method));
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("The method 'NotAScriptMethod' is not a Cake script method.",
                     result.Message);
             }
 

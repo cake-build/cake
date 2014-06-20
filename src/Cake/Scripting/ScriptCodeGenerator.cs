@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Cake.Core;
+using Cake.Core.Annotations;
 using Cake.Extensions;
 
 namespace Cake.Scripting
@@ -27,6 +28,11 @@ namespace Cake.Scripting
             if (!method.IsDefined(typeof(ExtensionAttribute)))
             {
                 const string format = "The method '{0}' is not an extension method.";
+                throw new CakeException(string.Format(format, method.Name));
+            }
+            if (!method.IsDefined(typeof(CakeScriptMethodAttribute)))
+            {
+                const string format = "The method '{0}' is not a Cake script method.";
                 throw new CakeException(string.Format(format, method.Name));
             }
             return GenerateCode(method);
