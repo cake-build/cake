@@ -1,3 +1,7 @@
+### New in 0.1.7 (Released 2014/06/21)
+* Renamed method Run to RunTarget.
+* Various fixes and improvements.
+
 ### New in 0.1.6 (Released 2014/06/18)
 * Added MSTest support.
 

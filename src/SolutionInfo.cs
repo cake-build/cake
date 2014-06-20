@@ -2,12 +2,12 @@
 using System.Reflection;
 
 [assembly: AssemblyProductAttribute("Cake")]
-[assembly: AssemblyVersionAttribute("0.1.6")]
-[assembly: AssemblyFileVersionAttribute("0.1.6")]
-[assembly: AssemblyInformationalVersionAttribute("0.1.6")]
+[assembly: AssemblyVersionAttribute("0.1.7")]
+[assembly: AssemblyFileVersionAttribute("0.1.7")]
+[assembly: AssemblyInformationalVersionAttribute("0.1.7")]
 [assembly: AssemblyCopyrightAttribute("Copyright (c) Patrik Svensson 2014")]
 namespace System {
     internal static class AssemblyVersionInformation {
-        internal const string Version = "0.1.6";
+        internal const string Version = "0.1.7";
     }
 }
