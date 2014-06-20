@@ -1,15 +1,18 @@
 ﻿using System.ComponentModel;
 using Cake.Core;
+using Cake.Core.Annotations;
 
 namespace Cake.Common.IO
 {
     public static class ArgumentExtensions
     {
+        [CakeScriptMethod]
         public static bool HasArgument(this ICakeContext context, string key)
         {
             return context.Arguments.HasArgument(key);
         }
 
+        [CakeScriptMethod]
         public static T Argument<T>(this ICakeContext context, string key)
         {
             var value = context.Arguments.GetArgument(key);
@@ -20,6 +23,7 @@ namespace Cake.Common.IO
             return Convert<T>(value);
         }
 
+        [CakeScriptMethod]
         public static T Argument<T>(this ICakeContext context, string key, T defaultValue)
         {
             var value = context.Arguments.GetArgument(key);

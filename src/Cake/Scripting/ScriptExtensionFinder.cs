@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Cake.Core;
+using Cake.Core.Annotations;
 using Cake.Extensions;
 
 namespace Cake.Scripting
@@ -32,6 +33,10 @@ namespace Cake.Scripting
             foreach (var method in methods)
             {
                 if (!method.IsDefined(typeof(ExtensionAttribute)))
+                {
+                    continue;
+                }
+                if (!method.IsDefined(typeof(CakeScriptMethodAttribute)))
                 {
                     continue;
                 }

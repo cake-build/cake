@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using Cake.Core;
+using Cake.Core.Annotations;
 using Cake.Core.IO;
 
 namespace Cake.Common.ILMerge
 {
     public static class ILMergeExtensions
     {
+        [CakeScriptMethod]
         public static void ILMerge(this ICakeContext context, FilePath outputFile, FilePath primaryAssembly,
             IEnumerable<FilePath> assemblyPaths)
         {
@@ -13,6 +15,7 @@ namespace Cake.Common.ILMerge
             merger.Merge(outputFile, primaryAssembly, assemblyPaths);
         }
 
+        [CakeScriptMethod]
         public static void ILMerge(this ICakeContext context, FilePath outputFile, FilePath primaryAssembly,
             IEnumerable<FilePath> assemblyPaths, ILMergeSettings settings)
         {
