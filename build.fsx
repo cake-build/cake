@@ -58,7 +58,7 @@ Target "Update-TeamCity-Build-Number" (fun _ ->
 )
 
 Target "Set-Versions" (fun _ ->
-    Block "Settings version information" (fun _ ->            
+    Block "Setting version information" (fun _ ->            
         CreateCSharpAssemblyInfo "./src/SolutionInfo.cs"
             [Attribute.Product "Cake"
              Attribute.Version version
@@ -69,7 +69,7 @@ Target "Set-Versions" (fun _ ->
 )
 
 Target "Build" (fun _ ->
-    Block "Building Lunt" (fun _ ->
+    Block "Building Cake" (fun _ ->
         MSBuild null "Build" ["Configuration", buildMode] ["./src/Cake.sln"]
         |> Log "AppBuild-Output: "
     )
