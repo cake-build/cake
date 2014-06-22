@@ -56,6 +56,8 @@
     <Compile Include="CakeArguments.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="ICakeArguments.cs" />
+    <Compile Include="IO\DirectoryPathCollection.cs" />
+    <Compile Include="IO\FilePathCollection.cs" />
     <Compile Include="IO\FileExtensions.cs" />
     <Compile Include="IO\FileSystemExtensions.cs" />
     <Compile Include="IO\GlobberExtensions.cs" />

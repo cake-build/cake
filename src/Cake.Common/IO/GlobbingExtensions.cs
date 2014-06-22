@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -9,15 +8,17 @@ namespace Cake.Common.IO
     public static class GlobbingExtensions
     {
         [CakeScriptMethod]
-        public static IEnumerable<FilePath> GetFiles(this ICakeContext context, string pattern)
+        public static FilePathCollection GetFiles(this ICakeContext context, string pattern)
         {
-            return context.Globber.Match(pattern).OfType<FilePath>();
+            return new FilePathCollection(context.Globber.Match(pattern).OfType<FilePath>(),
+                new PathComparer(context.Environment.IsUnix()));
         }
 
         [CakeScriptMethod]
-        public static IEnumerable<DirectoryPath> GetDirectories(this ICakeContext context, string pattern)
+        public static DirectoryPathCollection GetDirectories(this ICakeContext context, string pattern)
         {
-            return context.Globber.Match(pattern).OfType<DirectoryPath>();
+            return new DirectoryPathCollection(context.Globber.Match(pattern).OfType<DirectoryPath>(),
+                new PathComparer(context.Environment.IsUnix()));
         }
     }
 }
