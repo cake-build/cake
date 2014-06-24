@@ -198,7 +198,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "/target:Build src/Solution.sln"));
+                    p => p.Arguments == "/target:Build \"src/Solution.sln\""));
             }
 
             [Fact]
@@ -217,7 +217,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "/target:A;B src/Solution.sln"));
+                    p => p.Arguments == "/target:A;B \"src/Solution.sln\""));
             }
 
             [Fact]
@@ -236,7 +236,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "/property:A=B;C=D /target:Build src/Solution.sln"));
+                    p => p.Arguments == "/property:A=B;C=D /target:Build \"src/Solution.sln\""));
             }
 
             [Fact]
@@ -254,7 +254,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "/property:Configuration=Release /target:Build src/Solution.sln"));
+                    p => p.Arguments == "/property:Configuration=Release /target:Build \"src/Solution.sln\""));
             }
 
             [Fact]

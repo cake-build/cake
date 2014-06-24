@@ -83,7 +83,7 @@ namespace Cake.Common.Tools.MSBuild
             }
 
             // Add the solution as the last parameter.
-            parameters.Add(settings.Solution.FullPath);
+            parameters.Add(string.Concat("\"", settings.Solution.FullPath, "\""));
 
             return new ProcessStartInfo(msBuildPath.FullPath)
             {
