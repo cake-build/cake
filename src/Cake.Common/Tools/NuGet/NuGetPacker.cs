@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using Cake.Core;
 using Cake.Core.Extensions;
 using Cake.Core.IO;
@@ -33,10 +31,10 @@ namespace Cake.Common.Tools.NuGet
             }
 
             // Find the NuGet executable.
-            var toolPath = GetToolPath(settings);
+            var toolPath = NuGetResolver.GetToolPath(_environment, _globber, settings.ToolPath);
 
             // Start the process.
-            var processInfo = GetProcessStartInfo(toolPath, nuspecFilePath, settings);
+            var processInfo = NuGetResolver.GetProcessStartInfo(_environment, toolPath, ()=>GetPackParameters(nuspecFilePath, settings));
             var process = _processRunner.Start(processInfo);
             if (process == null)
             {
@@ -53,24 +51,9 @@ namespace Cake.Common.Tools.NuGet
             }
         }
 
-        private FilePath GetToolPath(NuGetPackSettings settings)
+        private static ICollection<string> GetPackParameters(FilePath nuspecFilePath, NuGetPackSettings settings)
         {
-            if (settings.ToolPath != null)
-            {
-                return settings.ToolPath.MakeAbsolute(_environment);
-            }
-            var expression = string.Format("./tools/**/NuGet.exe");
-            var nugetExePath = _globber.GetFiles(expression).FirstOrDefault();
-            if (nugetExePath == null)
-            {
-                throw new CakeException("Could not find NuGet.exe.");
-            }
-            return nugetExePath;
-        }
-
-        private ProcessStartInfo GetProcessStartInfo(FilePath nugetExePath, FilePath nuspecFilePath, NuGetPackSettings settings)
-        {
-            var parameters = new List<string> { "pack" };
+            var parameters = new List<string> {"pack"};
 
             // Version
             if (!string.IsNullOrWhiteSpace(settings.Version))
@@ -83,14 +66,14 @@ namespace Cake.Common.Tools.NuGet
             if (settings.BasePath != null)
             {
                 parameters.Add("-BasePath");
-                parameters.Add(settings.BasePath.FullPath.Quote());                
+                parameters.Add(settings.BasePath.FullPath.Quote());
             }
 
             // Output directory
             if (settings.OutputDirectory != null)
             {
                 parameters.Add("-OutputDirectory");
-                parameters.Add(settings.OutputDirectory.FullPath.Quote());                
+                parameters.Add(settings.OutputDirectory.FullPath.Quote());
             }
 
             // Nuspec file
@@ -107,13 +90,7 @@ namespace Cake.Common.Tools.NuGet
             {
                 parameters.Add("-Symbols");
             }
-
-            return new ProcessStartInfo(nugetExePath.FullPath)
-            {
-                WorkingDirectory = _environment.WorkingDirectory.FullPath,
-                Arguments = string.Join(" ", parameters),
-                UseShellExecute = false
-            };
+            return parameters;
         }
     }
 }
