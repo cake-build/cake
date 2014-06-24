@@ -19,7 +19,7 @@ namespace Cake.Common.Tools.NuGet
             _processRunner = processRunner;
         }
 
-        public void Restore(NugetRestoreSettings settings)
+        public void Restore(NuGetRestoreSettings settings)
         {
             if (settings == null)
             {
@@ -47,7 +47,7 @@ namespace Cake.Common.Tools.NuGet
             }
         }
 
-        private static ICollection<string> GetPackParameters(NugetRestoreSettings settings)
+        private static ICollection<string> GetPackParameters(NuGetRestoreSettings settings)
         {
             var parameters = new List<string>
             {

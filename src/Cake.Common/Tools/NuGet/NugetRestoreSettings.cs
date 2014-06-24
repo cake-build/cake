@@ -4,13 +4,16 @@ using Cake.Core.IO;
 
 namespace Cake.Common.Tools.NuGet
 {
-    public sealed class NugetRestoreSettings
+    public sealed class NuGetRestoreSettings
     {
         /// <summary>
         /// Solution to restore packages for
         /// </summary>
-        public FilePath Solution { get; private set; }
-
+        public FilePath Solution { get;  set; }
+        
+        /// <summary>
+        /// Path to nuget.exe
+        /// </summary>
         public FilePath ToolPath { get; set; }
 
         /// <summary>
@@ -48,13 +51,17 @@ namespace Cake.Common.Tools.NuGet
         /// </summary>
         public FilePath ConfigFile { get; set; }
 
-        public NugetRestoreSettings(FilePath solution)
+
+        public NuGetRestoreSettings() 
+        {
+        }
+
+        public NuGetRestoreSettings(FilePath solution)
         {
             if (solution == null)
             {
                 throw new ArgumentNullException("solution");
             }
-            
             Solution = solution;
         }
     }

@@ -1,40 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cake.Core.IO;
+﻿using Cake.Core.IO;
 
 namespace Cake.Common.Tools.NuGet
 {
-    public static class NugetRestoreSettingsExtensions
+    public static class NuGetRestoreSettingsExtensions
     {
-        public static NugetRestoreSettings WithNoCache(this NugetRestoreSettings settings)
+        public static NuGetRestoreSettings WithNoCache(this NuGetRestoreSettings settings)
         {
             settings.NoCache = true;
             return settings;
         }
 
-        public static NugetRestoreSettings WithVerbosityDetailed(this NugetRestoreSettings settings)
+        public static NuGetRestoreSettings WithVerbosityDetailed(this NuGetRestoreSettings settings)
         {
             settings.Verbosity = NuGetVerbosity.Detailed;
             return settings;
         }
 
-        public static NugetRestoreSettings WithVerbosityQuiet(this NugetRestoreSettings settings)
+        public static NuGetRestoreSettings WithVerbosityQuiet(this NuGetRestoreSettings settings)
         {
             settings.Verbosity = NuGetVerbosity.Quiet;
             return settings;
         }
 
-        public static NugetRestoreSettings WithVerbosityNormal(this NugetRestoreSettings settings)
+        public static NuGetRestoreSettings WithVerbosityNormal(this NuGetRestoreSettings settings)
         {
             settings.Verbosity = NuGetVerbosity.Normal;
             return settings;
         }
 
         
-        public static NugetRestoreSettings SetToolPath(this NugetRestoreSettings settings, FilePath tooPath)
+        public static NuGetRestoreSettings SetToolPath(this NuGetRestoreSettings settings, FilePath tooPath)
         {
             settings.ToolPath = tooPath;
             return settings;
