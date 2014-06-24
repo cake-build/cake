@@ -122,6 +122,21 @@ namespace Cake.Core.Tests.Unit
                 Assert.IsType<CakeException>(result);
                 Assert.Equal("Another task with the name 'task' has already been added.", result.Message);
             }
+
+            [Fact]
+            public void Should_Throw_If_Another_Task_With_The_Same_Name_Already_Been_Added_Regardless_Of_Casing()
+            {
+                // Given
+                var engine = new CakeEngineFixture().CreateEngine();
+                engine.Task("task");
+
+                // When
+                var result = Record.Exception(() => engine.Task("TASK"));
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("Another task with the name 'TASK' has already been added.", result.Message);
+            }
         }
 
         public sealed class TheRunTargetMethod

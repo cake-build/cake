@@ -111,6 +111,20 @@ namespace Cake.Core.Tests.Unit.Graph
             }
 
             [Fact]
+            public void Should_Not_Create_Edge_Between_Connected_Nodes_If_An_Edge_Already_Exist_Regardless_Of_Casing()
+            {
+                // Given
+                var graph = new CakeGraph();
+                graph.Connect("start", "end");
+
+                // When
+                graph.Connect("START", "END");
+
+                // Then
+                Assert.Equal(1, graph.Edges.Count);
+            }
+
+            [Fact]
             public void Should_Throw_If_Edge_Is_Reflexive()
             {
                 // Given
@@ -138,36 +152,56 @@ namespace Cake.Core.Tests.Unit.Graph
                 Assert.IsType<CakeException>(exception);
                 Assert.Equal("Unidirectional edges in graph are not allowed.", exception.Message);
             }
+
+            [Fact]
+            public void Should_Throw_If_Edge_Is_Unidirectional_Regardless_Of_Casing()
+            {
+                // Given
+                var graph = new CakeGraph();
+                graph.Connect("start", "end");
+
+                // When
+                var exception = Record.Exception(() => graph.Connect("END", "START"));
+
+                // Then
+                Assert.IsType<CakeException>(exception);
+                Assert.Equal("Unidirectional edges in graph are not allowed.", exception.Message);
+            }
         }
 
         public sealed class TheExistMethod
         {
             [Fact]
-            public void Should_Return_True_If_Node_Exist()
+            public void Should_Find_Node_In_Graph()
             {
                 // Given
                 var graph = new CakeGraph();
                 graph.Add("start");
 
-                // When
-                var result = graph.Exist("start");
-
-                // Then
-                Assert.True(result);
+                // When, Then
+                Assert.True(graph.Exist("start"));
             }
 
             [Fact]
-            public void Should_Return_False_If_Node_Do_Not_Exist()
+            public void Should_Find_Node_In_Graph_Regardless_Of_Casing()
             {
                 // Given
                 var graph = new CakeGraph();
                 graph.Add("start");
 
-                // When
-                var result = graph.Exist("other");
+                // When, Then
+                Assert.True(graph.Exist("START"));
+            }
 
-                // Then
-                Assert.False(result);
+            [Fact]
+            public void Should_Not_Find_Non_Existing_Node_In_Graph()
+            {
+                // Given
+                var graph = new CakeGraph();
+                graph.Add("start");
+
+                // When, Then
+                Assert.False(graph.Exist("other"));
             }
         }
 
@@ -210,6 +244,26 @@ namespace Cake.Core.Tests.Unit.Graph
             }
 
             [Fact]
+            public void Should_Traverse_Graph_In_Correct_Order_Regardless_Of_Casing_Of_Root()
+            {
+                // Given
+                var graph = new CakeGraph();
+                graph.Connect("A", "B");
+                graph.Connect("C", "D");
+                graph.Connect("B", "C");
+
+                // When
+                var result = graph.Traverse("d").ToArray();
+
+                // Then
+                Assert.Equal(4, result.Length);
+                Assert.Equal("A", result[0]);
+                Assert.Equal("B", result[1]);
+                Assert.Equal("C", result[2]);
+                Assert.Equal("d", result[3]);
+            }
+
+            [Fact]
             public void Should_Skip_Nodes_That_Are_Not_On_The_Way_To_The_Target()
             {
                 // Given
@@ -234,8 +288,8 @@ namespace Cake.Core.Tests.Unit.Graph
             public void Should_Throw_If_Encountering_Circular_Reference()
             {
                 var graph = new CakeGraph();
-                graph.Connect("A","B");
-                graph.Connect("B","C");
+                graph.Connect("A", "B");
+                graph.Connect("B", "C");
                 graph.Connect("C", "A");
 
                 var exception = Record.Exception(() => graph.Traverse("C"));

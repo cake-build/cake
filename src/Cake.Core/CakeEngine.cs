@@ -81,7 +81,7 @@ namespace Cake.Core
 
         public CakeTaskBuilder<ActionTask> Task(string name)
         {
-            if (_tasks.Any(x => x.Name == name))
+            if (_tasks.Any(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
                 const string format = "Another task with the name '{0}' has already been added.";
                 throw new CakeException(string.Format(format, name));
@@ -107,7 +107,7 @@ namespace Cake.Core
 
             foreach (var task in graph.Traverse(target))
             {
-                var taskNode = _tasks.FirstOrDefault(x => x.Name == task);
+                var taskNode = _tasks.FirstOrDefault(x => x.Name.Equals(task, StringComparison.OrdinalIgnoreCase));
                 Debug.Assert(taskNode != null, "Node should not be null.");
 
                 if (ShouldTaskExecute(taskNode))
