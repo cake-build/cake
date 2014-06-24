@@ -1,3 +1,9 @@
+### New in 0.1.8 (Released 2014/06/25)
+* Added NuGet restore support.
+* Task names are no longer case sensitive.
+* Bug fix for non quoted MSBuild solution argument.
+* Added custom collections for file and directory paths.
+
 ### New in 0.1.7 (Released 2014/06/21)
 * Renamed method Run to RunTarget.
 * Various fixes and improvements.
