@@ -28,54 +28,56 @@ var configuration = Argument("configuration", "Release");
 
 /////////////////////////////////////////////////
 
-Task("Hello")
-    .WithCriteria(isTeamCityBuild)
-    .Does(context =>
-{
-    // Access log via context.    
-    context.Log.Information("Hello TeamCity!");
-});
-
 Task("Clean")
-    .IsDependentOn("Hello")
     .Does(() =>
 {
     // Clean directories.
     CleanDirectory("./build");
+    CleanDirectory("./build/bin");
     CleanDirectories("./src/**/bin/" + configuration);
 });
 
-Task("Build")
+Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean")
+    .Does(context =>
+{
+    NuGetRestore("./src/Cake.sln");    
+});
+
+Task("Build")
+    .IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
 {
-    // Build project using MSBuild.
-    MSBuild("./src/Cake.sln", settings => 
-        settings.SetPlatformTarget(PlatformTarget.x86)
-            .UseToolVersion(MSBuildToolVersion.NET45)
-            .WithProperty("Magic","1")
-            .WithTarget("Build")
-            .SetConfiguration(configuration));         
+    MSBuild("./src/Cake.sln", s => 
+        s.SetConfiguration(configuration));
 });
 
 Task("Unit-Tests")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    // Run unit tests.
     XUnit("./src/**/bin/" + configuration + "/*.Tests.dll");
 });
 
-Task("Pack")
+Task("Copy-Files")
     .IsDependentOn("Unit-Tests")
     .Does(() =>
-{   
-    var root = "./src/Cake/bin/" + configuration;
-    var output = "./build/" + configuration + ".zip";
-    var files = root + "/*";
+{
+    var sourcePath = "./src/Cake/bin/" + configuration;    
+    var files = GetFiles(sourcePath + "/**/*.dll") + GetFiles(sourcePath + "/**/*.exe");
+    var destinationPath = "./build/bin";
 
-    // Package the bin folder.
-    Zip(root, output, files);
+    CopyFiles(files, destinationPath);
+});
+
+Task("Pack")
+    .IsDependentOn("Copy-Files")
+    .Does(() =>
+{   
+    var root = "./build/bin";
+    var output = "./build/" + configuration + ".zip";
+
+    Zip(root, output);
 });
 
 Task("NuGet")
@@ -85,7 +87,7 @@ Task("NuGet")
     // Create NuGet package.
     NuGetPack("./Cake.nuspec", new NuGetPackSettings {
         Version = "0.1.0",
-        BasePath = "./src/Cake/bin/" + configuration,
+        BasePath = "./build/bin",
         OutputDirectory = "./build",
         NoPackageAnalysis = true
     });
