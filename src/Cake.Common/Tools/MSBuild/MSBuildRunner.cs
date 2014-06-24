@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Core.Extensions;
 
 namespace Cake.Common.Tools.MSBuild
 {
@@ -83,7 +84,7 @@ namespace Cake.Common.Tools.MSBuild
             }
 
             // Add the solution as the last parameter.
-            parameters.Add(string.Concat("\"", settings.Solution.FullPath, "\""));
+            parameters.Add(settings.Solution.FullPath.Quote());
 
             return new ProcessStartInfo(msBuildPath.FullPath)
             {
