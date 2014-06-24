@@ -35,7 +35,7 @@ namespace Cake.Core.Tests.Unit.Graph
                 var graph = CakeGraphBuilder.Build(tasks);
 
                 // When
-                var result = graph.Edges.SingleOrDefault(x => x.Start.Name == "A" && x.End.Name == "B");
+                var result = graph.Edges.SingleOrDefault(x => x.Start == "A" && x.End == "B");
 
                 // Then
                 Assert.NotNull(result);

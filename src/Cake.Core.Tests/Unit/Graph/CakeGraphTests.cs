@@ -27,11 +27,10 @@ namespace Cake.Core.Tests.Unit.Graph
             public void Should_Add_Node_To_Graph()
             {
                 // Given
-                var node = new ActionTask("start");
                 var graph = new CakeGraph();
 
                 // When
-                graph.Add(node);
+                graph.Add("start");
 
                 // Then
                 Assert.Equal(1, graph.Nodes.Count);
@@ -41,12 +40,11 @@ namespace Cake.Core.Tests.Unit.Graph
             public void Should_Throw_If_Node_Already_Is_Present_In_Graph()
             {
                 // Given
-                var node = new ActionTask("start");
                 var graph = new CakeGraph();
-                graph.Add(node);
+                graph.Add("start");
 
                 // When
-                var exception = Record.Exception(() => graph.Add(node));
+                var exception = Record.Exception(() => graph.Add("start"));
 
                 // Then
                 Assert.IsType<CakeException>(exception);
@@ -61,15 +59,13 @@ namespace Cake.Core.Tests.Unit.Graph
             {
                 // Given
                 var graph = new CakeGraph();
-                var start = new ActionTask("start");
-                var end = new ActionTask("end");
 
                 // When
-                graph.Connect(start, end);
+                graph.Connect("start", "end");
 
                 // Then
-                Assert.Equal(start, graph.Edges[0].Start);
-                Assert.Equal(end, graph.Edges[0].End);
+                Assert.Equal("start", graph.Edges[0].Start);
+                Assert.Equal("end", graph.Edges[0].End);
             }
 
             [Fact]
@@ -77,12 +73,10 @@ namespace Cake.Core.Tests.Unit.Graph
             {
                 // Given
                 var graph = new CakeGraph();
-                var start = new ActionTask("start");
-                var end = new ActionTask("end");
-                graph.Add(end);
+                graph.Add("end");
 
                 // When
-                graph.Connect(start, end);      
+                graph.Connect("start", "end");      
      
                 // Then
                 Assert.Equal(2, graph.Nodes.Count);
@@ -93,12 +87,10 @@ namespace Cake.Core.Tests.Unit.Graph
             {
                 // Given
                 var graph = new CakeGraph();
-                var start = new ActionTask("start");
-                var end = new ActionTask("end");
-                graph.Add(start);
+                graph.Add("start");
 
                 // When
-                graph.Connect(start, end);
+                graph.Connect("start", "end");
 
                 // Then
                 Assert.Equal(2, graph.Nodes.Count);
@@ -109,12 +101,10 @@ namespace Cake.Core.Tests.Unit.Graph
             {
                 // Given
                 var graph = new CakeGraph();
-                var start = new ActionTask("start");
-                var end = new ActionTask("end");
-                graph.Connect(start, end);
+                graph.Connect("start", "end");
 
                 // When
-                graph.Connect(start, end);
+                graph.Connect("start", "end");
 
                 // Then
                 Assert.Equal(1, graph.Edges.Count);                
@@ -125,10 +115,9 @@ namespace Cake.Core.Tests.Unit.Graph
             {
                 // Given
                 var graph = new CakeGraph();
-                var start = new ActionTask("start");
 
                 // When
-                var exception = Record.Exception(() => graph.Connect(start, start));
+                var exception = Record.Exception(() => graph.Connect("start", "start"));
 
                 // Then
                 Assert.IsType<CakeException>(exception);
@@ -140,12 +129,10 @@ namespace Cake.Core.Tests.Unit.Graph
             {
                 // Given
                 var graph = new CakeGraph();
-                var start = new ActionTask("start");
-                var end = new ActionTask("end");
-                graph.Connect(start, end);
+                graph.Connect("start", "end");
 
                 // When
-                var exception = Record.Exception(() => graph.Connect(end, start));
+                var exception = Record.Exception(() => graph.Connect("end", "start"));
 
                 // Then
                 Assert.IsType<CakeException>(exception);
@@ -153,35 +140,34 @@ namespace Cake.Core.Tests.Unit.Graph
             }
         }
 
-        public sealed class TheFindNodeMethod
+        public sealed class TheExistMethod
         {
             [Fact]
-            public void Should_Return_Correct_Node()
+            public void Should_Return_True_If_Node_Exist()
             {
                 // Given
                 var graph = new CakeGraph();
-                var start = new ActionTask("start");
-                graph.Add(start);
+                graph.Add("start");
 
                 // When
-                var result = graph.Find("start");
+                var result = graph.Exist("start");
 
                 // Then
-                Assert.Equal(start, result);
+                Assert.True(result);
             }
 
             [Fact]
-            public void Should_Return_Null_If_Node_Was_Not_Found()
+            public void Should_Return_False_If_Node_Do_Not_Exist()
             {
                 // Given
                 var graph = new CakeGraph();
-                graph.Add(new ActionTask("start"));
+                graph.Add("start");
 
                 // When
-                var result = graph.Find("other");
+                var result = graph.Exist("other");
 
                 // Then
-                Assert.Null(result);
+                Assert.False(result);
             }
         }
 
@@ -192,9 +178,9 @@ namespace Cake.Core.Tests.Unit.Graph
             {
                 // Given
                 var graph = new CakeGraph();
-                graph.Connect(new ActionTask("A"), new ActionTask("B"));
-                graph.Connect(new ActionTask("C"), new ActionTask("D"));
-                graph.Connect(new ActionTask("B"), new ActionTask("C"));
+                graph.Connect("A", "B");
+                graph.Connect("C", "D");
+                graph.Connect("B", "C");
 
                 // When
                 var result = graph.Traverse("E").ToArray();
@@ -208,19 +194,19 @@ namespace Cake.Core.Tests.Unit.Graph
             {
                 // Given
                 var graph = new CakeGraph();
-                graph.Connect(new ActionTask("A"), new ActionTask("B"));
-                graph.Connect(new ActionTask("C"), new ActionTask("D"));
-                graph.Connect(new ActionTask("B"), new ActionTask("C"));
+                graph.Connect("A", "B");
+                graph.Connect("C", "D");
+                graph.Connect("B", "C");
 
                 // When
                 var result = graph.Traverse("D").ToArray();
 
                 // Then
                 Assert.Equal(4, result.Length);
-                Assert.Equal("A", result[0].Name);
-                Assert.Equal("B", result[1].Name);
-                Assert.Equal("C", result[2].Name);
-                Assert.Equal("D", result[3].Name);
+                Assert.Equal("A", result[0]);
+                Assert.Equal("B", result[1]);
+                Assert.Equal("C", result[2]);
+                Assert.Equal("D", result[3]);
             }
 
             [Fact]
@@ -228,29 +214,29 @@ namespace Cake.Core.Tests.Unit.Graph
             {
                 // Given
                 var graph = new CakeGraph();
-                graph.Connect(new ActionTask("A"), new ActionTask("B"));
-                graph.Connect(new ActionTask("B"), new ActionTask("C"));
-                graph.Connect(new ActionTask("B"), new ActionTask("D"));
-                graph.Connect(new ActionTask("D"), new ActionTask("E"));                
+                graph.Connect("A", "B");
+                graph.Connect("B", "C");
+                graph.Connect("B", "D");
+                graph.Connect("D", "E");                
 
                 // When
                 var result = graph.Traverse("E").ToArray();                
 
                 // Then
                 Assert.Equal(4, result.Length);
-                Assert.Equal("A", result[0].Name);
-                Assert.Equal("B", result[1].Name);
-                Assert.Equal("D", result[2].Name);
-                Assert.Equal("E", result[3].Name);
+                Assert.Equal("A", result[0]);
+                Assert.Equal("B", result[1]);
+                Assert.Equal("D", result[2]);
+                Assert.Equal("E", result[3]);
             }
 
             [Fact]
             public void Should_Throw_If_Encountering_Circular_Reference()
             {
                 var graph = new CakeGraph();
-                graph.Connect(new ActionTask("A"), new ActionTask("B"));
-                graph.Connect(new ActionTask("B"), new ActionTask("C"));
-                graph.Connect(new ActionTask("C"), new ActionTask("A"));
+                graph.Connect("A","B");
+                graph.Connect("B","C");
+                graph.Connect("C", "A");
 
                 var exception = Record.Exception(() => graph.Traverse("C"));
 

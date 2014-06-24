@@ -96,7 +96,7 @@ namespace Cake.Core
             var graph = CakeGraphBuilder.Build(_tasks);
 
             // Make sure target exist.
-            if (graph.Find(target) == null)
+            if (!graph.Exist(target))
             {
                 const string format = "The target '{0}' was not found.";
                 throw new CakeException(string.Format(format, target));
@@ -107,13 +107,16 @@ namespace Cake.Core
 
             foreach (var task in graph.Traverse(target))
             {
-                if (ShouldTaskExecute(task))
+                var taskNode = _tasks.FirstOrDefault(x => x.Name == task);
+                Debug.Assert(taskNode != null, "Node should not be null.");
+
+                if (ShouldTaskExecute(taskNode))
                 {
-                    _log.Verbose("Executing task: {0}...", task.Name);    
-            
-                    ExecuteTask(stopWatch, task, report);
-                    
-                    _log.Verbose("Finished executing task: {0}", task.Name);
+                    _log.Verbose("Executing task: {0}...", taskNode.Name);
+
+                    ExecuteTask(stopWatch, taskNode, report);
+
+                    _log.Verbose("Finished executing task: {0}", taskNode.Name);
                 }
             }
 
