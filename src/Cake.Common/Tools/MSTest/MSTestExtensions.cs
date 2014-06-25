@@ -30,7 +30,7 @@ namespace Cake.Common.Tools.MSTest
         [CakeScriptMethod]
         public static void MSTest(this ICakeContext context, IEnumerable<FilePath> assemblyPaths, MSTestSettings settings)
         {
-            var runner = new MSTestRunner(context.FileSystem, context.Environment);
+            var runner = new MSTestRunner(context.FileSystem, context.Environment, context.ProcessRunner);
             foreach (var assembly in assemblyPaths)
             {
                 runner.Run(assembly, settings);

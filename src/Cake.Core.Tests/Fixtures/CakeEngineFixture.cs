@@ -11,6 +11,7 @@ namespace Cake.Core.Tests.Fixtures
         public ICakeLog Log { get; set; }
         public IGlobber Globber { get; set; }
         public ICakeArguments Arguments { get; set; }
+        public IProcessRunner ProcessRunner { get; set; }
 
         public CakeEngineFixture()
         {
@@ -19,11 +20,12 @@ namespace Cake.Core.Tests.Fixtures
             Log = Substitute.For<ICakeLog>();
             Globber = Substitute.For<IGlobber>();
             Arguments = Substitute.For<ICakeArguments>();
+            ProcessRunner = Substitute.For<IProcessRunner>();
         }
 
         public CakeEngine CreateEngine()
         {
-            return new CakeEngine(FileSystem, Environment, Log, Arguments, Globber);
+            return new CakeEngine(FileSystem, Environment, Log, Arguments, Globber, ProcessRunner);
         }
     }
 }

@@ -15,11 +15,11 @@ namespace Cake.Common.Tools.MSBuild
         private readonly ICakeEnvironment _environment;
         private readonly IProcessRunner _runner;
 
-        public MSBuildRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner runner = null)
+        public MSBuildRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner runner)
         {
             _fileSystem = fileSystem;
             _environment = environment;
-            _runner = runner ?? new ProcessRunner();
+            _runner = runner;
         }
 
         public void Run(MSBuildSettings settings)

@@ -13,11 +13,11 @@ namespace Cake.Common.Tools.MSTest
         private readonly ICakeEnvironment _environment;
         private readonly IProcessRunner _processRunner;
 
-        public MSTestRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner = null)
+        public MSTestRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner)
         {
             _fileSystem = fileSystem;
             _environment = environment;
-            _processRunner = processRunner ?? new ProcessRunner();
+            _processRunner = processRunner;
         }
 
         public void Run(FilePath assemblyPath, MSTestSettings settings)

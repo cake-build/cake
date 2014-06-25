@@ -39,6 +39,48 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
+            public void Should_Throw_If_Arguments_Are_Null()
+            {
+                // Given
+                var fixture = new CakeEngineFixture { Arguments = null };
+
+                // When
+                var result = Record.Exception(() => fixture.CreateEngine());
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("arguments", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Globber_Is_Null()
+            {
+                // Given
+                var fixture = new CakeEngineFixture { Globber = null };
+
+                // When
+                var result = Record.Exception(() => fixture.CreateEngine());
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("globber", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_ProcessRunner_Is_Null()
+            {
+                // Given
+                var fixture = new CakeEngineFixture { ProcessRunner = null };
+
+                // When
+                var result = Record.Exception(() => fixture.CreateEngine());
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("processRunner", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
             public void Should_Throw_If_Log_Is_Null()
             {
                 // Given
@@ -50,19 +92,6 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
                 Assert.Equal("log", ((ArgumentNullException)result).ParamName);
-            }
-
-            [Fact]
-            public void Should_Create_Default_Globber_If_The_Provided_One_Is_Null()
-            {
-                // Given
-                var fixture = new CakeEngineFixture { Globber = null };
-
-                // When
-                var engine = fixture.CreateEngine();
-
-                // Then
-                Assert.NotNull(engine.Globber);
             }
 
             [Fact]

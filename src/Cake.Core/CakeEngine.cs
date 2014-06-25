@@ -15,6 +15,7 @@ namespace Cake.Core
         private readonly IGlobber _globber;
         private readonly ICakeLog _log;
         private readonly ICakeArguments _arguments;
+        private readonly IProcessRunner _processRunner;
         private readonly List<CakeTask> _tasks;
 
         public IFileSystem FileSystem
@@ -47,8 +48,13 @@ namespace Cake.Core
             get { return _arguments; }
         }
 
+        public IProcessRunner ProcessRunner
+        {
+            get { return _processRunner; }
+        }
+
         public CakeEngine(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log, 
-            ICakeArguments arguments, IGlobber globber = null)
+            ICakeArguments arguments, IGlobber globber, IProcessRunner processRunner)
         {
             if (fileSystem == null)
             {
@@ -62,11 +68,24 @@ namespace Cake.Core
             {
                 throw new ArgumentNullException("log");
             }
+            if (arguments == null)
+            {
+                throw new ArgumentNullException("arguments");
+            }
+            if (globber == null)
+            {
+                throw new ArgumentNullException("globber");
+            }
+            if (processRunner == null)
+            {
+                throw new ArgumentNullException("processRunner");
+            }
             _fileSystem = fileSystem;
             _environment = environment;
-            _log = log;
-            _arguments = arguments ?? new CakeArguments();
-            _globber = globber ?? new Globber(_fileSystem, _environment);
+            _log = log;            
+            _arguments = arguments;
+            _globber = globber;
+            _processRunner = processRunner;
             _tasks = new List<CakeTask>();
         }
 

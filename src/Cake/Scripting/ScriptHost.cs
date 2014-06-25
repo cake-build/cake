@@ -33,6 +33,11 @@ namespace Cake.Scripting
             get { return _engine.Arguments; }
         }
 
+        public IProcessRunner ProcessRunner
+        {
+            get { return _engine.ProcessRunner; }
+        }
+
         public ScriptHost(ICakeEngine engine)
         {
             _engine = engine;

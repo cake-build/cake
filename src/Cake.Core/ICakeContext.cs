@@ -10,5 +10,6 @@ namespace Cake.Core
         IGlobber Globber { get; }
         ICakeLog Log { get; }
         ICakeArguments Arguments { get; }
+        IProcessRunner ProcessRunner { get; }
     }
 }

@@ -11,7 +11,7 @@ namespace Cake.Common.Tools.ILMerge
         public static void ILMerge(this ICakeContext context, FilePath outputFile, FilePath primaryAssembly,
             IEnumerable<FilePath> assemblyPaths)
         {
-            var merger = new ILMergeRunner(context.Environment, context.Globber, new ProcessRunner());
+            var merger = new ILMergeRunner(context.Environment, context.Globber, context.ProcessRunner);
             merger.Merge(outputFile, primaryAssembly, assemblyPaths);
         }
 
@@ -19,7 +19,7 @@ namespace Cake.Common.Tools.ILMerge
         public static void ILMerge(this ICakeContext context, FilePath outputFile, FilePath primaryAssembly,
             IEnumerable<FilePath> assemblyPaths, ILMergeSettings settings)
         {
-            var merger = new ILMergeRunner(context.Environment, context.Globber, new ProcessRunner());
+            var merger = new ILMergeRunner(context.Environment, context.Globber, context.ProcessRunner);
             merger.Merge(outputFile, primaryAssembly, assemblyPaths, settings);
         }
     }

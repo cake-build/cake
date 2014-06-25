@@ -30,7 +30,7 @@ namespace Cake.Common.Tools.XUnit
         [CakeScriptMethod]
         public static void XUnit(this ICakeContext context, IEnumerable<FilePath> assemblies, XUnitSettings settings)
         {
-            var runner = new XUnitRunner(context.Environment, context.Globber);
+            var runner = new XUnitRunner(context.Environment, context.Globber, context.ProcessRunner);
             foreach (var assembly in assemblies)
             {
                 runner.Run(assembly, settings);

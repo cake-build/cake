@@ -119,7 +119,9 @@ namespace Cake
         {
             return new ScriptHost(new CakeEngine(
                 _fileSystem, _environment, _log,
-                new CakeArguments(options.Arguments)));
+                new CakeArguments(options.Arguments),
+                new Globber(_fileSystem, _environment), 
+                new ProcessRunner(_log)));
         }
     }
 }

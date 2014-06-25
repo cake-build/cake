@@ -10,7 +10,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeScriptMethod]
         public static void NuGetPack(this ICakeContext context, FilePath nuspecFilePath, NuGetPackSettings settings)
         {
-            var packer = new NuGetPacker(context.Environment, context.Globber, new ProcessRunner());
+            var packer = new NuGetPacker(context.Environment, context.Globber, context.ProcessRunner);
             packer.Pack(nuspecFilePath, settings);
         }
 
@@ -32,7 +32,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeScriptMethod]
         public static void NuGetRestore(this ICakeContext context, NuGetRestoreSettings settings)
         {   
-            var runner = new NuGetRestorer(context.Environment, context.Globber, new ProcessRunner());
+            var runner = new NuGetRestorer(context.Environment, context.Globber, context.ProcessRunner);
             runner.Restore(settings);
         }
     }

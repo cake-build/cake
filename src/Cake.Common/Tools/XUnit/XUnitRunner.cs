@@ -14,11 +14,11 @@ namespace Cake.Common.Tools.XUnit
         private readonly IGlobber _globber;
         private readonly IProcessRunner _runner;
 
-        public XUnitRunner(ICakeEnvironment environment, IGlobber globber, IProcessRunner runner = null)
+        public XUnitRunner(ICakeEnvironment environment, IGlobber globber, IProcessRunner runner)
         {
             _environment = environment;
             _globber = globber;
-            _runner = runner ?? new ProcessRunner();
+            _runner = runner;
         }
 
         public void Run(FilePath assemblyPath, XUnitSettings settings)
