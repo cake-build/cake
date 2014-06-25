@@ -25,16 +25,17 @@ namespace Cake.Common.IO
 
             context.Log.Verbose("Deleting contents of {0}", path);
 
-            // Delete all files.
-            foreach (var file in root.GetFiles("*", SearchScope.Recursive))
+            // Delete all directories.
+            foreach (var directory in root.GetDirectories("*", SearchScope.Current))
             {
-                file.Delete();
+                Clean(context, directory.Path.FullPath);
+                directory.Delete(false);
             }
 
-            // Delete all directories.
-            foreach (var directory in root.GetDirectories("*", SearchScope.Recursive))
+            // Delete all files.
+            foreach (var file in root.GetFiles("*", SearchScope.Current))
             {
-                directory.Delete(false);
+                file.Delete();
             }
         }
     }
