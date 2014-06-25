@@ -1,4 +1,8 @@
-﻿namespace Cake.Common.Tools.MSBuild
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Cake.Common.Tools.MSBuild
 {
     public static class MSBuildSettingsExtensions
     {
@@ -20,9 +24,16 @@
             return settings;
         }
 
-        public static MSBuildSettings WithProperty(this MSBuildSettings settings, string name, string value)
+        public static MSBuildSettings WithProperty(this MSBuildSettings settings, string name, params string[] values)
         {
-            settings.Properties.Add(name, value);
+            IList<string> currValue;
+            currValue = new List<string>(
+                settings.Properties.TryGetValue(name, out currValue) && currValue != null
+                    ? currValue.Concat(values)
+                    : values
+                );
+            
+            settings.Properties[name] = currValue;
             return settings;
         }
 

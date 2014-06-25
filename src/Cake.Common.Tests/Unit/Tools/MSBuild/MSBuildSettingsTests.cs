@@ -88,7 +88,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var configuration = new MSBuildSettings(solution);
                 
                 // When
-                configuration.Properties.Add("THEKEY", "THEVALUE");
+                configuration.Properties.Add("THEKEY", new []{"THEVALUE"});
 
                 // Then
                 Assert.True(configuration.Properties.ContainsKey("thekey"));
