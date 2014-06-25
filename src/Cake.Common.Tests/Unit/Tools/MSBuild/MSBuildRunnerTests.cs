@@ -236,7 +236,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "/property:A=B;C=D /target:Build \"src/Solution.sln\""));
+                    p => p.Arguments == "/p:\"A\"=\"B\" /p:\"C\"=\"D\" /target:Build \"src/Solution.sln\""));
             }
 
             [Fact]
@@ -254,7 +254,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "/property:Configuration=Release /target:Build \"src/Solution.sln\""));
+                    p => p.Arguments == "/p:\"Configuration\"=\"Release\" /target:Build \"src/Solution.sln\""));
             }
 
             [Fact]

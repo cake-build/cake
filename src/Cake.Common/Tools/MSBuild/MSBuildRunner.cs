@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Extensions;
@@ -51,24 +53,28 @@ namespace Cake.Common.Tools.MSBuild
         private ProcessStartInfo GetProcessStartInfo(MSBuildSettings settings, FilePath msBuildPath)
         {
             var parameters = new List<string>();
-            var properties = new List<string>();
 
             // Got a specific configuration in mind?
             if (!string.IsNullOrWhiteSpace(settings.Configuration))
             {
                 // Add the configuration as a property.
                 var configuration = settings.Configuration;
-                properties.Add(string.Concat("Configuration", "=", configuration));
+                parameters.Add(string.Concat("/p:\"Configuration\"", "=", configuration.Quote()));
             }
 
             // Got any properties?
             if (settings.Properties.Count > 0)
             {
-                properties.AddRange(settings.Properties.Select(x => string.Concat(x.Key, "=", x.Value)));
-            }
-            if (properties.Count > 0)
-            {
-                parameters.Add(string.Concat("/property:", string.Join(";", properties)));
+                parameters.AddRange(
+                    from key in settings.Properties
+                    from value in key.Value
+                    select string.Concat(
+                        "/p:",
+                        key.Key.Quote(),
+                        "=",
+                        value.Quote()
+                        )
+                    );
             }
 
             // Got any targets?

@@ -8,7 +8,7 @@ namespace Cake.Common.Tools.MSBuild
     {
         private readonly FilePath _solution;
         private readonly HashSet<string> _targets;
-        private readonly Dictionary<string, string> _properties;        
+        private readonly Dictionary<string, IList<string>> _properties;        
 
         public FilePath Solution
         {
@@ -20,7 +20,7 @@ namespace Cake.Common.Tools.MSBuild
             get { return _targets; }
         }
 
-        public IDictionary<string, string> Properties
+        public IDictionary<string, IList<string>> Properties
         {
             get { return _properties; }
         }
@@ -38,7 +38,7 @@ namespace Cake.Common.Tools.MSBuild
             
             _solution = solution;
             _targets = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            _properties = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            _properties = new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
 
             PlatformTarget = PlatformTarget.MSIL;
             ToolVersion = MSBuildToolVersion.VS2013;
