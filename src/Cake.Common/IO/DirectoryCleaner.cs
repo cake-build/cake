@@ -25,7 +25,7 @@ namespace Cake.Common.IO
 
             context.Log.Verbose("Deleting contents of {0}", path);
 
-            // Delete all files.
+            // Delete all directories.
             foreach (var directory in root.GetDirectories("*", SearchScope.Current))
             {
                 Clean(context, directory.Path.FullPath);
