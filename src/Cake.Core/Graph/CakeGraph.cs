@@ -6,16 +6,16 @@ namespace Cake.Core.Graph
 {
     internal sealed class CakeGraph
     {
-        private readonly List<CakeTask> _nodes;
+        private readonly List<string> _nodes;
         private readonly List<CakeGraphEdge> _edges;
 
         public CakeGraph()
         {
-            _nodes = new List<CakeTask>();
+            _nodes = new List<string>();
             _edges = new List<CakeGraphEdge>();
         }
 
-        public IReadOnlyList<CakeTask> Nodes
+        public IReadOnlyList<string> Nodes
         {
             get { return _nodes; }
         }
@@ -25,75 +25,76 @@ namespace Cake.Core.Graph
             get { return _edges; }
         }
 
-        public void Add(CakeTask node)
+        public void Add(string node)
         {
             if (node == null)
             {
                 throw new ArgumentNullException("node");
             }
-            if (_nodes.Any(x => x.Name == node.Name))
+            if (_nodes.Any(x => x == node))
             {                
                 throw new CakeException("Node has already been added to graph.");
             }
             _nodes.Add(node);   
         }
 
-        public void Connect(CakeTask start, CakeTask end)
+        public void Connect(string start, string end)
         {
-            if (start.Name == end.Name)
+            if (start.Equals(end, StringComparison.OrdinalIgnoreCase))
             {
                 throw new CakeException("Reflexive edges in graph are not allowed.");
             }
-            if (_edges.Any(x => x.Start.Name == end.Name && x.End.Name == start.Name))
+            if (_edges.Any(x => x.Start.Equals(end, StringComparison.OrdinalIgnoreCase) 
+                && x.End.Equals(start, StringComparison.OrdinalIgnoreCase)))
             {
                 throw new CakeException("Unidirectional edges in graph are not allowed.");
             }
-            if (_edges.Any(x => x.Start.Name == start.Name && x.End.Name == end.Name))
+            if (_edges.Any(x => x.Start.Equals(start, StringComparison.OrdinalIgnoreCase)
+                && x.End.Equals(end, StringComparison.OrdinalIgnoreCase)))
             {
                 return;
             }
-            if (_nodes.All(x => x.Name != start.Name))
+            if (_nodes.All(x => !x.Equals(start, StringComparison.OrdinalIgnoreCase)))
             {
                 _nodes.Add(start);
             }
-            if (_nodes.All(x => x.Name != end.Name))
+            if (_nodes.All(x => !x.Equals(end, StringComparison.OrdinalIgnoreCase)))
             {
                 _nodes.Add(end);
             }
             _edges.Add(new CakeGraphEdge(start, end));
         }
 
-        public CakeTask Find(string name)
+        public bool Exist(string name)
         {
-            return _nodes.SingleOrDefault(x => x.Name == name);
+            return _nodes.Any(x => x.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
-        public IEnumerable<CakeTask> Traverse(string target)
+        public IEnumerable<string> Traverse(string target)
         {
-            var root = Find(target);
-            if (root == null)
+            if (!Exist(target))
             {
-                return Enumerable.Empty<CakeTask>();
+                return Enumerable.Empty<string>();
             }
-            var result = new List<CakeTask>();
-            Traverse(root, result);
+            var result = new List<string>();
+            Traverse(target, result);
             return result;
         }
 
-        private void Traverse(CakeTask node, ICollection<CakeTask> result, ISet<CakeTask> visited = null)
+        private void Traverse(string node, ICollection<string> result, ISet<string> visited = null)
         {
-            visited = visited ?? new HashSet<CakeTask>();
+            visited = visited ?? new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             if (!visited.Contains(node))
             {
                 visited.Add(node);
-                var incoming = _edges.Where(x => x.End.Name == node.Name).Select(x => x.Start);
+                var incoming = _edges.Where(x => x.End.Equals(node, StringComparison.OrdinalIgnoreCase)).Select(x => x.Start);
                 foreach (var child in incoming)
                 {
                     Traverse(child, result, visited);
                 }
                 result.Add(node);
             }
-            else if (!result.Contains(node))
+            else if (!result.Any(x => x.Equals(node, StringComparison.OrdinalIgnoreCase)))
             {
                 throw new CakeException("Graph contains circular references.");
             }

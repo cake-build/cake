@@ -2,20 +2,20 @@
 {
     internal sealed class CakeGraphEdge
     {
-        private readonly CakeTask _start;
-        private readonly CakeTask _end;
+        private readonly string _start;
+        private readonly string _end;
 
-        public CakeTask Start
+        public string Start
         {
             get { return _start; }
         }
 
-        public CakeTask End
+        public string End
         {
             get { return _end; }
         }
 
-        public CakeGraphEdge(CakeTask start, CakeTask end)
+        public CakeGraphEdge(string start, string end)
         {
             _start = start;
             _end = end;

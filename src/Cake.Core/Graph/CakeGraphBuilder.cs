@@ -14,21 +14,20 @@ namespace Cake.Core.Graph
             var graph = new CakeGraph();
             foreach (var task in tasks)
             {
-                graph.Add(task);
+                graph.Add(task.Name);
             }
             foreach (var task in tasks)
             {
                 foreach (var dependency in task.Dependencies)
                 {
-                    var taskDependency = graph.Find(dependency);
-                    if (taskDependency == null)
+                    if (!graph.Exist(dependency))
                     {
                         const string format = "Task '{0}' is dependent on task '{1}' which do not exist.";
                         var message = string.Format(format, task.Name, dependency);
                         throw new CakeException(message);
                     }
 
-                    graph.Connect(taskDependency, task);
+                    graph.Connect(dependency, task.Name);
                 }
             }
             return graph;
