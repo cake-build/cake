@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Extensions;
@@ -53,6 +51,9 @@ namespace Cake.Common.Tools.MSBuild
         private ProcessStartInfo GetProcessStartInfo(MSBuildSettings settings, FilePath msBuildPath)
         {
             var parameters = new List<string>();
+
+            // Set the maximum number of processors.
+            parameters.Add(settings.MaxCpuCount > 0 ? string.Concat("/m:", settings.MaxCpuCount) : "/m");
 
             // Got a specific configuration in mind?
             if (!string.IsNullOrWhiteSpace(settings.Configuration))

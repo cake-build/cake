@@ -110,5 +110,18 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.Equal(string.Empty, configuration.Configuration);
             }
         }
+
+        public sealed class TheMaxCpuCountProperty
+        {
+            [Fact]
+            public void Should_Be_Empty_By_Default()
+            {
+                // Given
+                var configuration = new MSBuildSettings(new FilePath("/src/Solution.sln"));
+
+                // Then
+                Assert.Equal(0, configuration.MaxCpuCount);
+            }
+        }
     }
 }

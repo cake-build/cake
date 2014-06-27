@@ -28,7 +28,7 @@ namespace Cake.Common.Tests.Fixtures
             Environment.WorkingDirectory.Returns("/Working");
 
             FileSystem = Substitute.For<IFileSystem>();
-            FileSystem.GetFile(Arg.Is<FilePath>(p => p.FullPath.EndsWith("MSBuild.exe")))
+            FileSystem.GetFile(Arg.Is<FilePath>(p => p.FullPath.EndsWith("MSBuild.exe", System.StringComparison.Ordinal)))
                 .Returns(c => {
                     // All requested files exist.
                     var file = Substitute.For<IFile>();

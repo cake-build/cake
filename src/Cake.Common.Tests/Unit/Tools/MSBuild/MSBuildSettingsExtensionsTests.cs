@@ -160,5 +160,50 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.Equal(settings, result);
             }
         }
+
+        public sealed class TheSetMaxCpuCountMethod
+        {
+            [Fact]
+            public void Should_Set_MaxCpuCount()
+            {
+                // Given
+                var solution = new FilePath("/src/Solution.sln");
+                var settings = new MSBuildSettings(solution);
+
+                // When
+                settings.SetMaxCpuCount(4);
+
+                // Then
+                Assert.Equal(4, settings.MaxCpuCount);
+            }
+
+            [Fact]
+            public void Should_Set_MaxCpuCount_To_Zero_If_Negative_Value()
+            {
+                // Given
+                var solution = new FilePath("/src/Solution.sln");
+                var settings = new MSBuildSettings(solution);
+
+                // When
+                settings.SetMaxCpuCount(-1);
+
+                // Then
+                Assert.Equal(0, settings.MaxCpuCount);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var solution = new FilePath("/src/Solution.sln");
+                var settings = new MSBuildSettings(solution);
+
+                // When
+                var result = settings.SetMaxCpuCount(4);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
     }
 }

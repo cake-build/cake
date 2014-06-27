@@ -187,6 +187,42 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Fact]
+            public void Should_Use_As_Many_Processors_As_Possible_If_MaxCpuCount_Is_Zero()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                var settings = new MSBuildSettings("./src/Solution.sln");
+                settings.MaxCpuCount = 0;
+
+                // When
+                runner.Run(settings);
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
+                    p => p.Arguments == "/m /target:Build \"src/Solution.sln\""));
+            }
+
+            [Fact]
+            public void Should_Use_Specified_Number_Of_Max_Processors()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                var settings = new MSBuildSettings("./src/Solution.sln");
+                settings.MaxCpuCount = 4;
+
+                // When
+                runner.Run(settings);
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
+                    p => p.Arguments == "/m:4 /target:Build \"src/Solution.sln\""));
+            }
+
+            [Fact]
             public void Should_Use_Correct_Default_Target_In_Process_Arguments()
             {
                 // Given
@@ -198,7 +234,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "/target:Build \"src/Solution.sln\""));
+                    p => p.Arguments == "/m /target:Build \"src/Solution.sln\""));
             }
 
             [Fact]
@@ -217,7 +253,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "/target:A;B \"src/Solution.sln\""));
+                    p => p.Arguments == "/m /target:A;B \"src/Solution.sln\""));
             }
 
             [Fact]
@@ -236,7 +272,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "/p:\"A\"=\"B\" /p:\"C\"=\"D\" /target:Build \"src/Solution.sln\""));
+                    p => p.Arguments == "/m /p:\"A\"=\"B\" /p:\"C\"=\"D\" /target:Build \"src/Solution.sln\""));
             }
 
             [Fact]
@@ -254,7 +290,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "/p:\"Configuration\"=\"Release\" /target:Build \"src/Solution.sln\""));
+                    p => p.Arguments == "/m /p:\"Configuration\"=\"Release\" /target:Build \"src/Solution.sln\""));
             }
 
             [Fact]

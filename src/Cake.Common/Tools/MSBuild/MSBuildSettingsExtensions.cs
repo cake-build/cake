@@ -42,5 +42,11 @@ namespace Cake.Common.Tools.MSBuild
             settings.Configuration = configuration;
             return settings;
         }
+
+        public static MSBuildSettings SetMaxCpuCount(this MSBuildSettings settings, int maxCpuCount)
+        {
+            settings.MaxCpuCount = Math.Max(0, maxCpuCount);
+            return settings;
+        }
     }
 }

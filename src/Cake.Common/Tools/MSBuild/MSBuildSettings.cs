@@ -28,6 +28,7 @@ namespace Cake.Common.Tools.MSBuild
         public PlatformTarget PlatformTarget { get; set; }
         public MSBuildToolVersion ToolVersion { get; set; }
         public string Configuration { get; set; }
+        public int MaxCpuCount { get; set; }
 
         public MSBuildSettings(FilePath solution)
         {
@@ -43,6 +44,6 @@ namespace Cake.Common.Tools.MSBuild
             PlatformTarget = PlatformTarget.MSIL;
             ToolVersion = MSBuildToolVersion.VS2013;
             Configuration = string.Empty;
-        }
+        } 
     }
 }
