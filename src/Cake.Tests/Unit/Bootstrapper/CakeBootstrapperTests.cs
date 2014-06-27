@@ -1,4 +1,5 @@
-﻿using Cake.Bootstrapping;
+﻿using System;
+using Cake.Bootstrapping;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using NSubstitute;
@@ -22,8 +23,10 @@ namespace Cake.Tests.Unit.Bootstrapper
             compilerFile.Path.Returns(new FilePath("Roslyn.Compilers.dll"));
 
             var fileSystem = Substitute.For<IFileSystem>();
-            fileSystem.GetFile(Arg.Is<FilePath>(p => p.FullPath.EndsWith("Roslyn.Compilers.CSharp.dll"))).Returns(csharpFile);
-            fileSystem.GetFile(Arg.Is<FilePath>(p => p.FullPath.EndsWith("Roslyn.Compilers.dll"))).Returns(compilerFile);
+            fileSystem.GetFile(Arg.Is<FilePath>(
+                p => p.FullPath.EndsWith("Roslyn.Compilers.CSharp.dll", StringComparison.Ordinal))).Returns(csharpFile);
+            fileSystem.GetFile(Arg.Is<FilePath>(
+                p => p.FullPath.EndsWith("Roslyn.Compilers.dll", StringComparison.Ordinal))).Returns(compilerFile);
 
             var log = Substitute.For<ICakeLog>();
             var installer = Substitute.For<INuGetInstaller>();
@@ -52,8 +55,10 @@ namespace Cake.Tests.Unit.Bootstrapper
             compilerFile.Path.Returns(new FilePath("Roslyn.Compilers.dll"));
 
             var fileSystem = Substitute.For<IFileSystem>();
-            fileSystem.GetFile(Arg.Is<FilePath>(p => p.FullPath.EndsWith("Roslyn.Compilers.CSharp.dll"))).Returns(csharpFile);
-            fileSystem.GetFile(Arg.Is<FilePath>(p => p.FullPath.EndsWith("Roslyn.Compilers.dll"))).Returns(compilerFile);
+            fileSystem.GetFile(Arg.Is<FilePath>(
+                p => p.FullPath.EndsWith("Roslyn.Compilers.CSharp.dll", StringComparison.Ordinal))).Returns(csharpFile);
+            fileSystem.GetFile(Arg.Is<FilePath>(
+                p => p.FullPath.EndsWith("Roslyn.Compilers.dll", StringComparison.Ordinal))).Returns(compilerFile);
 
             var log = Substitute.For<ICakeLog>();
             var installer = Substitute.For<INuGetInstaller>();

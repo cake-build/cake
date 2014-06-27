@@ -155,7 +155,8 @@ namespace Cake.Tests.Unit
                 // Then
                 fixture.ScriptRunner.Received(1).Run(
                     Arg.Any<ScriptHost>(),
-                    Arg.Is<IEnumerable<Assembly>>(c => c.Any(x => x.FullName.StartsWith(assemblyName + ","))),
+                    Arg.Is<IEnumerable<Assembly>>(
+                        c => c.Any(x => x.FullName.StartsWith(assemblyName + ",", StringComparison.Ordinal))),
                     Arg.Any<IEnumerable<string>>(),
                     Arg.Any<string>());
             }

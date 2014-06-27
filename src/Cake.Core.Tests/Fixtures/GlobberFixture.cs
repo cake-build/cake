@@ -33,7 +33,7 @@ namespace Cake.Core.Tests.Fixtures
             return fileSystem;
         }
 
-        private ICakeEnvironment CreateEnvironment(bool isUnix)
+        private static ICakeEnvironment CreateEnvironment(bool isUnix)
         {
             var environment = Substitute.For<ICakeEnvironment>();
             environment.IsUnix().Returns(isUnix);
