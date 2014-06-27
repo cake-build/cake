@@ -63,12 +63,13 @@ namespace Cake.Common.IO
             using (var archive = new ZipArchive(outputStream, ZipArchiveMode.Create))
             {
                 foreach (var inputPath in filePaths)
-                {                    
-                    var file = _fileSystem.GetFile(inputPath.MakeAbsolute(_environment));
+                {
+                    var absoluteInputPath = inputPath.MakeAbsolute(_environment);
+                    var file = _fileSystem.GetFile(absoluteInputPath);
                     using (var inputStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
                     {
                         // Get the relative filename to the rootPath.
-                        var relativeFilePath = GetRelativeFilePath(rootPath, inputPath);
+                        var relativeFilePath = GetRelativeFilePath(rootPath, absoluteInputPath);
                         _log.Verbose("Adding file: {0}", relativeFilePath);
 
                         // Create the zip archive entry.
