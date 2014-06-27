@@ -9,7 +9,7 @@ echo.
 
 if not exist tools\fake\tools\Fake.exe ( 
 	echo Installing FAKE...
-	"tools\nuget\nuget.exe" "install" "fake" "-OutputDirectory" "tools" "-ExcludeVersion" "-NonInteractive"
+	"tools\nuget\nuget.exe" "install" "fake" "-OutputDirectory" "tools" "-ExcludeVersion" "-NonInteractive" "-Version" "2.18.2"
 	echo.
 )
 
