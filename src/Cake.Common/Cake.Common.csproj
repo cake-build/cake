@@ -40,6 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfoCreator.cs" />
+    <Compile Include="AssemblyInfoExtensions.cs" />
+    <Compile Include="AssemblyInfoRegistration.cs" />
+    <Compile Include="AssemblyInfoSettings.cs" />
     <Compile Include="Tools\ILMerge\ILMergeExtensions.cs" />
     <Compile Include="Tools\ILMerge\ILMergeRunner.cs" />
     <Compile Include="Tools\ILMerge\ILMergeSettings.cs" />

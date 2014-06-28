@@ -72,7 +72,8 @@ namespace Cake
             {
                 "System", "System.Collections.Generic", "System.Linq",
                 "System.Text", "System.Threading.Tasks", "System.IO",
-                "Cake", "Cake.Core", "Cake.Core.IO", "Cake.Common.IO", 
+                "Cake", "Cake.Core", "Cake.Core.IO", 
+                "Cake.Common", "Cake.Common.IO", 
                 "Cake.Common.IO", "Cake.Core.Diagnostics", 
                 "Cake.Common.Tools.MSBuild", "Cake.Common.Tools.XUnit", 
                 "Cake.Common.Tools.NuGet", "Cake.Common.Tools.NUnit",
