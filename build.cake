@@ -22,7 +22,7 @@ Task("Update-TeamCity-Build-Number")
 	.WithCriteria(teamCity)
 	.Does(() =>
 {
-	Console.WriteLine("##teamcity[buildNumber '%s']", semVersion);
+	Console.WriteLine("##teamcity[buildNumber '{0}']", semVersion);
 });
 
 Task("Clean")
