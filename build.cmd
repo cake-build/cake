@@ -7,9 +7,9 @@ echo Restoring NuGet packages for solution...
 "tools\nuget\nuget.exe" "restore" "src/Cake.sln"
 echo.
 
-if not exist tools\fake\tools\Fake.exe ( 
-	echo Installing FAKE...
-	"tools\nuget\nuget.exe" "install" "fake" "-OutputDirectory" "tools" "-ExcludeVersion" "-NonInteractive" "-Version" "2.18.2"
+if not exist tools\Cake\Cake.exe ( 
+	echo Installing Cake...
+	"tools\nuget\nuget.exe" "install" "Cake" "-OutputDirectory" "tools" "-ExcludeVersion" "-NonInteractive"
 	echo.
 )
 
@@ -24,8 +24,8 @@ IF NOT [%1]==[] (set TARGET="%1")
 SET BUILDMODE="Release"
 IF NOT [%2]==[] (set BUILDMODE="%2")
 
-echo Starting FAKE...
-"tools\fake\tools\Fake.exe" "build.fsx" "target=%TARGET%" "buildMode=%BUILDMODE%"
+echo Starting Cake...
+tools\Cake\Cake.exe build.cake -target=%TARGET% -configuration=%BUILDMODE% 
 
 rem Loop the build script.
 echo.
