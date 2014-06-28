@@ -59,7 +59,8 @@ Task("Build")
 	.Does(() =>
 {
 	MSBuild("./src/Cake.sln", settings =>
-		settings.SetConfiguration(configuration));
+		settings.SetConfiguration(configuration)
+			.UseToolVersion(MSBuildToolVersion.NET45));
 });
 
 Task("Run-Unit-Tests")
