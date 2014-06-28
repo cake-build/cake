@@ -1,3 +1,11 @@
+### New in 0.1.9 (Releases 2014/06/28)
+* Added AssemblyInfo creator.
+* Zip: Fixed bug with relative paths.
+* MSBuild: Added support for max CPU count.
+* Added logging of process launch parameters.
+* MSBuild: Fix for multiple property values & quotation.
+* Fixed issue with cleaning deep dir structures.
+
 ### New in 0.1.8 (Released 2014/06/25)
 * Added NuGet restore support.
 * Task names are no longer case sensitive.
