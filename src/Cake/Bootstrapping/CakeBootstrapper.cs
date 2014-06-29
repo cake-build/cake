@@ -1,7 +1,7 @@
 ﻿using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
-// TODO: This is one big hack. Should refactor and add better tests.
+// TODO: This is one big hack. Should really rethink this.
 
 namespace Cake.Bootstrapping
 {
@@ -17,7 +17,7 @@ namespace Cake.Bootstrapping
             @"Roslyn.Compilers.dll"
         };
 
-        public CakeBootstrapper(IFileSystem fileSystem, ICakeLog log, INuGetInstaller installer = null)
+        public CakeBootstrapper(IFileSystem fileSystem, ICakeLog log, INuGetInstaller installer)
         {
             _fileSystem = fileSystem;            
             _log = log;

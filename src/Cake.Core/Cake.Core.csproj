@@ -104,6 +104,10 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="Scripting\IScriptHost.cs" />
+    <Compile Include="Scripting\IScriptRunner.cs" />
+    <Compile Include="Scripting\IScriptSession.cs" />
+    <Compile Include="Scripting\IScriptSessionFactory.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

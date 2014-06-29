@@ -3,25 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Cake.Core.Diagnostics;
+using Cake.Core.Scripting;
 using Cake.Extensions;
-using Roslyn.Scripting;
-using Roslyn.Scripting.CSharp;
 
 namespace Cake.Scripting
 {
-    public sealed class ScriptRunner : IScriptRunner
+    internal sealed class ScriptRunner : IScriptRunner
     {
         private readonly ICakeLog _log;
+        private readonly IScriptSessionFactory _sessionFactory;
 
-        public ScriptRunner(ICakeLog log)
+        public ScriptRunner(ICakeLog log, IScriptSessionFactory sessionFactory)
         {
             _log = log;
+            _sessionFactory = sessionFactory;
         }
 
-        public void Run(ScriptHost host, IEnumerable<Assembly> references, IEnumerable<string> namespaces, string code)
+        public void Run(IScriptHost host, IEnumerable<Assembly> references, IEnumerable<string> namespaces, string code)
         {
-            var script = new ScriptEngine();
-            var session = script.CreateSession(host);
+            var session = _sessionFactory.CreateSession(host);
             var assemblies = references as Assembly[] ?? references.ToArray();
 
             // Add references to session.
@@ -43,7 +43,7 @@ namespace Cake.Scripting
             session.Execute(code);
         }
 
-        private void AddExtensionMethodsToSession(Session session, IEnumerable<Assembly> assemblies)
+        private void AddExtensionMethodsToSession(IScriptSession session, IEnumerable<Assembly> assemblies)
         {
             _log.Debug("Generating script host proxy methods for extension methods...");
             foreach (var method in ScriptExtensionFinder.GetExtensionMethods(assemblies))

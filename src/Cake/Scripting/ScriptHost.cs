@@ -1,10 +1,12 @@
-﻿using Cake.Core;
+﻿using System;
+using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.Scripting;
 
 namespace Cake.Scripting
 {
-    public sealed class ScriptHost : ICakeEngine
+    public sealed class ScriptHost : IScriptHost
     {
         private readonly ICakeEngine _engine;
 
@@ -40,6 +42,10 @@ namespace Cake.Scripting
 
         public ScriptHost(ICakeEngine engine)
         {
+            if (engine == null)
+            {
+                throw new ArgumentNullException("engine");
+            }
             _engine = engine;
         }
 
@@ -53,7 +59,7 @@ namespace Cake.Scripting
             var report = _engine.RunTarget(target);
             if (!report.IsEmpty)
             {
-                CakeReportPrinter.Write(report);   
+                CakeReportPrinter.Write(report);
             }            
             return report;
         }

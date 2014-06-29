@@ -33,6 +33,14 @@
     <Reference Include="NSubstitute">
       <HintPath>..\packages\NSubstitute.1.7.2.0\lib\NET45\NSubstitute.dll</HintPath>
     </Reference>
+    <Reference Include="Roslyn.Compilers, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Roslyn.Compilers.Common.1.2.20906.2\lib\net45\Roslyn.Compilers.dll</HintPath>
+    </Reference>
+    <Reference Include="Roslyn.Compilers.CSharp, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Roslyn.Compilers.CSharp.1.2.20906.2\lib\net45\Roslyn.Compilers.CSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -54,6 +62,7 @@
     <Compile Include="Unit\CakeOptionsTests.cs" />
     <Compile Include="Unit\Diagnostics\CakeLogAdapterTests.cs" />
     <Compile Include="Unit\Diagnostics\FormatParserTests.cs" />
+    <Compile Include="Unit\Scripting\RoslynScriptSessionTests.cs" />
     <Compile Include="Unit\Scripting\ScriptCodeGeneratorTests.cs" />
     <Compile Include="Unit\Scripting\ScriptHostTests.cs" />
     <Compile Include="Fakes\FakeLog.cs" />

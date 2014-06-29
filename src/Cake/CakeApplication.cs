@@ -7,6 +7,7 @@ using Cake.Common.IO;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.Scripting;
 using Cake.Diagnostics;
 using Cake.Scripting;
 
@@ -18,16 +19,36 @@ namespace Cake
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly CakeLogAdapter _log;
-        private readonly IScriptRunner _runner;
+        private readonly IScriptRunner _scriptRunner;
 
-        public CakeApplication(ICakeBootstrapper bootstrapper = null, IFileSystem fileSystem = null,
-            ICakeEnvironment environment = null, ICakeLog log = null, IScriptRunner runner = null)
+        public CakeApplication(ICakeBootstrapper bootstrapper, IFileSystem fileSystem,
+            ICakeEnvironment environment, ICakeLog log, IScriptRunner scriptRunner)
         {
-            _fileSystem = fileSystem ?? new FileSystem();
-            _log = new CakeLogAdapter(log ?? new ColoredConsoleBuildLog());
-            _bootstrapper = bootstrapper ?? new CakeBootstrapper(_fileSystem, _log);
-            _environment = environment ?? new CakeEnvironment();
-            _runner = runner ?? new ScriptRunner(_log);
+            if (bootstrapper == null)
+            {
+                throw new ArgumentNullException("bootstrapper");
+            }
+            if (fileSystem == null)
+            {
+                throw new ArgumentNullException("fileSystem");
+            }
+            if (environment == null)
+            {
+                throw new ArgumentNullException("environment");
+            }
+            if (log == null)
+            {
+                throw new ArgumentNullException("log");
+            }
+            if (scriptRunner == null)
+            {
+                throw new ArgumentNullException("scriptRunner");
+            }
+            _bootstrapper = bootstrapper;
+            _fileSystem = fileSystem;
+            _log = new CakeLogAdapter(log);
+            _environment = environment;
+            _scriptRunner = scriptRunner;
         }
 
         public void Run(CakeOptions options)
@@ -72,7 +93,7 @@ namespace Cake
             {
                 "System", "System.Collections.Generic", "System.Linq",
                 "System.Text", "System.Threading.Tasks", "System.IO",
-                "Cake", "Cake.Core", "Cake.Core.IO", 
+                "Cake", "Cake.Core", "Cake.Core.IO",  "Cake.Scripting", "Cake.Core.Scripting",
                 "Cake.Common", "Cake.Common.IO", 
                 "Cake.Common.IO", "Cake.Core.Diagnostics", 
                 "Cake.Common.Tools.MSBuild", "Cake.Common.Tools.XUnit", 
@@ -81,7 +102,7 @@ namespace Cake
             };
 
             // Execute the script.
-            _runner.Run(CreateScriptHost(options), references, namespaces, code);
+            _scriptRunner.Run(CreateScriptHost(options), references, namespaces, code);
         }
 
         private string ReadSource(FilePath path)

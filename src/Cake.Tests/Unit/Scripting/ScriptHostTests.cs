@@ -1,4 +1,6 @@
-﻿using Cake.Tests.Fixtures;
+﻿using System;
+using Cake.Scripting;
+using Cake.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
 
@@ -6,6 +8,20 @@ namespace Cake.Tests.Unit.Scripting
 {
     public sealed class ScriptHostTests
     {
+        public sealed class TheConstructor
+        {
+            [Fact]
+            public void Should_Throw_If_Engine_Is_Null()
+            {
+                // When
+                var result = Record.Exception(() => new ScriptHost(null));
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("engine", ((ArgumentNullException)result).ParamName);
+            }
+        }
+
         public sealed class TheFileSystemProperty
         {
             [Fact]
@@ -88,7 +104,7 @@ namespace Cake.Tests.Unit.Scripting
 
                 // Then
                 Assert.Equal(fixture.Engine.Arguments, result);
-            }    
+            }
         }
 
         public sealed class TheTaskMethod
@@ -105,7 +121,7 @@ namespace Cake.Tests.Unit.Scripting
 
                 // Then
                 fixture.Engine.Received(1).Task("Task");
-            }            
+            }
         }
 
         public sealed class TheRunTargetMethod

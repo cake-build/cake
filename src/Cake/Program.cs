@@ -1,7 +1,11 @@
 ﻿using System;
 using Cake.Arguments;
+using Cake.Bootstrapping;
+using Cake.Core;
 using Cake.Core.Diagnostics;
+using Cake.Core.IO;
 using Cake.Diagnostics;
+using Cake.Scripting;
 
 namespace Cake
 {
@@ -24,7 +28,7 @@ namespace Cake
                 var options = parser.Parse(args);
 
                 // Create and run the application.
-                var application = new CakeApplication(log: log);
+                var application = CreateApplication(log);
                 application.Run(options);
 
                 return 0;
@@ -34,6 +38,15 @@ namespace Cake
                 log.Error("Error: {0}", ex.Message);
                 return 1;
             }
+        }
+
+        private static CakeApplication CreateApplication(ICakeLog log)
+        {
+            var fileSystem = new FileSystem();
+            var environment = new CakeEnvironment();
+            var bootstrapper = new CakeBootstrapper(fileSystem, log, new NuGetInstaller(fileSystem, log));
+            var scriptRunner = new ScriptRunner(log, new RoslynScriptSessionFactory());
+            return new CakeApplication(bootstrapper, fileSystem, environment, log, scriptRunner);
         }
     }
 }

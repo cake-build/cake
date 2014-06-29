@@ -14,6 +14,84 @@ namespace Cake.Tests.Unit
 {
     public sealed class CakeApplicationTests
     {
+        public sealed class TheConstructor
+        {
+            [Fact]
+            public void Should_Throw_If_Bootstraper_Is_Null()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.Bootstrapper = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateApplication());
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("bootstrapper", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_File_System_Is_Null()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.FileSystem = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateApplication());
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("fileSystem", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Environment_Is_Null()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.Environment = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateApplication());
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("environment", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Log_Is_Null()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.Log = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateApplication());
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("log", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Script_Engine_Is_Null()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.ScriptRunner = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateApplication());
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("scriptRunner", ((ArgumentNullException)result).ParamName);
+            }
+        }
+
         public sealed class TheRunMethod
         {
             [Fact]

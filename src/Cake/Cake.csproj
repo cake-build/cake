@@ -76,11 +76,12 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Scripting\IScriptRunner.cs" />
+    <Compile Include="Scripting\RoslynScriptSession.cs" />
+    <Compile Include="Scripting\RoslynScriptSessionFactory.cs" />
     <Compile Include="Scripting\ScriptCodeGenerator.cs" />
     <Compile Include="Scripting\ScriptExtensionFinder.cs" />
-    <Compile Include="Scripting\ScriptRunner.cs" />
     <Compile Include="Scripting\ScriptHost.cs" />
+    <Compile Include="Scripting\ScriptRunner.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Common\Cake.Common.csproj">

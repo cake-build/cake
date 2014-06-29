@@ -3,7 +3,7 @@ using Cake.Bootstrapping;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Scripting;
+using Cake.Core.Scripting;
 using NSubstitute;
 
 namespace Cake.Tests.Fixtures
@@ -36,7 +36,6 @@ namespace Cake.Tests.Fixtures
             FileSystem.GetFile(Arg.Is<FilePath>(p => p.FullPath == _scriptPath)).Returns(File);
 
             Log = Substitute.For<ICakeLog>();
-
             ScriptRunner = Substitute.For<IScriptRunner>();
         }
 
