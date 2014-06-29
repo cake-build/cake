@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -16,7 +18,7 @@ namespace Cake.Common
         }
 
         [CakeScriptMethod]
-        public static ReleaseNotes ParseReleaseNotes(this ICakeContext context, FilePath filePath)
+        public static IReadOnlyList<ReleaseNotes> ParseAllReleaseNotes(this ICakeContext context, FilePath filePath)
         {
             if (filePath == null)
             {
@@ -40,6 +42,12 @@ namespace Cake.Common
             {
                 return _parser.Parse(reader.ReadToEnd());
             }
+        }
+
+        [CakeScriptMethod]
+        public static ReleaseNotes ParseReleaseNotes(this ICakeContext context, FilePath filePath)
+        {
+            return ParseAllReleaseNotes(context, filePath).First();
         }
     }
 }

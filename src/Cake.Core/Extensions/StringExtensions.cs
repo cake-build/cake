@@ -28,6 +28,12 @@ namespace Cake.Core.Extensions
                    && value.EndsWith("\"", StringComparison.OrdinalIgnoreCase);
         }
 
+        public static string[] SplitLines(this string content)
+        {
+            content = NormalizeLineEndings(content);
+            return content.Split(new[] { "\r\n" }, StringSplitOptions.None);
+        }
+
         public static string NormalizeLineEndings(this string value)
         {
             value = value.Replace("\r\n", "\n");

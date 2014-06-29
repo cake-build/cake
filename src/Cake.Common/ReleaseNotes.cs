@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -5,10 +6,10 @@ namespace Cake.Common
 {
     public sealed class ReleaseNotes
     {
-        private readonly string _version;
+        private readonly Version _version;
         private readonly List<string> _notes;
 
-        public string Version
+        public Version Version
         {
             get { return _version; }
         }
@@ -18,8 +19,12 @@ namespace Cake.Common
             get { return _notes; }
         }
 
-        public ReleaseNotes(string version, IEnumerable<string> notes)
+        public ReleaseNotes(Version version, IEnumerable<string> notes)
         {
+            if (version == null)
+            {
+                throw new ArgumentNullException("version");
+            }
             _version = version;
             _notes = new List<string>(notes ?? Enumerable.Empty<string>());
         }

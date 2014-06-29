@@ -16,28 +16,36 @@ namespace Cake.Common
             _versionRegex = new Regex(@"([0-9]+\.)+[0-9]+");
         }
 
-        public ReleaseNotes Parse(string content)
+        public IReadOnlyList<ReleaseNotes> Parse(string content)
         {
             if (content == null)
             {
                 throw new ArgumentNullException("content");
             }
 
-            var lines = GetLines(content);
+            var lines = content.SplitLines();
             if (lines.Length > 0)
             {
-                if (lines[0].StartsWith("#", StringComparison.OrdinalIgnoreCase))
+                var line = lines[0].Trim();
+
+                if (line.StartsWith("#", StringComparison.OrdinalIgnoreCase))
                 {
                     return ParseComplexFormat(lines);
                 }
+
+                if (line.StartsWith("*", StringComparison.OrdinalIgnoreCase))
+                {
+                    return ParseSimpleFormat(lines);
+                }
             }
+
             throw new CakeException("Unknown release notes format.");
         }
 
-        private ReleaseNotes ParseComplexFormat(string[] lines)
+        private IReadOnlyList<ReleaseNotes> ParseComplexFormat(string[] lines)
         {
             var lineIndex = 0;
-            var result = new Dictionary<Version, List<string>>();
+            var result = new List<ReleaseNotes>();
 
             while (true)
             {
@@ -48,19 +56,19 @@ namespace Cake.Common
 
                 // Parse header.
                 var versionResult = _versionRegex.Match(lines[lineIndex]);
-                if(!versionResult.Success)
+                if (!versionResult.Success)
                 {
                     throw new CakeException("Could not parse version from release notes header.");
                 }
 
                 // Create release notes.
                 var version = Version.Parse(versionResult.Value);
-                result.Add(version, new List<string>());
 
                 // Increase the line index.
                 lineIndex++;
 
                 // Parse content.
+                var notes = new List<string>();
                 while (true)
                 {
                     // Sanity checks.
@@ -68,7 +76,7 @@ namespace Cake.Common
                     {
                         break;
                     }
-                    if(lines[lineIndex].StartsWith("#", StringComparison.OrdinalIgnoreCase))
+                    if (lines[lineIndex].StartsWith("#", StringComparison.OrdinalIgnoreCase))
                     {
                         break;
                     }
@@ -77,30 +85,57 @@ namespace Cake.Common
                     var line = (lines[lineIndex] ?? string.Empty).Trim(new[] { '*' }).Trim();
                     if (!string.IsNullOrWhiteSpace(line))
                     {
-                        result[version].Add(line);
+                        notes.Add(line);
                     }
 
                     lineIndex++;
                 }
+
+                result.Add(new ReleaseNotes(version, notes));
             }
 
-            // Get the highest key.
-            var highestKey = result.Keys.OrderByDescending(v => v).First();
-            if (highestKey == null)
-            {
-                throw new CakeException("Could not parse release notes.");
-            }
-
-            // Return the parsed release notes.
-            var notes = result[highestKey];
-            return new ReleaseNotes(highestKey.ToString(), notes);
+            return result.OrderByDescending(x => x.Version).ToArray();
         }
 
-        private static string[] GetLines(string content)
+        private IReadOnlyList<ReleaseNotes> ParseSimpleFormat(string[] lines)
         {
-            content = content.NormalizeLineEndings();
-            var lines = content.Split(new[] { "\r\n" }, StringSplitOptions.None);
-            return lines.Select(l => l.Trim()).ToArray();
+            var lineIndex = 0;
+            var result = new List<ReleaseNotes>();
+
+            while (true)
+            {
+                if (lineIndex >= lines.Length)
+                {
+                    break;
+                }
+
+                // Trim the current line.
+                var line = (lines[lineIndex] ?? string.Empty).Trim(new[] { '*', ' ' });
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    lineIndex++;
+                    continue;
+                }
+                
+                // Parse header.
+                var versionResult = _versionRegex.Match(line);
+                if (!versionResult.Success)
+                {
+                    throw new CakeException("Could not parse version from release notes header.");
+                }
+
+                var version = Version.Parse(versionResult.Value);
+
+                // Parse the description.
+                line = line.Substring(versionResult.Length).Trim(new[] { '-', ' ' });
+
+                // Add the release notes to the result.
+                result.Add(new ReleaseNotes(version, new[] { line }));
+
+                lineIndex++;
+            }
+
+            return result.OrderByDescending(x => x.Version).ToArray();
         }
     }
 }
