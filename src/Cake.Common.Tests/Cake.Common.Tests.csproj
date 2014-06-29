@@ -71,6 +71,8 @@
     <Compile Include="Fixtures\NUnitRunnerFixture.cs" />
     <Compile Include="Fixtures\XUnitRunnerFixture.cs" />
     <Compile Include="Unit\AssemblyInfoCreatorTests.cs" />
+    <Compile Include="Unit\ReleaseNotesExtensionsTests.cs" />
+    <Compile Include="Unit\ReleaseNotesParserTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeSettingsTests.cs" />
     <Compile Include="Unit\IO\ZipperTests.cs" />

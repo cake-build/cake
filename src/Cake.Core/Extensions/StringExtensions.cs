@@ -27,5 +27,12 @@ namespace Cake.Core.Extensions
             return value.StartsWith("\"", StringComparison.OrdinalIgnoreCase)
                    && value.EndsWith("\"", StringComparison.OrdinalIgnoreCase);
         }
+
+        public static string NormalizeLineEndings(this string value)
+        {
+            value = value.Replace("\r\n", "\n");
+            value = value.Replace("\r", string.Empty);
+            return value.Replace("\n", "\r\n");
+        }
     }
 }
