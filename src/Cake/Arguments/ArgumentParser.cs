@@ -114,6 +114,12 @@ namespace Cake.Arguments
                 }                    
             }
 
+            if (name.Equals("showdescription", StringComparison.OrdinalIgnoreCase) ||
+                name.Equals("s", StringComparison.OrdinalIgnoreCase))
+            {
+                options.ShowDescription = true;
+            }
+
             if (options.Arguments.ContainsKey(name))
             {
                 _log.Error("Multiple arguments with the same name ({0}).", name);
