@@ -62,6 +62,12 @@ namespace Cake.Tests.Unit.Scripting
         {
             throw new NotImplementedException();
         }
+
+        [CakeScriptMethod]
+        public static void NonGeneric_ExtensionMethodWithParameterArray(this ICakeContext context, params int[] values)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public sealed class ScriptCodeGeneratorTests
@@ -228,6 +234,22 @@ namespace Cake.Tests.Unit.Scripting
                                         "(GetContext(),value);}";
 
                 var method = typeof(StaticClass).GetMethods().SingleOrDefault(x => x.Name == "Generic_ExtensionMethodWithGenericReturnValue");
+
+                // When
+                var result = ScriptCodeGenerator.Generate(method);
+
+                // Then
+                Assert.Equal(expected, result);
+            }
+
+            [Fact]
+            public void Should_Return_Correctly_Generated_Wrapper_For_Non_Generic_Type_With_Parameter_Array_Argument()
+            {
+                const string expected = "public void NonGeneric_ExtensionMethodWithParameterArray(params System.Int32[] values){" +
+                                        "Cake.Tests.Unit.Scripting.StaticClass.NonGeneric_ExtensionMethodWithParameterArray" +
+                                        "(GetContext(),values);}";
+
+                var method = typeof(StaticClass).GetMethod("NonGeneric_ExtensionMethodWithParameterArray");
 
                 // When
                 var result = ScriptCodeGenerator.Generate(method);

@@ -98,8 +98,10 @@ namespace Cake.Scripting
             var result = new List<string>();
             foreach (var parameter in parameters)
             {
+                var isParameterArray = parameter.IsDefined(typeof (ParamArrayAttribute));
                 var typeName = parameter.ParameterType.GetFullName();
-                result.Add(string.Concat(typeName, " ", parameter.Name));
+                var typeDeclaration = isParameterArray ? string.Concat("params ", typeName) : typeName;
+                result.Add(string.Concat(typeDeclaration, " ", parameter.Name));
             }
             return string.Join(",", result);
         }
