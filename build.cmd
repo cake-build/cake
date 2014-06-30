@@ -3,19 +3,15 @@
 :Build
 cls
 
-echo Restoring NuGet packages for solution...
-"tools\nuget\nuget.exe" "restore" "src/Cake.sln"
-echo.
-
 if not exist tools\Cake\Cake.exe ( 
 	echo Installing Cake...
-	"tools\nuget\nuget.exe" "install" "Cake" "-OutputDirectory" "tools" "-ExcludeVersion" "-NonInteractive"
+	tools\nuget\nuget.exe install Cake -OutputDirectory tools -ExcludeVersion -NonInteractive -NoCache
 	echo.
 )
 
 if not exist tools\xunit.runners\tools\xunit.console.exe (
 	echo Installing xUnit.net: Runners...
-	"tools\nuget\nuget.exe" "install" "xunit.runners" "-OutputDirectory" "tools" "-ExcludeVersion" "-Version" "1.9.2" "-NonInteractive"
+	tools\nuget\nuget.exe install xunit.runners -OutputDirectory tools -ExcludeVersion -Version 1.9.2 -NonInteractive
 	echo.
 )
 
@@ -25,7 +21,7 @@ SET BUILDMODE="Release"
 IF NOT [%2]==[] (set BUILDMODE="%2")
 
 echo Starting Cake...
-tools\Cake\Cake.exe build.cake -target=%TARGET% -configuration=%BUILDMODE% 
+tools\Cake\Cake.exe build.cake -target=%TARGET% -configuration=%BUILDMODE% -verbosity=verbose
 
 rem Loop the build script.
 echo.
