@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace Cake.Core
 {
@@ -43,6 +44,12 @@ namespace Cake.Core
         public static CakeTaskBuilder<ActionTask> ContinueOnError(this CakeTaskBuilder<ActionTask> builder)
         {
             builder.Task.ContinueOnError = true;
+            return builder;
+        }
+
+        public static CakeTaskBuilder<T> DescriptionAttribute<T>(this CakeTaskBuilder<T> builder, string description)
+            where T : CakeTask
+        {
             return builder;
         }
 

@@ -137,8 +137,16 @@ namespace Cake
             return scriptLocation;
         }
 
-        private ScriptHost CreateScriptHost(CakeOptions options)
+        private IScriptHost CreateScriptHost(CakeOptions options)
         {
+            if (options.ShowDescription)
+            {
+                return new DescriptionScriptHost(new CakeEngine(
+                    _fileSystem, _environment, _log,
+                    new CakeArguments(options.Arguments),
+                    new Globber(_fileSystem, _environment),
+                    new ProcessRunner(_log)));
+            }
             return new ScriptHost(new CakeEngine(
                 _fileSystem, _environment, _log,
                 new CakeArguments(options.Arguments),
