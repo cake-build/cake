@@ -6,9 +6,9 @@ using Cake.Core.Scripting;
 
 namespace Cake.Scripting
 {
-    public sealed class ScriptHost : IScriptHost
+    public class ScriptHost : IScriptHost
     {
-        private readonly ICakeEngine _engine;
+        protected readonly ICakeEngine _engine;
 
         public IFileSystem FileSystem
         {

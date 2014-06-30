@@ -15,6 +15,8 @@ namespace Cake.Core
             get { return _name; }
         }
 
+        public string Description { get; set; }
+
         public IReadOnlyList<string> Dependencies
         {
             get { return _dependencies; }

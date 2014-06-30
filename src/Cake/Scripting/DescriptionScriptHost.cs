@@ -1,26 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cake.Core;
-using Cake.Core.Diagnostics;
-using Cake.Core.IO;
-using Cake.Core.Scripting;
 
 namespace Cake.Scripting
 {
     public sealed class DescriptionScriptHost : ScriptHost
     {
+        public Dictionary<string, string> Tasks { get; set; } 
+
         public DescriptionScriptHost(ICakeEngine engine) : base(engine)
         {
+            Tasks = new Dictionary<string, string>();
         }
 
         public new CakeReport RunTarget(string target)
         {
-            
-            /*var report = _engine.RunTarget(target);
-            if (!report.IsEmpty)
+            foreach (var t in _engine.Tasks)
             {
-                CakeReportPrinter.Write(report);
-            }            
-            return report;*/
+                Tasks.Add(t.Name, t.Description);
+            }
+
             return new CakeReport();
         }
     }

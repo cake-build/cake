@@ -1,6 +1,6 @@
 ﻿namespace Cake.Core.Scripting
 {
-    public interface IScriptHost : ICakeEngine
+    public interface IScriptHost : ICakeContext
     {
         ICakeContext GetContext();
     }
