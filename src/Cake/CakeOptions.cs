@@ -17,12 +17,15 @@ namespace Cake
             get { return _arguments; }
         }
 
+        public bool ShowDescription { get; set; }
+
         public CakeOptions()
         {
             _arguments = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             // Default to normal verbosity.
             Verbosity = Verbosity.Normal;
+            ShowDescription = false;
         }
     }
 }

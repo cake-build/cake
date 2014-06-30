@@ -271,6 +271,40 @@ namespace Cake.Tests.Unit
                     Arg.Is<IEnumerable<string>>(c => c.Any(x => x == @namespace)),
                     Arg.Any<string>());
             }
+
+            [Fact]
+            public void Should_Use_Script_Host_When_ShowDescription_Is_False_In_Options()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture(showDescription: false);
+
+                // When
+                fixture.Run();
+
+                // Then
+                fixture.ScriptRunner.Received(1).Run(
+                    Arg.Any<ScriptHost>(),
+                    Arg.Any<IEnumerable<Assembly>>(),
+                    Arg.Any<IEnumerable<string>>(),
+                    Arg.Any<string>());
+            }
+
+            [Fact]
+            public void Should_Use_Description_Script_Host_When_ShowDescription_Is_True_In_Options()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture(showDescription: true);
+
+                // When
+                fixture.Run();
+
+                // Then
+                fixture.ScriptRunner.Received(1).Run(
+                    Arg.Any<DescriptionScriptHost>(),
+                    Arg.Any<IEnumerable<Assembly>>(),
+                    Arg.Any<IEnumerable<string>>(),
+                    Arg.Any<string>());
+            }
         }
     }
 }

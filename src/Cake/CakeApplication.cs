@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Xml.Serialization;
 using Cake.Bootstrapping;
 using Cake.Common.IO;
 using Cake.Core;
@@ -102,7 +104,18 @@ namespace Cake
             };
 
             // Execute the script.
-            _scriptRunner.Run(CreateScriptHost(options), references, namespaces, code);
+            var scriptHost = CreateScriptHost(options);
+            _scriptRunner.Run(scriptHost, references, namespaces, code);
+            if (scriptHost is DescriptionScriptHost)
+            {
+                Console.WriteLine("{0,-30}{1}","Task", "Description");
+                Console.WriteLine(String.Concat(Enumerable.Range(0,79).Select(s => "=")));
+                var descriptionScriptHost = (scriptHost as DescriptionScriptHost);
+                foreach (var key in descriptionScriptHost.TasksWithDescription.Keys.OrderByDescending(s => s))
+                {
+                    Console.WriteLine("{0,-30}{1}", key,  descriptionScriptHost.TasksWithDescription[key]);
+                }
+            }
         }
 
         private string ReadSource(FilePath path)
@@ -137,8 +150,16 @@ namespace Cake
             return scriptLocation;
         }
 
-        private ScriptHost CreateScriptHost(CakeOptions options)
+        private IScriptHost CreateScriptHost(CakeOptions options)
         {
+            if (options.ShowDescription)
+            {
+                return new DescriptionScriptHost(new CakeEngine(
+                    _fileSystem, _environment, _log,
+                    new CakeArguments(options.Arguments),
+                    new Globber(_fileSystem, _environment),
+                    new ProcessRunner(_log)));
+            }
             return new ScriptHost(new CakeEngine(
                 _fileSystem, _environment, _log,
                 new CakeArguments(options.Arguments),

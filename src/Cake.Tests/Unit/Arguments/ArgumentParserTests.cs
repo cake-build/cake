@@ -140,6 +140,22 @@ namespace Cake.Tests.Unit.Arguments
                 Assert.NotNull(result.Script);
                 Assert.Equal("/home/test/build.csx", result.Script.FullPath);
             }
+
+            [Theory]
+            [InlineData("-showdescription")]
+            [InlineData("-s")]
+            public void Can_Parse_ShowDescription(string input)
+            {
+                // Given
+                var log = Substitute.For<ICakeLog>();
+                var parser = new ArgumentParser(log);
+
+                // When
+                var result = parser.Parse(new[] { "build.csx", input });
+
+                // Then
+                Assert.Equal(true, result.ShowDescription);
+            }
         }
     }
 }

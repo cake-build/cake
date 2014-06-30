@@ -76,6 +76,7 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="Scripting\DescriptionScriptHost.cs" />
     <Compile Include="Scripting\RoslynScriptSession.cs" />
     <Compile Include="Scripting\RoslynScriptSessionFactory.cs" />
     <Compile Include="Scripting\ScriptCodeGenerator.cs" />

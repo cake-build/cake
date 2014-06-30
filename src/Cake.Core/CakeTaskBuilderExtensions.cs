@@ -34,7 +34,8 @@ namespace Cake.Core
             return Does(builder, context => action());
         }
 
-        public static CakeTaskBuilder<ActionTask> Does(this CakeTaskBuilder<ActionTask> builder, Action<ICakeContext> action)
+        public static CakeTaskBuilder<ActionTask> Does(this CakeTaskBuilder<ActionTask> builder,
+            Action<ICakeContext> action)
         {
             builder.Task.AddAction(action);
             return builder;
@@ -43,6 +44,13 @@ namespace Cake.Core
         public static CakeTaskBuilder<ActionTask> ContinueOnError(this CakeTaskBuilder<ActionTask> builder)
         {
             builder.Task.ContinueOnError = true;
+            return builder;
+        }
+
+        public static CakeTaskBuilder<T> Description<T>(this CakeTaskBuilder<T> builder, string description)
+            where T : CakeTask
+        {
+            builder.Task.Description = description;
             return builder;
         }
 

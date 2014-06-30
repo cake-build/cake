@@ -11,6 +11,7 @@ namespace Cake.Tests.Fixtures
     public sealed class CakeApplicationFixture
     {
         private readonly string _scriptPath;
+        private readonly bool _showDescription;
 
         public ICakeBootstrapper Bootstrapper { get; set; }
         public IFileSystem FileSystem { get; set; }
@@ -19,9 +20,10 @@ namespace Cake.Tests.Fixtures
         public ICakeLog Log { get; set; }
         public IScriptRunner ScriptRunner { get; set; }
 
-        public CakeApplicationFixture(string scriptPath = "/Build/script.csx")
+        public CakeApplicationFixture(string scriptPath = "/Build/script.csx", bool showDescription = false)
         {
             _scriptPath = scriptPath;
+            _showDescription = showDescription;
 
             Bootstrapper = Substitute.For<ICakeBootstrapper>();
 
@@ -56,7 +58,7 @@ namespace Cake.Tests.Fixtures
 
         public void Run()
         {           
-            CreateApplication().Run(new CakeOptions { Script = _scriptPath });
+            CreateApplication().Run(new CakeOptions { Script = _scriptPath, ShowDescription = _showDescription});
         }
     }
 }
