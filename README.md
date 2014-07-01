@@ -16,7 +16,7 @@ For more information and examples of how to use Cake, see the [Wiki](https://git
 
 ###1. Download Cake
 
-```
+```Batchfile
 C:\Project> NuGet.exe install Cake -OutputDirectory Tools -ExcludeVersion
 ```
 
@@ -117,7 +117,7 @@ Task("Foo")
 
 To get a list of tasks run:
 
-```
+```Batchfile
 C:\Project\Tools\Cake> Cake.exe ../../build.csx -s
 ```
 
