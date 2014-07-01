@@ -81,6 +81,7 @@ Task("Pack")
 });
 
 Task("NuGet")
+    .Description("Create NuGet package")
     .IsDependentOn("Pack")
     .Does(() =>
 {
@@ -103,3 +104,24 @@ RunTarget(target);
 ```
 C:\Project\Tools\Cake> Cake.exe ../../build.csx -verbosity=verbose -target=Pack
 ```
+
+
+###4. Task descriptions
+A Task can be given a description using ``.Description``
+```
+Task("Foo")
+    .Description("A description for task Foo")
+    .Does(() => {});
+```
+To get a list of tasks run
+```
+C:\Project\Tools\Cake> Cake.exe ../../build.csx -s
+```
+The output will look something like
+```
+Task                          Description
+===============================================================================
+Bar
+Foo                           A description for task Foo
+```
+Tasks without a description will be listed with a blank description.
