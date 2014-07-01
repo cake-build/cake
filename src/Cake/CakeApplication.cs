@@ -111,9 +111,9 @@ namespace Cake
                 Console.WriteLine("{0,-30}{1}","Task", "Description");
                 Console.WriteLine(String.Concat(Enumerable.Range(0,79).Select(s => "=")));
                 var descriptionScriptHost = (scriptHost as DescriptionScriptHost);
-                foreach (var key in descriptionScriptHost.Tasks.Keys.OrderByDescending(s => s))
+                foreach (var key in descriptionScriptHost.TasksWithDescription.Keys.OrderByDescending(s => s))
                 {
-                    Console.WriteLine("{0,-30}{1}", key,  descriptionScriptHost.Tasks[key]);
+                    Console.WriteLine("{0,-30}{1}", key,  descriptionScriptHost.TasksWithDescription[key]);
                 }
             }
         }

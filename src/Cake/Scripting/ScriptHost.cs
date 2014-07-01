@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -49,12 +50,17 @@ namespace Cake.Scripting
             _engine = engine;
         }
 
+        public IReadOnlyList<CakeTask> Tasks
+        {
+            get { return _engine.Tasks; }
+        }
+
         public CakeTaskBuilder<ActionTask> Task(string name)
         {
             return _engine.Task(name);
         }
 
-        public CakeReport RunTarget(string target)
+        public virtual CakeReport RunTarget(string target)
         {
             var report = _engine.RunTarget(target);
             if (!report.IsEmpty)
