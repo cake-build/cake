@@ -5,16 +5,10 @@ namespace Cake.Scripting
 {
     internal sealed class RoslynScriptSessionFactory : IScriptSessionFactory
     {
-        private readonly ScriptEngine _roslynScriptEngine;
-
-        public RoslynScriptSessionFactory()
-        {
-            _roslynScriptEngine = new ScriptEngine();
-        }
-
         public IScriptSession CreateSession(IScriptHost host)
         {
-            var session = _roslynScriptEngine.CreateSession(host, typeof(IScriptHost));
+            var roslynScriptEngine = new ScriptEngine();
+            var session = roslynScriptEngine.CreateSession(host, typeof(IScriptHost));
             return new RoslynScriptSession(session);
         }
     }
