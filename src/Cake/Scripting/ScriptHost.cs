@@ -9,7 +9,7 @@ namespace Cake.Scripting
 {
     public class ScriptHost : IScriptHost
     {
-        protected readonly ICakeEngine _engine;
+        private readonly ICakeEngine _engine;
 
         public IFileSystem FileSystem
         {

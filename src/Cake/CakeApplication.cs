@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Xml.Serialization;
 using Cake.Bootstrapping;
 using Cake.Common.IO;
 using Cake.Core;
@@ -81,7 +80,7 @@ namespace Cake
             {
                 typeof(Action).Assembly, // mscorlib
                 typeof(Uri).Assembly, // System
-                typeof(System.Linq.IQueryable).Assembly, // System.Core
+                typeof(IQueryable).Assembly, // System.Core
                 typeof(System.Data.DataTable).Assembly, // System.Data
                 typeof(System.Xml.XmlReader).Assembly, // System.Xml
                 typeof(System.Xml.Linq.XDocument).Assembly, // System.Xml.Linq
