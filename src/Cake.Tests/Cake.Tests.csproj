@@ -56,12 +56,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Fixtures\DescriptionScriptHostFixture.cs" />
     <Compile Include="Unit\Arguments\ArgumentParserTests.cs" />
     <Compile Include="Unit\Bootstrapper\CakeBootstrapperTests.cs" />
     <Compile Include="Unit\CakeApplicationTests.cs" />
     <Compile Include="Unit\CakeOptionsTests.cs" />
     <Compile Include="Unit\Diagnostics\CakeLogAdapterTests.cs" />
     <Compile Include="Unit\Diagnostics\FormatParserTests.cs" />
+    <Compile Include="Unit\Scripting\DescriptionScriptHostTests.cs" />
     <Compile Include="Unit\Scripting\RoslynScriptSessionTests.cs" />
     <Compile Include="Unit\Scripting\ScriptCodeGeneratorTests.cs" />
     <Compile Include="Unit\Scripting\ScriptHostTests.cs" />
