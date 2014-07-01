@@ -6,7 +6,7 @@ var buildLabel = Argument("buildLabel", string.Empty);
 var buildInfo = Argument("buildInfo", string.Empty);
 
 // Set version.
-var version = "0.1.9";
+var version = "0.1.10";
 var semVersion = version + (buildLabel != "" ? ("-" + buildLabel) : string.Empty);
 
 // Define directories.

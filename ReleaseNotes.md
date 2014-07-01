@@ -1,3 +1,8 @@
+### New in 0.1.10 (Released 2014/07/01)
+* Added parsing of FAKE's complex release notes format.
+* Added task description support.
+* Added script methods for log.
+
 ### New in 0.1.9 (Releases 2014/06/28)
 * Added AssemblyInfo creator.
 * Zip: Fixed bug with relative paths.
