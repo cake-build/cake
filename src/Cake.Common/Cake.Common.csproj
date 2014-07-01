@@ -44,6 +44,7 @@
     <Compile Include="AssemblyInfoExtensions.cs" />
     <Compile Include="AssemblyInfoRegistration.cs" />
     <Compile Include="AssemblyInfoSettings.cs" />
+    <Compile Include="Diagnostics\LoggingExtensions.cs" />
     <Compile Include="ReleaseNotes.cs" />
     <Compile Include="ReleaseNotesExtensions.cs" />
     <Compile Include="ReleaseNotesParser.cs" />
