@@ -1,5 +1,8 @@
+### New in 0.1.11 (Released 2014/07/01)
+* Critical bug fix for script host.
+
 ### New in 0.1.10 (Released 2014/07/01)
-* Added parsing of FAKE's complex release notes format.
+* Added parsing of FAKE's release notes format.
 * Added task description support.
 * Added script methods for log.
 

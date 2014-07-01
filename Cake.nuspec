@@ -12,10 +12,7 @@
     <iconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <copyright>Copyright (c) Patrik Svensson 2014</copyright>
-    <releaseNotes>Added parsing of FAKE's complex release notes format.
-Added task description support.
-Added script methods for log.
-    </releaseNotes>
+    <releaseNotes>Critical bug fix for script host.</releaseNotes>
     <tags>Cake Script Build</tags>
   </metadata>
   <files>
