@@ -175,8 +175,11 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 Assert.Equal("Failed to run Candle.", result.Message);
             }
 
-            [Fact]
-            public void Should_Add_Architecture_To_Arguments_If_Provided()
+            [Theory]
+            [InlineData(Architecture.IA64, "-arch ia64")]
+            [InlineData(Architecture.X64, "-arch x64")]
+            [InlineData(Architecture.X86, "-arch x86")]
+            public void Should_Add_Architecture_To_Arguments_If_Provided(Architecture arch, string expected)
             {
                 // Given
                 var fixture = new WiXFixture();
@@ -185,12 +188,12 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 // When
                 runner.Run(new[] { new FilePath("./Test.wxs") }, new CandleSettings
                 {
-                    Architecture = Architecture.X64
+                    Architecture = arch
                 });
 
                 // Then
                 fixture.ProcessRunner.Received(1)
-                    .Start(Arg.Is<ProcessStartInfo>(p => p.Arguments == "-arch x64 \"/Working/Test.wxs\""));
+                    .Start(Arg.Is<ProcessStartInfo>(p => p.Arguments == string.Concat(expected, " \"/Working/Test.wxs\"")));
             }
 
             [Fact]
