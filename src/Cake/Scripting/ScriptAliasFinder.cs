@@ -8,7 +8,7 @@ using Cake.Extensions;
 
 namespace Cake.Scripting
 {
-    internal static class ScriptExtensionFinder
+    internal static class ScriptAliasFinder
     {
         public static IEnumerable<MethodInfo> GetExtensionMethods(IEnumerable<Assembly> references)
         {
@@ -36,7 +36,8 @@ namespace Cake.Scripting
                 {
                     continue;
                 }
-                if (!method.IsDefined(typeof(CakeScriptMethodAttribute)))
+                if (!method.IsDefined(typeof(CakeScriptMethodAttribute)) &&
+                    !method.IsDefined(typeof(CakePropertyAliasAttribute)))
                 {
                     continue;
                 }

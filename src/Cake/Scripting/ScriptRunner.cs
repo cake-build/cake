@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Cake.Core.Annotations;
 using Cake.Core.Diagnostics;
 using Cake.Core.Scripting;
 using Cake.Extensions;
+using Cake.Scripting.CodeGen;
 
 namespace Cake.Scripting
 {
@@ -46,15 +48,14 @@ namespace Cake.Scripting
         private void AddExtensionMethodsToSession(IScriptSession session, IEnumerable<Assembly> assemblies)
         {
             _log.Debug("Generating script host proxy methods for extension methods...");
-            foreach (var method in ScriptExtensionFinder.GetExtensionMethods(assemblies))
+            foreach (var method in ScriptAliasFinder.GetExtensionMethods(assemblies))
             {
                 var signature = method.GetSignature();
 
                 try
                 {
                     _log.Debug("  {0}", signature);
-                    var extensionWrapper = ScriptCodeGenerator.Generate(method);
-                    session.Execute(extensionWrapper);
+                    session.Execute(GenerateAliasCode(method));
                 }
                 catch (Exception)
                 {
@@ -63,6 +64,24 @@ namespace Cake.Scripting
                 }
             }
             _log.Debug("Done generating code.");
+        }
+
+        private static string GenerateAliasCode(MethodInfo method)
+        {
+            string code;
+            if (method.IsDefined(typeof(CakeScriptMethodAttribute)))
+            {
+                code = MethodAliasGenerator.Generate(method);
+            }
+            else if (method.IsDefined(typeof(CakePropertyAliasAttribute)))
+            {
+                code = PropertyAliasGenerator.Generate(method);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unknown alias type.");
+            }
+            return code;
         }
     }
 }

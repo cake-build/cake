@@ -9,9 +9,9 @@ using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Extensions;
 
-namespace Cake.Scripting
+namespace Cake.Scripting.CodeGen
 {
-    internal static class ScriptCodeGenerator
+    internal static class MethodAliasGenerator
     {
         public static string Generate(MethodInfo method)
         {

@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionTask.cs" />
+    <Compile Include="Annotations\CakePropertyAliasAttribute.cs" />
     <Compile Include="CakeEngine.cs" />
     <Compile Include="CakeException.cs" />
     <Compile Include="CakeReport.cs" />
