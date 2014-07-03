@@ -22,26 +22,28 @@ namespace Cake.Diagnostics
 
         public static IDictionary<LogLevel, ColoredConsolePalette> GetColorfulPalette()
         {
+            var background = Console.BackgroundColor;
             var palette = new Dictionary<LogLevel, ColoredConsolePalette>
             {
                 { LogLevel.Error, new ColoredConsolePalette(ConsoleColor.DarkRed, ConsoleColor.White, ConsoleColor.Red, ConsoleColor.White) },
-                { LogLevel.Warning, new ColoredConsolePalette(ConsoleColor.Black, ConsoleColor.Yellow, ConsoleColor.Black, ConsoleColor.Yellow) },
-                { LogLevel.Information, new ColoredConsolePalette(ConsoleColor.Black, ConsoleColor.White, ConsoleColor.DarkBlue, ConsoleColor.White) },
-                { LogLevel.Verbose, new ColoredConsolePalette(ConsoleColor.Black, ConsoleColor.Gray, ConsoleColor.Black, ConsoleColor.White) },
-                { LogLevel.Debug, new ColoredConsolePalette(ConsoleColor.Black, ConsoleColor.DarkGray, ConsoleColor.Black, ConsoleColor.Gray) }
+                { LogLevel.Warning, new ColoredConsolePalette(background, ConsoleColor.Yellow, background, ConsoleColor.Yellow) },
+                { LogLevel.Information, new ColoredConsolePalette(background, ConsoleColor.White, ConsoleColor.DarkBlue, ConsoleColor.White) },
+                { LogLevel.Verbose, new ColoredConsolePalette(background, ConsoleColor.Gray, background, ConsoleColor.White) },
+                { LogLevel.Debug, new ColoredConsolePalette(background, ConsoleColor.DarkGray, background, ConsoleColor.Gray) }
             };
             return palette;
         }
 
         public static IDictionary<LogLevel, ColoredConsolePalette> GetGreyscalePalette()
         {
+            var background = Console.BackgroundColor;
             var palette = new Dictionary<LogLevel, ColoredConsolePalette>
             {
-                { LogLevel.Error, new ColoredConsolePalette(ConsoleColor.Black, ConsoleColor.Gray, ConsoleColor.Black, ConsoleColor.White) },
-                { LogLevel.Warning, new ColoredConsolePalette(ConsoleColor.Black, ConsoleColor.Gray, ConsoleColor.Black, ConsoleColor.White) },
-                { LogLevel.Information, new ColoredConsolePalette(ConsoleColor.Black, ConsoleColor.Gray, ConsoleColor.Black, ConsoleColor.White) },
-                { LogLevel.Verbose, new ColoredConsolePalette(ConsoleColor.Black, ConsoleColor.Gray, ConsoleColor.Black, ConsoleColor.White) },
-                { LogLevel.Debug, new ColoredConsolePalette(ConsoleColor.Black, ConsoleColor.Gray, ConsoleColor.Black, ConsoleColor.White) }
+                { LogLevel.Error, new ColoredConsolePalette(background, ConsoleColor.Gray, background, ConsoleColor.White) },
+                { LogLevel.Warning, new ColoredConsolePalette(background, ConsoleColor.Gray, background, ConsoleColor.White) },
+                { LogLevel.Information, new ColoredConsolePalette(background, ConsoleColor.Gray, background, ConsoleColor.White) },
+                { LogLevel.Verbose, new ColoredConsolePalette(background, ConsoleColor.Gray, background, ConsoleColor.White) },
+                { LogLevel.Debug, new ColoredConsolePalette(background, ConsoleColor.Gray, background, ConsoleColor.White) }
             };
             return palette;
         }
