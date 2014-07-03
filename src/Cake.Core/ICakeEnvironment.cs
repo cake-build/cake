@@ -9,5 +9,6 @@ namespace Cake.Core
         bool IsUnix();        
         DirectoryPath GetSpecialPath(SpecialPath path);
         DirectoryPath GetApplicationRoot();
+        string GetEnvironmentVariable(string variable);
     }
 }

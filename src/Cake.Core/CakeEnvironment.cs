@@ -47,6 +47,11 @@ namespace Cake.Core
             return new DirectoryPath(path);
         }
 
+        public string GetEnvironmentVariable(string variable)
+        {
+            return Environment.GetEnvironmentVariable(variable);
+        }
+
         private static void SetWorkingDirectory(DirectoryPath path)
         {
             if (path.IsRelative)
