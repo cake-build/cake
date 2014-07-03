@@ -99,7 +99,7 @@ namespace Cake
                 "Cake.Common.IO", "Cake.Core.Diagnostics", 
                 "Cake.Common.Tools.MSBuild", "Cake.Common.Tools.XUnit", 
                 "Cake.Common.Tools.NuGet", "Cake.Common.Tools.NUnit",
-                "Cake.Common.Tools.ILMerge"
+                "Cake.Common.Tools.ILMerge", "Cake.Common.Tools.WiX"
             };
 
             // Execute the script.
