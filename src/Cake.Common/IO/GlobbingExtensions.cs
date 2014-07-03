@@ -7,14 +7,14 @@ namespace Cake.Common.IO
 {
     public static class GlobbingExtensions
     {
-        [CakeScriptMethod]
+        [CakeMethodAlias]
         public static FilePathCollection GetFiles(this ICakeContext context, string pattern)
         {
             return new FilePathCollection(context.Globber.Match(pattern).OfType<FilePath>(),
                 new PathComparer(context.Environment.IsUnix()));
         }
 
-        [CakeScriptMethod]
+        [CakeMethodAlias]
         public static DirectoryPathCollection GetDirectories(this ICakeContext context, string pattern)
         {
             return new DirectoryPathCollection(context.Globber.Match(pattern).OfType<DirectoryPath>(),

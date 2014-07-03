@@ -32,7 +32,7 @@ namespace Cake.Scripting.CodeGen
             }
             if (!method.IsDefined(typeof(CakePropertyAliasAttribute)))
             {
-                const string format = "The method '{0}' is not a Cake property alias.";
+                const string format = "The method '{0}' is not a property alias.";
                 throw new CakeException(string.Format(format, method.Name));
             }
 
@@ -47,19 +47,19 @@ namespace Cake.Scripting.CodeGen
             }
             if (!parameterCorrect)
             {
-                const string format = "The cake property alias method '{0}' has an invalid signature.";
+                const string format = "The property alias '{0}' has an invalid signature.";
                 throw new CakeException(string.Format(format, method.Name));   
             }
 
             if (method.IsGenericMethod)
             {
-                const string format = "The cake property alias method '{0}' cannot be generic.";
+                const string format = "The property alias '{0}' cannot be generic.";
                 throw new CakeException(string.Format(format, method.Name));
             }
 
             if (method.ReturnType == typeof (void))
             {
-                const string format = "The cake property alias method '{0}' cannot return void.";
+                const string format = "The property alias '{0}' cannot return void.";
                 throw new CakeException(string.Format(format, method.Name));                
             }
 

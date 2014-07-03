@@ -6,13 +6,13 @@ namespace Cake.Common
 {
     public static class ArgumentExtensions
     {
-        [CakeScriptMethod]
+        [CakeMethodAlias]
         public static bool HasArgument(this ICakeContext context, string key)
         {
             return context.Arguments.HasArgument(key);
         }
 
-        [CakeScriptMethod]
+        [CakeMethodAlias]
         public static T Argument<T>(this ICakeContext context, string key)
         {
             var value = context.Arguments.GetArgument(key);
@@ -23,7 +23,7 @@ namespace Cake.Common
             return Convert<T>(value);
         }
 
-        [CakeScriptMethod]
+        [CakeMethodAlias]
         public static T Argument<T>(this ICakeContext context, string key, T defaultValue)
         {
             var value = context.Arguments.GetArgument(key);

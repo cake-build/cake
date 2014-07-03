@@ -30,9 +30,9 @@ namespace Cake.Scripting.CodeGen
                 const string format = "The method '{0}' is not an extension method.";
                 throw new CakeException(string.Format(format, method.Name));
             }
-            if (!method.IsDefined(typeof(CakeScriptMethodAttribute)))
+            if (!method.IsDefined(typeof(CakeMethodAliasAttribute)))
             {
-                const string format = "The method '{0}' is not a Cake script method.";
+                const string format = "The method '{0}' is not a method alias.";
                 throw new CakeException(string.Format(format, method.Name));
             }
             return GenerateCode(method);

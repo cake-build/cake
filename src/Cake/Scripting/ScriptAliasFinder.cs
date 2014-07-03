@@ -36,7 +36,7 @@ namespace Cake.Scripting
                 {
                     continue;
                 }
-                if (!method.IsDefined(typeof(CakeScriptMethodAttribute)) &&
+                if (!method.IsDefined(typeof(CakeMethodAliasAttribute)) &&
                     !method.IsDefined(typeof(CakePropertyAliasAttribute)))
                 {
                     continue;

@@ -62,7 +62,7 @@ namespace Cake.Tests.Unit.Scripting.CodeGen
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("The method 'NotAScriptMethod' is not a Cake property alias.",
+                Assert.Equal("The method 'NotAScriptMethod' is not a property alias.",
                     result.Message);
             }
 
@@ -77,7 +77,7 @@ namespace Cake.Tests.Unit.Scripting.CodeGen
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("The cake property alias method 'PropertyAliasWithMoreThanOneMethod' has an invalid signature.",
+                Assert.Equal("The property alias 'PropertyAliasWithMoreThanOneMethod' has an invalid signature.",
                     result.Message);
             }
 
@@ -92,7 +92,7 @@ namespace Cake.Tests.Unit.Scripting.CodeGen
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("The cake property alias method 'PropertyAliasWithoutContext' has an invalid signature.",
+                Assert.Equal("The property alias 'PropertyAliasWithoutContext' has an invalid signature.",
                     result.Message);
             }
 
@@ -107,7 +107,7 @@ namespace Cake.Tests.Unit.Scripting.CodeGen
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("The cake property alias method 'GenericScriptMethod' cannot be generic.",
+                Assert.Equal("The property alias 'GenericScriptMethod' cannot be generic.",
                     result.Message);
             }
 
@@ -122,7 +122,7 @@ namespace Cake.Tests.Unit.Scripting.CodeGen
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("The cake property alias method 'PropertyAliasReturningVoid' cannot return void.",
+                Assert.Equal("The property alias 'PropertyAliasReturningVoid' cannot return void.",
                     result.Message);
             }
 

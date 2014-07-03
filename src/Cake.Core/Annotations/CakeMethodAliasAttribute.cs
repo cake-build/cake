@@ -3,7 +3,7 @@
 namespace Cake.Core.Annotations
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-    public sealed class CakeScriptMethodAttribute : Attribute
+    public sealed class CakeMethodAliasAttribute : Attribute
     {
     }
 }

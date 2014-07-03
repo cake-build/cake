@@ -17,7 +17,7 @@ namespace Cake.Common
             _parser = new ReleaseNotesParser();
         }
 
-        [CakeScriptMethod]
+        [CakeMethodAlias]
         public static IReadOnlyList<ReleaseNotes> ParseAllReleaseNotes(this ICakeContext context, FilePath filePath)
         {
             if (filePath == null)
@@ -44,7 +44,7 @@ namespace Cake.Common
             }
         }
 
-        [CakeScriptMethod]
+        [CakeMethodAlias]
         public static ReleaseNotes ParseReleaseNotes(this ICakeContext context, FilePath filePath)
         {
             return ParseAllReleaseNotes(context, filePath).First();

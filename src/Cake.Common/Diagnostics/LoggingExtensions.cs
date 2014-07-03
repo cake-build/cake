@@ -6,31 +6,31 @@ namespace Cake.Common.Diagnostics
 {
     public static class LoggingExtensions
     {
-        [CakeScriptMethod]
+        [CakeMethodAlias]
         public static void Error(this ICakeContext context, string format, params object[] args)
         {
             context.Log.Error(format, args);
         }
 
-        [CakeScriptMethod]
+        [CakeMethodAlias]
         public static void Warning(this ICakeContext context, string format, params object[] args)
         {
             context.Log.Warning(format, args);
         }
 
-        [CakeScriptMethod]
+        [CakeMethodAlias]
         public static void Information(this ICakeContext context, string format, params object[] args)
         {
             context.Log.Information(format, args);
         }
 
-        [CakeScriptMethod]
+        [CakeMethodAlias]
         public static void Verbose(this ICakeContext context, string format, params object[] args)
         {
             context.Log.Verbose(format, args);
         }
 
-        [CakeScriptMethod]
+        [CakeMethodAlias]
         public static void Debug(this ICakeContext context, string format, params object[] args)
         {
             context.Log.Debug(format, args);

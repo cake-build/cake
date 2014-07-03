@@ -7,7 +7,7 @@ namespace Cake.Common.Tools.ILMerge
 {
     public static class ILMergeExtensions
     {
-        [CakeScriptMethod]
+        [CakeMethodAlias]
         public static void ILMerge(this ICakeContext context, FilePath outputFile, FilePath primaryAssembly,
             IEnumerable<FilePath> assemblyPaths)
         {
@@ -15,7 +15,7 @@ namespace Cake.Common.Tools.ILMerge
             merger.Merge(outputFile, primaryAssembly, assemblyPaths);
         }
 
-        [CakeScriptMethod]
+        [CakeMethodAlias]
         public static void ILMerge(this ICakeContext context, FilePath outputFile, FilePath primaryAssembly,
             IEnumerable<FilePath> assemblyPaths, ILMergeSettings settings)
         {

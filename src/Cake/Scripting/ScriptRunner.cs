@@ -69,7 +69,7 @@ namespace Cake.Scripting
         private static string GenerateAliasCode(MethodInfo method)
         {
             string code;
-            if (method.IsDefined(typeof(CakeScriptMethodAttribute)))
+            if (method.IsDefined(typeof(CakeMethodAliasAttribute)))
             {
                 code = MethodAliasGenerator.Generate(method);
             }

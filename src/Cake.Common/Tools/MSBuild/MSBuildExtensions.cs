@@ -7,13 +7,13 @@ namespace Cake.Common.Tools.MSBuild
 {
     public static class MSBuildExtensions
     {
-        [CakeScriptMethod]
+        [CakeMethodAlias]
         public static void MSBuild(this ICakeContext context, FilePath solution)
         {
             MSBuild(context, solution, settings => { });
         }
 
-        [CakeScriptMethod]
+        [CakeMethodAlias]
         public static void MSBuild(this ICakeContext context, FilePath solution, Action<MSBuildSettings> configurator)
         {
             var settings = new MSBuildSettings(solution);
