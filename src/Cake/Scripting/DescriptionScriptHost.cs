@@ -10,11 +10,6 @@ namespace Cake.Scripting
     {
         private readonly Dictionary<string, string> _descriptions; 
 
-        public Dictionary<string, string> Descriptions
-        {
-            get { return _descriptions; }
-        }
-
         public DescriptionScriptHost(ICakeEngine engine) 
             : base(engine)
         {
