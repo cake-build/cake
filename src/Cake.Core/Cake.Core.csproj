@@ -55,7 +55,9 @@
     <Compile Include="Diagnostics\Verbosity.cs" />
     <Compile Include="Diagnostics\VerbosityTypeConverter.cs" />
     <Compile Include="CakeArguments.cs" />
+    <Compile Include="Extensions\MethodInfoExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="ICakeArguments.cs" />
     <Compile Include="IO\DirectoryPathCollection.cs" />
     <Compile Include="IO\FilePathCollection.cs" />
@@ -105,10 +107,14 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="Scripting\CodeGen\MethodAliasGenerator.cs" />
+    <Compile Include="Scripting\CodeGen\PropertyAliasGenerator.cs" />
     <Compile Include="Scripting\IScriptHost.cs" />
     <Compile Include="Scripting\IScriptRunner.cs" />
     <Compile Include="Scripting\IScriptSession.cs" />
     <Compile Include="Scripting\IScriptSessionFactory.cs" />
+    <Compile Include="Scripting\ScriptAliasFinder.cs" />
+    <Compile Include="Scripting\ScriptHost.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

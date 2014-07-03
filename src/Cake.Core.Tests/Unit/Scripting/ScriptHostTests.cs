@@ -1,20 +1,21 @@
 ﻿using System;
-using Cake.Scripting;
-using Cake.Tests.Fixtures;
+using Cake.Core.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
 
-namespace Cake.Tests.Unit.Scripting
+namespace Cake.Core.Tests.Unit.Scripting
 {
     public sealed class ScriptHostTests
     {
+
+        
         public sealed class TheConstructor
         {
             [Fact]
             public void Should_Throw_If_Engine_Is_Null()
             {
                 // When
-                var result = Record.Exception(() => new ScriptHost(null));
+                var result = Record.Exception(() => new ScriptHostFixture.TestingScriptHost(null));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -121,23 +122,6 @@ namespace Cake.Tests.Unit.Scripting
 
                 // Then
                 fixture.Engine.Received(1).Task("Task");
-            }
-        }
-
-        public sealed class TheRunTargetMethod
-        {
-            [Fact]
-            public void Should_Proxy_Call_To_Engine()
-            {
-                // Given
-                var fixture = new ScriptHostFixture();
-                var host = fixture.CreateHost();
-
-                // When
-                host.RunTarget("Target");
-
-                // Then
-                fixture.Engine.Received(1).RunTarget("Target");
             }
         }
     }

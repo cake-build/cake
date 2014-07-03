@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cake.Extensions
+namespace Cake.Core.Extensions
 {
     internal static class TypeExtensions
     {

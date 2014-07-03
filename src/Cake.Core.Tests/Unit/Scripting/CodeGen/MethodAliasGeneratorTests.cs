@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Linq;
-using Cake.Core;
-using Cake.Scripting.CodeGen;
-using Cake.Tests.Fixtures;
+using Cake.Core.Scripting.CodeGen;
+using Cake.Core.Tests.Fixtures;
 using Xunit;
 
-namespace Cake.Tests.Unit.Scripting.CodeGen
+namespace Cake.Core.Tests.Unit.Scripting.CodeGen
 {
     public sealed class MethodAliasGeneratorTests
     {
@@ -33,7 +32,7 @@ namespace Cake.Tests.Unit.Scripting.CodeGen
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("The type 'Cake.Tests.Unit.Scripting.CodeGen.MethodAliasGeneratorTests+TheGeneratorMethod' is not static.",
+                Assert.Equal("The type 'Cake.Core.Tests.Unit.Scripting.CodeGen.MethodAliasGeneratorTests+TheGeneratorMethod' is not static.",
                     result.Message);
             }
 
@@ -71,7 +70,7 @@ namespace Cake.Tests.Unit.Scripting.CodeGen
             public void Should_Return_Correctly_Generated_Wrapper_For_Non_Generic_Type_Without_Arguments()
             {
                 const string expected = "public void NonGeneric_ExtensionMethodWithNoParameters(){" +
-                                        "Cake.Tests.Fixtures.MethodAliasGeneratorFixture.NonGeneric_ExtensionMethodWithNoParameters" +
+                                        "Cake.Core.Tests.Fixtures.MethodAliasGeneratorFixture.NonGeneric_ExtensionMethodWithNoParameters" +
                                         "(GetContext());}";
 
                 var method = typeof(MethodAliasGeneratorFixture).GetMethod("NonGeneric_ExtensionMethodWithNoParameters");
@@ -87,7 +86,7 @@ namespace Cake.Tests.Unit.Scripting.CodeGen
             public void Should_Return_Correctly_Generated_Wrapper_For_Non_Generic_Type_With_Argument()
             {
                 const string expected = "public void NonGeneric_ExtensionMethodWithParameter(System.Int32 value){" +
-                                        "Cake.Tests.Fixtures.MethodAliasGeneratorFixture.NonGeneric_ExtensionMethodWithParameter" +
+                                        "Cake.Core.Tests.Fixtures.MethodAliasGeneratorFixture.NonGeneric_ExtensionMethodWithParameter" +
                                         "(GetContext(),value);}";
 
                 var method = typeof(MethodAliasGeneratorFixture).GetMethod("NonGeneric_ExtensionMethodWithParameter");
@@ -103,7 +102,7 @@ namespace Cake.Tests.Unit.Scripting.CodeGen
             public void Should_Return_Correctly_Generated_Wrapper_For_Non_Generic_Type_With_Generic_Argument()
             {
                 const string expected = "public void NonGeneric_ExtensionMethodWithGenericParameter(System.Action<System.Int32> value){" +
-                                        "Cake.Tests.Fixtures.MethodAliasGeneratorFixture.NonGeneric_ExtensionMethodWithGenericParameter" +
+                                        "Cake.Core.Tests.Fixtures.MethodAliasGeneratorFixture.NonGeneric_ExtensionMethodWithGenericParameter" +
                                         "(GetContext(),value);}";
 
                 var method = typeof(MethodAliasGeneratorFixture).GetMethod("NonGeneric_ExtensionMethodWithGenericParameter");
@@ -119,7 +118,7 @@ namespace Cake.Tests.Unit.Scripting.CodeGen
             public void Should_Return_Correctly_Generated_Wrapper_For_Method_With_Return_Value()
             {
                 const string expected = "public System.String NonGeneric_ExtensionMethodWithReturnValue(){" +
-                                        "return Cake.Tests.Fixtures.MethodAliasGeneratorFixture.NonGeneric_ExtensionMethodWithReturnValue" +
+                                        "return Cake.Core.Tests.Fixtures.MethodAliasGeneratorFixture.NonGeneric_ExtensionMethodWithReturnValue" +
                                         "(GetContext());}";
 
                 var method = typeof(MethodAliasGeneratorFixture).GetMethod("NonGeneric_ExtensionMethodWithReturnValue");
@@ -135,7 +134,7 @@ namespace Cake.Tests.Unit.Scripting.CodeGen
             public void Should_Return_Correctly_Generated_Wrapper_For_Generic_Type_Without_Arguments()
             {
                 const string expected = "public void Generic_ExtensionMethod<TTest>(){" +
-                                        "Cake.Tests.Fixtures.MethodAliasGeneratorFixture.Generic_ExtensionMethod<TTest>" +
+                                        "Cake.Core.Tests.Fixtures.MethodAliasGeneratorFixture.Generic_ExtensionMethod<TTest>" +
                                         "(GetContext());}";
 
                 var method = typeof(MethodAliasGeneratorFixture).GetMethods().SingleOrDefault(x => x.Name == "Generic_ExtensionMethod");
@@ -151,7 +150,7 @@ namespace Cake.Tests.Unit.Scripting.CodeGen
             public void Should_Return_Correctly_Generated_Wrapper_For_Generic_Type_With_Argument()
             {
                 const string expected = "public void Generic_ExtensionMethodWithParameter<TTest>(TTest value){" +
-                                        "Cake.Tests.Fixtures.MethodAliasGeneratorFixture.Generic_ExtensionMethodWithParameter<TTest>" +
+                                        "Cake.Core.Tests.Fixtures.MethodAliasGeneratorFixture.Generic_ExtensionMethodWithParameter<TTest>" +
                                         "(GetContext(),value);}";
 
                 var method = typeof(MethodAliasGeneratorFixture).GetMethods().SingleOrDefault(x => x.Name == "Generic_ExtensionMethodWithParameter");
@@ -167,7 +166,7 @@ namespace Cake.Tests.Unit.Scripting.CodeGen
             public void Should_Return_Correctly_Generated_Wrapper_For_Generic_Type_With_Generic_Return_Value()
             {
                 const string expected = "public TTest Generic_ExtensionMethodWithGenericReturnValue<TTest>(TTest value){" +
-                                        "return Cake.Tests.Fixtures.MethodAliasGeneratorFixture.Generic_ExtensionMethodWithGenericReturnValue<TTest>" +
+                                        "return Cake.Core.Tests.Fixtures.MethodAliasGeneratorFixture.Generic_ExtensionMethodWithGenericReturnValue<TTest>" +
                                         "(GetContext(),value);}";
 
                 var method = typeof(MethodAliasGeneratorFixture).GetMethods().SingleOrDefault(x => x.Name == "Generic_ExtensionMethodWithGenericReturnValue");
@@ -183,7 +182,7 @@ namespace Cake.Tests.Unit.Scripting.CodeGen
             public void Should_Return_Correctly_Generated_Wrapper_For_Non_Generic_Type_With_Parameter_Array_Argument()
             {
                 const string expected = "public void NonGeneric_ExtensionMethodWithParameterArray(params System.Int32[] values){" +
-                                        "Cake.Tests.Fixtures.MethodAliasGeneratorFixture.NonGeneric_ExtensionMethodWithParameterArray" +
+                                        "Cake.Core.Tests.Fixtures.MethodAliasGeneratorFixture.NonGeneric_ExtensionMethodWithParameterArray" +
                                         "(GetContext(),values);}";
 
                 var method = typeof(MethodAliasGeneratorFixture).GetMethod("NonGeneric_ExtensionMethodWithParameterArray");

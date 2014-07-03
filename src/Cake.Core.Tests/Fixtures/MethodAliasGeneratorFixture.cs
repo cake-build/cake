@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using Cake.Core;
 using Cake.Core.Annotations;
 
-namespace Cake.Tests.Fixtures
+namespace Cake.Core.Tests.Fixtures
 {
     public static class MethodAliasGeneratorFixture
     {

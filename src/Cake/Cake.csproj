@@ -69,20 +69,15 @@
     <Compile Include="Diagnostics\Formatting\FormatToken.cs" />
     <Compile Include="Diagnostics\Formatting\LiteralToken.cs" />
     <Compile Include="Diagnostics\Formatting\PropertyToken.cs" />
-    <Compile Include="Extensions\MethodInfoExtensions.cs" />
-    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Scripting\CodeGen\MethodAliasGenerator.cs" />
-    <Compile Include="Scripting\CodeGen\PropertyAliasGenerator.cs" />
+    <Compile Include="Scripting\DefaultScriptHost.cs" />
     <Compile Include="Scripting\DescriptionScriptHost.cs" />
     <Compile Include="Scripting\RoslynScriptSession.cs" />
     <Compile Include="Scripting\RoslynScriptSessionFactory.cs" />
-    <Compile Include="Scripting\ScriptAliasFinder.cs" />
-    <Compile Include="Scripting\ScriptHost.cs" />
     <Compile Include="Scripting\ScriptRunner.cs" />
   </ItemGroup>
   <ItemGroup>

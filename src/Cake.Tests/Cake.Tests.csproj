@@ -56,23 +56,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Fixtures\DescriptionScriptHostFixture.cs" />
-    <Compile Include="Fixtures\PropertyAliasGeneratorFixture.cs" />
-    <Compile Include="Fixtures\MethodAliasGeneratorFixture.cs" />
     <Compile Include="Unit\Arguments\ArgumentParserTests.cs" />
     <Compile Include="Unit\Bootstrapper\CakeBootstrapperTests.cs" />
     <Compile Include="Unit\CakeApplicationTests.cs" />
     <Compile Include="Unit\CakeOptionsTests.cs" />
     <Compile Include="Unit\Diagnostics\CakeLogAdapterTests.cs" />
     <Compile Include="Unit\Diagnostics\FormatParserTests.cs" />
-    <Compile Include="Unit\Scripting\CodeGen\PropertyAliasGeneratorTests.cs" />
-    <Compile Include="Unit\Scripting\CodeGen\MethodAliasGeneratorTests.cs" />
+    <Compile Include="Unit\Scripting\DefaultScriptHostTests.cs" />
     <Compile Include="Unit\Scripting\DescriptionScriptHostTests.cs" />
     <Compile Include="Unit\Scripting\RoslynScriptSessionTests.cs" />
-    <Compile Include="Unit\Scripting\ScriptHostTests.cs" />
     <Compile Include="Fakes\FakeLog.cs" />
     <Compile Include="Fixtures\CakeApplicationFixture.cs" />
-    <Compile Include="Fixtures\ScriptHostFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Core.Scripting;
 
-namespace Cake.Scripting
+namespace Cake.Core.Scripting
 {
-    public class ScriptHost : IScriptHost
+    public abstract class ScriptHost : IScriptHost
     {
         private readonly ICakeEngine _engine;
 
@@ -41,7 +39,12 @@ namespace Cake.Scripting
             get { return _engine.ProcessRunner; }
         }
 
-        public ScriptHost(ICakeEngine engine)
+        protected ICakeEngine Engine
+        {
+            get { return _engine; }
+        }
+
+        protected ScriptHost(ICakeEngine engine)
         {
             if (engine == null)
             {
@@ -60,19 +63,15 @@ namespace Cake.Scripting
             return _engine.Task(name);
         }
 
-        public virtual CakeReport RunTarget(string target)
-        {
-            var report = _engine.RunTarget(target);
-            if (!report.IsEmpty)
-            {
-                CakeReportPrinter.Write(report);
-            }            
-            return report;
-        }
-
         public ICakeContext GetContext()
         {
             return this;
+        }
+
+        public abstract CakeReport RunTarget(string target);
+
+        public virtual void AfterRunTarget()
+        {            
         }
     }
 }

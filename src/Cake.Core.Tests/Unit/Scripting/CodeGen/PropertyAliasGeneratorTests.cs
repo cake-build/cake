@@ -1,10 +1,9 @@
 ﻿using System;
-using Cake.Core;
-using Cake.Scripting.CodeGen;
-using Cake.Tests.Fixtures;
+using Cake.Core.Scripting.CodeGen;
+using Cake.Core.Tests.Fixtures;
 using Xunit;
 
-namespace Cake.Tests.Unit.Scripting.CodeGen
+namespace Cake.Core.Tests.Unit.Scripting.CodeGen
 {
     public sealed class PropertyAliasGeneratorTests
     {
@@ -32,7 +31,7 @@ namespace Cake.Tests.Unit.Scripting.CodeGen
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("The type 'Cake.Tests.Unit.Scripting.CodeGen.PropertyAliasGeneratorTests+TheGenerateMethod' is not static.",
+                Assert.Equal("The type 'Cake.Core.Tests.Unit.Scripting.CodeGen.PropertyAliasGeneratorTests+TheGenerateMethod' is not static.",
                     result.Message);
             }
 
@@ -131,7 +130,7 @@ namespace Cake.Tests.Unit.Scripting.CodeGen
             {
                 // Given
                 const string expected = "public System.Int32 PropertyAliasReturningInteger{get{return " +
-                                        "Cake.Tests.Fixtures.PropertyAliasGeneratorFixture.PropertyAliasReturningInteger(GetContext());}}";
+                                        "Cake.Core.Tests.Fixtures.PropertyAliasGeneratorFixture.PropertyAliasReturningInteger(GetContext());}}";
 
                 var method = typeof(PropertyAliasGeneratorFixture).GetMethod("PropertyAliasReturningInteger");
 

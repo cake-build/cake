@@ -5,8 +5,8 @@ using System.Reflection;
 using Cake.Core.Annotations;
 using Cake.Core.Diagnostics;
 using Cake.Core.Scripting;
-using Cake.Extensions;
-using Cake.Scripting.CodeGen;
+using Cake.Core.Extensions;
+using Cake.Core.Scripting.CodeGen;
 
 namespace Cake.Scripting
 {

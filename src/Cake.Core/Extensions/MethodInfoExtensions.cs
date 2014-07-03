@@ -2,9 +2,9 @@
 using System.Reflection;
 using System.Text;
 
-namespace Cake.Extensions
+namespace Cake.Core.Extensions
 {
-    internal static class MethodInfoExtensions
+    public static class MethodInfoExtensions
     {
         public static string GetSignature(this MethodInfo method, 
             bool includeMethodNamespace = true, bool includeParameterNamespace = false)

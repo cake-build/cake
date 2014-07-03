@@ -1,7 +1,6 @@
-﻿using Cake.Core;
-using Cake.Core.Annotations;
+﻿using Cake.Core.Annotations;
 
-namespace Cake.Tests.Fixtures
+namespace Cake.Core.Tests.Fixtures
 {
     public static class PropertyAliasGeneratorFixture
     {

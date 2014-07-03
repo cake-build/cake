@@ -1,13 +1,25 @@
-﻿using Cake.Core;
-using Cake.Core.Diagnostics;
+﻿using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Scripting;
+using Cake.Core.Scripting;
 using NSubstitute;
 
-namespace Cake.Tests.Fixtures
+namespace Cake.Core.Tests.Fixtures
 {
     public sealed class ScriptHostFixture
     {
+        public sealed class TestingScriptHost : ScriptHost
+        {
+            public TestingScriptHost(ICakeEngine engine)
+                : base(engine)
+            {
+            }
+
+            public override CakeReport RunTarget(string target)
+            {
+                return new CakeReport();
+            }
+        }
+
         public ICakeEngine Engine { get; set; }
         public IFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
@@ -34,7 +46,7 @@ namespace Cake.Tests.Fixtures
 
         public ScriptHost CreateHost()
         {
-            return new ScriptHost(Engine);
+            return new TestingScriptHost(Engine);
         }
     }
 }

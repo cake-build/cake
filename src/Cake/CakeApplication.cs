@@ -105,16 +105,6 @@ namespace Cake
             // Execute the script.
             var scriptHost = CreateScriptHost(options);
             _scriptRunner.Run(scriptHost, references, namespaces, code);
-            if (scriptHost is DescriptionScriptHost)
-            {
-                Console.WriteLine("{0,-30}{1}","Task", "Description");
-                Console.WriteLine(String.Concat(Enumerable.Range(0,79).Select(s => "=")));
-                var descriptionScriptHost = (scriptHost as DescriptionScriptHost);
-                foreach (var key in descriptionScriptHost.TasksWithDescription.Keys.OrderByDescending(s => s))
-                {
-                    Console.WriteLine("{0,-30}{1}", key,  descriptionScriptHost.TasksWithDescription[key]);
-                }
-            }
         }
 
         private string ReadSource(FilePath path)
@@ -159,7 +149,7 @@ namespace Cake
                     new Globber(_fileSystem, _environment),
                     new ProcessRunner(_log)));
             }
-            return new ScriptHost(new CakeEngine(
+            return new DefaultScriptHost(new CakeEngine(
                 _fileSystem, _environment, _log,
                 new CakeArguments(options.Arguments),
                 new Globber(_fileSystem, _environment), 

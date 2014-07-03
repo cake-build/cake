@@ -3,11 +3,10 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
-using Cake.Core;
 using Cake.Core.Annotations;
-using Cake.Extensions;
+using Cake.Core.Extensions;
 
-namespace Cake.Scripting.CodeGen
+namespace Cake.Core.Scripting.CodeGen
 {
     public static class PropertyAliasGenerator
     {

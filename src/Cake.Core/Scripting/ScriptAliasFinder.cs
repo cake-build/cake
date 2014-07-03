@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Cake.Core;
 using Cake.Core.Annotations;
-using Cake.Extensions;
+using Cake.Core.Extensions;
 
-namespace Cake.Scripting
+namespace Cake.Core.Scripting
 {
-    internal static class ScriptAliasFinder
+    public static class ScriptAliasFinder
     {
         public static IEnumerable<MethodInfo> GetExtensionMethods(IEnumerable<Assembly> references)
         {
