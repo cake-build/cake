@@ -111,7 +111,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "pack -Version \"1.0.0\" \"existing.nuspec\""));
+                    p => p.Arguments == "pack -Version \"1.0.0\" \"/Working/existing.nuspec\""));
             }
 
             [Fact]
@@ -129,7 +129,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "pack -BasePath \"build\" \"existing.nuspec\""));
+                    p => p.Arguments == "pack -BasePath \"/Working/build\" \"/Working/existing.nuspec\""));
             }
 
             [Fact]
@@ -147,7 +147,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "pack -OutputDirectory \"build/output\" \"existing.nuspec\""));
+                    p => p.Arguments == "pack -OutputDirectory \"/Working/build/output\" \"/Working/existing.nuspec\""));
             }
 
             [Fact]
@@ -165,7 +165,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "pack \"existing.nuspec\" -NoPackageAnalysis"));
+                    p => p.Arguments == "pack \"/Working/existing.nuspec\" -NoPackageAnalysis"));
             }
 
             [Fact]
@@ -183,7 +183,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "pack \"existing.nuspec\" -Symbols"));
+                    p => p.Arguments == "pack \"/Working/existing.nuspec\" -Symbols"));
             }
         }
     }

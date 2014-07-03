@@ -51,7 +51,7 @@ namespace Cake.Common.Tools.NuGet
             }
         }
 
-        private static ICollection<string> GetPackParameters(FilePath nuspecFilePath, NuGetPackSettings settings)
+        private ICollection<string> GetPackParameters(FilePath nuspecFilePath, NuGetPackSettings settings)
         {
             var parameters = new List<string> {"pack"};
 
@@ -66,18 +66,18 @@ namespace Cake.Common.Tools.NuGet
             if (settings.BasePath != null)
             {
                 parameters.Add("-BasePath");
-                parameters.Add(settings.BasePath.FullPath.Quote());
+                parameters.Add(settings.BasePath.MakeAbsolute(_environment).FullPath.Quote());
             }
 
             // Output directory
             if (settings.OutputDirectory != null)
             {
                 parameters.Add("-OutputDirectory");
-                parameters.Add(settings.OutputDirectory.FullPath.Quote());
+                parameters.Add(settings.OutputDirectory.MakeAbsolute(_environment).FullPath.Quote());
             }
 
             // Nuspec file
-            parameters.Add(nuspecFilePath.FullPath.Quote());
+            parameters.Add(nuspecFilePath.MakeAbsolute(_environment).FullPath.Quote());
 
             // No package analysis?
             if (settings.NoPackageAnalysis)
