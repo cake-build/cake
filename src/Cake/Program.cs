@@ -13,7 +13,7 @@ namespace Cake
     {
         public static int Main(string[] args)
         {
-            var log = new ColoredConsoleBuildLog();
+            var log = new CakeLogAdapter(new ColoredConsoleBuildLog());
 
             try
             {
@@ -26,6 +26,9 @@ namespace Cake
                 // Parse arguments.
                 var parser = new ArgumentParser(log);
                 var options = parser.Parse(args);
+
+                // Set the log verbosity.
+                log.Verbosity = options.Verbosity;
 
                 // Create and run the application.
                 var application = CreateApplication(log);

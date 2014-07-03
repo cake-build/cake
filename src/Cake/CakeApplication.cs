@@ -19,7 +19,7 @@ namespace Cake
         private readonly ICakeBootstrapper _bootstrapper;
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
-        private readonly CakeLogAdapter _log;
+        private readonly ICakeLog _log;
         private readonly IScriptRunner _scriptRunner;
 
         public CakeApplication(ICakeBootstrapper bootstrapper, IFileSystem fileSystem,
@@ -47,7 +47,7 @@ namespace Cake
             }
             _bootstrapper = bootstrapper;
             _fileSystem = fileSystem;
-            _log = new CakeLogAdapter(log);
+            _log = log;
             _environment = environment;
             _scriptRunner = scriptRunner;
         }
@@ -62,9 +62,6 @@ namespace Cake
             {
                 throw new CakeException("No script provided.");
             }
-
-            // Set the log verbosity.
-            _log.Verbosity = options.Verbosity;
 
             // Bootstrap the application.
             _bootstrapper.Bootstrap(_environment.GetApplicationRoot());
