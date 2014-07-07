@@ -1,12 +1,12 @@
-﻿using System;
+using System;
+using Cake.Core.Diagnostics;
 using NuGet;
 
-namespace Cake.Bootstrapping
+namespace Cake.Scripting.Roslyn
 {
-    using Core.Diagnostics;
     using Core.IO;
 
-    internal sealed class NuGetInstaller : INuGetInstaller
+    internal sealed class RoslynInstaller : IRoslynInstaller
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeLog _log;
@@ -17,10 +17,29 @@ namespace Cake.Bootstrapping
             @"Roslyn.Compilers.Common.1.2.20906.2\lib\net45\Roslyn.Compilers.dll"
         };
 
-        public NuGetInstaller(IFileSystem fileSystem, ICakeLog log)
+        public readonly FilePath[] _roslynAssemblies =
+        {
+            @"Roslyn.Compilers.CSharp.dll",
+            @"Roslyn.Compilers.dll"
+        };
+
+        public RoslynInstaller(IFileSystem fileSystem, ICakeLog log)
         {
             _fileSystem = fileSystem;
             _log = log;
+        }
+
+        public bool IsInstalled(DirectoryPath root)
+        {
+            foreach (var roslynAssembly in _roslynAssemblies)
+            {
+                var file = _fileSystem.GetFile(root.CombineWithFilePath(roslynAssembly));
+                if (!file.Exists)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public void Install(DirectoryPath root)
@@ -36,7 +55,7 @@ namespace Cake.Bootstrapping
             // Copy files
             _log.Verbose("Copying files...");
             foreach (var nugetPath in _nugetPaths)
-            {                
+            {
                 var source = _fileSystem.GetFile(installRoot.CombineWithFilePath(nugetPath));
                 var destination = _fileSystem.GetFile(root.CombineWithFilePath(nugetPath.GetFilename()));
 

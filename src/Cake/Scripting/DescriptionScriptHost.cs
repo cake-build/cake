@@ -8,12 +8,12 @@ namespace Cake.Scripting
 {
     public sealed class DescriptionScriptHost : ScriptHost
     {
-        private readonly Dictionary<string, string> _descriptions; 
+        private readonly Dictionary<string, string> _descriptions;
 
-        public DescriptionScriptHost(ICakeEngine engine) 
+        public DescriptionScriptHost(ICakeEngine engine)
             : base(engine)
-        {
-            _descriptions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        {            
+            _descriptions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);            
         }
 
         public override CakeReport RunTarget(string target)
@@ -23,14 +23,15 @@ namespace Cake.Scripting
                 _descriptions.Add(task.Name, task.Description);
             }
 
+            Console.WriteLine();
             Console.WriteLine("{0,-30}{1}", "Task", "Description");
             Console.WriteLine(String.Concat(Enumerable.Range(0, 79).Select(s => "=")));
-            foreach (var key in _descriptions.Keys.OrderByDescending(s => s))
+            foreach (var key in _descriptions.Keys)
             {
                 Console.WriteLine("{0,-30}{1}", key, _descriptions[key]);
             }
 
-            return new CakeReport();
+            return null;
         }
     }
 }

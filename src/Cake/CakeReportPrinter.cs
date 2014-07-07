@@ -4,9 +4,9 @@ using Cake.Core;
 
 namespace Cake
 {
-    internal static class CakeReportPrinter
+    internal sealed class CakeReportPrinter : ICakeReportPrinter
     {
-        public static void Write(CakeReport report)
+        public void Write(CakeReport report)
         {
             try
             {

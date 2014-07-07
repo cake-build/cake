@@ -1,33 +1,85 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
-using Cake.Core.Annotations;
-using Cake.Core.Diagnostics;
+using Cake.Common.IO;
+using Cake.Core;
+using Cake.Core.IO;
 using Cake.Core.Scripting;
-using Cake.Core.Extensions;
-using Cake.Core.Scripting.CodeGen;
 
 namespace Cake.Scripting
 {
-    internal sealed class ScriptRunner : IScriptRunner
+    internal sealed class ScriptRunner
     {
-        private readonly ICakeLog _log;
+        private readonly IFileSystem _fileSystem;
+        private readonly ICakeEnvironment _environment;
+        private readonly CakeArguments _arguments;
         private readonly IScriptSessionFactory _sessionFactory;
+        private readonly IScriptAliasGenerator _aliasGenerator;
+        private readonly IScriptHost _host;
 
-        public ScriptRunner(ICakeLog log, IScriptSessionFactory sessionFactory)
+        // Delegate factory used by Autofac.
+        public delegate ScriptRunner Factory(IScriptHost host);
+
+        public ScriptRunner(IFileSystem fileSystem, ICakeEnvironment environment, CakeArguments arguments,
+            IScriptSessionFactory sessionFactory, IScriptAliasGenerator aliasGenerator, IScriptHost host)
         {
-            _log = log;
+            if (fileSystem == null)
+            {
+                throw new ArgumentNullException("fileSystem");                
+            }
+            if (environment == null)
+            {
+                throw new ArgumentNullException("environment");
+            }
+            if (arguments == null)
+            {
+                throw new ArgumentNullException("arguments");
+            }
+            if (sessionFactory == null)
+            {
+                throw new ArgumentNullException("sessionFactory");
+            }
+            if (aliasGenerator == null)
+            {
+                throw new ArgumentNullException("aliasGenerator");
+            }
+            if (host == null)
+            {
+                throw new ArgumentNullException("host");
+            }   
+            _fileSystem = fileSystem;
+            _environment = environment;
+            _arguments = arguments;
             _sessionFactory = sessionFactory;
+            _aliasGenerator = aliasGenerator;
+            _host = host;
         }
 
-        public void Run(IScriptHost host, IEnumerable<Assembly> references, IEnumerable<string> namespaces, string code)
+        public void Run(CakeOptions options)
         {
-            var session = _sessionFactory.CreateSession(host);
-            var assemblies = references as Assembly[] ?? references.ToArray();
+            // Initialize the script session factory.
+            _sessionFactory.Initialize();
+
+            // Copy the arguments from the options.
+            _arguments.SetArguments(options.Arguments);
+
+            // Read the source.
+            var code = ReadSource(options.Script);
+
+            // Add all references.            
+            var references = GetReferencedAssemblies();
+            var namespaces = GetNamespaces();
+
+            // Update the working directory.
+            _environment.WorkingDirectory = GetAbsoluteScriptDirectory(options.Script);
+
+            // Run script.
+            var session = _sessionFactory.CreateSession(_host);
 
             // Add references to session.
-            foreach (var reference in assemblies)
+            foreach (var reference in references)
             {
                 session.AddReference(reference);
             }
@@ -39,49 +91,76 @@ namespace Cake.Scripting
             }
 
             // Find all extension methods and generate proxy methods.
-            AddExtensionMethodsToSession(session, assemblies);
+            _aliasGenerator.Generate(session, references);
 
             // Execute the code.
             session.Execute(code);
         }
 
-        private void AddExtensionMethodsToSession(IScriptSession session, IEnumerable<Assembly> assemblies)
+        private static IEnumerable<string> GetNamespaces()
         {
-            _log.Debug("Generating script host proxy methods for extension methods...");
-            foreach (var method in ScriptAliasFinder.GetExtensionMethods(assemblies))
+            var namespaces = new List<string>
             {
-                var signature = method.GetSignature();
-
-                try
-                {
-                    _log.Debug("  {0}", signature);
-                    session.Execute(GenerateAliasCode(method));
-                }
-                catch (Exception)
-                {
-                    _log.Error("An error occured while generating proxy code for {0}", signature);
-                    throw;
-                }
-            }
-            _log.Debug("Done generating code.");
+                "System", "System.Collections.Generic", "System.Linq",
+                "System.Text", "System.Threading.Tasks", "System.IO",
+                "Cake", "Cake.Core", "Cake.Core.IO", "Cake.Scripting", 
+                "Cake.Core.Scripting", "Cake.Common", "Cake.Common.IO",
+                "Cake.Core.Diagnostics", "Cake.Common.Tools.MSBuild",
+                "Cake.Common.Tools.XUnit", "Cake.Common.Tools.NuGet",
+                "Cake.Common.Tools.NUnit", "Cake.Common.Tools.ILMerge"
+            };
+            return namespaces;
         }
 
-        private static string GenerateAliasCode(MethodInfo method)
+        private static List<Assembly> GetReferencedAssemblies()
         {
-            string code;
-            if (method.IsDefined(typeof(CakeMethodAliasAttribute)))
+            var references = new List<Assembly>
             {
-                code = MethodAliasGenerator.Generate(method);
-            }
-            else if (method.IsDefined(typeof(CakePropertyAliasAttribute)))
+                typeof (Action).Assembly, // mscorlib
+                typeof (Uri).Assembly, // System
+                typeof (IQueryable).Assembly, // System.Core
+                typeof (System.Data.DataTable).Assembly, // System.Data
+                typeof (System.Xml.XmlReader).Assembly, // System.Xml
+                typeof (System.Xml.Linq.XDocument).Assembly, // System.Xml.Linq
+                typeof (Program).Assembly, // Cake
+                typeof (ICakeContext).Assembly, // Cake.Core
+                typeof (DirectoryExtensions).Assembly, // Cake.Common
+            };
+            return references;
+        }
+
+        private string ReadSource(FilePath path)
+        {
+            path = path.MakeAbsolute(_environment);
+
+            // Get the file and make sure it exist.
+            var file = _fileSystem.GetFile(path);
+            if (!file.Exists)
             {
-                code = PropertyAliasGenerator.Generate(method);
+                var message = string.Format("Could not find script '{0}'.", path);
+                throw new CakeException(message);
             }
-            else
+
+            // Read the content from the file.
+            using (var stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (var reader = new StreamReader(stream))
             {
-                throw new InvalidOperationException("Unknown alias type.");
+                return reader.ReadToEnd();
             }
-            return code;
+        }
+
+        private DirectoryPath GetAbsoluteScriptDirectory(FilePath scriptPath)
+        {
+            // Get the script location.
+            var scriptLocation = scriptPath.GetDirectory();
+            if (scriptLocation.IsRelative)
+            {
+                // Concatinate the starting working directory
+                // with the script file path.
+                scriptLocation = _environment.WorkingDirectory
+                    .CombineWithFilePath(scriptPath).GetDirectory();
+            }
+            return scriptLocation;
         }
     }
 }

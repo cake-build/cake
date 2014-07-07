@@ -6,7 +6,7 @@ using Xunit.Extensions;
 
 namespace Cake.Tests.Unit.Diagnostics
 {
-    public sealed class CakeLogAdapterTests
+    public sealed class CakeBuildLogTests
     {
         public sealed class TheWriteMethod
         {
@@ -19,7 +19,7 @@ namespace Cake.Tests.Unit.Diagnostics
             {
                 // Given
                 var log = new FakeLog();
-                var adapter = new CakeLogAdapter(log)
+                var adapter = new CakeBuildLog(log)
                 {
                     Verbosity = logVerbosity
                 };
@@ -40,7 +40,7 @@ namespace Cake.Tests.Unit.Diagnostics
             {
                 // Given
                 var log = new FakeLog();
-                var adapter = new CakeLogAdapter(log)
+                var adapter = new CakeBuildLog(log)
                 {
                     Verbosity = logVerbosity
                 };

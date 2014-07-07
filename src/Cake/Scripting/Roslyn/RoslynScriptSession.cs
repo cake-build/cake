@@ -3,7 +3,7 @@ using System.Reflection;
 using Cake.Core.Scripting;
 using Roslyn.Scripting;
 
-namespace Cake.Scripting
+namespace Cake.Scripting.Roslyn
 {
     internal sealed class RoslynScriptSession : IScriptSession
     {

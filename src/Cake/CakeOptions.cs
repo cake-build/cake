@@ -7,7 +7,7 @@ namespace Cake
 {
     public sealed class CakeOptions
     {
-        private readonly Dictionary<string, string> _arguments; 
+        private readonly Dictionary<string, string> _arguments;
 
         public Verbosity Verbosity { get; set; }
         public FilePath Script { get; set; }
@@ -18,14 +18,15 @@ namespace Cake
         }
 
         public bool ShowDescription { get; set; }
+        public bool ShowHelp { get; set; }
 
         public CakeOptions()
         {
             _arguments = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-            // Default to normal verbosity.
             Verbosity = Verbosity.Normal;
             ShowDescription = false;
+            ShowHelp = false;
         }
     }
 }

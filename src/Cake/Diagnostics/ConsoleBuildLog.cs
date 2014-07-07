@@ -5,12 +5,12 @@ using Cake.Diagnostics.Formatting;
 
 namespace Cake.Diagnostics
 {
-    internal sealed class ColoredConsoleBuildLog : ICakeLog
+    internal sealed class ConsoleBuildLog : ICakeLog
     {
         private readonly object _lock;
-        private readonly IDictionary<LogLevel, ColoredConsolePalette> _palettes;
+        private readonly IDictionary<LogLevel, ConsolePalette> _palettes;
 
-        public ColoredConsoleBuildLog(bool grayscale = false)
+        public ConsoleBuildLog(bool grayscale = false)
         {
             _lock = new object();
             _palettes = GetPalette(grayscale);
@@ -38,7 +38,7 @@ namespace Cake.Diagnostics
             }
         }
 
-        private static void SetPalette(FormatToken token, ColoredConsolePalette palette)
+        private static void SetPalette(FormatToken token, ConsolePalette palette)
         {
             var property = token as PropertyToken;
             if (property != null)
@@ -53,11 +53,11 @@ namespace Cake.Diagnostics
             }
         }
 
-        private static IDictionary<LogLevel, ColoredConsolePalette> GetPalette(bool grayscale)
+        private static IDictionary<LogLevel, ConsolePalette> GetPalette(bool grayscale)
         {
             return grayscale 
-                ? ColoredConsolePalette.GetGreyscalePalette() 
-                : ColoredConsolePalette.GetColorfulPalette();
+                ? ConsolePalette.GetGreyscalePalette() 
+                : ConsolePalette.GetColorfulPalette();
         }
     }
 }

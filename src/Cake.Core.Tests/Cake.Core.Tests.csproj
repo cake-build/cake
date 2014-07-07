@@ -52,7 +52,6 @@
     <Compile Include="Fixtures\PropertyAliasGeneratorFixture.cs" />
     <Compile Include="Fixtures\ScriptHostFixture.cs" />
     <Compile Include="Unit\ActionTaskTests.cs" />
-    <Compile Include="Unit\CakeArgumentsTests.cs" />
     <Compile Include="Unit\CakeEngineTests.cs" />
     <Compile Include="Unit\CakeTaskBuilderExtensionsTests.cs" />
     <Compile Include="Unit\CakeTaskBuilderTests.cs" />

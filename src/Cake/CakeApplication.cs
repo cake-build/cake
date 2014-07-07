@@ -1,156 +1,82 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using Cake.Bootstrapping;
-using Cake.Common.IO;
-using Cake.Core;
+using Cake.Arguments;
+using Cake.Commands;
 using Cake.Core.Diagnostics;
-using Cake.Core.IO;
-using Cake.Core.Scripting;
 using Cake.Diagnostics;
-using Cake.Scripting;
 
 namespace Cake
 {
     public sealed class CakeApplication
-    {        
-        private readonly ICakeBootstrapper _bootstrapper;
-        private readonly IFileSystem _fileSystem;
-        private readonly ICakeEnvironment _environment;
-        private readonly ICakeLog _log;
-        private readonly IScriptRunner _scriptRunner;
+    {
+        private readonly IVerbosityAwareLog _log;
+        private readonly ICommandFactory _commandFactory;
+        private readonly IArgumentParser _argumentParser;
 
-        public CakeApplication(ICakeBootstrapper bootstrapper, IFileSystem fileSystem,
-            ICakeEnvironment environment, ICakeLog log, IScriptRunner scriptRunner)
+        public CakeApplication(IVerbosityAwareLog log, ICommandFactory commandFactory, IArgumentParser argumentParser)
         {
-            if (bootstrapper == null)
-            {
-                throw new ArgumentNullException("bootstrapper");
-            }
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException("fileSystem");
-            }
-            if (environment == null)
-            {
-                throw new ArgumentNullException("environment");
-            }
             if (log == null)
             {
                 throw new ArgumentNullException("log");
             }
-            if (scriptRunner == null)
+            if (commandFactory == null)
             {
-                throw new ArgumentNullException("scriptRunner");
+                throw new ArgumentNullException("commandFactory");
             }
-            _bootstrapper = bootstrapper;
-            _fileSystem = fileSystem;
+            if (argumentParser == null)
+            {
+                throw new ArgumentNullException("argumentParser");
+            }
             _log = log;
-            _environment = environment;
-            _scriptRunner = scriptRunner;
+            _commandFactory = commandFactory;
+            _argumentParser = argumentParser;
         }
 
-        public void Run(CakeOptions options)
-        {
-            if (options == null)
+        public int Run(IEnumerable<string> args)
+       {
+            try
             {
-                throw new ArgumentNullException("options");
+                // Parse options.
+                var options = _argumentParser.Parse(args);
+                if (options != null)
+                {
+                    _log.Verbosity = options.Verbosity;  
+                }
+
+                // Create the correct command and execute it.
+                var command = CreateCommand(options);
+                command.Execute(options);
+
+                // Return success.
+                return 0;
             }
-            if (options.Script == null)
+            catch (Exception ex)
             {
-                throw new CakeException("No script provided.");
-            }
-
-            // Bootstrap the application.
-            _bootstrapper.Bootstrap(_environment.GetApplicationRoot());
-            
-            // Read the file content.
-            var code = ReadSource(options.Script);
-
-            // Update the working directory.
-            _environment.WorkingDirectory = GetAbsoluteScriptDirectory(options.Script);
-
-            // Add all references.
-            var references = new List<Assembly>
-            {
-                typeof(Action).Assembly, // mscorlib
-                typeof(Uri).Assembly, // System
-                typeof(IQueryable).Assembly, // System.Core
-                typeof(System.Data.DataTable).Assembly, // System.Data
-                typeof(System.Xml.XmlReader).Assembly, // System.Xml
-                typeof(System.Xml.Linq.XDocument).Assembly, // System.Xml.Linq
-                typeof(Program).Assembly, // Cake
-                typeof(ICakeContext).Assembly,  // Cake.Core
-                typeof(DirectoryExtensions).Assembly, // Cake.Common
-            };
-
-            // Add all namespaces.
-            var namespaces = new List<string>
-            {
-                "System", "System.Collections.Generic", "System.Linq",
-                "System.Text", "System.Threading.Tasks", "System.IO",
-                "Cake", "Cake.Core", "Cake.Core.IO",  "Cake.Scripting", "Cake.Core.Scripting",
-                "Cake.Common", "Cake.Common.IO", 
-                "Cake.Common.IO", "Cake.Core.Diagnostics", 
-                "Cake.Common.Tools.MSBuild", "Cake.Common.Tools.XUnit", 
-                "Cake.Common.Tools.NuGet", "Cake.Common.Tools.NUnit",
-                "Cake.Common.Tools.ILMerge"
-            };
-
-            // Execute the script.
-            var scriptHost = CreateScriptHost(options);
-            _scriptRunner.Run(scriptHost, references, namespaces, code);
-        }
-
-        private string ReadSource(FilePath path)
-        {
-            // Get the file and make sure it exist.
-            var file = _fileSystem.GetFile(path);
-            if (!file.Exists)
-            {
-                var message = string.Format("Could not find script '{0}'.", path);
-                throw new CakeException(message);
-            }
-
-            // Read the content from the file.
-            using (var stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (var reader = new StreamReader(stream))
-            {
-                return reader.ReadToEnd();
+                _log.Error("An unhandled exception occured.");
+                _log.Error(ex.Message);
+                return 1;
             }
         }
 
-        private DirectoryPath GetAbsoluteScriptDirectory(FilePath scriptPath)
+        private ICommand CreateCommand(CakeOptions options)
         {
-            // Get the script location.
-            var scriptLocation = scriptPath.GetDirectory();
-            if (scriptLocation.IsRelative)
+            if (options != null)
             {
-                // Concatinate the starting working directory
-                // with the script file path.
-                scriptLocation = _environment.WorkingDirectory
-                    .CombineWithFilePath(scriptPath).GetDirectory();
+                if (options.ShowHelp)
+                {
+                    return _commandFactory.CreateHelpCommand();               
+                }
+                if (options.Script != null)
+                {
+                    if (options.ShowDescription)
+                    {
+                        _log.Verbosity = Verbosity.Quiet;
+                        return _commandFactory.CreateDescriptionCommand();
+                    }
+                    return _commandFactory.CreateBuildCommand();                 
+                }
             }
-            return scriptLocation;
-        }
-
-        private IScriptHost CreateScriptHost(CakeOptions options)
-        {
-            if (options.ShowDescription)
-            {
-                return new DescriptionScriptHost(new CakeEngine(
-                    _fileSystem, _environment, _log,
-                    new CakeArguments(options.Arguments),
-                    new Globber(_fileSystem, _environment),
-                    new ProcessRunner(_log)));
-            }
-            return new DefaultScriptHost(new CakeEngine(
-                _fileSystem, _environment, _log,
-                new CakeArguments(options.Arguments),
-                new Globber(_fileSystem, _environment), 
-                new ProcessRunner(_log)));
+            return _commandFactory.CreateHelpCommand();
         }
     }
 }

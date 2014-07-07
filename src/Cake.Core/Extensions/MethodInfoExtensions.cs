@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 
@@ -16,7 +17,11 @@ namespace Cake.Core.Extensions
             var parameterList = new string[parameters.Length];
             for (var i = 0; i < parameterList.Length; i++)
             {
-                parameterList[i] = parameters[i].ParameterType.GetFullName(includeParameterNamespace);
+                var isParams = parameters[i].IsDefined(typeof (ParamArrayAttribute));
+                var signature = parameters[i].ParameterType.GetFullName(includeParameterNamespace);
+                signature = isParams ? string.Concat("params ", signature) : signature;
+
+                parameterList[i] = signature;
             }
             builder.Append(string.Join(", ", parameterList));
             builder.Append(")");

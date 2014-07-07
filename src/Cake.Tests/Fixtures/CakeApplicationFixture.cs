@@ -1,64 +1,34 @@
-﻿using System.IO;
-using Cake.Bootstrapping;
-using Cake.Core;
+﻿using System.Collections.Generic;
+using Cake.Arguments;
+using Cake.Commands;
 using Cake.Core.Diagnostics;
-using Cake.Core.IO;
-using Cake.Core.Scripting;
+using Cake.Diagnostics;
 using NSubstitute;
 
 namespace Cake.Tests.Fixtures
 {
     public sealed class CakeApplicationFixture
     {
-        private readonly string _scriptPath;
-        private readonly bool _showDescription;
+        public IVerbosityAwareLog Log { get; set; }
+        public ICommandFactory CommandFactory { get; set; }
+        public IArgumentParser ArgumentParser { get; set; }
+        public CakeOptions Options { get; set; }
 
-        public ICakeBootstrapper Bootstrapper { get; set; }
-        public IFileSystem FileSystem { get; set; }
-        public ICakeEnvironment Environment { get; set; }
-        public IFile File { get; set; }
-        public ICakeLog Log { get; set; }
-        public IScriptRunner ScriptRunner { get; set; }
-
-        public CakeApplicationFixture(string scriptPath = "/Build/script.csx", bool showDescription = false)
+        public CakeApplicationFixture()
         {
-            _scriptPath = scriptPath;
-            _showDescription = showDescription;
+            Options = new CakeOptions();
+            Options.Verbosity = Verbosity.Diagnostic;
 
-            Bootstrapper = Substitute.For<ICakeBootstrapper>();
+            Log = Substitute.For<IVerbosityAwareLog>();
+            CommandFactory = Substitute.For<ICommandFactory>();
 
-            Environment = Substitute.For<ICakeEnvironment>();
-            Environment.WorkingDirectory.Returns("/Working");
-
-            File = Substitute.For<IFile>();
-            File.Exists.Returns(true);
-            File.Open(FileMode.Open, FileAccess.Read, FileShare.Read).Returns(c => CreateCodeStream());
-
-            FileSystem = Substitute.For<IFileSystem>();
-            FileSystem.GetFile(Arg.Is<FilePath>(p => p.FullPath == _scriptPath)).Returns(File);
-
-            Log = Substitute.For<ICakeLog>();
-            ScriptRunner = Substitute.For<IScriptRunner>();
-        }
-
-        private static Stream CreateCodeStream()
-        {
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            writer.Write(@"var lol = 123;");
-            writer.Flush();
-            stream.Seek(0, SeekOrigin.Begin);
-            return stream;
+            ArgumentParser = Substitute.For<IArgumentParser>();
+            ArgumentParser.Parse(Arg.Any<IEnumerable<string>>()).Returns(Options);
         }
 
         public CakeApplication CreateApplication()
         {
-            return new CakeApplication(Bootstrapper, FileSystem, Environment, Log, ScriptRunner);
-        }
-
-        public void Run()
-        {           
-            CreateApplication().Run(new CakeOptions { Script = _scriptPath, ShowDescription = _showDescription});
+            return new CakeApplication(Log, CommandFactory, ArgumentParser);
         }
     }
 }

@@ -2,13 +2,12 @@
 
 namespace Cake.Diagnostics
 {
-    internal sealed class CakeLogAdapter : ICakeLog
+    internal sealed class CakeBuildLog : IVerbosityAwareLog
     {
         private readonly ICakeLog _log;
-
         public Verbosity Verbosity { get; set; }
 
-        public CakeLogAdapter(ICakeLog log)
+        public CakeBuildLog(ICakeLog log)
         {
             _log = log;
         }

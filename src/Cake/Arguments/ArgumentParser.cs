@@ -7,7 +7,7 @@ using Cake.Core.Extensions;
 
 namespace Cake.Arguments
 {
-    internal sealed class ArgumentParser
+    internal sealed class ArgumentParser : IArgumentParser
     {
         private readonly ICakeLog _log;
 
@@ -118,6 +118,12 @@ namespace Cake.Arguments
                 name.Equals("s", StringComparison.OrdinalIgnoreCase))
             {
                 options.ShowDescription = true;
+            }
+
+            if (name.Equals("help", StringComparison.OrdinalIgnoreCase) ||
+                name.Equals("?", StringComparison.OrdinalIgnoreCase))
+            {
+                options.ShowHelp = true;
             }
 
             if (options.Arguments.ContainsKey(name))

@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Cake.Core;
-using Cake.Core.IO;
-using Cake.Core.Scripting;
-using Cake.Scripting;
+using Cake.Core.Diagnostics;
 using Cake.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Cake.Tests.Unit
 {
@@ -17,51 +11,6 @@ namespace Cake.Tests.Unit
     {
         public sealed class TheConstructor
         {
-            [Fact]
-            public void Should_Throw_If_Bootstraper_Is_Null()
-            {
-                // Given
-                var fixture = new CakeApplicationFixture();
-                fixture.Bootstrapper = null;
-
-                // When
-                var result = Record.Exception(() => fixture.CreateApplication());
-
-                // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("bootstrapper", ((ArgumentNullException)result).ParamName);
-            }
-
-            [Fact]
-            public void Should_Throw_If_File_System_Is_Null()
-            {
-                // Given
-                var fixture = new CakeApplicationFixture();
-                fixture.FileSystem = null;
-
-                // When
-                var result = Record.Exception(() => fixture.CreateApplication());
-
-                // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("fileSystem", ((ArgumentNullException)result).ParamName);
-            }
-
-            [Fact]
-            public void Should_Throw_If_Environment_Is_Null()
-            {
-                // Given
-                var fixture = new CakeApplicationFixture();
-                fixture.Environment = null;
-
-                // When
-                var result = Record.Exception(() => fixture.CreateApplication());
-
-                // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("environment", ((ArgumentNullException)result).ParamName);
-            }
-
             [Fact]
             public void Should_Throw_If_Log_Is_Null()
             {
@@ -78,233 +27,157 @@ namespace Cake.Tests.Unit
             }
 
             [Fact]
-            public void Should_Throw_If_Script_Engine_Is_Null()
+            public void Should_Throw_If_Command_Factory_Is_Null()
             {
                 // Given
                 var fixture = new CakeApplicationFixture();
-                fixture.ScriptRunner = null;
+                fixture.CommandFactory = null;
 
                 // When
                 var result = Record.Exception(() => fixture.CreateApplication());
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("scriptRunner", ((ArgumentNullException)result).ParamName);
+                Assert.Equal("commandFactory", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Argument_Parser_Is_Null()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.ArgumentParser = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateApplication());
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("argumentParser", ((ArgumentNullException)result).ParamName);
             }
         }
 
         public sealed class TheRunMethod
         {
             [Fact]
-            public void Should_Throw_If_Arguments_Were_Null()
+            public void Should_Set_Verbosity_If_Options_Are_Not_Null()
             {
                 // Given
                 var fixture = new CakeApplicationFixture();
                 var application = fixture.CreateApplication();
 
                 // When
-                var result = Record.Exception(() => application.Run(null));
+                application.Run(Enumerable.Empty<string>());
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("options", ((ArgumentNullException)result).ParamName);
+                fixture.Log.Received(1).Verbosity = Verbosity.Diagnostic;
             }
 
             [Fact]
-            public void Should_Throw_If_Arguments_Were_Empty()
+            public void Should_Return_Success_If_No_Exception_Was_Thrown()
             {
                 // Given
                 var fixture = new CakeApplicationFixture();
                 var application = fixture.CreateApplication();
 
                 // When
-                var result = Record.Exception(() => application.Run(new CakeOptions()));
+                var result = application.Run(Enumerable.Empty<string>());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("No script provided.", result.Message);
+                Assert.Equal(0, result);
             }
 
             [Fact]
-            public void Should_Throw_If_Script_File_Does_Not_Exist()
+            public void Should_Return_Failure_If_An_Exception_Was_Thrown()
             {
                 // Given
                 var fixture = new CakeApplicationFixture();
-                fixture.File.Exists.Returns(false);
+                fixture.Options.ShowHelp = true;
+                fixture.CommandFactory.When(x => x.CreateHelpCommand())
+                    .Do(info => { throw new Exception("Error!"); });
+                var application = fixture.CreateApplication();
 
                 // When
-                var result = Record.Exception(() => fixture.Run());
+                var result = application.Run(Enumerable.Empty<string>());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("Could not find script '/Build/script.csx'.", result.Message);
+                Assert.Equal(1, result);
             }
 
             [Fact]
-            public void Should_Bootstrap_Application_To_Directory_Where_Cake_Resides()
+            public void Should_Create_Help_Command_If_Specified_In_Options()
             {
                 // Given
                 var fixture = new CakeApplicationFixture();
-                fixture.Environment.GetApplicationRoot().Returns("/Application");
+                fixture.Options.ShowHelp = true;
+                var application = fixture.CreateApplication();
 
                 // When
-                fixture.Run();
+                application.Run(Enumerable.Empty<string>());
 
                 // Then
-                fixture.Bootstrapper.Received(1).Bootstrap(
-                    Arg.Is<DirectoryPath>(p => p.FullPath == "/Application"));
+                fixture.CommandFactory.Received(1).CreateHelpCommand();
             }
 
             [Fact]
-            public void Should_Set_Working_Directory_To_The_Scripts_Directory()
+            public void Should_Create_Description_Command_If_Specified_In_Options()
             {
                 // Given
                 var fixture = new CakeApplicationFixture();
+                fixture.Options.ShowDescription = true;
+                fixture.Options.Script = "./build.cake";
+                var application = fixture.CreateApplication();
 
                 // When
-                fixture.Run();
+                application.Run(Enumerable.Empty<string>());
 
                 // Then
-                Assert.Equal("/Build", fixture.Environment.WorkingDirectory.FullPath);
+                fixture.CommandFactory.Received(1).CreateDescriptionCommand();
             }
 
             [Fact]
-            public void Should_Read_Code_From_Provided_File()
+            public void Should_Not_Create_Description_Command_If_Options_Do_Not_Contain_Script()
             {
                 // Given
                 var fixture = new CakeApplicationFixture();
+                fixture.Options.ShowDescription = true;
+                var application = fixture.CreateApplication();
 
                 // When
-                fixture.Run();
+                application.Run(Enumerable.Empty<string>());
 
                 // Then
-                fixture.ScriptRunner.Received(1).Run(
-                    Arg.Any<ScriptHost>(),
-                    Arg.Any<IEnumerable<Assembly>>(),
-                    Arg.Any<IEnumerable<string>>(), 
-                    Arg.Is<string>(x => x == "var lol = 123;"));
+                fixture.CommandFactory.Received(1).CreateHelpCommand();
             }
 
             [Fact]
-            public void Should_Set_Working_Directory_To_Script_Directory()
+            public void Should_Create_Build_Command_If_Options_Contain_Script()
             {
                 // Given
                 var fixture = new CakeApplicationFixture();
+                fixture.Options.Script = "./build.cake";
+                var application = fixture.CreateApplication();
 
                 // When
-                fixture.Run();
+                application.Run(Enumerable.Empty<string>());
 
                 // Then
-                fixture.Environment.Received().WorkingDirectory 
-                    = Arg.Is<DirectoryPath>(x => x.FullPath == "/Build");
+                fixture.CommandFactory.Received(1).CreateBuildCommand();
             }
 
             [Fact]
-            public void Should_Append_Script_Directory_To_Initial_Working_Directory_If_Script_Directory_Is_Relative()
-            {
-                // Given
-                var fixture = new CakeApplicationFixture("Build/script.csx");
-
-                // When
-                fixture.Run();
-
-                // Then
-                fixture.Environment.Received().WorkingDirectory
-                    = Arg.Is<DirectoryPath>(x => x.FullPath == "/Working/Build");
-            }
-
-            [Theory]
-            [InlineData("mscorlib")]
-            [InlineData("System")]
-            [InlineData("System.Core")]
-            [InlineData("System.Data")]
-            [InlineData("System.Xml")]
-            [InlineData("System.Xml.Linq")]
-            [InlineData("Cake")]
-            [InlineData("Cake.Core")]
-            [InlineData("Cake.Common")]
-            public void Should_Provide_Script_Runner_With_References(string assemblyName)
+            public void Should_Create_Help_Command_If_Options_Are_Null()
             {
                 // Given
                 var fixture = new CakeApplicationFixture();
+                fixture.Options = null;
+                var application = fixture.CreateApplication();
 
                 // When
-                fixture.Run();
+                application.Run(Enumerable.Empty<string>());
 
                 // Then
-                fixture.ScriptRunner.Received(1).Run(
-                    Arg.Any<ScriptHost>(),
-                    Arg.Is<IEnumerable<Assembly>>(
-                        c => c.Any(x => x.FullName.StartsWith(assemblyName + ",", StringComparison.Ordinal))),
-                    Arg.Any<IEnumerable<string>>(),
-                    Arg.Any<string>());
-            }
-
-            [Theory]
-            [InlineData("System")]
-            [InlineData("System.Collections.Generic")]
-            [InlineData("System.Linq")]
-            [InlineData("System.Text")]
-            [InlineData("System.Threading.Tasks")]
-            [InlineData("System.IO")]
-            [InlineData("Cake")]
-            [InlineData("Cake.Core")]
-            [InlineData("Cake.Core.IO")]
-            [InlineData("Cake.Core.Diagnostics")]
-            [InlineData("Cake.Common.IO")]
-            [InlineData("Cake.Common.Tools.MSBuild")]
-            [InlineData("Cake.Common.Tools.XUnit")]
-            [InlineData("Cake.Common.Tools.NuGet")]
-            [InlineData("Cake.Common.Tools.NUnit")]
-            [InlineData("Cake.Common.Tools.ILMerge")]
-            public void Should_Provide_Script_Runner_With_Namespaces(string @namespace)
-            {
-                // Given
-                var fixture = new CakeApplicationFixture();
-
-                // When
-                fixture.Run();
-
-                // Then
-                fixture.ScriptRunner.Received(1).Run(
-                    Arg.Any<ScriptHost>(),
-                    Arg.Any<IEnumerable<Assembly>>(),
-                    Arg.Is<IEnumerable<string>>(c => c.Any(x => x == @namespace)),
-                    Arg.Any<string>());
-            }
-
-            [Fact]
-            public void Should_Use_Script_Host_When_ShowDescription_Is_False_In_Options()
-            {
-                // Given
-                var fixture = new CakeApplicationFixture(showDescription: false);
-
-                // When
-                fixture.Run();
-
-                // Then
-                fixture.ScriptRunner.Received(1).Run(
-                    Arg.Any<ScriptHost>(),
-                    Arg.Any<IEnumerable<Assembly>>(),
-                    Arg.Any<IEnumerable<string>>(),
-                    Arg.Any<string>());
-            }
-
-            [Fact]
-            public void Should_Use_Description_Script_Host_When_ShowDescription_Is_True_In_Options()
-            {
-                // Given
-                var fixture = new CakeApplicationFixture(showDescription: true);
-
-                // When
-                fixture.Run();
-
-                // Then
-                fixture.ScriptRunner.Received(1).Run(
-                    Arg.Any<DescriptionScriptHost>(),
-                    Arg.Any<IEnumerable<Assembly>>(),
-                    Arg.Any<IEnumerable<string>>(),
-                    Arg.Any<string>());
+                fixture.CommandFactory.Received(1).CreateHelpCommand();
             }
         }
     }

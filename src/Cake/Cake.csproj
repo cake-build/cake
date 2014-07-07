@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{066B4595-3C61-476B-9B21-7B302D02AE9D}</ProjectGuid>
+    <ProjectGuid>{1BF8D4F1-86D3-4B7B-BAF6-4CF3D863B819}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Cake</RootNamespace>
@@ -32,12 +32,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.3.5.0\lib\net40\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.XmlTransform">
       <HintPath>..\packages\Microsoft.Web.Xdt.2.1.1\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
     </Reference>
     <Reference Include="NuGet.Core, Version=2.8.50506.491, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Nuget.Core.2.8.2\lib\net40-Client\NuGet.Core.dll</HintPath>
+      <HintPath>..\packages\NuGet.Core.2.8.2\lib\net40-Client\NuGet.Core.dll</HintPath>
     </Reference>
     <Reference Include="Roslyn.Compilers">
       <HintPath>..\packages\Roslyn.Compilers.Common.1.2.20906.2\lib\net45\Roslyn.Compilers.dll</HintPath>
@@ -55,34 +58,52 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arguments\ArgumentParser.cs" />
-    <Compile Include="Bootstrapping\INuGetInstaller.cs" />
-    <Compile Include="Bootstrapping\NuGetInstaller.cs" />
-    <Compile Include="CakeApplication.cs" />
-    <Compile Include="Bootstrapping\ICakeBootstrapper.cs" />
-    <Compile Include="Bootstrapping\CakeBootstrapper.cs" />
+    <Compile Include="Arguments\IArgumentParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CakeApplication.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CakeArguments.cs" />
     <Compile Include="CakeOptions.cs" />
     <Compile Include="CakeReportPrinter.cs" />
-    <Compile Include="Diagnostics\CakeLogAdapter.cs" />
-    <Compile Include="Diagnostics\ColoredConsoleBuildLog.cs" />
-    <Compile Include="Diagnostics\ColoredConsolePalette.cs" />
+    <Compile Include="Commands\BuildCommand.cs" />
+    <Compile Include="Commands\CommandFactory.cs" />
+    <Compile Include="Commands\DescriptionCommand.cs" />
+    <Compile Include="Commands\HelpCommand.cs" />
+    <Compile Include="Commands\ICommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ICommandFactory.cs" />
+    <Compile Include="Diagnostics\CakeBuildLog.cs" />
+    <Compile Include="Diagnostics\ConsoleBuildLog.cs" />
+    <Compile Include="Diagnostics\ConsolePalette.cs" />
     <Compile Include="Diagnostics\Formatting\FormatParser.cs" />
     <Compile Include="Diagnostics\Formatting\FormatToken.cs" />
     <Compile Include="Diagnostics\Formatting\LiteralToken.cs" />
     <Compile Include="Diagnostics\Formatting\PropertyToken.cs" />
+    <Compile Include="Diagnostics\IVerbosityAware.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Scripting\DefaultScriptHost.cs" />
+    <Compile Include="Scripting\BuildScriptHost.cs" />
     <Compile Include="Scripting\DescriptionScriptHost.cs" />
-    <Compile Include="Scripting\RoslynScriptSession.cs" />
-    <Compile Include="Scripting\RoslynScriptSessionFactory.cs" />
+    <Compile Include="Scripting\Roslyn\IRoslynInstaller.cs" />
+    <Compile Include="Scripting\Roslyn\RoslynInstaller.cs" />
+    <Compile Include="Scripting\Roslyn\RoslynScriptSession.cs" />
+    <Compile Include="Scripting\Roslyn\RoslynScriptSessionFactory.cs" />
+    <Compile Include="Scripting\ScriptAliasGenerator.cs" />
     <Compile Include="Scripting\ScriptRunner.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Cake.Common\Cake.Common.csproj">
-      <Project>{abc3f1cb-f84e-43ed-a120-0ccfe344d250}</Project>
+      <Project>{ABC3F1CB-F84E-43ED-A120-0CCFE344D250}</Project>
       <Name>Cake.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
@@ -90,9 +111,7 @@
       <Name>Cake.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

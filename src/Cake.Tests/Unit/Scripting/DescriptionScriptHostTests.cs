@@ -1,4 +1,4 @@
-using Cake.Core;
+﻿using Cake.Core;
 using Cake.Scripting;
 using NSubstitute;
 using Xunit;

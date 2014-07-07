@@ -1,11 +1,14 @@
 ﻿using System;
+using Autofac;
 using Cake.Arguments;
-using Cake.Bootstrapping;
+using Cake.Commands;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.Scripting;
 using Cake.Diagnostics;
 using Cake.Scripting;
+using Cake.Scripting.Roslyn;
 
 namespace Cake
 {
@@ -13,43 +16,51 @@ namespace Cake
     {
         public static int Main(string[] args)
         {
-            var log = new CakeLogAdapter(new ColoredConsoleBuildLog());
-
-            try
+            using (var container = CreateContainer())
             {
-                if (args.Length == 0)
-                {
-                    Console.WriteLine("Usage: Cake.exe <script> [-verbosity=value] [scriptarguments]");
-                    return 0;
-                }
-
-                // Parse arguments.
-                var parser = new ArgumentParser(log);
-                var options = parser.Parse(args);
-
-                // Set the log verbosity.
-                log.Verbosity = options.Verbosity;
-
-                // Create and run the application.
-                var application = CreateApplication(log);
-                application.Run(options);
-
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error: {0}", ex.Message);
-                return 1;
+                var application = container.Resolve<CakeApplication>();
+                return application.Run(args);
             }
         }
 
-        private static CakeApplication CreateApplication(ICakeLog log)
+        private static IContainer CreateContainer()
         {
-            var fileSystem = new FileSystem();
-            var environment = new CakeEnvironment();
-            var bootstrapper = new CakeBootstrapper(fileSystem, log, new NuGetInstaller(fileSystem, log));
-            var scriptRunner = new ScriptRunner(log, new RoslynScriptSessionFactory());
-            return new CakeApplication(bootstrapper, fileSystem, environment, log, scriptRunner);
+            var builder = new ContainerBuilder();
+
+            // Register log.
+            builder.RegisterInstance(new CakeBuildLog(new ConsoleBuildLog()))
+                .As<ICakeLog>().As<IVerbosityAwareLog>().SingleInstance();
+
+            // Core services.
+            builder.RegisterType<CakeEngine>().As<ICakeEngine>().SingleInstance();
+            builder.RegisterType<FileSystem>().As<IFileSystem>().SingleInstance();
+            builder.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().SingleInstance();            
+            builder.RegisterType<CakeArguments>().As<ICakeArguments>().AsSelf().SingleInstance();
+            builder.RegisterType<Globber>().As<IGlobber>().SingleInstance();
+            builder.RegisterType<ProcessRunner>().As<IProcessRunner>().SingleInstance();
+            builder.RegisterType<ScriptAliasGenerator>().As<IScriptAliasGenerator>().SingleInstance();
+            builder.RegisterType<CakeReportPrinter>().As<ICakeReportPrinter>().SingleInstance();
+            
+            // Roslyn related services.
+            builder.RegisterType<RoslynScriptSessionFactory>().As<IScriptSessionFactory>();
+            builder.RegisterType<RoslynInstaller>().As<IRoslynInstaller>().SingleInstance();
+
+            // Cake services.
+            builder.RegisterType<ArgumentParser>().As<IArgumentParser>().SingleInstance();
+            builder.RegisterType<CommandFactory>().As<ICommandFactory>().SingleInstance();
+            builder.RegisterType<CakeApplication>().SingleInstance();
+            builder.RegisterType<ScriptRunner>().InstancePerDependency();
+
+            // Register script hosts.            
+            builder.RegisterType<BuildScriptHost>().SingleInstance();
+            builder.RegisterType<DescriptionScriptHost>().SingleInstance();
+            
+            // Register commands.
+            builder.RegisterType<BuildCommand>().AsSelf().InstancePerDependency();
+            builder.RegisterType<DescriptionCommand>().AsSelf().InstancePerDependency();
+            builder.RegisterType<HelpCommand>().AsSelf().InstancePerDependency();
+
+            return builder.Build();
         }
     }
 }

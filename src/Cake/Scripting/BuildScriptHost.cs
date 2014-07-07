@@ -3,11 +3,14 @@ using Cake.Core.Scripting;
 
 namespace Cake.Scripting
 {
-    public sealed class DefaultScriptHost : ScriptHost
+    public sealed class BuildScriptHost : ScriptHost
     {
-        public DefaultScriptHost(ICakeEngine engine)
+        private readonly ICakeReportPrinter _reportPrinter;
+
+        public BuildScriptHost(ICakeEngine engine, ICakeReportPrinter reportPrinter) 
             : base(engine)
         {
+            _reportPrinter = reportPrinter;
         }
 
         public override CakeReport RunTarget(string target)
@@ -15,7 +18,7 @@ namespace Cake.Scripting
             var report = Engine.RunTarget(target);
             if (report != null && !report.IsEmpty)
             {
-                CakeReportPrinter.Write(report);
+                _reportPrinter.Write(report);
             }
             return report;
         }
