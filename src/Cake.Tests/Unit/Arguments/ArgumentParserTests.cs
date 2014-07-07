@@ -172,6 +172,22 @@ namespace Cake.Tests.Unit.Arguments
                 // Then
                 Assert.Equal(true, result.ShowHelp);
             }
+
+            [Theory]
+            [InlineData("-version")]
+            [InlineData("-ver")]
+            public void Can_Parse_Version(string input)
+            {
+                // Given
+                var log = Substitute.For<ICakeLog>();
+                var parser = new ArgumentParser(log);
+
+                // When
+                var result = parser.Parse(new[] { "build.csx", input });
+
+                // Then
+                Assert.Equal(true, result.ShowVersion);
+            }
         }
     }
 }

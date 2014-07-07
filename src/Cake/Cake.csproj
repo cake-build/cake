@@ -75,6 +75,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\ICommandFactory.cs" />
+    <Compile Include="Commands\VersionCommand.cs" />
     <Compile Include="Diagnostics\CakeBuildLog.cs" />
     <Compile Include="Diagnostics\ConsoleBuildLog.cs" />
     <Compile Include="Diagnostics\ConsolePalette.cs" />

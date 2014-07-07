@@ -66,6 +66,10 @@ namespace Cake
                 {
                     return _commandFactory.CreateHelpCommand();               
                 }
+                if (options.ShowVersion)
+                {
+                    return _commandFactory.CreateVersionCommand();
+                }
                 if (options.Script != null)
                 {
                     if (options.ShowDescription)

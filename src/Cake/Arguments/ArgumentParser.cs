@@ -126,6 +126,12 @@ namespace Cake.Arguments
                 options.ShowHelp = true;
             }
 
+            if (name.Equals("version", StringComparison.OrdinalIgnoreCase) ||
+                name.Equals("ver", StringComparison.OrdinalIgnoreCase))
+            {
+                options.ShowVersion = true;
+            }
+
             if (options.Arguments.ContainsKey(name))
             {
                 _log.Error("Multiple arguments with the same name ({0}).", name);

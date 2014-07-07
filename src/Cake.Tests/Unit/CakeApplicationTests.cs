@@ -120,6 +120,21 @@ namespace Cake.Tests.Unit
             }
 
             [Fact]
+            public void Should_Create_Version_Command_If_Specified_In_Options()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.Options.ShowVersion = true;
+                var application = fixture.CreateApplication();
+
+                // When
+                application.Run(Enumerable.Empty<string>());
+
+                // Then
+                fixture.CommandFactory.Received(1).CreateVersionCommand();
+            }
+
+            [Fact]
             public void Should_Create_Description_Command_If_Specified_In_Options()
             {
                 // Given

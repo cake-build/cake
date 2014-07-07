@@ -1,5 +1,4 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Cake.Arguments;
 using Cake.Commands;
 using Cake.Core;
@@ -59,6 +58,7 @@ namespace Cake
             builder.RegisterType<BuildCommand>().AsSelf().InstancePerDependency();
             builder.RegisterType<DescriptionCommand>().AsSelf().InstancePerDependency();
             builder.RegisterType<HelpCommand>().AsSelf().InstancePerDependency();
+            builder.RegisterType<VersionCommand>().AsSelf().InstancePerDependency();
 
             return builder.Build();
         }

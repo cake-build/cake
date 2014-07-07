@@ -4,6 +4,7 @@
     {
         ICommand CreateBuildCommand();
         ICommand CreateDescriptionCommand();
-        ICommand CreateHelpCommand();        
+        ICommand CreateHelpCommand();
+        ICommand CreateVersionCommand();
     }
 }

@@ -19,6 +19,7 @@ namespace Cake
 
         public bool ShowDescription { get; set; }
         public bool ShowHelp { get; set; }
+        public bool ShowVersion { get; set; }
 
         public CakeOptions()
         {
