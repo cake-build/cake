@@ -19,26 +19,32 @@ namespace Cake.Common.Tests.Fixtures
 
         public FileCopyFixture()
         {
+            // Setup the target directory.
             TargetDirectory = Substitute.For<IDirectory>();
             TargetDirectory.Exists.Returns(true);
 
+            // Setup the files in the file system.
             SourceFilePaths = new List<FilePath>();
             TargetFiles = new List<IFile>();
             TargetFilePaths = new List<FilePath>();
             CreateTargetFile("./file1.txt", "/Working/file1.txt");
             CreateTargetFile("./file2.txt", "/Working/file2.txt");
 
+            // Setup the globber to return all files for wild card.
             Globber = Substitute.For<IGlobber>();
             Globber.Match("*").Returns(c => TargetFilePaths);
 
+            // Setup the file system to return correct directories when asked for.
             FileSystem = Substitute.For<IFileSystem>();
             FileSystem.GetDirectory(Arg.Is<DirectoryPath>(p => p.FullPath == "/Working/target")).Returns(c => TargetDirectory);
             FileSystem.GetFile(Arg.Is<FilePath>(p => p.FullPath == TargetFilePaths[0].FullPath)).Returns(c => TargetFiles[0]);
             FileSystem.GetFile(Arg.Is<FilePath>(p => p.FullPath == TargetFilePaths[1].FullPath)).Returns(c => TargetFiles[1]);
 
+            // Set the working directory.
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory.Returns("/Working");
 
+            // Prepare the context.
             Context = Substitute.For<ICakeContext>();
             Context.FileSystem.Returns(FileSystem);
             Context.Environment.Returns(Environment);
@@ -47,10 +53,12 @@ namespace Cake.Common.Tests.Fixtures
 
         private void CreateTargetFile(FilePath sourcePath, FilePath targetPath)
         {
+            // Create the target file.
             var targetFile = Substitute.For<IFile>();
             targetFile.Exists.Returns(true);
             targetFile.Path.Returns(targetPath);
 
+            // Add the file to lookup data structures.
             SourceFilePaths.Add(sourcePath);
             TargetFiles.Add(targetFile);
             TargetFilePaths.Add(targetPath);

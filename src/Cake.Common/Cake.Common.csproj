@@ -46,6 +46,7 @@
     <Compile Include="AssemblyInfoSettings.cs" />
     <Compile Include="Diagnostics\LoggingExtensions.cs" />
     <Compile Include="IO\DirectoryCreator.cs" />
+    <Compile Include="IO\FileMover.cs" />
     <Compile Include="ReleaseNotes.cs" />
     <Compile Include="ReleaseNotesExtensions.cs" />
     <Compile Include="ReleaseNotesParser.cs" />

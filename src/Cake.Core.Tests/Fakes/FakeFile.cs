@@ -55,6 +55,11 @@ namespace Cake.Core.Tests.Fakes
             throw new NotImplementedException();
         }
 
+        public void Move(FilePath destination)
+        {
+            throw new NotImplementedException();
+        }
+
         public Stream Open(FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
         {
             var position = GetPosition(fileMode);

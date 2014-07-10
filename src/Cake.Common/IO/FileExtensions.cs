@@ -30,5 +30,29 @@ namespace Cake.Common.IO
         {
             FileCopier.CopyFiles(context, filePaths, targetDirectoryPath);
         }
+
+        [CakeMethodAlias]
+        public static void MoveFileToDirectory(this ICakeContext context, FilePath filePath, DirectoryPath targetDirectoryPath)
+        {
+            FileMover.MoveFileToDirectory(context, filePath, targetDirectoryPath);
+        }
+
+        [CakeMethodAlias]
+        public static void MoveFiles(this ICakeContext context, string pattern, DirectoryPath targetDirectoryPath)
+        {
+            FileMover.MoveFiles(context, pattern, targetDirectoryPath);
+        }
+
+        [CakeMethodAlias]
+        public static void MoveFiles(this ICakeContext context, IEnumerable<FilePath> filePaths, DirectoryPath targetDirectoryPath)
+        {
+            FileMover.MoveFiles(context, filePaths, targetDirectoryPath);
+        }
+
+        [CakeMethodAlias]
+        public static void MoveFile(this ICakeContext context, FilePath filePath, FilePath targetFilePath)
+        {
+            FileMover.MoveFile(context, filePath, targetFilePath);
+        }
     }
 }

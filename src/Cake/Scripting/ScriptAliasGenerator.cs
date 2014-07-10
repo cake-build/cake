@@ -27,6 +27,7 @@ namespace Cake.Scripting
 
                 try
                 {
+                    _log.Verbose(signature);
                     session.Execute(GernerateCode(method));
                 }
                 catch (Exception)
