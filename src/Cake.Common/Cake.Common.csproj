@@ -76,8 +76,8 @@
     <Compile Include="Tools\NuGet\NuGetPacker.cs" />
     <Compile Include="Tools\NuGet\NuGetPackSettings.cs" />
     <Compile Include="Tools\NuGet\NuGetRestorer.cs" />
-    <Compile Include="Tools\NuGet\NugetRestoreSettings.cs" />
-    <Compile Include="Tools\NuGet\NugetRestoreSettingsExtensions.cs" />
+    <Compile Include="Tools\NuGet\NuGetRestoreSettings.cs" />
+    <Compile Include="Tools\NuGet\NuGetRestoreSettingsExtensions.cs" />
     <Compile Include="Tools\NuGet\NuGetVerbosity.cs" />
     <Compile Include="Tools\NUnit\NUnitExtensions.cs" />
     <Compile Include="Tools\NUnit\NUnitRunner.cs" />
