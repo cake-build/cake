@@ -1,3 +1,6 @@
+### New in 0.1.13 (Released 2014/07/10)
+* No more logging when creating script aliases.
+
 ### New in 0.1.12 (Released 2014/07/10)
 * Added file deletion.
 * Added file moving.

@@ -12,15 +12,7 @@
     <iconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <copyright>Copyright (c) Patrik Svensson 2014</copyright>
-    <releaseNotes>Added file deletion.
-Added file moving.
-Added directory creation.
-Added version command.
-Major refactoring of Cake (console application).
-NuGet packer now use absolute paths.
-Minor fix for console background colors.
-Added way of retrieving environment variables.
-Added script alias property support.</releaseNotes>
+    <releaseNotes>Removed logging when creating script aliases.</releaseNotes>
     <tags>Cake Script Build</tags>
   </metadata>
   <files>
