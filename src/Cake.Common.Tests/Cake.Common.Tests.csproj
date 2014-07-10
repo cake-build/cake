@@ -63,6 +63,7 @@
     </Compile>
     <Compile Include="Fixtures\AssemblyInfoFixture.cs" />
     <Compile Include="Fixtures\FileCopyFixture.cs" />
+    <Compile Include="Fixtures\FileDeleteFixture.cs" />
     <Compile Include="Fixtures\FileSystemFixture.cs" />
     <Compile Include="Fixtures\ILMergeRunnerFixture.cs" />
     <Compile Include="Fixtures\MSBuildRunnerFixture.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Unit\AssemblyInfoCreatorTests.cs" />
     <Compile Include="Unit\Diagnostics\LoggingExtensionsTests.cs" />
     <Compile Include="Unit\IO\DirectoryCreatorTests.cs" />
+    <Compile Include="Unit\IO\FileDeleterTests.cs" />
     <Compile Include="Unit\IO\FileMoverTests.cs" />
     <Compile Include="Unit\ReleaseNotesExtensionsTests.cs" />
     <Compile Include="Unit\ReleaseNotesParserTests.cs" />

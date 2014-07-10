@@ -54,5 +54,23 @@ namespace Cake.Common.IO
         {
             FileMover.MoveFile(context, filePath, targetFilePath);
         }
+
+        [CakeMethodAlias]
+        public static void DeleteFiles(this ICakeContext context, string pattern)
+        {
+            FileDeleter.DeleteFiles(context, pattern);
+        }
+
+        [CakeMethodAlias]
+        public static void DeleteFiles(this ICakeContext context, IEnumerable<FilePath> filePaths)
+        {
+            FileDeleter.DeleteFiles(context, filePaths);
+        }
+
+        [CakeMethodAlias]
+        public static void DeleteFile(this ICakeContext context, FilePath filePath)
+        {
+            FileDeleter.DeleteFile(context, filePath);
+        }
     }
 }
