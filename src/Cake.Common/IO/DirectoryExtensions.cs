@@ -43,5 +43,11 @@ namespace Cake.Common.IO
         {
             DirectoryCleaner.Clean(context, path);
         }
+
+        [CakeMethodAlias]
+        public static void CreateDirectory(this ICakeContext context, DirectoryPath path)
+        {
+            DirectoryCreator.Create(context, path);
+        }
     }
 }

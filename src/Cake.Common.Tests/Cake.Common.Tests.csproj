@@ -72,6 +72,7 @@
     <Compile Include="Fixtures\XUnitRunnerFixture.cs" />
     <Compile Include="Unit\AssemblyInfoCreatorTests.cs" />
     <Compile Include="Unit\Diagnostics\LoggingExtensionsTests.cs" />
+    <Compile Include="Unit\IO\DirectoryCreatorTests.cs" />
     <Compile Include="Unit\ReleaseNotesExtensionsTests.cs" />
     <Compile Include="Unit\ReleaseNotesParserTests.cs" />
     <Compile Include="Unit\ReleaseNotesTests.cs" />
