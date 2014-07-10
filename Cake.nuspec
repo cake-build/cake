@@ -12,13 +12,23 @@
     <iconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <copyright>Copyright (c) Patrik Svensson 2014</copyright>
-    <releaseNotes>Critical bug fix for script host.</releaseNotes>
+    <releaseNotes>Added file deletion.
+Added file moving.
+Added directory creation.
+Added version command.
+Major refactoring of Cake (console application).
+NuGet packer now use absolute paths.
+Minor fix for console background colors.
+Added way of retrieving environment variables.
+Added script alias property support.</releaseNotes>
     <tags>Cake Script Build</tags>
   </metadata>
   <files>
     <file src="Cake.exe" />
     <file src="Cake.Core.dll" />
     <file src="Cake.Common.dll" />
+    <file src="NuGet.Core.dll" />
+    <file src="Autofac.dll" />
     <file src="LICENSE" />
   </files>
 </package>

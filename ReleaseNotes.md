@@ -1,3 +1,14 @@
+### New in 0.1.12 (Released 2014/07/10)
+* Added file deletion.
+* Added file moving.
+* Added directory creation.
+* Added version command.
+* Major refactoring of Cake (console application).
+* NuGet packer now use absolute paths.
+* Minor fix for console background colors.
+* Added way of retrieving environment variables.
+* Added script alias property support.
+
 ### New in 0.1.11 (Released 2014/07/01)
 * Critical bug fix for script host.
 
