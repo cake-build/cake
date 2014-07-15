@@ -69,9 +69,5 @@ namespace Cake.Core.Scripting
         }
 
         public abstract CakeReport RunTarget(string target);
-
-        public virtual void AfterRunTarget()
-        {            
-        }
     }
 }
