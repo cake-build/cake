@@ -43,7 +43,7 @@ namespace Cake
                     _log.Verbosity = options.Verbosity;  
                 }
 
-                // Create the correct command and execute it.
+                // CreateDefault the correct command and execute it.
                 var command = CreateCommand(options);
                 command.Execute(options);
 

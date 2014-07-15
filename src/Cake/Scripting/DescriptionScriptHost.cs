@@ -2,18 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
+using Cake.Core.Extensions;
 using Cake.Core.Scripting;
 
 namespace Cake.Scripting
 {
     public sealed class DescriptionScriptHost : ScriptHost
     {
+        private readonly IConsole _console;
         private readonly Dictionary<string, string> _descriptions;
 
-        public DescriptionScriptHost(ICakeEngine engine)
+        public DescriptionScriptHost(ICakeEngine engine, IConsole console)
             : base(engine)
-        {            
-            _descriptions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);            
+        {
+            _console = console;
+            _descriptions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         }
 
         public override CakeReport RunTarget(string target)
@@ -23,12 +26,12 @@ namespace Cake.Scripting
                 _descriptions.Add(task.Name, task.Description);
             }
 
-            Console.WriteLine();
-            Console.WriteLine("{0,-30}{1}", "Task", "Description");
-            Console.WriteLine(String.Concat(Enumerable.Range(0, 79).Select(s => "=")));
+            _console.WriteLine();
+            _console.WriteLine("{0,-30}{1}", "Task", "Description");
+            _console.WriteLine(string.Concat(Enumerable.Range(0, 79).Select(s => "=")));
             foreach (var key in _descriptions.Keys)
             {
-                Console.WriteLine("{0,-30}{1}", key, _descriptions[key]);
+                _console.WriteLine("{0,-30}{1}", key, _descriptions[key]);
             }
 
             return null;

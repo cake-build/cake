@@ -14,7 +14,8 @@ namespace Cake.Tests.Unit.Scripting
             {
                 // Given
                 var engine = Substitute.For<ICakeEngine>();
-                var host = new DescriptionScriptHost(engine);
+                var console = Substitute.For<IConsole>();
+                var host = new DescriptionScriptHost(engine, console);
 
                 // When
                 host.RunTarget("Target");

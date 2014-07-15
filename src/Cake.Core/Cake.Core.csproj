@@ -54,11 +54,13 @@
     <Compile Include="Diagnostics\NullLog.cs" />
     <Compile Include="Diagnostics\Verbosity.cs" />
     <Compile Include="Diagnostics\VerbosityTypeConverter.cs" />
+    <Compile Include="Extensions\ConsoleExtensions.cs" />
     <Compile Include="Extensions\MethodInfoExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="ICakeArguments.cs" />
     <Compile Include="ICakeReportPrinter.cs" />
+    <Compile Include="IConsole.cs" />
     <Compile Include="IO\DirectoryPathCollection.cs" />
     <Compile Include="IO\FilePathCollection.cs" />
     <Compile Include="IO\FileExtensions.cs" />

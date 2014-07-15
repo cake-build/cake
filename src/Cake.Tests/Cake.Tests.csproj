@@ -68,6 +68,7 @@
     <Compile Include="..\Cake.Core.Tests\Fakes\FakeFileSystem.cs">
       <Link>Fakes\FakeFileSystem.cs</Link>
     </Compile>
+    <Compile Include="Fakes\FakeConsole.cs" />
     <Compile Include="Fakes\FakeLog.cs" />
     <Compile Include="Fixtures\CakeApplicationFixture.cs" />
     <Compile Include="Fixtures\ScriptRunnerFixture.cs" />

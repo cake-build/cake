@@ -26,20 +26,18 @@ namespace Cake
         {
             var builder = new ContainerBuilder();
 
-            // Register log.
-            builder.RegisterInstance(new CakeBuildLog(new ConsoleBuildLog()))
-                .As<ICakeLog>().As<IVerbosityAwareLog>().SingleInstance();
-
             // Core services.
             builder.RegisterType<CakeEngine>().As<ICakeEngine>().SingleInstance();
             builder.RegisterType<FileSystem>().As<IFileSystem>().SingleInstance();
-            builder.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().SingleInstance();            
+            builder.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().SingleInstance();
             builder.RegisterType<CakeArguments>().As<ICakeArguments>().AsSelf().SingleInstance();
             builder.RegisterType<Globber>().As<IGlobber>().SingleInstance();
             builder.RegisterType<ProcessRunner>().As<IProcessRunner>().SingleInstance();
             builder.RegisterType<ScriptAliasGenerator>().As<IScriptAliasGenerator>().SingleInstance();
             builder.RegisterType<CakeReportPrinter>().As<ICakeReportPrinter>().SingleInstance();
-            
+            builder.RegisterType<CakeBuildLog>().As<ICakeLog>().As<IVerbosityAwareLog>().SingleInstance();
+            builder.RegisterType<CakeConsole>().As<IConsole>().SingleInstance();
+
             // Roslyn related services.
             builder.RegisterType<RoslynScriptSessionFactory>().As<IScriptSessionFactory>();
             builder.RegisterType<RoslynInstaller>().As<IRoslynInstaller>().SingleInstance();
@@ -53,7 +51,7 @@ namespace Cake
             // Register script hosts.            
             builder.RegisterType<BuildScriptHost>().SingleInstance();
             builder.RegisterType<DescriptionScriptHost>().SingleInstance();
-            
+
             // Register commands.
             builder.RegisterType<BuildCommand>().AsSelf().InstancePerDependency();
             builder.RegisterType<DescriptionCommand>().AsSelf().InstancePerDependency();

@@ -18,17 +18,17 @@ namespace Cake.Tests.Unit.Diagnostics
             public void Should_Drop_Log_Messages_Written_With_A_Lower_Verbosity_Than_Allowed(Verbosity logVerbosity, Verbosity messageVerbosity)
             {
                 // Given
-                var log = new FakeLog();
-                var adapter = new CakeBuildLog(log)
+                var console = new FakeConsole();
+                var log = new CakeBuildLog(console)
                 {
                     Verbosity = logVerbosity
                 };
 
                 // When
-                adapter.Write(messageVerbosity, LogLevel.Information, "Hello World");
+                log.Write(messageVerbosity, LogLevel.Information, "Hello World");
 
                 // Then
-                Assert.Equal(0, log.Messages.Count);
+                Assert.Equal(0, console.Messages.Count);
             }
 
             [Theory]
@@ -39,17 +39,17 @@ namespace Cake.Tests.Unit.Diagnostics
             public void Should_Write_Log_Messages_Written_With_A_Higher_Verbosity_Than_Allowed(Verbosity logVerbosity, Verbosity messageVerbosity)
             {
                 // Given
-                var log = new FakeLog();
-                var adapter = new CakeBuildLog(log)
+                var console = new FakeConsole();
+                var log = new CakeBuildLog(console)
                 {
                     Verbosity = logVerbosity
                 };
 
                 // When
-                adapter.Write(messageVerbosity, LogLevel.Information, "Hello World");
+                log.Write(messageVerbosity, LogLevel.Information, "Hello World");
 
                 // Then
-                Assert.Equal(1, log.Messages.Count);
+                Assert.Equal(1, console.Messages.Count);
             }
         }
     }
