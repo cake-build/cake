@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Cake.Core;
-using Cake.Core.Extensions;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.MSTest

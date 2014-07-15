@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using Cake.Common.IO;
@@ -17,17 +16,18 @@ namespace Cake.Scripting
         private readonly CakeArguments _arguments;
         private readonly IScriptSessionFactory _sessionFactory;
         private readonly IScriptAliasGenerator _aliasGenerator;
+        private readonly IScriptProcessor _processor;
         private readonly IScriptHost _host;
 
         // Delegate factory used by Autofac.
         public delegate ScriptRunner Factory(IScriptHost host);
 
         public ScriptRunner(IFileSystem fileSystem, ICakeEnvironment environment, CakeArguments arguments,
-            IScriptSessionFactory sessionFactory, IScriptAliasGenerator aliasGenerator, IScriptHost host)
+            IScriptSessionFactory sessionFactory, IScriptAliasGenerator aliasGenerator, IScriptProcessor processor, IScriptHost host)
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");                
+                throw new ArgumentNullException("fileSystem");
             }
             if (environment == null)
             {
@@ -45,15 +45,20 @@ namespace Cake.Scripting
             {
                 throw new ArgumentNullException("aliasGenerator");
             }
+            if (processor == null)
+            {
+                throw new ArgumentNullException("processor");
+            }
             if (host == null)
             {
                 throw new ArgumentNullException("host");
-            }   
+            }
             _fileSystem = fileSystem;
             _environment = environment;
             _arguments = arguments;
             _sessionFactory = sessionFactory;
             _aliasGenerator = aliasGenerator;
+            _processor = processor;
             _host = host;
         }
 
@@ -66,55 +71,63 @@ namespace Cake.Scripting
             _arguments.SetArguments(options.Arguments);
 
             // Read the source.
-            var code = ReadSource(options.Script);
+            var processorResult = _processor.Process(options.Script);
 
-            // Add all references.            
-            var references = GetReferencedAssemblies();
-            var namespaces = GetNamespaces();
-
-            // Update the working directory.
-            _environment.WorkingDirectory = GetAbsoluteScriptDirectory(options.Script);
+            // Set the working directory.
+            _environment.WorkingDirectory = processorResult.Root;
 
             // Run script.
             var session = _sessionFactory.CreateSession(_host);
 
             // Add references to session.
-            foreach (var reference in references)
-            {
-                session.AddReference(reference);
-            }
+            var references = LoadReferencedAssemblies(session, processorResult);
 
             // Add namespaces to session.
-            foreach (var @namespace in namespaces)
-            {
-                session.ImportNamespace(@namespace);
-            }
+            ImportNamespaces(session);
 
             // Find all extension methods and generate proxy methods.
             _aliasGenerator.Generate(session, references);
 
             // Execute the code.
-            session.Execute(code);
+            session.Execute(processorResult.Code);
         }
 
-        private static IEnumerable<string> GetNamespaces()
+        private IEnumerable<Assembly> LoadReferencedAssemblies(IScriptSession session, ScriptProcessorResult processorResult)
         {
-            var namespaces = new List<string>
+            // Get all default assemblies.
+            var assemblies = GetDefaultAssemblies();
+
+            // Try to load assemblies we find on disc.
+            // This way we get script aliases for free.
+            foreach (var reference in processorResult.References)
             {
-                "System", "System.Collections.Generic", "System.Linq",
-                "System.Text", "System.Threading.Tasks", "System.IO",
-                "Cake", "Cake.Core", "Cake.Core.IO", "Cake.Scripting", 
-                "Cake.Core.Scripting", "Cake.Common", "Cake.Common.IO",
-                "Cake.Core.Diagnostics", "Cake.Common.Tools.MSBuild",
-                "Cake.Common.Tools.XUnit", "Cake.Common.Tools.NuGet",
-                "Cake.Common.Tools.NUnit", "Cake.Common.Tools.ILMerge"
-            };
-            return namespaces;
+                var absoluteReferencePath = reference.MakeAbsolute(_environment);
+                if (_fileSystem.Exist(absoluteReferencePath))
+                {
+                    var assembly = Assembly.LoadFile(absoluteReferencePath.FullPath);
+                    assemblies.Add(assembly);
+                }
+                else
+                {
+                    // Add a reference to the session.
+                    // This reference
+                    session.AddReferencePath(reference);
+                }
+            }
+
+            // Add all loaded assemblies to the session.
+            foreach (var reference in assemblies)
+            {
+                session.AddReference(reference);
+            }
+
+            // Return the list of assemblies.
+            return assemblies;
         }
 
-        private static List<Assembly> GetReferencedAssemblies()
+        private static List<Assembly> GetDefaultAssemblies()
         {
-            var references = new List<Assembly>
+            return new List<Assembly>
             {
                 typeof (Action).Assembly, // mscorlib
                 typeof (Uri).Assembly, // System
@@ -126,41 +139,28 @@ namespace Cake.Scripting
                 typeof (ICakeContext).Assembly, // Cake.Core
                 typeof (DirectoryExtensions).Assembly, // Cake.Common
             };
-            return references;
         }
 
-        private string ReadSource(FilePath path)
+        private static void ImportNamespaces(IScriptSession session)
         {
-            path = path.MakeAbsolute(_environment);
-
-            // Get the file and make sure it exist.
-            var file = _fileSystem.GetFile(path);
-            if (!file.Exists)
+            foreach (var @namespace in GetDefaultNamespaces())
             {
-                var message = string.Format("Could not find script '{0}'.", path);
-                throw new CakeException(message);
-            }
-
-            // Read the content from the file.
-            using (var stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (var reader = new StreamReader(stream))
-            {
-                return reader.ReadToEnd();
+                session.ImportNamespace(@namespace);
             }
         }
 
-        private DirectoryPath GetAbsoluteScriptDirectory(FilePath scriptPath)
+        private static IEnumerable<string> GetDefaultNamespaces()
         {
-            // Get the script location.
-            var scriptLocation = scriptPath.GetDirectory();
-            if (scriptLocation.IsRelative)
+            return new List<string>
             {
-                // Concatinate the starting working directory
-                // with the script file path.
-                scriptLocation = _environment.WorkingDirectory
-                    .CombineWithFilePath(scriptPath).GetDirectory();
-            }
-            return scriptLocation;
+                "System", "System.Collections.Generic", "System.Linq",
+                "System.Text", "System.Threading.Tasks", "System.IO",
+                "Cake", "Cake.Core", "Cake.Core.IO", "Cake.Scripting", 
+                "Cake.Core.Scripting", "Cake.Common", "Cake.Common.IO",
+                "Cake.Core.Diagnostics", "Cake.Common.Tools.MSBuild",
+                "Cake.Common.Tools.XUnit", "Cake.Common.Tools.NuGet",
+                "Cake.Common.Tools.NUnit", "Cake.Common.Tools.ILMerge"
+            };
         }
     }
 }

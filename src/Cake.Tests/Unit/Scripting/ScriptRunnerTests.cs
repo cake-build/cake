@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Cake.Core;
 using Cake.Core.IO;
 using Cake.Tests.Fixtures;
 using NSubstitute;
@@ -90,6 +89,21 @@ namespace Cake.Tests.Unit.Scripting
             }
 
             [Fact]
+            public void Should_Throw_If_Script_Processor_Is_Null()
+            {
+                // Given
+                var fixture = new ScriptRunnerFixture();
+                fixture.Processor = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateScriptRunner());
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("processor", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
             public void Should_Throw_If_Script_Host_Is_Null()
             {
                 // Given
@@ -137,18 +151,17 @@ namespace Cake.Tests.Unit.Scripting
             }
 
             [Fact]
-            public void Should_Throw_If_Script_Was_Not_Found()
+            public void Should_Create_Session_Via_Session_Factory()
             {
                 // Given
-                var fixture = new ScriptRunnerFixture(scriptExist: false);
+                var fixture = new ScriptRunnerFixture();
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run(fixture.Options));
+                runner.Run(fixture.Options);
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("Could not find script '/Working/build.cake'.", result.Message);
+                fixture.SessionFactory.Received(1).CreateSession(fixture.Host);
             }
 
             [Fact]
@@ -164,20 +177,6 @@ namespace Cake.Tests.Unit.Scripting
                 // Then
                 fixture.Environment.Received(1).WorkingDirectory
                     = Arg.Is<DirectoryPath>(p => p.FullPath == "/build");
-            }
-
-            [Fact]
-            public void Should_Create_Session_Via_Session_Factory()
-            {
-                // Given
-                var fixture = new ScriptRunnerFixture();
-                var runner = fixture.CreateScriptRunner();
-
-                // When
-                runner.Run(fixture.Options);
-
-                // Then
-                fixture.SessionFactory.Received(1).CreateSession(fixture.Host);
             }
 
             [Theory]

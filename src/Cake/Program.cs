@@ -34,9 +34,9 @@ namespace Cake
             builder.RegisterType<Globber>().As<IGlobber>().SingleInstance();
             builder.RegisterType<ProcessRunner>().As<IProcessRunner>().SingleInstance();
             builder.RegisterType<ScriptAliasGenerator>().As<IScriptAliasGenerator>().SingleInstance();
-            builder.RegisterType<CakeReportPrinter>().As<ICakeReportPrinter>().SingleInstance();
-            builder.RegisterType<CakeBuildLog>().As<ICakeLog>().As<IVerbosityAwareLog>().SingleInstance();
+            builder.RegisterType<CakeReportPrinter>().As<ICakeReportPrinter>().SingleInstance();            
             builder.RegisterType<CakeConsole>().As<IConsole>().SingleInstance();
+            builder.RegisterType<ScriptProcessor>().As<IScriptProcessor>().SingleInstance();
 
             // Roslyn related services.
             builder.RegisterType<RoslynScriptSessionFactory>().As<IScriptSessionFactory>();
@@ -47,6 +47,7 @@ namespace Cake
             builder.RegisterType<CommandFactory>().As<ICommandFactory>().SingleInstance();
             builder.RegisterType<CakeApplication>().SingleInstance();
             builder.RegisterType<ScriptRunner>().InstancePerDependency();
+            builder.RegisterType<CakeBuildLog>().As<ICakeLog>().As<IVerbosityAwareLog>().SingleInstance();
 
             // Register script hosts.            
             builder.RegisterType<BuildScriptHost>().SingleInstance();

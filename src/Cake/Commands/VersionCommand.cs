@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using Cake.Core;
-using Cake.Core.Extensions;
 
 namespace Cake.Commands
 {

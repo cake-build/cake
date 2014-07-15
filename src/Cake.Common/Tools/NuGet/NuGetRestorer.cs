@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cake.Core;
-using Cake.Core.Extensions;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.NuGet

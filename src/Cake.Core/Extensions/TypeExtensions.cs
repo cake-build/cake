@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cake.Core.Extensions
+// ReSharper disable once CheckNamespace
+namespace Cake.Core
 {
-    internal static class TypeExtensions
+    public static class TypeExtensions
     {
         public static bool IsStatic(this Type type)
         {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cake.Core;
-using Cake.Core.Extensions;
 using Cake.Core.Diagnostics;
 using Cake.Diagnostics.Formatting;
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using Cake.Core;
-using Cake.Core.Extensions;
 
 namespace Cake
 {

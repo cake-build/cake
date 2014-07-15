@@ -51,6 +51,7 @@
     <Compile Include="Fixtures\MethodAliasGeneratorFixture.cs" />
     <Compile Include="Fixtures\PropertyAliasGeneratorFixture.cs" />
     <Compile Include="Fixtures\ScriptHostFixture.cs" />
+    <Compile Include="Fixtures\ScriptProcessorFixture.cs" />
     <Compile Include="Unit\ActionTaskTests.cs" />
     <Compile Include="Unit\CakeEngineTests.cs" />
     <Compile Include="Unit\CakeTaskBuilderExtensionsTests.cs" />
@@ -82,6 +83,8 @@
     <Compile Include="Unit\Scripting\CodeGen\MethodAliasGeneratorTests.cs" />
     <Compile Include="Unit\Scripting\CodeGen\PropertyAliasGeneratorTests.cs" />
     <Compile Include="Unit\Scripting\ScriptHostTests.cs" />
+    <Compile Include="Unit\Scripting\ScriptProcessorResultTests.cs" />
+    <Compile Include="Unit\Scripting\ScriptProcessorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

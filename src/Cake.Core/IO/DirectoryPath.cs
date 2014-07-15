@@ -43,8 +43,27 @@ namespace Cake.Core.IO
             return new DirectoryPath(combinedPath);
         }
 
+        public DirectoryPath MakeAbsolute(DirectoryPath path)
+        {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+            if (path.IsRelative)
+            {
+                throw new CakeException("The provided path cannot be relative.");
+            }
+            return IsRelative
+                ? path.Combine(this)
+                : new DirectoryPath(FullPath);
+        }
+
         public DirectoryPath MakeAbsolute(ICakeEnvironment environment)
         {
+            if (environment == null)
+            {
+                throw new ArgumentNullException("environment");
+            }
             return IsRelative 
                 ? environment.WorkingDirectory.Combine(this) 
                 : new DirectoryPath(FullPath);

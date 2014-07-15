@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Cake.Core.Annotations;
-using Cake.Core.Extensions;
 
 namespace Cake.Core.Scripting
 {

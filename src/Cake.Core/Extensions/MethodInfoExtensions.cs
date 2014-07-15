@@ -3,7 +3,8 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 
-namespace Cake.Core.Extensions
+// ReSharper disable once CheckNamespace
+namespace Cake.Core
 {
     public static class MethodInfoExtensions
     {

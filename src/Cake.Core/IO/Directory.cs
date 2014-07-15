@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Cake.Core.IO
 {
-    public sealed class Directory : IDirectory
+    internal sealed class Directory : IDirectory
     {
         private readonly DirectoryInfo _directory;
         private readonly DirectoryPath _path;

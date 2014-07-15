@@ -1,6 +1,7 @@
 ﻿using System;
 
-namespace Cake.Core.Extensions
+// ReSharper disable once CheckNamespace
+namespace Cake.Core
 {
     public static class StringExtensions
     {

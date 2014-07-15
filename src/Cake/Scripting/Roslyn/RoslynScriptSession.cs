@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Cake.Core.IO;
 using Cake.Core.Scripting;
 using Roslyn.Scripting;
 
@@ -16,6 +17,11 @@ namespace Cake.Scripting.Roslyn
                 throw new ArgumentNullException("roslynSession");
             }
             _roslynSession = roslynSession;
+        }
+
+        public void AddReferencePath(FilePath path)
+        {
+            _roslynSession.AddReference(path.FullPath);
         }
 
         public void AddReference(Assembly assembly)

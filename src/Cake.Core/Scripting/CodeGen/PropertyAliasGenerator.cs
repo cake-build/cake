@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Cake.Core.Annotations;
-using Cake.Core.Extensions;
 
 namespace Cake.Core.Scripting.CodeGen
 {

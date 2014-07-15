@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.Diagnostics;
-using Cake.Core.Extensions;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.CodeGen;
 
@@ -27,7 +27,7 @@ namespace Cake.Scripting
 
                 try
                 {
-                    session.Execute(GernerateCode(method));
+                    session.Execute(GenerateCode(method));
                 }
                 catch (Exception)
                 {
@@ -38,7 +38,7 @@ namespace Cake.Scripting
             _log.Debug("Done generating script alias code.");
         }
 
-        private static string GernerateCode(MethodInfo method)
+        private static string GenerateCode(MethodInfo method)
         {
             string code;
             if (method.IsDefined(typeof(CakeMethodAliasAttribute)))

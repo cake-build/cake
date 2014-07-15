@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Extensions;
 
 namespace Cake.Common.Tools.MSBuild
 {
