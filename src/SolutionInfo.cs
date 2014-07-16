@@ -6,7 +6,7 @@
 using System.Reflection;
 
 [assembly: AssemblyProduct("Cake")]
-[assembly: AssemblyVersion("0.1.13")]
-[assembly: AssemblyFileVersion("0.1.13")]
-[assembly: AssemblyInformationalVersion("0.1.13")]
+[assembly: AssemblyVersion("0.1.14")]
+[assembly: AssemblyFileVersion("0.1.14")]
+[assembly: AssemblyInformationalVersion("0.1.14")]
 [assembly: AssemblyCopyright("Copyright (c) Patrik Svensson 2014")]
