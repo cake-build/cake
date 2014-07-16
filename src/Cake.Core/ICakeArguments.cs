@@ -6,7 +6,7 @@
     public interface ICakeArguments
     {
         /// <summary>
-        /// Determines whether the specified argument exist.
+        /// Determines whether or not the specified argument exist.
         /// </summary>
         /// <param name="name">The argument name.</param>
         /// <returns>

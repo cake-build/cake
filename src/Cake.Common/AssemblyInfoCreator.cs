@@ -7,12 +7,21 @@ using Cake.Core.IO;
 
 namespace Cake.Common
 {
+    /// <summary>
+    /// The aseembly info creator.
+    /// </summary>
     public sealed class AssemblyInfoCreator
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AssemblyInfoCreator"/> class.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="environment">The environment.</param>
+        /// <param name="log">The log.</param>
         public AssemblyInfoCreator(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log)
         {
             if (fileSystem == null)
@@ -32,6 +41,11 @@ namespace Cake.Common
             _log = log;
         }
 
+        /// <summary>
+        /// Creates an assembly info file.
+        /// </summary>
+        /// <param name="outputPath">The output path.</param>
+        /// <param name="settings">The settings.</param>
         public void Create(FilePath outputPath, AssemblyInfoSettings settings)
         {
             if (outputPath == null)

@@ -200,7 +200,7 @@ namespace Cake.Tests.Unit.Scripting
 
                 // Then
                 fixture.Session.Received(1).AddReference(
-                    Arg.Is<Assembly>(a => a.FullName.StartsWith(assemblyName + ", ")));
+                    Arg.Is<Assembly>(a => a.FullName.StartsWith(assemblyName + ", ", StringComparison.OrdinalIgnoreCase)));
             }
 
             [Theory]

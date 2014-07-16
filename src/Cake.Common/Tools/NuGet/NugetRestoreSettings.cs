@@ -4,6 +4,9 @@ using Cake.Core.IO;
 
 namespace Cake.Common.Tools.NuGet
 {
+    /// <summary>
+    /// Contains settings used by <see cref="NuGetRestorer"/>.
+    /// </summary>
     public sealed class NuGetRestoreSettings
     {
         /// <summary>
@@ -32,7 +35,7 @@ namespace Cake.Common.Tools.NuGet
         public ICollection<string>  Source { get; set; }
 
         /// <summary>
-        /// Disable using the machine cache as the first package source.
+        /// Sets whether or not to use the machine cache as the first package source.
         /// </summary>
         public bool NoCache { get; set; }
 
@@ -52,10 +55,17 @@ namespace Cake.Common.Tools.NuGet
         public FilePath ConfigFile { get; set; }
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NuGetRestoreSettings"/> class.
+        /// </summary>
         public NuGetRestoreSettings() 
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NuGetRestoreSettings"/> class.
+        /// </summary>
+        /// <param name="solution">The solution.</param>
         public NuGetRestoreSettings(FilePath solution)
         {
             if (solution == null)

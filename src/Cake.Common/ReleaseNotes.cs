@@ -4,21 +4,37 @@ using System.Linq;
 
 namespace Cake.Common
 {
+    /// <summary>
+    /// Represent release notes.
+    /// </summary>
     public sealed class ReleaseNotes
     {
         private readonly Version _version;
         private readonly List<string> _notes;
 
+        /// <summary>
+        /// Gets the version.
+        /// </summary>
+        /// <value>The version.</value>
         public Version Version
         {
             get { return _version; }
         }
 
+        /// <summary>
+        /// Gets the release notes.
+        /// </summary>
+        /// <value>The release notes.</value>
         public IReadOnlyList<string> Notes
         {
             get { return _notes; }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReleaseNotes"/> class.
+        /// </summary>
+        /// <param name="version">The version.</param>
+        /// <param name="notes">The notes.</param>
         public ReleaseNotes(Version version, IEnumerable<string> notes)
         {
             if (version == null)

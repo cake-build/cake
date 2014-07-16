@@ -8,6 +8,9 @@ using Cake.Core.IO;
 
 namespace Cake.Common
 {
+    /// <summary>
+    /// Contains functionality related to release notes.
+    /// </summary>
     public static class ReleaseNotesExtensions
     {
         private static readonly ReleaseNotesParser _parser;
@@ -17,6 +20,12 @@ namespace Cake.Common
             _parser = new ReleaseNotesParser();
         }
 
+        /// <summary>
+        /// Parses all release notes.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="filePath">The file path.</param>
+        /// <returns>All release notes.</returns>
         [CakeMethodAlias]
         public static IReadOnlyList<ReleaseNotes> ParseAllReleaseNotes(this ICakeContext context, FilePath filePath)
         {
@@ -44,6 +53,12 @@ namespace Cake.Common
             }
         }
 
+        /// <summary>
+        /// Parses the latest release notes.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="filePath">The file path.</param>
+        /// <returns>The latest release notes.</returns>
         [CakeMethodAlias]
         public static ReleaseNotes ParseReleaseNotes(this ICakeContext context, FilePath filePath)
         {

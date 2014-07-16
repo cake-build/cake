@@ -8,13 +8,22 @@ using Cake.Core.IO;
 
 namespace Cake.Common.IO
 {
+    /// <summary>
+    /// Performs Zip compression.
+    /// </summary>
     public sealed class Zipper
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
-        private readonly StringComparison _comparison;        
+        private readonly StringComparison _comparison;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Zipper"/> class.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="environment">The environment.</param>
+        /// <param name="log">The log.</param>
         public Zipper(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log)
         {
             if (fileSystem == null)
@@ -35,6 +44,12 @@ namespace Cake.Common.IO
             _comparison = environment.IsUnix() ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
         }
 
+        /// <summary>
+        /// Zips the specified directory.
+        /// </summary>
+        /// <param name="rootPath">The root path.</param>
+        /// <param name="outputPath">The output path.</param>
+        /// <param name="filePaths">The files to zip.</param>
         public void Zip(DirectoryPath rootPath, FilePath outputPath, IEnumerable<FilePath> filePaths)
         {
             if (rootPath == null)

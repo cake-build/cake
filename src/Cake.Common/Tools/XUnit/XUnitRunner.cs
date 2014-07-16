@@ -7,12 +7,21 @@ using Cake.Core.IO;
 
 namespace Cake.Common.Tools.XUnit
 {
+    /// <summary>
+    /// The xUnit unit test runner.
+    /// </summary>
     public sealed class XUnitRunner
     {
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
         private readonly IProcessRunner _runner;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XUnitRunner"/> class.
+        /// </summary>
+        /// <param name="environment">The environment.</param>
+        /// <param name="globber">The globber.</param>
+        /// <param name="runner">The runner.</param>
         public XUnitRunner(ICakeEnvironment environment, IGlobber globber, IProcessRunner runner)
         {
             _environment = environment;
@@ -20,6 +29,11 @@ namespace Cake.Common.Tools.XUnit
             _runner = runner;
         }
 
+        /// <summary>
+        /// Runs the tests in the specified assembly.
+        /// </summary>
+        /// <param name="assemblyPath">The assembly path.</param>
+        /// <param name="settings">The settings.</param>
         public void Run(FilePath assemblyPath, XUnitSettings settings)
         {
             if (assemblyPath == null)

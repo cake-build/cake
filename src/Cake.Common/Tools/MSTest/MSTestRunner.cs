@@ -6,12 +6,21 @@ using Cake.Core.IO;
 
 namespace Cake.Common.Tools.MSTest
 {
+    /// <summary>
+    /// The MSTest unit test runner.
+    /// </summary>
     public sealed class MSTestRunner
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly IProcessRunner _processRunner;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MSTestRunner"/> class.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="environment">The environment.</param>
+        /// <param name="processRunner">The process runner.</param>
         public MSTestRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner)
         {
             _fileSystem = fileSystem;
@@ -19,6 +28,11 @@ namespace Cake.Common.Tools.MSTest
             _processRunner = processRunner;
         }
 
+        /// <summary>
+        /// Runs the tests in the specified assembly.
+        /// </summary>
+        /// <param name="assemblyPath">The assembly path.</param>
+        /// <param name="settings">The settings.</param>
         public void Run(FilePath assemblyPath, MSTestSettings settings)
         {
             if (assemblyPath == null)

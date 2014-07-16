@@ -5,12 +5,21 @@ using Cake.Core.IO;
 
 namespace Cake.Common.Tools.NuGet
 {
+    /// <summary>
+    /// The NuGet package restorer used to restore solution packages.
+    /// </summary>
     public sealed class NuGetRestorer
     {
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
         private readonly IProcessRunner _processRunner;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NuGetRestorer"/> class.
+        /// </summary>
+        /// <param name="environment">The environment.</param>
+        /// <param name="globber">The globber.</param>
+        /// <param name="processRunner">The process runner.</param>
         public NuGetRestorer(ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
         {
             _environment = environment;
@@ -18,6 +27,10 @@ namespace Cake.Common.Tools.NuGet
             _processRunner = processRunner;
         }
 
+        /// <summary>
+        /// Restores NuGet packages using the specified settings.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
         public void Restore(NuGetRestoreSettings settings)
         {
             if (settings == null)

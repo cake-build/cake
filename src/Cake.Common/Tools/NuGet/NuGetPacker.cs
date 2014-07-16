@@ -5,12 +5,21 @@ using Cake.Core.IO;
 
 namespace Cake.Common.Tools.NuGet
 {
+    /// <summary>
+    /// The NuGet packer.
+    /// </summary>
     public sealed class NuGetPacker
     {
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
         private readonly IProcessRunner _processRunner;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NuGetPacker"/> class.
+        /// </summary>
+        /// <param name="environment">The environment.</param>
+        /// <param name="globber">The globber.</param>
+        /// <param name="processRunner">The process runner.</param>
         public NuGetPacker(ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
         {
             _environment = environment;
@@ -18,6 +27,11 @@ namespace Cake.Common.Tools.NuGet
             _processRunner = processRunner;
         }
 
+        /// <summary>
+        /// Creates a NuGet package from the specified Nuspec file.
+        /// </summary>
+        /// <param name="nuspecFilePath">The nuspec file path.</param>
+        /// <param name="settings">The settings.</param>
         public void Pack(FilePath nuspecFilePath, NuGetPackSettings settings)
         {
             if (nuspecFilePath == null)

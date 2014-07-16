@@ -126,11 +126,11 @@ namespace Cake.Core.Scripting
             }
 
             var reference = line.Substring(index + 1).UnQuote().Trim();
-            if (reference.StartsWith("\""))
+            if (reference.StartsWith("\"", StringComparison.OrdinalIgnoreCase))
             {
                 return null;
             }
-            if (reference.EndsWith("\""))
+            if (reference.EndsWith("\"", StringComparison.OrdinalIgnoreCase))
             {
                 return null;
             }

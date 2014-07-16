@@ -6,15 +6,26 @@ using Cake.Core;
 
 namespace Cake.Common
 {
+    /// <summary>
+    /// The release notes parser.
+    /// </summary>
     public sealed class ReleaseNotesParser
     {
         private readonly Regex _versionRegex;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReleaseNotesParser"/> class.
+        /// </summary>
         public ReleaseNotesParser()
         {
             _versionRegex = new Regex(@"([0-9]+\.)+[0-9]+");
         }
 
+        /// <summary>
+        /// Parses all release notes.
+        /// </summary>
+        /// <param name="content">The content.</param>
+        /// <returns>All release notes.</returns>
         public IReadOnlyList<ReleaseNotes> Parse(string content)
         {
             if (content == null)
