@@ -29,15 +29,15 @@ namespace Cake
             }
         }
 
-        public bool HasArgument(string key)
+        public bool HasArgument(string name)
         {
-            return _arguments.ContainsKey(key);
+            return _arguments.ContainsKey(name);
         }
 
-        public string GetArgument(string key)
+        public string GetArgument(string name)
         {
-            return _arguments.ContainsKey(key) 
-                ? _arguments[key] : null;
+            return _arguments.ContainsKey(name) 
+                ? _arguments[name] : null;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Cake.Scripting
         public void Generate(IScriptSession session, IEnumerable<Assembly> assemblies)
         {
             _log.Debug("Generating script alias code...");
-            foreach (var method in ScriptAliasFinder.GetExtensionMethods(assemblies))
+            foreach (var method in ScriptAliasFinder.FindAliases(assemblies))
             {
                 var signature = method.GetSignature(false);
 

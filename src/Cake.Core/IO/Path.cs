@@ -3,6 +3,10 @@ using System.Linq;
 
 namespace Cake.Core.IO
 {
+    /// <summary>
+    /// Provides properties and instance methods for working with paths.
+    /// This class must be inherited.
+    /// </summary>
     public abstract class Path
     {
         private readonly string _path;
@@ -10,21 +14,39 @@ namespace Cake.Core.IO
         private readonly string[] _segments;
         private static readonly char[] _invalidPathCharacters;
 
+        /// <summary>
+        /// Gets the full path.
+        /// </summary>
+        /// <value>The full path.</value>
         public string FullPath
         {
             get { return _path; }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this path is relative.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this path is relative; otherwise, <c>false</c>.
+        /// </value>
         public bool IsRelative
         {
             get { return _isRelative; }
         }
 
+        /// <summary>
+        /// Gets the segments making up the path.
+        /// </summary>
+        /// <value>The segments making up the path.</value>
         public string[] Segments
         {
             get { return _segments; }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Path"/> class.
+        /// </summary>
+        /// <param name="path">The path.</param>
         protected Path(string path)
         {
             if (path == null)
@@ -77,6 +99,12 @@ namespace Cake.Core.IO
             _invalidPathCharacters = System.IO.Path.GetInvalidPathChars().Concat(new[] { '*', '?' }).ToArray();
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this path.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             return FullPath;

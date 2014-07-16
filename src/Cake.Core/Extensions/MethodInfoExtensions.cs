@@ -6,8 +6,18 @@ using System.Text;
 // ReSharper disable once CheckNamespace
 namespace Cake.Core
 {
+    /// <summary>
+    /// Contains extension methods for <see cref="MethodInfo"/>.
+    /// </summary>
     public static class MethodInfoExtensions
     {
+        /// <summary>
+        /// Gets the signature for a method.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <param name="includeMethodNamespace">if set to <c>true</c>, include method namespace.</param>
+        /// <param name="includeParameterNamespace">if set to <c>true</c>, include parameter namespace.</param>
+        /// <returns>The method signature.</returns>
         public static string GetSignature(this MethodInfo method, 
             bool includeMethodNamespace = true, bool includeParameterNamespace = false)
         {
@@ -29,6 +39,11 @@ namespace Cake.Core
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Gets the full name of a method.
+        /// </summary>
+        /// <param name="method">The method to get the full name for.</param>
+        /// <returns>The full name.</returns>
         public static string GetFullName(this MethodInfo method)
         {
             Debug.Assert(method.DeclaringType != null); // Resharper

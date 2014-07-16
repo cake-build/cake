@@ -34,9 +34,9 @@ namespace Cake.Scripting.Roslyn
             _roslynSession.ImportNamespace(@namespace);
         }
 
-        public object Execute(string code)
+        public void Execute(string code)
         {
-            return _roslynSession.Execute(code);
+            _roslynSession.Execute(code);
         }
     }
 }

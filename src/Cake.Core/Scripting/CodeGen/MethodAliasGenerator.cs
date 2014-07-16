@@ -9,8 +9,18 @@ using Cake.Core.Annotations;
 
 namespace Cake.Core.Scripting.CodeGen
 {
+    /// <summary>
+    /// Responsible for generating script method aliases.
+    /// </summary>
     public static class MethodAliasGenerator
     {
+        /// <summary>
+        /// Generates a script method alias from the specified method.
+        /// The provided method must be an extensionmethod for <see cref="ICakeContext"/>
+        /// and it must be decorated with the <see cref="CakeMethodAliasAttribute"/>.
+        /// </summary>
+        /// <param name="method">The method to generate the code for.</param>
+        /// <returns>The generated code.</returns>
         public static string Generate(MethodInfo method)
         {
             if (method == null)

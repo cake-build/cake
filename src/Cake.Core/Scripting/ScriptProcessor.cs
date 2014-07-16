@@ -5,11 +5,19 @@ using Cake.Core.IO;
 
 namespace Cake.Core.Scripting
 {
+    /// <summary>
+    /// Responsible for processing script files.
+    /// </summary>
     public sealed class ScriptProcessor : IScriptProcessor
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScriptProcessor"/> class.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="environment">The environment.</param>
         public ScriptProcessor(IFileSystem fileSystem, ICakeEnvironment environment)
         {
             if (fileSystem == null)
@@ -24,6 +32,11 @@ namespace Cake.Core.Scripting
             _environment = environment;
         }
 
+        /// <summary>
+        /// Processes the specified script.
+        /// </summary>
+        /// <param name="path">The path to the script that should be processed.</param>
+        /// <returns>The processing result.</returns>
         public ScriptProcessorResult Process(FilePath path)
         {
             if (path == null)

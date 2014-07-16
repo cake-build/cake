@@ -13,12 +13,20 @@ using Cake.Core.IO.Globbing.Nodes.Roots;
 
 namespace Cake.Core.IO
 {
+    /// <summary>
+    /// Responsible for file system globbing.
+    /// </summary>
     public sealed class Globber : IGlobber
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly RegexOptions _options;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Globber"/> class.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="environment">The environment.</param>
         public Globber(IFileSystem fileSystem, ICakeEnvironment environment)
         {
             if (fileSystem == null)
@@ -40,6 +48,13 @@ namespace Cake.Core.IO
             }
         }
 
+        /// <summary>
+        /// Returns <see cref="Path" /> instances matching the specified pattern.
+        /// </summary>
+        /// <param name="pattern">The pattern to match.</param>
+        /// <returns>
+        ///   <see cref="Path" /> instances matching the specified pattern.
+        /// </returns>
         public IEnumerable<Path> Match(string pattern)
         {
             var scanner = new Scanner(pattern);
