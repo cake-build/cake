@@ -92,6 +92,8 @@ Task("Copy-Files")
 {
 	CopyFileToDirectory(buildDir + "/Cake.exe", binDir);
     CopyFileToDirectory(buildDir + "/Cake.Core.dll", binDir);
+    CopyFileToDirectory(buildDir + "/Cake.Core.xml", binDir);
+    CopyFileToDirectory(buildDir + "/Cake.Core.pdb", binDir);
     CopyFileToDirectory(buildDir + "/Cake.Common.dll", binDir);
     CopyFileToDirectory(buildDir + "/Autofac.dll", binDir);
     CopyFileToDirectory(buildDir + "/Nuget.Core.dll", binDir);
@@ -107,7 +109,7 @@ Task("Zip-Files")
 	Zip(binDir, filename);
 });
 
-Task("Create-NuGet-Package")
+Task("Create-Cake-NuGet-Package")
 	.Description("Creates the Cake NuGet package.")
 	.IsDependentOn("Copy-Files")
 	.Does(() =>
@@ -116,15 +118,29 @@ Task("Create-NuGet-Package")
 		Version = version,
         BasePath = binDir,
         OutputDirectory = nugetRoot,
-        Symbols = true,
+        Symbols = false,
         NoPackageAnalysis = true
+	});
+});
+
+Task("Create-Core-NuGet-Package")
+	.Description("Creates the Cake NuGet package.")
+	.IsDependentOn("Copy-Files")
+	.Does(() =>
+{
+	NuGetPack("./Cake.Core.nuspec", new NuGetPackSettings {
+		Version = version,
+        BasePath = binDir,
+        OutputDirectory = nugetRoot,
+        Symbols = true
 	});
 });
 
 Task("Package")
 	.Description("Zips and creates NuGet package.")
 	.IsDependentOn("Zip-Files")
-	.IsDependentOn("Create-NuGet-Package");
+	.IsDependentOn("Create-Cake-NuGet-Package")
+	.IsDependentOn("Create-Core-NuGet-Package");
 
 Task("All")
 	.Description("Final target.")
