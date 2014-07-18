@@ -89,13 +89,12 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Scripting\BuildScriptHost.cs" />
-    <Compile Include="Scripting\DescriptionScriptHost.cs" />
+    <Compile Include="Scripting\Hosts\BuildScriptHost.cs" />
+    <Compile Include="Scripting\Hosts\DescriptionScriptHost.cs" />
     <Compile Include="Scripting\Roslyn\IRoslynInstaller.cs" />
     <Compile Include="Scripting\Roslyn\RoslynInstaller.cs" />
     <Compile Include="Scripting\Roslyn\RoslynScriptSession.cs" />
     <Compile Include="Scripting\Roslyn\RoslynScriptSessionFactory.cs" />
-    <Compile Include="Scripting\ScriptAliasGenerator.cs" />
     <Compile Include="Scripting\ScriptRunner.cs" />
   </ItemGroup>
   <ItemGroup>

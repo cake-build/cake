@@ -84,10 +84,10 @@
     <Compile Include="Unit\CakeOptionsTests.cs" />
     <Compile Include="Unit\Diagnostics\CakeBuildLogTests.cs" />
     <Compile Include="Unit\Diagnostics\FormatParserTests.cs" />
-    <Compile Include="Unit\Scripting\BuildScriptHostTests.cs">
+    <Compile Include="Unit\Scripting\Hosts\BuildScriptHostTests.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Unit\Scripting\DescriptionScriptHostTests.cs" />
+    <Compile Include="Unit\Scripting\Hosts\DescriptionScriptHostTests.cs" />
     <Compile Include="Unit\Scripting\Roslyn\RoslynScriptSessionFactoryTests.cs">
       <SubType>Code</SubType>
     </Compile>

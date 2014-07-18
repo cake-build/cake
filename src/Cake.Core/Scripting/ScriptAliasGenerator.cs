@@ -1,23 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.Diagnostics;
-using Cake.Core.Scripting;
 using Cake.Core.Scripting.CodeGen;
 
-namespace Cake.Scripting
+namespace Cake.Core.Scripting
 {
-    internal sealed class ScriptAliasGenerator : IScriptAliasGenerator
+    /// <summary>
+    /// The script alias generator.
+    /// </summary>
+    public sealed class ScriptAliasGenerator : IScriptAliasGenerator
     {
         private readonly ICakeLog _log;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScriptAliasGenerator"/> class.
+        /// </summary>
+        /// <param name="log">The log.</param>
         public ScriptAliasGenerator(ICakeLog log)
         {
             _log = log;
         }
 
+        /// <summary>
+        /// Generates script aliases and adds them to the specified session.
+        /// </summary>
+        /// <param name="session">The session to add script aliases to.</param>
+        /// <param name="assemblies">The assemblies to find script aliases in.</param>
         public void Generate(IScriptSession session, IEnumerable<Assembly> assemblies)
         {
             _log.Debug("Generating script alias code...");

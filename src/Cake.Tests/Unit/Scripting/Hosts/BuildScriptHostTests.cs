@@ -1,10 +1,10 @@
 ﻿using System;
 using Cake.Core;
-using Cake.Scripting;
+using Cake.Scripting.Hosts;
 using NSubstitute;
 using Xunit;
 
-namespace Cake.Tests.Unit.Scripting
+namespace Cake.Tests.Unit.Scripting.Hosts
 {
     public sealed class BuildScriptHostTests
     {

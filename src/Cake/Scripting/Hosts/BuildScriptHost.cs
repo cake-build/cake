@@ -1,7 +1,7 @@
 ﻿using Cake.Core;
 using Cake.Core.Scripting;
 
-namespace Cake.Scripting
+namespace Cake.Scripting.Hosts
 {
     public sealed class BuildScriptHost : ScriptHost
     {

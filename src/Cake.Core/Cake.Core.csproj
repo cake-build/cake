@@ -119,6 +119,7 @@
     <Compile Include="Scripting\IScriptSession.cs" />
     <Compile Include="Scripting\IScriptSessionFactory.cs" />
     <Compile Include="Scripting\ScriptAliasFinder.cs" />
+    <Compile Include="Scripting\ScriptAliasGenerator.cs" />
     <Compile Include="Scripting\ScriptHost.cs" />
     <Compile Include="Scripting\ScriptProcessor.cs" />
     <Compile Include="Scripting\ScriptProcessorResult.cs" />

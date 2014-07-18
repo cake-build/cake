@@ -7,6 +7,7 @@ using Cake.Core.IO;
 using Cake.Core.Scripting;
 using Cake.Diagnostics;
 using Cake.Scripting;
+using Cake.Scripting.Hosts;
 using Cake.Scripting.Roslyn;
 
 namespace Cake

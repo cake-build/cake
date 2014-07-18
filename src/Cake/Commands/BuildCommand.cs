@@ -1,4 +1,5 @@
 ﻿using Cake.Scripting;
+using Cake.Scripting.Hosts;
 
 namespace Cake.Commands
 {
