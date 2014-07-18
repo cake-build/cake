@@ -1,6 +1,6 @@
 #Cake
 
-Cake (C# Make) is a build automation system inspired by [Fake](http://fsharp.github.io/FAKE/).
+Cake (C# Make) is a build automation system using C#.
 
 [![TeamCity CI Build Status](http://builds.nullreferenceexception.se/app/rest/builds/buildType:id:Cake_Continuous/statusIcon)](http://builds.nullreferenceexception.se/viewType.html?buildTypeId=Cake_Continuous&guest=1)
 
@@ -8,7 +8,7 @@ Cake (C# Make) is a build automation system inspired by [Fake](http://fsharp.git
 
 The Cake engine is pretty much done, but there are still improvements to be made. I'm still experimenting with the script API to make it as easy and intuitive as possible, so expect changes along the road.
 
-Currently basic MSBuild, xUnit, NuGet, ILMerge, NUnit, MSTest, compression and file system operations are implemented, but more features are planned. The full roadmap can be found [here](https://github.com/cake-build/cake/issues/milestones).
+Currently basic MSBuild, xUnit, NuGet, ILMerge, NUnit, MSTest, compression and file system operations are implemented, but more features are planned. A roadmap can be found [here](https://github.com/cake-build/cake/issues/milestones).
 
 For more information and examples of how to use Cake, see the [Wiki](https://github.com/cake-build/cake/wiki).
 
@@ -26,8 +26,6 @@ C:\Project> NuGet.exe install Cake -OutputDirectory Tools -ExcludeVersion
 var target = Argument("target", "NuGet");
 var configuration = Argument("configuration", "Release");
 
-/////////////////////////////////////////////////
-
 Task("Clean")
     .Does(() =>
 {
@@ -41,6 +39,7 @@ Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean")
     .Does(context =>
 {
+    // Restore NuGet packages.
     NuGetRestore("./src/Cake.sln");    
 });
 
@@ -94,8 +93,6 @@ Task("NuGet")
     });
 });
 
-/////////////////////////////////////////////////
-
 RunTarget(target);
 ```
 
@@ -105,27 +102,20 @@ RunTarget(target);
 C:\Project\Tools\Cake> Cake.exe ../../build.csx -verbosity=verbose -target=Pack
 ```
 
-##Task descriptions
+## Contributing
 
-A task can be given a description using the `.Description` extension.
+* Fork the repository.
+* Make your feature addition or bug fix.
+* Don't forget the unit tests.
+* Send a pull request. Bonus for topic branches. *Funny .gif will be your reward.*
 
-```CSharp
-Task("Foo")
-    .Description("A description for task Foo")
-    .Does(() => {});
-```
+## License
 
-To get a list of tasks run:
+Copyright (c) 2014, Patrik Svensson and contributors.   
+Cake is provided as-is under the MIT license. For more information see `LICENSE`.
 
-```Batchfile
-C:\Project\Tools\Cake> Cake.exe ../../build.csx -s
-```
+* For Roslyn, see https://roslyn.codeplex.com/license
+* For Autofac, see https://github.com/autofac/Autofac/blob/master/LICENSE
+* For NuGet.Core, see https://nuget.codeplex.com/license
 
-The output will look something like this:
 
-```
-Task                          Description
-===============================================================================
-Bar
-Foo                           A description for task Foo
-```
