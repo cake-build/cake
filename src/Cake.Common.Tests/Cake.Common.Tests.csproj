@@ -91,6 +91,8 @@
     <Compile Include="Unit\Tools\MSTest\MSTestRunnerTests.cs" />
     <Compile Include="Unit\Tools\NuGet\NuGetPackerTests.cs" />
     <Compile Include="Unit\Tools\NuGet\NuGetPackSettingsTests.cs" />
+    <Compile Include="Unit\Tools\NuGet\NuGetPusherTests.cs" />
+    <Compile Include="Unit\Tools\NuGet\NuGetPushSettingsTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitRunnerTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitSettingsTests.cs" />
     <Compile Include="Unit\Tools\XUnit\XUnitRunnerTests.cs" />

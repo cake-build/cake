@@ -30,6 +30,7 @@ This is a list of the currently implemented functionality.
 * xUnit
 * NUnit
 * NuGet pack
+* NuGet push
 * NuGet restore
 * ILMerge
 * File copying/moving/deleting

@@ -59,5 +59,18 @@ namespace Cake.Common.Tools.NuGet
             var runner = new NuGetRestorer(context.Environment, context.Globber, context.ProcessRunner);
             runner.Restore(settings);
         }
+
+        /// <summary>
+        /// Pushes a NuGet package to a NuGet server and publishes it.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageFilePath">The nupkg file path.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        public static void NuGetPush(this ICakeContext context, FilePath packageFilePath, NuGetPushSettings settings)
+        {
+            var packer = new NuGetPusher(context.Environment, context.Globber, context.ProcessRunner);
+            packer.Push(packageFilePath, settings);
+        }
     }
 }

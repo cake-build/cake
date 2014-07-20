@@ -47,7 +47,7 @@ namespace Cake.Common.Tools.NuGet
             var toolPath = NuGetResolver.GetToolPath(_environment, _globber, settings.ToolPath);
 
             // Start the process.
-            var processInfo = NuGetResolver.GetProcessStartInfo(_environment, toolPath, ()=>GetPackParameters(nuspecFilePath, settings));
+            var processInfo = NuGetResolver.GetProcessStartInfo(_environment, toolPath, () => GetPackParameters(nuspecFilePath, settings));
             var process = _processRunner.Start(processInfo);
             if (process == null)
             {
@@ -66,7 +66,7 @@ namespace Cake.Common.Tools.NuGet
 
         private ICollection<string> GetPackParameters(FilePath nuspecFilePath, NuGetPackSettings settings)
         {
-            var parameters = new List<string> {"pack"};
+            var parameters = new List<string> { "pack" };
 
             // Version
             if (!string.IsNullOrWhiteSpace(settings.Version))

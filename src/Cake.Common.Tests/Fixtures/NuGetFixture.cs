@@ -31,5 +31,10 @@ namespace Cake.Common.Tests.Fixtures
         {
             return new NuGetPacker(Environment, Globber, ProcessRunner);
         }
+
+        public NuGetPusher CreatePusher()
+        {
+            return new NuGetPusher(Environment, Globber, ProcessRunner);
+        }
     }
 }
