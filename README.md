@@ -4,13 +4,42 @@ Cake (C# Make) is a build automation system using C#.
 
 [![TeamCity CI Build Status](http://builds.nullreferenceexception.se/app/rest/builds/buildType:id:Cake_Continuous/statusIcon)](http://builds.nullreferenceexception.se/viewType.html?buildTypeId=Cake_Continuous&guest=1)
 
+##Table of content
+
+1. [Roadmap](https://github.com/cake-build/cake#roadmap)
+2. [Implemented functionality](https://github.com/cake-build/cake#implemented-functionality)
+3. [Example](https://github.com/cake-build/cake#example)
+    - [Download Cake](https://github.com/cake-build/cake#1-download-cake)
+    - [Create build script](https://github.com/cake-build/cake#2-create-build-script)
+    - [Run build script](https://github.com/cake-build/cake#3-run-build-script)
+4. [Contributing](https://github.com/cake-build/cake#contributing)
+5. [License](https://github.com/cake-build/cake#license)
+
 ##Roadmap
 
 The Cake engine is pretty much done, but there are still improvements to be made. I'm still experimenting with the script API to make it as easy and intuitive as possible, so expect changes along the road.
 
-Currently basic MSBuild, xUnit, NuGet, ILMerge, NUnit, MSTest, compression and file system operations are implemented, but more features are planned. A roadmap can be found [here](https://github.com/cake-build/cake/issues/milestones).
+A roadmap can be found [here](https://github.com/cake-build/cake/issues/milestones).
 
-For more information and examples of how to use Cake, see the [Wiki](https://github.com/cake-build/cake/wiki).
+##Implemented functionality
+
+This is a list of the currently implemented functionality.
+
+* MSBuild
+* MSTest
+* xUnit
+* NUnit
+* NuGet pack
+* NuGet restore
+* ILMerge
+* File copying/moving/deleting
+* Directory creation/cleaning/deleting
+* File/Directory globbing
+* Compression (zip)
+* AssemblyInfo patching
+* Release notes parser
+
+For more information and examples of how to use Cake, see the [Wiki](https://github.com/cake-build/cake/wiki). 
 
 ##Example
 
