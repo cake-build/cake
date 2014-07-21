@@ -19,7 +19,8 @@ namespace Cake.Common.Tools.NuGet
         [CakeMethodAlias]
         public static void NuGetPack(this ICakeContext context, FilePath nuspecFilePath, NuGetPackSettings settings)
         {
-            var packer = new NuGetPacker(context.Environment, context.Globber, context.ProcessRunner);
+            var packer = new NuGetPacker(context.FileSystem, context.Environment, 
+                context.Globber, context.ProcessRunner, context.Log);
             packer.Pack(nuspecFilePath, settings);
         }
 
