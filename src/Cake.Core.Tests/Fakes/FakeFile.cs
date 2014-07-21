@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Security.Cryptography;
 using Cake.Core.IO;
 
 namespace Cake.Core.Tests.Fakes

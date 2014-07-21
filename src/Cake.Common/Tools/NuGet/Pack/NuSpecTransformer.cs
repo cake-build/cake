@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using Cake.Core;
-using Cake.Core.IO;
 
 namespace Cake.Common.Tools.NuGet
 {

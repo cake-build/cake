@@ -125,7 +125,7 @@ namespace Cake.Common.Tools.NuGet
             return SaveNuspecXml(nuspecFilePath, settings, xml);
         }
 
-        private XmlDocument LoadNuspecXml(IFile nuspecFile)
+        private static XmlDocument LoadNuspecXml(IFile nuspecFile)
         {
             using (var stream = nuspecFile.OpenRead())
             {
