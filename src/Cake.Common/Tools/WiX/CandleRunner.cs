@@ -7,12 +7,22 @@ using Cake.Core.IO;
 
 namespace Cake.Common.Tools.WiX
 {
+    /// <summary>
+    /// The WiX Candle runner.
+    /// </summary>
     public sealed class CandleRunner
     {
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
         private readonly IProcessRunner _processRunner;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CandleRunner"/> class.
+        /// </summary>
+        /// <param name="environment">The environment.</param>
+        /// <param name="globber">The globber.</param>
+        /// <param name="processRunner">The process runner.</param>
+        /// <exception cref="ArgumentNullException"></exception>
         public CandleRunner(ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
         {
             if (environment == null) throw new ArgumentNullException("environment");
@@ -24,6 +34,11 @@ namespace Cake.Common.Tools.WiX
             _processRunner = processRunner;
         }
 
+        /// <summary>
+        /// Runs Candle with the specified source files and settings.
+        /// </summary>
+        /// <param name="sourceFiles">The source files (.wxs) to compile.</param>
+        /// <param name="settings">The settings.</param>
         public void Run(IEnumerable<FilePath> sourceFiles, CandleSettings settings)
         {
             if (sourceFiles == null)
