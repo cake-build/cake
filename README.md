@@ -12,8 +12,9 @@ Cake (C# Make) is a build automation system using C#.
     - [Download Cake](https://github.com/cake-build/cake#1-download-cake)
     - [Create build script](https://github.com/cake-build/cake#2-create-build-script)
     - [Run build script](https://github.com/cake-build/cake#3-run-build-script)
-4. [Contributing](https://github.com/cake-build/cake#contributing)
-5. [License](https://github.com/cake-build/cake#license)
+4. [Documentation](https://github.com/cake-build/cake#documentation)
+5. [Contributing](https://github.com/cake-build/cake#contributing)
+6. [License](https://github.com/cake-build/cake#license)
 
 ##Roadmap
 
@@ -131,6 +132,10 @@ RunTarget(target);
 ```
 C:\Project\Tools\Cake> Cake.exe ../../build.csx -verbosity=verbose -target=Pack
 ```
+
+## Documentation
+
+You can read the latest documentation at [http://cake.readthedocs.org/](http://cake.readthedocs.org/).
 
 ## Contributing
 
