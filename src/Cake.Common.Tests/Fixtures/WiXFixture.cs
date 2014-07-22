@@ -26,11 +26,17 @@ namespace Cake.Common.Tests.Fixtures
 
             Globber = Substitute.For<IGlobber>();
             Globber.Match("./tools/**/candle.exe").Returns(new[] { (FilePath)"/Working/tools/candle.exe" });
+            Globber.Match("./tools/**/light.exe").Returns(new[] { (FilePath)"/Working/tools/light.exe" });
         }
 
         public CandleRunner CreateCandleRunner()
         {
             return new CandleRunner(Environment, Globber, ProcessRunner);
+        }
+
+        public LightRunner CreateLightRunner()
+        {
+            return new LightRunner(Environment, Globber, ProcessRunner);
         }
     }
 }

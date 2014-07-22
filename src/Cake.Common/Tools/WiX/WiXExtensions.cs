@@ -35,5 +35,31 @@ namespace Cake.Common.Tools.WiX
             var runner = new CandleRunner(context.Environment, context.Globber, context.ProcessRunner);
             runner.Run(sourceFiles, settings ?? new CandleSettings());
         }
+
+        /// <summary>
+        /// Links all .wixobj files matching the <paramref name="pattern"/>.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="pattern">The globbing pattern.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        public static void WiXLight(this ICakeContext context, string pattern, LightSettings settings = null)
+        {
+            var files = context.Globber.GetFiles(pattern);
+            WiXLight(context, files, settings ?? new LightSettings());
+        }
+
+        /// <summary>
+        /// Links all .wixobj files in <paramref name="objectFiles"/>.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="objectFiles">The object files.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        public static void WiXLight(this ICakeContext context, IEnumerable<FilePath> objectFiles, LightSettings settings = null)
+        {
+            var runner = new LightRunner(context.Environment, context.Globber, context.ProcessRunner);
+            runner.Run(objectFiles, settings ?? new LightSettings());
+        }
     }
 }

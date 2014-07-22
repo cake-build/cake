@@ -93,6 +93,8 @@
     <Compile Include="Tools\WiX\Architecture.cs" />
     <Compile Include="Tools\WiX\CandleRunner.cs" />
     <Compile Include="Tools\WiX\CandleSettings.cs" />
+    <Compile Include="Tools\WiX\LightRunner.cs" />
+    <Compile Include="Tools\WiX\LightSettings.cs" />
     <Compile Include="Tools\WiX\WiXExtensions.cs" />
     <Compile Include="Tools\XUnit\XUnitExtensions.cs" />
     <Compile Include="Tools\XUnit\XUnitRunner.cs" />

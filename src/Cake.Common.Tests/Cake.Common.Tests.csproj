@@ -101,6 +101,7 @@
     <Compile Include="Unit\Tools\NuGet\NuGetPushSettingsTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitRunnerTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitSettingsTests.cs" />
+    <Compile Include="Unit\Tools\WiX\LightRunnerTests.cs" />
     <Compile Include="Unit\Tools\WiX\CandleRunnerTests.cs" />
     <Compile Include="Unit\Tools\XUnit\XUnitRunnerTests.cs" />
     <Compile Include="Unit\Tools\XUnit\XUnitSettingsTests.cs" />

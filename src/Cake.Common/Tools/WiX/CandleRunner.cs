@@ -22,7 +22,6 @@ namespace Cake.Common.Tools.WiX
         /// <param name="environment">The environment.</param>
         /// <param name="globber">The globber.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <exception cref="ArgumentNullException"></exception>
         public CandleRunner(ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
         {
             if (environment == null) throw new ArgumentNullException("environment");
