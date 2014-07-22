@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{463B19BD-6937-4120-9EAC-FFE83D389651}</ProjectGuid>
+    <ProjectGuid>{9C5DC58C-D8BF-4E80-962C-05E6457EB5A9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Cake.Tests</RootNamespace>
@@ -37,9 +37,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Roslyn.Compilers.Common.1.2.20906.2\lib\net45\Roslyn.Compilers.dll</HintPath>
     </Reference>
-    <Reference Include="Roslyn.Compilers.CSharp, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Roslyn.Compilers.CSharp">
       <HintPath>..\packages\Roslyn.Compilers.CSharp.1.2.20906.2\lib\net45\Roslyn.Compilers.CSharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -56,24 +56,43 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Unit\Arguments\ArgumentParserTests.cs" />
-    <Compile Include="Unit\Bootstrapper\CakeBootstrapperTests.cs" />
-    <Compile Include="Unit\CakeApplicationTests.cs" />
-    <Compile Include="Unit\CakeOptionsTests.cs" />
-    <Compile Include="Unit\Diagnostics\CakeLogAdapterTests.cs" />
-    <Compile Include="Unit\Diagnostics\FormatParserTests.cs" />
-    <Compile Include="Unit\Scripting\DefaultScriptHostTests.cs" />
-    <Compile Include="Unit\Scripting\DescriptionScriptHostTests.cs" />
-    <Compile Include="Unit\Scripting\RoslynScriptSessionTests.cs" />
+    <Compile Include="..\Cake.Core.Tests\Fakes\FakeDirectory.cs">
+      <Link>Fakes\FakeDirectory.cs</Link>
+    </Compile>
+    <Compile Include="..\Cake.Core.Tests\Fakes\FakeFile.cs">
+      <Link>Fakes\FakeFile.cs</Link>
+    </Compile>
+    <Compile Include="..\Cake.Core.Tests\Fakes\FakeFileStream.cs">
+      <Link>Fakes\FakeFileStream.cs</Link>
+    </Compile>
+    <Compile Include="..\Cake.Core.Tests\Fakes\FakeFileSystem.cs">
+      <Link>Fakes\FakeFileSystem.cs</Link>
+    </Compile>
+    <Compile Include="Fakes\FakeConsole.cs" />
     <Compile Include="Fakes\FakeLog.cs" />
     <Compile Include="Fixtures\CakeApplicationFixture.cs" />
+    <Compile Include="Fixtures\ScriptRunnerFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Compile Include="Unit\Arguments\ArgumentParserTests.cs" />
+    <Compile Include="Unit\CakeApplicationTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Unit\CakeArgumentsTest.cs" />
+    <Compile Include="Unit\CakeOptionsTests.cs" />
+    <Compile Include="Unit\Diagnostics\CakeBuildLogTests.cs" />
+    <Compile Include="Unit\Diagnostics\FormatParserTests.cs" />
+    <Compile Include="Unit\Scripting\Hosts\BuildScriptHostTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Unit\Scripting\Hosts\DescriptionScriptHostTests.cs" />
+    <Compile Include="Unit\Scripting\Roslyn\RoslynScriptSessionFactoryTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Unit\Scripting\Roslyn\RoslynScriptSessionTests.cs" />
+    <Compile Include="Unit\Scripting\ScriptRunnerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
@@ -81,9 +100,12 @@
       <Name>Cake.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Cake\Cake.csproj">
-      <Project>{066b4595-3c61-476b-9b21-7b302d02ae9d}</Project>
+      <Project>{1bf8d4f1-86d3-4b7b-baf6-4cf3d863b819}</Project>
       <Name>Cake</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

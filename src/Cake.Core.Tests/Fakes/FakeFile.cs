@@ -6,11 +6,13 @@ namespace Cake.Core.Tests.Fakes
 {
     public sealed class FakeFile : IFile
     {
+        private readonly FakeFileSystem _fileSystem;
         private readonly FilePath _path;
         private bool _exists;
         private byte[] _content = new byte[4096];
         private long _contentLength;
         private readonly object _contentLock = new object();
+        private bool _deleted;
 
         public FilePath Path
         {
@@ -20,6 +22,12 @@ namespace Cake.Core.Tests.Fakes
         public bool Exists
         {
             get { return _exists; }
+            set { _exists = value; } 
+        }
+
+        public bool Deleted
+        {
+            get { return _deleted; }
         }
 
         public long Length
@@ -44,13 +52,24 @@ namespace Cake.Core.Tests.Fakes
             set { _content = value; }
         }
 
-        public FakeFile(FilePath path)
+        public FakeFile(FakeFileSystem fileSystem, FilePath path)
         {
+            _fileSystem = fileSystem;
             _path = path;
             _exists = false;
         }
 
         public void Copy(FilePath destination, bool overwrite)
+        {
+            var file = _fileSystem.GetCreatedFile(destination) as FakeFile;
+            if (file != null)
+            {
+                file.Content = Content;
+                file.ContentLength = ContentLength;
+            }
+        }
+
+        public void Move(FilePath destination)
         {
             throw new NotImplementedException();
         }
@@ -118,6 +137,7 @@ namespace Cake.Core.Tests.Fakes
         public void Delete()
         {
             _exists = false;
+            _deleted = true;
         }
     }
 }

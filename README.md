@@ -1,16 +1,47 @@
 #Cake
 
-Cake (C# Make) is a build automation system inspired by [Fake](http://fsharp.github.io/FAKE/).
+Cake (C# Make) is a build automation system using C#.
 
 [![TeamCity CI Build Status](http://builds.nullreferenceexception.se/app/rest/builds/buildType:id:Cake_Continuous/statusIcon)](http://builds.nullreferenceexception.se/viewType.html?buildTypeId=Cake_Continuous&guest=1)
+
+##Table of contents
+
+1. [Roadmap](https://github.com/cake-build/cake#roadmap)
+2. [Implemented functionality](https://github.com/cake-build/cake#implemented-functionality)
+3. [Example](https://github.com/cake-build/cake#example)
+    - [Download Cake](https://github.com/cake-build/cake#1-download-cake)
+    - [Create build script](https://github.com/cake-build/cake#2-create-build-script)
+    - [Run build script](https://github.com/cake-build/cake#3-run-build-script)
+4. [Documentation](https://github.com/cake-build/cake#documentation)
+5. [Contributing](https://github.com/cake-build/cake#contributing)
+6. [License](https://github.com/cake-build/cake#license)
 
 ##Roadmap
 
 The Cake engine is pretty much done, but there are still improvements to be made. I'm still experimenting with the script API to make it as easy and intuitive as possible, so expect changes along the road.
 
-Currently basic MSBuild, xUnit, NuGet, ILMerge, NUnit, MSTest, compression and file system operations are implemented, but more features are planned. The full roadmap can be found [here](https://github.com/cake-build/cake/issues/milestones).
+A roadmap can be found [here](https://github.com/cake-build/cake/issues/milestones).
 
-For more information and examples of how to use Cake, see the [Wiki](https://github.com/cake-build/cake/wiki).
+##Implemented functionality
+
+This is a list of the currently implemented functionality.
+
+* MSBuild
+* MSTest
+* xUnit
+* NUnit
+* NuGet pack
+* NuGet push
+* NuGet restore
+* ILMerge
+* File copying/moving/deleting
+* Directory creation/cleaning/deleting
+* File/Directory globbing
+* Compression (zip)
+* AssemblyInfo patching
+* Release notes parser
+
+For more information and examples of how to use Cake, see the [Wiki](https://github.com/cake-build/cake/wiki). 
 
 ##Example
 
@@ -26,8 +57,6 @@ C:\Project> NuGet.exe install Cake -OutputDirectory Tools -ExcludeVersion
 var target = Argument("target", "NuGet");
 var configuration = Argument("configuration", "Release");
 
-/////////////////////////////////////////////////
-
 Task("Clean")
     .Does(() =>
 {
@@ -41,6 +70,7 @@ Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean")
     .Does(context =>
 {
+    // Restore NuGet packages.
     NuGetRestore("./src/Cake.sln");    
 });
 
@@ -94,8 +124,6 @@ Task("NuGet")
     });
 });
 
-/////////////////////////////////////////////////
-
 RunTarget(target);
 ```
 
@@ -105,27 +133,24 @@ RunTarget(target);
 C:\Project\Tools\Cake> Cake.exe ../../build.csx -verbosity=verbose -target=Pack
 ```
 
-##Task descriptions
+## Documentation
 
-A task can be given a description using the `.Description` extension.
+You can read the latest documentation at [http://cake.readthedocs.org/](http://cake.readthedocs.org/).
 
-```CSharp
-Task("Foo")
-    .Description("A description for task Foo")
-    .Does(() => {});
-```
+## Contributing
 
-To get a list of tasks run:
+* Fork the repository.
+* Make your feature addition or bug fix.
+* Don't forget the unit tests.
+* Send a pull request. Bonus for topic branches. *Funny .gif will be your reward.*
 
-```Batchfile
-C:\Project\Tools\Cake> Cake.exe ../../build.csx -s
-```
+## License
 
-The output will look something like this:
+Copyright (c) 2014, Patrik Svensson and contributors.   
+Cake is provided as-is under the MIT license. For more information see `LICENSE`.
 
-```
-Task                          Description
-===============================================================================
-Bar
-Foo                           A description for task Foo
-```
+* For Roslyn, see https://roslyn.codeplex.com/license
+* For Autofac, see https://github.com/autofac/Autofac/blob/master/LICENSE
+* For NuGet.Core, see https://nuget.codeplex.com/license
+
+

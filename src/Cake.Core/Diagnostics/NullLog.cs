@@ -1,7 +1,18 @@
 ﻿namespace Cake.Core.Diagnostics
 {
+    /// <summary>
+    /// A log that discards messages written to it.
+    /// </summary>
     public sealed class NullLog : ICakeLog
     {
+        /// <summary>
+        /// Writes the text representation of the specified array of objects to the 
+        /// log using the specified verbosity, log level and format information.
+        /// </summary>
+        /// <param name="verbosity">The verbosity.</param>
+        /// <param name="level">The log level.</param>
+        /// <param name="format">A composite format string.</param>
+        /// <param name="args">An array of objects to write using format.</param>
         public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
         {
         }

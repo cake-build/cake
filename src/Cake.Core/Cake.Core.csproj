@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Cake.Core.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Cake.Core.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -54,11 +56,13 @@
     <Compile Include="Diagnostics\NullLog.cs" />
     <Compile Include="Diagnostics\Verbosity.cs" />
     <Compile Include="Diagnostics\VerbosityTypeConverter.cs" />
-    <Compile Include="CakeArguments.cs" />
+    <Compile Include="Extensions\ConsoleExtensions.cs" />
     <Compile Include="Extensions\MethodInfoExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="ICakeArguments.cs" />
+    <Compile Include="ICakeReportPrinter.cs" />
+    <Compile Include="IConsole.cs" />
     <Compile Include="IO\DirectoryPathCollection.cs" />
     <Compile Include="IO\FilePathCollection.cs" />
     <Compile Include="IO\FileExtensions.cs" />
@@ -109,12 +113,16 @@
     </Compile>
     <Compile Include="Scripting\CodeGen\MethodAliasGenerator.cs" />
     <Compile Include="Scripting\CodeGen\PropertyAliasGenerator.cs" />
+    <Compile Include="Scripting\IScriptAliasGenerator.cs" />
     <Compile Include="Scripting\IScriptHost.cs" />
-    <Compile Include="Scripting\IScriptRunner.cs" />
+    <Compile Include="Scripting\IScriptProcessor.cs" />
     <Compile Include="Scripting\IScriptSession.cs" />
     <Compile Include="Scripting\IScriptSessionFactory.cs" />
     <Compile Include="Scripting\ScriptAliasFinder.cs" />
+    <Compile Include="Scripting\ScriptAliasGenerator.cs" />
     <Compile Include="Scripting\ScriptHost.cs" />
+    <Compile Include="Scripting\ScriptProcessor.cs" />
+    <Compile Include="Scripting\ScriptProcessorResult.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

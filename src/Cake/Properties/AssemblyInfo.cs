@@ -13,4 +13,5 @@ using System.Runtime.InteropServices;
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
+// Make internals visible to unit test assembly.
 [assembly: InternalsVisibleTo("Cake.Tests")]

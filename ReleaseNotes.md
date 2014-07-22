@@ -1,3 +1,24 @@
+### New in 0.1.15 (Released 2014/07/20)
+* Added NuGet push support.
+
+### New in 0.1.14 (Released 2014/07/17)
+* Added Cake.Core NuGet package.
+* Added support for loading external script aliases.
+
+### New in 0.1.13 (Released 2014/07/10)
+* No more logging when creating script aliases.
+
+### New in 0.1.12 (Released 2014/07/10)
+* Added file deletion.
+* Added file moving.
+* Added directory creation.
+* Added version command.
+* Major refactoring of Cake (console application).
+* NuGet packer now use absolute paths.
+* Minor fix for console background colors.
+* Added way of retrieving environment variables.
+* Added script alias property support.
+
 ### New in 0.1.11 (Released 2014/07/01)
 * Critical bug fix for script host.
 

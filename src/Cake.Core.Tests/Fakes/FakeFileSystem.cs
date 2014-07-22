@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Cake.Core.IO;
 
@@ -29,7 +30,7 @@ namespace Cake.Core.Tests.Fakes
         {
             if (!Files.ContainsKey(path))
             {
-                Files.Add(path, new FakeFile(path));
+                Files.Add(path, new FakeFile(this, path));
             }
             return Files[path];
         }
@@ -84,6 +85,36 @@ namespace Cake.Core.Tests.Fakes
                 Directories.Add(path, new FakeDirectory(this, path, creatable));
             }
             return Directories[path];
+        }
+
+        public string GetTextContent(FilePath path)
+        {
+            var file = GetFile(path) as FakeFile;
+            if (file == null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            try
+            {
+                if (file.Deleted)
+                {
+                    Files[path].Exists = true;
+                }
+
+                using (var stream = file.OpenRead())
+                using (var reader = new StreamReader(stream))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
+            finally
+            {
+                if (file.Deleted)
+                {
+                    Files[path].Exists = false;
+                }
+            }
         }
     }
 }

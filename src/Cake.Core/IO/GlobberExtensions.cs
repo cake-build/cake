@@ -3,13 +3,28 @@ using System.Linq;
 
 namespace Cake.Core.IO
 {
+    /// <summary>
+    /// Contains extensions for <see cref="IGlobber"/>.
+    /// </summary>
     public static class GlobberExtensions
     {
+        /// <summary>
+        /// Gets all files matching the specified pattern.
+        /// </summary>
+        /// <param name="globber">The globber.</param>
+        /// <param name="pattern">The pattern.</param>
+        /// <returns>The files matching the specified pattern.</returns>
         public static IEnumerable<FilePath> GetFiles(this IGlobber globber, string pattern)
         {
             return globber.Match(pattern).OfType<FilePath>();
         }
 
+        /// <summary>
+        /// Gets all directories matching the specified pattern.
+        /// </summary>
+        /// <param name="globber">The globber.</param>
+        /// <param name="pattern">The pattern.</param>
+        /// <returns>The directories matching the specified pattern.</returns>
         public static IEnumerable<DirectoryPath> GetDirectories(this IGlobber globber, string pattern)
         {
             return globber.Match(pattern).OfType<DirectoryPath>();

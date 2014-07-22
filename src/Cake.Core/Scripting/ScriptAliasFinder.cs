@@ -3,21 +3,28 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Cake.Core.Annotations;
-using Cake.Core.Extensions;
 
 namespace Cake.Core.Scripting
 {
+    /// <summary>
+    /// Responsible for finding aliases in assemblies.
+    /// </summary>
     public static class ScriptAliasFinder
     {
-        public static IEnumerable<MethodInfo> GetExtensionMethods(IEnumerable<Assembly> references)
+        /// <summary>
+        /// Gets all alias extension methods in the list of assemblies.
+        /// </summary>
+        /// <param name="assemblies">The assemblies.</param>
+        /// <returns>A list of methods.</returns>
+        public static IEnumerable<MethodInfo> FindAliases(IEnumerable<Assembly> assemblies)
         {
-            foreach (var reference in references)
+            foreach (var reference in assemblies)
             {
                 foreach (var type in reference.GetTypes())
                 {
                     if (type.IsStatic())
                     {
-                        foreach (var extensionMethod in GetExtensionMethods(type))
+                        foreach (var extensionMethod in GetAliasMethods(type))
                         {
                             yield return extensionMethod;
                         }
@@ -26,7 +33,7 @@ namespace Cake.Core.Scripting
             }
         }
 
-        private static IEnumerable<MethodInfo> GetExtensionMethods(Type type)
+        private static IEnumerable<MethodInfo> GetAliasMethods(Type type)
         {
             var methods = type.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Static);
             foreach (var method in methods)

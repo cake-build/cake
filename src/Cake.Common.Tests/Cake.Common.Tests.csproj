@@ -63,6 +63,7 @@
     </Compile>
     <Compile Include="Fixtures\AssemblyInfoFixture.cs" />
     <Compile Include="Fixtures\FileCopyFixture.cs" />
+    <Compile Include="Fixtures\FileDeleteFixture.cs" />
     <Compile Include="Fixtures\FileSystemFixture.cs" />
     <Compile Include="Fixtures\ILMergeRunnerFixture.cs" />
     <Compile Include="Fixtures\MSBuildRunnerFixture.cs" />
@@ -71,8 +72,16 @@
     <Compile Include="Fixtures\NUnitRunnerFixture.cs" />
     <Compile Include="Fixtures\WiXFixture.cs" />
     <Compile Include="Fixtures\XUnitRunnerFixture.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Unit\AssemblyInfoCreatorTests.cs" />
     <Compile Include="Unit\Diagnostics\LoggingExtensionsTests.cs" />
+    <Compile Include="Unit\IO\DirectoryCreatorTests.cs" />
+    <Compile Include="Unit\IO\FileDeleterTests.cs" />
+    <Compile Include="Unit\IO\FileMoverTests.cs" />
     <Compile Include="Unit\ReleaseNotesExtensionsTests.cs" />
     <Compile Include="Unit\ReleaseNotesParserTests.cs" />
     <Compile Include="Unit\ReleaseNotesTests.cs" />
@@ -88,6 +97,8 @@
     <Compile Include="Unit\Tools\MSTest\MSTestRunnerTests.cs" />
     <Compile Include="Unit\Tools\NuGet\NuGetPackerTests.cs" />
     <Compile Include="Unit\Tools\NuGet\NuGetPackSettingsTests.cs" />
+    <Compile Include="Unit\Tools\NuGet\NuGetPusherTests.cs" />
+    <Compile Include="Unit\Tools\NuGet\NuGetPushSettingsTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitRunnerTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitSettingsTests.cs" />
     <Compile Include="Unit\Tools\WiX\CandleRunnerTests.cs" />
@@ -113,6 +124,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

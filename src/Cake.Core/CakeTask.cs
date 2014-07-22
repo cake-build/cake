@@ -4,31 +4,61 @@ using System.Linq;
 
 namespace Cake.Core
 {
+    /// <summary>
+    /// A <see cref="CakeTask"/> represents a unit of work.
+    /// </summary>
     public abstract class CakeTask
     {
         private readonly string _name;
         private readonly List<string> _dependencies;
         private readonly List<Func<bool>> _criterias;
 
+        /// <summary>
+        /// Gets the name of the task.
+        /// </summary>
+        /// <value>The name of the task.</value>
         public string Name
         {
             get { return _name; }
         }
 
+        /// <summary>
+        /// Gets or sets the description of the task.
+        /// </summary>
+        /// <value>The description of the task.</value>
         public string Description { get; set; }
 
+        /// <summary>
+        /// Gets the task's dependencies.
+        /// </summary>
+        /// <value>The task's dependencies.</value>
         public IReadOnlyList<string> Dependencies
         {
             get { return _dependencies; }
         }
 
+        /// <summary>
+        /// Gets the task's criterias.
+        /// </summary>
+        /// <value>The task's criterias.</value>
         public IReadOnlyList<Func<bool>> Criterias
         {
             get { return _criterias; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the task should recover 
+        /// from errors such as thrown exceptions.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the task should recover from errors; otherwise, <c>false</c>.
+        /// </value>
         public bool ContinueOnError { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CakeTask"/> class.
+        /// </summary>
+        /// <param name="name">The name of the task.</param>
         protected CakeTask(string name)
         {
             if (name == null)
@@ -45,6 +75,10 @@ namespace Cake.Core
         }
 
 
+        /// <summary>
+        /// Adds a dependency to the task.
+        /// </summary>
+        /// <param name="name">The name of the dependency.</param>
         public void AddDependency(string name)
         {
             if (_dependencies.Any(x => x == name))
@@ -56,6 +90,10 @@ namespace Cake.Core
             _dependencies.Add(name);
         }
 
+        /// <summary>
+        /// Adds a criteria to the task that is invoked when the task is invoked.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
         public void AddCriteria(Func<bool> criteria)
         {
             if (criteria == null)
@@ -65,6 +103,10 @@ namespace Cake.Core
             _criterias.Add(criteria);
         }
 
+        /// <summary>
+        /// Executes the task using the specified context.
+        /// </summary>
+        /// <param name="context">The context.</param>
         public abstract void Execute(ICakeContext context);
     }
 }

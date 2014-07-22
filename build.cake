@@ -5,9 +5,13 @@ var teamCity = HasArgument("teamCity");
 var buildLabel = Argument("buildLabel", string.Empty);
 var buildInfo = Argument("buildInfo", string.Empty);
 
+// Parse release notes.
+var releaseNotes = ParseReleaseNotes("./ReleaseNotes.md");
+
 // Set version.
-var version = "0.1.11";
+var version = releaseNotes.Version.ToString();
 var semVersion = version + (buildLabel != "" ? ("-" + buildLabel) : string.Empty);
+Information("Building version {0} of Cake.", version);
 
 // Define directories.
 var buildDir = "./src/Cake/bin/" + configuration;
@@ -19,6 +23,7 @@ var binDir = buildResultDir + "/bin";
 //////////////////////////////////////////////////////////////////////////
 
 Task("Update-TeamCity-Build-Number")
+	.Description("Updates the TeamCity build number.")
 	.WithCriteria(teamCity)
 	.Does(() =>
 {
@@ -26,6 +31,7 @@ Task("Update-TeamCity-Build-Number")
 });
 
 Task("Clean")
+	.Description("Cleans the build and output directories.")
 	.IsDependentOn("Update-TeamCity-Build-Number")
 	.Does(() =>
 {
@@ -34,6 +40,7 @@ Task("Clean")
 });
 
 Task("Restore-NuGet-Packages")
+	.Description("Restores all NuGet packages in solution.")
 	.IsDependentOn("Clean")
 	.Does(() =>
 {
@@ -41,6 +48,7 @@ Task("Restore-NuGet-Packages")
 });
 
 Task("Patch-Assembly-Info")
+	.Description("Patches the AssemblyInfo files.")
 	.IsDependentOn("Restore-NuGet-Packages")
 	.Does(() =>
 {
@@ -55,6 +63,7 @@ Task("Patch-Assembly-Info")
 });
 
 Task("Build")
+	.Description("Builds the Cake source code.")
 	.IsDependentOn("Patch-Assembly-Info")
 	.Does(() =>
 {
@@ -64,24 +73,35 @@ Task("Build")
 });
 
 Task("Run-Unit-Tests")
+	.Description("Runs unit tests.")
 	.IsDependentOn("Build")
 	.Does(() =>
 {
-	XUnit("./src/**/bin/" + configuration + "/*.Tests.dll");
+	XUnit("./src/**/bin/" + configuration + "/*.Tests.dll", new XUnitSettings {
+		OutputDirectory = testResultsDir,
+		XmlReport = true,
+		HtmlReport = true
+	});
 });
 
+
 Task("Copy-Files")
+	.Description("Copy files to the output directory.")
 	.IsDependentOn("Run-Unit-Tests")
 	.Does(() =>
 {
-    CopyFileToDirectory(buildDir + "/Cake.exe", binDir);
+	CopyFileToDirectory(buildDir + "/Cake.exe", binDir);
     CopyFileToDirectory(buildDir + "/Cake.Core.dll", binDir);
+    CopyFileToDirectory(buildDir + "/Cake.Core.xml", binDir);
+    CopyFileToDirectory(buildDir + "/Cake.Core.pdb", binDir);
     CopyFileToDirectory(buildDir + "/Cake.Common.dll", binDir);
-    CopyFileToDirectory(buildDir + "/NuGet.Core.dll", binDir);
+    CopyFileToDirectory(buildDir + "/Autofac.dll", binDir);
+    CopyFileToDirectory(buildDir + "/Nuget.Core.dll", binDir);
     CopyFiles(new FilePath[] { "LICENSE", "README.md", "ReleaseNotes.md" }, binDir);
 });
 
 Task("Zip-Files")
+	.Description("Zips all files.")
 	.IsDependentOn("Copy-Files")
 	.Does(() =>
 {
@@ -89,7 +109,8 @@ Task("Zip-Files")
 	Zip(binDir, filename);
 });
 
-Task("Create-NuGet-Package")
+Task("Create-Cake-NuGet-Package")
+	.Description("Creates the Cake NuGet package.")
 	.IsDependentOn("Copy-Files")
 	.Does(() =>
 {
@@ -97,16 +118,32 @@ Task("Create-NuGet-Package")
 		Version = version,
         BasePath = binDir,
         OutputDirectory = nugetRoot,
-        Symbols = true,
+        Symbols = false,
         NoPackageAnalysis = true
 	});
 });
 
+Task("Create-Core-NuGet-Package")
+	.Description("Creates the Cake NuGet package.")
+	.IsDependentOn("Copy-Files")
+	.Does(() =>
+{
+	NuGetPack("./Cake.Core.nuspec", new NuGetPackSettings {
+		Version = version,
+        BasePath = binDir,
+        OutputDirectory = nugetRoot,
+        Symbols = true
+	});
+});
+
 Task("Package")
+	.Description("Zips and creates NuGet package.")
 	.IsDependentOn("Zip-Files")
-	.IsDependentOn("Create-NuGet-Package");
+	.IsDependentOn("Create-Cake-NuGet-Package")
+	.IsDependentOn("Create-Core-NuGet-Package");
 
 Task("All")
+	.Description("Final target.")
 	.IsDependentOn("Package");
 
 //////////////////////////////////////////////////////////////////////////

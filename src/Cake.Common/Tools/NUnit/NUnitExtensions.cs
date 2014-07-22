@@ -5,8 +5,16 @@ using Cake.Core.IO;
 
 namespace Cake.Common.Tools.NUnit
 {
+    /// <summary>
+    /// Contains functionality related to running NUnit unit tests.
+    /// </summary>
     public static class NUnitExtensions
     {
+        /// <summary>
+        /// Runs all NUnit unit tests in the assemblies matching the specified pattern.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="pattern">The pattern.</param>
         [CakeMethodAlias]
         public static void NUnit(this ICakeContext context, string pattern)
         {
@@ -14,6 +22,12 @@ namespace Cake.Common.Tools.NUnit
             NUnit(context, assemblies, new NUnitSettings());
         }
 
+        /// <summary>
+        /// Runs all NUnit unit tests in the assemblies matching the specified pattern.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="pattern">The pattern.</param>
+        /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
         public static void NUnit(this ICakeContext context, string pattern, NUnitSettings settings)
         {
@@ -21,12 +35,23 @@ namespace Cake.Common.Tools.NUnit
             NUnit(context, assemblies, settings);
         }
 
+        /// <summary>
+        /// Runs all NUnit unit tests in the specified assemblies.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="assemblies">The assemblies.</param>
         [CakeMethodAlias]
         public static void NUnit(this ICakeContext context, IEnumerable<FilePath> assemblies)
         {
             NUnit(context, assemblies, new NUnitSettings());
         }
 
+        /// <summary>
+        /// Runs all NUnit unit tests in the specified assemblies.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="assemblies">The assemblies.</param>
+        /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
         public static void NUnit(this ICakeContext context, IEnumerable<FilePath> assemblies, NUnitSettings settings)
         {

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Core.Extensions;
 
 namespace Cake.Arguments
 {
-    internal sealed class ArgumentParser
+    internal sealed class ArgumentParser : IArgumentParser
     {
         private readonly ICakeLog _log;
 
@@ -118,6 +118,18 @@ namespace Cake.Arguments
                 name.Equals("s", StringComparison.OrdinalIgnoreCase))
             {
                 options.ShowDescription = true;
+            }
+
+            if (name.Equals("help", StringComparison.OrdinalIgnoreCase) ||
+                name.Equals("?", StringComparison.OrdinalIgnoreCase))
+            {
+                options.ShowHelp = true;
+            }
+
+            if (name.Equals("version", StringComparison.OrdinalIgnoreCase) ||
+                name.Equals("ver", StringComparison.OrdinalIgnoreCase))
+            {
+                options.ShowVersion = true;
             }
 
             if (options.Arguments.ContainsKey(name))

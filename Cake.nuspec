@@ -12,7 +12,7 @@
     <iconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <copyright>Copyright (c) Patrik Svensson 2014</copyright>
-    <releaseNotes>Critical bug fix for script host.</releaseNotes>
+    <releaseNotes>Added NuGet push support.</releaseNotes>
     <tags>Cake Script Build</tags>
   </metadata>
   <files>
@@ -20,6 +20,7 @@
     <file src="Cake.Core.dll" />
     <file src="Cake.Common.dll" />
     <file src="NuGet.Core.dll" />
+    <file src="Autofac.dll" />
     <file src="LICENSE" />
   </files>
 </package>

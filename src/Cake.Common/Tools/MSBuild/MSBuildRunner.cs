@@ -3,16 +3,24 @@ using System.Diagnostics;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Extensions;
 
 namespace Cake.Common.Tools.MSBuild
 {
+    /// <summary>
+    /// The MSBuild runner.
+    /// </summary>
     public sealed class MSBuildRunner
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly IProcessRunner _runner;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MSBuildRunner"/> class.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="environment">The environment.</param>
+        /// <param name="runner">The runner.</param>
         public MSBuildRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner runner)
         {
             _fileSystem = fileSystem;
@@ -20,6 +28,10 @@ namespace Cake.Common.Tools.MSBuild
             _runner = runner;
         }
 
+        /// <summary>
+        /// Runs MSBuild with the specified settings.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
         public void Run(MSBuildSettings settings)
         {
             // Get the MSBuild path.

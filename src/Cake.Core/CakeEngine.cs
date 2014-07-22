@@ -8,6 +8,9 @@ using Cake.Core.IO;
 
 namespace Cake.Core
 {
+    /// <summary>
+    /// The Cake execution engine.
+    /// </summary>
     public sealed class CakeEngine : ICakeEngine
     {
         private readonly IFileSystem _fileSystem;
@@ -18,41 +21,78 @@ namespace Cake.Core
         private readonly IProcessRunner _processRunner;
         private readonly List<CakeTask> _tasks;
 
+        /// <summary>
+        /// Gets the file system.
+        /// </summary>
+        /// <value>The file system.</value>
         public IFileSystem FileSystem
         {
             get { return _fileSystem; }
         }
 
+        /// <summary>
+        /// Gets the environment.
+        /// </summary>
+        /// <value>The environment.</value>
         public ICakeEnvironment Environment
         {
             get { return _environment; }
         }
 
+        /// <summary>
+        /// Gets all registered tasks.
+        /// </summary>
+        /// <value>The registered tasks.</value>
         public IReadOnlyList<CakeTask> Tasks
         {
             get { return _tasks; }
         }
 
+        /// <summary>
+        /// Gets the globber.
+        /// </summary>
+        /// <value>The globber.</value>
         public IGlobber Globber
         {
             get { return _globber; }
         }
 
+        /// <summary>
+        /// Gets the log.
+        /// </summary>
+        /// <value>The log.</value>
         public ICakeLog Log
         {
             get { return _log; }
         }
 
+        /// <summary>
+        /// Gets the arguments.
+        /// </summary>
+        /// <value>The arguments.</value>
         public ICakeArguments Arguments
         {
             get { return _arguments; }
         }
 
+        /// <summary>
+        /// Gets the process runner.
+        /// </summary>
+        /// <value>The process runner.</value>
         public IProcessRunner ProcessRunner
         {
             get { return _processRunner; }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CakeEngine"/> class.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="environment">The environment.</param>
+        /// <param name="log">The log.</param>
+        /// <param name="arguments">The arguments.</param>
+        /// <param name="globber">The globber.</param>
+        /// <param name="processRunner">The process runner.</param>
         public CakeEngine(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log, 
             ICakeArguments arguments, IGlobber globber, IProcessRunner processRunner)
         {
@@ -89,6 +129,13 @@ namespace Cake.Core
             _tasks = new List<CakeTask>();
         }
 
+        /// <summary>
+        /// Creates and registers a new task.
+        /// </summary>
+        /// <typeparam name="T">The task type.</typeparam>
+        /// <returns>
+        /// A <see cref="CakeTaskBuilder{T}"/> used to configure the task.
+        /// </returns>
         public CakeTaskBuilder<T> Build<T>()
             where T : CakeTask, new()
         {
@@ -98,6 +145,13 @@ namespace Cake.Core
             return builder;
         }
 
+        /// <summary>
+        /// Creates and registers a new <see cref="ActionTask"/>.
+        /// </summary>
+        /// <param name="name">The name of the task.</param>
+        /// <returns>
+        /// A <see cref="CakeTaskBuilder{T}"/> used to configure the task.
+        /// </returns>
         public CakeTaskBuilder<ActionTask> Task(string name)
         {
             if (_tasks.Any(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
@@ -110,6 +164,11 @@ namespace Cake.Core
             return new CakeTaskBuilder<ActionTask>(task);
         }
 
+        /// <summary>
+        /// Runs the specified target.
+        /// </summary>
+        /// <param name="target">The target to run.</param>
+        /// <returns>The resulting report.</returns>
         public CakeReport RunTarget(string target)
         {
             var graph = CakeGraphBuilder.Build(_tasks);

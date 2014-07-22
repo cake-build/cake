@@ -4,10 +4,17 @@ using Cake.Core.Diagnostics;
 
 namespace Cake.Core.IO
 {
+    /// <summary>
+    /// Responsible for starting processes.
+    /// </summary>
     public sealed class ProcessRunner : IProcessRunner
     {
         private readonly ICakeLog _log;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProcessRunner"/> class.
+        /// </summary>
+        /// <param name="log">The log.</param>
         public ProcessRunner(ICakeLog log)
         {
             if (log == null)
@@ -17,6 +24,11 @@ namespace Cake.Core.IO
             _log = log;
         }
 
+        /// <summary>
+        /// Starts a process using the specified information.
+        /// </summary>
+        /// <param name="info">The information about the process to start.</param>
+        /// <returns>A process handle.</returns>
         public IProcess Start(ProcessStartInfo info)
         {
             if (info == null)

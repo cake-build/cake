@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Cake.Common.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Cake.Common.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -45,6 +47,9 @@
     <Compile Include="AssemblyInfoRegistration.cs" />
     <Compile Include="AssemblyInfoSettings.cs" />
     <Compile Include="Diagnostics\LoggingExtensions.cs" />
+    <Compile Include="IO\DirectoryCreator.cs" />
+    <Compile Include="IO\FileDeleter.cs" />
+    <Compile Include="IO\FileMover.cs" />
     <Compile Include="ReleaseNotes.cs" />
     <Compile Include="ReleaseNotesExtensions.cs" />
     <Compile Include="ReleaseNotesParser.cs" />
@@ -73,12 +78,15 @@
     <Compile Include="Tools\MSTest\MSTestRunner.cs" />
     <Compile Include="Tools\MSTest\MSTestSettings.cs" />
     <Compile Include="Tools\NuGet\NuGetExtensions.cs" />
-    <Compile Include="Tools\NuGet\NuGetPacker.cs" />
-    <Compile Include="Tools\NuGet\NuGetPackSettings.cs" />
-    <Compile Include="Tools\NuGet\NuGetRestorer.cs" />
-    <Compile Include="Tools\NuGet\NugetRestoreSettings.cs" />
-    <Compile Include="Tools\NuGet\NugetRestoreSettingsExtensions.cs" />
+    <Compile Include="Tools\NuGet\Pack\NuGetPacker.cs" />
+    <Compile Include="Tools\NuGet\Pack\NuGetPackSettings.cs" />
+    <Compile Include="Tools\NuGet\Push\NuGetPusher.cs" />
+    <Compile Include="Tools\NuGet\Push\NuGetPushSettings.cs" />
+    <Compile Include="Tools\NuGet\Restore\NuGetRestorer.cs" />
+    <Compile Include="Tools\NuGet\Restore\NugetRestoreSettings.cs" />
+    <Compile Include="Tools\NuGet\Restore\NugetRestoreSettingsExtensions.cs" />
     <Compile Include="Tools\NuGet\NuGetVerbosity.cs" />
+    <Compile Include="Tools\NuGet\Pack\NuspecTransformer.cs" />
     <Compile Include="Tools\NUnit\NUnitExtensions.cs" />
     <Compile Include="Tools\NUnit\NUnitRunner.cs" />
     <Compile Include="Tools\NUnit\NUnitSettings.cs" />

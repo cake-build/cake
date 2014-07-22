@@ -3,17 +3,25 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Cake.Core;
-using Cake.Core.Extensions;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.ILMerge
 {
+    /// <summary>
+    /// The ILMerge runner.
+    /// </summary>
     public sealed class ILMergeRunner
     {
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
         private readonly IProcessRunner _processRunner;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ILMergeRunner"/> class.
+        /// </summary>
+        /// <param name="environment">The environment.</param>
+        /// <param name="globber">The globber.</param>
+        /// <param name="processRunner">The process runner.</param>
         public ILMergeRunner(ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
         {
             _environment = environment;
@@ -21,6 +29,13 @@ namespace Cake.Common.Tools.ILMerge
             _processRunner = processRunner;
         }
 
+        /// <summary>
+        /// Merges the specified assemblies.
+        /// </summary>
+        /// <param name="outputAssemblyPath">The output assembly path.</param>
+        /// <param name="primaryAssemblyPath">The primary assembly path.</param>
+        /// <param name="assemblyPaths">The assembly paths.</param>
+        /// <param name="settings">The settings.</param>
         public void Merge(FilePath outputAssemblyPath, FilePath primaryAssemblyPath, 
             IEnumerable<FilePath> assemblyPaths, ILMergeSettings settings = null)
         {

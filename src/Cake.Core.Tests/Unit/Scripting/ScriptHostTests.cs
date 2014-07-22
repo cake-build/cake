@@ -7,8 +7,6 @@ namespace Cake.Core.Tests.Unit.Scripting
 {
     public sealed class ScriptHostTests
     {
-
-        
         public sealed class TheConstructor
         {
             [Fact]

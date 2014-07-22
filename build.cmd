@@ -21,7 +21,7 @@ SET BUILDMODE="Release"
 IF NOT [%2]==[] (set BUILDMODE="%2")
 
 echo Starting Cake...
-tools\Cake\Cake.exe build.cake -target=%TARGET% -configuration=%BUILDMODE% -verbosity=verbose
+tools\Cake\Cake.exe build.cake -target=%TARGET% -configuration=%BUILDMODE% -verbosity=diagnostic
 
 rem Loop the build script.
 echo.

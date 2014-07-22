@@ -33,6 +33,11 @@ namespace Cake.Core.IO
             _file.CopyTo(destination.FullPath, overwrite);
         }
 
+        public void Move(FilePath destination)
+        {
+            _file.MoveTo(destination.FullPath);
+        }
+
         public void Delete()
         {
             _file.Delete();
