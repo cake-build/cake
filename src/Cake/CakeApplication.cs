@@ -27,6 +27,7 @@ namespace Cake
             {
                 throw new ArgumentNullException("argumentParser");
             }
+            
             _log = log;
             _commandFactory = commandFactory;
             _argumentParser = argumentParser;
