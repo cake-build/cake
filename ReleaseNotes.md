@@ -1,3 +1,7 @@
+### New in 0.1.16 (Released 2014/07/23)
+* Added WiX support.
+* Added .nuspec metadata manipulation support to NuGet package creation.
+
 ### New in 0.1.15 (Released 2014/07/20)
 * Added NuGet push support.
 

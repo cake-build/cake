@@ -12,7 +12,8 @@
     <iconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <copyright>Copyright (c) Patrik Svensson 2014</copyright>
-    <releaseNotes>Added NuGet push support.</releaseNotes>
+    <releaseNotes>Added WiX support.
+Added .nuspec metadata manipulation support to NuGet package creation.</releaseNotes>
     <tags>Cake Script Build</tags>
   </metadata>
   <files>

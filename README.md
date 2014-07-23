@@ -34,6 +34,7 @@ This is a list of the currently implemented functionality.
 * NuGet push
 * NuGet restore
 * ILMerge
+* WiX (Candle and Light)
 * File copying/moving/deleting
 * Directory creation/cleaning/deleting
 * File/Directory globbing
