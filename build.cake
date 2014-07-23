@@ -116,8 +116,9 @@ Task("Create-Cake-NuGet-Package")
 {
 	NuGetPack("./Cake.nuspec", new NuGetPackSettings {
 		Version = version,
+		ReleaseNotes = releaseNotes.Notes.ToArray(),
         BasePath = binDir,
-        OutputDirectory = nugetRoot,
+        OutputDirectory = nugetRoot,        
         Symbols = false,
         NoPackageAnalysis = true
 	});
@@ -130,8 +131,9 @@ Task("Create-Core-NuGet-Package")
 {
 	NuGetPack("./Cake.Core.nuspec", new NuGetPackSettings {
 		Version = version,
+		ReleaseNotes = releaseNotes.Notes.ToArray(),
         BasePath = binDir,
-        OutputDirectory = nugetRoot,
+        OutputDirectory = nugetRoot,        
         Symbols = true
 	});
 });
