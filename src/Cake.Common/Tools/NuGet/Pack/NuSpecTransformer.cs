@@ -5,7 +5,7 @@ using System.Linq;
 using System.Xml;
 using Cake.Core;
 
-namespace Cake.Common.Tools.NuGet
+namespace Cake.Common.Tools.NuGet.Pack
 {
     internal static class NuspecTransformer
     {

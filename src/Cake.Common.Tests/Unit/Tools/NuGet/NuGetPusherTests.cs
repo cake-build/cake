@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.NuGet;
+using Cake.Common.Tools.NuGet.Push;
 using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;

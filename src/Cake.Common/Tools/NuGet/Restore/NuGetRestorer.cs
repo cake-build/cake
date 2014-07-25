@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools.NuGet
+namespace Cake.Common.Tools.NuGet.Restore
 {
     /// <summary>
     /// The NuGet package restorer used to restore solution packages.

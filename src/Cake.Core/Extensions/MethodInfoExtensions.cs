@@ -31,7 +31,6 @@ namespace Cake.Core
                 var isParams = parameters[i].IsDefined(typeof (ParamArrayAttribute));
                 var signature = parameters[i].ParameterType.GetFullName(includeParameterNamespace);
                 signature = isParams ? string.Concat("params ", signature) : signature;
-
                 parameterList[i] = signature;
             }
             builder.Append(string.Join(", ", parameterList));
@@ -48,6 +47,17 @@ namespace Cake.Core
         {
             Debug.Assert(method.DeclaringType != null); // Resharper
             return string.Concat(method.DeclaringType.FullName, ".", method.Name);
+        }
+
+        /// <summary>
+        /// Gets the namespace of the method.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <returns>The namespace of the method.</returns>
+        public static string GetNamespace(this MethodInfo method)
+        {
+            Debug.Assert(method.DeclaringType != null); // Resharper
+            return method.DeclaringType.Namespace;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Cake.Common.Tests.Properties;
-using Cake.Common.Tools.NuGet;
+using Cake.Common.Tools.NuGet.Pack;
+using Cake.Common.Tools.NuGet.Push;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;

@@ -6,7 +6,7 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools.NuGet
+namespace Cake.Common.Tools.NuGet.Pack
 {
     /// <summary>
     /// The NuGet packer.

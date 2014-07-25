@@ -1,6 +1,6 @@
 ﻿using Cake.Core.IO;
 
-namespace Cake.Common.Tools.NuGet
+namespace Cake.Common.Tools.NuGet.Restore
 {
     /// <summary>
     /// Contains functionality for restoring NuGet packages in solution.

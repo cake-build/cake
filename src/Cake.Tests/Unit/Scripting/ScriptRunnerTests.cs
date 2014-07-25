@@ -211,18 +211,11 @@ namespace Cake.Tests.Unit.Scripting
             [InlineData("System.Threading.Tasks")]
             [InlineData("System.IO")]
             [InlineData("Cake")]
-            [InlineData("Cake.Core")]
-            [InlineData("Cake.Core.IO")]
             [InlineData("Cake.Scripting")]
+            [InlineData("Cake.Core")]
+            [InlineData("Cake.Core.IO")]            
             [InlineData("Cake.Core.Scripting")]
-            [InlineData("Cake.Common")]
-            [InlineData("Cake.Common.IO")]
             [InlineData("Cake.Core.Diagnostics")]
-            [InlineData("Cake.Common.Tools.MSBuild")]
-            [InlineData("Cake.Common.Tools.XUnit")]
-            [InlineData("Cake.Common.Tools.NuGet")]
-            [InlineData("Cake.Common.Tools.NUnit")]
-            [InlineData("Cake.Common.Tools.ILMerge")]
             public void Should_Add_Namespaces_To_Session(string @namespace)
             {
                 // Given

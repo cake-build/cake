@@ -1,4 +1,7 @@
 ﻿using System;
+using Cake.Common.Tools.NuGet.Pack;
+using Cake.Common.Tools.NuGet.Push;
+using Cake.Common.Tools.NuGet.Restore;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -17,6 +20,7 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="nuspecFilePath">The nuspec file path.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Pack")]
         public static void NuGetPack(this ICakeContext context, FilePath nuspecFilePath, NuGetPackSettings settings)
         {
             var packer = new NuGetPacker(context.FileSystem, context.Environment, 
@@ -30,6 +34,7 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="context">The context.</param>
         /// <param name="solution">The Visual Studio solution.</param>
         [CakeMethodAlias]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Restore")]
         public static void NuGetRestore(this ICakeContext context, FilePath solution)
         {
             context.NuGetRestore(solution, settings => { });
@@ -42,6 +47,7 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="solution">The solution.</param>
         /// <param name="configurator">The configurator.</param>
         [CakeMethodAlias]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Restore")]
         public static void NuGetRestore(this ICakeContext context, FilePath solution, Action<NuGetRestoreSettings> configurator)
         {
             var settings = new NuGetRestoreSettings(solution);
@@ -55,6 +61,7 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="context">The context.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Restore")]
         public static void NuGetRestore(this ICakeContext context, NuGetRestoreSettings settings)
         {   
             var runner = new NuGetRestorer(context.Environment, context.Globber, context.ProcessRunner);
@@ -68,6 +75,7 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="packageFilePath">The nupkg file path.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Push")]
         public static void NuGetPush(this ICakeContext context, FilePath packageFilePath, NuGetPushSettings settings)
         {
             var packer = new NuGetPusher(context.Environment, context.Globber, context.ProcessRunner);

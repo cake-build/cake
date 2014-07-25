@@ -5,7 +5,7 @@ using System.Globalization;
 using Cake.Core;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools.NuGet
+namespace Cake.Common.Tools.NuGet.Push
 {
     /// <summary>
     /// The NuGet package pusher.

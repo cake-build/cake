@@ -31,20 +31,31 @@ namespace Cake.Core.Scripting
         public void Generate(IScriptSession session, IEnumerable<Assembly> assemblies)
         {
             _log.Debug("Generating script alias code...");
+
             foreach (var method in ScriptAliasFinder.FindAliases(assemblies))
             {
-                var signature = method.GetSignature(false);
-
                 try
                 {
-                    session.Execute(GenerateCode(method));
+                    // Generate the code.
+                    var code = GenerateCode(method);
+
+                    // Import namespaces.
+                    ImportNamespaces(session, method);
+
+                    // Execute the code.
+                    session.Execute(code);
                 }
                 catch (Exception)
                 {
-                    _log.Error("An error occured while generating proxy code for {0}", signature);
+                    // Log this error.
+                    const string format = "An error occured while generating proxy code for {0}.";
+                    _log.Error(format, method.GetSignature(false));
+
+                    // Rethrow the original exception.
                     throw;
                 }
             }
+
             _log.Debug("Done generating script alias code.");
         }
 
@@ -64,6 +75,27 @@ namespace Cake.Core.Scripting
                 throw new InvalidOperationException("Unknown alias type.");
             }
             return code;
+        }
+
+        private static void ImportNamespaces(IScriptSession session, MethodInfo method)
+        {
+            // Import the method's namespace to the session.
+            var @namespace = method.GetNamespace();
+            session.ImportNamespace(@namespace);
+
+            // Find out if the method want us to import more namespaces.
+            var namespaceAttributes = method.GetCustomAttributes<CakeNamespaceImportAttribute>();
+            foreach (var namespaceAttribute in namespaceAttributes)
+            {
+                session.ImportNamespace(namespaceAttribute.Namespace);
+            }
+
+            // Find out if the class contains any more namespaces.
+            namespaceAttributes = method.DeclaringType.GetCustomAttributes<CakeNamespaceImportAttribute>();
+            foreach (var namespaceAttribute in namespaceAttributes)
+            {
+                session.ImportNamespace(namespaceAttribute.Namespace);
+            }
         }
     }
 }

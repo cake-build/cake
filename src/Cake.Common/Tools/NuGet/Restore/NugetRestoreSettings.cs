@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools.NuGet
+namespace Cake.Common.Tools.NuGet.Restore
 {
     /// <summary>
     /// Contains settings used by <see cref="NuGetRestorer"/>.
