@@ -40,15 +40,26 @@ namespace Cake.Common.Tools.WiX
         /// <param name="settings">The settings.</param>
         public void Run(IEnumerable<FilePath> objectFiles, LightSettings settings)
         {
-            if (objectFiles == null) throw new ArgumentNullException("objectFiles");
-            if (settings == null) throw new ArgumentNullException("settings");
-            if (!objectFiles.Any()) throw new ArgumentException("No object files provided.", "objectFiles");
+            if (objectFiles == null)
+            {
+                throw new ArgumentNullException("objectFiles");
+            }
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+
+            var objectFilesArray = objectFiles as FilePath[] ?? objectFiles.ToArray();
+            if (!objectFilesArray.Any())
+            {
+                throw new ArgumentException("No object files provided.", "objectFiles");
+            }
 
             // Find light.exe
             var toolPath = GetToolPath(settings);
 
             // Get process start info
-            var info = GetProcessStartInfo(objectFiles, settings, toolPath);
+            var info = GetProcessStartInfo(objectFilesArray, settings, toolPath);
 
             // Run the process
             var process = _processRunner.Start(info);

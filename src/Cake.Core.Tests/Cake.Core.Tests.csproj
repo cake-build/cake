@@ -53,6 +53,7 @@
     <Compile Include="Fixtures\ScriptHostFixture.cs" />
     <Compile Include="Fixtures\ScriptProcessorFixture.cs" />
     <Compile Include="Unit\ActionTaskTests.cs" />
+    <Compile Include="Unit\Annotations\CakeNamespaceImportAttributeTests.cs" />
     <Compile Include="Unit\CakeEngineTests.cs" />
     <Compile Include="Unit\CakeTaskBuilderExtensionsTests.cs" />
     <Compile Include="Unit\CakeTaskBuilderTests.cs" />

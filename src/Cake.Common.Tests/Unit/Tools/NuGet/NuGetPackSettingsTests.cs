@@ -1,5 +1,4 @@
-﻿using Cake.Common.Tools.NuGet;
-using Cake.Common.Tools.NuGet.Pack;
+﻿using Cake.Common.Tools.NuGet.Pack;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.NuGet

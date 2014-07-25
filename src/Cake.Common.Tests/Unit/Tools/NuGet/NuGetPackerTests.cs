@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Linq;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tests.Properties;
-using Cake.Common.Tools.NuGet;
 using Cake.Common.Tools.NuGet.Pack;
 using Cake.Core;
 using Cake.Core.IO;

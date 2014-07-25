@@ -45,7 +45,8 @@ namespace Cake.Common.Tools.WiX
                 throw new ArgumentNullException("sourceFiles");
             }
 
-            if (!sourceFiles.Any())
+            var sourceFilesArray = sourceFiles as FilePath[] ?? sourceFiles.ToArray();
+            if (!sourceFilesArray.Any())
             {
                 throw new ArgumentException("No source files specified.", "sourceFiles");
             }
@@ -59,7 +60,7 @@ namespace Cake.Common.Tools.WiX
             var toolPath = GetToolPath(settings);
 
             // Get process start info
-            var info = GetProcessStartInfo(sourceFiles, settings, toolPath);
+            var info = GetProcessStartInfo(sourceFilesArray, settings, toolPath);
 
             // Run the process
             var process = _processRunner.Start(info);
