@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
@@ -10,23 +8,23 @@ namespace Cake.Common.Tools.XUnit
     /// <summary>
     /// The xUnit unit test runner.
     /// </summary>
-    public sealed class XUnitRunner
+    public sealed class XUnitRunner : Tool<XUnitSettings>
     {
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
-        private readonly IProcessRunner _runner;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XUnitRunner"/> class.
         /// </summary>
+        /// <param name="fileSystem"></param>
         /// <param name="environment">The environment.</param>
         /// <param name="globber">The globber.</param>
         /// <param name="runner">The runner.</param>
-        public XUnitRunner(ICakeEnvironment environment, IGlobber globber, IProcessRunner runner)
+        public XUnitRunner(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, IProcessRunner runner)
+            : base(fileSystem, environment, runner)
         {
             _environment = environment;
             _globber = globber;
-            _runner = runner;
         }
 
         /// <summary>
@@ -41,9 +39,6 @@ namespace Cake.Common.Tools.XUnit
                 throw new ArgumentNullException("assemblyPath");
             }
 
-            // Find the xUnit console runner.
-            var toolPath = GetToolPath(settings);
-
             // Make sure we got output directory set when generating reports.
             if (settings.OutputDirectory == null || string.IsNullOrWhiteSpace(settings.OutputDirectory.FullPath))
             {
@@ -57,53 +52,20 @@ namespace Cake.Common.Tools.XUnit
                 }
             }
 
-            // Get the process start info.
-            var info = GetProcessStartInfo(assemblyPath, settings, toolPath);
-
-            // Run the process.
-            var process = _runner.Start(info);
-            if (process == null)
-            {
-                throw new CakeException("xUnit process was not started.");
-            }
-
-            // Wait for the process to exit.
-            process.WaitForExit();
-
-            // Did an error occur?
-            if (process.GetExitCode() != 0)
-            {
-                throw new CakeException("Failing xUnit tests.");
-            }
+            Run(settings, GetArguments(assemblyPath, settings), settings.ToolPath);
         }
 
-        private FilePath GetToolPath(XUnitSettings settings)
+        private ToolArgumentBuilder GetArguments(FilePath assemblyPath, XUnitSettings settings)
         {
-            if (settings.ToolPath != null)
-            {
-                return settings.ToolPath.MakeAbsolute(_environment);
-            }
-
-            var expression = string.Format("./tools/**/xunit.console.clr4.exe");
-            var runnerPath = _globber.GetFiles(expression).FirstOrDefault();
-            if (runnerPath == null)
-            {
-                throw new CakeException("Could not find xunit.console.clr4.exe.");
-            }
-            return runnerPath;
-        }
-
-        private ProcessStartInfo GetProcessStartInfo(FilePath assemblyPath, XUnitSettings settings, FilePath runnerPath)
-        {
-            var parameters = new List<string>();
+            var builder = new ToolArgumentBuilder();
 
             // Add the assembly to build.
-            parameters.Add(assemblyPath.MakeAbsolute(_environment).FullPath.Quote());
+            builder.AppendQuotedText(assemblyPath.MakeAbsolute(_environment).FullPath);
 
             // No shadow copy?
             if (!settings.ShadowCopy)
             {
-                parameters.Add("/noshadow".Quote());
+                builder.AppendQuotedText("/noshadow");
             }
 
             // Generate HTML report?
@@ -111,8 +73,9 @@ namespace Cake.Common.Tools.XUnit
             {
                 var assemblyFilename = assemblyPath.GetFilename().AppendExtension(".html");
                 var outputPath = settings.OutputDirectory.GetFilePath(assemblyFilename);
-                parameters.Add("/html".Quote());
-                parameters.Add(outputPath.FullPath.Quote());
+
+                builder.AppendQuotedText("/html");
+                builder.AppendQuotedText(outputPath.FullPath);
             }
 
             // Generate XML report?
@@ -120,17 +83,31 @@ namespace Cake.Common.Tools.XUnit
             {
                 var assemblyFilename = assemblyPath.GetFilename().AppendExtension(".xml");
                 var outputPath = settings.OutputDirectory.GetFilePath(assemblyFilename);
-                parameters.Add("/xml".Quote());
-                parameters.Add(outputPath.FullPath.Quote());
+
+                builder.AppendQuotedText("/xml");
+                builder.AppendQuotedText(outputPath.FullPath);
             }
 
-            // Create the process start info.
-            return new ProcessStartInfo(runnerPath.FullPath)
-            {
-                WorkingDirectory = _environment.WorkingDirectory.FullPath,
-                Arguments = string.Join(" ", parameters),
-                UseShellExecute = false
-            };
+            return builder;
+        }
+
+        /// <summary>
+        /// Gets the name of the tool.
+        /// </summary>
+        /// <returns>The name of the tool.</returns>
+        protected override string GetToolName()
+        {
+            return "xUnit";
+        }
+
+        /// <summary>
+        /// Gets the default tool path.
+        /// </summary>
+        /// <returns>The default tool path.</returns>
+        protected override FilePath GetDefaultToolPath(XUnitSettings settings)
+        {
+            var expression = string.Format("./tools/**/xunit.console.clr4.exe");
+            return _globber.GetFiles(expression).FirstOrDefault();
         }
     }
 }

@@ -55,7 +55,7 @@ namespace Cake.Common.Tools.NUnit
         [CakeMethodAlias]
         public static void NUnit(this ICakeContext context, IEnumerable<FilePath> assemblies, NUnitSettings settings)
         {
-            var runner = new NUnitRunner(context.Environment, context.Globber, context.ProcessRunner);            
+            var runner = new NUnitRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);            
             foreach (var assembly in assemblies)
             {
                 runner.Run(assembly, settings);

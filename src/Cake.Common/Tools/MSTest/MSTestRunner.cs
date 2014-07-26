@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -9,11 +7,10 @@ namespace Cake.Common.Tools.MSTest
     /// <summary>
     /// The MSTest unit test runner.
     /// </summary>
-    public sealed class MSTestRunner
+    public sealed class MSTestRunner : Tool<MSTestSettings>
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
-        private readonly IProcessRunner _processRunner;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MSTestRunner"/> class.
@@ -22,10 +19,10 @@ namespace Cake.Common.Tools.MSTest
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
         public MSTestRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner)
+            : base(fileSystem, environment, processRunner)
         {
             _fileSystem = fileSystem;
             _environment = environment;
-            _processRunner = processRunner;
         }
 
         /// <summary>
@@ -44,39 +41,39 @@ namespace Cake.Common.Tools.MSTest
                 throw new ArgumentNullException("settings");
             }
 
-            // Find MSTest.exe.
-            var toolPath = GetToolPath(settings);
-            if (toolPath == null)
-            {
-                throw new CakeException("Could not find MSTest.exe.");   
-            }
-
-            // Get the process start info.
-            var info = GetProcessStartInfo(toolPath, assemblyPath, settings);
-
-            // Run the process.
-            var process = _processRunner.Start(info);
-            if (process == null)
-            {
-                throw new CakeException("MSTest process was not started.");
-            }
-
-            // Wait for the process to exit.
-            process.WaitForExit();
-
-            // Did an error occur?
-            if (process.GetExitCode() != 0)
-            {
-                throw new CakeException("MSTest process returned failure.");
-            }
+            Run(settings, GetArguments(assemblyPath, settings), settings.ToolPath);
         }
 
-        private FilePath GetToolPath(MSTestSettings settings)
+        private ToolArgumentBuilder GetArguments(FilePath assemblyPath, MSTestSettings settings)
         {
-            if (settings.ToolPath != null)
+            var builder = new ToolArgumentBuilder();
+
+            // Add the assembly to build.
+            builder.AppendText(string.Concat("/testcontainer:", assemblyPath.MakeAbsolute(_environment).FullPath).Quote());
+
+            if (settings.NoIsolation)
             {
-                return settings.ToolPath.MakeAbsolute(_environment);
+                builder.AppendQuotedText("/noisolation");
             }
+
+            return builder;
+        }
+
+        /// <summary>
+        /// Gets the name of the tool.
+        /// </summary>
+        /// <returns>The tool name.</returns>
+        protected override string GetToolName()
+        {
+            return "MSTest";
+        }
+
+        /// <summary>
+        /// Gets the default tool path.
+        /// </summary>
+        /// <returns>The default tool path.</returns>
+        protected override FilePath GetDefaultToolPath(MSTestSettings settings)
+        {
             foreach (var version in new[] { "12.0", "11.0", "10.0" })
             {
                 var path = GetToolPath(version);
@@ -93,27 +90,6 @@ namespace Cake.Common.Tools.MSTest
             var programFiles = _environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
             var root = programFiles.Combine(string.Concat("Microsoft Visual Studio ", version, "/Common7/IDE"));
             return root.CombineWithFilePath("mstest.exe");
-        }
-
-        private ProcessStartInfo GetProcessStartInfo(FilePath toolPath, FilePath assemblyPath, MSTestSettings settings)
-        {
-            var parameters = new List<string>();
-
-            // Add the assembly to build.
-            parameters.Add(string.Concat("/testcontainer:", assemblyPath.MakeAbsolute(_environment).FullPath).Quote());
-
-            if (settings.NoIsolation)
-            {
-                parameters.Add("/noisolation".Quote());
-            }
-
-            // Create the process start info.
-            return new ProcessStartInfo(toolPath.FullPath)
-            {
-                WorkingDirectory = _environment.WorkingDirectory.FullPath,
-                Arguments = string.Join(" ", parameters),
-                UseShellExecute = false
-            };
         }
     }
 }

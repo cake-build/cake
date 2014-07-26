@@ -8,12 +8,13 @@ namespace Cake.Common.Tests.Fixtures
 {
     public sealed class WiXFixture
     {
+        public IFileSystem FileSystem { get; set; }
         public IProcess Process { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
         public ICakeEnvironment Environment { get; set; }
         public IGlobber Globber { get; set; }
 
-        public WiXFixture()
+        public WiXFixture(FilePath toolPath = null)
         {
             Process = Substitute.For<IProcess>();
             Process.GetExitCode().Returns(0);
@@ -27,16 +28,25 @@ namespace Cake.Common.Tests.Fixtures
             Globber = Substitute.For<IGlobber>();
             Globber.Match("./tools/**/candle.exe").Returns(new[] { (FilePath)"/Working/tools/candle.exe" });
             Globber.Match("./tools/**/light.exe").Returns(new[] { (FilePath)"/Working/tools/light.exe" });
+
+            FileSystem = Substitute.For<IFileSystem>();
+            FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == "/Working/tools/candle.exe")).Returns(true);
+            FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == "/Working/tools/light.exe")).Returns(true);
+
+            if (toolPath != null)
+            {
+                FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == toolPath.FullPath)).Returns(true);
+            }
         }
 
         public CandleRunner CreateCandleRunner()
         {
-            return new CandleRunner(Environment, Globber, ProcessRunner);
+            return new CandleRunner(FileSystem, Environment, Globber, ProcessRunner);
         }
 
         public LightRunner CreateLightRunner()
         {
-            return new LightRunner(Environment, Globber, ProcessRunner);
+            return new LightRunner(FileSystem, Environment, Globber, ProcessRunner);
         }
     }
 }

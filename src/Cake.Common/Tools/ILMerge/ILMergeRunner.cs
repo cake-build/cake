@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
@@ -10,23 +9,23 @@ namespace Cake.Common.Tools.ILMerge
     /// <summary>
     /// The ILMerge runner.
     /// </summary>
-    public sealed class ILMergeRunner
+    public sealed class ILMergeRunner : Tool<ILMergeSettings>
     {
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
-        private readonly IProcessRunner _processRunner;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ILMergeRunner"/> class.
         /// </summary>
+        /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="globber">The globber.</param>
         /// <param name="processRunner">The process runner.</param>
-        public ILMergeRunner(ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
+        public ILMergeRunner(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
+            : base(fileSystem, environment, processRunner)
         {
             _environment = environment;
             _globber = globber;
-            _processRunner = processRunner;
         }
 
         /// <summary>
@@ -55,75 +54,36 @@ namespace Cake.Common.Tools.ILMerge
             settings = settings ?? new ILMergeSettings();
 
             // Get the ILMerge path.
-            var toolPath = GetToolPath(settings);
-
-            // Get the process start info.
-            var info = GetProcessStartInfo(toolPath, outputAssemblyPath, primaryAssemblyPath, assemblyPaths, settings);
-
-            // Run the process.
-            var process = _processRunner.Start(info);
-            if (process == null)
-            {
-                throw new CakeException("ILMerge process was not started.");
-            }
-
-            // Wait for the process to exit.
-            process.WaitForExit();
-
-            // Did an error occur?
-            if (process.GetExitCode() != 0)
-            {
-                throw new CakeException("Failed to merge assemblies.");
-            }
+            Run(settings, GetArguments(outputAssemblyPath, primaryAssemblyPath, assemblyPaths, settings), settings.ToolPath);
         }
 
-        private ProcessStartInfo GetProcessStartInfo(FilePath toolPath, FilePath outputAssemblyPath,
+        private ToolArgumentBuilder GetArguments(FilePath outputAssemblyPath,
             FilePath primaryAssemblyFilePath, IEnumerable<FilePath> assemblyPaths, ILMergeSettings settings)
         {
-            var parameters = new List<string>();
+            var builder = new ToolArgumentBuilder();
 
-            parameters.Add(GetOutputParameter(outputAssemblyPath));
+            builder.AppendText(GetOutputParameter(outputAssemblyPath));
 
             if (settings.TargetKind != TargetKind.Default)
             {
-                parameters.Add(GetTargetKindParameter(settings));
+                builder.AppendText(GetTargetKindParameter(settings));
             }
 
             if (settings.Internalize)
             {
-                parameters.Add("/internalize");
+                builder.AppendText("/internalize");
             }
 
             // Add primary assembly.
-            parameters.Add(primaryAssemblyFilePath.MakeAbsolute(_environment).FullPath.Quote());
+            builder.AppendQuotedText(primaryAssemblyFilePath.MakeAbsolute(_environment).FullPath);
 
             foreach (var file in assemblyPaths)
             {
-                parameters.Add(file.MakeAbsolute(_environment).FullPath.Quote());
+                builder.AppendQuotedText(file.MakeAbsolute(_environment).FullPath);
             }
 
             // Create the process start info.
-            return new ProcessStartInfo(toolPath.FullPath)
-            {
-                WorkingDirectory = _environment.WorkingDirectory.FullPath,
-                Arguments = string.Join(" ", parameters),
-                UseShellExecute = false
-            };
-        }
-
-        private FilePath GetToolPath(ILMergeSettings settings)
-        {
-            if (settings.ToolPath != null)
-            {
-                return settings.ToolPath.MakeAbsolute(_environment);
-            }
-            var expression = string.Format("./tools/**/ILMerge.exe");
-            var nugetExePath = _globber.GetFiles(expression).FirstOrDefault();
-            if (nugetExePath == null)
-            {
-                throw new CakeException("Could not find ILMerge.exe.");
-            }
-            return nugetExePath;
+            return builder;
         }
 
         private string GetOutputParameter(FilePath outputAssemblyPath)
@@ -150,6 +110,25 @@ namespace Cake.Common.Tools.ILMerge
                 default:
                     throw new NotSupportedException("The provided ILMerge target kind is not valid.");
             }
+        }
+
+        /// <summary>
+        /// Gets the name of the tool.
+        /// </summary>
+        /// <returns>The name of the tool.</returns>
+        protected override string GetToolName()
+        {
+            return "ILMerge";
+        }
+
+        /// <summary>
+        /// Gets the default tool path.
+        /// </summary>
+        /// <returns>The default tool path.</returns>
+        protected override FilePath GetDefaultToolPath(ILMergeSettings settings)
+        {
+            var expression = string.Format("./tools/**/ILMerge.exe");
+            return _globber.GetFiles(expression).FirstOrDefault();
         }
     }
 }

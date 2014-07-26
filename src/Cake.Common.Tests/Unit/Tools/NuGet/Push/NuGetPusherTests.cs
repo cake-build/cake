@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.NuGet;
 using Cake.Common.Tools.NuGet.Push;
@@ -10,7 +9,7 @@ using NSubstitute;
 using Xunit;
 using Xunit.Extensions;
 
-namespace Cake.Common.Tests.Unit.Tools.NuGet
+namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
 {
     public sealed class NuGetPusherTests
     {
@@ -21,10 +20,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
             {
                 // Given
                 var fixture = new NuGetFixture();
-                var packer = fixture.CreatePusher();
+                var pusher = fixture.CreatePusher();
 
                 // When
-                var result = Record.Exception(() => packer.Push(null, new NuGetPushSettings()));
+                var result = Record.Exception(() => pusher.Push(null, new NuGetPushSettings()));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -36,10 +35,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
             {
                 // Given
                 var fixture = new NuGetFixture();
-                var packer = fixture.CreatePusher();
+                var pusher = fixture.CreatePusher();
 
                 // When
-                var result = Record.Exception(() => packer.Push("./existing.nupkg", null));
+                var result = Record.Exception(() => pusher.Push("./existing.nupkg", null));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -50,16 +49,15 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
             public void Should_Throw_If_NuGet_Executable_Was_Not_Found()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                fixture.Globber.Match("./tools/**/NuGet.exe").Returns(Enumerable.Empty<Path>());
-                var packer = fixture.CreatePusher();
+                var fixture = new NuGetFixture(defaultToolExist: false);
+                var pusher = fixture.CreatePusher();
 
                 // When
-                var result = Record.Exception(() => packer.Push("./existing.nupkg", new NuGetPushSettings()));
+                var result = Record.Exception(() => pusher.Push("./existing.nupkg", new NuGetPushSettings()));
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Could not find NuGet.exe.", result.Message);
+                Assert.Equal("NuGet: Could not locate executable.", result.Message);
             }
 
             [Theory]
@@ -68,11 +66,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
             public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var packer = fixture.CreatePusher();
+                var fixture = new NuGetFixture(toolPath: expected);
+                var pusher = fixture.CreatePusher();
 
                 // When
-                packer.Push("./existing.nupkg", new NuGetPushSettings
+                pusher.Push("./existing.nupkg", new NuGetPushSettings
                 {
                     ToolPath = toolPath
                 });
@@ -87,10 +85,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
             {
                 // Given
                 var fixture = new NuGetFixture();
-                var packer = fixture.CreatePusher();
+                var pusher = fixture.CreatePusher();
 
                 // When
-                packer.Push("./existing.nupkg", new NuGetPushSettings());
+                pusher.Push("./existing.nupkg", new NuGetPushSettings());
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
@@ -98,14 +96,46 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
             }
 
             [Fact]
+            public void Should_Throw_If_Process_Was_Not_Started()
+            {
+                // Given
+                var fixture = new NuGetFixture();
+                fixture.ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns((IProcess)null);
+                var pusher = fixture.CreatePusher();
+
+                // When
+                var result = Record.Exception(() => pusher.Push("./existing.nupkg", new NuGetPushSettings()));
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("NuGet: Process was not started.", result.Message);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
+            {
+                // Given
+                var fixture = new NuGetFixture();
+                fixture.Process.GetExitCode().Returns(1);
+                var pusher = fixture.CreatePusher();
+
+                // When
+                var result = Record.Exception(() => pusher.Push("./existing.nupkg", new NuGetPushSettings()));
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("NuGet: Process returned an error.", result.Message);
+            }
+
+            [Fact]
             public void Should_Add_NuGet_Package_To_Arguments()
             {
                 // Given
                 var fixture = new NuGetFixture();
-                var packer = fixture.CreatePusher();
+                var pusher = fixture.CreatePusher();
 
                 // When
-                packer.Push("./existing.nupkg", new NuGetPushSettings
+                pusher.Push("./existing.nupkg", new NuGetPushSettings
                {
                     NonInteractive = false
                 });
@@ -120,10 +150,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
             {
                 // Given
                 var fixture = new NuGetFixture();
-                var packer = fixture.CreatePusher();
+                var pusher = fixture.CreatePusher();
 
                 // When
-                packer.Push("./existing.nupkg", new NuGetPushSettings
+                pusher.Push("./existing.nupkg", new NuGetPushSettings
                 {
                     NonInteractive = false,
                     ApiKey = "1234"
@@ -139,10 +169,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
             {
                 // Given
                 var fixture = new NuGetFixture();
-                var packer = fixture.CreatePusher();
+                var pusher = fixture.CreatePusher();
 
                 // When
-                packer.Push("./existing.nupkg", new NuGetPushSettings
+                pusher.Push("./existing.nupkg", new NuGetPushSettings
                 {
                     NonInteractive = false,
                     ConfigFile = "./NuGet.config"
@@ -158,10 +188,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
             {
                 // Given
                 var fixture = new NuGetFixture();
-                var packer = fixture.CreatePusher();
+                var pusher = fixture.CreatePusher();
 
                 // When
-                packer.Push("./existing.nupkg", new NuGetPushSettings
+                pusher.Push("./existing.nupkg", new NuGetPushSettings
                 {
                     NonInteractive = true
                 });
@@ -176,10 +206,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
             {
                 // Given
                 var fixture = new NuGetFixture();
-                var packer = fixture.CreatePusher();
+                var pusher = fixture.CreatePusher();
 
                 // When
-                packer.Push("./existing.nupkg", new NuGetPushSettings
+                pusher.Push("./existing.nupkg", new NuGetPushSettings
                 {
                     NonInteractive = false,
                     Source = "http://customsource/"
@@ -195,10 +225,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
             {
                 // Given
                 var fixture = new NuGetFixture();
-                var packer = fixture.CreatePusher();
+                var pusher = fixture.CreatePusher();
 
                 // When
-                packer.Push("./existing.nupkg", new NuGetPushSettings
+                pusher.Push("./existing.nupkg", new NuGetPushSettings
                 {
                     NonInteractive = false,
                     Timeout = TimeSpan.FromSeconds(987) 
@@ -217,11 +247,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
             {
                 // Given
                 var fixture = new NuGetFixture();
-                var packer = fixture.CreatePusher();
+                var pusher = fixture.CreatePusher();
                 var expected = string.Format("push \"/Working/existing.nupkg\" -Verbosity {0}", name);
 
                 // When
-                packer.Push("./existing.nupkg", new NuGetPushSettings
+                pusher.Push("./existing.nupkg", new NuGetPushSettings
                 {
                     NonInteractive = false,
                     Verbosity = verbosity

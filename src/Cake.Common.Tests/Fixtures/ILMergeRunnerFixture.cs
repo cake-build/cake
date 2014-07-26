@@ -9,6 +9,7 @@ namespace Cake.Common.Tests.Fixtures
 {
     public sealed class ILMergeRunnerFixture
     {
+        public IFileSystem FileSystem { get; set; }
         public IProcess Process { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
         public ICakeEnvironment Environment { get; set; }
@@ -20,7 +21,7 @@ namespace Cake.Common.Tests.Fixtures
 
         public ILMergeSettings Settings { get; set; }
 
-        public ILMergeRunnerFixture()
+        public ILMergeRunnerFixture(FilePath toolPath = null, bool defaultToolExist = true)
         {
             OutputAssemblyPath = "output.exe";
             PrimaryAssemblyPath = "input.exe";
@@ -38,12 +39,20 @@ namespace Cake.Common.Tests.Fixtures
             Globber = Substitute.For<IGlobber>();
             Globber.Match("./tools/**/ILMerge.exe").Returns(new[] { (FilePath)"/Working/tools/ILMerge.exe" });
 
+            FileSystem = Substitute.For<IFileSystem>();
+            FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == "/Working/tools/ILMerge.exe")).Returns(defaultToolExist);
+
+            if (toolPath != null)
+            {
+                FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == toolPath.FullPath)).Returns(true);
+            }
+
             Settings = new ILMergeSettings();
         }
 
         public void Run()
         {
-            var runner = new ILMergeRunner(Environment, Globber, ProcessRunner);
+            var runner = new ILMergeRunner(FileSystem, Environment, Globber, ProcessRunner);
             runner.Merge(OutputAssemblyPath, PrimaryAssemblyPath, AssemblyPaths, Settings);
         }
     }

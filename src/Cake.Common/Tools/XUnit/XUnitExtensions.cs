@@ -55,7 +55,7 @@ namespace Cake.Common.Tools.XUnit
         [CakeMethodAlias]
         public static void XUnit(this ICakeContext context, IEnumerable<FilePath> assemblies, XUnitSettings settings)
         {
-            var runner = new XUnitRunner(context.Environment, context.Globber, context.ProcessRunner);
+            var runner = new XUnitRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
             foreach (var assembly in assemblies)
             {
                 runner.Run(assembly, settings);

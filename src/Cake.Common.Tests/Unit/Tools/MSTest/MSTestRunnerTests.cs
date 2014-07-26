@@ -46,8 +46,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         public void Should_Throw_If_Tool_Path_Was_Not_Found()
         {
             // Given
-            var fixture = new MSTestRunnerFixture();
-            fixture.ToolPath = null;
+            var fixture = new MSTestRunnerFixture(defaultToolExist: false);
             var runner = fixture.CreateRunner();
 
             // When
@@ -55,7 +54,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
 
             // Then
             Assert.IsType<CakeException>(result);
-            Assert.Equal("Could not find MSTest.exe.", result.Message);
+            Assert.Equal("MSTest: Could not locate executable.", result.Message);
         }
 
         [Theory]
@@ -64,7 +63,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         public void Should_Use_MSTest_From_Tool_Path_If_Provided(string toolPath, string expected)
         {
             // Given
-            var fixture = new MSTestRunnerFixture();
+            var fixture = new MSTestRunnerFixture(toolPath: expected);
             var runner = fixture.CreateRunner();
 
             // When
@@ -125,7 +124,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
 
             // Then
             Assert.IsType<CakeException>(result);
-            Assert.Equal("MSTest process was not started.", result.Message);
+            Assert.Equal("MSTest: Process was not started.", result.Message);
         }
 
         [Fact]
@@ -141,7 +140,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
 
             // Then
             Assert.IsType<CakeException>(result);
-            Assert.Equal("MSTest process returned failure.", result.Message);
+            Assert.Equal("MSTest: Process returned an error.", result.Message);
         }
 
         [Fact]

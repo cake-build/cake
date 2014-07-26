@@ -21,6 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\Cake.Common.xml</DocumentationFile>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -80,16 +81,18 @@
     <Compile Include="Tools\NuGet\NuGetExtensions.cs" />
     <Compile Include="Tools\NuGet\Pack\NuGetPacker.cs" />
     <Compile Include="Tools\NuGet\Pack\NuGetPackSettings.cs" />
+    <Compile Include="Tools\NuGet\Pack\NuspecProcessor.cs" />
     <Compile Include="Tools\NuGet\Push\NuGetPusher.cs" />
     <Compile Include="Tools\NuGet\Push\NuGetPushSettings.cs" />
     <Compile Include="Tools\NuGet\Restore\NuGetRestorer.cs" />
     <Compile Include="Tools\NuGet\Restore\NugetRestoreSettings.cs" />
-    <Compile Include="Tools\NuGet\Restore\NugetRestoreSettingsExtensions.cs" />
     <Compile Include="Tools\NuGet\NuGetVerbosity.cs" />
     <Compile Include="Tools\NuGet\Pack\NuspecTransformer.cs" />
     <Compile Include="Tools\NUnit\NUnitExtensions.cs" />
     <Compile Include="Tools\NUnit\NUnitRunner.cs" />
     <Compile Include="Tools\NUnit\NUnitSettings.cs" />
+    <Compile Include="Tools\Tool.cs" />
+    <Compile Include="Tools\ToolArgumentBuilder.cs" />
     <Compile Include="Tools\WiX\Architecture.cs" />
     <Compile Include="Tools\WiX\CandleRunner.cs" />
     <Compile Include="Tools\WiX\CandleSettings.cs" />
@@ -109,9 +112,6 @@
       <Project>{8074b833-11b8-459f-bb98-bfba2bc5c698}</Project>
       <Name>Cake.Core</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Tools\NuGet\NuGetResolver.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,7 +1,7 @@
 ﻿using Cake.Common.Tools.NuGet.Pack;
 using Xunit;
 
-namespace Cake.Common.Tests.Unit.Tools.NuGet
+namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
 {
     public sealed class NuGetPackSettingsTests
     {

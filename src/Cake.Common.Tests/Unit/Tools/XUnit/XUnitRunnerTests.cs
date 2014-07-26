@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.XUnit;
 using Cake.Core;
@@ -31,8 +30,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             public void Should_Throw_If_XUnit_Runner_Was_Not_Found()
             {
                 // Given
-                var fixture = new XUnitRunnerFixture();
-                fixture.Globber.Match("./tools/**/xunit.console.clr4.exe").Returns(Enumerable.Empty<Path>());
+                var fixture = new XUnitRunnerFixture(defaultToolExist: false);
                 var runner = fixture.CreateRunner();
 
                 // When
@@ -40,7 +38,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Could not find xunit.console.clr4.exe.", result.Message);
+                Assert.Equal("xUnit: Could not locate executable.", result.Message);
             }
 
             [Theory]            
@@ -49,7 +47,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             public void Should_Use_XUnit_Runner_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new XUnitRunnerFixture();
+                var fixture = new XUnitRunnerFixture(expected);
                 var runner = fixture.CreateRunner();
 
                 // When
@@ -121,7 +119,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("xUnit process was not started.", result.Message);     
+                Assert.Equal("xUnit: Process was not started.", result.Message);     
             }
 
             [Fact]
@@ -137,7 +135,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Failing xUnit tests.", result.Message);                  
+                Assert.Equal("xUnit: Process returned an error.", result.Message);                  
             }
 
             [Fact]

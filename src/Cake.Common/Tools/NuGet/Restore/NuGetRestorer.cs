@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -8,114 +8,120 @@ namespace Cake.Common.Tools.NuGet.Restore
     /// <summary>
     /// The NuGet package restorer used to restore solution packages.
     /// </summary>
-    public sealed class NuGetRestorer
+    public sealed class NuGetRestorer : Tool<NuGetRestoreSettings>
     {
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
-        private readonly IProcessRunner _processRunner;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetRestorer"/> class.
         /// </summary>
+        /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="globber">The globber.</param>
         /// <param name="processRunner">The process runner.</param>
-        public NuGetRestorer(ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
+        public NuGetRestorer(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
+            : base(fileSystem, environment, processRunner)
         {
             _environment = environment;
             _globber = globber;
-            _processRunner = processRunner;
         }
 
         /// <summary>
         /// Restores NuGet packages using the specified settings.
         /// </summary>
+        /// <param name="targetFilePath">The target file path.</param>
         /// <param name="settings">The settings.</param>
-        public void Restore(NuGetRestoreSettings settings)
+        public void Restore(FilePath targetFilePath, NuGetRestoreSettings settings)
         {
+            if (targetFilePath == null)
+            {
+                throw new ArgumentNullException("targetFilePath");
+            }
             if (settings == null)
             {
                 throw new ArgumentNullException("settings");
             }
 
-            // Find the NuGet executable.
-            var toolPath = NuGetResolver.GetToolPath(_environment, _globber, settings.ToolPath);
-
-            // Start the process.
-            var processInfo = NuGetResolver.GetProcessStartInfo(_environment, toolPath, ()=>GetPackParameters(settings));
-            var process = _processRunner.Start(processInfo);
-            if (process == null)
-            {
-                throw new CakeException("NuGet.exe was not started.");
-            }
-
-            // Wait for the process to exit.
-            process.WaitForExit();
-
-            // Did an error occur?
-            if (process.GetExitCode() != 0)
-            {
-                throw new CakeException("NuGet packager failed.");
-            }
+            Run(settings, GetArguments(targetFilePath, settings), settings.ToolPath);
         }
 
-        private static ICollection<string> GetPackParameters(NuGetRestoreSettings settings)
+        private ToolArgumentBuilder GetArguments(FilePath targetFilePath, NuGetRestoreSettings settings)
         {
-            var parameters = new List<string>
-            {
-                "restore",
-                settings.Solution.FullPath.Quote()
-            };
+            var builder = new ToolArgumentBuilder();
+
+            builder.AppendText("restore");
+            builder.AppendQuotedText(targetFilePath.MakeAbsolute(_environment).FullPath);
 
             // RequireConsent?
             if (settings.RequireConsent)
             {
-                parameters.Add("-RequireConsent");
+                builder.AppendText("-RequireConsent");
             }
-          
+
             // Packages Directory
             if (settings.PackagesDirectory != null)
             {
-                parameters.Add("-PackagesDirectory");
-                parameters.Add(settings.PackagesDirectory.FullPath.Quote());
+                builder.AppendText("-PackagesDirectory");
+                builder.AppendQuotedText(settings.PackagesDirectory.MakeAbsolute(_environment).FullPath);
             }
 
             // List of package sources
-            if (settings.Source != null && settings.Source.Count>0)
+            if (settings.Source != null && settings.Source.Count > 0)
             {
-                parameters.Add("-Source");
-                parameters.Add(string.Join(";", settings.Source).Quote());
+                builder.AppendText("-Source");
+                builder.AppendQuotedText(string.Join(";", settings.Source));
             }
-           
+
             // No Cache?
             if (settings.NoCache)
             {
-                parameters.Add("-NoCache");
+                builder.AppendText("-NoCache");
             }
 
             // Disable Parallel Processing?
             if (settings.DisableParallelProcessing)
             {
-                parameters.Add("-DisableParallelProcessing");
+                builder.AppendText("-DisableParallelProcessing");
             }
 
             // Verbosity?
             if (settings.Verbosity.HasValue)
             {
-                parameters.Add("-Verbosity");
-                parameters.Add(settings.Verbosity.Value.ToString().ToLowerInvariant());
+                builder.AppendText("-Verbosity");
+                builder.AppendText(settings.Verbosity.Value.ToString().ToLowerInvariant());
             }
-          
-            // Packages Directory
+
+            // Configuration file
             if (settings.ConfigFile != null)
             {
-                parameters.Add("-ConfigFile");
-                parameters.Add(settings.ConfigFile.FullPath.Quote());
+                builder.AppendText("-ConfigFile");
+                builder.AppendQuotedText(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
             }
 
-            parameters.Add("-NonInteractive");
+            builder.AppendText("-NonInteractive");
 
-            return parameters;
+            return builder;
+        }
+
+        /// <summary>
+        /// Gets the name of the tool.
+        /// </summary>
+        /// <returns>The name of the tool.</returns>
+        protected override string GetToolName()
+        {
+            return "NuGet";
+        }
+
+        /// <summary>
+        /// Gets the default tool path.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The default tool path.</returns>
+        protected override FilePath GetDefaultToolPath(NuGetRestoreSettings settings)
+        {
+            var expression = string.Format("./tools/**/NuGet.exe");
+            return _globber.GetFiles(expression).FirstOrDefault();
         }
     }
 }

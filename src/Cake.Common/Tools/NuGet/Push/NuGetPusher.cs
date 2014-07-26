@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -10,23 +9,23 @@ namespace Cake.Common.Tools.NuGet.Push
     /// <summary>
     /// The NuGet package pusher.
     /// </summary>
-    public sealed class NuGetPusher
+    public sealed class NuGetPusher : Tool<NuGetPushSettings>
     {
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
-        private readonly IProcessRunner _processRunner;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetPusher"/> class.
         /// </summary>
+        /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="globber">The globber.</param>
         /// <param name="processRunner">The process runner.</param>
-        public NuGetPusher(ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
+        public NuGetPusher(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
+            : base(fileSystem, environment, processRunner)
         {
             _environment = environment;
             _globber = globber;
-            _processRunner = processRunner;
         }
 
         /// <summary>
@@ -45,74 +44,70 @@ namespace Cake.Common.Tools.NuGet.Push
                 throw new ArgumentNullException("settings");
             }
 
-            // Find the NuGet executable.
-            var toolPath = NuGetResolver.GetToolPath(_environment, _globber, settings.ToolPath);
-
-            // Start the process.
-            var processInfo = GetProcessStartInfo(toolPath, packageFilePath, settings);
-            var process = _processRunner.Start(processInfo);
-            if (process == null)
-            {
-                throw new CakeException("NuGet.exe was not started.");
-            }
-
-            // Wait for the process to exit.
-            process.WaitForExit();
-
-            // Did an error occur?
-            if (process.GetExitCode() != 0)
-            {
-                throw new CakeException("NuGet packager failed.");
-            }
+            Run(settings, GetArguments(packageFilePath, settings), settings.ToolPath);
         }
 
-        private ProcessStartInfo GetProcessStartInfo(FilePath toolPath, FilePath packageFilePath, NuGetPushSettings settings)
+        private ToolArgumentBuilder GetArguments(FilePath packageFilePath, NuGetPushSettings settings)
         {
-            return NuGetResolver.GetProcessStartInfo(_environment, toolPath,
-                () => GetPackParameters(packageFilePath, settings));
-        }
+            var builder = new ToolArgumentBuilder();
+            builder.AppendText("push");
 
-        private ICollection<string> GetPackParameters(FilePath packageFilePath, NuGetPushSettings settings)
-        {
-            var parameters = new List<string> { "push" };
-
-            parameters.Add(packageFilePath.MakeAbsolute(_environment).FullPath.Quote());
+            builder.AppendQuotedText(packageFilePath.MakeAbsolute(_environment).FullPath);
 
             if (settings.ApiKey != null)
             {
-                parameters.Add(settings.ApiKey);
+                builder.AppendText(settings.ApiKey);
             }
 
             if (settings.NonInteractive)
             {
-                parameters.Add("-NonInteractive");
+                builder.AppendText("-NonInteractive");
             }
 
             if (settings.ConfigFile != null)
             {
-                parameters.Add("-ConfigFile");
-                parameters.Add(settings.ConfigFile.MakeAbsolute(_environment).FullPath.Quote());
+                builder.AppendText("-ConfigFile");
+                builder.AppendQuotedText(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
             }
 
             if (settings.Source != null)
             {
-                parameters.Add("-Source");
-                parameters.Add(settings.Source.Quote());
+                builder.AppendText("-Source");
+                builder.AppendQuotedText(settings.Source);
             }
 
             if (settings.Timeout != null)
             {
-                parameters.Add("-Timeout");
-                parameters.Add(Convert.ToInt32(settings.Timeout.Value.TotalSeconds).ToString(CultureInfo.InvariantCulture));
+                builder.AppendText("-Timeout");
+                builder.AppendText(Convert.ToInt32(settings.Timeout.Value.TotalSeconds).ToString(CultureInfo.InvariantCulture));
             }
 
             if (settings.Verbosity != null)
             {
-                parameters.Add("-Verbosity");
-                parameters.Add(settings.Verbosity.Value.ToString().ToLowerInvariant());
+                builder.AppendText("-Verbosity");
+                builder.AppendText(settings.Verbosity.Value.ToString().ToLowerInvariant());
             }
 
-            return parameters;
+            return builder;
+        }
+
+        /// <summary>
+        /// Gets the name of the tool.
+        /// </summary>
+        /// <returns>The name of the tool.</returns>
+        protected override string GetToolName()
+        {
+            return "NuGet";
+        }
+
+        /// <summary>
+        /// Gets the default tool path.
+        /// </summary>
+        /// <returns>The default tool path.</returns>
+        protected override FilePath GetDefaultToolPath(NuGetPushSettings settings)
+        {
+            var expression = string.Format("./tools/**/NuGet.exe");
+            return _globber.GetFiles(expression).FirstOrDefault();
         }
     }
 }

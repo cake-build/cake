@@ -32,7 +32,7 @@ namespace Cake.Common.Tools.WiX
         [CakeMethodAlias]
         public static void WiXCandle(this ICakeContext context, IEnumerable<FilePath> sourceFiles, CandleSettings settings = null)
         {
-            var runner = new CandleRunner(context.Environment, context.Globber, context.ProcessRunner);
+            var runner = new CandleRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
             runner.Run(sourceFiles, settings ?? new CandleSettings());
         }
 
@@ -58,7 +58,7 @@ namespace Cake.Common.Tools.WiX
         [CakeMethodAlias]
         public static void WiXLight(this ICakeContext context, IEnumerable<FilePath> objectFiles, LightSettings settings = null)
         {
-            var runner = new LightRunner(context.Environment, context.Globber, context.ProcessRunner);
+            var runner = new LightRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
             runner.Run(objectFiles, settings ?? new LightSettings());
         }
     }

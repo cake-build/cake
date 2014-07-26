@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -9,11 +7,9 @@ namespace Cake.Common.Tools.MSBuild
     /// <summary>
     /// The MSBuild runner.
     /// </summary>
-    public sealed class MSBuildRunner
+    public sealed class MSBuildRunner : Tool<MSBuildSettings>
     {
-        private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
-        private readonly IProcessRunner _runner;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MSBuildRunner"/> class.
@@ -22,10 +18,9 @@ namespace Cake.Common.Tools.MSBuild
         /// <param name="environment">The environment.</param>
         /// <param name="runner">The runner.</param>
         public MSBuildRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner runner)
+            : base(fileSystem, environment, runner)
         {
-            _fileSystem = fileSystem;
             _environment = environment;
-            _runner = runner;
         }
 
         /// <summary>
@@ -34,83 +29,79 @@ namespace Cake.Common.Tools.MSBuild
         /// <param name="settings">The settings.</param>
         public void Run(MSBuildSettings settings)
         {
-            // Get the MSBuild path.
-            var msBuildPath = MSBuildResolver.GetMSBuildPath(_environment, settings.ToolVersion, settings.PlatformTarget);
-            if (!_fileSystem.GetFile(msBuildPath).Exists)
-            {
-                var message = string.Format("Could not find MSBuild at {0}", msBuildPath);
-                throw new CakeException(message);
-            }
-
-            // Start the process.
-            var processInfo = GetProcessStartInfo(settings, msBuildPath);
-            var process = _runner.Start(processInfo);
-            if (process == null)
-            {
-                throw new CakeException("MSBuild process was not started.");
-            }
-
-            // Wait for the process to exit.
-            process.WaitForExit();
-
-            // Did an error occur?
-            if (process.GetExitCode() != 0)
-            {
-                throw new CakeException("Build failed.");
-            }
+            Run(settings, GetArguments(settings));
         }
 
-        private ProcessStartInfo GetProcessStartInfo(MSBuildSettings settings, FilePath msBuildPath)
+        private static ToolArgumentBuilder GetArguments(MSBuildSettings settings)
         {
-            var parameters = new List<string>();
+            var builder = new ToolArgumentBuilder();
 
             // Set the maximum number of processors.
-            parameters.Add(settings.MaxCpuCount > 0 ? string.Concat("/m:", settings.MaxCpuCount) : "/m");
+            builder.AppendText(settings.MaxCpuCount > 0 ? string.Concat("/m:", settings.MaxCpuCount) : "/m");
 
             // Got a specific configuration in mind?
             if (!string.IsNullOrWhiteSpace(settings.Configuration))
             {
                 // Add the configuration as a property.
                 var configuration = settings.Configuration;
-                parameters.Add(string.Concat("/p:\"Configuration\"", "=", configuration.Quote()));
+                builder.AppendText(string.Concat("/p:\"Configuration\"", "=", configuration.Quote()));
             }
 
             // Got any properties?
             if (settings.Properties.Count > 0)
             {
-                parameters.AddRange(
-                    from key in settings.Properties
-                    from value in key.Value
-                    select string.Concat(
-                        "/p:",
-                        key.Key.Quote(),
-                        "=",
-                        value.Quote()
-                        )
-                    );
+                foreach (var property in GetPropertyArguments(settings.Properties))
+                {
+                    builder.AppendText(property);
+                }
             }
 
             // Got any targets?
             if (settings.Targets.Count > 0)
             {
                 var targets = string.Join(";", settings.Targets);
-                parameters.Add(string.Concat("/target:", targets));
+                builder.AppendText(string.Concat("/target:", targets));
             }
             else
             {
                 // Use default target.
-                parameters.Add("/target:Build");
+                builder.AppendText("/target:Build");
             }
 
             // Add the solution as the last parameter.
-            parameters.Add(settings.Solution.FullPath.Quote());
+            builder.AppendText(settings.Solution.FullPath.Quote());
 
-            return new ProcessStartInfo(msBuildPath.FullPath)
+            return builder;
+        }
+
+        private static IEnumerable<string> GetPropertyArguments(IDictionary<string, IList<string>> properties)
+        {
+            foreach (var propertyKey in properties.Keys)
             {
-                WorkingDirectory = _environment.WorkingDirectory.FullPath,
-                Arguments = string.Join(" ", parameters),
-                UseShellExecute = false
-            };
+                foreach (var propertyValue in properties[propertyKey])
+                {
+                    yield return string.Concat("/p:", propertyKey.Quote(), "=", propertyValue.Quote());
+                }
+            }            
+        }
+
+        /// <summary>
+        /// Gets the name of the tool.
+        /// </summary>
+        /// <returns>The name of the tool.</returns>
+        protected override string GetToolName()
+        {
+            return "MSBuild";
+        }
+
+        /// <summary>
+        /// Gets the default tool path.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The default tool path.</returns>
+        protected override FilePath GetDefaultToolPath(MSBuildSettings settings)
+        {
+            return MSBuildResolver.GetMSBuildPath(_environment, settings.ToolVersion, settings.PlatformTarget);
         }
     }
 }

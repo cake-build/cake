@@ -72,7 +72,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Could not find ILMerge.exe.", result.Message);
+                Assert.Equal("ILMerge: Could not locate executable.", result.Message);
             }
 
             [Theory]
@@ -81,7 +81,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
             public void Should_Use_ILMerge_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new ILMergeRunnerFixture();
+                var fixture = new ILMergeRunnerFixture(toolPath: expected);
                 fixture.Settings.ToolPath = toolPath;               
 
                 // When
@@ -148,7 +148,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("ILMerge process was not started.", result.Message);
+                Assert.Equal("ILMerge: Process was not started.", result.Message);
             }
 
             [Fact]
@@ -163,7 +163,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Failed to merge assemblies.", result.Message);
+                Assert.Equal("ILMerge: Process returned an error.", result.Message);
             }
 
             [Fact]

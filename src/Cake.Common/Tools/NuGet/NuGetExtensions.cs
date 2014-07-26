@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Common.Tools.NuGet.Pack;
+﻿using Cake.Common.Tools.NuGet.Pack;
 using Cake.Common.Tools.NuGet.Push;
 using Cake.Common.Tools.NuGet.Restore;
 using Cake.Core;
@@ -29,43 +28,30 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// Restores NuGet packages in the specified solution.
+        /// Restores NuGet packages for the specified target.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="solution">The Visual Studio solution.</param>
+        /// <param name="targetFilePath">The target to restore.</param>
         [CakeMethodAlias]
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Restore")]
-        public static void NuGetRestore(this ICakeContext context, FilePath solution)
+        public static void NuGetRestore(this ICakeContext context, FilePath targetFilePath)
         {
-            context.NuGetRestore(solution, settings => { });
-        }
-
-        /// <summary>
-        /// Restores NuGet packages in the specified solution.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="solution">The solution.</param>
-        /// <param name="configurator">The configurator.</param>
-        [CakeMethodAlias]
-        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Restore")]
-        public static void NuGetRestore(this ICakeContext context, FilePath solution, Action<NuGetRestoreSettings> configurator)
-        {
-            var settings = new NuGetRestoreSettings(solution);
-            configurator(settings);
-            context.NuGetRestore(settings);
+            var settings = new NuGetRestoreSettings();
+            NuGetRestore(context, targetFilePath, settings);
         }
 
         /// <summary>
         /// Restores NuGet packages using the specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
+        /// <param name="targetFilePath">The target to restore.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Restore")]
-        public static void NuGetRestore(this ICakeContext context, NuGetRestoreSettings settings)
+        public static void NuGetRestore(this ICakeContext context, FilePath targetFilePath, NuGetRestoreSettings settings)
         {   
-            var runner = new NuGetRestorer(context.Environment, context.Globber, context.ProcessRunner);
-            runner.Restore(settings);
+            var runner = new NuGetRestorer(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            runner.Restore(targetFilePath, settings);
         }
 
         /// <summary>
@@ -78,7 +64,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Push")]
         public static void NuGetPush(this ICakeContext context, FilePath packageFilePath, NuGetPushSettings settings)
         {
-            var packer = new NuGetPusher(context.Environment, context.Globber, context.ProcessRunner);
+            var packer = new NuGetPusher(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
             packer.Push(packageFilePath, settings);
         }
     }

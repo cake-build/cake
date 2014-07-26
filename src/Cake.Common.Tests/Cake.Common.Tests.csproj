@@ -95,10 +95,12 @@
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsExtensionsTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsTests.cs" />
     <Compile Include="Unit\Tools\MSTest\MSTestRunnerTests.cs" />
-    <Compile Include="Unit\Tools\NuGet\NuGetPackerTests.cs" />
-    <Compile Include="Unit\Tools\NuGet\NuGetPackSettingsTests.cs" />
-    <Compile Include="Unit\Tools\NuGet\NuGetPusherTests.cs" />
-    <Compile Include="Unit\Tools\NuGet\NuGetPushSettingsTests.cs" />
+    <Compile Include="Unit\Tools\NuGet\Pack\NuGetPackerTests.cs" />
+    <Compile Include="Unit\Tools\NuGet\Pack\NuGetPackSettingsTests.cs" />
+    <Compile Include="Unit\Tools\NuGet\Push\NuGetPusherTests.cs" />
+    <Compile Include="Unit\Tools\NuGet\Push\NuGetPushSettingsTests.cs" />
+    <Compile Include="Unit\Tools\NuGet\Restore\NuGetRestorerTests.cs" />
+    <Compile Include="Unit\Tools\NuGet\Restore\NuGetRestoreSettingsTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitRunnerTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitSettingsTests.cs" />
     <Compile Include="Unit\Tools\WiX\LightRunnerTests.cs" />

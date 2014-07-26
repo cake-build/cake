@@ -183,7 +183,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Could not find MSBuild at /Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe", result.Message);
+                Assert.Equal("MSBuild: Could not locate executable.", result.Message);
             }
 
             [Fact]
@@ -276,6 +276,25 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Fact]
+            public void Should_Append_Property_With_Multiple_Values_To_Process_Arguments()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                var settings = new MSBuildSettings("./src/Solution.sln");
+                settings.WithProperty("A", new[] { "B", "E" });
+                settings.WithProperty("C", "D");
+
+                // When
+                runner.Run(settings);
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
+                    p => p.Arguments == "/m /p:\"A\"=\"B\" /p:\"A\"=\"E\" /p:\"C\"=\"D\" /target:Build \"src/Solution.sln\""));
+            }
+
+            [Fact]
             public void Should_Append_Configuration_As_Property_To_Process_Arguments()
             {
                 // Given
@@ -322,7 +341,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("MSBuild process was not started.", result.Message);
+                Assert.Equal("MSBuild: Process was not started.", result.Message);
             }
 
             [Fact]
@@ -338,7 +357,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Build failed.", result.Message);
+                Assert.Equal("MSBuild: Process returned an error.", result.Message);
             }
         }
     }

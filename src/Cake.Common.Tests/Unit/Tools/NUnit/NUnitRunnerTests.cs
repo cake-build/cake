@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.NUnit;
 using Cake.Core;
@@ -31,8 +30,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
             public void Should_Throw_If_NUnit_Runner_Was_Not_Found()
             {
                 // Given
-                var fixture = new NUnitRunnerFixture();
-                fixture.Globber.Match("./tools/**/nunit-console.exe").Returns(Enumerable.Empty<Path>());
+                var fixture = new NUnitRunnerFixture(defaultToolExist: false);
                 var runner = fixture.CreateRunner();
 
                 // When
@@ -40,7 +38,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Could not find nunit-console.exe.", result.Message);
+                Assert.Equal("NUnit: Could not locate executable.", result.Message);
             }
 
             [Theory]
@@ -49,7 +47,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
             public void Should_Use_NUnit_Runner_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new NUnitRunnerFixture();
+                var fixture = new NUnitRunnerFixture(toolPath: expected);
                 var runner = fixture.CreateRunner();
 
                 // When
@@ -121,7 +119,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("NUnit process was not started.", result.Message);
+                Assert.Equal("NUnit: Process was not started.", result.Message);
             }
 
             [Fact]
@@ -137,7 +135,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Failing NUnit tests.", result.Message);
+                Assert.Equal("NUnit: Process returned an error.", result.Message);
             }
 
             [Fact]

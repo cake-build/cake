@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tests.Properties;
 using Cake.Common.Tools.NuGet.Pack;
@@ -10,7 +9,7 @@ using NSubstitute;
 using Xunit;
 using Xunit.Extensions;
 
-namespace Cake.Common.Tests.Unit.Tools.NuGet
+namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
 {
     public sealed class NuGetPackerTests
     {
@@ -50,8 +49,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
             public void Should_Throw_If_NuGet_Executable_Was_Not_Found()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                fixture.Globber.Match("./tools/**/NuGet.exe").Returns(Enumerable.Empty<Path>());
+                var fixture = new NuGetFixture(defaultToolExist: false);
                 var packer = fixture.CreatePacker();
 
                 // When
@@ -59,7 +57,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Could not find NuGet.exe.", result.Message);
+                Assert.Equal("NuGet: Could not locate executable.", result.Message);
             }
 
             [Theory]
@@ -68,7 +66,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
             public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new NuGetFixture();
+                var fixture = new NuGetFixture(toolPath: expected);
                 var packer = fixture.CreatePacker();
 
                 // When
@@ -95,6 +93,38 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
                     p => p.FileName == "/Working/tools/NuGet.exe"));
+            }
+
+            [Fact]
+            public void Should_Throw_If_Process_Was_Not_Started()
+            {
+                // Given
+                var fixture = new NuGetFixture();
+                fixture.ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns((IProcess)null);
+                var packer = fixture.CreatePacker();
+
+                // When
+                var result = Record.Exception(() => packer.Pack("./existing.nuspec", new NuGetPackSettings()));
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("NuGet: Process was not started.", result.Message);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
+            {
+                // Given
+                var fixture = new NuGetFixture();
+                fixture.Process.GetExitCode().Returns(1);
+                var packer = fixture.CreatePacker();
+
+                // When
+                var result = Record.Exception(() => packer.Pack("./existing.nuspec", new NuGetPackSettings()));
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("NuGet: Process returned an error.", result.Message);
             }
 
             [Fact]

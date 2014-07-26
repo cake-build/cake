@@ -74,7 +74,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Could not find light.exe.", result.Message);
+                Assert.Equal("Light: Could not locate executable.", result.Message);
             }
 
             [Theory]
@@ -83,7 +83,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
             public void Should_Use_Light_Runner_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new WiXFixture();
+                var fixture = new WiXFixture(toolPath: expected);
                 var runner = fixture.CreateLightRunner();
 
                 // When
@@ -155,7 +155,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 // Then
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Light process was not started.", result.Message);   
+                Assert.Equal("Light: Process was not started.", result.Message);   
             }
 
             [Fact]
@@ -172,7 +172,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 // Then
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Failed to run Light.", result.Message);
+                Assert.Equal("Light: Process returned an error.", result.Message);
             }
 
             [Fact]

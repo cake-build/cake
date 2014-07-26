@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
@@ -10,27 +9,31 @@ namespace Cake.Common.Tools.WiX
     /// <summary>
     /// The WiX Candle runner.
     /// </summary>
-    public sealed class CandleRunner
+    public sealed class CandleRunner : Tool<CandleSettings>
     {
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
-        private readonly IProcessRunner _processRunner;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CandleRunner"/> class.
         /// </summary>
+        /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="globber">The globber.</param>
         /// <param name="processRunner">The process runner.</param>
-        public CandleRunner(ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
+        public CandleRunner(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
+            : base(fileSystem, environment, processRunner)
         {
-            if (environment == null) throw new ArgumentNullException("environment");
-            if (globber == null) throw new ArgumentNullException("globber");
-            if (processRunner == null) throw new ArgumentNullException("processRunner");
-
+            if (environment == null)
+            {
+                throw new ArgumentNullException("environment");
+            }
+            if (globber == null)
+            {
+                throw new ArgumentNullException("globber");
+            }
             _environment = environment;
             _globber = globber;
-            _processRunner = processRunner;
         }
 
         /// <summary>
@@ -56,78 +59,50 @@ namespace Cake.Common.Tools.WiX
                 throw new ArgumentNullException("settings");
             }
 
-            // Find candle.exe
-            var toolPath = GetToolPath(settings);
-
-            // Get process start info
-            var info = GetProcessStartInfo(sourceFilesArray, settings, toolPath);
-
-            // Run the process
-            var process = _processRunner.Start(info);
-            if (process == null)
-            {
-                throw new CakeException("Candle process was not started.");
-            }
-
-            // Wait for exit
-            process.WaitForExit();
-
-            if (process.GetExitCode() != 0)
-            {
-                throw new CakeException("Failed to run Candle.");
-            }
+            Run(settings, GetArguments(sourceFilesArray, settings), settings.ToolPath);
         }
 
-        private FilePath GetToolPath(CandleSettings settings)
+        private ToolArgumentBuilder GetArguments(FilePath[] sourceFiles, CandleSettings settings)
         {
-            if (settings.ToolPath != null)
-            {
-                return settings.ToolPath.MakeAbsolute(_environment);
-            }
-
-            var expression = string.Format("./tools/**/candle.exe");
-            var runnerPath = _globber.GetFiles(expression).FirstOrDefault();
-
-            if (runnerPath == null)
-            {
-                throw new CakeException("Could not find candle.exe.");
-            }
-
-            return runnerPath;
-        }
-
-        private ProcessStartInfo GetProcessStartInfo(IEnumerable<FilePath> sourceFiles, CandleSettings settings, FilePath toolPath)
-        {
-            var parameters = new List<string>();
+            var builder = new ToolArgumentBuilder();
 
             // Architecture
             if (settings.Architecture.HasValue)
             {
-                parameters.Add(string.Format("-arch {0}", GetArchitectureName(settings.Architecture.Value)));
+                builder.AppendText("-arch");
+                builder.AppendText(GetArchitectureName(settings.Architecture.Value));
             }
 
             // Add defines
             if (settings.Defines != null && settings.Defines.Any())
             {
-                parameters.AddRange(settings.Defines.Select(define => string.Format("-d{0}={1}", define.Key, define.Value)));
+                var defines = settings.Defines.Select(define => string.Format("-d{0}={1}", define.Key, define.Value));
+                foreach (var define in defines)
+                {
+                    builder.AppendText(define);
+                }
             }
 
             // Add extensions
             if (settings.Extensions != null && settings.Extensions.Any())
             {
-                parameters.AddRange(settings.Extensions.Select(extension => string.Format("-ext {0}", extension)));
+                var extensions = settings.Extensions.Select(extension => string.Format("-ext {0}", extension));
+                foreach (var extension in extensions)
+                {
+                    builder.AppendText(extension);
+                }
             }
 
             // FIPS
             if (settings.FIPS)
             {
-                parameters.Add("-fips");
+                builder.AppendText("-fips");
             }
 
             // No logo
             if (settings.NoLogo)
             {
-                parameters.Add("-nologo");
+                builder.AppendText("-nologo");
             }
 
             // Output directory
@@ -137,36 +112,35 @@ namespace Cake.Common.Tools.WiX
                 var separatorChar = System.IO.Path.DirectorySeparatorChar;
                 var fullPath = string.Concat(settings.OutputDirectory.MakeAbsolute(_environment).FullPath, separatorChar, separatorChar);
 
-                parameters.Add(string.Format("-o {0}", fullPath.Quote()));
+                builder.AppendText("-o");
+                builder.AppendQuotedText(fullPath);
             }
 
             // Pedantic
             if (settings.Pedantic)
             {
-                parameters.Add("-pedantic");
+                builder.AppendText("-pedantic");
             }
 
             // Show source trace
             if (settings.ShowSourceTrace)
             {
-                parameters.Add("-trace");
+                builder.AppendText("-trace");
             }
 
             // Verbose
             if (settings.Verbose)
             {
-                parameters.Add("-v");
+                builder.AppendText("-v");
             }
 
             // Source files (.wxs)
-            parameters.AddRange(sourceFiles.Select(file => string.Format(file.MakeAbsolute(_environment).FullPath.Quote())));
-
-            return new ProcessStartInfo(toolPath.FullPath)
+            foreach (var sourceFile in sourceFiles.Select(file => file.MakeAbsolute(_environment).FullPath))
             {
-                WorkingDirectory = _environment.WorkingDirectory.FullPath,
-                Arguments = string.Join(" ", parameters),
-                UseShellExecute = false
-            };
+                builder.AppendQuotedText(sourceFile);
+            }
+
+            return builder;
         }
 
         private static string GetArchitectureName(Architecture arch)
@@ -182,6 +156,26 @@ namespace Cake.Common.Tools.WiX
                 default:
                     throw new NotSupportedException("The provided architecture is not valid.");
             }
+        }
+
+        /// <summary>
+        /// Gets the name of the tool.
+        /// </summary>
+        /// <returns>The name of the tool.</returns>
+        protected override string GetToolName()
+        {
+            return "Candle";
+        }
+
+        /// <summary>
+        /// Gets the default tool path.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The default tool path.</returns>
+        protected override FilePath GetDefaultToolPath(CandleSettings settings)
+        {
+            var expression = string.Format("./tools/**/candle.exe");
+            return _globber.GetFiles(expression).FirstOrDefault();
         }
     }
 }

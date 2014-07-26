@@ -1,7 +1,7 @@
 ﻿using Cake.Common.Tools.NuGet.Push;
 using Xunit;
 
-namespace Cake.Common.Tests.Unit.Tools.NuGet
+namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
 {
     public sealed class NuGetPushSettingsTests
     {

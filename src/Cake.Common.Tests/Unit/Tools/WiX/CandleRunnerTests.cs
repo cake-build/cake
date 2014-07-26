@@ -14,6 +14,39 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
 {
     public sealed class CandleRunnerTests
     {
+        public sealed class TheContructor
+        {
+            [Fact]
+            public void Should_Throw_If_Environment_Is_Null()
+            {
+                // Given
+                var fixture = new WiXFixture();
+                fixture.Environment = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateCandleRunner());
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("environment", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Globber_Is_Null()
+            {
+                // Given
+                var fixture = new WiXFixture();
+                fixture.Globber = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateCandleRunner());
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("globber", ((ArgumentNullException)result).ParamName);
+            }
+        }
+
         public sealed class TheRunMethod
         {
             [Fact]
@@ -74,7 +107,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Could not find candle.exe.", result.Message);
+                Assert.Equal("Candle: Could not locate executable.", result.Message);
             }
 
             [Theory]
@@ -83,7 +116,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
             public void Should_Use_Candle_Runner_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new WiXFixture();
+                var fixture = new WiXFixture(toolPath: expected);
                 var runner = fixture.CreateCandleRunner();
 
                 // When
@@ -93,7 +126,8 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(p => p.FileName == expected));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<ProcessStartInfo>(p => p.FileName == expected));
             }
 
             [Fact]
@@ -153,9 +187,8 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 var result = Record.Exception(() => runner.Run(new[] { new FilePath("./Test.wxs") }, new CandleSettings()));
 
                 // Then
-                // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Candle process was not started.", result.Message);   
+                Assert.Equal("Candle: Process was not started.", result.Message);   
             }
 
             [Fact]
@@ -170,9 +203,8 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 var result = Record.Exception(() => runner.Run(new[] { new FilePath("./Test.wxs") }, new CandleSettings()));
 
                 // Then
-                // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Failed to run Candle.", result.Message);
+                Assert.Equal("Candle: Process returned an error.", result.Message);
             }
 
             [Theory]
