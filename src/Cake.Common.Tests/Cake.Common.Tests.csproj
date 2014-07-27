@@ -98,7 +98,6 @@
     <Compile Include="Unit\Tools\NuGet\Pack\NuGetPackerTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Pack\NuGetPackSettingsTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Push\NuGetPusherTests.cs" />
-    <Compile Include="Unit\Tools\NuGet\Push\NuGetPushSettingsTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Restore\NuGetRestorerTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Restore\NuGetRestoreSettingsTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitRunnerTests.cs" />

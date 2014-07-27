@@ -135,14 +135,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 var pusher = fixture.CreatePusher();
 
                 // When
-                pusher.Push("./existing.nupkg", new NuGetPushSettings
-               {
-                    NonInteractive = false
-                });
+                pusher.Push("./existing.nupkg", new NuGetPushSettings());
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "push \"/Working/existing.nupkg\""));
+                    p => p.Arguments == "push \"/Working/existing.nupkg\" -NonInteractive"));
             }
 
             [Fact]
@@ -155,13 +152,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 // When
                 pusher.Push("./existing.nupkg", new NuGetPushSettings
                 {
-                    NonInteractive = false,
                     ApiKey = "1234"
                 });
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "push \"/Working/existing.nupkg\" 1234"));
+                    p => p.Arguments == "push \"/Working/existing.nupkg\" 1234 -NonInteractive"));
             }
 
             [Fact]
@@ -174,31 +170,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 // When
                 pusher.Push("./existing.nupkg", new NuGetPushSettings
                 {
-                    NonInteractive = false,
                     ConfigFile = "./NuGet.config"
                 });
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "push \"/Working/existing.nupkg\" -ConfigFile \"/Working/NuGet.config\""));
-            }
-
-            [Fact]
-            public void Should_Add_Non_Interactive_Flag_To_Arguments_If_True()
-            {
-                // Given
-                var fixture = new NuGetFixture();
-                var pusher = fixture.CreatePusher();
-
-                // When
-                pusher.Push("./existing.nupkg", new NuGetPushSettings
-                {
-                    NonInteractive = true
-                });
-
-                // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "push \"/Working/existing.nupkg\" -NonInteractive"));
+                    p => p.Arguments == "push \"/Working/existing.nupkg\" -NonInteractive -ConfigFile \"/Working/NuGet.config\""));
             }
 
             [Fact]
@@ -211,13 +188,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 // When
                 pusher.Push("./existing.nupkg", new NuGetPushSettings
                 {
-                    NonInteractive = false,
                     Source = "http://customsource/"
                 });
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "push \"/Working/existing.nupkg\" -Source \"http://customsource/\""));
+                    p => p.Arguments == "push \"/Working/existing.nupkg\" -NonInteractive -Source \"http://customsource/\""));
             }
 
             [Fact]
@@ -230,13 +206,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 // When
                 pusher.Push("./existing.nupkg", new NuGetPushSettings
                 {
-                    NonInteractive = false,
                     Timeout = TimeSpan.FromSeconds(987) 
                 });
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "push \"/Working/existing.nupkg\" -Timeout 987"));
+                    p => p.Arguments == "push \"/Working/existing.nupkg\" -NonInteractive -Timeout 987"));
             }
 
             [Theory]
@@ -248,12 +223,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 // Given
                 var fixture = new NuGetFixture();
                 var pusher = fixture.CreatePusher();
-                var expected = string.Format("push \"/Working/existing.nupkg\" -Verbosity {0}", name);
+                var expected = string.Format("push \"/Working/existing.nupkg\" -NonInteractive -Verbosity {0}", name);
 
                 // When
                 pusher.Push("./existing.nupkg", new NuGetPushSettings
                 {
-                    NonInteractive = false,
                     Verbosity = verbosity
                 });
 

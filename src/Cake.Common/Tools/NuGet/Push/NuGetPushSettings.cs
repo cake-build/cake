@@ -37,15 +37,6 @@ namespace Cake.Common.Tools.NuGet.Push
         public NuGetVerbosity? Verbosity { get; set; }
 
         /// <summary>
-        /// Gets or sets whether or not NuGet should prompt for 
-        /// user input or confirmations.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if NuGet should prompt for user input or confirmations; otherwise, <c>false</c>.
-        /// </value>
-        public bool NonInteractive { get; set; }
-
-        /// <summary>
         /// Gets or sets the NuGet configuration file.
         /// </summary>
         /// <value>The NuGet configuation file.</value>
@@ -56,13 +47,5 @@ namespace Cake.Common.Tools.NuGet.Push
         /// </summary>
         /// <value>The tool path.</value>
         public FilePath ToolPath { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NuGetPushSettings"/> class.
-        /// </summary>
-        public NuGetPushSettings()
-        {
-            NonInteractive = true;
-        }
     }
 }

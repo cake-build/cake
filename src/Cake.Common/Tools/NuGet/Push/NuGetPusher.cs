@@ -59,10 +59,7 @@ namespace Cake.Common.Tools.NuGet.Push
                 builder.AppendText(settings.ApiKey);
             }
 
-            if (settings.NonInteractive)
-            {
-                builder.AppendText("-NonInteractive");
-            }
+            builder.AppendText("-NonInteractive");
 
             if (settings.ConfigFile != null)
             {
