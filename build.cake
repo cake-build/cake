@@ -95,6 +95,7 @@ Task("Copy-Files")
     CopyFileToDirectory(buildDir + "/Cake.Core.xml", binDir);
     CopyFileToDirectory(buildDir + "/Cake.Core.pdb", binDir);
     CopyFileToDirectory(buildDir + "/Cake.Common.dll", binDir);
+    CopyFileToDirectory(buildDir + "/Cake.Common.xml", binDir);
     CopyFileToDirectory(buildDir + "/Autofac.dll", binDir);
     CopyFileToDirectory(buildDir + "/Nuget.Core.dll", binDir);
     CopyFiles(new FilePath[] { "LICENSE", "README.md", "ReleaseNotes.md" }, binDir);
