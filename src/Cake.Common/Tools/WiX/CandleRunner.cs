@@ -62,7 +62,7 @@ namespace Cake.Common.Tools.WiX
             Run(settings, GetArguments(sourceFilesArray, settings), settings.ToolPath);
         }
 
-        private ToolArgumentBuilder GetArguments(FilePath[] sourceFiles, CandleSettings settings)
+        private ToolArgumentBuilder GetArguments(IEnumerable<FilePath> sourceFiles, CandleSettings settings)
         {
             var builder = new ToolArgumentBuilder();
 

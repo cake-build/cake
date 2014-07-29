@@ -63,7 +63,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         public void Should_Use_MSTest_From_Tool_Path_If_Provided(string toolPath, string expected)
         {
             // Given
-            var fixture = new MSTestRunnerFixture(toolPath: expected);
+            var fixture = new MSTestRunnerFixture(expected);
             var runner = fixture.CreateRunner();
 
             // When

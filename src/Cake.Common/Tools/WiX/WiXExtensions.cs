@@ -8,6 +8,7 @@ namespace Cake.Common.Tools.WiX
     /// <summary>
     /// Contains functionality related to running WiX tools.
     /// </summary>
+    [CakeAliasCategory("WiX")]
     public static class WiXExtensions
     {
         /// <summary>
@@ -17,6 +18,7 @@ namespace Cake.Common.Tools.WiX
         /// <param name="pattern">The globbing pattern.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
+        [CakeAliasCategory("Candle")]
         public static void WiXCandle(this ICakeContext context, string pattern, CandleSettings settings = null)
         {
             var files = context.Globber.GetFiles(pattern);
@@ -30,6 +32,7 @@ namespace Cake.Common.Tools.WiX
         /// <param name="sourceFiles">The source files.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
+        [CakeAliasCategory("Candle")]
         public static void WiXCandle(this ICakeContext context, IEnumerable<FilePath> sourceFiles, CandleSettings settings = null)
         {
             var runner = new CandleRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
@@ -43,6 +46,7 @@ namespace Cake.Common.Tools.WiX
         /// <param name="pattern">The globbing pattern.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
+        [CakeAliasCategory("Light")]
         public static void WiXLight(this ICakeContext context, string pattern, LightSettings settings = null)
         {
             var files = context.Globber.GetFiles(pattern);
@@ -56,6 +60,7 @@ namespace Cake.Common.Tools.WiX
         /// <param name="objectFiles">The object files.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
+        [CakeAliasCategory("Light")]
         public static void WiXLight(this ICakeContext context, IEnumerable<FilePath> objectFiles, LightSettings settings = null)
         {
             var runner = new LightRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);

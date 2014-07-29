@@ -10,6 +10,7 @@ namespace Cake.Common.Tools.NuGet
     /// <summary>
     /// Contains functionality for working with NuGet.
     /// </summary>
+    [CakeAliasCategory("NuGet")]
     public static class NuGetExtensions
     {
         /// <summary>
@@ -19,6 +20,7 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="nuspecFilePath">The nuspec file path.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
+        [CakeAliasCategory("Pack")]
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Pack")]
         public static void NuGetPack(this ICakeContext context, FilePath nuspecFilePath, NuGetPackSettings settings)
         {
@@ -33,6 +35,7 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="context">The context.</param>
         /// <param name="targetFilePath">The target to restore.</param>
         [CakeMethodAlias]
+        [CakeAliasCategory("Restore")]
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Restore")]
         public static void NuGetRestore(this ICakeContext context, FilePath targetFilePath)
         {
@@ -47,6 +50,7 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="targetFilePath">The target to restore.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
+        [CakeAliasCategory("Restore")]
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Restore")]
         public static void NuGetRestore(this ICakeContext context, FilePath targetFilePath, NuGetRestoreSettings settings)
         {   
@@ -61,6 +65,7 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="packageFilePath">The nupkg file path.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
+        [CakeAliasCategory("Push")]
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Push")]
         public static void NuGetPush(this ICakeContext context, FilePath packageFilePath, NuGetPushSettings settings)
         {

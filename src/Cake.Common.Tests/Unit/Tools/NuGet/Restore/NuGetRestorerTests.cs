@@ -68,7 +68,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new NuGetFixture(toolPath: expected);
+                var fixture = new NuGetFixture(expected);
                 var restorer = fixture.CreateRestorer();
 
                 // When

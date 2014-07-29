@@ -7,6 +7,7 @@ namespace Cake.Common
     /// <summary>
     /// Contains functionality related to assembly info.
     /// </summary>
+    [CakeAliasCategory("Assembly Info")]
     public static class AssemblyInfoExtensions
     {
         /// <summary>

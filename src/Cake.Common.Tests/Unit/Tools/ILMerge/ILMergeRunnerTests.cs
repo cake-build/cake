@@ -81,7 +81,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
             public void Should_Use_ILMerge_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new ILMergeRunnerFixture(toolPath: expected);
+                var fixture = new ILMergeRunnerFixture(expected);
                 fixture.Settings.ToolPath = toolPath;               
 
                 // When

@@ -8,6 +8,7 @@ namespace Cake.Common.Tools.ILMerge
     /// <summary>
     /// Contains functionality related to ILMerge.
     /// </summary>
+    [CakeAliasCategory("ILMerge")]
     public static class ILMergeExtensions
     {
         /// <summary>

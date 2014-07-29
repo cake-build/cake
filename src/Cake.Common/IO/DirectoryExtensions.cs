@@ -8,6 +8,7 @@ namespace Cake.Common.IO
     /// <summary>
     /// Contains extension methods for working with directories.
     /// </summary>
+    [CakeAliasCategory("Directory Operations")]
     public static class DirectoryExtensions
     {
         /// <summary>
@@ -17,6 +18,7 @@ namespace Cake.Common.IO
         /// <param name="directories">The directory paths.</param>
         /// <param name="recursive">Will perform a recursive delete if set to <c>true</c>.</param>
         [CakeMethodAlias]
+        [CakeAliasCategory("Delete")]
         public static void DeleteDirectories(this ICakeContext context, IEnumerable<DirectoryPath> directories, bool recursive = true)
         {
             foreach (var directory in directories)
@@ -32,6 +34,7 @@ namespace Cake.Common.IO
         /// <param name="path">The directory path.</param>
         /// <param name="recursive">Will perform a recursive delete if set to <c>true</c>.</param>
         [CakeMethodAlias]
+        [CakeAliasCategory("Delete")]
         public static void DeleteDirectory(this ICakeContext context, DirectoryPath path, bool recursive = false)
         {
             DirectoryDeleter.Delete(context, path, recursive);
@@ -44,6 +47,7 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern to match.</param>
         [CakeMethodAlias]
+        [CakeAliasCategory("Clean")]
         public static void CleanDirectories(this ICakeContext context, string pattern)
         {
             var directories = context.GetDirectories(pattern);
@@ -57,6 +61,7 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="directories">The directory paths.</param>
         [CakeMethodAlias]
+        [CakeAliasCategory("Clean")]
         public static void CleanDirectories(this ICakeContext context, IEnumerable<DirectoryPath> directories)
         {
             foreach (var directory in directories)
@@ -71,6 +76,7 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="path">The directory path.</param>
         [CakeMethodAlias]
+        [CakeAliasCategory("Clean")]
         public static void CleanDirectory(this ICakeContext context, DirectoryPath path)
         {
             DirectoryCleaner.Clean(context, path);
@@ -82,6 +88,7 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="path">The directory path.</param>
         [CakeMethodAlias]
+        [CakeAliasCategory("Create")]
         public static void CreateDirectory(this ICakeContext context, DirectoryPath path)
         {
             DirectoryCreator.Create(context, path);

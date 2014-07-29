@@ -7,6 +7,7 @@ namespace Cake.Common
     /// <summary>
     /// Contains functionality related to arguments.
     /// </summary>
+    [CakeAliasCategory("Arguments")]
     public static class ArgumentExtensions
     {
         /// <summary>

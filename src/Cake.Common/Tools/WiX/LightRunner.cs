@@ -56,7 +56,7 @@ namespace Cake.Common.Tools.WiX
             Run(settings, GetArguments(objectFilesArray, settings), settings.ToolPath);
         }
 
-        private ToolArgumentBuilder GetArguments(FilePath[] objectFiles, LightSettings settings)
+        private ToolArgumentBuilder GetArguments(IEnumerable<FilePath> objectFiles, LightSettings settings)
         {
             var builder = new ToolArgumentBuilder();
 

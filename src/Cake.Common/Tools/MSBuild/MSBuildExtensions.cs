@@ -8,6 +8,7 @@ namespace Cake.Common.Tools.MSBuild
     /// <summary>
     /// Contains functionality related to MSBuild.
     /// </summary>
+    [CakeAliasCategory("MSBuild")]
     public static class MSBuildExtensions
     {
         /// <summary>

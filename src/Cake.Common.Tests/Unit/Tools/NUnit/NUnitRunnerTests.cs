@@ -47,7 +47,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
             public void Should_Use_NUnit_Runner_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new NUnitRunnerFixture(toolPath: expected);
+                var fixture = new NUnitRunnerFixture(expected);
                 var runner = fixture.CreateRunner();
 
                 // When

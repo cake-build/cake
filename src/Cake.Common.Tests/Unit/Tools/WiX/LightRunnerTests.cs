@@ -83,7 +83,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
             public void Should_Use_Light_Runner_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new WiXFixture(toolPath: expected);
+                var fixture = new WiXFixture(expected);
                 var runner = fixture.CreateLightRunner();
 
                 // When

@@ -8,6 +8,7 @@ namespace Cake.Common.IO
     /// <summary>
     /// Contains functionality related to compress files to Zip.
     /// </summary>
+    [CakeAliasCategory("Compression")]
     public static class ZipExtensions
     {
         /// <summary>

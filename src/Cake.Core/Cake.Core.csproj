@@ -43,6 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionTask.cs" />
+    <Compile Include="Annotations\CakeAliasAttribute.cs" />
+    <Compile Include="Annotations\CakeAliasCategoryAttribute.cs" />
     <Compile Include="Annotations\CakeNamespaceImportAttribute.cs" />
     <Compile Include="Annotations\CakePropertyAliasAttribute.cs" />
     <Compile Include="CakeEngine.cs" />
