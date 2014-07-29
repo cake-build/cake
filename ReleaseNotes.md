@@ -1,3 +1,9 @@
+### New in 0.1.17 (Released 2014/07/29)
+* Made non interactive mode mandatory for NuGet restore.
+* Added missing Cake.Common.xml.
+* Major refactoring of tools.
+* Added attributes for documentation.
+
 ### New in 0.1.16 (Released 2014/07/23)
 * Added WiX support.
 * Added .nuspec metadata manipulation support to NuGet package creation.

@@ -19,7 +19,9 @@ Added .nuspec metadata manipulation support to NuGet package creation.</releaseN
   <files>
     <file src="Cake.exe" />
     <file src="Cake.Core.dll" />
+    <file src="Cake.Core.xml" />
     <file src="Cake.Common.dll" />
+    <file src="Cake.Common.xml" />
     <file src="NuGet.Core.dll" />
     <file src="Autofac.dll" />
     <file src="LICENSE" />
