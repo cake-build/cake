@@ -48,11 +48,13 @@ namespace Cake.Core.Scripting
             var root = GetAbsoluteScriptDirectory(path);
 
             // Read the source.
-            var lines = ReadSource(path);                        
+            var lines = ReadSource(path);
+
+            var references = new HashSet<FilePath>(new PathComparer(_environment.IsUnix()));
+            var scripts = new HashSet<FilePath>(new PathComparer(_environment.IsUnix()));
 
             // Find references in code.
-            var code = new List<string>();
-            var references = new HashSet<FilePath>(new PathComparer(_environment.IsUnix()));
+            var code = new List<string>();            
             foreach (var line in lines)
             {
                 if (line.StartsWith("#r", StringComparison.OrdinalIgnoreCase))
@@ -63,8 +65,17 @@ namespace Cake.Core.Scripting
                         var message = string.Format("Reference directive is malformed: {0}", line);
                         throw new CakeException(message);
                     }
-
                     references.Add(reference);
+                }
+                else if (line.StartsWith("#l", StringComparison.OrdinalIgnoreCase))
+                {
+                    var script = ParseScript(line);
+                    if (string.IsNullOrWhiteSpace(script))
+                    {
+                        var message = string.Format("Load directive is malformed: {0}", line);
+                        throw new CakeException(message);
+                    }
+                    scripts.Add(script);
                 }
                 else
                 {
@@ -73,8 +84,7 @@ namespace Cake.Core.Scripting
             }
 
             // Return the result.
-            return new ScriptProcessorResult(string.Join("\r\n", code),
-                root, references);
+            return new ScriptProcessorResult(string.Join("\r\n", code), root, references, scripts);
         }
 
         private DirectoryPath GetAbsoluteScriptDirectory(FilePath scriptPath)
@@ -117,6 +127,28 @@ namespace Cake.Core.Scripting
         }
 
         private static string ParseReference(string line)
+        {
+            // Find the space index.
+            var index = line.IndexOf(" ", StringComparison.OrdinalIgnoreCase);
+            if (index < 2)
+            {
+                return null;
+            }
+
+            var reference = line.Substring(index + 1).UnQuote().Trim();
+            if (reference.StartsWith("\"", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+            if (reference.EndsWith("\"", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+
+            return reference;
+        }
+
+        private static string ParseScript(string line)
         {
             // Find the space index.
             var index = line.IndexOf(" ", StringComparison.OrdinalIgnoreCase);

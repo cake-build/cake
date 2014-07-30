@@ -98,6 +98,27 @@ namespace Cake.Core.IO
         }
 
         /// <summary>
+        /// Makes the path absolute (if relative) using the specified directory path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>An absolute path.</returns>
+        public FilePath MakeAbsolute(DirectoryPath path)
+        {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+            if (path.IsRelative)
+            {
+                throw new InvalidOperationException("Cannot make a file path absolute with a relative directory path.");
+            }
+
+            return IsRelative
+                ? path.CombineWithFilePath(this)
+                : new FilePath(FullPath);
+        }
+
+        /// <summary>
         /// Performs an implicit conversion from <see cref="System.String"/> to <see cref="FilePath"/>.
         /// </summary>
         /// <param name="path">The path.</param>

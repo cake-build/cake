@@ -12,6 +12,7 @@ namespace Cake.Core.Scripting
         private readonly string _code;
         private readonly DirectoryPath _root;
         private readonly List<FilePath> _references;
+        private readonly List<FilePath> _scripts;
 
         /// <summary>
         /// Gets the script code.
@@ -41,12 +42,23 @@ namespace Cake.Core.Scripting
         }
 
         /// <summary>
+        /// Gets the references.
+        /// </summary>
+        /// <value>The references.</value>
+        public IReadOnlyList<FilePath> Scripts
+        {
+            get { return _scripts; }
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ScriptProcessorResult"/> class.
         /// </summary>
         /// <param name="code">The script code.</param>
         /// <param name="root">The root directory path.</param>
         /// <param name="references">The references.</param>
-        public ScriptProcessorResult(string code, DirectoryPath root, IEnumerable<FilePath> references)
+        /// <param name="scripts">The scripts.</param>
+        public ScriptProcessorResult(string code, DirectoryPath root, 
+            IEnumerable<FilePath> references, IEnumerable<FilePath> scripts)
         {
             if (code == null)
             {
@@ -64,9 +76,14 @@ namespace Cake.Core.Scripting
             {
                 throw new ArgumentNullException("references");
             }
+            if (scripts == null)
+            {
+                throw new ArgumentNullException("scripts");
+            }
             _code = code;
-            _root = root;
+            _root = root;            
             _references = references as List<FilePath> ?? new List<FilePath>(references);
+            _scripts = scripts as List<FilePath> ?? new List<FilePath>(scripts);
         }
     }
 }

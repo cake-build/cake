@@ -42,7 +42,9 @@ namespace Cake.Tests.Fixtures
 
             Processor = Substitute.For<IScriptProcessor>();
             Processor.Process(Options.Script).Returns(new ScriptProcessorResult(
-                Source, Options.Script.GetDirectory().MakeAbsolute("/Working"), Enumerable.Empty<FilePath>()));
+                Source, Options.Script.GetDirectory().MakeAbsolute("/Working"), 
+                Enumerable.Empty<FilePath>(),
+                Enumerable.Empty<FilePath>()));
 
             Arguments = new CakeArguments();
             AliasGenerator = Substitute.For<IScriptAliasGenerator>();            

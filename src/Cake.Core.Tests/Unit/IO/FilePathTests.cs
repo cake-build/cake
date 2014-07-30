@@ -1,4 +1,6 @@
-﻿using Cake.Core.IO;
+﻿using System;
+using Cake.Core.IO;
+using NSubstitute;
 using Xunit;
 using Xunit.Extensions;
 
@@ -99,7 +101,6 @@ namespace Cake.Core.Tests.Unit.IO
             }
         }
 
-
         public sealed class TheGetFilenameMethod
         {
             [Fact]
@@ -114,6 +115,102 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.Equal("test.txt", result.FullPath);
             }
-        }        
+        }
+
+        public sealed class TheMakeAbsoluteMethod
+        {
+            public sealed class WithEnvironment
+            {
+                [Fact]
+                public void Should_Return_A_Absolute_File_Path_If_File_Path_Is_Relative()
+                {
+                    // Given
+                    var file = new FilePath("./test.txt");
+                    var environment = Substitute.For<ICakeEnvironment>();
+                    environment.WorkingDirectory.Returns(new DirectoryPath("/absolute"));
+
+                    // When 
+                    var result = file.MakeAbsolute(environment);
+
+                    // Then
+                    Assert.Equal("/absolute/test.txt", result.FullPath);
+                }
+
+                [Fact]
+                public void Should_Return_Same_File_Path_If_File_Path_Is_Absolute()
+                {
+                    // Given
+                    var file = new FilePath("/test.txt");
+                    var environment = Substitute.For<ICakeEnvironment>();
+                    environment.WorkingDirectory.Returns(new DirectoryPath("/absolute"));
+
+                    // When 
+                    var result = file.MakeAbsolute(environment);
+
+                    // Then
+                    Assert.Equal("/test.txt", result.FullPath);
+                }
+            }
+
+            public sealed class WithDirectoryPath
+            {
+                [Fact]
+                public void Should_Throw_If_Provided_Directory_Is_Null()
+                {
+                    // Given
+                    var file = new FilePath("./test.txt");
+
+                    // When 
+                    var result = Record.Exception(() => file.MakeAbsolute((DirectoryPath) null));
+
+                    // Then
+                    Assert.IsType<ArgumentNullException>(result);
+                    Assert.Equal("path", ((ArgumentNullException)result).ParamName);
+                }
+
+                [Fact]
+                public void Should_Throw_If_Provided_Directory_Is_Relative()
+                {
+                    // Given
+                    var file = new FilePath("./test.txt");
+                    var directory = new DirectoryPath("./relative");
+
+                    // When 
+                    var result = Record.Exception(() => file.MakeAbsolute(directory));
+
+                    // Then
+                    Assert.IsType<InvalidOperationException>(result);
+                    Assert.Equal("Cannot make a file path absolute with a relative directory path.", result.Message);
+                }
+
+                [Fact]
+                public void Should_Return_A_Absolute_File_Path_If_File_Path_Is_Relative()
+                {
+                    // Given
+                    var file = new FilePath("./test.txt");
+                    var directory = new DirectoryPath("/absolute");
+
+                    // When 
+                    var result = file.MakeAbsolute(directory);
+
+                    // Then
+                    Assert.Equal("/absolute/test.txt", result.FullPath); 
+                }
+
+                [Fact]
+                public void Should_Return_Same_File_Path_If_File_Path_Is_Absolute()
+                {
+                    // Given
+                    var file = new FilePath("/test.txt");
+                    var directory = new DirectoryPath("/absolute");
+
+                    // When 
+                    var result = file.MakeAbsolute(directory);
+
+                    // Then
+                    Assert.Equal("/test.txt", result.FullPath);
+                }
+            }
+        }
     }
 }

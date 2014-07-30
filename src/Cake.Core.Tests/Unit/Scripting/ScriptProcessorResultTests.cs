@@ -14,8 +14,8 @@ namespace Cake.Core.Tests.Unit.Scripting
             public void Should_Throw_If_Code_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => 
-                    new ScriptProcessorResult(null, "/Working", Enumerable.Empty<FilePath>()));
+                var result = Record.Exception(() =>
+                    new ScriptProcessorResult(null, "/Working", Enumerable.Empty<FilePath>(), Enumerable.Empty<FilePath>()));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -27,7 +27,7 @@ namespace Cake.Core.Tests.Unit.Scripting
             {
                 // Given, When
                 var result = Record.Exception(() =>
-                    new ScriptProcessorResult("", null, Enumerable.Empty<FilePath>()));
+                    new ScriptProcessorResult("", null, Enumerable.Empty<FilePath>(), Enumerable.Empty<FilePath>()));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -39,7 +39,7 @@ namespace Cake.Core.Tests.Unit.Scripting
             {
                 // Given, When
                 var result = Record.Exception(() =>
-                    new ScriptProcessorResult("", "Working", Enumerable.Empty<FilePath>()));
+                    new ScriptProcessorResult("", "Working", Enumerable.Empty<FilePath>(), Enumerable.Empty<FilePath>()));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -51,11 +51,23 @@ namespace Cake.Core.Tests.Unit.Scripting
             {
                 // Given, When
                 var result = Record.Exception(() =>
-                    new ScriptProcessorResult("", "/Working", null));
+                    new ScriptProcessorResult("", "/Working", null, Enumerable.Empty<FilePath>()));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
                 Assert.Equal("references", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Scripts_Are_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() =>
+                    new ScriptProcessorResult("", "/Working", Enumerable.Empty<FilePath>(), null));
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("scripts", ((ArgumentNullException)result).ParamName);
             }
         }
     }

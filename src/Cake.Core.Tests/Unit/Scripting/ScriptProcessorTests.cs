@@ -164,6 +164,57 @@ namespace Cake.Core.Tests.Unit.Scripting
                 Assert.Equal("hello.dll", result.References[0].FullPath);
                 Assert.Equal("world.dll", result.References[1].FullPath);
             }
+
+            [Theory]
+            [InlineData("#l")]
+            [InlineData("#l ")]
+            [InlineData("#l \"")]
+            [InlineData("#l \"test.cake")]
+            [InlineData("#l test.cake\"")]
+            public void Should_Throw_If_Load_Directive_Is_Malformed(string source)
+            {
+                // Given
+                var expected = string.Format("Load directive is malformed: {0}", source);
+                var fixture = new ScriptProcessorFixture(scriptSource: source);
+
+                // When
+                var result = Record.Exception(() => fixture.Process());
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal(expected, result.Message);
+            }
+
+            [Fact]
+            public void Should_Return_Single_Script_Reference_Found_In_Source()
+            {
+                // Given
+                const string source = "#l \"hello.cake\"\r\nConsole.WriteLine();";
+                var fixture = new ScriptProcessorFixture(scriptSource: source);
+
+                // When
+                var result = fixture.Process();
+
+                // Then
+                Assert.Equal(1, result.Scripts.Count);
+                Assert.Equal("hello.cake", result.Scripts[0].FullPath);
+            }
+
+            [Fact]
+            public void Should_Return_Multiple_Script_References_Found_In_Source()
+            {
+                // Given
+                const string source = "#l \"hello.cake\"\r\n#l \"world.cake\"\r\nConsole.WriteLine();";
+                var fixture = new ScriptProcessorFixture(scriptSource: source);
+
+                // When
+                var result = fixture.Process();
+
+                // Then
+                Assert.Equal(2, result.Scripts.Count);
+                Assert.Equal("hello.cake", result.Scripts[0].FullPath);
+                Assert.Equal("world.cake", result.Scripts[1].FullPath);
+            }
         }
     }
 }
