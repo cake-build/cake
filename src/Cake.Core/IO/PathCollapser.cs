@@ -12,11 +12,6 @@ namespace Cake.Core.IO
             {
                 throw new ArgumentNullException("path");
             }
-            //if (path.IsRelative)
-            //{
-            //    throw new ArgumentException("Path to be collapsed cannot be relative.", "path");
-            //}
-
             var stack = new Stack<string>();
             var segments = path.FullPath.Split(new[] { '/', '\\' });
             foreach (var segment in segments)

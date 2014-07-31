@@ -76,7 +76,7 @@
     <Compile Include="Unit\IO\PathComparerTests.cs" />
     <Compile Include="Unit\IO\DirectoryPathTests.cs" />
     <Compile Include="Unit\IO\FilePathTests.cs" />
-    <Compile Include="Unit\IO\PathNormalizerTests.cs" />
+    <Compile Include="Unit\IO\PathCollapserTests.cs" />
     <Compile Include="Unit\IO\PathTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
