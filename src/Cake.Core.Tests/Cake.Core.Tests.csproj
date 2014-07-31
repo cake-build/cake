@@ -86,7 +86,7 @@
     <Compile Include="Unit\Scripting\CodeGen\MethodAliasGeneratorTests.cs" />
     <Compile Include="Unit\Scripting\CodeGen\PropertyAliasGeneratorTests.cs" />
     <Compile Include="Unit\Scripting\ScriptHostTests.cs" />
-    <Compile Include="Unit\Scripting\Processing\ScriptProcessorTests.cs" />
+    <Compile Include="Unit\Scripting\ScriptProcessorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

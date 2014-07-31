@@ -6,7 +6,6 @@ using Cake.Common.IO;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Scripting;
-using Cake.Core.Scripting.Processing;
 
 namespace Cake.Scripting
 {

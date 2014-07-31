@@ -123,9 +123,12 @@
     <Compile Include="Scripting\IScriptProcessor.cs" />
     <Compile Include="Scripting\IScriptSession.cs" />
     <Compile Include="Scripting\IScriptSessionFactory.cs" />
-    <Compile Include="Scripting\Processing\ScriptProcessor.cs" />
-    <Compile Include="Scripting\Processing\ScriptProcessorContext.cs" />
-    <Compile Include="Scripting\Processing\ScriptLineVisitor.cs" />
+    <Compile Include="Scripting\LineProcessor.cs" />
+    <Compile Include="Scripting\Processors\LoadDirectiveProcessor.cs" />
+    <Compile Include="Scripting\Processors\ReferenceDirectiveProcessor.cs" />
+    <Compile Include="Scripting\ScriptProcessor.cs" />
+    <Compile Include="Scripting\ScriptProcessorContext.cs" />
+    <Compile Include="Scripting\Processors\UsingStatementProcessor.cs" />
     <Compile Include="Scripting\ScriptAliasFinder.cs" />
     <Compile Include="Scripting\ScriptAliasGenerator.cs" />
     <Compile Include="Scripting\ScriptHost.cs" />

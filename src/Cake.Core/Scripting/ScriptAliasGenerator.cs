@@ -4,7 +4,6 @@ using System.Reflection;
 using Cake.Core.Annotations;
 using Cake.Core.Diagnostics;
 using Cake.Core.Scripting.CodeGen;
-using Cake.Core.Scripting.Processing;
 
 namespace Cake.Core.Scripting
 {

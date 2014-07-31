@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Cake.Core.IO;
-using Cake.Core.Scripting.Processing;
+using Cake.Core.Scripting;
 using Cake.Tests.Fixtures;
 using NSubstitute;
 using Xunit;

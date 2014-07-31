@@ -1,7 +1,6 @@
 ﻿using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.Scripting;
-using Cake.Core.Scripting.Processing;
 using Cake.Core.Tests.Fakes;
 using Cake.Scripting;
 using NSubstitute;

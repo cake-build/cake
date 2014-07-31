@@ -1,5 +1,4 @@
 ﻿using Cake.Core.IO;
-using Cake.Core.Scripting.Processing;
 
 namespace Cake.Core.Scripting
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Cake.Core.Scripting.Processing
+namespace Cake.Core.Scripting
 {
     /// <summary>
     /// Acts as a context, keeping track of loaded scripts,

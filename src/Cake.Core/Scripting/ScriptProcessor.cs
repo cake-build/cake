@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.Scripting.Processors;
 
-namespace Cake.Core.Scripting.Processing
+namespace Cake.Core.Scripting
 {
     /// <summary>
     /// Responsible for processing script files.
@@ -13,7 +15,7 @@ namespace Cake.Core.Scripting.Processing
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
-        private readonly ScriptLineVisitor _visitor;
+        private readonly IEnumerable<LineProcessor> _lineProcessors;
         private readonly ICakeLog _log;
 
         /// <summary>
@@ -35,7 +37,12 @@ namespace Cake.Core.Scripting.Processing
             _fileSystem = fileSystem;
             _environment = environment;
             _log = log;
-            _visitor = new ScriptLineVisitor(fileSystem, environment);
+
+            _lineProcessors = new LineProcessor[] {
+                new LoadDirectiveProcessor(_environment),
+                new ReferenceDirectiveProcessor(_fileSystem, _environment),
+                new UsingStatementProcessor(_environment) 
+            };
         }
 
         /// <summary>
@@ -57,7 +64,7 @@ namespace Cake.Core.Scripting.Processing
             // Already processed this script?
             if (context.HasScriptBeenProcessed(path.FullPath))
             {
-                _log.Debug("Skipping {0} since it's already processed.", path.GetFilename().FullPath);
+                _log.Debug("Skipping {0} since it's already been processed.", path.GetFilename().FullPath);
                 return;
             }
 
@@ -71,7 +78,10 @@ namespace Cake.Core.Scripting.Processing
             // Iterate all lines in the script.
             foreach (var line in lines)
             {
-                _visitor.Visit(this, context, path, line);
+                if (!_lineProcessors.Any(p => p.Process(this, context, path, line)))
+                {
+                    context.AppendScriptLine(line);
+                }
             }
         }
 

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using Cake.Core.Scripting.Processing;
+using Cake.Core.Scripting;
 using Cake.Core.Tests.Fixtures;
 using Xunit;
 
-namespace Cake.Core.Tests.Unit.Scripting.Processing
+namespace Cake.Core.Tests.Unit.Scripting
 {
     public sealed class ScriptProcessorTests
     {

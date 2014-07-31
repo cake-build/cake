@@ -5,7 +5,6 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting;
-using Cake.Core.Scripting.Processing;
 using Cake.Diagnostics;
 using Cake.Scripting;
 using Cake.Scripting.Hosts;
