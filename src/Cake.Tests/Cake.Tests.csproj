@@ -91,7 +91,6 @@
     <Compile Include="Unit\Scripting\Roslyn\RoslynScriptSessionFactoryTests.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Unit\Scripting\Roslyn\RoslynScriptSessionTests.cs" />
     <Compile Include="Unit\Scripting\ScriptRunnerTests.cs" />
   </ItemGroup>
   <ItemGroup>

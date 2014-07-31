@@ -190,7 +190,7 @@ namespace Cake.Core
 
                 if (ShouldTaskExecute(taskNode))
                 {
-                    _log.Verbose("Executing task: {0}...", taskNode.Name);
+                    _log.Verbose("Executing task: {0}", taskNode.Name);
 
                     ExecuteTask(stopWatch, taskNode, report);
 

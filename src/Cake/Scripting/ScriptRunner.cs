@@ -6,6 +6,7 @@ using Cake.Common.IO;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Scripting;
+using Cake.Core.Scripting.Processing;
 
 namespace Cake.Scripting
 {
@@ -23,7 +24,8 @@ namespace Cake.Scripting
         public delegate ScriptRunner Factory(IScriptHost host);
 
         public ScriptRunner(IFileSystem fileSystem, ICakeEnvironment environment, CakeArguments arguments,
-            IScriptSessionFactory sessionFactory, IScriptAliasGenerator aliasGenerator, IScriptProcessor processor, IScriptHost host)
+            IScriptSessionFactory sessionFactory, IScriptAliasGenerator aliasGenerator, 
+            IScriptProcessor processor, IScriptHost host)
         {
             if (fileSystem == null)
             {
@@ -44,10 +46,6 @@ namespace Cake.Scripting
             if (aliasGenerator == null)
             {
                 throw new ArgumentNullException("aliasGenerator");
-            }
-            if (processor == null)
-            {
-                throw new ArgumentNullException("processor");
             }
             if (host == null)
             {
@@ -70,78 +68,24 @@ namespace Cake.Scripting
             // Copy the arguments from the options.
             _arguments.SetArguments(options.Arguments);
 
-            // Create a new context to keep track of what scripts have been loaded and so on.
-            var context = new ScriptRunnerContext(new PathComparer(_environment.IsUnix()));
-
             // Create and prepare the session.
             var session = _sessionFactory.CreateSession(_host);
-            PrepareSession(session);
-
-            // Read the source.
-            var result = _processor.Process(options.Script);
-
-            // Set the working directory.
-            _environment.WorkingDirectory = result.Root;
 
             // Process the script.
-            ExecuteScript(session, context, result);
-        }
+            var context = new ScriptProcessorContext();
+            _processor.Process(options.Script, context);
 
-        private void PrepareSession(IScriptSession session)
-        {
-            // Load default assemblies.
-            var defaultAssemblies = LoadDefaultAssemblies(session);
+            // Set the working directory.
+            _environment.WorkingDirectory = options.Script.MakeAbsolute(_environment).GetDirectory();
 
-            // Add namespaces to session.
-            ImportDefaultNamespaces(session);
-
-            // Find all extension methods and generate proxy methods.
-            _aliasGenerator.Generate(session, defaultAssemblies);
-        }
-
-        private void ExecuteScript(IScriptSession session, ScriptRunnerContext context, ScriptProcessorResult result)
-        {
-            if (result.Scripts.Count > 0)
-            {
-                foreach (var scriptPath in result.Scripts)
-                {
-                    // TODO: Make script path absolute to the current script.
-                    var absoluteScriptPath = scriptPath.MakeAbsolute(result.Root);
-                    if (!context.Exist(absoluteScriptPath))
-                    {
-                        var scriptResult = _processor.Process(absoluteScriptPath);
-                        context.AddScript(absoluteScriptPath);
-
-                        // Execute the script recursivly.
-                        ExecuteScript(session, context, scriptResult);
-                    }
-                }
-            }
-
-            // Add script references to session.
-            var references = LoadReferencedAssemblies(session, result);
-            if (references.Count > 0)
-            {
-                // Find all extension methods and generate proxy methods.    
-                _aliasGenerator.Generate(session, references);
-            }
-
-            session.Execute(result.Code);
-        }
-
-        private IList<Assembly> LoadReferencedAssemblies(IScriptSession session, ScriptProcessorResult processorResult)
-        {
-            // Get all default assemblies.
+            // Load all references.
             var assemblies = new List<Assembly>();
-
-            // Try to load assemblies we find on disc.
-            // This way we get script aliases for free.
-            foreach (var reference in processorResult.References)
+            assemblies.AddRange(GetDefaultAssemblies());
+            foreach (var reference in context.References)
             {
-                var absoluteReferencePath = reference.MakeAbsolute(_environment);
-                if (_fileSystem.Exist(absoluteReferencePath))
+                if (_fileSystem.Exist((FilePath)reference))
                 {
-                    var assembly = Assembly.LoadFile(absoluteReferencePath.FullPath);
+                    var assembly = Assembly.LoadFile(reference);
                     assemblies.Add(assembly);
                 }
                 else
@@ -151,15 +95,34 @@ namespace Cake.Scripting
                 }
             }
 
-            LoadAssemblies(session, assemblies);
-            
-            return assemblies;
+            // Got any assemblies?
+            if (assemblies.Count > 0)
+            {
+                // Find all extension methods and generate proxy methods.    
+                _aliasGenerator.GenerateScriptAliases(context, assemblies);
+
+                // Add assembly references to the session.
+                foreach (var assembly in assemblies)
+                {
+                    session.AddReference(assembly);
+                }
+            }
+
+            // Import all namespaces.
+            var namespaces = new List<string>(context.Namespaces);
+            namespaces.AddRange(GetDefaultNamespaces());
+            foreach (var @namespace in namespaces.OrderBy(ns => ns))
+            {
+                session.ImportNamespace(@namespace);
+            }
+
+            // Execute the script.
+            session.Execute(context.GetScriptCode());
         }
 
-        private static IEnumerable<Assembly> LoadDefaultAssemblies(IScriptSession session)
+        private static IEnumerable<Assembly> GetDefaultAssemblies()
         {
-            var defaultAssemblies = new List<Assembly>
-            {
+            var defaultAssemblies = new List<Assembly> {
                 typeof (Action).Assembly, // mscorlib
                 typeof (Uri).Assembly, // System
                 typeof (IQueryable).Assembly, // System.Core
@@ -170,31 +133,18 @@ namespace Cake.Scripting
                 typeof (ICakeContext).Assembly, // Cake.Core
                 typeof (DirectoryExtensions).Assembly, // Cake.Common
             };
-            LoadAssemblies(session, defaultAssemblies);
             return defaultAssemblies;
         }
 
-        private static void ImportDefaultNamespaces(IScriptSession session)
+        private static IEnumerable<string> GetDefaultNamespaces()
         {
-            var defaultNamespaces = new List<string>
-            {
+            var defaultNamespaces = new List<string> {
                 "System", "System.Collections.Generic", "System.Linq",
                 "System.Text", "System.Threading.Tasks", "System.IO",
-                "Cake", "Cake.Core", "Cake.Core.IO", "Cake.Scripting", 
+                "Cake", "Cake.Core", "Cake.Core.IO", "Cake.Scripting",
                 "Cake.Core.Scripting", "Cake.Core.Diagnostics"
             };
-            foreach (var @namespace in defaultNamespaces)
-            {
-                session.ImportNamespace(@namespace);
-            }
-        }
-
-        private static void LoadAssemblies(IScriptSession session, IEnumerable<Assembly> assemblies)
-        {
-            foreach (var reference in assemblies)
-            {
-                session.AddReference(reference);
-            }
+            return defaultNamespaces;
         }
     }
 }

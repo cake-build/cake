@@ -1,5 +1,6 @@
-﻿using Cake.Core.IO;
-using Cake.Core.Scripting;
+﻿using Cake.Core.Diagnostics;
+using Cake.Core.IO;
+using Cake.Core.Scripting.Processing;
 using Cake.Core.Tests.Fakes;
 using NSubstitute;
 
@@ -9,6 +10,7 @@ namespace Cake.Core.Tests.Fixtures
     {
         public FakeFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
+        public ICakeLog Log { get; set; }
 
         public FilePath ScriptPath { get; set; }
         public string Source { get; private set; }
@@ -22,6 +24,8 @@ namespace Cake.Core.Tests.Fixtures
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory.Returns("/Working");
 
+            Log = Substitute.For<ICakeLog>();
+
             FileSystem = new FakeFileSystem(true);
             if (scriptExist)
             {
@@ -31,12 +35,14 @@ namespace Cake.Core.Tests.Fixtures
 
         public ScriptProcessor CreateProcessor()
         {
-            return new ScriptProcessor(FileSystem, Environment);
+            return new ScriptProcessor(FileSystem, Environment, Log);
         }
 
-        public ScriptProcessorResult Process()
+        public ScriptProcessorContext Process()
         {
-            return CreateProcessor().Process(ScriptPath);
+            var context = new ScriptProcessorContext();
+            CreateProcessor().Process(ScriptPath, context);
+            return context;
         }
     }
 }

@@ -31,9 +31,10 @@ namespace Cake.Scripting.Roslyn
 
         public IScriptSession CreateSession(IScriptHost host)
         {
+            _log.Debug("Creating script session...");
             var roslynScriptEngine = new ScriptEngine();
             var session = roslynScriptEngine.CreateSession(host, typeof(IScriptHost));
-            return new RoslynScriptSession(session);
+            return new RoslynScriptSession(session, _log);
         }
     }
 }

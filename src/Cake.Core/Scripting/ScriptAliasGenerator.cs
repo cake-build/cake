@@ -4,6 +4,7 @@ using System.Reflection;
 using Cake.Core.Annotations;
 using Cake.Core.Diagnostics;
 using Cake.Core.Scripting.CodeGen;
+using Cake.Core.Scripting.Processing;
 
 namespace Cake.Core.Scripting
 {
@@ -26,37 +27,48 @@ namespace Cake.Core.Scripting
         /// <summary>
         /// Generates script aliases and adds them to the specified session.
         /// </summary>
-        /// <param name="session">The session to add script aliases to.</param>
+        /// <param name="context">The script context to add generated code to.</param>
         /// <param name="assemblies">The assemblies to find script aliases in.</param>
-        public void Generate(IScriptSession session, IEnumerable<Assembly> assemblies)
+        public void GenerateScriptAliases(ScriptProcessorContext context, IEnumerable<Assembly> assemblies)
         {
-            _log.Debug("Generating script alias code...");
-
             foreach (var method in ScriptAliasFinder.FindAliases(assemblies))
             {
                 try
                 {
+                    // Import the method's namespace to the session.
+                    var @namespace = method.GetNamespace();
+                    context.AddNamespace(@namespace);
+
+                    // Find out if the method want us to import more namespaces.
+                    var namespaceAttributes = method.GetCustomAttributes<CakeNamespaceImportAttribute>();
+                    foreach (var namespaceAttribute in namespaceAttributes)
+                    {
+                        context.AddNamespace(namespaceAttribute.Namespace);
+                    }
+
+                    // Find out if the class contains any more namespaces.
+                    namespaceAttributes = method.DeclaringType.GetCustomAttributes<CakeNamespaceImportAttribute>();
+                    foreach (var namespaceAttribute in namespaceAttributes)
+                    {
+                        context.AddNamespace(namespaceAttribute.Namespace);
+                    }
+
                     // Generate the code.
                     var code = GenerateCode(method);
 
-                    // Import namespaces.
-                    ImportNamespaces(session, method);
-
-                    // Execute the code.
-                    session.Execute(code);
+                    // Add the generated code to the context.
+                    context.AddScriptAliasCode(code);
                 }
                 catch (Exception)
                 {
                     // Log this error.
-                    const string format = "An error occured while generating proxy code for {0}.";
+                    const string format = "An error occured while generating code for alias {0}.";
                     _log.Error(format, method.GetSignature(false));
 
                     // Rethrow the original exception.
                     throw;
                 }
             }
-
-            _log.Debug("Done generating script alias code.");
         }
 
         private static string GenerateCode(MethodInfo method)
@@ -75,27 +87,6 @@ namespace Cake.Core.Scripting
                 throw new InvalidOperationException("Unknown alias type.");
             }
             return code;
-        }
-
-        private static void ImportNamespaces(IScriptSession session, MethodInfo method)
-        {
-            // Import the method's namespace to the session.
-            var @namespace = method.GetNamespace();
-            session.ImportNamespace(@namespace);
-
-            // Find out if the method want us to import more namespaces.
-            var namespaceAttributes = method.GetCustomAttributes<CakeNamespaceImportAttribute>();
-            foreach (var namespaceAttribute in namespaceAttributes)
-            {
-                session.ImportNamespace(namespaceAttribute.Namespace);
-            }
-
-            // Find out if the class contains any more namespaces.
-            namespaceAttributes = method.DeclaringType.GetCustomAttributes<CakeNamespaceImportAttribute>();
-            foreach (var namespaceAttribute in namespaceAttributes)
-            {
-                session.ImportNamespace(namespaceAttribute.Namespace);
-            }
         }
     }
 }

@@ -97,7 +97,6 @@
     <Compile Include="Scripting\Roslyn\RoslynScriptSession.cs" />
     <Compile Include="Scripting\Roslyn\RoslynScriptSessionFactory.cs" />
     <Compile Include="Scripting\ScriptRunner.cs" />
-    <Compile Include="Scripting\ScriptRunnerContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

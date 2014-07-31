@@ -93,7 +93,7 @@ namespace Cake.Core.IO
         public FilePath MakeAbsolute(ICakeEnvironment environment)
         {
             return IsRelative
-                ? environment.WorkingDirectory.CombineWithFilePath(this)
+                ? environment.WorkingDirectory.CombineWithFilePath(this).Collapse()
                 : new FilePath(FullPath);
         }
 
@@ -114,8 +114,17 @@ namespace Cake.Core.IO
             }
 
             return IsRelative
-                ? path.CombineWithFilePath(this)
+                ? path.CombineWithFilePath(this).Collapse()
                 : new FilePath(FullPath);
+        }
+
+        /// <summary>
+        /// Collapses a <see cref="FilePath"/> containing ellipses.
+        /// </summary>
+        /// <returns>A collapsed <see cref="FilePath"/>.</returns>
+        public FilePath Collapse()
+        {
+            return new FilePath(PathCollapser.Collapse(this));
         }
 
         /// <summary>

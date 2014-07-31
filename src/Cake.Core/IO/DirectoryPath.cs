@@ -83,7 +83,7 @@ namespace Cake.Core.IO
                 throw new CakeException("The provided path cannot be relative.");
             }
             return IsRelative
-                ? path.Combine(this)
+                ? path.Combine(this).Collapse()
                 : new DirectoryPath(FullPath);
         }
 
@@ -99,8 +99,17 @@ namespace Cake.Core.IO
                 throw new ArgumentNullException("environment");
             }
             return IsRelative 
-                ? environment.WorkingDirectory.Combine(this) 
+                ? environment.WorkingDirectory.Combine(this).Collapse()
                 : new DirectoryPath(FullPath);
+        }
+
+        /// <summary>
+        /// Collapses a <see cref="DirectoryPath"/> containing ellipses.
+        /// </summary>
+        /// <returns>A collapsed <see cref="DirectoryPath"/>.</returns>
+        public DirectoryPath Collapse()
+        {
+            return new DirectoryPath(PathCollapser.Collapse(this));
         }
 
         /// <summary>

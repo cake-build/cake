@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Linq;
+using Cake.Core.Scripting.Processing;
 using Cake.Core.Tests.Fixtures;
 using Xunit;
-using Xunit.Extensions;
 
-namespace Cake.Core.Tests.Unit.Scripting
+namespace Cake.Core.Tests.Unit.Scripting.Processing
 {
     public sealed class ScriptProcessorTests
     {
@@ -50,12 +51,28 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var processor = fixture.CreateProcessor();
 
                 // When
-                var result = Record.Exception(() => processor.Process(null));
+                var result = Record.Exception(() => processor.Process(null, new ScriptProcessorContext()));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
                 Assert.Equal("path", ((ArgumentNullException)result).ParamName);
             }
+
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given
+                var fixture = new ScriptProcessorFixture();
+                var processor = fixture.CreateProcessor();
+
+                // When
+                var result = Record.Exception(() => processor.Process("./build.cake", null));
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+            }
+
 
             [Fact]
             public void Should_Throw_If_Script_Was_Not_Found()
@@ -81,41 +98,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = fixture.Process();
 
                 // Then
-                Assert.Equal(fixture.Source, result.Code);                
-            }
-
-            [Fact]
-            public void Should_Return_Script_Path_Directory_As_Root_Path()
-            {
-                // Given
-                var fixture = new ScriptProcessorFixture(
-                    scriptPath: "/a/b/c/build.cake");
-          
-                // When                
-                var result = fixture.Process();
-
-                // Then
-                Assert.Equal("/a/b/c", result.Root.FullPath);
-            }
-
-            [Theory]
-            [InlineData("#r")]
-            [InlineData("#r ")]
-            [InlineData("#r \"")]
-            [InlineData("#r \"test.dll")]
-            [InlineData("#r test.dll\"")]
-            public void Should_Throw_If_Reference_Directive_Is_Malformed(string source)
-            {
-                // Given
-                var expected = string.Format("Reference directive is malformed: {0}", source);
-                var fixture = new ScriptProcessorFixture(scriptSource: source);
-
-                // When
-                var result = Record.Exception(() => fixture.Process());
-
-                // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal(expected, result.Message);
+                Assert.Equal(fixture.Source, result.GetScriptCode());                
             }
 
             [Fact]
@@ -130,7 +113,7 @@ namespace Cake.Core.Tests.Unit.Scripting
 
                 // Then
                 Assert.Equal(1, result.References.Count);
-                Assert.Equal("hello.dll", result.References[0].FullPath);
+                Assert.Equal("hello.dll", result.References.ElementAt(0));
             }
 
             [Fact]
@@ -145,8 +128,8 @@ namespace Cake.Core.Tests.Unit.Scripting
 
                 // Then
                 Assert.Equal(2, result.References.Count);
-                Assert.Equal("hello.dll", result.References[0].FullPath);
-                Assert.Equal("world.dll", result.References[1].FullPath);
+                Assert.Equal("hello.dll", result.References.ElementAt(0));
+                Assert.Equal("world.dll", result.References.ElementAt(1));
             }
 
             [Fact]
@@ -161,59 +144,44 @@ namespace Cake.Core.Tests.Unit.Scripting
 
                 // Then
                 Assert.Equal(2, result.References.Count);
-                Assert.Equal("hello.dll", result.References[0].FullPath);
-                Assert.Equal("world.dll", result.References[1].FullPath);
-            }
-
-            [Theory]
-            [InlineData("#l")]
-            [InlineData("#l ")]
-            [InlineData("#l \"")]
-            [InlineData("#l \"test.cake")]
-            [InlineData("#l test.cake\"")]
-            public void Should_Throw_If_Load_Directive_Is_Malformed(string source)
-            {
-                // Given
-                var expected = string.Format("Load directive is malformed: {0}", source);
-                var fixture = new ScriptProcessorFixture(scriptSource: source);
-
-                // When
-                var result = Record.Exception(() => fixture.Process());
-
-                // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal(expected, result.Message);
+                Assert.Equal("hello.dll", result.References.ElementAt(0));
+                Assert.Equal("world.dll", result.References.ElementAt(1));
             }
 
             [Fact]
-            public void Should_Return_Single_Script_Reference_Found_In_Source()
+            public void Should_Process_Single_Script_Reference_Found_In_Source()
             {
                 // Given
                 const string source = "#l \"hello.cake\"\r\nConsole.WriteLine();";
                 var fixture = new ScriptProcessorFixture(scriptSource: source);
+                fixture.FileSystem.GetCreatedFile("/Working/hello.cake");
 
                 // When
                 var result = fixture.Process();
 
                 // Then
-                Assert.Equal(1, result.Scripts.Count);
-                Assert.Equal("hello.cake", result.Scripts[0].FullPath);
+                Assert.Equal(2, result.ProcessedScripts.Count);
+                Assert.Equal("/Working/build.cake", result.ProcessedScripts.ElementAt(0));
+                Assert.Equal("/Working/hello.cake", result.ProcessedScripts.ElementAt(1));
             }
 
             [Fact]
-            public void Should_Return_Multiple_Script_References_Found_In_Source()
+            public void Should_Process_Multiple_Script_References_Found_In_Source()
             {
                 // Given
                 const string source = "#l \"hello.cake\"\r\n#l \"world.cake\"\r\nConsole.WriteLine();";
                 var fixture = new ScriptProcessorFixture(scriptSource: source);
+                fixture.FileSystem.GetCreatedFile("/Working/hello.cake");
+                fixture.FileSystem.GetCreatedFile("/Working/world.cake");
 
                 // When
                 var result = fixture.Process();
 
                 // Then
-                Assert.Equal(2, result.Scripts.Count);
-                Assert.Equal("hello.cake", result.Scripts[0].FullPath);
-                Assert.Equal("world.cake", result.Scripts[1].FullPath);
+                Assert.Equal(3, result.ProcessedScripts.Count);
+                Assert.Equal("/Working/build.cake", result.ProcessedScripts.ElementAt(0));
+                Assert.Equal("/Working/hello.cake", result.ProcessedScripts.ElementAt(1));
+                Assert.Equal("/Working/world.cake", result.ProcessedScripts.ElementAt(2));
             }
         }
     }

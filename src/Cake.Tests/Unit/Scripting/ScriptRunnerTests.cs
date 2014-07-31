@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Cake.Core.IO;
+using Cake.Core.Scripting.Processing;
 using Cake.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
@@ -86,21 +87,6 @@ namespace Cake.Tests.Unit.Scripting
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
                 Assert.Equal("aliasGenerator", ((ArgumentNullException)result).ParamName);
-            }
-
-            [Fact]
-            public void Should_Throw_If_Script_Processor_Is_Null()
-            {
-                // Given
-                var fixture = new ScriptRunnerFixture();
-                fixture.Processor = null;
-
-                // When
-                var result = Record.Exception(() => fixture.CreateScriptRunner());
-
-                // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("processor", ((ArgumentNullException)result).ParamName);
             }
 
             [Fact]
@@ -240,7 +226,8 @@ namespace Cake.Tests.Unit.Scripting
                 runner.Run(fixture.Options);
 
                 // Then
-                fixture.AliasGenerator.Received(1).Generate(fixture.Session,
+                fixture.AliasGenerator.Received(1).GenerateScriptAliases(
+                    Arg.Any<ScriptProcessorContext>(),
                     Arg.Any<IEnumerable<Assembly>>());
             }
 
