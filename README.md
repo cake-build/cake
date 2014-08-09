@@ -140,6 +140,10 @@ You can read the latest documentation at [http://cake.readthedocs.org/](http://c
 
 ## Contributing
 
+So you’re thinking about contributing to Cake? Great! It’s **really** appreciated.   
+
+Make sure you've read the [contribution guidelines](http://cake.readthedocs.org/en/latest/contribution-guidelines.html) before sending that epic pull request.
+
 * Fork the repository.
 * Make your feature addition or bug fix.
 * Don't forget the unit tests.
