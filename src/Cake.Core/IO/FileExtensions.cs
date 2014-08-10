@@ -57,8 +57,9 @@ namespace Cake.Core.IO
 
         /// <summary>
         /// Opens the file for writing.
+        /// If the file already exists, it will be overwritten.
         /// </summary>
-        /// <param name="file">The file.</param>
+        /// <param name="file">The file to be opened.</param>
         /// <returns>A <see cref="Stream"/> to the file.</returns>
         public static Stream OpenWrite(this IFile file)
         {
@@ -66,7 +67,7 @@ namespace Cake.Core.IO
             {
                 throw new ArgumentNullException("file");
             }
-            return file.Open(FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
+            return file.Open(FileMode.Create, FileAccess.Write, FileShare.None);
         }
     }
 }
