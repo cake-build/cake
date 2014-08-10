@@ -132,7 +132,7 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <returns>The default tool path.</returns>
         protected override FilePath GetDefaultToolPath(NuGetPackSettings settings)
         {
-            var expression = string.Format("./tools/**/NuGet.exe");
+            const string expression = "./tools/**/NuGet.exe";
             return _globber.GetFiles(expression).FirstOrDefault();
         }
     }

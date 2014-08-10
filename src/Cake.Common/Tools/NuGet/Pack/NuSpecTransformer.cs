@@ -51,7 +51,7 @@ namespace Cake.Common.Tools.NuGet.Pack
 
         private static XmlNode FindOrCreateElement(XmlDocument document, XmlNamespaceManager ns, string name)
         {
-            var path = string.Format("/package/nu:metadata/nu:{0}", name);
+            var path = string.Format(CultureInfo.InvariantCulture, "/package/nu:metadata/nu:{0}", name);
             var node = document.SelectSingleNode(path, ns);
             if (node == null)
             {

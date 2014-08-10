@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Cake.Core.IO
@@ -16,6 +17,10 @@ namespace Cake.Core.IO
         /// <returns>The files matching the specified pattern.</returns>
         public static IEnumerable<FilePath> GetFiles(this IGlobber globber, string pattern)
         {
+            if (globber == null)
+            {
+                throw new ArgumentNullException("globber");
+            }
             return globber.Match(pattern).OfType<FilePath>();
         }
 
@@ -27,6 +32,10 @@ namespace Cake.Core.IO
         /// <returns>The directories matching the specified pattern.</returns>
         public static IEnumerable<DirectoryPath> GetDirectories(this IGlobber globber, string pattern)
         {
+            if (globber == null)
+            {
+                throw new ArgumentNullException("globber");
+            }
             return globber.Match(pattern).OfType<DirectoryPath>();
         }
     }

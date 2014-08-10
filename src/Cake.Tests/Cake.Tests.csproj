@@ -82,6 +82,7 @@
     </Compile>
     <Compile Include="Unit\CakeArgumentsTest.cs" />
     <Compile Include="Unit\CakeOptionsTests.cs" />
+    <Compile Include="Unit\CakeReportPrinterTests.cs" />
     <Compile Include="Unit\Diagnostics\CakeBuildLogTests.cs" />
     <Compile Include="Unit\Diagnostics\FormatParserTests.cs" />
     <Compile Include="Unit\Scripting\Hosts\BuildScriptHostTests.cs">

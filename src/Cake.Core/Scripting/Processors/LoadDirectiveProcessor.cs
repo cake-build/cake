@@ -29,6 +29,11 @@ namespace Cake.Core.Scripting.Processors
         /// </returns>
         public override bool Process(IScriptProcessor processor, ScriptProcessorContext context, FilePath currentScriptPath, string line)
         {
+            if (processor == null)
+            {
+                throw new ArgumentNullException("processor");
+            }
+
             var tokens = Split(line);
             if (tokens.Length <= 0)
             {

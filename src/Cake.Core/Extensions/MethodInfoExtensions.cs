@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 
@@ -21,6 +20,11 @@ namespace Cake.Core
         public static string GetSignature(this MethodInfo method, 
             bool includeMethodNamespace = true, bool includeParameterNamespace = false)
         {
+            if (method == null)
+            {
+                throw new ArgumentNullException("method");
+            }
+
             var builder = new StringBuilder();
             builder.Append(includeMethodNamespace ? method.GetFullName() : method.Name);
             builder.Append("(");
@@ -45,8 +49,11 @@ namespace Cake.Core
         /// <returns>The full name.</returns>
         public static string GetFullName(this MethodInfo method)
         {
-            Debug.Assert(method.DeclaringType != null); // Resharper
-            return string.Concat(method.DeclaringType.FullName, ".", method.Name);
+            if (method != null && method.DeclaringType != null)
+            {
+                return string.Concat(method.DeclaringType.FullName, ".", method.Name);
+            }
+            return string.Empty;
         }
 
         /// <summary>
@@ -56,8 +63,11 @@ namespace Cake.Core
         /// <returns>The namespace of the method.</returns>
         public static string GetNamespace(this MethodInfo method)
         {
-            Debug.Assert(method.DeclaringType != null); // Resharper
-            return method.DeclaringType.Namespace;
+            if (method != null && method.DeclaringType != null)
+            {
+                return method.DeclaringType.Namespace;   
+            }
+            return string.Empty;
         }
     }
 }

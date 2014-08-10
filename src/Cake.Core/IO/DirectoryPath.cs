@@ -23,6 +23,11 @@ namespace Cake.Core.IO
         /// <returns>A combination of the current path and the file name of the provided <see cref="FilePath"/>.</returns>
         public FilePath GetFilePath(FilePath path)
         {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+
             var combinedPath = System.IO.Path.Combine(FullPath, path.GetFilename().FullPath);
             return new FilePath(combinedPath);
         }

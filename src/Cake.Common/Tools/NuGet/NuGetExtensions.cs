@@ -1,4 +1,5 @@
-﻿using Cake.Common.Tools.NuGet.Pack;
+﻿using System;
+using Cake.Common.Tools.NuGet.Pack;
 using Cake.Common.Tools.NuGet.Push;
 using Cake.Common.Tools.NuGet.Restore;
 using Cake.Core;
@@ -24,6 +25,11 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Pack")]
         public static void NuGetPack(this ICakeContext context, FilePath nuspecFilePath, NuGetPackSettings settings)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             var packer = new NuGetPacker(context.FileSystem, context.Environment, 
                 context.Globber, context.ProcessRunner, context.Log);
             packer.Pack(nuspecFilePath, settings);
@@ -53,7 +59,12 @@ namespace Cake.Common.Tools.NuGet
         [CakeAliasCategory("Restore")]
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Restore")]
         public static void NuGetRestore(this ICakeContext context, FilePath targetFilePath, NuGetRestoreSettings settings)
-        {   
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             var runner = new NuGetRestorer(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
             runner.Restore(targetFilePath, settings);
         }
@@ -69,6 +80,11 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Push")]
         public static void NuGetPush(this ICakeContext context, FilePath packageFilePath, NuGetPushSettings settings)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             var packer = new NuGetPusher(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
             packer.Push(packageFilePath, settings);
         }

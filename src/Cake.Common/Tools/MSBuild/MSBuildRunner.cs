@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -101,6 +102,10 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The default tool path.</returns>
         protected override FilePath GetDefaultToolPath(MSBuildSettings settings)
         {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
             return MSBuildResolver.GetMSBuildPath(_environment, settings.ToolVersion, settings.PlatformTarget);
         }
     }

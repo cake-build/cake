@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 
 namespace Cake.Core.IO
@@ -89,7 +90,7 @@ namespace Cake.Core.IO
                 if (_invalidPathCharacters.Contains(character))
                 {
                     const string format = "Illegal characters in directory path ({0}).";
-                    throw new ArgumentException(string.Format(format, character), "path");
+                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, format, character), "path");
                 }
             }
         }

@@ -38,6 +38,10 @@ namespace Cake.Core.Scripting
         /// <returns>The parts that make up the line.</returns>
         protected static string[] Split(string line)
         {
+            if (line == null)
+            {
+                throw new ArgumentNullException("line");
+            }
             return line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
@@ -48,6 +52,11 @@ namespace Cake.Core.Scripting
         /// <returns>The absolute directory path.</returns>
         protected DirectoryPath GetAbsoluteDirectory(FilePath path)
         {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+
             // Get the script location.
             var scriptLocation = path.GetDirectory();
             if (scriptLocation.IsRelative)

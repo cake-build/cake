@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
@@ -76,7 +77,7 @@ namespace Cake.Common.Tools.WiX
             // Add defines
             if (settings.Defines != null && settings.Defines.Any())
             {
-                var defines = settings.Defines.Select(define => string.Format("-d{0}={1}", define.Key, define.Value));
+                var defines = settings.Defines.Select(define => string.Format(CultureInfo.InvariantCulture, "-d{0}={1}", define.Key, define.Value));
                 foreach (var define in defines)
                 {
                     builder.AppendText(define);
@@ -86,7 +87,7 @@ namespace Cake.Common.Tools.WiX
             // Add extensions
             if (settings.Extensions != null && settings.Extensions.Any())
             {
-                var extensions = settings.Extensions.Select(extension => string.Format("-ext {0}", extension));
+                var extensions = settings.Extensions.Select(extension => string.Format(CultureInfo.InvariantCulture, "-ext {0}", extension));
                 foreach (var extension in extensions)
                 {
                     builder.AppendText(extension);
@@ -174,7 +175,7 @@ namespace Cake.Common.Tools.WiX
         /// <returns>The default tool path.</returns>
         protected override FilePath GetDefaultToolPath(CandleSettings settings)
         {
-            var expression = string.Format("./tools/**/candle.exe");
+            const string expression = "./tools/**/candle.exe";
             return _globber.GetFiles(expression).FirstOrDefault();
         }
     }

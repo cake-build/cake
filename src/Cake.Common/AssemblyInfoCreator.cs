@@ -46,6 +46,7 @@ namespace Cake.Common
         /// </summary>
         /// <param name="outputPath">The output path.</param>
         /// <param name="settings">The settings.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public void Create(FilePath outputPath, AssemblyInfoSettings settings)
         {
             if (outputPath == null)

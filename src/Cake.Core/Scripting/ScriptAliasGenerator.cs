@@ -30,6 +30,11 @@ namespace Cake.Core.Scripting
         /// <param name="assemblies">The assemblies to find script aliases in.</param>
         public void GenerateScriptAliases(ScriptProcessorContext context, IEnumerable<Assembly> assemblies)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             foreach (var method in ScriptAliasFinder.FindAliases(assemblies))
             {
                 try

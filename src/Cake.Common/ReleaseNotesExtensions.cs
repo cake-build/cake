@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Cake.Core;
@@ -30,6 +31,10 @@ namespace Cake.Common
         [CakeMethodAlias]
         public static IReadOnlyList<ReleaseNotes> ParseAllReleaseNotes(this ICakeContext context, FilePath filePath)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
             if (filePath == null)
             {
                 throw new ArgumentNullException("filePath");
@@ -44,7 +49,8 @@ namespace Cake.Common
             var file = context.FileSystem.GetFile(filePath);
             if (!file.Exists)
             {
-                var message = string.Format("Release notes file '{0}' do not exist.", filePath.FullPath);
+                const string format = "Release notes file '{0}' do not exist.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, filePath.FullPath);
                 throw new CakeException(message);
             }
 

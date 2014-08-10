@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace Cake.Core.IO
 {
@@ -30,11 +31,19 @@ namespace Cake.Core.IO
 
         public void Copy(FilePath destination, bool overwrite)
         {
+            if (destination == null)
+            {
+                throw new ArgumentNullException("destination");
+            }
             _file.CopyTo(destination.FullPath, overwrite);
         }
 
         public void Move(FilePath destination)
         {
+            if (destination == null)
+            {
+                throw new ArgumentNullException("destination");
+            }
             _file.MoveTo(destination.FullPath);
         }
 

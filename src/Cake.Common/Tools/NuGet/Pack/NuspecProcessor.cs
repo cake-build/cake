@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Globalization;
+using System.Xml;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -28,7 +29,7 @@ namespace Cake.Common.Tools.NuGet.Pack
             if (!nuspecFile.Exists)
             {
                 const string format = "Could not find nuspec file '{0}'.";
-                throw new CakeException(string.Format(format, nuspecFilePath.FullPath));
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, nuspecFilePath.FullPath));
             }
 
             // Load the content of the nuspec file.
@@ -67,7 +68,7 @@ namespace Cake.Common.Tools.NuGet.Pack
             if (nuspecFile.Exists)
             {
                 const string format = "Could not create the nuspec file '{0}' since it already exist.";
-                throw new CakeException(string.Format(format, resultPath.FullPath));
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, resultPath.FullPath));
             }
 
             // Now create the file.

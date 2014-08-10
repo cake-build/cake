@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using Cake.Core;
@@ -50,6 +51,7 @@ namespace Cake.Common.IO
         /// <param name="rootPath">The root path.</param>
         /// <param name="outputPath">The output path.</param>
         /// <param name="filePaths">The files to zip.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public void Zip(DirectoryPath rootPath, FilePath outputPath, IEnumerable<FilePath> filePaths)
         {
             if (rootPath == null)
@@ -105,7 +107,7 @@ namespace Cake.Common.IO
             if (!file.FullPath.StartsWith(root.FullPath, _comparison))
             {
                 const string format = "File '{0}' is not relative to root path '{1}'.";
-                throw new CakeException(string.Format(format, file.FullPath, root.FullPath));
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, file.FullPath, root.FullPath));
             }
             return file.FullPath.Substring(root.FullPath.Length + 1);
         }

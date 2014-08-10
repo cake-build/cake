@@ -15,6 +15,11 @@ namespace Cake
 
         public void Write(CakeReport report)
         {
+            if (report == null)
+            {
+                throw new ArgumentNullException("report");
+            }
+
             try
             {
                 _console.ForegroundColor = ConsoleColor.Green;

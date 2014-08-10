@@ -17,6 +17,10 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings WithTarget(this MSBuildSettings settings, string target)
         {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
             settings.Targets.Add(target);
             return settings;
         }
@@ -29,6 +33,10 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings UseToolVersion(this MSBuildSettings settings, MSBuildToolVersion version)
         {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
             settings.ToolVersion = version;
             return settings;
         }
@@ -41,6 +49,10 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings SetPlatformTarget(this MSBuildSettings settings, PlatformTarget target)
         {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
             settings.PlatformTarget = target;
             return settings;
         }
@@ -54,6 +66,11 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings WithProperty(this MSBuildSettings settings, string name, params string[] values)
         {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+
             IList<string> currValue;
             currValue = new List<string>(
                 settings.Properties.TryGetValue(name, out currValue) && currValue != null
@@ -73,6 +90,10 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings SetConfiguration(this MSBuildSettings settings, string configuration)
         {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
             settings.Configuration = configuration;
             return settings;
         }
@@ -85,6 +106,10 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings SetMaxCpuCount(this MSBuildSettings settings, int maxCpuCount)
         {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
             settings.MaxCpuCount = Math.Max(0, maxCpuCount);
             return settings;
         }

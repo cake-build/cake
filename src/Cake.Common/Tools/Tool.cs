@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -58,7 +59,7 @@ namespace Cake.Common.Tools
             if (toolPath == null || !_fileSystem.Exist(toolPath))
             {
                 const string message = "{0}: Could not locate executable.";
-                throw new CakeException(string.Format(message, toolName));
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, toolName));
             }
 
             // Get the working directory.
@@ -66,7 +67,7 @@ namespace Cake.Common.Tools
             if (workingDirectory == null)
             {
                 const string message = "{0}: Could not resolve working directory.";
-                throw new CakeException(string.Format(message, toolName));                
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, toolName));                
             }
 
             // Create the process start info.
@@ -82,7 +83,7 @@ namespace Cake.Common.Tools
             if (process == null)
             {
                 const string message = "{0}: Process was not started.";
-                throw new CakeException(string.Format(message, toolName));
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, toolName));
             }
 
             // Wait for the process to exit.
@@ -92,7 +93,7 @@ namespace Cake.Common.Tools
             if (process.GetExitCode() != 0)
             {
                 const string message = "{0}: Process returned an error.";
-                throw new CakeException(string.Format(message, toolName));
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, toolName));
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -21,6 +22,11 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Delete")]
         public static void DeleteDirectories(this ICakeContext context, IEnumerable<DirectoryPath> directories, bool recursive = true)
         {
+            if (directories == null)
+            {
+                throw new ArgumentNullException("directories");
+            }
+
             foreach (var directory in directories)
             {
                 DeleteDirectory(context, directory, recursive);
@@ -64,6 +70,10 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Clean")]
         public static void CleanDirectories(this ICakeContext context, IEnumerable<DirectoryPath> directories)
         {
+            if (directories == null)
+            {
+                throw new ArgumentNullException("directories");
+            }
             foreach (var directory in directories)
             {
                 CleanDirectory(context, directory);

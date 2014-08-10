@@ -31,6 +31,11 @@ namespace Cake.Scripting.Roslyn
 
         public bool IsInstalled(DirectoryPath root)
         {
+            if (root == null)
+            {
+                throw new ArgumentNullException("root");
+            }
+
             foreach (var roslynAssembly in _roslynAssemblies)
             {
                 var file = _fileSystem.GetFile(root.CombineWithFilePath(roslynAssembly));
@@ -44,6 +49,11 @@ namespace Cake.Scripting.Roslyn
 
         public void Install(DirectoryPath root)
         {
+            if (root == null)
+            {
+                throw new ArgumentNullException("root");
+            }
+
             var installRoot = root.Combine(Guid.NewGuid().ToString().Replace("-", ""));
 
             // Install package.

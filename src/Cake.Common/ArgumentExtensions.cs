@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using Cake.Core;
 using Cake.Core.Annotations;
 
@@ -19,6 +20,10 @@ namespace Cake.Common
         [CakeMethodAlias]
         public static bool HasArgument(this ICakeContext context, string name)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
             return context.Arguments.HasArgument(name);
         }
 
@@ -32,6 +37,11 @@ namespace Cake.Common
         [CakeMethodAlias]
         public static T Argument<T>(this ICakeContext context, string name)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             var value = context.Arguments.GetArgument(name);
             if (value == null)
             {
@@ -51,6 +61,11 @@ namespace Cake.Common
         [CakeMethodAlias]
         public static T Argument<T>(this ICakeContext context, string name, T defaultValue)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             var value = context.Arguments.GetArgument(name);
             return value == null
                 ? defaultValue

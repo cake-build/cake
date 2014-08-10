@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using Cake.Core;
 using Cake.Core.IO;
@@ -60,7 +61,8 @@ namespace Cake.Common.IO
             if (!context.FileSystem.Exist(targetDirectoryPath))
             {
                 const string format = "The directory '{0}' do not exist.";
-                throw new DirectoryNotFoundException(string.Format(format, targetDirectoryPath.FullPath));
+                var message = string.Format(CultureInfo.InvariantCulture, format, targetDirectoryPath.FullPath);
+                throw new DirectoryNotFoundException(message);
             }
 
             // Iterate all files and copy them.
@@ -93,7 +95,8 @@ namespace Cake.Common.IO
             if (!context.FileSystem.Exist(targetDirectoryPath))
             {
                 const string format = "The directory '{0}' do not exist.";
-                throw new DirectoryNotFoundException(string.Format(format, targetDirectoryPath.FullPath));
+                var message = string.Format(CultureInfo.InvariantCulture, format, targetDirectoryPath.FullPath);
+                throw new DirectoryNotFoundException(message);
             }            
 
             // Get the file and verify it exist.
@@ -101,8 +104,8 @@ namespace Cake.Common.IO
             if (!file.Exists)
             {
                 const string format = "The file '{0}' do not exist.";
-                throw new FileNotFoundException(string.Format(format, filePath.FullPath),
-                    filePath.FullPath);
+                var message = string.Format(CultureInfo.InvariantCulture, format, filePath.FullPath);
+                throw new FileNotFoundException(message ,filePath.FullPath);
             }
 
             // Move the file.            

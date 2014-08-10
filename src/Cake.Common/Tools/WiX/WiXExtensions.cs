@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -21,6 +22,11 @@ namespace Cake.Common.Tools.WiX
         [CakeAliasCategory("Candle")]
         public static void WiXCandle(this ICakeContext context, string pattern, CandleSettings settings = null)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             var files = context.Globber.GetFiles(pattern);
             WiXCandle(context, files, settings ?? new CandleSettings());
         }
@@ -35,6 +41,11 @@ namespace Cake.Common.Tools.WiX
         [CakeAliasCategory("Candle")]
         public static void WiXCandle(this ICakeContext context, IEnumerable<FilePath> sourceFiles, CandleSettings settings = null)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             var runner = new CandleRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
             runner.Run(sourceFiles, settings ?? new CandleSettings());
         }
@@ -49,6 +60,11 @@ namespace Cake.Common.Tools.WiX
         [CakeAliasCategory("Light")]
         public static void WiXLight(this ICakeContext context, string pattern, LightSettings settings = null)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             var files = context.Globber.GetFiles(pattern);
             WiXLight(context, files, settings ?? new LightSettings());
         }
@@ -63,6 +79,11 @@ namespace Cake.Common.Tools.WiX
         [CakeAliasCategory("Light")]
         public static void WiXLight(this ICakeContext context, IEnumerable<FilePath> objectFiles, LightSettings settings = null)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             var runner = new LightRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
             runner.Run(objectFiles, settings ?? new LightSettings());
         }

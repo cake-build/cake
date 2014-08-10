@@ -103,7 +103,7 @@ namespace Cake.Common.Tools.NuGet.Push
         /// <returns>The default tool path.</returns>
         protected override FilePath GetDefaultToolPath(NuGetPushSettings settings)
         {
-            var expression = string.Format("./tools/**/NuGet.exe");
+            const string expression = "./tools/**/NuGet.exe";
             return _globber.GetFiles(expression).FirstOrDefault();
         }
     }

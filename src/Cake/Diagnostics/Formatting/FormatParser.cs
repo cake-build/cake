@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -67,7 +68,7 @@ namespace Cake.Diagnostics.Formatting
                         {
                             throw new FormatException("Input string was not in a correct format.");
                         }
-                        var position = int.Parse(name);
+                        var position = int.Parse(name, CultureInfo.InvariantCulture);
                         return new PropertyToken(position, format);
                     }
                     else
@@ -77,7 +78,7 @@ namespace Cake.Diagnostics.Formatting
                         {
                             throw new FormatException("Input string was not in a correct format.");
                         }
-                        var position = int.Parse(accumulated);
+                        var position = int.Parse(accumulated, CultureInfo.InvariantCulture);
                         return new PropertyToken(position, null);
                     }
                 }

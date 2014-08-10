@@ -31,12 +31,20 @@ namespace Cake.Scripting.Roslyn
 
         public void AddReferencePath(FilePath path)
         {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
             _log.Debug("Adding reference to {0}...", path.GetFilename().FullPath);
             _roslynSession.AddReference(path.FullPath);
         }
 
         public void AddReference(Assembly assembly)
         {
+            if (assembly == null)
+            {
+                throw new ArgumentNullException("assembly");
+            }
             _log.Debug("Adding reference to {0}...", new FilePath(assembly.Location).GetFilename().FullPath);
             _roslynSession.AddReference(assembly);
         }

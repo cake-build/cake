@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using Cake.Core.Diagnostics;
 using Cake.Core.Graph;
@@ -157,7 +158,7 @@ namespace Cake.Core
             if (_tasks.Any(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
                 const string format = "Another task with the name '{0}' has already been added.";
-                throw new CakeException(string.Format(format, name));
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, name));
             }
             var task = new ActionTask(name);
             _tasks.Add(task);
@@ -177,7 +178,7 @@ namespace Cake.Core
             if (!graph.Exist(target))
             {
                 const string format = "The target '{0}' was not found.";
-                throw new CakeException(string.Format(format, target));
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, target));
             }
 
             var stopWatch = new Stopwatch();

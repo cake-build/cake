@@ -1,4 +1,6 @@
-﻿namespace Cake.Core.IO
+﻿using System;
+
+namespace Cake.Core.IO
 {
     /// <summary>
     /// Contains extensions for <see cref="IFileSystem"/>.
@@ -13,6 +15,10 @@
         /// <returns>Whether or not the specified file exist.</returns>
         public static bool Exist(this IFileSystem fileSystem, FilePath path)
         {
+            if (fileSystem == null)
+            {
+                throw new ArgumentNullException("fileSystem");
+            }
             var file = fileSystem.GetFile(path);
             return file != null && file.Exists;
         }
@@ -25,6 +31,10 @@
         /// <returns>Whether or not the specified directory exist.</returns>
         public static bool Exist(this IFileSystem fileSystem, DirectoryPath path)
         {
+            if (fileSystem == null)
+            {
+                throw new ArgumentNullException("fileSystem");
+            }
             var directory = fileSystem.GetDirectory(path);
             return directory != null && directory.Exists;
         }

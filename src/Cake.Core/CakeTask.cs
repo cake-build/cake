@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace Cake.Core
@@ -84,7 +85,7 @@ namespace Cake.Core
             if (_dependencies.Any(x => x == name))
             {
                 const string format = "The task '{0}' already have a dependency on '{1}'.";
-                var message = string.Format(format, _name, name);
+                var message = string.Format(CultureInfo.InvariantCulture, format, _name, name);
                 throw new CakeException(message);
             }
             _dependencies.Add(name);

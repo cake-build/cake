@@ -17,6 +17,11 @@ namespace Cake.Core
         public static CakeTaskBuilder<T> IsDependentOn<T>(this CakeTaskBuilder<T> builder, string name)
             where T : CakeTask
         {
+            if (builder == null)
+            {
+                throw new ArgumentNullException("builder");
+            }
+
             builder.Task.AddDependency(name);
             return builder;
         }
@@ -31,6 +36,11 @@ namespace Cake.Core
         public static CakeTaskBuilder<T> WithCriteria<T>(this CakeTaskBuilder<T> builder, bool criteria)
             where T : CakeTask
         {
+            if (builder == null)
+            {
+                throw new ArgumentNullException("builder");
+            }
+
             builder.Task.AddCriteria(() => criteria);
             return builder;
         }
@@ -46,6 +56,11 @@ namespace Cake.Core
         public static CakeTaskBuilder<T> WithCriteria<T>(this CakeTaskBuilder<T> builder, Func<bool> criteria)
             where T : CakeTask
         {
+            if (builder == null)
+            {
+                throw new ArgumentNullException("builder");
+            }
+
             builder.Task.AddCriteria(criteria);
             return builder;
         }
@@ -74,6 +89,11 @@ namespace Cake.Core
         public static CakeTaskBuilder<ActionTask> Does(this CakeTaskBuilder<ActionTask> builder,
             Action<ICakeContext> action)
         {
+            if (builder == null)
+            {
+                throw new ArgumentNullException("builder");
+            }
+
             builder.Task.AddAction(action);
             return builder;
         }
@@ -85,6 +105,11 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder{ActionTask}"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder<ActionTask> ContinueOnError(this CakeTaskBuilder<ActionTask> builder)
         {
+            if (builder == null)
+            {
+                throw new ArgumentNullException("builder");
+            }
+
             builder.Task.ContinueOnError = true;
             return builder;
         }
@@ -99,6 +124,11 @@ namespace Cake.Core
         public static CakeTaskBuilder<T> Description<T>(this CakeTaskBuilder<T> builder, string description)
             where T : CakeTask
         {
+            if (builder == null)
+            {
+                throw new ArgumentNullException("builder");
+            }
+
             builder.Task.Description = description;
             return builder;
         }

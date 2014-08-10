@@ -127,7 +127,7 @@ namespace Cake.Common.Tools.ILMerge
         /// <returns>The default tool path.</returns>
         protected override FilePath GetDefaultToolPath(ILMergeSettings settings)
         {
-            var expression = string.Format("./tools/**/ILMerge.exe");
+            const string expression = "./tools/**/ILMerge.exe";
             return _globber.GetFiles(expression).FirstOrDefault();
         }
     }

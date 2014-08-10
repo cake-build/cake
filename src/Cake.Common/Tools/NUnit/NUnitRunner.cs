@@ -38,6 +38,10 @@ namespace Cake.Common.Tools.NUnit
             {
                 throw new ArgumentNullException("assemblyPath");
             }
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
 
             Run(settings, GetArguments(assemblyPath, settings), settings.ToolPath);
         }
@@ -73,7 +77,7 @@ namespace Cake.Common.Tools.NUnit
         /// <returns>The default tool path.</returns>
         protected override FilePath GetDefaultToolPath(NUnitSettings settings)
         {
-            var expression = string.Format("./tools/**/nunit-console.exe");
+            const string expression = "./tools/**/nunit-console.exe";
             return _globber.GetFiles(expression).FirstOrDefault();
         }
     }

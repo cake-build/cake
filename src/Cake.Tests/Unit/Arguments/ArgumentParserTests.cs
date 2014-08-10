@@ -13,6 +13,21 @@ namespace Cake.Tests.Unit.Arguments
         public class TheParseMethod
         {
             [Fact]
+            public void Should_Throw_If_Arguments_Are_Null()
+            {
+                // Given
+                var log = Substitute.For<ICakeLog>();
+                var parser = new ArgumentParser(log);
+
+                // When
+                var result = Record.Exception(() => parser.Parse(null));
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("args", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
             public void Can_Parse_Empty_Parameters()
             {
                 // Given

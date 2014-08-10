@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Cake.Core.Diagnostics;
@@ -85,6 +86,7 @@ namespace Cake.Core.Scripting
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         private IEnumerable<string> ReadSource(FilePath path)
         {
             path = path.MakeAbsolute(_environment);
@@ -93,7 +95,7 @@ namespace Cake.Core.Scripting
             var file = _fileSystem.GetFile(path);
             if (!file.Exists)
             {
-                var message = string.Format("Could not find script '{0}'.", path);
+                var message = string.Format(CultureInfo.InvariantCulture, "Could not find script '{0}'.", path);
                 throw new CakeException(message);
             }
 

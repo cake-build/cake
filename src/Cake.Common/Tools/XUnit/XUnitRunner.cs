@@ -38,6 +38,10 @@ namespace Cake.Common.Tools.XUnit
             {
                 throw new ArgumentNullException("assemblyPath");
             }
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
 
             // Make sure we got output directory set when generating reports.
             if (settings.OutputDirectory == null || string.IsNullOrWhiteSpace(settings.OutputDirectory.FullPath))
@@ -106,7 +110,7 @@ namespace Cake.Common.Tools.XUnit
         /// <returns>The default tool path.</returns>
         protected override FilePath GetDefaultToolPath(XUnitSettings settings)
         {
-            var expression = string.Format("./tools/**/xunit.console.clr4.exe");
+            const string expression = "./tools/**/xunit.console.clr4.exe";
             return _globber.GetFiles(expression).FirstOrDefault();
         }
     }

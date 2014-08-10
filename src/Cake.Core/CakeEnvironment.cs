@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Cake.Core.IO;
 using System.Reflection;
 
@@ -67,7 +68,7 @@ namespace Cake.Core
                 return new DirectoryPath(Environment.GetFolderPath(Environment.SpecialFolder.Windows));
             }
             const string format = "The special path '{0}' is not supported.";
-            throw new NotSupportedException(string.Format(format, path.ToString()));
+            throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, format, path.ToString()));
         }
 
         /// <summary>

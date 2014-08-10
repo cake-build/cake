@@ -60,9 +60,13 @@ namespace Cake.Core
         /// <returns>A <see cref="String"/> with normalized line endings.</returns>
         public static string NormalizeLineEndings(this string value)
         {
-            value = value.Replace("\r\n", "\n");
-            value = value.Replace("\r", string.Empty);
-            return value.Replace("\n", "\r\n");
+            if (value != null)
+            {
+                value = value.Replace("\r\n", "\n");
+                value = value.Replace("\r", string.Empty);
+                return value.Replace("\n", "\r\n");   
+            }
+            return string.Empty;
         }
     }
 }

@@ -78,6 +78,10 @@ namespace Cake.Core.IO
         /// <returns>A new <see cref="FilePath"/> with an appended extension.</returns>
         public FilePath AppendExtension(string extension)
         {
+            if (extension == null)
+            {
+                throw new ArgumentNullException("extension");
+            }
             if (!extension.StartsWith(".", StringComparison.OrdinalIgnoreCase))
             {
                 extension = string.Concat(".", extension);
@@ -92,6 +96,10 @@ namespace Cake.Core.IO
         /// <returns>An absolute path.</returns>
         public FilePath MakeAbsolute(ICakeEnvironment environment)
         {
+            if (environment == null)
+            {
+                throw new ArgumentNullException("environment");
+            }
             return IsRelative
                 ? environment.WorkingDirectory.CombineWithFilePath(this).Collapse()
                 : new FilePath(FullPath);

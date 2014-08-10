@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -14,7 +15,7 @@ namespace Cake.Common.IO
             if (!directory.Exists)
             {
                 const string format = "The directory '{0}' do not exist.";
-                throw new IOException(string.Format(format, path.FullPath));
+                throw new IOException(string.Format(CultureInfo.InvariantCulture, format, path.FullPath));
             }
 
             var hasDirectories = directory.GetDirectories("*", SearchScope.Current).Any();
@@ -22,7 +23,7 @@ namespace Cake.Common.IO
             if (!recursive && (hasDirectories || hasFiles))
             {
                 const string format = "Cannot delete directory '{0}' without recursion since it's not empty.";
-                throw new IOException(string.Format(format, path.FullPath));
+                throw new IOException(string.Format(CultureInfo.InvariantCulture, format, path.FullPath));
             }
 
             context.Log.Verbose("Deleting {0}", path);           

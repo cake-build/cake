@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -48,6 +49,11 @@ namespace Cake.Common.IO
         [CakeMethodAlias]
         public static void Zip(this ICakeContext context, DirectoryPath rootPath, FilePath outputPath, IEnumerable<FilePath> filePaths)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             var zipper = new Zipper(context.FileSystem, context.Environment, context.Log);
             zipper.Zip(rootPath, outputPath, filePaths);
         }

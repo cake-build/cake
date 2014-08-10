@@ -69,6 +69,10 @@ namespace Cake.Core.IO
         /// <param name="paths">The paths to add.</param>
         public void Add(IEnumerable<FilePath> paths)
         {
+            if (paths == null)
+            {
+                throw new ArgumentNullException("paths");
+            }
             foreach (var path in paths)
             {
                 _paths.Add(path);
@@ -93,6 +97,10 @@ namespace Cake.Core.IO
         /// <param name="paths">The paths to remove.</param>
         public void Remove(IEnumerable<FilePath> paths)
         {
+            if (paths == null)
+            {
+                throw new ArgumentNullException("paths");
+            }
             foreach (var path in paths)
             {
                 _paths.Remove(path);
@@ -106,6 +114,10 @@ namespace Cake.Core.IO
         /// well as the paths in the original collection.</returns>
         public static FilePathCollection operator +(FilePathCollection collection, FilePath path)
         {
+            if (collection == null)
+            {
+                throw new ArgumentNullException("collection");
+            }
             var result = new FilePathCollection(collection, collection.Comparer);
             result.Add(path);
             return result;
@@ -117,6 +129,10 @@ namespace Cake.Core.IO
         /// <returns>A new <see cref="FilePathCollection"/> with the content of both collections.</returns>
         public static FilePathCollection operator +(FilePathCollection collection, IEnumerable<FilePath> paths)
         {
+            if (collection == null)
+            {
+                throw new ArgumentNullException("collection");
+            }
             var result = new FilePathCollection(collection, collection.Comparer);
             result.Add(paths);
             return result;
@@ -130,6 +146,10 @@ namespace Cake.Core.IO
         /// <returns>A new <see cref="FilePathCollection"/> that do not contain the provided path.</returns>
         public static FilePathCollection operator -(FilePathCollection collection, FilePath path)
         {
+            if (collection == null)
+            {
+                throw new ArgumentNullException("collection");
+            }
             var result = new FilePathCollection(collection, collection.Comparer);
             result.Remove(path);
             return result;
@@ -143,6 +163,10 @@ namespace Cake.Core.IO
         /// <returns>A new <see cref="FilePathCollection"/> that do not contain the provided paths.</returns>
         public static FilePathCollection operator -(FilePathCollection collection, IEnumerable<FilePath> paths)
         {
+            if (collection == null)
+            {
+                throw new ArgumentNullException("collection");
+            }
             var result = new FilePathCollection(collection, collection.Comparer);
             result.Remove(paths);
             return result;

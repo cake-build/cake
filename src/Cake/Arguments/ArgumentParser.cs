@@ -18,6 +18,11 @@ namespace Cake.Arguments
 
         public CakeOptions Parse(IEnumerable<string> args)
         {
+            if (args == null)
+            {
+                throw new ArgumentNullException("args");
+            }
+
             var options = new CakeOptions();
             var isParsingOptions = false;
 

@@ -12,7 +12,7 @@ using Cake.Scripting.Roslyn;
 
 namespace Cake
 {
-    public class Program
+    public static class Program
     {
         public static int Main(string[] args)
         {

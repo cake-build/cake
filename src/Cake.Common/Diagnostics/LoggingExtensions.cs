@@ -1,4 +1,5 @@
-﻿using Cake.Core;
+﻿using System;
+using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.Diagnostics;
 
@@ -19,6 +20,10 @@ namespace Cake.Common.Diagnostics
         [CakeMethodAlias]
         public static void Error(this ICakeContext context, string format, params object[] args)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
             context.Log.Error(format, args);
         }
 
@@ -31,6 +36,10 @@ namespace Cake.Common.Diagnostics
         [CakeMethodAlias]
         public static void Warning(this ICakeContext context, string format, params object[] args)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
             context.Log.Warning(format, args);
         }
 
@@ -43,6 +52,10 @@ namespace Cake.Common.Diagnostics
         [CakeMethodAlias]
         public static void Information(this ICakeContext context, string format, params object[] args)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
             context.Log.Information(format, args);
         }
 
@@ -55,6 +68,10 @@ namespace Cake.Common.Diagnostics
         [CakeMethodAlias]
         public static void Verbose(this ICakeContext context, string format, params object[] args)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
             context.Log.Verbose(format, args);
         }
 
@@ -67,6 +84,10 @@ namespace Cake.Common.Diagnostics
         [CakeMethodAlias]
         public static void Debug(this ICakeContext context, string format, params object[] args)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
             context.Log.Debug(format, args);
         }
     }

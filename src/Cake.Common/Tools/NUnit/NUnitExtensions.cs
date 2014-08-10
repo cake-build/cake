@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -19,6 +20,11 @@ namespace Cake.Common.Tools.NUnit
         [CakeMethodAlias]
         public static void NUnit(this ICakeContext context, string pattern)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             var assemblies = context.Globber.GetFiles(pattern);
             NUnit(context, assemblies, new NUnitSettings());
         }
@@ -32,6 +38,11 @@ namespace Cake.Common.Tools.NUnit
         [CakeMethodAlias]
         public static void NUnit(this ICakeContext context, string pattern, NUnitSettings settings)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             var assemblies = context.Globber.GetFiles(pattern);
             NUnit(context, assemblies, settings);
         }
@@ -56,6 +67,15 @@ namespace Cake.Common.Tools.NUnit
         [CakeMethodAlias]
         public static void NUnit(this ICakeContext context, IEnumerable<FilePath> assemblies, NUnitSettings settings)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            if (assemblies == null)
+            {
+                throw new ArgumentNullException("assemblies");
+            }
+
             var runner = new NUnitRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);            
             foreach (var assembly in assemblies)
             {

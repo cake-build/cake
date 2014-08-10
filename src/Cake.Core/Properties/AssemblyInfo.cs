@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -12,6 +13,9 @@ using System.Runtime.InteropServices;
 // to COM components.  If you need to access a type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
+
+// We're CLS compliant.
+[assembly: CLSCompliant(true)]
 
 // Make internals visible to unit test assembly.
 [assembly: InternalsVisibleTo("Cake.Core.Tests")]

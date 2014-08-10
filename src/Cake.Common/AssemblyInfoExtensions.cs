@@ -1,4 +1,5 @@
-﻿using Cake.Core;
+﻿using System;
+using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
 
@@ -19,6 +20,11 @@ namespace Cake.Common
         [CakeMethodAlias]
         public static void CreateAssemblyInfo(this ICakeContext context, FilePath outputPath, AssemblyInfoSettings settings)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             var creator = new AssemblyInfoCreator(context.FileSystem, context.Environment, context.Log);
             creator.Create(outputPath, settings);
         }

@@ -31,6 +31,15 @@ namespace Cake.Common.Tools.MSBuild
         [CakeMethodAlias]
         public static void MSBuild(this ICakeContext context, FilePath solution, Action<MSBuildSettings> configurator)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            if (configurator == null)
+            {
+                throw new ArgumentNullException("configurator");
+            }
+
             var settings = new MSBuildSettings(solution);
             configurator(settings);
 

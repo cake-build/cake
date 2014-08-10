@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -19,6 +20,10 @@ namespace Cake.Common.Tools.MSTest
         [CakeMethodAlias]
         public static void MSTest(this ICakeContext context, string pattern)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
             var assemblies = context.Globber.GetFiles(pattern);
             MSTest(context, assemblies);
         }
@@ -32,6 +37,10 @@ namespace Cake.Common.Tools.MSTest
         [CakeMethodAlias]
         public static void MSTest(this ICakeContext context, string pattern, MSTestSettings settings)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
             var assemblies = context.Globber.GetFiles(pattern);
             MSTest(context, assemblies, settings);
         }
@@ -56,6 +65,15 @@ namespace Cake.Common.Tools.MSTest
         [CakeMethodAlias]
         public static void MSTest(this ICakeContext context, IEnumerable<FilePath> assemblyPaths, MSTestSettings settings)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            if (assemblyPaths == null)
+            {
+                throw new ArgumentNullException("assemblyPaths");
+            }
+
             var runner = new MSTestRunner(context.FileSystem, context.Environment, context.ProcessRunner);
             foreach (var assembly in assemblyPaths)
             {
