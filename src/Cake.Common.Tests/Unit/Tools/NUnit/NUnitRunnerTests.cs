@@ -155,6 +155,24 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
                     p => p.Arguments == "\"/Working/Test1.dll\" \"/noshadow\""));
             }
+
+            [Fact]
+            public void Should_Generate_Html_Report_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new NUnitRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run("./Test1.dll", new NUnitSettings
+                {
+                    ResultsDirectory = "/Results",
+                });
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
+                    p => p.Arguments == "\"/Working/Test1.dll\" \"/xml:./Results/Test1.dll.xml\""));
+            }
         }
     }
 }

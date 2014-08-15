@@ -23,6 +23,12 @@ namespace Cake.Common.Tools.NUnit
         public bool ShadowCopy { get; set; }
 
         /// <summary>
+        /// Gets or sets the output directory.
+        /// </summary>
+        /// <value>The output directory.</value>
+        public DirectoryPath ResultsDirectory { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="NUnitSettings"/> class.
         /// </summary>
         public NUnitSettings()

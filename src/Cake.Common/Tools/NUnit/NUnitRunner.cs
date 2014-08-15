@@ -59,6 +59,26 @@ namespace Cake.Common.Tools.NUnit
                 builder.AppendQuotedText("/noshadow");
             }
 
+            // Output directory?
+            if (settings.ResultsDirectory != null)
+            {
+                var assemblyFilename = assemblyPath.GetFilename().AppendExtension(".xml");
+                var resultsPath = settings.ResultsDirectory.GetFilePath(assemblyFilename);
+
+                var fullPath = resultsPath.ToString();
+
+                // nunit-console treats a starting "/" as the root of the current drive
+                if (fullPath.StartsWith("/"))
+                {
+                    // prepend "." to path to ensure nunit-console doesn't
+                    // attempt to store the results in a non-existent path
+                    // based on the root of the drive
+                    fullPath = "." + fullPath;
+                }
+
+                builder.AppendQuotedText("/xml:" + fullPath);
+            }
+
             return builder;
         }
 

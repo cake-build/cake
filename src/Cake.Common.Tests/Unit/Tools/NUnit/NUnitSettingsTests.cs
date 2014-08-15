@@ -8,6 +8,16 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
         public sealed class TheConstructor
         {
             [Fact]
+            public void Should_Set_Results_Directory_To_Null_By_Default()
+            {
+                // Given, When
+                var settings = new NUnitSettings();
+
+                // Then
+                Assert.Null(settings.ResultsDirectory);
+            }
+
+            [Fact]
             public void Should_Enable_Shadow_Copying_By_Default()
             {
                 // Given, When
