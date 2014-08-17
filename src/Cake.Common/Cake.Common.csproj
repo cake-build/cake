@@ -53,6 +53,8 @@
     <Compile Include="IO\DirectoryCreator.cs" />
     <Compile Include="IO\FileDeleter.cs" />
     <Compile Include="IO\FileMover.cs" />
+    <Compile Include="ProcessExtensions.cs" />
+    <Compile Include="ProcessSettings.cs" />
     <Compile Include="ReleaseNotes.cs" />
     <Compile Include="ReleaseNotesExtensions.cs" />
     <Compile Include="ReleaseNotesParser.cs" />

@@ -70,6 +70,7 @@
     <Compile Include="Fixtures\NuGetFixture.cs" />
     <Compile Include="Fixtures\MSTestRunnerFixture.cs" />
     <Compile Include="Fixtures\NUnitRunnerFixture.cs" />
+    <Compile Include="Fixtures\ProcessFixture.cs" />
     <Compile Include="Fixtures\WiXFixture.cs" />
     <Compile Include="Fixtures\XUnitRunnerFixture.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -79,6 +80,7 @@
     </Compile>
     <Compile Include="Unit\AssemblyInfoCreatorTests.cs" />
     <Compile Include="Unit\Diagnostics\LoggingExtensionsTests.cs" />
+    <Compile Include="Unit\ProcessExtensionsTests.cs" />
     <Compile Include="Unit\ReleaseNotesExtensionsTests.cs" />
     <Compile Include="Unit\ReleaseNotesParserTests.cs" />
     <Compile Include="Unit\ReleaseNotesTests.cs" />
