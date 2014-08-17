@@ -79,18 +79,14 @@
     </Compile>
     <Compile Include="Unit\AssemblyInfoCreatorTests.cs" />
     <Compile Include="Unit\Diagnostics\LoggingExtensionsTests.cs" />
-    <Compile Include="Unit\IO\DirectoryCreatorTests.cs" />
-    <Compile Include="Unit\IO\FileDeleterTests.cs" />
-    <Compile Include="Unit\IO\FileMoverTests.cs" />
     <Compile Include="Unit\ReleaseNotesExtensionsTests.cs" />
     <Compile Include="Unit\ReleaseNotesParserTests.cs" />
     <Compile Include="Unit\ReleaseNotesTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeSettingsTests.cs" />
     <Compile Include="Unit\IO\ZipperTests.cs" />
-    <Compile Include="Unit\IO\DirectoryCleanerTests.cs" />
-    <Compile Include="Unit\IO\DirectoryDeleterTests.cs" />
-    <Compile Include="Unit\IO\FileCopierTests.cs" />
+    <Compile Include="Unit\IO\DirectoryExtensionsTests.cs" />
+    <Compile Include="Unit\IO\FileExtensionsTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildRunnerTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsExtensionsTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsTests.cs" />

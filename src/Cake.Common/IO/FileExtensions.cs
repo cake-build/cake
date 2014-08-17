@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -61,6 +63,24 @@ namespace Cake.Common.IO
         public static void CopyFiles(this ICakeContext context, IEnumerable<FilePath> filePaths, DirectoryPath targetDirectoryPath)
         {
             FileCopier.CopyFiles(context, filePaths, targetDirectoryPath);
+        }
+
+        /// <summary>
+        /// Copies the specified files.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="filePaths">The file paths.</param>
+        /// <param name="targetDirectoryPath">The target directory path.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Copy")]
+        public static void CopyFiles(this ICakeContext context, IEnumerable<string> filePaths, DirectoryPath targetDirectoryPath)
+        {
+            if (filePaths == null)
+            {
+                throw new ArgumentNullException("filePaths");
+            }
+            var paths = filePaths.Select(p => new FilePath(p));
+            FileCopier.CopyFiles(context, paths, targetDirectoryPath);
         }
 
         /// <summary>

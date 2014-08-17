@@ -21,6 +21,7 @@ namespace Cake.Common.Tests.Fixtures
             fileSystem.GetCreatedDirectory("/Temp/HasFiles");
             fileSystem.GetCreatedDirectory("/Temp/Hello");
             fileSystem.GetCreatedDirectory("/Temp/Hello/Empty");
+            fileSystem.GetCreatedDirectory("/Temp/Hello/More/Empty");
             fileSystem.GetCreatedDirectory("/Temp/Hello/World");
             fileSystem.GetCreatedDirectory("/Temp/Goodbye");
             fileSystem.GetCreatedFile("/Presentation.ppt");

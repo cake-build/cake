@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -53,9 +54,42 @@ namespace Cake.Common.Tools.XUnit
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
         [CakeMethodAlias]
+        public static void XUnit(this ICakeContext context, IEnumerable<string> assemblies)
+        {
+            if (assemblies == null)
+            {
+                throw new ArgumentNullException("assemblies");
+            }
+            var paths = assemblies.Select(p => new FilePath(p));
+            XUnit(context, paths, new XUnitSettings());
+        }
+
+        /// <summary>
+        /// Runs all xUnit unit tests in the specified assemblies.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="assemblies">The assemblies.</param>
+        [CakeMethodAlias]
         public static void XUnit(this ICakeContext context, IEnumerable<FilePath> assemblies)
         {            
             XUnit(context, assemblies, new XUnitSettings());
+        }
+
+        /// <summary>
+        /// Runs all xUnit unit tests in the specified assemblies.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="assemblies">The assemblies.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        public static void XUnit(this ICakeContext context, IEnumerable<string> assemblies, XUnitSettings settings)
+        {
+            if (assemblies == null)
+            {
+                throw new ArgumentNullException("assemblies");
+            }
+            var paths = assemblies.Select(p => new FilePath(p));
+            XUnit(context, paths, settings);
         }
 
         /// <summary>

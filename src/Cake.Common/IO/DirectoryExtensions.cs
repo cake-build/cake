@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -20,7 +21,7 @@ namespace Cake.Common.IO
         /// <param name="recursive">Will perform a recursive delete if set to <c>true</c>.</param>
         [CakeMethodAlias]
         [CakeAliasCategory("Delete")]
-        public static void DeleteDirectories(this ICakeContext context, IEnumerable<DirectoryPath> directories, bool recursive = true)
+        public static void DeleteDirectories(this ICakeContext context, IEnumerable<DirectoryPath> directories, bool recursive = false)
         {
             if (directories == null)
             {
@@ -28,6 +29,28 @@ namespace Cake.Common.IO
             }
 
             foreach (var directory in directories)
+            {
+                DeleteDirectory(context, directory, recursive);
+            }
+        }
+
+        /// <summary>
+        /// Deletes the specified directories.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="directories">The directory paths.</param>
+        /// <param name="recursive">Will perform a recursive delete if set to <c>true</c>.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Delete")]
+        public static void DeleteDirectories(this ICakeContext context, IEnumerable<string> directories, bool recursive = false)
+        {
+            if (directories == null)
+            {
+                throw new ArgumentNullException("directories");
+            }
+
+            var paths = directories.Select(p => new DirectoryPath(p));
+            foreach (var directory in paths)
             {
                 DeleteDirectory(context, directory, recursive);
             }
@@ -75,6 +98,27 @@ namespace Cake.Common.IO
                 throw new ArgumentNullException("directories");
             }
             foreach (var directory in directories)
+            {
+                CleanDirectory(context, directory);
+            }
+        }
+
+        /// <summary>
+        /// Cleans the specified directories.
+        /// Cleaning a directory will remove all it's content but not the directory iteself.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="directories">The directory paths.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Clean")]
+        public static void CleanDirectories(this ICakeContext context, IEnumerable<string> directories)
+        {
+            if (directories == null)
+            {
+                throw new ArgumentNullException("directories");
+            }
+            var paths = directories.Select(p => new DirectoryPath(p));
+            foreach (var directory in paths)
             {
                 CleanDirectory(context, directory);
             }
