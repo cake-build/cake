@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
 using Cake.Core;
+using Cake.Core.Annotations;
 
 namespace Cake.Common
 {
     /// <summary>
     /// Contains functionality related to processes.
     /// </summary>
+    [CakeAliasCategory("Process")]
     public static class ProcessExtensions
     {
         /// <summary>
@@ -15,6 +17,7 @@ namespace Cake.Common
         /// <param name="context">The context.</param>
         /// <param name="fileName">The file name.</param>
         /// <returns>The exit code that the started process specified when it terminated.</returns>
+        [CakeMethodAlias]
         public static int StartProcess(this ICakeContext context, string fileName)
         {
             return StartProcess(context, fileName, new ProcessSettings());
@@ -27,6 +30,7 @@ namespace Cake.Common
         /// <param name="fileName">Name of the file.</param>
         /// <param name="settings">The settings.</param>
         /// <returns>The exit code that the started process specified when it terminated.</returns>
+        [CakeMethodAlias]
         public static int StartProcess(this ICakeContext context, string fileName, ProcessSettings settings)
         {
             if (context == null)
