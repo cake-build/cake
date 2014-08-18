@@ -58,6 +58,9 @@
     <Compile Include="ReleaseNotes.cs" />
     <Compile Include="ReleaseNotesExtensions.cs" />
     <Compile Include="ReleaseNotesParser.cs" />
+    <Compile Include="Tools\AliaSql\AliaSqlExtensions.cs" />
+    <Compile Include="Tools\AliaSql\AliaSqlRunner.cs" />
+    <Compile Include="Tools\AliaSql\AliaSqlSettings.cs" />
     <Compile Include="Tools\ILMerge\ILMergeExtensions.cs" />
     <Compile Include="Tools\ILMerge\ILMergeRunner.cs" />
     <Compile Include="Tools\ILMerge\ILMergeSettings.cs" />
