@@ -80,7 +80,7 @@ namespace Cake.Common.Tools.MSBuild
             _properties = new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
 
             PlatformTarget = PlatformTarget.MSIL;
-            ToolVersion = MSBuildToolVersion.VS2013;
+            ToolVersion = MSBuildToolVersion.Default;
             Configuration = string.Empty;
         } 
     }

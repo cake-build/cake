@@ -21,7 +21,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Fact]
-            public void Should_Set_Default_Tools_Version_To_VS2013()
+            public void Should_Set_Default_Tools_Version_To_Default()
             {
                 // Given
                 var path = new FilePath("./Project.sln");
@@ -30,7 +30,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var settings = new MSBuildSettings(path);
 
                 // Then
-                Assert.Equal(MSBuildToolVersion.VS2013, settings.ToolVersion);
+                Assert.Equal(MSBuildToolVersion.Default, settings.ToolVersion);
             }
 
             [Fact]

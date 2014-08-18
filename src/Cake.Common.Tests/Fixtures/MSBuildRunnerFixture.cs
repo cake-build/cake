@@ -2,6 +2,7 @@
 using Cake.Common.Tools.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Core.Tests.Fakes;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures
@@ -13,8 +14,17 @@ namespace Cake.Common.Tests.Fixtures
         public IProcess Process { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
 
-        public MSBuildRunnerFixture(bool is64BitOperativeSystem = false,
-            bool msBuildFileExist = true)
+        public MSBuildRunnerFixture(DirectoryPath[] existingMSBuildPaths)
+            : this(false, false, existingMSBuildPaths)
+        {
+        }
+
+        public MSBuildRunnerFixture(bool is64BitOperativeSystem, bool msBuildFileExist)
+            : this(is64BitOperativeSystem, msBuildFileExist, null)
+        {
+        }
+
+        private MSBuildRunnerFixture(bool is64BitOperativeSystem, bool msBuildFileExist, DirectoryPath[] existingMSBuildPaths)
         {
             Process = Substitute.For<IProcess>();
 
@@ -27,15 +37,32 @@ namespace Cake.Common.Tests.Fixtures
             Environment.GetSpecialPath(SpecialPath.Windows).Returns("/Windows");
             Environment.WorkingDirectory.Returns("/Working");
 
-            FileSystem = Substitute.For<IFileSystem>();
-            FileSystem.GetFile(Arg.Is<FilePath>(p => p.FullPath.EndsWith("MSBuild.exe", System.StringComparison.Ordinal)))
-                .Returns(c => {
-                    // All requested files exist.
-                    var file = Substitute.For<IFile>();
-                    file.Exists.Returns(msBuildFileExist);
-                    file.Path.Returns(c.Arg<FilePath>());
-                    return file;
-                });
+            if (existingMSBuildPaths != null)
+            {
+                // Add all existing MSBuild tool paths.
+                var fileSystem = new FakeFileSystem(true);
+                FileSystem = fileSystem;
+                foreach (var existingPath in existingMSBuildPaths)
+                {
+                    fileSystem.GetCreatedDirectory(existingPath);
+                    fileSystem.GetCreatedFile(existingPath.GetFilePath("MSBuild.exe"));
+                }
+            }
+            else
+            {
+                // 
+                FileSystem = Substitute.For<IFileSystem>();
+                FileSystem.GetFile(
+                    Arg.Is<FilePath>(p => p.FullPath.EndsWith("MSBuild.exe", System.StringComparison.Ordinal)))
+                    .Returns(c =>
+                    {
+                        // All requested files exist.
+                        var file = Substitute.For<IFile>();
+                        file.Exists.Returns(msBuildFileExist);
+                        file.Path.Returns(c.Arg<FilePath>());
+                        return file;
+                    });                
+            }
         }
 
         public MSBuildRunner CreateRunner()

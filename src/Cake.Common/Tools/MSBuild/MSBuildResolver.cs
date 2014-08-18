@@ -6,10 +6,12 @@ namespace Cake.Common.Tools.MSBuild
 {
     internal sealed class MSBuildResolver
     {
-        public static FilePath GetMSBuildPath(ICakeEnvironment environment, MSBuildToolVersion version, PlatformTarget target)
+        public static FilePath GetMSBuildPath(IFileSystem fileSystem, ICakeEnvironment environment, MSBuildToolVersion version, PlatformTarget target)
         {
-            // Get the bin path for MSBuild.
-            var binPath = GetMSBuildPath(environment, (MSBuildVersion)version, target);
+            var binPath = (version == MSBuildToolVersion.Default)
+                ? GetHighestAvailableMSBuildVersion(fileSystem, environment, target) 
+                : GetMSBuildPath(environment, (MSBuildVersion)version, target);
+
             if (binPath == null)
             {
                 throw new CakeException("Could not resolve MSBuild.");
@@ -17,6 +19,25 @@ namespace Cake.Common.Tools.MSBuild
 
             // Get the MSBuild path.
             return binPath.CombineWithFilePath("MSBuild.exe");
+        }
+
+        private static DirectoryPath GetHighestAvailableMSBuildVersion(IFileSystem fileSystem, ICakeEnvironment environment, PlatformTarget target)
+        {
+            var versions = new[] {
+                MSBuildVersion.MSBuild12, 
+                MSBuildVersion.MSBuild4,
+                MSBuildVersion.MSBuild35,
+                MSBuildVersion.MSBuild20
+            };
+            foreach (var version in versions)
+            {
+                var path = GetMSBuildPath(environment, version, target);
+                if (fileSystem.Exist(path))
+                {
+                    return path;
+                }
+            }
+            return null;
         }
 
         private static DirectoryPath GetMSBuildPath(ICakeEnvironment environment, MSBuildVersion version, PlatformTarget target)

@@ -11,6 +11,7 @@ namespace Cake.Common.Tools.MSBuild
     public sealed class MSBuildRunner : Tool<MSBuildSettings>
     {
         private readonly ICakeEnvironment _environment;
+        private readonly IFileSystem _fileSystem;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MSBuildRunner"/> class.
@@ -21,6 +22,7 @@ namespace Cake.Common.Tools.MSBuild
         public MSBuildRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner runner)
             : base(fileSystem, environment, runner)
         {
+            _fileSystem = fileSystem;
             _environment = environment;
         }
 
@@ -106,7 +108,7 @@ namespace Cake.Common.Tools.MSBuild
             {
                 throw new ArgumentNullException("settings");
             }
-            return MSBuildResolver.GetMSBuildPath(_environment, settings.ToolVersion, settings.PlatformTarget);
+            return MSBuildResolver.GetMSBuildPath(_fileSystem, _environment, settings.ToolVersion, settings.PlatformTarget);
         }
     }
 }

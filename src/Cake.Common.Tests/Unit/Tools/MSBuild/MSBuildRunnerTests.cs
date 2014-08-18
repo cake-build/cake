@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core;
@@ -13,6 +14,30 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
     {
         public sealed class TheRunMethod
         {
+            [Fact]
+            public void Should_Return_The_Highest_MSBuild_Version_If_Tool_Version_Is_Set_To_Default()
+            {
+                // Given
+                var existingToolPaths = new DirectoryPath[] {
+                    "/Windows/Microsoft.NET/Framework64/v4.0.30319",
+                    "/Windows/Microsoft.NET/Framework64/v2.0.50727"
+                };
+
+                var fixture = new MSBuildRunnerFixture(existingToolPaths);
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run(new MSBuildSettings("./src/Solution.sln")
+                {
+                    PlatformTarget = PlatformTarget.x64,
+                    ToolVersion = MSBuildToolVersion.Default
+                });
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
+                    p => p.FileName == "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe"));
+            }
+
             [Theory]
             [InlineData(MSBuildToolVersion.VS2005, PlatformTarget.MSIL, true, "/Windows/Microsoft.NET/Framework64/v2.0.50727/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2005, PlatformTarget.MSIL, false, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
@@ -35,7 +60,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Get_Correct_Path_To_MSBuild_Version_2(MSBuildToolVersion version, PlatformTarget target, bool is64BitOperativeSystem, string expected)
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem);
+                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, true);
                 var runner = fixture.CreateRunner();
 
                 // When
@@ -66,7 +91,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Get_Correct_Path_To_MSBuild_Version_35(MSBuildToolVersion version, PlatformTarget target, bool is64BitOperativeSystem, string expected)
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem);
+                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, true);
                 var runner = fixture.CreateRunner();
 
                 // When
@@ -115,7 +140,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Get_Correct_Path_To_MSBuild_Version_4(MSBuildToolVersion version, PlatformTarget target, bool is64BitOperativeSystem, string expected)
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem);
+                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, true);
                 var runner = fixture.CreateRunner();
 
                 // When
@@ -152,7 +177,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Get_Correct_Path_To_MSBuild_Version_12(MSBuildToolVersion version, PlatformTarget target, bool is64BitOperativeSystem, string expected)
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem);
+                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, true);
                 var runner = fixture.CreateRunner();
 
                 // When
@@ -171,7 +196,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Throw_If_MSBuild_Executable_Did_Not_Exist()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(msBuildFileExist: false);
+                var fixture = new MSBuildRunnerFixture(false, false);
                 var runner = fixture.CreateRunner();
 
                 // When
@@ -190,10 +215,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Use_As_Many_Processors_As_Possible_If_MaxCpuCount_Is_Zero()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture();
+                var fixture = new MSBuildRunnerFixture(false, true);
                 var runner = fixture.CreateRunner();
 
                 var settings = new MSBuildSettings("./src/Solution.sln");
+                settings.ToolVersion = MSBuildToolVersion.VS2013;
                 settings.MaxCpuCount = 0;
 
                 // When
@@ -208,10 +234,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Use_Specified_Number_Of_Max_Processors()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture();
+                var fixture = new MSBuildRunnerFixture(false, true);
                 var runner = fixture.CreateRunner();
 
                 var settings = new MSBuildSettings("./src/Solution.sln");
+                settings.ToolVersion = MSBuildToolVersion.VS2013;
                 settings.MaxCpuCount = 4;
 
                 // When
@@ -226,11 +253,14 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Use_Correct_Default_Target_In_Process_Arguments()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture();
+                var fixture = new MSBuildRunnerFixture(false, true);
                 var runner = fixture.CreateRunner();
 
+                var settings = new MSBuildSettings("./src/Solution.sln");
+                settings.ToolVersion = MSBuildToolVersion.VS2013;
+
                 // When
-                runner.Run(new MSBuildSettings("./src/Solution.sln"));
+                runner.Run(settings);
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
@@ -241,10 +271,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Append_Targets_To_Process_Arguments()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture();
+                var fixture = new MSBuildRunnerFixture(false, true);
                 var runner = fixture.CreateRunner();
 
                 var settings = new MSBuildSettings("./src/Solution.sln");
+                settings.ToolVersion = MSBuildToolVersion.VS2013;
                 settings.WithTarget("A");
                 settings.WithTarget("B");
 
@@ -260,10 +291,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Append_Property_To_Process_Arguments()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture();
+                var fixture = new MSBuildRunnerFixture(false, true);
                 var runner = fixture.CreateRunner();
 
                 var settings = new MSBuildSettings("./src/Solution.sln");
+                settings.ToolVersion = MSBuildToolVersion.VS2013;
                 settings.WithProperty("A", "B");
                 settings.WithProperty("C", "D");
 
@@ -279,10 +311,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Append_Property_With_Multiple_Values_To_Process_Arguments()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture();
+                var fixture = new MSBuildRunnerFixture(false, true);
                 var runner = fixture.CreateRunner();
 
                 var settings = new MSBuildSettings("./src/Solution.sln");
+                settings.ToolVersion = MSBuildToolVersion.VS2013;
                 settings.WithProperty("A", new[] { "B", "E" });
                 settings.WithProperty("C", "D");
 
@@ -298,11 +331,12 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Append_Configuration_As_Property_To_Process_Arguments()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture();
+                var fixture = new MSBuildRunnerFixture(false, true);
                 var runner = fixture.CreateRunner();
 
                 var settings = new MSBuildSettings("./src/Solution.sln");
-                settings.SetConfiguration("Release");
+                settings.ToolVersion = MSBuildToolVersion.VS2013;
+                settings.SetConfiguration("Release");                
 
                 // When
                 runner.Run(settings);
@@ -316,9 +350,10 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Set_Working_Directory()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture();
+                var fixture = new MSBuildRunnerFixture(false, true);
                 var runner = fixture.CreateRunner();
                 var settings = new MSBuildSettings("./src/Solution.sln");
+                settings.ToolVersion = MSBuildToolVersion.VS2013;
 
                 // When
                 runner.Run(settings);
@@ -332,12 +367,15 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Throw_If_Process_Was_Not_Started()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture();
+                var fixture = new MSBuildRunnerFixture(false, true);
                 fixture.ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns((IProcess)null);
                 var runner = fixture.CreateRunner();
 
+                var settings = new MSBuildSettings("./src/Solution.sln");
+                settings.ToolVersion = MSBuildToolVersion.VS2013;
+
                 // When
-                var result = Record.Exception(() => runner.Run(new MSBuildSettings("./src/Solution.sln")));
+                var result = Record.Exception(() => runner.Run(settings));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -348,12 +386,15 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture();
+                var fixture = new MSBuildRunnerFixture(false, true);
                 fixture.Process.GetExitCode().Returns(1);
                 var runner = fixture.CreateRunner();
 
+                var settings = new MSBuildSettings("./src/Solution.sln");
+                settings.ToolVersion = MSBuildToolVersion.VS2013;
+
                 // When
-                var result = Record.Exception(() => runner.Run(new MSBuildSettings("./src/Solution.sln")));
+                var result = Record.Exception(() => runner.Run(settings));
 
                 // Then
                 Assert.IsType<CakeException>(result);

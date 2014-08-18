@@ -6,6 +6,11 @@
     public enum MSBuildToolVersion : byte
     {
         /// <summary>
+        /// The highest available MSBuild tool version.
+        /// </summary>
+        Default = 0,
+
+        /// <summary>
         /// .NET 2.0
         /// </summary>
         NET20 = 1,
