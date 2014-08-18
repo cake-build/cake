@@ -153,7 +153,76 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "\"/Working/Test1.dll\" \"/noshadow\""));
+                    p => p.Arguments == "\"/Working/Test1.dll\" /noshadow"));
+            }
+
+            [Fact]
+            public void Should_Not_Allow_NoResults_And_ResultsFile()
+            {
+                // Given
+                var fixture = new NUnitRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                var result = Record.Exception(() => 
+                    runner.Run("./Test1.dll", new NUnitSettings
+                    {
+                        ResultsFile = "NewResults.xml",
+                        NoResults = true
+                    }));
+
+                // Then
+                Assert.IsType<ArgumentException>(result);
+                Assert.Equal("NUnit: You can't specify both a results file and set NoResults to true.", result.Message);
+            }
+
+            [Fact]
+            public void Should_Set_Result_Switch()
+            {
+                // Given
+                var fixture = new NUnitRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run("./Test1.dll", new NUnitSettings
+                {
+                    ResultsFile = "NewTestResult.xml"
+                });
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
+                    p => p.Arguments == "\"/Working/Test1.dll\" \"/result:NewTestResult.xml\""));
+            }
+
+            [Fact]
+            public void Should_Set_Commandline_Switches()
+            {
+                // Given
+                var fixture = new NUnitRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run("./Test1.dll", new NUnitSettings
+                {
+                    ResultsFile = "NewTestResult.xml",
+                    NoLogo = true,
+                    NoThread = true,
+                    StopOnError = true,
+                    Trace = "Debug",
+                    Timeout = 5,
+                    Include = "Database",
+                    Exclude = "Database_Users",
+                    Framework = "net1_1"
+                });
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
+                    p => p.Arguments ==
+                        "\"/Working/Test1.dll\" " +
+                        "\"/framework:net1_1\" " +
+                        "\"/include:Database\" \"/exclude:Database_Users\" " +
+                        "/timeout:5 /nologo /nothread /stoponerror /trace:Debug " +
+                        "\"/result:NewTestResult.xml\""));
             }
         }
     }

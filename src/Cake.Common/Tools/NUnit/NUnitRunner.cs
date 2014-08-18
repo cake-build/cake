@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
@@ -53,10 +54,68 @@ namespace Cake.Common.Tools.NUnit
             // Add the assembly to build.
             builder.AppendQuotedText(assemblyPath.MakeAbsolute(_environment).FullPath);
 
+            if(settings.Framework != null)
+            {
+                builder.AppendQuotedText("/framework:" + settings.Framework);
+            }
+
+            if (settings.Include != null)
+            {
+                builder.AppendQuotedText("/include:" + settings.Include);
+            }
+
+            if (settings.Exclude != null)
+            {
+                builder.AppendQuotedText("/exclude:" + settings.Exclude);
+            }
+
+            if (settings.Timeout.HasValue)
+            {
+                builder.AppendText("/timeout:" + settings.Timeout.Value);
+            }
+
             // No shadow copy?
             if (!settings.ShadowCopy)
             {
-                builder.AppendQuotedText("/noshadow");
+                builder.AppendText("/noshadow");
+            }
+
+            if (settings.NoLogo)
+            {
+                builder.AppendText("/nologo");
+            }
+
+            if (settings.NoThread)
+            {
+                builder.AppendText("/nothread");
+            }
+
+            if (settings.StopOnError)
+            {
+                builder.AppendText("/stoponerror");
+            }
+
+            if (settings.Trace != null)
+            {
+                builder.AppendText("/trace:" + settings.Trace);
+            }
+
+            if (settings.ResultsFile != null && settings.NoResults)
+            {
+                throw new ArgumentException(
+                    GetToolName() + ": You can't specify both a results file and set NoResults to true.");
+            }
+
+            if (settings.ResultsFile != null)
+            {
+                builder.AppendQuotedText(
+                    string.Format(
+                    CultureInfo.InvariantCulture,
+                    "/result:{0}", settings.ResultsFile.FullPath));
+            }
+            else if (settings.NoResults)
+            {
+                builder.AppendQuotedText("/noresult");
             }
 
             return builder;
