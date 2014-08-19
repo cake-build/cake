@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Core.Utilities;
 
 namespace Cake.Common.Tools.MSBuild
 {

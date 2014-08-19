@@ -95,8 +95,6 @@
     <Compile Include="Tools\NUnit\NUnitExtensions.cs" />
     <Compile Include="Tools\NUnit\NUnitRunner.cs" />
     <Compile Include="Tools\NUnit\NUnitSettings.cs" />
-    <Compile Include="Tools\Tool.cs" />
-    <Compile Include="Tools\ToolArgumentBuilder.cs" />
     <Compile Include="Tools\WiX\Architecture.cs" />
     <Compile Include="Tools\WiX\CandleRunner.cs" />
     <Compile Include="Tools\WiX\CandleSettings.cs" />

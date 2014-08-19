@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Cake.Core;
 
-namespace Cake.Common.Tools
+namespace Cake.Core.Utilities
 {
     /// <summary>
     /// Class used to build tool arguments.

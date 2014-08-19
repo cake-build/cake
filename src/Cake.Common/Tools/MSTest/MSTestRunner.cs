@@ -1,6 +1,7 @@
 ﻿using System;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Core.Utilities;
 
 namespace Cake.Common.Tools.MSTest
 {

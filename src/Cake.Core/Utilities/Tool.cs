@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
-using Cake.Core;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools
+namespace Cake.Core.Utilities
 {
     /// <summary>
     /// Base class for tools.
