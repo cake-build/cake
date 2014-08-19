@@ -20,7 +20,7 @@ Cake (C# Make) is a build automation system using C#.
 
 The Cake engine is pretty much done, but there are still improvements to be made. I'm still experimenting with the script API to make it as easy and intuitive as possible, so expect changes along the road.
 
-A roadmap can be found [here](https://github.com/cake-build/cake/issues/milestones).
+A roadmap can be found [here](https://github.com/cake-build/cake/milestones).
 
 ##Implemented functionality
 
@@ -42,7 +42,7 @@ This is a list of the currently implemented functionality.
 * AssemblyInfo patching
 * Release notes parser
 
-For more information and examples of how to use Cake, see the [Wiki](https://github.com/cake-build/cake/wiki). 
+For more information and examples of how to use Cake, see the [Documentation](http://cake.readthedocs.org/). 
 
 ##Example
 
