@@ -227,10 +227,10 @@ namespace Cake.Core
             }
             catch (Exception ex)
             {
-                _log.Error("An error occured in task {0}.", ex.Message);
+                _log.Error("An error occured in task {0}.", task.Name);
                 if (!task.ContinueOnError)
                 {
-                    throw;   
+                    throw;
                 }                
             }            
 

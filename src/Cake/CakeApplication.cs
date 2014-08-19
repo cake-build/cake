@@ -53,8 +53,7 @@ namespace Cake
             }
             catch (Exception ex)
             {
-                _log.Error("An unhandled exception occured.");
-                _log.Error(ex.Message);
+                _log.Error("Error: {0}", ex.Message);
                 return 1;
             }
         }
