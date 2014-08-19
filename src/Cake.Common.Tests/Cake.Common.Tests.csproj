@@ -69,6 +69,7 @@
     <Compile Include="Fixtures\MSBuildRunnerFixture.cs" />
     <Compile Include="Fixtures\NuGetFixture.cs" />
     <Compile Include="Fixtures\MSTestRunnerFixture.cs" />
+    <Compile Include="Fixtures\AliaSqlFixture.cs" />
     <Compile Include="Fixtures\NUnitRunnerFixture.cs" />
     <Compile Include="Fixtures\ProcessFixture.cs" />
     <Compile Include="Fixtures\WiXFixture.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Unit\ReleaseNotesExtensionsTests.cs" />
     <Compile Include="Unit\ReleaseNotesParserTests.cs" />
     <Compile Include="Unit\ReleaseNotesTests.cs" />
+    <Compile Include="Unit\Tools\AliaSql\AliaSqlRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeSettingsTests.cs" />
     <Compile Include="Unit\IO\ZipperTests.cs" />
