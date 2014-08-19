@@ -231,8 +231,10 @@ namespace Cake.Core
                 if (!task.ContinueOnError)
                 {
                     throw;
-                }                
-            }            
+                }
+                // Output the error if continuing as nothing happened.
+                _log.Error("Error: {0}", ex.Message);
+            }
 
             // Add the task results to the report.
             report.Add(task.Name, stopWatch.Elapsed);
