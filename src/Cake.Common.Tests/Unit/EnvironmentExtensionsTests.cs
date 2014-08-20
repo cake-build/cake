@@ -23,7 +23,7 @@ namespace Cake.Common.Tests.Unit
                 context.Environment.Returns(environment);
 
                 // When
-                EnvironmentExtensions.HasEnvVar(context, TestVariableName);
+                EnvironmentExtensions.HasEnvironmentVariable(context, TestVariableName);
 
                 // Then
                 environment.Received().GetEnvironmentVariable(TestVariableName);
@@ -43,7 +43,7 @@ namespace Cake.Common.Tests.Unit
                     context.Environment.Returns(environment);
 
                     // When
-                    var result = EnvironmentExtensions.HasEnvVar(context, TestVariableName);
+                    var result = EnvironmentExtensions.HasEnvironmentVariable(context, TestVariableName);
 
                     // Then
                     Assert.Equal(result, true);
@@ -61,7 +61,7 @@ namespace Cake.Common.Tests.Unit
                     context.Environment.Returns(environment);
 
                     // When
-                    var result = EnvironmentExtensions.HasEnvVar(context, TestVariableName);
+                    var result = EnvironmentExtensions.HasEnvironmentVariable(context, TestVariableName);
 
                     // Then
                     Assert.Equal(result, false);
@@ -79,7 +79,7 @@ namespace Cake.Common.Tests.Unit
                     context.Environment.Returns(environment);
 
                     // When
-                    var result = EnvironmentExtensions.HasEnvVar(context, TestVariableName);
+                    var result = EnvironmentExtensions.HasEnvironmentVariable(context, TestVariableName);
 
                     // Then
                     Assert.Equal(result, false);
@@ -99,7 +99,7 @@ namespace Cake.Common.Tests.Unit
                     context.Environment.Returns(environment);
 
                     // When
-                    var result = EnvironmentExtensions.GetEnvVar(context, TestVariableName);
+                    var result = EnvironmentExtensions.EnvironmentVariable(context, TestVariableName);
 
                     // Then
                     Assert.Equal(result, TestVariableValue);
@@ -117,7 +117,7 @@ namespace Cake.Common.Tests.Unit
                     context.Environment.Returns(environment);
 
                     // When
-                    var result = EnvironmentExtensions.GetEnvVar(context, TestVariableName);
+                    var result = EnvironmentExtensions.EnvironmentVariable(context, TestVariableName);
 
                     // Then
                     Assert.Equal(result, "");
