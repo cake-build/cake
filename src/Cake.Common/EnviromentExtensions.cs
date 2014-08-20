@@ -1,4 +1,6 @@
-﻿using Cake.Core;
+﻿using System;
+using System.ComponentModel;
+using Cake.Core;
 using Cake.Core.Annotations;
 
 namespace Cake.Common
@@ -18,7 +20,25 @@ namespace Cake.Common
         [CakeMethodAlias]
         public static string GetEnvVar(this ICakeContext context, string variable)
         {
+            if (context == null) throw new ArgumentNullException("context");
+            if (variable == null) throw new ArgumentNullException("variable");
+
             return context.Environment.GetEnvironmentVariable(variable);
+        }
+
+        /// <summary>
+        /// Checks for the existance of a value for a given enviroment variable.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="variable">The environment variable.</param>
+        /// <returns></returns>
+        [CakeMethodAlias]
+        public static bool HasEnvVar(this ICakeContext context, string variable)
+        {
+            if (context == null) throw new ArgumentNullException("context");
+            if (variable == null) throw new ArgumentNullException("variable");
+
+            return !string.IsNullOrWhiteSpace(context.Environment.GetEnvironmentVariable(variable));
         }
     }
 }
