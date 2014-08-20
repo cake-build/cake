@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using Cake.Core;
 using Cake.Core.Annotations;
 
@@ -18,10 +17,17 @@ namespace Cake.Common
         /// <param name="variable">The environment variable.</param>
         /// <returns></returns>
         [CakeMethodAlias]
-        public static string GetEnvVar(this ICakeContext context, string variable)
+        public static string EnvironmentVariable(this ICakeContext context, string variable)
         {
-            if (context == null) throw new ArgumentNullException("context");
-            if (variable == null) throw new ArgumentNullException("variable");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            if (variable == null)
+            {
+                throw new ArgumentNullException("variable");
+            }
 
             return context.Environment.GetEnvironmentVariable(variable);
         }
@@ -33,10 +39,17 @@ namespace Cake.Common
         /// <param name="variable">The environment variable.</param>
         /// <returns></returns>
         [CakeMethodAlias]
-        public static bool HasEnvVar(this ICakeContext context, string variable)
+        public static bool HasEnvironmentVariable(this ICakeContext context, string variable)
         {
-            if (context == null) throw new ArgumentNullException("context");
-            if (variable == null) throw new ArgumentNullException("variable");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            if (variable == null)
+            {
+                throw new ArgumentNullException("variable");
+            }
 
             return !string.IsNullOrWhiteSpace(context.Environment.GetEnvironmentVariable(variable));
         }
