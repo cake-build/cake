@@ -80,6 +80,7 @@
     </Compile>
     <Compile Include="Unit\AssemblyInfoCreatorTests.cs" />
     <Compile Include="Unit\Diagnostics\LoggingExtensionsTests.cs" />
+    <Compile Include="Unit\EnvironmentExtensionsTests.cs" />
     <Compile Include="Unit\ProcessExtensionsTests.cs" />
     <Compile Include="Unit\ReleaseNotesExtensionsTests.cs" />
     <Compile Include="Unit\ReleaseNotesParserTests.cs" />

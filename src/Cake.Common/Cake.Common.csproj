@@ -50,6 +50,7 @@
     <Compile Include="AssemblyInfoRegistration.cs" />
     <Compile Include="AssemblyInfoSettings.cs" />
     <Compile Include="Diagnostics\LoggingExtensions.cs" />
+    <Compile Include="EnviromentExtensions.cs" />
     <Compile Include="IO\DirectoryCreator.cs" />
     <Compile Include="IO\FileDeleter.cs" />
     <Compile Include="IO\FileMover.cs" />
