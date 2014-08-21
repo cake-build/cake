@@ -1,3 +1,14 @@
+### New in 0.1.18 (Released 2014/07/29)
+* Added external script loading.
+* IFile.OpenWrite will now truncate existing file.
+* Added overloads for common script alias methods.
+* Added support for running custom processes.
+* MSBuild runner now uses latest MSBuild version if not explicitly specified.
+* Moved Tool<T> to Cake.Core.
+* Ignored errors are now logged.
+* Added more NUnit settings.
+* Added environment variable script aliases.
+
 ### New in 0.1.17 (Released 2014/07/29)
 * Made non interactive mode mandatory for NuGet restore.
 * Added missing Cake.Common.xml.
