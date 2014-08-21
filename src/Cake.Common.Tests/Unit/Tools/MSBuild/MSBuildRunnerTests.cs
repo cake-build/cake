@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core;

@@ -15,7 +15,7 @@ namespace Cake.Common
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="variable">The environment variable.</param>
-        /// <returns></returns>
+        /// <returns>The environment variable or <c>null</c> if variable did not exist.</returns>
         [CakeMethodAlias]
         public static string EnvironmentVariable(this ICakeContext context, string variable)
         {
@@ -23,12 +23,10 @@ namespace Cake.Common
             {
                 throw new ArgumentNullException("context");
             }
-
             if (variable == null)
             {
                 throw new ArgumentNullException("variable");
             }
-
             return context.Environment.GetEnvironmentVariable(variable);
         }
 
@@ -37,7 +35,7 @@ namespace Cake.Common
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="variable">The environment variable.</param>
-        /// <returns></returns>
+        /// <returns><c>true</c> if environment variable exist, else <c>false</c>.</returns>
         [CakeMethodAlias]
         public static bool HasEnvironmentVariable(this ICakeContext context, string variable)
         {
@@ -45,13 +43,11 @@ namespace Cake.Common
             {
                 throw new ArgumentNullException("context");
             }
-
             if (variable == null)
             {
                 throw new ArgumentNullException("variable");
             }
-
-            return !string.IsNullOrWhiteSpace(context.Environment.GetEnvironmentVariable(variable));
+            return context.Environment.GetEnvironmentVariable(variable) != null;
         }
     }
 }
