@@ -14,7 +14,8 @@ Cake (C# Make) is a build automation system using C#.
     - [Run build script](https://github.com/cake-build/cake#3-run-build-script)
 4. [Documentation](https://github.com/cake-build/cake#documentation)
 5. [Contributing](https://github.com/cake-build/cake#contributing)
-6. [License](https://github.com/cake-build/cake#license)
+6. [External add-ons](https://github.com/cake-build/cake#external-add-ons)
+7. [License](https://github.com/cake-build/cake#license)
 
 ##Roadmap
 
@@ -147,7 +148,11 @@ Make sure you've read the [contribution guidelines](http://cake.readthedocs.org/
 * Fork the repository.
 * Make your feature addition or bug fix.
 * Don't forget the unit tests.
-* Send a pull request. Bonus for topic branches. *Funny .gif will be your reward.*
+* Send a pull request. Bonus for topic branches. *Funny .gif will be your reward.*  
+
+## External add-ons
+
+AliaSql: [https://www.nuget.org/packages/Cake.AliaSql](https://www.nuget.org/packages/Cake.AliaSql)
 
 ## License
 
@@ -157,5 +162,3 @@ Cake is provided as-is under the MIT license. For more information see `LICENSE`
 * For Roslyn, see https://roslyn.codeplex.com/license
 * For Autofac, see https://github.com/autofac/Autofac/blob/master/LICENSE
 * For NuGet.Core, see https://nuget.codeplex.com/license
-
-
