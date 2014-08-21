@@ -13,9 +13,10 @@ Cake (C# Make) is a build automation system using C#.
     - [Create build script](https://github.com/cake-build/cake#2-create-build-script)
     - [Run build script](https://github.com/cake-build/cake#3-run-build-script)
 4. [Documentation](https://github.com/cake-build/cake#documentation)
-5. [Contributing](https://github.com/cake-build/cake#contributing)
-6. [External add-ons](https://github.com/cake-build/cake#external-add-ons)
-7. [License](https://github.com/cake-build/cake#license)
+5. [Contributors](https://github.com/cake-build/cake#contributors)
+6. [Contributing](https://github.com/cake-build/cake#contributing)
+7. [External add-ons](https://github.com/cake-build/cake#external-add-ons)
+8. [License](https://github.com/cake-build/cake#license)
 
 ##Roadmap
 
@@ -138,6 +139,19 @@ C:\Project\Tools\Cake> Cake.exe ../../build.csx -verbosity=verbose -target=Pack
 ## Documentation
 
 You can read the latest documentation at [http://cake.readthedocs.org/](http://cake.readthedocs.org/).
+
+## Contributors
+
+Contributions have been accepted from:
+
+Patrik Svensson ([@patriksvensson](https://github.com/patriksvensson))   
+Mattias Karlsson ([@devlead](https://github.com/devlead))   
+Fredrik Leijon ([@FredrikL](https://github.com/FredrikL))   
+Viktor Elofsson ([@vktr](https://github.com/vktr))   
+Jeff Doolittle ([@jeffdoolittle](https://github.com/jeffdoolittle))   
+Richard Simpson ([@RichiCoder1](https://github.com/RichiCoder1))   
+
+Thank you very much!
 
 ## Contributing
 
