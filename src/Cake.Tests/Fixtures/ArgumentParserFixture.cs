@@ -16,7 +16,6 @@ namespace Cake.Tests.Fixtures
             Log = new FakeLog();
 
             FileSystem = Substitute.For<IFileSystem>();
-            FileSystem.GetFile(Arg.Any<FilePath>()).Returns((IFile) null);
         }
     }
 }

@@ -195,7 +195,7 @@ namespace Cake.Arguments
             {
                 var currentFile = new FilePath(defaultScriptNameConvention);
                 var file = _fileSystem.GetFile(currentFile);
-                if (file != null)
+                if (file != null && file.Exists)
                 {
                     _log.Verbose("Found default build script: {0}", defaultScriptNameConvention);
                     return currentFile;

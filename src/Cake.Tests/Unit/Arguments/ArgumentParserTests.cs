@@ -233,9 +233,11 @@ namespace Cake.Tests.Unit.Arguments
                 // Given
                 var fixture = new ArgumentParserFixture();
                 var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                var file = Substitute.For<IFile>();
+                file.Exists.Returns(true);
 
                 fixture.FileSystem.GetFile(Arg.Is<FilePath>(fp => fp.FullPath == scriptName))
-                    .Returns(new FakeFile(new FakeFileSystem(false), new FilePath(scriptName)));
+                    .Returns(file);
 
                 // When
                 var result = parser.Parse(new string [] {});
