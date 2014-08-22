@@ -1,4 +1,4 @@
-### New in 0.1.18 (Released 2014/07/29)
+### New in 0.1.18 (Released 2014/08/21)
 * Added external script loading.
 * IFile.OpenWrite will now truncate existing file.
 * Added overloads for common script alias methods.
