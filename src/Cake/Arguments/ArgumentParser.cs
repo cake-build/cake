@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -10,10 +12,12 @@ namespace Cake.Arguments
     internal sealed class ArgumentParser : IArgumentParser
     {
         private readonly ICakeLog _log;
+        private readonly IFileSystem _fileSystem;
 
-        public ArgumentParser(ICakeLog log)
+        public ArgumentParser(ICakeLog log, IFileSystem fileSystem)
         {
             _log = log;
+            _fileSystem = fileSystem;
         }
 
         public CakeOptions Parse(IEnumerable<string> args)
@@ -26,7 +30,24 @@ namespace Cake.Arguments
             var options = new CakeOptions();
             var isParsingOptions = false;
 
-            foreach (var arg in args)
+            var arguments = args.ToList();
+
+            // If we don't have any arguments, search for a default script.
+            if (arguments.Count == 0)
+            {
+                var defaultScriptPath = GetDefaultScript();
+                options.Script = defaultScriptPath;
+
+                if (defaultScriptPath == null)
+                {
+                    _log.Error("Couldn't find build script.\n" + 
+                        "Either the first argument must the build script's path, " +
+                        "or build script should follow default script name conventions.");
+                }
+                return options;
+            }
+
+            foreach (var arg in arguments)
             {
                 var value = arg.UnQuote();
 
@@ -49,10 +70,20 @@ namespace Cake.Arguments
                 {
                     try
                     {
+                        // If they didn't provide a specific build script, search for a defualt.
                         if (IsOption(arg))
                         {
-                            _log.Error("First argument must be the build script.");
-                            return null;
+                            var defaultScriptPath = GetDefaultScript();
+                            if (defaultScriptPath == null)
+                            {
+                                _log.Error("Couldn't find build script.\n" +
+                                    "Either the first argument must the build script's path, " +
+                                    "or build script should follow default script name conventions.");
+                                return null;
+                            }
+
+                            options.Script = defaultScriptPath;
+                            continue;
                         }
 
                         // Quoted?
@@ -145,6 +176,32 @@ namespace Cake.Arguments
 
             options.Arguments.Add(name, value);
             return true;
+        }
+
+        private readonly string[] _defaultScriptNameConventions =
+        {
+            "build.cake",
+            "default.cake",
+            "bake.cake",
+            ".cakefile"
+        };
+
+        private FilePath GetDefaultScript()
+        {
+            _log.Verbose("Searching for default build script...");
+
+            // Search for default cake scripts in order
+            foreach (var defaultScriptNameConvention in _defaultScriptNameConventions)
+            {
+                var currentFile = new FilePath(defaultScriptNameConvention);
+                var file = _fileSystem.GetFile(currentFile);
+                if (file != null && file.Exists)
+                {
+                    _log.Verbose("Found default build script: {0}", defaultScriptNameConvention);
+                    return currentFile;
+                }
+            }
+            return null;
         }
     }
 }

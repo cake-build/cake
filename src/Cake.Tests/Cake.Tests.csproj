@@ -70,6 +70,7 @@
     </Compile>
     <Compile Include="Fakes\FakeConsole.cs" />
     <Compile Include="Fakes\FakeLog.cs" />
+    <Compile Include="Fixtures\ArgumentParserFixture.cs" />
     <Compile Include="Fixtures\CakeApplicationFixture.cs" />
     <Compile Include="Fixtures\ScriptRunnerFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
