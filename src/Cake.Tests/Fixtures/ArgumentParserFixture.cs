@@ -1,5 +1,4 @@
-﻿using Cake.Core.Diagnostics;
-using Cake.Core.IO;
+﻿using Cake.Core.IO;
 using Cake.Tests.Fakes;
 using NSubstitute;
 
