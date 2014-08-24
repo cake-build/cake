@@ -1,5 +1,5 @@
 ﻿using Cake.Core.IO;
-using Cake.Tests.Fakes;
+using Cake.Core.Tests.Fakes;
 using NSubstitute;
 
 namespace Cake.Tests.Fixtures

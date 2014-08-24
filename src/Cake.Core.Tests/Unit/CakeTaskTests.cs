@@ -97,5 +97,50 @@ namespace Cake.Core.Tests.Unit
                 Assert.Equal(1, task.Criterias.Count);
             }
         }
+
+        public sealed class TheSetErrorHandlerMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Error_Handler_Is_Null()
+            {
+                // Given
+                var task = new ActionTask("task");
+
+                // When
+                var exception = Record.Exception(() => task.SetErrorHandler(null));
+
+                // Then
+                Assert.IsType<ArgumentNullException>(exception);
+                Assert.Equal("errorHandler", ((ArgumentNullException)exception).ParamName);
+            }
+
+            [Fact]
+            public void Should_Set_Error_Handler()
+            {
+                // Given
+                var task = new ActionTask("task");
+
+                // When
+                task.SetErrorHandler(e => { });
+
+                // Then
+                Assert.NotNull(task.ErrorHandler);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Setting_More_Than_One_Error_Handler()
+            {
+                // Given
+                var task = new ActionTask("task");
+                task.SetErrorHandler(e => { });
+
+                // When
+                var result = Record.Exception(() => task.SetErrorHandler(e => { }));
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("There can only be one error handler per task.", result.Message);
+            }
+        }
     }
 }

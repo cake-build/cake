@@ -1,5 +1,5 @@
-﻿using Cake.Core.Diagnostics;
-using Cake.Core.IO;
+﻿using Cake.Core.IO;
+using Cake.Core.Tests.Fakes;
 using NSubstitute;
 
 namespace Cake.Core.Tests.Fixtures
@@ -8,7 +8,7 @@ namespace Cake.Core.Tests.Fixtures
     {
         public IFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
-        public ICakeLog Log { get; set; }
+        public FakeLog Log { get; set; }
         public IGlobber Globber { get; set; }
         public ICakeArguments Arguments { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
@@ -17,7 +17,7 @@ namespace Cake.Core.Tests.Fixtures
         {
             FileSystem = Substitute.For<IFileSystem>();
             Environment = Substitute.For<ICakeEnvironment>();
-            Log = Substitute.For<ICakeLog>();
+            Log = new FakeLog();
             Globber = Substitute.For<IGlobber>();
             Arguments = Substitute.For<ICakeArguments>();
             ProcessRunner = Substitute.For<IProcessRunner>();
