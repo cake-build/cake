@@ -94,7 +94,7 @@ namespace Cake.Core
         /// <param name="arguments">The arguments.</param>
         /// <param name="globber">The globber.</param>
         /// <param name="processRunner">The process runner.</param>
-        public CakeEngine(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log, 
+        public CakeEngine(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log,
             ICakeArguments arguments, IGlobber globber, IProcessRunner processRunner)
         {
             if (fileSystem == null)
@@ -123,7 +123,7 @@ namespace Cake.Core
             }
             _fileSystem = fileSystem;
             _environment = environment;
-            _log = log;            
+            _log = log;
             _arguments = arguments;
             _globber = globber;
             _processRunner = processRunner;
@@ -219,21 +219,41 @@ namespace Cake.Core
             // Reset the stop watch.
             stopWatch.Reset();
             stopWatch.Start();
-            
+
             try
             {
                 // Execute the task.
                 task.Execute(this);
             }
-            catch (Exception ex)
+            catch (Exception taskException)
             {
-                _log.Error("An error occured in task {0}.", task.Name);
-                if (!task.ContinueOnError)
+                _log.Error("An error occured when executing task.", task.Name);
+
+                // Got an error handler?
+                if (task.ErrorHandler != null)
                 {
+                    try
+                    {
+                        // Let the error handler handle the exception.
+                        task.ErrorHandler(taskException);
+                    }
+                    catch (Exception errorHandlerException)
+                    {
+                        if (errorHandlerException != taskException)
+                        {
+                            // Log the original error.
+                            _log.Error("Error: {0}", taskException.Message);                            
+                        }
+                        // Rethrow the exception and let it propagate.
+                        throw;
+                    }
+                }
+                else
+                {
+                    // No error handler defined for this task.
+                    // Rethrow the exception and let it propagate.
                     throw;
                 }
-                // Output the error if continuing as nothing happened.
-                _log.Error("Error: {0}", ex.Message);
             }
 
             // Add the task results to the report.

@@ -48,13 +48,10 @@ namespace Cake.Core
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the task should recover 
-        /// from errors such as thrown exceptions.
+        /// Gets the error handler.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if the task should recover from errors; otherwise, <c>false</c>.
-        /// </value>
-        public bool ContinueOnError { get; set; }
+        /// <value>The error handler.</value>
+        public Action<Exception> ErrorHandler { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeTask"/> class.
@@ -102,6 +99,24 @@ namespace Cake.Core
                 throw new ArgumentNullException("criteria");
             }
             _criterias.Add(criteria);
+        }
+
+        /// <summary>
+        /// Sets the error handler for the task.
+        /// The error handler is invoked when an exception is thrown from the task.
+        /// </summary>
+        /// <param name="errorHandler">The error handler.</param>
+        public void SetErrorHandler(Action<Exception> errorHandler)
+        {
+            if (errorHandler == null)
+            {
+                throw new ArgumentNullException("errorHandler");
+            }
+            if (ErrorHandler != null)
+            {
+                throw new CakeException("There can only be one error handler per task.");
+            }
+            ErrorHandler = errorHandler;
         }
 
         /// <summary>

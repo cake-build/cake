@@ -3,7 +3,6 @@ using Cake.Arguments;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tests.Fakes;
-using Cake.Tests.Fakes;
 using Cake.Tests.Fixtures;
 using NSubstitute;
 using Xunit;

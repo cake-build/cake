@@ -125,7 +125,7 @@ namespace Cake.Core.Tests.Unit
                 builder.ContinueOnError();
 
                 // Then
-                Assert.True(builder.Task.ContinueOnError);
+                Assert.NotNull(builder.Task.ErrorHandler);
             }
         }
     }
