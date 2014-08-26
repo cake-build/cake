@@ -47,6 +47,8 @@
   <ItemGroup>
     <Compile Include="AssemblyInfoCreator.cs" />
     <Compile Include="AssemblyInfoExtensions.cs" />
+    <Compile Include="AssemblyInfoParser.cs" />
+    <Compile Include="AssemblyInfoParseResult.cs" />
     <Compile Include="AssemblyInfoRegistration.cs" />
     <Compile Include="AssemblyInfoSettings.cs" />
     <Compile Include="Diagnostics\LoggingExtensions.cs" />

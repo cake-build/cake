@@ -1,7 +1,9 @@
 ﻿using System;
 using Cake.Arguments;
 using Cake.Core.Diagnostics;
-using Cake.Tests.Fakes;
+using Cake.Core.IO;
+using Cake.Core.Tests.Fakes;
+using Cake.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
 using Xunit.Extensions;
@@ -16,8 +18,8 @@ namespace Cake.Tests.Unit.Arguments
             public void Should_Throw_If_Arguments_Are_Null()
             {
                 // Given
-                var log = Substitute.For<ICakeLog>();
-                var parser = new ArgumentParser(log);
+                var fixture = new ArgumentParserFixture();
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
 
                 // When
                 var result = Record.Exception(() => parser.Parse(null));
@@ -31,8 +33,8 @@ namespace Cake.Tests.Unit.Arguments
             public void Can_Parse_Empty_Parameters()
             {
                 // Given
-                var log = Substitute.For<ICakeLog>();
-                var parser = new ArgumentParser(log);
+                var fixture = new ArgumentParserFixture();
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
 
                 // When
                 var result = parser.Parse(new string[] { });
@@ -42,11 +44,29 @@ namespace Cake.Tests.Unit.Arguments
             }
 
             [Fact]
+            public void Should_Log_Error_On_Empty_Parameters()
+            {
+                // Given
+                var fixture = new ArgumentParserFixture();
+                var log = Substitute.For<ICakeLog>();
+                var parser = new ArgumentParser(log, fixture.FileSystem);
+
+                // When
+                var result = parser.Parse(new string[] { });
+
+                // Then
+                Assert.NotNull(result);
+                log.Received().Error("Couldn't find build script.\n" +
+                        "Either the first argument must the build script's path, " +
+                        "or build script should follow default script name conventions.");
+            }
+
+            [Fact]
             public void Should_Add_Unknown_Arguments_To_Argument_List()
             {
                 // Given
-                var log = new FakeLog();
-                var parser = new ArgumentParser(log);
+                var fixture = new ArgumentParserFixture();
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
 
                 // When
                 var result = parser.Parse(new[] { "build.csx", "-unknown" });
@@ -59,15 +79,15 @@ namespace Cake.Tests.Unit.Arguments
             public void Should_Return_Error_If_Multiple_Arguments_With_The_Same_Name_Exist()
             {
                 // Given
-                var log = new FakeLog();
-                var parser = new ArgumentParser(log);
+                var fixture = new ArgumentParserFixture {Log = new FakeLog()};
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
 
                 // When
                 var result = parser.Parse(new[] { "build.csx", "-unknown", "-unknown" });
 
                 // Then
                 Assert.Null(result);
-                Assert.True(log.Messages.Contains("Multiple arguments with the same name (unknown)."));
+                Assert.True(fixture.Log.Messages.Contains("Multiple arguments with the same name (unknown)."));
             }
 
             [Theory]
@@ -94,8 +114,8 @@ namespace Cake.Tests.Unit.Arguments
             public void Can_Parse_Verbosity(string input, Verbosity value)
             {
                 // Given
-                var log = Substitute.For<ICakeLog>();
-                var parser = new ArgumentParser(log);
+                var fixture = new ArgumentParserFixture();
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
 
                 // When
                 var result = parser.Parse(new[] { "build.csx", input });
@@ -110,8 +130,8 @@ namespace Cake.Tests.Unit.Arguments
             public void Can_Parse_Script(string input)
             {
                 // Given
-                var log = Substitute.For<ICakeLog>();
-                var parser = new ArgumentParser(log);
+                var fixture = new ArgumentParserFixture();
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
                 var arguments = input.Split(new[] { ' ' }, StringSplitOptions.None);
 
                 // When
@@ -126,15 +146,15 @@ namespace Cake.Tests.Unit.Arguments
             public void Should_Throw_If_Multiple_Build_Configurations_Are_Provided()
             {
                 // Given
-                var log = new FakeLog();
-                var parser = new ArgumentParser(log);
+                var fixture = new ArgumentParserFixture { Log = new FakeLog() };
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
                 var arguments = new[] { "build1.config", "build2.config" };
 
                 // When
                 parser.Parse(arguments);
 
                 // Then
-                Assert.Equal("More than one build script specified.", log.Messages[0]);
+                Assert.Equal("More than one build script specified.", fixture.Log.Messages[0]);
             }
 
             [Theory]
@@ -143,8 +163,8 @@ namespace Cake.Tests.Unit.Arguments
             public void Can_Parse_Script_With_Unix_Path(string input)
             {
                 // Given
-                var log = Substitute.For<ICakeLog>();
-                var parser = new ArgumentParser(log);
+                var fixture = new ArgumentParserFixture();
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
                 var arguments = input.Split(new[] { ' ' }, StringSplitOptions.None);
 
                 // When
@@ -162,8 +182,8 @@ namespace Cake.Tests.Unit.Arguments
             public void Can_Parse_ShowDescription(string input)
             {
                 // Given
-                var log = Substitute.For<ICakeLog>();
-                var parser = new ArgumentParser(log);
+                var fixture = new ArgumentParserFixture();
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
 
                 // When
                 var result = parser.Parse(new[] { "build.csx", input });
@@ -178,8 +198,8 @@ namespace Cake.Tests.Unit.Arguments
             public void Can_Parse_Help(string input)
             {
                 // Given
-                var log = Substitute.For<ICakeLog>();
-                var parser = new ArgumentParser(log);
+                var fixture = new ArgumentParserFixture();
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
 
                 // When
                 var result = parser.Parse(new[] { "build.csx", input });
@@ -194,14 +214,35 @@ namespace Cake.Tests.Unit.Arguments
             public void Can_Parse_Version(string input)
             {
                 // Given
-                var log = Substitute.For<ICakeLog>();
-                var parser = new ArgumentParser(log);
+                var fixture = new ArgumentParserFixture();
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
 
                 // When
                 var result = parser.Parse(new[] { "build.csx", input });
 
                 // Then
                 Assert.Equal(true, result.ShowVersion);
+            }
+
+            [Theory]
+            [InlineData(".cakefile")]
+            [InlineData("build.cake")]
+            public void Can_Find_Default_Scripts(string scriptName)
+            {
+                // Given
+                var fixture = new ArgumentParserFixture();
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                var file = Substitute.For<IFile>();
+                file.Exists.Returns(true);
+
+                fixture.FileSystem.GetFile(Arg.Is<FilePath>(fp => fp.FullPath == scriptName))
+                    .Returns(file);
+
+                // When
+                var result = parser.Parse(new string [] {});
+
+                // Then
+                Assert.NotNull(result.Script);
             }
         }
     }

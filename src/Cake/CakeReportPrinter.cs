@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using Cake.Core;
 
 namespace Cake
@@ -23,21 +24,37 @@ namespace Cake
             try
             {
                 _console.ForegroundColor = ConsoleColor.Green;
+
+                // Write header.
                 _console.WriteLine();
                 _console.WriteLine("{0,-30}{1,-20}", "Task", "Duration");
                 _console.WriteLine(new string('-', 50));
 
+                // Write task status.
                 foreach (var item in report)
                 {
-                    var name = item.Key;
-                    var time = item.Value.ToString("c", CultureInfo.InvariantCulture);
-                    _console.WriteLine("{0,-30}{1,-20}", name, time);
+                    _console.WriteLine("{0,-30}{1,-20}", item.TaskName, FormatTime(item.Duration));
                 }
+
+                // Write footer.
+                _console.WriteLine(new string('-', 50));
+                _console.WriteLine("{0,-30}{1,-20}", "Total:", FormatTime(GetTotalTime(report)));
             }
             finally
             {
                 _console.ResetColor();
             }
+        }
+
+        private static string FormatTime(TimeSpan time)
+        {
+            return time.ToString("c", CultureInfo.InvariantCulture);
+        }
+
+        private static TimeSpan GetTotalTime(CakeReport report)
+        {
+            return report.Select(i => i.Duration)
+                .Aggregate(TimeSpan.Zero, (t1, t2) => t1 + t2);
         }
     }
 }

@@ -7,9 +7,9 @@ namespace Cake.Core
     /// <summary>
     /// Contains information about tasks that were executed in a script.
     /// </summary>
-    public sealed class CakeReport : IEnumerable<KeyValuePair<string, TimeSpan>>
+    public sealed class CakeReport : IEnumerable<CakeReportEntry>
     {
-        private readonly IDictionary<string, TimeSpan> _report;
+        private readonly List<CakeReportEntry> _report;
 
         /// <summary>
         /// Gets a value indicating whether the report is empty.
@@ -27,7 +27,7 @@ namespace Cake.Core
         /// </summary>
         public CakeReport()
         {
-            _report = new Dictionary<string, TimeSpan>(StringComparer.OrdinalIgnoreCase);
+            _report = new List<CakeReportEntry>();
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Cake.Core
         /// <param name="span">The span.</param>
         public void Add(string task, TimeSpan span)
         {
-            _report.Add(task, span);
+            _report.Add(new CakeReportEntry(task, span));
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Cake.Core
         /// <returns>
         /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
         /// </returns>
-        public IEnumerator<KeyValuePair<string, TimeSpan>> GetEnumerator()
+        public IEnumerator<CakeReportEntry> GetEnumerator()
         {
             return _report.GetEnumerator();
         }

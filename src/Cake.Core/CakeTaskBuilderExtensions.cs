@@ -99,22 +99,6 @@ namespace Cake.Core
         }
 
         /// <summary>
-        /// Adds an indication to the task that a thrown exception will not halt the script execution.
-        /// </summary>
-        /// <param name="builder">The task builder.</param>
-        /// <returns>The same <see cref="CakeTaskBuilder{ActionTask}"/> instance so that multiple calls can be chained.</returns>
-        public static CakeTaskBuilder<ActionTask> ContinueOnError(this CakeTaskBuilder<ActionTask> builder)
-        {
-            if (builder == null)
-            {
-                throw new ArgumentNullException("builder");
-            }
-
-            builder.Task.ContinueOnError = true;
-            return builder;
-        }
-
-        /// <summary>
         /// Adds a description to the task.
         /// </summary>
         /// <typeparam name="T">The task type.</typeparam>
@@ -133,5 +117,46 @@ namespace Cake.Core
             return builder;
         }
 
+        /// <summary>
+        /// Adds an indication to the task that a thrown exception will not halt the script execution.
+        /// </summary>
+        /// <param name="builder">The task builder.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{ActionTask}"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder<ActionTask> ContinueOnError(this CakeTaskBuilder<ActionTask> builder)
+        {
+            return OnError(builder, () => { });
+        }
+
+        /// <summary>
+        /// Adds an error handler to be executed if an exception occurs in the task.
+        /// </summary>
+        /// <typeparam name="T">The task type.</typeparam>
+        /// <param name="builder">The builder.</param>
+        /// <param name="errorHandler">The error handler.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{T}"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder<T> OnError<T>(this CakeTaskBuilder<T> builder, Action errorHandler)
+            where T : CakeTask
+        {
+            return OnError(builder, exception => errorHandler());
+        }
+
+        /// <summary>
+        /// Adds an error handler to be executed if an exception occurs in the task.
+        /// </summary>
+        /// <typeparam name="T">The task type.</typeparam>
+        /// <param name="builder">The builder.</param>
+        /// <param name="errorHandler">The error handler.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{T}"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder<T> OnError<T>(this CakeTaskBuilder<T> builder, Action<Exception> errorHandler)
+            where T : CakeTask
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException("builder");
+            }
+
+            builder.Task.SetErrorHandler(errorHandler);
+            return builder;
+        }
     }
 }

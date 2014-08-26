@@ -53,6 +53,7 @@
     <Compile Include="CakeException.cs" />
     <Compile Include="CakeReport.cs" />
     <Compile Include="Annotations\CakeMethodAliasAttribute.cs" />
+    <Compile Include="CakeReportEntry.cs" />
     <Compile Include="CakeTask.cs" />
     <Compile Include="CakeTaskBuilder.cs" />
     <Compile Include="CakeTaskBuilderExtensions.cs" />

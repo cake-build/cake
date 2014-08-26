@@ -68,8 +68,11 @@
     <Compile Include="..\Cake.Core.Tests\Fakes\FakeFileSystem.cs">
       <Link>Fakes\FakeFileSystem.cs</Link>
     </Compile>
+    <Compile Include="..\Cake.Core.Tests\Fakes\FakeLog.cs">
+      <Link>Fakes\FakeLog.cs</Link>
+    </Compile>
     <Compile Include="Fakes\FakeConsole.cs" />
-    <Compile Include="Fakes\FakeLog.cs" />
+    <Compile Include="Fixtures\ArgumentParserFixture.cs" />
     <Compile Include="Fixtures\CakeApplicationFixture.cs" />
     <Compile Include="Fixtures\ScriptRunnerFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

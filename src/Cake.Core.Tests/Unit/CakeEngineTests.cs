@@ -244,7 +244,7 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
-            public void Should_Not_Catch_Exceptions_From_Task_If_Not_Explicitly_Told_So()
+            public void Should_Not_Catch_Exceptions_From_Task_If_ContinueOnError_Is_Not_Set()
             {
                 // Given
                 var engine = new CakeEngineFixture().CreateEngine();
@@ -259,14 +259,65 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
-            public void Should_Catch_Exceptions_If_Explicitly_Told_So()
+            public void Should_Swallow_Exceptions_If_ContinueOnError_Is_Set()
             {
                 // Given
-                var engine = new CakeEngineFixture().CreateEngine();                
+                var engine = new CakeEngineFixture().CreateEngine();
                 engine.Task("A").ContinueOnError().Does(() => { throw new InvalidOperationException(); });
 
                 // When, Then
                 engine.RunTarget("A");
+            }
+
+            [Fact]
+            public void Should_Invoke_Task_Error_Handler_If_Exception_Is_Thrown()
+            {
+                // Given
+                var invoked = false;
+                var engine = new CakeEngineFixture().CreateEngine();
+                engine.Task("A")
+                    .Does(() => { throw new InvalidOperationException("Whoopsie"); })
+                    .OnError(exception => { invoked = true; });
+
+                // When
+                Record.Exception(() => engine.RunTarget("A"));
+
+                // Then
+                Assert.True(invoked);
+            }
+
+            [Fact]
+            public void Should_Propagate_Exception_From_Error_Handler()
+            {
+                // Given
+                var engine = new CakeEngineFixture().CreateEngine();
+                engine.Task("A")
+                    .Does(() => { throw new InvalidOperationException("Whoopsie"); })
+                    .OnError(exception => { throw new InvalidOperationException("Totally my fault"); });
+
+                // When
+                var result = Record.Exception(() => engine.RunTarget("A"));
+
+                // Then
+                Assert.IsType<InvalidOperationException>(result);
+                Assert.Equal("Totally my fault", result.Message);
+            }
+
+            [Fact]
+            public void Should_Log_Exception_Handled_By_Error_Handler()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.Task("A")
+                    .Does(() => { throw new InvalidOperationException("Whoopsie"); })
+                    .OnError(exception => { throw new InvalidOperationException("Totally my fault"); });
+
+                // When
+                Record.Exception(() => engine.RunTarget("A"));
+
+                // Then
+                Assert.True(fixture.Log.Messages.Contains("Error: Whoopsie"));
             }
         }
     }

@@ -112,10 +112,27 @@ namespace Cake.Core.Tests.Unit
             }
         }
 
+        public sealed class TheOnErrorMethod
+        {
+            [Fact]
+            public void Should_Set_The_Error_Handler()
+            {
+                // Given
+                var task = new ActionTask("task");
+                var builder = new CakeTaskBuilder<ActionTask>(task);
+
+                // When
+                builder.OnError(exception => { });
+
+                // Then
+                Assert.NotNull(builder.Task.ErrorHandler);
+            }
+        }
+
         public sealed class TheContinueOnErrorMethod
         {
             [Fact]
-            public void Should_Set_The_Property()
+            public void Should_Set_The_Error_Handler()
             {
                 // Given
                 var task = new ActionTask("task");
@@ -125,7 +142,7 @@ namespace Cake.Core.Tests.Unit
                 builder.ContinueOnError();
 
                 // Then
-                Assert.True(builder.Task.ContinueOnError);
+                Assert.NotNull(builder.Task.ErrorHandler);
             }
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Cake.Core.Diagnostics;
 
-namespace Cake.Tests.Fakes
+namespace Cake.Core.Tests.Fakes
 {
     public sealed class FakeLog : ICakeLog
     {

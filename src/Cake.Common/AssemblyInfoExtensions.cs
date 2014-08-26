@@ -28,5 +28,23 @@ namespace Cake.Common
             var creator = new AssemblyInfoCreator(context.FileSystem, context.Environment, context.Log);
             creator.Create(outputPath, settings);
         }
+
+        /// <summary>
+        /// Parses an assembly information.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="assemblyInfoPath">The assembly info path.</param>
+        /// <returns>The content of the assembly info file.</returns>
+        [CakeMethodAlias]
+        public static AssemblyInfoParseResult ParseAssemblyInfo(this ICakeContext context, FilePath assemblyInfoPath)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var parser = new AssemblyInfoParser(context.FileSystem, context.Environment);
+            return parser.Parse(assemblyInfoPath);
+        }
     }
 }
