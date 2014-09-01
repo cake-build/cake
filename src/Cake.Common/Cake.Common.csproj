@@ -98,6 +98,10 @@
     <Compile Include="Tools\NUnit\NUnitExtensions.cs" />
     <Compile Include="Tools\NUnit\NUnitRunner.cs" />
     <Compile Include="Tools\NUnit\NUnitSettings.cs" />
+    <Compile Include="Tools\SignTool\SignToolResolver.cs" />
+    <Compile Include="Tools\SignTool\Sign\SignToolSignExtensions.cs" />
+    <Compile Include="Tools\SignTool\Sign\SignToolSignRunner.cs" />
+    <Compile Include="Tools\SignTool\Sign\SignToolSignSettings.cs" />
     <Compile Include="Tools\WiX\Architecture.cs" />
     <Compile Include="Tools\WiX\CandleRunner.cs" />
     <Compile Include="Tools\WiX\CandleSettings.cs" />
@@ -118,6 +122,7 @@
       <Name>Cake.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
