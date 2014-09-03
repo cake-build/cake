@@ -1,3 +1,14 @@
+### New in 0.1.19 (Released 2014/09/03)
+* Added default file convention recognizer.
+* Added assembly info parser.
+* Added error handling.
+* Added total duration to task report.
+* Added Sign extension for assembly certificate signing.
+* Changed the way processes are started.
+* Now outputs full stack trace in diagnostic mode.
+* Fixed issue with relative paths in tools.
+* Added xUnit silent flag.
+
 ### New in 0.1.18 (Released 2014/08/21)
 * Added external script loading.
 * IFile.OpenWrite will now truncate existing file.
