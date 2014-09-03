@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Cake.Core.IO.Arguments;
 
 namespace Cake.Core.IO
 {
@@ -45,6 +46,28 @@ namespace Cake.Core.IO
         public string RenderSafe()
         {
             return string.Join(" ", _tokens.Select(t => t.RenderSafe()));
+        }
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="System.String"/> to <see cref="ProcessArgumentBuilder"/>.
+        /// </summary>
+        /// <param name="value">The text value to convert.</param>
+        /// <returns>A <see cref="FilePath"/>.</returns>
+        public static implicit operator ProcessArgumentBuilder(string value)
+        {
+            return FromString(value);
+        }
+
+        /// <summary>
+        /// Performs a conversion from <see cref="System.String"/> to <see cref="ProcessArgumentBuilder"/>.
+        /// </summary>
+        /// <param name="value">The text value to convert.</param>
+        /// <returns>A <see cref="FilePath"/>.</returns>
+        public static ProcessArgumentBuilder FromString(string value)
+        {
+            var builder = new ProcessArgumentBuilder();
+            builder.Append(new TextArgument(value));
+            return builder;
         }
     }
 }
