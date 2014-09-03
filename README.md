@@ -37,6 +37,7 @@ This is a list of the currently implemented functionality.
 * NuGet restore
 * ILMerge
 * WiX (Candle and Light)
+* SignTool
 * File copying/moving/deleting
 * Directory creation/cleaning/deleting
 * File/Directory globbing
