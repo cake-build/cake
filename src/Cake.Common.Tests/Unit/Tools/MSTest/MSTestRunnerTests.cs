@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.MSTest;
 using Cake.Core;
@@ -73,8 +72,9 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             });
 
             // Then
-            fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                p => p.FileName == expected));
+            fixture.ProcessRunner.Received(1).Start(
+                Arg.Is<FilePath>(p => p.FullPath == expected),
+                Arg.Any<ProcessSettings>());
         }
 
         [Theory]
@@ -92,8 +92,10 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             runner.Run("Test1.dll", new MSTestSettings());
 
             // Then
-            fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                p => p.FileName == existingToolPath));
+            fixture.ProcessRunner.Received(1).Start(
+                Arg.Is<FilePath>(p => p.FullPath == existingToolPath),
+                Arg.Any<ProcessSettings>());
+
         }
 
         [Fact]
@@ -107,8 +109,9 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             runner.Run("./Test1.dll", new MSTestSettings());
 
             // Then
-            fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                p => p.WorkingDirectory == "/Working"));
+            fixture.ProcessRunner.Received(1).Start(
+                Arg.Any<FilePath>(),Arg.Is<ProcessSettings>(p => 
+                    p.WorkingDirectory.FullPath == "/Working"));
         }
 
         [Fact]
@@ -116,7 +119,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         {
             // Given
             var fixture = new MSTestRunnerFixture();
-            fixture.ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns((IProcess)null);
+            fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
             var runner = fixture.CreateRunner();
 
             // When
@@ -154,8 +157,10 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             runner.Run("./Test1.dll", new MSTestSettings());
 
             // Then
-            fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                p => p.Arguments == "\"/testcontainer:/Working/Test1.dll\" \"/noisolation\""));
+            fixture.ProcessRunner.Received(1).Start(
+                Arg.Any<FilePath>(), 
+                Arg.Is<ProcessSettings>(p => 
+                    p.Arguments.Render() == "\"/testcontainer:/Working/Test1.dll\" \"/noisolation\""));
         }
 
         [Fact]
@@ -172,8 +177,10 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             });
 
             // Then
-            fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                p => p.Arguments == "\"/testcontainer:/Working/Test1.dll\""));
+            fixture.ProcessRunner.Received(1).Start(
+                Arg.Any<FilePath>(), 
+                Arg.Is<ProcessSettings>(p => 
+                    p.Arguments.Render() == "\"/testcontainer:/Working/Test1.dll\""));
         }
     }
 }

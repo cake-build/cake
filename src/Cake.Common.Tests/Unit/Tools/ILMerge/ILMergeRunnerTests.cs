@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.ILMerge;
@@ -88,8 +87,9 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.FileName == expected));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == expected),
+                    Arg.Any<ProcessSettings>());
             }
 
             [Fact]
@@ -102,8 +102,9 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.FileName == "/Working/tools/ILMerge.exe"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/ILMerge.exe"),
+                    Arg.Any<ProcessSettings>());
             }
 
             [Fact]
@@ -118,8 +119,10 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "/out:\"/Working/output.exe\" \"/Working/input.exe\" \"/Working/C.dll\" \"/Working/D.dll\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "/out:\"/Working/output.exe\" \"/Working/input.exe\" \"/Working/C.dll\" \"/Working/D.dll\""));
             }
 
             [Fact]
@@ -132,8 +135,10 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.WorkingDirectory == "/Working"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p => 
+                        p.WorkingDirectory.FullPath == "/Working"));
             }
 
             [Fact]
@@ -141,7 +146,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
             {
                 // Given
                 var fixture = new ILMergeRunnerFixture();
-                fixture.ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns((IProcess)null);
+                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
@@ -177,8 +182,10 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "/out:\"/Working/output.exe\" /internalize \"/Working/input.exe\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "/out:\"/Working/output.exe\" /internalize \"/Working/input.exe\""));
             }
 
             [Theory]
@@ -196,8 +203,10 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == expected));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == expected));
             }
         }
     }

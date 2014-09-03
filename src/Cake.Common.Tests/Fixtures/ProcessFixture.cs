@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Cake.Core;
+﻿using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
 
@@ -20,7 +19,7 @@ namespace Cake.Common.Tests.Fixtures
             Process = Substitute.For<IProcess>();
 
             ProcessRunner = Substitute.For<IProcessRunner>();
-            ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns(p => Process);
+            ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns(p => Process);
 
             Context = Substitute.For<ICakeContext>();
             Context.ProcessRunner.Returns(ProcessRunner);

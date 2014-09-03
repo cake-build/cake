@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using Cake.Core.IO;
 
@@ -32,7 +31,7 @@ namespace Cake.Core.Utilities
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="arguments">The arguments.</param>
-        protected void Run(T settings, ToolArgumentBuilder arguments)
+        protected void Run(T settings, ProcessArgumentBuilder arguments)
         {
             Run(settings, arguments, null);
         }
@@ -43,7 +42,7 @@ namespace Cake.Core.Utilities
         /// <param name="settings">The settings.</param>
         /// <param name="arguments">The arguments.</param>
         /// <param name="toolPath">The tool path to use.</param> 
-        protected void Run(T settings, ToolArgumentBuilder arguments, FilePath toolPath)
+        protected void Run(T settings, ProcessArgumentBuilder arguments, FilePath toolPath)
         {
             if (arguments == null)
             {
@@ -70,15 +69,14 @@ namespace Cake.Core.Utilities
             }
 
             // Create the process start info.
-            var info = new ProcessStartInfo(toolPath.FullPath)
+            var info = new ProcessSettings
             {
                 WorkingDirectory = workingDirectory.MakeAbsolute(_environment).FullPath,
-                Arguments = arguments.Render(),
-                UseShellExecute = false
+                Arguments = arguments
             };
 
             // Run the process.
-            var process = _processRunner.Start(info);
+            var process = _processRunner.Start(toolPath, info);
             if (process == null)
             {
                 const string message = "{0}: Process was not started.";

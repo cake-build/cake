@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using Cake.Common.Tests.Fixtures;
 using Cake.Core;
 using Cake.Core.IO;
@@ -54,8 +53,9 @@ namespace Cake.Common.Tests.Unit
                     fixture.Start("hello.exe");
 
                     // Then
-                    fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(info =>
-                        info.WorkingDirectory == "/Working"));
+                    fixture.ProcessRunner.Received(1).Start(
+                        Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(info =>
+                            info.WorkingDirectory.FullPath == "/Working"));
                 }
 
                 [Fact]
@@ -63,7 +63,7 @@ namespace Cake.Common.Tests.Unit
                 {
                     // Given
                     var fixture = new ProcessFixture();
-                    fixture.ProcessRunner.Start(Arg.Any<ProcessStartInfo>())
+                    fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>())
                         .Returns((IProcess)null);
 
                     // When
@@ -151,8 +151,10 @@ namespace Cake.Common.Tests.Unit
                     fixture.Start(fileName, settings);
 
                     // Then
-                    fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(info =>
-                        info.WorkingDirectory == "/Working"));
+                    fixture.ProcessRunner.Received(1).Start(
+                        Arg.Any<FilePath>(), 
+                        Arg.Is<ProcessSettings>(info => 
+                            info.WorkingDirectory.FullPath == "/Working"));
                 }
 
                 [Fact]
@@ -168,8 +170,10 @@ namespace Cake.Common.Tests.Unit
                     fixture.Start(fileName, settings);
 
                     // Then
-                    fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(info =>
-                        info.WorkingDirectory == "/OtherWorking"));
+                    fixture.ProcessRunner.Received(1).Start(
+                        Arg.Any<FilePath>(), 
+                        Arg.Is<ProcessSettings>(info =>
+                            info.WorkingDirectory.FullPath == "/OtherWorking"));
                 }
 
                 [Fact]
@@ -185,8 +189,10 @@ namespace Cake.Common.Tests.Unit
                     fixture.Start(fileName, settings);
 
                     // Then
-                    fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(info =>
-                        info.WorkingDirectory == "/Working/OtherWorking"));
+                    fixture.ProcessRunner.Received(1).Start(
+                        Arg.Any<FilePath>(), 
+                        Arg.Is<ProcessSettings>(info =>
+                            info.WorkingDirectory.FullPath == "/Working/OtherWorking"));
                 }
 
                 [Fact]
@@ -197,8 +203,9 @@ namespace Cake.Common.Tests.Unit
                     const string fileName = "hello.exe";
                     var settings = new ProcessSettings();
 
-                    fixture.ProcessRunner.Start(Arg.Any<ProcessStartInfo>())
-                        .Returns((IProcess)null);
+                    fixture.ProcessRunner.Start(
+                        Arg.Any<FilePath>(), 
+                        Arg.Any<ProcessSettings>()).Returns((IProcess)null);
 
                     // When
                     var result = Record.Exception(() => fixture.Start(fileName, settings));

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Cake.Common.Tests.Properties;
+﻿using Cake.Common.Tests.Properties;
 using Cake.Common.Tools.NuGet.Pack;
 using Cake.Common.Tools.NuGet.Push;
 using Cake.Common.Tools.NuGet.Restore;
@@ -31,7 +30,7 @@ namespace Cake.Common.Tests.Fixtures
             Process = Substitute.For<IProcess>();
             Process.GetExitCode().Returns(0);
             ProcessRunner = Substitute.For<IProcessRunner>();
-            ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns(Process);
+            ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns(Process);
 
             Log = Substitute.For<ICakeLog>();
 

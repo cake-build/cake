@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.NUnit;
 using Cake.Core;
@@ -57,8 +56,9 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.FileName == expected));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == expected),
+                    Arg.Any<ProcessSettings>());
             }
 
             [Fact]
@@ -72,8 +72,9 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 runner.Run("./Test1.dll", new NUnitSettings());
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.FileName == "/Working/tools/nunit-console.exe"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/nunit-console.exe"),
+                    Arg.Any<ProcessSettings>());
             }
 
             [Fact]
@@ -87,8 +88,8 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 runner.Run("./Test1.dll", new NUnitSettings());
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "\"/Working/Test1.dll\""));
+                fixture.ProcessRunner.Received(1).Start(Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(
+                    p => p.Arguments.Render() == "\"/Working/Test1.dll\""));
             }
 
             [Fact]
@@ -102,8 +103,8 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 runner.Run("./Test1.dll", new NUnitSettings());
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.WorkingDirectory == "/Working"));
+                fixture.ProcessRunner.Received(1).Start(Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(
+                    p => p.WorkingDirectory.FullPath == "/Working"));
             }
 
             [Fact]
@@ -111,7 +112,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
             {
                 // Given
                 var fixture = new NUnitRunnerFixture();
-                fixture.ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns((IProcess)null);
+                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
                 var runner = fixture.CreateRunner();
 
                 // When
@@ -152,8 +153,10 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "\"/Working/Test1.dll\" /noshadow"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "\"/Working/Test1.dll\" /noshadow"));
             }
 
             [Fact]
@@ -190,8 +193,10 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "\"/Working/Test1.dll\" \"/result:NewTestResult.xml\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "\"/Working/Test1.dll\" \"/result:NewTestResult.xml\""));
             }
 
             [Fact]
@@ -216,13 +221,15 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments ==
-                        "\"/Working/Test1.dll\" " +
-                        "\"/framework:net1_1\" " +
-                        "\"/include:Database\" \"/exclude:Database_Users\" " +
-                        "/timeout:5 /nologo /nothread /stoponerror /trace:Debug " +
-                        "\"/result:NewTestResult.xml\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == 
+                            "\"/Working/Test1.dll\" " +
+                            "\"/framework:net1_1\" " +
+                            "\"/include:Database\" \"/exclude:Database_Users\" " +
+                            "/timeout:5 /nologo /nothread /stoponerror /trace:Debug " +
+                            "\"/result:NewTestResult.xml\""));
             }
         }
     }

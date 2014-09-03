@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Cake.Common.Tools.MSBuild;
+﻿using Cake.Common.Tools.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tests.Fakes;
@@ -29,7 +28,7 @@ namespace Cake.Common.Tests.Fixtures
             Process = Substitute.For<IProcess>();
 
             ProcessRunner = Substitute.For<IProcessRunner>();
-            ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns(Process);
+            ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns(Process);
 
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.Is64BitOperativeSystem().Returns(is64BitOperativeSystem);

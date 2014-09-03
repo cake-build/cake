@@ -58,9 +58,9 @@ namespace Cake.Common.Tools.WiX
             Run(settings, GetArguments(objectFilesArray, settings), settings.ToolPath);
         }
 
-        private ToolArgumentBuilder GetArguments(IEnumerable<FilePath> objectFiles, LightSettings settings)
+        private ProcessArgumentBuilder GetArguments(IEnumerable<FilePath> objectFiles, LightSettings settings)
         {
-            var builder = new ToolArgumentBuilder();
+            var builder = new ProcessArgumentBuilder();
 
             // Add defines
             if (settings.Defines != null && settings.Defines.Any())
@@ -68,7 +68,7 @@ namespace Cake.Common.Tools.WiX
                 var defines = settings.Defines.Select(define => string.Format(CultureInfo.InvariantCulture, "-d{0}={1}", define.Key, define.Value));
                 foreach (var define in defines)
                 {
-                    builder.AppendText(define);
+                    builder.Append(define);
                 }       
             }
 
@@ -78,33 +78,33 @@ namespace Cake.Common.Tools.WiX
                 var extensions = settings.Extensions.Select(extension => string.Format(CultureInfo.InvariantCulture, "-ext {0}", extension));
                 foreach (var extension in extensions)
                 {
-                    builder.AppendText(extension);
+                    builder.Append(extension);
                 }
             }
 
             // No logo
             if (settings.NoLogo)
             {
-                builder.AppendText("-nologo");
+                builder.Append("-nologo");
             }
 
             // Output file
             if (settings.OutputFile != null && !string.IsNullOrEmpty(settings.OutputFile.FullPath))
             {
-                builder.AppendText("-o");
-                builder.AppendQuotedText(settings.OutputFile.MakeAbsolute(_environment).FullPath);
+                builder.Append("-o");
+                builder.AppendQuoted(settings.OutputFile.MakeAbsolute(_environment).FullPath);
             }
 
             // Raw arguments
             if (!string.IsNullOrEmpty(settings.RawArguments))
             {
-                builder.AppendText(settings.RawArguments);
+                builder.Append(settings.RawArguments);
             }
 
             // Object files (.wixobj)
             foreach (var objectFile in objectFiles.Select(file => file.MakeAbsolute(_environment).FullPath))
             {
-                builder.AppendQuotedText(objectFile);
+                builder.AppendQuoted(objectFile);
             }
 
             return builder;

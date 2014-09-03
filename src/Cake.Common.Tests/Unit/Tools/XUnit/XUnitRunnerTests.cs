@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.XUnit;
 using Cake.Core;
@@ -57,8 +56,9 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.FileName == expected));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == expected),
+                    Arg.Any<ProcessSettings>());
             }
 
             [Fact]
@@ -72,8 +72,9 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 runner.Run("./Test1.dll", new XUnitSettings());
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.FileName == "/Working/tools/xunit.console.clr4.exe"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/xunit.console.clr4.exe"),
+                    Arg.Any<ProcessSettings>());
             }
 
             [Fact]
@@ -87,8 +88,9 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 runner.Run("./Test1.dll", new XUnitSettings());
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "\"/Working/Test1.dll\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => p.Arguments.Render() == "\"/Working/Test1.dll\""));
             }
 
             [Fact]
@@ -102,8 +104,9 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 runner.Run("./Test1.dll", new XUnitSettings());
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.WorkingDirectory == "/Working"));                
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => p.WorkingDirectory.FullPath == "/Working"));                
             }
 
             [Fact]
@@ -111,7 +114,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             {
                 // Given
                 var fixture = new XUnitRunnerFixture();
-                fixture.ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns((IProcess)null);
+                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
                 var runner = fixture.CreateRunner();
 
                 // When
@@ -171,8 +174,10 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "\"/Working/Test1.dll\" \"/html\" \"/Output/Test1.dll.html\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "\"/Working/Test1.dll\" \"/html\" \"/Output/Test1.dll.html\""));
             }
 
             [Fact]
@@ -208,8 +213,10 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "\"/Working/Test1.dll\" \"/xml\" \"/Output/Test1.dll.xml\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "\"/Working/Test1.dll\" \"/xml\" \"/Output/Test1.dll.xml\""));
             }
 
             [Fact]
@@ -226,8 +233,10 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "\"/Working/Test1.dll\" \"/noshadow\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "\"/Working/Test1.dll\" \"/noshadow\""));
             }
         }
     }

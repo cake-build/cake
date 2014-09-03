@@ -48,42 +48,42 @@ namespace Cake.Common.Tools.NuGet.Push
             Run(settings, GetArguments(packageFilePath, settings), settings.ToolPath);
         }
 
-        private ToolArgumentBuilder GetArguments(FilePath packageFilePath, NuGetPushSettings settings)
+        private ProcessArgumentBuilder GetArguments(FilePath packageFilePath, NuGetPushSettings settings)
         {
-            var builder = new ToolArgumentBuilder();
-            builder.AppendText("push");
+            var builder = new ProcessArgumentBuilder();
+            builder.Append("push");
 
-            builder.AppendQuotedText(packageFilePath.MakeAbsolute(_environment).FullPath);
+            builder.AppendQuoted(packageFilePath.MakeAbsolute(_environment).FullPath);
 
             if (settings.ApiKey != null)
             {
-                builder.AppendText(settings.ApiKey);
+                builder.AppendSecret(settings.ApiKey);
             }
 
-            builder.AppendText("-NonInteractive");
+            builder.Append("-NonInteractive");
 
             if (settings.ConfigFile != null)
             {
-                builder.AppendText("-ConfigFile");
-                builder.AppendQuotedText(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
+                builder.Append("-ConfigFile");
+                builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
             }
 
             if (settings.Source != null)
             {
-                builder.AppendText("-Source");
-                builder.AppendQuotedText(settings.Source);
+                builder.Append("-Source");
+                builder.AppendQuoted(settings.Source);
             }
 
             if (settings.Timeout != null)
             {
-                builder.AppendText("-Timeout");
-                builder.AppendText(Convert.ToInt32(settings.Timeout.Value.TotalSeconds).ToString(CultureInfo.InvariantCulture));
+                builder.Append("-Timeout");
+                builder.Append(Convert.ToInt32(settings.Timeout.Value.TotalSeconds).ToString(CultureInfo.InvariantCulture));
             }
 
             if (settings.Verbosity != null)
             {
-                builder.AppendText("-Verbosity");
-                builder.AppendText(settings.Verbosity.Value.ToString().ToLowerInvariant());
+                builder.Append("-Verbosity");
+                builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
             }
 
             return builder;

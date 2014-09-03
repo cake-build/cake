@@ -60,17 +60,17 @@ namespace Cake.Common.Tools.XUnit
             Run(settings, GetArguments(assemblyPath, settings), settings.ToolPath);
         }
 
-        private ToolArgumentBuilder GetArguments(FilePath assemblyPath, XUnitSettings settings)
+        private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, XUnitSettings settings)
         {
-            var builder = new ToolArgumentBuilder();
+            var builder = new ProcessArgumentBuilder();
 
             // Add the assembly to build.
-            builder.AppendQuotedText(assemblyPath.MakeAbsolute(_environment).FullPath);
+            builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
 
             // No shadow copy?
             if (!settings.ShadowCopy)
             {
-                builder.AppendQuotedText("/noshadow");
+                builder.AppendQuoted("/noshadow");
             }
 
             // Generate HTML report?
@@ -79,8 +79,8 @@ namespace Cake.Common.Tools.XUnit
                 var assemblyFilename = assemblyPath.GetFilename().AppendExtension(".html");
                 var outputPath = settings.OutputDirectory.GetFilePath(assemblyFilename);
 
-                builder.AppendQuotedText("/html");
-                builder.AppendQuotedText(outputPath.FullPath);
+                builder.AppendQuoted("/html");
+                builder.AppendQuoted(outputPath.FullPath);
             }
 
             // Generate XML report?
@@ -89,8 +89,8 @@ namespace Cake.Common.Tools.XUnit
                 var assemblyFilename = assemblyPath.GetFilename().AppendExtension(".xml");
                 var outputPath = settings.OutputDirectory.GetFilePath(assemblyFilename);
 
-                builder.AppendQuotedText("/xml");
-                builder.AppendQuotedText(outputPath.FullPath);
+                builder.AppendQuoted("/xml");
+                builder.AppendQuoted(outputPath.FullPath);
             }
 
             return builder;

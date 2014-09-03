@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.NuGet;
@@ -78,8 +77,9 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.FileName == expected));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == expected),
+                    Arg.Any<ProcessSettings>());
             }
 
             [Fact]
@@ -87,7 +87,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             {
                 // Given
                 var fixture = new NuGetFixture();
-                fixture.ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns((IProcess)null);
+                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
                 var restorer = fixture.CreateRestorer();
 
                 // When
@@ -125,8 +125,9 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 restorer.Restore("./project.sln", new NuGetRestoreSettings());
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.FileName == "/Working/tools/NuGet.exe"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/NuGet.exe"),
+                    Arg.Any<ProcessSettings>());
             }
 
             [Fact]
@@ -140,8 +141,9 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 restorer.Restore("./project.sln", new NuGetRestoreSettings());
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "restore \"/Working/project.sln\" -NonInteractive"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "restore \"/Working/project.sln\" -NonInteractive"));
             }
 
             [Fact]
@@ -158,8 +160,9 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "restore \"/Working/project.sln\" -RequireConsent -NonInteractive"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "restore \"/Working/project.sln\" -RequireConsent -NonInteractive"));
             }
 
             [Fact]
@@ -176,8 +179,9 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "restore \"/Working/project.sln\" -PackagesDirectory \"/Working/package\" -NonInteractive"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "restore \"/Working/project.sln\" -PackagesDirectory \"/Working/package\" -NonInteractive"));
             }
 
             [Fact]
@@ -194,8 +198,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "restore \"/Working/project.sln\" -Source \"A;B;C\" -NonInteractive"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "restore \"/Working/project.sln\" -Source \"A;B;C\" -NonInteractive"));
+
             }
 
             [Fact]
@@ -212,8 +218,9 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "restore \"/Working/project.sln\" -NoCache -NonInteractive"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "restore \"/Working/project.sln\" -NoCache -NonInteractive"));
             }
 
             [Fact]
@@ -230,8 +237,9 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "restore \"/Working/project.sln\" -DisableParallelProcessing -NonInteractive"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "restore \"/Working/project.sln\" -DisableParallelProcessing -NonInteractive"));
             }
 
             [Theory]
@@ -252,8 +260,9 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == expected));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == expected));
             }
 
             [Fact]
@@ -270,8 +279,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "restore \"/Working/project.sln\" -ConfigFile \"/Working/nuget.config\" -NonInteractive"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "restore \"/Working/project.sln\" -ConfigFile \"/Working/nuget.config\" -NonInteractive"));
+
             }
         }
     }

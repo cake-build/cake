@@ -65,6 +65,8 @@
     <Compile Include="Diagnostics\VerbosityTypeConverter.cs" />
     <Compile Include="Extensions\ConsoleExtensions.cs" />
     <Compile Include="Extensions\MethodInfoExtensions.cs" />
+    <Compile Include="Extensions\ProcessArgumentListExtensions.cs" />
+    <Compile Include="Extensions\ProcessRunnerExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="ICakeArguments.cs" />
@@ -112,9 +114,13 @@
     <Compile Include="IO\PathCollapser.cs" />
     <Compile Include="IO\PathComparer.cs" />
     <Compile Include="IO\ProcessRunner.cs" />
+    <Compile Include="IO\ProcessSettings.cs" />
     <Compile Include="IO\ProcessWrapper.cs" />
+    <Compile Include="IO\Arguments\QuotedArgument.cs" />
     <Compile Include="IO\SearchScope.cs" />
+    <Compile Include="IO\Arguments\SecretArgument.cs" />
     <Compile Include="IO\SpecialPath.cs" />
+    <Compile Include="IO\Arguments\TextArgument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
@@ -135,8 +141,9 @@
     <Compile Include="Scripting\ScriptAliasFinder.cs" />
     <Compile Include="Scripting\ScriptAliasGenerator.cs" />
     <Compile Include="Scripting\ScriptHost.cs" />
+    <Compile Include="IO\ProcessArgument.cs" />
+    <Compile Include="IO\ProcessArgumentBuilder.cs" />
     <Compile Include="Utilities\Tool.cs" />
-    <Compile Include="Utilities\ToolArgumentBuilder.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Cake.Common.Tools.XUnit;
+﻿using Cake.Common.Tools.XUnit;
 using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
@@ -20,7 +19,7 @@ namespace Cake.Common.Tests.Fixtures
             Process.GetExitCode().Returns(0);
 
             ProcessRunner = Substitute.For<IProcessRunner>();
-            ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns(Process);
+            ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns(Process);
 
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory = "/Working";

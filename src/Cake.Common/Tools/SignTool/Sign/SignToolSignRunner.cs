@@ -44,7 +44,7 @@ namespace Cake.Common.Tools.SignTool.Sign
             Run(settings, GetArguments(assemblyPath, settings), settings.ToolPath);
         }
 
-        private ToolArgumentBuilder GetArguments(FilePath assemblyPath, SignToolSignSettings settings)
+        private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, SignToolSignSettings settings)
         {
             if (assemblyPath==null || !File.Exists(assemblyPath.FullPath))
                throw new ArgumentException(
@@ -65,29 +65,25 @@ namespace Cake.Common.Tools.SignTool.Sign
                throw new ArgumentException(
                     string.Format(CultureInfo.InvariantCulture, "{0}: Password Required but not specified.", GetToolName()));
 
-            var builder = new ToolArgumentBuilder();
+            var builder = new ProcessArgumentBuilder();
 
             //SIGN Command
-            builder.AppendText("SIGN");
-
+            builder.Append("SIGN");
 
             //TimeStamp server
-            builder.AppendText("/t");
-            builder.AppendQuotedText(settings.TimeStampUri.AbsoluteUri);
-
-            
+            builder.Append("/t");
+            builder.AppendQuoted(settings.TimeStampUri.AbsoluteUri);
+    
             //Path to PFX Certificate
-            builder.AppendText("/f");
-            builder.AppendQuotedText(settings.CertPath.MakeAbsolute(_environment).FullPath);
-
+            builder.Append("/f");
+            builder.AppendQuoted(settings.CertPath.MakeAbsolute(_environment).FullPath);
             
             //PFX Password
-            builder.AppendText("/p");
-            builder.AppendQuotedText(settings.Password);
+            builder.Append("/p");
+            builder.AppendSecret(settings.Password);
 
             //Target Assembly to sign
-            builder.AppendQuotedText(assemblyPath.MakeAbsolute(_environment).FullPath);
-
+            builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
 
             return builder;
         }

@@ -47,60 +47,60 @@ namespace Cake.Common.Tools.NuGet.Restore
             Run(settings, GetArguments(targetFilePath, settings), settings.ToolPath);
         }
 
-        private ToolArgumentBuilder GetArguments(FilePath targetFilePath, NuGetRestoreSettings settings)
+        private ProcessArgumentBuilder GetArguments(FilePath targetFilePath, NuGetRestoreSettings settings)
         {
-            var builder = new ToolArgumentBuilder();
+            var builder = new ProcessArgumentBuilder();
 
-            builder.AppendText("restore");
-            builder.AppendQuotedText(targetFilePath.MakeAbsolute(_environment).FullPath);
+            builder.Append("restore");
+            builder.AppendQuoted(targetFilePath.MakeAbsolute(_environment).FullPath);
 
             // RequireConsent?
             if (settings.RequireConsent)
             {
-                builder.AppendText("-RequireConsent");
+                builder.Append("-RequireConsent");
             }
 
             // Packages Directory
             if (settings.PackagesDirectory != null)
             {
-                builder.AppendText("-PackagesDirectory");
-                builder.AppendQuotedText(settings.PackagesDirectory.MakeAbsolute(_environment).FullPath);
+                builder.Append("-PackagesDirectory");
+                builder.AppendQuoted(settings.PackagesDirectory.MakeAbsolute(_environment).FullPath);
             }
 
             // List of package sources
             if (settings.Source != null && settings.Source.Count > 0)
             {
-                builder.AppendText("-Source");
-                builder.AppendQuotedText(string.Join(";", settings.Source));
+                builder.Append("-Source");
+                builder.AppendQuoted(string.Join(";", settings.Source));
             }
 
             // No Cache?
             if (settings.NoCache)
             {
-                builder.AppendText("-NoCache");
+                builder.Append("-NoCache");
             }
 
             // Disable Parallel Processing?
             if (settings.DisableParallelProcessing)
             {
-                builder.AppendText("-DisableParallelProcessing");
+                builder.Append("-DisableParallelProcessing");
             }
 
             // Verbosity?
             if (settings.Verbosity.HasValue)
             {
-                builder.AppendText("-Verbosity");
-                builder.AppendText(settings.Verbosity.Value.ToString().ToLowerInvariant());
+                builder.Append("-Verbosity");
+                builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
             }
 
             // Configuration file
             if (settings.ConfigFile != null)
             {
-                builder.AppendText("-ConfigFile");
-                builder.AppendQuotedText(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
+                builder.Append("-ConfigFile");
+                builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
             }
 
-            builder.AppendText("-NonInteractive");
+            builder.Append("-NonInteractive");
 
             return builder;
         }
