@@ -1,17 +1,16 @@
+#l "utilities.cake"
+
 // Get arguments passed to the script.
 var target = Argument("target", "All");
 var configuration = Argument("configuration", "Release");
-var teamCity = HasArgument("teamCity");
-var buildLabel = Argument("buildLabel", string.Empty);
-var buildInfo = Argument("buildInfo", string.Empty);
 
 // Parse release notes.
 var releaseNotes = ParseReleaseNotes("./ReleaseNotes.md");
 
-// Set version.
+// Get version.
+int buildNumber = GetBuildNumber();
 var version = releaseNotes.Version.ToString();
-var semVersion = version + (buildLabel != "" ? ("-" + buildLabel) : string.Empty);
-Information("Building version {0} of Cake.", version);
+var semVersion = version + string.Concat("-build-", buildNumber);
 
 // Define directories.
 var buildDir = "./src/Cake/bin/" + configuration;
@@ -20,19 +19,21 @@ var testResultsDir = buildResultDir + "/test-results";
 var nugetRoot = buildResultDir + "/nuget";
 var binDir = buildResultDir + "/bin";
 
+// Output some information about the current build.
+Information("Building version {0} of Cake ({1}).", version, semVersion);
+
 //////////////////////////////////////////////////////////////////////////
 
-Task("Update-TeamCity-Build-Number")
+Task("Update-Build-Number")
 	.Description("Updates the TeamCity build number.")
-	.WithCriteria(teamCity)
 	.Does(() =>
 {
-	Console.WriteLine("##teamcity[buildNumber '{0}']", semVersion);
+	SetBuildVersion(semVersion);
 });
 
 Task("Clean")
 	.Description("Cleans the build and output directories.")
-	.IsDependentOn("Update-TeamCity-Build-Number")
+	.IsDependentOn("Update-Build-Number")
 	.Does(() =>
 {
 	CleanDirectories(new DirectoryPath[] {
@@ -57,7 +58,7 @@ Task("Patch-Assembly-Info")
 		Product = "Cake",
 		Version = version,
 		FileVersion = version,
-		InformationalVersion = (version + buildInfo).Trim(),
+		InformationalVersion = semVersion,
 		Copyright = "Copyright (c) Patrik Svensson 2014"
 	});
 });
@@ -106,7 +107,7 @@ Task("Zip-Files")
 	.IsDependentOn("Copy-Files")
 	.Does(() =>
 {
-	var filename = buildResultDir + "/Cake-bin-v" + version + ".zip";
+	var filename = buildResultDir + "/Cake-bin-v" + semVersion + ".zip";
 	Zip(binDir, filename);
 });
 

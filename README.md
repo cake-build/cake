@@ -2,7 +2,7 @@
 
 Cake (C# Make) is a build automation system using C#.
 
-[![TeamCity CI Build Status](http://builds.nullreferenceexception.se/app/rest/builds/buildType:id:Cake_Continuous/statusIcon)](http://builds.nullreferenceexception.se/viewType.html?buildTypeId=Cake_Continuous&guest=1)
+[![Build status](https://ci.appveyor.com/api/projects/status/nf49kmmpyl1ekds2/branch/develop)](https://ci.appveyor.com/project/patriksvensson/cake/branch/develop)
 
 ##Table of contents
 
