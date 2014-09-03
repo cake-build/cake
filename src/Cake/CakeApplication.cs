@@ -44,20 +44,24 @@ namespace Cake
                     _log.Verbosity = options.Verbosity;  
                 }
 
-                // CreateDefault the correct command and execute it.
+                // Create the correct command and execute it.
                 var command = CreateCommand(options);
                 command.Execute(options);
 
-                // Return success.
-                return 0;
+                // Return success if we could create and run the command.
+                // If the parsed options are null, consider it failed.
+                return options == null ? 1 : 0;
             }
             catch (Exception ex)
             {
                 if (_log.Verbosity == Verbosity.Diagnostic)
+                {
                     _log.Error("Error: {0}", ex);
+                }
                 else
-                    _log.Error("Error: {0}", ex.Message);
-                    
+                {
+                    _log.Error("Error: {0}", ex.Message);   
+                }                    
                 return 1;
             }
         }
@@ -68,7 +72,7 @@ namespace Cake
             {
                 if (options.ShowHelp)
                 {
-                    return _commandFactory.CreateHelpCommand();               
+                    return _commandFactory.CreateHelpCommand();          
                 }
                 if (options.ShowVersion)
                 {
