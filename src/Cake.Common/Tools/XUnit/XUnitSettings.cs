@@ -45,6 +45,11 @@ namespace Cake.Common.Tools.XUnit
         public FilePath ToolPath { get; set; }
 
         /// <summary>
+        /// Gets or set whether or not output running test count.
+        /// </summary>
+        public bool Silent { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="XUnitSettings"/> class.
         /// </summary>
         public XUnitSettings()

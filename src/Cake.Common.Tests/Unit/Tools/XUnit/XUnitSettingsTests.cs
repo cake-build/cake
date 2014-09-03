@@ -46,6 +46,16 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 // Then
                 Assert.True(settings.ShadowCopy);
             }
+
+            [Fact]
+            public void Should_Disable_Silent_Mode_By_Default()
+            {
+                // Given, When
+                var settings = new XUnitSettings();
+
+                // Then
+                Assert.False(settings.Silent);                
+            }
         }
     }
 }

@@ -238,6 +238,26 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                     Arg.Is<ProcessSettings>(p => 
                         p.Arguments.Render() == "\"/Working/Test1.dll\" \"/noshadow\""));
             }
+
+            [Fact]
+            public void Should_Set_Silent_Mode_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new XUnitRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run("./Test1.dll", new XUnitSettings
+                {
+                    Silent = true
+                });
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "\"/Working/Test1.dll\" /silent"));
+            }
         }
     }
 }
