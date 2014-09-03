@@ -86,6 +86,7 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="Unit\IO\ProcessArgumentBuilderTests.cs" />
     <Compile Include="Unit\IO\ProcessRunnerTests.cs" />
     <Compile Include="Unit\Scripting\CodeGen\MethodAliasGeneratorTests.cs" />
     <Compile Include="Unit\Scripting\CodeGen\PropertyAliasGeneratorTests.cs" />

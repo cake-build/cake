@@ -3,6 +3,7 @@
 // Get arguments passed to the script.
 var target = Argument("target", "All");
 var configuration = Argument("configuration", "Release");
+var local = Argument("local", false);
 
 // Parse release notes.
 var releaseNotes = ParseReleaseNotes("./ReleaseNotes.md");
@@ -10,7 +11,7 @@ var releaseNotes = ParseReleaseNotes("./ReleaseNotes.md");
 // Get version.
 int buildNumber = GetBuildNumber();
 var version = releaseNotes.Version.ToString();
-var semVersion = version + string.Concat("-build-", buildNumber);
+var semVersion = local ? version : (version + string.Concat("-build-", buildNumber));
 
 // Define directories.
 var buildDir = "./src/Cake/bin/" + configuration;
@@ -81,7 +82,8 @@ Task("Run-Unit-Tests")
 	XUnit("./src/**/bin/" + configuration + "/*.Tests.dll", new XUnitSettings {
 		OutputDirectory = testResultsDir,
 		XmlReport = true,
-		HtmlReport = true
+		HtmlReport = true,
+		Silent = !local
 	});
 });
 
