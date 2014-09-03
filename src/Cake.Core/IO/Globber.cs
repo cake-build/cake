@@ -147,10 +147,10 @@ namespace Cake.Core.IO
             {
                 return results;
             }
-
+            var rootFullPath = PathCollapser.Collapse(rootPath);
             foreach (var directory in root.GetDirectories("*", SearchScope.Current))
             {
-                var part = directory.Path.FullPath.Substring(root.Path.FullPath.Length + 1);
+                var part = directory.Path.FullPath.Substring(rootFullPath.Length + 1);
                 var pathTest = expression.IsMatch(part);
 
                 var subWalkCount = 0;
@@ -189,7 +189,7 @@ namespace Cake.Core.IO
 
             foreach (var file in root.GetFiles("*", SearchScope.Current))
             {
-                var part = file.Path.FullPath.Substring(root.Path.FullPath.Length + 1);
+                var part = file.Path.FullPath.Substring(rootFullPath.Length + 1);
                 var pathTest = expression.IsMatch(part);
 
                 // Got a match?
