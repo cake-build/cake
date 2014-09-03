@@ -46,43 +46,48 @@ namespace Cake.Common.Tools.SignTool.Sign
 
         private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, SignToolSignSettings settings)
         {
-            if (assemblyPath==null || !File.Exists(assemblyPath.FullPath))
+            if (assemblyPath == null || !File.Exists(assemblyPath.FullPath))
+            {                           
                throw new ArgumentException(
                     string.Format(CultureInfo.InvariantCulture, "{0}: AssemblyPath not specified or missing ({1})", GetToolName(), assemblyPath));
-
-
-            if (settings.TimeStampUri==null)
-               throw new ArgumentException(
-                    string.Format(CultureInfo.InvariantCulture, "{0}: TimeStampUri Required but not specified.", GetToolName()));
-
-            
-            if (settings.CertPath==null || !File.Exists(settings.CertPath.FullPath))
-               throw new ArgumentException(
-                    string.Format(CultureInfo.InvariantCulture, "{0}: CertPath not specified or missing ({1})", GetToolName(), settings.CertPath));
-
-            
+            }
+            if (settings.TimeStampUri == null)
+            {
+                throw new ArgumentException(
+                    string.Format(CultureInfo.InvariantCulture, "{0}: TimeStampUri Required but not specified.",
+                        GetToolName()));
+            }
+            if (settings.CertPath == null || !File.Exists(settings.CertPath.FullPath))
+            {
+                throw new ArgumentException(
+                    string.Format(CultureInfo.InvariantCulture, "{0}: CertPath not specified or missing ({1})",
+                        GetToolName(), settings.CertPath));
+            }
             if (string.IsNullOrEmpty(settings.Password))
-               throw new ArgumentException(
-                    string.Format(CultureInfo.InvariantCulture, "{0}: Password Required but not specified.", GetToolName()));
+            {
+                throw new ArgumentException(
+                    string.Format(CultureInfo.InvariantCulture, "{0}: Password Required but not specified.",
+                        GetToolName()));
+            }
 
             var builder = new ProcessArgumentBuilder();
 
-            //SIGN Command
+            // SIGN Command.
             builder.Append("SIGN");
 
-            //TimeStamp server
+            // TimeStamp server.
             builder.Append("/t");
             builder.AppendQuoted(settings.TimeStampUri.AbsoluteUri);
-    
-            //Path to PFX Certificate
+
+            // Path to PFX Certificate.
             builder.Append("/f");
             builder.AppendQuoted(settings.CertPath.MakeAbsolute(_environment).FullPath);
-            
-            //PFX Password
+
+            // PFX Password.
             builder.Append("/p");
             builder.AppendSecret(settings.Password);
 
-            //Target Assembly to sign
+            // Target Assembly to sign.
             builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
 
             return builder;
