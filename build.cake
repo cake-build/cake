@@ -82,7 +82,8 @@ Task("Run-Unit-Tests")
 	XUnit("./src/**/bin/" + configuration + "/*.Tests.dll", new XUnitSettings {
 		OutputDirectory = testResultsDir,
 		XmlReport = true,
-		HtmlReport = true
+		HtmlReport = true,
+		Silent = !local
 	});
 });
 
