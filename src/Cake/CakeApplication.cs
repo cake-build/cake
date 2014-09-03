@@ -53,7 +53,11 @@ namespace Cake
             }
             catch (Exception ex)
             {
-                _log.Error("Error: {0}", ex.Message);
+                if (_log.Verbosity == Verbosity.Diagnostic)
+                    _log.Error("Error: {0}", ex);
+                else
+                    _log.Error("Error: {0}", ex.Message);
+                    
                 return 1;
             }
         }
