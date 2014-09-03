@@ -19,9 +19,11 @@ SET TARGET="All"
 IF NOT [%1]==[] (set TARGET="%1")
 SET BUILDMODE="Release"
 IF NOT [%2]==[] (set BUILDMODE="%2")
+SET LOCALBUILD="false"
+IF NOT [%3]==[] (set LOCALBUILD="true")
 
 echo Starting Cake...
-tools\Cake\Cake.exe build.cake -target=%TARGET% -configuration=%BUILDMODE% -verbosity=diagnostic
+tools\Cake\Cake.exe build.cake -target=%TARGET% -configuration=%BUILDMODE% -verbosity=diagnostic -local=%LOCALBUILD%
 
 :Quit
 exit /b %errorlevel%
