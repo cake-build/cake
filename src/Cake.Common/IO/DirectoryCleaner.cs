@@ -14,6 +14,9 @@ namespace Cake.Common.IO
                 throw new ArgumentNullException("path");
             }
 
+            // Make path absolute.
+            path = path.MakeAbsolute(context.Environment);
+
             // Get the root directory.
             var root = context.FileSystem.GetDirectory(path);
             if (!root.Exists)

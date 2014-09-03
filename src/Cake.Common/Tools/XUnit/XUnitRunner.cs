@@ -64,8 +64,11 @@ namespace Cake.Common.Tools.XUnit
         {
             var builder = new ProcessArgumentBuilder();
 
+            // Get the absolute path to the assembly.
+            assemblyPath = assemblyPath.MakeAbsolute(_environment);
+
             // Add the assembly to build.
-            builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
+            builder.AppendQuoted(assemblyPath.FullPath);
 
             // No shadow copy?
             if (!settings.ShadowCopy)
@@ -77,7 +80,7 @@ namespace Cake.Common.Tools.XUnit
             if (settings.HtmlReport)
             {
                 var assemblyFilename = assemblyPath.GetFilename().AppendExtension(".html");
-                var outputPath = settings.OutputDirectory.GetFilePath(assemblyFilename);
+                var outputPath = settings.OutputDirectory.MakeAbsolute(_environment).GetFilePath(assemblyFilename);
 
                 builder.AppendQuoted("/html");
                 builder.AppendQuoted(outputPath.FullPath);
@@ -87,7 +90,7 @@ namespace Cake.Common.Tools.XUnit
             if (settings.XmlReport)
             {
                 var assemblyFilename = assemblyPath.GetFilename().AppendExtension(".xml");
-                var outputPath = settings.OutputDirectory.GetFilePath(assemblyFilename);
+                var outputPath = settings.OutputDirectory.MakeAbsolute(_environment).GetFilePath(assemblyFilename);
 
                 builder.AppendQuoted("/xml");
                 builder.AppendQuoted(outputPath.FullPath);

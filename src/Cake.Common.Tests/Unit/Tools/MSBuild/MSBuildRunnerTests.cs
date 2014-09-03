@@ -231,8 +231,8 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "/m /target:Build \"src/Solution.sln\""));
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "/m /target:Build \"/Working/src/Solution.sln\""));
             }
 
             [Fact]
@@ -252,8 +252,8 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "/m:4 /target:Build \"src/Solution.sln\""));
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "/m:4 /target:Build \"/Working/src/Solution.sln\""));
             }
 
             [Fact]
@@ -272,8 +272,8 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "/m /target:Build \"src/Solution.sln\""));
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "/m /target:Build \"/Working/src/Solution.sln\""));
             }
 
             [Fact]
@@ -294,8 +294,8 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "/m /target:A;B \"src/Solution.sln\""));
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "/m /target:A;B \"/Working/src/Solution.sln\""));
             }
 
             [Fact]
@@ -316,8 +316,8 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "/m /p:\"A\"=\"B\" /p:\"C\"=\"D\" /target:Build \"src/Solution.sln\""));
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "/m /p:\"A\"=\"B\" /p:\"C\"=\"D\" /target:Build \"/Working/src/Solution.sln\""));
             }
 
             [Fact]
@@ -338,8 +338,8 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "/m /p:\"A\"=\"B\" /p:\"A\"=\"E\" /p:\"C\"=\"D\" /target:Build \"src/Solution.sln\""));
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "/m /p:\"A\"=\"B\" /p:\"A\"=\"E\" /p:\"C\"=\"D\" /target:Build \"/Working/src/Solution.sln\""));
             }
 
             [Fact]
@@ -360,7 +360,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
                     Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "/m /p:\"Configuration\"=\"Release\" /target:Build \"src/Solution.sln\""));
+                        p.Arguments.Render() == "/m /p:\"Configuration\"=\"Release\" /target:Build \"/Working/src/Solution.sln\""));
             }
 
             [Fact]

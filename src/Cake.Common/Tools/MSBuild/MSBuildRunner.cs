@@ -36,7 +36,7 @@ namespace Cake.Common.Tools.MSBuild
             Run(settings, GetArguments(settings));
         }
 
-        private static ProcessArgumentBuilder GetArguments(MSBuildSettings settings)
+        private ProcessArgumentBuilder GetArguments(MSBuildSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
 
@@ -73,7 +73,7 @@ namespace Cake.Common.Tools.MSBuild
             }
 
             // Add the solution as the last parameter.
-            builder.AppendQuoted(settings.Solution.FullPath);
+            builder.AppendQuoted(settings.Solution.MakeAbsolute(_environment).FullPath);
 
             return builder;
         }

@@ -63,7 +63,7 @@ namespace Cake.Common.Tools.ILMerge
         {
             var builder = new ProcessArgumentBuilder();
 
-            builder.Append(GetOutputParameter(outputAssemblyPath));
+            builder.Append(GetOutputParameter(outputAssemblyPath.MakeAbsolute(_environment)));
 
             if (settings.TargetKind != TargetKind.Default)
             {

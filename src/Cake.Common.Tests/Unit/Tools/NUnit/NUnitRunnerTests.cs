@@ -196,7 +196,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), 
                     Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "\"/Working/Test1.dll\" \"/result:NewTestResult.xml\""));
+                        p.Arguments.Render() == "\"/Working/Test1.dll\" \"/result:/Working/NewTestResult.xml\""));
             }
 
             [Fact]
@@ -229,7 +229,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                             "\"/framework:net1_1\" " +
                             "\"/include:Database\" \"/exclude:Database_Users\" " +
                             "/timeout:5 /nologo /nothread /stoponerror /trace:Debug " +
-                            "\"/result:NewTestResult.xml\""));
+                            "\"/result:/Working/NewTestResult.xml\""));
             }
         }
     }

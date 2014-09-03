@@ -11,6 +11,8 @@ namespace Cake.Common.IO
     {
         public static void Delete(ICakeContext context, DirectoryPath path, bool recursive)
         {
+            path = path.MakeAbsolute(context.Environment);
+
             var directory = context.FileSystem.GetDirectory(path);
             if (!directory.Exists)
             {
