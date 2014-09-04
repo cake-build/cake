@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cake.Arguments;
 using Cake.Commands;
 using Cake.Core.Diagnostics;
@@ -52,6 +53,23 @@ namespace Cake
                 // If the parsed options are null, consider it failed.
                 return options == null ? 1 : 0;
             }
+            catch (Roslyn.Compilers.CompilationErrorException ex)
+            {
+                _log.Error(
+                    string.Join(
+                        "\r\n",
+                        ex.Diagnostics.OfType<Roslyn.Compilers.Common.CommonDiagnostic>()
+                            .Select(
+                                diag => string.Format(
+                                    "Info: {0}\r\nLocation: {1}",
+                                    diag.Info,
+                                    GetDebugView.Value(diag.Location)
+                                    )
+                            )
+                        )
+                    );
+                return 1;
+            }
             catch (Exception ex)
             {
                 if (_log.Verbosity == Verbosity.Diagnostic)
@@ -90,5 +108,16 @@ namespace Cake
             }
             return _commandFactory.CreateHelpCommand();
         }
+
+        private static readonly Lazy<Func<Roslyn.Compilers.Common.CommonLocation, string>> GetDebugView = new Lazy<Func<Roslyn.Compilers.Common.CommonLocation, string>>(
+            () =>
+            {
+                var type = typeof (Roslyn.Compilers.Common.CommonLocation);
+                var prop = type.GetProperty("DebugView", System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance);
+                Func<Roslyn.Compilers.Common.CommonLocation, string> result =
+                    location => prop.GetValue(location) as string;
+                return result;
+            }
+            );
     }
 }
