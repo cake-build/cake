@@ -5,7 +5,7 @@ cls
 
 if not exist tools\Cake\Cake.exe ( 
 	echo Installing Cake...
-	tools\nuget\nuget.exe install Cake -OutputDirectory tools -ExcludeVersion -NonInteractive -NoCache
+	tools\nuget\nuget.exe install Cake -OutputDirectory tools -ExcludeVersion -NonInteractive -NoCache -Source https://www.myget.org/F/cake/ -Prerelease
 	echo.
 )
 
