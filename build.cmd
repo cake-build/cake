@@ -15,15 +15,13 @@ if not exist tools\xunit.runners\tools\xunit.console.exe (
 	echo.
 )
 
-SET TARGET="All"
+SET TARGET="Default"
 IF NOT [%1]==[] (set TARGET="%1")
 SET BUILDMODE="Release"
 IF NOT [%2]==[] (set BUILDMODE="%2")
-SET LOCALBUILD="false"
-IF NOT [%3]==[] (set LOCALBUILD="true")
 
 echo Starting Cake...
-tools\Cake\Cake.exe build.cake -target=%TARGET% -configuration=%BUILDMODE% -verbosity=diagnostic -local=%LOCALBUILD%
+tools\Cake\Cake.exe build.cake -target=%TARGET% -configuration=%BUILDMODE% -verbosity=diagnostic
 
 :Quit
 exit /b %errorlevel%

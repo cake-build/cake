@@ -1,9 +1,11 @@
 #l "utilities.cake"
 
 // Get arguments passed to the script.
-var target = Argument("target", "All");
+var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
-var local = Argument("local", false);
+
+// Get whether or not this is a local build.
+var local = IsLocalBuild();
 
 // Parse release notes.
 var releaseNotes = ParseReleaseNotes("./ReleaseNotes.md");
@@ -119,7 +121,7 @@ Task("Create-Cake-NuGet-Package")
 	.Does(() =>
 {
 	NuGetPack("./Cake.nuspec", new NuGetPackSettings {
-		Version = version,
+		Version = semVersion,
 		ReleaseNotes = releaseNotes.Notes.ToArray(),
         BasePath = binDir,
         OutputDirectory = nugetRoot,        
@@ -134,7 +136,7 @@ Task("Create-Core-NuGet-Package")
 	.Does(() =>
 {
 	NuGetPack("./Cake.Core.nuspec", new NuGetPackSettings {
-		Version = version,
+		Version = semVersion,
 		ReleaseNotes = releaseNotes.Notes.ToArray(),
         BasePath = binDir,
         OutputDirectory = nugetRoot,        
@@ -148,9 +150,34 @@ Task("Package")
 	.IsDependentOn("Create-Cake-NuGet-Package")
 	.IsDependentOn("Create-Core-NuGet-Package");
 
-Task("All")
-	.Description("Final target.")
-	.IsDependentOn("Package");
+Task("Publish-MyGet")
+	.IsDependentOn("Package")
+	.WithCriteria(() => !local)
+	.Does(() =>
+{
+	// Resolve the API key.
+	var apiKey = EnvironmentVariable("MYGET_API_KEY");
+	if(string.IsNullOrEmpty(apiKey)) {
+		throw new InvalidOperationException("Could not resolve MyGet API key.");
+	}
+
+	// Get the path to the package.
+	var package = nugetRoot + "/Cake." + semVersion + ".nupkg";
+
+	// Push the package.
+	NuGetPush(package, new NuGetPushSettings {
+		Source = "https://www.myget.org/F/cake/api/v2/package",
+		ApiKey = apiKey
+	});	
+});
+
+Task("Publish")
+	.WithCriteria(() => !local)
+	.IsDependentOn("Publish-MyGet");
+
+Task("Default")
+	.Description("The default target.")
+	.IsDependentOn("Publish");
 
 //////////////////////////////////////////////////////////////////////////
 

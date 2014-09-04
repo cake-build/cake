@@ -1,5 +1,5 @@
 :Build
-call build.cmd All Release -Local
+call build.cmd
 
 echo.
 set CHOICE=nothing

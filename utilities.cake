@@ -32,3 +32,8 @@ public string GetBuildSystemName()
 	}
 	return "Local";
 }
+
+public bool IsLocalBuild()
+{
+	return GetBuildSystemName() == "Local";
+}
