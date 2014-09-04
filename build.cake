@@ -6,6 +6,7 @@ var configuration = Argument("configuration", "Release");
 
 // Get whether or not this is a local build.
 var local = IsLocalBuild();
+var isPullRequest = IsPullRequest();
 
 // Parse release notes.
 var releaseNotes = ParseReleaseNotes("./ReleaseNotes.md");
@@ -152,7 +153,7 @@ Task("Package")
 
 Task("Publish-MyGet")
 	.IsDependentOn("Package")
-	.WithCriteria(() => !local)
+	.WithCriteria(() => !local && !isPullRequest)
 	.Does(() =>
 {
 	// Resolve the API key.
@@ -172,7 +173,7 @@ Task("Publish-MyGet")
 });
 
 Task("Publish")
-	.WithCriteria(() => !local)
+	.WithCriteria(() => !local && !isPullRequest)
 	.IsDependentOn("Publish-MyGet");
 
 Task("Default")

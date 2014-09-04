@@ -37,3 +37,18 @@ public bool IsLocalBuild()
 {
 	return GetBuildSystemName() == "Local";
 }
+
+public bool IsPullRequest()
+{
+	var context = GetContext();
+	var value = context.Environment.GetEnvironmentVariable("APPVEYOR_PULL_REQUEST_NUMBER");
+	if(value != null)
+	{
+		int number = 0;
+		if(int.TryParse(value, out number))
+		{
+			return number > 0;
+		}
+	}	
+	return false;
+}
