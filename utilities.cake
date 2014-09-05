@@ -52,3 +52,18 @@ public bool IsPullRequest()
 	}	
 	return false;
 }
+
+public void UploadTestResultFile(FilePath path)
+{	
+	using(var client = new System.Net.WebClient())
+	{
+		Information("Uploading {0}...", path.FullPath);	
+		var jobId = EnvironmentVariable("APPVEYOR_JOB_ID");
+		if(string.IsNullOrEmpty(jobId))
+		{
+			throw new InvalidOperationException("Could not resolve AppVeyor job id.");
+		}
+		var uri = "https://ci.appveyor.com/api/testresults/xunit/" + jobId;
+		client.UploadFile(uri, path.FullPath);
+	}
+}

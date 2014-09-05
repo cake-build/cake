@@ -82,12 +82,41 @@ Task("Run-Unit-Tests")
 	.IsDependentOn("Build")
 	.Does(() =>
 {
-	XUnit("./src/**/bin/" + configuration + "/*.Tests.dll", new XUnitSettings {
-		OutputDirectory = testResultsDir,
-		XmlReport = true,
-		HtmlReport = true,
-		Silent = !local
-	});
+	try
+	{
+		// Run unit tests.
+		XUnit("./src/**/bin/" + configuration + "/*.Tests.dll", new XUnitSettings {
+			OutputDirectory = testResultsDir,
+			XmlReport = true,
+			Silent = !local
+		});	
+	}
+	finally
+	{
+		if(!local)
+		{
+			Information("Uploading test results...");
+			var files = GetFiles(testResultsDir + "/*.xml");
+			if(files.Count > 0)
+			{
+				foreach(var file in files)
+				{				
+					try
+					{
+						UploadTestResultFile(file);
+					}
+					catch
+					{	
+						Error("An error occured while uploading {0}.", file.FullPath);		
+					}
+				}
+			}
+			else
+			{
+				Warning("No test results found.");
+			}
+		}	
+	}	
 });
 
 
