@@ -180,8 +180,18 @@ Task("Package")
 	.IsDependentOn("Create-Cake-NuGet-Package")
 	.IsDependentOn("Create-Core-NuGet-Package");
 
-Task("Publish-MyGet")
+Task("Upload-Artifacts")
 	.IsDependentOn("Package")
+	.WithCriteria(() => !local)
+	.Does(() =>
+{
+	// Upload zip file.
+	var filename = new FilePath(buildResultDir + "/Cake-bin-v" + semVersion + ".zip");
+	UploadArtifact(filename);
+});	
+
+Task("Publish-MyGet")
+	.IsDependentOn("Upload-Artifacts")
 	.WithCriteria(() => !local && !isPullRequest)
 	.Does(() =>
 {
@@ -202,11 +212,10 @@ Task("Publish-MyGet")
 });
 
 Task("Publish")
-	.WithCriteria(() => !local && !isPullRequest)
 	.IsDependentOn("Publish-MyGet");
 
 Task("Default")
-	.Description("The default target.")
+	.Description("The default target.")	
 	.IsDependentOn("Publish");
 
 //////////////////////////////////////////////////////////////////////////

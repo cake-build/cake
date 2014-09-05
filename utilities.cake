@@ -67,3 +67,15 @@ public void UploadTestResultFile(FilePath path)
 		client.UploadFile(uri, path.FullPath);
 	}
 }
+
+public void UploadArtifact(FilePath path)
+{
+	if(GetBuildSystemName() == "AppVeyor")
+	{
+		var fileName = path.GetFilename().FullPath;
+		StartProcess("appveyor", new ProcessSettings {
+			Arguments = string.Concat("PushArtifact -Path \"", path.FullPath, 
+				"\" -FileName \"", fileName , "\"")
+		});
+	}	
+}
