@@ -333,7 +333,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Could not reach target B since it was skipped due to a criteria.", result.Message);
+                Assert.Equal("Could not reach target 'B' since it was skipped due to a criteria.", result.Message);
             }
         }
     }

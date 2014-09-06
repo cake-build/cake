@@ -199,6 +199,10 @@ namespace Cake.Core
 
                     _log.Verbose("Finished executing task: {0}", taskNode.Name);
                 }
+                else
+                {
+                    _log.Verbose("Skipping task: {0}", taskNode.Name);
+                }
             }
 
             return report;
@@ -214,7 +218,7 @@ namespace Cake.Core
                     {
                         // It's not OK to skip the target task.
                         // See issue #106 (https://github.com/cake-build/cake/issues/106)
-                        const string format = "Could not reach target {0} since it was skipped due to a criteria.";
+                        const string format = "Could not reach target '{0}' since it was skipped due to a criteria.";
                         var message = string.Format(CultureInfo.InvariantCulture, format, task.Name);
                         throw new CakeException(message);
                     }
