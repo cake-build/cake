@@ -189,10 +189,12 @@ namespace Cake.Core
                 var taskNode = _tasks.FirstOrDefault(x => x.Name.Equals(task, StringComparison.OrdinalIgnoreCase));
                 Debug.Assert(taskNode != null, "Node should not be null.");
 
-                if (ShouldTaskExecute(taskNode))
+                var isTarget = taskNode.Name.Equals(target, StringComparison.OrdinalIgnoreCase);
+
+                if (ShouldTaskExecute(taskNode, isTarget))
                 {
                     _log.Verbose("Executing task: {0}", taskNode.Name);
-
+                    
                     ExecuteTask(stopWatch, taskNode, report);
 
                     _log.Verbose("Finished executing task: {0}", taskNode.Name);
@@ -202,12 +204,20 @@ namespace Cake.Core
             return report;
         }
 
-        private static bool ShouldTaskExecute(CakeTask task)
+        private static bool ShouldTaskExecute(CakeTask task, bool isTarget)
         {
             foreach (var criteria in task.Criterias)
             {
                 if (!criteria())
                 {
+                    if (isTarget)
+                    {
+                        // It's not OK to skip the target task.
+                        // See issue #106 (https://github.com/cake-build/cake/issues/106)
+                        const string format = "Could not reach target {0} since it was skipped due to a criteria.";
+                        var message = string.Format(CultureInfo.InvariantCulture, format, task.Name);
+                        throw new CakeException(message);
+                    }
                     return false;
                 }
             }

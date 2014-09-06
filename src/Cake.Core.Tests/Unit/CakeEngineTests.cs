@@ -319,6 +319,22 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.True(fixture.Log.Messages.Contains("Error: Whoopsie"));
             }
+
+            [Fact]
+            public void Should_Throw_If_Target_Cannot_Be_Reached_Due_To_Constraint()
+            {
+                // Given
+                var engine = new CakeEngineFixture().CreateEngine();
+                engine.Task("A");
+                engine.Task("B").IsDependentOn("A").WithCriteria(false);
+
+                // When
+                var result = Record.Exception(() => engine.RunTarget("B"));
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("Could not reach target B since it was skipped due to a criteria.", result.Message);
+            }
         }
     }
 }

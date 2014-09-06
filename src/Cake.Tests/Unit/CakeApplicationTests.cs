@@ -208,7 +208,7 @@ namespace Cake.Tests.Unit
                 fixture.Options.ShowHelp = true;
 
                 // When
-                var result = fixture.RunApplication();
+                fixture.RunApplication();
 
                 // Then
                 fixture.CommandFactory.Received(1).CreateBuildCommand();
@@ -223,7 +223,7 @@ namespace Cake.Tests.Unit
                 fixture.Options.ShowVersion = true;
 
                 // When
-                var result = fixture.RunApplication();
+                fixture.RunApplication();
 
                 // Then
                 fixture.CommandFactory.Received(1).CreateBuildCommand();
