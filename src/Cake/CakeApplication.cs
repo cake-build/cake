@@ -70,14 +70,6 @@ namespace Cake
         {
             if (options != null)
             {
-                if (options.ShowHelp)
-                {
-                    return _commandFactory.CreateHelpCommand();          
-                }
-                if (options.ShowVersion)
-                {
-                    return _commandFactory.CreateVersionCommand();
-                }
                 if (options.Script != null)
                 {
                     if (options.ShowDescription)
@@ -86,6 +78,14 @@ namespace Cake
                         return _commandFactory.CreateDescriptionCommand();
                     }
                     return _commandFactory.CreateBuildCommand();                 
+                }
+                if (options.ShowHelp)
+                {
+                    return _commandFactory.CreateHelpCommand();
+                }
+                if (options.ShowVersion)
+                {
+                    return _commandFactory.CreateVersionCommand();
                 }
             }
             return _commandFactory.CreateHelpCommand();

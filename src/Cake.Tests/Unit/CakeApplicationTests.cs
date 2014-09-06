@@ -198,6 +198,36 @@ namespace Cake.Tests.Unit
                 // Then
                 Assert.Equal(1, result);
             }
+
+            [Fact]
+            public void Should_Not_Create_Help_Command_If_Script_Is_Specified()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.Options.Script = "./build.cake";
+                fixture.Options.ShowHelp = true;
+
+                // When
+                var result = fixture.RunApplication();
+
+                // Then
+                fixture.CommandFactory.Received(1).CreateBuildCommand();
+            }
+
+            [Fact]
+            public void Should_Not_Create_Version_Command_If_Script_Is_Specified()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.Options.Script = "./build.cake";
+                fixture.Options.ShowVersion = true;
+
+                // When
+                var result = fixture.RunApplication();
+
+                // Then
+                fixture.CommandFactory.Received(1).CreateBuildCommand();
+            }
         }
     }
 }
