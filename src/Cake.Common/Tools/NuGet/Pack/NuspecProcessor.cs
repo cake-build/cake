@@ -60,8 +60,7 @@ namespace Cake.Common.Tools.NuGet.Pack
             // Get the new nuspec path.
             var filename = nuspecFilePath.GetFilename();
             filename = filename.ChangeExtension("temp.nuspec");
-            var outputDirectory = GetOutputDirectory(nuspecFilePath, settings);
-            var resultPath = outputDirectory.GetFilePath(filename).MakeAbsolute(_environment);
+            var resultPath = nuspecFilePath.GetDirectory().GetFilePath(filename).MakeAbsolute(_environment);
 
             // Make sure the new nuspec file does not exist.
             var nuspecFile = _fileSystem.GetFile(resultPath);
@@ -79,13 +78,6 @@ namespace Cake.Common.Tools.NuGet.Pack
 
             // Return the new path.
             return nuspecFile.Path;
-        }
-
-        private DirectoryPath GetOutputDirectory(FilePath nuspecFilePath, NuGetPackSettings settings)
-        {
-            return settings.OutputDirectory != null
-                ? settings.OutputDirectory.MakeAbsolute(_environment)
-                : nuspecFilePath.GetDirectory().MakeAbsolute(_environment);
         }
     }
 }

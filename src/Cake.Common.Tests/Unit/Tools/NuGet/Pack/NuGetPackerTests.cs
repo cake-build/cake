@@ -233,7 +233,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), 
                     Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "pack -OutputDirectory \"/Working/build/output\" \"/Working/build/output/existing.temp.nuspec\""));
+                        p.Arguments.Render() == "pack -OutputDirectory \"/Working/build/output\" \"/Working/existing.temp.nuspec\""));
             }
 
             [Fact]
