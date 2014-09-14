@@ -51,16 +51,32 @@ namespace Cake.Common.Tools.NuGet.Pack
 
         private static XmlNode FindOrCreateElement(XmlDocument document, XmlNamespaceManager ns, string name)
         {
-            var path = string.Format(CultureInfo.InvariantCulture, "/package/nu:metadata/nu:{0}", name);
+            var path = string.Format(CultureInfo.InvariantCulture, "/package//*[local-name()='metadata']//*[local-name()='{0}']", name);
             var node = document.SelectSingleNode(path, ns);
             if (node == null)
             {
-                var parent = document.SelectSingleNode("/package/nu:metadata", ns);
+                var parent = document.SelectSingleNode("/package//*[local-name()='metadata']", ns);
                 if (parent == null)
                 {
-                    throw new CakeException("Nuspec file is missing metadata element.");
+                    // Get the package element.
+                    var package = document.SelectSingleNode("/package");
+                    if (package == null)
+                    {
+                        throw new CakeException("Nuspec file is missing package root.");
+                    }
+
+                    // Create the metadata element.
+                    parent = document.CreateElement("metadata", "http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd");
+                    package.PrependChild(parent);
                 }
-                node = document.CreateElement(name, "http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd");
+
+                // If the parent didn't have a namespace specified, then skip adding one.
+                // Otherwise add the parent's namespace. This is a little hackish, but it 
+                // will avoid empty namespaces. This should probably be done better...
+                node = parent.NamespaceURI == string.Empty 
+                    ? document.CreateElement(name) 
+                    : document.CreateElement(name, parent.NamespaceURI);
+
                 parent.AppendChild(node);
             }
             return node;

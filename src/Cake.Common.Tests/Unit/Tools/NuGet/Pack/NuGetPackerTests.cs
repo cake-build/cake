@@ -277,6 +277,38 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
             }
 
             [Fact]
+            public void Should_Add_Metadata_Element_To_Nuspec_If_Missing()
+            {
+                // Given
+                var fixture = new NuGetFixture(xml: Resources.Nuspec_NoMetadataElement);
+                var packer = fixture.CreatePacker();
+
+                // When
+                packer.Pack("./existing.nuspec", new NuGetPackSettings
+                {
+                    Id = "The ID",
+                    Version = "The version",
+                    Title = "The title",
+                    Authors = new[] { "Author #1", "Author #2" },
+                    Owners = new[] { "Owner #1", "Owner #2" },
+                    Description = "The description",
+                    Summary = "The summary",
+                    LicenseUrl = new Uri("https://license.com"),
+                    ProjectUrl = new Uri("https://project.com"),
+                    IconUrl = new Uri("https://icon.com"),
+                    RequireLicenseAcceptance = true,
+                    Copyright = "The copyright",
+                    ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" },
+                    Tags = new[] { "Tag1", "Tag2", "Tag3" }
+                });
+
+                // Then
+                Assert.Equal(
+                    Resources.Nuspec_Metadata.NormalizeLineEndings(),
+                    fixture.FileSystem.GetTextContent("/Working/existing.temp.nuspec").NormalizeLineEndings());
+            }
+
+            [Fact]
             public void Should_Replace_Template_Tokens_In_Nuspec()
             {
                 // Given
@@ -305,6 +337,38 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 // Then
                 Assert.Equal(
                     Resources.Nuspec_Metadata.NormalizeLineEndings(),
+                    fixture.FileSystem.GetTextContent("/Working/existing.temp.nuspec").NormalizeLineEndings());
+            }
+
+            [Fact]
+            public void Should_Replace_Template_Tokens_In_Nuspec_Without_Namespaces()
+            {
+                // Given
+                var fixture = new NuGetFixture(xml: Resources.Nuspec_NoMetadataValues_WithoutNamespaces);
+                var packer = fixture.CreatePacker();
+
+                // When
+                packer.Pack("./existing.nuspec", new NuGetPackSettings
+                {
+                    Id = "The ID",
+                    Version = "The version",
+                    Title = "The title",
+                    Authors = new[] { "Author #1", "Author #2" },
+                    Owners = new[] { "Owner #1", "Owner #2" },
+                    Description = "The description",
+                    Summary = "The summary",
+                    LicenseUrl = new Uri("https://license.com"),
+                    ProjectUrl = new Uri("https://project.com"),
+                    IconUrl = new Uri("https://icon.com"),
+                    RequireLicenseAcceptance = true,
+                    Copyright = "The copyright",
+                    ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" },
+                    Tags = new[] { "Tag1", "Tag2", "Tag3" }
+                });
+
+                // Then
+                Assert.Equal(
+                    Resources.Nuspec_Metadata_WithoutNamespaces.NormalizeLineEndings(),
                     fixture.FileSystem.GetTextContent("/Working/existing.temp.nuspec").NormalizeLineEndings());
             }
         }

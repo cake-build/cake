@@ -9,6 +9,9 @@
 //------------------------------------------------------------------------------
 
 namespace Cake.Common.Tests.Properties {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -78,6 +81,28 @@ namespace Cake.Common.Tests.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;package&gt;
+        ///  &lt;metadata&gt;
+        ///    &lt;id&gt;The ID&lt;/id&gt;
+        ///    &lt;version&gt;The version&lt;/version&gt;
+        ///    &lt;title&gt;The title&lt;/title&gt;
+        ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+        ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+        ///    &lt;description&gt;The description&lt;/description&gt;
+        ///    &lt;summary&gt;The summary&lt;/summary&gt;
+        ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+        ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+        ///    &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
+        ///    &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseA [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Nuspec_Metadata_WithoutNamespaces {
+            get {
+                return ResourceManager.GetString("Nuspec_Metadata_WithoutNamespaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
         ///  &lt;files&gt;
         ///    &lt;file src=&quot;Cake.Core.dll&quot; target=&quot;lib/net45&quot; /&gt;
@@ -108,6 +133,24 @@ namespace Cake.Common.Tests.Properties {
         internal static string Nuspec_NoMetadataValues {
             get {
                 return ResourceManager.GetString("Nuspec_NoMetadataValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;package&gt;
+        ///  &lt;metadata /&gt;
+        ///  &lt;files&gt;
+        ///    &lt;file src=&quot;Cake.Core.dll&quot; target=&quot;lib/net45&quot; /&gt;
+        ///    &lt;file src=&quot;Cake.Core.xml&quot; target=&quot;lib/net45&quot; /&gt;
+        ///    &lt;file src=&quot;Cake.Core.pdb&quot; target=&quot;lib/net45&quot; /&gt;
+        ///    &lt;file src=&quot;LICENSE&quot; /&gt;
+        ///  &lt;/files&gt;
+        ///&lt;/package&gt;.
+        /// </summary>
+        internal static string Nuspec_NoMetadataValues_WithoutNamespaces {
+            get {
+                return ResourceManager.GetString("Nuspec_NoMetadataValues_WithoutNamespaces", resourceCulture);
             }
         }
     }
