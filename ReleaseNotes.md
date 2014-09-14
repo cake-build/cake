@@ -1,3 +1,11 @@
+### New in 0.1.20 (Released 2014/09/14)
+* Fix for relative paths in Globber.
+* Specifying a script now take precedence over version or help commands.
+* Throws if target cannot be reached due to constraints.
+* Added logging when tasks are skipped due to constraints.
+* Changed location of transformed nuspec file.
+* Made nuspec XML namespaces optional.
+
 ### New in 0.1.19 (Released 2014/09/03)
 * Added default file convention recognizer.
 * Added assembly info parser.
