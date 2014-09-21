@@ -242,7 +242,7 @@ namespace Cake.Tests.Unit.Scripting
                 runner.Run(fixture.Options);
 
                 // Then
-                fixture.Session.Received(1).Execute(fixture.Source);
+                fixture.Session.Received(1).Execute(fixture.GetExpectedSource());
             }
         }
     }

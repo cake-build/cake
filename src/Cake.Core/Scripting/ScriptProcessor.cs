@@ -76,6 +76,9 @@ namespace Cake.Core.Scripting
             _log.Debug("Processing {0}...", path.GetFilename().FullPath);
             var lines = ReadSource(path);
 
+            // Append the line directive for the script.
+            context.AppendScriptLine(string.Format("#line 1 \"{0}\"", path.GetFilename().FullPath));
+
             // Iterate all lines in the script.
             foreach (var line in lines)
             {

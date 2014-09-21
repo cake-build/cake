@@ -53,5 +53,10 @@ namespace Cake.Tests.Fixtures
             return new ScriptRunner(FileSystem, Environment, Arguments,
                 SessionFactory, AliasGenerator, ScriptProcessor, Host);
         }
+
+        public string GetExpectedSource()
+        {
+            return string.Concat("#line 1 \"build.cake\"", "\r\n", Source);
+        }
     }
 }

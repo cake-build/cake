@@ -97,8 +97,8 @@ namespace Cake.Core.Tests.Unit.Scripting
                 // When                
                 var result = fixture.Process();
 
-                // Then
-                Assert.Equal(fixture.Source, result.GetScriptCode());                
+                // Then                
+                Assert.Equal(fixture.GetExpectedSource(), result.GetScriptCode());                
             }
 
             [Fact]
