@@ -77,7 +77,7 @@ namespace Cake.Core.Scripting
             var lines = ReadSource(path);
 
             // Append the line directive for the script.
-            context.AppendScriptLine(string.Format("#line 1 \"{0}\"", path.GetFilename().FullPath));
+            context.AppendScriptLine(string.Format(CultureInfo.InvariantCulture, "#line 1 \"{0}\"", path.GetFilename().FullPath));
 
             // Iterate all lines in the script.
             foreach (var line in lines)
