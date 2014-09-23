@@ -1,3 +1,6 @@
+### New in 0.1.21 (Released 2014/09/23)
+* Added line directives to generated scripts.
+
 ### New in 0.1.20 (Released 2014/09/14)
 * Fix for relative paths in Globber.
 * Specifying a script now take precedence over version or help commands.
