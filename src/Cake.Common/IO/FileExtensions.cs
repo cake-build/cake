@@ -14,7 +14,7 @@ namespace Cake.Common.IO
     public static class FileExtensions
     {
         /// <summary>
-        /// Copies the specified file.
+        /// Copies an existing file to a new location.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="filePath">The file path.</param>
@@ -27,7 +27,7 @@ namespace Cake.Common.IO
         }
 
         /// <summary>
-        /// Copies the specified file.
+        /// Copies an existing file to a new file, providing the option to specify a new file name.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="filePath">The file path.</param>
@@ -40,7 +40,7 @@ namespace Cake.Common.IO
         }
 
         /// <summary>
-        /// Copies the files matching the specified pattern.
+        /// Copies all files matching the provided pattern to a new location.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
@@ -53,7 +53,7 @@ namespace Cake.Common.IO
         }
 
         /// <summary>
-        /// Copies the specified files.
+        /// Copies existing files to a new location.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="filePaths">The file paths.</param>
@@ -66,7 +66,7 @@ namespace Cake.Common.IO
         }
 
         /// <summary>
-        /// Copies the specified files.
+        /// Copies existing files to a new location.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="filePaths">The file paths.</param>
@@ -84,7 +84,7 @@ namespace Cake.Common.IO
         }
 
         /// <summary>
-        /// Moves the specified file to the specified directory.
+        /// Moves an existing file to a new location.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="filePath">The file path.</param>
@@ -97,7 +97,7 @@ namespace Cake.Common.IO
         }
 
         /// <summary>
-        /// Moves the files matching the specified pattern to the specified directory.
+        /// Moves existing files matching the specified pattern to a new location.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
@@ -110,7 +110,7 @@ namespace Cake.Common.IO
         }
 
         /// <summary>
-        /// Moves the specified files to the specified directory.
+        /// Moves existing files to a new location.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="filePaths">The file paths.</param>
@@ -123,7 +123,7 @@ namespace Cake.Common.IO
         }
 
         /// <summary>
-        /// Moves the specified file to the specified directory.
+        /// Moves an existing file to a new location, providing the option to specify a new file name.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="filePath">The file path.</param>
