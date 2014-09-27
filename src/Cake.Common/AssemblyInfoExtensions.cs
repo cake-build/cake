@@ -30,7 +30,7 @@ namespace Cake.Common
         }
 
         /// <summary>
-        /// Parses an assembly information.
+        /// Parses an existing assembly information file.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="assemblyInfoPath">The assembly info path.</param>
