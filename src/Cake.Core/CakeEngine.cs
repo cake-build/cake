@@ -21,6 +21,8 @@ namespace Cake.Core
         private readonly ICakeArguments _arguments;
         private readonly IProcessRunner _processRunner;
         private readonly List<CakeTask> _tasks;
+        private Action _setupAction;
+        private Action _teardownAction;
 
         /// <summary>
         /// Gets the file system.
@@ -166,6 +168,26 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Allows registration of an action that's executed before any tasks are run.
+        /// If setup fails, no tasks will be executed but teardown will be performed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        public void Setup(Action action)
+        {
+            _setupAction = action;
+        }
+
+        /// <summary>
+        /// Allows registration of an action that's executed after all other tasks have been run.
+        /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        public void Teardown(Action action)
+        {
+            _teardownAction = action;
+        }
+
+        /// <summary>
         /// Runs the specified target.
         /// </summary>
         /// <param name="target">The target to run.</param>
@@ -181,31 +203,59 @@ namespace Cake.Core
                 throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, target));
             }
 
-            var stopWatch = new Stopwatch();
-            var report = new CakeReport();
+            // This isn't pretty, but we need to keep track of exceptions thrown
+            // while running a setup action, or a task. We do this since we don't
+            // want to throw teardown exceptions if an exception was thrown previously.
+            bool exceptionWasThrown = false;
 
-            foreach (var task in graph.Traverse(target))
+            try
             {
-                var taskNode = _tasks.FirstOrDefault(x => x.Name.Equals(task, StringComparison.OrdinalIgnoreCase));
-                Debug.Assert(taskNode != null, "Node should not be null.");
+                PerformSetup();
 
-                var isTarget = taskNode.Name.Equals(target, StringComparison.OrdinalIgnoreCase);
+                var stopWatch = new Stopwatch();
+                var report = new CakeReport();
 
-                if (ShouldTaskExecute(taskNode, isTarget))
+                foreach (var task in graph.Traverse(target))
                 {
-                    _log.Verbose("Executing task: {0}", taskNode.Name);
-                    
-                    ExecuteTask(stopWatch, taskNode, report);
+                    var taskNode = _tasks.FirstOrDefault(x => x.Name.Equals(task, StringComparison.OrdinalIgnoreCase));
+                    Debug.Assert(taskNode != null, "Node should not be null.");
 
-                    _log.Verbose("Finished executing task: {0}", taskNode.Name);
+                    var isTarget = taskNode.Name.Equals(target, StringComparison.OrdinalIgnoreCase);
+
+                    if (ShouldTaskExecute(taskNode, isTarget))
+                    {
+                        _log.Verbose("Executing task: {0}", taskNode.Name);
+
+                        ExecuteTask(stopWatch, taskNode, report);
+
+                        _log.Verbose("Finished executing task: {0}", taskNode.Name);
+                    }
+                    else
+                    {
+                        _log.Verbose("Skipping task: {0}", taskNode.Name);
+                    }
                 }
-                else
-                {
-                    _log.Verbose("Skipping task: {0}", taskNode.Name);
-                }
+
+                return report;
             }
+            catch
+            {
+                exceptionWasThrown = true;
+                throw;
+            }
+            finally
+            {
+                PerformTeardown(exceptionWasThrown);
+            }
+        }
 
-            return report;
+        private void PerformSetup()
+        {
+            if (_setupAction != null)
+            {
+                _log.Verbose("Executing custom setup action...");
+                _setupAction();
+            }
         }
 
         private static bool ShouldTaskExecute(CakeTask task, bool isTarget)
@@ -272,6 +322,28 @@ namespace Cake.Core
 
             // Add the task results to the report.
             report.Add(task.Name, stopWatch.Elapsed);
+        }
+
+        private void PerformTeardown(bool exceptionWasThrown)
+        {
+            if (_teardownAction != null)
+            {
+                try
+                {
+                    _log.Verbose("Executing custom teardown action...");
+                    _teardownAction();
+                }
+                catch (Exception ex)
+                {
+                    _log.Error("An error occured in the custom teardown action.");
+                    if (!exceptionWasThrown)
+                    {
+                        // If no other exception was thrown, we throw this one.
+                        throw;
+                    }
+                    _log.Error("Teardown error: {0}", ex.ToString());
+                }
+            }
         }
     }
 }
