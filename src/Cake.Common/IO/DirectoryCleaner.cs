@@ -9,13 +9,19 @@ namespace Cake.Common.IO
     {
         public static void Clean(ICakeContext context, DirectoryPath path)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
             if (path == null)
             {
                 throw new ArgumentNullException("path");
             }
-
-            // Make path absolute.
-            path = path.MakeAbsolute(context.Environment);
+           
+            if (path.IsRelative)
+            {
+                path = path.MakeAbsolute(context.Environment);
+            }
 
             // Get the root directory.
             var root = context.FileSystem.GetDirectory(path);

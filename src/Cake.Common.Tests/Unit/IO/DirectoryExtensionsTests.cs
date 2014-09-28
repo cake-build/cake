@@ -15,7 +15,19 @@ namespace Cake.Common.Tests.Unit.IO
         public sealed class TheCleanMethod
         {
             [Fact]
-            public void Should_Throw_If_Provided_Directory_Are_Null()
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() =>
+                    DirectoryExtensions.CleanDirectory(null, "/Temp/Hello"));
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Directory_Are_Null()
             {
                 // Given
                 var context = Substitute.For<ICakeContext>();
@@ -100,7 +112,22 @@ namespace Cake.Common.Tests.Unit.IO
             public sealed class WithPaths
             {
                 [Fact]
-                public void Should_Throw_If_Provided_Directory_Are_Null()
+                public void Should_Throw_If_Context_Is_Null()
+                {
+                    // Given
+                    var paths = new DirectoryPath[] { "/Temp/Hello", "/Temp/Goodbye" };
+
+                    // When
+                    var result = Record.Exception(() =>
+                        DirectoryExtensions.CleanDirectories(null, paths));
+
+                    // Then
+                    Assert.IsType<ArgumentNullException>(result);
+                    Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                }
+
+                [Fact]
+                public void Should_Throw_If_Directories_Are_Null()
                 {
                     // Given
                     var context = Substitute.For<ICakeContext>();
@@ -177,7 +204,22 @@ namespace Cake.Common.Tests.Unit.IO
             public sealed class WithStrings
             {
                 [Fact]
-                public void Should_Throw_If_Provided_Directory_Are_Null()
+                public void Should_Throw_If_Context_Is_Null()
+                {
+                    // Given
+                    var paths = new[] { "/Temp/Hello", "/Temp/Goodbye" };
+
+                    // When
+                    var result = Record.Exception(() =>
+                        DirectoryExtensions.CleanDirectories(null, paths));
+
+                    // Then
+                    Assert.IsType<ArgumentNullException>(result);
+                    Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                }
+
+                [Fact]
+                public void Should_Throw_If_Directories_Are_Null()
                 {
                     // Given
                     var context = Substitute.For<ICakeContext>();
@@ -270,7 +312,7 @@ namespace Cake.Common.Tests.Unit.IO
             }
 
             [Fact]
-            public void Should_Throw_If_Path_Is_Null()
+            public void Should_Throw_If_Directory_Is_Null()
             {
                 // Given
                 var context = Substitute.For<ICakeContext>();
@@ -345,6 +387,36 @@ namespace Cake.Common.Tests.Unit.IO
 
         public sealed class TheDeleteDirectoryMethod
         {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given
+                var fixture = new FileSystemFixture();
+
+                // When
+                var result = Record.Exception(() => DirectoryExtensions.DeleteDirectory(null, "/Temp/DoNotExist"));
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Directory_Is_Null()
+            {
+                // Given
+                var fixture = new FileSystemFixture();
+                var context = Substitute.For<ICakeContext>();
+                context.FileSystem.Returns(fixture.FileSystem);
+
+                // When
+                var result = Record.Exception(() => DirectoryExtensions.DeleteDirectory(context, null));
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("path", ((ArgumentNullException)result).ParamName);
+            }
+
             [Fact]
             public void Should_Throw_If_Directory_Do_Not_Exist()
             {
@@ -432,7 +504,22 @@ namespace Cake.Common.Tests.Unit.IO
             public sealed class WithPaths
             {
                 [Fact]
-                public void Should_Throw_If_Provided_Directories_Are_Null()
+                public void Should_Throw_If_Context_Is_Null()
+                {
+                    // Given
+                    var paths = new DirectoryPath[] { "/Temp/DoNotExist" };
+
+                    // When
+                    var result = Record.Exception(() =>
+                        DirectoryExtensions.DeleteDirectories(null, paths));
+
+                    // Then
+                    Assert.IsType<ArgumentNullException>(result);
+                    Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                }
+
+                [Fact]
+                public void Should_Throw_If_Directories_Are_Null()
                 {
                     // Given
                     var context = Substitute.For<ICakeContext>();
@@ -543,7 +630,22 @@ namespace Cake.Common.Tests.Unit.IO
             public sealed class WithStrings
             {
                 [Fact]
-                public void Should_Throw_If_Provided_Directories_Are_Null()
+                public void Should_Throw_If_Context_Is_Null()
+                {
+                    // Given
+                    var paths = new[] { "/Temp/DoNotExist" };
+
+                    // When
+                    var result = Record.Exception(() =>
+                        DirectoryExtensions.DeleteDirectories(null, paths));
+
+                    // Then
+                    Assert.IsType<ArgumentNullException>(result);
+                    Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                }
+
+                [Fact]
+                public void Should_Throw_If_Directories_Are_Null()
                 {
                     // Given
                     var context = Substitute.For<ICakeContext>();

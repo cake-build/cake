@@ -4,6 +4,7 @@ using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using System;
 
 namespace Cake.Common.IO
 {
@@ -11,7 +12,19 @@ namespace Cake.Common.IO
     {
         public static void Delete(ICakeContext context, DirectoryPath path, bool recursive)
         {
-            path = path.MakeAbsolute(context.Environment);
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            if(path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+
+            if (path.IsRelative)
+            {
+                path = path.MakeAbsolute(context.Environment);
+            }
 
             var directory = context.FileSystem.GetDirectory(path);
             if (!directory.Exists)
