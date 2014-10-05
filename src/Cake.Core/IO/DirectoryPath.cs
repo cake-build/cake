@@ -34,7 +34,7 @@ namespace Cake.Core.IO
 
         /// <summary>
         /// Combines the current path with a <see cref="FilePath"/>.
-        /// The provided <see cref="FilePath"/> must be absolute.
+        /// The provided <see cref="FilePath"/> must be relative.
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns>A combination of the current path and the provided <see cref="FilePath"/>.</returns>
@@ -54,7 +54,7 @@ namespace Cake.Core.IO
 
         /// <summary>
         /// Combines the current path with another <see cref="DirectoryPath"/>.
-        /// The provided <see cref="DirectoryPath"/> must be absolute.
+        /// The provided <see cref="DirectoryPath"/> must be relative.
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns>A combination of the current path and the provided <see cref="DirectoryPath"/>.</returns>
