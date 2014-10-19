@@ -74,7 +74,6 @@
     <Compile Include="Fakes\FakeConsole.cs" />
     <Compile Include="Fixtures\ArgumentParserFixture.cs" />
     <Compile Include="Fixtures\CakeApplicationFixture.cs" />
-    <Compile Include="Fixtures\ScriptRunnerFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
@@ -88,14 +87,13 @@
     <Compile Include="Unit\CakeReportPrinterTests.cs" />
     <Compile Include="Unit\Diagnostics\CakeBuildLogTests.cs" />
     <Compile Include="Unit\Diagnostics\FormatParserTests.cs" />
-    <Compile Include="Unit\Scripting\Hosts\BuildScriptHostTests.cs">
+    <Compile Include="Unit\Scripting\BuildScriptHostTests.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Unit\Scripting\Hosts\DescriptionScriptHostTests.cs" />
+    <Compile Include="Unit\Scripting\DescriptionScriptHostTests.cs" />
     <Compile Include="Unit\Scripting\Roslyn\RoslynScriptSessionFactoryTests.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Unit\Scripting\ScriptRunnerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">

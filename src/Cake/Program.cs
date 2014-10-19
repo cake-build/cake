@@ -7,7 +7,6 @@ using Cake.Core.IO;
 using Cake.Core.Scripting;
 using Cake.Diagnostics;
 using Cake.Scripting;
-using Cake.Scripting.Hosts;
 using Cake.Scripting.Roslyn;
 
 namespace Cake
@@ -31,7 +30,7 @@ namespace Cake
             builder.RegisterType<CakeEngine>().As<ICakeEngine>().SingleInstance();
             builder.RegisterType<FileSystem>().As<IFileSystem>().SingleInstance();
             builder.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().SingleInstance();
-            builder.RegisterType<CakeArguments>().As<ICakeArguments>().AsSelf().SingleInstance();
+            builder.RegisterType<CakeArguments>().As<ICakeArguments>().SingleInstance();
             builder.RegisterType<Globber>().As<IGlobber>().SingleInstance();
             builder.RegisterType<ProcessRunner>().As<IProcessRunner>().SingleInstance();
             builder.RegisterType<ScriptAliasGenerator>().As<IScriptAliasGenerator>().SingleInstance();
@@ -47,7 +46,7 @@ namespace Cake
             builder.RegisterType<ArgumentParser>().As<IArgumentParser>().SingleInstance();
             builder.RegisterType<CommandFactory>().As<ICommandFactory>().SingleInstance();
             builder.RegisterType<CakeApplication>().SingleInstance();
-            builder.RegisterType<ScriptRunner>().InstancePerDependency();
+            builder.RegisterType<ScriptRunner>().As<IScriptRunner>().SingleInstance();
             builder.RegisterType<CakeBuildLog>().As<ICakeLog>().As<IVerbosityAwareLog>().SingleInstance();
 
             // Register script hosts.            

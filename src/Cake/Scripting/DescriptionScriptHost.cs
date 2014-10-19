@@ -4,7 +4,7 @@ using System.Linq;
 using Cake.Core;
 using Cake.Core.Scripting;
 
-namespace Cake.Scripting.Hosts
+namespace Cake.Scripting
 {
     public sealed class DescriptionScriptHost : ScriptHost
     {

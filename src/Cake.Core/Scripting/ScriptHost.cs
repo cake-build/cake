@@ -6,7 +6,7 @@ using Cake.Core.IO;
 namespace Cake.Core.Scripting
 {
     /// <summary>
-    /// The script host that works as a context for the scripts.
+    /// The script host works as a context for scripts.
     /// </summary>
     public abstract class ScriptHost : IScriptHost
     {

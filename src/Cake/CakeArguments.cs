@@ -20,12 +20,14 @@ namespace Cake
 
         public void SetArguments(IDictionary<string, string> arguments)
         {
-            if (_arguments.Count == 0)
+            if (arguments == null)
             {
-                foreach (var argument in arguments)
-                {
-                    _arguments.Add(argument.Key, argument.Value);
-                }
+                throw new ArgumentNullException("arguments");
+            }
+            _arguments.Clear();
+            foreach (var argument in arguments)
+            {
+                _arguments.Add(argument.Key, argument.Value);
             }
         }
 
@@ -36,7 +38,7 @@ namespace Cake
 
         public string GetArgument(string name)
         {
-            return _arguments.ContainsKey(name) 
+            return _arguments.ContainsKey(name)
                 ? _arguments[name] : null;
         }
     }
