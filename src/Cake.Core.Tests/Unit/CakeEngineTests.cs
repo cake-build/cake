@@ -454,6 +454,24 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
+            public void Should_Throw_Exception_Occuring_In_Teardown_If_No_Previous_Exception_Was_Thrown()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                var expected = new InvalidOperationException("Teardown");
+
+                engine.Teardown(() => { throw expected; });
+                engine.Task("A").Does(() => { });
+
+                // When
+                var exception = Record.Exception(() => engine.RunTarget("A"));
+
+                // Then
+                Assert.Equal(expected, exception);
+            }
+
+            [Fact]
             public void Should_Log_Teardown_Exception_If_Both_Setup_And_Teardown_Actions_Throw()
             {
                 // Given
