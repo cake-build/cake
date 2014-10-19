@@ -390,10 +390,7 @@ namespace Cake.Common.Tests.Unit.IO
             [Fact]
             public void Should_Throw_If_Context_Is_Null()
             {
-                // Given
-                var fixture = new FileSystemFixture();
-
-                // When
+                // Given, When
                 var result = Record.Exception(() => DirectoryExtensions.DeleteDirectory(null, "/Temp/DoNotExist"));
 
                 // Then

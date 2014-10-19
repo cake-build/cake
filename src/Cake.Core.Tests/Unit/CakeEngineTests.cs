@@ -365,7 +365,7 @@ namespace Cake.Core.Tests.Unit
                 engine.Task("A").Does(() => runTask = true);
 
                 // When
-                var exception = Record.Exception(() => engine.RunTarget("A"));
+                Record.Exception(() => engine.RunTarget("A"));
 
                 // Then
                 Assert.False(runTask, "Task A was executed although it shouldn't have been.");
@@ -465,7 +465,7 @@ namespace Cake.Core.Tests.Unit
                 engine.Task("A").Does(() => { });
 
                 // When
-                var exception = Record.Exception(() => engine.RunTarget("A"));
+                Record.Exception(() => engine.RunTarget("A"));
 
                 // Then
                 Assert.True(fixture.Log.Messages.Any(x => x.StartsWith("Teardown error:")));
@@ -501,7 +501,7 @@ namespace Cake.Core.Tests.Unit
                 engine.Task("A").Does(() => { throw new InvalidOperationException("Task"); });
 
                 // When
-                var exception = Record.Exception(() => engine.RunTarget("A"));
+                Record.Exception(() => engine.RunTarget("A"));
 
                 // Then
                 Assert.True(fixture.Log.Messages.Any(x => x.StartsWith("Teardown error:")));

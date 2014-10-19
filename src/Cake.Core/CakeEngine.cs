@@ -206,7 +206,7 @@ namespace Cake.Core
             // This isn't pretty, but we need to keep track of exceptions thrown
             // while running a setup action, or a task. We do this since we don't
             // want to throw teardown exceptions if an exception was thrown previously.
-            bool exceptionWasThrown = false;
+            var exceptionWasThrown = false;
 
             try
             {
