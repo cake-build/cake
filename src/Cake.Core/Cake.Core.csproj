@@ -130,6 +130,7 @@
     <Compile Include="Scripting\IScriptAliasGenerator.cs" />
     <Compile Include="Scripting\IScriptHost.cs" />
     <Compile Include="Scripting\IScriptProcessor.cs" />
+    <Compile Include="Scripting\IScriptRunner.cs" />
     <Compile Include="Scripting\IScriptSession.cs" />
     <Compile Include="Scripting\IScriptSessionFactory.cs" />
     <Compile Include="Scripting\LineProcessor.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="Scripting\ScriptHost.cs" />
     <Compile Include="IO\ProcessArgument.cs" />
     <Compile Include="IO\ProcessArgumentBuilder.cs" />
+    <Compile Include="Scripting\ScriptRunner.cs" />
     <Compile Include="Utilities\Tool.cs" />
   </ItemGroup>
   <ItemGroup />

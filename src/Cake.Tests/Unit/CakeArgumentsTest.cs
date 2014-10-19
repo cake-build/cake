@@ -6,7 +6,7 @@ namespace Cake.Tests.Unit
 {
     public sealed class CakeArgumentsTests
     {
-        public sealed class SetArguments
+        public sealed class TheSetArgumentsMethod
         {
             [Fact]
             public void Should_Set_Arguments()
@@ -22,7 +22,7 @@ namespace Cake.Tests.Unit
             }
 
             [Fact]
-            public void Should_Only_Set_Arguments_If_Argument_Collection_Is_Empty()
+            public void Should_Replace_Arguments_If_New_Ones_Are_Set()
             {
                 // Given
                 var arguments = new CakeArguments();
@@ -32,7 +32,7 @@ namespace Cake.Tests.Unit
                 arguments.SetArguments(new Dictionary<string, string> { { "C", "D" }, { "D", "E" } });
 
                 // Then
-                Assert.Equal(1, arguments.Arguments.Count);
+                Assert.Equal(2, arguments.Arguments.Count);
             }
         }
 
