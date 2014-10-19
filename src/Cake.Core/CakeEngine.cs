@@ -133,22 +133,6 @@ namespace Cake.Core
         }
 
         /// <summary>
-        /// Creates and registers a new task.
-        /// </summary>
-        /// <typeparam name="T">The task type.</typeparam>
-        /// <returns>
-        /// A <see cref="CakeTaskBuilder{T}"/> used to configure the task.
-        /// </returns>
-        public CakeTaskBuilder<T> Build<T>()
-            where T : CakeTask, new()
-        {
-            var task = new T();
-            _tasks.Add(task);
-            var builder = new CakeTaskBuilder<T>(task);
-            return builder;
-        }
-
-        /// <summary>
         /// Creates and registers a new <see cref="ActionTask"/>.
         /// </summary>
         /// <param name="name">The name of the task.</param>
