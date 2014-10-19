@@ -5,7 +5,7 @@ using Cake.Core.Annotations;
 namespace Cake.Common
 {
     /// <summary>
-    /// Added helpers to retrieve enviroment information
+    /// Contains functionality related to the environment.
     /// </summary>
     [CakeAliasCategory("Environment")]
     public static class EnvironmentExtensions
