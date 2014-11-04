@@ -10,3 +10,4 @@ branches:
   # Whitelist
   only:
     - develop
+    - main
