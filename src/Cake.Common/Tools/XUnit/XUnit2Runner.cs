@@ -7,9 +7,9 @@ using Cake.Core.Utilities;
 namespace Cake.Common.Tools.XUnit
 {
     /// <summary>
-    /// The xUnit.net (v1) test runner.
+    /// The xUnit.net v2 test runner.
     /// </summary>
-    public sealed class XUnitRunner : Tool<XUnitSettings>
+    public sealed class XUnit2Runner : Tool<XUnit2Settings>
     {
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
@@ -21,7 +21,7 @@ namespace Cake.Common.Tools.XUnit
         /// <param name="environment">The environment.</param>
         /// <param name="globber">The globber.</param>
         /// <param name="runner">The runner.</param>
-        public XUnitRunner(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, IProcessRunner runner)
+        public XUnit2Runner(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, IProcessRunner runner)
             : base(fileSystem, environment, runner)
         {
             _environment = environment;
@@ -33,7 +33,7 @@ namespace Cake.Common.Tools.XUnit
         /// </summary>
         /// <param name="assemblyPath">The assembly path.</param>
         /// <param name="settings">The settings.</param>
-        public void Run(FilePath assemblyPath, XUnitSettings settings)
+        public void Run(FilePath assemblyPath, XUnit2Settings settings)
         {
             if (assemblyPath == null)
             {
@@ -51,7 +51,7 @@ namespace Cake.Common.Tools.XUnit
                 {
                     throw new CakeException("Cannot generate HTML report when no output directory has been set.");
                 }
-                if (settings.XmlReport)
+                if (settings.XmlReport || settings.XmlReportV1)
                 {
                     throw new CakeException("Cannot generate XML report when no output directory has been set.");
                 }
@@ -60,7 +60,7 @@ namespace Cake.Common.Tools.XUnit
             Run(settings, GetArguments(assemblyPath, settings), settings.ToolPath);
         }
 
-        private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, XUnitSettings settings)
+        private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, XUnit2Settings settings)
         {
             var builder = new ProcessArgumentBuilder();
 
@@ -73,7 +73,7 @@ namespace Cake.Common.Tools.XUnit
             // No shadow copy?
             if (!settings.ShadowCopy)
             {
-                builder.AppendQuoted("/noshadow");
+                builder.AppendQuoted("-noshadow");
             }
 
             // Generate HTML report?
@@ -82,24 +82,24 @@ namespace Cake.Common.Tools.XUnit
                 var assemblyFilename = assemblyPath.GetFilename().AppendExtension(".html");
                 var outputPath = settings.OutputDirectory.MakeAbsolute(_environment).GetFilePath(assemblyFilename);
 
-                builder.AppendQuoted("/html");
+                builder.AppendQuoted("-html");
                 builder.AppendQuoted(outputPath.FullPath);
             }
 
             // Generate XML report?
-            if (settings.XmlReport)
+            if (settings.XmlReport || settings.XmlReportV1)
             {
                 var assemblyFilename = assemblyPath.GetFilename().AppendExtension(".xml");
                 var outputPath = settings.OutputDirectory.MakeAbsolute(_environment).GetFilePath(assemblyFilename);
 
-                builder.AppendQuoted("/xml");
+                builder.AppendQuoted(settings.XmlReportV1 ? "-xmlv1" : "-xml");
                 builder.AppendQuoted(outputPath.FullPath);
             }
 
             // Silent mode?
             if (settings.Silent)
             {
-                builder.Append("/silent");
+                builder.AppendQuoted("-silent");
             }
 
             return builder;
@@ -111,7 +111,7 @@ namespace Cake.Common.Tools.XUnit
         /// <returns>The name of the tool.</returns>
         protected override string GetToolName()
         {
-            return "xUnit.net (v1)";
+            return "xUnit.net (v2)";
         }
 
         /// <summary>
@@ -119,9 +119,9 @@ namespace Cake.Common.Tools.XUnit
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The default tool path.</returns>
-        protected override FilePath GetDefaultToolPath(XUnitSettings settings)
+        protected override FilePath GetDefaultToolPath(XUnit2Settings settings)
         {
-            return _globber.GetFiles("./tools/**/xunit.console.clr4.exe").FirstOrDefault();
+            return _globber.GetFiles("./tools/**/xunit.console.exe").FirstOrDefault();
         }
     }
 }

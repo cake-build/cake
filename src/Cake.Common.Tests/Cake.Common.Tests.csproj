@@ -74,6 +74,7 @@
     <Compile Include="Fixtures\NUnitRunnerFixture.cs" />
     <Compile Include="Fixtures\ProcessFixture.cs" />
     <Compile Include="Fixtures\WiXFixture.cs" />
+    <Compile Include="Fixtures\XUnit2RunnerFixture.cs" />
     <Compile Include="Fixtures\XUnitRunnerFixture.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -106,6 +107,8 @@
     <Compile Include="Unit\Tools\NUnit\NUnitSettingsTests.cs" />
     <Compile Include="Unit\Tools\WiX\LightRunnerTests.cs" />
     <Compile Include="Unit\Tools\WiX\CandleRunnerTests.cs" />
+    <Compile Include="Unit\Tools\XUnit\XUnit2SettingsTests.cs" />
+    <Compile Include="Unit\Tools\XUnit\XUnit2RunnerTests.cs" />
     <Compile Include="Unit\Tools\XUnit\XUnitRunnerTests.cs" />
     <Compile Include="Unit\Tools\XUnit\XUnitSettingsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
