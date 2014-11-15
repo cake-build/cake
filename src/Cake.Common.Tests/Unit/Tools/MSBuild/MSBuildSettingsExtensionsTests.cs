@@ -1,6 +1,7 @@
 ﻿using Cake.Common.Tools.MSBuild;
 using Cake.Core.IO;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Cake.Common.Tests.Unit.Tools.MSBuild
 {
@@ -204,6 +205,41 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Then
                 Assert.Equal(settings, result);
             }
+        }
+
+        public sealed class TheNodeReuseMethod
+        {
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public void Should_Set_Node_Reuse(bool reuse)
+            {
+                // Given
+                var solution = new FilePath("/src/Solution.sln");
+                var settings = new MSBuildSettings(solution);
+
+                // When
+                settings.SetNodeReuse(reuse);
+
+                // Then
+                Assert.Equal(reuse, settings.NodeReuse);
+            }
+
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public void Should_Return_The_Same_Configuration(bool reuse)
+            {
+                // Given
+                var solution = new FilePath("/src/Solution.sln");
+                var settings = new MSBuildSettings(solution);
+
+                // When
+                var result = settings.SetNodeReuse(reuse);
+
+                // Then
+                Assert.Equal(settings, result);
+            }        
         }
     }
 }

@@ -277,6 +277,27 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Fact]
+            public void Should_Use_Node_Reuse_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, true);
+                var runner = fixture.CreateRunner();
+
+                var settings = new MSBuildSettings("./src/Solution.sln");
+                settings.ToolVersion = MSBuildToolVersion.VS2013;
+                settings.NodeReuse = true;
+
+                // When
+                runner.Run(settings);
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "/m /nr:true /target:Build \"/Working/src/Solution.sln\""));
+            }
+
+            [Fact]
             public void Should_Append_Targets_To_Process_Arguments()
             {
                 // Given
