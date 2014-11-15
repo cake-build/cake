@@ -113,5 +113,21 @@ namespace Cake.Common.Tools.MSBuild
             settings.MaxCpuCount = Math.Max(0, maxCpuCount);
             return settings;
         }
+
+        /// <summary>
+        /// Sets whether or not node reuse should be enabled.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="reuse"><c>true</c> if node reuse should be enabled; otherwise <c>false</c>.</param>
+        /// <returns></returns>
+        public static MSBuildSettings SetNodeReuse(this MSBuildSettings settings, bool reuse)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+            settings.NodeReuse = reuse;
+            return settings;
+        }
     }
 }
