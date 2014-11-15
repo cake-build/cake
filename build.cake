@@ -85,9 +85,9 @@ Task("Run-Unit-Tests")
 	try
 	{
 		// Run unit tests.
-		XUnit("./src/**/bin/" + configuration + "/*.Tests.dll", new XUnitSettings {
+		XUnit2("./src/**/bin/" + configuration + "/*.Tests.dll", new XUnit2Settings {
 			OutputDirectory = testResultsDir,
-			XmlReport = true,
+			XmlReportV1 = true,
 			Silent = !local
 		});	
 	}
