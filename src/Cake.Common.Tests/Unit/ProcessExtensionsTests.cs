@@ -36,7 +36,7 @@ namespace Cake.Common.Tests.Unit
 
                     // When
                     var result = Record.Exception(() =>
-                        ProcessExtensions.StartProcess(context, null));
+                        context.StartProcess(null));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -116,7 +116,7 @@ namespace Cake.Common.Tests.Unit
 
                     // When
                     var result = Record.Exception(() =>
-                        ProcessExtensions.StartProcess(context, null, settings));
+                        context.StartProcess(null, settings));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -132,7 +132,7 @@ namespace Cake.Common.Tests.Unit
 
                     // When
                     var result = Record.Exception(() =>
-                        ProcessExtensions.StartProcess(context, fileName, null));
+                        context.StartProcess(fileName, null));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);

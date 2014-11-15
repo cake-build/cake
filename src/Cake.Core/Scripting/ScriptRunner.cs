@@ -117,6 +117,7 @@ namespace Cake.Core.Scripting
             session.Execute(context.GetScriptCode());
         }
 
+        // ReSharper disable once UnusedParameter.Local
         private static void ValidateScriptHost(IScriptHost host)
         {
             if (host.FileSystem == null)

@@ -42,7 +42,7 @@ namespace Cake.Common.Tools.NuGet.Pack
 
             // Return the file of the new nuspec.
             _log.Debug("Writing temporary nuspec...");
-            return SaveNuspecXml(nuspecFilePath, settings, xml);
+            return SaveNuspecXml(nuspecFilePath, xml);
         }
 
         private static XmlDocument LoadNuspecXml(IFile nuspecFile)
@@ -55,7 +55,7 @@ namespace Cake.Common.Tools.NuGet.Pack
             }
         }
 
-        private FilePath SaveNuspecXml(FilePath nuspecFilePath, NuGetPackSettings settings, XmlDocument document)
+        private FilePath SaveNuspecXml(FilePath nuspecFilePath, XmlDocument document)
         {
             // Get the new nuspec path.
             var filename = nuspecFilePath.GetFilename();

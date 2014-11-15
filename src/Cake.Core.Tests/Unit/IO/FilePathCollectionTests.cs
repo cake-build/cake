@@ -72,7 +72,7 @@ namespace Cake.Core.Tests.Unit.IO
                 }
             }
 
-            public sealed class With_Multiple_Paths
+            public sealed class WithMultiplePaths
             {
                 [Fact]
                 public void Should_Add_Paths_That_Are_Not_Present()
@@ -125,7 +125,7 @@ namespace Cake.Core.Tests.Unit.IO
                 }
             }
 
-            public sealed class With_Multiple_Paths
+            public sealed class WithMultiplePaths
             {
                 [Theory]
                 [InlineData(true, 2)]
