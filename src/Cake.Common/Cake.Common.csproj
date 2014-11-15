@@ -107,13 +107,16 @@
     <Compile Include="Tools\WiX\LightRunner.cs" />
     <Compile Include="Tools\WiX\LightSettings.cs" />
     <Compile Include="Tools\WiX\WiXExtensions.cs" />
+    <Compile Include="Tools\XUnit\XUnit2Extensions.cs" />
     <Compile Include="Tools\XUnit\XUnitExtensions.cs" />
-    <Compile Include="Tools\XUnit\XUnitRunner.cs" />
     <Compile Include="Tools\XUnit\XUnitSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="Tools\XUnit\XUnitRunner.cs" />
+    <Compile Include="Tools\XUnit\XUnit2Runner.cs" />
+    <Compile Include="Tools\XUnit\XUnit2Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">

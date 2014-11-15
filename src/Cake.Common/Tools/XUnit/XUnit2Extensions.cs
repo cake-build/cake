@@ -11,15 +11,15 @@ namespace Cake.Common.Tools.XUnit
     /// Contains functionality related to running xUnit.net tests.
     /// </summary>
     [CakeAliasCategory("xUnit")]
-    public static class XUnitExtensions
+    public static class XUnit2Extensions
     {
         /// <summary>
-        /// Runs all xUnit.net tests in the assemblies matching the specified pattern.
+        /// Runs all xUnit.net v2 tests in the assemblies matching the specified pattern.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
         [CakeMethodAlias]
-        public static void XUnit(this ICakeContext context, string pattern)
+        public static void XUnit2(this ICakeContext context, string pattern)
         {
             if (context == null)
             {
@@ -27,17 +27,17 @@ namespace Cake.Common.Tools.XUnit
             }
 
             var assemblies = context.Globber.GetFiles(pattern);
-            XUnit(context, assemblies, new XUnitSettings());
+            XUnit2(context, assemblies, new XUnit2Settings());
         }
 
         /// <summary>
-        /// Runs all xUnit.net tests in the assemblies matching the specified pattern.
+        /// Runs all xUnit.net v2 tests in the assemblies matching the specified pattern.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
-        public static void XUnit(this ICakeContext context, string pattern, XUnitSettings settings)
+        public static void XUnit2(this ICakeContext context, string pattern, XUnit2Settings settings)
         {
             if (context == null)
             {
@@ -45,23 +45,23 @@ namespace Cake.Common.Tools.XUnit
             }
 
             var assemblies = context.Globber.GetFiles(pattern);
-            XUnit(context, assemblies, settings);
+            XUnit2(context, assemblies, settings);
         }
 
         /// <summary>
-        /// Runs all xUnit.net tests in the specified assemblies.
+        /// Runs all xUnit.net v2 tests in the specified assemblies.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
         [CakeMethodAlias]
-        public static void XUnit(this ICakeContext context, IEnumerable<string> assemblies)
+        public static void XUnit2(this ICakeContext context, IEnumerable<string> assemblies)
         {
             if (assemblies == null)
             {
                 throw new ArgumentNullException("assemblies");
             }
             var paths = assemblies.Select(p => new FilePath(p));
-            XUnit(context, paths, new XUnitSettings());
+            XUnit2(context, paths, new XUnit2Settings());
         }
 
         /// <summary>
@@ -70,36 +70,36 @@ namespace Cake.Common.Tools.XUnit
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
         [CakeMethodAlias]
-        public static void XUnit(this ICakeContext context, IEnumerable<FilePath> assemblies)
-        {            
-            XUnit(context, assemblies, new XUnitSettings());
+        public static void XUnit2(this ICakeContext context, IEnumerable<FilePath> assemblies)
+        {
+            XUnit2(context, assemblies, new XUnit2Settings());
         }
 
         /// <summary>
-        /// Runs all xUnit.net tests in the specified assemblies.
+        /// Runs all xUnit.net v2 tests in the specified assemblies.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
-        public static void XUnit(this ICakeContext context, IEnumerable<string> assemblies, XUnitSettings settings)
+        public static void XUnit2(this ICakeContext context, IEnumerable<string> assemblies, XUnit2Settings settings)
         {
             if (assemblies == null)
             {
                 throw new ArgumentNullException("assemblies");
             }
             var paths = assemblies.Select(p => new FilePath(p));
-            XUnit(context, paths, settings);
+            XUnit2(context, paths, settings);
         }
 
         /// <summary>
-        /// Runs all xUnit.net tests in the specified assemblies.
+        /// Runs all xUnit.net v2 tests in the specified assemblies.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
-        public static void XUnit(this ICakeContext context, IEnumerable<FilePath> assemblies, XUnitSettings settings)
+        public static void XUnit2(this ICakeContext context, IEnumerable<FilePath> assemblies, XUnit2Settings settings)
         {
             if (context == null)
             {
@@ -110,7 +110,7 @@ namespace Cake.Common.Tools.XUnit
                 throw new ArgumentNullException("assemblies");
             }
 
-            var runner = new XUnitRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            var runner = new XUnit2Runner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
             foreach (var assembly in assemblies)
             {
                 runner.Run(assembly, settings);

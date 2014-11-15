@@ -3,9 +3,9 @@
 namespace Cake.Common.Tools.XUnit
 {
     /// <summary>
-    /// Contains settings used by <see cref="XUnitRunner"/>.
+    /// Contains settings used by <see cref="XUnit2Runner"/>.
     /// </summary>
-    public class XUnitSettings
+    public class XUnit2Settings
     {
         /// <summary>
         /// Gets or sets a value indicating whether tests should be run as a shadow copy.
@@ -31,6 +31,11 @@ namespace Cake.Common.Tools.XUnit
         public bool XmlReport { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether an xUnit.net v1 style XML report should be generated.
+        /// </summary>
+        public bool XmlReportV1 { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether an HTML report should be generated.
         /// </summary>
         /// <value>
@@ -50,9 +55,9 @@ namespace Cake.Common.Tools.XUnit
         public bool Silent { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="XUnitSettings"/> class.
+        /// Initializes a new instance of the <see cref="XUnit2Settings"/> class.
         /// </summary>
-        public XUnitSettings()
+        public XUnit2Settings()
         {
             ShadowCopy = true;
         }
