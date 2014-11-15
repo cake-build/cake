@@ -118,9 +118,7 @@ namespace Cake.Core.IO
             {
                 throw new ArgumentNullException("collection");
             }
-            var result = new FilePathCollection(collection, collection.Comparer);
-            result.Add(path);
-            return result;
+            return new FilePathCollection(collection, collection.Comparer) {path};
         }
 
         /// <summary>Adds multiple paths to the collection.</summary>
@@ -133,9 +131,7 @@ namespace Cake.Core.IO
             {
                 throw new ArgumentNullException("collection");
             }
-            var result = new FilePathCollection(collection, collection.Comparer);
-            result.Add(paths);
-            return result;
+            return new FilePathCollection(collection, collection.Comparer) {paths};
         }
 
         /// <summary>

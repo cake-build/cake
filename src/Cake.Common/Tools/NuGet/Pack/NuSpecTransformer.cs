@@ -13,21 +13,23 @@ namespace Cake.Common.Tools.NuGet.Pack
 
         static NuspecTransformer()
         {
-            _mappings = new Dictionary<string, Func<NuGetPackSettings, string>>();
-            _mappings.Add("id", settings => ToString(settings.Id));
-            _mappings.Add("version", settings => ToString(settings.Version));
-            _mappings.Add("title", settings => ToString(settings.Title));
-            _mappings.Add("authors", settings => ToCommaSeparatedString(settings.Authors));
-            _mappings.Add("owners", settings => ToCommaSeparatedString(settings.Owners));
-            _mappings.Add("description", settings => ToString(settings.Description));
-            _mappings.Add("summary", settings => ToString(settings.Summary));
-            _mappings.Add("licenseUrl", settings => ToString(settings.LicenseUrl));
-            _mappings.Add("projectUrl", settings => ToString(settings.ProjectUrl));
-            _mappings.Add("iconUrl", settings => ToString(settings.IconUrl));
-            _mappings.Add("requireLicenseAcceptance", settings => ToString(settings.RequireLicenseAcceptance));
-            _mappings.Add("copyright", settings => ToString(settings.Copyright));
-            _mappings.Add("releaseNotes", settings => ToMultiLineString(settings.ReleaseNotes));
-            _mappings.Add("tags", settings => ToSpaceSeparatedString(settings.Tags));
+            _mappings = new Dictionary<string, Func<NuGetPackSettings, string>>
+            {
+                {"id", settings => ToString(settings.Id)},
+                {"version", settings => ToString(settings.Version)},
+                {"title", settings => ToString(settings.Title)},
+                {"authors", settings => ToCommaSeparatedString(settings.Authors)},
+                {"owners", settings => ToCommaSeparatedString(settings.Owners)},
+                {"description", settings => ToString(settings.Description)},
+                {"summary", settings => ToString(settings.Summary)},
+                {"licenseUrl", settings => ToString(settings.LicenseUrl)},
+                {"projectUrl", settings => ToString(settings.ProjectUrl)},
+                {"iconUrl", settings => ToString(settings.IconUrl)},
+                {"requireLicenseAcceptance", settings => ToString(settings.RequireLicenseAcceptance)},
+                {"copyright", settings => ToString(settings.Copyright)},
+                {"releaseNotes", settings => ToMultiLineString(settings.ReleaseNotes)},
+                {"tags", settings => ToSpaceSeparatedString(settings.Tags)}
+            };
         }
 
         public static void Transform(XmlDocument document, NuGetPackSettings settings)

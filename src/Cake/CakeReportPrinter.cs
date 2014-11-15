@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Cake.Core;
@@ -51,9 +52,9 @@ namespace Cake
             return time.ToString("c", CultureInfo.InvariantCulture);
         }
 
-        private static TimeSpan GetTotalTime(CakeReport report)
+        private static TimeSpan GetTotalTime(IEnumerable<CakeReportEntry> entries)
         {
-            return report.Select(i => i.Duration)
+            return entries.Select(i => i.Duration)
                 .Aggregate(TimeSpan.Zero, (t1, t2) => t1 + t2);
         }
     }

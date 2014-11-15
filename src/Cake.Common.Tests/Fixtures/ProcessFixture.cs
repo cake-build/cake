@@ -28,12 +28,12 @@ namespace Cake.Common.Tests.Fixtures
 
         public int Start(string filename)
         {
-            return ProcessExtensions.StartProcess(Context, filename);
+            return Context.StartProcess(filename);
         }
 
         public int Start(string filename, ProcessSettings settings)
         {
-            return ProcessExtensions.StartProcess(Context, filename, settings);
+            return Context.StartProcess(filename, settings);
         }
     }
 }

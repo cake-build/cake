@@ -112,7 +112,7 @@ namespace Cake.Core.Tests.Unit.IO
 
         public sealed class TheMakeAbsoluteMethod
         {
-            public sealed class That_Takes_An_Environment
+            public sealed class ThatTakesAnEnvironment
             {
                 [Fact]
                 public void Should_Throw_If_Provided_Environment_Is_Null()
@@ -159,7 +159,7 @@ namespace Cake.Core.Tests.Unit.IO
                 }
             }
 
-            public sealed class That_Takes_Another_Directory_Path
+            public sealed class ThatTakesAnotherDirectoryPath
             {
                 [Fact]
                 public void Should_Throw_If_Provided_Path_Is_Null()

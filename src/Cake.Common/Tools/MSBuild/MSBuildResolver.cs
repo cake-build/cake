@@ -85,8 +85,8 @@ namespace Cake.Common.Tools.MSBuild
             if (target == PlatformTarget.MSIL)
             {
                 // Get the framework folder.
-                var is64bit = environment.Is64BitOperativeSystem();
-                var frameWorkFolder = is64bit ? netFolder.Combine("Framework64") : netFolder.Combine("Framework");
+                var is64Bit = environment.Is64BitOperativeSystem();
+                var frameWorkFolder = is64Bit ? netFolder.Combine("Framework64") : netFolder.Combine("Framework");
                 return frameWorkFolder.Combine(version);
             }
 

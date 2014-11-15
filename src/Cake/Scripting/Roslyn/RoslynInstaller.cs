@@ -11,13 +11,13 @@ namespace Cake.Scripting.Roslyn
         private readonly IFileSystem _fileSystem;
         private readonly ICakeLog _log;
 
-        public readonly FilePath[] _nugetPaths =
+        private readonly FilePath[] _nugetPaths =
         {
             @"Roslyn.Compilers.CSharp.1.2.20906.2\lib\net45\Roslyn.Compilers.CSharp.dll",
             @"Roslyn.Compilers.Common.1.2.20906.2\lib\net45\Roslyn.Compilers.dll"
         };
 
-        public readonly FilePath[] _roslynAssemblies =
+        private readonly FilePath[] _roslynAssemblies =
         {
             @"Roslyn.Compilers.CSharp.dll",
             @"Roslyn.Compilers.dll"
