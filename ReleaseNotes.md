@@ -1,3 +1,8 @@
+### New in 0.1.22 (Released 2014/11/20)
+* Added support for script setup/teardown.
+* Added MSBuild node reuse option.
+* Added xUnit.net v2 support.
+
 ### New in 0.1.21 (Released 2014/09/23)
 * Added line directives to generated scripts.
 
