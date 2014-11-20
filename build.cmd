@@ -11,7 +11,7 @@ if not exist tools\Cake\Cake.exe (
 
 if not exist tools\xunit.runners\tools\xunit.console.exe (
 	echo Installing xUnit.net: Runners...
-	tools\nuget\nuget.exe install xunit.runners -OutputDirectory tools -Prerelease -ExcludeVersion -NonInteractive
+	tools\nuget\nuget.exe install xunit.runners -OutputDirectory tools -Prerelease -ExcludeVersion -NonInteractive -Version 2.0.0-beta4-build2738
 	echo.
 )
 
