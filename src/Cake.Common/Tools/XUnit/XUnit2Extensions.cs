@@ -10,7 +10,7 @@ namespace Cake.Common.Tools.XUnit
     /// <summary>
     /// Contains functionality related to running xUnit.net tests.
     /// </summary>
-    [CakeAliasCategory("xUnit")]
+    [CakeAliasCategory("xUnit v2")]
     public static class XUnit2Extensions
     {
         /// <summary>
