@@ -1,3 +1,6 @@
+### New in 0.1.23 (Released 2014/11/21)
+* Removed silent flag from xUnit.net v2 runner since it's been deprecated.
+
 ### New in 0.1.22 (Released 2014/11/20)
 * Added support for script setup/teardown.
 * Added MSBuild node reuse option.
