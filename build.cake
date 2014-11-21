@@ -85,8 +85,7 @@ Task("Run-Unit-Tests")
 	// Run unit tests.
 	XUnit2("./src/**/bin/" + configuration + "/*.Tests.dll", new XUnit2Settings {
 		OutputDirectory = testResultsDir,
-		XmlReportV1 = true,
-		Silent = !local
+		XmlReportV1 = true
 	});	
 });
 

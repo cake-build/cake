@@ -96,12 +96,6 @@ namespace Cake.Common.Tools.XUnit
                 builder.AppendQuoted(outputPath.FullPath);
             }
 
-            // Silent mode?
-            if (settings.Silent)
-            {
-                builder.AppendQuoted("-silent");
-            }
-
             return builder;
         }
 
