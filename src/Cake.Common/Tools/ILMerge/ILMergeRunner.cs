@@ -58,29 +58,29 @@ namespace Cake.Common.Tools.ILMerge
             Run(settings, GetArguments(outputAssemblyPath, primaryAssemblyPath, assemblyPaths, settings), settings.ToolPath);
         }
 
-        private ToolArgumentBuilder GetArguments(FilePath outputAssemblyPath,
+        private ProcessArgumentBuilder GetArguments(FilePath outputAssemblyPath,
             FilePath primaryAssemblyFilePath, IEnumerable<FilePath> assemblyPaths, ILMergeSettings settings)
         {
-            var builder = new ToolArgumentBuilder();
+            var builder = new ProcessArgumentBuilder();
 
-            builder.AppendText(GetOutputParameter(outputAssemblyPath));
+            builder.Append(GetOutputParameter(outputAssemblyPath.MakeAbsolute(_environment)));
 
             if (settings.TargetKind != TargetKind.Default)
             {
-                builder.AppendText(GetTargetKindParameter(settings));
+                builder.Append(GetTargetKindParameter(settings));
             }
 
             if (settings.Internalize)
             {
-                builder.AppendText("/internalize");
+                builder.Append("/internalize");
             }
 
             // Add primary assembly.
-            builder.AppendQuotedText(primaryAssemblyFilePath.MakeAbsolute(_environment).FullPath);
+            builder.AppendQuoted(primaryAssemblyFilePath.MakeAbsolute(_environment).FullPath);
 
             foreach (var file in assemblyPaths)
             {
-                builder.AppendQuotedText(file.MakeAbsolute(_environment).FullPath);
+                builder.AppendQuoted(file.MakeAbsolute(_environment).FullPath);
             }
 
             // Create the process start info.

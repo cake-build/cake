@@ -1,26 +1,30 @@
-﻿using Cake.Scripting;
-using Cake.Scripting.Hosts;
+﻿using System;
+using Cake.Core.Scripting;
+using Cake.Scripting;
 
 namespace Cake.Commands
 {
     internal sealed class BuildCommand : ICommand
     {
-        private readonly ScriptRunner.Factory _factory;
+        private readonly IScriptRunner _scriptRunner;
         private readonly BuildScriptHost _host;
 
         // Delegate factory used by Autofac.
         public delegate BuildCommand Factory();
 
-        public BuildCommand(ScriptRunner.Factory factory, BuildScriptHost host)
+        public BuildCommand(IScriptRunner scriptRunner, BuildScriptHost host)
         {
-            _factory = factory;
+            _scriptRunner = scriptRunner;
             _host = host;
         }
 
         public void Execute(CakeOptions options)
         {
-            var runner = _factory(_host);
-            runner.Run(options);
+            if (options == null)
+            {
+                throw new ArgumentNullException("options");
+            }
+            _scriptRunner.Run(_host, options.Script, options.Arguments);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Cake.Common.Tools.XUnit
     /// <summary>
     /// Contains settings used by <see cref="XUnitRunner"/>.
     /// </summary>
-    public sealed class XUnitSettings
+    public class XUnitSettings
     {
         /// <summary>
         /// Gets or sets a value indicating whether tests should be run as a shadow copy.
@@ -43,6 +43,11 @@ namespace Cake.Common.Tools.XUnit
         /// </summary>
         /// <value>The tool path.</value>
         public FilePath ToolPath { get; set; }
+
+        /// <summary>
+        /// Gets or set whether or not output running test count.
+        /// </summary>
+        public bool Silent { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XUnitSettings"/> class.

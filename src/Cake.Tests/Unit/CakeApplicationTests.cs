@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Cake.Core.Diagnostics;
 using Cake.Tests.Fixtures;
 using NSubstitute;
@@ -64,10 +63,9 @@ namespace Cake.Tests.Unit
             {
                 // Given
                 var fixture = new CakeApplicationFixture();
-                var application = fixture.CreateApplication();
 
                 // When
-                application.Run(Enumerable.Empty<string>());
+                fixture.RunApplication();
 
                 // Then
                 fixture.Log.Received(1).Verbosity = Verbosity.Diagnostic;
@@ -78,10 +76,9 @@ namespace Cake.Tests.Unit
             {
                 // Given
                 var fixture = new CakeApplicationFixture();
-                var application = fixture.CreateApplication();
 
                 // When
-                var result = application.Run(Enumerable.Empty<string>());
+                var result = fixture.RunApplication();
 
                 // Then
                 Assert.Equal(0, result);
@@ -95,10 +92,9 @@ namespace Cake.Tests.Unit
                 fixture.Options.ShowHelp = true;
                 fixture.CommandFactory.When(x => x.CreateHelpCommand())
                     .Do(info => { throw new Exception("Error!"); });
-                var application = fixture.CreateApplication();
 
                 // When
-                var result = application.Run(Enumerable.Empty<string>());
+                var result = fixture.RunApplication();
 
                 // Then
                 Assert.Equal(1, result);
@@ -110,10 +106,9 @@ namespace Cake.Tests.Unit
                 // Given
                 var fixture = new CakeApplicationFixture();
                 fixture.Options.ShowHelp = true;
-                var application = fixture.CreateApplication();
 
                 // When
-                application.Run(Enumerable.Empty<string>());
+                fixture.RunApplication();
 
                 // Then
                 fixture.CommandFactory.Received(1).CreateHelpCommand();
@@ -125,10 +120,9 @@ namespace Cake.Tests.Unit
                 // Given
                 var fixture = new CakeApplicationFixture();
                 fixture.Options.ShowVersion = true;
-                var application = fixture.CreateApplication();
 
                 // When
-                application.Run(Enumerable.Empty<string>());
+                fixture.RunApplication();
 
                 // Then
                 fixture.CommandFactory.Received(1).CreateVersionCommand();
@@ -141,10 +135,9 @@ namespace Cake.Tests.Unit
                 var fixture = new CakeApplicationFixture();
                 fixture.Options.ShowDescription = true;
                 fixture.Options.Script = "./build.cake";
-                var application = fixture.CreateApplication();
 
                 // When
-                application.Run(Enumerable.Empty<string>());
+                fixture.RunApplication();
 
                 // Then
                 fixture.CommandFactory.Received(1).CreateDescriptionCommand();
@@ -156,10 +149,9 @@ namespace Cake.Tests.Unit
                 // Given
                 var fixture = new CakeApplicationFixture();
                 fixture.Options.ShowDescription = true;
-                var application = fixture.CreateApplication();
 
                 // When
-                application.Run(Enumerable.Empty<string>());
+                fixture.RunApplication();
 
                 // Then
                 fixture.CommandFactory.Received(1).CreateHelpCommand();
@@ -171,10 +163,9 @@ namespace Cake.Tests.Unit
                 // Given
                 var fixture = new CakeApplicationFixture();
                 fixture.Options.Script = "./build.cake";
-                var application = fixture.CreateApplication();
 
                 // When
-                application.Run(Enumerable.Empty<string>());
+                fixture.RunApplication();
 
                 // Then
                 fixture.CommandFactory.Received(1).CreateBuildCommand();
@@ -186,13 +177,56 @@ namespace Cake.Tests.Unit
                 // Given
                 var fixture = new CakeApplicationFixture();
                 fixture.Options = null;
-                var application = fixture.CreateApplication();
 
                 // When
-                application.Run(Enumerable.Empty<string>());
+                fixture.RunApplication();
 
                 // Then
                 fixture.CommandFactory.Received(1).CreateHelpCommand();
+            }
+
+            [Fact]
+            public void Should_Return_Error_If_Options_Are_Null()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.Options = null;
+
+                // When
+                var result = fixture.RunApplication();
+
+                // Then
+                Assert.Equal(1, result);
+            }
+
+            [Fact]
+            public void Should_Not_Create_Help_Command_If_Script_Is_Specified()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.Options.Script = "./build.cake";
+                fixture.Options.ShowHelp = true;
+
+                // When
+                fixture.RunApplication();
+
+                // Then
+                fixture.CommandFactory.Received(1).CreateBuildCommand();
+            }
+
+            [Fact]
+            public void Should_Not_Create_Version_Command_If_Script_Is_Specified()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.Options.Script = "./build.cake";
+                fixture.Options.ShowVersion = true;
+
+                // When
+                fixture.RunApplication();
+
+                // Then
+                fixture.CommandFactory.Received(1).CreateBuildCommand();
             }
         }
     }

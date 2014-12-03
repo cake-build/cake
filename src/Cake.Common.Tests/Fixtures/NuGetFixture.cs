@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Cake.Common.Tests.Properties;
+﻿using Cake.Common.Tests.Properties;
 using Cake.Common.Tools.NuGet.Pack;
 using Cake.Common.Tools.NuGet.Push;
 using Cake.Common.Tools.NuGet.Restore;
@@ -20,7 +19,7 @@ namespace Cake.Common.Tests.Fixtures
         public IProcess Process { get; set; }
         public ICakeLog Log { get; set; }
 
-        public NuGetFixture(FilePath toolPath = null, bool defaultToolExist = true)
+        public NuGetFixture(FilePath toolPath = null, bool defaultToolExist = true, string xml = null)
         {
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory.Returns("/Working");
@@ -31,12 +30,12 @@ namespace Cake.Common.Tests.Fixtures
             Process = Substitute.For<IProcess>();
             Process.GetExitCode().Returns(0);
             ProcessRunner = Substitute.For<IProcessRunner>();
-            ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns(Process);
+            ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns(Process);
 
             Log = Substitute.For<ICakeLog>();
 
             FileSystem = new FakeFileSystem(true);
-            FileSystem.GetCreatedFile("/Working/existing.nuspec", Resources.Nuspec_NoMetadataValues);
+            FileSystem.GetCreatedFile("/Working/existing.nuspec", xml ?? Resources.Nuspec_NoMetadataValues);
 
             if (defaultToolExist)
             {

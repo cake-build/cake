@@ -1,9 +1,9 @@
 ﻿using Cake.Core;
-using Cake.Scripting.Hosts;
+using Cake.Scripting;
 using NSubstitute;
 using Xunit;
 
-namespace Cake.Tests.Unit.Scripting.Hosts
+namespace Cake.Tests.Unit.Scripting
 {
     public sealed class DescriptionScriptHostTests
     {

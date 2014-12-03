@@ -45,16 +45,16 @@ namespace Cake.Common.Tools.MSTest
             Run(settings, GetArguments(assemblyPath, settings), settings.ToolPath);
         }
 
-        private ToolArgumentBuilder GetArguments(FilePath assemblyPath, MSTestSettings settings)
+        private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, MSTestSettings settings)
         {
-            var builder = new ToolArgumentBuilder();
+            var builder = new ProcessArgumentBuilder();
 
             // Add the assembly to build.
-            builder.AppendText(string.Concat("/testcontainer:", assemblyPath.MakeAbsolute(_environment).FullPath).Quote());
+            builder.Append(string.Concat("/testcontainer:", assemblyPath.MakeAbsolute(_environment).FullPath).Quote());
 
             if (settings.NoIsolation)
             {
-                builder.AppendQuotedText("/noisolation");
+                builder.AppendQuoted("/noisolation");
             }
 
             return builder;

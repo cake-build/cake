@@ -5,17 +5,17 @@ using Cake.Core.Annotations;
 namespace Cake.Common
 {
     /// <summary>
-    /// Added helpers to retrieve enviroment information
+    /// Contains functionality related to the environment.
     /// </summary>
     [CakeAliasCategory("Environment")]
     public static class EnvironmentExtensions
     {
         /// <summary>
-        /// Retrieves the value of the enviroment variable.
+        /// Retrieves the value of the environment variable or <c>null</c> if the environment variable do not exist.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="variable">The environment variable.</param>
-        /// <returns>The environment variable or <c>null</c> if variable did not exist.</returns>
+        /// <returns>The environment variable or <c>null</c> if the environment variable do not exist.</returns>
         [CakeMethodAlias]
         public static string EnvironmentVariable(this ICakeContext context, string variable)
         {
@@ -35,7 +35,7 @@ namespace Cake.Common
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="variable">The environment variable.</param>
-        /// <returns><c>true</c> if environment variable exist, else <c>false</c>.</returns>
+        /// <returns><c>true</c> if the environment variable exist; otherwise <c>false</c>.</returns>
         [CakeMethodAlias]
         public static bool HasEnvironmentVariable(this ICakeContext context, string variable)
         {

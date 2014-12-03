@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.WiX;
@@ -93,7 +92,9 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(p => p.FileName == expected));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == expected),
+                    Arg.Any<ProcessSettings>());
             }
 
             [Fact]
@@ -107,8 +108,9 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 runner.Run(new[] {new FilePath("./Test.wixobj")}, new LightSettings());
 
                 // Then
-                fixture.ProcessRunner.Received(1)
-                    .Start(Arg.Is<ProcessStartInfo>(p => p.FileName == "/Working/tools/light.exe"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/light.exe"),
+                    Arg.Any<ProcessSettings>());
             }
 
             [Fact]
@@ -122,8 +124,9 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 runner.Run(new[] {new FilePath("./Test.wixobj"), new FilePath("./Test2.wixobj")}, new LightSettings());
 
                 // Then
-                fixture.ProcessRunner.Received(1)
-                    .Start(Arg.Is<ProcessStartInfo>(p => p.Arguments == "\"/Working/Test.wixobj\" \"/Working/Test2.wixobj\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "\"/Working/Test.wixobj\" \"/Working/Test2.wixobj\""));
             }
 
             [Fact]
@@ -137,8 +140,10 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 runner.Run(new[] { new FilePath("./Test.wixobj") }, new LightSettings());
 
                 // Then
-                fixture.ProcessRunner.Received(1)
-                    .Start(Arg.Is<ProcessStartInfo>(p => p.WorkingDirectory == "/Working"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.WorkingDirectory.FullPath == "/Working"));
             }
 
             [Fact]
@@ -146,7 +151,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
             {
                 // Given
                 var fixture = new WiXFixture();
-                fixture.ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns((IProcess) null);
+                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
                 var runner = fixture.CreateLightRunner();
 
                 // When
@@ -192,8 +197,10 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1)
-                    .Start(Arg.Is<ProcessStartInfo>(p => p.Arguments == "-dFoo=Bar \"/Working/Test.wixobj\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "-dFoo=Bar \"/Working/Test.wixobj\""));
             }
 
             [Fact]
@@ -210,8 +217,10 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1)
-                    .Start(Arg.Is<ProcessStartInfo>(p => p.Arguments == "-ext WixUIExtension \"/Working/Test.wixobj\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "-ext WixUIExtension \"/Working/Test.wixobj\""));
             }
 
             [Fact]
@@ -228,8 +237,10 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1)
-                    .Start(Arg.Is<ProcessStartInfo>(p => p.Arguments == "-nologo \"/Working/Test.wixobj\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "-nologo \"/Working/Test.wixobj\""));
             }
 
             [Fact]
@@ -246,8 +257,10 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1)
-                    .Start(Arg.Is<ProcessStartInfo>(p => p.Arguments == "-o \"/Working/bin/test.msi\" \"/Working/Test.wixobj\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "-o \"/Working/bin/test.msi\" \"/Working/Test.wixobj\""));
             }
 
             [Fact]
@@ -264,8 +277,10 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1)
-                    .Start(Arg.Is<ProcessStartInfo>(p => p.Arguments == "-dFoo=Bar \"/Working/Test.wixobj\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "-dFoo=Bar \"/Working/Test.wixobj\""));
             }
         }
     }

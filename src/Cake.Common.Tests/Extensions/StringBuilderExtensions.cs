@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Cake.Common.Tests
+namespace Cake.Common.Tests.Extensions
 {
     internal static class StringBuilderExtensions
     {

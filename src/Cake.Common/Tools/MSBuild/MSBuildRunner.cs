@@ -36,19 +36,24 @@ namespace Cake.Common.Tools.MSBuild
             Run(settings, GetArguments(settings));
         }
 
-        private static ToolArgumentBuilder GetArguments(MSBuildSettings settings)
+        private ProcessArgumentBuilder GetArguments(MSBuildSettings settings)
         {
-            var builder = new ToolArgumentBuilder();
+            var builder = new ProcessArgumentBuilder();
 
             // Set the maximum number of processors.
-            builder.AppendText(settings.MaxCpuCount > 0 ? string.Concat("/m:", settings.MaxCpuCount) : "/m");
+            builder.Append(settings.MaxCpuCount > 0 ? string.Concat("/m:", settings.MaxCpuCount) : "/m");
+
+if (settings.NodeReuse != null)
+{
+    builder.Append(string.Concat("/nr:", settings.NodeReuse.Value ? "true" : "false"));
+}
 
             // Got a specific configuration in mind?
             if (!string.IsNullOrWhiteSpace(settings.Configuration))
             {
                 // Add the configuration as a property.
                 var configuration = settings.Configuration;
-                builder.AppendText(string.Concat("/p:\"Configuration\"", "=", configuration.Quote()));
+                builder.Append(string.Concat("/p:\"Configuration\"=", configuration.Quote()));
             }
 
             // Got any properties?
@@ -56,7 +61,7 @@ namespace Cake.Common.Tools.MSBuild
             {
                 foreach (var property in GetPropertyArguments(settings.Properties))
                 {
-                    builder.AppendText(property);
+                    builder.Append(property);
                 }
             }
 
@@ -64,16 +69,16 @@ namespace Cake.Common.Tools.MSBuild
             if (settings.Targets.Count > 0)
             {
                 var targets = string.Join(";", settings.Targets);
-                builder.AppendText(string.Concat("/target:", targets));
+                builder.Append(string.Concat("/target:", targets));
             }
             else
             {
                 // Use default target.
-                builder.AppendText("/target:Build");
+                builder.Append("/target:Build");
             }
 
             // Add the solution as the last parameter.
-            builder.AppendText(settings.Solution.FullPath.Quote());
+            builder.AppendQuoted(settings.Solution.MakeAbsolute(_environment).FullPath);
 
             return builder;
         }

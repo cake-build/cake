@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tests.Properties;
 using Cake.Common.Tools.NuGet.Pack;
@@ -76,8 +75,9 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.FileName == expected));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == expected),
+                    Arg.Any<ProcessSettings>());
             }
 
             [Fact]
@@ -91,8 +91,9 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 packer.Pack("./existing.nuspec", new NuGetPackSettings());
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.FileName == "/Working/tools/NuGet.exe"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/NuGet.exe"),
+                    Arg.Any<ProcessSettings>());
             }
 
             [Fact]
@@ -100,7 +101,8 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
             {
                 // Given
                 var fixture = new NuGetFixture();
-                fixture.ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns((IProcess)null);
+                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess) null);
+
                 var packer = fixture.CreatePacker();
 
                 // When
@@ -188,8 +190,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "pack -Version \"1.0.0\" \"/Working/existing.temp.nuspec\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "pack -Version \"1.0.0\" \"/Working/existing.temp.nuspec\""));
             }
 
             [Fact]
@@ -206,8 +210,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "pack -BasePath \"/Working/build\" \"/Working/existing.temp.nuspec\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "pack -BasePath \"/Working/build\" \"/Working/existing.temp.nuspec\""));
             }
 
             [Fact]
@@ -224,8 +230,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "pack -OutputDirectory \"/Working/build/output\" \"/Working/build/output/existing.temp.nuspec\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "pack -OutputDirectory \"/Working/build/output\" \"/Working/existing.temp.nuspec\""));
             }
 
             [Fact]
@@ -242,8 +250,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "pack \"/Working/existing.temp.nuspec\" -NoPackageAnalysis"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "pack \"/Working/existing.temp.nuspec\" -NoPackageAnalysis"));
             }
 
             [Fact]
@@ -260,8 +270,42 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "pack \"/Working/existing.temp.nuspec\" -Symbols"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "pack \"/Working/existing.temp.nuspec\" -Symbols"));
+            }
+
+            [Fact]
+            public void Should_Add_Metadata_Element_To_Nuspec_If_Missing()
+            {
+                // Given
+                var fixture = new NuGetFixture(xml: Resources.Nuspec_NoMetadataElement);
+                var packer = fixture.CreatePacker();
+
+                // When
+                packer.Pack("./existing.nuspec", new NuGetPackSettings
+                {
+                    Id = "The ID",
+                    Version = "The version",
+                    Title = "The title",
+                    Authors = new[] { "Author #1", "Author #2" },
+                    Owners = new[] { "Owner #1", "Owner #2" },
+                    Description = "The description",
+                    Summary = "The summary",
+                    LicenseUrl = new Uri("https://license.com"),
+                    ProjectUrl = new Uri("https://project.com"),
+                    IconUrl = new Uri("https://icon.com"),
+                    RequireLicenseAcceptance = true,
+                    Copyright = "The copyright",
+                    ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" },
+                    Tags = new[] { "Tag1", "Tag2", "Tag3" }
+                });
+
+                // Then
+                Assert.Equal(
+                    Resources.Nuspec_Metadata.NormalizeLineEndings(),
+                    fixture.FileSystem.GetTextContent("/Working/existing.temp.nuspec").NormalizeLineEndings());
             }
 
             [Fact]
@@ -293,6 +337,38 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 // Then
                 Assert.Equal(
                     Resources.Nuspec_Metadata.NormalizeLineEndings(),
+                    fixture.FileSystem.GetTextContent("/Working/existing.temp.nuspec").NormalizeLineEndings());
+            }
+
+            [Fact]
+            public void Should_Replace_Template_Tokens_In_Nuspec_Without_Namespaces()
+            {
+                // Given
+                var fixture = new NuGetFixture(xml: Resources.Nuspec_NoMetadataValues_WithoutNamespaces);
+                var packer = fixture.CreatePacker();
+
+                // When
+                packer.Pack("./existing.nuspec", new NuGetPackSettings
+                {
+                    Id = "The ID",
+                    Version = "The version",
+                    Title = "The title",
+                    Authors = new[] { "Author #1", "Author #2" },
+                    Owners = new[] { "Owner #1", "Owner #2" },
+                    Description = "The description",
+                    Summary = "The summary",
+                    LicenseUrl = new Uri("https://license.com"),
+                    ProjectUrl = new Uri("https://project.com"),
+                    IconUrl = new Uri("https://icon.com"),
+                    RequireLicenseAcceptance = true,
+                    Copyright = "The copyright",
+                    ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" },
+                    Tags = new[] { "Tag1", "Tag2", "Tag3" }
+                });
+
+                // Then
+                Assert.Equal(
+                    Resources.Nuspec_Metadata_WithoutNamespaces.NormalizeLineEndings(),
                     fixture.FileSystem.GetTextContent("/Working/existing.temp.nuspec").NormalizeLineEndings());
             }
         }

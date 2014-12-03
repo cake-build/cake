@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
@@ -14,7 +14,7 @@ namespace Cake.Common.Tests.Fixtures
         public IProcess Process { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
 
-        public MSBuildRunnerFixture(DirectoryPath[] existingMSBuildPaths)
+        public MSBuildRunnerFixture(IEnumerable<DirectoryPath> existingMSBuildPaths)
             : this(false, false, existingMSBuildPaths)
         {
         }
@@ -24,12 +24,12 @@ namespace Cake.Common.Tests.Fixtures
         {
         }
 
-        private MSBuildRunnerFixture(bool is64BitOperativeSystem, bool msBuildFileExist, DirectoryPath[] existingMSBuildPaths)
+        private MSBuildRunnerFixture(bool is64BitOperativeSystem, bool msBuildFileExist, IEnumerable<DirectoryPath> existingMSBuildPaths)
         {
             Process = Substitute.For<IProcess>();
 
             ProcessRunner = Substitute.For<IProcessRunner>();
-            ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns(Process);
+            ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns(Process);
 
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.Is64BitOperativeSystem().Returns(is64BitOperativeSystem);

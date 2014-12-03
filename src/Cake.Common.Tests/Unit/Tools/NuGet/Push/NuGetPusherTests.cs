@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.NuGet;
 using Cake.Common.Tools.NuGet.Push;
@@ -76,8 +75,9 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.FileName == expected));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == expected),
+                    Arg.Any<ProcessSettings>());
             }
 
             [Fact]
@@ -91,8 +91,9 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 pusher.Push("./existing.nupkg", new NuGetPushSettings());
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.FileName == "/Working/tools/NuGet.exe"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/NuGet.exe"),
+                    Arg.Any<ProcessSettings>());
             }
 
             [Fact]
@@ -100,7 +101,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
             {
                 // Given
                 var fixture = new NuGetFixture();
-                fixture.ProcessRunner.Start(Arg.Any<ProcessStartInfo>()).Returns((IProcess)null);
+                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
                 var pusher = fixture.CreatePusher();
 
                 // When
@@ -138,8 +139,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 pusher.Push("./existing.nupkg", new NuGetPushSettings());
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "push \"/Working/existing.nupkg\" -NonInteractive"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "push \"/Working/existing.nupkg\" -NonInteractive"));
             }
 
             [Fact]
@@ -156,8 +159,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "push \"/Working/existing.nupkg\" 1234 -NonInteractive"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "push \"/Working/existing.nupkg\" 1234 -NonInteractive"));
             }
 
             [Fact]
@@ -174,8 +179,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "push \"/Working/existing.nupkg\" -NonInteractive -ConfigFile \"/Working/NuGet.config\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "push \"/Working/existing.nupkg\" -NonInteractive -ConfigFile \"/Working/NuGet.config\""));
             }
 
             [Fact]
@@ -192,8 +199,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "push \"/Working/existing.nupkg\" -NonInteractive -Source \"http://customsource/\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "push \"/Working/existing.nupkg\" -NonInteractive -Source \"http://customsource/\""));
             }
 
             [Fact]
@@ -210,8 +219,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == "push \"/Working/existing.nupkg\" -NonInteractive -Timeout 987"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "push \"/Working/existing.nupkg\" -NonInteractive -Timeout 987"));
             }
 
             [Theory]
@@ -232,8 +243,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 });
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Is<ProcessStartInfo>(
-                    p => p.Arguments == expected));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), 
+                    Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == expected));
             }
         }
     }

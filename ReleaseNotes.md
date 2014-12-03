@@ -1,3 +1,33 @@
+### New in 0.1.23 (Released 2014/11/21)
+* Removed silent flag from xUnit.net v2 runner since it's been deprecated.
+
+### New in 0.1.22 (Released 2014/11/20)
+* Added support for script setup/teardown.
+* Added MSBuild node reuse option.
+* Added xUnit.net v2 support.
+
+### New in 0.1.21 (Released 2014/09/23)
+* Added line directives to generated scripts.
+
+### New in 0.1.20 (Released 2014/09/14)
+* Fix for relative paths in Globber.
+* Specifying a script now take precedence over version or help commands.
+* Throws if target cannot be reached due to constraints.
+* Added logging when tasks are skipped due to constraints.
+* Changed location of transformed nuspec file.
+* Made nuspec XML namespaces optional.
+
+### New in 0.1.19 (Released 2014/09/03)
+* Added default file convention recognizer.
+* Added assembly info parser.
+* Added error handling.
+* Added total duration to task report.
+* Added Sign extension for assembly certificate signing.
+* Changed the way processes are started.
+* Now outputs full stack trace in diagnostic mode.
+* Fixed issue with relative paths in tools.
+* Added xUnit silent flag.
+
 ### New in 0.1.18 (Released 2014/08/21)
 * Added external script loading.
 * IFile.OpenWrite will now truncate existing file.

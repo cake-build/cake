@@ -2,7 +2,7 @@
 
 Cake (C# Make) is a build automation system using C#.
 
-[![TeamCity CI Build Status](http://builds.nullreferenceexception.se/app/rest/builds/buildType:id:Cake_Continuous/statusIcon)](http://builds.nullreferenceexception.se/viewType.html?buildTypeId=Cake_Continuous&guest=1)
+[![Build status](https://ci.appveyor.com/api/projects/status/c6lw0vvj1mf4395a/branch/develop)](https://ci.appveyor.com/project/patriksvensson/cake/branch/develop)
 
 ##Table of contents
 
@@ -37,6 +37,7 @@ This is a list of the currently implemented functionality.
 * NuGet restore
 * ILMerge
 * WiX (Candle and Light)
+* SignTool
 * File copying/moving/deleting
 * Directory creation/cleaning/deleting
 * File/Directory globbing
@@ -166,7 +167,8 @@ Make sure you've read the [contribution guidelines](http://cake.readthedocs.org/
 
 ## External add-ons
 
-AliaSql: [https://www.nuget.org/packages/Cake.AliaSql](https://www.nuget.org/packages/Cake.AliaSql)
+AliaSql: [https://www.nuget.org/packages/Cake.AliaSql](https://www.nuget.org/packages/Cake.AliaSql)  
+Unity: [https://github.com/patriksvensson/Cake.Unity](https://github.com/patriksvensson/Cake.Unity)
 
 ## License
 

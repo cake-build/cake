@@ -28,7 +28,7 @@ namespace Cake.Common
         }
 
         /// <summary>
-        /// Gets an argument.
+        /// Gets an argument and throws if the argument is missing.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="context">The context.</param>
@@ -51,13 +51,13 @@ namespace Cake.Common
         }
 
         /// <summary>
-        /// Gets an argument.
+        /// Gets an argument and returns the provided <paramref name="defaultValue"/> if the argument is missing.
         /// </summary>
         /// <typeparam name="T">The argument type.</typeparam>
         /// <param name="context">The context.</param>
         /// <param name="name">The argument name.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        /// <returns>The value of the argument.</returns>
+        /// <param name="defaultValue">The value to return if the argument is missing.</param>
+        /// <returns>The value of the argument if it exist; otherwise <paramref name="defaultValue"/>.</returns>
         [CakeMethodAlias]
         public static T Argument<T>(this ICakeContext context, string name, T defaultValue)
         {

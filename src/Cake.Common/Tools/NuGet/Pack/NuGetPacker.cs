@@ -74,45 +74,45 @@ namespace Cake.Common.Tools.NuGet.Pack
             }
         }
 
-        private ToolArgumentBuilder GetArguments(FilePath nuspecFilePath, NuGetPackSettings settings)
+        private ProcessArgumentBuilder GetArguments(FilePath nuspecFilePath, NuGetPackSettings settings)
         {
-            var builder = new ToolArgumentBuilder();
-            builder.AppendText("pack");
+            var builder = new ProcessArgumentBuilder();
+            builder.Append("pack");
 
             // Version
             if (!string.IsNullOrWhiteSpace(settings.Version))
             {
-                builder.AppendText("-Version");
-                builder.AppendQuotedText(settings.Version);
+                builder.Append("-Version");
+                builder.AppendQuoted(settings.Version);
             }
 
             // Base path
             if (settings.BasePath != null)
             {
-                builder.AppendText("-BasePath");
-                builder.AppendQuotedText(settings.BasePath.MakeAbsolute(_environment).FullPath);
+                builder.Append("-BasePath");
+                builder.AppendQuoted(settings.BasePath.MakeAbsolute(_environment).FullPath);
             }
 
             // Output directory
             if (settings.OutputDirectory != null)
             {
-                builder.AppendText("-OutputDirectory");
-                builder.AppendQuotedText(settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
+                builder.Append("-OutputDirectory");
+                builder.AppendQuoted(settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
             }
 
             // Nuspec file
-            builder.AppendQuotedText(nuspecFilePath.MakeAbsolute(_environment).FullPath);
+            builder.AppendQuoted(nuspecFilePath.MakeAbsolute(_environment).FullPath);
 
             // No package analysis?
             if (settings.NoPackageAnalysis)
             {
-                builder.AppendText("-NoPackageAnalysis");
+                builder.Append("-NoPackageAnalysis");
             }
 
             // Symbols?
             if (settings.Symbols)
             {
-                builder.AppendText("-Symbols");
+                builder.Append("-Symbols");
             }
 
             return builder;

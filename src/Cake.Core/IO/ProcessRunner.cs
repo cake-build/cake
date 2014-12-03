@@ -9,41 +9,65 @@ namespace Cake.Core.IO
     /// </summary>
     public sealed class ProcessRunner : IProcessRunner
     {
+        private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessRunner"/> class.
         /// </summary>
+        /// <param name="environment"></param>
         /// <param name="log">The log.</param>
-        public ProcessRunner(ICakeLog log)
+        public ProcessRunner(ICakeEnvironment environment, ICakeLog log)
         {
+            if (environment == null)
+            {
+                throw new ArgumentNullException("environment");
+            }
             if (log == null)
             {
                 throw new ArgumentNullException("log");
             }
+            _environment = environment;
             _log = log;
         }
 
         /// <summary>
         /// Starts a process using the specified information.
         /// </summary>
-        /// <param name="info">The information about the process to start.</param>
+        /// <param name="filePath">The file name such as an application or document with which to start the process.</param>
+        /// <param name="settings">The information about the process to start.</param>
         /// <returns>A process handle.</returns>
-        public IProcess Start(ProcessStartInfo info)
+        public IProcess Start(FilePath filePath, ProcessSettings settings)
         {
-            if (info == null)
+            if (filePath == null)
             {
-                throw new ArgumentNullException("info");
+                throw new ArgumentNullException("filePath");
             }
-            if (string.IsNullOrWhiteSpace(info.FileName))
+            if (settings == null)
             {
-                throw new CakeException("Cannot start process since no filename has been set.");
+                throw new ArgumentNullException("settings");
             }
+
+            // Get the arguments.
+            var arguments = settings.Arguments ?? new ProcessArgumentBuilder();
             
             // Log the filename and arguments.
-            _log.Verbose(Verbosity.Diagnostic, "Executing: {0}", string.Concat(info.FileName, " ", info.Arguments).Trim());
+            var message = string.Concat(filePath, " ", arguments.RenderSafe().TrimEnd());
+            _log.Verbose(Verbosity.Diagnostic, "Executing: {0}", message);
 
-            // Start the process.
+            // Get the working directory.
+            var workingDirectory = settings.WorkingDirectory ?? _environment.WorkingDirectory;
+            settings.WorkingDirectory = workingDirectory.MakeAbsolute(_environment);
+
+            // Create the process start info.
+            var info = new ProcessStartInfo(filePath.FullPath)
+            {
+                Arguments = arguments.Render(),
+                WorkingDirectory = workingDirectory.FullPath,
+                UseShellExecute = false
+            };
+
+            // Start and return the process.
             var process = Process.Start(info);
             return process == null ? null : new ProcessWrapper(process);
         }

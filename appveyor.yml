@@ -1,0 +1,13 @@
+# Build script
+build_script:
+  - ps: .\build.cmd
+
+# Tests
+test: off
+
+# Branches to build
+branches:
+  # Whitelist
+  only:
+    - develop
+    - main

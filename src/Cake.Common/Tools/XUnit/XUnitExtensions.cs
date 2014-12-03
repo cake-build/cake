@@ -8,13 +8,13 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.XUnit
 {
     /// <summary>
-    /// Contains functionality related to running xUnit unit tests.
+    /// Contains functionality related to running xUnit.net tests.
     /// </summary>
     [CakeAliasCategory("xUnit")]
     public static class XUnitExtensions
     {
         /// <summary>
-        /// Runs all xUnit unit tests in the assemblies matching the specified pattern.
+        /// Runs all xUnit.net tests in the assemblies matching the specified pattern.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
@@ -31,7 +31,7 @@ namespace Cake.Common.Tools.XUnit
         }
 
         /// <summary>
-        /// Runs all xUnit unit tests in the assemblies matching the specified pattern.
+        /// Runs all xUnit.net tests in the assemblies matching the specified pattern.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
@@ -49,7 +49,7 @@ namespace Cake.Common.Tools.XUnit
         }
 
         /// <summary>
-        /// Runs all xUnit unit tests in the specified assemblies.
+        /// Runs all xUnit.net tests in the specified assemblies.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
@@ -65,7 +65,7 @@ namespace Cake.Common.Tools.XUnit
         }
 
         /// <summary>
-        /// Runs all xUnit unit tests in the specified assemblies.
+        /// Runs all xUnit.net tests in the specified assemblies.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
@@ -76,7 +76,7 @@ namespace Cake.Common.Tools.XUnit
         }
 
         /// <summary>
-        /// Runs all xUnit unit tests in the specified assemblies.
+        /// Runs all xUnit.net tests in the specified assemblies.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
@@ -93,7 +93,7 @@ namespace Cake.Common.Tools.XUnit
         }
 
         /// <summary>
-        /// Runs all xUnit unit tests in the specified assemblies.
+        /// Runs all xUnit.net tests in the specified assemblies.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
@@ -103,7 +103,7 @@ namespace Cake.Common.Tools.XUnit
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException("assemblies");
             }
             if (assemblies == null)
             {
@@ -114,7 +114,7 @@ namespace Cake.Common.Tools.XUnit
             foreach (var assembly in assemblies)
             {
                 runner.Run(assembly, settings);
-            }
+            }    
         }
     }
 }

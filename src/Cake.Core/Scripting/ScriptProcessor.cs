@@ -77,10 +77,18 @@ namespace Cake.Core.Scripting
             var lines = ReadSource(path);
 
             // Iterate all lines in the script.
+            var firstLine = true;
             foreach (var line in lines)
             {
                 if (!_lineProcessors.Any(p => p.Process(this, context, path, line)))
                 {
+                    if (firstLine)
+                    {
+                        // Append the line directive for the script.
+                        context.AppendScriptLine(string.Format(CultureInfo.InvariantCulture, "#line 1 \"{0}\"", path.GetFilename().FullPath));
+                        firstLine = false;
+                    }
+
                     context.AppendScriptLine(line);
                 }
             }

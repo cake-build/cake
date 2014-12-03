@@ -13,11 +13,13 @@
         /// <summary>
         /// x86
         /// </summary>
+        // ReSharper disable once InconsistentNaming
         x86 = 1,
         
         /// <summary>
         /// x64
         /// </summary>
+        // ReSharper disable once InconsistentNaming
         x64 = 2
     }
 }

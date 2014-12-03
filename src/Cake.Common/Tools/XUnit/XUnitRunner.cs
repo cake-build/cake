@@ -7,7 +7,7 @@ using Cake.Core.Utilities;
 namespace Cake.Common.Tools.XUnit
 {
     /// <summary>
-    /// The xUnit unit test runner.
+    /// The xUnit.net (v1) test runner.
     /// </summary>
     public sealed class XUnitRunner : Tool<XUnitSettings>
     {
@@ -60,37 +60,46 @@ namespace Cake.Common.Tools.XUnit
             Run(settings, GetArguments(assemblyPath, settings), settings.ToolPath);
         }
 
-        private ToolArgumentBuilder GetArguments(FilePath assemblyPath, XUnitSettings settings)
+        private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, XUnitSettings settings)
         {
-            var builder = new ToolArgumentBuilder();
+            var builder = new ProcessArgumentBuilder();
+
+            // Get the absolute path to the assembly.
+            assemblyPath = assemblyPath.MakeAbsolute(_environment);
 
             // Add the assembly to build.
-            builder.AppendQuotedText(assemblyPath.MakeAbsolute(_environment).FullPath);
+            builder.AppendQuoted(assemblyPath.FullPath);
 
             // No shadow copy?
             if (!settings.ShadowCopy)
             {
-                builder.AppendQuotedText("/noshadow");
+                builder.AppendQuoted("/noshadow");
             }
 
             // Generate HTML report?
             if (settings.HtmlReport)
             {
                 var assemblyFilename = assemblyPath.GetFilename().AppendExtension(".html");
-                var outputPath = settings.OutputDirectory.GetFilePath(assemblyFilename);
+                var outputPath = settings.OutputDirectory.MakeAbsolute(_environment).GetFilePath(assemblyFilename);
 
-                builder.AppendQuotedText("/html");
-                builder.AppendQuotedText(outputPath.FullPath);
+                builder.AppendQuoted("/html");
+                builder.AppendQuoted(outputPath.FullPath);
             }
 
             // Generate XML report?
             if (settings.XmlReport)
             {
                 var assemblyFilename = assemblyPath.GetFilename().AppendExtension(".xml");
-                var outputPath = settings.OutputDirectory.GetFilePath(assemblyFilename);
+                var outputPath = settings.OutputDirectory.MakeAbsolute(_environment).GetFilePath(assemblyFilename);
 
-                builder.AppendQuotedText("/xml");
-                builder.AppendQuotedText(outputPath.FullPath);
+                builder.AppendQuoted("/xml");
+                builder.AppendQuoted(outputPath.FullPath);
+            }
+
+            // Silent mode?
+            if (settings.Silent)
+            {
+                builder.Append("/silent");
             }
 
             return builder;
@@ -102,17 +111,17 @@ namespace Cake.Common.Tools.XUnit
         /// <returns>The name of the tool.</returns>
         protected override string GetToolName()
         {
-            return "xUnit";
+            return "xUnit.net (v1)";
         }
 
         /// <summary>
         /// Gets the default tool path.
         /// </summary>
+        /// <param name="settings">The settings.</param>
         /// <returns>The default tool path.</returns>
         protected override FilePath GetDefaultToolPath(XUnitSettings settings)
         {
-            const string expression = "./tools/**/xunit.console.clr4.exe";
-            return _globber.GetFiles(expression).FirstOrDefault();
+            return _globber.GetFiles("./tools/**/xunit.console.clr4.exe").FirstOrDefault();
         }
     }
 }

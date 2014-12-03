@@ -1,17 +1,20 @@
+#l "utilities.cake"
+
 // Get arguments passed to the script.
-var target = Argument("target", "All");
+var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
-var teamCity = HasArgument("teamCity");
-var buildLabel = Argument("buildLabel", string.Empty);
-var buildInfo = Argument("buildInfo", string.Empty);
+
+// Get whether or not this is a local build.
+var local = IsLocalBuild();
+var isPullRequest = IsPullRequest();
 
 // Parse release notes.
 var releaseNotes = ParseReleaseNotes("./ReleaseNotes.md");
 
-// Set version.
+// Get version.
+int buildNumber = GetBuildNumber();
 var version = releaseNotes.Version.ToString();
-var semVersion = version + (buildLabel != "" ? ("-" + buildLabel) : string.Empty);
-Information("Building version {0} of Cake.", version);
+var semVersion = local ? version : (version + string.Concat("-build-", buildNumber));
 
 // Define directories.
 var buildDir = "./src/Cake/bin/" + configuration;
@@ -20,19 +23,21 @@ var testResultsDir = buildResultDir + "/test-results";
 var nugetRoot = buildResultDir + "/nuget";
 var binDir = buildResultDir + "/bin";
 
+// Output some information about the current build.
+Information("Building version {0} of Cake ({1}).", version, semVersion);
+
 //////////////////////////////////////////////////////////////////////////
 
-Task("Update-TeamCity-Build-Number")
+Task("Update-Build-Number")
 	.Description("Updates the TeamCity build number.")
-	.WithCriteria(teamCity)
 	.Does(() =>
 {
-	Console.WriteLine("##teamcity[buildNumber '{0}']", semVersion);
+	SetBuildVersion(semVersion);
 });
 
 Task("Clean")
 	.Description("Cleans the build and output directories.")
-	.IsDependentOn("Update-TeamCity-Build-Number")
+	.IsDependentOn("Update-Build-Number")
 	.Does(() =>
 {
 	CleanDirectories(new DirectoryPath[] {
@@ -57,7 +62,7 @@ Task("Patch-Assembly-Info")
 		Product = "Cake",
 		Version = version,
 		FileVersion = version,
-		InformationalVersion = (version + buildInfo).Trim(),
+		InformationalVersion = semVersion,
 		Copyright = "Copyright (c) Patrik Svensson 2014"
 	});
 });
@@ -77,11 +82,11 @@ Task("Run-Unit-Tests")
 	.IsDependentOn("Build")
 	.Does(() =>
 {
-	XUnit("./src/**/bin/" + configuration + "/*.Tests.dll", new XUnitSettings {
+	// Run unit tests.
+	XUnit2("./src/**/bin/" + configuration + "/*.Tests.dll", new XUnit2Settings {
 		OutputDirectory = testResultsDir,
-		XmlReport = true,
-		HtmlReport = true
-	});
+		XmlReportV1 = true
+	});	
 });
 
 
@@ -106,7 +111,7 @@ Task("Zip-Files")
 	.IsDependentOn("Copy-Files")
 	.Does(() =>
 {
-	var filename = buildResultDir + "/Cake-bin-v" + version + ".zip";
+	var filename = buildResultDir + "/Cake-bin-v" + semVersion + ".zip";
 	Zip(binDir, filename);
 });
 
@@ -116,7 +121,7 @@ Task("Create-Cake-NuGet-Package")
 	.Does(() =>
 {
 	NuGetPack("./Cake.nuspec", new NuGetPackSettings {
-		Version = version,
+		Version = semVersion,
 		ReleaseNotes = releaseNotes.Notes.ToArray(),
         BasePath = binDir,
         OutputDirectory = nugetRoot,        
@@ -131,7 +136,7 @@ Task("Create-Core-NuGet-Package")
 	.Does(() =>
 {
 	NuGetPack("./Cake.Core.nuspec", new NuGetPackSettings {
-		Version = version,
+		Version = semVersion,
 		ReleaseNotes = releaseNotes.Notes.ToArray(),
         BasePath = binDir,
         OutputDirectory = nugetRoot,        
@@ -145,9 +150,43 @@ Task("Package")
 	.IsDependentOn("Create-Cake-NuGet-Package")
 	.IsDependentOn("Create-Core-NuGet-Package");
 
-Task("All")
-	.Description("Final target.")
-	.IsDependentOn("Package");
+Task("Upload-Artifacts")
+	.IsDependentOn("Package")
+	.WithCriteria(() => !local)
+	.Does(() =>
+{
+	// Upload zip file.
+	var filename = new FilePath(buildResultDir + "/Cake-bin-v" + semVersion + ".zip");
+	UploadArtifact(filename);
+});	
+
+Task("Publish-MyGet")
+	.IsDependentOn("Upload-Artifacts")
+	.WithCriteria(() => !local && !isPullRequest)
+	.Does(() =>
+{
+	// Resolve the API key.
+	var apiKey = EnvironmentVariable("MYGET_API_KEY");
+	if(string.IsNullOrEmpty(apiKey)) {
+		throw new InvalidOperationException("Could not resolve MyGet API key.");
+	}
+
+	// Get the path to the package.
+	var package = nugetRoot + "/Cake." + semVersion + ".nupkg";
+
+	// Push the package.
+	NuGetPush(package, new NuGetPushSettings {
+		Source = "https://www.myget.org/F/cake/api/v2/package",
+		ApiKey = apiKey
+	});	
+});
+
+Task("Publish")
+	.IsDependentOn("Publish-MyGet");
+
+Task("Default")
+	.Description("The default target.")	
+	.IsDependentOn("Publish");
 
 //////////////////////////////////////////////////////////////////////////
 

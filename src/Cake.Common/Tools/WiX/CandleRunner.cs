@@ -64,15 +64,15 @@ namespace Cake.Common.Tools.WiX
             Run(settings, GetArguments(sourceFilesArray, settings), settings.ToolPath);
         }
 
-        private ToolArgumentBuilder GetArguments(IEnumerable<FilePath> sourceFiles, CandleSettings settings)
+        private ProcessArgumentBuilder GetArguments(IEnumerable<FilePath> sourceFiles, CandleSettings settings)
         {
-            var builder = new ToolArgumentBuilder();
+            var builder = new ProcessArgumentBuilder();
 
             // Architecture
             if (settings.Architecture.HasValue)
             {
-                builder.AppendText("-arch");
-                builder.AppendText(GetArchitectureName(settings.Architecture.Value));
+                builder.Append("-arch");
+                builder.Append(GetArchitectureName(settings.Architecture.Value));
             }
 
             // Add defines
@@ -81,7 +81,7 @@ namespace Cake.Common.Tools.WiX
                 var defines = settings.Defines.Select(define => string.Format(CultureInfo.InvariantCulture, "-d{0}={1}", define.Key, define.Value));
                 foreach (var define in defines)
                 {
-                    builder.AppendText(define);
+                    builder.Append(define);
                 }
             }
 
@@ -91,20 +91,20 @@ namespace Cake.Common.Tools.WiX
                 var extensions = settings.Extensions.Select(extension => string.Format(CultureInfo.InvariantCulture, "-ext {0}", extension));
                 foreach (var extension in extensions)
                 {
-                    builder.AppendText(extension);
+                    builder.Append(extension);
                 }
             }
 
             // FIPS
             if (settings.FIPS)
             {
-                builder.AppendText("-fips");
+                builder.Append("-fips");
             }
 
             // No logo
             if (settings.NoLogo)
             {
-                builder.AppendText("-nologo");
+                builder.Append("-nologo");
             }
 
             // Output directory
@@ -114,32 +114,32 @@ namespace Cake.Common.Tools.WiX
                 var separatorChar = System.IO.Path.DirectorySeparatorChar;
                 var fullPath = string.Concat(settings.OutputDirectory.MakeAbsolute(_environment).FullPath, separatorChar, separatorChar);
 
-                builder.AppendText("-o");
-                builder.AppendQuotedText(fullPath);
+                builder.Append("-o");
+                builder.AppendQuoted(fullPath);
             }
 
             // Pedantic
             if (settings.Pedantic)
             {
-                builder.AppendText("-pedantic");
+                builder.Append("-pedantic");
             }
 
             // Show source trace
             if (settings.ShowSourceTrace)
             {
-                builder.AppendText("-trace");
+                builder.Append("-trace");
             }
 
             // Verbose
             if (settings.Verbose)
             {
-                builder.AppendText("-v");
+                builder.Append("-v");
             }
 
             // Source files (.wxs)
             foreach (var sourceFile in sourceFiles.Select(file => file.MakeAbsolute(_environment).FullPath))
             {
-                builder.AppendQuotedText(sourceFile);
+                builder.AppendQuoted(sourceFile);
             }
 
             return builder;

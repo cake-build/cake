@@ -19,7 +19,7 @@ namespace Cake.Common.IO
         /// <param name="pattern"></param>
         /// <returns>A <see cref="FilePathCollection"/>.</returns>
         [CakeMethodAlias]
-        [CakeAliasCategory("Globbing")]
+        [CakeAliasCategory("Files")]
         public static FilePathCollection GetFiles(this ICakeContext context, string pattern)
         {
             if (context == null)

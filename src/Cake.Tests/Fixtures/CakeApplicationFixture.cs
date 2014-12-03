@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Cake.Arguments;
 using Cake.Commands;
 using Cake.Core.Diagnostics;
@@ -23,12 +24,17 @@ namespace Cake.Tests.Fixtures
             CommandFactory = Substitute.For<ICommandFactory>();
 
             ArgumentParser = Substitute.For<IArgumentParser>();
-            ArgumentParser.Parse(Arg.Any<IEnumerable<string>>()).Returns(Options);
+            ArgumentParser.Parse(Arg.Any<IEnumerable<string>>()).Returns(c => Options);
         }
 
         public CakeApplication CreateApplication()
         {
             return new CakeApplication(Log, CommandFactory, ArgumentParser);
+        }
+
+        public int RunApplication()
+        {
+            return CreateApplication().Run(Enumerable.Empty<string>());
         }
     }
 }

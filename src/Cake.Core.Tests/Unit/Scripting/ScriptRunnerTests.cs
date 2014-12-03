@@ -3,62 +3,17 @@ using System.Collections.Generic;
 using System.Reflection;
 using Cake.Core.IO;
 using Cake.Core.Scripting;
-using Cake.Tests.Fixtures;
+using Cake.Core.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
 using Xunit.Extensions;
 
-namespace Cake.Tests.Unit.Scripting
+namespace Cake.Core.Tests.Unit.Scripting
 {
     public sealed class ScriptRunnerTests
     {
         public sealed class TheConstructor
         {
-            [Fact]
-            public void Should_Throw_If_File_System_Is_Null()
-            {
-                // Given
-                var fixture = new ScriptRunnerFixture();
-                fixture.FileSystem = null;
-
-                // When
-                var result = Record.Exception(() => fixture.CreateScriptRunner());
-
-                // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("fileSystem", ((ArgumentNullException)result).ParamName);
-            }
-
-            [Fact]
-            public void Should_Throw_If_Environment_Is_Null()
-            {
-                // Given
-                var fixture = new ScriptRunnerFixture();
-                fixture.Environment = null;
-
-                // When
-                var result = Record.Exception(() => fixture.CreateScriptRunner());
-
-                // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("environment", ((ArgumentNullException)result).ParamName);
-            }
-
-            [Fact]
-            public void Should_Throw_If_Arguments_Is_Null()
-            {
-                // Given
-                var fixture = new ScriptRunnerFixture();
-                fixture.Arguments = null;
-
-                // When
-                var result = Record.Exception(() => fixture.CreateScriptRunner());
-
-                // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("arguments", ((ArgumentNullException)result).ParamName);
-            }
-
             [Fact]
             public void Should_Throw_If_Session_Factory_Is_Null()
             {
@@ -88,25 +43,103 @@ namespace Cake.Tests.Unit.Scripting
                 Assert.IsType<ArgumentNullException>(result);
                 Assert.Equal("aliasGenerator", ((ArgumentNullException)result).ParamName);
             }
+        }
 
+        public sealed class TheRunMethod
+        {
             [Fact]
             public void Should_Throw_If_Script_Host_Is_Null()
             {
                 // Given
                 var fixture = new ScriptRunnerFixture();
-                fixture.Host = null;
+                var runner = fixture.CreateScriptRunner();
 
                 // When
-                var result = Record.Exception(() => fixture.CreateScriptRunner());
+                var result = Record.Exception(() => runner.Run(null, fixture.Script, fixture.ArgumentDictionary));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
                 Assert.Equal("host", ((ArgumentNullException)result).ParamName);
             }
-        }
 
-        public sealed class TheRunMethod
-        {
+            [Fact]
+            public void Should_Throw_If_Script_Is_Null()
+            {
+                // Given
+                var fixture = new ScriptRunnerFixture();
+                var runner = fixture.CreateScriptRunner();
+
+                // When
+                var result = Record.Exception(() => runner.Run(fixture.Host, null, fixture.ArgumentDictionary));
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("script", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Arguments_Are_Null()
+            {
+                // Given
+                var fixture = new ScriptRunnerFixture();
+                var runner = fixture.CreateScriptRunner();
+
+                // When
+                var result = Record.Exception(() => runner.Run(fixture.Host, fixture.Script, null));
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("arguments", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Script_Host_Has_No_File_System()
+            {
+                // Given
+                var fixture = new ScriptRunnerFixture();
+                fixture.FileSystem = null;
+                var runner = fixture.CreateScriptRunner();
+
+                // When
+                var result = Record.Exception(() => runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary));
+
+                // Then
+                Assert.IsType<ArgumentException>(result);
+                Assert.Equal("Script host has no file system.", result.Message);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Script_Host_Has_No_Environment()
+            {
+                // Given
+                var fixture = new ScriptRunnerFixture();
+                fixture.Environment = null;
+                var runner = fixture.CreateScriptRunner();
+
+                // When
+                var result = Record.Exception(() => runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary));
+
+                // Then
+                Assert.IsType<ArgumentException>(result);
+                Assert.Equal("Script host has no environment.", result.Message);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Script_Host_Has_No_Arguments()
+            {
+                var fixture = new ScriptRunnerFixture();
+                fixture.Arguments = null;
+                var runner = fixture.CreateScriptRunner();
+
+                // When
+                var result = Record.Exception(() => runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary));
+
+                // Then
+                Assert.IsType<ArgumentException>(result);
+                Assert.Equal("Script host has no arguments.", result.Message);
+            }
+
+
             [Fact]
             public void Should_Initialize_Script_Session_Factory()
             {
@@ -115,7 +148,7 @@ namespace Cake.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                runner.Run(fixture.Options);
+                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
 
                 // Then
                 fixture.SessionFactory.Received(1).Initialize();
@@ -126,14 +159,14 @@ namespace Cake.Tests.Unit.Scripting
             {
                 // Given
                 var fixture = new ScriptRunnerFixture();
-                fixture.Options.Arguments.Add("A", "B");
+                fixture.ArgumentDictionary.Add("A", "B");
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                runner.Run(fixture.Options);
+                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
 
                 // Then
-                Assert.True(fixture.Arguments.HasArgument("A"));
+                fixture.Arguments.Received(1).SetArguments(fixture.ArgumentDictionary);
             }
 
             [Fact]
@@ -144,7 +177,7 @@ namespace Cake.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                runner.Run(fixture.Options);
+                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
 
                 // Then
                 fixture.SessionFactory.Received(1).CreateSession(fixture.Host);
@@ -158,7 +191,7 @@ namespace Cake.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                runner.Run(fixture.Options);
+                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
 
                 // Then
                 fixture.Environment.Received(1).WorkingDirectory
@@ -172,9 +205,7 @@ namespace Cake.Tests.Unit.Scripting
             [InlineData("System.Data")]
             [InlineData("System.Xml")]
             [InlineData("System.Xml.Linq")]
-            [InlineData("Cake")]
             [InlineData("Cake.Core")]
-            [InlineData("Cake.Common")]
             public void Should_Add_References_To_Session(string @assemblyName)
             {
                 // Given
@@ -182,7 +213,7 @@ namespace Cake.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                runner.Run(fixture.Options);
+                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
 
                 // Then
                 fixture.Session.Received(1).AddReference(
@@ -196,8 +227,6 @@ namespace Cake.Tests.Unit.Scripting
             [InlineData("System.Text")]
             [InlineData("System.Threading.Tasks")]
             [InlineData("System.IO")]
-            [InlineData("Cake")]
-            [InlineData("Cake.Scripting")]
             [InlineData("Cake.Core")]
             [InlineData("Cake.Core.IO")]            
             [InlineData("Cake.Core.Scripting")]
@@ -209,7 +238,7 @@ namespace Cake.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                runner.Run(fixture.Options);
+                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
 
                 // Then
                 fixture.Session.Received(1).ImportNamespace(@namespace);
@@ -223,7 +252,7 @@ namespace Cake.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                runner.Run(fixture.Options);
+                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
 
                 // Then
                 fixture.AliasGenerator.Received(1).GenerateScriptAliases(
@@ -239,10 +268,10 @@ namespace Cake.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                runner.Run(fixture.Options);
+                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
 
                 // Then
-                fixture.Session.Received(1).Execute(fixture.Source);
+                fixture.Session.Received(1).Execute(fixture.GetExpectedSource());
             }
         }
     }

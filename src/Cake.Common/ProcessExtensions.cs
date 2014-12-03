@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using Cake.Core;
 using Cake.Core.Annotations;
+using Cake.Core.IO;
 
 namespace Cake.Common
 {
@@ -18,7 +18,7 @@ namespace Cake.Common
         /// <param name="fileName">The file name.</param>
         /// <returns>The exit code that the started process specified when it terminated.</returns>
         [CakeMethodAlias]
-        public static int StartProcess(this ICakeContext context, string fileName)
+        public static int StartProcess(this ICakeContext context, FilePath fileName)
         {
             return StartProcess(context, fileName, new ProcessSettings());
         }
@@ -31,7 +31,7 @@ namespace Cake.Common
         /// <param name="settings">The settings.</param>
         /// <returns>The exit code that the started process specified when it terminated.</returns>
         [CakeMethodAlias]
-        public static int StartProcess(this ICakeContext context, string fileName, ProcessSettings settings)
+        public static int StartProcess(this ICakeContext context, FilePath fileName, ProcessSettings settings)
         {
             if (context == null)
             {
@@ -48,16 +48,10 @@ namespace Cake.Common
 
             // Get the working directory.
             var workingDirectory = settings.WorkingDirectory ?? context.Environment.WorkingDirectory;
-            workingDirectory = workingDirectory.MakeAbsolute(context.Environment);   
-
-            // Get the process start info.
-            var info = new ProcessStartInfo();
-            info.FileName = fileName;
-            info.WorkingDirectory = workingDirectory.FullPath;
-            info.Arguments = settings.Arguments ?? string.Empty;
+            settings.WorkingDirectory = workingDirectory.MakeAbsolute(context.Environment);
 
             // Start the process.
-            var process = context.ProcessRunner.Start(info);
+            var process = context.ProcessRunner.Start(fileName, settings);
             if (process == null)
             {
                 throw new CakeException("Could not start process.");

@@ -21,6 +21,8 @@ namespace Cake.Core
         private readonly ICakeArguments _arguments;
         private readonly IProcessRunner _processRunner;
         private readonly List<CakeTask> _tasks;
+        private Action _setupAction;
+        private Action _teardownAction;
 
         /// <summary>
         /// Gets the file system.
@@ -131,22 +133,6 @@ namespace Cake.Core
         }
 
         /// <summary>
-        /// Creates and registers a new task.
-        /// </summary>
-        /// <typeparam name="T">The task type.</typeparam>
-        /// <returns>
-        /// A <see cref="CakeTaskBuilder{T}"/> used to configure the task.
-        /// </returns>
-        public CakeTaskBuilder<T> Build<T>()
-            where T : CakeTask, new()
-        {
-            var task = new T();
-            _tasks.Add(task);
-            var builder = new CakeTaskBuilder<T>(task);
-            return builder;
-        }
-
-        /// <summary>
         /// Creates and registers a new <see cref="ActionTask"/>.
         /// </summary>
         /// <param name="name">The name of the task.</param>
@@ -166,6 +152,26 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Allows registration of an action that's executed before any tasks are run.
+        /// If setup fails, no tasks will be executed but teardown will be performed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        public void Setup(Action action)
+        {
+            _setupAction = action;
+        }
+
+        /// <summary>
+        /// Allows registration of an action that's executed after all other tasks have been run.
+        /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        public void Teardown(Action action)
+        {
+            _teardownAction = action;
+        }
+
+        /// <summary>
         /// Runs the specified target.
         /// </summary>
         /// <param name="target">The target to run.</param>
@@ -181,33 +187,75 @@ namespace Cake.Core
                 throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, target));
             }
 
-            var stopWatch = new Stopwatch();
-            var report = new CakeReport();
+            // This isn't pretty, but we need to keep track of exceptions thrown
+            // while running a setup action, or a task. We do this since we don't
+            // want to throw teardown exceptions if an exception was thrown previously.
+            var exceptionWasThrown = false;
 
-            foreach (var task in graph.Traverse(target))
+            try
             {
-                var taskNode = _tasks.FirstOrDefault(x => x.Name.Equals(task, StringComparison.OrdinalIgnoreCase));
-                Debug.Assert(taskNode != null, "Node should not be null.");
+                PerformSetup();
 
-                if (ShouldTaskExecute(taskNode))
+                var stopWatch = new Stopwatch();
+                var report = new CakeReport();
+
+                foreach (var task in graph.Traverse(target))
                 {
-                    _log.Verbose("Executing task: {0}", taskNode.Name);
+                    var taskNode = _tasks.FirstOrDefault(x => x.Name.Equals(task, StringComparison.OrdinalIgnoreCase));
+                    Debug.Assert(taskNode != null, "Node should not be null.");
 
-                    ExecuteTask(stopWatch, taskNode, report);
+                    var isTarget = taskNode.Name.Equals(target, StringComparison.OrdinalIgnoreCase);
 
-                    _log.Verbose("Finished executing task: {0}", taskNode.Name);
+                    if (ShouldTaskExecute(taskNode, isTarget))
+                    {
+                        _log.Verbose("Executing task: {0}", taskNode.Name);
+
+                        ExecuteTask(stopWatch, taskNode, report);
+
+                        _log.Verbose("Finished executing task: {0}", taskNode.Name);
+                    }
+                    else
+                    {
+                        _log.Verbose("Skipping task: {0}", taskNode.Name);
+                    }
                 }
-            }
 
-            return report;
+                return report;
+            }
+            catch
+            {
+                exceptionWasThrown = true;
+                throw;
+            }
+            finally
+            {
+                PerformTeardown(exceptionWasThrown);
+            }
         }
 
-        private static bool ShouldTaskExecute(CakeTask task)
+        private void PerformSetup()
+        {
+            if (_setupAction != null)
+            {
+                _log.Verbose("Executing custom setup action...");
+                _setupAction();
+            }
+        }
+
+        private static bool ShouldTaskExecute(CakeTask task, bool isTarget)
         {
             foreach (var criteria in task.Criterias)
             {
                 if (!criteria())
                 {
+                    if (isTarget)
+                    {
+                        // It's not OK to skip the target task.
+                        // See issue #106 (https://github.com/cake-build/cake/issues/106)
+                        const string format = "Could not reach target '{0}' since it was skipped due to a criteria.";
+                        var message = string.Format(CultureInfo.InvariantCulture, format, task.Name);
+                        throw new CakeException(message);
+                    }
                     return false;
                 }
             }
@@ -258,6 +306,28 @@ namespace Cake.Core
 
             // Add the task results to the report.
             report.Add(task.Name, stopWatch.Elapsed);
+        }
+
+        private void PerformTeardown(bool exceptionWasThrown)
+        {
+            if (_teardownAction != null)
+            {
+                try
+                {
+                    _log.Verbose("Executing custom teardown action...");
+                    _teardownAction();
+                }
+                catch (Exception ex)
+                {
+                    _log.Error("An error occured in the custom teardown action.");
+                    if (!exceptionWasThrown)
+                    {
+                        // If no other exception was thrown, we throw this one.
+                        throw;
+                    }
+                    _log.Error("Teardown error: {0}", ex.ToString());
+                }
+            }
         }
     }
 }

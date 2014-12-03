@@ -48,57 +48,57 @@ namespace Cake.Common.Tools.NUnit
             Run(settings, GetArguments(assemblyPath, settings), settings.ToolPath);
         }
 
-        private ToolArgumentBuilder GetArguments(FilePath assemblyPath, NUnitSettings settings)
+        private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, NUnitSettings settings)
         {
-            var builder = new ToolArgumentBuilder();
+            var builder = new ProcessArgumentBuilder();
 
             // Add the assembly to build.
-            builder.AppendQuotedText(assemblyPath.MakeAbsolute(_environment).FullPath);
+            builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
 
             if(settings.Framework != null)
             {
-                builder.AppendQuotedText("/framework:" + settings.Framework);
+                builder.AppendQuoted("/framework:" + settings.Framework);
             }
 
             if (settings.Include != null)
             {
-                builder.AppendQuotedText("/include:" + settings.Include);
+                builder.AppendQuoted("/include:" + settings.Include);
             }
 
             if (settings.Exclude != null)
             {
-                builder.AppendQuotedText("/exclude:" + settings.Exclude);
+                builder.AppendQuoted("/exclude:" + settings.Exclude);
             }
 
             if (settings.Timeout.HasValue)
             {
-                builder.AppendText("/timeout:" + settings.Timeout.Value);
+                builder.Append("/timeout:" + settings.Timeout.Value);
             }
 
             // No shadow copy?
             if (!settings.ShadowCopy)
             {
-                builder.AppendText("/noshadow");
+                builder.Append("/noshadow");
             }
 
             if (settings.NoLogo)
             {
-                builder.AppendText("/nologo");
+                builder.Append("/nologo");
             }
 
             if (settings.NoThread)
             {
-                builder.AppendText("/nothread");
+                builder.Append("/nothread");
             }
 
             if (settings.StopOnError)
             {
-                builder.AppendText("/stoponerror");
+                builder.Append("/stoponerror");
             }
 
             if (settings.Trace != null)
             {
-                builder.AppendText("/trace:" + settings.Trace);
+                builder.Append("/trace:" + settings.Trace);
             }
 
             if (settings.ResultsFile != null && settings.NoResults)
@@ -109,14 +109,14 @@ namespace Cake.Common.Tools.NUnit
 
             if (settings.ResultsFile != null)
             {
-                builder.AppendQuotedText(
+                builder.AppendQuoted(
                     string.Format(
                     CultureInfo.InvariantCulture,
-                    "/result:{0}", settings.ResultsFile.FullPath));
+                    "/result:{0}", settings.ResultsFile.MakeAbsolute(_environment).FullPath));
             }
             else if (settings.NoResults)
             {
-                builder.AppendQuotedText("/noresult");
+                builder.AppendQuoted("/noresult");
             }
 
             return builder;

@@ -6,7 +6,7 @@ using Cake.Core.IO;
 namespace Cake.Core.Scripting
 {
     /// <summary>
-    /// The script host that works as a context for the scripts.
+    /// The script host works as a context for scripts.
     /// </summary>
     public abstract class ScriptHost : IScriptHost
     {
@@ -114,6 +114,26 @@ namespace Cake.Core.Scripting
         public ICakeContext GetContext()
         {
             return this;
+        }
+
+        /// <summary>
+        /// Allows registration of an action that's executed before any tasks are run.
+        /// If setup fails, no tasks will be executed but teardown will be performed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        public void Setup(Action action)
+        {
+            _engine.Setup(action);
+        }
+
+        /// <summary>
+        /// Allows registration of an action that's executed after all other tasks have been run.
+        /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        public void Teardown(Action action)
+        {
+            _engine.Teardown(action);
         }
 
         /// <summary>

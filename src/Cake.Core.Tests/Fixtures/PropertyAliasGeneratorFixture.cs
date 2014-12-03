@@ -13,6 +13,7 @@ namespace Cake.Core.Tests.Fixtures
         }
 
         [CakePropertyAlias]
+        // ReSharper disable once UnusedTypeParameter
         public static void GenericScriptMethod<T>(this ICakeContext context)
         {
         }
