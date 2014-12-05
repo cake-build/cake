@@ -2,6 +2,7 @@
 using Cake.Common.Tools.NuGet.Pack;
 using Cake.Common.Tools.NuGet.Push;
 using Cake.Common.Tools.NuGet.Restore;
+using Cake.Common.Tools.NuGet.Sources;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -87,6 +88,109 @@ namespace Cake.Common.Tools.NuGet
 
             var packer = new NuGetPusher(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
             packer.Push(packageFilePath, settings);
+        }
+
+        /// <summary>
+        /// Adds NuGet package source using the specified name &amp;source to global user config
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">Name of the source.</param>
+        /// <param name="source">Path to the package(s) source.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("AddSource")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Sources")]
+        public static void NuGetAddSource(this ICakeContext context, string name, string source)
+        {
+            context.NuGetAddSource(name, source, NuGetSourcesSettings.Default);
+        }
+
+        /// <summary>
+        /// Adds NuGet package source using the specified name, source &amp; settings to global user config
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">Name of the source.</param>
+        /// <param name="source">Path to the package(s) source.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("AddSource")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Sources")]
+        public static void NuGetAddSource(this ICakeContext context, string name, string source, NuGetSourcesSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var runner = new NuGetSources(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            runner.AddSource(name, source, settings);
+        }
+
+        /// <summary>
+        /// Removes NuGet package source using the specified name &amp; source from global user config
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">Name of the source.</param>
+        /// <param name="source">Path to the package(s) source.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("RemoveSource")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Sources")]
+        public static void NuGetRemoveSource(this ICakeContext context, string name, string source)
+        {
+            context.NuGetRemoveSource(name, source, NuGetSourcesSettings.Default);
+        }
+
+        /// <summary>
+        /// Removes NuGet package source using the specified name, source &amp; settings from global user config
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">Name of the source.</param>
+        /// <param name="source">Path to the package(s) source.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("RemoveSource")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Sources")]
+        public static void NuGetRemoveSource(this ICakeContext context, string name, string source, NuGetSourcesSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var runner = new NuGetSources(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            runner.RemoveSource(name, source, settings);
+        }
+
+        /// <summary>
+        /// Checks if NuGet package source exists in global user config using the specified source
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="source">Path to the package(s) source.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("HasSource")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Sources")]
+        public static bool NuGetHasSource(this ICakeContext context, string source)
+        {
+            return context.NuGetHasSource(source, NuGetSourcesSettings.Default);
+        }
+
+        /// <summary>
+        /// Checks if NuGet package source exists in global user config using the specified source &amp; settings
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="source">Path to the package(s) source.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("HasSource")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Sources")]
+        public static bool NuGetHasSource(this ICakeContext context, string source, NuGetSourcesSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var runner = new NuGetSources(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            return runner.HasSource(source, settings);
         }
     }
 }
