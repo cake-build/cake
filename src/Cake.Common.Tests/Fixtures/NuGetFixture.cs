@@ -2,6 +2,7 @@
 using Cake.Common.Tools.NuGet.Pack;
 using Cake.Common.Tools.NuGet.Push;
 using Cake.Common.Tools.NuGet.Restore;
+using Cake.Common.Tools.NuGet.Sources;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -60,6 +61,11 @@ namespace Cake.Common.Tests.Fixtures
         public NuGetRestorer CreateRestorer()
         {
             return new NuGetRestorer(FileSystem, Environment, Globber, ProcessRunner);
+        }
+
+        public NuGetSources CreateSources()
+        {
+            return new NuGetSources(FileSystem, Environment, Globber, ProcessRunner);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
@@ -12,6 +13,7 @@ namespace Cake.Common.Tools.NuGet.Sources
     public sealed class NuGetSources : Tool<NuGetSourcesSettings>
     {
         private readonly IGlobber _globber;
+        private readonly IFileSystem _fileSystem;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetSources"/> class.
@@ -24,6 +26,7 @@ namespace Cake.Common.Tools.NuGet.Sources
             : base(fileSystem, environment, processRunner)
         {
             _globber = globber;
+            _fileSystem = fileSystem;
         }
 
         /// <summary>
@@ -106,14 +109,40 @@ namespace Cake.Common.Tools.NuGet.Sources
                 throw new ArgumentNullException("settings");
             }
 
+            // Get the tool name.
+            var toolName = GetToolName();
+
+            // Get the tool path.
+            var  toolPath = GetToolPath(settings, settings.ToolPath);
+            if (toolPath == null || !_fileSystem.Exist(toolPath))
+            {
+                const string message = "{0}: Could not locate executable.";
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, toolName));
+            }
+
             var info = new System.Diagnostics.ProcessStartInfo( GetToolPath(settings, settings.ToolPath).FullPath)
             {
                 Arguments = "sources List",
                 UseShellExecute = false,
                 RedirectStandardOutput = true
             };
-            var process = System.Diagnostics.Process.Start(info);
-            process.WaitForExit();
+            System.Diagnostics.Process process;
+            try
+            {
+                process = System.Diagnostics.Process.Start(info);
+
+                if (process == null)
+                {
+                    throw new NullReferenceException("process start returned null");
+                }
+
+                process.WaitForExit();
+            }
+            catch (Exception)
+            {
+                const string message = "{0}: Process was not started.";
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, toolName));
+            }
             string line;
             while ((line=process.StandardOutput.ReadLine())!=null)
             {
