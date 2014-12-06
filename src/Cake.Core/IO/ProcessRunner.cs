@@ -64,7 +64,8 @@ namespace Cake.Core.IO
             {
                 Arguments = arguments.Render(),
                 WorkingDirectory = workingDirectory.FullPath,
-                UseShellExecute = false
+                UseShellExecute = false,
+                RedirectStandardOutput = settings.RedirectStandardOutput
             };
 
             // Start and return the process.

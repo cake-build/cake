@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Cake.Core.IO
 {
@@ -19,6 +20,15 @@ namespace Cake.Core.IO
         public int GetExitCode()
         {
             return _process.ExitCode;
+        }
+
+        public IEnumerable<string> GetStandardOutput()
+        {
+            string line;
+            while ((line=_process.StandardOutput.ReadLine())!=null)
+            {
+                yield return line;
+            }
         }
     }
 }

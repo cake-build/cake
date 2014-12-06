@@ -77,6 +77,27 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 Assert.Equal("NuGet: Could not locate executable.", result.Message);
             }
 
+            [Theory]
+            [InlineData("C:/nuget/nuget.exe", "C:/nuget/nuget.exe")]
+            [InlineData("./tools/nuget/nuget.exe", "/Working/tools/nuget/nuget.exe")]
+            public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
+            {
+                // Given
+                var fixture = new NuGetFixture(expected);
+                var sources = fixture.CreateSources();
+
+                // When
+                sources.AddSource("name", "source", new NuGetSourcesSettings
+                {
+                    ToolPath = toolPath
+                });
+
+                // Then
+                fixture.ProcessRunner.Received(2).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == expected),
+                    Arg.Any<ProcessSettings>());
+            }
+
             [Fact]
             public void Should_Throw_If_Process_Was_Not_Started()
             {

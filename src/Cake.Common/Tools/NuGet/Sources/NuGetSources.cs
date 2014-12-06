@@ -14,6 +14,7 @@ namespace Cake.Common.Tools.NuGet.Sources
     {
         private readonly IGlobber _globber;
         private readonly IFileSystem _fileSystem;
+        private readonly IProcessRunner _processRunner;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetSources"/> class.
@@ -27,6 +28,7 @@ namespace Cake.Common.Tools.NuGet.Sources
         {
             _globber = globber;
             _fileSystem = fileSystem;
+            _processRunner = processRunner;
         }
 
         /// <summary>
@@ -120,16 +122,19 @@ namespace Cake.Common.Tools.NuGet.Sources
                 throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, toolName));
             }
 
-            var info = new System.Diagnostics.ProcessStartInfo( GetToolPath(settings, settings.ToolPath).FullPath)
-            {
-                Arguments = "sources List",
-                UseShellExecute = false,
-                RedirectStandardOutput = true
-            };
-            System.Diagnostics.Process process;
+           
+
+            IProcess process;
             try
             {
-                process = System.Diagnostics.Process.Start(info);
+                process = _processRunner.Start(
+                    toolPath,
+                    new ProcessSettings
+                    {
+                        Arguments = "sources List",
+                        RedirectStandardOutput = true
+                    }
+                    );
 
                 if (process == null)
                 {
@@ -143,13 +148,10 @@ namespace Cake.Common.Tools.NuGet.Sources
                 const string message = "{0}: Process was not started.";
                 throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, toolName));
             }
-            string line;
-            while ((line=process.StandardOutput.ReadLine())!=null)
-            {
-                if (line.TrimStart() == source)
-                    return true;
-            }
-            return false;
+
+            var result = process.GetStandardOutput().Any(line => line.TrimStart() == source);
+
+            return result;
         }
 
         private static ProcessArgumentBuilder GetAddArguments(string name, string source, NuGetSourcesSettings settings)
