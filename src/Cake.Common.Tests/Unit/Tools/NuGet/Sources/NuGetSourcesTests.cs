@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.NuGet;
 using Cake.Common.Tools.NuGet.Sources;
@@ -112,6 +113,93 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 // Then
                 Assert.IsType<CakeException>(result);
                 Assert.Equal("NuGet: Process was not started.", result.Message);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
+            {
+                // Given
+                var fixture = new NuGetFixture();
+                fixture.Process.GetExitCode().Returns(2);
+                var sources = fixture.CreateSources();
+
+                // When
+                var result = Record.Exception(() => sources.AddSource("name", "source", NuGetSourcesSettings.Default));
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("NuGet: Process returned an error.", result.Message);
+            }
+
+            [Fact]
+            public void Should_Find_NuGet_Executable_If_Tool_Path_Not_Provided()
+            {
+                // Given
+                var fixture = new NuGetFixture();
+                var sources = fixture.CreateSources();
+
+                // When
+                sources.AddSource("name", "source", NuGetSourcesSettings.Default);
+
+                // Then
+                fixture.ProcessRunner.Received(2).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/NuGet.exe"),
+                    Arg.Any<ProcessSettings>());
+            }
+
+            [Fact]
+            public void Should_Add_Mandatory_Arguments()
+            {
+                // Given
+                var fixture = new NuGetFixture();
+                var sources = fixture.CreateSources();
+
+                // When
+                sources.AddSource("name", "source", NuGetSourcesSettings.Default);
+                
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "sources Add -Name \"name\" -Source \"source\" -NonInteractive"));
+            }
+
+            [Fact]
+            public void Should_Add_UserName_And_Password_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new NuGetFixture();
+                var sources = fixture.CreateSources();
+
+                // When
+                sources.AddSource("name", "source", new NuGetSourcesSettings
+                {
+                    UserName = "username",
+                    Password = "password"
+                });
+                
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "sources Add -Name \"name\" -Source \"source\" -NonInteractive -UserName \"username\" -Password \"password\""));
+            }
+
+            [Fact]
+            public void Should_Add_Verbosity_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new NuGetFixture();
+                var sources = fixture.CreateSources();
+
+                // When
+                sources.AddSource("name", "source", new NuGetSourcesSettings
+                {
+                    Verbosity = NuGetVerbosity.Detailed
+                });
+                
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p => 
+                        p.Arguments.Render() == "sources Add -Name \"name\" -Source \"source\" -Verbosity detailed -NonInteractive"));
             }
         }
     }
