@@ -110,47 +110,21 @@ namespace Cake.Common.Tools.NuGet.Sources
             {
                 throw new ArgumentNullException("settings");
             }
+            var arguments = new ProcessArgumentBuilder();
+            arguments.Append("sources List");
 
-            // Get the tool name.
-            var toolName = GetToolName();
-
-            // Get the tool path.
-            var  toolPath = GetToolPath(settings, settings.ToolPath);
-            if (toolPath == null || !_fileSystem.Exist(toolPath))
-            {
-                const string message = "{0}: Could not locate executable.";
-                throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, toolName));
-            }
-
-           
-
-            IProcess process;
-            try
-            {
-                process = _processRunner.Start(
-                    toolPath,
-                    new ProcessSettings
-                    {
-                        Arguments = "sources List",
-                        RedirectStandardOutput = true
-                    }
-                    );
-
-                if (process == null)
+            var result = false;
+            Run(
+                settings,
+                null,
+                settings.ToolPath,
+                new ProcessSettings
                 {
-                    throw new NullReferenceException("process start returned null");
-                }
-
-                process.WaitForExit();
-            }
-            catch (Exception)
-            {
-                const string message = "{0}: Process was not started.";
-                throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, toolName));
-            }
-
-            var result = process.GetStandardOutput().Any(line => line.TrimStart() == source);
-
+                    Arguments = "sources List",
+                    RedirectStandardOutput = true
+                },
+                process => result = process.GetStandardOutput().Any(line => line.TrimStart() == source)
+                );
             return result;
         }
 

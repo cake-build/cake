@@ -44,7 +44,20 @@ namespace Cake.Core.Utilities
         /// <param name="toolPath">The tool path to use.</param> 
         protected void Run(T settings, ProcessArgumentBuilder arguments, FilePath toolPath)
         {
-            if (arguments == null)
+            Run(settings, arguments, toolPath, null, null);
+        }
+
+        /// <summary>
+        /// Runs the tool using a custom tool path and the specified settings.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="arguments">The arguments.</param>
+        /// <param name="toolPath">The tool path to use.</param>
+        /// <param name="processSettings">The process settings</param>
+        /// <param name="postAction">If specified called after process exit</param> 
+        protected void Run(T settings, ProcessArgumentBuilder arguments, FilePath toolPath, ProcessSettings processSettings, Action<IProcess> postAction)
+        {
+            if (arguments == null && (processSettings == null || processSettings.Arguments == null))
             {
                 throw new ArgumentNullException("arguments");
             }
@@ -69,11 +82,15 @@ namespace Cake.Core.Utilities
             }
 
             // Create the process start info.
-            var info = new ProcessSettings
+            var info = processSettings ?? new ProcessSettings();
+            if (info.Arguments == null)
             {
-                WorkingDirectory = workingDirectory.MakeAbsolute(_environment).FullPath,
-                Arguments = arguments
-            };
+                info.Arguments = arguments;
+            }
+            if (info.WorkingDirectory == null)
+            {
+                info.WorkingDirectory = workingDirectory.MakeAbsolute(_environment).FullPath;
+            }
 
             // Run the process.
             var process = _processRunner.Start(toolPath, info);
@@ -86,11 +103,22 @@ namespace Cake.Core.Utilities
             // Wait for the process to exit.
             process.WaitForExit();
 
-            // Did an error occur?
-            if (process.GetExitCode() != 0)
+            try
             {
-                const string message = "{0}: Process returned an error.";
-                throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, toolName));
+                // Did an error occur?
+                if (process.GetExitCode() != 0)
+                {
+                    const string message = "{0}: Process returned an error.";
+                    throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, toolName));
+                }
+            }
+            finally
+            {
+                //Post action specified?
+                if (postAction != null)
+                {
+                    postAction(process);
+                }
             }
         }
 
