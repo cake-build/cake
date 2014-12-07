@@ -1,4 +1,6 @@
-﻿namespace Cake.Core.IO
+﻿using System.Collections.Generic;
+
+namespace Cake.Core.IO
 {
     /// <summary>
     /// Represents a process.
@@ -15,5 +17,11 @@
         /// </summary>
         /// <returns>The exit code of the process.</returns>
         int GetExitCode();
+
+        /// <summary>
+        /// Get the standard output of process
+        /// </summary>
+        /// <returns>Returns process output <see cref="ProcessSettings.RedirectStandardOutput">RedirectStandardOutput</see> is true</returns>
+        IEnumerable<string> GetStandardOutput();
     }
 }

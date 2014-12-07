@@ -16,5 +16,11 @@
         /// </summary>
         /// <value>The working directory for the process to be started.</value>
         public DirectoryPath WorkingDirectory { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value that indicates whether the output of an application is written to the <see cref="P:System.Diagnostics.Process.StandardOutput"/> stream.
+        /// </summary>
+        /// <value>true if output should be written to <see cref="P:System.Diagnostics.Process.StandardOutput"/>; otherwise, false. The default is false.</value>
+        public bool RedirectStandardOutput { get; set; }
     }
 }
