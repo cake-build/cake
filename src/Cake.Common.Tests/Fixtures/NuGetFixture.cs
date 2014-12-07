@@ -1,4 +1,6 @@
-﻿using Cake.Common.Tests.Properties;
+﻿using System;
+using System.Collections.Generic;
+using Cake.Common.Tests.Properties;
 using Cake.Common.Tools.NuGet.Pack;
 using Cake.Common.Tools.NuGet.Push;
 using Cake.Common.Tools.NuGet.Restore;
@@ -20,7 +22,7 @@ namespace Cake.Common.Tests.Fixtures
         public IProcess Process { get; set; }
         public ICakeLog Log { get; set; }
 
-        public NuGetFixture(FilePath toolPath = null, bool defaultToolExist = true, string xml = null)
+        public NuGetFixture(FilePath toolPath = null, bool defaultToolExist = true, string xml = null, KeyValuePair<string, string>? sourceExists = null)
         {
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory.Returns("/Working");
@@ -45,6 +47,30 @@ namespace Cake.Common.Tests.Fixtures
             if (toolPath != null)
             {
                 FileSystem.GetCreatedFile(toolPath);
+            }
+            if (sourceExists.HasValue)
+            {
+                Process.GetStandardOutput().Returns(
+                    new[]
+                    {
+                        "  1.  https://www.nuget.org/api/v2/ [Enabled]",
+                        "      https://www.nuget.org/api/v2/",
+                        string.Format(
+                            "  2.  {0} [Enabled]",
+                            sourceExists.Value.Key
+                            ),
+                        string.Format(
+                            "      {0}",
+                            sourceExists.Value.Value
+                            )
+                    }
+                    );
+            }
+            else
+            {
+                Process.GetStandardOutput().Returns(
+                    new string[0]
+                    );
             }
         }
 
