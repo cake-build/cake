@@ -1,5 +1,9 @@
 #l "utilities.cake"
 
+//////////////////////////////////////////////////////////////////////
+// ARGUMENTS
+//////////////////////////////////////////////////////////////////////
+
 // Get arguments passed to the script.
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
@@ -12,13 +16,13 @@ var isPullRequest = IsPullRequest();
 var releaseNotes = ParseReleaseNotes("./ReleaseNotes.md");
 
 // Get version.
-int buildNumber = GetBuildNumber();
+var buildNumber = GetBuildNumber();
 var version = releaseNotes.Version.ToString();
 var semVersion = local ? version : (version + string.Concat("-build-", buildNumber));
 
 // Define directories.
 var buildDir = "./src/Cake/bin/" + configuration;
-var buildResultDir = "./build/" + "v" + semVersion;
+var buildResultDir = "./build/v" + semVersion;
 var testResultsDir = buildResultDir + "/test-results";
 var nugetRoot = buildResultDir + "/nuget";
 var binDir = buildResultDir + "/bin";
@@ -26,18 +30,27 @@ var binDir = buildResultDir + "/bin";
 // Output some information about the current build.
 Information("Building version {0} of Cake ({1}).", version, semVersion);
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// SETUP / TEARDOWN
+///////////////////////////////////////////////////////////////////////////////
 
-Task("Update-Build-Number")
-	.Description("Updates the TeamCity build number.")
-	.Does(() =>
+Setup(() =>
 {
-	SetBuildVersion(semVersion);
+    // Executed BEFORE the first task.
+    Information("Running tasks...");
 });
 
+Teardown(() =>
+{
+    // Executed AFTER the last task.
+    Information("Finished running tasks.");
+});
+
+//////////////////////////////////////////////////////////////////////
+// TASKS
+//////////////////////////////////////////////////////////////////////
+
 Task("Clean")
-	.Description("Cleans the build and output directories.")
-	.IsDependentOn("Update-Build-Number")
 	.Does(() =>
 {
 	CleanDirectories(new DirectoryPath[] {
@@ -45,7 +58,6 @@ Task("Clean")
 });
 
 Task("Restore-NuGet-Packages")
-	.Description("Restores all NuGet packages in solution.")
 	.IsDependentOn("Clean")
 	.Does(() =>
 {
@@ -53,7 +65,6 @@ Task("Restore-NuGet-Packages")
 });
 
 Task("Patch-Assembly-Info")
-	.Description("Patches the AssemblyInfo files.")
 	.IsDependentOn("Restore-NuGet-Packages")
 	.Does(() =>
 {
@@ -68,7 +79,6 @@ Task("Patch-Assembly-Info")
 });
 
 Task("Build")
-	.Description("Builds the Cake source code.")
 	.IsDependentOn("Patch-Assembly-Info")
 	.Does(() =>
 {
@@ -78,11 +88,9 @@ Task("Build")
 });
 
 Task("Run-Unit-Tests")
-	.Description("Runs unit tests.")
 	.IsDependentOn("Build")
 	.Does(() =>
 {
-	// Run unit tests.
 	XUnit2("./src/**/bin/" + configuration + "/*.Tests.dll", new XUnit2Settings {
 		OutputDirectory = testResultsDir,
 		XmlReportV1 = true
@@ -91,7 +99,6 @@ Task("Run-Unit-Tests")
 
 
 Task("Copy-Files")
-	.Description("Copy files to the output directory.")
 	.IsDependentOn("Run-Unit-Tests")
 	.Does(() =>
 {
@@ -107,7 +114,6 @@ Task("Copy-Files")
 });
 
 Task("Zip-Files")
-	.Description("Zips all files.")
 	.IsDependentOn("Copy-Files")
 	.Does(() =>
 {
@@ -116,7 +122,6 @@ Task("Zip-Files")
 });
 
 Task("Create-Cake-NuGet-Package")
-	.Description("Creates the Cake NuGet package.")
 	.IsDependentOn("Copy-Files")
 	.Does(() =>
 {
@@ -131,7 +136,6 @@ Task("Create-Cake-NuGet-Package")
 });
 
 Task("Create-Core-NuGet-Package")
-	.Description("Creates the Cake NuGet package.")
 	.IsDependentOn("Copy-Files")
 	.Does(() =>
 {
@@ -145,14 +149,20 @@ Task("Create-Core-NuGet-Package")
 });
 
 Task("Package")
-	.Description("Zips and creates NuGet package.")
 	.IsDependentOn("Zip-Files")
 	.IsDependentOn("Create-Cake-NuGet-Package")
 	.IsDependentOn("Create-Core-NuGet-Package");
 
-Task("Upload-Artifacts")
-	.IsDependentOn("Package")
+Task("Update-AppVeyor-Build-Number")
 	.WithCriteria(() => !local)
+	.Does(() =>
+{
+	SetBuildVersion(semVersion);
+});	
+
+Task("Upload-AppVeyor-Artifacts")
+	.IsDependentOn("Package")
+	.WithCriteria(() => !local)	
 	.Does(() =>
 {
 	// Upload zip file.
@@ -161,7 +171,6 @@ Task("Upload-Artifacts")
 });	
 
 Task("Publish-MyGet")
-	.IsDependentOn("Upload-Artifacts")
 	.WithCriteria(() => !local && !isPullRequest)
 	.Does(() =>
 {
@@ -181,13 +190,20 @@ Task("Publish-MyGet")
 	});	
 });
 
-Task("Publish")
-	.IsDependentOn("Publish-MyGet");
+//////////////////////////////////////////////////////////////////////
+// TASK TARGETS
+//////////////////////////////////////////////////////////////////////
 
 Task("Default")
-	.Description("The default target.")	
-	.IsDependentOn("Publish");
+	.IsDependentOn("Package");
 
-//////////////////////////////////////////////////////////////////////////
+Task("AppVeyor")
+	.IsDependentOn("Update-AppVeyor-Build-Number")
+	.IsDependentOn("Upload-AppVeyor-Artifacts")
+	.IsDependentOn("Publish-MyGet");
+
+//////////////////////////////////////////////////////////////////////
+// EXECUTION
+//////////////////////////////////////////////////////////////////////
 
 RunTarget(target);
