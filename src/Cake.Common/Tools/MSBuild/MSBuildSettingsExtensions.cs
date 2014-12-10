@@ -115,6 +115,22 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
+        /// Sets the build verbosity.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="verbosity">The build verbosity.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings WithVerbosity(this MSBuildSettings settings, string verbosity)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+            settings.Verbosity = verbosity;
+            return settings;
+        }
+
+        /// <summary>
         /// Sets whether or not node reuse should be enabled.
         /// </summary>
         /// <param name="settings">The settings.</param>
