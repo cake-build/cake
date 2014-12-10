@@ -5,6 +5,7 @@ using Cake.Common.IO;
 using Cake.Common.Tests.Fixtures;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Core.Tests.Fakes;
 using NSubstitute;
 using Xunit;
 
@@ -748,6 +749,155 @@ namespace Cake.Common.Tests.Unit.IO
                     Assert.False(fixture.FileSystem.GetDirectory("/Temp/Hello").Exists);
                     Assert.False(fixture.FileSystem.GetDirectory("/Temp/Goodbye").Exists);
                 }                
+            }
+        }
+
+        public sealed class TheCopyDirectoryMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given
+                var sourcePath = new DirectoryPath("C:/Temp");
+                var destinationPath = new DirectoryPath("C:/Temp2");
+
+                // When
+                var result = Record.Exception(() =>
+                    DirectoryExtensions.CopyDirectory(null, sourcePath, destinationPath));
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Source_Directory_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+
+                // When
+                var result = Record.Exception(() =>
+                    context.CopyDirectory(null, null));
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("source", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Destination_Directory_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var sourcePath = new DirectoryPath("C:/Temp");
+
+                // When
+                var result = Record.Exception(() =>
+                    context.CopyDirectory(sourcePath, null));
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("destination", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Source_Directory_Does_Not_Exist()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                context.FileSystem.Returns(new FakeFileSystem(false));
+                var sourcePath = new DirectoryPath("C:/Temp");
+                var destinationPath = new DirectoryPath("C:/Temp2");
+
+                // When
+                var result = Record.Exception(() =>
+                    context.CopyDirectory(sourcePath, destinationPath));
+
+                // Then
+                Assert.IsType<DirectoryNotFoundException>(result);
+            }
+
+            [Fact]
+            public void Should_Create_Destination_Folder_If_Not_Exist()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var fileSystem = CreateFileStructure(new FakeFileSystem(false));
+                context.FileSystem.Returns(fileSystem);
+                var sourcePath = new DirectoryPath("C:/Temp");
+                var destinationPath = new DirectoryPath("C:/Temp2");
+
+                // When
+                context.CopyDirectory(sourcePath, destinationPath);
+                
+                // Then
+                Assert.True(fileSystem.Directories.ContainsKey(destinationPath));
+            }
+
+            [Fact]
+            public void Should_Copy_Files()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var fileSystem = CreateFileStructure(new FakeFileSystem(false));
+                context.FileSystem.Returns(fileSystem);
+                var sourcePath = new DirectoryPath("C:/Temp");
+                var destinationPath = new DirectoryPath("C:/Temp2");
+
+                // When
+                context.CopyDirectory(sourcePath, destinationPath);
+
+                // Then
+                Assert.True(fileSystem.Files.ContainsKey(new FilePath("C:/Temp/file1.txt")));
+                Assert.True(fileSystem.Files.ContainsKey(new FilePath("C:/Temp/file2.txt")));
+            }
+
+            [Fact]
+            public void Should_Recursively_Copy_Files_And_Directory()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var fileSystem = CreateFileStructure(new FakeFileSystem(false));
+                context.FileSystem.Returns(fileSystem);
+                var sourcePath = new DirectoryPath("C:/Temp");
+                var destinationPath = new DirectoryPath("C:/Temp2");
+
+                // When
+                context.CopyDirectory(sourcePath, destinationPath);
+
+                // Then
+                // Directories should exist
+                Assert.True(fileSystem.Directories.ContainsKey(new DirectoryPath("C:/Temp2/Stuff")));
+                Assert.True(fileSystem.Directories.ContainsKey(new DirectoryPath("C:/Temp2/Things")));
+
+                // Files should exist
+                Assert.True(fileSystem.Files.ContainsKey(new FilePath("C:/Temp2/Stuff/file1.txt")));
+                Assert.True(fileSystem.Files.ContainsKey(new FilePath("C:/Temp2/Stuff/file2.txt")));
+                Assert.True(fileSystem.Files.ContainsKey(new FilePath("C:/Temp2/Things/file1.txt")));
+            }
+
+            private FakeFileSystem CreateFileStructure(FakeFileSystem ffs)
+            {
+                Action<string> dir = (path) => ffs.GetCreatedDirectory(path);
+                Action<string> file = (path) => ffs.GetCreatedFile(path);
+
+                dir("C:/Temp");
+                {
+                    file("C:/Temp/file1.txt");
+                    file("C:/Temp/file2.txt");
+                    dir("C:/Temp/Stuff");
+                    {
+                        file("C:/Temp/Stuff/file1.txt");
+                        file("C:/Temp/Stuff/file2.txt");
+                    }
+                    dir("C:/Temp/Things");
+                    {
+                        file("C:/Temp/Things/file1.txt");
+                    }
+                }
+
+                return ffs;
             }
         }
     }
