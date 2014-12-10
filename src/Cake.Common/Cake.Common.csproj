@@ -84,6 +84,8 @@
     <Compile Include="Tools\MSTest\MSTestExtensions.cs" />
     <Compile Include="Tools\MSTest\MSTestRunner.cs" />
     <Compile Include="Tools\MSTest\MSTestSettings.cs" />
+    <Compile Include="Tools\NuGet\Sources\NuGetSources.cs" />
+    <Compile Include="Tools\NuGet\Sources\NuGetSourcesSettings.cs" />
     <Compile Include="Tools\NuGet\NuGetExtensions.cs" />
     <Compile Include="Tools\NuGet\Pack\NuGetPacker.cs" />
     <Compile Include="Tools\NuGet\Pack\NuGetPackSettings.cs" />

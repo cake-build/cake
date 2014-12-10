@@ -64,12 +64,13 @@ namespace Cake.Core.IO
             {
                 Arguments = arguments.Render(),
                 WorkingDirectory = workingDirectory.FullPath,
-                UseShellExecute = false
+                UseShellExecute = false,
+                RedirectStandardOutput = settings.RedirectStandardOutput
             };
 
             // Start and return the process.
             var process = Process.Start(info);
-            return process == null ? null : new ProcessWrapper(process);
+            return process == null ? null : new ProcessWrapper(process, _log);
         }
     }
 }

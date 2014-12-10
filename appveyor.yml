@@ -1,6 +1,6 @@
 # Build script
 build_script:
-  - ps: .\build.cmd
+  - ps: .\build.ps1 -Target "AppVeyor"
 
 # Tests
 test: off
