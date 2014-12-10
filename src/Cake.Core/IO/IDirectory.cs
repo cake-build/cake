@@ -14,6 +14,12 @@ namespace Cake.Core.IO
         DirectoryPath Path { get; }
 
         /// <summary>
+        /// Gets the name of the directory.
+        /// </summary>
+        /// <value>The directory's name.</value>
+        string Name { get; }
+
+        /// <summary>
         /// Gets a value indicating whether this <see cref="IDirectory"/> exists.
         /// </summary>
         /// <value>
