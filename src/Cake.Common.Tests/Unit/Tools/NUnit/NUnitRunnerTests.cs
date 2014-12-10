@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.NUnit;
 using Cake.Core;
@@ -19,7 +20,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 var fixture = new NUnitRunnerFixture();
                 var runner = fixture.CreateRunner();
 
-                var result = Record.Exception(() => runner.Run(null, new NUnitSettings()));
+                var result = Record.Exception(() => runner.Run((FilePath) null, new NUnitSettings()));
 
                 Assert.IsType<ArgumentNullException>(result);
                 Assert.Equal("assemblyPath", ((ArgumentNullException)result).ParamName);
@@ -78,7 +79,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
             }
 
             [Fact]
-            public void Should_Use_Provided_Assembly_Paths_In_Process_Arguments()
+            public void Should_Use_Provided_Assembly_Path_In_Process_Arguments()
             {
                 // Given
                 var fixture = new NUnitRunnerFixture();
@@ -90,6 +91,21 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 // Then
                 fixture.ProcessRunner.Received(1).Start(Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(
                     p => p.Arguments.Render() == "\"/Working/Test1.dll\""));
+            }
+
+            [Fact]
+            public void Should_Use_Provided_Assembly_Paths_In_Process_Arguments()
+            {
+                // Given
+                var fixture = new NUnitRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run(new List<FilePath>{"./Test1.dll", "./Test2.dll"}, new NUnitSettings());
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(
+                    p => p.Arguments.Render() == "\"/Working/Test1.dll\" \"/Working/Test2.dll\""));
             }
 
             [Fact]
