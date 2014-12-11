@@ -6,7 +6,7 @@ namespace Cake.Common.Solution
     /// <summary>
     /// Represents the content in an MSBuild solution file
     /// </summary>
-    public class SolutionParserResult
+    public sealed class SolutionParserResult
     {
         private readonly ICollection<SolutionProject> _projects;
 

@@ -5,7 +5,7 @@ namespace Cake.Common.Solution.Project
     /// <summary>
     /// MSBuild Project file content
     /// </summary>
-    public class ProjectFile
+    public sealed class ProjectFile
     {
         /// <summary>
         /// Path to file

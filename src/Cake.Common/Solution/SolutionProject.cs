@@ -5,7 +5,7 @@ namespace Cake.Common.Solution
     /// <summary>
     /// Solution Project
     /// </summary>
-    public class SolutionProject
+    public sealed class SolutionProject
     {
         private readonly string _id;
         private readonly string _name;

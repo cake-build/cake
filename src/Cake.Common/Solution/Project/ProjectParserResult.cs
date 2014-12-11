@@ -6,7 +6,7 @@ namespace Cake.Common.Solution.Project
     /// <summary>
     /// Represents the content in an MSBuild Project file 
     /// </summary>
-    public class ProjectParserResult
+    public sealed class ProjectParserResult
     {
         private readonly string _configuration;
         private readonly string _platform;
