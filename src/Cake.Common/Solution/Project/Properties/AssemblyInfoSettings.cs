@@ -1,4 +1,4 @@
-﻿namespace Cake.Common
+﻿namespace Cake.Common.Solution.Project.Properties
 {
     /// <summary>
     /// Contains functionality used by <see cref="AssemblyInfoCreator"/>.

@@ -45,12 +45,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfoCreator.cs" />
-    <Compile Include="AssemblyInfoExtensions.cs" />
-    <Compile Include="AssemblyInfoParser.cs" />
-    <Compile Include="AssemblyInfoParseResult.cs" />
-    <Compile Include="AssemblyInfoRegistration.cs" />
-    <Compile Include="AssemblyInfoSettings.cs" />
+    <Compile Include="Solution\Project\ProjectExtensions.cs" />
+    <Compile Include="Solution\Project\ProjectFile.cs" />
+    <Compile Include="Solution\Project\ProjectParser.cs" />
+    <Compile Include="Solution\Project\ProjectParserResult.cs" />
+    <Compile Include="Solution\Project\ProjectXElement.cs" />
+    <Compile Include="Solution\Project\Properties\AssemblyInfoCreator.cs" />
+    <Compile Include="Solution\Project\Properties\AssemblyInfoExtensions.cs" />
+    <Compile Include="Solution\Project\Properties\AssemblyInfoParser.cs" />
+    <Compile Include="Solution\Project\Properties\AssemblyInfoParseResult.cs" />
+    <Compile Include="Solution\Project\Properties\AssemblyInfoRegistration.cs" />
+    <Compile Include="Solution\Project\Properties\AssemblyInfoSettings.cs" />
     <Compile Include="Diagnostics\LoggingExtensions.cs" />
     <Compile Include="EnviromentExtensions.cs" />
     <Compile Include="IO\DirectoryCreator.cs" />
@@ -60,6 +65,10 @@
     <Compile Include="ReleaseNotes.cs" />
     <Compile Include="ReleaseNotesExtensions.cs" />
     <Compile Include="ReleaseNotesParser.cs" />
+    <Compile Include="Solution\SolutionExtensions.cs" />
+    <Compile Include="Solution\SolutionParser.cs" />
+    <Compile Include="Solution\SolutionParserResult.cs" />
+    <Compile Include="Solution\SolutionProject.cs" />
     <Compile Include="Tools\ILMerge\ILMergeExtensions.cs" />
     <Compile Include="Tools\ILMerge\ILMergeRunner.cs" />
     <Compile Include="Tools\ILMerge\ILMergeSettings.cs" />

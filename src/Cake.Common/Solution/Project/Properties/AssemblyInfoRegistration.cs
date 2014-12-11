@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Cake.Common
+namespace Cake.Common.Solution.Project.Properties
 {
     internal class AssemblyInfoRegistration
     {

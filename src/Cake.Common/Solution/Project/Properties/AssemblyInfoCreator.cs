@@ -5,7 +5,7 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
-namespace Cake.Common
+namespace Cake.Common.Solution.Project.Properties
 {
     /// <summary>
     /// The aseembly info creator.

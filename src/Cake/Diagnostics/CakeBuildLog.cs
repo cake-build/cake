@@ -36,7 +36,7 @@ namespace Cake.Diagnostics
                     foreach (var token in tokens)
                     {
                         SetPalette(token, palette);
-                        _console.Write(token.Render(args));
+                        _console.Write("{0}", token.Render(args));
                     }
                     _console.WriteLine();
                 }

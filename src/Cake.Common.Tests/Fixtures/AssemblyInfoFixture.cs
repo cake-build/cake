@@ -1,4 +1,5 @@
-﻿using Cake.Core;
+﻿using Cake.Common.Solution.Project.Properties;
+using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tests.Fakes;
