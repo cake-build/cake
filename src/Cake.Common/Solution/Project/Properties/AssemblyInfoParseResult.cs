@@ -1,4 +1,4 @@
-﻿namespace Cake.Common
+﻿namespace Cake.Common.Solution.Project.Properties
 {
     /// <summary>
     /// Represents the content in an assembly info file.

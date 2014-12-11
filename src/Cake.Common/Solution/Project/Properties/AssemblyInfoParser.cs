@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using Cake.Core;
 using Cake.Core.IO;
 
-namespace Cake.Common
+namespace Cake.Common.Solution.Project.Properties
 {
     /// <summary>
     /// The assembly info creator.

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Cake.Core.IO
@@ -68,6 +70,25 @@ namespace Cake.Core.IO
                 throw new ArgumentNullException("file");
             }
             return file.Open(FileMode.Create, FileAccess.Write, FileShare.None);
+        }
+
+        /// <summary>
+        /// Enumerates line in file
+        /// </summary>
+        /// <param name="file">The file to be read from.</param>
+        /// <param name="encoding">The encoding that is applied to the content of the file.</param>
+        /// <returns>A <see cref="IEnumerable{T}"/> of file line content</returns>
+        public static IEnumerable<string> ReadLines(this IFile file, System.Text.Encoding encoding)
+        {
+            if (file == null)
+            {
+                throw new ArgumentNullException("file");
+            }
+            if (!file.Exists)
+            {
+                throw new FileNotFoundException("Solution doesn't exist", file.Path.FullPath);
+            }
+            return System.IO.File.ReadLines(file.Path.FullPath, encoding);
         }
     }
 }

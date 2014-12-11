@@ -1,4 +1,5 @@
 ﻿using System;
+using Cake.Common.Solution.Project.Properties;
 using Cake.Common.Tests.Fixtures;
 using Cake.Core;
 using Cake.Core.Diagnostics;

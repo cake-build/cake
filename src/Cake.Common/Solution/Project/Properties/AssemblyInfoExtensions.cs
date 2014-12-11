@@ -3,7 +3,7 @@ using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
 
-namespace Cake.Common
+namespace Cake.Common.Solution.Project.Properties
 {
     /// <summary>
     /// Contains functionality related to assembly info.
