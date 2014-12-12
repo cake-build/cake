@@ -28,22 +28,30 @@ A roadmap can be found [here](https://github.com/cake-build/cake/milestones).
 
 This is a list of the currently implemented functionality.
 
-* MSBuild
-* MSTest
-* xUnit
-* NUnit
-* NuGet pack
-* NuGet push
-* NuGet restore
-* ILMerge
-* WiX (Candle and Light)
-* SignTool
-* File copying/moving/deleting
-* Directory creation/cleaning/deleting
-* File/Directory globbing
-* Compression (zip)
-* AssemblyInfo patching
-* Release notes parser
+* [MSBuild](http://cake.readthedocs.org/en/latest/api-documentation.html#msbuild)
+* [MSTest](http://cake.readthedocs.org/en/latest/api-documentation.html#mstest)
+* [xUnit](http://cake.readthedocs.org/en/latest/api-documentation.html#xunit)
+* [NUnit](http://cake.readthedocs.org/en/latest/api-documentation.html#nunit)
+* [NuGet](http://cake.readthedocs.org/en/latest/api-documentation.html#nuget)
+  * pack
+  * push
+  * restore
+  * source
+* [ILMerge](http://cake.readthedocs.org/en/latest/api-documentation.html#ilmerge)
+* [WiX (Candle and Light)](http://cake.readthedocs.org/en/latest/api-documentation.html#wix)
+* [SignTool](http://cake.readthedocs.org/en/latest/api-documentation.html#signing)
+* [File operations](http://cake.readthedocs.org/en/latest/api-documentation.html#file-operations)
+  * copying
+  * moving
+  * deleting
+* [Directory operations](http://cake.readthedocs.org/en/latest/api-documentation.html#directory-operations)
+  * creation
+  * cleaning
+  * deleting
+* [File/Directory globbing](http://cake.readthedocs.org/en/latest/api-documentation.html#globbing)
+* [Compression (zip)](http://cake.readthedocs.org/en/latest/api-documentation.html#compression)
+* [AssemblyInfo patching](http://cake.readthedocs.org/en/latest/api-documentation.html#assembly-info)
+* [Release notes parser](http://cake.readthedocs.org/en/latest/api-documentation.html#release-notes)
 
 For more information and examples of how to use Cake, see the [Documentation](http://cake.readthedocs.org/). 
 
