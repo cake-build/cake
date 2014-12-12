@@ -13,10 +13,11 @@ Cake (C# Make) is a build automation system using C#.
     - [Create build script](https://github.com/cake-build/cake#2-create-build-script)
     - [Run build script](https://github.com/cake-build/cake#3-run-build-script)
 4. [Documentation](https://github.com/cake-build/cake#documentation)
-5. [Contributors](https://github.com/cake-build/cake#contributors)
-6. [Contributing](https://github.com/cake-build/cake#contributing)
-7. [External add-ons](https://github.com/cake-build/cake#external-add-ons)
-8. [License](https://github.com/cake-build/cake#license)
+5. [Bootstrapper](https://github.com/cake-build/cake#bootstrapper)
+6. [Contributors](https://github.com/cake-build/cake#contributors)
+7. [Contributing](https://github.com/cake-build/cake#contributing)
+8. [External add-ons](https://github.com/cake-build/cake#external-add-ons)
+9. [License](https://github.com/cake-build/cake#license)
 
 ##Roadmap
 
@@ -28,30 +29,33 @@ A roadmap can be found [here](https://github.com/cake-build/cake/milestones).
 
 This is a list of the currently implemented functionality.
 
-* [MSBuild](http://cake.readthedocs.org/en/latest/api-documentation.html#msbuild)
+* [MSBuild](http://cake.readthedocs.org/en/latest/api-documentation.html#msbuild) 
 * [MSTest](http://cake.readthedocs.org/en/latest/api-documentation.html#mstest)
 * [xUnit](http://cake.readthedocs.org/en/latest/api-documentation.html#xunit)
 * [NUnit](http://cake.readthedocs.org/en/latest/api-documentation.html#nunit)
 * [NuGet](http://cake.readthedocs.org/en/latest/api-documentation.html#nuget)
-  * pack
-  * push
-  * restore
-  * source
+  * Pack
+  * Push
+  * Restore
+  * Sources
 * [ILMerge](http://cake.readthedocs.org/en/latest/api-documentation.html#ilmerge)
 * [WiX (Candle and Light)](http://cake.readthedocs.org/en/latest/api-documentation.html#wix)
 * [SignTool](http://cake.readthedocs.org/en/latest/api-documentation.html#signing)
 * [File operations](http://cake.readthedocs.org/en/latest/api-documentation.html#file-operations)
-  * copying
-  * moving
-  * deleting
+  * Copying
+  * Moving
+  * Deleting
 * [Directory operations](http://cake.readthedocs.org/en/latest/api-documentation.html#directory-operations)
-  * creation
-  * cleaning
-  * deleting
+  * Creation
+  * Cleaning
+  * Deleting
 * [File/Directory globbing](http://cake.readthedocs.org/en/latest/api-documentation.html#globbing)
 * [Compression (zip)](http://cake.readthedocs.org/en/latest/api-documentation.html#compression)
 * [AssemblyInfo patching](http://cake.readthedocs.org/en/latest/api-documentation.html#assembly-info)
 * [Release notes parser](http://cake.readthedocs.org/en/latest/api-documentation.html#release-notes)
+* [MSBuild Resource](http://cake.readthedocs.org/en/latest/api-documentation.html#msbuild-resource)
+  * Solution file parsing
+  * Project file parsing
 
 For more information and examples of how to use Cake, see the [Documentation](http://cake.readthedocs.org/). 
 
@@ -148,6 +152,10 @@ C:\Project\Tools\Cake> Cake.exe ../../build.csx -verbosity=verbose -target=Pack
 ## Documentation
 
 You can read the latest documentation at [http://cake.readthedocs.org/](http://cake.readthedocs.org/).
+
+## Bootstrapper
+
+The Cake [Bootstrapper](https://github.com/cake-build/bootstrapper) is a Powershell cmdlet that helps you set up a new Cake build by downloading dependencies, setting up the bootstrapper script and creating a Cake build script.
 
 ## Contributors
 
