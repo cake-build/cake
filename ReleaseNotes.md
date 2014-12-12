@@ -1,3 +1,7 @@
+### New in 0.1.24 (Releases 2014/12/12)
+* Added support for NuGet sources.
+* Added solution and project parsers.
+
 ### New in 0.1.23 (Released 2014/11/21)
 * Removed silent flag from xUnit.net v2 runner since it's been deprecated.
 
