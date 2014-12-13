@@ -19,6 +19,10 @@ Push-Location
 Set-Location $TOOLS_DIR
 Invoke-Expression "$NUGET_EXE install -ExcludeVersion"
 Pop-Location
+if ($LASTEXITCODE -ne 0)
+{
+    exit $LASTEXITCODE
+}
 
 # Make sure that Cake has been installed.
 if (!(Test-Path $CAKE_EXE)) {
@@ -27,3 +31,4 @@ if (!(Test-Path $CAKE_EXE)) {
 
 # Start Cake
 Invoke-Expression "$CAKE_EXE `"$Script`" -target=`"$Target`" -configuration=`"$Configuration`" -verbosity=`"$Verbosity`""
+exit $LASTEXITCODE
