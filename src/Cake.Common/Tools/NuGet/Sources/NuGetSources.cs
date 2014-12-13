@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
@@ -13,8 +12,6 @@ namespace Cake.Common.Tools.NuGet.Sources
     public sealed class NuGetSources : Tool<NuGetSourcesSettings>
     {
         private readonly IGlobber _globber;
-        private readonly IFileSystem _fileSystem;
-        private readonly IProcessRunner _processRunner;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetSources"/> class.
@@ -27,8 +24,6 @@ namespace Cake.Common.Tools.NuGet.Sources
             : base(fileSystem, environment, processRunner)
         {
             _globber = globber;
-            _fileSystem = fileSystem;
-            _processRunner = processRunner;
         }
 
         /// <summary>

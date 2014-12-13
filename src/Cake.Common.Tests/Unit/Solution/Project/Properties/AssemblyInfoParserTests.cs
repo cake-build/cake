@@ -1,13 +1,12 @@
-﻿using Cake.Common.Solution.Project.Properties;
+﻿using System;
+using Cake.Common.Solution.Project.Properties;
 using Cake.Common.Tests.Fixtures;
 using Cake.Core;
-using System;
 using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
-using Xunit.Extensions;
 
-namespace Cake.Common.Tests.Unit
+namespace Cake.Common.Tests.Unit.Solution.Project.Properties
 {
     public sealed class AssemblyInfoParserTests
     {

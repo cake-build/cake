@@ -4,7 +4,6 @@ using Cake.Core.IO;
 using Cake.Core.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Cake.Core.Tests.Unit.IO
 {

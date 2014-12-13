@@ -6,7 +6,6 @@ using Cake.Core.Tests.Fakes;
 using Cake.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Cake.Tests.Unit.Arguments
 {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Cake.Core.Diagnostics;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Cake.Core.Tests.Unit.Diagnostics
 {

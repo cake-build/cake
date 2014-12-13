@@ -2,7 +2,6 @@
 using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Cake.Core.Tests.Unit.IO
 {

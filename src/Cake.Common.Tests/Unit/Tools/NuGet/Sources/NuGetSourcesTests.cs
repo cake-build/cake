@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.NuGet;
 using Cake.Common.Tools.NuGet.Sources;
@@ -9,7 +8,6 @@ using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
-using Xunit.Extensions;
 
 
 namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources

@@ -2,7 +2,6 @@
 using System.Linq;
 using Cake.Core.IO;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Cake.Core.Tests.Unit.IO
 {

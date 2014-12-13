@@ -6,7 +6,6 @@ using Cake.Core.Scripting;
 using Cake.Core.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Cake.Core.Tests.Unit.Scripting
 {

@@ -7,7 +7,7 @@ using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
 
-namespace Cake.Common.Tests.Unit
+namespace Cake.Common.Tests.Unit.Solution.Project.Properties
 {
     public sealed class AssemblyInfoCreatorTests
     {
