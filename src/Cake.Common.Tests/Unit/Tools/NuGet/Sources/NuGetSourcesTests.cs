@@ -9,7 +9,6 @@ using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
 
-
 namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
 {
     public sealed class NuGetSourcesTests
@@ -31,6 +30,23 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 Assert.Equal("name", ((ArgumentNullException)result).ParamName);
             }
 
+            [Theory]
+            [InlineData("")]
+            [InlineData("\t")]
+            public void Should_Throw_If_Name_Is_Empty(string name)
+            {
+                // Given
+                var fixture = new NuGetFixture(defaultToolExist: false);
+                var sources = fixture.CreateSources();
+
+                // When
+                var result = Record.Exception(() => sources.AddSource(name, "source", new NuGetSourcesSettings()));
+
+                // Then
+                Assert.Equal("name", ((ArgumentException)result).ParamName);
+                Assert.Equal(string.Format("Source name cannot be empty.{0}Parameter name: name", Environment.NewLine), result.Message);
+            }
+
             [Fact]
             public void Should_Throw_If_Source_Is_Null()
             {
@@ -46,6 +62,23 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 Assert.Equal("source", ((ArgumentNullException)result).ParamName);
             }
 
+            [Theory]
+            [InlineData("")]
+            [InlineData("\t")]
+            public void Should_Throw_If_Source_Is_Empty(string source)
+            {
+                // Given
+                var fixture = new NuGetFixture(defaultToolExist: false);
+                var sources = fixture.CreateSources();
+
+                // When
+                var result = Record.Exception(() => sources.AddSource("name", source, new NuGetSourcesSettings()));
+
+                // Then
+                Assert.Equal("source", ((ArgumentException)result).ParamName);
+                Assert.Equal(string.Format("Source cannot be empty.{0}Parameter name: source", Environment.NewLine), result.Message);
+            }
+
             [Fact]
             public void Should_Throw_If_Settings_Are_Null()
             {
@@ -59,6 +92,22 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
                 Assert.Equal("settings", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Adding_Source_That_Has_Already_Been_Added()
+            {
+                // Given
+                var fixture = new NuGetFixture();
+                var sources = fixture.CreateSources();
+                fixture.Process.GetStandardOutput().Returns(new[] {"existingsource"});
+
+                // When
+                var result = Record.Exception(() => sources.AddSource("name", "existingsource", new NuGetSourcesSettings()));
+
+                // Then
+                Assert.IsType<InvalidOperationException>(result);
+                Assert.Equal("The source 'existingsource' already exist.", result.Message);
             }
 
             [Fact]
@@ -238,6 +287,23 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 Assert.Equal("name", ((ArgumentNullException)result).ParamName);
             }
 
+            [Theory]
+            [InlineData("")]
+            [InlineData("\t")]
+            public void Should_Throw_If_Name_Is_Empty(string name)
+            {
+                // Given
+                var fixture = new NuGetFixture(defaultToolExist: false);
+                var sources = fixture.CreateSources();
+
+                // When
+                var result = Record.Exception(() => sources.RemoveSource(name, "source", new NuGetSourcesSettings()));
+
+                // Then
+                Assert.Equal("name", ((ArgumentException)result).ParamName);
+                Assert.Equal(string.Format("Source name cannot be empty.{0}Parameter name: name", Environment.NewLine), result.Message);
+            }
+
             [Fact]
             public void Should_Throw_If_Source_Is_Null()
             {
@@ -251,6 +317,23 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
                 Assert.Equal("source", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Theory]
+            [InlineData("")]
+            [InlineData("\t")]
+            public void Should_Throw_If_Source_Is_Empty(string source)
+            {
+                // Given
+                var fixture = new NuGetFixture(defaultToolExist: false);
+                var sources = fixture.CreateSources();
+
+                // When
+                var result = Record.Exception(() => sources.RemoveSource("name", source, new NuGetSourcesSettings()));
+
+                // Then
+                Assert.Equal("source", ((ArgumentException)result).ParamName);
+                Assert.Equal(string.Format("Source cannot be empty.{0}Parameter name: source", Environment.NewLine), result.Message);
             }
 
             [Fact]
@@ -267,6 +350,21 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
                 Assert.Equal("settings", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Removing_Source_That_Do_Not_Exist()
+            {
+                // Given
+                var fixture = new NuGetFixture();
+                var sources = fixture.CreateSources();
+
+                // When
+                var result = Record.Exception(() => sources.RemoveSource("name", "nonexistingsource", new NuGetSourcesSettings()));
+
+                // Then
+                Assert.IsType<InvalidOperationException>(result);
+                Assert.Equal("The source 'nonexistingsource' does not exist.", result.Message);
             }
 
             [Fact]
@@ -414,6 +512,56 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p => 
                         p.Arguments.RenderSafe() == "sources Remove -Name \"name\" -Source \"[REDACTED]\" -NonInteractive"));
+            }
+        }
+
+        public sealed class TheHasSourceMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Source_Is_Null()
+            {
+                // Given
+                var fixture = new NuGetFixture(defaultToolExist: false);
+                var sources = fixture.CreateSources();
+
+                // When
+                var result = Record.Exception(() => sources.HasSource(null, new NuGetSourcesSettings()));
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("source", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Theory]
+            [InlineData("")]
+            [InlineData("\t")]
+            public void Should_Throw_If_Source_Is_Empty(string source)
+            {
+                // Given
+                var fixture = new NuGetFixture(defaultToolExist: false);
+                var sources = fixture.CreateSources();
+
+                // When
+                var result = Record.Exception(() => sources.HasSource(source, new NuGetSourcesSettings()));
+
+                // Then
+                Assert.Equal("source", ((ArgumentException)result).ParamName);
+                Assert.Equal(string.Format("Source cannot be empty.{0}Parameter name: source", Environment.NewLine), result.Message);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Settings_Is_Null()
+            {
+                // Given
+                var fixture = new NuGetFixture(defaultToolExist: false);
+                var sources = fixture.CreateSources();
+
+                // When
+                var result = Record.Exception(() => sources.HasSource("source", null));
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("settings", ((ArgumentNullException)result).ParamName);
             }
         }
     }

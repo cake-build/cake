@@ -114,7 +114,7 @@ namespace Cake.Core.Utilities
             }
             finally
             {
-                //Post action specified?
+                // Post action specified?
                 if (postAction != null)
                 {
                     postAction(process);

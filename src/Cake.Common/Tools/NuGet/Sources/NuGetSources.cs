@@ -34,16 +34,22 @@ namespace Cake.Common.Tools.NuGet.Sources
         /// <param name="settings">The settings.</param>
         public void AddSource(string name, string source, NuGetSourcesSettings settings)
         {
-            if (string.IsNullOrWhiteSpace(name))
+            if (name == null)
             {
                 throw new ArgumentNullException("name");
             }
-
-            if (string.IsNullOrWhiteSpace(source))
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException("Source name cannot be empty.", "name");
+            }
+            if (source == null)
             {
                 throw new ArgumentNullException("source");
             }
-
+            if (string.IsNullOrWhiteSpace(source))
+            {
+                throw new ArgumentException("Source cannot be empty.", "source");
+            }
             if (settings == null)
             {
                 throw new ArgumentNullException("settings");
@@ -51,7 +57,8 @@ namespace Cake.Common.Tools.NuGet.Sources
 
             if (HasSource(source, settings))
             {
-                throw new ArgumentException("Source already exists", "source");
+                var message = string.Format("The source '{0}' already exist.", source);
+                throw new InvalidOperationException(message);
             }
 
             Run(settings, GetAddArguments(name, source, settings), settings.ToolPath);
@@ -65,16 +72,22 @@ namespace Cake.Common.Tools.NuGet.Sources
         /// <param name="settings">The settings.</param>
         public void RemoveSource(string name, string source, NuGetSourcesSettings settings)
         {
-            if (string.IsNullOrWhiteSpace(name))
+            if (name == null)
             {
                 throw new ArgumentNullException("name");
             }
-
-            if (string.IsNullOrWhiteSpace(source))
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException("Source name cannot be empty.", "name");
+            }
+            if (source == null)
             {
                 throw new ArgumentNullException("source");
             }
-
+            if (string.IsNullOrWhiteSpace(source))
+            {
+                throw new ArgumentException("Source cannot be empty.", "source");
+            }
             if (settings == null)
             {
                 throw new ArgumentNullException("settings");
@@ -82,7 +95,8 @@ namespace Cake.Common.Tools.NuGet.Sources
 
             if (!HasSource(source, settings))
             {
-                throw new ArgumentException("Source doesn't exists", "source");
+                var message = string.Format("The source '{0}' does not exist.", source);
+                throw new InvalidOperationException(message);
             }
 
             Run(settings, GetRemoveArguments(name, source, settings), settings.ToolPath);
@@ -96,30 +110,30 @@ namespace Cake.Common.Tools.NuGet.Sources
         /// <param name="settings">The settings.</param>
         public bool HasSource(string source, NuGetSourcesSettings settings)
         {
-            if (string.IsNullOrWhiteSpace(source))
-            { 
+            if (source == null)
+            {
                 throw new ArgumentNullException("source");
             }
-
+            if (string.IsNullOrWhiteSpace(source))
+            {
+                throw new ArgumentException("Source cannot be empty.", "source");
+            }
             if (settings == null)
             {
                 throw new ArgumentNullException("settings");
             }
-            var arguments = new ProcessArgumentBuilder();
-            arguments.Append("sources List");
+
+            var processSettings = new ProcessSettings
+            {
+                Arguments = "sources List",
+                RedirectStandardOutput = true
+            };
 
             var result = false;
-            Run(
-                settings,
-                null,
-                settings.ToolPath,
-                new ProcessSettings
-                {
-                    Arguments = "sources List",
-                    RedirectStandardOutput = true
-                },
-                process => result = process.GetStandardOutput().Any(line => line.TrimStart() == source)
-                );
+            Run(settings, null, settings.ToolPath, processSettings,
+                process => result = process.GetStandardOutput().Any(line => line.TrimStart() == source));
+
+            // Return whether or not the source exist.
             return result;
         }
 
@@ -161,7 +175,6 @@ namespace Cake.Common.Tools.NuGet.Sources
 
         private static void AddCommonParameters(string name, string source, NuGetSourcesSettings settings, ProcessArgumentBuilder builder)
         {
-
             builder.Append("-Name");
             builder.AppendQuoted(name);
 
