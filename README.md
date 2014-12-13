@@ -31,7 +31,7 @@ This is a list of the currently implemented functionality.
 
 * [MSBuild](http://cake.readthedocs.org/en/latest/api-documentation.html#msbuild) 
 * [MSTest](http://cake.readthedocs.org/en/latest/api-documentation.html#mstest)
-* [xUnit](http://cake.readthedocs.org/en/latest/api-documentation.html#xunit)
+* [xUnit (v1 and v2)](http://cake.readthedocs.org/en/latest/api-documentation.html#xunit)
 * [NUnit](http://cake.readthedocs.org/en/latest/api-documentation.html#nunit)
 * [NuGet](http://cake.readthedocs.org/en/latest/api-documentation.html#nuget)
   * Pack
@@ -39,7 +39,9 @@ This is a list of the currently implemented functionality.
   * Restore
   * Sources
 * [ILMerge](http://cake.readthedocs.org/en/latest/api-documentation.html#ilmerge)
-* [WiX (Candle and Light)](http://cake.readthedocs.org/en/latest/api-documentation.html#wix)
+* [WiX](http://cake.readthedocs.org/en/latest/api-documentation.html#wix)
+  * Candle
+  * Light
 * [SignTool](http://cake.readthedocs.org/en/latest/api-documentation.html#signing)
 * [File operations](http://cake.readthedocs.org/en/latest/api-documentation.html#file-operations)
   * Copying
