@@ -35,7 +35,9 @@ namespace Cake.Diagnostics.Formatting
                     return formattable.ToString(_format, CultureInfo.InvariantCulture);
                 }
             }
-            return value.ToString();
+            return (value == null)
+                ? "[NULL]"
+                : value.ToString();
         }
     }
 }
