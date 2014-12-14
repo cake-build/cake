@@ -9,26 +9,48 @@ namespace Cake.Core.Tests.Unit.IO
     {
         public sealed class TheGetFilePathMethod
         {
+            [Fact]
+            public void Should_Throw_If_Path_Is_Null()
+            {
+                // Given
+                var path = new DirectoryPath("assets");
+
+                // When
+                var result = Record.Exception(() => path.GetFilePath(null));
+
+                // Then
+                Assert.IsType<ArgumentNullException>(result);
+                Assert.Equal("path", ((ArgumentNullException)result).ParamName);
+            }
+
             [Theory]
 #if !UNIX
             [InlineData("c:/assets/shaders/", "simple.frag", "c:/assets/shaders/simple.frag")]
             [InlineData("c:/", "simple.frag", "c:/simple.frag")]
+            [InlineData("c:/assets/shaders/", "test/simple.frag", "c:/assets/shaders/simple.frag")]
+            [InlineData("c:/", "test/simple.frag", "c:/simple.frag")]
 #endif
             [InlineData("assets/shaders", "simple.frag", "assets/shaders/simple.frag")]
             [InlineData("assets/shaders/", "simple.frag", "assets/shaders/simple.frag")]
             [InlineData("/assets/shaders/", "simple.frag", "/assets/shaders/simple.frag")]
+            [InlineData("assets/shaders", "test/simple.frag", "assets/shaders/simple.frag")]
+            [InlineData("assets/shaders/", "test/simple.frag", "assets/shaders/simple.frag")]
+            [InlineData("/assets/shaders/", "test/simple.frag", "/assets/shaders/simple.frag")]
             public void Should_Combine_Paths(string first, string second, string expected)
             {
                 // Given
                 var path = new DirectoryPath(first);
 
                 // When
-                var result = path.CombineWithFilePath(new FilePath(second));
+                var result = path.GetFilePath(new FilePath(second));
 
                 // Then
                 Assert.Equal(expected, result.FullPath);
             }
+        }
 
+        public sealed class TheCombineWithFilePathMethod
+        {
             [Fact]
             public void Should_Throw_If_Path_Is_Null()
             {
@@ -41,6 +63,31 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
                 Assert.Equal("path", ((ArgumentNullException)result).ParamName);
+            }
+
+            [Theory]
+#if !UNIX
+            [InlineData("c:/assets/shaders/", "simple.frag", "c:/assets/shaders/simple.frag")]
+            [InlineData("c:/", "simple.frag", "c:/simple.frag")]
+            [InlineData("c:/assets/shaders/", "test/simple.frag", "c:/assets/shaders/test/simple.frag")]
+            [InlineData("c:/", "test/simple.frag", "c:/test/simple.frag")]
+#endif
+            [InlineData("assets/shaders", "simple.frag", "assets/shaders/simple.frag")]
+            [InlineData("assets/shaders/", "simple.frag", "assets/shaders/simple.frag")]
+            [InlineData("/assets/shaders/", "simple.frag", "/assets/shaders/simple.frag")]
+            [InlineData("assets/shaders", "test/simple.frag", "assets/shaders/test/simple.frag")]
+            [InlineData("assets/shaders/", "test/simple.frag", "assets/shaders/test/simple.frag")]
+            [InlineData("/assets/shaders/", "test/simple.frag", "/assets/shaders/test/simple.frag")]
+            public void Should_Combine_Paths(string first, string second, string expected)
+            {
+                // Given
+                var path = new DirectoryPath(first);
+
+                // When
+                var result = path.CombineWithFilePath(new FilePath(second));
+
+                // Then
+                Assert.Equal(expected, result.FullPath);
             }
 
             [Fact]

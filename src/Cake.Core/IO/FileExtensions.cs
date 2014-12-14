@@ -83,11 +83,17 @@ namespace Cake.Core.IO
             {
                 throw new ArgumentNullException("file");
             }
-            if (!file.Exists)
+            using (var stream = file.OpenRead())
+            using (var reader = new StreamReader(stream, encoding))
             {
-                throw new FileNotFoundException("Solution doesn't exist", file.Path.FullPath);
+                var result = new List<string>();
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    result.Add(line);
+                }
+                return result;
             }
-            return System.IO.File.ReadLines(file.Path.FullPath, encoding);
         }
     }
 }

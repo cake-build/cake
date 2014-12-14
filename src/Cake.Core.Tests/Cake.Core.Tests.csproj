@@ -80,6 +80,7 @@
     <Compile Include="Unit\IO\Arguments\SecretArgumentTests.cs" />
     <Compile Include="Unit\IO\Arguments\TextArgumentTests.cs" />
     <Compile Include="Unit\IO\DirectoryPathCollectionTests.cs" />
+    <Compile Include="Unit\IO\FileExtensionsTests.cs" />
     <Compile Include="Unit\IO\FilePathCollectionTests.cs" />
     <Compile Include="Unit\IO\FileSystemExtensionsTest.cs" />
     <Compile Include="Unit\IO\GlobberTests.cs" />

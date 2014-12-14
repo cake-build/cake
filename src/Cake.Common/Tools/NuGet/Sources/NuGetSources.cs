@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
@@ -57,7 +58,7 @@ namespace Cake.Common.Tools.NuGet.Sources
 
             if (HasSource(source, settings))
             {
-                var message = string.Format("The source '{0}' already exist.", source);
+                var message = string.Format(CultureInfo.InvariantCulture, "The source '{0}' already exist.", source);
                 throw new InvalidOperationException(message);
             }
 
@@ -95,7 +96,7 @@ namespace Cake.Common.Tools.NuGet.Sources
 
             if (!HasSource(source, settings))
             {
-                var message = string.Format("The source '{0}' does not exist.", source);
+                var message = string.Format(CultureInfo.InvariantCulture, "The source '{0}' does not exist.", source);
                 throw new InvalidOperationException(message);
             }
 
