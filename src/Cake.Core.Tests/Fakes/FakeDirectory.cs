@@ -17,6 +17,11 @@ namespace Cake.Core.Tests.Fakes
             get { return _path; }
         }
 
+        public string Name
+        {
+            get { return _path.Segments.Last(); }
+        }
+
         public bool Exists
         {
             get { return _exist; }

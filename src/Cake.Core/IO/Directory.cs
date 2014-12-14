@@ -14,6 +14,11 @@ namespace Cake.Core.IO
             get { return _path; }
         }
 
+        public string Name
+        {
+            get { return _directory.Name; }
+        }
+
         public bool Exists
         {
             get { return _directory.Exists; }

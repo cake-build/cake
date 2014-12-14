@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.Annotations;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Common.IO
@@ -146,6 +147,70 @@ namespace Cake.Common.IO
         public static void CreateDirectory(this ICakeContext context, DirectoryPath path)
         {
             DirectoryCreator.Create(context, path);
+        }
+
+        /// <summary>
+        /// Copies a directory to the specified location.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="source">The source directory path.</param>
+        /// <param name="destination">The destination directory path.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Copy")]
+        public static void CopyDirectory(this ICakeContext context, DirectoryPath source, DirectoryPath destination)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            if (source == null)
+            {
+                throw new ArgumentNullException("source");
+            }
+
+            if (destination == null)
+            {
+                throw new ArgumentNullException("destination");
+            }
+
+            if (source.IsRelative)
+            {
+                source = source.MakeAbsolute(context.Environment);
+            }
+
+            // Get the subdirectories for the specified directory.
+            var sourceDir = context.FileSystem.GetDirectory(source);
+            if (!sourceDir.Exists)
+            {
+                throw new System.IO.DirectoryNotFoundException(
+                    "Source directory does not exist or could not be found: "
+                    + source.FullPath);
+            }
+
+            var dirs = sourceDir.GetDirectories("*", SearchScope.Current);
+
+            var destinationDir = context.FileSystem.GetDirectory(destination);
+            // If the destination directory doesn't exist, create it. 
+            if (!destinationDir.Exists)
+            {
+                destinationDir.Create();
+            }
+
+            // Get the files in the directory and copy them to the new location.
+            var files = sourceDir.GetFiles("*", SearchScope.Current);
+            foreach (var file in files)
+            {
+                var temppath = destinationDir.Path.CombineWithFilePath(file.Path.GetFilename());
+                file.Copy(temppath, true);
+            }
+
+            // Copy all of the subdirectories
+            foreach (var subdir in dirs)
+            {
+                var temppath = destination.Combine(subdir.Name);
+                CopyDirectory(context, subdir.Path, temppath);
+            }
         }
     }
 }
