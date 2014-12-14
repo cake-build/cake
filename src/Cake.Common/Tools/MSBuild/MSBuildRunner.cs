@@ -43,10 +43,10 @@ namespace Cake.Common.Tools.MSBuild
             // Set the maximum number of processors.
             builder.Append(settings.MaxCpuCount > 0 ? string.Concat("/m:", settings.MaxCpuCount) : "/m");
 
-if (settings.NodeReuse != null)
-{
-    builder.Append(string.Concat("/nr:", settings.NodeReuse.Value ? "true" : "false"));
-}
+            if (settings.NodeReuse != null)
+            {
+                builder.Append(string.Concat("/nr:", settings.NodeReuse.Value ? "true" : "false"));
+            }
 
             // Got a specific configuration in mind?
             if (!string.IsNullOrWhiteSpace(settings.Configuration))
@@ -75,6 +75,11 @@ if (settings.NodeReuse != null)
             {
                 // Use default target.
                 builder.Append("/target:Build");
+            }
+
+            if (!string.IsNullOrWhiteSpace(settings.Verbosity))
+            {
+                builder.Append("/verbosity:" + settings.Verbosity);
             }
 
             // Add the solution as the last parameter.

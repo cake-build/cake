@@ -65,6 +65,12 @@ namespace Cake.Common.Tools.MSBuild
         public int MaxCpuCount { get; set; }
 
         /// <summary>
+        /// Gets or sets the build verbosity.
+        /// </summary>
+        /// <value>The build verbosity.</value>
+        public string Verbosity { get; set; }
+
+        /// <summary>
         /// Gets or sets whether or not node reuse is used.
         /// When you’re doing multiple builds in a row, this helps reduce your total build time, 
         /// by avoiding the start up costs of each MSBuild child node.

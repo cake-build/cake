@@ -240,5 +240,36 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.Equal(settings, result);
             }        
         }
+
+        public sealed class TheWithVerbosityMethod
+        {
+            [Fact]
+            public void Should_Add_Target_To_Configuration()
+            {
+                // Given
+                var solution = new FilePath("/src/Solution.sln");
+                var settings = new MSBuildSettings(solution);
+
+                // When
+                settings.WithVerbosity("quiet");
+
+                // Then
+                Assert.Equal(settings.Verbosity, "quiet");
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var solution = new FilePath("/src/Solution.sln");
+                var settings = new MSBuildSettings(solution);
+
+                // When
+                var result = settings.WithTarget("Target");
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
     }
 }
