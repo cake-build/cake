@@ -11,7 +11,7 @@ namespace Cake.Common.IO
     /// Contains functionality related to file operations.
     /// </summary>
     [CakeAliasCategory("File Operations")]
-    public static class FileExtensions
+    public static class FileAliases
     {
         /// <summary>
         /// Copies an existing file to a new location.

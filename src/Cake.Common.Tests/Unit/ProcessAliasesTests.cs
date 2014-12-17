@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Cake.Common.Tests.Unit
 {
-    public sealed class ProcessExtensionsTests
+    public sealed class ProcessAliasesTests
     {
         public sealed class TheStartProcessMethod
         {
@@ -21,7 +21,7 @@ namespace Cake.Common.Tests.Unit
 
                     // When
                     var result = Record.Exception(() =>
-                        ProcessExtensions.StartProcess(null, fileName));
+                        ProcessAliases.StartProcess(null, fileName));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -100,7 +100,7 @@ namespace Cake.Common.Tests.Unit
 
                     // When
                     var result = Record.Exception(() =>
-                        ProcessExtensions.StartProcess(null, fileName, settings));
+                        ProcessAliases.StartProcess(null, fileName, settings));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);

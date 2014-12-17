@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Cake.Common.Tests.Unit
 {
-    public sealed class ReleaseNotesExtensionsTests
+    public sealed class ReleaseNotesAliasesTests
     {
         public sealed class TheParseAllReleaseNotesMethod
         {

@@ -10,7 +10,7 @@ namespace Cake.Common.Tools.ILMerge
     /// Contains functionality related to ILMerge.
     /// </summary>
     [CakeAliasCategory("ILMerge")]
-    public static class ILMergeExtensions
+    public static class ILMergeAliases
     {
         /// <summary>
         /// Merges the specified assemblies.

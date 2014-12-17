@@ -9,7 +9,7 @@ namespace Cake.Common.Diagnostics
     /// Contains functionality related to logging.
     /// </summary>
     [CakeAliasCategory("Logging")]
-    public static class LoggingExtensions
+    public static class LoggingAliases
     {
         /// <summary>
         /// Writes an error message to the log using the specified format information.

@@ -9,7 +9,7 @@ namespace Cake.Common.Solution.Project.Properties
     /// Contains functionality related to assembly info.
     /// </summary>
     [CakeAliasCategory("Assembly Info")]
-    public static class AssemblyInfoExtensions
+    public static class AssemblyInfoAliases
     {
         /// <summary>
         /// Creates an assembly information file.

@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Cake.Common.Tests.Unit.Diagnostics
 {
-    public sealed class LoggingExtensionsTests
+    public sealed class LoggingAliasesTests
     {
         public sealed class TheErrorMethod
         {

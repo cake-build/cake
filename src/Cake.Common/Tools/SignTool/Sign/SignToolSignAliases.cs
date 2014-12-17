@@ -11,7 +11,7 @@ namespace Cake.Common.Tools.SignTool.Sign
     /// Contains functionality related to signing assemblies with PFX certificate
     /// </summary>
     [CakeAliasCategoryAttribute("Signing")]
-    public static class SignToolSignExtensions
+    public static class SignToolSignAliases
     {
         /// <summary>
         /// Signs the specified assembly

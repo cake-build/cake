@@ -11,7 +11,7 @@ namespace Cake.Common.IO
     /// Contains extension methods for working with directories.
     /// </summary>
     [CakeAliasCategory("Directory Operations")]
-    public static class DirectoryExtensions
+    public static class DirectoryAliases
     {
         /// <summary>
         /// Deletes the specified directories.

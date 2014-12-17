@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.NuGet
     /// Contains functionality for working with NuGet.
     /// </summary>
     [CakeAliasCategory("NuGet")]
-    public static class NuGetExtensions
+    public static class NuGetAliases
     {
         /// <summary>
         /// Creates a NuGet package using the specified Nuspec file.

@@ -10,7 +10,7 @@ namespace Cake.Common.Tools.MSTest
     /// Contains functionality related to running MSTest unit tests.
     /// </summary>
     [CakeAliasCategory("MSTest")]
-    public static class MSTestExtensions
+    public static class MSTestAliases
     {
         /// <summary>
         /// Runs all MSTest unit tests in the assemblies matching the specified pattern.

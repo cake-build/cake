@@ -9,7 +9,7 @@ namespace Cake.Common.Solution.Project
     /// Contains functionality related to MSBuild project files
     /// </summary>
     [CakeAliasCategory("MSBuild Resource")]
-    public static class ProjectExtensions
+    public static class ProjectAliases
     {
         /// <summary>
         /// Parses project information from project file

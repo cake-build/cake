@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Cake.Common.Tests.Unit
 {
-    public sealed class EnvironmentExtensionsTests
+    public sealed class EnvironmentAliasesTests
     {
         private const string TestVariableName = "Test";
         private const string TestVariableValue = "Value";

@@ -10,7 +10,7 @@ namespace Cake.Common.IO
     /// Contains functionality related to file system globbing.
     /// </summary>
     [CakeAliasCategory("Globbing")]
-    public static class GlobbingExtensions
+    public static class GlobbingAliases
     {
         /// <summary>
         /// Gets all files matching the specified pattern.
