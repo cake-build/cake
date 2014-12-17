@@ -9,7 +9,7 @@ namespace Cake.Common
     /// Contains functionality related to arguments.
     /// </summary>
     [CakeAliasCategory("Arguments")]
-    public static class ArgumentExtensions
+    public static class ArgumentAliases
     {
         /// <summary>
         /// Determines whether or not the specified argument exist.

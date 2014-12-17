@@ -88,17 +88,17 @@
     </Compile>
     <Compile Include="Unit\Solution\Project\Properties\AssemblyInfoCreatorTests.cs" />
     <Compile Include="Unit\Solution\Project\Properties\AssemblyInfoParserTests.cs" />
-    <Compile Include="Unit\Diagnostics\LoggingExtensionsTests.cs" />
-    <Compile Include="Unit\EnvironmentExtensionsTests.cs" />
-    <Compile Include="Unit\ProcessExtensionsTests.cs" />
-    <Compile Include="Unit\ReleaseNotesExtensionsTests.cs" />
+    <Compile Include="Unit\Diagnostics\LoggingAliasesTests.cs" />
+    <Compile Include="Unit\EnvironmentAliasesTests.cs" />
+    <Compile Include="Unit\ProcessAliasesTests.cs" />
+    <Compile Include="Unit\ReleaseNotesAliasesTests.cs" />
     <Compile Include="Unit\ReleaseNotesParserTests.cs" />
     <Compile Include="Unit\ReleaseNotesTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeSettingsTests.cs" />
     <Compile Include="Unit\IO\ZipperTests.cs" />
-    <Compile Include="Unit\IO\DirectoryExtensionsTests.cs" />
-    <Compile Include="Unit\IO\FileExtensionsTests.cs" />
+    <Compile Include="Unit\IO\DirectoryAliasesTests.cs" />
+    <Compile Include="Unit\IO\FileAliasesTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildRunnerTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsExtensionsTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsTests.cs" />

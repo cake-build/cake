@@ -8,7 +8,7 @@ namespace Cake.Common
     /// Contains functionality related to the environment.
     /// </summary>
     [CakeAliasCategory("Environment")]
-    public static class EnvironmentExtensions
+    public static class EnvironmentAliases
     {
         /// <summary>
         /// Retrieves the value of the environment variable or <c>null</c> if the environment variable do not exist.

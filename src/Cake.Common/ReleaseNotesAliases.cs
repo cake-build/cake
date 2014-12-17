@@ -13,11 +13,11 @@ namespace Cake.Common
     /// Contains functionality related to release notes.
     /// </summary>
     [CakeAliasCategory("Release Notes")]
-    public static class ReleaseNotesExtensions
+    public static class ReleaseNotesAliases
     {
         private static readonly ReleaseNotesParser _parser;
 
-        static ReleaseNotesExtensions()
+        static ReleaseNotesAliases()
         {
             _parser = new ReleaseNotesParser();
         }

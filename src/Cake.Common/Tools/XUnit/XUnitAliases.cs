@@ -11,7 +11,7 @@ namespace Cake.Common.Tools.XUnit
     /// Contains functionality related to running xUnit.net tests.
     /// </summary>
     [CakeAliasCategory("xUnit")]
-    public static class XUnitExtensions
+    public static class XUnitAliases
     {
         /// <summary>
         /// Runs all xUnit.net tests in the assemblies matching the specified pattern.

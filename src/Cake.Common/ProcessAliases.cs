@@ -9,7 +9,7 @@ namespace Cake.Common
     /// Contains functionality related to processes.
     /// </summary>
     [CakeAliasCategory("Process")]
-    public static class ProcessExtensions
+    public static class ProcessAliases
     {
         /// <summary>
         /// Starts the process resource that is specified by the filename.

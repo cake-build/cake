@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Cake.Common.IO;
 using Cake.Common.Tests.Fixtures;
 using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
-using FileExtensions = Cake.Common.IO.FileExtensions;
 
 namespace Cake.Common.Tests.Unit.IO
 {
-    public sealed class FileExtensionsTests
+    public sealed class FileAliasesTests
     {
         public sealed class TheCopyToDirectoryMethod
         {
@@ -20,7 +20,7 @@ namespace Cake.Common.Tests.Unit.IO
             {
                 // Given, When
                 var result = Record.Exception(() =>
-                    FileExtensions.CopyFileToDirectory(null, "./file.txt", "./target"));
+                    FileAliases.CopyFileToDirectory(null, "./file.txt", "./target"));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -35,7 +35,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    FileExtensions.CopyFileToDirectory(context, null, "./target"));
+                    FileAliases.CopyFileToDirectory(context, null, "./target"));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -50,7 +50,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    FileExtensions.CopyFileToDirectory(context, "./file.txt", null));
+                    FileAliases.CopyFileToDirectory(context, "./file.txt", null));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -64,7 +64,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var fixture = new FileCopyFixture();
 
                 // When
-                FileExtensions.CopyFileToDirectory(fixture.Context, "./file1.txt", "./target");
+                FileAliases.CopyFileToDirectory(fixture.Context, "./file1.txt", "./target");
 
                 // Then
                 fixture.TargetFiles[0].Received(1).Copy(
@@ -79,7 +79,7 @@ namespace Cake.Common.Tests.Unit.IO
             {
                 // Given, When
                 var result = Record.Exception(() =>
-                    FileExtensions.CopyFile(null, "./file.txt", "./target"));
+                    FileAliases.CopyFile(null, "./file.txt", "./target"));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -94,7 +94,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    FileExtensions.CopyFile(context, null, "./target"));
+                    FileAliases.CopyFile(context, null, "./target"));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -109,7 +109,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    FileExtensions.CopyFile(context, "./file.txt", null));
+                    FileAliases.CopyFile(context, "./file.txt", null));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -126,7 +126,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    FileExtensions.CopyFile(fixture.Context, "./file1.txt", "./target/file1.txt"));
+                    FileAliases.CopyFile(fixture.Context, "./file1.txt", "./target/file1.txt"));
 
                 // Then
                 Assert.IsType<DirectoryNotFoundException>(result);
@@ -143,7 +143,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    FileExtensions.CopyFile(fixture.Context, "./file1.txt", "./target/file1.txt"));
+                    FileAliases.CopyFile(fixture.Context, "./file1.txt", "./target/file1.txt"));
 
                 // Then
                 Assert.IsType<FileNotFoundException>(result);
@@ -157,7 +157,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var fixture = new FileCopyFixture();
 
                 // When
-                FileExtensions.CopyFile(fixture.Context, "./file1.txt", "./target/file1.txt");
+                FileAliases.CopyFile(fixture.Context, "./file1.txt", "./target/file1.txt");
 
                 // Then
                 fixture.TargetFiles[0].Received(1).Copy(
@@ -177,7 +177,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.CopyFiles(null, fixture.SourceFilePaths, "./target"));
+                        FileAliases.CopyFiles(null, fixture.SourceFilePaths, "./target"));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -192,7 +192,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.CopyFiles(context, (IEnumerable<FilePath>)null, "./target"));
+                        FileAliases.CopyFiles(context, (IEnumerable<FilePath>)null, "./target"));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -207,7 +207,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.CopyFiles(fixture.Context, fixture.SourceFilePaths, null));
+                        FileAliases.CopyFiles(fixture.Context, fixture.SourceFilePaths, null));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -224,7 +224,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.CopyFiles(fixture.Context, fixture.SourceFilePaths, "./target"));
+                        FileAliases.CopyFiles(fixture.Context, fixture.SourceFilePaths, "./target"));
 
                     // Then
                     Assert.IsType<DirectoryNotFoundException>(result);
@@ -241,7 +241,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.CopyFiles(fixture.Context, fixture.SourceFilePaths, "./target"));
+                        FileAliases.CopyFiles(fixture.Context, fixture.SourceFilePaths, "./target"));
 
                     // Then
                     Assert.IsType<FileNotFoundException>(result);
@@ -255,7 +255,7 @@ namespace Cake.Common.Tests.Unit.IO
                     var fixture = new FileCopyFixture();
 
                     // When
-                    FileExtensions.CopyFiles(fixture.Context, fixture.SourceFilePaths, "./target");
+                    FileAliases.CopyFiles(fixture.Context, fixture.SourceFilePaths, "./target");
 
                     // Then
                     fixture.TargetFiles[0].Received(1).Copy(Arg.Any<FilePath>(), true);
@@ -274,7 +274,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.CopyFiles(null, filePaths, "./target"));
+                        FileAliases.CopyFiles(null, filePaths, "./target"));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -289,7 +289,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.CopyFiles(context, (IEnumerable<string>)null, "./target"));
+                        FileAliases.CopyFiles(context, (IEnumerable<string>)null, "./target"));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -305,7 +305,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.CopyFiles(fixture.Context, filePaths, null));
+                        FileAliases.CopyFiles(fixture.Context, filePaths, null));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -323,7 +323,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.CopyFiles(fixture.Context, filePaths, "./target"));
+                        FileAliases.CopyFiles(fixture.Context, filePaths, "./target"));
 
                     // Then
                     Assert.IsType<DirectoryNotFoundException>(result);
@@ -341,7 +341,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.CopyFiles(fixture.Context, filePaths, "./target"));
+                        FileAliases.CopyFiles(fixture.Context, filePaths, "./target"));
 
                     // Then
                     Assert.IsType<FileNotFoundException>(result);
@@ -356,7 +356,7 @@ namespace Cake.Common.Tests.Unit.IO
                     var filePaths = fixture.SourceFilePaths.Select(x => x.FullPath);
 
                     // When
-                    FileExtensions.CopyFiles(fixture.Context, filePaths, "./target");
+                    FileAliases.CopyFiles(fixture.Context, filePaths, "./target");
 
                     // Then
                     fixture.TargetFiles[0].Received(1).Copy(Arg.Any<FilePath>(), true);
@@ -371,7 +371,7 @@ namespace Cake.Common.Tests.Unit.IO
                 {
                     // Given, When
                     var result = Record.Exception(() =>
-                        FileExtensions.CopyFiles(null, "", "./target"));
+                        FileAliases.CopyFiles(null, "", "./target"));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -386,7 +386,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.CopyFiles(fixture.Context, (string)null, "./target"));
+                        FileAliases.CopyFiles(fixture.Context, (string)null, "./target"));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -401,7 +401,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.CopyFiles(fixture.Context, "", null));
+                        FileAliases.CopyFiles(fixture.Context, "", null));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -418,7 +418,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.CopyFiles(fixture.Context, "*", "./target"));
+                        FileAliases.CopyFiles(fixture.Context, "*", "./target"));
 
                     // Then
                     Assert.IsType<DirectoryNotFoundException>(result);
@@ -435,7 +435,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.CopyFiles(fixture.Context, "*", "./target"));
+                        FileAliases.CopyFiles(fixture.Context, "*", "./target"));
 
                     // Then
                     Assert.IsType<FileNotFoundException>(result);
@@ -449,7 +449,7 @@ namespace Cake.Common.Tests.Unit.IO
                     var fixture = new FileCopyFixture();
 
                     // When
-                    FileExtensions.CopyFiles(fixture.Context, "*", "./target");
+                    FileAliases.CopyFiles(fixture.Context, "*", "./target");
 
                     // Then
                     fixture.TargetFiles[0].Received(1).Copy(Arg.Any<FilePath>(), true);
@@ -468,7 +468,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    FileExtensions.DeleteFile(null, filePath));
+                    FileAliases.DeleteFile(null, filePath));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -483,7 +483,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    FileExtensions.DeleteFile(context, null));
+                    FileAliases.DeleteFile(context, null));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -498,7 +498,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    FileExtensions.DeleteFile(fixture.Context, "/file.txt"));
+                    FileAliases.DeleteFile(fixture.Context, "/file.txt"));
 
                 // Then
                 Assert.IsType<FileNotFoundException>(result);
@@ -512,7 +512,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var fixture = new FileDeleteFixture();
 
                 // When
-                FileExtensions.DeleteFile(fixture.Context, "file1.txt");
+                FileAliases.DeleteFile(fixture.Context, "file1.txt");
 
                 // Then
                 fixture.FileSystem.Received(1).GetFile(Arg.Is<FilePath>(
@@ -526,7 +526,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var fixture = new FileDeleteFixture();
 
                 // When
-                FileExtensions.DeleteFile(fixture.Context, fixture.Paths[0]);
+                FileAliases.DeleteFile(fixture.Context, fixture.Paths[0]);
 
                 // Then
                 fixture.Files[0].Received(1).Delete();
@@ -545,7 +545,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.DeleteFiles(null, filePaths));
+                        FileAliases.DeleteFiles(null, filePaths));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -560,7 +560,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.DeleteFiles(context, (IEnumerable<FilePath>)null));
+                        FileAliases.DeleteFiles(context, (IEnumerable<FilePath>)null));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -574,7 +574,7 @@ namespace Cake.Common.Tests.Unit.IO
                     var fixture = new FileDeleteFixture();
 
                     // When
-                    FileExtensions.DeleteFiles(fixture.Context, fixture.Paths);
+                    FileAliases.DeleteFiles(fixture.Context, fixture.Paths);
 
                     // Then
                     fixture.Files[0].Received(1).Delete();
@@ -589,7 +589,7 @@ namespace Cake.Common.Tests.Unit.IO
                 {
                     // Given, When
                     var result = Record.Exception(() =>
-                        FileExtensions.DeleteFiles(null, "*"));
+                        FileAliases.DeleteFiles(null, "*"));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -604,7 +604,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.DeleteFiles(context, (string)null));
+                        FileAliases.DeleteFiles(context, (string)null));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -618,7 +618,7 @@ namespace Cake.Common.Tests.Unit.IO
                     var fixture = new FileDeleteFixture();
 
                     // When
-                    FileExtensions.DeleteFiles(fixture.Context, "*");
+                    FileAliases.DeleteFiles(fixture.Context, "*");
 
                     // Then
                     fixture.Files[0].Received(1).Delete();
@@ -637,7 +637,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var target = new DirectoryPath("./target");
 
                 var result = Record.Exception(() =>
-                    FileExtensions.MoveFileToDirectory(null, source, target));
+                    FileAliases.MoveFileToDirectory(null, source, target));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -653,7 +653,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    FileExtensions.MoveFileToDirectory(context, null, target));
+                    FileAliases.MoveFileToDirectory(context, null, target));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -669,7 +669,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    FileExtensions.MoveFileToDirectory(context, source, null));
+                    FileAliases.MoveFileToDirectory(context, source, null));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -683,7 +683,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var fixture = new FileCopyFixture();
 
                 // When
-                FileExtensions.MoveFileToDirectory(fixture.Context, "./file1.txt", "./target");
+                FileAliases.MoveFileToDirectory(fixture.Context, "./file1.txt", "./target");
 
                 // Then
                 fixture.TargetFiles[0].Received(1).Move(
@@ -703,7 +703,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.MoveFiles(null, fixture.SourceFilePaths, "./target"));
+                        FileAliases.MoveFiles(null, fixture.SourceFilePaths, "./target"));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -718,7 +718,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.MoveFiles(context, (IEnumerable<FilePath>)null, "./target"));
+                        FileAliases.MoveFiles(context, (IEnumerable<FilePath>)null, "./target"));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -733,7 +733,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.MoveFiles(fixture.Context, fixture.SourceFilePaths, null));
+                        FileAliases.MoveFiles(fixture.Context, fixture.SourceFilePaths, null));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -750,7 +750,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.MoveFiles(fixture.Context, fixture.SourceFilePaths, "./target"));
+                        FileAliases.MoveFiles(fixture.Context, fixture.SourceFilePaths, "./target"));
 
                     // Then
                     Assert.IsType<DirectoryNotFoundException>(result);
@@ -767,7 +767,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.MoveFiles(fixture.Context, fixture.SourceFilePaths, "./target"));
+                        FileAliases.MoveFiles(fixture.Context, fixture.SourceFilePaths, "./target"));
 
                     // Then
                     Assert.IsType<FileNotFoundException>(result);
@@ -781,7 +781,7 @@ namespace Cake.Common.Tests.Unit.IO
                     var fixture = new FileCopyFixture();
 
                     // When
-                    FileExtensions.MoveFiles(fixture.Context, fixture.SourceFilePaths, "./target");
+                    FileAliases.MoveFiles(fixture.Context, fixture.SourceFilePaths, "./target");
 
                     // Then
                     fixture.TargetFiles[0].Received(1).Move(Arg.Any<FilePath>());
@@ -796,7 +796,7 @@ namespace Cake.Common.Tests.Unit.IO
                 {
                     // Given, When
                     var result = Record.Exception(() =>
-                        FileExtensions.MoveFiles(null, "", "./target"));
+                        FileAliases.MoveFiles(null, "", "./target"));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -811,7 +811,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.MoveFiles(fixture.Context, (string)null, "./target"));
+                        FileAliases.MoveFiles(fixture.Context, (string)null, "./target"));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -826,7 +826,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.MoveFiles(fixture.Context, "", null));
+                        FileAliases.MoveFiles(fixture.Context, "", null));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -843,7 +843,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.MoveFiles(fixture.Context, "*", "./target"));
+                        FileAliases.MoveFiles(fixture.Context, "*", "./target"));
 
                     // Then
                     Assert.IsType<DirectoryNotFoundException>(result);
@@ -860,7 +860,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileExtensions.MoveFiles(fixture.Context, "*", "./target"));
+                        FileAliases.MoveFiles(fixture.Context, "*", "./target"));
 
                     // Then
                     Assert.IsType<FileNotFoundException>(result);
@@ -874,7 +874,7 @@ namespace Cake.Common.Tests.Unit.IO
                     var fixture = new FileCopyFixture();
 
                     // When
-                    FileExtensions.MoveFiles(fixture.Context, "*", "./target");
+                    FileAliases.MoveFiles(fixture.Context, "*", "./target");
 
                     // Then
                     fixture.TargetFiles[0].Received(1).Move(Arg.Any<FilePath>());
@@ -893,7 +893,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var target = new FilePath("./target.txt");
 
                 var result = Record.Exception(() =>
-                    FileExtensions.MoveFile(null, source, target));
+                    FileAliases.MoveFile(null, source, target));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -909,7 +909,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    FileExtensions.MoveFile(context, null, target));
+                    FileAliases.MoveFile(context, null, target));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -925,7 +925,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    FileExtensions.MoveFile(context, source, null));
+                    FileAliases.MoveFile(context, source, null));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -942,7 +942,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    FileExtensions.MoveFile(fixture.Context, "./file1.txt", "./target/file1.txt"));
+                    FileAliases.MoveFile(fixture.Context, "./file1.txt", "./target/file1.txt"));
 
                 // Then
                 Assert.IsType<DirectoryNotFoundException>(result);
@@ -959,7 +959,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    FileExtensions.MoveFile(fixture.Context, "./file1.txt", "./target/file1.txt"));
+                    FileAliases.MoveFile(fixture.Context, "./file1.txt", "./target/file1.txt"));
 
                 // Then
                 Assert.IsType<FileNotFoundException>(result);
@@ -973,7 +973,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var fixture = new FileCopyFixture();
 
                 // When
-                FileExtensions.MoveFile(fixture.Context, "./file1.txt", "./target/file1.txt");
+                FileAliases.MoveFile(fixture.Context, "./file1.txt", "./target/file1.txt");
 
                 // Then
                 fixture.TargetFiles[0].Received(1).Move(

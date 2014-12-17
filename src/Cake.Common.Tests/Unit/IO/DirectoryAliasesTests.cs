@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Cake.Common.Tests.Unit.IO
 {
-    public sealed class DirectoryExtensionsTests
+    public sealed class DirectoryAliasesTests
     {
         public sealed class TheCleanMethod
         {
@@ -19,7 +19,7 @@ namespace Cake.Common.Tests.Unit.IO
             {
                 // Given, When
                 var result = Record.Exception(() =>
-                    DirectoryExtensions.CleanDirectory(null, "/Temp/Hello"));
+                    DirectoryAliases.CleanDirectory(null, "/Temp/Hello"));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -119,7 +119,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        DirectoryExtensions.CleanDirectories(null, paths));
+                        DirectoryAliases.CleanDirectories(null, paths));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -211,7 +211,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        DirectoryExtensions.CleanDirectories(null, paths));
+                        DirectoryAliases.CleanDirectories(null, paths));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -304,7 +304,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    DirectoryExtensions.CreateDirectory(null, path));
+                    DirectoryAliases.CreateDirectory(null, path));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -391,7 +391,7 @@ namespace Cake.Common.Tests.Unit.IO
             public void Should_Throw_If_Context_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => DirectoryExtensions.DeleteDirectory(null, "/Temp/DoNotExist"));
+                var result = Record.Exception(() => DirectoryAliases.DeleteDirectory(null, "/Temp/DoNotExist"));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -508,7 +508,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        DirectoryExtensions.DeleteDirectories(null, paths));
+                        DirectoryAliases.DeleteDirectories(null, paths));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
@@ -634,7 +634,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        DirectoryExtensions.DeleteDirectories(null, paths));
+                        DirectoryAliases.DeleteDirectories(null, paths));
 
                     // Then
                     Assert.IsType<ArgumentNullException>(result);
