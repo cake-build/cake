@@ -66,6 +66,16 @@ namespace Cake.Core.Scripting
             get { return _engine.ProcessRunner; }
         }
 
+         /// <summary>
+        /// Gets resolver by tool name
+        /// </summary>
+        /// <param name="toolName">resolver tool name</param>
+        /// <returns>IToolResolver for tool</returns>
+        public IToolResolver GetToolResolver(string toolName)
+        {
+            return _engine.GetToolResolver(toolName);
+        }
+
         /// <summary>
         /// Gets the engine.
         /// </summary>

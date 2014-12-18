@@ -20,6 +20,7 @@ namespace Cake.Common.Tests.Fixtures
         public IProcessRunner ProcessRunner { get; set; }
         public IProcess Process { get; set; }
         public ICakeLog Log { get; set; }
+        public IToolResolver NuGetToolResolver { get; set; }
 
         public NuGetFixture(FilePath toolPath = null, bool defaultToolExist = true, string xml = null, KeyValuePair<string, string>? sourceExists = null)
         {
@@ -34,6 +35,14 @@ namespace Cake.Common.Tests.Fixtures
             ProcessRunner = Substitute.For<IProcessRunner>();
             ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns(Process);
 
+            
+
+            NuGetToolResolver = Substitute.For<IToolResolver>();
+            NuGetToolResolver.Name.Returns("NuGet");
+            NuGetToolResolver.ResolveToolPath().Returns(
+                defaultToolExist ? "/Working/tools/NuGet.exe" : "/NonWorking/tools/NuGet.exe"
+                );
+
             Log = Substitute.For<ICakeLog>();
 
             FileSystem = new FakeFileSystem(true);
@@ -43,6 +52,7 @@ namespace Cake.Common.Tests.Fixtures
             {
                 FileSystem.GetCreatedFile("/Working/tools/NuGet.exe");
             }
+
             if (toolPath != null)
             {
                 FileSystem.GetCreatedFile(toolPath);
@@ -75,22 +85,22 @@ namespace Cake.Common.Tests.Fixtures
 
         public NuGetPacker CreatePacker()
         {
-            return new NuGetPacker(FileSystem, Environment, Globber, ProcessRunner, Log);
+            return new NuGetPacker(FileSystem,Environment, ProcessRunner,Log, NuGetToolResolver);
         }
 
         public NuGetPusher CreatePusher()
         {
-            return new NuGetPusher(FileSystem, Environment, Globber, ProcessRunner);
+            return new NuGetPusher(FileSystem, Environment, Globber, ProcessRunner, NuGetToolResolver);
         }
 
         public NuGetRestorer CreateRestorer()
         {
-            return new NuGetRestorer(FileSystem, Environment, Globber, ProcessRunner);
+            return new NuGetRestorer(FileSystem, Environment, ProcessRunner, NuGetToolResolver);
         }
 
         public NuGetSources CreateSources()
         {
-            return new NuGetSources(FileSystem, Environment, Globber, ProcessRunner);
+            return new NuGetSources(FileSystem, Environment, ProcessRunner, NuGetToolResolver);
         }
     }
 }
