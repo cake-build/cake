@@ -108,6 +108,8 @@
     <Compile Include="IO\IProcess.cs" />
     <Compile Include="IO\IProcessRunner.cs" />
     <Compile Include="IO\Machine.cs" />
+    <Compile Include="IO\IToolResolver.cs" />
+    <Compile Include="IO\NuGet\NuGetToolResolver.cs" />
     <Compile Include="IO\Path.cs" />
     <Compile Include="IO\DirectoryPath.cs" />
     <Compile Include="IO\FilePath.cs" />

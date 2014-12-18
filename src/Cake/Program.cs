@@ -1,9 +1,12 @@
-﻿using Autofac;
+﻿using System.Collections.Generic;
+using Autofac;
+using Autofac.Builder;
 using Cake.Arguments;
 using Cake.Commands;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.IO.NuGet;
 using Cake.Core.Scripting;
 using Cake.Diagnostics;
 using Cake.Scripting;
@@ -37,6 +40,8 @@ namespace Cake
             builder.RegisterType<CakeReportPrinter>().As<ICakeReportPrinter>().SingleInstance();            
             builder.RegisterType<CakeConsole>().As<IConsole>().SingleInstance();
             builder.RegisterType<ScriptProcessor>().As<IScriptProcessor>().SingleInstance();
+            builder.RegisterCollection<IToolResolver>("toolResolvers").As<IEnumerable<IToolResolver>>();
+            builder.RegisterType<NuGetToolResolver>().As<IToolResolver>().SingleInstance().MemberOf("toolResolvers");
 
             // Roslyn related services.
             builder.RegisterType<RoslynScriptSessionFactory>().As<IScriptSessionFactory>();

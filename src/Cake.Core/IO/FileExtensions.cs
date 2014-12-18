@@ -77,6 +77,7 @@ namespace Cake.Core.IO
         /// <param name="file">The file to be read from.</param>
         /// <param name="encoding">The encoding that is applied to the content of the file.</param>
         /// <returns>A <see cref="IEnumerable{T}"/> of file line content</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public static IEnumerable<string> ReadLines(this IFile file, System.Text.Encoding encoding)
         {
             if (file == null)
