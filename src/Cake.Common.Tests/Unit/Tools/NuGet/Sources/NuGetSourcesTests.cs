@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.NuGet;
 using Cake.Common.Tools.NuGet.Sources;
@@ -115,7 +114,6 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             {
                 // Given
                 var fixture = new NuGetFixture(defaultToolExist: false);
-                fixture.Globber.Match("./tools/**/NuGet.exe").Returns(Enumerable.Empty<FilePath>());
                 var sources = fixture.CreateSources();
 
                 // When
@@ -373,7 +371,6 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 // Given
                 var source = new KeyValuePair<string, string>("name", "source");
                 var fixture = new NuGetFixture(defaultToolExist: false, sourceExists:source);
-                fixture.Globber.Match("./tools/**/NuGet.exe").Returns(Enumerable.Empty<FilePath>());
                 var sources = fixture.CreateSources();
 
                 // When

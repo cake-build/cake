@@ -2,7 +2,6 @@
 using System.Globalization;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.IO.NuGet;
 using Cake.Core.Utilities;
 
 namespace Cake.Common.Tools.NuGet.Push
@@ -20,16 +19,10 @@ namespace Cake.Common.Tools.NuGet.Push
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
-        /// <param name="globber">The globber.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="nuGetToolResolver">The NuGet tool resolver.</param>
-        public NuGetPusher(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IGlobber globber,
-            IProcessRunner processRunner,
-            IToolResolver nuGetToolResolver
-            )
+        public NuGetPusher(IFileSystem fileSystem, ICakeEnvironment environment,
+            IProcessRunner processRunner, IToolResolver nuGetToolResolver)
             : base(fileSystem, environment, processRunner)
         {
             _environment = environment;

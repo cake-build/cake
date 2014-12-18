@@ -16,81 +16,70 @@ namespace Cake.Common.Tests.Fixtures
     {
         public FakeFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
-        public IGlobber Globber { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
         public IProcess Process { get; set; }
         public ICakeLog Log { get; set; }
         public IToolResolver NuGetToolResolver { get; set; }
 
-        public NuGetFixture(FilePath toolPath = null, bool defaultToolExist = true, string xml = null, KeyValuePair<string, string>? sourceExists = null)
+        public NuGetFixture(FilePath toolPath = null, bool defaultToolExist = true, 
+            string xml = null, KeyValuePair<string, string>? sourceExists = null)
         {
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory.Returns("/Working");
-
-            Globber = Substitute.For<IGlobber>();
-            Globber.Match("./tools/**/NuGet.exe").Returns(new[] { (FilePath)"/Working/tools/NuGet.exe" });
 
             Process = Substitute.For<IProcess>();
             Process.GetExitCode().Returns(0);
             ProcessRunner = Substitute.For<IProcessRunner>();
             ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns(Process);
 
-            
-
             NuGetToolResolver = Substitute.For<IToolResolver>();
             NuGetToolResolver.Name.Returns("NuGet");
-            NuGetToolResolver.ResolveToolPath().Returns(
-                defaultToolExist ? "/Working/tools/NuGet.exe" : "/NonWorking/tools/NuGet.exe"
-                );
+            NuGetToolResolver.ResolveToolPath()
+                .Returns(defaultToolExist ? "/Working/tools/NuGet.exe" : "/NonWorking/tools/NuGet.exe");
 
             Log = Substitute.For<ICakeLog>();
 
             FileSystem = new FakeFileSystem(true);
             FileSystem.GetCreatedFile("/Working/existing.nuspec", xml ?? Resources.Nuspec_NoMetadataValues);
 
+            // Got a default tool?
             if (defaultToolExist)
             {
                 FileSystem.GetCreatedFile("/Working/tools/NuGet.exe");
             }
 
+            // Custom tool path?
             if (toolPath != null)
             {
                 FileSystem.GetCreatedFile(toolPath);
             }
+
+            // NuGet source?
             if (sourceExists.HasValue)
             {
-                Process.GetStandardOutput().Returns(
-                    new[]
-                    {
+                Process.GetStandardOutput()
+                    .Returns(new[] { 
                         "  1.  https://www.nuget.org/api/v2/ [Enabled]",
                         "      https://www.nuget.org/api/v2/",
-                        string.Format(
-                            "  2.  {0} [Enabled]",
-                            sourceExists.Value.Key
-                            ),
-                        string.Format(
-                            "      {0}",
-                            sourceExists.Value.Value
-                            )
-                    }
-                    );
+                        string.Format("  2.  {0} [Enabled]", sourceExists.Value.Key),
+                        string.Format("      {0}", sourceExists.Value.Value)
+                    });
             }
             else
             {
-                Process.GetStandardOutput().Returns(
-                    new string[0]
-                    );
+                Process.GetStandardOutput()
+                    .Returns(new string[0]);
             }
         }
 
         public NuGetPacker CreatePacker()
         {
-            return new NuGetPacker(FileSystem,Environment, ProcessRunner,Log, NuGetToolResolver);
+            return new NuGetPacker(FileSystem, Environment, ProcessRunner, Log, NuGetToolResolver);
         }
 
         public NuGetPusher CreatePusher()
         {
-            return new NuGetPusher(FileSystem, Environment, Globber, ProcessRunner, NuGetToolResolver);
+            return new NuGetPusher(FileSystem, Environment, ProcessRunner, NuGetToolResolver);
         }
 
         public NuGetRestorer CreateRestorer()

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.NuGet;
 using Cake.Common.Tools.NuGet.Restore;
@@ -49,7 +48,6 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             {
                 // Given
                 var fixture = new NuGetFixture(defaultToolExist: false);
-                fixture.Globber.Match("./tools/**/NuGet.exe").Returns(Enumerable.Empty<FilePath>());
                 var restorer = fixture.CreateRestorer();
 
                 // When

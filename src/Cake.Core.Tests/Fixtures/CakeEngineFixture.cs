@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Cake.Core.IO;
 using Cake.Core.Tests.Fakes;
 using NSubstitute;

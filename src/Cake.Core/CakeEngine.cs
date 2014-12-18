@@ -6,7 +6,6 @@ using System.Linq;
 using Cake.Core.Diagnostics;
 using Cake.Core.Graph;
 using Cake.Core.IO;
-using Cake.Core.IO.NuGet;
 
 namespace Cake.Core
 {
