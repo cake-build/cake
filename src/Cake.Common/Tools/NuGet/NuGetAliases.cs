@@ -86,7 +86,7 @@ namespace Cake.Common.Tools.NuGet
                 throw new ArgumentNullException("context");
             }
 
-            var packer = new NuGetPusher(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner, context.GetToolResolver("NuGet"));
+            var packer = new NuGetPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.GetToolResolver("NuGet"));
             packer.Push(packageFilePath, settings);
         }
 

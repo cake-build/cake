@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.IO.NuGet;
 using Cake.Core.Utilities;
 
 namespace Cake.Common.Tools.NuGet.Sources
@@ -22,7 +21,8 @@ namespace Cake.Common.Tools.NuGet.Sources
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="nuGetToolResolver">The NuGet tool resolver.</param>
-        public NuGetSources(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IToolResolver nuGetToolResolver)
+        public NuGetSources(IFileSystem fileSystem, ICakeEnvironment environment, 
+            IProcessRunner processRunner, IToolResolver nuGetToolResolver)
             : base(fileSystem, environment, processRunner)
         {
             _nuGetToolResolver = nuGetToolResolver;

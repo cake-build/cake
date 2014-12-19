@@ -2,7 +2,6 @@
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Core.IO.NuGet;
 using Cake.Core.Utilities;
 
 namespace Cake.Common.Tools.NuGet.Pack
