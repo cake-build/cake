@@ -75,6 +75,25 @@ namespace Cake.Tests.Unit.Arguments
             }
 
             [Fact]
+            public void Should_Add_Unknown_Arguments_To_Argument_List_Without_Script()
+            {
+                // Given
+                var fakeFileSystem = new FakeFileSystem(isUnix: false);
+                var fakePath = new FilePath("build.cake");
+                var fakeFile = new FakeFile(fakeFileSystem, fakePath) { Exists = true };
+                var fixture = new ArgumentParserFixture { FileSystem = fakeFileSystem };
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                fakeFileSystem.Files.Add(fakePath, fakeFile);
+
+                // When
+                var result = parser.Parse(new[] { "-unknown" });
+
+                // Then
+                Assert.True(result.Arguments.ContainsKey("unknown"));
+            }
+
+            [Fact]
             public void Should_Return_Error_If_Multiple_Arguments_With_The_Same_Name_Exist()
             {
                 // Given
