@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Cake.Core.Tests.Unit.Text
 {
-    public sealed class TextTemplateTests
+    public sealed class TextTransformationTemplateTests
     {
         public sealed class TheConstructor
         {

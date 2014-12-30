@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -39,6 +40,7 @@ namespace Cake.Common.Text
         /// <param name="path">The template file path.</param>
         /// <returns>A <see cref="TextTransformation{TTemplate}"/> representing the provided template.</returns>
         [CakeMethodAlias]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "Stream reader leaves stream open.")]
         public static TextTransformation<TextTransformationTemplate> TransformTextFile(this ICakeContext context, FilePath path)
         {
             if (context == null)
@@ -56,7 +58,7 @@ namespace Cake.Common.Text
             // Read the content of the file.
             var file = context.FileSystem.GetFile(path);
             using (var stream = file.OpenRead())
-            using (var reader = new StreamReader(stream))
+            using (var reader = new StreamReader(stream, Encoding.UTF8, true, 1024, true))
             {
                 return new TextTransformation<TextTransformationTemplate>(
                     context.FileSystem, context.Environment,

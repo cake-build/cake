@@ -48,7 +48,7 @@ namespace Cake.Common.Text
         /// Saves the text transformation to a file.
         /// </summary>
         /// <param name="path"></param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "StreamWriter leaves stream open.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "Stream writer leaves stream open.")]
         public void Save(FilePath path)
         {
             if (path == null)
@@ -62,7 +62,7 @@ namespace Cake.Common.Text
             // Render the content to the file.
             var file = _fileSystem.GetFile(path); 
             using (var stream = file.OpenWrite())
-            using (var writer = new StreamWriter(stream, Encoding.UTF8, 4096, true))
+            using (var writer = new StreamWriter(stream, Encoding.UTF8, 1024, true))
             {
                 writer.Write(_template.Render());
             }

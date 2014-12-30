@@ -39,7 +39,7 @@ namespace Cake.Common.Tests.Fixtures
                     settings.InformationalVersion = informationalVersion;
                 }
 
-                // CreateTextTransformation the assembly info.
+                // Create the assembly info.
                 var creator = new AssemblyInfoCreator(FileSystem, Environment, Substitute.For<ICakeLog>());
                 creator.Create("./output.cs", settings);
             }

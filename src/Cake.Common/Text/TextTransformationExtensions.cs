@@ -19,7 +19,10 @@ namespace Cake.Common.Text
             this TextTransformation<TTemplate> transformation, string key, object value)
             where TTemplate : class, ITextTransformationTemplate
         {
-            transformation.Template.Register(key, value);
+            if (transformation != null)
+            {
+                transformation.Template.Register(key, value);
+            }
             return transformation;
         }
     }

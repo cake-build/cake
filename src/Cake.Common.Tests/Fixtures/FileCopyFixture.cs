@@ -53,7 +53,7 @@ namespace Cake.Common.Tests.Fixtures
 
         private void CreateTargetFile(FilePath sourcePath, FilePath targetPath)
         {
-            // CreateTextTransformation the target file.
+            // Create the target file.
             var targetFile = Substitute.For<IFile>();
             targetFile.Exists.Returns(true);
             targetFile.Path.Returns(targetPath);
