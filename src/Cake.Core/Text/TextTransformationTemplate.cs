@@ -53,7 +53,7 @@ namespace Cake.Core.Text
         }
 
         /// <summary>
-        /// Renders the text template using the registered tokens.
+        /// Renders the template using the registered tokens.
         /// </summary>
         /// <returns>The rendered template.</returns>
         public string Render()

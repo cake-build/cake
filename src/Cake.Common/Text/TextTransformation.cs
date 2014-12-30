@@ -68,6 +68,10 @@ namespace Cake.Common.Text
             }
         }
 
+        /// <summary>
+        /// Returns a string containing the rendered template.
+        /// </summary>
+        /// <returns>A string containing the rendered template.</returns>
         public override string ToString()
         {
             return _template.Render();
