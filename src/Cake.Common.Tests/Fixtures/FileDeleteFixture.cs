@@ -57,7 +57,7 @@ namespace Cake.Common.Tests.Fixtures
 
         private void CreatFile(FilePath relativePath, FilePath absolutePath)
         {
-            // Create the target file.
+            // CreateTextTransformation the target file.
             var file = Substitute.For<IFile>();
             file.Exists.Returns(true);
             file.Path.Returns(absolutePath);
