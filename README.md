@@ -14,8 +14,8 @@ Cake (C# Make) is a build automation system using C#.
     - [Run build script](https://github.com/cake-build/cake#3-run-build-script)
 4. [Documentation](https://github.com/cake-build/cake#documentation)
 5. [Bootstrapper](https://github.com/cake-build/cake#bootstrapper)
-6. [Contributors](https://github.com/cake-build/cake#contributors)
-7. [Contributing](https://github.com/cake-build/cake#contributing)
+6. [Contributing](https://github.com/cake-build/cake#contributing)
+7. [Contributors](https://github.com/cake-build/cake#contributors)
 8. [External add-ons](https://github.com/cake-build/cake#external-add-ons)
 9. [License](https://github.com/cake-build/cake#license)
 
@@ -159,19 +159,6 @@ You can read the latest documentation at [http://cake.readthedocs.org/](http://c
 
 The Cake [Bootstrapper](https://github.com/cake-build/bootstrapper) is a Powershell cmdlet that helps you set up a new Cake build by downloading dependencies, setting up the bootstrapper script and creating a Cake build script.
 
-## Contributors
-
-Contributions have been accepted from:
-
-Patrik Svensson ([@patriksvensson](https://github.com/patriksvensson))   
-Mattias Karlsson ([@devlead](https://github.com/devlead))   
-Fredrik Leijon ([@FredrikL](https://github.com/FredrikL))   
-Viktor Elofsson ([@vktr](https://github.com/vktr))   
-Jeff Doolittle ([@jeffdoolittle](https://github.com/jeffdoolittle))   
-Richard Simpson ([@RichiCoder1](https://github.com/RichiCoder1))   
-
-Thank you very much!
-
 ## Contributing
 
 So you’re thinking about contributing to Cake? Great! It’s **really** appreciated.   
@@ -182,6 +169,10 @@ Make sure you've read the [contribution guidelines](http://cake.readthedocs.org/
 * Make your feature addition or bug fix.
 * Don't forget the unit tests.
 * Send a pull request. Bonus for topic branches. *Funny .gif will be your reward.*  
+
+## Contributors
+
+The full list of contributors can be found at [http://cake.readthedocs.org/en/latest/contributors.html](http://cake.readthedocs.org/en/latest/contributors.html).
 
 ## External add-ons
 
