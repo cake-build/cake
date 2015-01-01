@@ -2,7 +2,6 @@
 using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Cake.Core.Tests.Unit.IO
 {
@@ -85,6 +84,19 @@ namespace Cake.Core.Tests.Unit.IO
 
         public sealed class TheAppendExtensionMethod
         {
+            [Fact]
+            public void Should_Throw_If_Extension_Is_Null()
+            {
+                // Given
+                var path = new FilePath("temp/hello.txt");
+
+                // When
+                var result = Record.Exception(() => path.AppendExtension(null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "extension");
+            }
+
             [Theory]
             [InlineData("dat", "temp/hello.txt.dat")]
             [InlineData(".dat", "temp/hello.txt.dat")]
@@ -122,15 +134,28 @@ namespace Cake.Core.Tests.Unit.IO
             public sealed class WithEnvironment
             {
                 [Fact]
+                public void Should_Throw_If_Environment_Is_Null()
+                {
+                    // Given
+                    var path = new FilePath("temp/hello.txt");
+
+                    // When
+                    var result = Record.Exception(() => path.MakeAbsolute((ICakeEnvironment)null));
+
+                    // Then
+                    Assert.IsArgumentNullException(result, "environment");
+                }
+
+                [Fact]
                 public void Should_Return_A_Absolute_File_Path_If_File_Path_Is_Relative()
                 {
                     // Given
-                    var file = new FilePath("./test.txt");
+                    var path = new FilePath("./test.txt");
                     var environment = Substitute.For<ICakeEnvironment>();
                     environment.WorkingDirectory.Returns(new DirectoryPath("/absolute"));
 
                     // When 
-                    var result = file.MakeAbsolute(environment);
+                    var result = path.MakeAbsolute(environment);
 
                     // Then
                     Assert.Equal("/absolute/test.txt", result.FullPath);
@@ -140,12 +165,12 @@ namespace Cake.Core.Tests.Unit.IO
                 public void Should_Return_Same_File_Path_If_File_Path_Is_Absolute()
                 {
                     // Given
-                    var file = new FilePath("/test.txt");
+                    var path = new FilePath("/test.txt");
                     var environment = Substitute.For<ICakeEnvironment>();
                     environment.WorkingDirectory.Returns(new DirectoryPath("/absolute"));
 
                     // When 
-                    var result = file.MakeAbsolute(environment);
+                    var result = path.MakeAbsolute(environment);
 
                     // Then
                     Assert.Equal("/test.txt", result.FullPath);
@@ -158,25 +183,24 @@ namespace Cake.Core.Tests.Unit.IO
                 public void Should_Throw_If_Provided_Directory_Is_Null()
                 {
                     // Given
-                    var file = new FilePath("./test.txt");
+                    var path = new FilePath("./test.txt");
 
                     // When 
-                    var result = Record.Exception(() => file.MakeAbsolute((DirectoryPath) null));
+                    var result = Record.Exception(() => path.MakeAbsolute((DirectoryPath)null));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("path", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "path");
                 }
 
                 [Fact]
                 public void Should_Throw_If_Provided_Directory_Is_Relative()
                 {
                     // Given
-                    var file = new FilePath("./test.txt");
+                    var path = new FilePath("./test.txt");
                     var directory = new DirectoryPath("./relative");
 
                     // When 
-                    var result = Record.Exception(() => file.MakeAbsolute(directory));
+                    var result = Record.Exception(() => path.MakeAbsolute(directory));
 
                     // Then
                     Assert.IsType<InvalidOperationException>(result);
@@ -187,11 +211,11 @@ namespace Cake.Core.Tests.Unit.IO
                 public void Should_Return_A_Absolute_File_Path_If_File_Path_Is_Relative()
                 {
                     // Given
-                    var file = new FilePath("./test.txt");
+                    var path = new FilePath("./test.txt");
                     var directory = new DirectoryPath("/absolute");
 
                     // When 
-                    var result = file.MakeAbsolute(directory);
+                    var result = path.MakeAbsolute(directory);
 
                     // Then
                     Assert.Equal("/absolute/test.txt", result.FullPath); 
@@ -201,11 +225,11 @@ namespace Cake.Core.Tests.Unit.IO
                 public void Should_Return_Same_File_Path_If_File_Path_Is_Absolute()
                 {
                     // Given
-                    var file = new FilePath("/test.txt");
+                    var path = new FilePath("/test.txt");
                     var directory = new DirectoryPath("/absolute");
 
                     // When 
-                    var result = file.MakeAbsolute(directory);
+                    var result = path.MakeAbsolute(directory);
 
                     // Then
                     Assert.Equal("/test.txt", result.FullPath);

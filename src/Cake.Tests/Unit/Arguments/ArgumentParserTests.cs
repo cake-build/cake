@@ -2,11 +2,10 @@
 using Cake.Arguments;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Core.Tests.Fakes;
+using Cake.Testing.Fakes;
 using Cake.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Cake.Tests.Unit.Arguments
 {
@@ -25,8 +24,7 @@ namespace Cake.Tests.Unit.Arguments
                 var result = Record.Exception(() => parser.Parse(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("args", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "args");
             }
 
             [Fact]
@@ -70,6 +68,25 @@ namespace Cake.Tests.Unit.Arguments
 
                 // When
                 var result = parser.Parse(new[] { "build.csx", "-unknown" });
+
+                // Then
+                Assert.True(result.Arguments.ContainsKey("unknown"));
+            }
+
+            [Fact]
+            public void Should_Add_Unknown_Arguments_To_Argument_List_Without_Script()
+            {
+                // Given
+                var fakeFileSystem = new FakeFileSystem(isUnix: false);
+                var fakePath = new FilePath("build.cake");
+                var fakeFile = new FakeFile(fakeFileSystem, fakePath) { Exists = true };
+                var fixture = new ArgumentParserFixture { FileSystem = fakeFileSystem };
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                fakeFileSystem.Files.Add(fakePath, fakeFile);
+
+                // When
+                var result = parser.Parse(new[] { "-unknown" });
 
                 // Then
                 Assert.True(result.Arguments.ContainsKey("unknown"));

@@ -1,7 +1,6 @@
 ﻿using System;
 using Cake.Core.IO;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Cake.Core.Tests.Unit.IO
 {
@@ -28,8 +27,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => new TestingPath(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("path", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "path");
             }
 
             [Theory]

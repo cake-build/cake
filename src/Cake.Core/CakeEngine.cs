@@ -21,6 +21,7 @@ namespace Cake.Core
         private readonly ICakeArguments _arguments;
         private readonly IProcessRunner _processRunner;
         private readonly List<CakeTask> _tasks;
+        private readonly ILookup<string, IToolResolver> _toolResolverLookup;
         private Action _setupAction;
         private Action _teardownAction;
 
@@ -88,6 +89,21 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Gets resolver by tool name
+        /// </summary>
+        /// <param name="toolName">resolver tool name</param>
+        /// <returns>IToolResolver for tool</returns>
+        public IToolResolver GetToolResolver(string toolName)
+        {
+            var toolResolver = _toolResolverLookup[toolName].FirstOrDefault();
+            if (toolResolver == null)
+            {
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, "Failed to resolve tool: {0}", toolName));
+            }
+            return toolResolver;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CakeEngine"/> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
@@ -96,8 +112,10 @@ namespace Cake.Core
         /// <param name="arguments">The arguments.</param>
         /// <param name="globber">The globber.</param>
         /// <param name="processRunner">The process runner.</param>
+        /// <param name="toolResolvers">The tool resolvers.</param>
         public CakeEngine(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log, 
-            ICakeArguments arguments, IGlobber globber, IProcessRunner processRunner)
+            ICakeArguments arguments, IGlobber globber, IProcessRunner processRunner,
+            IEnumerable<IToolResolver> toolResolvers)
         {
             if (fileSystem == null)
             {
@@ -123,6 +141,10 @@ namespace Cake.Core
             {
                 throw new ArgumentNullException("processRunner");
             }
+            if (processRunner == null)
+            {
+                throw new ArgumentNullException("toolResolvers");
+            }
             _fileSystem = fileSystem;
             _environment = environment;
             _log = log;            
@@ -130,6 +152,11 @@ namespace Cake.Core
             _globber = globber;
             _processRunner = processRunner;
             _tasks = new List<CakeTask>();
+            _toolResolverLookup =toolResolvers.ToLookup(
+                key=>key.Name,
+                value=>value,
+                StringComparer.OrdinalIgnoreCase
+                );
         }
 
         /// <summary>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -14,25 +13,26 @@ namespace Cake.Common.Tools.NuGet.Pack
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
-        private readonly IGlobber _globber;
         private readonly NuspecProcessor _processor;
+        private readonly IToolResolver _nuGetToolResolver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetPacker"/> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
-        /// <param name="globber">The globber.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="log">The log.</param>
+        /// <param name="nuGetToolResolver">The NuGet tool resolver</param>
         public NuGetPacker(IFileSystem fileSystem, ICakeEnvironment environment,
-            IGlobber globber, IProcessRunner processRunner, ICakeLog log)
+            IProcessRunner processRunner, ICakeLog log,
+            IToolResolver nuGetToolResolver)
             : base(fileSystem, environment, processRunner)
         {
             _fileSystem = fileSystem;
             _environment = environment;
-            _globber = globber;
-            _processor = new NuspecProcessor(_fileSystem, _environment, log);    
+            _processor = new NuspecProcessor(_fileSystem, _environment, log);
+            _nuGetToolResolver = nuGetToolResolver;
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <returns>The name of the tool.</returns>
         protected override string GetToolName()
         {
-            return "NuGet";
+            return _nuGetToolResolver.Name;
         }
 
         /// <summary>
@@ -133,8 +133,7 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <returns>The default tool path.</returns>
         protected override FilePath GetDefaultToolPath(NuGetPackSettings settings)
         {
-            const string expression = "./tools/**/NuGet.exe";
-            return _globber.GetFiles(expression).FirstOrDefault();
+            return _nuGetToolResolver.ResolveToolPath();
         }
     }
 }

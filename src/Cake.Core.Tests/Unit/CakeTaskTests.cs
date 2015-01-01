@@ -1,6 +1,5 @@
 ﻿using System;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Cake.Core.Tests.Unit
 {
@@ -12,11 +11,10 @@ namespace Cake.Core.Tests.Unit
             public void Should_Throw_If_Name_Is_Null()
             {
                 // Given, When
-                var exception = Record.Exception(() => new ActionTask(null));
+                var result = Record.Exception(() => new ActionTask(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(exception);
-                Assert.Equal("name", ((ArgumentNullException)exception).ParamName);
+                Assert.IsArgumentNullException(result, "name");
             }
 
             [Theory]
@@ -27,11 +25,11 @@ namespace Cake.Core.Tests.Unit
             public void Should_Throw_If_Name_Is_Empty(string name)
             {
                 // Given, When
-                var exception = Record.Exception(() => new ActionTask(name));
+                var result = Record.Exception(() => new ActionTask(name));
 
                 // Then
-                Assert.IsType<ArgumentException>(exception);
-                Assert.Equal("Task name cannot be empty.", exception.Message);
+                Assert.IsType<ArgumentException>(result);
+                Assert.Equal("Task name cannot be empty.", result.Message);
             }
         }
 
@@ -60,11 +58,11 @@ namespace Cake.Core.Tests.Unit
                 task.AddDependency("other");
 
                 // When
-                var exception = Record.Exception(() => task.AddDependency("other"));
+                var result = Record.Exception(() => task.AddDependency("other"));
 
                 // Then
-                Assert.IsType<CakeException>(exception);
-                Assert.Equal("The task 'task' already have a dependency on 'other'.", exception.Message);
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("The task 'task' already have a dependency on 'other'.", result.Message);
             }
         }
 
@@ -77,11 +75,10 @@ namespace Cake.Core.Tests.Unit
                 var task = new ActionTask("task");
 
                 // When
-                var exception = Record.Exception(() => task.AddCriteria(null));
+                var result = Record.Exception(() => task.AddCriteria(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(exception);
-                Assert.Equal("criteria", ((ArgumentNullException)exception).ParamName);
+                Assert.IsArgumentNullException(result, "criteria");
             }
 
             [Fact]
@@ -107,11 +104,10 @@ namespace Cake.Core.Tests.Unit
                 var task = new ActionTask("task");
 
                 // When
-                var exception = Record.Exception(() => task.SetErrorHandler(null));
+                var result = Record.Exception(() => task.SetErrorHandler(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(exception);
-                Assert.Equal("errorHandler", ((ArgumentNullException)exception).ParamName);
+                Assert.IsArgumentNullException(result, "errorHandler");
             }
 
             [Fact]

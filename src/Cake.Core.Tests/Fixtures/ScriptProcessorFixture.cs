@@ -1,12 +1,12 @@
 ﻿using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting;
-using Cake.Core.Tests.Fakes;
+using Cake.Testing.Fakes;
 using NSubstitute;
 
 namespace Cake.Core.Tests.Fixtures
 {
-    public sealed class ScriptProcessorFixture
+    internal sealed class ScriptProcessorFixture
     {
         public FakeFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }

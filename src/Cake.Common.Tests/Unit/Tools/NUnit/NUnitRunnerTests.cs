@@ -5,7 +5,6 @@ using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Cake.Common.Tests.Unit.Tools.NUnit
 {
@@ -16,13 +15,15 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
             [Fact]
             public void Should_Throw_If_Assembly_Path_Is_Null()
             {
+                // Given
                 var fixture = new NUnitRunnerFixture();
                 var runner = fixture.CreateRunner();
 
+                // When
                 var result = Record.Exception(() => runner.Run(null, new NUnitSettings()));
 
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("assemblyPath", ((ArgumentNullException)result).ParamName);
+                // Then
+                Assert.IsArgumentNullException(result, "assemblyPath");
             }
 
             [Fact]

@@ -7,7 +7,6 @@ using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Cake.Common.Tests.Unit.Tools.WiX
 {
@@ -26,8 +25,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 var result = Record.Exception(() => fixture.CreateCandleRunner());
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("environment", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -41,8 +39,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 var result = Record.Exception(() => fixture.CreateCandleRunner());
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("globber", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "globber");
             }
         }
 
@@ -59,8 +56,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 var result = Record.Exception(() => runner.Run(null, new CandleSettings()));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("sourceFiles", ((ArgumentNullException) result).ParamName);
+                Assert.IsArgumentNullException(result, "sourceFiles");
             }
 
             [Fact]
@@ -89,8 +85,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 var result = Record.Exception(() => runner.Run(new[] {new FilePath("/Working/File.lol")}, null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("settings", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "settings");
             }
 
             [Fact]

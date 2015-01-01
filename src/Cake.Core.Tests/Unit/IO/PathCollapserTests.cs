@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Core.IO;
+﻿using Cake.Core.IO;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit.IO
@@ -15,8 +14,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => PathCollapser.Collapse(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("path", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "path");
             }
 
             [Fact]

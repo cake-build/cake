@@ -1,7 +1,6 @@
 ﻿using Cake.Core.IO;
 using Cake.Core.IO.Arguments;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Cake.Core.Tests.Unit.IO.Arguments
 {

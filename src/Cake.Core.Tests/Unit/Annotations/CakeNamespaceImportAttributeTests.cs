@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Core.Annotations;
+﻿using Cake.Core.Annotations;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit.Annotations
@@ -12,11 +11,10 @@ namespace Cake.Core.Tests.Unit.Annotations
             public void Should_Throw_If_Namespace_Is_Null()
             {
                 // Given, When
-                var exception = Record.Exception(() => new CakeNamespaceImportAttribute(null));
+                var result = Record.Exception(() => new CakeNamespaceImportAttribute(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(exception);
-                Assert.Equal("namespace", ((ArgumentNullException)exception).ParamName);
+                Assert.IsArgumentNullException(result, "namespace");
             }
         }
     }

@@ -1,10 +1,11 @@
-﻿using Cake.Core.IO;
-using Cake.Core.Tests.Fakes;
+﻿using System.Collections.Generic;
+using Cake.Core.IO;
+using Cake.Testing.Fakes;
 using NSubstitute;
 
 namespace Cake.Core.Tests.Fixtures
 {
-    public sealed class CakeEngineFixture
+    internal sealed class CakeEngineFixture
     {
         public IFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
@@ -12,6 +13,7 @@ namespace Cake.Core.Tests.Fixtures
         public IGlobber Globber { get; set; }
         public ICakeArguments Arguments { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
+        public IEnumerable<IToolResolver> ToolResolvers { get; set; }
 
         public CakeEngineFixture()
         {
@@ -21,11 +23,12 @@ namespace Cake.Core.Tests.Fixtures
             Globber = Substitute.For<IGlobber>();
             Arguments = Substitute.For<ICakeArguments>();
             ProcessRunner = Substitute.For<IProcessRunner>();
+            ToolResolvers = Substitute.For<IEnumerable<IToolResolver>>();
         }
 
         public CakeEngine CreateEngine()
         {
-            return new CakeEngine(FileSystem, Environment, Log, Arguments, Globber, ProcessRunner);
+            return new CakeEngine(FileSystem, Environment, Log, Arguments, Globber, ProcessRunner, ToolResolvers);
         }
     }
 }

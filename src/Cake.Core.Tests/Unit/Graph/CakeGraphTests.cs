@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Cake.Core.Graph;
 using Xunit;
 
@@ -16,11 +15,10 @@ namespace Cake.Core.Tests.Unit.Graph
                 var graph = new CakeGraph();
 
                 // When
-                var exception = Record.Exception(() => graph.Add(null));
+                var result = Record.Exception(() => graph.Add(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(exception);
-                Assert.Equal("node", ((ArgumentNullException)exception).ParamName);
+                Assert.IsArgumentNullException(result, "node");
             }
 
             [Fact]
@@ -44,11 +42,11 @@ namespace Cake.Core.Tests.Unit.Graph
                 graph.Add("start");
 
                 // When
-                var exception = Record.Exception(() => graph.Add("start"));
+                var result = Record.Exception(() => graph.Add("start"));
 
                 // Then
-                Assert.IsType<CakeException>(exception);
-                Assert.Equal("Node has already been added to graph.", exception.Message);
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("Node has already been added to graph.", result.Message);
             }
         }
 
@@ -131,11 +129,11 @@ namespace Cake.Core.Tests.Unit.Graph
                 var graph = new CakeGraph();
 
                 // When
-                var exception = Record.Exception(() => graph.Connect("start", "start"));
+                var result = Record.Exception(() => graph.Connect("start", "start"));
 
                 // Then
-                Assert.IsType<CakeException>(exception);
-                Assert.Equal("Reflexive edges in graph are not allowed.", exception.Message);
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("Reflexive edges in graph are not allowed.", result.Message);
             }
 
             [Fact]
@@ -146,11 +144,11 @@ namespace Cake.Core.Tests.Unit.Graph
                 graph.Connect("start", "end");
 
                 // When
-                var exception = Record.Exception(() => graph.Connect("end", "start"));
+                var result = Record.Exception(() => graph.Connect("end", "start"));
 
                 // Then
-                Assert.IsType<CakeException>(exception);
-                Assert.Equal("Unidirectional edges in graph are not allowed.", exception.Message);
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("Unidirectional edges in graph are not allowed.", result.Message);
             }
 
             [Fact]
@@ -161,11 +159,11 @@ namespace Cake.Core.Tests.Unit.Graph
                 graph.Connect("start", "end");
 
                 // When
-                var exception = Record.Exception(() => graph.Connect("END", "START"));
+                var result = Record.Exception(() => graph.Connect("END", "START"));
 
                 // Then
-                Assert.IsType<CakeException>(exception);
-                Assert.Equal("Unidirectional edges in graph are not allowed.", exception.Message);
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("Unidirectional edges in graph are not allowed.", result.Message);
             }
         }
 
@@ -292,10 +290,10 @@ namespace Cake.Core.Tests.Unit.Graph
                 graph.Connect("B", "C");
                 graph.Connect("C", "A");
 
-                var exception = Record.Exception(() => graph.Traverse("C"));
+                var result = Record.Exception(() => graph.Traverse("C"));
 
-                Assert.IsType<CakeException>(exception);
-                Assert.Equal("Graph contains circular references.", exception.Message);
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("Graph contains circular references.", result.Message);
             }
         }
     }

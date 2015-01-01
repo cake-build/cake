@@ -1,13 +1,10 @@
-﻿using System;
-using System.Linq;
-using Cake.Common.Tests.Fixtures;
+﻿using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.NuGet;
 using Cake.Common.Tools.NuGet.Restore;
 using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
 {
@@ -26,8 +23,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 var result = Record.Exception(() => restorer.Restore(null, new NuGetRestoreSettings()));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("targetFilePath", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "targetFilePath");
             }
 
             [Fact]
@@ -41,8 +37,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 var result = Record.Exception(() => restorer.Restore("./project.sln", null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("settings", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -50,7 +45,6 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             {
                 // Given
                 var fixture = new NuGetFixture(defaultToolExist: false);
-                fixture.Globber.Match("./tools/**/NuGet.exe").Returns(Enumerable.Empty<FilePath>());
                 var restorer = fixture.CreateRestorer();
 
                 // When

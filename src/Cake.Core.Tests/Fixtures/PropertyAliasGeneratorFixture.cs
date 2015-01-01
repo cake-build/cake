@@ -2,7 +2,7 @@
 
 namespace Cake.Core.Tests.Fixtures
 {
-    public static class PropertyAliasGeneratorFixture
+    internal static class PropertyAliasGeneratorFixture
     {
         public static void NotAnExtensionMethod()
         {

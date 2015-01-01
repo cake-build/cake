@@ -1,8 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Cake.Core.IO;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Cake.Core.Tests.Unit.IO
 {
@@ -17,8 +15,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => new DirectoryPathCollection(Enumerable.Empty<DirectoryPath>(), null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("comparer", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "comparer");
             }
         }
 

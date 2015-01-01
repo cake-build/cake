@@ -4,7 +4,7 @@ using Cake.Core.Annotations;
 
 namespace Cake.Core.Tests.Fixtures
 {
-    public static class MethodAliasGeneratorFixture
+    internal static class MethodAliasGeneratorFixture
     {
         public static void NotAnExtensionMethod()
         {

@@ -70,13 +70,11 @@ namespace Cake.Core.Tests.Unit
                     var task = new ActionTask("task");
                     var builder = new CakeTaskBuilder<ActionTask>(task);
 
-
                     // When
-                    var exception = Record.Exception(() => builder.Does((Action)null));
+                    var result = Record.Exception(() => builder.Does((Action)null));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(exception);
-                    Assert.Equal("action", ((ArgumentNullException)exception).ParamName);
+                    Assert.IsArgumentNullException(result, "action");
                 }
 
                 [Fact]

@@ -1,6 +1,6 @@
 # Build script
 build_script:
-  - ps: .\build.ps1 -Target "AppVeyor"
+  - cmd: powershell -NoProfile -ExecutionPolicy unrestricted -Command .\build.ps1
 
 # Tests
 test: off

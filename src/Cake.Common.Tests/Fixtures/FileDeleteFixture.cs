@@ -5,7 +5,7 @@ using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures
 {
-    public sealed class FileDeleteFixture
+    internal sealed class FileDeleteFixture
     {
         private readonly List<IFile> _files;
         private readonly List<FilePath> _paths;

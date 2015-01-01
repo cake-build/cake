@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5572610D-D857-450A-9CC9-F3E08B0E1449}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Cake.Testing</RootNamespace>
+    <AssemblyName>Cake.Testing</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
+    <Compile Include="Asserts\Assert.cs" />
+    <Compile Include="Asserts\BooleanAsserts.cs" />
+    <Compile Include="Asserts\CollectionAsserts.cs" />
+    <Compile Include="Asserts\Comparers.cs" />
+    <Compile Include="Asserts\EqualityAsserts.cs" />
+    <Compile Include="Asserts\ExceptionAsserts.cs" />
+    <Compile Include="Asserts\Guards.cs" />
+    <Compile Include="Asserts\IdentityAsserts.cs" />
+    <Compile Include="Asserts\NullAsserts.cs" />
+    <Compile Include="Asserts\PropertyAsserts.cs" />
+    <Compile Include="Asserts\RangeAsserts.cs" />
+    <Compile Include="Asserts\Record.cs" />
+    <Compile Include="Asserts\Sdk\ArgumentFormatter.cs" />
+    <Compile Include="Asserts\Sdk\AssertComparer.cs" />
+    <Compile Include="Asserts\Sdk\AssertEqualityComparer.cs" />
+    <Compile Include="Asserts\Sdk\AssertEqualityComparerAdapter.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\AllException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\AssertActualExpectedException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\AssertCollectionCountException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\CollectionException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\ContainsException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\DoesNotContainException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\DoesNotMatchException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\EmptyException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\EndsWithException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\EqualException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\FalseException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\InRangeException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\IsAssignableFromException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\IsNotTypeException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\IsTypeException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\MatchesException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\NoneException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\NotEmptyException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\NotEqualException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\NotInRangeException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\NotNullException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\NotSameException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\NullException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\ParameterCountMismatchException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\ProperSubsetException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\ProperSupersetException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\PropertyChangedException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\SameException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\SingleException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\StartsWithException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\SubsetException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\SupersetException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\ThrowsException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\TrueException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\XunitException.cs" />
+    <Compile Include="Asserts\SetAsserts.cs" />
+    <Compile Include="Asserts\StringAsserts.cs" />
+    <Compile Include="Asserts\TypeAsserts.cs" />
+    <Compile Include="ExceptionAsserts.cs" />
+    <Compile Include="Fakes\FakeConsole.cs" />
+    <Compile Include="Fakes\FakeDirectory.cs" />
+    <Compile Include="Fakes\FakeFile.cs" />
+    <Compile Include="Fakes\FakeFileStream.cs" />
+    <Compile Include="Fakes\FakeFileSystem.cs" />
+    <Compile Include="Fakes\FakeLog.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
+      <Project>{8074b833-11b8-459f-bb98-bfba2bc5c698}</Project>
+      <Name>Cake.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

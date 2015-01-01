@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Utilities;
@@ -13,20 +12,21 @@ namespace Cake.Common.Tools.NuGet.Push
     public sealed class NuGetPusher : Tool<NuGetPushSettings>
     {
         private readonly ICakeEnvironment _environment;
-        private readonly IGlobber _globber;
+        private readonly IToolResolver _nuGetToolResolver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetPusher"/> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
-        /// <param name="globber">The globber.</param>
         /// <param name="processRunner">The process runner.</param>
-        public NuGetPusher(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
+        /// <param name="nuGetToolResolver">The NuGet tool resolver.</param>
+        public NuGetPusher(IFileSystem fileSystem, ICakeEnvironment environment,
+            IProcessRunner processRunner, IToolResolver nuGetToolResolver)
             : base(fileSystem, environment, processRunner)
         {
             _environment = environment;
-            _globber = globber;
+            _nuGetToolResolver = nuGetToolResolver;
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace Cake.Common.Tools.NuGet.Push
         /// <returns>The name of the tool.</returns>
         protected override string GetToolName()
         {
-            return "NuGet";
+            return _nuGetToolResolver.Name;
         }
 
         /// <summary>
@@ -104,8 +104,7 @@ namespace Cake.Common.Tools.NuGet.Push
         /// <returns>The default tool path.</returns>
         protected override FilePath GetDefaultToolPath(NuGetPushSettings settings)
         {
-            const string expression = "./tools/**/NuGet.exe";
-            return _globber.GetFiles(expression).FirstOrDefault();
+            return _nuGetToolResolver.ResolveToolPath();
         }
     }
 }

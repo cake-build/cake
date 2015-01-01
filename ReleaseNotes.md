@@ -1,4 +1,6 @@
-### New in 0.1.24 (Releases 2014/12/12)
+### New in 0.1.25
+
+### New in 0.1.24 (Released 2014/12/12)
 * Added support for NuGet sources.
 * Added solution and project parsers.
 

@@ -7,7 +7,6 @@ using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Cake.Common.Tests.Unit.Tools.WiX
 {
@@ -26,8 +25,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 var result = Record.Exception(() => runner.Run(null, new LightSettings()));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("objectFiles", ((ArgumentNullException) result).ParamName);
+                Assert.IsArgumentNullException(result, "objectFiles");
             }
 
             [Fact]
@@ -56,8 +54,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 var result = Record.Exception(() => runner.Run(new[] {new FilePath("/Working/File.lol")}, null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("settings", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "settings");
             }
 
             [Fact]

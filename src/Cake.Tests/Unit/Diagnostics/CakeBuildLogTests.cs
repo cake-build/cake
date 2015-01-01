@@ -1,8 +1,7 @@
 ﻿using Cake.Core.Diagnostics;
 using Cake.Diagnostics;
-using Cake.Tests.Fakes;
+using Cake.Testing.Fakes;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Cake.Tests.Unit.Diagnostics
 {

@@ -5,7 +5,7 @@ using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures
 {
-    public sealed class XUnit2RunnerFixture
+    internal sealed class XUnit2RunnerFixture
     {
         public IFileSystem FileSystem { get; set; }
         public IProcess Process { get; set; }

@@ -1,11 +1,10 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
 using Cake.Common.IO;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Core.Tests.Fakes;
+using Cake.Testing.Fakes;
 using NSubstitute;
 using Xunit;
 
@@ -26,8 +25,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => new Zipper(null, environment, log));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("fileSystem", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -41,8 +39,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => new Zipper(fileSystem, null, log));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("environment", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -56,8 +53,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => new Zipper(fileSystem, environment, null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("log", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "log");
             }
         }
 
@@ -76,8 +72,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => zipper.Zip(null, "/file.zip", new FilePath[] {"/Root/file.txt"}));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("rootPath", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "rootPath");
             }
 
             [Fact]
@@ -93,8 +88,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => zipper.Zip("/Root", null, new FilePath[] { "/Root/file.txt" }));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("outputPath", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "outputPath");
             }
 
             [Fact]
@@ -110,8 +104,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => zipper.Zip("/Root", "/file.txt", null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("filePaths", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "filePaths");
             }
 
             [Fact]

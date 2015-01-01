@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\xunit.core.2.0.0-beta4-build2738\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.0.0-beta4-build2738\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid\xunit.core.props')" />
+  <Import Project="..\packages\xunit.core.2.0.0-beta5-build2785\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.0.0-beta5-build2785\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid\xunit.core.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,7 +12,7 @@
     <AssemblyName>Cake.Common.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>d5998e7a</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>02c21e58</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NSubstitute">
-      <HintPath>..\packages\NSubstitute.1.7.2.0\lib\NET45\NSubstitute.dll</HintPath>
+      <HintPath>..\packages\NSubstitute.1.8.1.0\lib\net45\NSubstitute.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -43,30 +43,16 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="xunit.abstractions">
-      <HintPath>..\packages\xunit.abstractions.2.0.0-beta4-build2738\lib\net35\xunit.abstractions.dll</HintPath>
+    <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\xunit.abstractions.2.0.0-beta5-build2785\lib\net35\xunit.abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.assert">
-      <HintPath>..\packages\xunit.assert.2.0.0-beta4-build2738\lib\portable-net45+win+wpa81+wp80+monoandroid+monotouch10\xunit.assert.dll</HintPath>
-    </Reference>
-    <Reference Include="xunit.core">
-      <HintPath>..\packages\xunit.core.2.0.0-beta4-build2738\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid\xunit.core.dll</HintPath>
+    <Reference Include="xunit.core, Version=2.0.0.2785, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\xunit.core.2.0.0-beta5-build2785\lib\portable-net45+aspnetcore50+win+wpa81+wp80+monotouch+monoandroid\xunit.core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\cake.core.tests\fakes\FakeDirectory.cs">
-      <Link>Fakes\FakeDirectory.cs</Link>
-    </Compile>
-    <Compile Include="..\cake.core.tests\fakes\FakeFile.cs">
-      <Link>Fakes\FakeFile.cs</Link>
-    </Compile>
-    <Compile Include="..\cake.core.tests\fakes\FakeFileStream.cs">
-      <Link>Fakes\FakeFileStream.cs</Link>
-    </Compile>
-    <Compile Include="..\cake.core.tests\fakes\FakeFileSystem.cs">
-      <Link>Fakes\FakeFileSystem.cs</Link>
-    </Compile>
-    <Compile Include="Extensions\StringBuilderExtensions.cs" />
     <Compile Include="Fixtures\AssemblyInfoFixture.cs" />
     <Compile Include="Fixtures\AssemblyInfoParserFixture.cs" />
     <Compile Include="Fixtures\FileCopyFixture.cs" />
@@ -78,6 +64,7 @@
     <Compile Include="Fixtures\MSTestRunnerFixture.cs" />
     <Compile Include="Fixtures\NUnitRunnerFixture.cs" />
     <Compile Include="Fixtures\ProcessFixture.cs" />
+    <Compile Include="Fixtures\TextTransformationFixture.cs" />
     <Compile Include="Fixtures\WiXFixture.cs" />
     <Compile Include="Fixtures\XUnit2RunnerFixture.cs" />
     <Compile Include="Fixtures\XUnitRunnerFixture.cs" />
@@ -88,17 +75,20 @@
     </Compile>
     <Compile Include="Unit\Solution\Project\Properties\AssemblyInfoCreatorTests.cs" />
     <Compile Include="Unit\Solution\Project\Properties\AssemblyInfoParserTests.cs" />
-    <Compile Include="Unit\Diagnostics\LoggingExtensionsTests.cs" />
-    <Compile Include="Unit\EnvironmentExtensionsTests.cs" />
-    <Compile Include="Unit\ProcessExtensionsTests.cs" />
-    <Compile Include="Unit\ReleaseNotesExtensionsTests.cs" />
+    <Compile Include="Unit\Diagnostics\LoggingAliasesTests.cs" />
+    <Compile Include="Unit\EnvironmentAliasesTests.cs" />
+    <Compile Include="Unit\ProcessAliasesTests.cs" />
+    <Compile Include="Unit\ReleaseNotesAliasesTests.cs" />
     <Compile Include="Unit\ReleaseNotesParserTests.cs" />
     <Compile Include="Unit\ReleaseNotesTests.cs" />
+    <Compile Include="Unit\Text\TextTransformationAliasesTests.cs" />
+    <Compile Include="Unit\Text\TextTransformationExtensionsTests.cs" />
+    <Compile Include="Unit\Text\TextTransformationTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeSettingsTests.cs" />
     <Compile Include="Unit\IO\ZipperTests.cs" />
-    <Compile Include="Unit\IO\DirectoryExtensionsTests.cs" />
-    <Compile Include="Unit\IO\FileExtensionsTests.cs" />
+    <Compile Include="Unit\IO\DirectoryAliasesTests.cs" />
+    <Compile Include="Unit\IO\FileAliasesTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildRunnerTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsExtensionsTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsTests.cs" />
@@ -132,6 +122,10 @@
       <Project>{8074b833-11b8-459f-bb98-bfba2bc5c698}</Project>
       <Name>Cake.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Cake.Testing\Cake.Testing.csproj">
+      <Project>{5572610d-d857-450a-9cc9-f3e08b0e1449}</Project>
+      <Name>Cake.Testing</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -150,7 +144,7 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\xunit.core.2.0.0-beta4-build2738\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.0.0-beta4-build2738\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid\xunit.core.props'))" />
+    <Error Condition="!Exists('..\packages\xunit.core.2.0.0-beta5-build2785\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.0.0-beta5-build2785\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid\xunit.core.props'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

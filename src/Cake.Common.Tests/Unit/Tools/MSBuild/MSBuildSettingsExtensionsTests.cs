@@ -1,7 +1,6 @@
 ﻿using Cake.Common.Tools.MSBuild;
 using Cake.Core.IO;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Cake.Common.Tests.Unit.Tools.MSBuild
 {

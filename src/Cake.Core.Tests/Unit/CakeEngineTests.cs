@@ -20,8 +20,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateEngine());
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("fileSystem", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -34,8 +33,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateEngine());
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("environment", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -48,8 +46,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateEngine());
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("arguments", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "arguments");
             }
 
             [Fact]
@@ -62,8 +59,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateEngine());
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("globber", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "globber");
             }
 
             [Fact]
@@ -76,8 +72,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateEngine());
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("processRunner", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "processRunner");
             }
 
             [Fact]
@@ -90,8 +85,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateEngine());
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("log", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "log");
             }
 
             [Fact]
@@ -403,12 +397,12 @@ namespace Cake.Core.Tests.Unit
                 engine.Task("A").Does(() => { throw new InvalidOperationException("Fail"); });
 
                 // When
-                var exception = Record.Exception(() => engine.RunTarget("A"));
+                var result = Record.Exception(() => engine.RunTarget("A"));
 
                 // Then
-                Assert.NotNull(exception);
-                Assert.IsType<InvalidOperationException>(exception);
-                Assert.Equal("Fail", exception.Message);
+                Assert.NotNull(result);
+                Assert.IsType<InvalidOperationException>(result);
+                Assert.Equal("Fail", result.Message);
                 Assert.True(fixture.Log.Messages.Contains("Executing custom teardown action..."));
             }
 
@@ -424,12 +418,12 @@ namespace Cake.Core.Tests.Unit
                 engine.Task("A").Does(() => { });
 
                 // When
-                var exception = Record.Exception(() => engine.RunTarget("A"));
+                var result = Record.Exception(() => engine.RunTarget("A"));
 
                 // Then
-                Assert.NotNull(exception);
-                Assert.IsType<InvalidOperationException>(exception);
-                Assert.Equal("Fail", exception.Message);
+                Assert.NotNull(result);
+                Assert.IsType<InvalidOperationException>(result);
+                Assert.Equal("Fail", result.Message);
                 Assert.True(fixture.Log.Messages.Contains("Executing custom teardown action..."));
             }
 
@@ -445,12 +439,12 @@ namespace Cake.Core.Tests.Unit
                 engine.Task("A").Does(() => { });
 
                 // When
-                var exception = Record.Exception(() => engine.RunTarget("A"));
+                var result = Record.Exception(() => engine.RunTarget("A"));
 
                 // Then
-                Assert.NotNull(exception);
-                Assert.IsType<InvalidOperationException>(exception);
-                Assert.Equal("Setup", exception.Message);
+                Assert.NotNull(result);
+                Assert.IsType<InvalidOperationException>(result);
+                Assert.Equal("Setup", result.Message);
             }
 
             [Fact]
@@ -465,10 +459,10 @@ namespace Cake.Core.Tests.Unit
                 engine.Task("A").Does(() => { });
 
                 // When
-                var exception = Record.Exception(() => engine.RunTarget("A"));
+                var result = Record.Exception(() => engine.RunTarget("A"));
 
                 // Then
-                Assert.Equal(expected, exception);
+                Assert.Equal(expected, result);
             }
 
             [Fact]
@@ -500,12 +494,12 @@ namespace Cake.Core.Tests.Unit
                 engine.Task("A").Does(() => { throw new InvalidOperationException("Task"); });
 
                 // When
-                var exception = Record.Exception(() => engine.RunTarget("A"));
+                var result = Record.Exception(() => engine.RunTarget("A"));
 
                 // Then
-                Assert.NotNull(exception);
-                Assert.IsType<InvalidOperationException>(exception);
-                Assert.Equal("Task", exception.Message);
+                Assert.NotNull(result);
+                Assert.IsType<InvalidOperationException>(result);
+                Assert.Equal("Task", result.Message);
             }
 
             [Fact]

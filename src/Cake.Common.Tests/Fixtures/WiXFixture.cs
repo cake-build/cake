@@ -5,7 +5,7 @@ using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures
 {
-    public sealed class WiXFixture
+    internal sealed class WiXFixture
     {
         public IFileSystem FileSystem { get; set; }
         public IProcess Process { get; set; }

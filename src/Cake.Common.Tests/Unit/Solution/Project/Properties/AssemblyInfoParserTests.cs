@@ -1,13 +1,11 @@
 ﻿using Cake.Common.Solution.Project.Properties;
 using Cake.Common.Tests.Fixtures;
 using Cake.Core;
-using System;
 using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
-using Xunit.Extensions;
 
-namespace Cake.Common.Tests.Unit
+namespace Cake.Common.Tests.Unit.Solution.Project.Properties
 {
     public sealed class AssemblyInfoParserTests
     {
@@ -23,8 +21,7 @@ namespace Cake.Common.Tests.Unit
                 var result = Record.Exception(() => new AssemblyInfoParser(null, environment));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("fileSystem", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -37,8 +34,7 @@ namespace Cake.Common.Tests.Unit
                 var result = Record.Exception(() => new AssemblyInfoParser(fileSystem, null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("environment", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "environment");
             }
         }
 
@@ -54,8 +50,7 @@ namespace Cake.Common.Tests.Unit
                 var result = Record.Exception(() => fixture.Parse(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("assemblyInfoPath", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "assemblyInfoPath");
             }
 
             [Fact]

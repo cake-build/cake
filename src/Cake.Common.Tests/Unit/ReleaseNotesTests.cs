@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit
@@ -15,8 +14,7 @@ namespace Cake.Common.Tests.Unit
                 var result = Record.Exception(() => new ReleaseNotes(null, Enumerable.Empty<string>()));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("version", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "version");
             }
         }
     }

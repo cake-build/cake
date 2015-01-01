@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Cake.Tests.Unit
 {

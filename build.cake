@@ -125,7 +125,7 @@ Task("Create-Cake-NuGet-Package")
 	.IsDependentOn("Copy-Files")
 	.Does(() =>
 {
-	NuGetPack("./Cake.nuspec", new NuGetPackSettings {
+	NuGetPack("./nuspec/Cake.nuspec", new NuGetPackSettings {
 		Version = semVersion,
 		ReleaseNotes = releaseNotes.Notes.ToArray(),
         BasePath = binDir,
@@ -139,7 +139,7 @@ Task("Create-Core-NuGet-Package")
 	.IsDependentOn("Copy-Files")
 	.Does(() =>
 {
-	NuGetPack("./Cake.Core.nuspec", new NuGetPackSettings {
+	NuGetPack("./nuspec/Cake.Core.nuspec", new NuGetPackSettings {
 		Version = semVersion,
 		ReleaseNotes = releaseNotes.Notes.ToArray(),
         BasePath = binDir,

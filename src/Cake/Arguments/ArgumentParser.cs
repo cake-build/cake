@@ -72,6 +72,12 @@ namespace Cake.Arguments
                         // If they didn't provide a specific build script, search for a defualt.
                         if (IsOption(arg))
                         {
+                            // Make sure we parse the option
+                            if (!ParseOption(value, options))
+                            {
+                                return null;
+                            }
+
                             var defaultScriptPath = GetDefaultScript();
                             if (defaultScriptPath == null)
                             {

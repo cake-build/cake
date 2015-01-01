@@ -1,5 +1,4 @@
-﻿using System;
-using Xunit;
+﻿using Xunit;
 
 namespace Cake.Core.Tests.Unit
 {
@@ -14,8 +13,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => new CakeTaskBuilder<ActionTask>(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("task", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "task");
             }
         }
 

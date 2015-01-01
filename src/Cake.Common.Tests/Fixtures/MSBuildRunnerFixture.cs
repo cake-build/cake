@@ -2,12 +2,12 @@
 using Cake.Common.Tools.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Tests.Fakes;
+using Cake.Testing.Fakes;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures
 {
-    public sealed class MSBuildRunnerFixture
+    internal sealed class MSBuildRunnerFixture
     {
         public IFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }

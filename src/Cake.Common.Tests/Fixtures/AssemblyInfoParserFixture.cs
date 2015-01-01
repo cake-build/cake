@@ -2,12 +2,12 @@
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Core.Tests.Fakes;
+using Cake.Testing.Fakes;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures
 {
-    public sealed class AssemblyInfoParserFixture
+    internal sealed class AssemblyInfoParserFixture
     {
         public FakeFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }

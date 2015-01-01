@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -61,61 +62,88 @@ namespace Cake.Common.Solution
                 throw new CakeException(message);
             }
 
+            string
+                version = null,
+                visualStudioVersion = null,
+                minimumVisualStudioVersion = null;
+            var projects = new List<SolutionProject>();
+
+            foreach (var line in file.ReadLines(Encoding.UTF8))
+            {
+                if (line.StartsWith("Project(\"{"))
+                {
+                    var project = ParseSolutionProjectLine(file, line);
+                    if (!StringComparer.OrdinalIgnoreCase.Equals(project.Type, SolutionFolder))
+                        projects.Add(project);
+                }
+                else if (line.StartsWith("Microsoft Visual Studio Solution File, "))
+                {
+                    version = string.Concat(line.Skip(39));
+                }
+                else if (line.StartsWith("VisualStudioVersion = "))
+                {
+                    visualStudioVersion = string.Concat(line.Skip(22));
+                }
+                else if (line.StartsWith("MinimumVisualStudioVersion = "))
+                {
+                    minimumVisualStudioVersion = string.Concat(line.Skip(29));
+                }
+            }
+
             var solutionParserResult = new SolutionParserResult(
-                file
-                    .ReadLines(Encoding.UTF8)
-                    .Where(line => line.StartsWith("Project(\"{"))
-                    .Select(
-                        line =>
-                        {
-                            var withinQuotes = false;
-                            StringBuilder
-                                projectTypeBuilder = new StringBuilder(),
-                                nameBuilder = new StringBuilder(),
-                                pathBuilder = new StringBuilder(),
-                                idBuilder = new StringBuilder();
-                            var result = new[]
-                            {
-                                projectTypeBuilder,
-                                nameBuilder,
-                                pathBuilder,
-                                idBuilder
-                            };
-                            var position = 0;
-                            foreach (var c in line.Skip(8))
-                            {
-                                if (c == '"')
-                                {
-                                    withinQuotes = !withinQuotes;
-                                    if (!withinQuotes)
-                                    {
-                                        if (position++ >= result.Length)
-                                            break;
-                                    }
-                                    continue;
-                                }
-
-                                if (!withinQuotes) continue;
-
-                                result[position].Append(c);
-                            }
-
-                            return new SolutionProject(
-                                idBuilder.ToString(),
-                                nameBuilder.ToString(),
-                                file
-                                    .Path
-                                    .GetDirectory()
-                                    .CombineWithFilePath(pathBuilder.ToString()),
-                                projectTypeBuilder.ToString()
-                                );
-                        }
-                    )
-                    //Exclude solution folder
-                    .Where(project => !StringComparer.OrdinalIgnoreCase.Equals(project.Type, SolutionFolder))
+                version,
+                visualStudioVersion,
+                minimumVisualStudioVersion,
+                projects.AsReadOnly()
                 );
 
             return solutionParserResult;
+        }
+
+
+        private static SolutionProject ParseSolutionProjectLine(IFile file, string line)
+        {
+            var withinQuotes = false;
+            StringBuilder
+                projectTypeBuilder = new StringBuilder(),
+                nameBuilder = new StringBuilder(),
+                pathBuilder = new StringBuilder(),
+                idBuilder = new StringBuilder();
+            var result = new[]
+            {
+                projectTypeBuilder,
+                nameBuilder,
+                pathBuilder,
+                idBuilder
+            };
+            var position = 0;
+            foreach (var c in line.Skip(8))
+            {
+                if (c == '"')
+                {
+                    withinQuotes = !withinQuotes;
+                    if (!withinQuotes)
+                    {
+                        if (position++ >= result.Length)
+                            break;
+                    }
+                    continue;
+                }
+
+                if (!withinQuotes) continue;
+
+                result[position].Append(c);
+            }
+
+            return new SolutionProject(
+                idBuilder.ToString(),
+                nameBuilder.ToString(),
+                file
+                    .Path
+                    .GetDirectory()
+                    .CombineWithFilePath(pathBuilder.ToString()),
+                projectTypeBuilder.ToString()
+                );
         }
     }
 }

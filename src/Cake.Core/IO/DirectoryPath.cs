@@ -27,7 +27,6 @@ namespace Cake.Core.IO
             {
                 throw new ArgumentNullException("path");
             }
-
             var combinedPath = System.IO.Path.Combine(FullPath, path.GetFilename().FullPath);
             return new FilePath(combinedPath);
         }

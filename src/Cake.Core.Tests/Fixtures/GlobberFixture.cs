@@ -1,10 +1,10 @@
 ﻿using Cake.Core.IO;
-using Cake.Core.Tests.Fakes;
+using Cake.Testing.Fakes;
 using NSubstitute;
 
 namespace Cake.Core.Tests.Fixtures
 {
-    public sealed class GlobberFixture
+    internal sealed class GlobberFixture
     {
         public IFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }

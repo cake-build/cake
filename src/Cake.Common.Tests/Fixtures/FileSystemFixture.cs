@@ -1,9 +1,9 @@
 ﻿using Cake.Core.IO;
-using Cake.Core.Tests.Fakes;
+using Cake.Testing.Fakes;
 
 namespace Cake.Common.Tests.Fixtures
 {
-    public sealed class FileSystemFixture
+    internal sealed class FileSystemFixture
     {
         public IFileSystem FileSystem { get; set; }
 

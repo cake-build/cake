@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Core.Scripting.CodeGen;
+﻿using Cake.Core.Scripting.CodeGen;
 using Cake.Core.Tests.Fixtures;
 using Xunit;
 
@@ -16,8 +15,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
                 var result = Record.Exception(() => PropertyAliasGenerator.Generate(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("method", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "method");
             }
 
             [Fact]

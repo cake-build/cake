@@ -4,7 +4,7 @@ using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures
 {
-    public sealed class ProcessFixture
+    internal sealed class ProcessFixture
     {
         public ICakeContext Context { get; set; }
         public ICakeEnvironment Environment { get; set; }
