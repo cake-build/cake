@@ -69,6 +69,9 @@
     <Compile Include="Solution\SolutionParser.cs" />
     <Compile Include="Solution\SolutionParserResult.cs" />
     <Compile Include="Solution\SolutionProject.cs" />
+    <Compile Include="Text\TextTransformationAliases.cs" />
+    <Compile Include="Text\TextTransformation.cs" />
+    <Compile Include="Text\TextTransformationExtensions.cs" />
     <Compile Include="Tools\ILMerge\ILMergeAliases.cs" />
     <Compile Include="Tools\ILMerge\ILMergeRunner.cs" />
     <Compile Include="Tools\ILMerge\ILMergeSettings.cs" />
