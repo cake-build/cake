@@ -2,7 +2,7 @@
 using Cake.Arguments;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Core.Tests.Fakes;
+using Cake.Testing.Fakes;
 using Cake.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
@@ -24,8 +24,7 @@ namespace Cake.Tests.Unit.Arguments
                 var result = Record.Exception(() => parser.Parse(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("args", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "args");
             }
 
             [Fact]

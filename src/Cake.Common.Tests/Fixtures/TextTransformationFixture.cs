@@ -1,12 +1,12 @@
 ﻿using Cake.Common.Text;
 using Cake.Core;
-using Cake.Core.Tests.Fakes;
 using Cake.Core.Text;
+using Cake.Testing.Fakes;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures
 {
-    public sealed class TextTransformationFixture
+    internal sealed class TextTransformationFixture
     {
         public FakeFileSystem FileSystem { get; set; }
         public ICakeEnvironment Enviroment { get; set; }

@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Common.Tests.Fixtures;
+﻿using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.XUnit;
 using Cake.Core;
 using Cake.Core.IO;
@@ -15,13 +14,15 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             [Fact]
             public void Should_Throw_If_Assembly_Path_Is_Null()
             {
+                // Given
                 var fixture = new XUnit2RunnerFixture();
                 var runner = fixture.CreateRunner();
 
+                // When
                 var result = Record.Exception(() => runner.Run(null, new XUnit2Settings()));
 
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("assemblyPath", ((ArgumentNullException)result).ParamName);
+                // Then
+                Assert.IsArgumentNullException(result, "assemblyPath");
             }
 
             [Fact]

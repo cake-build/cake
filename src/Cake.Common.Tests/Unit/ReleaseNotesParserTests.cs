@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Core;
+﻿using Cake.Core;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit
@@ -18,8 +17,7 @@ namespace Cake.Common.Tests.Unit
                 var result = Record.Exception(() => parser.Parse(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("content", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "content");
             }
 
             [Fact]

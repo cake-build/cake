@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting;
-using Cake.Core.Tests.Fakes;
+using Cake.Testing.Fakes;
 using NSubstitute;
 
 namespace Cake.Core.Tests.Fixtures

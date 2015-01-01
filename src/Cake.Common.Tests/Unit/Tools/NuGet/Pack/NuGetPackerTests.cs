@@ -24,8 +24,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 var result = Record.Exception(() => packer.Pack(null, new NuGetPackSettings()));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("nuspecFilePath", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "nuspecFilePath");
             }
 
             [Fact]
@@ -39,8 +38,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 var result = Record.Exception(() => packer.Pack("./existing.nuspec", null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("settings", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "settings");
             }
 
             [Fact]

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Cake.Common.IO;
@@ -23,8 +22,7 @@ namespace Cake.Common.Tests.Unit.IO
                     FileAliases.CopyFileToDirectory(null, "./file.txt", "./target"));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -38,8 +36,7 @@ namespace Cake.Common.Tests.Unit.IO
                     FileAliases.CopyFileToDirectory(context, null, "./target"));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("filePath", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "filePath");
             }
 
             [Fact]
@@ -53,8 +50,7 @@ namespace Cake.Common.Tests.Unit.IO
                     FileAliases.CopyFileToDirectory(context, "./file.txt", null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("targetDirectoryPath", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "targetDirectoryPath");
             }
 
             [Fact]
@@ -82,8 +78,7 @@ namespace Cake.Common.Tests.Unit.IO
                     FileAliases.CopyFile(null, "./file.txt", "./target"));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -97,8 +92,7 @@ namespace Cake.Common.Tests.Unit.IO
                     FileAliases.CopyFile(context, null, "./target"));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("filePath", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "filePath");
             }
 
             [Fact]
@@ -112,8 +106,7 @@ namespace Cake.Common.Tests.Unit.IO
                     FileAliases.CopyFile(context, "./file.txt", null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("targetFilePath", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "targetFilePath");
             }
 
             [Fact]
@@ -180,8 +173,7 @@ namespace Cake.Common.Tests.Unit.IO
                         FileAliases.CopyFiles(null, fixture.SourceFilePaths, "./target"));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -195,8 +187,7 @@ namespace Cake.Common.Tests.Unit.IO
                         FileAliases.CopyFiles(context, (IEnumerable<FilePath>)null, "./target"));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("filePaths", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "filePaths");
                 }
 
                 [Fact]
@@ -210,8 +201,7 @@ namespace Cake.Common.Tests.Unit.IO
                         FileAliases.CopyFiles(fixture.Context, fixture.SourceFilePaths, null));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("targetDirectoryPath", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "targetDirectoryPath");
                 }
 
                 [Fact]
@@ -277,8 +267,7 @@ namespace Cake.Common.Tests.Unit.IO
                         FileAliases.CopyFiles(null, filePaths, "./target"));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -292,8 +281,7 @@ namespace Cake.Common.Tests.Unit.IO
                         FileAliases.CopyFiles(context, (IEnumerable<string>)null, "./target"));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("filePaths", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "filePaths");
                 }
 
                 [Fact]
@@ -308,8 +296,7 @@ namespace Cake.Common.Tests.Unit.IO
                         FileAliases.CopyFiles(fixture.Context, filePaths, null));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("targetDirectoryPath", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "targetDirectoryPath");
                 }
 
                 [Fact]
@@ -374,8 +361,7 @@ namespace Cake.Common.Tests.Unit.IO
                         FileAliases.CopyFiles(null, "", "./target"));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -389,8 +375,7 @@ namespace Cake.Common.Tests.Unit.IO
                         FileAliases.CopyFiles(fixture.Context, (string)null, "./target"));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("pattern", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "pattern");
                 }
 
                 [Fact]
@@ -404,8 +389,7 @@ namespace Cake.Common.Tests.Unit.IO
                         FileAliases.CopyFiles(fixture.Context, "", null));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("targetDirectoryPath", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "targetDirectoryPath");
                 }
 
                 [Fact]
@@ -471,8 +455,7 @@ namespace Cake.Common.Tests.Unit.IO
                     FileAliases.DeleteFile(null, filePath));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -486,8 +469,7 @@ namespace Cake.Common.Tests.Unit.IO
                     FileAliases.DeleteFile(context, null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("filePath", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "filePath");
             }
 
             [Fact]
@@ -548,8 +530,7 @@ namespace Cake.Common.Tests.Unit.IO
                         FileAliases.DeleteFiles(null, filePaths));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -563,8 +544,7 @@ namespace Cake.Common.Tests.Unit.IO
                         FileAliases.DeleteFiles(context, (IEnumerable<FilePath>)null));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("filePaths", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "filePaths");
                 }
 
                 [Fact]
@@ -592,8 +572,7 @@ namespace Cake.Common.Tests.Unit.IO
                         FileAliases.DeleteFiles(null, "*"));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -607,8 +586,7 @@ namespace Cake.Common.Tests.Unit.IO
                         FileAliases.DeleteFiles(context, (string)null));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("pattern", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "pattern");
                 }
 
                 [Fact]
@@ -640,8 +618,7 @@ namespace Cake.Common.Tests.Unit.IO
                     FileAliases.MoveFileToDirectory(null, source, target));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -656,8 +633,7 @@ namespace Cake.Common.Tests.Unit.IO
                     FileAliases.MoveFileToDirectory(context, null, target));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("filePath", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "filePath");
             }
 
             [Fact]
@@ -672,8 +648,7 @@ namespace Cake.Common.Tests.Unit.IO
                     FileAliases.MoveFileToDirectory(context, source, null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("targetDirectoryPath", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "targetDirectoryPath");
             }
 
             [Fact]
@@ -706,8 +681,7 @@ namespace Cake.Common.Tests.Unit.IO
                         FileAliases.MoveFiles(null, fixture.SourceFilePaths, "./target"));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -721,8 +695,7 @@ namespace Cake.Common.Tests.Unit.IO
                         FileAliases.MoveFiles(context, (IEnumerable<FilePath>)null, "./target"));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("filePaths", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "filePaths");
                 }
 
                 [Fact]
@@ -736,8 +709,7 @@ namespace Cake.Common.Tests.Unit.IO
                         FileAliases.MoveFiles(fixture.Context, fixture.SourceFilePaths, null));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("targetDirectoryPath", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "targetDirectoryPath");
                 }
 
                 [Fact]
@@ -799,8 +771,7 @@ namespace Cake.Common.Tests.Unit.IO
                         FileAliases.MoveFiles(null, "", "./target"));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -814,8 +785,7 @@ namespace Cake.Common.Tests.Unit.IO
                         FileAliases.MoveFiles(fixture.Context, (string)null, "./target"));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("pattern", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "pattern");
                 }
 
                 [Fact]
@@ -829,8 +799,7 @@ namespace Cake.Common.Tests.Unit.IO
                         FileAliases.MoveFiles(fixture.Context, "", null));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("targetDirectoryPath", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "targetDirectoryPath");
                 }
 
                 [Fact]
@@ -896,8 +865,7 @@ namespace Cake.Common.Tests.Unit.IO
                     FileAliases.MoveFile(null, source, target));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -912,8 +880,7 @@ namespace Cake.Common.Tests.Unit.IO
                     FileAliases.MoveFile(context, null, target));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("filePath", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "filePath");
             }
 
             [Fact]
@@ -928,8 +895,7 @@ namespace Cake.Common.Tests.Unit.IO
                     FileAliases.MoveFile(context, source, null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("targetFilePath", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "targetFilePath");
             }
 
             [Fact]

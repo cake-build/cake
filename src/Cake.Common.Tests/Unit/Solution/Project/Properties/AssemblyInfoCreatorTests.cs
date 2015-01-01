@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Common.Solution.Project.Properties;
+﻿using Cake.Common.Solution.Project.Properties;
 using Cake.Common.Tests.Fixtures;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -24,8 +23,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = Record.Exception(() => new AssemblyInfoCreator(null, environment, log));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("fileSystem", ((ArgumentNullException)result).ParamName);                
+                Assert.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -39,8 +37,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = Record.Exception(() => new AssemblyInfoCreator(fileSystem, null, log));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("environment", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -54,8 +51,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = Record.Exception(() => new AssemblyInfoCreator(fileSystem, environment, null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("log", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "log");
             }
         }
 
@@ -72,8 +68,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = Record.Exception(() => creator.Create(null, new AssemblyInfoSettings()));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("outputPath", ((ArgumentNullException)result).ParamName);                   
+                Assert.IsArgumentNullException(result, "outputPath");
             }
 
             [Fact]
@@ -87,8 +82,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = Record.Exception(() => creator.Create("A.cs", null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("settings", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "settings");
             }
 
             [Fact]

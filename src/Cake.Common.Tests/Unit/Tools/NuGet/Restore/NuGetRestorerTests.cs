@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Common.Tests.Fixtures;
+﻿using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.NuGet;
 using Cake.Common.Tools.NuGet.Restore;
 using Cake.Core;
@@ -24,8 +23,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 var result = Record.Exception(() => restorer.Restore(null, new NuGetRestoreSettings()));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("targetFilePath", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "targetFilePath");
             }
 
             [Fact]
@@ -39,8 +37,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 var result = Record.Exception(() => restorer.Restore("./project.sln", null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("settings", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "settings");
             }
 
             [Fact]

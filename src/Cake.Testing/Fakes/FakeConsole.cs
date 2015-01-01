@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Cake.Core;
 
-namespace Cake.Tests.Fakes
+namespace Cake.Testing.Fakes
 {
     public sealed class FakeConsole : IConsole
     {

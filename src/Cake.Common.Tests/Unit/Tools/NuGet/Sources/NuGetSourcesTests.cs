@@ -25,8 +25,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => sources.AddSource(null, "source", new NuGetSourcesSettings()));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("name", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "name");
             }
 
             [Theory]
@@ -57,8 +56,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => sources.AddSource("name", null, new NuGetSourcesSettings()));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("source", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "source");
             }
 
             [Theory]
@@ -89,8 +87,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => sources.AddSource("name", "source", null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("settings", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -281,8 +278,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => sources.RemoveSource(null, "source", new NuGetSourcesSettings()));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("name", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "name");
             }
 
             [Theory]
@@ -313,8 +309,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => sources.RemoveSource("name", null, new NuGetSourcesSettings()));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("source", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "source");
             }
 
             [Theory]
@@ -346,8 +341,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => sources.RemoveSource(source.Key, source.Value, null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("settings", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -525,8 +519,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => sources.HasSource(null, new NuGetSourcesSettings()));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("source", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "source");
             }
 
             [Theory]
@@ -557,8 +550,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => sources.HasSource("source", null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("settings", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "settings");
             }
         }
     }

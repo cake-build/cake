@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Common.Solution.Project.Properties;
+﻿using Cake.Common.Solution.Project.Properties;
 using Cake.Common.Tests.Fixtures;
 using Cake.Core;
 using Cake.Core.IO;
@@ -22,8 +21,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = Record.Exception(() => new AssemblyInfoParser(null, environment));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("fileSystem", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -36,8 +34,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = Record.Exception(() => new AssemblyInfoParser(fileSystem, null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("environment", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "environment");
             }
         }
 
@@ -53,8 +50,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = Record.Exception(() => fixture.Parse(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("assemblyInfoPath", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "assemblyInfoPath");
             }
 
             [Fact]

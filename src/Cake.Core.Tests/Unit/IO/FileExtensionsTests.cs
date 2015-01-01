@@ -1,9 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Text;
 using Cake.Core.IO;
-using Cake.Core.Tests.Fakes;
+using Cake.Testing.Fakes;
 using NSubstitute;
 using Xunit;
 
@@ -22,8 +21,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var result = Record.Exception(() => FileExtensions.Open(null, FileMode.Create));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("file", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "file");
                 }
 
                 [Theory]
@@ -55,8 +53,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var result = Record.Exception(() => FileExtensions.Open(null, FileMode.Create, FileAccess.Write));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("file", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "file");
                 }
 
                 [Theory]
@@ -89,8 +86,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => FileExtensions.OpenRead(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("file", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "file");
             }
 
             [Fact]
@@ -116,8 +112,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => FileExtensions.OpenWrite(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("file", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "file");
             }
 
             [Fact]
@@ -143,8 +138,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => FileExtensions.ReadLines(null, Encoding.UTF8));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("file", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "file");
             }
 
             [Fact]

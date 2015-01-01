@@ -94,8 +94,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => path.AppendExtension(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("extension", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "extension");
             }
 
             [Theory]
@@ -144,8 +143,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var result = Record.Exception(() => path.MakeAbsolute((ICakeEnvironment)null));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("environment", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "environment");
                 }
 
                 [Fact]
@@ -191,8 +189,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var result = Record.Exception(() => path.MakeAbsolute((DirectoryPath)null));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("path", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "path");
                 }
 
                 [Fact]

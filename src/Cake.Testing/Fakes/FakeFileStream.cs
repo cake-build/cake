@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Cake.Core.Tests.Fakes
+namespace Cake.Testing.Fakes
 {
     public sealed class FakeFileStream : Stream
     {

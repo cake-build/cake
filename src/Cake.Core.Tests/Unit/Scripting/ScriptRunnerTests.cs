@@ -24,8 +24,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => fixture.CreateScriptRunner());
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("sessionFactory", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "sessionFactory");
             }
 
             [Fact]
@@ -39,8 +38,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => fixture.CreateScriptRunner());
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("aliasGenerator", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "aliasGenerator");
             }
         }
 
@@ -57,8 +55,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => runner.Run(null, fixture.Script, fixture.ArgumentDictionary));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("host", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "host");
             }
 
             [Fact]
@@ -72,8 +69,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => runner.Run(fixture.Host, null, fixture.ArgumentDictionary));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("script", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "script");
             }
 
             [Fact]
@@ -87,8 +83,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => runner.Run(fixture.Host, fixture.Script, null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("arguments", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "arguments");
             }
 
             [Fact]

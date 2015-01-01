@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Common.Tools.MSBuild;
+﻿using Cake.Common.Tools.MSBuild;
 using Cake.Core.IO;
 using Xunit;
 
@@ -13,11 +12,10 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Throw_If_Solution_Path_Is_Null()
             {
                 // Given, When
-                var exception = Record.Exception(() => new MSBuildSettings(null));
+                var result = Record.Exception(() => new MSBuildSettings(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(exception);
-                Assert.Equal("solution", ((ArgumentNullException)exception).ParamName);
+                Assert.IsArgumentNullException(result, "solution");
             }
 
             [Fact]

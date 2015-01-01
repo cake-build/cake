@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Cake.Core.Scripting;
 using Cake.Core.Tests.Fixtures;
 using Xunit;
@@ -21,8 +20,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => fixture.CreateProcessor());
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("fileSystem", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -36,8 +34,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => fixture.CreateProcessor());
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("environment", ((ArgumentNullException)result).ParamName);           
+                Assert.IsArgumentNullException(result, "environment");
             }
         }
 
@@ -54,8 +51,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => processor.Process(null, new ScriptProcessorContext()));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("path", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "path");
             }
 
             [Fact]
@@ -69,10 +65,8 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => processor.Process("./build.cake", null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "context");
             }
-
 
             [Fact]
             public void Should_Throw_If_Script_Was_Not_Found()

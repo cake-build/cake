@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Core.Diagnostics;
+﻿using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
@@ -20,8 +19,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => new ProcessRunner(null, log));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("environment", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -34,8 +32,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => new ProcessRunner(environment, null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("log", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "log");
             }
         }
         
@@ -53,8 +50,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => runner.Start("./app.exe", null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("settings", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -70,8 +66,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => runner.Start(null, info));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("filePath", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "filePath");
             }
         }
     }

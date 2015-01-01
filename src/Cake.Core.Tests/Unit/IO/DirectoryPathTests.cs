@@ -19,8 +19,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => path.GetFilePath(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("path", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "path");
             }
 
             [Theory]
@@ -61,8 +60,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => path.CombineWithFilePath(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("path", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "path");
             }
 
             [Theory]
@@ -137,8 +135,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => path.Combine(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("path", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "path");
             }
 
             [Fact]
@@ -171,8 +168,7 @@ namespace Cake.Core.Tests.Unit.IO
                         () => path.MakeAbsolute((ICakeEnvironment) null));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("environment", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "environment");
                 }
 
                 [Fact]
@@ -218,8 +214,7 @@ namespace Cake.Core.Tests.Unit.IO
                         () => path.MakeAbsolute((DirectoryPath)null));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("path", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "path");
                 }
 
                 [Fact]

@@ -24,8 +24,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 var result = Record.Exception(() => pusher.Push(null, new NuGetPushSettings()));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("packageFilePath", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "packageFilePath");
             }
 
             [Fact]
@@ -39,8 +38,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 var result = Record.Exception(() => pusher.Push("./existing.nupkg", null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("settings", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "settings");
             }
 
             [Fact]

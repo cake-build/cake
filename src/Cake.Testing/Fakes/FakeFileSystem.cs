@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Cake.Core.IO;
 
-namespace Cake.Core.Tests.Fakes
+namespace Cake.Testing.Fakes
 {
     public sealed class FakeFileSystem : IFileSystem
     {
@@ -53,14 +53,6 @@ namespace Cake.Core.Tests.Fakes
             return file;
         }
 
-        public void DeleteDirectory(DirectoryPath path)
-        {
-            if (Directories.ContainsKey(path))
-            {
-                Directories[path].Exists = false;
-            }
-        }
-
         public IDirectory GetDirectory(DirectoryPath path)
         {
             return GetDirectory(path, creatable: true);
@@ -71,11 +63,6 @@ namespace Cake.Core.Tests.Fakes
             var directory = GetDirectory(path, creatable: true);
             directory.Create();
             return directory;
-        }
-
-        public IDirectory GetNonCreatableDirectory(DirectoryPath path)
-        {
-            return GetDirectory(path, creatable: false);
         }
 
         private IDirectory GetDirectory(DirectoryPath path, bool creatable)

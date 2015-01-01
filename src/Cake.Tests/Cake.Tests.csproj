@@ -12,7 +12,7 @@
     <AssemblyName>Cake.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>89a82b50</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>d3999791</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,33 +50,16 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="xunit.abstractions">
+    <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\xunit.abstractions.2.0.0-beta5-build2785\lib\net35\xunit.abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.assert">
-      <HintPath>..\packages\xunit.assert.2.0.0-beta5-build2785\lib\portable-net45+aspnetcore50+win+wpa81+wp80+monoandroid+monotouch10\xunit.assert.dll</HintPath>
-    </Reference>
-    <Reference Include="xunit.core">
+    <Reference Include="xunit.core, Version=2.0.0.2785, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\xunit.core.2.0.0-beta5-build2785\lib\portable-net45+aspnetcore50+win+wpa81+wp80+monotouch+monoandroid\xunit.core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Cake.Core.Tests\Fakes\FakeDirectory.cs">
-      <Link>Fakes\FakeDirectory.cs</Link>
-    </Compile>
-    <Compile Include="..\Cake.Core.Tests\Fakes\FakeFile.cs">
-      <Link>Fakes\FakeFile.cs</Link>
-    </Compile>
-    <Compile Include="..\Cake.Core.Tests\Fakes\FakeFileStream.cs">
-      <Link>Fakes\FakeFileStream.cs</Link>
-    </Compile>
-    <Compile Include="..\Cake.Core.Tests\Fakes\FakeFileSystem.cs">
-      <Link>Fakes\FakeFileSystem.cs</Link>
-    </Compile>
-    <Compile Include="..\Cake.Core.Tests\Fakes\FakeLog.cs">
-      <Link>Fakes\FakeLog.cs</Link>
-    </Compile>
-    <Compile Include="Fakes\FakeConsole.cs" />
     <Compile Include="Fixtures\ArgumentParserFixture.cs" />
     <Compile Include="Fixtures\CakeApplicationFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -104,6 +87,10 @@
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
       <Project>{8074b833-11b8-459f-bb98-bfba2bc5c698}</Project>
       <Name>Cake.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cake.Testing\Cake.Testing.csproj">
+      <Project>{5572610d-d857-450a-9cc9-f3e08b0e1449}</Project>
+      <Name>Cake.Testing</Name>
     </ProjectReference>
     <ProjectReference Include="..\Cake\Cake.csproj">
       <Project>{1bf8d4f1-86d3-4b7b-baf6-4cf3d863b819}</Project>

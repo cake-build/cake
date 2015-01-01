@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cake.Core.IO;
 
-namespace Cake.Core.Tests.Fakes
+namespace Cake.Testing.Fakes
 {
     public sealed class FakeDirectory : IDirectory
     {
@@ -20,7 +20,6 @@ namespace Cake.Core.Tests.Fakes
         public bool Exists
         {
             get { return _exist; }
-            set { _exist = value; }
         }
 
         public FakeDirectory(FakeFileSystem fileSystem, DirectoryPath path, bool creatable)

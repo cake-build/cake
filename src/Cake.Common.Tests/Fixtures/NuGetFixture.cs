@@ -7,12 +7,12 @@ using Cake.Common.Tools.NuGet.Sources;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Core.Tests.Fakes;
+using Cake.Testing.Fakes;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures
 {
-    public class NuGetFixture
+    internal sealed class NuGetFixture
     {
         public FakeFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }

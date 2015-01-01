@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.ILMerge;
 using Cake.Core;
@@ -24,8 +23,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("outputAssemblyPath", ((ArgumentNullException) result).ParamName);
+                Assert.IsArgumentNullException(result, "outputAssemblyPath");
             }
 
             [Fact]
@@ -39,8 +37,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("primaryAssemblyPath", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "primaryAssemblyPath");
             }
 
             [Fact]
@@ -54,8 +51,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("assemblyPaths", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "assemblyPaths");
             }
 
             [Fact]

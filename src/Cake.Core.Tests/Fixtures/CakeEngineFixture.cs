@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using Cake.Core.IO;
-using Cake.Core.Tests.Fakes;
+using Cake.Testing.Fakes;
 using NSubstitute;
 
 namespace Cake.Core.Tests.Fixtures
 {
-    public sealed class CakeEngineFixture
+    internal sealed class CakeEngineFixture
     {
         public IFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }

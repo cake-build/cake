@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Common.Tests.Fixtures;
+﻿using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.MSTest;
 using Cake.Core;
 using Cake.Core.IO;
@@ -21,8 +20,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             var result = Record.Exception(() => runner.Run(null, new MSTestSettings()));
 
             // Then
-            Assert.IsType<ArgumentNullException>(result);
-            Assert.Equal("assemblyPath", ((ArgumentNullException)result).ParamName);
+            Assert.IsArgumentNullException(result, "assemblyPath");
         }
 
         [Fact]
@@ -36,8 +34,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             var result = Record.Exception(() => runner.Run("Test1.dll", null));
 
             // Then
-            Assert.IsType<ArgumentNullException>(result);
-            Assert.Equal("settings", ((ArgumentNullException)result).ParamName);
+            Assert.IsArgumentNullException(result, "settings");
         }
 
         [Fact]

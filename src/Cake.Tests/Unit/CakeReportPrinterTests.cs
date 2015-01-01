@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Core;
+﻿using Cake.Core;
 using NSubstitute;
 using Xunit;
 
@@ -20,8 +19,7 @@ namespace Cake.Tests.Unit
                 var result = Record.Exception(() => printer.Write(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("report", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "report");
             }
         }
     }

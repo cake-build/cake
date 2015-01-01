@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Common.Tests.Fixtures;
+﻿using Cake.Common.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
 
@@ -20,8 +19,7 @@ namespace Cake.Common.Tests.Unit.Text
                 var result = Record.Exception(() => fixture.CreateTextTransformation());
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("template", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "template");
             }
         }
 
@@ -38,8 +36,7 @@ namespace Cake.Common.Tests.Unit.Text
                 var result = Record.Exception(() => transformation.Save(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("path", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "path");
             }
 
             [Fact]

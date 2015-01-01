@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Core.Tests.Fixtures;
+﻿using Cake.Core.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
 
@@ -16,8 +15,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => new ScriptHostFixture.TestingScriptHost(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("engine", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "engine");
             }
         }
 

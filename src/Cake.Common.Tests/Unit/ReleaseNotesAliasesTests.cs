@@ -1,7 +1,6 @@
-﻿using System;
-using Cake.Core;
+﻿using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Tests.Fakes;
+using Cake.Testing.Fakes;
 using NSubstitute;
 using Xunit;
 
@@ -21,8 +20,7 @@ namespace Cake.Common.Tests.Unit
                 var result = Record.Exception(() => context.ParseAllReleaseNotes(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("filePath", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "filePath");
             }
 
             [Fact]

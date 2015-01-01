@@ -8,7 +8,7 @@ using NSubstitute;
 
 namespace Cake.Tests.Fixtures
 {
-    public sealed class CakeApplicationFixture
+    internal sealed class CakeApplicationFixture
     {
         public IVerbosityAwareLog Log { get; set; }
         public ICommandFactory CommandFactory { get; set; }

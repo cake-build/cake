@@ -1,8 +1,7 @@
-﻿using System;
-using Cake.Common.Text;
+﻿using Cake.Common.Text;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Tests.Fakes;
+using Cake.Testing.Fakes;
 using NSubstitute;
 using Xunit;
 
@@ -20,8 +19,7 @@ namespace Cake.Common.Tests.Unit.Text
                     TextTransformationAliases.TransformText(null, "Hello World"));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -35,8 +33,7 @@ namespace Cake.Common.Tests.Unit.Text
                     TextTransformationAliases.TransformText(context, null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("template", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "template");
             }
 
             [Fact]
@@ -64,8 +61,7 @@ namespace Cake.Common.Tests.Unit.Text
                         null, new FilePath("./template.txt")));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -80,8 +76,7 @@ namespace Cake.Common.Tests.Unit.Text
                         context, null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("path", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "path");
             }
 
             [Fact]

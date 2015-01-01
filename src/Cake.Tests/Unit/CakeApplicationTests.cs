@@ -21,8 +21,7 @@ namespace Cake.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateApplication());
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("log", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "log");
             }
 
             [Fact]
@@ -36,8 +35,7 @@ namespace Cake.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateApplication());
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("commandFactory", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "commandFactory");
             }
 
             [Fact]
@@ -51,8 +49,7 @@ namespace Cake.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateApplication());
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("argumentParser", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "argumentParser");
             }
         }
 

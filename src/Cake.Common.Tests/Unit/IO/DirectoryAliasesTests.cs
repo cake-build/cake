@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using Cake.Common.IO;
 using Cake.Common.Tests.Fixtures;
@@ -22,8 +21,7 @@ namespace Cake.Common.Tests.Unit.IO
                     DirectoryAliases.CleanDirectory(null, "/Temp/Hello"));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -38,8 +36,7 @@ namespace Cake.Common.Tests.Unit.IO
                     context.CleanDirectory(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("path", ((ArgumentNullException) result).ParamName);
+                Assert.IsArgumentNullException(result, "path");
             }
 
             [Fact]
@@ -122,8 +119,7 @@ namespace Cake.Common.Tests.Unit.IO
                         DirectoryAliases.CleanDirectories(null, paths));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -137,8 +133,7 @@ namespace Cake.Common.Tests.Unit.IO
                         context.CleanDirectories((IEnumerable<DirectoryPath>)null));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("directories", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "directories");
                 }
                 
                 [Fact]
@@ -214,8 +209,7 @@ namespace Cake.Common.Tests.Unit.IO
                         DirectoryAliases.CleanDirectories(null, paths));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -229,8 +223,7 @@ namespace Cake.Common.Tests.Unit.IO
                         context.CleanDirectories((IEnumerable<string>)null));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("directories", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "directories");
                 }
 
                 [Fact]
@@ -307,8 +300,7 @@ namespace Cake.Common.Tests.Unit.IO
                     DirectoryAliases.CreateDirectory(null, path));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -322,8 +314,7 @@ namespace Cake.Common.Tests.Unit.IO
                     context.CreateDirectory(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("path", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "path");
             }
 
             [Fact]
@@ -394,8 +385,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => DirectoryAliases.DeleteDirectory(null, "/Temp/DoNotExist"));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -410,8 +400,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => context.DeleteDirectory(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("path", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "path");
             }
 
             [Fact]
@@ -511,8 +500,7 @@ namespace Cake.Common.Tests.Unit.IO
                         DirectoryAliases.DeleteDirectories(null, paths));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -526,8 +514,7 @@ namespace Cake.Common.Tests.Unit.IO
                         context.DeleteDirectories((IEnumerable<DirectoryPath>)null));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("directories", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "directories");
                 }
 
                 [Fact]
@@ -637,8 +624,7 @@ namespace Cake.Common.Tests.Unit.IO
                         DirectoryAliases.DeleteDirectories(null, paths));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -652,8 +638,7 @@ namespace Cake.Common.Tests.Unit.IO
                         context.DeleteDirectories((IEnumerable<string>)null));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("directories", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "directories");
                 }
 
                 [Fact]

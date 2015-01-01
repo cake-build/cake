@@ -5,7 +5,7 @@ using NSubstitute;
 
 namespace Cake.Core.Tests.Fixtures
 {
-    public sealed class ScriptHostFixture
+    internal sealed class ScriptHostFixture
     {
         public sealed class TestingScriptHost : ScriptHost
         {

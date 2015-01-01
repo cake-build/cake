@@ -73,22 +73,22 @@ namespace Cake.Tests.Unit.Diagnostics
             public void Should_Throw_If_A_Format_Item_Is_Not_Positional()
             {
                 // Given, When
-                var exception = Record.Exception(() => FormatParser.Parse("{Hello}").ToArray());
+                var result = Record.Exception(() => FormatParser.Parse("{Hello}").ToArray());
 
                 // Then
-                Assert.IsType<FormatException>(exception);
-                Assert.Equal("Input string was not in a correct format.", exception.Message);
+                Assert.IsType<FormatException>(result);
+                Assert.Equal("Input string was not in a correct format.", result.Message);
             }
 
             [Fact]
             public void Should_Throw_If_A_Format_Item_With_Format_Is_Not_Positional()
             {
                 // Given, When
-                var exception = Record.Exception(() => FormatParser.Parse("{Hello:yyyy-MM-dd}").ToArray());
+                var result = Record.Exception(() => FormatParser.Parse("{Hello:yyyy-MM-dd}").ToArray());
 
                 // Then
-                Assert.IsType<FormatException>(exception);
-                Assert.Equal("Input string was not in a correct format.", exception.Message);
+                Assert.IsType<FormatException>(result);
+                Assert.Equal("Input string was not in a correct format.", result.Message);
             }
 
             [Fact]

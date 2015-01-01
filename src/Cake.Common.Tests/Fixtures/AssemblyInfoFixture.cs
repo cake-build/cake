@@ -2,14 +2,14 @@
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Core.Tests.Fakes;
+using Cake.Testing.Fakes;
 using NSubstitute;
 using Xunit;
 using System.IO;
 
 namespace Cake.Common.Tests.Fixtures
 {
-    public sealed class AssemblyInfoFixture
+    internal sealed class AssemblyInfoFixture
     {
         public IFileSystem FileSystem { get; set; }
         public ICakeLog Log { get; set; }

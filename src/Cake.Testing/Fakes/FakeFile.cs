@@ -2,7 +2,7 @@
 using System.IO;
 using Cake.Core.IO;
 
-namespace Cake.Core.Tests.Fakes
+namespace Cake.Testing.Fakes
 {
     public sealed class FakeFile : IFile
     {

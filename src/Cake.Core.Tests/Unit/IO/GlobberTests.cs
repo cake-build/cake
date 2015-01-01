@@ -19,20 +19,20 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => new Globber(null, environment));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("fileSystem", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
             public void Should_Throw_If_Environment_Is_Null()
             {
-                // Given, When
+                // Given
                 var fileSystem = Substitute.For<IFileSystem>();
+                
+                // When
                 var result = Record.Exception(() => new Globber(fileSystem, null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("environment", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "environment");
             }
         }
 
@@ -49,8 +49,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => globber.Match(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("pattern", ((ArgumentNullException)result).ParamName);
+                Assert.IsArgumentNullException(result, "pattern");
             }
 
             [Fact]

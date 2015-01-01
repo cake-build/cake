@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Core.IO;
+﻿using Cake.Core.IO;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit.IO
@@ -110,8 +109,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => comparer.GetHashCode(null));
 
                 // Then
-                Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("obj", ((ArgumentNullException) result).ParamName);
+                Assert.IsArgumentNullException(result, "obj");
             }
 
             [Theory]

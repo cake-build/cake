@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Common.Tests.Fixtures;
+﻿using Cake.Common.Tests.Fixtures;
 using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
@@ -24,8 +23,7 @@ namespace Cake.Common.Tests.Unit
                         ProcessAliases.StartProcess(null, fileName));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -39,8 +37,7 @@ namespace Cake.Common.Tests.Unit
                         context.StartProcess(null));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("fileName", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "fileName");
                 }
 
                 [Fact]
@@ -103,8 +100,7 @@ namespace Cake.Common.Tests.Unit
                         ProcessAliases.StartProcess(null, fileName, settings));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -119,8 +115,7 @@ namespace Cake.Common.Tests.Unit
                         context.StartProcess(null, settings));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("fileName", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "fileName");
                 }
 
                 [Fact]
@@ -135,8 +130,7 @@ namespace Cake.Common.Tests.Unit
                         context.StartProcess(fileName, null));
 
                     // Then
-                    Assert.IsType<ArgumentNullException>(result);
-                    Assert.Equal("settings", ((ArgumentNullException)result).ParamName);
+                    Assert.IsArgumentNullException(result, "settings");
                 }
 
                 [Fact]
