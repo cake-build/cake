@@ -518,6 +518,59 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.True(fixture.Log.Messages.Any(x => x.StartsWith("Teardown error:")));
             }
+
+            [Fact]
+            public void Should_Execute_Finally_Handler_If_Task_Succeeds()
+            {
+                // Given
+                var invoked = false;
+                var engine = new CakeEngineFixture().CreateEngine();
+                engine.Task("A")
+                    .Finally(() => invoked = true);
+
+                // When
+                engine.RunTarget("A");
+
+                // Then
+                Assert.True(invoked);
+            }
+
+            [Fact]
+            public void Should_Execute_Finally_Handler_If_Task_Throws()
+            {
+                // Given
+                var invoked = false;
+                var engine = new CakeEngineFixture().CreateEngine();
+                engine.Task("A")
+                    .Does(() => { throw new InvalidOperationException("Whoopsie"); })
+                    .ContinueOnError()
+                    .Finally(() => invoked = true);
+
+                // When
+                engine.RunTarget("A");
+
+                // Then
+                Assert.True(invoked);
+            }
+
+            [Fact]
+            public void Should_Execute_Finally_Handler_After_Error_Handler_If_Task_Succeeds()
+            {
+                // Given
+                var result = new List<string>();
+                var engine = new CakeEngineFixture().CreateEngine();
+                engine.Task("A")
+                    .Does(() => { throw new InvalidOperationException("Whoopsie"); })
+                    .OnError(() => result.Add("Error"))
+                    .Finally(() => result.Add("Finally"));
+
+                // When
+                engine.RunTarget("A");
+
+                // Then
+                Assert.Equal(2, result.Count);
+                Assert.Equal("Error", result[0]);
+            }
         }
     }
 }

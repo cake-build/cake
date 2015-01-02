@@ -158,5 +158,23 @@ namespace Cake.Core
             builder.Task.SetErrorHandler(errorHandler);
             return builder;
         }
+
+        /// <summary>
+        /// Adds a finally handler to be executed after the task have finished executing.
+        /// </summary>
+        /// <typeparam name="T">The task type.</typeparam>
+        /// <param name="builder">The builder.</param>
+        /// <param name="finallyHandler">The finally handler.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{T}"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder<T> Finally<T>(this CakeTaskBuilder<T> builder, Action finallyHandler)
+            where T : CakeTask
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException("builder");
+            }
+            builder.Task.SetFinallyHandler(finallyHandler);
+            return builder;
+        }
     }
 }

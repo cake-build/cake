@@ -143,5 +143,46 @@ namespace Cake.Core.Tests.Unit
                 Assert.NotNull(builder.Task.ErrorHandler);
             }
         }
+
+        public sealed class TheFinallyMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Builder_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => CakeTaskBuilderExtensions.Finally<ActionTask>(null, () => { }));
+
+                // Then
+                Assert.IsArgumentNullException(result, "builder");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Action_Is_Null()
+            {
+                // Given
+                var task = new ActionTask("task");
+                var builder = new CakeTaskBuilder<ActionTask>(task);
+
+                // When
+                var result = Record.Exception(() => CakeTaskBuilderExtensions.Finally(builder, null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "finallyHandler");
+            }
+
+            [Fact]
+            public void Should_Set_The_Finally_Handler()
+            {
+                // Given
+                var task = new ActionTask("task");
+                var builder = new CakeTaskBuilder<ActionTask>(task);
+
+                // When
+                builder.Finally(() => { });
+
+                // Then
+                Assert.NotNull(builder.Task.FinallyHandler);
+            }
+        }
     }
 }

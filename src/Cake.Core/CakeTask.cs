@@ -54,6 +54,11 @@ namespace Cake.Core
         public Action<Exception> ErrorHandler { get; private set; }
 
         /// <summary>
+        /// Gets the finally handler.
+        /// </summary>
+        public Action FinallyHandler { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CakeTask"/> class.
         /// </summary>
         /// <param name="name">The name of the task.</param>
@@ -117,6 +122,24 @@ namespace Cake.Core
                 throw new CakeException("There can only be one error handler per task.");
             }
             ErrorHandler = errorHandler;
+        }
+
+        /// <summary>
+        /// Sets the finally handler for the task.
+        /// The finally handler is always invoked when a task have finished running.
+        /// </summary>
+        /// <param name="finallyHandler">The finally handler.</param>
+        public void SetFinallyHandler(Action finallyHandler)
+        {
+            if (finallyHandler == null)
+            {
+                throw new ArgumentNullException("finallyHandler");
+            }
+            if (FinallyHandler != null)
+            {
+                throw new CakeException("There can only be one finally handler per task.");
+            }
+            FinallyHandler = finallyHandler;
         }
 
         /// <summary>

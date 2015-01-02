@@ -138,5 +138,49 @@ namespace Cake.Core.Tests.Unit
                 Assert.Equal("There can only be one error handler per task.", result.Message);
             }
         }
+
+        public sealed class TheSetFinallyHandlerMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Finally_Handler_Is_Null()
+            {
+                // Given
+                var task = new ActionTask("task");
+
+                // When
+                var result = Record.Exception(() => task.SetFinallyHandler(null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "finallyHandler");
+            }
+
+            [Fact]
+            public void Should_Set_Finally_Handler()
+            {
+                // Given
+                var task = new ActionTask("task");
+
+                // When
+                task.SetFinallyHandler(() => { });
+
+                // Then
+                Assert.NotNull(task.FinallyHandler);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Setting_More_Than_One_Finally_Handler()
+            {
+                // Given
+                var task = new ActionTask("task");
+                task.SetFinallyHandler(() => { });
+
+                // When
+                var result = Record.Exception(() => task.SetFinallyHandler(() => { }));
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("There can only be one finally handler per task.", result.Message);
+            }
+        }
     }
 }

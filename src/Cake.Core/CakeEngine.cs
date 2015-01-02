@@ -330,6 +330,13 @@ namespace Cake.Core
                     throw;
                 }
             }
+            finally
+            {
+                if (task.FinallyHandler != null)
+                {
+                    task.FinallyHandler();
+                }
+            }
 
             // Add the task results to the report.
             report.Add(task.Name, stopWatch.Elapsed);
