@@ -54,6 +54,11 @@ namespace Cake.Core
         public Action<Exception> ErrorHandler { get; private set; }
 
         /// <summary>
+        /// Gets the error reporter.
+        /// </summary>
+        public Action<Exception> ErrorReporter { get; private set; }
+
+        /// <summary>
         /// Gets the finally handler.
         /// </summary>
         public Action FinallyHandler { get; private set; }
@@ -122,6 +127,25 @@ namespace Cake.Core
                 throw new CakeException("There can only be one error handler per task.");
             }
             ErrorHandler = errorHandler;
+        }
+
+        /// <summary>
+        /// Sets the error reporter for the task.
+        /// The error reporter is invoked when an exception is thrown from the task.
+        /// This action is invoked before the error handler, but gives no opportunity to recover from the error.
+        /// </summary>
+        /// <param name="errorReporter"></param>
+        public void SetErrorReporter(Action<Exception> errorReporter)
+        {
+            if (errorReporter == null)
+            {
+                throw new ArgumentNullException("errorReporter");
+            }
+            if (ErrorReporter != null)
+            {
+                throw new CakeException("There can only be one error reporter per task.");
+            }
+            ErrorReporter = errorReporter;
         }
 
         /// <summary>

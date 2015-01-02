@@ -182,5 +182,49 @@ namespace Cake.Core.Tests.Unit
                 Assert.Equal("There can only be one finally handler per task.", result.Message);
             }
         }
+
+        public sealed class TheSetErrorReportHandlerMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Error_Reporter_Is_Null()
+            {
+                // Given
+                var task = new ActionTask("task");
+
+                // When
+                var result = Record.Exception(() => task.SetErrorReporter(null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "errorReporter");
+            }
+
+            [Fact]
+            public void Should_Set_Error_Reporter()
+            {
+                // Given
+                var task = new ActionTask("task");
+
+                // When
+                task.SetErrorReporter(exception => { });
+
+                // Then
+                Assert.NotNull(task.ErrorReporter);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Setting_More_Than_One_Error_Reporter()
+            {
+                // Given
+                var task = new ActionTask("task");
+                task.SetErrorReporter(error => { });
+
+                // When
+                var result = Record.Exception(() => task.SetErrorReporter(exception => { }));
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("There can only be one error reporter per task.", result.Message);
+            }
+        }
     }
 }

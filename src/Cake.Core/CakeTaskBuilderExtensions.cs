@@ -176,5 +176,24 @@ namespace Cake.Core
             builder.Task.SetFinallyHandler(finallyHandler);
             return builder;
         }
+
+        /// <summary>
+        /// Adds an error reporter for the task to be executed when an exception is thrown from the task.
+        /// This action is invoked before the error handler, but gives no opportunity to recover from the error.
+        /// </summary>
+        /// <typeparam name="T">The task type.</typeparam>
+        /// <param name="builder">The builder.</param>
+        /// <param name="errorReporter">The finally handler.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{T}"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder<T> ReportError<T>(this CakeTaskBuilder<T> builder, Action<Exception> errorReporter)
+            where T : CakeTask
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException("builder");
+            }
+            builder.Task.SetErrorReporter(errorReporter);
+            return builder;
+        }
     }
 }
