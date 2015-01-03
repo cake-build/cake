@@ -54,6 +54,16 @@ namespace Cake.Core
         public Action<Exception> ErrorHandler { get; private set; }
 
         /// <summary>
+        /// Gets the error reporter.
+        /// </summary>
+        public Action<Exception> ErrorReporter { get; private set; }
+
+        /// <summary>
+        /// Gets the finally handler.
+        /// </summary>
+        public Action FinallyHandler { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CakeTask"/> class.
         /// </summary>
         /// <param name="name">The name of the task.</param>
@@ -117,6 +127,43 @@ namespace Cake.Core
                 throw new CakeException("There can only be one error handler per task.");
             }
             ErrorHandler = errorHandler;
+        }
+
+        /// <summary>
+        /// Sets the error reporter for the task.
+        /// The error reporter is invoked when an exception is thrown from the task.
+        /// This action is invoked before the error handler, but gives no opportunity to recover from the error.
+        /// </summary>
+        /// <param name="errorReporter"></param>
+        public void SetErrorReporter(Action<Exception> errorReporter)
+        {
+            if (errorReporter == null)
+            {
+                throw new ArgumentNullException("errorReporter");
+            }
+            if (ErrorReporter != null)
+            {
+                throw new CakeException("There can only be one error reporter per task.");
+            }
+            ErrorReporter = errorReporter;
+        }
+
+        /// <summary>
+        /// Sets the finally handler for the task.
+        /// The finally handler is always invoked when a task have finished running.
+        /// </summary>
+        /// <param name="finallyHandler">The finally handler.</param>
+        public void SetFinallyHandler(Action finallyHandler)
+        {
+            if (finallyHandler == null)
+            {
+                throw new ArgumentNullException("finallyHandler");
+            }
+            if (FinallyHandler != null)
+            {
+                throw new CakeException("There can only be one finally handler per task.");
+            }
+            FinallyHandler = finallyHandler;
         }
 
         /// <summary>

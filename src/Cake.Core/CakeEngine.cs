@@ -113,7 +113,7 @@ namespace Cake.Core
         /// <param name="globber">The globber.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="toolResolvers">The tool resolvers.</param>
-        public CakeEngine(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log, 
+        public CakeEngine(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log,
             ICakeArguments arguments, IGlobber globber, IProcessRunner processRunner,
             IEnumerable<IToolResolver> toolResolvers)
         {
@@ -147,14 +147,14 @@ namespace Cake.Core
             }
             _fileSystem = fileSystem;
             _environment = environment;
-            _log = log;            
+            _log = log;
             _arguments = arguments;
             _globber = globber;
             _processRunner = processRunner;
             _tasks = new List<CakeTask>();
-            _toolResolverLookup =toolResolvers.ToLookup(
-                key=>key.Name,
-                value=>value,
+            _toolResolverLookup = toolResolvers.ToLookup(
+                key => key.Name,
+                value => value,
                 StringComparer.OrdinalIgnoreCase
                 );
         }
@@ -300,28 +300,20 @@ namespace Cake.Core
                 // Execute the task.
                 task.Execute(this);
             }
-            catch (Exception taskException)
+            catch (Exception exception)
             {
                 _log.Error("An error occured when executing task.", task.Name);
+
+                // Got an error reporter?
+                if (task.ErrorReporter != null)
+                {
+                    ReportErrors(task.ErrorReporter, exception);
+                }
 
                 // Got an error handler?
                 if (task.ErrorHandler != null)
                 {
-                    try
-                    {
-                        // Let the error handler handle the exception.
-                        task.ErrorHandler(taskException);
-                    }
-                    catch (Exception errorHandlerException)
-                    {
-                        if (errorHandlerException != taskException)
-                        {
-                            // Log the original error.
-                            _log.Error("Error: {0}", taskException.Message);
-                        }
-                        // Rethrow the exception and let it propagate.
-                        throw;
-                    }
+                    PerformErrorHandling(task.ErrorHandler, exception);
                 }
                 else
                 {
@@ -330,9 +322,45 @@ namespace Cake.Core
                     throw;
                 }
             }
+            finally
+            {
+                if (task.FinallyHandler != null)
+                {
+                    task.FinallyHandler();
+                }
+            }
 
             // Add the task results to the report.
             report.Add(task.Name, stopWatch.Elapsed);
+        }
+
+        private static void ReportErrors(Action<Exception> errorReporter, Exception taskException)
+        {
+            try
+            {
+                errorReporter(taskException);
+            }
+            // ReSharper disable once EmptyGeneralCatchClause
+            catch
+            {
+                // Ignore errors from the error reporter.
+            }
+        }
+
+        private void PerformErrorHandling(Action<Exception> errorHandler , Exception exception)
+        {
+            try
+            {
+                errorHandler(exception);
+            }
+            catch (Exception errorHandlerException)
+            {
+                if (errorHandlerException != exception)
+                {
+                    _log.Error("Error: {0}", exception.Message);
+                }
+                throw;
+            }
         }
 
         private void PerformTeardown(bool exceptionWasThrown)
