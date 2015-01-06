@@ -1,4 +1,10 @@
-### New in 0.1.25
+### New in 0.1.26
+
+### New in 0.1.25 (Released 2015/01/01)
+* Added parsing of solution version information if available.
+* Fixed so logging won't throw an exception if one of the arguments is null.
+* Fix for argument parsing without script.
+* Added support for simple text transformations.
 
 ### New in 0.1.24 (Released 2014/12/12)
 * Added support for NuGet sources.
