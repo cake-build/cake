@@ -8,5 +8,9 @@ namespace Cake.Core.Annotations
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public sealed class CakePropertyAliasAttribute : CakeAliasAttribute
     {
+        /// <summary>
+        /// Indicates if the result of the property alias method should be false.
+        /// </summary>
+        public bool Cache { get; set; }
     }
 }

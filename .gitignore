@@ -4,7 +4,7 @@
 [Tt]emp/
 [Ll]ib/
 [Pp]ackages/
-[Bb]uild/
+/[Bb]uild/
 *.sln.ide/
 
 # Build related

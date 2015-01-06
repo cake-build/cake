@@ -1,4 +1,5 @@
-﻿using Cake.Core.Scripting.CodeGen;
+﻿using System.Text;
+using Cake.Core.Scripting.CodeGen;
 using Cake.Core.Tests.Fixtures;
 using Xunit;
 
@@ -44,7 +45,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("The method 'NotAnExtensionMethod' is not an extension method.", 
+                Assert.Equal("The method 'NotAnExtensionMethod' is not an extension method.",
                     result.Message);
             }
 
@@ -137,6 +138,46 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
 
                 // Then
                 Assert.Equal(expected, result);
+            }
+
+            [Fact]
+            public void Should_Generate_Cached_Code_For_Cached_Property_Alias_Returning_Reference_Type()
+            {
+                // Given
+                var expected = new StringBuilder();
+                expected.Append("private System.String _PropertyAliasReturningCachedString;\n");
+                expected.Append("public System.String PropertyAliasReturningCachedString{get{");
+                expected.Append("if(_PropertyAliasReturningCachedString==null){_PropertyAliasReturningCachedString=");
+                expected.Append("Cake.Core.Tests.Fixtures.PropertyAliasGeneratorFixture.PropertyAliasReturningCachedString");
+                expected.Append("(GetContext());}return _PropertyAliasReturningCachedString;}}");
+
+                var method = typeof(PropertyAliasGeneratorFixture).GetMethod("PropertyAliasReturningCachedString");
+
+                // When
+                var result = PropertyAliasGenerator.Generate(method);
+
+                // Then
+                Assert.Equal(expected.ToString(), result);
+            }
+
+            [Fact]
+            public void Should_Generate_Cached_Code_For_Cached_Property_Alias_Returning_Value_Type()
+            {
+                // Given
+                var expected = new StringBuilder();
+                expected.Append("private System.Boolean? _PropertyAliasReturningCachedBoolean;\n");
+                expected.Append("public System.Boolean PropertyAliasReturningCachedBoolean{get{");
+                expected.Append("if(_PropertyAliasReturningCachedBoolean==null){_PropertyAliasReturningCachedBoolean=");
+                expected.Append("Cake.Core.Tests.Fixtures.PropertyAliasGeneratorFixture.PropertyAliasReturningCachedBoolean");
+                expected.Append("(GetContext());}return _PropertyAliasReturningCachedBoolean.Value;}}");
+
+                var method = typeof(PropertyAliasGeneratorFixture).GetMethod("PropertyAliasReturningCachedBoolean");
+
+                // When
+                var result = PropertyAliasGenerator.Generate(method);
+
+                // Then
+                Assert.Equal(expected.ToString(), result);
             }
         }
     }
