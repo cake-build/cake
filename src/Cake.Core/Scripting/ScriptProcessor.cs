@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.IO.NuGet;
 using Cake.Core.Scripting.Processors;
 
 namespace Cake.Core.Scripting
@@ -25,7 +26,8 @@ namespace Cake.Core.Scripting
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="log">The log.</param>
-        public ScriptProcessor(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log)
+        /// <param name="nugetToolResolver">Nuget tool resolver</param>
+        public ScriptProcessor(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log, INuGetToolResolver nugetToolResolver)
         {
             if (fileSystem == null)
             {
@@ -35,14 +37,29 @@ namespace Cake.Core.Scripting
             {
                 throw new ArgumentNullException("environment");
             }
+            if (log == null)
+            {
+                throw new ArgumentNullException("log");
+            }
+            if (nugetToolResolver == null)
+            {
+                throw new ArgumentNullException("nugetToolResolver");
+            }
             _fileSystem = fileSystem;
             _environment = environment;
             _log = log;
 
-            _lineProcessors = new LineProcessor[] {
+            _lineProcessors = new LineProcessor[]
+            {
                 new LoadDirectiveProcessor(_environment),
                 new ReferenceDirectiveProcessor(_fileSystem, _environment),
-                new UsingStatementProcessor(_environment) 
+                new UsingStatementProcessor(_environment),
+                new AddInDirectiveProcessor(
+                    _fileSystem,
+                    _environment,
+                    _log,
+                    nugetToolResolver
+                    )
             };
         }
 

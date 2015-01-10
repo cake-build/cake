@@ -1,5 +1,6 @@
 ﻿using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.IO.NuGet;
 using Cake.Core.Scripting;
 using Cake.Testing.Fakes;
 using NSubstitute;
@@ -13,6 +14,8 @@ namespace Cake.Core.Tests.Fixtures
         public ICakeLog Log { get; set; }
         public FilePath ScriptPath { get; set; }
         public string Source { get; private set; }
+        public IGlobber Globber{ get; set; }
+        public INuGetToolResolver NuGetToolResolver{ get; private set; }
         
         public ScriptProcessorFixture(string scriptPath = "./build.cake", bool scriptExist = true,
             string scriptSource = "Console.WriteLine();")
@@ -25,16 +28,20 @@ namespace Cake.Core.Tests.Fixtures
 
             Log = Substitute.For<ICakeLog>();
 
+            Globber = Substitute.For<IGlobber>();
+
             FileSystem = new FakeFileSystem(true);
             if (scriptExist)
             {
                 FileSystem.GetCreatedFile(ScriptPath.MakeAbsolute(Environment), Source);
             }
+
+            NuGetToolResolver = new NuGetToolResolver(FileSystem, Globber, Environment);
         }
 
         public ScriptProcessor CreateProcessor()
         {
-            return new ScriptProcessor(FileSystem, Environment, Log);
+            return new ScriptProcessor(FileSystem, Environment, Log, NuGetToolResolver);
         }
 
         public ScriptProcessorContext Process()
