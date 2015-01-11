@@ -176,8 +176,9 @@ The full list of contributors can be found at [http://cake.readthedocs.org/en/la
 
 ## External add-ons
 
-AliaSql: [https://www.nuget.org/packages/Cake.AliaSql](https://www.nuget.org/packages/Cake.AliaSql)  
-Unity: [https://github.com/patriksvensson/Cake.Unity](https://github.com/patriksvensson/Cake.Unity)
+Cake.AliaSql: [https://www.nuget.org/packages/Cake.AliaSql](https://www.nuget.org/packages/Cake.AliaSql)  
+Cake.Unity: [https://github.com/patriksvensson/Cake.Unity](https://github.com/patriksvensson/Cake.Unity)  
+Cake.Slack: [https://github.com/WCOMAB/Cake.Slack](https://github.com/WCOMAB/Cake.Slack)
 
 ## License
 
