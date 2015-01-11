@@ -10,5 +10,12 @@ namespace Xunit
             IsType<ArgumentNullException>(exception);
             Equal(parameterName, ((ArgumentNullException)exception).ParamName);
         }
+
+        public static void IsExceptionWithMessage<T>(Exception exception, string message)
+            where T : Exception
+        {
+            IsType<T>(exception);
+            Equal(message, exception.Message);
+        }
     }
 }

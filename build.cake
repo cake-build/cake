@@ -50,7 +50,16 @@ Teardown(() =>
 // TASKS
 //////////////////////////////////////////////////////////////////////
 
+Task("Update-Build-Version")
+	.WithCriteria(() => !local)
+	.Description("Updates the AppVeyor build version.")
+	.Does(() =>
+{
+	SetBuildVersion(semVersion);
+});
+
 Task("Clean")
+	.IsDependentOn("Update-Build-Version")
 	.Does(() =>
 {
 	CleanDirectories(new DirectoryPath[] {
@@ -162,7 +171,7 @@ Task("Update-AppVeyor-Build-Number")
 
 Task("Upload-AppVeyor-Artifacts")
 	.IsDependentOn("Package")
-	.WithCriteria(() => !local)	
+	.WithCriteria(() => !local)
 	.Does(() =>
 {
 	// Upload zip file.

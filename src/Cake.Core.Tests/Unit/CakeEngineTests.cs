@@ -518,6 +518,111 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.True(fixture.Log.Messages.Any(x => x.StartsWith("Teardown error:")));
             }
+
+            [Fact]
+            public void Should_Execute_Finally_Handler_If_Task_Succeeds()
+            {
+                // Given
+                var invoked = false;
+                var engine = new CakeEngineFixture().CreateEngine();
+                engine.Task("A")
+                    .Finally(() => invoked = true);
+
+                // When
+                engine.RunTarget("A");
+
+                // Then
+                Assert.True(invoked);
+            }
+
+            [Fact]
+            public void Should_Execute_Finally_Handler_If_Task_Throws()
+            {
+                // Given
+                var invoked = false;
+                var engine = new CakeEngineFixture().CreateEngine();
+                engine.Task("A")
+                    .Does(() => { throw new InvalidOperationException("Whoopsie"); })
+                    .ContinueOnError()
+                    .Finally(() => invoked = true);
+
+                // When
+                engine.RunTarget("A");
+
+                // Then
+                Assert.True(invoked);
+            }
+
+            [Fact]
+            public void Should_Execute_Finally_Handler_After_Error_Handler_If_Task_Succeeds()
+            {
+                // Given
+                var result = new List<string>();
+                var engine = new CakeEngineFixture().CreateEngine();
+                engine.Task("A")
+                    .Does(() => { throw new InvalidOperationException("Whoopsie"); })
+                    .OnError(() => result.Add("Error"))
+                    .Finally(() => result.Add("Finally"));
+
+                // When
+                engine.RunTarget("A");
+
+                // Then
+                Assert.Equal(2, result.Count);
+                Assert.Equal("Error", result[0]);
+            }
+
+            [Fact]
+            public void Should_Execute_Error_Reporter_Before_Error_Handler_If_Task_Succeeds()
+            {
+                // Given
+                var result = new List<string>();
+                var engine = new CakeEngineFixture().CreateEngine();
+                engine.Task("A")
+                    .Does(() => { throw new InvalidOperationException("Whoopsie"); })
+                    .OnError(ex => result.Add("Error"))
+                    .ReportError(ex => result.Add("Report"));
+
+                // When
+                engine.RunTarget("A");
+
+                // Then
+                Assert.Equal(2, result.Count);
+                Assert.Equal("Report", result[0]);
+            }
+
+            [Fact]
+            public void Should_Swallow_Exceptions_Thrown_In_Error_Reporter()
+            {
+                // Given
+                var engine = new CakeEngineFixture().CreateEngine();
+                engine.Task("A")
+                    .Does(() => { throw new InvalidOperationException("Task"); })
+                    .ReportError(ex => { throw new InvalidOperationException("Report"); });
+
+                // When
+                var result = Record.Exception(() => engine.RunTarget("A"));
+
+                // Then
+                Assert.Equal("Task", result.Message);
+            }
+
+            [Fact]
+            public void Should_Execute_Error_Handler_Even_If_Exception_Was_Thrown_In_Error_Reporter()
+            {
+                // Given
+                var engine = new CakeEngineFixture().CreateEngine();
+                engine.Task("A")
+                    .Does(() => { throw new InvalidOperationException("Task"); })
+                    .OnError(() => { throw new InvalidOperationException("Error"); })
+                    .ReportError(ex => { throw new InvalidOperationException("Report"); });
+
+                // When
+                var result = Record.Exception(() => engine.RunTarget("A"));
+
+                // Then
+                Assert.Equal("Error", result.Message);
+            }
         }
     }
 }

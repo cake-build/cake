@@ -109,6 +109,7 @@
     <Compile Include="IO\IProcessRunner.cs" />
     <Compile Include="IO\Machine.cs" />
     <Compile Include="IO\IToolResolver.cs" />
+    <Compile Include="IO\NuGet\INuGetToolResolver.cs" />
     <Compile Include="IO\NuGet\NuGetToolResolver.cs" />
     <Compile Include="IO\Path.cs" />
     <Compile Include="IO\DirectoryPath.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Scripting\IScriptSession.cs" />
     <Compile Include="Scripting\IScriptSessionFactory.cs" />
     <Compile Include="Scripting\LineProcessor.cs" />
+    <Compile Include="Scripting\Processors\AddInDirectiveProcessor.cs" />
     <Compile Include="Scripting\Processors\LoadDirectiveProcessor.cs" />
     <Compile Include="Scripting\Processors\ReferenceDirectiveProcessor.cs" />
     <Compile Include="Scripting\ScriptProcessor.cs" />

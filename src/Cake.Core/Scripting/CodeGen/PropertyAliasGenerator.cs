@@ -27,6 +27,21 @@ namespace Cake.Core.Scripting.CodeGen
                 throw new ArgumentNullException("method");
             }
 
+            // Perform validation.
+            ValidateMethod(method);
+            ValidateMethodParameters(method);
+
+            // Get the property alias attribute.
+            var attribute = method.GetCustomAttribute<CakePropertyAliasAttribute>();
+
+            // Generate code.
+            return attribute.Cache
+                ? GenerateCachedCode(method)
+                : GenerateCode(method);
+        }
+
+        private static void ValidateMethod(MethodInfo method)
+        {
             Debug.Assert(method.DeclaringType != null); // Resharper
 
             if (!method.DeclaringType.IsStatic())
@@ -44,7 +59,10 @@ namespace Cake.Core.Scripting.CodeGen
                 const string format = "The method '{0}' is not a property alias.";
                 throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, method.Name));
             }
+        }
 
+        private static void ValidateMethodParameters(MethodInfo method)
+        {
             var parameters = method.GetParameters();
             var parameterCorrect = false;
             if (parameters.Length == 1)
@@ -57,7 +75,7 @@ namespace Cake.Core.Scripting.CodeGen
             if (!parameterCorrect)
             {
                 const string format = "The property alias '{0}' has an invalid signature.";
-                throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, method.Name));   
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, method.Name));
             }
 
             if (method.IsGenericMethod)
@@ -66,13 +84,11 @@ namespace Cake.Core.Scripting.CodeGen
                 throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, method.Name));
             }
 
-            if (method.ReturnType == typeof (void))
+            if (method.ReturnType == typeof(void))
             {
                 const string format = "The property alias '{0}' cannot return void.";
-                throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, method.Name));                
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, method.Name));
             }
-
-            return GenerateCode(method);
         }
 
         private static string GenerateCode(MethodInfo method)
@@ -88,6 +104,47 @@ namespace Cake.Core.Scripting.CodeGen
             builder.Append(method.GetFullName());
             builder.Append("(GetContext());");
             builder.Append("}}");
+
+            return builder.ToString();
+        }
+
+        private static string GenerateCachedCode(MethodInfo method)
+        {
+            var builder = new StringBuilder();
+
+            // Backing field.
+            builder.Append("private ");
+            builder.Append(GetReturnType(method));
+            if (method.ReturnType.IsValueType)
+            {
+                builder.Append("?");
+            }
+            builder.Append(" _");
+            builder.Append(method.Name);
+            builder.Append(";");
+            builder.Append("\n");
+
+            // Property
+            builder.Append("public ");
+            builder.Append(GetReturnType(method));
+            builder.Append(" ");
+            builder.Append(method.Name);
+            builder.Append("{");
+            builder.Append("get{");
+            builder.AppendFormat("if(_{0}==null)", method.Name);
+            builder.Append("{");
+            builder.AppendFormat("_{0}=", method.Name);
+            builder.Append(method.GetFullName());
+            builder.Append("(GetContext());");
+            builder.Append("}");
+            builder.AppendFormat("return _{0}", method.Name);
+            if (method.ReturnType.IsValueType)
+            {
+                builder.Append(".Value");
+            }
+            builder.Append(";");
+            builder.Append("}");
+            builder.Append("}");
 
             return builder.ToString();
         }

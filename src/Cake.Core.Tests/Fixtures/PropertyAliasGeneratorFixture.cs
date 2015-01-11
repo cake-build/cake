@@ -38,5 +38,17 @@ namespace Cake.Core.Tests.Fixtures
         {
             return 42;
         }
+
+        [CakePropertyAlias(Cache = true)]
+        public static string PropertyAliasReturningCachedString(this ICakeContext context)
+        {
+            return "Hello World";
+        }
+
+        [CakePropertyAlias(Cache = true)]
+        public static bool PropertyAliasReturningCachedBoolean(this ICakeContext context)
+        {
+            return true;
+        }
     }
 }

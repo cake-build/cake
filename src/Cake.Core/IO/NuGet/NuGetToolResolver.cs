@@ -6,7 +6,7 @@ namespace Cake.Core.IO.NuGet
     /// <summary>
     /// Contains NuGet path resolver functionality
     /// </summary>
-    public sealed class NuGetToolResolver : IToolResolver
+    public sealed class NuGetToolResolver : INuGetToolResolver
     {
         private IFile _nugetExeFile;
         private readonly IFileSystem _fileSystem;

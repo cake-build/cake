@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.IO.NuGet;
 using Cake.Core.Scripting;
 using Cake.Testing.Fakes;
 using NSubstitute;
@@ -23,6 +24,8 @@ namespace Cake.Core.Tests.Fixtures
         public FilePath Script { get; set; }
         public IDictionary<string, string> ArgumentDictionary { get; set; }
         public string Source { get; private set; }
+        public IGlobber Globber{ get; set; }
+        public INuGetToolResolver NuGetToolResolver{ get; private set; }
 
         public ScriptRunnerFixture(string fileName = "./build.cake")
         {
@@ -37,6 +40,8 @@ namespace Cake.Core.Tests.Fixtures
             FileSystem = new FakeFileSystem(true);
             FileSystem.GetCreatedFile(Script.MakeAbsolute(Environment), Source);
 
+            Globber = Substitute.For<IGlobber>();
+
             Session = Substitute.For<IScriptSession>();
             SessionFactory = Substitute.For<IScriptSessionFactory>();
             SessionFactory.CreateSession(Arg.Any<IScriptHost>()).Returns(Session);
@@ -44,7 +49,8 @@ namespace Cake.Core.Tests.Fixtures
             Arguments = Substitute.For<ICakeArguments>();
             AliasGenerator = Substitute.For<IScriptAliasGenerator>();            
             Log = Substitute.For<ICakeLog>();
-            ScriptProcessor = new ScriptProcessor(FileSystem, Environment, Log);
+            NuGetToolResolver = new NuGetToolResolver(FileSystem, Globber, Environment);
+            ScriptProcessor = new ScriptProcessor(FileSystem, Environment, Log, NuGetToolResolver);
 
             Host = Substitute.For<IScriptHost>();
             Host.FileSystem.Returns(c => FileSystem);
