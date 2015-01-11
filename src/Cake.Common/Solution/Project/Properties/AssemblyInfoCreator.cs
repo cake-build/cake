@@ -108,6 +108,10 @@ namespace Cake.Common.Solution.Project.Properties
             {
                 registration.AddString("AssemblyDescription", "System.Reflection", settings.Description);
             }
+            if (settings.Company != null)
+            {
+                registration.AddString("AssemblyCompany", "System.Reflection", settings.Company);
+            }
             if (settings.Product != null)
             {
                 registration.AddString("AssemblyProduct", "System.Reflection", settings.Product);

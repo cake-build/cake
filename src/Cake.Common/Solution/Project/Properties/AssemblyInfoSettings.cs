@@ -70,5 +70,11 @@
         /// </summary>
         /// <value>Whether or not the assembly is CLS compliant.</value>
         public bool? CLSCompliant { get; set; }
+
+        /// <summary>
+        /// Gets or sets the company.
+        /// </summary>
+        /// <value>The company.</value>
+        public string Company { get; set; }
     }
 }
