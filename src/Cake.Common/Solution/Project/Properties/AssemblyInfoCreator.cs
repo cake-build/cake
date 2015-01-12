@@ -67,7 +67,7 @@ namespace Cake.Common.Solution.Project.Properties
             _log.Verbose("Creating assembly info file: {0}", absoluteOutputPath);
 
             using (var stream = _fileSystem.GetFile(absoluteOutputPath).OpenWrite())
-            using (var writer = new StreamWriter(stream))
+            using (var writer = new StreamWriter(stream, System.Text.Encoding.UTF8))
             {
                 // Write header.
                 writer.WriteLine("//------------------------------------------------------------------------------");
