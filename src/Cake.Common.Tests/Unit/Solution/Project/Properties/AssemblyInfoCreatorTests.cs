@@ -275,7 +275,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = fixture.CreateAndReturnContent();
 
                 // Then
-                Assert.True(result.Contains("using System.Runtime.InteropServices;"));
+                Assert.True(result.Contains("using System;"));
                 Assert.True(result.Contains("[assembly: CLSCompliant(true)]"));
             }
         }
