@@ -1,3 +1,6 @@
+### New in 0.1.27
+* Made build log easier to read.
+
 ### New in 0.1.26 (Released 2015/01/11)
 * Added AppVeyor support.
 * Added #addin directive for NuGet addins.
