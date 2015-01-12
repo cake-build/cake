@@ -146,7 +146,7 @@ namespace Cake.Common.Solution.Project.Properties
             }
             if (settings.CLSCompliant != null)
             {
-                registration.AddBoolean("CLSCompliant", "System.Runtime.InteropServices", settings.CLSCompliant.Value);
+                registration.AddBoolean("CLSCompliant", "System", settings.CLSCompliant.Value);
             }
 
             return registration;
