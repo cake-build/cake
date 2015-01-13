@@ -1,5 +1,7 @@
 ### New in 0.1.27
 * Made build log easier to read.
+* Fixed wrong namespace for CLSCompliant attribute.
+* Added predictable encoding to AssemblyInfoCreator.
 
 ### New in 0.1.26 (Released 2015/01/11)
 * Added AppVeyor support.
