@@ -235,6 +235,10 @@ namespace Cake.Core
 
                     if (ShouldTaskExecute(taskNode, isTarget))
                     {
+                        _log.Information("");
+                        _log.Information("========================================");
+                        _log.Information(taskNode.Name);
+                        _log.Information("========================================");
                         _log.Verbose("Executing task: {0}", taskNode.Name);
 
                         ExecuteTask(stopWatch, taskNode, report);
@@ -264,6 +268,10 @@ namespace Cake.Core
         {
             if (_setupAction != null)
             {
+                _log.Information("");
+                _log.Information("----------------------------------------");
+                _log.Information("Setup");
+                _log.Information("----------------------------------------");
                 _log.Verbose("Executing custom setup action...");
                 _setupAction();
             }
@@ -369,6 +377,10 @@ namespace Cake.Core
             {
                 try
                 {
+                    _log.Information("");
+                    _log.Information("----------------------------------------");
+                    _log.Information("Teardown");
+                    _log.Information("----------------------------------------");
                     _log.Verbose("Executing custom teardown action...");
                     _teardownAction();
                 }
