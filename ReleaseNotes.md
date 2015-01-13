@@ -1,4 +1,6 @@
-### New in 0.1.27
+### New in 0.1.28
+
+### New in 0.1.27 (Released 2015/01/13)
 * Made build log easier to read.
 * Fixed wrong namespace for CLSCompliant attribute.
 * Added predictable encoding to AssemblyInfoCreator.
