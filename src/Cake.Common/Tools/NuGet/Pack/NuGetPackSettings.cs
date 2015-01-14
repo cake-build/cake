@@ -130,5 +130,11 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// </summary>
         /// <value>The tool path.</value>
         public FilePath ToolPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the package files.
+        /// </summary>
+        /// <value>The package files.</value>
+        public ICollection<NuSpecContent> Files { get; set; }
     }
 }
