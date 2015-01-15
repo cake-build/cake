@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 
 namespace Cake.Core.IO
 {
@@ -14,6 +16,21 @@ namespace Cake.Core.IO
         public DirectoryPath(string path)
             : base(path)
         {
+        }
+
+        /// <summary>
+        /// Gets the name of the directory.
+        /// </summary>
+        /// <returns>The directory name.</returns>
+        /// <remarks>
+        ///    If this is passed a file path, it will return the file name.
+        ///    This is by-and-large equivalent to how DirectoryInfo handles this scenario.
+        ///    If we wanted to return the *actual* directory name, we'd need to pull in IFileSystem,
+        ///    and do various checks to make sure things exists.
+        /// </remarks>
+        public string GetDirectoryName()
+        {
+            return Segments.Last();
         }
 
         /// <summary>

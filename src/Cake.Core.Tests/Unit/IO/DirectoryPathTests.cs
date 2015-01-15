@@ -7,6 +7,25 @@ namespace Cake.Core.Tests.Unit.IO
 {
     public sealed class DirectoryPathTests
     {
+        public sealed class TheGetDirectoryNameMethod
+        {
+            [Theory]
+            [InlineData("C:/Data", "Data")]
+            [InlineData("C:/Data/Work", "Work")]
+            [InlineData("C:/Data/Work/file.txt", "file.txt")]
+            public void Should_Return_Directory_Name(string directoryPath, string name)
+            {
+                // Given
+                var path = new DirectoryPath(directoryPath);
+
+                // When
+                var result = path.GetDirectoryName();
+
+                // Then
+                Assert.Equal(name, result);
+            }
+        }
+
         public sealed class TheGetFilePathMethod
         {
             [Fact]
