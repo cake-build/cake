@@ -31,12 +31,13 @@ namespace Cake.Common.Tools.NuGet.Pack
                 {"tags", settings => ToSpaceSeparatedString(settings.Tags)}
             };
         }
-
+        private const string NuSpecXsd = "http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd";
         public static void Transform(XmlDocument document, NuGetPackSettings settings)
         {
             // Create the namespace manager.
             var namespaceManager = new XmlNamespaceManager(document.NameTable);
-            namespaceManager.AddNamespace("nu", "http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd");
+            
+            namespaceManager.AddNamespace("nu", NuSpecXsd);
 
             // Iterate through all mappings.
             foreach (var elementName in _mappings.Keys)
@@ -49,6 +50,39 @@ namespace Cake.Common.Tools.NuGet.Pack
                     node.InnerText = content;
                 }
             }
+
+            //Check if files specified
+            if (settings.Files != null && settings.Files.Count > 0)
+            {
+                var filesPath = string.Format(CultureInfo.InvariantCulture, "/package//*[local-name()='files']");
+                var filesElement =document.SelectSingleNode(filesPath, namespaceManager);
+                if (filesElement == null)
+                {
+                    // Get the package element.
+                    var package = GetPackageElement(document);
+                    filesElement = document.CreateAndAppendElement(package, "files");
+
+                }
+                // Add the files
+                filesElement.RemoveAll();
+                foreach (var file in settings.Files)
+                {
+                    var fileElement = document.CreateAndAppendElement(filesElement, "file");
+                    fileElement.AddAttributeIfSpecified(file.Source, "src");
+                    fileElement.AddAttributeIfSpecified(file.Exclude, "exclude");
+                    fileElement.AddAttributeIfSpecified(file.Target, "target");
+                }
+            }
+        }
+
+        private static XmlNode GetPackageElement(XmlDocument document)
+        {
+            var package = document.SelectSingleNode("/package");
+            if (package == null)
+            {
+                throw new CakeException("Nuspec file is missing package root.");
+            }
+            return package;
         }
 
         private static XmlNode FindOrCreateElement(XmlDocument document, XmlNamespaceManager ns, string name)
@@ -61,27 +95,39 @@ namespace Cake.Common.Tools.NuGet.Pack
                 if (parent == null)
                 {
                     // Get the package element.
-                    var package = document.SelectSingleNode("/package");
-                    if (package == null)
-                    {
-                        throw new CakeException("Nuspec file is missing package root.");
-                    }
+                    var package = GetPackageElement(document);
 
                     // Create the metadata element.
-                    parent = document.CreateElement("metadata", "http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd");
+                    parent = document.CreateElement("metadata", NuSpecXsd);
                     package.PrependChild(parent);
                 }
-
-                // If the parent didn't have a namespace specified, then skip adding one.
-                // Otherwise add the parent's namespace. This is a little hackish, but it 
-                // will avoid empty namespaces. This should probably be done better...
-                node = parent.NamespaceURI == string.Empty 
-                    ? document.CreateElement(name) 
-                    : document.CreateElement(name, parent.NamespaceURI);
-
-                parent.AppendChild(node);
+                
+                node = document.CreateAndAppendElement(parent, name);
             }
             return node;
+        }
+
+        private static XmlNode CreateAndAppendElement(this XmlDocument document, XmlNode parent, string name)
+        {
+            // If the parent didn't have a namespace specified, then skip adding one.
+            // Otherwise add the parent's namespace. This is a little hackish, but it 
+            // will avoid empty namespaces. This should probably be done better...
+            return parent.AppendChild(
+                string.IsNullOrWhiteSpace(parent.NamespaceURI)
+                    ? document.CreateElement(name)
+                    : document.CreateElement(name, parent.NamespaceURI)
+                );
+        }
+
+        private static void AddAttributeIfSpecified(this XmlNode element, string value, string name)
+        {
+            if (string.IsNullOrWhiteSpace(value) || element.OwnerDocument == null || element.Attributes == null)
+            {
+                return;
+            }
+            var attr = element.OwnerDocument.CreateAttribute(name);
+            attr.Value = value;
+            element.Attributes.Append(attr);
         }
 
         private static string ToString(string value)
