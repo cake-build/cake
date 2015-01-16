@@ -1,5 +1,6 @@
 using System;
 using Cake.Core.IO;
+using System.Globalization;
 
 namespace Cake.Core.Scripting.Processors
 {
@@ -46,11 +47,23 @@ namespace Cake.Core.Scripting.Processors
                 return false;
             }
 
-            var directoryPath = GetAbsoluteDirectory(currentScriptPath);
-            var uri = new Uri(tokens[1].UnQuote());
-            if (uri.IsFile)
+            var scriptPathString = tokens[1].UnQuote();
+            if (string.IsNullOrWhiteSpace(scriptPathString))
             {
-                var scriptPath = new FilePath(uri.ToString());
+                throw new CakeException(
+                    string.Format(CultureInfo.InvariantCulture,
+                        "{0}{2}{1}",
+                        "Load directive may not contain empty path or Uri",
+                        line,
+                        Environment.NewLine));
+            }
+
+            var directoryPath = GetAbsoluteDirectory(currentScriptPath);
+            Uri scriptUri;
+            if (!Uri.TryCreate(scriptPathString, UriKind.RelativeOrAbsolute, out scriptUri)
+                || !scriptUri.IsAbsoluteUri || scriptUri.IsFile)
+            {
+                var scriptPath = new FilePath(scriptPathString);
                 if (scriptPath.IsRelative)
                     scriptPath = scriptPath.MakeAbsolute(directoryPath);
 
@@ -58,7 +71,7 @@ namespace Cake.Core.Scripting.Processors
             }
             else
             {
-                processor.Process(uri, context);
+                processor.Process(scriptUri, context);
             }
 
             return true;
