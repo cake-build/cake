@@ -7,6 +7,7 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
 using Cake.Core.Scripting.Processors;
+using System.Net;
 
 namespace Cake.Core.Scripting
 {
@@ -75,15 +76,17 @@ namespace Cake.Core.Scripting
                 throw new ArgumentNullException("context");
             }
 
+            var scriptPath = path.MakeAbsolute(_environment);
+
             // Already processed this script?
-            if (context.HasScriptBeenProcessed(path.FullPath))
+            if (context.HasScriptBeenProcessed(scriptPath.FullPath))
             {
-                _log.Debug("Skipping {0} since it's already been processed.", path.GetFilename().FullPath);
+                _log.Debug("Skipping {0} since it's already been processed.", scriptPath.GetFilename().FullPath);
                 return;
             }
 
             // Add the script.
-            context.MarkScriptAsProcessed(path.MakeAbsolute(_environment).FullPath);
+            context.MarkScriptAsProcessed(scriptPath.FullPath);
 
             // Read the source.
             _log.Debug("Processing {0}...", path.GetFilename().FullPath);
@@ -99,6 +102,68 @@ namespace Cake.Core.Scripting
                     {
                         // Append the line directive for the script.
                         context.AppendScriptLine(string.Format(CultureInfo.InvariantCulture, "#line 1 \"{0}\"", path.GetFilename().FullPath));
+                        firstLine = false;
+                    }
+
+                    context.AppendScriptLine(line);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Processes the specified script from the web.
+        /// </summary>
+        /// <param name="url">The script's url.</param>
+        /// <param name="context">The context.</param>
+        public void Process(Uri url, ScriptProcessorContext context)
+        {
+            if (url == null)
+            {
+                throw new ArgumentNullException("url");
+            }
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var urlString = url.ToString();
+
+            // Already processed this script?
+            if (context.HasScriptBeenProcessed(urlString))
+            {
+                _log.Debug("Skipping {0} since it's already been processed.", urlString);
+                return;
+            }
+
+            // Add the script.
+            context.MarkScriptAsProcessed(urlString);
+
+            // Download the script to a local directory.
+            FilePath tempFile = System.IO.Path.GetTempFileName();
+            try
+            {
+                var client = new WebClient();
+                client.DownloadFile(url, tempFile.FullPath);
+            }
+            catch (WebException ex)
+            {
+                throw new Exception("Failed to load file from web. See inner exception.", ex);
+            }
+
+            // Read the source.
+            _log.Debug("Processing {0}...", tempFile.GetFilename().FullPath);
+            var lines = ReadSource(tempFile);
+
+            // Iterate all lines in the script.
+            var firstLine = true;
+            foreach (var line in lines)
+            {
+                if (!_lineProcessors.Any(p => p.Process(this, context, tempFile, line)))
+                {
+                    if (firstLine)
+                    {
+                        // Append the line directive for the script.
+                        context.AppendScriptLine(string.Format(CultureInfo.InvariantCulture, "#line 1 \"{0}\"", tempFile.GetFilename().FullPath));
                         firstLine = false;
                     }
 

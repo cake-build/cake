@@ -47,9 +47,19 @@ namespace Cake.Core.Scripting.Processors
             }
 
             var directoryPath = GetAbsoluteDirectory(currentScriptPath);
-            var scriptPath = new FilePath(tokens[1].UnQuote()).MakeAbsolute(directoryPath);
+            var uri = new Uri(tokens[1].UnQuote());
+            if (uri.IsFile)
+            {
+                var scriptPath = new FilePath(uri.ToString());
+                if (scriptPath.IsRelative)
+                    scriptPath = scriptPath.MakeAbsolute(directoryPath);
 
-            processor.Process(scriptPath, context);
+                processor.Process(scriptPath, context);
+            }
+            else
+            {
+                processor.Process(uri, context);
+            }
 
             return true;
         }

@@ -2,6 +2,7 @@
 using Cake.Core.Scripting;
 using Cake.Core.Tests.Fixtures;
 using Xunit;
+using Cake.Core.IO;
 
 namespace Cake.Core.Tests.Unit.Scripting
 {
@@ -48,7 +49,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var processor = fixture.CreateProcessor();
 
                 // When
-                var result = Record.Exception(() => processor.Process(null, new ScriptProcessorContext()));
+                var result = Record.Exception(() => processor.Process((FilePath) null, new ScriptProcessorContext()));
 
                 // Then
                 Assert.IsArgumentNullException(result, "path");
