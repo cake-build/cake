@@ -84,14 +84,15 @@ namespace Cake.Core.IO
             }
 
             // Ge the root.
-            var rootDirectory = new DirectoryPath(string.Join("/", rootNodes.Select(x => x.Render())));
+            var rootPath = string.Join("/", rootNodes.Select(x => x.Render()));
 
             // Nothing left in the path?
             if (path.Count == 0)
             {
-                // We have an absolute path with no wild cards.
-                return new Path[] { rootDirectory };
+                return GetPath(rootPath);
             }
+
+            var rootDirectory = new DirectoryPath(rootPath);
 
             // Walk the root and return the unique results.
             var segments = new Stack<Node>(((IEnumerable<Node>)path).Reverse());
@@ -125,6 +126,26 @@ namespace Cake.Core.IO
             }
 
             return null;
+        }
+
+        private IEnumerable<Path> GetPath(string rootPath)
+        {
+            // Is this an existing file?
+            var rootFilePath = new FilePath(rootPath);
+            if (_fileSystem.Exist(rootFilePath))
+            {
+                return new Path[] { rootFilePath };
+            }
+
+            // Is this an existing directory?
+            var rootDirectoryPath = new DirectoryPath(rootPath);
+            if (_fileSystem.Exist(rootDirectoryPath))
+            {
+                return new Path[] { rootDirectoryPath };
+            }
+
+            // Neither an existing file or directory.
+            return new Path[] { };
         }
 
         private List<Path> Walk(DirectoryPath rootPath, Stack<Node> segments)
@@ -197,7 +218,7 @@ namespace Cake.Core.IO
                 {
                     results.Add(file.Path);
                 }
-                else if(pathTest)
+                else if (pathTest)
                 {
                     /////////////////////////////////////////////////////////////B
                     // We got a match, but we still have segments left.
