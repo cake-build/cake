@@ -27,7 +27,7 @@ namespace Cake.Core.Tests.Unit.IO
             {
                 // Given
                 var fileSystem = Substitute.For<IFileSystem>();
-                
+
                 // When
                 var result = Record.Exception(() => new Globber(fileSystem, null));
 
@@ -43,7 +43,7 @@ namespace Cake.Core.Tests.Unit.IO
             {
                 // Given
                 var fixture = new GlobberFixture();
-                var globber = new Globber(fixture.FileSystem, fixture.Environment);
+                var globber = fixture.CreateGlobber();
 
                 // When
                 var result = Record.Exception(() => globber.Match(null));
@@ -57,7 +57,7 @@ namespace Cake.Core.Tests.Unit.IO
             {
                 // Given
                 var fixture = new GlobberFixture();
-                var globber = new Globber(fixture.FileSystem, fixture.Environment);
+                var globber = fixture.CreateGlobber();
 
                 // When
                 var result = globber.Match("/Temp/**/*.txt").ToArray();
@@ -73,24 +73,23 @@ namespace Cake.Core.Tests.Unit.IO
             {
                 // Given
                 var fixture = new GlobberFixture();
-                var globber = new Globber(fixture.FileSystem, fixture.Environment);
+                var globber = fixture.CreateGlobber();
 
                 // When
                 var result = globber.Match("Hello/World/Text.txt").ToArray();
 
                 // Then
                 Assert.Equal(1, result.Length);
-                Assert.Equal("/Working/Hello/World/Text.txt", result[0].FullPath);
+                Assert.Equal("/Temp/Hello/World/Text.txt", result[0].FullPath);
             }
 
-#if !UNIX
             [Fact]
             public void Will_Fix_Root_If_Drive_Is_Missing_By_Using_The_Drive_From_The_Working_Directory()
             {
                 // Given
-                var fixture = new GlobberFixture(isUnix: false);
-                fixture.Environment.WorkingDirectory.Returns("C:/Working/");
-                var globber = new Globber(fixture.FileSystem, fixture.Environment);
+                var fixture = new GlobberFixture();
+                fixture.SetWorkingDirectory("C:/Working/");
+                var globber = fixture.CreateGlobber();
 
                 // When
                 var result = globber.Match("/Temp/Hello/World/Text.txt").ToArray();
@@ -104,8 +103,8 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Throw_If_Unc_Root_Was_Encountered()
             {
                 // Given
-                var fixture = new GlobberFixture(isUnix: false);
-                var globber = new Globber(fixture.FileSystem, fixture.Environment);
+                var fixture = new GlobberFixture();
+                var globber = fixture.CreateGlobber();
 
                 // When
                 var result = Record.Exception(() => globber.Match("//Hello/World/Text.txt"));
@@ -114,22 +113,87 @@ namespace Cake.Core.Tests.Unit.IO
                 Assert.IsType<NotSupportedException>(result);
                 Assert.Equal("UNC paths are not supported.", result.Message);
             }
-#endif
 
             [Theory]
             [InlineData(true, false)]
             [InlineData(false, true)]
-            public void Should_Ignore_Case_Sensitivity_On_Case_Insensitive_Operative_System(bool isUnix, bool shouldFindFile)
+            public void Should_Ignore_Case_Sensitivity_On_Case_Insensitive_Operative_System(bool isFileSystemCaseSensitive, bool shouldFindFile)
             {
                 // Given
-                var fixture = new GlobberFixture(isUnix);
-                var globber = new Globber(fixture.FileSystem, fixture.Environment);
+                var fixture = new GlobberFixture(isFileSystemCaseSensitive);
+                var globber = fixture.CreateGlobber();
 
                 // When
                 var result = globber.Match("/Temp/**/text.txt").ToArray();
 
                 // Then
                 Assert.Equal(shouldFindFile, result.Length == 1);
+            }
+
+            [Fact]
+            public void Should_Return_Single_Path_For_Absolute_File_Path_Without_Glob_Pattern()
+            {
+                // Given
+                var fixture = new GlobberFixture();
+                var globber = fixture.CreateGlobber();
+
+                // When
+                var result = globber.Match("/Temp/Hello/World/Text.txt").ToArray();
+
+                // Then                
+                Assert.Equal(1, result.Length);
+                Assert.IsType<FilePath>(result[0]);
+                Assert.Equal("/Temp/Hello/World/Text.txt", result[0].FullPath);
+            }
+
+            [Fact]
+            public void Should_Return_Single_Path_For_Absolute_Directory_Path_Without_Glob_Pattern()
+            {
+                // Given
+                var fixture = new GlobberFixture();
+                var globber = fixture.CreateGlobber();
+
+                // When
+                var result = globber.Match("/Temp/Hello/World").ToArray();
+
+                // Then                
+                Assert.Equal(1, result.Length);
+                Assert.IsType<DirectoryPath>(result[0]);
+                Assert.Equal("/Temp/Hello/World", result[0].FullPath);
+            }
+
+            [Fact]
+            public void Should_Return_Single_Path_For_Relative_File_Path_Without_Glob_Pattern()
+            {
+                // Given
+                var fixture = new GlobberFixture();
+                fixture.SetWorkingDirectory("/Temp/Hello");
+                var globber = fixture.CreateGlobber();
+
+                // When
+                var result = globber.Match("./World/Text.txt").ToArray();
+
+                // Then                
+                Assert.Equal(1, result.Length);
+                Assert.IsType<FilePath>(result[0]);
+                Assert.Equal("/Temp/Hello/World/Text.txt", result[0].FullPath);
+            }
+
+            [Fact]
+            public void Should_Return_Single_Path_For_Relative_Directory_Path_Without_Glob_Pattern()
+            {
+                // Given
+                var fixture = new GlobberFixture();
+                fixture.SetWorkingDirectory("/Temp/Hello");
+                var globber = fixture.CreateGlobber();
+
+                // When
+                var result = globber.Match("./World").ToArray();
+
+                // Then                
+                Assert.Equal(1, result.Length);
+                Assert.IsType<DirectoryPath>(result[0]);
+                Assert.Equal("/Temp/Hello/World", result[0].FullPath);
             }
         }
     }
