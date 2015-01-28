@@ -6,39 +6,45 @@ namespace Cake.Core.Tests.Fixtures
 {
     internal sealed class GlobberFixture
     {
-        public IFileSystem FileSystem { get; set; }
+        public FakeFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
 
-        public GlobberFixture(bool isUnix = true)
-        {
-            FileSystem = CreateFileSystem(isUnix);
-            Environment = CreateEnvironment(isUnix);
+        public GlobberFixture()
+            : this(false)
+        {            
         }
 
-        private static FakeFileSystem CreateFileSystem(bool isUnix)
+        public GlobberFixture(bool isFileSystemCaseSensitive)
         {
-            var fileSystem = new FakeFileSystem(isUnix);
-            fileSystem.GetCreatedDirectory("/Temp");
-            fileSystem.GetCreatedDirectory("/Temp/Hello");
-            fileSystem.GetCreatedDirectory("/Temp/Hello/World");
-            fileSystem.GetCreatedDirectory("/Temp/Goodbye");
-            fileSystem.GetCreatedFile("/Presentation.ppt");
-            fileSystem.GetCreatedFile("/Budget.xlsx");
-            fileSystem.GetCreatedFile("/Text.txt");
-            fileSystem.GetCreatedFile("/Temp");
-            fileSystem.GetCreatedFile("/Temp/Hello/World/Text.txt");
-            fileSystem.GetCreatedFile("/Temp/Hello/World/Picture.png");
-            fileSystem.GetCreatedFile("/Temp/Goodbye/OtherText.txt");
-            fileSystem.GetCreatedFile("/Temp/Goodbye/OtherPicture.png");
-            return fileSystem;
+            FileSystem = new FakeFileSystem(isFileSystemCaseSensitive);
+            FileSystem.GetCreatedDirectory("/Temp");
+            FileSystem.GetCreatedDirectory("/Temp/Hello");
+            FileSystem.GetCreatedDirectory("/Temp/Hello/World");
+            FileSystem.GetCreatedDirectory("/Temp/Goodbye");
+            FileSystem.GetCreatedFile("/Presentation.ppt");
+            FileSystem.GetCreatedFile("/Budget.xlsx");
+            FileSystem.GetCreatedFile("/Text.txt");
+            FileSystem.GetCreatedFile("/Temp");
+            FileSystem.GetCreatedFile("/Temp/Hello/World/Text.txt");
+            FileSystem.GetCreatedFile("/Temp/Hello/World/Picture.png");
+            FileSystem.GetCreatedFile("/Temp/Goodbye/OtherText.txt");
+            FileSystem.GetCreatedFile("/Temp/Goodbye/OtherPicture.png");
+            FileSystem.GetCreatedFile("/Working/Text.txt");
+            FileSystem.GetCreatedFile("C:/Temp/Hello/World/Text.txt");
+
+            Environment = Substitute.For<ICakeEnvironment>();
+            Environment.IsUnix().Returns(isFileSystemCaseSensitive);
+            Environment.WorkingDirectory.Returns("/Temp");
         }
 
-        private static ICakeEnvironment CreateEnvironment(bool isUnix)
+        public void SetWorkingDirectory(DirectoryPath path)
         {
-            var environment = Substitute.For<ICakeEnvironment>();
-            environment.IsUnix().Returns(isUnix);
-            environment.WorkingDirectory.Returns("/Working");
-            return environment;
+            Environment.WorkingDirectory.Returns(path);
+        }
+
+        public Globber CreateGlobber()
+        {
+            return new Globber(FileSystem, Environment);
         }
     }
 }
