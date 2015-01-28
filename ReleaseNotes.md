@@ -1,5 +1,5 @@
 ### New in 0.1.29 (Released 2015/01/28)
-* Fixed globber bug that prevented NUnit runner to run.
+* Fixed globber bug that prevented NUnit runner from running.
 
 ### New in 0.1.28 (Released 2015/01/18)
 * Added support for transforming nuspec files.
