@@ -1,4 +1,7 @@
-### New in 0.1.28 (Releases 2015/01/18)
+### New in 0.1.29 (Released 2015/01/28)
+* Fixed globber bug that prevented NUnit runner to run.
+
+### New in 0.1.28 (Released 2015/01/18)
 * Added support for transforming nuspec files.
 * Added support for copying directories.
 
