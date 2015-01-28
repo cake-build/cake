@@ -44,7 +44,8 @@ namespace Cake.Core.Scripting.Processors
                 return false;
             }
 
-            if (!tokens[0].Equals("#r", StringComparison.Ordinal))
+            if (!tokens[0].Equals("#r", StringComparison.Ordinal) && 
+                !tokens[0].Equals("#reference", StringComparison.Ordinal))
             {
                 return false;
             }

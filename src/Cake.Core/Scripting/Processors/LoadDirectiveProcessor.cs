@@ -40,7 +40,8 @@ namespace Cake.Core.Scripting.Processors
                 return false;
             }
 
-            if (!tokens[0].Equals("#l", StringComparison.Ordinal))
+            if (!tokens[0].Equals("#l", StringComparison.Ordinal) &&
+                !tokens[0].Equals("#load", StringComparison.Ordinal))
             {
                 return false;
             }
