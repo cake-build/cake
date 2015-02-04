@@ -105,6 +105,8 @@
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsExtensionsTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsTests.cs" />
     <Compile Include="Unit\Tools\MSTest\MSTestRunnerTests.cs" />
+    <Compile Include="Unit\Tools\NuGet\Install\NuGetInstallerTests.cs" />
+    <Compile Include="Unit\Tools\NuGet\Install\NuGetInstallerSettingsTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Pack\NuGetPackerTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Pack\NuGetPackSettingsTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Push\NuGetPusherTests.cs" />
@@ -151,6 +153,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
