@@ -110,11 +110,13 @@ namespace Cake.Core.Tests.Unit.Scripting
                 Assert.Equal("hello.dll", result.References.ElementAt(0));
             }
 
-            [Fact]
-            public void Should_Return_Multiple_Assembly_References_Found_In_Source()
+            [Theory]
+            [InlineData("#r \"hello.dll\"\r\n#r \"world.dll\"\r\nConsole.WriteLine();")]
+            [InlineData("#reference \"hello.dll\"\r\n#reference \"world.dll\"\r\nConsole.WriteLine();")]
+            [InlineData("#reference \"hello.dll\"\r\n#r \"world.dll\"\r\nConsole.WriteLine();")]
+            public void Should_Return_Multiple_Assembly_References_Found_In_Source(string source)
             {
                 // Given
-                const string source = "#r \"hello.dll\"\r\n#r \"world.dll\"\r\nConsole.WriteLine();";
                 var fixture = new ScriptProcessorFixture(scriptSource: source);
 
                 // When
@@ -126,11 +128,13 @@ namespace Cake.Core.Tests.Unit.Scripting
                 Assert.Equal("world.dll", result.References.ElementAt(1));
             }
 
-            [Fact]
-            public void Should_Return_Multiple_Assembly_References_Found_In_Source_Regardless_Of_Location()
+            [Theory]
+            [InlineData("#r \"hello.dll\"\r\nConsole.WriteLine();\r\n#r \"world.dll\"")]
+            [InlineData("#reference \"hello.dll\"\r\nConsole.WriteLine();\r\n#reference \"world.dll\"")]
+            [InlineData("#reference \"hello.dll\"\r\nConsole.WriteLine();\r\n#r \"world.dll\"")]
+            public void Should_Return_Multiple_Assembly_References_Found_In_Source_Regardless_Of_Location(string source)
             {
                 // Given
-                const string source = "#r \"hello.dll\"\r\nConsole.WriteLine();\r\n#r \"world.dll\"";
                 var fixture = new ScriptProcessorFixture(scriptSource: source);
 
                 // When
@@ -142,11 +146,12 @@ namespace Cake.Core.Tests.Unit.Scripting
                 Assert.Equal("world.dll", result.References.ElementAt(1));
             }
 
-            [Fact]
-            public void Should_Process_Single_Script_Reference_Found_In_Source()
+            [Theory]
+            [InlineData("#l \"hello.cake\"\r\nConsole.WriteLine();")]
+            [InlineData("#load \"hello.cake\"\r\nConsole.WriteLine();")]
+            public void Should_Process_Single_Script_Reference_Found_In_Source(string source)
             {
                 // Given
-                const string source = "#l \"hello.cake\"\r\nConsole.WriteLine();";
                 var fixture = new ScriptProcessorFixture(scriptSource: source);
                 fixture.FileSystem.GetCreatedFile("/Working/hello.cake");
 
@@ -159,11 +164,13 @@ namespace Cake.Core.Tests.Unit.Scripting
                 Assert.Equal("/Working/hello.cake", result.ProcessedScripts.ElementAt(1));
             }
 
-            [Fact]
-            public void Should_Process_Multiple_Script_References_Found_In_Source()
+            [Theory]
+            [InlineData("#l \"hello.cake\"\r\n#l \"world.cake\"\r\nConsole.WriteLine();")]
+            [InlineData("#load \"hello.cake\"\r\n#load \"world.cake\"\r\nConsole.WriteLine();")]
+            [InlineData("#load \"hello.cake\"\r\n#l \"world.cake\"\r\nConsole.WriteLine();")]
+            public void Should_Process_Multiple_Script_References_Found_In_Source(string source)
             {
                 // Given
-                const string source = "#l \"hello.cake\"\r\n#l \"world.cake\"\r\nConsole.WriteLine();";
                 var fixture = new ScriptProcessorFixture(scriptSource: source);
                 fixture.FileSystem.GetCreatedFile("/Working/hello.cake");
                 fixture.FileSystem.GetCreatedFile("/Working/world.cake");
