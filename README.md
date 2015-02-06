@@ -1,5 +1,7 @@
 #Cake
 
+[![Join the chat at https://gitter.im/cake-build/cake](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/cake-build/cake?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Cake (C# Make) is a build automation system using C#.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/c6lw0vvj1mf4395a/branch/develop)](https://ci.appveyor.com/project/patriksvensson/cake/branch/develop)
