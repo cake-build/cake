@@ -13,8 +13,14 @@ namespace Cake.Testing.Fakes
         private long _contentLength;
         private readonly object _contentLock = new object();
         private bool _deleted;
+        private bool _hidden;
 
         public FilePath Path
+        {
+            get { return _path; }
+        }
+
+        Core.IO.Path IFileSystemInfo.Path
         {
             get { return _path; }
         }
@@ -23,6 +29,12 @@ namespace Cake.Testing.Fakes
         {
             get { return _exists; }
             set { _exists = value; } 
+        }
+
+         public bool Hidden
+        {
+            get { return _hidden; }
+            set { _hidden = value; } 
         }
 
         public bool Deleted
@@ -57,6 +69,7 @@ namespace Cake.Testing.Fakes
             _fileSystem = fileSystem;
             _path = path;
             _exists = false;
+            _hidden = false;
         }
 
         public void Copy(FilePath destination, bool overwrite)

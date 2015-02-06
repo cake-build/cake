@@ -13,9 +13,19 @@ namespace Cake.Core.IO
             get { return _path; }
         }
 
+        Path IFileSystemInfo.Path
+        {
+            get { return _path; }
+        }
+
         public bool Exists
         {
             get { return _file.Exists; }
+        }
+
+        public bool Hidden
+        {
+            get { return (_file.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden; }
         }
 
         public long Length

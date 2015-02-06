@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Cake.Common.IO;
 using Cake.Common.Tests.Fixtures;
 using Cake.Core;
@@ -58,6 +59,30 @@ namespace Cake.Common.Tests.Unit.IO
             }
 
             [Fact]
+            public void Should_Delete_Files_Respecting_Predicate_In_Provided_Directory()
+            {
+                // Given
+                var directory = new DirectoryPath("/Temp/Hello");
+                var fixture = new FileSystemFixture();
+                var context = Substitute.For<ICakeContext>();
+                Func<IFileSystemInfo, bool> wherePredicate = entry=>!entry.Hidden;
+                context.FileSystem.Returns(fixture.FileSystem);
+                var filesNotMatchingPredicate = fixture
+                    .FileSystem
+                    .GetDirectory(directory)
+                    .GetFiles("*", SearchScope.Recursive)
+                    .Where(entry=>!wherePredicate(entry))
+                    .ToArray();
+
+                // When
+                context.CleanDirectory(directory, wherePredicate);
+
+                // Then
+                Assert.Empty(fixture.FileSystem.GetDirectory(directory).GetFiles("*", SearchScope.Recursive).Where(wherePredicate));
+                Assert.Equal(filesNotMatchingPredicate, fixture.FileSystem.GetDirectory(directory).GetFiles("*", SearchScope.Recursive));
+            }
+
+            [Fact]
             public void Should_Delete_Directories_In_Provided_Directory()
             {
                 // Given
@@ -71,6 +96,29 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 Assert.Empty(fixture.FileSystem.GetDirectory(directory).GetDirectories("*", SearchScope.Recursive));
+            }
+
+            [Fact]
+            public void Should_Delete_Directories_Respecting_Predicate_In_Provided_Directory()
+            {
+                // Given
+                var directory = new DirectoryPath("/Temp/Hello");
+                var fixture = new FileSystemFixture();
+                var context = Substitute.For<ICakeContext>();
+                context.FileSystem.Returns(fixture.FileSystem);
+                Func<IFileSystemInfo, bool> wherePredicate = entry=>!entry.Hidden;
+                var directoriesNotMatchingPredicate = fixture.FileSystem
+                    .GetDirectory(directory)
+                    .GetDirectories("*", SearchScope.Recursive)
+                    .Where(entry => !wherePredicate(entry))
+                    .ToArray();
+
+                // When
+                context.CleanDirectory(directory, wherePredicate);
+
+                // Then
+                Assert.Empty(fixture.FileSystem.GetDirectory(directory).GetDirectories("*", SearchScope.Recursive).Where(wherePredicate));
+                Assert.Equal(directoriesNotMatchingPredicate, fixture.FileSystem.GetDirectory(directory).GetDirectories("*", SearchScope.Recursive));
             }
 
             [Fact]
