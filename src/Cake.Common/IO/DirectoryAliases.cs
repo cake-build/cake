@@ -137,6 +137,19 @@ namespace Cake.Common.IO
         }
 
         /// <summary>
+        /// Cleans the specified directory.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="path">The directory path.</param>
+        /// <param name="wherePredicate">Filters which filesfiles/directories get deleted based on predicate</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Clean")]
+        public static void CleanDirectory(this ICakeContext context, DirectoryPath path, Func<IFileSystemInfo, bool> wherePredicate)
+        {
+            DirectoryCleaner.Clean(context, path, wherePredicate, null);
+        }
+
+        /// <summary>
         /// Creates the specified directory.
         /// </summary>
         /// <param name="context">The context.</param>

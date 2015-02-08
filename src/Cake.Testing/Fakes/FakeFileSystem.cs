@@ -28,16 +28,26 @@ namespace Cake.Testing.Fakes
 
         public IFile GetFile(FilePath path)
         {
+            return GetFile(path, false);
+        }
+
+        public IFile GetFile(FilePath path, bool hidden)
+        {
             if (!Files.ContainsKey(path))
             {
-                Files.Add(path, new FakeFile(this, path));
+                Files.Add(path, new FakeFile(this, path){Hidden = hidden});
             }
             return Files[path];
         }
 
         public IFile GetCreatedFile(FilePath path)
         {
-            var file = GetFile(path);
+            return GetCreatedFile(path, false);
+        }
+
+        public IFile GetCreatedFile(FilePath path, bool hidden)
+        {
+            var file = GetFile(path,hidden);
             file.Open(FileMode.Create, FileAccess.Write, FileShare.None).Close();
             return file;
         }
@@ -55,21 +65,26 @@ namespace Cake.Testing.Fakes
 
         public IDirectory GetDirectory(DirectoryPath path)
         {
-            return GetDirectory(path, creatable: true);
+            return GetDirectory(path, creatable: true, hidden:false);
         }
 
         public IDirectory GetCreatedDirectory(DirectoryPath path)
         {
-            var directory = GetDirectory(path, creatable: true);
+            return GetCreatedDirectory(path, false);
+        }
+
+        public IDirectory GetCreatedDirectory(DirectoryPath path, bool hidden)
+        {
+            var directory = GetDirectory(path, creatable: true, hidden:hidden);
             directory.Create();
             return directory;
         }
 
-        private IDirectory GetDirectory(DirectoryPath path, bool creatable)
+        private IDirectory GetDirectory(DirectoryPath path, bool creatable, bool hidden)
         {
             if (!Directories.ContainsKey(path))
             {
-                Directories.Add(path, new FakeDirectory(this, path, creatable));
+                Directories.Add(path, new FakeDirectory(this, path, creatable, hidden));
             }
             return Directories[path];
         }

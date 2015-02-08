@@ -5,21 +5,14 @@ namespace Cake.Core.IO
     /// <summary>
     /// Represents a file.
     /// </summary>
-    public interface IFile
+    public interface IFile : IFileSystemInfo
     {
         /// <summary>
         /// Gets the path to the file.
         /// </summary>
         /// <value>The path.</value>
-        FilePath Path { get; }
+        new FilePath Path { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="IFile"/> exists.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if the file exists; otherwise, <c>false</c>.
-        /// </value>
-        bool Exists { get; }
 
         /// <summary>
         /// Gets the length of the file.
