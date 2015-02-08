@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Cake.Common.Tests.Properties;
+using Cake.Common.Tools.NuGet.Install;
 using Cake.Common.Tools.NuGet.Pack;
 using Cake.Common.Tools.NuGet.Push;
 using Cake.Common.Tools.NuGet.Restore;
@@ -90,6 +91,11 @@ namespace Cake.Common.Tests.Fixtures
         public NuGetSources CreateSources()
         {
             return new NuGetSources(FileSystem, Environment, ProcessRunner, NuGetToolResolver);
+        }
+
+        public NuGetInstaller CreateInstaller()
+        {
+            return new NuGetInstaller(FileSystem, Environment, ProcessRunner, NuGetToolResolver);
         }
     }
 }

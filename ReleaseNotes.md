@@ -1,3 +1,7 @@
+### New in 0.1.30 (Released 2015/02/08)
+* Added support for installing NuGet packages from script.
+* Added filter support to CleanDirectory.
+
 ### New in 0.1.29 (Released 2015/01/28)
 * Fixed globber bug that prevented NUnit runner from running.
 

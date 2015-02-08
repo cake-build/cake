@@ -1,4 +1,5 @@
 ﻿using System;
+using Cake.Common.Tools.NuGet.Install;
 using Cake.Common.Tools.NuGet.Pack;
 using Cake.Common.Tools.NuGet.Push;
 using Cake.Common.Tools.NuGet.Restore;
@@ -191,6 +192,75 @@ namespace Cake.Common.Tools.NuGet
 
             var runner = new NuGetSources(context.FileSystem, context.Environment, context.ProcessRunner, context.GetToolResolver("NuGet"));
             return runner.HasSource(source, settings);
+        }
+
+        /// <summary>
+        /// Installs NuGet packages for the specified target.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageId">The id of the package to install.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Install")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Install")]
+        public static void NuGetInstall(this ICakeContext context, string packageId)
+        {
+            var settings = new NuGetInstallSettings();
+            NuGetInstall(context, packageId, settings);
+        }
+
+        /// <summary>
+        /// Installs NuGet packages using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageId">The id of the package to install.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Install")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Install")]
+        public static void NuGetInstall(this ICakeContext context, string packageId, NuGetInstallSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var runner = new NuGetInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.GetToolResolver("NuGet"));
+            runner.Install(packageId, settings);
+        }
+        
+
+        /// <summary>
+        /// Installs NuGet packages for the specified target.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageConfigPath">The target to install.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Install")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Install")]
+        public static void NuGetInstallFromConfig(this ICakeContext context, FilePath packageConfigPath)
+        {
+            var settings = new NuGetInstallSettings();
+            NuGetInstallFromConfig(context, packageConfigPath, settings);
+        }
+
+        /// <summary>
+        /// Installs NuGet packages using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageConfigPath">The target to install.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Install")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Install")]
+        public static void NuGetInstallFromConfig(this ICakeContext context, FilePath packageConfigPath, NuGetInstallSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var runner = new NuGetInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.GetToolResolver("NuGet"));
+            runner.InstallFromConfig(packageConfigPath, settings);
         }
     }
 }

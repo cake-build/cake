@@ -108,6 +108,8 @@
     <Compile Include="Tools\MSTest\MSTestAliases.cs" />
     <Compile Include="Tools\MSTest\MSTestRunner.cs" />
     <Compile Include="Tools\MSTest\MSTestSettings.cs" />
+    <Compile Include="Tools\NuGet\Install\NuGetInstaller.cs" />
+    <Compile Include="Tools\NuGet\Install\NugetInstallSettings.cs" />
     <Compile Include="Tools\NuGet\Pack\NuSpecContent.cs" />
     <Compile Include="Tools\NuGet\Sources\NuGetSources.cs" />
     <Compile Include="Tools\NuGet\Sources\NuGetSourcesSettings.cs" />
