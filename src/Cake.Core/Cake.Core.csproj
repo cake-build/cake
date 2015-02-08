@@ -104,6 +104,7 @@
     <Compile Include="IO\IDirectory.cs" />
     <Compile Include="IO\IFile.cs" />
     <Compile Include="IO\IFileSystem.cs" />
+    <Compile Include="IO\IFileSystemInfo.cs" />
     <Compile Include="IO\IGlobber.cs" />
     <Compile Include="IO\IProcess.cs" />
     <Compile Include="IO\IProcessRunner.cs" />

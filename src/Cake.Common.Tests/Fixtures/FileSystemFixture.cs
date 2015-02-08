@@ -24,6 +24,7 @@ namespace Cake.Common.Tests.Fixtures
             fileSystem.GetCreatedDirectory("/Temp/Hello/More/Empty");
             fileSystem.GetCreatedDirectory("/Temp/Hello/World");
             fileSystem.GetCreatedDirectory("/Temp/Goodbye");
+            fileSystem.GetCreatedDirectory("/Temp/Hello/Hidden", true);
             fileSystem.GetCreatedFile("/Presentation.ppt");
             fileSystem.GetCreatedFile("/Budget.xlsx");
             fileSystem.GetCreatedFile("/Text.txt");
@@ -31,6 +32,7 @@ namespace Cake.Common.Tests.Fixtures
             fileSystem.GetCreatedFile("/Temp/Hello/Document.txt");
             fileSystem.GetCreatedFile("/Temp/Hello/World/Text.txt");
             fileSystem.GetCreatedFile("/Temp/Hello/World/Picture.png");
+            fileSystem.GetCreatedFile("/Temp/Hello/Hidden.txt", true);
             fileSystem.GetCreatedFile("/Temp/Goodbye/OtherText.txt");
             fileSystem.GetCreatedFile("/Temp/Goodbye/OtherPicture.png");
             fileSystem.GetCreatedFile("/Temp/HasFiles/A.txt");
