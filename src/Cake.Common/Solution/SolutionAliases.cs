@@ -17,6 +17,27 @@ namespace Cake.Common.Solution
         /// <param name="context"></param>
         /// <param name="solutionPath"></param>
         /// <returns></returns>
+        /// <example>
+        /// <code>
+        /// var solutionPath = "./src/Cake.sln";
+        /// Information("Parsing {0}", solutionPath);
+        /// var parsedSolution = ParseSolution(solutionPath);
+        /// foreach(var project in parsedSolution.Projects)
+        /// {
+        ///     Information(
+        ///         @"Solution project file:
+        ///     Name: {0}
+        ///     Path: {1}
+        ///     Id  : {2}
+        ///     Type: {3}",
+        ///         project.Name,
+        ///         project.Path,
+        ///         project.Id,
+        ///         project.Type
+        ///     );
+        /// }
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static SolutionParserResult ParseSolution(this ICakeContext context, FilePath solutionPath)
         {
