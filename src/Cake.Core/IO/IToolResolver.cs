@@ -6,14 +6,15 @@
     public interface IToolResolver
     {
         /// <summary>
-        /// Name of tool
+        /// Gets the tool name.
         /// </summary>
+        /// <value>The tool name.</value>
         string Name { get; }
 
         /// <summary>
-        /// Generic resolve path to tool
+        /// Resolves the tool path.
         /// </summary>
-        /// <returns>nuget.exe path</returns>
+        /// <returns>The tool path.</returns>
         FilePath ResolveToolPath();
     }
 }

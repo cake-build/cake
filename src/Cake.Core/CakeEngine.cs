@@ -155,8 +155,7 @@ namespace Cake.Core
             _toolResolverLookup = toolResolvers.ToLookup(
                 key => key.Name,
                 value => value,
-                StringComparer.OrdinalIgnoreCase
-                );
+                StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -235,7 +234,7 @@ namespace Cake.Core
 
                     if (ShouldTaskExecute(taskNode, isTarget))
                     {
-                        _log.Information("");
+                        _log.Information(string.Empty);
                         _log.Information("========================================");
                         _log.Information(taskNode.Name);
                         _log.Information("========================================");
@@ -268,7 +267,7 @@ namespace Cake.Core
         {
             if (_setupAction != null)
             {
-                _log.Information("");
+                _log.Information(string.Empty);
                 _log.Information("----------------------------------------");
                 _log.Information("Setup");
                 _log.Information("----------------------------------------");
@@ -355,7 +354,7 @@ namespace Cake.Core
             }
         }
 
-        private void PerformErrorHandling(Action<Exception> errorHandler , Exception exception)
+        private void PerformErrorHandling(Action<Exception> errorHandler, Exception exception)
         {
             try
             {
@@ -377,7 +376,7 @@ namespace Cake.Core
             {
                 try
                 {
-                    _log.Information("");
+                    _log.Information(string.Empty);
                     _log.Information("----------------------------------------");
                     _log.Information("Teardown");
                     _log.Information("----------------------------------------");

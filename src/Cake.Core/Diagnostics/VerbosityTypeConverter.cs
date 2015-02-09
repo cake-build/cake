@@ -13,16 +13,16 @@ namespace Cake.Core.Diagnostics
         {
             _lookup = new Dictionary<string, Verbosity>(StringComparer.OrdinalIgnoreCase)
             {
-                {"q", Verbosity.Quiet},
-                {"quiet", Verbosity.Quiet},
-                {"m", Verbosity.Minimal},
-                {"minimal", Verbosity.Minimal},
-                {"n", Verbosity.Normal},
-                {"normal", Verbosity.Normal},
-                {"v", Verbosity.Verbose},
-                {"verbose", Verbosity.Verbose},
-                {"d", Verbosity.Diagnostic},
-                {"diagnostic", Verbosity.Diagnostic}
+                { "q", Verbosity.Quiet },
+                { "quiet", Verbosity.Quiet },
+                { "m", Verbosity.Minimal },
+                { "minimal", Verbosity.Minimal },
+                { "n", Verbosity.Normal },
+                { "normal", Verbosity.Normal },
+                { "v", Verbosity.Verbose },
+                { "verbose", Verbosity.Verbose },
+                { "d", Verbosity.Diagnostic },
+                { "diagnostic", Verbosity.Diagnostic }
             };
         }
 
@@ -33,16 +33,13 @@ namespace Cake.Core.Diagnostics
 
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            if (value != null)
+            var stringValue = value as string;
+            if (stringValue != null)
             {
-                var stringValue = value as string;
-                if (stringValue != null)
+                Verbosity verbosity;
+                if (_lookup.TryGetValue(stringValue, out verbosity))
                 {
-                    Verbosity verbosity;
-                    if (_lookup.TryGetValue(stringValue, out verbosity))
-                    {
-                        return verbosity;
-                    }
+                    return verbosity;
                 }
             }
             return base.ConvertFrom(context, culture, value);

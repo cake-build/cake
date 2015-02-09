@@ -9,27 +9,27 @@ namespace Cake.Core.Diagnostics
     public enum Verbosity
     {
         /// <summary>
-        /// Quiet
+        /// Quiet verbosity.
         /// </summary>
         Quiet = 0,
 
         /// <summary>
-        /// Minimal
+        /// Minimal verbosity.
         /// </summary>
         Minimal = 1,
 
         /// <summary>
-        /// Normal
+        /// Normal verbosity.
         /// </summary>
         Normal = 2,
 
         /// <summary>
-        /// Verbose
+        /// Verbose verbosity.
         /// </summary>
         Verbose = 3,
 
         /// <summary>
-        /// Diagnostic
+        /// Diagnostic verbosity.
         /// </summary>
         Diagnostic = 4 
     }

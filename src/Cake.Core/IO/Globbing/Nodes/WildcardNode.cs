@@ -28,15 +28,15 @@ namespace Cake.Core.IO.Globbing.Nodes
 
         public override string Render()
         {
-            if (Kind == TokenKind.Wildcard)
+            switch (Kind)
             {
-                return ".*";
-            }
-            if (Kind == TokenKind.CharacterWildcard)
-            {
-                return ".{1}";
-            }
-            throw new NotSupportedException();
+                case TokenKind.Wildcard:
+                    return ".*";
+                case TokenKind.CharacterWildcard:
+                    return ".{1}";
+                default:
+                    throw new NotSupportedException();
+            }            
         }
     }
 }

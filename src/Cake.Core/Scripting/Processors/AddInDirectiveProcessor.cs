@@ -11,23 +11,22 @@ namespace Cake.Core.Scripting.Processors
     /// </summary>
     public sealed class AddInDirectiveProcessor : LineProcessor
     {
-        private static FilePath _nuGetPath;
+        private static FilePath _nugetPath;
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
         private readonly IToolResolver _nugetToolResolver;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ReferenceDirectiveProcessor"/> class.
+        /// Initializes a new instance of the <see cref="AddInDirectiveProcessor" /> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="log">The log.</param>
-        /// <param name="nugetToolResolver">Nuget tool resolver</param>
-        public AddInDirectiveProcessor(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log, INuGetToolResolver nugetToolResolver) 
+        /// <param name="nugetToolResolver">The NuGet tool resolver.</param>
+        public AddInDirectiveProcessor(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log, INuGetToolResolver nugetToolResolver)
             : base(environment)
         {
-            
             if (fileSystem == null)
             {
                 throw new ArgumentNullException("fileSystem");
@@ -80,95 +79,86 @@ namespace Cake.Core.Scripting.Processors
                 return false;
             }
 
-            //Fetch addin NuGet Id
+            // Fetch the addin NuGet ID.
             var addInId = tokens
-                .Select(value=>value.UnQuote())
+                .Select(value => value.UnQuote())
                 .Skip(1).FirstOrDefault();
-
 
             if (string.IsNullOrWhiteSpace(addInId))
             {
                 return false;
             }
 
-            //Fetch optional NuGet source
+            // Fetch optional NuGet source.
             var source = tokens
                 .Skip(2)
-                .Select(value=>value.UnQuote())
+                .Select(value => value.UnQuote())
                 .FirstOrDefault();
 
-            //Get Cake path
-            var applicationRoot = _environment
-                .GetApplicationRoot();
+            // Get the directory path to Cake.
+            var applicationRoot = _environment.GetApplicationRoot();
 
-            //Get Addin directory
+            // Get the addin directory.
             var addInRootDirectoryPath = applicationRoot
                 .Combine("..\\Addins")
                 .Collapse()
                 .MakeAbsolute(_environment);
 
-
             var addInDirectoryPath = addInRootDirectoryPath.Combine(addInId);
-
             var addInRootDirectory = _fileSystem.GetDirectory(addInRootDirectoryPath);
 
-            // Create AddIn directory if it doesn't exist
+            // Create the addin directory if it doesn't exist.
             if (!addInRootDirectory.Exists)
             {
                 _log.Verbose("Creating addin directory {0}", addInRootDirectoryPath.FullPath);
                 addInRootDirectory.Create();
             }
 
-            // Fetch AddIn available assemblies
+            // Fetch available addin assemblies.
             var addInAssemblies = GetAddInAssemblies(addInDirectoryPath);
- 
-            // If no assemblies found try install add in from NuGet
-            if (addInAssemblies.Length==0)
+
+            // If no assemblies were found, try install addin from NuGet.
+            if (addInAssemblies.Length == 0)
             {
                 InstallAddin(addInId, addInRootDirectory, source);
                 addInAssemblies = GetAddInAssemblies(addInDirectoryPath);
             }
 
-            // Validate assemblies found
+            // Validate found assemblies.
             if (addInAssemblies.Length == 0)
             {
                 throw new CakeException("Failed to find AddIn assemblies");
             }
 
-            // Reference found assemblies
-            foreach (var assemblyPath in addInAssemblies.Select(assembly=>assembly.Path.FullPath))
+            // Reference found assemblies.
+            foreach (var assemblyPath in addInAssemblies.Select(assembly => assembly.Path.FullPath))
             {
                 _log.Verbose("Addin: {0}, adding Reference {1}", addInId, assemblyPath);
                 context.AddReference(assemblyPath);
             }
+
             return true;
         }
 
         private void InstallAddin(string addInId, IDirectory addInRootDirectory, string source)
         {
-            var nuGetPath = GetNuGetPath();
-
+            var nugetPath = GetNuGetPath();
             var runner = new ProcessRunner(_environment, _log);
-            var process = runner.Start(
-                nuGetPath,
-                new ProcessSettings
-                {
-                    Arguments = GetNuGetAddinInstallArguments(addInId, addInRootDirectory, source)
-                }
-                );
+            var process = runner.Start(nugetPath, new ProcessSettings 
+            {
+                Arguments = GetNuGetAddinInstallArguments(addInId, addInRootDirectory, source)
+            });
             process.WaitForExit();
         }
 
         private FilePath GetNuGetPath()
         {
-            var nuGetPath = _nuGetPath
-                            ?? (_nuGetPath = _nugetToolResolver.ResolveToolPath());
-
-            if (nuGetPath == null)
+            var nugetPath = _nugetPath ?? (_nugetPath = _nugetToolResolver.ResolveToolPath());
+            if (nugetPath == null)
             {
                 throw new CakeException("Failed to find NuGet");
             }
-            return nuGetPath;
+            return nugetPath;
         }
 
         private static ProcessArgumentBuilder GetNuGetAddinInstallArguments(string addInId, IDirectory addInRootDirectory,
@@ -191,7 +181,7 @@ namespace Cake.Core.Scripting.Processors
         private IFile[] GetAddInAssemblies(DirectoryPath addInDirectoryPath)
         {
             var addInDirectory = _fileSystem.GetDirectory(addInDirectoryPath);
-            return (addInDirectory.Exists)
+            return addInDirectory.Exists
                 ? addInDirectory.GetFiles("*.dll", SearchScope.Recursive)
                     .Where(file => !file.Path.FullPath.EndsWith("Cake.Core.dll", StringComparison.OrdinalIgnoreCase))
                     .ToArray()

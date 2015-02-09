@@ -14,6 +14,7 @@ namespace Cake.Core.IO
         {
             get { return _path; }
         }
+
         Path IFileSystemInfo.Path
         {
             get { return _path; }
@@ -61,7 +62,7 @@ namespace Cake.Core.IO
             return _directory
                 .GetDirectories(filter, option)
                 .Select(directory => new Directory(directory.FullName))
-                .Where(entry=>WherePredicate(entry, wherePredicate, predicateFiltered));
+                .Where(entry => WherePredicate(entry, wherePredicate, predicateFiltered));
         }
 
         public IEnumerable<IFile> GetFiles(string filter, SearchScope scope)
@@ -80,12 +81,12 @@ namespace Cake.Core.IO
             return _directory
                 .GetFiles(filter, option)
                 .Select(file => new File(file.FullName))
-                .Where(entry=>WherePredicate(entry, wherePredicate, predicateFiltered));
+                .Where(entry => WherePredicate(entry, wherePredicate, predicateFiltered));
         }
 
         private static bool WherePredicate(IFileSystemInfo entry, Func<IFileSystemInfo, bool> wherePredicate, Action<IFileSystemInfo> predicateFiltered)
         {
-            var include = wherePredicate==null || wherePredicate(entry);
+            var include = wherePredicate == null || wherePredicate(entry);
             if (!include && predicateFiltered != null)
             {
                 predicateFiltered(entry);

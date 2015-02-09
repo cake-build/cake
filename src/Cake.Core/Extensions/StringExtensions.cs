@@ -23,7 +23,7 @@ namespace Cake.Core
         }
 
         /// <summary>
-        /// Unquotes the specified <see cref="String"/>.
+        /// Unquote the specified <see cref="System.String"/>.
         /// </summary>
         /// <param name="value">The string to unquote.</param>
         /// <returns>An unquoted string.</returns>
@@ -34,12 +34,6 @@ namespace Cake.Core
                 value = value.Trim('"');                
             }
             return value;
-        }
-
-        private static bool IsQuoted(this string value)
-        {
-            return value.StartsWith("\"", StringComparison.OrdinalIgnoreCase)
-                   && value.EndsWith("\"", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -67,6 +61,12 @@ namespace Cake.Core
                 return value.Replace("\n", "\r\n");   
             }
             return string.Empty;
+        }
+
+        private static bool IsQuoted(this string value)
+        {
+            return value.StartsWith("\"", StringComparison.OrdinalIgnoreCase)
+                   && value.EndsWith("\"", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

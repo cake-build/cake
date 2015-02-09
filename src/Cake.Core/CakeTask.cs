@@ -82,7 +82,6 @@ namespace Cake.Core
             _criterias = new List<Func<bool>>();
         }
 
-
         /// <summary>
         /// Adds a dependency to the task.
         /// </summary>
@@ -134,7 +133,9 @@ namespace Cake.Core
         /// The error reporter is invoked when an exception is thrown from the task.
         /// This action is invoked before the error handler, but gives no opportunity to recover from the error.
         /// </summary>
-        /// <param name="errorReporter"></param>
+        /// <param name="errorReporter">The error reporter.</param>
+        /// <exception cref="System.ArgumentNullException"><paramref name="errorReporter"/> is <c>null</c>.</exception>
+        /// <exception cref="CakeException">There can only be one error reporter per task.</exception>
         public void SetErrorReporter(Action<Exception> errorReporter)
         {
             if (errorReporter == null)

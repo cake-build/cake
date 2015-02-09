@@ -13,7 +13,6 @@ namespace Cake.Core.IO
         /// <value>The path.</value>
         new FilePath Path { get; }
 
-
         /// <summary>
         /// Gets the length of the file.
         /// </summary>

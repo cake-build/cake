@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
-using Cake.Core.IO;
 using System.Reflection;
+using Cake.Core.IO;
 
 namespace Cake.Core
 {
