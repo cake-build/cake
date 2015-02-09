@@ -17,6 +17,37 @@ namespace Cake.Common.Solution.Project
         /// <param name="context"></param>
         /// <param name="projectPath"></param>
         /// <returns></returns>
+        /// <example>
+        /// <code>
+        /// var parsedProject = ParseProject("./src/Cake/Cake.csproj");
+        /// Information(
+        ///     @"    Parsed project file:
+        ///     Configuration         : {0}
+        ///     Platform              : {1}
+        ///     OutputType            : {2}
+        ///     RootNameSpace         : {3}
+        ///     AssemblyName          : {4}
+        ///     TargetFrameworkVersion: {5}
+        ///     Files                 : {6}",
+        ///     parsedProject.Configuration,
+        ///     parsedProject.Platform,
+        ///     parsedProject.OutputType,
+        ///     parsedProject.RootNameSpace,
+        ///     parsedProject.AssemblyName,
+        ///     parsedProject.TargetFrameworkVersion,
+        ///     string.Concat(
+        ///         parsedProject
+        ///             .Files
+        ///             .Select(
+        ///                 file=>  string.Format(
+        ///                             "\r\n            {0}",
+        ///                             file.FilePath
+        ///                         )
+        ///             )
+        ///     )
+        /// );
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static ProjectParserResult ParseProject(this ICakeContext context, FilePath projectPath)
         {
