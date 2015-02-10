@@ -65,6 +65,7 @@
     <Compile Include="Diagnostics\Verbosity.cs" />
     <Compile Include="Diagnostics\VerbosityTypeConverter.cs" />
     <Compile Include="Extensions\ConsoleExtensions.cs" />
+    <Compile Include="Extensions\DirectoryExtensions.cs" />
     <Compile Include="Extensions\MethodInfoExtensions.cs" />
     <Compile Include="Extensions\ProcessArgumentListExtensions.cs" />
     <Compile Include="Extensions\ProcessRunnerExtensions.cs" />
