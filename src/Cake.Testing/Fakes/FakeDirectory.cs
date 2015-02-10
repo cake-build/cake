@@ -18,7 +18,7 @@ namespace Cake.Testing.Fakes
             get { return _path; }
         }
 
-        Core.IO.Path IFileSystemInfo.Path
+        Path IFileSystemInfo.Path
         {
             get { return _path; }
         }
@@ -81,17 +81,6 @@ namespace Cake.Testing.Fakes
             return result;
         }
 
-        public IEnumerable<IDirectory> GetDirectories(string filter, SearchScope scope, Func<IFileSystemInfo, bool> wherePredicate)
-        {
-            return GetDirectories(filter, scope, wherePredicate, null);
-        }
-
-        public IEnumerable<IDirectory> GetDirectories(string filter, SearchScope scope, Func<IFileSystemInfo, bool> wherePredicate, Action<IFileSystemInfo> predicateFiltered)
-        {
-            return GetDirectories(filter, scope)
-                .Where(entry => WherePredicate(entry, wherePredicate, predicateFiltered));
-        }
-
         public IEnumerable<IFile> GetFiles(string filter, SearchScope scope)
         {
             var result = new List<IFile>();
@@ -105,27 +94,6 @@ namespace Cake.Testing.Fakes
                 }
             }
             return result;
-        }
-
-        public IEnumerable<IFile> GetFiles(string filter, SearchScope scope, Func<IFileSystemInfo, bool> wherePredicate)
-        {
-            return GetFiles(filter, scope, wherePredicate, null);
-        }
-
-        public IEnumerable<IFile> GetFiles(string filter, SearchScope scope, Func<IFileSystemInfo, bool> wherePredicate, Action<IFileSystemInfo> predicateFiltered)
-        {
-            return GetFiles(filter, scope)
-                .Where(entry=>WherePredicate(entry, wherePredicate, predicateFiltered));
-        }
-
-        private static bool WherePredicate(IFileSystemInfo entry, Func<IFileSystemInfo, bool> wherePredicate, Action<IFileSystemInfo> predicateFiltered)
-        {
-            var include = wherePredicate==null || wherePredicate(entry);
-            if (!include && predicateFiltered != null)
-            {
-                predicateFiltered(entry);
-            }
-            return include;
         }
     }
 }
