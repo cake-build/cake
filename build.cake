@@ -71,7 +71,7 @@ Task("Patch-Assembly-Info")
         Version = version,
         FileVersion = version,
         InformationalVersion = semVersion,
-        Copyright = "Copyright (c) Patrik Svensson 2014"
+        Copyright = string.Format("Copyright (c) Patrik Svensson 2014 - {0}", DateTime.Now.Year)
     });
 });
 
@@ -84,16 +84,33 @@ Task("Build")
             .UseToolVersion(MSBuildToolVersion.NET45));
 });
 
-Task("Run-Unit-Tests")
+Task("Test-Dog-Food-Build-Debug")
     .IsDependentOn("Build")
+    .Does(() =>
+{
+    if (StringComparer.OrdinalIgnoreCase.Equals(configuration, "Release"))
+    {
+        Information("Trying to build cake with cake");
+        var returnCode = StartProcess(buildDir + "/cake.exe", new ProcessSettings {
+            Arguments = "build.cake -configuration=\"Debug\" -target=\"Build\" -verbosity=\"Normal\""
+        });
+        if (returnCode ==1)
+        {
+            throw new CakeException("Failed to build Cake with Cake");
+        }
+        Information("Successfully build cake with cake");
+    }
+});
+
+Task("Run-Unit-Tests")
+    .IsDependentOn("Test-Dog-Food-Build-Debug")
     .Does(() =>
 {
     XUnit2("./src/**/bin/" + configuration + "/*.Tests.dll", new XUnit2Settings {
         OutputDirectory = testResultsDir,
         XmlReportV1 = true
-    }); 
+    });
 });
-
 
 Task("Copy-Files")
     .IsDependentOn("Run-Unit-Tests")
