@@ -4,6 +4,9 @@ using Cake.Scripting;
 
 namespace Cake.Commands
 {
+    /// <summary>
+    /// A command that builds and runs a build script.
+    /// </summary>
     internal sealed class BuildCommand : ICommand
     {
         private readonly IScriptRunner _scriptRunner;

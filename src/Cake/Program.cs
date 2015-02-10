@@ -14,8 +14,16 @@ using Cake.Scripting.Roslyn;
 
 namespace Cake
 {
+    /// <summary>
+    /// The Cake program.
+    /// </summary>
     public static class Program
     {
+        /// <summary>
+        /// The application entry point.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns>The application exit code.</returns>
         public static int Main(string[] args)
         {
             using (var container = CreateContainer())

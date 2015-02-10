@@ -7,12 +7,21 @@ using Cake.Diagnostics;
 
 namespace Cake
 {
-    public sealed class CakeApplication
+    /// <summary>
+    /// The Cake application.
+    /// </summary>
+    internal sealed class CakeApplication
     {
         private readonly IVerbosityAwareLog _log;
         private readonly ICommandFactory _commandFactory;
         private readonly IArgumentParser _argumentParser;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CakeApplication"/> class.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="commandFactory">The command factory.</param>
+        /// <param name="argumentParser">The argument parser.</param>
         public CakeApplication(IVerbosityAwareLog log, ICommandFactory commandFactory, IArgumentParser argumentParser)
         {
             if (log == null)
@@ -27,21 +36,26 @@ namespace Cake
             {
                 throw new ArgumentNullException("argumentParser");
             }
-            
+
             _log = log;
             _commandFactory = commandFactory;
             _argumentParser = argumentParser;
         }
 
+        /// <summary>
+        /// Runs the application with the specified arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns>The application exit code.</returns>
         public int Run(IEnumerable<string> args)
-       {
+        {
             try
             {
                 // Parse options.
                 var options = _argumentParser.Parse(args);
                 if (options != null)
                 {
-                    _log.Verbosity = options.Verbosity;  
+                    _log.Verbosity = options.Verbosity;
                 }
 
                 // Create the correct command and execute it.
@@ -60,8 +74,8 @@ namespace Cake
                 }
                 else
                 {
-                    _log.Error("Error: {0}", ex.Message);   
-                }                    
+                    _log.Error("Error: {0}", ex.Message);
+                }
                 return 1;
             }
         }
@@ -77,7 +91,7 @@ namespace Cake
                         _log.Verbosity = Verbosity.Quiet;
                         return _commandFactory.CreateDescriptionCommand();
                     }
-                    return _commandFactory.CreateBuildCommand();                 
+                    return _commandFactory.CreateBuildCommand();
                 }
                 if (options.ShowHelp)
                 {

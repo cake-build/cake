@@ -3,7 +3,7 @@ using Cake.Core.Scripting;
 
 namespace Cake.Scripting
 {
-    public sealed class BuildScriptHost : ScriptHost
+    internal sealed class BuildScriptHost : ScriptHost
     {
         private readonly ICakeReportPrinter _reportPrinter;
 

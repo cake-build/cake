@@ -4,6 +4,9 @@ using Cake.Scripting;
 
 namespace Cake.Commands
 {
+    /// <summary>
+    /// A command that displays information about script tasks.
+    /// </summary>
     internal sealed class DescriptionCommand : ICommand
     {
         private readonly IScriptRunner _scriptRunner;

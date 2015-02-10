@@ -116,7 +116,9 @@ namespace Cake.Diagnostics.Formatting
             foreach (var character in value)
             {
                 if (!char.IsDigit(character))
-                    return false;
+                {
+                    return false;   
+                }                    
             }
             return true;
         }
