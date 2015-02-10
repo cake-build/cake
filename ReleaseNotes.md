@@ -1,3 +1,6 @@
+### New in 0.1.31 (Released 2015/02/10)
+* Documentation updates only.
+
 ### New in 0.1.30 (Released 2015/02/08)
 * Added support for installing NuGet packages from script.
 * Added filter support to CleanDirectory.
