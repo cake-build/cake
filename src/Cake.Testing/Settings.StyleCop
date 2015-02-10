@@ -1,0 +1,77 @@
+<StyleCopSettings Version="105">
+  <Parsers>
+    <Parser ParserId="Microsoft.StyleCop.CSharp.CsParser">
+      <ParserSettings>
+        <BooleanProperty Name="AnalyzeDesignerFiles">False</BooleanProperty>
+        <CollectionProperty Name="GeneratedFileFilters">
+          <Value>\.g\.cs$</Value>
+          <Value>\.generated\.cs$</Value>
+          <Value>\.g\.i\.cs$</Value>
+          <Value>TemporaryGeneratedFile_.*\.cs$</Value>
+        </CollectionProperty>
+      </ParserSettings>
+    </Parser>
+  </Parsers>
+  <SourceFileList>
+    <SourceFile>Assert.cs</SourceFile>
+    <SourceFile>BooleanAsserts.cs</SourceFile>
+    <SourceFile>CollectionAsserts.cs</SourceFile>
+    <SourceFile>Comparers.cs</SourceFile>
+    <SourceFile>EqualityAsserts.cs</SourceFile>
+    <SourceFile>ExceptionAsserts.cs</SourceFile>
+    <SourceFile>Guards.cs</SourceFile>
+    <SourceFile>IdentityAsserts.cs</SourceFile>
+    <SourceFile>NullAsserts.cs</SourceFile>
+    <SourceFile>PropertyAsserts.cs</SourceFile>
+    <SourceFile>RangeAsserts.cs</SourceFile>
+    <SourceFile>Record.cs</SourceFile>
+    <SourceFile>SetAsserts.cs</SourceFile>
+    <SourceFile>StringAsserts.cs</SourceFile>
+    <SourceFile>TypeAsserts.cs</SourceFile>
+    <SourceFile>ArgumentFormatter.cs</SourceFile>
+    <SourceFile>AssertComparer.cs</SourceFile>
+    <SourceFile>AssertEqualityComparer.cs</SourceFile>
+    <SourceFile>AssertEqualityComparerAdapter.cs</SourceFile>
+    <SourceFile>AllException.cs</SourceFile>
+    <SourceFile>AssertActualExpectedException.cs</SourceFile>
+    <SourceFile>AssertCollectionCountException.cs</SourceFile>
+    <SourceFile>CollectionException.cs</SourceFile>
+    <SourceFile>ContainsException.cs</SourceFile>
+    <SourceFile>DoesNotContainException.cs</SourceFile>
+    <SourceFile>DoesNotMatchException.cs</SourceFile>
+    <SourceFile>EmptyException.cs</SourceFile>
+    <SourceFile>EndsWithException.cs</SourceFile>
+    <SourceFile>EqualException.cs</SourceFile>
+    <SourceFile>FalseException.cs</SourceFile>
+    <SourceFile>InRangeException.cs</SourceFile>
+    <SourceFile>IsAssignableFromException.cs</SourceFile>
+    <SourceFile>IsNotTypeException.cs</SourceFile>
+    <SourceFile>IsTypeException.cs</SourceFile>
+    <SourceFile>MatchesException.cs</SourceFile>
+    <SourceFile>NoneException.cs</SourceFile>
+    <SourceFile>NotEmptyException.cs</SourceFile>
+    <SourceFile>NotEqualException.cs</SourceFile>
+    <SourceFile>NotInRangeException.cs</SourceFile>
+    <SourceFile>NotNullException.cs</SourceFile>
+    <SourceFile>NotSameException.cs</SourceFile>
+    <SourceFile>NullException.cs</SourceFile>
+    <SourceFile>ParameterCountMismatchException.cs</SourceFile>
+    <SourceFile>ProperSubsetException.cs</SourceFile>
+    <SourceFile>ProperSupersetException.cs</SourceFile>
+    <SourceFile>PropertyChangedException.cs</SourceFile>
+    <SourceFile>SameException.cs</SourceFile>
+    <SourceFile>SingleException.cs</SourceFile>
+    <SourceFile>StartsWithException.cs</SourceFile>
+    <SourceFile>SubsetException.cs</SourceFile>
+    <SourceFile>SupersetException.cs</SourceFile>
+    <SourceFile>ThrowsException.cs</SourceFile>
+    <SourceFile>TrueException.cs</SourceFile>
+    <SourceFile>XunitException.cs</SourceFile>
+    <Settings>
+      <GlobalSettings>
+        <StringProperty Name="MergeSettingsFiles">NoMerge</StringProperty>
+        <BooleanProperty Name="RulesEnabledByDefault">False</BooleanProperty>
+      </GlobalSettings>
+    </Settings>
+  </SourceFileList>
+</StyleCopSettings>
