@@ -13,7 +13,7 @@ namespace Cake.Core.IO
                 throw new ArgumentNullException("path");
             }
             var stack = new Stack<string>();
-            var segments = path.FullPath.Split(new[] { '/', '\\' });
+            var segments = path.FullPath.Split('/', '\\');
             foreach (var segment in segments)
             {
                 if (segment == "..")

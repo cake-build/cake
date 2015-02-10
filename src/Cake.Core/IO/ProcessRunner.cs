@@ -13,9 +13,9 @@ namespace Cake.Core.IO
         private readonly ICakeLog _log;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProcessRunner"/> class.
+        /// Initializes a new instance of the <see cref="ProcessRunner" /> class.
         /// </summary>
-        /// <param name="environment"></param>
+        /// <param name="environment">The environment.</param>
         /// <param name="log">The log.</param>
         public ProcessRunner(ICakeEnvironment environment, ICakeLog log)
         {

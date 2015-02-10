@@ -6,32 +6,33 @@
     public enum LogLevel
     {
         /// <summary>
-        /// Fatal
+        /// Severe errors that cause premature termination.
         /// </summary>
         Fatal = 0,
-        
+       
         /// <summary>
-        /// Error
+        /// Other runtime errors or unexpected conditions.
         /// </summary>
         Error = 1,
         
         /// <summary>
-        /// Warning
+        /// Use of deprecated APIs, poor use of API, 'almost' errors, other runtime 
+        /// situations that are undesirable or unexpected, but not necessarily "wrong".
         /// </summary>
         Warning = 2,
         
         /// <summary>
-        /// Information
+        /// Interesting runtime events.
         /// </summary>
         Information = 3,
         
         /// <summary>
-        /// Verbose
+        /// Detailed information on the flow through the system.
         /// </summary>
         Verbose = 4,
         
         /// <summary>
-        /// Debug
+        /// Most detailed information.
         /// </summary>
         Debug = 5
     }

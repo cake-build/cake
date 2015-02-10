@@ -92,7 +92,7 @@ namespace Cake.Common
                     }
 
                     // Get the current line.
-                    var line = (lines[lineIndex] ?? string.Empty).Trim(new[] { '*' }).Trim();
+                    var line = (lines[lineIndex] ?? string.Empty).Trim('*').Trim();
                     if (!string.IsNullOrWhiteSpace(line))
                     {
                         notes.Add(line);
@@ -120,7 +120,7 @@ namespace Cake.Common
                 }
 
                 // Trim the current line.
-                var line = (lines[lineIndex] ?? string.Empty).Trim(new[] { '*', ' ' });
+                var line = (lines[lineIndex] ?? string.Empty).Trim('*', ' ');
                 if (string.IsNullOrWhiteSpace(line))
                 {
                     lineIndex++;
@@ -137,7 +137,7 @@ namespace Cake.Common
                 var version = Version.Parse(versionResult.Value);
 
                 // Parse the description.
-                line = line.Substring(versionResult.Length).Trim(new[] { '-', ' ' });
+                line = line.Substring(versionResult.Length).Trim('-', ' ');
 
                 // Add the release notes to the result.
                 result.Add(new ReleaseNotes(version, new[] { line }));

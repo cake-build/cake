@@ -14,7 +14,7 @@ namespace Cake.Common.Tools.NuGet.Pack
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly NuspecProcessor _processor;
-        private readonly IToolResolver _nuGetToolResolver;
+        private readonly IToolResolver _nugetToolResolver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetPacker"/> class.
@@ -23,16 +23,16 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="log">The log.</param>
-        /// <param name="nuGetToolResolver">The NuGet tool resolver</param>
+        /// <param name="nugetToolResolver">The NuGet tool resolver</param>
         public NuGetPacker(IFileSystem fileSystem, ICakeEnvironment environment,
             IProcessRunner processRunner, ICakeLog log,
-            IToolResolver nuGetToolResolver)
+            IToolResolver nugetToolResolver)
             : base(fileSystem, environment, processRunner)
         {
             _fileSystem = fileSystem;
             _environment = environment;
             _processor = new NuspecProcessor(_fileSystem, _environment, log);
-            _nuGetToolResolver = nuGetToolResolver;
+            _nugetToolResolver = nugetToolResolver;
         }
 
         /// <summary>
@@ -124,16 +124,17 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <returns>The name of the tool.</returns>
         protected override string GetToolName()
         {
-            return _nuGetToolResolver.Name;
+            return _nugetToolResolver.Name;
         }
 
         /// <summary>
         /// Gets the default tool path.
         /// </summary>
+        /// <param name="settings">The settings.</param>
         /// <returns>The default tool path.</returns>
         protected override FilePath GetDefaultToolPath(NuGetPackSettings settings)
         {
-            return _nuGetToolResolver.ResolveToolPath();
+            return _nugetToolResolver.ResolveToolPath();
         }
     }
 }

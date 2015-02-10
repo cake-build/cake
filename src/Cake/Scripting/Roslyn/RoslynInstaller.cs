@@ -54,7 +54,7 @@ namespace Cake.Scripting.Roslyn
                 throw new ArgumentNullException("root");
             }
 
-            var installRoot = root.Combine(Guid.NewGuid().ToString().Replace("-", ""));
+            var installRoot = root.Combine(Guid.NewGuid().ToString().Replace("-", string.Empty));
 
             // Install package.
             _log.Verbose("Installing package...");

@@ -26,8 +26,14 @@ namespace Cake.Common.Tools.WiX
         public LightRunner(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
             : base(fileSystem, environment, processRunner)
         {
-            if (environment == null) throw new ArgumentNullException("environment");
-            if (globber == null) throw new ArgumentNullException("globber");
+            if (environment == null)
+            {
+                throw new ArgumentNullException("environment");
+            }
+            if (globber == null)
+            {
+                throw new ArgumentNullException("globber");
+            }
 
             _environment = environment;
             _globber = globber;
@@ -36,7 +42,7 @@ namespace Cake.Common.Tools.WiX
         /// <summary>
         /// Runs Light with the specified input object files and settings.
         /// </summary>
-        /// <param name="objectFiles">The object files (.wixobj).</param>
+        /// <param name="objectFiles">The object files (<c>.wixobj</c>).</param>
         /// <param name="settings">The settings.</param>
         public void Run(IEnumerable<FilePath> objectFiles, LightSettings settings)
         {

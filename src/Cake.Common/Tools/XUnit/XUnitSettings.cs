@@ -3,7 +3,7 @@
 namespace Cake.Common.Tools.XUnit
 {
     /// <summary>
-    /// Contains settings used by <see cref="XUnitRunner"/>.
+    /// Contains settings used by <see cref="XUnitRunner" />.
     /// </summary>
     public class XUnitSettings
     {
@@ -45,8 +45,11 @@ namespace Cake.Common.Tools.XUnit
         public FilePath ToolPath { get; set; }
 
         /// <summary>
-        /// Gets or set whether or not output running test count.
+        /// Gets or sets a value indicating whether or not output running test count.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if running test count should be outputted; otherwise, <c>false</c>.
+        /// </value>
         public bool Silent { get; set; }
 
         /// <summary>

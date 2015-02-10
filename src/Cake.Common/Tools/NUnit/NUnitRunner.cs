@@ -55,7 +55,7 @@ namespace Cake.Common.Tools.NUnit
             // Add the assembly to build.
             builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
 
-            if(settings.Framework != null)
+            if (settings.Framework != null)
             {
                 builder.AppendQuoted("/framework:" + settings.Framework);
             }
@@ -134,6 +134,7 @@ namespace Cake.Common.Tools.NUnit
         /// <summary>
         /// Gets the default tool path.
         /// </summary>
+        /// <param name="settings">The settings.</param>
         /// <returns>The default tool path.</returns>
         protected override FilePath GetDefaultToolPath(NUnitSettings settings)
         {

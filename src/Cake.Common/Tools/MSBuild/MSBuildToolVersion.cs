@@ -11,67 +11,67 @@
         Default = 0,
 
         /// <summary>
-        /// .NET 2.0
+        /// MSBuild tool version: <c>.NET 2.0</c>
         /// </summary>
         NET20 = 1,
         
         /// <summary>
-        /// .NET 3.0
+        /// MSBuild tool version: <c>.NET 3.0</c>
         /// </summary>
         NET30 = 1,
         
         /// <summary>
-        /// Visual Studio 2005
+        /// MSBuild tool version: <c>Visual Studio 2005</c>
         /// </summary>
         VS2005 = 1,
         
         /// <summary>
-        /// .NET 3.5
+        /// MSBuild tool version: <c>.NET 3.5</c>
         /// </summary>
         NET35 = 2,
         
         /// <summary>
-        /// Visual Studio 2008
+        /// MSBuild tool version: <c>Visual Studio 2008</c>
         /// </summary>
         VS2008 = 2,
         
         /// <summary>
-        /// .NET 4.0
+        /// MSBuild tool version: <c>.NET 4.0</c>
         /// </summary>
         NET40 = 3,
         
         /// <summary>
-        /// .NET 4.5
+        /// MSBuild tool version: <c>.NET 4.5</c>
         /// </summary>
         NET45 = 3,
         
         /// <summary>
-        /// Visual Studio 2010
+        /// MSBuild tool version: <c>Visual Studio 2010</c>
         /// </summary>
         VS2010 = 3,
         
         /// <summary>
-        /// Visual Studio 2011
+        /// MSBuild tool version: <c>Visual Studio 2011</c>
         /// </summary>
         VS2011 = 3,
         
         /// <summary>
-        /// Visual Studio 2012
+        /// MSBuild tool version: <c>Visual Studio 2012</c>
         /// </summary>
         VS2012 = 3,
         
         /// <summary>
-        /// .NET 4.5.1
+        /// MSBuild tool version: <c>.NET 4.5.1</c>
         /// </summary>
         NET451 = 4,
         
         /// <summary>
-        /// .NET 4.5.2
+        /// MSBuild tool version: <c>.NET 4.5.2</c>
         /// </summary>
         NET452 = 4,
 
         /// <summary>
-        /// Visual Studio 2013
+        /// MSBuild tool version: <c>Visual Studio 2013</c>
         /// </summary>
         VS2013 = 4,
     }

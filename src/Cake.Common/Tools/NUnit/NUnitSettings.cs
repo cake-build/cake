@@ -3,7 +3,7 @@
 namespace Cake.Common.Tools.NUnit
 {
     /// <summary>
-    /// Contains settings used by <see cref="NUnitRunner"/>.
+    /// Contains settings used by <see cref="NUnitRunner" />.
     /// </summary>
     public sealed class NUnitSettings
     {
@@ -11,49 +11,53 @@ namespace Cake.Common.Tools.NUnit
         /// Gets or sets the tool path.
         /// </summary>
         /// <value>
-        /// The tool path.
-        /// Defaults to './tools/**/nunit-console.exe'.
+        /// The tool path. Defaults to <c>./tools/**/nunit-console.exe</c>.
         /// </value>
         public FilePath ToolPath { get; set; }
 
         /// <summary>
-        /// Specifies the name of the Xml Results File.
+        /// Gets or sets the name of the XML result file.
         /// </summary>
         /// <value>
-        /// Results file path.
-        /// Defaults to 'TestResult.xml'
+        /// The name of the XML result file. Defaults to <c>TestResult.xml</c>.
         /// </value>
         public FilePath ResultsFile { get; set; }
 
         /// <summary>
-        /// Specifies wether to generate the results xml file.
+        /// Gets or sets a value indicating whether to generate the XML result file.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if the XML result file should be generated; otherwise, <c>false</c>.
+        /// </value>
         public bool NoResults { get; set; }
 
         /// <summary>
-        /// Allows you to specify the version of the runtime to be used in executing tests.
+        /// Gets or sets the version of the runtime to be used when executing tests.
         /// </summary>
-        /// <remarks>
-        /// If that version specified is different from the one being used by NUnit, the tests are run in a separate process.
-        /// </remarks>
+        /// <value>
+        /// The version of the runtime to be used when executing tests.
+        /// </value>
         public string Framework { get; set; }
 
         /// <summary>
-        /// Specifies categories to include in running. 
-        /// See <see cref="!:http://nunit.org/index.php?p=consoleCommandLine&amp;r=2.6.3 "> examples here</see> under "Specifying Test Categories to Include or Exclude".
+        /// Gets or sets the categories to include in a run.
         /// </summary>
+        /// <value>The categories to include in a run.</value>
         public string Include { get; set; }
 
         /// <summary>
-        /// Specifies categories to exclude from running.
-        /// See <see cref="!:http://nunit.org/index.php?p=consoleCommandLine&amp;r=2.6.3 ">examples here</see> under "Specifying Test Categories to Include or Exclude".
+        /// Gets or sets the categories to exclude from a run.
         /// </summary>
+        /// <value>
+        /// The categories to exclude from a run.
+        /// </value>
         public string Exclude { get; set; }
 
         /// <summary>
-        /// Represents the default timeout to be used for test cases in this run. 
+        /// Gets or sets the default timeout to be used for test cases in this run.
         /// If any test exceeds the timeout value, it is cancelled and reported as an error.
         /// </summary>
+        /// <value>The default timeout to be used for test cases in this run.</value>
         public int? Timeout { get; set; }
 
         /// <summary>
@@ -66,30 +70,38 @@ namespace Cake.Common.Tools.NUnit
         public bool ShadowCopy { get; set; }
 
         /// <summary>
-        /// Suppresses use of a separate thread for running the tests and uses the main thread instead.
+        /// Gets or sets a value indicating whether the main thread should be used for running tests.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if the main thread should be used for running tests; otherwise, <c>false</c>.
+        /// </value>
         public bool NoThread { get; set; }
 
         /// <summary>
-        /// Disables display of the copyright information at the start of the program.
+        /// Gets or sets a value indicating whether to show copyright information at the start of the program.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if to show copyright information at the start of the program; otherwise, <c>false</c>.
+        /// </value>
         public bool NoLogo { get; set; }
 
         /// <summary>
-        /// Causes execution of the test run to terminate immediately on the first test failure or error.
+        /// Gets or sets a value indicating whether execution of the test run should terminate 
+        /// immediately on the first test failure or error.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if execution of the test run should terminate immediately on the first test failure or error; otherwise, <c>false</c>.
+        /// </value>
         public bool StopOnError { get; set; }
 
         /// <summary>
-        /// Allows you to control the amount of information that NUnit writes to its internal trace log.
+        /// Gets or sets the amount of information that NUnit should write to its internal trace log.
         /// </summary>
-        /// <value>
-        ///     Valid values are Off, Error, Warning, Info, and Debug. The default is Off.
-        /// </value>
+        /// <value>The amount of information that NUnit should write to its internal trace log.</value>
         public string Trace { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NUnitSettings"/> class.
+        /// Initializes a new instance of the <see cref="NUnitSettings" /> class.
         /// </summary>
         public NUnitSettings()
         {

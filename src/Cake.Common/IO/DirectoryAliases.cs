@@ -71,7 +71,7 @@ namespace Cake.Common.IO
 
         /// <summary>
         /// Cleans the directories matching the specified pattern.
-        /// Cleaning the directory will remove all it's content but not the directory iteself.
+        /// Cleaning the directory will remove all it's content but not the directory itself.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern to match.</param>
@@ -85,7 +85,7 @@ namespace Cake.Common.IO
 
         /// <summary>
         /// Cleans the specified directories.
-        /// Cleaning a directory will remove all it's content but not the directory iteself.
+        /// Cleaning a directory will remove all it's content but not the directory itself.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="directories">The directory paths.</param>
@@ -105,7 +105,7 @@ namespace Cake.Common.IO
 
         /// <summary>
         /// Cleans the specified directories.
-        /// Cleaning a directory will remove all it's content but not the directory iteself.
+        /// Cleaning a directory will remove all it's content but not the directory itself.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="directories">The directory paths.</param>
@@ -141,12 +141,12 @@ namespace Cake.Common.IO
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="path">The directory path.</param>
-        /// <param name="wherePredicate">Filters which filesfiles/directories get deleted based on predicate</param>
+        /// <param name="predicate">Predicate used to determine which files/directories should get deleted.</param>
         [CakeMethodAlias]
         [CakeAliasCategory("Clean")]
-        public static void CleanDirectory(this ICakeContext context, DirectoryPath path, Func<IFileSystemInfo, bool> wherePredicate)
+        public static void CleanDirectory(this ICakeContext context, DirectoryPath path, Func<IFileSystemInfo, bool> predicate)
         {
-            DirectoryCleaner.Clean(context, path, wherePredicate, null);
+            DirectoryCleaner.Clean(context, path, predicate, null);
         }
 
         /// <summary>
@@ -202,8 +202,7 @@ namespace Cake.Common.IO
 
             var dirs = sourceDir.GetDirectories("*", SearchScope.Current);
 
-            var destinationDir = context.FileSystem.GetDirectory(destination);
-            // If the destination directory doesn't exist, create it. 
+            var destinationDir = context.FileSystem.GetDirectory(destination);            
             if (!destinationDir.Exists)
             {
                 destinationDir.Create();

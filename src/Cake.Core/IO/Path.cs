@@ -57,7 +57,7 @@ namespace Cake.Core.IO
             if (string.IsNullOrWhiteSpace(path))
             {
                 throw new ArgumentException("Path cannot be empty.", "path");
-            }         
+            }
 
             _path = path.Replace('\\', '/').Trim();
             _path = _path == "./" ? string.Empty : _path;
@@ -69,9 +69,9 @@ namespace Cake.Core.IO
             }
 
             // Remove trailing slashes.
-            _path = _path.TrimEnd(new[] {'/', '\\'});
+            _path = _path.TrimEnd('/', '\\');
 
-#if !UNIX            
+#if !UNIX
             if (_path.EndsWith(":", StringComparison.OrdinalIgnoreCase))
             {
                 _path = string.Concat(_path, "/");

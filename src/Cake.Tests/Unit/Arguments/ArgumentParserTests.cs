@@ -77,7 +77,7 @@ namespace Cake.Tests.Unit.Arguments
             public void Should_Add_Unknown_Arguments_To_Argument_List_Without_Script()
             {
                 // Given
-                var fakeFileSystem = new FakeFileSystem(isUnix: false);
+                var fakeFileSystem = new FakeFileSystem(isCaseSensitive: false);
                 var fakePath = new FilePath("build.cake");
                 var fakeFile = new FakeFile(fakeFileSystem, fakePath) { Exists = true };
                 var fixture = new ArgumentParserFixture { FileSystem = fakeFileSystem };

@@ -15,7 +15,7 @@ namespace Cake.Core.Scripting.CodeGen
     {
         /// <summary>
         /// Generates a script property alias from the specified method.
-        /// The provided method must be an extensionmethod for <see cref="ICakeContext"/>
+        /// The provided method must be an extension method for <see cref="ICakeContext"/>
         /// and it must be decorated with the <see cref="CakePropertyAliasAttribute"/>.
         /// </summary>
         /// <param name="method">The method to generate the code for.</param>
@@ -42,7 +42,7 @@ namespace Cake.Core.Scripting.CodeGen
 
         private static void ValidateMethod(MethodInfo method)
         {
-            Debug.Assert(method.DeclaringType != null); // Resharper
+            Debug.Assert(method.DeclaringType != null, "method.DeclaringType != null"); // Resharper
 
             if (!method.DeclaringType.IsStatic())
             {

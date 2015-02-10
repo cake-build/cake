@@ -17,7 +17,7 @@ namespace Cake.Core
         /// <param name="includeMethodNamespace">if set to <c>true</c>, include method namespace.</param>
         /// <param name="includeParameterNamespace">if set to <c>true</c>, include parameter namespace.</param>
         /// <returns>The method signature.</returns>
-        public static string GetSignature(this MethodInfo method, 
+        public static string GetSignature(this MethodInfo method,
             bool includeMethodNamespace = true, bool includeParameterNamespace = false)
         {
             if (method == null)
@@ -32,7 +32,7 @@ namespace Cake.Core
             var parameterList = new string[parameters.Length];
             for (var i = 0; i < parameterList.Length; i++)
             {
-                var isParams = parameters[i].IsDefined(typeof (ParamArrayAttribute));
+                var isParams = parameters[i].IsDefined(typeof(ParamArrayAttribute));
                 var signature = parameters[i].ParameterType.GetFullName(includeParameterNamespace);
                 signature = isParams ? string.Concat("params ", signature) : signature;
                 parameterList[i] = signature;
@@ -65,7 +65,7 @@ namespace Cake.Core
         {
             if (method != null && method.DeclaringType != null)
             {
-                return method.DeclaringType.Namespace;   
+                return method.DeclaringType.Namespace;
             }
             return string.Empty;
         }

@@ -13,7 +13,7 @@ namespace Cake.Common.Solution
         private readonly string _type;
 
         /// <summary>
-        /// Project Id
+        /// Gets the project identity.
         /// </summary>
         public string Id
         {
@@ -21,7 +21,7 @@ namespace Cake.Common.Solution
         }
 
         /// <summary>
-        /// Project Name
+        /// Gets the project name.
         /// </summary>
         public string Name
         {
@@ -29,7 +29,7 @@ namespace Cake.Common.Solution
         }
 
         /// <summary>
-        /// Project Path
+        /// Gets the project path.
         /// </summary>
         public FilePath Path
         {
@@ -37,7 +37,7 @@ namespace Cake.Common.Solution
         }
 
         /// <summary>
-        /// Project Type Id
+        /// Gets the project type identity.
         /// </summary>
         public string Type
         {
@@ -45,18 +45,13 @@ namespace Cake.Common.Solution
         }
 
         /// <summary>
-        /// Solution Project Constructor
+        /// Initializes a new instance of the <see cref="SolutionProject"/> class.
         /// </summary>
-        /// <param name="id">Project Id</param>
-        /// <param name="name">Project Name</param>
-        /// <param name="path">Project Path</param>
-        /// <param name="type">Project Type Id</param>
-        public SolutionProject(
-            string id,
-            string name,
-            FilePath path,
-            string type
-            )
+        /// <param name="id">The project identity.</param>
+        /// <param name="name">The project name.</param>
+        /// <param name="path">The project path.</param>
+        /// <param name="type">The project type identity.</param>
+        public SolutionProject(string id, string name, FilePath path, string type)
         {
             _id = id;
             _name = name;

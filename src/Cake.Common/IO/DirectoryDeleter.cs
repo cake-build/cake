@@ -1,10 +1,10 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using System;
 
 namespace Cake.Common.IO
 {
@@ -16,7 +16,7 @@ namespace Cake.Common.IO
             {
                 throw new ArgumentNullException("context");
             }
-            if(path == null)
+            if (path == null)
             {
                 throw new ArgumentNullException("path");
             }
@@ -41,8 +41,8 @@ namespace Cake.Common.IO
                 throw new IOException(string.Format(CultureInfo.InvariantCulture, format, path.FullPath));
             }
 
-            context.Log.Verbose("Deleting {0}", path);           
-            directory.Delete(recursive);            
+            context.Log.Verbose("Deleting {0}", path);
+            directory.Delete(recursive);
         }
     }
 }

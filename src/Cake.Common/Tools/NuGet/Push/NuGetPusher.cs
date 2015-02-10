@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.NuGet.Push
     public sealed class NuGetPusher : Tool<NuGetPushSettings>
     {
         private readonly ICakeEnvironment _environment;
-        private readonly IToolResolver _nuGetToolResolver;
+        private readonly IToolResolver _nugetToolResolver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetPusher"/> class.
@@ -20,13 +20,13 @@ namespace Cake.Common.Tools.NuGet.Push
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="nuGetToolResolver">The NuGet tool resolver.</param>
+        /// <param name="nugetToolResolver">The NuGet tool resolver.</param>
         public NuGetPusher(IFileSystem fileSystem, ICakeEnvironment environment,
-            IProcessRunner processRunner, IToolResolver nuGetToolResolver)
+            IProcessRunner processRunner, IToolResolver nugetToolResolver)
             : base(fileSystem, environment, processRunner)
         {
             _environment = environment;
-            _nuGetToolResolver = nuGetToolResolver;
+            _nugetToolResolver = nugetToolResolver;
         }
 
         /// <summary>
@@ -95,16 +95,17 @@ namespace Cake.Common.Tools.NuGet.Push
         /// <returns>The name of the tool.</returns>
         protected override string GetToolName()
         {
-            return _nuGetToolResolver.Name;
+            return _nugetToolResolver.Name;
         }
 
         /// <summary>
         /// Gets the default tool path.
         /// </summary>
+        /// <param name="settings">The settings.</param>
         /// <returns>The default tool path.</returns>
         protected override FilePath GetDefaultToolPath(NuGetPushSettings settings)
         {
-            return _nuGetToolResolver.ResolveToolPath();
+            return _nugetToolResolver.ResolveToolPath();
         }
     }
 }

@@ -111,7 +111,7 @@ namespace Cake.Core.IO
                 {
                     // Get the drive from the working directory.
                     var workingDirectory = _environment.WorkingDirectory;
-                    var root = workingDirectory.FullPath.Split(new[] { '/' }).First();
+                    var root = workingDirectory.FullPath.Split('/').First();
                     return new IdentifierNode(root);
                 }
             }

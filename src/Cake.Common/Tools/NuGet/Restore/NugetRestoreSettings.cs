@@ -9,42 +9,52 @@ namespace Cake.Common.Tools.NuGet.Restore
     public sealed class NuGetRestoreSettings
     {
         /// <summary>
-        /// Path to nuget.exe
+        /// Gets or sets the path to <c>nuget.exe</c>.
         /// </summary>
         public FilePath ToolPath { get; set; }
 
         /// <summary>
-        /// Checks if package restore consent is granted before installing a package.
+        /// Gets or sets a value indicating whether package restore consent is granted before installing a package.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if package restore consent is granted; otherwise, <c>false</c>.
+        /// </value>
         public bool RequireConsent { get; set; }
 
         /// <summary>
-        /// Specifies the packages folder.
+        /// Gets or sets the packages folder.
         /// </summary>
         public DirectoryPath PackagesDirectory { get; set; }
 
         /// <summary>
-        /// A list of packages sources to use for this command.
+        /// Gets or sets a list of packages sources to use for this command.
         /// </summary>
         public ICollection<string> Source { get; set; }
 
         /// <summary>
-        /// Sets whether or not to use the machine cache as the first package source.
+        /// Gets or sets a value indicating whether or not to use the machine cache as the first package source.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> to not use the machine cache as the first package source; otherwise, <c>false</c>.
+        /// </value>
         public bool NoCache { get; set; }
 
         /// <summary>
-        /// Disable parallel processing of packages for this command.
+        /// Gets or sets a value indicating whether or not to disable parallel processing of packages for this command.
         /// </summary>
+        /// <value>
+        /// <c>true</c> to disable parallel processing; otherwise, <c>false</c>.
+        /// </value>
         public bool DisableParallelProcessing { get; set; }
 
         /// <summary>
-        /// Display this amount of details in the output: Normal, Quiet, Detailed.
+        /// Gets or sets the amount of output details.
         /// </summary>
         public NuGetVerbosity? Verbosity { get; set; }
 
         /// <summary>
-        /// The NuGet configuration file. If not specified, file %AppData%\NuGet\NuGet.config is used as configuration file.
+        /// Gets or sets the NuGet configuration file. 
+        /// If not specified, the file <c>%AppData%\NuGet\NuGet.config</c> is used as the configuration file.
         /// </summary>
         public FilePath ConfigFile { get; set; }
     }

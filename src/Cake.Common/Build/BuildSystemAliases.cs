@@ -12,11 +12,11 @@ namespace Cake.Common.Build
     public static class BuildSystemAliases
     {
         /// <summary>
-        /// Gets a <see cref="BuildSystem"/> instance that can
+        /// Gets a <see cref="Cake.Common.Build.BuildSystem"/> instance that can
         /// be used to query for information about the current build system.
         /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        /// <param name="context">The context.</param>
+        /// <returns>A <see cref="Cake.Common.Build.BuildSystem"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]
         public static BuildSystem BuildSystem(this ICakeContext context)
         {
@@ -24,11 +24,11 @@ namespace Cake.Common.Build
         }
 
         /// <summary>
-        /// Gets a <see cref="AppVeyor"/> instance that can
+        /// Gets a <see cref="Cake.Common.Build.AppVeyor"/> instance that can
         /// be used to manipulate the AppVeyor environment.
         /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        /// <param name="context">The context.</param>
+        /// <returns>A <see cref="Cake.Common.Build.AppVeyor"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]
         public static AppVeyorProvider AppVeyor(this ICakeContext context)
         {

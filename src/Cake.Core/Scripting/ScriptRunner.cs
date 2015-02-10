@@ -64,7 +64,8 @@ namespace Cake.Core.Scripting
             _sessionFactory.Initialize();
 
             // Copy the arguments from the options.
-            host.Arguments.SetArguments(arguments);           
+            host.Arguments.SetArguments(arguments);
+
             // Set the working directory.
             host.Environment.WorkingDirectory = script.MakeAbsolute(host.Environment).GetDirectory();
 
@@ -136,20 +137,21 @@ namespace Cake.Core.Scripting
 
         private IEnumerable<Assembly> GetDefaultAssemblies(IFileSystem fileSystem)
         {
-            var defaultAssemblies = new HashSet<Assembly> {
-                typeof (Action).Assembly, // mscorlib
-                typeof (Uri).Assembly, // System
-                typeof (IQueryable).Assembly, // System.Core
-                typeof (System.Data.DataTable).Assembly, // System.Data
-                typeof (System.Xml.XmlReader).Assembly, // System.Xml
-                typeof (System.Xml.Linq.XDocument).Assembly, // System.Xml.Linq
-                typeof (ICakeContext).Assembly, // Cake.Core
+            var defaultAssemblies = new HashSet<Assembly> 
+            {
+                typeof(Action).Assembly, // mscorlib
+                typeof(Uri).Assembly, // System
+                typeof(IQueryable).Assembly, // System.Core
+                typeof(System.Data.DataTable).Assembly, // System.Data
+                typeof(System.Xml.XmlReader).Assembly, // System.Xml
+                typeof(System.Xml.Linq.XDocument).Assembly, // System.Xml.Linq
+                typeof(ICakeContext).Assembly, // Cake.Core
             };
 
             // Load other assemblies that we need.
             // TODO: Make this less hackish...
             var assemblyPath = new FilePath(typeof(ScriptRunner).Assembly.Location);
-            var assemblyDirectory = fileSystem.GetDirectory(assemblyPath.GetDirectory());            
+            var assemblyDirectory = fileSystem.GetDirectory(assemblyPath.GetDirectory());
             var patterns = new[] { "Cake.Common.dll", "Cake.exe" };
             var loaded = new HashSet<FilePath>();
             foreach (var pattern in patterns)
@@ -160,7 +162,7 @@ namespace Cake.Core.Scripting
                     var assembly = Assembly.LoadFile(cakeAssembly.Path.FullPath);
                     defaultAssemblies.Add(assembly);
                     loaded.Add(pattern);
-                }                
+                }
             }
 
             return defaultAssemblies;
@@ -168,7 +170,8 @@ namespace Cake.Core.Scripting
 
         private static IEnumerable<string> GetDefaultNamespaces()
         {
-            var defaultNamespaces = new HashSet<string> {
+            var defaultNamespaces = new HashSet<string> 
+            {
                 "System", "System.Collections.Generic", "System.Linq",
                 "System.Text", "System.Threading.Tasks", "System.IO",
                 "Cake.Core", "Cake.Core.IO",

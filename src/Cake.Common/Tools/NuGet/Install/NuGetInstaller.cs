@@ -11,7 +11,7 @@ namespace Cake.Common.Tools.NuGet.Install
     public sealed class NuGetInstaller : Tool<NuGetInstallSettings>
     {
         private readonly ICakeEnvironment _environment;
-        private readonly IToolResolver _nuGetToolResolver;
+        private readonly IToolResolver _nugetToolResolver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetInstaller"/> class.
@@ -19,19 +19,19 @@ namespace Cake.Common.Tools.NuGet.Install
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="nuGetToolResolver">The NuGet tool resolver</param>
+        /// <param name="nugetToolResolver">The NuGet tool resolver.</param>
         public NuGetInstaller(IFileSystem fileSystem, ICakeEnvironment environment, 
-            IProcessRunner processRunner, IToolResolver nuGetToolResolver)
+            IProcessRunner processRunner, IToolResolver nugetToolResolver)
             : base(fileSystem, environment, processRunner)
         {
             _environment = environment;
-            _nuGetToolResolver = nuGetToolResolver;
+            _nugetToolResolver = nugetToolResolver;
         }
 
         /// <summary>
-        /// Installers NuGet packages using the specified package cofig file and settings.
+        /// Installs NuGet packages using the specified package configuration file and settings.
         /// </summary>
-        /// <param name="packageConfigPath">Path to package config to use for install.</param>
+        /// <param name="packageConfigPath">Path to package configuration to use for install.</param>
         /// <param name="settings">The settings.</param>
         public void InstallFromConfig(FilePath packageConfigPath, NuGetInstallSettings settings)
         {
@@ -50,7 +50,7 @@ namespace Cake.Common.Tools.NuGet.Install
         }
 
         /// <summary>
-        /// Installs NuGet packages using the specified packageId and settings.
+        /// Installs NuGet packages using the specified package id and settings.
         /// </summary>
         /// <param name="packageId">The source package id.</param>
         /// <param name="settings">The settings.</param>
@@ -65,10 +65,8 @@ namespace Cake.Common.Tools.NuGet.Install
                 throw new ArgumentNullException("settings");
             }
 
-
             Run(settings, GetArguments(packageId, settings), settings.ToolPath);
         }
-
 
         private ProcessArgumentBuilder GetArguments(string packageId, NuGetInstallSettings settings)
         {
@@ -160,7 +158,7 @@ namespace Cake.Common.Tools.NuGet.Install
         /// <returns>The name of the tool.</returns>
         protected override string GetToolName()
         {
-            return _nuGetToolResolver.Name;
+            return _nugetToolResolver.Name;
         }
 
         /// <summary>
@@ -170,7 +168,7 @@ namespace Cake.Common.Tools.NuGet.Install
         /// <returns>The default tool path.</returns>
         protected override FilePath GetDefaultToolPath(NuGetInstallSettings settings)
         {
-            return _nuGetToolResolver.ResolveToolPath();
+            return _nugetToolResolver.ResolveToolPath();
         }
     }
 }

@@ -6,18 +6,18 @@
     public enum PlatformTarget
     {
         /// <summary>
-        /// MSIL (AnyCPU).
+        /// PlatformTarget: <c>MSIL</c> (AnyCPU)
         /// </summary>
         MSIL = 0,
         
         /// <summary>
-        /// x86
+        /// PlatformTarget: <c>x86</c>
         /// </summary>
         // ReSharper disable once InconsistentNaming
         x86 = 1,
         
         /// <summary>
-        /// x64
+        /// PlatformTarget: <c>x64</c>
         /// </summary>
         // ReSharper disable once InconsistentNaming
         x64 = 2

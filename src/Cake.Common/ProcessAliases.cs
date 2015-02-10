@@ -17,6 +17,13 @@ namespace Cake.Common
         /// <param name="context">The context.</param>
         /// <param name="fileName">The file name.</param>
         /// <returns>The exit code that the started process specified when it terminated.</returns>
+        /// <example>
+        /// <code>
+        /// var exitCodeWithoutArguments = StartProcess("ping");
+        /// // This should output 1 as argument is missing
+        /// Information("Exit code: {0}", exitCodeWithoutArguments);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static int StartProcess(this ICakeContext context, FilePath fileName)
         {
@@ -30,6 +37,13 @@ namespace Cake.Common
         /// <param name="fileName">Name of the file.</param>
         /// <param name="settings">The settings.</param>
         /// <returns>The exit code that the started process specified when it terminated.</returns>
+        /// <example>
+        /// <code>
+        /// var exitCodeWithArgument = StartProcess("ping", new ProcessSettings{ Arguments = "localhost" });
+        /// // This should output 0 as valid arguments supplied
+        /// Information("Exit code: {0}", exitCodeWithArgument);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static int StartProcess(this ICakeContext context, FilePath fileName, ProcessSettings settings)
         {

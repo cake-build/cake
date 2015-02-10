@@ -2,6 +2,9 @@
 
 namespace Cake.Commands
 {
+    /// <summary>
+    /// A command that displays help information.
+    /// </summary>
     internal sealed class HelpCommand : ICommand
     {
         private readonly IConsole _console;

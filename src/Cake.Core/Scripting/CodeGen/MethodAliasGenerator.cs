@@ -17,7 +17,7 @@ namespace Cake.Core.Scripting.CodeGen
     {
         /// <summary>
         /// Generates a script method alias from the specified method.
-        /// The provided method must be an extensionmethod for <see cref="ICakeContext"/>
+        /// The provided method must be an extension method for <see cref="ICakeContext"/>
         /// and it must be decorated with the <see cref="CakeMethodAliasAttribute"/>.
         /// </summary>
         /// <param name="method">The method to generate the code for.</param>
@@ -28,7 +28,7 @@ namespace Cake.Core.Scripting.CodeGen
             {
                 throw new ArgumentNullException("method");
             }
-            Debug.Assert(method.DeclaringType != null); // Resharper
+            Debug.Assert(method.DeclaringType != null, "method.DeclaringType != null"); // Resharper
             if (!method.DeclaringType.IsStatic())
             {
                 const string format = "The type '{0}' is not static.";
@@ -107,7 +107,7 @@ namespace Cake.Core.Scripting.CodeGen
             var result = new List<string>();
             foreach (var parameter in parameters)
             {
-                var isParameterArray = parameter.IsDefined(typeof (ParamArrayAttribute));
+                var isParameterArray = parameter.IsDefined(typeof(ParamArrayAttribute));
                 var typeName = parameter.ParameterType.GetFullName();
                 var typeDeclaration = isParameterArray ? string.Concat("params ", typeName) : typeName;
                 result.Add(string.Concat(typeDeclaration, " ", parameter.Name));

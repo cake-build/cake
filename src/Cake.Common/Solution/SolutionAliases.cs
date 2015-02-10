@@ -12,11 +12,32 @@ namespace Cake.Common.Solution
     public static class SolutionAliases
     {
         /// <summary>
-        /// Parses project information from solution file
+        /// Parses project information from a solution file.
         /// </summary>
-        /// <param name="context"></param>
-        /// <param name="solutionPath"></param>
-        /// <returns></returns>
+        /// <param name="context">The context.</param>
+        /// <param name="solutionPath">The solution path.</param>
+        /// <returns>A parsed solution.</returns>
+        /// <example>
+        /// <code>
+        /// var solutionPath = "./src/Cake.sln";
+        /// Information("Parsing {0}", solutionPath);
+        /// var parsedSolution = ParseSolution(solutionPath);
+        /// foreach(var project in parsedSolution.Projects)
+        /// {
+        ///     Information(
+        ///         @"Solution project file:
+        ///     Name: {0}
+        ///     Path: {1}
+        ///     Id  : {2}
+        ///     Type: {3}",
+        ///         project.Name,
+        ///         project.Path,
+        ///         project.Id,
+        ///         project.Type
+        ///     );
+        /// }
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static SolutionParserResult ParseSolution(this ICakeContext context, FilePath solutionPath)
         {

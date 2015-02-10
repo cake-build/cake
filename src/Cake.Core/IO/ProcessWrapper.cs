@@ -28,7 +28,7 @@ namespace Cake.Core.IO
         public IEnumerable<string> GetStandardOutput()
         {
             string line;
-            while ((line=_process.StandardOutput.ReadLine())!=null)
+            while ((line = _process.StandardOutput.ReadLine()) != null)
             {
                 _log.Verbose("{0}", line);
                 yield return line;

@@ -41,7 +41,7 @@ namespace Cake.Common.Tools.WiX
         /// <summary>
         /// Runs Candle with the specified source files and settings.
         /// </summary>
-        /// <param name="sourceFiles">The source files (.wxs) to compile.</param>
+        /// <param name="sourceFiles">The source files (<c>.wxs</c>) to compile.</param>
         /// <param name="settings">The settings.</param>
         public void Run(IEnumerable<FilePath> sourceFiles, CandleSettings settings)
         {

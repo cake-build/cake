@@ -15,9 +15,9 @@ namespace Cake.Common.Tools.XUnit
         private readonly IGlobber _globber;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="XUnitRunner"/> class.
+        /// Initializes a new instance of the <see cref="XUnitRunner" /> class.
         /// </summary>
-        /// <param name="fileSystem"></param>
+        /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="globber">The globber.</param>
         /// <param name="runner">The runner.</param>

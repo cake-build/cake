@@ -39,7 +39,7 @@ namespace Cake.Common.Tools.NuGet.Push
         /// <summary>
         /// Gets or sets the NuGet configuration file.
         /// </summary>
-        /// <value>The NuGet configuation file.</value>
+        /// <value>The NuGet configuration file.</value>
         public FilePath ConfigFile { get; set; }
 
         /// <summary>

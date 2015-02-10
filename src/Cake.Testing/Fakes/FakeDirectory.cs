@@ -5,34 +5,64 @@ using Cake.Core.IO;
 
 namespace Cake.Testing.Fakes
 {
+    /// <summary>
+    /// Implementation of a fake <see cref="IDirectory"/>.
+    /// </summary>
     public sealed class FakeDirectory : IDirectory
     {
         private readonly FakeFileSystem _fileSystem;
         private readonly DirectoryPath _path;
         private readonly bool _creatable;
-        private bool _exist;
         private readonly bool _hidden;
+        private bool _exist;        
 
+        /// <summary>
+        /// Gets the path to the directory.
+        /// </summary>
+        /// <value>The path.</value>
         public DirectoryPath Path
         {
             get { return _path; }
         }
 
-        Core.IO.Path IFileSystemInfo.Path
+        /// <summary>
+        /// Gets the path to the directory.
+        /// </summary>
+        /// <value>The path.</value>
+        Path IFileSystemInfo.Path
         {
             get { return _path; }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="IFileSystemInfo" /> exists.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the entry exists; otherwise, <c>false</c>.
+        /// </value>
         public bool Exists
         {
             get { return _exist; }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="IFileSystemInfo" /> is hidden.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the entry is hidden; otherwise, <c>false</c>.
+        /// </value>
         public bool Hidden
         {
             get { return _exist && _hidden; }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FakeDirectory"/> class.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="path">The path.</param>
+        /// <param name="creatable">if set to <c>true</c> the directory is creatable.</param>
+        /// <param name="hidden">if set to <c>true</c> the directory is hidden.</param>
         public FakeDirectory(FakeFileSystem fileSystem, DirectoryPath path, bool creatable, bool hidden)
         {
             _fileSystem = fileSystem;
@@ -42,6 +72,9 @@ namespace Cake.Testing.Fakes
             _hidden = hidden;
         }
 
+        /// <summary>
+        /// Creates the directory.
+        /// </summary>
         public void Create()
         {
             if (_creatable)
@@ -50,6 +83,10 @@ namespace Cake.Testing.Fakes
             }
         }
 
+        /// <summary>
+        /// Deletes the directory.
+        /// </summary>
+        /// <param name="recursive">Will perform a recursive delete if set to <c>true</c>.</param>
         public void Delete(bool recursive)
         {
             if (recursive)
@@ -66,6 +103,14 @@ namespace Cake.Testing.Fakes
             _exist = false;
         }
 
+        /// <summary>
+        /// Gets directories matching the specified filter and scope.
+        /// </summary>
+        /// <param name="filter">The filter.</param>
+        /// <param name="scope">The search scope.</param>
+        /// <returns>
+        /// Directories matching the filter and scope.
+        /// </returns>
         public IEnumerable<IDirectory> GetDirectories(string filter, SearchScope scope)
         {
             var result = new List<IDirectory>();
@@ -81,17 +126,14 @@ namespace Cake.Testing.Fakes
             return result;
         }
 
-        public IEnumerable<IDirectory> GetDirectories(string filter, SearchScope scope, Func<IFileSystemInfo, bool> wherePredicate)
-        {
-            return GetDirectories(filter, scope, wherePredicate, null);
-        }
-
-        public IEnumerable<IDirectory> GetDirectories(string filter, SearchScope scope, Func<IFileSystemInfo, bool> wherePredicate, Action<IFileSystemInfo> predicateFiltered)
-        {
-            return GetDirectories(filter, scope)
-                .Where(entry => WherePredicate(entry, wherePredicate, predicateFiltered));
-        }
-
+        /// <summary>
+        /// Gets files matching the specified filter and scope.
+        /// </summary>
+        /// <param name="filter">The filter.</param>
+        /// <param name="scope">The search scope.</param>
+        /// <returns>
+        /// Files matching the specified filter and scope.
+        /// </returns>
         public IEnumerable<IFile> GetFiles(string filter, SearchScope scope)
         {
             var result = new List<IFile>();
@@ -105,27 +147,6 @@ namespace Cake.Testing.Fakes
                 }
             }
             return result;
-        }
-
-        public IEnumerable<IFile> GetFiles(string filter, SearchScope scope, Func<IFileSystemInfo, bool> wherePredicate)
-        {
-            return GetFiles(filter, scope, wherePredicate, null);
-        }
-
-        public IEnumerable<IFile> GetFiles(string filter, SearchScope scope, Func<IFileSystemInfo, bool> wherePredicate, Action<IFileSystemInfo> predicateFiltered)
-        {
-            return GetFiles(filter, scope)
-                .Where(entry=>WherePredicate(entry, wherePredicate, predicateFiltered));
-        }
-
-        private static bool WherePredicate(IFileSystemInfo entry, Func<IFileSystemInfo, bool> wherePredicate, Action<IFileSystemInfo> predicateFiltered)
-        {
-            var include = wherePredicate==null || wherePredicate(entry);
-            if (!include && predicateFiltered != null)
-            {
-                predicateFiltered(entry);
-            }
-            return include;
         }
     }
 }

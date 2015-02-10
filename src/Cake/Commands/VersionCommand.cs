@@ -3,6 +3,9 @@ using Cake.Core;
 
 namespace Cake.Commands
 {
+    /// <summary>
+    /// A command that shows version information.
+    /// </summary>
     internal sealed class VersionCommand : ICommand
     {
         private readonly IConsole _console;

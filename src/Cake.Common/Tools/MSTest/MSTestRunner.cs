@@ -72,6 +72,7 @@ namespace Cake.Common.Tools.MSTest
         /// <summary>
         /// Gets the default tool path.
         /// </summary>
+        /// <param name="settings">The settings.</param>
         /// <returns>The default tool path.</returns>
         protected override FilePath GetDefaultToolPath(MSTestSettings settings)
         {

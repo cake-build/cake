@@ -7,19 +7,18 @@ namespace Cake.Core.IO.NuGet
     /// Contains NuGet path resolver functionality
     /// </summary>
     public sealed class NuGetToolResolver : INuGetToolResolver
-    {
-        private IFile _nugetExeFile;
+    {        
         private readonly IFileSystem _fileSystem;
         private readonly IGlobber _globber;
         private readonly ICakeEnvironment _environment;
-
+        private IFile _nugetExeFile;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NuGetToolResolver"/> class.
+        /// Initializes a new instance of the <see cref="NuGetToolResolver" /> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
         /// <param name="globber">The globber.</param>
+        /// <param name="environment">The environment.</param>
         public NuGetToolResolver(IFileSystem fileSystem, IGlobber globber, ICakeEnvironment environment)
         {
             _fileSystem = fileSystem;
@@ -28,17 +27,21 @@ namespace Cake.Core.IO.NuGet
         }
 
         /// <summary>
-        /// Name of tool
+        /// Gets the tool name.
         /// </summary>
+        /// <value>The tool name.</value>
         public string Name
         {
             get { return "NuGet"; }
         }
 
         /// <summary>
-        /// Resolve path to NuGet tool
+        /// Resolves the tool path.
         /// </summary>
-        /// <returns>nuget.exe path</returns>
+        /// <returns>
+        /// The tool path.
+        /// </returns>
+        /// <exception cref="CakeException">No nuget.exe found by resolver.</exception>
         public FilePath ResolveToolPath()
         {
             // Check if path allready resolved
@@ -75,20 +78,20 @@ namespace Cake.Core.IO.NuGet
             if (!string.IsNullOrWhiteSpace(envPath))
             {
                 var pathFile = envPath
-                    .Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(path=>_fileSystem.GetDirectory(path))
+                    .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(path => _fileSystem.GetDirectory(path))
                     .Where(path => path.Exists)
                     .Select(path => path.Path.CombineWithFilePath("nuget.exe"))
                     .Select(_fileSystem.GetFile)
                     .FirstOrDefault(file => file.Exists);
 
-                if (pathFile!=null)
+                if (pathFile != null)
                 {
                     return (_nugetExeFile = pathFile).Path;
                 }
             }
 
-            throw new CakeException("No NuGet.exe found by resolver");
+            throw new CakeException("No nuget.exe found by resolver.");
         }
     }
 }

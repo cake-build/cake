@@ -25,6 +25,5 @@ namespace Cake.Core.IO.Globbing
         {
             get { return _value; }
         }
-
     }
 }

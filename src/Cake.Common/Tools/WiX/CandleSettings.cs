@@ -14,7 +14,7 @@ namespace Cake.Common.Tools.WiX
         public Architecture? Architecture { get; set; }
 
         /// <summary>
-        /// Gets or sets the preprocessor defines.
+        /// Gets or sets the pre processor defines.
         /// </summary>
         public IDictionary<string, string> Defines { get; set; }
 
@@ -24,7 +24,7 @@ namespace Cake.Common.Tools.WiX
         public IEnumerable<string> Extensions { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating if FIPS compliant algorithms should be used.
+        /// Gets or sets a value indicating whether FIPS compliant algorithms should be used.
         /// </summary>
         /// <value>
         ///   <c>true</c> if FIPS compliant algorithms should be used, otherwise <c>false</c>.
@@ -52,7 +52,7 @@ namespace Cake.Common.Tools.WiX
         public bool ShowSourceTrace { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating verbose output.
+        /// Gets or sets a value indicating whether to show verbose output.
         /// </summary>
         public bool Verbose { get; set; }
 

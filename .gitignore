@@ -23,6 +23,8 @@ TestResults
 *.user
 *.sln.docstates
 *.userprefs
+*.GhostDoc.xml
+*StyleCop.Cache
 
 # Build results
 [Dd]ebug/

@@ -6,7 +6,7 @@ using Cake.Core.Scripting;
 
 namespace Cake.Scripting
 {
-    public sealed class DescriptionScriptHost : ScriptHost
+    internal sealed class DescriptionScriptHost : ScriptHost
     {
         private readonly IConsole _console;
         private readonly Dictionary<string, string> _descriptions;

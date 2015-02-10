@@ -121,7 +121,7 @@ namespace Cake.Core.Scripting
             var code = string.Join("\r\n", _lines);
             if (!string.IsNullOrWhiteSpace(aliases))
             {
-                return string.Join("\r\n", new[] { aliases, code });
+                return string.Join("\r\n", aliases, code);
             }
             return code;
         }

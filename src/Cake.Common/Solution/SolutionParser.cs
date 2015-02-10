@@ -37,10 +37,10 @@ namespace Cake.Common.Solution
         }
 
         /// <summary>
-        /// Parses solution project files
+        /// Parses a solution's project files.
         /// </summary>
-        /// <param name="solutionPath"></param>
-        /// <returns></returns>
+        /// <param name="solutionPath">The solution path.</param>
+        /// <returns>A parsed solution.</returns>
         public SolutionParserResult Parse(FilePath solutionPath)
         {
             if (solutionPath == null)
@@ -74,7 +74,9 @@ namespace Cake.Common.Solution
                 {
                     var project = ParseSolutionProjectLine(file, line);
                     if (!StringComparer.OrdinalIgnoreCase.Equals(project.Type, SolutionFolder))
+                    {
                         projects.Add(project);
+                    }
                 }
                 else if (line.StartsWith("Microsoft Visual Studio Solution File, "))
                 {
@@ -94,21 +96,20 @@ namespace Cake.Common.Solution
                 version,
                 visualStudioVersion,
                 minimumVisualStudioVersion,
-                projects.AsReadOnly()
-                );
+                projects.AsReadOnly());
 
             return solutionParserResult;
         }
 
-
         private static SolutionProject ParseSolutionProjectLine(IFile file, string line)
         {
             var withinQuotes = false;
-            StringBuilder
-                projectTypeBuilder = new StringBuilder(),
-                nameBuilder = new StringBuilder(),
-                pathBuilder = new StringBuilder(),
-                idBuilder = new StringBuilder();
+
+            var projectTypeBuilder = new StringBuilder();
+            var nameBuilder = new StringBuilder();
+            var pathBuilder = new StringBuilder();
+            var idBuilder = new StringBuilder();
+
             var result = new[]
             {
                 projectTypeBuilder,
@@ -125,12 +126,17 @@ namespace Cake.Common.Solution
                     if (!withinQuotes)
                     {
                         if (position++ >= result.Length)
-                            break;
+                        {
+                            break;   
+                        }                            
                     }
                     continue;
                 }
 
-                if (!withinQuotes) continue;
+                if (!withinQuotes)
+                {
+                    continue;
+                }
 
                 result[position].Append(c);
             }
@@ -138,12 +144,8 @@ namespace Cake.Common.Solution
             return new SolutionProject(
                 idBuilder.ToString(),
                 nameBuilder.ToString(),
-                file
-                    .Path
-                    .GetDirectory()
-                    .CombineWithFilePath(pathBuilder.ToString()),
-                projectTypeBuilder.ToString()
-                );
+                file.Path.GetDirectory().CombineWithFilePath(pathBuilder.ToString()),
+                projectTypeBuilder.ToString());
         }
     }
 }

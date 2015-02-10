@@ -17,6 +17,21 @@ namespace Cake.Common.Solution.Project.Properties
         /// <param name="context">The context.</param>
         /// <param name="outputPath">The output path.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var file = "./SolutionInfo.cs";
+        /// var version = "0.0.1";
+        /// var buildNo = "123";
+        /// var semVersion = string.Concat(version + "-" + buildNo);
+        /// CreateAssemblyInfo(file, new AssemblyInfoSettings {
+        ///     Product = "SampleProject",
+        ///     Version = version,
+        ///     FileVersion = version,
+        ///     InformationalVersion = semVersion,
+        ///     Copyright = string.Format("Copyright (c) Contoso 2014 - {0}", DateTime.Now.Year)
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void CreateAssemblyInfo(this ICakeContext context, FilePath outputPath, AssemblyInfoSettings settings)
         {
@@ -35,6 +50,14 @@ namespace Cake.Common.Solution.Project.Properties
         /// <param name="context">The context.</param>
         /// <param name="assemblyInfoPath">The assembly info path.</param>
         /// <returns>The content of the assembly info file.</returns>
+        /// <example>
+        /// <code>
+        /// var assemblyInfo = ParseAssemblyInfo("./SolutionInfo.cs");
+        /// Information("Version: {0}", assemblyInfo.AssemblyVersion);
+        /// Information("File version: {0}", assemblyInfo.AssemblyFileVersion);
+        /// Information("Informational version: {0}", assemblyInfo.AssemblyInformationalVersion);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static AssemblyInfoParseResult ParseAssemblyInfo(this ICakeContext context, FilePath assemblyInfoPath)
         {

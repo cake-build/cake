@@ -90,7 +90,7 @@ namespace Cake.Common.IO
             {
                 const string format = "The directory '{0}' do not exist.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, absoluteTargetDirectoryPath.FullPath);
-                throw new DirectoryNotFoundException(message);                
+                throw new DirectoryNotFoundException(message);
             }
 
             // Iterate all files and copy them.
@@ -105,7 +105,7 @@ namespace Cake.Common.IO
             var absoluteFilePath = filePath.MakeAbsolute(context.Environment);
 
             // Get the file.
-            if(!context.FileSystem.Exist(absoluteFilePath))
+            if (!context.FileSystem.Exist(absoluteFilePath))
             {
                 const string format = "The file '{0}' do not exist.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, absoluteFilePath.FullPath);
@@ -115,6 +115,6 @@ namespace Cake.Common.IO
             // Copy the file.
             var file = context.FileSystem.GetFile(absoluteFilePath);
             file.Copy(targetFilePath.MakeAbsolute(context.Environment), true);
-        } 
+        }
     }
 }

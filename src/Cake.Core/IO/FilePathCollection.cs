@@ -33,7 +33,7 @@ namespace Cake.Core.IO
         /// <param name="comparer">The comparer.</param>
         public FilePathCollection(PathComparer comparer)
             : this(Enumerable.Empty<FilePath>(), comparer)
-        {            
+        {
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Cake.Core.IO
             {
                 throw new ArgumentNullException("collection");
             }
-            return new FilePathCollection(collection, collection.Comparer) {path};
+            return new FilePathCollection(collection, collection.Comparer) { path };
         }
 
         /// <summary>Adds multiple paths to the collection.</summary>
@@ -131,7 +131,7 @@ namespace Cake.Core.IO
             {
                 throw new ArgumentNullException("collection");
             }
-            return new FilePathCollection(collection, collection.Comparer) {paths};
+            return new FilePathCollection(collection, collection.Comparer) { paths };
         }
 
         /// <summary>

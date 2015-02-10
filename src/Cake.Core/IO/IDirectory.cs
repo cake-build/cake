@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Cake.Core.IO
 {
@@ -29,54 +28,16 @@ namespace Cake.Core.IO
         /// Gets directories matching the specified filter and scope.
         /// </summary>
         /// <param name="filter">The filter.</param>
-        /// <param name="scope">The scope.</param>
+        /// <param name="scope">The search scope.</param>
         /// <returns>Directories matching the filter and scope.</returns>
         IEnumerable<IDirectory> GetDirectories(string filter, SearchScope scope);
 
         /// <summary>
-        /// Gets directories matching the specified filter and scope, with option to exclude hidden directories
-        /// </summary>
-        /// <param name="filter">The filter.</param>
-        /// <param name="scope">The scope.</param>
-        /// <param name="wherePredicate">Filters returned directories based on predicate</param>
-        /// <returns>Directories matching the filter and scope.</returns>
-        IEnumerable<IDirectory> GetDirectories(string filter, SearchScope scope, Func<IFileSystemInfo, bool> wherePredicate);
-
-        /// <summary>
-        /// Gets directories matching the specified filter and scope, with option to exclude hidden directories
-        /// </summary>
-        /// <param name="filter">The filter.</param>
-        /// <param name="scope">The scope.</param>
-        /// <param name="wherePredicate">Filters returned directories based on predicate</param>
-        /// <param name="predicateFiltered">Callback if directory gets filtered by wherePredicate</param>
-        /// <returns>Directories matching the filter and scope.</returns>
-        IEnumerable<IDirectory> GetDirectories(string filter, SearchScope scope, Func<IFileSystemInfo, bool> wherePredicate, Action<IFileSystemInfo> predicateFiltered);
-
-        /// <summary>
         /// Gets files matching the specified filter and scope.
         /// </summary>
         /// <param name="filter">The filter.</param>
-        /// <param name="scope">The scope.</param>
+        /// <param name="scope">The search scope.</param>
         /// <returns>Files matching the specified filter and scope.</returns>
         IEnumerable<IFile> GetFiles(string filter, SearchScope scope);
-
-        /// <summary>
-        /// Gets files matching the specified filter and scope.
-        /// </summary>
-        /// <param name="filter">The filter.</param>
-        /// <param name="scope">The scope.</param>
-        /// <param name="wherePredicate">Filters returned files based on predicate</param>
-        /// <returns>Files matching the specified filter and scope.</returns>
-        IEnumerable<IFile> GetFiles(string filter, SearchScope scope, Func<IFileSystemInfo, bool> wherePredicate);
-
-        /// <summary>
-        /// Gets files matching the specified filter and scope.
-        /// </summary>
-        /// <param name="filter">The filter.</param>
-        /// <param name="scope">The scope.</param>
-        /// <param name="wherePredicate">Filters returned files based on predicate</param>
-        /// <param name="predicateFiltered">Callback if file gets filtered by wherePredicate</param>
-        /// <returns>Files matching the specified filter and scope.</returns>
-        IEnumerable<IFile> GetFiles(string filter, SearchScope scope, Func<IFileSystemInfo, bool> wherePredicate, Action<IFileSystemInfo> predicateFiltered);
     }
 }

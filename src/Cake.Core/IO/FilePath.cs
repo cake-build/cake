@@ -54,7 +54,7 @@ namespace Cake.Core.IO
         /// <summary>
         /// Gets the file extension.
         /// </summary>
-        /// <returns>Gets the file extension.</returns>
+        /// <returns>The file extension.</returns>
         public string GetExtension()
         {
             var extension = System.IO.Path.GetExtension(FullPath);

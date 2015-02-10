@@ -9,8 +9,12 @@ namespace Cake.Core.Annotations
     public sealed class CakePropertyAliasAttribute : CakeAliasAttribute
     {
         /// <summary>
-        /// Indicates if the result of the property alias method should be false.
+        /// Gets or sets a value indicating whether the result of the property alias method should be cached.
+        /// Indicates .
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if cache; otherwise, <c>false</c>.
+        /// </value>
         public bool Cache { get; set; }
     }
 }

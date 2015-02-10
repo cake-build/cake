@@ -5,8 +5,11 @@ namespace Cake.Diagnostics
     internal class ConsolePalette
     {
         public ConsoleColor Background { get; set; }
+        
         public ConsoleColor Foreground { get; set; }
+        
         public ConsoleColor ArgumentBackground { get; set; }
+        
         public ConsoleColor ArgumentForeground { get; set; }
 
         public ConsolePalette(ConsoleColor background, ConsoleColor foreground, 

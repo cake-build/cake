@@ -11,6 +11,7 @@ namespace Cake.Common.Text
     /// Provides functionality to perform simple text transformations
     /// from a Cake build script and save them to disc.
     /// </summary>
+    /// <typeparam name="TTemplate">The text transformation template.</typeparam>
     public sealed class TextTransformation<TTemplate>
         where TTemplate : class, ITextTransformationTemplate
     {
@@ -19,8 +20,9 @@ namespace Cake.Common.Text
         private readonly TTemplate _template;
 
         /// <summary>
-        /// The test transformation template.
+        /// Gets the text transformation template.
         /// </summary>
+        /// <value>The text transformation template.</value>
         public TTemplate Template
         {
             get { return _template; }
@@ -47,7 +49,7 @@ namespace Cake.Common.Text
         /// <summary>
         /// Saves the text transformation to a file.
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="path">The <see cref="FilePath"/> to save the test transformation to.</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "Stream writer leaves stream open.")]
         public void Save(FilePath path)
         {

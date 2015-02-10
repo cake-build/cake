@@ -913,8 +913,8 @@ namespace Cake.Common.Tests.Unit.IO
 
             private FakeFileSystem CreateFileStructure(FakeFileSystem ffs)
             {
-                Action<string> dir = (path) => ffs.GetCreatedDirectory(path);
-                Action<string> file = (path) => ffs.GetCreatedFile(path);
+                Action<string> dir = path => ffs.GetCreatedDirectory(path);
+                Action<string> file = path => ffs.GetCreatedFile(path);
 
                 dir("C:/Temp");
                 {
