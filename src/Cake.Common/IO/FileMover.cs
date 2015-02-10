@@ -97,7 +97,7 @@ namespace Cake.Common.IO
                 const string format = "The directory '{0}' do not exist.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, targetDirectoryPath.FullPath);
                 throw new DirectoryNotFoundException(message);
-            }            
+            }
 
             // Get the file and verify it exist.
             var file = context.FileSystem.GetFile(filePath);
@@ -105,7 +105,7 @@ namespace Cake.Common.IO
             {
                 const string format = "The file '{0}' do not exist.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, filePath.FullPath);
-                throw new FileNotFoundException(message ,filePath.FullPath);
+                throw new FileNotFoundException(message, filePath.FullPath);
             }
 
             // Move the file.            

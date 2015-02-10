@@ -10,18 +10,21 @@ namespace Cake.Common.Tools.SignTool
     {
         private static string _programFiles;
         private static string _signToolPath;
+
         public static FilePath GetSignToolPath(ICakeEnvironment environment)
         {
-             //try SDK first
+            // Try SDK first.
             if (_programFiles == null)
+            {
                 _programFiles = environment.Is64BitOperativeSystem()
                     ? Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)
                     : Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-
+            }
 
             if (_signToolPath == null)
+            {
                 _signToolPath = (
-                    from path in (environment.Is64BitOperativeSystem())
+                    from path in environment.Is64BitOperativeSystem()
                         ? new[]
                         {
                             System.IO.Path.Combine(_programFiles, @"Windows Kits\8.1\bin\x64\signtool.exe"),
@@ -36,20 +39,21 @@ namespace Cake.Common.Tools.SignTool
                         }
                     where System.IO.File.Exists(path)
                     orderby path descending
-                    select path
-                    ).FirstOrDefault();
+                    select path).FirstOrDefault();
+            }
 
             if (!string.IsNullOrEmpty(_signToolPath))
             {
                 return _signToolPath;
             }
 
-            //try fallback to registry for older SDK's
-            using (var windows = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Microsoft SDKs\\Windows")
-                )
+            // Try falling back to registry for older SDKs.
+            using (var windows = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Microsoft SDKs\\Windows"))
             {
                 if (windows == null)
+                {
                     throw new CakeException("No Microsoft Windows SDKs key found");
+                }
 
                 _signToolPath = (
                     from key in windows.GetSubKeyNames()
@@ -60,12 +64,13 @@ namespace Cake.Common.Tools.SignTool
                     let signToolPath = System.IO.Path.Combine(installationFolder, "bin\\signtool.exe")
                     where System.IO.File.Exists(signToolPath)
                     orderby key descending
-                    select signToolPath
-                    ).FirstOrDefault();
+                    select signToolPath).FirstOrDefault();
             }
 
             if (string.IsNullOrEmpty(_signToolPath) || !System.IO.File.Exists(_signToolPath))
+            {
                 throw new CakeException("Failed to find signtool");
+            }
 
             return _signToolPath;
         }

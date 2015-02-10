@@ -6,22 +6,22 @@
     public enum TargetKind
     {
         /// <summary>
-        /// The default target.
+        /// TargetKind: <c>Default</c>
         /// </summary>
         Default,
 
         /// <summary>
-        /// Dynamic Link Library
+        /// TargetKind: <c>Dynamic Link Library</c>
         /// </summary>
         Dll,
 
         /// <summary>
-        /// Executable
+        /// TargetKind: <c>Executable</c>
         /// </summary>
         Exe,
 
         /// <summary>
-        /// Windows executable
+        /// TargetKind: <c>Windows executable</c>
         /// </summary>
         WinExe
     }

@@ -10,36 +10,35 @@ namespace Cake.Common.Tools.NuGet.Pack
     internal static class NuspecTransformer
     {
         private static readonly Dictionary<string, Func<NuGetPackSettings, string>> _mappings;
+        private const string NuSpecXsd = "http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd";
 
         static NuspecTransformer()
         {
             _mappings = new Dictionary<string, Func<NuGetPackSettings, string>>
             {
-                {"id", settings => ToString(settings.Id)},
-                {"version", settings => ToString(settings.Version)},
-                {"title", settings => ToString(settings.Title)},
-                {"authors", settings => ToCommaSeparatedString(settings.Authors)},
-                {"owners", settings => ToCommaSeparatedString(settings.Owners)},
-                {"description", settings => ToString(settings.Description)},
-                {"summary", settings => ToString(settings.Summary)},
-                {"licenseUrl", settings => ToString(settings.LicenseUrl)},
-                {"projectUrl", settings => ToString(settings.ProjectUrl)},
-                {"iconUrl", settings => ToString(settings.IconUrl)},
-                {"requireLicenseAcceptance", settings => ToString(settings.RequireLicenseAcceptance)},
-                {"copyright", settings => ToString(settings.Copyright)},
-                {"releaseNotes", settings => ToMultiLineString(settings.ReleaseNotes)},
-                {"tags", settings => ToSpaceSeparatedString(settings.Tags)}
+                { "id", settings => ToString(settings.Id) },
+                { "version", settings => ToString(settings.Version) },
+                { "title", settings => ToString(settings.Title) },
+                { "authors", settings => ToCommaSeparatedString(settings.Authors) },
+                { "owners", settings => ToCommaSeparatedString(settings.Owners) },
+                { "description", settings => ToString(settings.Description) },
+                { "summary", settings => ToString(settings.Summary) },
+                { "licenseUrl", settings => ToString(settings.LicenseUrl) },
+                { "projectUrl", settings => ToString(settings.ProjectUrl) },
+                { "iconUrl", settings => ToString(settings.IconUrl) },
+                { "requireLicenseAcceptance", settings => ToString(settings.RequireLicenseAcceptance) },
+                { "copyright", settings => ToString(settings.Copyright) },
+                { "releaseNotes", settings => ToMultiLineString(settings.ReleaseNotes) },
+                { "tags", settings => ToSpaceSeparatedString(settings.Tags) }
             };
         }
-        private const string NuSpecXsd = "http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd";
+
         public static void Transform(XmlDocument document, NuGetPackSettings settings)
         {
             // Create the namespace manager.
             var namespaceManager = new XmlNamespaceManager(document.NameTable);
-            
             namespaceManager.AddNamespace("nu", NuSpecXsd);
 
-            // Iterate through all mappings.
             foreach (var elementName in _mappings.Keys)
             {
                 var content = _mappings[elementName](settings);
@@ -51,18 +50,17 @@ namespace Cake.Common.Tools.NuGet.Pack
                 }
             }
 
-            //Check if files specified
             if (settings.Files != null && settings.Files.Count > 0)
             {
                 var filesPath = string.Format(CultureInfo.InvariantCulture, "/package//*[local-name()='files']");
-                var filesElement =document.SelectSingleNode(filesPath, namespaceManager);
+                var filesElement = document.SelectSingleNode(filesPath, namespaceManager);
                 if (filesElement == null)
                 {
                     // Get the package element.
                     var package = GetPackageElement(document);
                     filesElement = document.CreateAndAppendElement(package, "files");
-
                 }
+
                 // Add the files
                 filesElement.RemoveAll();
                 foreach (var file in settings.Files)
@@ -101,7 +99,7 @@ namespace Cake.Common.Tools.NuGet.Pack
                     parent = document.CreateElement("metadata", NuSpecXsd);
                     package.PrependChild(parent);
                 }
-                
+
                 node = document.CreateAndAppendElement(parent, name);
             }
             return node;
@@ -115,8 +113,7 @@ namespace Cake.Common.Tools.NuGet.Pack
             return parent.AppendChild(
                 string.IsNullOrWhiteSpace(parent.NamespaceURI)
                     ? document.CreateElement(name)
-                    : document.CreateElement(name, parent.NamespaceURI)
-                );
+                    : document.CreateElement(name, parent.NamespaceURI));
         }
 
         private static void AddAttributeIfSpecified(this XmlNode element, string value, string name)

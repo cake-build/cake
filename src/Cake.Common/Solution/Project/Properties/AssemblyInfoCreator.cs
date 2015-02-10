@@ -8,7 +8,7 @@ using Cake.Core.IO;
 namespace Cake.Common.Solution.Project.Properties
 {
     /// <summary>
-    /// The aseembly info creator.
+    /// The assembly info creator.
     /// </summary>
     public sealed class AssemblyInfoCreator
     {

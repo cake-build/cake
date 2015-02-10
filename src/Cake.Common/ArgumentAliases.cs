@@ -46,7 +46,7 @@ namespace Cake.Common
         /// <summary>
         /// Gets an argument and throws if the argument is missing.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">The argument type.</typeparam>
         /// <param name="context">The context.</param>
         /// <param name="name">The argument name.</param>
         /// <returns>The value of the argument.</returns>

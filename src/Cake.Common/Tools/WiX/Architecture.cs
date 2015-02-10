@@ -6,15 +6,17 @@
     public enum Architecture
     {
         /// <summary>
-        /// x86_64
+        /// Architecture: <c>x86_64</c>
         /// </summary>
         X64,
+
         /// <summary>
-        /// x86
+        /// Architecture: <c>x86</c>
         /// </summary>
         X86,
+
         /// <summary>
-        /// Itanium
+        /// Architecture: <c>Itanium</c>
         /// </summary>
         IA64
     }

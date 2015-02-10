@@ -75,10 +75,10 @@ namespace Cake.Common.Tools.MSBuild
             currValue = new List<string>(
                 settings.Properties.TryGetValue(name, out currValue) && currValue != null
                     ? currValue.Concat(values)
-                    : values
-                );
-            
+                    : values);
+
             settings.Properties[name] = currValue;
+
             return settings;
         }
 
@@ -119,7 +119,7 @@ namespace Cake.Common.Tools.MSBuild
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="reuse"><c>true</c> if node reuse should be enabled; otherwise <c>false</c>.</param>
-        /// <returns></returns>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings SetNodeReuse(this MSBuildSettings settings, bool reuse)
         {
             if (settings == null)

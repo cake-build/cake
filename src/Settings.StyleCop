@@ -5,10 +5,18 @@
       <Value>shortlived, short-lived</Value>
     </CollectionProperty>
     <CollectionProperty Name="RecognizedWords">
+      <Value>appveyor</Value>
+      <Value>bitbucket</Value>
+      <Value>bootstrapper</Value>
       <Value>criterias</Value>
+      <Value>git</Value>
+      <Value>github</Value>
       <Value>globber</Value>
       <Value>globbing</Value>
       <Value>nuget</Value>
+      <Value>nuspec</Value>
+      <Value>veyor</Value>
+      <Value>yml</Value>
     </CollectionProperty>
   </GlobalSettings>
   <Analyzers>

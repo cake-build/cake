@@ -35,10 +35,10 @@ namespace Cake.Common.Solution.Project
         }
 
         /// <summary>
-        /// Parses CSharp project file
+        /// Parses a project file.
         /// </summary>
-        /// <param name="projectPath"></param>
-        /// <returns></returns>
+        /// <param name="projectPath">The project path.</param>
+        /// <returns>The parsed project.</returns>
         public ProjectParserResult Parse(FilePath projectPath)
         {
             if (projectPath == null)
@@ -51,7 +51,7 @@ namespace Cake.Common.Solution.Project
                 projectPath = projectPath.MakeAbsolute(_environment);
             }
 
-            // Get the release notes file.
+            // Get the project file.
             var file = _fileSystem.GetFile(projectPath);
             if (!file.Exists)
             {
@@ -60,50 +60,48 @@ namespace Cake.Common.Solution.Project
                 throw new CakeException(message);
             }
 
-            XDocument xDoc;
-            using (var fs = file.OpenRead())
+            XDocument document;
+            using (var stream = file.OpenRead())
             {
-                xDoc = XDocument.Load(fs);
+                document = XDocument.Load(stream);
             }
 
             var projectProperties =
-                (
-                    from project in xDoc.Elements(ProjectXElement.Project)
-                    from propertyGroup in project.Elements(ProjectXElement.PropertyGroup)
-                    let configuration = propertyGroup
-                        .Elements(ProjectXElement.Configuration)
-                        .Select(cfg => cfg.Value)
-                        .FirstOrDefault()
-                    where !string.IsNullOrWhiteSpace(configuration)
-                    select new
-                    {
-                        Configuration = configuration,
-                        Platform = propertyGroup
-                            .Elements(ProjectXElement.Platform)
-                            .Select(platform => platform.Value)
-                            .FirstOrDefault(),
-                        ProjectGuid = propertyGroup
-                            .Elements(ProjectXElement.ProjectGuid)
-                            .Select(projectGuid => projectGuid.Value)
-                            .FirstOrDefault(),
-                        OutputType = propertyGroup
-                            .Elements(ProjectXElement.OutputType)
-                            .Select(outputType => outputType.Value)
-                            .FirstOrDefault(),
-                        RootNameSpace = propertyGroup
-                            .Elements(ProjectXElement.RootNamespace)
-                            .Select(rootNameSpace => rootNameSpace.Value)
-                            .FirstOrDefault(),
-                        AssemblyName = propertyGroup
-                            .Elements(ProjectXElement.AssemblyName)
-                            .Select(assemblyName => assemblyName.Value)
-                            .FirstOrDefault(),
-                        TargetFrameworkVersion = propertyGroup
-                            .Elements(ProjectXElement.TargetFrameworkVersion)
-                            .Select(targetFrameworkVersion => targetFrameworkVersion.Value)
-                            .FirstOrDefault()
-                    }
-                    ).FirstOrDefault();
+                (from project in document.Elements(ProjectXElement.Project)
+                 from propertyGroup in project.Elements(ProjectXElement.PropertyGroup)
+                 let configuration = propertyGroup
+                     .Elements(ProjectXElement.Configuration)
+                     .Select(cfg => cfg.Value)
+                     .FirstOrDefault()
+                 where !string.IsNullOrWhiteSpace(configuration)
+                 select new
+                 {
+                     Configuration = configuration,
+                     Platform = propertyGroup
+                         .Elements(ProjectXElement.Platform)
+                         .Select(platform => platform.Value)
+                         .FirstOrDefault(),
+                     ProjectGuid = propertyGroup
+                         .Elements(ProjectXElement.ProjectGuid)
+                         .Select(projectGuid => projectGuid.Value)
+                         .FirstOrDefault(),
+                     OutputType = propertyGroup
+                         .Elements(ProjectXElement.OutputType)
+                         .Select(outputType => outputType.Value)
+                         .FirstOrDefault(),
+                     RootNameSpace = propertyGroup
+                         .Elements(ProjectXElement.RootNamespace)
+                         .Select(rootNameSpace => rootNameSpace.Value)
+                         .FirstOrDefault(),
+                     AssemblyName = propertyGroup
+                         .Elements(ProjectXElement.AssemblyName)
+                         .Select(assemblyName => assemblyName.Value)
+                         .FirstOrDefault(),
+                     TargetFrameworkVersion = propertyGroup
+                         .Elements(ProjectXElement.TargetFrameworkVersion)
+                         .Select(targetFrameworkVersion => targetFrameworkVersion.Value)
+                         .FirstOrDefault()
+                 }).FirstOrDefault();
 
             if (projectProperties == null)
             {
@@ -111,7 +109,28 @@ namespace Cake.Common.Solution.Project
             }
 
             var rootPath = projectPath.GetDirectory();
-            var projectParserResult = new ProjectParserResult(
+
+            var projectFiles =
+                (from project in document.Elements(ProjectXElement.Project)
+                 from itemGroup in project.Elements(ProjectXElement.ItemGroup)
+                 from element in itemGroup.Elements()
+                 where element.Name != ProjectXElement.Reference &&
+                       element.Name != ProjectXElement.Import &&
+                       element.Name != ProjectXElement.BootstrapperPackage &&
+                       element.Name != ProjectXElement.ProjectReference &&
+                       element.Name != ProjectXElement.Service
+                 from include in element.Attributes("Include")
+                 let value = include.Value
+                 where !string.IsNullOrEmpty(value)
+                 let filePath = rootPath.CombineWithFilePath(value)
+                 select new ProjectFile
+                 {
+                     FilePath = filePath,
+                     RelativePath = value,
+                     Compile = element.Name == ProjectXElement.Compile
+                 }).ToArray();
+
+            return new ProjectParserResult(
                 projectProperties.Configuration,
                 projectProperties.Platform,
                 projectProperties.ProjectGuid,
@@ -119,30 +138,7 @@ namespace Cake.Common.Solution.Project
                 projectProperties.RootNameSpace,
                 projectProperties.AssemblyName,
                 projectProperties.TargetFrameworkVersion,
-                (
-                    from project in xDoc.Elements(ProjectXElement.Project)
-                    from itemGroup in project.Elements(ProjectXElement.ItemGroup)
-                    from element in itemGroup.Elements()
-                    where element.Name != ProjectXElement.Reference &&
-                          element.Name != ProjectXElement.Import &&
-                          element.Name != ProjectXElement.BootstrapperPackage &&
-                          element.Name != ProjectXElement.ProjectReference &&
-                          element.Name != ProjectXElement.Service
-                    from include in element.Attributes("Include")
-                    let value = include.Value
-                    where !string.IsNullOrEmpty(value)
-                    let filePath = rootPath.CombineWithFilePath(value)
-                    select
-                        new ProjectFile
-                        {
-                            FilePath = filePath,
-                            RelativePath = value,
-                            Compile = element.Name == ProjectXElement.Compile
-                        }).ToArray()
-                );
-
-
-            return projectParserResult;
+                projectFiles);
         }
     }
 }

@@ -125,6 +125,7 @@ namespace Cake.Common.Tools.ILMerge
         /// <summary>
         /// Gets the default tool path.
         /// </summary>
+        /// <param name="settings">The settings.</param>
         /// <returns>The default tool path.</returns>
         protected override FilePath GetDefaultToolPath(ILMergeSettings settings)
         {

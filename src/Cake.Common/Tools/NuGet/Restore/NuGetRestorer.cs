@@ -11,7 +11,7 @@ namespace Cake.Common.Tools.NuGet.Restore
     public sealed class NuGetRestorer : Tool<NuGetRestoreSettings>
     {
         private readonly ICakeEnvironment _environment;
-        private readonly IToolResolver _nuGetToolResolver;
+        private readonly IToolResolver _nugetToolResolver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetRestorer"/> class.
@@ -19,13 +19,13 @@ namespace Cake.Common.Tools.NuGet.Restore
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="nuGetToolResolver">The NuGet tool resolver</param>
+        /// <param name="nugetToolResolver">The NuGet tool resolver</param>
         public NuGetRestorer(IFileSystem fileSystem, ICakeEnvironment environment, 
-            IProcessRunner processRunner, IToolResolver nuGetToolResolver)
+            IProcessRunner processRunner, IToolResolver nugetToolResolver)
             : base(fileSystem, environment, processRunner)
         {
             _environment = environment;
-            _nuGetToolResolver = nuGetToolResolver;
+            _nugetToolResolver = nugetToolResolver;
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace Cake.Common.Tools.NuGet.Restore
         /// <returns>The name of the tool.</returns>
         protected override string GetToolName()
         {
-            return _nuGetToolResolver.Name;
+            return _nugetToolResolver.Name;
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace Cake.Common.Tools.NuGet.Restore
         /// <returns>The default tool path.</returns>
         protected override FilePath GetDefaultToolPath(NuGetRestoreSettings settings)
         {
-            return _nuGetToolResolver.ResolveToolPath();
+            return _nugetToolResolver.ResolveToolPath();
         }
     }
 }

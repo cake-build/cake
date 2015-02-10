@@ -126,7 +126,7 @@ namespace Cake.Common.Tools.NuGet
         /// Pushes a NuGet package to a NuGet server and publishes it.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="packageFilePath">The nupkg file path.</param>
+        /// <param name="packageFilePath">The <c>.nupkg</c> file path.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
@@ -240,10 +240,10 @@ namespace Cake.Common.Tools.NuGet
         ///                 Source = EnvironmentVariable("PRIVATE_FEED_SOURCE")
         ///             };
         /// 
-        ///NuGetRemoveSource(
+        /// NuGetRemoveSource(
         ///    name:feed.Name,
         ///    source:feed.Source
-        ///);
+        /// );
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -277,11 +277,11 @@ namespace Cake.Common.Tools.NuGet
         ///                 Source = EnvironmentVariable("PRIVATE_FEED_SOURCE")
         ///             };
         /// 
-        ///NuGetRemoveSource(
+        /// NuGetRemoveSource(
         ///    name:feed.Name,
         ///    source:feed.Source,
         ///    settings:nugetSourceSettings
-        ///);
+        /// );
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -299,28 +299,28 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// Checks if NuGet package source exists in global user config using the specified source
+        /// Checks whether or not a NuGet package source exists in the global user configuration, using the specified source.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="source">Path to the package(s) source.</param>
+        /// <returns>Whether or not the NuGet package source exists in the global user configuration.</returns>
         /// <example>
-        /// <code>
+        ///   <code>
         /// var feed = new
-        ///             {
-        ///                 Name = EnvironmentVariable("PRIVATE_FEED_NAME"),
-        ///                 Source = EnvironmentVariable("PRIVATE_FEED_SOURCE")
-        ///             };
-        /// 
-        ///if (!NuGetHasSource(
-        ///    source:feed.Source
-        ///))
-        ///{
-        ///    Information("Source missing");
-        ///}
-        ///else
-        ///{
-        ///    Information("Source already exists");
-        ///}
+        /// {
+        /// Name = EnvironmentVariable("PRIVATE_FEED_NAME"),
+        /// Source = EnvironmentVariable("PRIVATE_FEED_SOURCE")
+        /// };
+        /// if (!NuGetHasSource(
+        /// source:feed.Source
+        /// ))
+        /// {
+        /// Information("Source missing");
+        /// }
+        /// else
+        /// {
+        /// Information("Source already exists");
+        /// }
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -332,38 +332,37 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// Checks if NuGet package source exists in global user config using the specified source &amp; settings
+        /// Checks whether or not a NuGet package source exists in the global user configuration, using the specified source and settings.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="source">Path to the package(s) source.</param>
         /// <param name="settings">The settings.</param>
+        /// <returns>Whether the specified NuGet package source exist.</returns>
         /// <example>
-        /// <code>
+        ///   <code>
         /// var nugetSourceSettings = new NuGetSourcesSettings
-        ///                             {
-        ///                                 UserName = EnvironmentVariable("PRIVATE_FEED_USERNAME"),
-        ///                                 Password = EnvironmentVariable("PRIVATE_FEED_PASSWORD"),
-        ///                                 IsSensitiveSource = true,
-        ///                                 Verbosity = NuGetVerbosity.Detailed
-        ///                             };
-        /// 
+        /// {
+        /// UserName = EnvironmentVariable("PRIVATE_FEED_USERNAME"),
+        /// Password = EnvironmentVariable("PRIVATE_FEED_PASSWORD"),
+        /// IsSensitiveSource = true,
+        /// Verbosity = NuGetVerbosity.Detailed
+        /// };
         /// var feed = new
-        ///             {
-        ///                 Name = EnvironmentVariable("PRIVATE_FEED_NAME"),
-        ///                 Source = EnvironmentVariable("PRIVATE_FEED_SOURCE")
-        ///             };
-        /// 
-        ///if (!NuGetHasSource(
-        ///    source:feed.Source,
-        ///    settings:nugetSourceSettings
-        ///))
-        ///{
-        ///    Information("Source missing");
-        ///}
-        ///else
-        ///{
-        ///    Information("Source already exists");
-        ///}
+        /// {
+        /// Name = EnvironmentVariable("PRIVATE_FEED_NAME"),
+        /// Source = EnvironmentVariable("PRIVATE_FEED_SOURCE")
+        /// };
+        /// if (!NuGetHasSource(
+        /// source:feed.Source,
+        /// settings:nugetSourceSettings
+        /// ))
+        /// {
+        /// Information("Source missing");
+        /// }
+        /// else
+        /// {
+        /// Information("Source already exists");
+        /// }
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -381,7 +380,7 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// Installs NuGet packages for the specified target.
+        /// Installs a NuGet package.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="packageId">The id of the package to install.</param>
@@ -400,7 +399,7 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// Installs NuGet packages using the specified settings.
+        /// Installs a NuGet package using the specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="packageId">The id of the package to install.</param>
@@ -427,12 +426,11 @@ namespace Cake.Common.Tools.NuGet
             runner.Install(packageId, settings);
         }
         
-
         /// <summary>
-        /// Installs NuGet packages for the specified target.
+        /// Installs NuGet packages using the specified package configuration.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="packageConfigPath">The target to install.</param>
+        /// <param name="packageConfigPath">The package configuration to install.</param>
         /// <example>
         /// <code>
         /// NuGetInstall("./tools/packages.config");
@@ -448,10 +446,10 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// Installs NuGet packages using the specified settings.
+        /// Installs NuGet packages using the specified package configuration and settings.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="packageConfigPath">The target to install.</param>
+        /// <param name="packageConfigPath">The package configuration to install.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>

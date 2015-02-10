@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.NuGet.Sources
     /// </summary>
     public sealed class NuGetSources : Tool<NuGetSourcesSettings>
     {
-        private readonly IToolResolver _nuGetToolResolver;
+        private readonly IToolResolver _nugetToolResolver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetSources"/> class.
@@ -20,12 +20,12 @@ namespace Cake.Common.Tools.NuGet.Sources
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="nuGetToolResolver">The NuGet tool resolver.</param>
+        /// <param name="nugetToolResolver">The NuGet tool resolver.</param>
         public NuGetSources(IFileSystem fileSystem, ICakeEnvironment environment, 
-            IProcessRunner processRunner, IToolResolver nuGetToolResolver)
+            IProcessRunner processRunner, IToolResolver nugetToolResolver)
             : base(fileSystem, environment, processRunner)
         {
-            _nuGetToolResolver = nuGetToolResolver;
+            _nugetToolResolver = nugetToolResolver;
         }
 
         /// <summary>
@@ -104,12 +104,12 @@ namespace Cake.Common.Tools.NuGet.Sources
             Run(settings, GetRemoveArguments(name, source, settings), settings.ToolPath);
         }
 
-
         /// <summary>
-        /// Check NuGet package source exists
+        /// Determines whether the specified NuGet package source exist.
         /// </summary>
         /// <param name="source">Path to the package(s) source.</param>
         /// <param name="settings">The settings.</param>
+        /// <returns>Whether the specified NuGet package source exist.</returns>
         public bool HasSource(string source, NuGetSourcesSettings settings)
         {
             if (source == null)
@@ -180,10 +180,10 @@ namespace Cake.Common.Tools.NuGet.Sources
             builder.Append("-Name");
             builder.AppendQuoted(name);
 
-            builder.Append("-Source");
-            // Sensitive information in source?
+            builder.Append("-Source");           
             if (settings.IsSensitiveSource)
             {
+                // Sensitive information in source.
                 builder.AppendQuotedSecret(source);
             }
             else
@@ -207,7 +207,7 @@ namespace Cake.Common.Tools.NuGet.Sources
         /// <returns>The name of the tool.</returns>
         protected override string GetToolName()
         {
-            return _nuGetToolResolver.Name;
+            return _nugetToolResolver.Name;
         }
 
         /// <summary>
@@ -217,7 +217,7 @@ namespace Cake.Common.Tools.NuGet.Sources
         /// <returns>The default tool path.</returns>
         protected override FilePath GetDefaultToolPath(NuGetSourcesSettings settings)
         {
-            return _nuGetToolResolver.ResolveToolPath();
+            return _nugetToolResolver.ResolveToolPath();
         }
     }
 }

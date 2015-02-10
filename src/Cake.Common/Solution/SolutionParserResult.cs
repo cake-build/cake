@@ -13,7 +13,7 @@ namespace Cake.Common.Solution
         private readonly IReadOnlyCollection<SolutionProject> _projects;
 
         /// <summary>
-        /// Fileformat version
+        /// Gets the file format version.
         /// </summary>
         public string Version
         {
@@ -21,7 +21,7 @@ namespace Cake.Common.Solution
         }
 
         /// <summary>
-        /// Version of Visual Studio that created the file
+        /// Gets the version of Visual Studio that created the file.
         /// </summary>
         public string VisualStudioVersion
         {
@@ -29,7 +29,7 @@ namespace Cake.Common.Solution
         }
 
         /// <summary>
-        /// Minimum supported versions of Visual Studio
+        /// Gets the minimum supported version of Visual Studio.
         /// </summary>
         public string MinimumVisualStudioVersion
         {
@@ -37,7 +37,7 @@ namespace Cake.Common.Solution
         }
 
         /// <summary>
-        /// Solution Projects
+        /// Gets all solution projects.
         /// </summary>
         public IReadOnlyCollection<SolutionProject> Projects
         {
@@ -45,17 +45,14 @@ namespace Cake.Common.Solution
         }
 
         /// <summary>
-        /// Solution Projects
+        /// Initializes a new instance of the <see cref="SolutionParserResult"/> class.
         /// </summary>
-        /// <param name="version">Fileformat version</param>
-        /// <param name="visualStudioVersion">Version of Visual Studio that created the file</param>
-        /// <param name="minimumVisualStudioVersion">Minimum supported versions of Visual Studio</param>
-        /// <param name="projects">Solution Projects</param>
-        public SolutionParserResult(
-            string version,
-            string visualStudioVersion,
-            string minimumVisualStudioVersion,
-            IReadOnlyCollection<SolutionProject> projects)
+        /// <param name="version">The file format version.</param>
+        /// <param name="visualStudioVersion">The version of Visual Studio that created the file.</param>
+        /// <param name="minimumVisualStudioVersion">The minimum supported version of Visual Studio.</param>
+        /// <param name="projects">The solution projects.</param>
+        public SolutionParserResult(string version, string visualStudioVersion,
+            string minimumVisualStudioVersion, IReadOnlyCollection<SolutionProject> projects)
         {
             _version = version;
             _visualStudioVersion = visualStudioVersion;

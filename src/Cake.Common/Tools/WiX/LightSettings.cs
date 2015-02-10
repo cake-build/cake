@@ -29,7 +29,7 @@ namespace Cake.Common.Tools.WiX
         public bool NoLogo { get; set; }
 
         /// <summary>
-        /// Gets or sets the path to the output file (ie. the resulting MSI package).
+        /// Gets or sets the path to the output file (i.e. the resulting MSI package).
         /// </summary>
         public FilePath OutputFile { get; set; }
 

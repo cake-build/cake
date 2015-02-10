@@ -15,9 +15,9 @@ namespace Cake.Common.IO
         /// <summary>
         /// Gets all files matching the specified pattern.
         /// </summary>
-        /// <param name="context"></param>
-        /// <param name="pattern"></param>
-        /// <returns>A <see cref="FilePathCollection"/>.</returns>
+        /// <param name="context">The context.</param>
+        /// <param name="pattern">The glob pattern to match.</param>
+        /// <returns>A <see cref="FilePathCollection" />.</returns>
         [CakeMethodAlias]
         [CakeAliasCategory("Files")]
         public static FilePathCollection GetFiles(this ICakeContext context, string pattern)
@@ -34,9 +34,9 @@ namespace Cake.Common.IO
         /// <summary>
         /// Gets all directory matching the specified pattern.
         /// </summary>
-        /// <param name="context"></param>
-        /// <param name="pattern"></param>
-        /// <returns>A <see cref="DirectoryPathCollection"/>.</returns>
+        /// <param name="context">The context.</param>
+        /// <param name="pattern">The glob pattern to match.</param>
+        /// <returns>A <see cref="DirectoryPathCollection" />.</returns>
         [CakeMethodAlias]
         [CakeAliasCategory("Directories")]
         public static DirectoryPathCollection GetDirectories(this ICakeContext context, string pattern)

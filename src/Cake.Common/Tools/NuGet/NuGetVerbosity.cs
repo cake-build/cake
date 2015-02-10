@@ -6,17 +6,17 @@ namespace Cake.Common.Tools.NuGet
     public enum NuGetVerbosity
     {
         /// <summary>
-        /// Normal
+        /// Verbosity: <c>Normal</c>
         /// </summary>
         Normal = 1,
 
         /// <summary>
-        /// Quiet
+        /// Verbosity: <c>Quiet</c>
         /// </summary>
         Quiet = 2,
         
         /// <summary>
-        /// Detailed
+        /// Verbosity: <c>Detailed</c>
         /// </summary>
         Detailed = 4
     }

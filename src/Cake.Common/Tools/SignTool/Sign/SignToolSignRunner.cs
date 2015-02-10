@@ -3,7 +3,7 @@ using System.Globalization;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Utilities;
-using File=System.IO.File;
+using File = System.IO.File;
 
 namespace Cake.Common.Tools.SignTool.Sign
 {
@@ -20,7 +20,8 @@ namespace Cake.Common.Tools.SignTool.Sign
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        public SignToolSignRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner) : base(fileSystem, environment, processRunner)
+        public SignToolSignRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner)
+            : base(fileSystem, environment, processRunner)
         {
             _environment = environment;
         }
@@ -47,9 +48,9 @@ namespace Cake.Common.Tools.SignTool.Sign
         private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, SignToolSignSettings settings)
         {
             if (assemblyPath == null || !File.Exists(assemblyPath.FullPath))
-            {                           
-               throw new ArgumentException(
-                    string.Format(CultureInfo.InvariantCulture, "{0}: AssemblyPath not specified or missing ({1})", GetToolName(), assemblyPath));
+            {
+                throw new ArgumentException(
+                     string.Format(CultureInfo.InvariantCulture, "{0}: AssemblyPath not specified or missing ({1})", GetToolName(), assemblyPath));
             }
             if (settings.TimeStampUri == null)
             {
@@ -96,20 +97,20 @@ namespace Cake.Common.Tools.SignTool.Sign
         /// <summary>
         /// Get name of tool
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The name of the tool (<c>SignTool SIGN</c>).</returns>
         protected override string GetToolName()
         {
             return "SignTool SIGN";
         }
 
         /// <summary>
-        /// Get the default path to tool
+        /// Gets the default tool path.
         /// </summary>
-        /// <param name="settings"></param>
-        /// <returns></returns>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The default tool path.</returns>
         protected override FilePath GetDefaultToolPath(SignToolSignSettings settings)
         {
-            return (settings==null ? null :  settings.ToolPath)
+            return (settings == null ? null : settings.ToolPath)
                 ?? SignToolResolver.GetSignToolPath(_environment);
         }
     }

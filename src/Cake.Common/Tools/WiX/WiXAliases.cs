@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.WiX
     public static class WiXAliases
     {
         /// <summary>
-        /// Compiles all .wxs sources matching the specified pattern.
+        /// Compiles all <c>.wxs</c> sources matching the specified pattern.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The globbing pattern.</param>
@@ -32,7 +32,7 @@ namespace Cake.Common.Tools.WiX
         }
 
         /// <summary>
-        /// Compiles all .wxs sources in the provided source files.
+        /// Compiles all <c>.wxs</c> sources in the provided source files.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="sourceFiles">The source files.</param>
@@ -51,7 +51,7 @@ namespace Cake.Common.Tools.WiX
         }
 
         /// <summary>
-        /// Links all .wixobj files matching the specified pattern.
+        /// Links all <c>.wixobj</c> files matching the specified pattern.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The globbing pattern.</param>
@@ -70,7 +70,7 @@ namespace Cake.Common.Tools.WiX
         }
 
         /// <summary>
-        /// Links all .wixobj files in the provided object files.
+        /// Links all <c>.wixobj</c> files in the provided object files.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="objectFiles">The object files.</param>

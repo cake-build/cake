@@ -7,36 +7,42 @@ namespace Cake.Common.Tools.NuGet.Sources
     /// </summary>
     public sealed class NuGetSourcesSettings
     {
-        private static readonly NuGetSourcesSettings _default =new NuGetSourcesSettings();
-        /// <summary>
-        /// Default settings
-        /// </summary>
-        public static NuGetSourcesSettings Default {get { return _default; }}
+        private static readonly NuGetSourcesSettings _default = new NuGetSourcesSettings();
 
         /// <summary>
-        /// Gets or sets the UserName
+        /// Gets the default settings.
         /// </summary>
-        /// <value>Optional UserName to be used when connecting to an authenticated source.</value>
+        /// <value>The default settings.</value>
+        public static NuGetSourcesSettings Default
+        {
+            get { return _default; }
+        }
+
+        /// <summary>
+        /// Gets or sets the (optional) user name.
+        /// </summary>
+        /// <value>Optional user name to be used when connecting to an authenticated source.</value>
         public string UserName { get; set; }
 
         /// <summary>
-        /// Gets or sets the Password.
+        /// Gets or sets the (optional) password.
         /// </summary>
-        /// <value>Optional Password to be used when connecting to an authenticated source.</value>
+        /// <value>Optional password to be used when connecting to an authenticated source.</value>
         public string Password { get; set; }
 
         /// <summary>
-        /// Gets or sets the verbosity.
+        /// Gets or sets the output verbosity.
         /// </summary>
-        /// <value>The verbosity.</value>
+        /// <value>The output verbosity.</value>
         public NuGetVerbosity? Verbosity { get; set; }
 
         /// <summary>
-        /// Gets or sets the IsSensitiveSource
+        /// Gets or sets a value indicating whether this source contains sensitive data, i.e. authentication token in url.
         /// </summary>
-        /// <value>Flag for if source contains sensitive data i.e. auth token in url</value>
+        /// <value>
+        /// <c>true</c> if this source contains sensitive data; otherwise, <c>false</c>.
+        /// </value>
         public bool IsSensitiveSource { get; set; }
-        
 
         /// <summary>
         /// Gets or sets the tool path.

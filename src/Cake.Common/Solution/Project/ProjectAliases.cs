@@ -14,9 +14,9 @@ namespace Cake.Common.Solution.Project
         /// <summary>
         /// Parses project information from project file
         /// </summary>
-        /// <param name="context"></param>
-        /// <param name="projectPath"></param>
-        /// <returns></returns>
+        /// <param name="context">The context.</param>
+        /// <param name="projectPath">The project file path.</param>
+        /// <returns>A parsed project.</returns>
         /// <example>
         /// <code>
         /// var parsedProject = ParseProject("./src/Cake/Cake.csproj");

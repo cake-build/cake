@@ -36,20 +36,27 @@ namespace Cake.Common
         }
 
         /// <summary>
-        /// Checks for the existance of a value for a given enviroment variable.
+        /// Checks for the existence of a value for a given environment variable.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="variable">The environment variable.</param>
-        /// <returns><c>true</c> if the environment variable exist; otherwise <c>false</c>.</returns>
+        /// <returns>
+        ///   <c>true</c> if the environment variable exist; otherwise <c>false</c>.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// context
+        /// or
+        /// variable
+        /// </exception>
         /// <example>
-        /// <code>
+        ///   <code>
         /// if (HasEnvironmentVariable("ONLY_AVAIL_UNDER_CI"))
         /// {
-        ///     Information("Running under CI");
+        /// Information("Running under CI");
         /// }
         /// else
         /// {
-        ///     Information("Running locally");
+        /// Information("Running locally");
         /// }
         /// </code>
         /// </example>

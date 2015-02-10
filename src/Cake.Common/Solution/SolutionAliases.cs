@@ -12,11 +12,11 @@ namespace Cake.Common.Solution
     public static class SolutionAliases
     {
         /// <summary>
-        /// Parses project information from solution file
+        /// Parses project information from a solution file.
         /// </summary>
-        /// <param name="context"></param>
-        /// <param name="solutionPath"></param>
-        /// <returns></returns>
+        /// <param name="context">The context.</param>
+        /// <param name="solutionPath">The solution path.</param>
+        /// <returns>A parsed solution.</returns>
         /// <example>
         /// <code>
         /// var solutionPath = "./src/Cake.sln";
