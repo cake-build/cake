@@ -24,14 +24,20 @@ namespace Cake.Common.Solution.Project.Properties
             _namespaces = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         }
 
-        public void AddBoolean(string name, string @namespace, bool value)
+        public void AddBoolean(string name, string @namespace, bool? value)
         {
-            Add(name, @namespace, value ? "true" : "false");
+            if (value != null)
+            {
+                Add(name, @namespace, value.Value ? "true" : "false");   
+            }            
         }
 
         public void AddString(string name, string @namespace, string value)
         {
-            Add(name, @namespace, string.Concat("\"", value, "\""));
+            if (value != null)
+            {
+                Add(name, @namespace, string.Concat("\"", value, "\""));   
+            }            
         }
 
         private void Add(string name, string @namespace, string value)

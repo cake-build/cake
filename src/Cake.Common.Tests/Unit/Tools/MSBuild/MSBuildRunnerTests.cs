@@ -349,7 +349,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 var settings = new MSBuildSettings("./src/Solution.sln");
                 settings.ToolVersion = MSBuildToolVersion.VS2013;
-                settings.WithProperty("A", new[] { "B", "E" });
+                settings.WithProperty("A", "B", "E");
                 settings.WithProperty("C", "D");
 
                 // When

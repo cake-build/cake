@@ -16,7 +16,6 @@ namespace Cake.Testing.Fakes
         private byte[] _content = new byte[4096];
         private long _contentLength;        
         private bool _deleted;
-        private bool _hidden;
 
         /// <summary>
         /// Gets the path to the file.
@@ -54,11 +53,7 @@ namespace Cake.Testing.Fakes
         /// <value>
         ///   <c>true</c> if the entry is hidden; otherwise, <c>false</c>.
         /// </value>
-        public bool Hidden
-        {
-            get { return _hidden; }
-            set { _hidden = value; }
-        }
+        public bool Hidden { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this <see cref="FakeFile"/> is deleted.
@@ -123,7 +118,7 @@ namespace Cake.Testing.Fakes
             _fileSystem = fileSystem;
             _path = path;
             _exists = false;
-            _hidden = false;
+            Hidden = false;
         }
 
         /// <summary>

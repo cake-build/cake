@@ -99,56 +99,18 @@ namespace Cake.Common.Solution.Project.Properties
         private static AssemblyInfoRegistration GetRegistrations(AssemblyInfoSettings settings)
         {
             var registration = new AssemblyInfoRegistration();
-
-            if (settings.Title != null)
-            {
-                registration.AddString("AssemblyTitle", "System.Reflection", settings.Title);
-            }
-            if (settings.Description != null)
-            {
-                registration.AddString("AssemblyDescription", "System.Reflection", settings.Description);
-            }
-            if (settings.Company != null)
-            {
-                registration.AddString("AssemblyCompany", "System.Reflection", settings.Company);
-            }
-            if (settings.Product != null)
-            {
-                registration.AddString("AssemblyProduct", "System.Reflection", settings.Product);
-            }
-            if (settings.Version != null)
-            {
-                registration.AddString("AssemblyVersion", "System.Reflection", settings.Version);
-            }
-            if (settings.FileVersion != null)
-            {
-                registration.AddString("AssemblyFileVersion", "System.Reflection", settings.FileVersion);
-            }
-            if (settings.InformationalVersion != null)
-            {
-                registration.AddString("AssemblyInformationalVersion", "System.Reflection", settings.InformationalVersion);
-            }
-            if (settings.Copyright != null)
-            {
-                registration.AddString("AssemblyCopyright", "System.Reflection", settings.Copyright);
-            }
-            if (settings.Trademark != null)
-            {
-                registration.AddString("AssemblyTrademark", "System.Reflection", settings.Trademark);
-            }
-            if (settings.Guid != null)
-            {
-                registration.AddString("Guid", "System.Runtime.InteropServices", settings.Guid);
-            }
-            if (settings.ComVisible != null)
-            {
-                registration.AddBoolean("ComVisible", "System.Runtime.InteropServices", settings.ComVisible.Value);
-            }
-            if (settings.CLSCompliant != null)
-            {
-                registration.AddBoolean("CLSCompliant", "System", settings.CLSCompliant.Value);
-            }
-
+            registration.AddString("AssemblyTitle", "System.Reflection", settings.Title);
+            registration.AddString("AssemblyDescription", "System.Reflection", settings.Description);
+            registration.AddString("AssemblyCompany", "System.Reflection", settings.Company);
+            registration.AddString("AssemblyProduct", "System.Reflection", settings.Product);
+            registration.AddString("AssemblyVersion", "System.Reflection", settings.Version);
+            registration.AddString("AssemblyFileVersion", "System.Reflection", settings.FileVersion);
+            registration.AddString("AssemblyInformationalVersion", "System.Reflection", settings.InformationalVersion);
+            registration.AddString("AssemblyCopyright", "System.Reflection", settings.Copyright);
+            registration.AddString("AssemblyTrademark", "System.Reflection", settings.Trademark);
+            registration.AddString("Guid", "System.Runtime.InteropServices", settings.Guid);
+            registration.AddBoolean("ComVisible", "System.Runtime.InteropServices", settings.ComVisible);
+            registration.AddBoolean("CLSCompliant", "System", settings.CLSCompliant);
             return registration;
         }
     }

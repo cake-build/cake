@@ -139,7 +139,7 @@ namespace Cake.Common.Tools.NuGet.Pack
 
         private static string ToString(Uri value)
         {
-            return value == null ? null : value.ToString().TrimEnd(new[] { '/' });
+            return value == null ? null : value.ToString().TrimEnd('/');
         }
 
         private static string ToString(bool value)

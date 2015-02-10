@@ -45,7 +45,7 @@ namespace Cake.Core.Scripting.Processors
                 return false;
             }
 
-            var @namespace = tokens[1].TrimEnd(new[] { ';' });
+            var @namespace = tokens[1].TrimEnd(';');
             context.AddNamespace(@namespace);
 
             return true;
