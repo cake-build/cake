@@ -1,5 +1,5 @@
 ### New in 0.1.32 (Released 2015/02/10)
-* Critical fix.
+* Fixed issue where script hosts had been made internal by mistake.
 
 ### New in 0.1.31 (Released 2015/02/10)
 * Documentation updates only.
