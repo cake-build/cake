@@ -6,11 +6,19 @@ using Cake.Core.Scripting;
 
 namespace Cake.Scripting
 {
-    internal sealed class DescriptionScriptHost : ScriptHost
+    /// <summary>
+    /// The script host used for showing task descriptions. 
+    /// </summary>
+    public sealed class DescriptionScriptHost : ScriptHost
     {
         private readonly IConsole _console;
         private readonly Dictionary<string, string> _descriptions;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DescriptionScriptHost"/> class.
+        /// </summary>
+        /// <param name="engine">The engine.</param>
+        /// <param name="console">The console.</param>
         public DescriptionScriptHost(ICakeEngine engine, IConsole console)
             : base(engine)
         {
@@ -18,6 +26,11 @@ namespace Cake.Scripting
             _descriptions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         }
 
+        /// <summary>
+        /// Runs the specified target.
+        /// </summary>
+        /// <param name="target">The target to run.</param>
+        /// <returns>The resulting report.</returns>
         public override CakeReport RunTarget(string target)
         {
             foreach (var task in Tasks)

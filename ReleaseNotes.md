@@ -1,3 +1,6 @@
+### New in 0.1.32 (Released 2015/02/10)
+* Critical fix.
+
 ### New in 0.1.31 (Released 2015/02/10)
 * Documentation updates only.
 
