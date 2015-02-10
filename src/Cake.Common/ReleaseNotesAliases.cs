@@ -28,6 +28,19 @@ namespace Cake.Common
         /// <param name="context">The context.</param>
         /// <param name="filePath">The file path.</param>
         /// <returns>All release notes.</returns>
+        /// <example>
+        /// <code>
+        /// var releaseNotes = ParseAllReleaseNotes("./ReleaseNotes.md");
+        /// foreach(var releaseNote in releaseNotes)
+        /// {
+        ///     Information("Version: {0}", releaseNote.Version);
+        ///     foreach(var note in releaseNote.Notes)
+        ///     {
+        ///         Information("\t{0}", note);
+        ///     }
+        /// }
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static IReadOnlyList<ReleaseNotes> ParseAllReleaseNotes(this ICakeContext context, FilePath filePath)
         {
@@ -66,6 +79,16 @@ namespace Cake.Common
         /// <param name="context">The context.</param>
         /// <param name="filePath">The file path.</param>
         /// <returns>The latest release notes.</returns>
+        /// <example>
+        /// <code>
+        /// var releaseNote = ParseReleaseNotes("./ReleaseNotes.md");
+        /// Information("Version: {0}", releaseNote.Version);
+        /// foreach(var note in releaseNote.Notes)
+        /// {
+        ///     Information("\t{0}", note);
+        /// }
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static ReleaseNotes ParseReleaseNotes(this ICakeContext context, FilePath filePath)
         {
