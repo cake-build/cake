@@ -40,8 +40,9 @@ namespace Cake.Core
             {
                 return type.Name;
             }
-            return type.IsGenericType
-                ? GetGenericTypeName(type, includeNamespace)
+            Type genericType;
+            return type.IsGenericType(out genericType)
+                ? GetGenericTypeName(genericType, includeNamespace)
                 : includeNamespace ? type.FullName : type.Name;
         }
 
@@ -58,6 +59,14 @@ namespace Cake.Core
             builder.Append(GetGenericTypeArguments(type, includeNamespace));
             builder.Append(">");
             return builder.ToString();
+        }
+
+        private static bool IsGenericType(this Type type, out Type genericType)
+        {
+            genericType = type.IsByRef
+                ? (type.GetElementType() ?? type)
+                : type;
+            return genericType.IsGenericType;
         }
 
         private static string GetGenericTypeArguments(this Type type, bool includeNamespace)
