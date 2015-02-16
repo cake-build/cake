@@ -11,15 +11,8 @@ namespace Cake.Core.Scripting
         /// <summary>
         /// Processes the specified script.
         /// </summary>
-        /// <param name="path">The script path.</param>
+        /// <param name="scriptReference">The script reference.</param>
         /// <param name="context">The context.</param>
-        void Process(FilePath path, ScriptProcessorContext context);
-
-        /// <summary>
-        /// Processes the specified script from the web.
-        /// </summary>
-        /// <param name="url">The script's url.</param>
-        /// <param name="context">The context.</param>
-        void Process(Uri url, ScriptProcessorContext context);
+        void Process(ScriptReference scriptReference, ScriptProcessorContext context);
     }
 }

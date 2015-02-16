@@ -13,6 +13,7 @@ namespace Cake.Core.Tests.Fixtures
         public ICakeEnvironment Environment { get; set; }
         public ICakeLog Log { get; set; }
         public FilePath ScriptPath { get; set; }
+        public ScriptReference ScriptReference { get; set; }
         public string Source { get; private set; }
         public IGlobber Globber{ get; set; }
         public INuGetToolResolver NuGetToolResolver{ get; private set; }
@@ -21,6 +22,7 @@ namespace Cake.Core.Tests.Fixtures
             string scriptSource = "Console.WriteLine();")
         {            
             ScriptPath = new FilePath(scriptPath);
+            ScriptReference = new ScriptReference(ScriptPath);
             Source = scriptSource;
 
             Environment = Substitute.For<ICakeEnvironment>();
@@ -47,7 +49,7 @@ namespace Cake.Core.Tests.Fixtures
         public ScriptProcessorContext Process()
         {
             var context = new ScriptProcessorContext();
-            CreateProcessor().Process(ScriptPath, context);
+            CreateProcessor().Process(ScriptReference, context);
             return context;
         }
 

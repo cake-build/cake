@@ -1,6 +1,7 @@
 using System;
-using Cake.Core.IO;
 using System.Globalization;
+using System.Net;
+using Cake.Core.IO;
 
 namespace Cake.Core.Scripting.Processors
 {
@@ -59,20 +60,32 @@ namespace Cake.Core.Scripting.Processors
             }
 
             var directoryPath = GetAbsoluteDirectory(currentScriptPath);
+            ScriptReference scriptReference;
             Uri scriptUri;
             if (!Uri.TryCreate(scriptPathString, UriKind.RelativeOrAbsolute, out scriptUri)
                 || !scriptUri.IsAbsoluteUri || scriptUri.IsFile)
             {
                 var scriptPath = new FilePath(scriptPathString);
-                if (scriptPath.IsRelative)
-                    scriptPath = scriptPath.MakeAbsolute(directoryPath);
-
-                processor.Process(scriptPath, context);
+                scriptReference = new ScriptReference(scriptPath);
             }
             else
             {
-                processor.Process(scriptUri, context);
+                // Download the script to a local directory.
+                FilePath tempFile = System.IO.Path.GetTempFileName();
+                try
+                {
+                    var client = new WebClient();
+                    client.DownloadFile(scriptUri, tempFile.FullPath);
+                }
+                catch (WebException ex)
+                {
+                    throw new Exception("Failed to load file from web. See inner exception.", ex);
+                }
+
+                scriptReference = new ScriptReference(tempFile.FullPath, scriptUri.ToString());
             }
+
+            processor.Process(scriptReference, context);
 
             return true;
         }

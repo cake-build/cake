@@ -75,7 +75,8 @@ namespace Cake.Core.Scripting
 
             // Process the script.
             var context = new ScriptProcessorContext();
-            _scriptProcessor.Process(script, context);
+            var scriptReference = new ScriptReference(script);
+            _scriptProcessor.Process(scriptReference, context);
 
             // Load all references.
             var assemblies = new List<Assembly>();
