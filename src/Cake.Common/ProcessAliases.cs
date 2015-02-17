@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -47,6 +49,37 @@ namespace Cake.Common
         [CakeMethodAlias]
         public static int StartProcess(this ICakeContext context, FilePath fileName, ProcessSettings settings)
         {
+            IEnumerable<string> redirectedOutput;
+            return StartProcess(context, fileName, settings, out redirectedOutput);
+        }
+
+        /// <summary>
+        /// Starts the process resource that is specified by the filename and settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="settings">The settings.</param>
+        /// <param name="redirectedOutput">outputs process output <see cref="ProcessSettings.RedirectStandardOutput">RedirectStandardOutput</see> is true</param>
+        /// <returns>The exit code that the started process specified when it terminated.</returns>
+        /// <example>
+        /// <code>
+        /// IEnumerable&lt;string&gt; redirectedOutput;
+        /// var exitCodeWithArgument = StartProcess("ping", new ProcessSettings{
+        /// Arguments = "localhost",
+        /// RedirectStandardOutput = true
+        /// },
+        /// out redirectedOutput
+        /// );
+        /// //Output last line of process output
+        /// Information("Last line of output: {0}", redirectedOutput.LastOrDefault());
+        /// 
+        /// // This should output 0 as valid arguments supplied
+        /// Information("Exit code: {0}", exitCodeWithArgument);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        public static int StartProcess(this ICakeContext context, FilePath fileName, ProcessSettings settings, out IEnumerable<string> redirectedOutput)
+        {
             if (context == null)
             {
                 throw new ArgumentNullException("context");
@@ -72,8 +105,27 @@ namespace Cake.Common
             }
 
             // Wait for the process to stop.
-            process.WaitForExit();
+            if (settings.Timeout.HasValue)
+            {
+                if (!process.WaitForExit(settings.Timeout.Value))
+                {
+                    throw new TimeoutException(
+                        string.Format(
+                            CultureInfo.InvariantCulture,
+                            "Process TimeOut ({0}): {1}",
+                            settings.Timeout.Value,
+                            fileName));
+                }
+            }
+            else
+            {
+                process.WaitForExit();
+            }
 
+            redirectedOutput = settings.RedirectStandardOutput
+                ? process.GetStandardOutput()
+                : null;
+           
             // Return the exit code.
             return process.GetExitCode();
         }
