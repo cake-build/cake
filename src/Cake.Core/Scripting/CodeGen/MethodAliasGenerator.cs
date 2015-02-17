@@ -66,7 +66,7 @@ namespace Cake.Core.Scripting.CodeGen
             }
 
             builder.Append("(");
-            builder.Append(GetProxyParameters(parameters));
+            builder.Append(string.Concat(GetProxyParameters(parameters, true)));
             builder.Append(")");
             builder.Append("{");
 
@@ -86,7 +86,7 @@ namespace Cake.Core.Scripting.CodeGen
             }
 
             builder.Append("(");
-            builder.Append(GetCallArguments(parameters));
+            builder.Append(string.Concat(GetProxyParameters(parameters, false)));
             builder.Append(");");
 
             // End method.
@@ -102,24 +102,42 @@ namespace Cake.Core.Scripting.CodeGen
                 : method.ReturnType.GetFullName();
         }
 
-        private static string GetProxyParameters(IEnumerable<ParameterInfo> parameters)
+        private static IEnumerable<string> GetProxyParameters(IEnumerable<ParameterInfo> parameters, bool includeType)
         {
-            var result = new List<string>();
+            var first = includeType;
+            if (!includeType)
+            {
+                yield return "GetContext()";
+            }
             foreach (var parameter in parameters)
             {
-                var isParameterArray = parameter.IsDefined(typeof(ParamArrayAttribute));
-                var typeName = parameter.ParameterType.GetFullName();
-                var typeDeclaration = isParameterArray ? string.Concat("params ", typeName) : typeName;
-                result.Add(string.Concat(typeDeclaration, " ", parameter.Name));
+                if (first)
+                {
+                    first = false;
+                }
+                else
+                {
+                    yield return ", ";
+                }
+                if (parameter.IsOut)
+                {
+                    yield return "out ";
+                }
+                else if (parameter.ParameterType.IsByRef)
+                {
+                    yield return "ref ";
+                }
+                if (includeType)
+                {
+                    if (parameter.IsDefined(typeof(ParamArrayAttribute)))
+                    {
+                        yield return "params ";
+                    }
+                    yield return parameter.ParameterType.GetFullName();
+                    yield return " ";
+                }
+                yield return parameter.Name;
             }
-            return string.Join(",", result);
-        }
-
-        private static string GetCallArguments(IEnumerable<ParameterInfo> parameters)
-        {
-            var result = new List<string> { "GetContext()" };
-            result.AddRange(parameters.Select(x => x.Name));
-            return string.Join(",", result);
         }
 
         private static void BuildGenericArguments(MethodInfo method, StringBuilder builder)

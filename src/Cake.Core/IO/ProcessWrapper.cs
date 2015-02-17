@@ -20,6 +20,20 @@ namespace Cake.Core.IO
             _process.WaitForExit();
         }
 
+        public bool WaitForExit(int milliseconds)
+        {
+            if (_process.WaitForExit(milliseconds))
+            {
+                return true;
+            }
+            _process.Refresh();
+            if (!_process.HasExited)
+            {
+                _process.Kill();
+            }
+            return false;
+        }
+
         public int GetExitCode()
         {
             return _process.ExitCode;
