@@ -85,6 +85,9 @@
     <Compile Include="Text\TextTransformationAliases.cs" />
     <Compile Include="Text\TextTransformation.cs" />
     <Compile Include="Text\TextTransformationExtensions.cs" />
+    <Compile Include="Tools\Cake\CakeAliases.cs" />
+    <Compile Include="Tools\Cake\CakeRunner.cs" />
+    <Compile Include="Tools\Cake\CakeSettings.cs" />
     <Compile Include="Tools\ILMerge\ILMergeAliases.cs" />
     <Compile Include="Tools\ILMerge\ILMergeRunner.cs" />
     <Compile Include="Tools\ILMerge\ILMergeSettings.cs" />

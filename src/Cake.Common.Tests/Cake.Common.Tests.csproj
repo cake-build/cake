@@ -57,6 +57,7 @@
     <Compile Include="Fixtures\AppVeyorInfoFixture.cs" />
     <Compile Include="Fixtures\AssemblyInfoFixture.cs" />
     <Compile Include="Fixtures\AssemblyInfoParserFixture.cs" />
+    <Compile Include="Fixtures\CakeRunnerFixture.cs" />
     <Compile Include="Fixtures\FileCopyFixture.cs" />
     <Compile Include="Fixtures\FileDeleteFixture.cs" />
     <Compile Include="Fixtures\FileSystemFixture.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Unit\Text\TextTransformationAliasesTests.cs" />
     <Compile Include="Unit\Text\TextTransformationExtensionsTests.cs" />
     <Compile Include="Unit\Text\TextTransformationTests.cs" />
+    <Compile Include="Unit\Tools\Cake\CakeRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeSettingsTests.cs" />
     <Compile Include="Unit\IO\ZipperTests.cs" />
