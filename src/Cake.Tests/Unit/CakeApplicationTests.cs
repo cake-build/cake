@@ -197,7 +197,7 @@ namespace Cake.Tests.Unit
             }
 
             [Fact]
-            public void Should_Not_Create_Help_Command_If_Script_Is_Specified()
+            public void Should_Create_Help_Command_Even_If_Script_Is_Specified()
             {
                 // Given
                 var fixture = new CakeApplicationFixture();
@@ -208,11 +208,12 @@ namespace Cake.Tests.Unit
                 fixture.RunApplication();
 
                 // Then
-                fixture.CommandFactory.Received(1).CreateBuildCommand();
+                fixture.CommandFactory.Received(0).CreateBuildCommand();
+                fixture.CommandFactory.Received(1).CreateHelpCommand();
             }
 
             [Fact]
-            public void Should_Not_Create_Version_Command_If_Script_Is_Specified()
+            public void Should_Create_Version_Command_Even_If_Script_Is_Specified()
             {
                 // Given
                 var fixture = new CakeApplicationFixture();
@@ -223,7 +224,8 @@ namespace Cake.Tests.Unit
                 fixture.RunApplication();
 
                 // Then
-                fixture.CommandFactory.Received(1).CreateBuildCommand();
+                fixture.CommandFactory.Received(0).CreateBuildCommand();
+                fixture.CommandFactory.Received(1).CreateVersionCommand();
             }
         }
     }
