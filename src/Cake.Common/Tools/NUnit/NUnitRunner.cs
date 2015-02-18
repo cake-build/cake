@@ -46,7 +46,7 @@ namespace Cake.Common.Tools.NUnit
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetArguments(new [] { assemblyPath }, settings), settings.ToolPath);
+            Run(settings, GetArguments(new[] { assemblyPath }, settings), settings.ToolPath);
         }
 
         /// <summary>
@@ -74,7 +74,9 @@ namespace Cake.Common.Tools.NUnit
 
             // Add the assemblies to build.
             foreach (var assemblyPath in assemblyPaths)
+            {
                 builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
+            }
 
             if (settings.Framework != null)
             {
