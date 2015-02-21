@@ -29,39 +29,41 @@ A roadmap can be found [here](https://github.com/cake-build/cake/milestones).
 
 ##Implemented functionality
 
-This is a list of the currently implemented functionality.
+This is a list of some the currently implemented functionality.   
+For a full list of supported tools, see the [DSL reference](http://cakebuild.net/dsl/).
 
-* [MSBuild](http://cake.readthedocs.org/en/latest/api-documentation.html#msbuild) 
-* [MSTest](http://cake.readthedocs.org/en/latest/api-documentation.html#mstest)
-* [xUnit (v1 and v2)](http://cake.readthedocs.org/en/latest/api-documentation.html#xunit)
-* [NUnit](http://cake.readthedocs.org/en/latest/api-documentation.html#nunit)
-* [NuGet](http://cake.readthedocs.org/en/latest/api-documentation.html#nuget)
+* [MSBuild](http://cakebuild.net/dsl/#msbuild) 
+* [MSTest](http://cakebuild.net/dsl/#mstest)
+* [xUnit (v1 and v2)](http://cakebuild.net/dsl/#xunit)
+* [NUnit](http://cakebuild.net/dsl/#nunit)
+* [NuGet](http://cakebuild.net/dsl/#nuget)
   * Pack
   * Push
   * Restore
   * Sources
-* [ILMerge](http://cake.readthedocs.org/en/latest/api-documentation.html#ilmerge)
-* [WiX](http://cake.readthedocs.org/en/latest/api-documentation.html#wix)
+* [ILMerge](http://cakebuild.net/dsl/#ilmerge)
+* [WiX](http://cakebuild.net/dsl/#wix)
   * Candle
   * Light
-* [SignTool](http://cake.readthedocs.org/en/latest/api-documentation.html#signing)
-* [File operations](http://cake.readthedocs.org/en/latest/api-documentation.html#file-operations)
+* [SignTool](http://cakebuild.net/dsl/#signing)
+* [File operations](http://cakebuild.net/dsl/#fileoperations)
   * Copying
   * Moving
   * Deleting
-* [Directory operations](http://cake.readthedocs.org/en/latest/api-documentation.html#directory-operations)
+* [Directory operations](http://cakebuild.net/dsl/#directoryoperations)
   * Creation
   * Cleaning
   * Deleting
-* [File/Directory globbing](http://cake.readthedocs.org/en/latest/api-documentation.html#globbing)
-* [Compression (zip)](http://cake.readthedocs.org/en/latest/api-documentation.html#compression)
-* [AssemblyInfo patching](http://cake.readthedocs.org/en/latest/api-documentation.html#assembly-info)
-* [Release notes parser](http://cake.readthedocs.org/en/latest/api-documentation.html#release-notes)
-* [MSBuild Resource](http://cake.readthedocs.org/en/latest/api-documentation.html#msbuild-resource)
+* [File/Directory globbing](http://cakebuild.net/dsl/#globbing)
+* [Compression (zip)](http://cakebuild.net/dsl/#compression)
+* [AssemblyInfo patching](http://cakebuild.net/dsl/#assemblyinfo)
+* [Release notes parser](http://cakebuild.net/dsl/#releasenotes)
+* [AppVeyor](http://cakebuild.net/dsl/#buildsystem)
+* [MSBuild Resource](http://cakebuild.net/dsl/#msbuildresource)
   * Solution file parsing
   * Project file parsing
 
-For more information and examples of how to use Cake, see the [Documentation](http://cake.readthedocs.org/). 
+For more information and examples of how to use Cake, see the [Documentation](http://cakebuild.net/). 
 
 ##Example
 
@@ -155,7 +157,7 @@ C:\Project\Tools\Cake> Cake.exe ../../build.csx -verbosity=verbose -target=Pack
 
 ## Documentation
 
-You can read the latest documentation at [http://cake.readthedocs.org/](http://cake.readthedocs.org/).
+You can read the latest documentation at [http://cakebuild.net/](http://cakebuild.net/).
 
 ## Bootstrapper
 
@@ -165,7 +167,7 @@ The Cake [Bootstrapper](https://github.com/cake-build/bootstrapper) is a Powersh
 
 So you’re thinking about contributing to Cake? Great! It’s **really** appreciated.   
 
-Make sure you've read the [contribution guidelines](http://cake.readthedocs.org/en/latest/contribution-guidelines.html) before sending that epic pull request.
+Make sure you've read the [contribution guidelines](http://cakebuild.net/contribution-guidelines/) before sending that epic pull request.
 
 * Fork the repository.
 * Make your feature addition or bug fix.
@@ -174,7 +176,7 @@ Make sure you've read the [contribution guidelines](http://cake.readthedocs.org/
 
 ## Contributors
 
-The full list of contributors can be found at [http://cake.readthedocs.org/en/latest/contributors.html](http://cake.readthedocs.org/en/latest/contributors.html).
+The full list of contributors can be found at [http://cakebuild.net/contributors/](http://cakebuild.net/contributors/).
 
 ## External add-ons
 
