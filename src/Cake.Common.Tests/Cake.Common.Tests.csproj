@@ -69,6 +69,7 @@
     <Compile Include="Fixtures\ProcessFixture.cs" />
     <Compile Include="Fixtures\TextTransformationFixture.cs" />
     <Compile Include="Fixtures\WiXFixture.cs" />
+    <Compile Include="Fixtures\XmlDocExampleCodeParserFixture.cs" />
     <Compile Include="Fixtures\XUnit2RunnerFixture.cs" />
     <Compile Include="Fixtures\XUnitRunnerFixture.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -94,6 +95,7 @@
     <Compile Include="Unit\ReleaseNotesAliasesTests.cs" />
     <Compile Include="Unit\ReleaseNotesParserTests.cs" />
     <Compile Include="Unit\ReleaseNotesTests.cs" />
+    <Compile Include="Unit\Solution\Project\XmlDoc\XmlDocExampleCodeParserTests.cs" />
     <Compile Include="Unit\Text\TextTransformationAliasesTests.cs" />
     <Compile Include="Unit\Text\TextTransformationExtensionsTests.cs" />
     <Compile Include="Unit\Text\TextTransformationTests.cs" />

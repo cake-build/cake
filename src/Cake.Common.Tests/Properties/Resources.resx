@@ -210,4 +210,76 @@ Line #3&lt;/releaseNotes&gt;
   &lt;/files&gt;
 &lt;/package&gt;</value>
   </data>
+  <data name="XmlDoc_ExampeCode_Cake_Common_Xml" xml:space="preserve">
+    <value>&lt;?xml version="1.0"?&gt;
+&lt;doc&gt;
+    &lt;assembly&gt;
+        &lt;name&gt;Cake.Common&lt;/name&gt;
+    &lt;/assembly&gt;
+    &lt;members&gt;
+        &lt;member name="M:Cake.Common.Solution.Project.ProjectAliases.ParseProject(Cake.Core.ICakeContext,Cake.Core.IO.FilePath)"&gt;
+            &lt;summary&gt;
+            Parses project information from project file
+            &lt;/summary&gt;
+            &lt;param name="context"&gt;The context.&lt;/param&gt;
+            &lt;param name="projectPath"&gt;The project file path.&lt;/param&gt;
+            &lt;returns&gt;A parsed project.&lt;/returns&gt;
+            &lt;example&gt;
+            &lt;code&gt;
+            var parsedProject = ParseProject("./src/Cake/Cake.csproj");
+            Information(
+                @"    Parsed project file:
+                Configuration         : {0}
+                Platform              : {1}
+                OutputType            : {2}
+                RootNameSpace         : {3}
+                AssemblyName          : {4}
+                TargetFrameworkVersion: {5}
+                Files                 : {6}",
+                parsedProject.Configuration,
+                parsedProject.Platform,
+                parsedProject.OutputType,
+                parsedProject.RootNameSpace,
+                parsedProject.AssemblyName,
+                parsedProject.TargetFrameworkVersion,
+                string.Concat(
+                    parsedProject
+                        .Files
+                        .Select(
+                            file=&gt;  string.Format(
+                                        "\r\n            {0}",
+                                        file.FilePath
+                                    )
+                        )
+                )
+            );
+            &lt;/code&gt;
+            &lt;/example&gt;
+        &lt;/member&gt;
+        &lt;member name="M:Cake.Common.Solution.Project.Properties.AssemblyInfoAliases.CreateAssemblyInfo(Cake.Core.ICakeContext,Cake.Core.IO.FilePath,Cake.Common.Solution.Project.Properties.AssemblyInfoSettings)"&gt;
+            &lt;summary&gt;
+            Creates an assembly information file.
+            &lt;/summary&gt;
+            &lt;param name="context"&gt;The context.&lt;/param&gt;
+            &lt;param name="outputPath"&gt;The output path.&lt;/param&gt;
+            &lt;param name="settings"&gt;The settings.&lt;/param&gt;
+            &lt;example&gt;
+            &lt;code&gt;
+            var file = "./SolutionInfo.cs";
+            var version = "0.0.1";
+            var buildNo = "123";
+            var semVersion = string.Concat(version + "-" + buildNo);
+            CreateAssemblyInfo(file, new AssemblyInfoSettings {
+                Product = "SampleProject",
+                Version = version,
+                FileVersion = version,
+                InformationalVersion = semVersion,
+                Copyright = string.Format("Copyright (c) Contoso 2014 - {0}", DateTime.Now.Year)
+            });
+            &lt;/code&gt;
+            &lt;/example&gt;
+        &lt;/member&gt;
+    &lt;/members&gt;
+&lt;/doc&gt;</value>
+  </data>
 </root>
