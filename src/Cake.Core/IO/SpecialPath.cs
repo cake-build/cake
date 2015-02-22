@@ -6,11 +6,6 @@
     public enum SpecialPath
     {
         /// <summary>
-        /// The Program Files folder.
-        /// </summary>
-        ProgramFiles,
-
-        /// <summary>
         /// The Program Files (X86) folder.
         /// </summary>
         ProgramFilesX86,

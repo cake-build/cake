@@ -36,7 +36,7 @@ namespace Cake.Common.Tests.Fixtures
             creator.Create(Path, Settings);
 
             var file = FileSystem.GetFile(Path.MakeAbsolute(Environment));
-            Assert.True(file.Exists, "AssemblyFile was not created.");
+            Assert.True(file.Exists, "File was not created.");
             using (var reader = new StreamReader(file.OpenRead()))
             {
                 return reader.ReadToEnd();

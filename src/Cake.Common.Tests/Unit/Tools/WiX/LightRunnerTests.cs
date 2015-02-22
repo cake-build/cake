@@ -51,7 +51,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 var runner = fixture.CreateLightRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run(new[] {new FilePath("/Working/AssemblyFile.lol")}, null));
+                var result = Record.Exception(() => runner.Run(new[] {new FilePath("/Working/File.lol")}, null));
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
