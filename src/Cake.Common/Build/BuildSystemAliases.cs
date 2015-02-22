@@ -24,7 +24,7 @@ namespace Cake.Common.Build
         }
 
         /// <summary>
-        /// Gets a <see cref="Cake.Common.Build.AppVeyor"/> instance that can
+        /// Gets a <see cref="Cake.Common.Build.AppVeyor.AppVeyorProvider"/> instance that can
         /// be used to manipulate the AppVeyor environment.
         /// </summary>
         /// <param name="context">The context.</param>

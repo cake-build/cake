@@ -59,6 +59,9 @@
     <Compile Include="Build\BuildSystem.cs" />
     <Compile Include="Build\BuildSystemAliases.cs" />
     <Compile Include="Build\AppVeyor\IAppVeyorProvider.cs" />
+    <Compile Include="Properties\Namespaces.cs">
+        <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="Solution\Project\ProjectAliases.cs" />
     <Compile Include="Solution\Project\ProjectFile.cs" />
     <Compile Include="Solution\Project\ProjectParser.cs" />

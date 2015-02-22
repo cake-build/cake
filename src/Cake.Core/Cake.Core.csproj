@@ -128,6 +128,9 @@
     <Compile Include="IO\Arguments\SecretArgument.cs" />
     <Compile Include="IO\SpecialPath.cs" />
     <Compile Include="IO\Arguments\TextArgument.cs" />
+    <Compile Include="Properties\Namespaces.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
