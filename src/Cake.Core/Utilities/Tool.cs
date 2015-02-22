@@ -22,6 +22,19 @@ namespace Cake.Core.Utilities
         /// <param name="processRunner">The process runner.</param>
         protected Tool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner)
         {
+            if (fileSystem == null)
+            {
+                throw new ArgumentNullException("fileSystem");
+            }
+            if (environment == null)
+            {
+                throw new ArgumentNullException("environment");
+            }
+            if (processRunner == null)
+            {
+                throw new ArgumentNullException("processRunner");
+            }
+
             _fileSystem = fileSystem;            
             _environment = environment;
             _processRunner = processRunner;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
@@ -15,3 +16,6 @@ using System.Runtime.InteropServices;
 
 // We're CLS compliant.
 [assembly: CLSCompliant(true)]
+
+// Expose internals to the test assembly.
+[assembly: InternalsVisibleTo("Cake.Common.Tests")]

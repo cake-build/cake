@@ -217,7 +217,7 @@ Line #3&lt;/releaseNotes&gt;
         &lt;name&gt;Cake.Common&lt;/name&gt;
     &lt;/assembly&gt;
     &lt;members&gt;
-        &lt;member name="M:Cake.Common.Solution.Project.ProjectAliases.ParseProject(Cake.Core.ICakeContext,Cake.Core.IO.FilePath)"&gt;
+        &lt;member name="M:Cake.Common.Solution.Project.ProjectAliases.ParseProject(Cake.Core.ICakeContext,Cake.Core.IO.AssemblyFilePath)"&gt;
             &lt;summary&gt;
             Parses project information from project file
             &lt;/summary&gt;
@@ -235,7 +235,7 @@ Line #3&lt;/releaseNotes&gt;
                 RootNameSpace         : {3}
                 AssemblyName          : {4}
                 TargetFrameworkVersion: {5}
-                Files                 : {6}",
+                AssemblyFiles                 : {6}",
                 parsedProject.Configuration,
                 parsedProject.Platform,
                 parsedProject.OutputType,
@@ -244,11 +244,11 @@ Line #3&lt;/releaseNotes&gt;
                 parsedProject.TargetFrameworkVersion,
                 string.Concat(
                     parsedProject
-                        .Files
+                        .AssemblyFiles
                         .Select(
                             file=&gt;  string.Format(
                                         "\r\n            {0}",
-                                        file.FilePath
+                                        file.AssemblyFilePath
                                     )
                         )
                 )
@@ -256,7 +256,7 @@ Line #3&lt;/releaseNotes&gt;
             &lt;/code&gt;
             &lt;/example&gt;
         &lt;/member&gt;
-        &lt;member name="M:Cake.Common.Solution.Project.Properties.AssemblyInfoAliases.CreateAssemblyInfo(Cake.Core.ICakeContext,Cake.Core.IO.FilePath,Cake.Common.Solution.Project.Properties.AssemblyInfoSettings)"&gt;
+        &lt;member name="M:Cake.Common.Solution.Project.Properties.AssemblyInfoAliases.CreateAssemblyInfo(Cake.Core.ICakeContext,Cake.Core.IO.AssemblyFilePath,Cake.Common.Solution.Project.Properties.AssemblyInfoSettings)"&gt;
             &lt;summary&gt;
             Creates an assembly information file.
             &lt;/summary&gt;
@@ -272,7 +272,7 @@ Line #3&lt;/releaseNotes&gt;
             CreateAssemblyInfo(file, new AssemblyInfoSettings {
                 Product = "SampleProject",
                 Version = version,
-                FileVersion = version,
+                AssemblyFileVersion = version,
                 InformationalVersion = semVersion,
                 Copyright = string.Format("Copyright (c) Contoso 2014 - {0}", DateTime.Now.Year)
             });
