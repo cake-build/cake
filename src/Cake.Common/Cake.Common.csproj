@@ -60,7 +60,7 @@
     <Compile Include="Build\BuildSystemAliases.cs" />
     <Compile Include="Build\AppVeyor\IAppVeyorProvider.cs" />
     <Compile Include="Properties\Namespaces.cs">
-        <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="Solution\Project\ProjectAliases.cs" />
     <Compile Include="Solution\Project\ProjectFile.cs" />
@@ -138,9 +138,9 @@
     <Compile Include="Tools\NUnit\NUnitRunner.cs" />
     <Compile Include="Tools\NUnit\NUnitSettings.cs" />
     <Compile Include="Tools\SignTool\SignToolResolver.cs" />
-    <Compile Include="Tools\SignTool\Sign\SignToolSignAliases.cs" />
-    <Compile Include="Tools\SignTool\Sign\SignToolSignRunner.cs" />
-    <Compile Include="Tools\SignTool\Sign\SignToolSignSettings.cs" />
+    <Compile Include="Tools\SignTool\SignToolSignAliases.cs" />
+    <Compile Include="Tools\SignTool\SignToolSignRunner.cs" />
+    <Compile Include="Tools\SignTool\SignToolSignSettings.cs" />
     <Compile Include="Tools\WiX\Architecture.cs" />
     <Compile Include="Tools\WiX\CandleRunner.cs" />
     <Compile Include="Tools\WiX\CandleSettings.cs" />

@@ -299,20 +299,8 @@ namespace Cake.Common.Tools.NUnit
 namespace Cake.Common.Tools.SignTool
 {
     /// <summary>
-    /// This namespace contain types used to interact with SignTool.
-    /// </summary>
-    [CompilerGenerated]
-    internal class NamespaceDoc
-    {
-    }
-}
-
-// ReSharper disable once CheckNamespace
-namespace Cake.Common.Tools.SignTool.Sign
-{
-    /// <summary>
-    /// This namespace contain types used for signing 
-    /// with SignTool.
+    /// This namespace contain types used for 
+    /// signing assemblies with SignTool.
     /// </summary>
     [CompilerGenerated]
     internal class NamespaceDoc

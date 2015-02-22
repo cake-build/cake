@@ -5,10 +5,10 @@ using Cake.Core.IO;
 using Cake.Core.Utilities;
 using File = System.IO.File;
 
-namespace Cake.Common.Tools.SignTool.Sign
+namespace Cake.Common.Tools.SignTool
 {
     /// <summary>
-    /// The SignTool SIGN assembly runner
+    /// The SignTool SIGN assembly runner.
     /// </summary>
     public sealed class SignToolSignRunner : Tool<SignToolSignSettings>
     {
@@ -27,7 +27,7 @@ namespace Cake.Common.Tools.SignTool.Sign
         }
 
         /// <summary>
-        /// Runs the tests in the specified assembly.
+        /// Signs the specified assembly.
         /// </summary>
         /// <param name="assemblyPath">The assembly path.</param>
         /// <param name="settings">The settings.</param>
@@ -95,9 +95,11 @@ namespace Cake.Common.Tools.SignTool.Sign
         }
 
         /// <summary>
-        /// Get name of tool
+        /// Gets the name of the tool.
         /// </summary>
-        /// <returns>The name of the tool (<c>SignTool SIGN</c>).</returns>
+        /// <returns>
+        /// The name of the tool (<c>SignTool SIGN</c>).
+        /// </returns>
         protected override string GetToolName()
         {
             return "SignTool SIGN";

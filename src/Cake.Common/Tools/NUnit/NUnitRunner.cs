@@ -31,7 +31,7 @@ namespace Cake.Common.Tools.NUnit
         }
 
         /// <summary>
-        /// Runs the tests in the specified assembly.
+        /// Runs the tests in the specified assembly, using the specified settings.
         /// </summary>
         /// <param name="assemblyPath">The assembly path.</param>
         /// <param name="settings">The settings.</param>
@@ -50,7 +50,7 @@ namespace Cake.Common.Tools.NUnit
         }
 
         /// <summary>
-        /// Runs the tests in the specified assemblies.
+        /// Runs the tests in the specified assemblies, using the specified settings.
         /// </summary>
         /// <param name="assemblyPaths">The assembly paths.</param>
         /// <param name="settings">The settings.</param>

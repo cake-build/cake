@@ -6,7 +6,7 @@ using Cake.Core.IO;
 namespace Cake.Common.Solution.Project
 {
     /// <summary>
-    /// Contains functionality related to MSBuild project files
+    /// Contains functionality related to MSBuild project files.
     /// </summary>
     [CakeAliasCategory("MSBuild Resource")]
     public static class ProjectAliases

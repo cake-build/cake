@@ -1,7 +1,7 @@
 ﻿namespace Cake.Common.Solution.Project.Properties
 {
     /// <summary>
-    /// Contains functionality used by <see cref="AssemblyInfoCreator"/>.
+    /// Contains settings used by <see cref="AssemblyInfoCreator"/>.
     /// </summary>
     public sealed class AssemblyInfoSettings
     {

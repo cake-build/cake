@@ -9,7 +9,7 @@ using Cake.Core.IO;
 namespace Cake.Common.Solution
 {
     /// <summary>
-    /// The MSBuild Solution File Parser
+    /// The MSBuild solution file parser.
     /// </summary>
     public sealed class SolutionParser
     {
@@ -37,7 +37,7 @@ namespace Cake.Common.Solution
         }
 
         /// <summary>
-        /// Parses a solution's project files.
+        /// Parses a MSBuild solution.
         /// </summary>
         /// <param name="solutionPath">The solution path.</param>
         /// <returns>A parsed solution.</returns>

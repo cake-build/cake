@@ -5,16 +5,16 @@ using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools.SignTool.Sign
+namespace Cake.Common.Tools.SignTool
 {
     /// <summary>
-    /// Contains functionality related to signing assemblies with PFX certificate
+    /// Contains functionality related to signing assemblies with PFX certificates.
     /// </summary>
     [CakeAliasCategoryAttribute("Signing")]
     public static class SignToolSignAliases
     {
         /// <summary>
-        /// Signs the specified assembly
+        /// Signs the specified assembly.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="assembly">The target assembly.</param>
@@ -47,7 +47,7 @@ namespace Cake.Common.Tools.SignTool.Sign
         }
 
         /// <summary>
-        /// Signs the specified assembly
+        /// Signs the specified assembly.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="assembly">The target assembly.</param>
@@ -81,7 +81,7 @@ namespace Cake.Common.Tools.SignTool.Sign
         }
 
         /// <summary>
-        /// Signs the specified assemblies
+        /// Signs the specified assemblies.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The target assembly.</param>
@@ -115,7 +115,7 @@ namespace Cake.Common.Tools.SignTool.Sign
         }
 
         /// <summary>
-        /// Signs the specified assemblies
+        /// Signs the specified assemblies.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The target assembly.</param>

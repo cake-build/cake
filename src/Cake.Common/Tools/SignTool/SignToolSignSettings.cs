@@ -2,7 +2,7 @@
 using Cake.Core;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools.SignTool.Sign
+namespace Cake.Common.Tools.SignTool
 {
     /// <summary>
     /// Contains settings used by  <see cref="SignToolSignRunner"/>.
