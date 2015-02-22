@@ -81,6 +81,7 @@ Task("Build")
 {
     MSBuild("./src/Cake.sln", settings =>
         settings.SetConfiguration(configuration)
+            .WithProperty("TreatWarningsAsErrors", "true")
             .UseToolVersion(MSBuildToolVersion.NET45));
 });
 
