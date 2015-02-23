@@ -934,5 +934,62 @@ namespace Cake.Common.Tests.Unit.IO
                 return ffs;
             }
         }
+
+        public sealed class TheDirectoryExistsMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => DirectoryAliases.DirectoryExists(null, "something"));
+
+                // Then
+                Assert.IsArgumentNullException(result, "context");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Path_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+
+                // When
+                var result = Record.Exception(() => DirectoryAliases.DirectoryExists(context, null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "path");
+            }
+
+            [Fact]
+            public void Should_Return_False_If_Directory_Does_Not_Exist()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var fileSystem = new FakeFileSystem(false);
+                context.FileSystem.Returns(fileSystem);
+
+                // When
+                var result = DirectoryAliases.DirectoryExists(context, "non-existent-path");
+
+                // Then
+                Assert.False(result);
+            }
+
+            [Fact]
+            public void Should_Return_True_If_Directory_Exist()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var fileSystem = new FakeFileSystem(false);
+                fileSystem.GetCreatedDirectory("some path");
+                context.FileSystem.Returns(fileSystem);
+
+                // When
+                var result = DirectoryAliases.DirectoryExists(context, "some path");
+
+                // Then
+                Assert.True(result);
+            }
+        }
     }
 }
