@@ -170,5 +170,30 @@ namespace Cake.Common.IO
         {
             FileDeleter.DeleteFile(context, filePath);
         }
+
+        /// <summary>
+        /// Determines whether the given path refers to an existing file.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="filePath">The <see cref="FilePath"/> to check.</param>
+        /// <returns><c>true</c> if <paramref name="filePath"/> refers to an existing file;
+        /// <c>false</c> if the file does not exist or an error occurs when trying to
+        /// determine if the specified file exists.</returns>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Exists")]
+        public static bool FileExists(this ICakeContext context, FilePath filePath)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            if (filePath == null)
+            {
+                throw new ArgumentNullException("filePath");
+            }
+
+            return context.FileSystem.GetFile(filePath).Exists;
+        }
     }
 }
