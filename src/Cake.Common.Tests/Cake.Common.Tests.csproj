@@ -64,6 +64,7 @@
     <Compile Include="Fixtures\FileSystemFixture.cs" />
     <Compile Include="Fixtures\ILMergeRunnerFixture.cs" />
     <Compile Include="Fixtures\MSBuildRunnerFixture.cs" />
+    <Compile Include="Fixtures\NSISFixture.cs" />
     <Compile Include="Fixtures\NuGetFixture.cs" />
     <Compile Include="Fixtures\MSTestRunnerFixture.cs" />
     <Compile Include="Fixtures\NUnitRunnerFixture.cs" />
@@ -111,6 +112,8 @@
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsExtensionsTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsTests.cs" />
     <Compile Include="Unit\Tools\MSTest\MSTestRunnerTests.cs" />
+    <Compile Include="Unit\Tools\NSIS\MakeNSISRunnerTests.cs" />
+    <Compile Include="Unit\Tools\NSIS\NSISAliasesTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Install\NuGetInstallerTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Install\NuGetInstallerSettingsTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Pack\NuGetPackerTests.cs" />
