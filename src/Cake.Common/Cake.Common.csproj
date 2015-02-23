@@ -62,6 +62,10 @@
     <Compile Include="Properties\Namespaces.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
+    <Compile Include="Security\HashAlgorithm.cs" />
+    <Compile Include="Security\FileHash.cs" />
+    <Compile Include="Security\FileHashCalculator.cs" />
+    <Compile Include="Security\SecurityAliases.cs" />
     <Compile Include="Solution\Project\ProjectAliases.cs" />
     <Compile Include="Solution\Project\ProjectFile.cs" />
     <Compile Include="Solution\Project\ProjectParser.cs" />
