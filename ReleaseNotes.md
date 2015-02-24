@@ -1,4 +1,4 @@
-### New in 0.1.33
+### New in 0.1.33 (Released 2015/02/24)
 * Added Multiple Assembly Support.
 * Added process output and timeout.
 * Fixed code generatiom issue.
