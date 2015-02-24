@@ -82,7 +82,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 var runner = fixture.CreateCandleRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run(new[] {new FilePath("/Working/File.lol")}, null));
+                var result = Record.Exception(() => runner.Run(new[] {new FilePath("/Working/AssemblyFile.lol")}, null));
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");

@@ -3,15 +3,16 @@ using System.Globalization;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Utilities;
-using File = System.IO.File;
 
-namespace Cake.Common.Tools.SignTool.Sign
+namespace Cake.Common.Tools.SignTool
 {
     /// <summary>
-    /// The SignTool SIGN assembly runner
+    /// The SignTool SIGN assembly runner.
     /// </summary>
     public sealed class SignToolSignRunner : Tool<SignToolSignSettings>
     {
+        private readonly ISignToolResolver _resolver;
+        private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
 
         /// <summary>
@@ -21,13 +22,31 @@ namespace Cake.Common.Tools.SignTool.Sign
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
         public SignToolSignRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner)
-            : base(fileSystem, environment, processRunner)
+            : this(fileSystem, environment, processRunner, null)
         {
-            _environment = environment;
         }
 
         /// <summary>
-        /// Runs the tests in the specified assembly.
+        /// Initializes a new instance of the <see cref="SignToolSignRunner"/> class.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="environment">The environment.</param>
+        /// <param name="processRunner">The process runner.</param>
+        /// <param name="resolver">The resolver.</param>
+        internal SignToolSignRunner(
+            IFileSystem fileSystem, 
+            ICakeEnvironment environment, 
+            IProcessRunner processRunner,
+            ISignToolResolver resolver)
+            : base(fileSystem, environment, processRunner)
+        {
+            _fileSystem = fileSystem;
+            _environment = environment;
+            _resolver = resolver ?? new SignToolResolver();
+        }
+
+        /// <summary>
+        /// Signs the specified assembly.
         /// </summary>
         /// <param name="assemblyPath">The assembly path.</param>
         /// <param name="settings">The settings.</param>
@@ -42,33 +61,54 @@ namespace Cake.Common.Tools.SignTool.Sign
                 throw new ArgumentNullException("settings");
             }
 
+            if (assemblyPath.IsRelative)
+            {
+                assemblyPath = assemblyPath.MakeAbsolute(_environment);
+            }
+
             Run(settings, GetArguments(assemblyPath, settings), settings.ToolPath);
         }
 
         private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, SignToolSignSettings settings)
         {
-            if (assemblyPath == null || !File.Exists(assemblyPath.FullPath))
+            if (!_fileSystem.Exist(assemblyPath))
             {
-                throw new ArgumentException(
-                     string.Format(CultureInfo.InvariantCulture, "{0}: AssemblyPath not specified or missing ({1})", GetToolName(), assemblyPath));
+                const string format = "{0}: The assembly '{1}' do not exist.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName(), assemblyPath.FullPath);
+                throw new CakeException(message);
             }
+            
             if (settings.TimeStampUri == null)
             {
-                throw new ArgumentException(
-                    string.Format(CultureInfo.InvariantCulture, "{0}: TimeStampUri Required but not specified.",
-                        GetToolName()));
+                const string format = "{0}: Timestamp server URL is required but not specified.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
+                throw new CakeException(message);
             }
-            if (settings.CertPath == null || !File.Exists(settings.CertPath.FullPath))
+
+            if (settings.CertPath == null)
             {
-                throw new ArgumentException(
-                    string.Format(CultureInfo.InvariantCulture, "{0}: CertPath not specified or missing ({1})",
-                        GetToolName(), settings.CertPath));
+                const string format = "{0}: Certificate path is required but not specified.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
+                throw new CakeException(message);
             }
+
+            // Make certificate path absolute.
+            settings.CertPath = settings.CertPath.IsRelative
+                ? settings.CertPath.MakeAbsolute(_environment)
+                : settings.CertPath;
+
+            if (!_fileSystem.Exist(settings.CertPath))
+            {
+                const string format = "{0}: The certificate '{1}' do not exist.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName(), settings.CertPath.FullPath);
+                throw new CakeException(message);
+            }
+
             if (string.IsNullOrEmpty(settings.Password))
             {
-                throw new ArgumentException(
-                    string.Format(CultureInfo.InvariantCulture, "{0}: Password Required but not specified.",
-                        GetToolName()));
+                const string format = "{0}: Password is required but not specified.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
+                throw new CakeException(message);
             }
 
             var builder = new ProcessArgumentBuilder();
@@ -95,9 +135,11 @@ namespace Cake.Common.Tools.SignTool.Sign
         }
 
         /// <summary>
-        /// Get name of tool
+        /// Gets the name of the tool.
         /// </summary>
-        /// <returns>The name of the tool (<c>SignTool SIGN</c>).</returns>
+        /// <returns>
+        /// The name of the tool (<c>SignTool SIGN</c>).
+        /// </returns>
         protected override string GetToolName()
         {
             return "SignTool SIGN";
@@ -111,7 +153,7 @@ namespace Cake.Common.Tools.SignTool.Sign
         protected override FilePath GetDefaultToolPath(SignToolSignSettings settings)
         {
             return (settings == null ? null : settings.ToolPath)
-                ?? SignToolResolver.GetSignToolPath(_environment);
+                ?? _resolver.GetSignToolPath(_environment);
         }
     }
 }

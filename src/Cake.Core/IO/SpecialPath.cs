@@ -13,6 +13,6 @@
         /// <summary>
         /// The Windows folder.
         /// </summary>
-        Windows,
+        Windows,        
     }
 }

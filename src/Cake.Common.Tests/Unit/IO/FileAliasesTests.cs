@@ -5,6 +5,7 @@ using Cake.Common.IO;
 using Cake.Common.Tests.Fixtures;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Testing.Fakes;
 using NSubstitute;
 using Xunit;
 
@@ -944,6 +945,63 @@ namespace Cake.Common.Tests.Unit.IO
                 // Then
                 fixture.TargetFiles[0].Received(1).Move(
                     Arg.Is<FilePath>(p => p.FullPath == "/Working/target/file1.txt"));
+            }
+        }
+
+        public sealed class TheFileExistsMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => FileAliases.FileExists(null, "some file"));
+
+                // Then
+                Assert.IsArgumentNullException(result, "context");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Path_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+
+                // When
+                var result = Record.Exception(() => FileAliases.FileExists(context, null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "filePath");
+            }
+
+            [Fact]
+            public void Should_Return_False_If_Directory_Does_Not_Exist()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var fileSystem = new FakeFileSystem(false);
+                context.FileSystem.Returns(fileSystem);
+
+                // When
+                var result = FileAliases.FileExists(context, "non-existent-file.txt");
+
+                // Then
+                Assert.False(result);
+            }
+
+            [Fact]
+            public void Should_Return_True_If_Directory_Exist()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var fileSystem = new FakeFileSystem(false);
+                fileSystem.GetCreatedFile("some file.txt");
+                context.FileSystem.Returns(fileSystem);
+
+                // When
+                var result = FileAliases.FileExists(context, "some file.txt");
+
+                // Then
+                Assert.True(result);
             }
         }
     }

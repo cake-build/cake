@@ -8,7 +8,7 @@ using Cake.Core.IO;
 namespace Cake.Common.Solution.Project
 {
     /// <summary>
-    /// The MSBuild Project File Parser
+    /// The MSBuild project file parser.
     /// </summary>
     public sealed class ProjectParser
     {

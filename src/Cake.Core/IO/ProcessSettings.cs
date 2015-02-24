@@ -22,5 +22,10 @@
         /// </summary>
         /// <value>true if output should be written to <see cref="P:System.Diagnostics.Process.StandardOutput"/>; otherwise, false. The default is false.</value>
         public bool RedirectStandardOutput { get; set; }
+
+        /// <summary>
+        /// Gets or sets optional timeout for process execution
+        /// </summary>
+        public int? Timeout { get; set; }
     }
 }

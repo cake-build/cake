@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -57,17 +58,21 @@
     <Compile Include="Fixtures\AppVeyorInfoFixture.cs" />
     <Compile Include="Fixtures\AssemblyInfoFixture.cs" />
     <Compile Include="Fixtures\AssemblyInfoParserFixture.cs" />
+    <Compile Include="Fixtures\CakeRunnerFixture.cs" />
     <Compile Include="Fixtures\FileCopyFixture.cs" />
     <Compile Include="Fixtures\FileDeleteFixture.cs" />
     <Compile Include="Fixtures\FileSystemFixture.cs" />
     <Compile Include="Fixtures\ILMergeRunnerFixture.cs" />
     <Compile Include="Fixtures\MSBuildRunnerFixture.cs" />
+    <Compile Include="Fixtures\NSISFixture.cs" />
     <Compile Include="Fixtures\NuGetFixture.cs" />
     <Compile Include="Fixtures\MSTestRunnerFixture.cs" />
     <Compile Include="Fixtures\NUnitRunnerFixture.cs" />
     <Compile Include="Fixtures\ProcessFixture.cs" />
+    <Compile Include="Fixtures\SignToolSignRunnerFixture.cs" />
     <Compile Include="Fixtures\TextTransformationFixture.cs" />
     <Compile Include="Fixtures\WiXFixture.cs" />
+    <Compile Include="Fixtures\XmlDocExampleCodeParserFixture.cs" />
     <Compile Include="Fixtures\XUnit2RunnerFixture.cs" />
     <Compile Include="Fixtures\XUnitRunnerFixture.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -85,6 +90,7 @@
     <Compile Include="Unit\Build\AppVeyor\Data\AppVeyorRepositoryInfoTests.cs" />
     <Compile Include="Unit\Build\BuildSystemAliasesTests.cs" />
     <Compile Include="Unit\Build\BuildSystemTests.cs" />
+    <Compile Include="Unit\Security\FileHashCalculatorTests.cs" />
     <Compile Include="Unit\Solution\Project\Properties\AssemblyInfoCreatorTests.cs" />
     <Compile Include="Unit\Solution\Project\Properties\AssemblyInfoParserTests.cs" />
     <Compile Include="Unit\Diagnostics\LoggingAliasesTests.cs" />
@@ -93,9 +99,11 @@
     <Compile Include="Unit\ReleaseNotesAliasesTests.cs" />
     <Compile Include="Unit\ReleaseNotesParserTests.cs" />
     <Compile Include="Unit\ReleaseNotesTests.cs" />
+    <Compile Include="Unit\Solution\Project\XmlDoc\XmlDocExampleCodeParserTests.cs" />
     <Compile Include="Unit\Text\TextTransformationAliasesTests.cs" />
     <Compile Include="Unit\Text\TextTransformationExtensionsTests.cs" />
     <Compile Include="Unit\Text\TextTransformationTests.cs" />
+    <Compile Include="Unit\Tools\Cake\CakeRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeSettingsTests.cs" />
     <Compile Include="Unit\IO\ZipperTests.cs" />
@@ -105,6 +113,8 @@
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsExtensionsTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsTests.cs" />
     <Compile Include="Unit\Tools\MSTest\MSTestRunnerTests.cs" />
+    <Compile Include="Unit\Tools\NSIS\MakeNSISRunnerTests.cs" />
+    <Compile Include="Unit\Tools\NSIS\NSISAliasesTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Install\NuGetInstallerTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Install\NuGetInstallerSettingsTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Pack\NuGetPackerTests.cs" />
@@ -116,6 +126,7 @@
     <Compile Include="Unit\Tools\NuGet\Sources\NuGetSourcesTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitRunnerTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitSettingsTests.cs" />
+    <Compile Include="Unit\Tools\SignTool\SignToolSignRunnerTests.cs" />
     <Compile Include="Unit\Tools\WiX\LightRunnerTests.cs" />
     <Compile Include="Unit\Tools\WiX\CandleRunnerTests.cs" />
     <Compile Include="Unit\Tools\XUnit\XUnit2SettingsTests.cs" />

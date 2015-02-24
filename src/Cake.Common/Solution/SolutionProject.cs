@@ -3,7 +3,7 @@ using Cake.Core.IO;
 namespace Cake.Common.Solution
 {
     /// <summary>
-    /// Solution Project
+    /// Represents a project in a MSBuild solution.
     /// </summary>
     public sealed class SolutionProject
     {

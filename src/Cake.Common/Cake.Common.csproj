@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>7bed147e</NuGetPackageImportStamp>
+    <StyleCopTreatErrorsAsWarnings>false</StyleCopTreatErrorsAsWarnings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,7 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\Cake.Common.xml</DocumentationFile>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <CodeAnalysisRuleSet>..\Cake.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -58,6 +59,13 @@
     <Compile Include="Build\BuildSystem.cs" />
     <Compile Include="Build\BuildSystemAliases.cs" />
     <Compile Include="Build\AppVeyor\IAppVeyorProvider.cs" />
+    <Compile Include="Properties\Namespaces.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Security\HashAlgorithm.cs" />
+    <Compile Include="Security\FileHash.cs" />
+    <Compile Include="Security\FileHashCalculator.cs" />
+    <Compile Include="Security\SecurityAliases.cs" />
     <Compile Include="Solution\Project\ProjectAliases.cs" />
     <Compile Include="Solution\Project\ProjectFile.cs" />
     <Compile Include="Solution\Project\ProjectParser.cs" />
@@ -78,6 +86,9 @@
     <Compile Include="ReleaseNotes.cs" />
     <Compile Include="ReleaseNotesAliases.cs" />
     <Compile Include="ReleaseNotesParser.cs" />
+    <Compile Include="Solution\Project\XmlDoc\XmlDocExampleCode.cs" />
+    <Compile Include="Solution\Project\XmlDoc\XmlDocExampleCodeParser.cs" />
+    <Compile Include="Solution\Project\XmlDoc\XmlDocAliases.cs" />
     <Compile Include="Solution\SolutionAliases.cs" />
     <Compile Include="Solution\SolutionParser.cs" />
     <Compile Include="Solution\SolutionParserResult.cs" />
@@ -85,6 +96,9 @@
     <Compile Include="Text\TextTransformationAliases.cs" />
     <Compile Include="Text\TextTransformation.cs" />
     <Compile Include="Text\TextTransformationExtensions.cs" />
+    <Compile Include="Tools\Cake\CakeAliases.cs" />
+    <Compile Include="Tools\Cake\CakeRunner.cs" />
+    <Compile Include="Tools\Cake\CakeSettings.cs" />
     <Compile Include="Tools\ILMerge\ILMergeAliases.cs" />
     <Compile Include="Tools\ILMerge\ILMergeRunner.cs" />
     <Compile Include="Tools\ILMerge\ILMergeSettings.cs" />
@@ -109,6 +123,9 @@
     <Compile Include="Tools\MSTest\MSTestAliases.cs" />
     <Compile Include="Tools\MSTest\MSTestRunner.cs" />
     <Compile Include="Tools\MSTest\MSTestSettings.cs" />
+    <Compile Include="Tools\NSIS\MakeNSISRunner.cs" />
+    <Compile Include="Tools\NSIS\MakeNSISSettings.cs" />
+    <Compile Include="Tools\NSIS\NSISAliases.cs" />
     <Compile Include="Tools\NuGet\Install\NuGetInstaller.cs" />
     <Compile Include="Tools\NuGet\Install\NugetInstallSettings.cs" />
     <Compile Include="Tools\NuGet\Pack\NuSpecContent.cs" />
@@ -127,10 +144,11 @@
     <Compile Include="Tools\NUnit\NUnitAliases.cs" />
     <Compile Include="Tools\NUnit\NUnitRunner.cs" />
     <Compile Include="Tools\NUnit\NUnitSettings.cs" />
+    <Compile Include="Tools\SignTool\ISignToolResolver.cs" />
     <Compile Include="Tools\SignTool\SignToolResolver.cs" />
-    <Compile Include="Tools\SignTool\Sign\SignToolSignAliases.cs" />
-    <Compile Include="Tools\SignTool\Sign\SignToolSignRunner.cs" />
-    <Compile Include="Tools\SignTool\Sign\SignToolSignSettings.cs" />
+    <Compile Include="Tools\SignTool\SignToolSignAliases.cs" />
+    <Compile Include="Tools\SignTool\SignToolSignRunner.cs" />
+    <Compile Include="Tools\SignTool\SignToolSignSettings.cs" />
     <Compile Include="Tools\WiX\Architecture.cs" />
     <Compile Include="Tools\WiX\CandleRunner.cs" />
     <Compile Include="Tools\WiX\CandleSettings.cs" />
@@ -157,6 +175,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\StyleCop.MSBuild.4.7.49.1\build\StyleCop.MSBuild.Targets" Condition="Exists('..\packages\StyleCop.MSBuild.4.7.49.1\build\StyleCop.MSBuild.Targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

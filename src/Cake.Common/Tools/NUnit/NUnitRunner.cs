@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Cake.Core;
@@ -30,7 +31,7 @@ namespace Cake.Common.Tools.NUnit
         }
 
         /// <summary>
-        /// Runs the tests in the specified assembly.
+        /// Runs the tests in the specified assembly, using the specified settings.
         /// </summary>
         /// <param name="assemblyPath">The assembly path.</param>
         /// <param name="settings">The settings.</param>
@@ -45,15 +46,37 @@ namespace Cake.Common.Tools.NUnit
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetArguments(assemblyPath, settings), settings.ToolPath);
+            Run(settings, GetArguments(new[] { assemblyPath }, settings), settings.ToolPath);
         }
 
-        private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, NUnitSettings settings)
+        /// <summary>
+        /// Runs the tests in the specified assemblies, using the specified settings.
+        /// </summary>
+        /// <param name="assemblyPaths">The assembly paths.</param>
+        /// <param name="settings">The settings.</param>
+        public void Run(IEnumerable<FilePath> assemblyPaths, NUnitSettings settings)
+        {
+            if (assemblyPaths == null)
+            {
+                throw new ArgumentNullException("assemblyPaths");
+            }
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+
+            Run(settings, GetArguments(assemblyPaths, settings), settings.ToolPath);
+        }
+
+        private ProcessArgumentBuilder GetArguments(IEnumerable<FilePath> assemblyPaths, NUnitSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
 
-            // Add the assembly to build.
-            builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
+            // Add the assemblies to build.
+            foreach (var assemblyPath in assemblyPaths)
+            {
+                builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
+            }
 
             if (settings.Framework != null)
             {

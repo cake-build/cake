@@ -1,5 +1,14 @@
+### New in 0.1.33 (Released 2015/02/24)
+* Added Multiple Assembly Support.
+* Added process output and timeout.
+* Fixed code generatiom issue.
+* Added aliases for executing cake scripts out of process.
+* Added file hash calculator.
+* Added aliases for checking existence of directories and files.
+* Added support for NSIS.
+
 ### New in 0.1.32 (Released 2015/02/10)
-* Critical fix.
+* Fixed issue where script hosts had been made internal by mistake.
 
 ### New in 0.1.31 (Released 2015/02/10)
 * Documentation updates only.

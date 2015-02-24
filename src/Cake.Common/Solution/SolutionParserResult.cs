@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace Cake.Common.Solution
 {
     /// <summary>
-    /// Represents the content in an MSBuild solution file
+    /// Represents the content in an MSBuild solution file.
     /// </summary>
     public sealed class SolutionParserResult
     {

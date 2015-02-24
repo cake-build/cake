@@ -223,5 +223,30 @@ namespace Cake.Common.IO
                 CopyDirectory(context, subdir.Path, temppath);
             }
         }
+
+        /// <summary>
+        /// Determines whether the given path refers to an existing directory.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="path">The <see cref="DirectoryPath"/> to check.</param>
+        /// <returns><c>true</c> if <paramref name="path"/> refers to an existing directory;
+        /// <c>false</c> if the directory does not exist or an error occurs when trying to
+        /// determine if the specified path exists.</returns>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Exists")]
+        public static bool DirectoryExists(this ICakeContext context, DirectoryPath path)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+
+            return context.FileSystem.GetDirectory(path).Exists;
+        }
     }
 }

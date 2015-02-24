@@ -6,13 +6,19 @@ using Microsoft.Win32;
 
 namespace Cake.Common.Tools.SignTool
 {
-    internal static class SignToolResolver
+    // TODO: Remove System.IO-specific methods. Cover this with tests!
+    internal sealed class SignToolResolver : ISignToolResolver
     {
-        private static string _programFiles;
-        private static string _signToolPath;
+        private string _programFiles;
+        private string _signToolPath;
 
-        public static FilePath GetSignToolPath(ICakeEnvironment environment)
+        public FilePath GetSignToolPath(ICakeEnvironment environment)
         {
+            if (environment == null)
+            {
+                throw new ArgumentNullException("environment");
+            }
+
             // Try SDK first.
             if (_programFiles == null)
             {
