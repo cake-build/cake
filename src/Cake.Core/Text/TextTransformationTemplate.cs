@@ -13,19 +13,33 @@ namespace Cake.Core.Text
     {
         private readonly Dictionary<string, object> _tokens;
         private readonly string _template;
+        private readonly Tuple<string, string> _placeholder;
+        private readonly string _keyExpression;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TextTransformationTemplate"/> class.
         /// </summary>
         /// <param name="template">The template.</param>
         public TextTransformationTemplate(string template)
+            : this(template, null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TextTransformationTemplate"/> class.
+        /// </summary>
+        /// <param name="template">The template.</param>
+        /// <param name="placeholder">The key placeholder.</param>
+        public TextTransformationTemplate(string template, Tuple<string, string> placeholder)
         {
             if (template == null)
             {
                 throw new ArgumentNullException("template");
             }
             _template = template;
+            _placeholder = placeholder ?? new Tuple<string, string>("<%", "%>");
             _tokens = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+            _keyExpression = string.Concat(_placeholder.Item1, @"(?<key>[^", _placeholder.Item2[0], "]+)", _placeholder.Item2);
         }
 
         /// <summary>
@@ -58,8 +72,7 @@ namespace Cake.Core.Text
         /// <returns>The rendered template.</returns>
         public string Render()
         {
-            const string keyExpression = @"<%(?<key>[^%]+)%>";
-            return Regex.Replace(_template, keyExpression, Replace);
+            return Regex.Replace(_template, _keyExpression, Replace);
         }
 
         private string Replace(Match match)
@@ -81,16 +94,18 @@ namespace Cake.Core.Text
                     var format = string.Join(":", parts.Skip(1).Take(parts.Length - 1)).Trim();
                     var formattable = _tokens[key] as IFormattable;
                     if (formattable != null)
-                    {                        
+                    {
                         return formattable.ToString(format, CultureInfo.InvariantCulture);
                     }
-                    return string.Concat("<%", key, ":", format, "%>");   
+
+                    // Return what we received.
+                    return match.Value;
                 }
                 return value.ToString();
             }
 
             // Return what we received.
-            return string.Concat("<%", key, "%>");
+            return match.Value;
         }
     }
 }
