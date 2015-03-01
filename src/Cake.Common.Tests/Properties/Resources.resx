@@ -282,4 +282,77 @@ Line #3&lt;/releaseNotes&gt;
     &lt;/members&gt;
 &lt;/doc&gt;</value>
   </data>
+  <data name="XmlTransformation_Htm" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;&lt;html&gt;&lt;body style="font-family:Arial;font-size:12pt;background-color:#EEEEEE"&gt;&lt;div style="background-color:teal;color:white;padding:4px"&gt;&lt;span style="font-weight:bold"&gt;Belgian Waffles
+                    -
+                &lt;/span&gt;$5.95&lt;/div&gt;&lt;div style="margin-left:20px;margin-bottom:1em;font-size:10pt"&gt;&lt;p&gt;Two of our famous Belgian Waffles with plenty of real maple syrup&lt;span style="font-style:italic"&gt;
+                        (
+                        650
+                        calories per serving)
+                    &lt;/span&gt;&lt;/p&gt;&lt;/div&gt;&lt;div style="background-color:teal;color:white;padding:4px"&gt;&lt;span style="font-weight:bold"&gt;Strawberry Belgian Waffles
+                    -
+                &lt;/span&gt;$7.95&lt;/div&gt;&lt;div style="margin-left:20px;margin-bottom:1em;font-size:10pt"&gt;&lt;p&gt;Light Belgian waffles covered with strawberries and whipped cream&lt;span style="font-style:italic"&gt;
+                        (
+                        900
+                        calories per serving)
+                    &lt;/span&gt;&lt;/p&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</value>
+  </data>
+  <data name="XmlTransformation_Htm_NoXmlDeclaration" xml:space="preserve">
+    <value>&lt;html&gt;&lt;body style="font-family:Arial;font-size:12pt;background-color:#EEEEEE"&gt;&lt;div style="background-color:teal;color:white;padding:4px"&gt;&lt;span style="font-weight:bold"&gt;Belgian Waffles
+                    -
+                &lt;/span&gt;$5.95&lt;/div&gt;&lt;div style="margin-left:20px;margin-bottom:1em;font-size:10pt"&gt;&lt;p&gt;Two of our famous Belgian Waffles with plenty of real maple syrup&lt;span style="font-style:italic"&gt;
+                        (
+                        650
+                        calories per serving)
+                    &lt;/span&gt;&lt;/p&gt;&lt;/div&gt;&lt;div style="background-color:teal;color:white;padding:4px"&gt;&lt;span style="font-weight:bold"&gt;Strawberry Belgian Waffles
+                    -
+                &lt;/span&gt;$7.95&lt;/div&gt;&lt;div style="margin-left:20px;margin-bottom:1em;font-size:10pt"&gt;&lt;p&gt;Light Belgian waffles covered with strawberries and whipped cream&lt;span style="font-style:italic"&gt;
+                        (
+                        900
+                        calories per serving)
+                    &lt;/span&gt;&lt;/p&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</value>
+  </data>
+  <data name="XmlTransformation_Xml" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;breakfast_menu&gt;
+    &lt;food&gt;
+        &lt;name&gt;Belgian Waffles&lt;/name&gt;
+        &lt;price&gt;$5.95&lt;/price&gt;
+        &lt;description&gt;Two of our famous Belgian Waffles with plenty of real maple syrup&lt;/description&gt;
+        &lt;calories&gt;650&lt;/calories&gt;
+    &lt;/food&gt;
+    &lt;food&gt;
+        &lt;name&gt;Strawberry Belgian Waffles&lt;/name&gt;
+        &lt;price&gt;$7.95&lt;/price&gt;
+        &lt;description&gt;Light Belgian waffles covered with strawberries and whipped cream&lt;/description&gt;
+        &lt;calories&gt;900&lt;/calories&gt;
+    &lt;/food&gt;
+&lt;/breakfast_menu&gt;</value>
+  </data>
+  <data name="XmlTransformation_Xsl" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;html xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xsl:version="1.0"&gt;
+    &lt;body style="font-family:Arial;font-size:12pt;background-color:#EEEEEE"&gt;
+        &lt;xsl:for-each select="breakfast_menu/food"&gt;
+            &lt;div style="background-color:teal;color:white;padding:4px"&gt;
+                &lt;span style="font-weight:bold"&gt;
+                    &lt;xsl:value-of select="name" /&gt;
+                    -
+                &lt;/span&gt;
+                &lt;xsl:value-of select="price" /&gt;
+            &lt;/div&gt;
+            &lt;div style="margin-left:20px;margin-bottom:1em;font-size:10pt"&gt;
+                &lt;p&gt;
+                    &lt;xsl:value-of select="description" /&gt;
+                    &lt;span style="font-style:italic"&gt;
+                        (
+                        &lt;xsl:value-of select="calories" /&gt;
+                        calories per serving)
+                    &lt;/span&gt;
+                &lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/xsl:for-each&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
 </root>

@@ -1,4 +1,8 @@
 # Build script
+init:
+  - git config --global core.autocrlf true
+
+# Build script
 build_script:
   - cmd: powershell -NoProfile -ExecutionPolicy unrestricted -Command .\build.ps1 -Target "AppVeyor"
 

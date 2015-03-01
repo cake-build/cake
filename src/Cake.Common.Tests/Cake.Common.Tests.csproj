@@ -73,6 +73,7 @@
     <Compile Include="Fixtures\TextTransformationFixture.cs" />
     <Compile Include="Fixtures\WiXFixture.cs" />
     <Compile Include="Fixtures\XmlDocExampleCodeParserFixture.cs" />
+    <Compile Include="Fixtures\XmlTransformationFixture.cs" />
     <Compile Include="Fixtures\XUnit2RunnerFixture.cs" />
     <Compile Include="Fixtures\XUnitRunnerFixture.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -137,6 +138,7 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="Unit\XML\XmlTransformationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Common\Cake.Common.csproj">
