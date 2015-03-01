@@ -267,6 +267,26 @@ namespace Cake.Core.Tests.Unit.Scripting
                 // Then
                 fixture.Session.Received(1).Execute(fixture.GetExpectedSource());
             }
+
+            [Theory]
+            [InlineData("test/build.cake")]
+            [InlineData("./test/build.cake")]
+            [InlineData("/test/build.cake")]
+            public void Should_Remove_Directory_From_Script_Path(string path)
+            {
+                // Given
+                var fixture = new ScriptRunnerFixture(path);
+                fixture.ScriptProcessor = Substitute.For<IScriptProcessor>();
+                var runner = fixture.CreateScriptRunner();
+
+                // When
+                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
+
+                // Then
+                fixture.ScriptProcessor.Received(1).Process(
+                    Arg.Is<FilePath>(p => p.FullPath == "build.cake"), 
+                    Arg.Any<ScriptProcessorContext>());
+            }
         }
     }
 }

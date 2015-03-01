@@ -69,6 +69,9 @@ namespace Cake.Core.Scripting
             // Set the working directory.
             host.Environment.WorkingDirectory = script.MakeAbsolute(host.Environment).GetDirectory();
 
+            // Make sure that any directories are stripped from the script path.
+            script = script.GetFilename();
+
             // Create and prepare the session.
             var session = _sessionFactory.CreateSession(host);
 
