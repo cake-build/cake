@@ -97,7 +97,7 @@ namespace Cake.Common.Text
         /// </code> 
         /// </example> 
         [CakeMethodAlias]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage","CA2202:Do not dispose objects multiple times", Justification = "Stream reader leaves stream open.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "Stream reader leaves stream open.")]
         public static TextTransformation<TextTransformationTemplate> TransformTextFile(this ICakeContext context, FilePath path)
         {
             return TransformTextFile(context, path, "<%", "%>");
@@ -123,7 +123,7 @@ namespace Cake.Common.Text
         [CakeMethodAlias]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "Stream reader leaves stream open.")]
         public static TextTransformation<TextTransformationTemplate> TransformTextFile(
-            this ICakeContext context, 
+            this ICakeContext context,
             FilePath path,
             string leftPlaceholder,
             string rightPlaceholder)

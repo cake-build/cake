@@ -97,11 +97,13 @@ namespace Cake.Core.Text
                     {
                         return formattable.ToString(format, CultureInfo.InvariantCulture);
                     }
+
                     // Return what we received.
                     return match.Value;
                 }
                 return value.ToString();
             }
+
             // Return what we received.
             return match.Value;
         }
