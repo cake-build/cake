@@ -3,6 +3,7 @@ using Cake.Common.Tools.NuGet.Install;
 using Cake.Common.Tools.NuGet.Pack;
 using Cake.Common.Tools.NuGet.Push;
 using Cake.Common.Tools.NuGet.Restore;
+using Cake.Common.Tools.NuGet.SetApiKey;
 using Cake.Common.Tools.NuGet.Sources;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -471,6 +472,41 @@ namespace Cake.Common.Tools.NuGet
 
             var runner = new NuGetInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.GetToolResolver("NuGet"));
             runner.InstallFromConfig(packageConfigPath, settings);
+        }
+
+        /// <summary>
+        /// Installs NuGet packages using the specified API key, source and settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="apiKey">The API key.</param>
+        /// <param name="source">Server URL where the API key is valid.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("SetApiKey")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.SetApiKey")]
+        public static void NuGetSetApiKey(this ICakeContext context, string apiKey, string source, NuGetSetApiKeySettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var runner = new NuGetSetApiKey(context.Log, context.FileSystem, context.Environment, context.ProcessRunner, context.GetToolResolver("NuGet"));
+            runner.SetApiKey(apiKey, source, settings);
+        }
+
+        /// <summary>
+        /// Installs NuGet packages using the specified API key and source.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="apiKey">The API key.</param>
+        /// <param name="source">Server URL where the API key is valid.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("SetApiKey")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.SetApiKey")]
+        public static void NuGetSetApiKey(this ICakeContext context, string apiKey, string source)
+        {
+            context.NuGetSetApiKey(apiKey, source, new NuGetSetApiKeySettings());
         }
     }
 }

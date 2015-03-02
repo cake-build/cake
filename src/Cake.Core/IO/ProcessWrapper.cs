@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Cake.Core.Diagnostics;
 
@@ -8,11 +9,13 @@ namespace Cake.Core.IO
     {
         private readonly Process _process;
         private readonly ICakeLog _log;
+        private readonly Func<string, string> _filterOutput;
 
-        public ProcessWrapper(Process process, ICakeLog log)
+        public ProcessWrapper(Process process, ICakeLog log, Func<string, string> filterOutput)
         {
             _process = process;
             _log = log;
+            _filterOutput = filterOutput ?? (source => "[REDACTED]");
         }
 
         public void WaitForExit()
@@ -44,7 +47,7 @@ namespace Cake.Core.IO
             string line;
             while ((line = _process.StandardOutput.ReadLine()) != null)
             {
-                _log.Verbose("{0}", line);
+                _log.Verbose("{0}", _filterOutput(line));
                 yield return line;
             }
         }
