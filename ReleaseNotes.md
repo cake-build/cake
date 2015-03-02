@@ -1,3 +1,11 @@
+### New in 0.1.34 (Released 2015/03/03)
+* Added support for NuGet SetApiKey.
+* Fixed unsafe logging.
+* Made text transformation placeholders configurable.
+* Added missing common special paths.
+* Fixed script path bug.
+* Added XML transformation support.
+
 ### New in 0.1.33 (Released 2015/02/24)
 * Added Multiple Assembly Support.
 * Added process output and timeout.
