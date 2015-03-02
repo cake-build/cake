@@ -70,7 +70,7 @@ namespace Cake.Core.IO
 
             // Start and return the process.
             var process = Process.Start(info);
-            return process == null ? null : new ProcessWrapper(process, _log);
+            return process == null ? null : new ProcessWrapper(process, _log, arguments.FilterUnsafe);
         }
     }
 }

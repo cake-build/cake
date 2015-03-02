@@ -123,6 +123,7 @@
     <Compile Include="Unit\Tools\NuGet\Push\NuGetPusherTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Restore\NuGetRestorerTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Restore\NuGetRestoreSettingsTests.cs" />
+    <Compile Include="Unit\Tools\NuGet\SetApiKey\NuGetSetApiKeyTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Sources\NuGetSourcesSettingsTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Sources\NuGetSourcesTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitRunnerTests.cs" />
