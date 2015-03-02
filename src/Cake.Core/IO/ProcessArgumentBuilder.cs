@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
 using Cake.Core.IO.Arguments;
 
 namespace Cake.Core.IO
@@ -46,6 +48,31 @@ namespace Cake.Core.IO
         public string RenderSafe()
         {
             return string.Join(" ", _tokens.Select(t => t.RenderSafe()));
+        }
+
+        /// <summary>
+        /// Tries to filer any unsafe arguments from string
+        /// </summary>
+        /// <param name="source">unsafe source string.</param>
+        /// <returns>Filtered string.</returns>
+        public string FilterUnsafe(string source)
+        {
+            if (string.IsNullOrWhiteSpace(source))
+            {
+                return source;
+            }
+
+            return _tokens
+                .Select(token => new
+                {
+                    Safe = token.RenderSafe().Trim('"').Trim(),
+                    Unsafe = token.Render().Trim('"').Trim()
+                })
+                .Where(token => token.Safe != token.Unsafe)
+                .Aggregate(
+                    new StringBuilder(source),
+                    (sb, token) => sb.Replace(token.Unsafe, token.Safe),
+                    sb => sb.ToString());
         }
 
         /// <summary>

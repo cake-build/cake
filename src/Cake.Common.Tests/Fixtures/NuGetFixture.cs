@@ -4,6 +4,7 @@ using Cake.Common.Tools.NuGet.Install;
 using Cake.Common.Tools.NuGet.Pack;
 using Cake.Common.Tools.NuGet.Push;
 using Cake.Common.Tools.NuGet.Restore;
+using Cake.Common.Tools.NuGet.SetApiKey;
 using Cake.Common.Tools.NuGet.Sources;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -23,7 +24,8 @@ namespace Cake.Common.Tests.Fixtures
         public IToolResolver NuGetToolResolver { get; set; }
 
         public NuGetFixture(FilePath toolPath = null, bool defaultToolExist = true, 
-            string xml = null, KeyValuePair<string, string>? sourceExists = null)
+            string xml = null, KeyValuePair<string, string>? sourceExists = null,
+            KeyValuePair<string, string>? setApiKey = null)
         {
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory.Returns("/Working");
@@ -66,6 +68,14 @@ namespace Cake.Common.Tests.Fixtures
                         string.Format("      {0}", sourceExists.Value.Value)
                     });
             }
+            else if (setApiKey.HasValue)
+            {
+                Process.GetStandardOutput()
+                    .Returns(new[]
+                    {
+                        string.Concat("The API Key '", setApiKey.Value.Key, "' was saved for '", setApiKey.Value.Value, "'.")
+                    });
+            }
             else
             {
                 Process.GetStandardOutput()
@@ -96,6 +106,11 @@ namespace Cake.Common.Tests.Fixtures
         public NuGetInstaller CreateInstaller()
         {
             return new NuGetInstaller(FileSystem, Environment, ProcessRunner, NuGetToolResolver);
+        }
+
+        public NuGetSetApiKey CreateSetApiKey()
+        {
+            return new NuGetSetApiKey(Log, FileSystem, Environment, ProcessRunner, NuGetToolResolver);
         }
     }
 }

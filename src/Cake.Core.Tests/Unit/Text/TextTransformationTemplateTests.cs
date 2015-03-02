@@ -86,6 +86,21 @@ namespace Cake.Core.Tests.Unit.Text
             }
 
             [Fact]
+            public void Should_Replace_Tokens_With_Different_Placeholder()
+            {
+                // Given
+                var placeholder = new Tuple<string, string>("{{", "}}");
+                var transformation = new TextTransformationTemplate("{{greeting}} world!", placeholder);
+                transformation.Register("greeting", "Hello");
+
+                // When
+                var result = transformation.Render();
+
+                // Then
+                Assert.Equal("Hello world!", result);
+            }
+
+            [Fact]
             public void Should_Keep_Unmatched_Tokens()
             {
                 // Given
@@ -97,6 +112,21 @@ namespace Cake.Core.Tests.Unit.Text
 
                 // Then
                 Assert.Equal("Hello <%subject%>!", result);
+            }
+
+            [Fact]
+            public void Should_Keep_Unmatched_Tokens_With_Different_Placeholder()
+            {
+                // Given
+                var placeholder = new Tuple<string, string>("{{", "}}");
+                var transformation = new TextTransformationTemplate("{{greeting}} {{subject}}!", placeholder);
+                transformation.Register("greeting", "Hello");
+
+                // When
+                var result = transformation.Render();
+
+                // Then
+                Assert.Equal("Hello {{subject}}!", result);
             }
 
             [Theory]
@@ -147,6 +177,21 @@ namespace Cake.Core.Tests.Unit.Text
 
                 // Then
                 Assert.Equal("Hello <%pointer:foo%>", result);
+            }
+
+            [Fact]
+            public void Should_Return_Key_If_The_Value_Was_Not_Formattable_With_Different_Placeholder()
+            {
+                // Given
+                var placeholder = new Tuple<string, string>("{{", "}}");
+                var transformation = new TextTransformationTemplate("Hello {{pointer:foo}}", placeholder);
+                transformation.Register("pointer", IntPtr.Zero);
+
+                // When
+                var result = transformation.Render();
+
+                // Then
+                Assert.Equal("Hello {{pointer:foo}}", result);
             }
 
             [Fact]
