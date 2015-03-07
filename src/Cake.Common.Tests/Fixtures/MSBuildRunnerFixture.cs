@@ -12,7 +12,9 @@ namespace Cake.Common.Tests.Fixtures
         public IFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
         public IProcess Process { get; set; }
-        public IProcessRunner ProcessRunner { get; set; }
+        public IProcessRunner ProcessRunner { get; private set; }
+
+        public MSBuildSettings Settings { get; set; }
 
         public MSBuildRunnerFixture(IEnumerable<DirectoryPath> existingMSBuildPaths)
             : this(false, false, existingMSBuildPaths)
@@ -37,6 +39,9 @@ namespace Cake.Common.Tests.Fixtures
             Environment.GetSpecialPath(SpecialPath.Windows).Returns("/Windows");
             Environment.WorkingDirectory.Returns("/Working");
 
+            Settings = new MSBuildSettings("./src/Solution.sln");
+            Settings.ToolVersion = MSBuildToolVersion.VS2013;
+
             if (existingMSBuildPaths != null)
             {
                 // Add all existing MSBuild tool paths.
@@ -50,7 +55,6 @@ namespace Cake.Common.Tests.Fixtures
             }
             else
             {
-                // 
                 FileSystem = Substitute.For<IFileSystem>();
                 FileSystem.GetFile(
                     Arg.Is<FilePath>(p => p.FullPath.EndsWith("MSBuild.exe", System.StringComparison.Ordinal)))
@@ -65,9 +69,26 @@ namespace Cake.Common.Tests.Fixtures
             }
         }
 
-        public MSBuildRunner CreateRunner()
+        public void Run()
         {
-            return new MSBuildRunner(FileSystem, Environment, ProcessRunner);
+            var runner = new MSBuildRunner(FileSystem, Environment, ProcessRunner);
+            runner.Run(Settings);
+        }
+
+        public void AssertReceivedFilePath(FilePath path)
+        {
+            ProcessRunner.Received(1).Start(
+                Arg.Is<FilePath>(p => p.FullPath == path.FullPath),
+                Arg.Any<ProcessSettings>());   
+        }
+
+        public void AssertReceivedArguments(string format, params object[] args)
+        {
+            var arguments = string.Format(format, args);
+            ProcessRunner.Received(1).Start(
+                Arg.Any<FilePath>(),
+                Arg.Is<ProcessSettings>(p =>
+                    p.Arguments.Render() == arguments));   
         }
     }
 }

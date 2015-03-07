@@ -1,4 +1,5 @@
 ﻿using System;
+using Cake.Core;
 
 // ReSharper disable once CheckNamespace
 namespace Xunit
@@ -9,6 +10,11 @@ namespace Xunit
         {
             IsType<ArgumentNullException>(exception);
             Equal(parameterName, ((ArgumentNullException)exception).ParamName);
+        }
+
+        public static void IsCakeException(Exception exception, string message)
+        {
+            IsExceptionWithMessage<CakeException>(exception, message);
         }
 
         public static void IsExceptionWithMessage<T>(Exception exception, string message)
