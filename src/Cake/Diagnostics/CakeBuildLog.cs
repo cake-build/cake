@@ -37,12 +37,12 @@ namespace Cake.Diagnostics
                     {
                         SetPalette(token, palette);
                         _console.Write("{0}", token.Render(args));
-                    }
-                    _console.WriteLine();
+                    }                    
                 }
                 finally
                 {
                     _console.ResetColor();
+                    _console.WriteLine();
                 }
             }
         }
