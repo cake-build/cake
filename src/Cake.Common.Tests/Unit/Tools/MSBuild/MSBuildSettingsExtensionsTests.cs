@@ -255,7 +255,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var settings = new MSBuildSettings(solution);
 
                 // When
-                var result = settings.SetVerbosity(verbosity);
+                settings.SetVerbosity(verbosity);
 
                 // Then
                 Assert.Equal(verbosity, settings.Verbosity);

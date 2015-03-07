@@ -103,7 +103,7 @@ namespace Cake.Common.Tools.MSBuild
                 case Verbosity.Diagnostic: 
                     return "diagnostic";
             }
-            throw new CakeException("Unknown MSBuild verbosity.");
+            throw new CakeException("Encountered unknown MSBuild build log verbosity.");
         }
 
         private static IEnumerable<string> GetPropertyArguments(IDictionary<string, IList<string>> properties)
