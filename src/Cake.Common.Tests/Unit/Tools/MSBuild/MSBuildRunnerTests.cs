@@ -1,6 +1,7 @@
 ﻿using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
@@ -228,10 +229,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 runner.Run(settings);
 
                 // Then
+                var args = "/m /v:normal /target:Build \"/Working/src/Solution.sln\"";
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), 
                     Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "/m /target:Build \"/Working/src/Solution.sln\""));
+                        p.Arguments.Render() == args));
             }
 
             [Fact]
@@ -249,10 +251,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 runner.Run(settings);
 
                 // Then
+                var args = "/m:4 /v:normal /target:Build \"/Working/src/Solution.sln\"";
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), 
                     Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "/m:4 /target:Build \"/Working/src/Solution.sln\""));
+                        p.Arguments.Render() == args));
             }
 
             [Fact]
@@ -269,10 +272,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 runner.Run(settings);
 
                 // Then
+                var args = "/m /v:normal /target:Build \"/Working/src/Solution.sln\"";
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), 
                     Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "/m /target:Build \"/Working/src/Solution.sln\""));
+                        p.Arguments.Render() == args));
             }
 
             [Fact]
@@ -290,10 +294,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 runner.Run(settings);
 
                 // Then
+                var args = "/m /v:normal /nr:true /target:Build \"/Working/src/Solution.sln\"";
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
                     Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "/m /nr:true /target:Build \"/Working/src/Solution.sln\""));
+                        p.Arguments.Render() == args));
             }
 
             [Fact]
@@ -312,10 +317,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 runner.Run(settings);
 
                 // Then
+                var args = "/m /v:normal /target:A;B \"/Working/src/Solution.sln\"";
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
                     Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "/m /target:A;B \"/Working/src/Solution.sln\""));
+                        p.Arguments.Render() == args));
             }
 
             [Fact]
@@ -334,10 +340,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 runner.Run(settings);
 
                 // Then
+                var args = "/m /v:normal /p:\"A\"=\"B\" /p:\"C\"=\"D\" /target:Build \"/Working/src/Solution.sln\"";
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
                     Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "/m /p:\"A\"=\"B\" /p:\"C\"=\"D\" /target:Build \"/Working/src/Solution.sln\""));
+                        p.Arguments.Render() == args));
             }
 
             [Fact]
@@ -356,10 +363,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 runner.Run(settings);
 
                 // Then
+                var args = "/m /v:normal /p:\"A\"=\"B\" /p:\"A\"=\"E\" /p:\"C\"=\"D\" /target:Build \"/Working/src/Solution.sln\"";
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
                     Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "/m /p:\"A\"=\"B\" /p:\"A\"=\"E\" /p:\"C\"=\"D\" /target:Build \"/Working/src/Solution.sln\""));
+                        p.Arguments.Render() == args));
             }
 
             [Fact]
@@ -377,10 +385,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 runner.Run(settings);
 
                 // Then
+                var args = "/m /v:normal /p:\"Configuration\"=\"Release\" /target:Build \"/Working/src/Solution.sln\"";
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
                     Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "/m /p:\"Configuration\"=\"Release\" /target:Build \"/Working/src/Solution.sln\""));
+                        p.Arguments.Render() == args));
             }
 
             [Fact]
@@ -438,6 +447,33 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Then
                 Assert.IsType<CakeException>(result);
                 Assert.Equal("MSBuild: Process returned an error.", result.Message);
+            }
+
+            [Theory]
+            [InlineData(Verbosity.Quiet, "/v:quiet")]
+            [InlineData(Verbosity.Minimal, "/v:minimal")]
+            [InlineData(Verbosity.Normal, "/v:normal")]
+            [InlineData(Verbosity.Verbose, "/v:verbose")]
+            [InlineData(Verbosity.Diagnostic, "/v:diagnostic")]
+            public void Should_Append_Correct_Verbosity(Verbosity verbosity, string expected)
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, true);
+                var runner = fixture.CreateRunner();
+
+                var settings = new MSBuildSettings("./src/Solution.sln");
+                settings.ToolVersion = MSBuildToolVersion.VS2013;
+                settings.Verbosity = verbosity;
+
+                // When
+                runner.Run(settings);
+
+                // Then
+                var args = string.Concat("/m ", expected, " /target:Build \"/Working/src/Solution.sln\"");
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == args));                
             }
         }
     }

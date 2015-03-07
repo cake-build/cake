@@ -1,4 +1,5 @@
 ﻿using Cake.Common.Tools.MSBuild;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Xunit;
 
@@ -42,6 +43,19 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 Assert.Equal(PlatformTarget.MSIL, settings.PlatformTarget);
+            }
+
+            [Fact]
+            public void Should_Set_Default_Verbosity_To_Normal()
+            {
+                // Given
+                var path = new FilePath("./Project.sln");
+
+                // When
+                var settings = new MSBuildSettings(path);
+
+                // Then
+                Assert.Equal(Verbosity.Normal, settings.Verbosity);                
             }
         }
 
