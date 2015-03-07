@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.MSBuild
@@ -72,6 +73,13 @@ namespace Cake.Common.Tools.MSBuild
         public bool? NodeReuse { get; set; }
 
         /// <summary>
+        /// Gets or sets the amount of information to display in the build log. 
+        /// Each logger displays events based on the verbosity level that you set for that logger.
+        /// </summary>
+        /// <value>The build log verbosity.</value>
+        public Verbosity Verbosity { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MSBuildSettings"/> class.
         /// </summary>
         /// <param name="solution">The solution.</param>
@@ -89,6 +97,7 @@ namespace Cake.Common.Tools.MSBuild
             PlatformTarget = PlatformTarget.MSIL;
             ToolVersion = MSBuildToolVersion.Default;
             Configuration = string.Empty;
-        } 
+            Verbosity = Verbosity.Normal;
+        }
     }
 }

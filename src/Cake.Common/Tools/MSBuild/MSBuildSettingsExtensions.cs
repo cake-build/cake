@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cake.Core.Diagnostics;
 
 namespace Cake.Common.Tools.MSBuild
 {
@@ -127,6 +128,22 @@ namespace Cake.Common.Tools.MSBuild
                 throw new ArgumentNullException("settings");
             }
             settings.NodeReuse = reuse;
+            return settings;
+        }
+
+        /// <summary>
+        /// Sets the build log verbosity.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="verbosity">The build log verbosity.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetVerbosity(this MSBuildSettings settings, Verbosity verbosity)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+            settings.Verbosity = verbosity;
             return settings;
         }
     }
