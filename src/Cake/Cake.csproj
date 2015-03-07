@@ -94,6 +94,7 @@
     <Compile Include="Commands\BuildCommand.cs" />
     <Compile Include="Commands\CommandFactory.cs" />
     <Compile Include="Commands\DescriptionCommand.cs" />
+    <Compile Include="Commands\ErrorCommandDecorator.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\ICommand.cs">
       <SubType>Code</SubType>

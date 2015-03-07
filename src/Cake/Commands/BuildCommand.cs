@@ -21,13 +21,14 @@ namespace Cake.Commands
             _host = host;
         }
 
-        public void Execute(CakeOptions options)
+        public bool Execute(CakeOptions options)
         {
             if (options == null)
             {
                 throw new ArgumentNullException("options");
             }
             _scriptRunner.Run(_host, options.Script, options.Arguments);
+            return true;
         }
     }
 }
