@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Cake.Arguments;
 using Cake.Commands;
+using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Diagnostics;
 
@@ -15,6 +16,7 @@ namespace Cake
         private readonly IVerbosityAwareLog _log;
         private readonly ICommandFactory _commandFactory;
         private readonly IArgumentParser _argumentParser;
+        private readonly IConsole _console;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeApplication"/> class.
@@ -22,7 +24,12 @@ namespace Cake
         /// <param name="log">The log.</param>
         /// <param name="commandFactory">The command factory.</param>
         /// <param name="argumentParser">The argument parser.</param>
-        public CakeApplication(IVerbosityAwareLog log, ICommandFactory commandFactory, IArgumentParser argumentParser)
+        /// <param name="console">The console.</param>
+        public CakeApplication(
+            IVerbosityAwareLog log,
+            ICommandFactory commandFactory,
+            IArgumentParser argumentParser,
+            IConsole console)
         {
             if (log == null)
             {
@@ -36,10 +43,15 @@ namespace Cake
             {
                 throw new ArgumentNullException("argumentParser");
             }
+            if (console == null)
+            {
+                throw new ArgumentNullException("console");
+            }
 
             _log = log;
             _commandFactory = commandFactory;
             _argumentParser = argumentParser;
+            _console = console;
         }
 
         /// <summary>
@@ -60,11 +72,11 @@ namespace Cake
 
                 // Create the correct command and execute it.
                 var command = CreateCommand(options);
-                command.Execute(options);
+                var result = command.Execute(options);
 
-                // Return success if we could create and run the command.
-                // If the parsed options are null, consider it failed.
-                return options == null ? 1 : 0;
+                // Return success if the command succeeded.
+                // If the parsed options are null, or if the command failed, consider it failed.
+                return options == null || result == false ? 1 : 0;
             }
             catch (Exception ex)
             {
@@ -88,10 +100,12 @@ namespace Cake
                 {
                     return _commandFactory.CreateHelpCommand();
                 }
+
                 if (options.ShowVersion)
                 {
                     return _commandFactory.CreateVersionCommand();
                 }
+
                 if (options.Script != null)
                 {
                     if (options.ShowDescription)
@@ -99,10 +113,17 @@ namespace Cake
                         _log.Verbosity = Verbosity.Quiet;
                         return _commandFactory.CreateDescriptionCommand();
                     }
+
                     return _commandFactory.CreateBuildCommand();
                 }
             }
-            return _commandFactory.CreateHelpCommand();
+
+            _console.WriteLine();
+            _log.Error("Could not find a build script to execute.");
+            _log.Error("Either the first argument must the build script's path,");
+            _log.Error("or build script should follow default script name conventions.");
+
+            return new ErrorCommandDecorator(_commandFactory.CreateHelpCommand());
         }
     }
 }

@@ -34,16 +34,7 @@ namespace Cake.Arguments
             // If we don't have any arguments, search for a default script.
             if (arguments.Count == 0)
             {
-                var defaultScriptPath = GetDefaultScript();
-                options.Script = defaultScriptPath;
-
-                if (defaultScriptPath == null)
-                {
-                    _log.Error("Couldn't find build script.\n" + 
-                        "Either the first argument must the build script's path, " +
-                        "or build script should follow default script name conventions.");
-                }
-                return options;
+                options.Script = GetDefaultScript();
             }
 
             foreach (var arg in arguments)
@@ -78,16 +69,7 @@ namespace Cake.Arguments
                                 return null;
                             }
 
-                            var defaultScriptPath = GetDefaultScript();
-                            if (defaultScriptPath == null)
-                            {
-                                _log.Error("Couldn't find build script.\n" +
-                                    "Either the first argument must the build script's path, " +
-                                    "or build script should follow default script name conventions.");
-                                return null;
-                            }
-
-                            options.Script = defaultScriptPath;
+                            options.Script = GetDefaultScript();
                             continue;
                         }
 

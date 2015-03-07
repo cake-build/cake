@@ -17,18 +17,23 @@ namespace Cake.Commands
             _console = console;
         }
 
-        public void Execute(CakeOptions options)
+        public bool Execute(CakeOptions options)
         {
-            _console.WriteLine("Usage: Cake.exe <build-script> [-verbosity=value] [-showdescription] [..]");
             _console.WriteLine();
-            _console.WriteLine("Example: Cake.exe build.cake");
+            _console.WriteLine("Usage: Cake.exe [build-script] [-verbosity=value] [-showdescription] [..]");
+            _console.WriteLine();
+            _console.WriteLine("Example: Cake.exe");
             _console.WriteLine("Example: Cake.exe build.cake -verbosity=quiet");
             _console.WriteLine("Example: Cake.exe build.cake -showdescription");
             _console.WriteLine();
             _console.WriteLine("Options:");
             _console.WriteLine("    -verbosity=value    Specifies the amount of information to be displayed.");
             _console.WriteLine("    -showdescription    Shows description about tasks.");
+            _console.WriteLine("    -version            Displays version information.");
             _console.WriteLine("    -help               Displays usage information.");
+            _console.WriteLine();
+
+            return true;
         }
     }
 }

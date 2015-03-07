@@ -9,6 +9,7 @@
         /// Executes the command with the specified options.
         /// </summary>
         /// <param name="options">The options.</param>
-        void Execute(CakeOptions options);
+        /// <returns><c>true</c> if the command exited successfully; otherwise, <c>false</c>.</returns>
+        bool Execute(CakeOptions options);
     }
 }
