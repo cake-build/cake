@@ -7,7 +7,7 @@ namespace Cake.Core.Tests.Unit
         public sealed class TheAddActionMethod
         {
             [Fact]
-            private void Should_Throw_If_Action_Is_Null()
+            public void Should_Throw_If_Action_Is_Null()
             {
                 // Given
                 var task = new ActionTask("task");

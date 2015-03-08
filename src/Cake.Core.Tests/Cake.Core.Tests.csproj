@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Fixtures\CakeContextFixture.cs" />
     <Compile Include="Fixtures\MethodAliasGeneratorFixture.cs" />
     <Compile Include="Fixtures\PropertyAliasGeneratorFixture.cs" />
     <Compile Include="Fixtures\ScriptHostFixture.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Unit\Annotations\CakeAliasCategoryAttributeTests.cs" />
     <Compile Include="Unit\Annotations\CakeNamespaceImportAttributeTests.cs" />
     <Compile Include="Unit\Annotations\CakePropertyAliasAttributeTests.cs" />
+    <Compile Include="Unit\CakeContextTests.cs" />
     <Compile Include="Unit\CakeEngineTests.cs" />
     <Compile Include="Unit\CakeTaskBuilderExtensionsTests.cs" />
     <Compile Include="Unit\CakeTaskBuilderTests.cs" />

@@ -52,10 +52,13 @@ namespace Cake.Core.Tests.Fixtures
             NuGetToolResolver = new NuGetToolResolver(FileSystem, Globber, Environment);
             ScriptProcessor = new ScriptProcessor(FileSystem, Environment, Log, NuGetToolResolver);
 
+            var context = Substitute.For<ICakeContext>();
+            context.Arguments.Returns(c => Arguments);
+            context.Environment.Returns(c => Environment);
+            context.FileSystem.Returns(c => FileSystem);
+
             Host = Substitute.For<IScriptHost>();
-            Host.FileSystem.Returns(c => FileSystem);
-            Host.Arguments.Returns(c => Arguments);
-            Host.Environment.Returns(c => Environment);
+            Host.Context.Returns(context);
         }
 
         public ScriptRunner CreateScriptRunner()

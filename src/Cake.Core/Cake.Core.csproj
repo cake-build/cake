@@ -54,6 +54,7 @@
     <Compile Include="Annotations\CakeAliasCategoryAttribute.cs" />
     <Compile Include="Annotations\CakeNamespaceImportAttribute.cs" />
     <Compile Include="Annotations\CakePropertyAliasAttribute.cs" />
+    <Compile Include="CakeContext.cs" />
     <Compile Include="CakeEngine.cs" />
     <Compile Include="CakeException.cs" />
     <Compile Include="CakeReport.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="CakeTask.cs" />
     <Compile Include="CakeTaskBuilder.cs" />
     <Compile Include="CakeTaskBuilderExtensions.cs" />
+    <Compile Include="DefaultExecutionStrategy.cs" />
     <Compile Include="Diagnostics\ICakeLog.cs" />
     <Compile Include="Diagnostics\LogExtensions.cs" />
     <Compile Include="Diagnostics\LogLevel.cs" />
@@ -76,6 +78,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="ICakeArguments.cs" />
+    <Compile Include="IExecutionStrategy.cs" />
     <Compile Include="ICakeReportPrinter.cs" />
     <Compile Include="IConsole.cs" />
     <Compile Include="IO\DirectoryPathCollection.cs" />

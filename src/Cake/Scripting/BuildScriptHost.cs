@@ -14,9 +14,10 @@ namespace Cake.Scripting
         /// Initializes a new instance of the <see cref="BuildScriptHost"/> class.
         /// </summary>
         /// <param name="engine">The engine.</param>
+        /// <param name="context">The context.</param>
         /// <param name="reportPrinter">The report printer.</param>
-        public BuildScriptHost(ICakeEngine engine, ICakeReportPrinter reportPrinter) 
-            : base(engine)
+        public BuildScriptHost(ICakeEngine engine, ICakeContext context, ICakeReportPrinter reportPrinter)
+            : base(engine, context)
         {
             _reportPrinter = reportPrinter;
         }
@@ -28,7 +29,7 @@ namespace Cake.Scripting
         /// <returns>The resulting report.</returns>
         public override CakeReport RunTarget(string target)
         {
-            var report = Engine.RunTarget(target);
+            var report = Engine.RunTarget(Context, target);
             if (report != null && !report.IsEmpty)
             {
                 _reportPrinter.Write(report);

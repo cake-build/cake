@@ -87,54 +87,6 @@ namespace Cake.Core.Tests.Unit.Scripting
             }
 
             [Fact]
-            public void Should_Throw_If_Script_Host_Has_No_File_System()
-            {
-                // Given
-                var fixture = new ScriptRunnerFixture();
-                fixture.FileSystem = null;
-                var runner = fixture.CreateScriptRunner();
-
-                // When
-                var result = Record.Exception(() => runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary));
-
-                // Then
-                Assert.IsType<ArgumentException>(result);
-                Assert.Equal("Script host has no file system.", result.Message);
-            }
-
-            [Fact]
-            public void Should_Throw_If_Script_Host_Has_No_Environment()
-            {
-                // Given
-                var fixture = new ScriptRunnerFixture();
-                fixture.Environment = null;
-                var runner = fixture.CreateScriptRunner();
-
-                // When
-                var result = Record.Exception(() => runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary));
-
-                // Then
-                Assert.IsType<ArgumentException>(result);
-                Assert.Equal("Script host has no environment.", result.Message);
-            }
-
-            [Fact]
-            public void Should_Throw_If_Script_Host_Has_No_Arguments()
-            {
-                var fixture = new ScriptRunnerFixture();
-                fixture.Arguments = null;
-                var runner = fixture.CreateScriptRunner();
-
-                // When
-                var result = Record.Exception(() => runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary));
-
-                // Then
-                Assert.IsType<ArgumentException>(result);
-                Assert.Equal("Script host has no arguments.", result.Message);
-            }
-
-
-            [Fact]
             public void Should_Initialize_Script_Session_Factory()
             {
                 // Given

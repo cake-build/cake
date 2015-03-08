@@ -129,7 +129,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             {
                 // Given
                 const string expected = "public System.Int32 PropertyAliasReturningInteger{get{return " +
-                                        "Cake.Core.Tests.Fixtures.PropertyAliasGeneratorFixture.PropertyAliasReturningInteger(GetContext());}}";
+                                        "Cake.Core.Tests.Fixtures.PropertyAliasGeneratorFixture.PropertyAliasReturningInteger(Context);}}";
 
                 var method = typeof(PropertyAliasGeneratorFixture).GetMethod("PropertyAliasReturningInteger");
 
@@ -149,7 +149,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
                 expected.Append("public System.String PropertyAliasReturningCachedString{get{");
                 expected.Append("if(_PropertyAliasReturningCachedString==null){_PropertyAliasReturningCachedString=");
                 expected.Append("Cake.Core.Tests.Fixtures.PropertyAliasGeneratorFixture.PropertyAliasReturningCachedString");
-                expected.Append("(GetContext());}return _PropertyAliasReturningCachedString;}}");
+                expected.Append("(Context);}return _PropertyAliasReturningCachedString;}}");
 
                 var method = typeof(PropertyAliasGeneratorFixture).GetMethod("PropertyAliasReturningCachedString");
 
@@ -169,7 +169,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
                 expected.Append("public System.Boolean PropertyAliasReturningCachedBoolean{get{");
                 expected.Append("if(_PropertyAliasReturningCachedBoolean==null){_PropertyAliasReturningCachedBoolean=");
                 expected.Append("Cake.Core.Tests.Fixtures.PropertyAliasGeneratorFixture.PropertyAliasReturningCachedBoolean");
-                expected.Append("(GetContext());}return _PropertyAliasReturningCachedBoolean.Value;}}");
+                expected.Append("(Context);}return _PropertyAliasReturningCachedBoolean.Value;}}");
 
                 var method = typeof(PropertyAliasGeneratorFixture).GetMethod("PropertyAliasReturningCachedBoolean");
 
