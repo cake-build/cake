@@ -102,7 +102,7 @@ namespace Cake.Core.Scripting.CodeGen
             builder.Append("{");
             builder.Append("get{return ");
             builder.Append(method.GetFullName());
-            builder.Append("(GetContext());");
+            builder.Append("(Context);");
             builder.Append("}}");
 
             return builder.ToString();
@@ -135,7 +135,7 @@ namespace Cake.Core.Scripting.CodeGen
             builder.Append("{");
             builder.AppendFormat("_{0}=", method.Name);
             builder.Append(method.GetFullName());
-            builder.Append("(GetContext());");
+            builder.Append("(Context);");
             builder.Append("}");
             builder.AppendFormat("return _{0}", method.Name);
             if (method.ReturnType.IsValueType)

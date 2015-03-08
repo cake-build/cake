@@ -9,8 +9,8 @@ namespace Cake.Core.Tests.Fixtures
     {
         public sealed class TestingScriptHost : ScriptHost
         {
-            public TestingScriptHost(ICakeEngine engine)
-                : base(engine)
+            public TestingScriptHost(ICakeEngine engine, ICakeContext context)
+                : base(engine, context)
             {
             }
 
@@ -26,6 +26,7 @@ namespace Cake.Core.Tests.Fixtures
         public ICakeLog Log { get; set; }
         public IGlobber Globber { get; set; }
         public ICakeArguments Arguments { get; set; }
+        public ICakeContext Context { get; set; }
 
         public ScriptHostFixture()
         {
@@ -35,18 +36,20 @@ namespace Cake.Core.Tests.Fixtures
             Globber = Substitute.For<IGlobber>();
             Arguments = Substitute.For<ICakeArguments>();
 
+            Context = Substitute.For<ICakeContext>();
+            Context.Arguments.Returns(Arguments);
+            Context.Environment.Returns(Environment);
+            Context.FileSystem.Returns(FileSystem);
+            Context.Globber.Returns(Globber);
+            Context.Log.Returns(Log);
+
             Engine = Substitute.For<ICakeEngine>();
-            Engine.FileSystem.Returns(FileSystem);
-            Engine.Environment.Returns(Environment);
-            Engine.Log.Returns(Log);
-            Engine.Globber.Returns(Globber);
-            Engine.Arguments.Returns(Arguments);
-            Engine.RunTarget(Arg.Any<string>()).Returns(new CakeReport());
+            Engine.RunTarget(Context, Arg.Any<string>()).Returns(new CakeReport());
         }
 
         public ScriptHost CreateHost()
         {
-            return new TestingScriptHost(Engine);
+            return new TestingScriptHost(Engine, Context);
         }
     }
 }

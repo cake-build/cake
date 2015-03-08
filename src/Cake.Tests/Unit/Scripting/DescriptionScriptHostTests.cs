@@ -14,14 +14,15 @@ namespace Cake.Tests.Unit.Scripting
             {
                 // Given
                 var engine = Substitute.For<ICakeEngine>();
+                var context = Substitute.For<ICakeContext>();
                 var console = Substitute.For<IConsole>();
-                var host = new DescriptionScriptHost(engine, console);
+                var host = new DescriptionScriptHost(engine, context, console);
 
                 // When
                 host.RunTarget("Target");
 
                 // Then
-                engine.Received(0).RunTarget("Target");
+                engine.Received(0).RunTarget(context, "Target");
             }
         }
     }

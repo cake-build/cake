@@ -6,7 +6,7 @@ namespace Cake.Core
     /// <summary>
     /// Represents the Cake engine.
     /// </summary>
-    public interface ICakeEngine : ICakeContext
+    public interface ICakeEngine
     {
         /// <summary>
         /// Gets all registered tasks.
@@ -19,27 +19,37 @@ namespace Cake.Core
         /// </summary>
         /// <param name="name">The name of the task.</param>
         /// <returns>A <see cref="CakeTaskBuilder{ActionTask}"/>.</returns>
-        CakeTaskBuilder<ActionTask> Task(string name);
+        CakeTaskBuilder<ActionTask> RegisterTask(string name);
 
         /// <summary>
         /// Allows registration of an action that's executed before any tasks are run.
         /// If setup fails, no tasks will be executed but teardown will be performed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        void Setup(Action action);
+        void RegisterSetupAction(Action action);
 
         /// <summary>
         /// Allows registration of an action that's executed after all other tasks have been run.
         /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        void Teardown(Action action);
+        void RegisterTeardownAction(Action action);
 
         /// <summary>
         /// Runs the specified target.
         /// </summary>
+        /// <param name="context">The context.</param>
         /// <param name="target">The target to run.</param>
         /// <returns>The resulting report.</returns>
-        CakeReport RunTarget(string target);
+        CakeReport RunTarget(ICakeContext context, string target);
+
+        /// <summary>
+        /// Runs the specified target using the specified <see cref="IExecutionStrategy"/>.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="strategy">The execution strategy.</param>
+        /// <param name="target">The target to run.</param>
+        /// <returns>The resulting report.</returns>
+        CakeReport RunTarget(ICakeContext context, IExecutionStrategy strategy, string target);
     }
 }

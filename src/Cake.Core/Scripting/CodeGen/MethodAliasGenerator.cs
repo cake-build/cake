@@ -107,7 +107,7 @@ namespace Cake.Core.Scripting.CodeGen
             var first = includeType;
             if (!includeType)
             {
-                yield return "GetContext()";
+                yield return "Context";
             }
             foreach (var parameter in parameters)
             {

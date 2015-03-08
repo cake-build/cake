@@ -11,15 +11,18 @@ namespace Cake.Core.Tests.Unit.Scripting
             [Fact]
             public void Should_Throw_If_Engine_Is_Null()
             {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+
                 // When
-                var result = Record.Exception(() => new ScriptHostFixture.TestingScriptHost(null));
+                var result = Record.Exception(() => new ScriptHostFixture.TestingScriptHost(null, context));
 
                 // Then
                 Assert.IsArgumentNullException(result, "engine");
             }
         }
 
-        public sealed class TheFileSystemProperty
+        public sealed class TheContextProperty
         {
             [Fact]
             public void Should_Proxy_Call_To_Engine()
@@ -29,78 +32,10 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var host = fixture.CreateHost();
 
                 // When
-                var result = host.FileSystem;
+                var result = host.Context;
 
                 // Then
-                Assert.Equal(fixture.Engine.FileSystem, result);
-            }
-        }
-
-        public sealed class TheEnvironmentProperty
-        {
-            [Fact]
-            public void Should_Proxy_Call_To_Engine()
-            {
-                // Given
-                var fixture = new ScriptHostFixture();
-                var host = fixture.CreateHost();
-
-                // When
-                var result = host.Environment;
-
-                // Then
-                Assert.Equal(fixture.Engine.Environment, result);
-            }
-        }
-
-        public sealed class TheLogProperty
-        {
-            [Fact]
-            public void Should_Proxy_Call_To_Engine()
-            {
-                // Given
-                var fixture = new ScriptHostFixture();
-                var host = fixture.CreateHost();
-
-                // When
-                var result = host.Log;
-
-                // Then
-                Assert.Equal(fixture.Engine.Log, result);
-            }
-        }
-
-        public sealed class TheGlobberProperty
-        {
-            [Fact]
-            public void Should_Proxy_Call_To_Engine()
-            {
-                // Given
-                var fixture = new ScriptHostFixture();
-                var host = fixture.CreateHost();
-
-                // When
-                var result = host.Globber;
-
-                // Then
-                Assert.Equal(fixture.Engine.Globber, result);
-            }
-        }
-
-        public sealed class TheArgumentsProperty
-        {
-            [Fact]
-            public void Should_Proxy_Call_To_Engine()
-            {
-                // Given
-                var fixture = new ScriptHostFixture();
-                var host = fixture.CreateHost();
-
-                // When
-                var result = host.Arguments;
-
-                // Then
-                Assert.Equal(fixture.Engine.Arguments, result);
+                Assert.Equal(fixture.Context, result);
             }
         }
 
@@ -117,7 +52,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 host.Task("Task");
 
                 // Then
-                fixture.Engine.Received(1).Task("Task");
+                fixture.Engine.Received(1).RegisterTask("Task");
             }
         }
     }

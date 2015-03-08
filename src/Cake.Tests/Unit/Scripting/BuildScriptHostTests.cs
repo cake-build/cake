@@ -15,14 +15,15 @@ namespace Cake.Tests.Unit.Scripting
             {
                 // Given
                 var engine = Substitute.For<ICakeEngine>();
+                var context = Substitute.For<ICakeContext>();
                 var printer = Substitute.For<ICakeReportPrinter>();
-                var host = new BuildScriptHost(engine, printer);
+                var host = new BuildScriptHost(engine, context, printer);
 
                 // When
                 host.RunTarget("Target");
 
                 // Then
-                engine.Received(1).RunTarget("Target");
+                engine.Received(1).RunTarget(context, "Target");
             }
 
             [Fact]
@@ -32,9 +33,10 @@ namespace Cake.Tests.Unit.Scripting
                 var report = new CakeReport();
                 report.Add("Target", TimeSpan.FromSeconds(1));
                 var engine = Substitute.For<ICakeEngine>();
-                engine.RunTarget("Target").Returns(report);
+                var context = Substitute.For<ICakeContext>();
+                engine.RunTarget(context, "Target").Returns(report);
                 var printer = Substitute.For<ICakeReportPrinter>();
-                var host = new BuildScriptHost(engine, printer);
+                var host = new BuildScriptHost(engine, context, printer);
 
                 // When
                 host.RunTarget("Target");
@@ -48,9 +50,10 @@ namespace Cake.Tests.Unit.Scripting
             {
                 // Given
                 var engine = Substitute.For<ICakeEngine>();
-                engine.RunTarget(Arg.Any<string>()).Returns((CakeReport)null);
+                var context = Substitute.For<ICakeContext>();
+                engine.RunTarget(context, Arg.Any<string>()).Returns((CakeReport)null);
                 var printer = Substitute.For<ICakeReportPrinter>();
-                var host = new BuildScriptHost(engine, printer);
+                var host = new BuildScriptHost(engine, context, printer);
 
                 // When
                 host.RunTarget("Target");
@@ -64,9 +67,10 @@ namespace Cake.Tests.Unit.Scripting
             {
                 // Given
                 var engine = Substitute.For<ICakeEngine>();
-                engine.RunTarget(Arg.Any<string>()).Returns(new CakeReport());
+                var context = Substitute.For<ICakeContext>();
+                engine.RunTarget(context, Arg.Any<string>()).Returns(new CakeReport());
                 var printer = Substitute.For<ICakeReportPrinter>();
-                var host = new BuildScriptHost(engine, printer);
+                var host = new BuildScriptHost(engine, context, printer);
 
                 // When
                 host.RunTarget("Target");

@@ -4,7 +4,7 @@ using Cake.Core.IO;
 namespace Cake.Core
 {
     /// <summary>
-    /// Represents a context for scripts.
+    /// Represents a context for scripts and script aliases.
     /// </summary>
     public interface ICakeContext
     {
