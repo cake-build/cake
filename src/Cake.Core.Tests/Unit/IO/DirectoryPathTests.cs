@@ -277,5 +277,100 @@ namespace Cake.Core.Tests.Unit.IO
                 }
             }
         }
+
+        public sealed class TheAddOperator
+        {
+            public sealed class ForDirectoryPath
+            {
+                [Fact]
+                public void Should_Combine_Paths()
+                {
+                    // Given
+                    var left = new DirectoryPath("./temp");
+                    var right = new DirectoryPath("files");
+
+                    // When
+                    var result = left + right;
+
+                    // Then
+                    Assert.IsType<DirectoryPath>(result);
+                    Assert.Equal("temp/files", result.FullPath);
+                }
+
+                [Fact]
+                public void Should_Throw_If_Proxy_Is_Null()
+                {
+                    // Given
+                    var left = (DirectoryPath)null;
+                    var right = new DirectoryPath("files");
+
+                    // When
+                    var result = Record.Exception(() => left + right);
+
+                    // Then
+                    Assert.IsArgumentNullException(result, "left");
+                }
+
+                [Fact]
+                public void Should_Throw_If_Directory_Path_Is_Null()
+                {
+                    // Given
+                    var left = new DirectoryPath("./temp");
+                    var right = (DirectoryPath)null;
+
+                    // When
+                    var result = Record.Exception(() => left + right);
+
+                    // Then
+                    Assert.IsArgumentNullException(result, "right");
+                }
+            }
+
+            public sealed class ForFilePath
+            {
+                [Fact]
+                public void Should_Combine_Paths()
+                {
+                    // Given
+                    var left = new DirectoryPath("./temp");
+                    var right = new FilePath("file.txt");
+
+                    // When
+                    var result = left + right;
+
+                    // Then
+                    Assert.IsType<FilePath>(result);
+                    Assert.Equal("temp/file.txt", result.FullPath);
+                }
+
+                [Fact]
+                public void Should_Throw_If_Left_Is_Null()
+                {
+                    // Given
+                    var left = (DirectoryPath)null;
+                    var right = new FilePath("file.txt");
+
+                    // When
+                    var result = Record.Exception(() => left + right);
+
+                    // Then
+                    Assert.IsArgumentNullException(result, "directory");
+                }
+
+                [Fact]
+                public void Should_Return_Left_Path_If_Left_Is_Null()
+                {
+                    // Given
+                    var left = new DirectoryPath("./temp");
+                    var right = (FilePath)null;
+
+                    // When
+                    var result = Record.Exception(() => left + right);
+
+                    // Then
+                    Assert.IsArgumentNullException(result, "file");
+                }
+            }
+        }
     }
 }

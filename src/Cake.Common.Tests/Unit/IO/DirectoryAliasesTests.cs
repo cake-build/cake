@@ -14,6 +14,49 @@ namespace Cake.Common.Tests.Unit.IO
 {
     public sealed class DirectoryAliasesTests
     {
+        public sealed class TheDirectoryMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given
+                const string path = "./temp";
+
+                // When
+                var result = Record.Exception(() => DirectoryAliases.Directory(null, path));
+
+                // Then
+                Assert.IsArgumentNullException(result, "context");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Path_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+
+                // When
+                var result = Record.Exception(() => DirectoryAliases.Directory(context, null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "path");
+            }
+
+            [Fact]
+            public void Should_Return_A_File_Path_Proxy()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+
+                // When
+                var result = DirectoryAliases.Directory(context, "./temp");
+
+                // Then
+                Assert.Equal("temp", result.FullPath);
+            }
+        }
+
+
         public sealed class TheCleanMethod
         {
             [Fact]

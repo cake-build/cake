@@ -14,6 +14,36 @@ namespace Cake.Common.IO
     public static class DirectoryAliases
     {
         /// <summary>
+        /// Gets a directory path from string.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// // Get the temp directory.
+        /// var root = Directory("./");
+        /// var temp = root + Directory("temp");
+        /// 
+        /// // Clean the directory.
+        /// CleanDirectory(temp);
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>A directory path.</returns>
+        [CakeMethodAlias]
+        public static DirectoryPath Directory(this ICakeContext context, string path)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+            return new DirectoryPath(path);
+        }
+
+        /// <summary>
         /// Deletes the specified directories.
         /// </summary>
         /// <param name="context">The context.</param>
