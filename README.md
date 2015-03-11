@@ -2,9 +2,11 @@
 
 Cake (C# Make) is a build automation system using C#.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/c6lw0vvj1mf4395a/branch/develop)](https://ci.appveyor.com/project/patriksvensson/cake/branch/develop) [![Coverity Scan](https://scan.coverity.com/projects/4147/badge.svg)](https://scan.coverity.com/projects/4147) 
+[![Build status](https://ci.appveyor.com/api/projects/status/c6lw0vvj1mf4395a/branch/develop?svg=true)](https://ci.appveyor.com/project/patriksvensson/cake/branch/develop)
+[![Coverity Scan](https://scan.coverity.com/projects/4147/badge.svg)](https://scan.coverity.com/projects/4147) 
 
 [![Join the chat at https://gitter.im/cake-build/cake](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/cake-build/cake?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Follow @cakebuildnet](https://img.shields.io/badge/Twitter-Follow%20%40cakebuildnet-blue.svg)](https://twitter.com/intent/follow?screen_name=cakebuildnet)
 
 ##Table of contents
 
