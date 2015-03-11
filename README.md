@@ -194,6 +194,6 @@ Cake.Slack: [https://github.com/WCOMAB/Cake.Slack](https://github.com/WCOMAB/Cak
 Copyright (c) 2014, Patrik Svensson and contributors.   
 Cake is provided as-is under the MIT license. For more information see `LICENSE`.
 
-* For Roslyn, see https://roslyn.codeplex.com/license
+* For Roslyn, see https://github.com/dotnet/roslyn/blob/master/License.txt
 * For Autofac, see https://github.com/autofac/Autofac/blob/master/LICENSE
 * For NuGet.Core, see https://nuget.codeplex.com/license
