@@ -18,6 +18,12 @@
         ICommand CreateDescriptionCommand();
 
         /// <summary>
+        /// Creates the dry run command.
+        /// </summary>
+        /// <returns>The dry run command.</returns>
+        ICommand CreateDryRunCommand();
+
+        /// <summary>
         /// Creates the help command.
         /// </summary>
         /// <returns>The help command.</returns>

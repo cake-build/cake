@@ -108,6 +108,11 @@ namespace Cake
 
                 if (options.Script != null)
                 {
+                    if (options.PerformDryRun)
+                    {
+                        return _commandFactory.CreateDryRunCommand();
+                    }
+
                     if (options.ShowDescription)
                     {
                         _log.SetVerbosity(options.Verbosity);

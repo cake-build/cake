@@ -1,11 +1,12 @@
 ﻿using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Scripting;
 using NSubstitute;
 using Xunit;
 
 namespace Cake.Tests.Unit.Scripting
 {
-    public sealed class DescriptionScriptHostTests
+    public sealed class DryRunScriptHostTests
     {
         public sealed class TheConstructor
         {
@@ -14,10 +15,10 @@ namespace Cake.Tests.Unit.Scripting
             {
                 // Given
                 var context = Substitute.For<ICakeContext>();
-                var console = Substitute.For<IConsole>();
+                var log = Substitute.For<ICakeLog>();
 
                 // When
-                var result = Record.Exception(() => new DescriptionScriptHost(null, context, console));
+                var result = Record.Exception(() => new DryRunScriptHost(null, context, log));
 
                 // Then
                 Assert.IsArgumentNullException(result, "engine");
@@ -28,49 +29,46 @@ namespace Cake.Tests.Unit.Scripting
             {
                 // Given
                 var engine = Substitute.For<ICakeEngine>();
-                var console = Substitute.For<IConsole>();
+                var log = Substitute.For<ICakeLog>();
 
                 // When
-                var result = Record.Exception(() => new DescriptionScriptHost(engine, null, console));
+                var result = Record.Exception(() => new DryRunScriptHost(engine, null, log));
 
                 // Then
                 Assert.IsArgumentNullException(result, "context");
             }
 
             [Fact]
-            public void Should_Throw_If_Console_Is_Null()
+            public void Should_Throw_If_Log_Is_Null()
             {
                 // Given
                 var engine = Substitute.For<ICakeEngine>();
                 var context = Substitute.For<ICakeContext>();
 
                 // When
-                var result = Record.Exception(() => new DescriptionScriptHost(engine, context, null));
+                var result = Record.Exception(() => new DryRunScriptHost(engine, context, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "console");
+                Assert.IsArgumentNullException(result, "log");
             }
         }
 
         public sealed class TheRunTargetMethod
         {
             [Fact]
-            public void Should_Not_Call_To_Engine()
+            public void Should_Invoke_The_Engine_With_Correct_Execution_Strategy()
             {
                 // Given
                 var engine = Substitute.For<ICakeEngine>();
                 var context = Substitute.For<ICakeContext>();
-                var console = Substitute.For<IConsole>();
-                var host = new DescriptionScriptHost(engine, context, console);
+                var log = Substitute.For<ICakeLog>();
+                var host = new DryRunScriptHost(engine, context, log);
 
                 // When
-                host.RunTarget("Target");
+                host.RunTarget("TheTarget");
 
                 // Then
-                engine.Received(0).RunTarget(
-                    context,
-                    Arg.Any<DefaultExecutionStrategy>(),
-                    "Target");
+                engine.Received(1).RunTarget(context, Arg.Any<DryRunExecutionStrategy>(), "TheTarget");
             }
         }
     }

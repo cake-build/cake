@@ -260,6 +260,35 @@ namespace Cake.Tests.Unit
                 // Then
                 Assert.Equal(1, result);
             }
+
+            [Fact]
+            public void Should_Create_Dry_Run_Command_If_Specified_In_Options()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.Options.PerformDryRun = true;
+                fixture.Options.Script = "./build.cake";
+
+                // When
+                fixture.RunApplication();
+
+                // Then
+                fixture.CommandFactory.Received(1).CreateDryRunCommand();
+            }
+
+            [Fact]
+            public void Should_Not_Create_Dry_Run_Command_If_Options_Do_Not_Contain_Script()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.Options.PerformDryRun = true;
+
+                // When
+                fixture.RunApplication();
+
+                // Then
+                fixture.CommandFactory.Received(1).CreateHelpCommand();
+            }
         }
     }
 }

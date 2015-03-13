@@ -23,6 +23,10 @@ namespace Cake.Scripting
         public DescriptionScriptHost(ICakeEngine engine, ICakeContext context, IConsole console)
             : base(engine, context)
         {
+            if (console == null)
+            {
+                throw new ArgumentNullException("console");
+            }
             _console = console;
             _descriptions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         }

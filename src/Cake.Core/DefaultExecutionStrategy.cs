@@ -1,12 +1,24 @@
 ﻿using System;
+using Cake.Core.Diagnostics;
 
 namespace Cake.Core
 {
     /// <summary>
     /// The default execution strategy.
     /// </summary>
-    internal sealed class DefaultExecutionStrategy : IExecutionStrategy
+    public sealed class DefaultExecutionStrategy : IExecutionStrategy
     {
+        private readonly ICakeLog _log;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultExecutionStrategy"/> class.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        public DefaultExecutionStrategy(ICakeLog log)
+        {
+            _log = log;
+        }
+
         /// <summary>
         /// Performs the setup.
         /// </summary>
@@ -15,6 +27,12 @@ namespace Cake.Core
         {
             if (action != null)
             {
+                _log.Information(string.Empty);
+                _log.Information("----------------------------------------");
+                _log.Information("Setup");
+                _log.Information("----------------------------------------");
+                _log.Verbose("Executing custom setup action...");
+
                 action();
             }
         }
@@ -27,6 +45,12 @@ namespace Cake.Core
         {
             if (action != null)
             {
+                _log.Information(string.Empty);
+                _log.Information("----------------------------------------");
+                _log.Information("Teardown");
+                _log.Information("----------------------------------------");
+                _log.Verbose("Executing custom teardown action...");
+
                 action();
             }
         }
@@ -40,7 +64,27 @@ namespace Cake.Core
         {
             if (task != null)
             {
+                _log.Information(string.Empty);
+                _log.Information("========================================");
+                _log.Information(task.Name);
+                _log.Information("========================================");
+                _log.Verbose("Executing task: {0}", task.Name);
+
                 task.Execute(context);
+
+                _log.Verbose("Finished executing task: {0}", task.Name);
+            }
+        }
+
+        /// <summary>
+        /// Skips the specified task.
+        /// </summary>
+        /// <param name="task">The task to skip.</param>
+        public void Skip(CakeTask task)
+        {
+            if (task != null)
+            {
+                _log.Verbose("Skipping task: {0}", task.Name);
             }
         }
 

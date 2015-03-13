@@ -44,7 +44,8 @@ namespace Cake.Core.Tests.Fixtures
             Context.Log.Returns(Log);
 
             Engine = Substitute.For<ICakeEngine>();
-            Engine.RunTarget(Context, Arg.Any<string>()).Returns(new CakeReport());
+            Engine.RunTarget(Context, Arg.Any<IExecutionStrategy>(), Arg.Any<string>())
+                .Returns(new CakeReport());
         }
 
         public ScriptHost CreateHost()

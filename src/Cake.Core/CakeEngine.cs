@@ -84,17 +84,6 @@ namespace Cake.Core
         /// Runs the specified target.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="target">The target to run.</param>
-        /// <returns>The resulting report.</returns>
-        public CakeReport RunTarget(ICakeContext context, string target)
-        {
-            return RunTarget(context, new DefaultExecutionStrategy(), target);
-        }
-
-        /// <summary>
-        /// Runs the specified target.
-        /// </summary>
-        /// <param name="context">The context.</param>
         /// <param name="strategy">The execution strategy.</param>
         /// <param name="target">The target to run.</param>
         /// <returns>The resulting report.</returns>
@@ -142,20 +131,11 @@ namespace Cake.Core
                     // Should we execute the task?
                     if (ShouldTaskExecute(task, isTarget))
                     {
-                        _log.Information(string.Empty);
-                        _log.Information("========================================");
-                        _log.Information(task.Name);
-                        _log.Information("========================================");
-                        _log.Verbose("Executing task: {0}", task.Name);
-
-                        // Execute the task.
                         ExecuteTask(context, strategy, stopWatch, task, report);
-
-                        _log.Verbose("Finished executing task: {0}", task.Name);
                     }
                     else
                     {
-                        _log.Verbose("Skipping task: {0}", task.Name);
+                        SkipTask(strategy, task);
                     }
                 }
 
@@ -176,12 +156,6 @@ namespace Cake.Core
         {
             if (_setupAction != null)
             {
-                _log.Information(string.Empty);
-                _log.Information("----------------------------------------");
-                _log.Information("Setup");
-                _log.Information("----------------------------------------");
-                _log.Verbose("Executing custom setup action...");
-
                 strategy.PerformSetup(_setupAction);
             }
         }
@@ -251,6 +225,11 @@ namespace Cake.Core
             report.Add(task.Name, stopWatch.Elapsed);
         }
 
+        private static void SkipTask(IExecutionStrategy strategy, CakeTask task)
+        {
+            strategy.Skip(task);
+        }
+
         private static void ReportErrors(IExecutionStrategy strategy, Action<Exception> errorReporter, Exception taskException)
         {
             try
@@ -286,12 +265,6 @@ namespace Cake.Core
             {
                 try
                 {
-                    _log.Information(string.Empty);
-                    _log.Information("----------------------------------------");
-                    _log.Information("Teardown");
-                    _log.Information("----------------------------------------");
-                    _log.Verbose("Executing custom teardown action...");
-
                     strategy.PerformTeardown(_teardownAction);
                 }
                 catch (Exception ex)

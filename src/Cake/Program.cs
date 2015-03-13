@@ -115,10 +115,12 @@ namespace Cake
             // Register script hosts.            
             builder.RegisterType<BuildScriptHost>().SingleInstance();
             builder.RegisterType<DescriptionScriptHost>().SingleInstance();
+            builder.RegisterType<DryRunScriptHost>().SingleInstance();
 
             // Register commands.
             builder.RegisterType<BuildCommand>().AsSelf().InstancePerDependency();
             builder.RegisterType<DescriptionCommand>().AsSelf().InstancePerDependency();
+            builder.RegisterType<DryRunCommand>().AsSelf().InstancePerDependency();
             builder.RegisterType<HelpCommand>().AsSelf().InstancePerDependency();
             builder.RegisterType<VersionCommand>().AsSelf().InstancePerDependency();
 

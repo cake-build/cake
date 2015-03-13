@@ -97,6 +97,7 @@
     <Compile Include="Commands\BuildCommand.cs" />
     <Compile Include="Commands\CommandFactory.cs" />
     <Compile Include="Commands\DescriptionCommand.cs" />
+    <Compile Include="Commands\DryRunCommand.cs" />
     <Compile Include="Commands\ErrorCommandDecorator.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\ICommand.cs">
@@ -118,6 +119,8 @@
     </Compile>
     <Compile Include="Scripting\BuildScriptHost.cs" />
     <Compile Include="Scripting\DescriptionScriptHost.cs" />
+    <Compile Include="Scripting\DryRunExecutionStrategy.cs" />
+    <Compile Include="Scripting\DryRunScriptHost.cs" />
     <Compile Include="Scripting\Roslyn\IRoslynInstaller.cs" />
     <Compile Include="Scripting\Roslyn\RoslynInstaller.cs" />
     <Compile Include="Scripting\Roslyn\RoslynScriptSession.cs" />

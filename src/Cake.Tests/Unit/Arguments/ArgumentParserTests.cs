@@ -192,6 +192,23 @@ namespace Cake.Tests.Unit.Arguments
             }
 
             [Theory]
+            [InlineData("-dryrun")]
+            [InlineData("-noop")]
+            [InlineData("-whatif")]
+            public void Can_Parse_DryRun(string input)
+            {
+                // Given
+                var fixture = new ArgumentParserFixture();
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                // When
+                var result = parser.Parse(new[] { "build.csx", input });
+
+                // Then
+                Assert.Equal(true, result.PerformDryRun);
+            }
+
+            [Theory]
             [InlineData("-help")]
             [InlineData("-?")]
             public void Can_Parse_Help(string input)

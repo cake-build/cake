@@ -1,5 +1,6 @@
 ﻿using System;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Scripting;
 using NSubstitute;
 using Xunit;
@@ -17,13 +18,14 @@ namespace Cake.Tests.Unit.Scripting
                 var engine = Substitute.For<ICakeEngine>();
                 var context = Substitute.For<ICakeContext>();
                 var printer = Substitute.For<ICakeReportPrinter>();
-                var host = new BuildScriptHost(engine, context, printer);
+                var log = Substitute.For<ICakeLog>();
+                var host = new BuildScriptHost(engine, context, printer, log);
 
                 // When
                 host.RunTarget("Target");
 
                 // Then
-                engine.Received(1).RunTarget(context, "Target");
+                engine.Received(1).RunTarget(context, Arg.Any<DefaultExecutionStrategy>(), "Target");
             }
 
             [Fact]
@@ -34,9 +36,10 @@ namespace Cake.Tests.Unit.Scripting
                 report.Add("Target", TimeSpan.FromSeconds(1));
                 var engine = Substitute.For<ICakeEngine>();
                 var context = Substitute.For<ICakeContext>();
-                engine.RunTarget(context, "Target").Returns(report);
+                engine.RunTarget(context, Arg.Any<DefaultExecutionStrategy>(), "Target").Returns(report);
                 var printer = Substitute.For<ICakeReportPrinter>();
-                var host = new BuildScriptHost(engine, context, printer);
+                var log = Substitute.For<ICakeLog>();
+                var host = new BuildScriptHost(engine, context, printer, log);
 
                 // When
                 host.RunTarget("Target");
@@ -51,9 +54,10 @@ namespace Cake.Tests.Unit.Scripting
                 // Given
                 var engine = Substitute.For<ICakeEngine>();
                 var context = Substitute.For<ICakeContext>();
-                engine.RunTarget(context, Arg.Any<string>()).Returns((CakeReport)null);
+                engine.RunTarget(context, Arg.Any<DefaultExecutionStrategy>(), Arg.Any<string>()).Returns((CakeReport)null);
                 var printer = Substitute.For<ICakeReportPrinter>();
-                var host = new BuildScriptHost(engine, context, printer);
+                var log = Substitute.For<ICakeLog>();
+                var host = new BuildScriptHost(engine, context, printer, log);
 
                 // When
                 host.RunTarget("Target");
@@ -68,9 +72,10 @@ namespace Cake.Tests.Unit.Scripting
                 // Given
                 var engine = Substitute.For<ICakeEngine>();
                 var context = Substitute.For<ICakeContext>();
-                engine.RunTarget(context, Arg.Any<string>()).Returns(new CakeReport());
+                engine.RunTarget(context, Arg.Any<DefaultExecutionStrategy>(), Arg.Any<string>()).Returns(new CakeReport());
                 var printer = Substitute.For<ICakeReportPrinter>();
-                var host = new BuildScriptHost(engine, context, printer);
+                var log = Substitute.For<ICakeLog>();
+                var host = new BuildScriptHost(engine, context, printer, log);
 
                 // When
                 host.RunTarget("Target");

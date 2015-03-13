@@ -96,7 +96,8 @@ namespace Cake.Core.Tests.Unit
                     var engine = fixture.CreateEngine();
 
                     // When
-                    var result = Record.Exception(() => engine.RunTarget(fixture.Context, null));
+                    var result = Record.Exception(() =>
+                        engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, null));
 
                     // Then
                     Assert.IsArgumentNullException(result, "target");
@@ -113,7 +114,8 @@ namespace Cake.Core.Tests.Unit
                     var engine = fixture.CreateEngine();
 
                     // When
-                    var result = Record.Exception(() => engine.RunTarget(fixture.Context, new DefaultExecutionStrategy(), null));
+                    var result = Record.Exception(() =>
+                        engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, null));
 
                     // Then
                     Assert.IsArgumentNullException(result, "target");
@@ -146,7 +148,7 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
-                engine.RunTarget(fixture.Context, "C");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "C");
 
                 // Then
                 Assert.Equal(3, result.Count);
@@ -167,7 +169,7 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
-                engine.RunTarget(fixture.Context, "C");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "C");
 
                 // Then
                 Assert.Equal(2, result.Count);
@@ -187,7 +189,7 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
-                engine.RunTarget(fixture.Context, "C");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "C");
 
                 // Then
                 Assert.Equal(3, result.Count);
@@ -205,7 +207,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = Record.Exception(() =>
-                    engine.RunTarget(fixture.Context, "Run-Some-Tests"));
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "Run-Some-Tests"));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -222,7 +224,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = Record.Exception(() =>
-                    engine.RunTarget(fixture.Context, "A"));
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.IsType<InvalidOperationException>(result);
@@ -238,7 +240,7 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("A").ContinueOnError().Does(() => { throw new InvalidOperationException(); });
 
                 // When, Then
-                engine.RunTarget(fixture.Context, "A");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
             }
 
             [Fact]
@@ -254,7 +256,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 Record.Exception(() =>
-                    engine.RunTarget(fixture.Context, "A"));
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.True(invoked);
@@ -272,7 +274,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = Record.Exception(() =>
-                    engine.RunTarget(fixture.Context, "A"));
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.IsType<InvalidOperationException>(result);
@@ -291,7 +293,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 Record.Exception(() =>
-                    engine.RunTarget(fixture.Context, "A"));
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.True(fixture.Log.Messages.Contains("Error: Whoopsie"));
@@ -307,8 +309,8 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("B").IsDependentOn("A").WithCriteria(false);
 
                 // When
-                var result = Record.Exception(() => 
-                    engine.RunTarget(fixture.Context, "B"));
+                var result = Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "B"));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -326,7 +328,7 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("A").Does(() => result.Add("A"));
 
                 // When
-                engine.RunTarget(fixture.Context, "A");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
 
                 // Then
                 Assert.Equal(2, result.Count);
@@ -345,7 +347,8 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("A").Does(() => runTask = true);
 
                 // When
-                Record.Exception(() => engine.RunTarget(fixture.Context, "A"));
+                Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.False(runTask, "Task A was executed although it shouldn't have been.");
@@ -365,7 +368,7 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("A").Does(() => result.Add("A"));
 
                 // When
-                engine.RunTarget(fixture.Context, "A");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
 
                 // Then
                 Assert.Equal(3, result.Count);
@@ -385,7 +388,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = Record.Exception(() =>
-                    engine.RunTarget(fixture.Context, "A"));
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.NotNull(result);
@@ -407,7 +410,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = Record.Exception(() =>
-                    engine.RunTarget(fixture.Context, "A"));
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.NotNull(result);
@@ -429,7 +432,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = Record.Exception(() =>
-                    engine.RunTarget(fixture.Context, "A"));
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.NotNull(result);
@@ -450,7 +453,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = Record.Exception(() =>
-                    engine.RunTarget(fixture.Context, "A"));
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.Equal(expected, result);
@@ -469,7 +472,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 Record.Exception(() =>
-                    engine.RunTarget(fixture.Context, "A"));
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.True(fixture.Log.Messages.Any(x => x.StartsWith("Teardown error:")));
@@ -487,7 +490,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = Record.Exception(() =>
-                    engine.RunTarget(fixture.Context, "A"));
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.NotNull(result);
@@ -506,8 +509,8 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("A").Does(() => { throw new InvalidOperationException("Task"); });
 
                 // When
-                Record.Exception(() => 
-                    engine.RunTarget(fixture.Context, "A"));
+                Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.True(fixture.Log.Messages.Any(x => x.StartsWith("Teardown error:")));
@@ -524,7 +527,7 @@ namespace Cake.Core.Tests.Unit
                     .Finally(() => invoked = true);
 
                 // When
-                engine.RunTarget(fixture.Context, "A");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
 
                 // Then
                 Assert.True(invoked);
@@ -544,7 +547,7 @@ namespace Cake.Core.Tests.Unit
                     .Finally(() => invoked = true);
 
                 // When
-                engine.RunTarget(fixture.Context, "A");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
 
                 // Then
                 Assert.True(invoked);
@@ -563,7 +566,7 @@ namespace Cake.Core.Tests.Unit
                     .Finally(() => result.Add("Finally"));
 
                 // When
-                engine.RunTarget(fixture.Context, "A");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
 
                 // Then
                 Assert.Equal(2, result.Count);
@@ -583,7 +586,7 @@ namespace Cake.Core.Tests.Unit
                     .ReportError(ex => result.Add("Report"));
 
                 // When
-                engine.RunTarget(fixture.Context, "A");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
 
                 // Then
                 Assert.Equal(2, result.Count);
@@ -602,7 +605,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = Record.Exception(() =>
-                    engine.RunTarget(fixture.Context, "A"));
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.Equal("Task", result.Message);
@@ -621,7 +624,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = Record.Exception(() =>
-                    engine.RunTarget(fixture.Context, "A"));
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.Equal("Error", result.Message);

@@ -36,14 +36,6 @@ namespace Cake.Core
         void RegisterTeardownAction(Action action);
 
         /// <summary>
-        /// Runs the specified target.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="target">The target to run.</param>
-        /// <returns>The resulting report.</returns>
-        CakeReport RunTarget(ICakeContext context, string target);
-
-        /// <summary>
         /// Runs the specified target using the specified <see cref="IExecutionStrategy"/>.
         /// </summary>
         /// <param name="context">The context.</param>
