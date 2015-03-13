@@ -143,6 +143,13 @@ namespace Cake.Arguments
                 options.ShowDescription = true;
             }
 
+            if (name.Equals("dryrun", StringComparison.OrdinalIgnoreCase) ||
+                name.Equals("noop", StringComparison.OrdinalIgnoreCase) ||
+                name.Equals("whatif", StringComparison.OrdinalIgnoreCase))
+            {
+                options.PerformDryRun = true;
+            }
+
             if (name.Equals("help", StringComparison.OrdinalIgnoreCase) ||
                 name.Equals("?", StringComparison.OrdinalIgnoreCase))
             {

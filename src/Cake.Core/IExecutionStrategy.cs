@@ -27,6 +27,12 @@ namespace Cake.Core
         void Execute(CakeTask task, ICakeContext context);
 
         /// <summary>
+        /// Skips the specified task.
+        /// </summary>
+        /// <param name="task">The task to skip.</param>
+        void Skip(CakeTask task);
+
+        /// <summary>
         /// Executes the error reporter.
         /// </summary>
         /// <param name="action">The action.</param>

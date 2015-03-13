@@ -81,6 +81,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Unit\Scripting\DescriptionScriptHostTests.cs" />
+    <Compile Include="Unit\Scripting\DryRunExecutionStrategyTests.cs" />
+    <Compile Include="Unit\Scripting\DryRunScriptHostTests.cs" />
     <Compile Include="Unit\Scripting\Roslyn\RoslynScriptSessionFactoryTests.cs">
       <SubType>Code</SubType>
     </Compile>

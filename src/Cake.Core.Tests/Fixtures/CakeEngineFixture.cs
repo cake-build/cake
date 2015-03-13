@@ -15,6 +15,7 @@ namespace Cake.Core.Tests.Fixtures
         public IProcessRunner ProcessRunner { get; set; }
         public IEnumerable<IToolResolver> ToolResolvers { get; set; }
         public ICakeContext Context { get; set; }
+        public IExecutionStrategy ExecutionStrategy { get; set; }
 
         public CakeEngineFixture()
         {
@@ -25,6 +26,7 @@ namespace Cake.Core.Tests.Fixtures
             Arguments = Substitute.For<ICakeArguments>();
             ProcessRunner = Substitute.For<IProcessRunner>();
             ToolResolvers = Substitute.For<IEnumerable<IToolResolver>>();
+            ExecutionStrategy = new DefaultExecutionStrategy(Log);
 
             Context = Substitute.For<ICakeContext>();
             Context.Arguments.Returns(Arguments);

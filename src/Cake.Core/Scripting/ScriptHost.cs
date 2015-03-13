@@ -40,6 +40,10 @@ namespace Cake.Core.Scripting
             {
                 throw new ArgumentNullException("engine");
             }
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
             _engine = engine;
             _context = context;
         }
