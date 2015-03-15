@@ -57,17 +57,15 @@ namespace Cake.Core.Scripting
                 throw new ArgumentNullException("arguments");
             }
 
-            // Validate the script host.
-            ValidateScriptHost(host);
-
             // SetArguments the script session factory.
             _sessionFactory.Initialize();
 
             // Copy the arguments from the options.
-            host.Arguments.SetArguments(arguments);
+            host.Context.Arguments.SetArguments(arguments);
 
             // Set the working directory.
-            host.Environment.WorkingDirectory = script.MakeAbsolute(host.Environment).GetDirectory();
+            host.Context.Environment.WorkingDirectory
+                = script.MakeAbsolute(host.Context.Environment).GetDirectory();
 
             // Make sure that any directories are stripped from the script path.
             script = script.GetFilename();
@@ -81,10 +79,10 @@ namespace Cake.Core.Scripting
 
             // Load all references.
             var assemblies = new List<Assembly>();
-            assemblies.AddRange(GetDefaultAssemblies(host.FileSystem));
+            assemblies.AddRange(GetDefaultAssemblies(host.Context.FileSystem));
             foreach (var reference in context.References)
             {
-                if (host.FileSystem.Exist((FilePath)reference))
+                if (host.Context.FileSystem.Exist((FilePath)reference))
                 {
                     var assembly = Assembly.LoadFile(reference);
                     assemblies.Add(assembly);
@@ -119,23 +117,6 @@ namespace Cake.Core.Scripting
 
             // Execute the script.
             session.Execute(context.GetScriptCode());
-        }
-
-        // ReSharper disable once UnusedParameter.Local
-        private static void ValidateScriptHost(IScriptHost host)
-        {
-            if (host.FileSystem == null)
-            {
-                throw new ArgumentException("Script host has no file system.");
-            }
-            if (host.Environment == null)
-            {
-                throw new ArgumentException("Script host has no environment.");
-            }
-            if (host.Arguments == null)
-            {
-                throw new ArgumentException("Script host has no arguments.");
-            }
         }
 
         private IEnumerable<Assembly> GetDefaultAssemblies(IFileSystem fileSystem)

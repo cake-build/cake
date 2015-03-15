@@ -42,24 +42,6 @@ namespace Cake.Tests.Unit.Arguments
             }
 
             [Fact]
-            public void Should_Log_Error_On_Empty_Parameters()
-            {
-                // Given
-                var fixture = new ArgumentParserFixture();
-                var log = Substitute.For<ICakeLog>();
-                var parser = new ArgumentParser(log, fixture.FileSystem);
-
-                // When
-                var result = parser.Parse(new string[] { });
-
-                // Then
-                Assert.NotNull(result);
-                log.Received().Error("Couldn't find build script.\n" +
-                        "Either the first argument must the build script's path, " +
-                        "or build script should follow default script name conventions.");
-            }
-
-            [Fact]
             public void Should_Add_Unknown_Arguments_To_Argument_List()
             {
                 // Given
@@ -207,6 +189,23 @@ namespace Cake.Tests.Unit.Arguments
 
                 // Then
                 Assert.Equal(true, result.ShowDescription);
+            }
+
+            [Theory]
+            [InlineData("-dryrun")]
+            [InlineData("-noop")]
+            [InlineData("-whatif")]
+            public void Can_Parse_DryRun(string input)
+            {
+                // Given
+                var fixture = new ArgumentParserFixture();
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                // When
+                var result = parser.Parse(new[] { "build.csx", input });
+
+                // Then
+                Assert.Equal(true, result.PerformDryRun);
             }
 
             [Theory]

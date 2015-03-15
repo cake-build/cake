@@ -143,6 +143,50 @@ namespace Cake.Core.IO
         }
 
         /// <summary>
+        /// Operator that combines A <see cref="DirectoryPath"/> instance 
+        /// with a <see cref="DirectoryPath"/> instance.
+        /// </summary>
+        /// <param name="left">The left directory path operand.</param>
+        /// <param name="right">The right directory path operand.</param>
+        /// <returns>
+        /// A new directory path representing a combination of the two provided paths.
+        /// </returns>
+        public static DirectoryPath operator +(DirectoryPath left, DirectoryPath right)
+        {
+            if (left == null)
+            {
+                throw new ArgumentNullException("left");
+            }
+            if (right == null)
+            {
+                throw new ArgumentNullException("right");
+            }
+            return left.Combine(right);
+        }
+
+        /// <summary>
+        /// Operator that combines A <see cref="DirectoryPath"/> instance 
+        /// with a <see cref="FilePath"/> instance.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>
+        /// A new file path representing a combination of the two provided paths.
+        /// </returns>
+        public static FilePath operator +(DirectoryPath directory, FilePath file)
+        {
+            if (directory == null)
+            {
+                throw new ArgumentNullException("directory");
+            }
+            if (file == null)
+            {
+                throw new ArgumentNullException("file");
+            }
+            return directory.CombineWithFilePath(file);
+        }
+
+        /// <summary>
         /// Performs a conversion from <see cref="System.String"/> to <see cref="DirectoryPath"/>.
         /// </summary>
         /// <param name="path">The path.</param>

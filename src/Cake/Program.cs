@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Autofac;
 using Autofac.Builder;
 using Cake.Arguments;
@@ -22,14 +25,60 @@ namespace Cake
         /// <summary>
         /// The application entry point.
         /// </summary>
-        /// <param name="args">The arguments.</param>
         /// <returns>The application exit code.</returns>
-        public static int Main(string[] args)
+        public static int Main()
         {
             using (var container = CreateContainer())
             {
+                var args = ParseArgs().ToArray();
                 var application = container.Resolve<CakeApplication>();
                 return application.Run(args);
+            }
+        }
+
+        private static IEnumerable<string> ParseArgs()
+        {
+            var commandLine = Environment.CommandLine;
+            if (string.IsNullOrWhiteSpace(commandLine))
+            {
+                yield break;
+            }
+            var index = commandLine.IndexOf(' ');
+            if (index == -1)
+            {
+                yield break;
+            }
+            newvalue:
+            var sb = new StringBuilder();
+            var inQuote = false;
+            for (; ++index < commandLine.Length;)
+            {
+                var c = commandLine[index];
+                switch (c)
+                {
+                    case '"':
+                    {
+                        inQuote = !inQuote;
+                        break;
+                    }
+                    case ' ':
+                    {
+                        if (inQuote)
+                        {
+                            break;
+                        }
+                        if (sb.Length > 1)
+                        {
+                            yield return sb.ToString();
+                        }
+                        goto newvalue;
+                    }
+                }
+                sb.Append(c);
+            }
+            if (sb.Length > 0)
+            {
+                yield return sb.ToString();
             }
         }
 
@@ -50,6 +99,7 @@ namespace Cake
             builder.RegisterType<ScriptProcessor>().As<IScriptProcessor>().SingleInstance();
             builder.RegisterCollection<IToolResolver>("toolResolvers").As<IEnumerable<IToolResolver>>();
             builder.RegisterType<NuGetToolResolver>().As<IToolResolver>().As<INuGetToolResolver>().SingleInstance().MemberOf("toolResolvers");
+            builder.RegisterType<CakeContext>().As<ICakeContext>().SingleInstance();
 
             // Roslyn related services.
             builder.RegisterType<RoslynScriptSessionFactory>().As<IScriptSessionFactory>();
@@ -65,10 +115,12 @@ namespace Cake
             // Register script hosts.            
             builder.RegisterType<BuildScriptHost>().SingleInstance();
             builder.RegisterType<DescriptionScriptHost>().SingleInstance();
+            builder.RegisterType<DryRunScriptHost>().SingleInstance();
 
             // Register commands.
             builder.RegisterType<BuildCommand>().AsSelf().InstancePerDependency();
             builder.RegisterType<DescriptionCommand>().AsSelf().InstancePerDependency();
+            builder.RegisterType<DryRunCommand>().AsSelf().InstancePerDependency();
             builder.RegisterType<HelpCommand>().AsSelf().InstancePerDependency();
             builder.RegisterType<VersionCommand>().AsSelf().InstancePerDependency();
 

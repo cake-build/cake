@@ -7,6 +7,51 @@ namespace Cake.Tests.Unit.Scripting
 {
     public sealed class DescriptionScriptHostTests
     {
+        public sealed class TheConstructor
+        {
+            [Fact]
+            public void Should_Throw_If_Engine_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var console = Substitute.For<IConsole>();
+
+                // When
+                var result = Record.Exception(() => new DescriptionScriptHost(null, context, console));
+
+                // Then
+                Assert.IsArgumentNullException(result, "engine");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given
+                var engine = Substitute.For<ICakeEngine>();
+                var console = Substitute.For<IConsole>();
+
+                // When
+                var result = Record.Exception(() => new DescriptionScriptHost(engine, null, console));
+
+                // Then
+                Assert.IsArgumentNullException(result, "context");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Console_Is_Null()
+            {
+                // Given
+                var engine = Substitute.For<ICakeEngine>();
+                var context = Substitute.For<ICakeContext>();
+
+                // When
+                var result = Record.Exception(() => new DescriptionScriptHost(engine, context, null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "console");
+            }
+        }
+
         public sealed class TheRunTargetMethod
         {
             [Fact]
@@ -14,14 +59,18 @@ namespace Cake.Tests.Unit.Scripting
             {
                 // Given
                 var engine = Substitute.For<ICakeEngine>();
+                var context = Substitute.For<ICakeContext>();
                 var console = Substitute.For<IConsole>();
-                var host = new DescriptionScriptHost(engine, console);
+                var host = new DescriptionScriptHost(engine, context, console);
 
                 // When
                 host.RunTarget("Target");
 
                 // Then
-                engine.Received(0).RunTarget("Target");
+                engine.Received(0).RunTarget(
+                    context,
+                    Arg.Any<DefaultExecutionStrategy>(),
+                    "Target");
             }
         }
     }

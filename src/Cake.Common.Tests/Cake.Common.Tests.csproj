@@ -22,7 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NSubstitute">
@@ -63,6 +64,7 @@
     <Compile Include="Fixtures\FileDeleteFixture.cs" />
     <Compile Include="Fixtures\FileSystemFixture.cs" />
     <Compile Include="Fixtures\ILMergeRunnerFixture.cs" />
+    <Compile Include="Fixtures\LogActionFixture.cs" />
     <Compile Include="Fixtures\MSBuildRunnerFixture.cs" />
     <Compile Include="Fixtures\NSISFixture.cs" />
     <Compile Include="Fixtures\NuGetFixture.cs" />

@@ -47,7 +47,7 @@ namespace Cake.Core.IO
             string line;
             while ((line = _process.StandardOutput.ReadLine()) != null)
             {
-                _log.Verbose("{0}", _filterOutput(line));
+                _log.Debug("{0}", _filterOutput(line));
                 yield return line;
             }
         }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Utilities;
 
@@ -43,10 +45,13 @@ namespace Cake.Common.Tools.MSBuild
             // Set the maximum number of processors.
             builder.Append(settings.MaxCpuCount > 0 ? string.Concat("/m:", settings.MaxCpuCount) : "/m");
 
-if (settings.NodeReuse != null)
-{
-    builder.Append(string.Concat("/nr:", settings.NodeReuse.Value ? "true" : "false"));
-}
+            // Set the verbosity.
+            builder.Append(string.Format(CultureInfo.InvariantCulture, "/v:{0}", GetVerbosityName(settings.Verbosity)));
+
+            if (settings.NodeReuse != null)
+            {
+                builder.Append(string.Concat("/nr:", settings.NodeReuse.Value ? "true" : "false"));
+            }
 
             // Got a specific configuration in mind?
             if (!string.IsNullOrWhiteSpace(settings.Configuration))
@@ -83,6 +88,24 @@ if (settings.NodeReuse != null)
             return builder;
         }
 
+        private static string GetVerbosityName(Verbosity verbosity)
+        {
+            switch (verbosity)
+            {
+                case Verbosity.Quiet:
+                    return "quiet";
+                case Verbosity.Minimal:
+                    return "minimal";
+                case Verbosity.Normal:
+                    return "normal";
+                case Verbosity.Verbose:
+                    return "verbose";
+                case Verbosity.Diagnostic: 
+                    return "diagnostic";
+            }
+            throw new CakeException("Encountered unknown MSBuild build log verbosity.");
+        }
+
         private static IEnumerable<string> GetPropertyArguments(IDictionary<string, IList<string>> properties)
         {
             foreach (var propertyKey in properties.Keys)
@@ -91,7 +114,7 @@ if (settings.NodeReuse != null)
                 {
                     yield return string.Concat("/p:", propertyKey.Quote(), "=", propertyValue.Quote());
                 }
-            }            
+            }
         }
 
         /// <summary>

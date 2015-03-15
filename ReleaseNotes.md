@@ -1,3 +1,11 @@
+### New in 0.2.0 (Released 2015/03/15)
+* Added script dry run option.
+* Added MSBuild verbosity setting.
+* Added convenience aliases for working with directory and file paths.
+* Fixed console rendering bug.
+* Fixed nuspec xpath bug.
+* Fixed parsing of command line arguments.
+
 ### New in 0.1.34 (Released 2015/03/03)
 * Added support for NuGet SetApiKey.
 * Fixed unsafe logging.

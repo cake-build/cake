@@ -52,7 +52,7 @@ namespace Cake.Common.Tools.NuGet.Pack
 
             if (settings.Files != null && settings.Files.Count > 0)
             {
-                var filesPath = string.Format(CultureInfo.InvariantCulture, "/package//*[local-name()='files']");
+                var filesPath = string.Format(CultureInfo.InvariantCulture, "//*[local-name()='package']//*[local-name()='files']");
                 var filesElement = document.SelectSingleNode(filesPath, namespaceManager);
                 if (filesElement == null)
                 {
@@ -75,7 +75,7 @@ namespace Cake.Common.Tools.NuGet.Pack
 
         private static XmlNode GetPackageElement(XmlDocument document)
         {
-            var package = document.SelectSingleNode("/package");
+            var package = document.SelectSingleNode("//*[local-name()='package']");
             if (package == null)
             {
                 throw new CakeException("Nuspec file is missing package root.");
@@ -85,11 +85,11 @@ namespace Cake.Common.Tools.NuGet.Pack
 
         private static XmlNode FindOrCreateElement(XmlDocument document, XmlNamespaceManager ns, string name)
         {
-            var path = string.Format(CultureInfo.InvariantCulture, "/package//*[local-name()='metadata']//*[local-name()='{0}']", name);
+            var path = string.Format(CultureInfo.InvariantCulture, "//*[local-name()='package']//*[local-name()='metadata']//*[local-name()='{0}']", name);
             var node = document.SelectSingleNode(path, ns);
             if (node == null)
             {
-                var parent = document.SelectSingleNode("/package//*[local-name()='metadata']", ns);
+                var parent = document.SelectSingleNode("//*[local-name()='package']//*[local-name()='metadata']", ns);
                 if (parent == null)
                 {
                     // Get the package element.

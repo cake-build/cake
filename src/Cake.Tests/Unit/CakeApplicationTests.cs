@@ -1,4 +1,5 @@
 ﻿using System;
+using Cake.Commands;
 using Cake.Core.Diagnostics;
 using Cake.Tests.Fixtures;
 using NSubstitute;
@@ -51,6 +52,20 @@ namespace Cake.Tests.Unit
                 // Then
                 Assert.IsArgumentNullException(result, "argumentParser");
             }
+
+            [Fact]
+            public void Should_Throw_If_Console_Is_Null()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.Console = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateApplication());
+
+                // Then
+                Assert.IsArgumentNullException(result, "console");
+            }
         }
 
         public sealed class TheRunMethod
@@ -65,7 +80,7 @@ namespace Cake.Tests.Unit
                 fixture.RunApplication();
 
                 // Then
-                fixture.Log.Received(1).Verbosity = Verbosity.Diagnostic;
+                fixture.Log.Received(1).SetVerbosity(Verbosity.Diagnostic);
             }
 
             [Fact]
@@ -73,7 +88,11 @@ namespace Cake.Tests.Unit
             {
                 // Given
                 var fixture = new CakeApplicationFixture();
-
+                var command = Substitute.For<ICommand>();
+                command.Execute(fixture.Options).Returns(true);
+                fixture.Options.Script = "./build.cake";
+                fixture.CommandFactory.CreateBuildCommand().Returns(command);
+                
                 // When
                 var result = fixture.RunApplication();
 
@@ -226,6 +245,49 @@ namespace Cake.Tests.Unit
                 // Then
                 fixture.CommandFactory.Received(0).CreateBuildCommand();
                 fixture.CommandFactory.Received(1).CreateVersionCommand();
+            }
+
+            [Fact]
+            public void Should_Return_Error_If_No_Parameters_Are_Set()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.Options = new CakeOptions();
+
+                // When
+                var result = fixture.RunApplication();
+
+                // Then
+                Assert.Equal(1, result);
+            }
+
+            [Fact]
+            public void Should_Create_Dry_Run_Command_If_Specified_In_Options()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.Options.PerformDryRun = true;
+                fixture.Options.Script = "./build.cake";
+
+                // When
+                fixture.RunApplication();
+
+                // Then
+                fixture.CommandFactory.Received(1).CreateDryRunCommand();
+            }
+
+            [Fact]
+            public void Should_Not_Create_Dry_Run_Command_If_Options_Do_Not_Contain_Script()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.Options.PerformDryRun = true;
+
+                // When
+                fixture.RunApplication();
+
+                // Then
+                fixture.CommandFactory.Received(1).CreateHelpCommand();
             }
         }
     }

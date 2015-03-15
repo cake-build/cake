@@ -42,6 +42,14 @@ namespace Cake
         public bool ShowDescription { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to perform a dry run.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if a dry run should be performed; otherwise, <c>false</c>.
+        /// </value>
+        public bool PerformDryRun { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to show help.
         /// </summary>
         /// <value>

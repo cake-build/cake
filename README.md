@@ -2,7 +2,12 @@
 
 Cake (C# Make) is a build automation system using C#.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/c6lw0vvj1mf4395a/branch/develop)](https://ci.appveyor.com/project/patriksvensson/cake/branch/develop) [![Coverity Scan](https://scan.coverity.com/projects/4147/badge.svg)](https://scan.coverity.com/projects/4147) 
+[![Build status](https://ci.appveyor.com/api/projects/status/c6lw0vvj1mf4395a/branch/develop?svg=true)](https://ci.appveyor.com/project/patriksvensson/cake/branch/develop)
+[![Coverity Scan](https://scan.coverity.com/projects/4147/badge.svg)](https://scan.coverity.com/projects/4147) 
+
+[![Follow @cakebuildnet](https://img.shields.io/badge/Twitter-Follow%20%40cakebuildnet-blue.svg)](https://twitter.com/intent/follow?screen_name=cakebuildnet)
+
+[![cakebuild.net](https://img.shields.io/badge/WWW-cakebuild.net-blue.svg)](http://cakebuild.net/)
 
 [![Join the chat at https://gitter.im/cake-build/cake](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/cake-build/cake?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -189,6 +194,6 @@ Cake.Slack: [https://github.com/WCOMAB/Cake.Slack](https://github.com/WCOMAB/Cak
 Copyright (c) 2014, Patrik Svensson and contributors.   
 Cake is provided as-is under the MIT license. For more information see `LICENSE`.
 
-* For Roslyn, see https://roslyn.codeplex.com/license
+* For Roslyn, see https://github.com/dotnet/roslyn/blob/master/License.txt
 * For Autofac, see https://github.com/autofac/Autofac/blob/master/LICENSE
 * For NuGet.Core, see https://nuget.codeplex.com/license

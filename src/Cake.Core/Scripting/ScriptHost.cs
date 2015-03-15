@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Cake.Core.Diagnostics;
-using Cake.Core.IO;
 
 namespace Cake.Core.Scripting
 {
@@ -11,70 +9,7 @@ namespace Cake.Core.Scripting
     public abstract class ScriptHost : IScriptHost
     {
         private readonly ICakeEngine _engine;
-
-        /// <summary>
-        /// Gets the file system.
-        /// </summary>
-        /// <value>The file system.</value>
-        public IFileSystem FileSystem
-        {
-            get { return _engine.FileSystem; }
-        }
-
-        /// <summary>
-        /// Gets the environment.
-        /// </summary>
-        /// <value>The environment.</value>
-        public ICakeEnvironment Environment
-        {
-            get { return _engine.Environment; }
-        }
-
-        /// <summary>
-        /// Gets the globber.
-        /// </summary>
-        /// <value>The globber.</value>
-        public IGlobber Globber
-        {
-            get { return _engine.Globber; }
-        }
-
-        /// <summary>
-        /// Gets the log.
-        /// </summary>
-        /// <value>The log.</value>
-        public ICakeLog Log
-        {
-            get { return _engine.Log; }
-        }
-
-        /// <summary>
-        /// Gets the arguments.
-        /// </summary>
-        /// <value>The arguments.</value>
-        public ICakeArguments Arguments
-        {
-            get { return _engine.Arguments; }
-        }
-
-        /// <summary>
-        /// Gets the process runner.
-        /// </summary>
-        /// <value>The process runner.</value>
-        public IProcessRunner ProcessRunner
-        {
-            get { return _engine.ProcessRunner; }
-        }
-
-         /// <summary>
-        /// Gets resolver by tool name
-        /// </summary>
-        /// <param name="toolName">resolver tool name</param>
-        /// <returns>IToolResolver for tool</returns>
-        public IToolResolver GetToolResolver(string toolName)
-        {
-            return _engine.GetToolResolver(toolName);
-        }
+        private readonly ICakeContext _context;
 
         /// <summary>
         /// Gets the engine.
@@ -86,16 +21,31 @@ namespace Cake.Core.Scripting
         }
 
         /// <summary>
+        /// Gets the context.
+        /// </summary>
+        /// <value>The context.</value>
+        public ICakeContext Context
+        {
+            get { return _context; }
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ScriptHost"/> class.
         /// </summary>
         /// <param name="engine">The engine.</param>
-        protected ScriptHost(ICakeEngine engine)
+        /// <param name="context">The context.</param>
+        protected ScriptHost(ICakeEngine engine, ICakeContext context)
         {
             if (engine == null)
             {
                 throw new ArgumentNullException("engine");
             }
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
             _engine = engine;
+            _context = context;
         }
 
         /// <summary>
@@ -114,16 +64,7 @@ namespace Cake.Core.Scripting
         /// <returns>A <see cref="CakeTaskBuilder{ActionTask}"/>.</returns>
         public CakeTaskBuilder<ActionTask> Task(string name)
         {
-            return _engine.Task(name);
-        }
-
-        /// <summary>
-        /// Gets the <see cref="ICakeContext"/>.
-        /// </summary>
-        /// <returns>The context.</returns>
-        public ICakeContext GetContext()
-        {
-            return this;
+            return _engine.RegisterTask(name);
         }
 
         /// <summary>
@@ -133,7 +74,7 @@ namespace Cake.Core.Scripting
         /// <param name="action">The action to be executed.</param>
         public void Setup(Action action)
         {
-            _engine.Setup(action);
+            _engine.RegisterSetupAction(action);
         }
 
         /// <summary>
@@ -143,7 +84,7 @@ namespace Cake.Core.Scripting
         /// <param name="action">The action to be executed.</param>
         public void Teardown(Action action)
         {
-            _engine.Teardown(action);
+            _engine.RegisterTeardownAction(action);
         }
 
         /// <summary>

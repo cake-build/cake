@@ -22,7 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NSubstitute">
@@ -80,6 +81,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Unit\Scripting\DescriptionScriptHostTests.cs" />
+    <Compile Include="Unit\Scripting\DryRunExecutionStrategyTests.cs" />
+    <Compile Include="Unit\Scripting\DryRunScriptHostTests.cs" />
     <Compile Include="Unit\Scripting\Roslyn\RoslynScriptSessionFactoryTests.cs">
       <SubType>Code</SubType>
     </Compile>

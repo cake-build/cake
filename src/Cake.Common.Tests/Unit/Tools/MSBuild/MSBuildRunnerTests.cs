@@ -1,6 +1,7 @@
 ﻿using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
@@ -21,19 +22,14 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 };
 
                 var fixture = new MSBuildRunnerFixture(existingToolPaths);
-                var runner = fixture.CreateRunner();
+                fixture.Settings.PlatformTarget = PlatformTarget.x64;
+                fixture.Settings.ToolVersion = MSBuildToolVersion.Default;
 
                 // When
-                runner.Run(new MSBuildSettings("./src/Solution.sln")
-                {
-                    PlatformTarget = PlatformTarget.x64,
-                    ToolVersion = MSBuildToolVersion.Default
-                });
+                fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe"),
-                    Arg.Any<ProcessSettings>());
+                fixture.AssertReceivedFilePath("/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe");
             }
 
             [Theory]
@@ -59,19 +55,14 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, true);
-                var runner = fixture.CreateRunner();
+                fixture.Settings.ToolVersion = version;
+                fixture.Settings.PlatformTarget = target;
 
                 // When
-                runner.Run(new MSBuildSettings("./src/Solution.sln")
-                {
-                    PlatformTarget = target,
-                    ToolVersion = version
-                });
+                fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                fixture.AssertReceivedFilePath(expected);
             }
 
             [Theory]
@@ -91,19 +82,14 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, true);
-                var runner = fixture.CreateRunner();
+                fixture.Settings.ToolVersion = version;
+                fixture.Settings.PlatformTarget = target;
 
                 // When
-                runner.Run(new MSBuildSettings("./src/Solution.sln")
-                {
-                    ToolVersion = version,
-                    PlatformTarget = target
-                });
+                fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                fixture.AssertReceivedFilePath(expected);
             }
 
             [Theory]
@@ -141,19 +127,14 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, true);
-                var runner = fixture.CreateRunner();
+                fixture.Settings.ToolVersion = version;
+                fixture.Settings.PlatformTarget = target;
 
                 // When
-                runner.Run(new MSBuildSettings("./src/Solution.sln")
-                {
-                    ToolVersion = version,
-                    PlatformTarget = target
-                });
+                fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                fixture.AssertReceivedFilePath(expected);
             }
 
             [Theory]
@@ -179,19 +160,14 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, true);
-                var runner = fixture.CreateRunner();
+                fixture.Settings.ToolVersion = version;
+                fixture.Settings.PlatformTarget = target;
 
                 // When
-                runner.Run(new MSBuildSettings("./src/Solution.sln")
-                {
-                    ToolVersion = version,
-                    PlatformTarget = target
-                });
+                fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                fixture.AssertReceivedFilePath(expected);
             }
 
             [Fact]
@@ -199,18 +175,14 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(false, false);
-                var runner = fixture.CreateRunner();
+                fixture.Settings.PlatformTarget = PlatformTarget.x86;
+                fixture.Settings.ToolVersion = MSBuildToolVersion.NET20;
 
                 // When
-                var result = Record.Exception(() => runner.Run( 
-                    new MSBuildSettings("./src/Solution.sln") {
-                        PlatformTarget = PlatformTarget.x86,
-                        ToolVersion = MSBuildToolVersion.NET20
-                    }));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("MSBuild: Could not locate executable.", result.Message);
+                Assert.IsCakeException(result, "MSBuild: Could not locate executable.");
             }
 
             [Fact]
@@ -218,20 +190,14 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(false, true);
-                var runner = fixture.CreateRunner();
-
-                var settings = new MSBuildSettings("./src/Solution.sln");
-                settings.ToolVersion = MSBuildToolVersion.VS2013;
-                settings.MaxCpuCount = 0;
+                fixture.Settings.MaxCpuCount = 0;
 
                 // When
-                runner.Run(settings);
+                fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "/m /target:Build \"/Working/src/Solution.sln\""));
+                fixture.AssertReceivedArguments(
+                    "/m /v:normal /target:Build \"/Working/src/Solution.sln\"");
             }
 
             [Fact]
@@ -239,20 +205,14 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(false, true);
-                var runner = fixture.CreateRunner();
-
-                var settings = new MSBuildSettings("./src/Solution.sln");
-                settings.ToolVersion = MSBuildToolVersion.VS2013;
-                settings.MaxCpuCount = 4;
+                fixture.Settings.MaxCpuCount = 4;
 
                 // When
-                runner.Run(settings);
+                fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "/m:4 /target:Build \"/Working/src/Solution.sln\""));
+                fixture.AssertReceivedArguments(
+                    "/m:4 /v:normal /target:Build \"/Working/src/Solution.sln\"");
             }
 
             [Fact]
@@ -260,19 +220,13 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(false, true);
-                var runner = fixture.CreateRunner();
-
-                var settings = new MSBuildSettings("./src/Solution.sln");
-                settings.ToolVersion = MSBuildToolVersion.VS2013;
 
                 // When
-                runner.Run(settings);
+                fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "/m /target:Build \"/Working/src/Solution.sln\""));
+                fixture.AssertReceivedArguments(
+                    "/m /v:normal /target:Build \"/Working/src/Solution.sln\"");
             }
 
             [Fact]
@@ -280,20 +234,14 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(false, true);
-                var runner = fixture.CreateRunner();
-
-                var settings = new MSBuildSettings("./src/Solution.sln");
-                settings.ToolVersion = MSBuildToolVersion.VS2013;
-                settings.NodeReuse = true;
+                fixture.Settings.NodeReuse = true;
 
                 // When
-                runner.Run(settings);
+                fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "/m /nr:true /target:Build \"/Working/src/Solution.sln\""));
+                fixture.AssertReceivedArguments(
+                    "/m /v:normal /nr:true /target:Build \"/Working/src/Solution.sln\"");
             }
 
             [Fact]
@@ -301,21 +249,15 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(false, true);
-                var runner = fixture.CreateRunner();
-
-                var settings = new MSBuildSettings("./src/Solution.sln");
-                settings.ToolVersion = MSBuildToolVersion.VS2013;
-                settings.WithTarget("A");
-                settings.WithTarget("B");
+                fixture.Settings.WithTarget("A");
+                fixture.Settings.WithTarget("B");
 
                 // When
-                runner.Run(settings);
+                fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "/m /target:A;B \"/Working/src/Solution.sln\""));
+                fixture.AssertReceivedArguments(
+                    "/m /v:normal /target:A;B \"/Working/src/Solution.sln\"");
             }
 
             [Fact]
@@ -323,21 +265,15 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(false, true);
-                var runner = fixture.CreateRunner();
-
-                var settings = new MSBuildSettings("./src/Solution.sln");
-                settings.ToolVersion = MSBuildToolVersion.VS2013;
-                settings.WithProperty("A", "B");
-                settings.WithProperty("C", "D");
+                fixture.Settings.WithProperty("A", "B");
+                fixture.Settings.WithProperty("C", "D");
 
                 // When
-                runner.Run(settings);
+                fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "/m /p:\"A\"=\"B\" /p:\"C\"=\"D\" /target:Build \"/Working/src/Solution.sln\""));
+                fixture.AssertReceivedArguments(
+                    "/m /v:normal /p:\"A\"=\"B\" /p:\"C\"=\"D\" /target:Build \"/Working/src/Solution.sln\"");
             }
 
             [Fact]
@@ -345,21 +281,15 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(false, true);
-                var runner = fixture.CreateRunner();
-
-                var settings = new MSBuildSettings("./src/Solution.sln");
-                settings.ToolVersion = MSBuildToolVersion.VS2013;
-                settings.WithProperty("A", "B", "E");
-                settings.WithProperty("C", "D");
+                fixture.Settings.WithProperty("A", "B", "E");
+                fixture.Settings.WithProperty("C", "D");
 
                 // When
-                runner.Run(settings);
+                fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "/m /p:\"A\"=\"B\" /p:\"A\"=\"E\" /p:\"C\"=\"D\" /target:Build \"/Working/src/Solution.sln\""));
+                fixture.AssertReceivedArguments(
+                    "/m /v:normal /p:\"A\"=\"B\" /p:\"A\"=\"E\" /p:\"C\"=\"D\" /target:Build \"/Working/src/Solution.sln\"");
             }
 
             [Fact]
@@ -367,20 +297,14 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(false, true);
-                var runner = fixture.CreateRunner();
-
-                var settings = new MSBuildSettings("./src/Solution.sln");
-                settings.ToolVersion = MSBuildToolVersion.VS2013;
-                settings.SetConfiguration("Release");                
+                fixture.Settings.SetConfiguration("Release");
 
                 // When
-                runner.Run(settings);
+                fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "/m /p:\"Configuration\"=\"Release\" /target:Build \"/Working/src/Solution.sln\""));
+                fixture.AssertReceivedArguments(
+                    "/m /v:normal /p:\"Configuration\"=\"Release\" /target:Build \"/Working/src/Solution.sln\"");
             }
 
             [Fact]
@@ -388,17 +312,14 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(false, true);
-                var runner = fixture.CreateRunner();
-                var settings = new MSBuildSettings("./src/Solution.sln");
-                settings.ToolVersion = MSBuildToolVersion.VS2013;
 
                 // When
-                runner.Run(settings);
+                fixture.Run();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p => 
+                    Arg.Is<ProcessSettings>(p =>
                         p.WorkingDirectory.FullPath == "/Working"));
             }
 
@@ -407,18 +328,15 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(false, true);
-                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
-                var runner = fixture.CreateRunner();
-
-                var settings = new MSBuildSettings("./src/Solution.sln");
-                settings.ToolVersion = MSBuildToolVersion.VS2013;
+                fixture.ProcessRunner
+                    .Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>())
+                    .Returns((IProcess)null);
 
                 // When
-                var result = Record.Exception(() => runner.Run(settings));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("MSBuild: Process was not started.", result.Message);
+                Assert.IsCakeException(result, "MSBuild: Process was not started.");
             }
 
             [Fact]
@@ -427,17 +345,46 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Given
                 var fixture = new MSBuildRunnerFixture(false, true);
                 fixture.Process.GetExitCode().Returns(1);
-                var runner = fixture.CreateRunner();
-
-                var settings = new MSBuildSettings("./src/Solution.sln");
-                settings.ToolVersion = MSBuildToolVersion.VS2013;
 
                 // When
-                var result = Record.Exception(() => runner.Run(settings));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("MSBuild: Process returned an error.", result.Message);
+                Assert.IsCakeException(result, "MSBuild: Process returned an error.");
+            }
+
+            [Theory]
+            [InlineData(Verbosity.Quiet, "quiet")]
+            [InlineData(Verbosity.Minimal, "minimal")]
+            [InlineData(Verbosity.Normal, "normal")]
+            [InlineData(Verbosity.Verbose, "verbose")]
+            [InlineData(Verbosity.Diagnostic, "diagnostic")]
+            public void Should_Append_Correct_Verbosity(Verbosity verbosity, string expected)
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, true);
+                fixture.Settings.Verbosity = verbosity;
+
+                // When
+                fixture.Run();
+
+                // Then
+                fixture.AssertReceivedArguments(
+                    "/m /v:{0} /target:Build \"/Working/src/Solution.sln\"", expected);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Verbosity_Is_Unknown()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, true);
+                fixture.Settings.Verbosity = (Verbosity)int.MaxValue;
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                Assert.IsCakeException(result, "Encountered unknown MSBuild build log verbosity.");
             }
         }
     }

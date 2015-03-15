@@ -1,4 +1,5 @@
 ﻿using Cake.Common.Tools.MSBuild;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Xunit;
 
@@ -224,21 +225,55 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.Equal(reuse, settings.NodeReuse);
             }
 
-            [Theory]
-            [InlineData(true)]
-            [InlineData(false)]
-            public void Should_Return_The_Same_Configuration(bool reuse)
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
             {
                 // Given
                 var solution = new FilePath("/src/Solution.sln");
                 var settings = new MSBuildSettings(solution);
 
                 // When
-                var result = settings.SetNodeReuse(reuse);
+                var result = settings.SetNodeReuse(true);
 
                 // Then
                 Assert.Equal(settings, result);
             }        
+        }
+
+        public sealed class TheSetVerbosityMethod
+        {
+            [Theory]
+            [InlineData(Verbosity.Quiet)]
+            [InlineData(Verbosity.Minimal)]
+            [InlineData(Verbosity.Normal)]
+            [InlineData(Verbosity.Verbose)]
+            [InlineData(Verbosity.Diagnostic)]
+            public void Should_Set_Verbosity(Verbosity verbosity)
+            {
+                // Given
+                var solution = new FilePath("/src/Solution.sln");
+                var settings = new MSBuildSettings(solution);
+
+                // When
+                settings.SetVerbosity(verbosity);
+
+                // Then
+                Assert.Equal(verbosity, settings.Verbosity);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var solution = new FilePath("/src/Solution.sln");
+                var settings = new MSBuildSettings(solution);
+
+                // When
+                var result = settings.SetVerbosity(Verbosity.Normal);
+
+                // Then
+                Assert.Equal(settings, result);
+            } 
         }
     }
 }

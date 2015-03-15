@@ -11,71 +11,6 @@ namespace Cake.Core.Tests.Unit
         public sealed class TheConstructor
         {
             [Fact]
-            public void Should_Throw_If_File_System_Is_Null()
-            {
-                // Given
-                var fixture = new CakeEngineFixture { FileSystem = null };
-
-                // When
-                var result = Record.Exception(() => fixture.CreateEngine());
-
-                // Then
-                Assert.IsArgumentNullException(result, "fileSystem");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Environment_Is_Null()
-            {
-                // Given
-                var fixture = new CakeEngineFixture { Environment = null };
-
-                // When
-                var result = Record.Exception(() => fixture.CreateEngine());
-
-                // Then
-                Assert.IsArgumentNullException(result, "environment");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Arguments_Are_Null()
-            {
-                // Given
-                var fixture = new CakeEngineFixture { Arguments = null };
-
-                // When
-                var result = Record.Exception(() => fixture.CreateEngine());
-
-                // Then
-                Assert.IsArgumentNullException(result, "arguments");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Globber_Is_Null()
-            {
-                // Given
-                var fixture = new CakeEngineFixture { Globber = null };
-
-                // When
-                var result = Record.Exception(() => fixture.CreateEngine());
-
-                // Then
-                Assert.IsArgumentNullException(result, "globber");
-            }
-
-            [Fact]
-            public void Should_Throw_If_ProcessRunner_Is_Null()
-            {
-                // Given
-                var fixture = new CakeEngineFixture { ProcessRunner = null };
-
-                // When
-                var result = Record.Exception(() => fixture.CreateEngine());
-
-                // Then
-                Assert.IsArgumentNullException(result, "processRunner");
-            }
-
-            [Fact]
             public void Should_Throw_If_Log_Is_Null()
             {
                 // Given
@@ -87,22 +22,9 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.IsArgumentNullException(result, "log");
             }
-
-            [Fact]
-            public void Should_Keep_Provided_Globber_If_It_Is_Not_Null()
-            {
-                // Given
-                var fixture = new CakeEngineFixture();
-
-                // When
-                var engine = fixture.CreateEngine();
-
-                // Then
-                Assert.Equal(fixture.Globber, engine.Globber);
-            }
         }
 
-        public sealed class TheTaskMethod
+        public sealed class TheRegisterTaskMethod
         {
             [Fact]
             public void Should_Return_A_New_Task()
@@ -111,7 +33,7 @@ namespace Cake.Core.Tests.Unit
                 var engine = new CakeEngineFixture().CreateEngine();
 
                 // When
-                var result = engine.Task("task");
+                var result = engine.RegisterTask("task");
 
                 // Then
                 Assert.NotNull(result);
@@ -125,7 +47,7 @@ namespace Cake.Core.Tests.Unit
                 var engine = new CakeEngineFixture().CreateEngine();
 
                 // When
-                var result = engine.Task("task");
+                var result = engine.RegisterTask("task");
 
                 // Then
                 Assert.True(engine.Tasks.Contains(result.Task));
@@ -136,10 +58,10 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var engine = new CakeEngineFixture().CreateEngine();
-                engine.Task("task");
+                engine.RegisterTask("task");
 
                 // When
-                var result = Record.Exception(() => engine.Task("task"));
+                var result = Record.Exception(() => engine.RegisterTask("task"));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -151,10 +73,10 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var engine = new CakeEngineFixture().CreateEngine();
-                engine.Task("task");
+                engine.RegisterTask("task");
 
                 // When
-                var result = Record.Exception(() => engine.Task("TASK"));
+                var result = Record.Exception(() => engine.RegisterTask("TASK"));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -164,18 +86,69 @@ namespace Cake.Core.Tests.Unit
 
         public sealed class TheRunTargetMethod
         {
+            public sealed class WithTarget
+            {
+                [Fact]
+                public void Should_Throw_If_Target_Is_Null()
+                {
+                    // Given
+                    var fixture = new CakeEngineFixture();
+                    var engine = fixture.CreateEngine();
+
+                    // When
+                    var result = Record.Exception(() =>
+                        engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, null));
+
+                    // Then
+                    Assert.IsArgumentNullException(result, "target");
+                }
+            }
+
+            public sealed class WithExecutionStrategy
+            {
+                [Fact]
+                public void Should_Throw_If_Target_Is_Null()
+                {
+                    // Given
+                    var fixture = new CakeEngineFixture();
+                    var engine = fixture.CreateEngine();
+
+                    // When
+                    var result = Record.Exception(() =>
+                        engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, null));
+
+                    // Then
+                    Assert.IsArgumentNullException(result, "target");
+                }
+
+                [Fact]
+                public void Should_Throw_If_Execution_Strategy_Is_Null()
+                {
+                    // Given
+                    var fixture = new CakeEngineFixture();
+                    var engine = fixture.CreateEngine();
+
+                    // When
+                    var result = Record.Exception(() => engine.RunTarget(fixture.Context, null, "A"));
+
+                    // Then
+                    Assert.IsArgumentNullException(result, "strategy");
+                }
+            }
+
             [Fact]
             public void Should_Execute_Tasks_In_Order()
             {
                 // Given
                 var result = new List<string>();
-                var engine = new CakeEngineFixture().CreateEngine();
-                engine.Task("A").Does(() => result.Add("A"));
-                engine.Task("B").IsDependentOn("A").Does(() => result.Add("B"));
-                engine.Task("C").IsDependentOn("B").Does(() => result.Add("C"));
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A").Does(() => result.Add("A"));
+                engine.RegisterTask("B").IsDependentOn("A").Does(() => result.Add("B"));
+                engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
-                engine.RunTarget("C");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "C");
 
                 // Then
                 Assert.Equal(3, result.Count);
@@ -189,13 +162,14 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var result = new List<string>();
-                var engine = new CakeEngineFixture().CreateEngine();
-                engine.Task("A").Does(() => result.Add("A"));
-                engine.Task("B").IsDependentOn("A").WithCriteria(() => false).Does(() => result.Add("B"));
-                engine.Task("C").IsDependentOn("B").Does(() => result.Add("C"));
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A").Does(() => result.Add("A"));
+                engine.RegisterTask("B").IsDependentOn("A").WithCriteria(() => false).Does(() => result.Add("B"));
+                engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
-                engine.RunTarget("C");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "C");
 
                 // Then
                 Assert.Equal(2, result.Count);
@@ -208,13 +182,14 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var result = new List<string>();
-                var engine = new CakeEngineFixture().CreateEngine();
-                engine.Task("A").Does(() => result.Add("A"));
-                engine.Task("B").IsDependentOn("A").WithCriteria(() => true).Does(() => result.Add("B"));
-                engine.Task("C").IsDependentOn("B").Does(() => result.Add("C"));
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A").Does(() => result.Add("A"));
+                engine.RegisterTask("B").IsDependentOn("A").WithCriteria(() => true).Does(() => result.Add("B"));
+                engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
-                engine.RunTarget("C");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "C");
 
                 // Then
                 Assert.Equal(3, result.Count);
@@ -227,10 +202,12 @@ namespace Cake.Core.Tests.Unit
             public void Should_Throw_If_Target_Was_Not_Found()
             {
                 // Given
-                var engine = new CakeEngineFixture().CreateEngine();
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
 
                 // When
-                var result = Record.Exception(() => engine.RunTarget("Run-Some-Tests"));
+                var result = Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "Run-Some-Tests"));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -241,11 +218,13 @@ namespace Cake.Core.Tests.Unit
             public void Should_Not_Catch_Exceptions_From_Task_If_ContinueOnError_Is_Not_Set()
             {
                 // Given
-                var engine = new CakeEngineFixture().CreateEngine();
-                engine.Task("A").Does(() => { throw new InvalidOperationException("Whoopsie"); });
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A").Does(() => { throw new InvalidOperationException("Whoopsie"); });
 
                 // When
-                var result = Record.Exception(() => engine.RunTarget("A"));
+                var result = Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.IsType<InvalidOperationException>(result);
@@ -256,11 +235,12 @@ namespace Cake.Core.Tests.Unit
             public void Should_Swallow_Exceptions_If_ContinueOnError_Is_Set()
             {
                 // Given
-                var engine = new CakeEngineFixture().CreateEngine();
-                engine.Task("A").ContinueOnError().Does(() => { throw new InvalidOperationException(); });
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A").ContinueOnError().Does(() => { throw new InvalidOperationException(); });
 
                 // When, Then
-                engine.RunTarget("A");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
             }
 
             [Fact]
@@ -268,13 +248,15 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var invoked = false;
-                var engine = new CakeEngineFixture().CreateEngine();
-                engine.Task("A")
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A")
                     .Does(() => { throw new InvalidOperationException("Whoopsie"); })
                     .OnError(exception => { invoked = true; });
 
                 // When
-                Record.Exception(() => engine.RunTarget("A"));
+                Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.True(invoked);
@@ -284,13 +266,15 @@ namespace Cake.Core.Tests.Unit
             public void Should_Propagate_Exception_From_Error_Handler()
             {
                 // Given
-                var engine = new CakeEngineFixture().CreateEngine();
-                engine.Task("A")
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A")
                     .Does(() => { throw new InvalidOperationException("Whoopsie"); })
                     .OnError(exception => { throw new InvalidOperationException("Totally my fault"); });
 
                 // When
-                var result = Record.Exception(() => engine.RunTarget("A"));
+                var result = Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.IsType<InvalidOperationException>(result);
@@ -303,12 +287,13 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
-                engine.Task("A")
+                engine.RegisterTask("A")
                     .Does(() => { throw new InvalidOperationException("Whoopsie"); })
                     .OnError(exception => { throw new InvalidOperationException("Totally my fault"); });
 
                 // When
-                Record.Exception(() => engine.RunTarget("A"));
+                Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.True(fixture.Log.Messages.Contains("Error: Whoopsie"));
@@ -318,12 +303,14 @@ namespace Cake.Core.Tests.Unit
             public void Should_Throw_If_Target_Cannot_Be_Reached_Due_To_Constraint()
             {
                 // Given
-                var engine = new CakeEngineFixture().CreateEngine();
-                engine.Task("A");
-                engine.Task("B").IsDependentOn("A").WithCriteria(false);
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A");
+                engine.RegisterTask("B").IsDependentOn("A").WithCriteria(false);
 
                 // When
-                var result = Record.Exception(() => engine.RunTarget("B"));
+                var result = Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "B"));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -335,12 +322,13 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var result = new List<string>();
-                var engine = new CakeEngineFixture().CreateEngine();
-                engine.Setup(() => result.Add("Setup"));
-                engine.Task("A").Does(() => result.Add("A"));
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterSetupAction(() => result.Add("Setup"));
+                engine.RegisterTask("A").Does(() => result.Add("A"));
 
                 // When
-                engine.RunTarget("A");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
 
                 // Then
                 Assert.Equal(2, result.Count);
@@ -355,11 +343,12 @@ namespace Cake.Core.Tests.Unit
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
 
-                engine.Setup(() => { throw new InvalidOperationException("Fail"); });
-                engine.Task("A").Does(() => runTask = true);
+                engine.RegisterSetupAction(() => { throw new InvalidOperationException("Fail"); });
+                engine.RegisterTask("A").Does(() => runTask = true);
 
                 // When
-                Record.Exception(() => engine.RunTarget("A"));
+                Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.False(runTask, "Task A was executed although it shouldn't have been.");
@@ -371,14 +360,15 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var result = new List<string>();
-                var engine = new CakeEngineFixture().CreateEngine();
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
 
-                engine.Setup(() => result.Add("Setup"));
-                engine.Teardown(() => result.Add("Teardown"));
-                engine.Task("A").Does(() => result.Add("A"));
+                engine.RegisterSetupAction(() => result.Add("Setup"));
+                engine.RegisterTeardownAction(() => result.Add("Teardown"));
+                engine.RegisterTask("A").Does(() => result.Add("A"));
 
                 // When
-                engine.RunTarget("A");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
 
                 // Then
                 Assert.Equal(3, result.Count);
@@ -392,12 +382,13 @@ namespace Cake.Core.Tests.Unit
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
 
-                engine.Setup(() => { });
-                engine.Teardown(() => { });
-                engine.Task("A").Does(() => { throw new InvalidOperationException("Fail"); });
+                engine.RegisterSetupAction(() => { });
+                engine.RegisterTeardownAction(() => { });
+                engine.RegisterTask("A").Does(() => { throw new InvalidOperationException("Fail"); });
 
                 // When
-                var result = Record.Exception(() => engine.RunTarget("A"));
+                var result = Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.NotNull(result);
@@ -413,12 +404,13 @@ namespace Cake.Core.Tests.Unit
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
 
-                engine.Setup(() => { throw new InvalidOperationException("Fail"); });
-                engine.Teardown(() => { });
-                engine.Task("A").Does(() => { });
+                engine.RegisterSetupAction(() => { throw new InvalidOperationException("Fail"); });
+                engine.RegisterTeardownAction(() => { });
+                engine.RegisterTask("A").Does(() => { });
 
                 // When
-                var result = Record.Exception(() => engine.RunTarget("A"));
+                var result = Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.NotNull(result);
@@ -434,12 +426,13 @@ namespace Cake.Core.Tests.Unit
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
 
-                engine.Setup(() => { throw new InvalidOperationException("Setup"); });
-                engine.Teardown(() => { throw new InvalidOperationException("Teardown"); });
-                engine.Task("A").Does(() => { });
+                engine.RegisterSetupAction(() => { throw new InvalidOperationException("Setup"); });
+                engine.RegisterTeardownAction(() => { throw new InvalidOperationException("Teardown"); });
+                engine.RegisterTask("A").Does(() => { });
 
                 // When
-                var result = Record.Exception(() => engine.RunTarget("A"));
+                var result = Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.NotNull(result);
@@ -455,11 +448,12 @@ namespace Cake.Core.Tests.Unit
                 var engine = fixture.CreateEngine();
                 var expected = new InvalidOperationException("Teardown");
 
-                engine.Teardown(() => { throw expected; });
-                engine.Task("A").Does(() => { });
+                engine.RegisterTeardownAction(() => { throw expected; });
+                engine.RegisterTask("A").Does(() => { });
 
                 // When
-                var result = Record.Exception(() => engine.RunTarget("A"));
+                var result = Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.Equal(expected, result);
@@ -472,12 +466,13 @@ namespace Cake.Core.Tests.Unit
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
 
-                engine.Setup(() => { throw new InvalidOperationException("Setup"); });
-                engine.Teardown(() => { throw new InvalidOperationException("Teardown"); });
-                engine.Task("A").Does(() => { });
+                engine.RegisterSetupAction(() => { throw new InvalidOperationException("Setup"); });
+                engine.RegisterTeardownAction(() => { throw new InvalidOperationException("Teardown"); });
+                engine.RegisterTask("A").Does(() => { });
 
                 // When
-                Record.Exception(() => engine.RunTarget("A"));
+                Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.True(fixture.Log.Messages.Any(x => x.StartsWith("Teardown error:")));
@@ -490,11 +485,12 @@ namespace Cake.Core.Tests.Unit
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
 
-                engine.Teardown(() => { throw new InvalidOperationException("Teardown"); });
-                engine.Task("A").Does(() => { throw new InvalidOperationException("Task"); });
+                engine.RegisterTeardownAction(() => { throw new InvalidOperationException("Teardown"); });
+                engine.RegisterTask("A").Does(() => { throw new InvalidOperationException("Task"); });
 
                 // When
-                var result = Record.Exception(() => engine.RunTarget("A"));
+                var result = Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.NotNull(result);
@@ -509,11 +505,12 @@ namespace Cake.Core.Tests.Unit
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
 
-                engine.Teardown(() => { throw new InvalidOperationException("Teardown"); });
-                engine.Task("A").Does(() => { throw new InvalidOperationException("Task"); });
+                engine.RegisterTeardownAction(() => { throw new InvalidOperationException("Teardown"); });
+                engine.RegisterTask("A").Does(() => { throw new InvalidOperationException("Task"); });
 
                 // When
-                Record.Exception(() => engine.RunTarget("A"));
+                Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.True(fixture.Log.Messages.Any(x => x.StartsWith("Teardown error:")));
@@ -524,12 +521,13 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var invoked = false;
-                var engine = new CakeEngineFixture().CreateEngine();
-                engine.Task("A")
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A")
                     .Finally(() => invoked = true);
 
                 // When
-                engine.RunTarget("A");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
 
                 // Then
                 Assert.True(invoked);
@@ -540,14 +538,16 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var invoked = false;
-                var engine = new CakeEngineFixture().CreateEngine();
-                engine.Task("A")
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+
+                engine.RegisterTask("A")
                     .Does(() => { throw new InvalidOperationException("Whoopsie"); })
                     .ContinueOnError()
                     .Finally(() => invoked = true);
 
                 // When
-                engine.RunTarget("A");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
 
                 // Then
                 Assert.True(invoked);
@@ -558,14 +558,15 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var result = new List<string>();
-                var engine = new CakeEngineFixture().CreateEngine();
-                engine.Task("A")
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A")
                     .Does(() => { throw new InvalidOperationException("Whoopsie"); })
                     .OnError(() => result.Add("Error"))
                     .Finally(() => result.Add("Finally"));
 
                 // When
-                engine.RunTarget("A");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
 
                 // Then
                 Assert.Equal(2, result.Count);
@@ -577,14 +578,15 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var result = new List<string>();
-                var engine = new CakeEngineFixture().CreateEngine();
-                engine.Task("A")
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A")
                     .Does(() => { throw new InvalidOperationException("Whoopsie"); })
                     .OnError(ex => result.Add("Error"))
                     .ReportError(ex => result.Add("Report"));
 
                 // When
-                engine.RunTarget("A");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
 
                 // Then
                 Assert.Equal(2, result.Count);
@@ -595,13 +597,15 @@ namespace Cake.Core.Tests.Unit
             public void Should_Swallow_Exceptions_Thrown_In_Error_Reporter()
             {
                 // Given
-                var engine = new CakeEngineFixture().CreateEngine();
-                engine.Task("A")
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A")
                     .Does(() => { throw new InvalidOperationException("Task"); })
                     .ReportError(ex => { throw new InvalidOperationException("Report"); });
 
                 // When
-                var result = Record.Exception(() => engine.RunTarget("A"));
+                var result = Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.Equal("Task", result.Message);
@@ -611,14 +615,16 @@ namespace Cake.Core.Tests.Unit
             public void Should_Execute_Error_Handler_Even_If_Exception_Was_Thrown_In_Error_Reporter()
             {
                 // Given
-                var engine = new CakeEngineFixture().CreateEngine();
-                engine.Task("A")
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A")
                     .Does(() => { throw new InvalidOperationException("Task"); })
                     .OnError(() => { throw new InvalidOperationException("Error"); })
                     .ReportError(ex => { throw new InvalidOperationException("Report"); });
 
                 // When
-                var result = Record.Exception(() => engine.RunTarget("A"));
+                var result = Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.Equal("Error", result.Message);

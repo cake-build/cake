@@ -28,6 +28,15 @@ namespace Cake.Testing.Fakes
         }
 
         /// <summary>
+        /// Gets the verbosity.
+        /// </summary>
+        /// <value>The verbosity.</value>
+        public Verbosity Verbosity
+        {
+            get { return Verbosity.Quiet; }
+        }
+
+        /// <summary>
         /// Writes the text representation of the specified array of objects to the
         /// log using the specified verbosity, log level and format information.
         /// </summary>

@@ -18,10 +18,15 @@ namespace Cake.Scripting
         /// Initializes a new instance of the <see cref="DescriptionScriptHost"/> class.
         /// </summary>
         /// <param name="engine">The engine.</param>
+        /// <param name="context">The context.</param>
         /// <param name="console">The console.</param>
-        public DescriptionScriptHost(ICakeEngine engine, IConsole console)
-            : base(engine)
+        public DescriptionScriptHost(ICakeEngine engine, ICakeContext context, IConsole console)
+            : base(engine, context)
         {
+            if (console == null)
+            {
+                throw new ArgumentNullException("console");
+            }
             _console = console;
             _descriptions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         }

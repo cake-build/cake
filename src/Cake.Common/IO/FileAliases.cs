@@ -14,6 +14,36 @@ namespace Cake.Common.IO
     public static class FileAliases
     {
         /// <summary>
+        /// Gets a file path from string.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// // Get the temp file.
+        /// var root = Directory("./");
+        /// var temp = root + File("temp");
+        /// 
+        /// // Delete the file.
+        /// CleanDirectory(temp);
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>A file path.</returns>
+        [CakeMethodAlias]
+        public static FilePath File(this ICakeContext context, string path)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+            return new FilePath(path);
+        }
+
+        /// <summary>
         /// Copies an existing file to a new location.
         /// </summary>
         /// <param name="context">The context.</param>

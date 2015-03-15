@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using Cake.Core.Diagnostics;
 using Cake.Core.Graph;
-using Cake.Core.IO;
 
 namespace Cake.Core
 {
@@ -14,34 +13,10 @@ namespace Cake.Core
     /// </summary>
     public sealed class CakeEngine : ICakeEngine
     {
-        private readonly IFileSystem _fileSystem;
-        private readonly ICakeEnvironment _environment;
-        private readonly IGlobber _globber;
         private readonly ICakeLog _log;
-        private readonly ICakeArguments _arguments;
-        private readonly IProcessRunner _processRunner;
         private readonly List<CakeTask> _tasks;
-        private readonly ILookup<string, IToolResolver> _toolResolverLookup;
         private Action _setupAction;
         private Action _teardownAction;
-
-        /// <summary>
-        /// Gets the file system.
-        /// </summary>
-        /// <value>The file system.</value>
-        public IFileSystem FileSystem
-        {
-            get { return _fileSystem; }
-        }
-
-        /// <summary>
-        /// Gets the environment.
-        /// </summary>
-        /// <value>The environment.</value>
-        public ICakeEnvironment Environment
-        {
-            get { return _environment; }
-        }
 
         /// <summary>
         /// Gets all registered tasks.
@@ -53,109 +28,17 @@ namespace Cake.Core
         }
 
         /// <summary>
-        /// Gets the globber.
-        /// </summary>
-        /// <value>The globber.</value>
-        public IGlobber Globber
-        {
-            get { return _globber; }
-        }
-
-        /// <summary>
-        /// Gets the log.
-        /// </summary>
-        /// <value>The log.</value>
-        public ICakeLog Log
-        {
-            get { return _log; }
-        }
-
-        /// <summary>
-        /// Gets the arguments.
-        /// </summary>
-        /// <value>The arguments.</value>
-        public ICakeArguments Arguments
-        {
-            get { return _arguments; }
-        }
-
-        /// <summary>
-        /// Gets the process runner.
-        /// </summary>
-        /// <value>The process runner.</value>
-        public IProcessRunner ProcessRunner
-        {
-            get { return _processRunner; }
-        }
-
-        /// <summary>
-        /// Gets resolver by tool name
-        /// </summary>
-        /// <param name="toolName">resolver tool name</param>
-        /// <returns>IToolResolver for tool</returns>
-        public IToolResolver GetToolResolver(string toolName)
-        {
-            var toolResolver = _toolResolverLookup[toolName].FirstOrDefault();
-            if (toolResolver == null)
-            {
-                throw new CakeException(string.Format(CultureInfo.InvariantCulture, "Failed to resolve tool: {0}", toolName));
-            }
-            return toolResolver;
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="CakeEngine"/> class.
         /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
         /// <param name="log">The log.</param>
-        /// <param name="arguments">The arguments.</param>
-        /// <param name="globber">The globber.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="toolResolvers">The tool resolvers.</param>
-        public CakeEngine(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log,
-            ICakeArguments arguments, IGlobber globber, IProcessRunner processRunner,
-            IEnumerable<IToolResolver> toolResolvers)
+        public CakeEngine(ICakeLog log)
         {
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException("fileSystem");
-            }
-            if (environment == null)
-            {
-                throw new ArgumentNullException("environment");
-            }
             if (log == null)
             {
                 throw new ArgumentNullException("log");
             }
-            if (arguments == null)
-            {
-                throw new ArgumentNullException("arguments");
-            }
-            if (globber == null)
-            {
-                throw new ArgumentNullException("globber");
-            }
-            if (processRunner == null)
-            {
-                throw new ArgumentNullException("processRunner");
-            }
-            if (processRunner == null)
-            {
-                throw new ArgumentNullException("toolResolvers");
-            }
-            _fileSystem = fileSystem;
-            _environment = environment;
             _log = log;
-            _arguments = arguments;
-            _globber = globber;
-            _processRunner = processRunner;
             _tasks = new List<CakeTask>();
-            _toolResolverLookup = toolResolvers.ToLookup(
-                key => key.Name,
-                value => value,
-                StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -165,7 +48,7 @@ namespace Cake.Core
         /// <returns>
         /// A <see cref="CakeTaskBuilder{T}"/> used to configure the task.
         /// </returns>
-        public CakeTaskBuilder<ActionTask> Task(string name)
+        public CakeTaskBuilder<ActionTask> RegisterTask(string name)
         {
             if (_tasks.Any(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
@@ -182,7 +65,7 @@ namespace Cake.Core
         /// If setup fails, no tasks will be executed but teardown will be performed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        public void Setup(Action action)
+        public void RegisterSetupAction(Action action)
         {
             _setupAction = action;
         }
@@ -192,7 +75,7 @@ namespace Cake.Core
         /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        public void Teardown(Action action)
+        public void RegisterTeardownAction(Action action)
         {
             _teardownAction = action;
         }
@@ -200,10 +83,21 @@ namespace Cake.Core
         /// <summary>
         /// Runs the specified target.
         /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="strategy">The execution strategy.</param>
         /// <param name="target">The target to run.</param>
         /// <returns>The resulting report.</returns>
-        public CakeReport RunTarget(string target)
+        public CakeReport RunTarget(ICakeContext context, IExecutionStrategy strategy, string target)
         {
+            if (target == null)
+            {
+                throw new ArgumentNullException("target");
+            }
+            if (strategy == null)
+            {
+                throw new ArgumentNullException("strategy");
+            }
+
             var graph = CakeGraphBuilder.Build(_tasks);
 
             // Make sure target exist.
@@ -220,33 +114,28 @@ namespace Cake.Core
 
             try
             {
-                PerformSetup();
+                PerformSetup(strategy);
 
                 var stopWatch = new Stopwatch();
                 var report = new CakeReport();
 
-                foreach (var task in graph.Traverse(target))
+                foreach (var taskNode in graph.Traverse(target))
                 {
-                    var taskNode = _tasks.FirstOrDefault(x => x.Name.Equals(task, StringComparison.OrdinalIgnoreCase));
-                    Debug.Assert(taskNode != null, "Node should not be null.");
+                    // Get the task.
+                    var task = _tasks.FirstOrDefault(x => x.Name.Equals(taskNode, StringComparison.OrdinalIgnoreCase));
+                    Debug.Assert(task != null, "Node should not be null.");
 
-                    var isTarget = taskNode.Name.Equals(target, StringComparison.OrdinalIgnoreCase);
+                    // Is this the current target?
+                    var isTarget = task.Name.Equals(target, StringComparison.OrdinalIgnoreCase);
 
-                    if (ShouldTaskExecute(taskNode, isTarget))
+                    // Should we execute the task?
+                    if (ShouldTaskExecute(task, isTarget))
                     {
-                        _log.Information(string.Empty);
-                        _log.Information("========================================");
-                        _log.Information(taskNode.Name);
-                        _log.Information("========================================");
-                        _log.Verbose("Executing task: {0}", taskNode.Name);
-
-                        ExecuteTask(stopWatch, taskNode, report);
-
-                        _log.Verbose("Finished executing task: {0}", taskNode.Name);
+                        ExecuteTask(context, strategy, stopWatch, task, report);
                     }
                     else
                     {
-                        _log.Verbose("Skipping task: {0}", taskNode.Name);
+                        SkipTask(strategy, task);
                     }
                 }
 
@@ -259,20 +148,15 @@ namespace Cake.Core
             }
             finally
             {
-                PerformTeardown(exceptionWasThrown);
+                PerformTeardown(strategy, exceptionWasThrown);
             }
         }
 
-        private void PerformSetup()
+        private void PerformSetup(IExecutionStrategy strategy)
         {
             if (_setupAction != null)
             {
-                _log.Information(string.Empty);
-                _log.Information("----------------------------------------");
-                _log.Information("Setup");
-                _log.Information("----------------------------------------");
-                _log.Verbose("Executing custom setup action...");
-                _setupAction();
+                strategy.PerformSetup(_setupAction);
             }
         }
 
@@ -296,7 +180,7 @@ namespace Cake.Core
             return true;
         }
 
-        private void ExecuteTask(Stopwatch stopWatch, CakeTask task, CakeReport report)
+        private void ExecuteTask(ICakeContext context, IExecutionStrategy strategy, Stopwatch stopWatch, CakeTask task, CakeReport report)
         {
             // Reset the stop watch.
             stopWatch.Reset();
@@ -305,7 +189,7 @@ namespace Cake.Core
             try
             {
                 // Execute the task.
-                task.Execute(this);
+                strategy.Execute(task, context);
             }
             catch (Exception exception)
             {
@@ -314,13 +198,13 @@ namespace Cake.Core
                 // Got an error reporter?
                 if (task.ErrorReporter != null)
                 {
-                    ReportErrors(task.ErrorReporter, exception);
+                    ReportErrors(strategy, task.ErrorReporter, exception);
                 }
 
                 // Got an error handler?
                 if (task.ErrorHandler != null)
                 {
-                    PerformErrorHandling(task.ErrorHandler, exception);
+                    HandleErrors(strategy, task.ErrorHandler, exception);
                 }
                 else
                 {
@@ -333,7 +217,7 @@ namespace Cake.Core
             {
                 if (task.FinallyHandler != null)
                 {
-                    task.FinallyHandler();
+                    strategy.InvokeFinally(task.FinallyHandler);
                 }
             }
 
@@ -341,11 +225,16 @@ namespace Cake.Core
             report.Add(task.Name, stopWatch.Elapsed);
         }
 
-        private static void ReportErrors(Action<Exception> errorReporter, Exception taskException)
+        private static void SkipTask(IExecutionStrategy strategy, CakeTask task)
+        {
+            strategy.Skip(task);
+        }
+
+        private static void ReportErrors(IExecutionStrategy strategy, Action<Exception> errorReporter, Exception taskException)
         {
             try
             {
-                errorReporter(taskException);
+                strategy.ReportErrors(errorReporter, taskException);
             }
             // ReSharper disable once EmptyGeneralCatchClause
             catch
@@ -354,11 +243,11 @@ namespace Cake.Core
             }
         }
 
-        private void PerformErrorHandling(Action<Exception> errorHandler, Exception exception)
+        private void HandleErrors(IExecutionStrategy strategy, Action<Exception> errorHandler, Exception exception)
         {
             try
             {
-                errorHandler(exception);
+                strategy.HandleErrors(errorHandler, exception);
             }
             catch (Exception errorHandlerException)
             {
@@ -370,18 +259,13 @@ namespace Cake.Core
             }
         }
 
-        private void PerformTeardown(bool exceptionWasThrown)
+        private void PerformTeardown(IExecutionStrategy strategy, bool exceptionWasThrown)
         {
             if (_teardownAction != null)
             {
                 try
                 {
-                    _log.Information(string.Empty);
-                    _log.Information("----------------------------------------");
-                    _log.Information("Teardown");
-                    _log.Information("----------------------------------------");
-                    _log.Verbose("Executing custom teardown action...");
-                    _teardownAction();
+                    strategy.PerformTeardown(_teardownAction);
                 }
                 catch (Exception ex)
                 {

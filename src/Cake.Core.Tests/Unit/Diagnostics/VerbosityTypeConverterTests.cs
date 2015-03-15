@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Cake.Core.Tests.Unit.Diagnostics
 {
-    public sealed class VerboseTypeConverterTests
+    public sealed class VerbosityTypeConverterTests
     {
         [Theory]
         [InlineData("q", Verbosity.Quiet)]
