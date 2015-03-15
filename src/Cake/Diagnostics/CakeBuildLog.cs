@@ -12,13 +12,14 @@ namespace Cake.Diagnostics
         private readonly object _lock;
         private readonly IDictionary<LogLevel, ConsolePalette> _palettes;
 
-        public Verbosity Verbosity { get; set; }
+        public Verbosity Verbosity { get; private set; }
 
-        public CakeBuildLog(IConsole console)
+        public CakeBuildLog(IConsole console, Verbosity verbosity = Verbosity.Normal)
         {
             _console = console;
             _lock = new object();
             _palettes = CreatePalette();
+            Verbosity = verbosity;
         }
 
         public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
@@ -45,6 +46,11 @@ namespace Cake.Diagnostics
                     _console.WriteLine();
                 }
             }
+        }
+
+        public void SetVerbosity(Verbosity verbosity)
+        {
+            Verbosity = verbosity;
         }
 
         private void SetPalette(FormatToken token, ConsolePalette palette)

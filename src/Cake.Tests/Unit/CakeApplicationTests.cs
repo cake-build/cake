@@ -80,7 +80,7 @@ namespace Cake.Tests.Unit
                 fixture.RunApplication();
 
                 // Then
-                fixture.Log.Received(1).Verbosity = Verbosity.Diagnostic;
+                fixture.Log.Received(1).SetVerbosity(Verbosity.Diagnostic);
             }
 
             [Fact]

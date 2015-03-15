@@ -18,10 +18,7 @@ namespace Cake.Tests.Unit.Diagnostics
             {
                 // Given
                 var console = new FakeConsole();
-                var log = new CakeBuildLog(console)
-                {
-                    Verbosity = logVerbosity
-                };
+                var log = new CakeBuildLog(console, logVerbosity);
 
                 // When
                 log.Write(messageVerbosity, LogLevel.Information, "Hello World");
@@ -39,10 +36,7 @@ namespace Cake.Tests.Unit.Diagnostics
             {
                 // Given
                 var console = new FakeConsole();
-                var log = new CakeBuildLog(console)
-                {
-                    Verbosity = logVerbosity
-                };
+                var log = new CakeBuildLog(console, logVerbosity);
 
                 // When
                 log.Write(messageVerbosity, LogLevel.Information, "Hello World");
