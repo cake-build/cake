@@ -67,7 +67,7 @@ namespace Cake
                 var options = _argumentParser.Parse(args);
                 if (options != null)
                 {
-                    _log.Verbosity = options.Verbosity;
+                    _log.SetVerbosity(options.Verbosity);
                 }
 
                 // Create the correct command and execute it.
@@ -110,7 +110,7 @@ namespace Cake
                 {
                     if (options.ShowDescription)
                     {
-                        _log.Verbosity = Verbosity.Quiet;
+                        _log.SetVerbosity(options.Verbosity);
                         return _commandFactory.CreateDescriptionCommand();
                     }
 

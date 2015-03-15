@@ -65,6 +65,7 @@
     <Compile Include="CakeTaskBuilderExtensions.cs" />
     <Compile Include="DefaultExecutionStrategy.cs" />
     <Compile Include="Diagnostics\ICakeLog.cs" />
+    <Compile Include="Diagnostics\LogAction.cs" />
     <Compile Include="Diagnostics\LogExtensions.cs" />
     <Compile Include="Diagnostics\LogLevel.cs" />
     <Compile Include="Diagnostics\NullLog.cs" />

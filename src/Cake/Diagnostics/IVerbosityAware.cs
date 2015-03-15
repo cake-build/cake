@@ -8,9 +8,9 @@ namespace Cake.Diagnostics
     public interface IVerbosityAwareLog : ICakeLog
     {
         /// <summary>
-        /// Gets or sets the verbosity.
+        /// Sets the verbosity.
         /// </summary>
-        /// <value>The verbosity.</value>
-        Verbosity Verbosity { get; set; }
+        /// <param name="verbosity">The desired verbosity.</param>
+        void SetVerbosity(Verbosity verbosity);
     }
 }

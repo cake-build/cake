@@ -26,6 +26,22 @@ namespace Cake.Common.Diagnostics
             }
             context.Log.Error(format, args);
         }
+        
+        /// <summary>
+        /// Writes an error message to the log using the specified log message action.
+        /// Evaluation message only if verbosity same or more verbose.
+        /// </summary>
+        /// <param name="context">the context.</param>
+        /// <param name="logAction">The function called for message when logging.</param>
+        [CakeMethodAlias]
+        public static void Error(this ICakeContext context, LogAction logAction)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            context.Log.Error(logAction);
+        }
 
         /// <summary>
         /// Writes a warning message to the log using the specified format information.
@@ -41,6 +57,22 @@ namespace Cake.Common.Diagnostics
                 throw new ArgumentNullException("context");
             }
             context.Log.Warning(format, args);
+        }
+
+        /// <summary>
+        /// Writes a warning message to the log using the specified log message action.
+        /// Evaluation message only if verbosity same or more verbose.
+        /// </summary>
+        /// <param name="context">the context.</param>
+        /// <param name="logAction">The function called for message when logging.</param>
+        [CakeMethodAlias]
+        public static void Warning(this ICakeContext context, LogAction logAction)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            context.Log.Warning(logAction);
         }
 
         /// <summary>
@@ -60,6 +92,22 @@ namespace Cake.Common.Diagnostics
         }
 
         /// <summary>
+        /// Writes an informational message to the log using the specified log message action.
+        /// Evaluation message only if verbosity same or more verbose.
+        /// </summary>
+        /// <param name="context">the context.</param>
+        /// <param name="logAction">The function called for message when logging.</param>
+        [CakeMethodAlias]
+        public static void Information(this ICakeContext context, LogAction logAction)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            context.Log.Information(logAction);
+        }
+
+        /// <summary>
         /// Writes a verbose message to the log using the specified format information.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -76,6 +124,22 @@ namespace Cake.Common.Diagnostics
         }
 
         /// <summary>
+        /// Writes a verbose message to the log using the specified log message action.
+        /// Evaluation message only if verbosity same or more verbose.
+        /// </summary>
+        /// <param name="context">the context.</param>
+        /// <param name="logAction">The function called for message when logging.</param>
+        [CakeMethodAlias]
+        public static void Verbose(this ICakeContext context, LogAction logAction)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            context.Log.Verbose(logAction);
+        }
+
+        /// <summary>
         /// Writes a debug message to the log using the specified format information.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -89,6 +153,22 @@ namespace Cake.Common.Diagnostics
                 throw new ArgumentNullException("context");
             }
             context.Log.Debug(format, args);
+        }
+
+        /// <summary>
+        /// Writes a debug message to the log using the specified log message action.
+        /// Evaluation message only if verbosity same or more verbose.
+        /// </summary>
+        /// <param name="context">the context.</param>
+        /// <param name="logAction">The function called for message when logging.</param>
+        [CakeMethodAlias]
+        public static void Debug(this ICakeContext context, LogAction logAction)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            context.Log.Debug(logAction);
         }
     }
 }
