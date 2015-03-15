@@ -1,4 +1,6 @@
-﻿using Cake.Core;
+﻿using System;
+using Cake.Core;
+using Cake.Core.Diagnostics;
 
 namespace Cake.Commands
 {
@@ -29,6 +31,8 @@ namespace Cake.Commands
             _console.WriteLine();
             _console.WriteLine("Options:");
             _console.WriteLine("    -verbosity=value    Specifies the amount of information to be displayed.");
+            _console.WriteLine("                        ({0})",
+                string.Join(", ", Enum.GetNames(typeof(Verbosity))));
             _console.WriteLine("    -showdescription    Shows description about tasks.");
             _console.WriteLine("    -dryrun             Performs a dry run.");
             _console.WriteLine("    -version            Displays version information.");
