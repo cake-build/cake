@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using Cake.Common.IO;
+using Cake.Common.IO.Paths;
 using Cake.Common.Tests.Fixtures;
 using Cake.Core;
 using Cake.Core.IO;
@@ -42,7 +43,7 @@ namespace Cake.Common.Tests.Unit.IO
             }
 
             [Fact]
-            public void Should_Return_A_File_Path_Proxy()
+            public void Should_Return_A_Convertable_File_Path()
             {
                 // Given
                 var context = Substitute.For<ICakeContext>();
@@ -51,7 +52,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = FileAliases.File(context, "./file.txt");
 
                 // Then
-                Assert.Equal("file.txt", result.FullPath);
+                Assert.IsType<ConvertableFilePath>(result);
             }
         }
 

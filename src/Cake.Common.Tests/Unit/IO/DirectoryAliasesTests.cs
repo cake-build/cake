@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Cake.Common.IO;
+using Cake.Common.IO.Paths;
 using Cake.Common.Tests.Fixtures;
 using Cake.Core;
 using Cake.Core.IO;
@@ -43,7 +44,7 @@ namespace Cake.Common.Tests.Unit.IO
             }
 
             [Fact]
-            public void Should_Return_A_File_Path_Proxy()
+            public void Should_Return_A_Convertable_Directory_Path()
             {
                 // Given
                 var context = Substitute.For<ICakeContext>();
@@ -51,8 +52,8 @@ namespace Cake.Common.Tests.Unit.IO
                 // When
                 var result = DirectoryAliases.Directory(context, "./temp");
 
-                // Then
-                Assert.Equal("temp", result.FullPath);
+                // Then                
+                Assert.IsType<ConvertableDirectoryPath>(result);
             }
         }
 

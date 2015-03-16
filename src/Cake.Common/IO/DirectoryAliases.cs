@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cake.Common.IO.Paths;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -30,7 +31,8 @@ namespace Cake.Common.IO
         /// <param name="path">The path.</param>
         /// <returns>A directory path.</returns>
         [CakeMethodAlias]
-        public static DirectoryPath Directory(this ICakeContext context, string path)
+        [CakeNamespaceImport("Cake.Common.IO.Paths")]
+        public static ConvertableDirectoryPath Directory(this ICakeContext context, string path)
         {
             if (context == null)
             {
@@ -40,7 +42,7 @@ namespace Cake.Common.IO
             {
                 throw new ArgumentNullException("path");
             }
-            return new DirectoryPath(path);
+            return new ConvertableDirectoryPath(new DirectoryPath(path));
         }
 
         /// <summary>
