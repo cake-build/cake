@@ -17,6 +17,11 @@ namespace Cake.Common.Diagnostics
         /// <param name="context">The context.</param>
         /// <param name="format">The format.</param>
         /// <param name="args">The arguments.</param>
+        /// <example>
+        /// <code>
+        /// Error("Hello {0}! Today is an {1:dddd}", "World", DateTime.Now);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void Error(this ICakeContext context, string format, params object[] args)
         {
@@ -33,6 +38,11 @@ namespace Cake.Common.Diagnostics
         /// </summary>
         /// <param name="context">the context.</param>
         /// <param name="logAction">The function called for message when logging.</param>
+        /// <example>
+        /// <code>
+        /// Error(logAction=>logAction("Hello {0}! Today is an {1:dddd}", "World", DateTime.Now));
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void Error(this ICakeContext context, LogAction logAction)
         {
@@ -49,6 +59,11 @@ namespace Cake.Common.Diagnostics
         /// <param name="context">The context.</param>
         /// <param name="format">The format.</param>
         /// <param name="args">The arguments.</param>
+        /// <example>
+        /// <code>
+        /// Warning("Hello {0}! Today is an {1:dddd}", "World", DateTime.Now);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void Warning(this ICakeContext context, string format, params object[] args)
         {
@@ -65,6 +80,11 @@ namespace Cake.Common.Diagnostics
         /// </summary>
         /// <param name="context">the context.</param>
         /// <param name="logAction">The function called for message when logging.</param>
+        /// <example>
+        /// <code>
+        /// Warning(logAction=>logAction("Hello {0}! Today is an {1:dddd}", "World", DateTime.Now));
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void Warning(this ICakeContext context, LogAction logAction)
         {
@@ -81,6 +101,11 @@ namespace Cake.Common.Diagnostics
         /// <param name="context">The context.</param>
         /// <param name="format">The format.</param>
         /// <param name="args">The arguments.</param>
+        /// <example>
+        /// <code>
+        /// Information("Hello {0}! Today is an {1:dddd}", "World", DateTime.Now);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void Information(this ICakeContext context, string format, params object[] args)
         {
@@ -97,6 +122,11 @@ namespace Cake.Common.Diagnostics
         /// </summary>
         /// <param name="context">the context.</param>
         /// <param name="logAction">The function called for message when logging.</param>
+        /// <example>
+        /// <code>
+        /// Information(logAction=>logAction("Hello {0}! Today is an {1:dddd}", "World", DateTime.Now));
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void Information(this ICakeContext context, LogAction logAction)
         {
@@ -113,6 +143,11 @@ namespace Cake.Common.Diagnostics
         /// <param name="context">The context.</param>
         /// <param name="format">The format.</param>
         /// <param name="args">The arguments.</param>
+        /// <example>
+        /// <code>
+        /// Verbose("Hello {0}! Today is an {1:dddd}", "World", DateTime.Now);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void Verbose(this ICakeContext context, string format, params object[] args)
         {
@@ -129,6 +164,11 @@ namespace Cake.Common.Diagnostics
         /// </summary>
         /// <param name="context">the context.</param>
         /// <param name="logAction">The function called for message when logging.</param>
+        /// <example>
+        /// <code>
+        /// Verbose(logAction=>logAction("Hello {0}! Today is an {1:dddd}", "World", DateTime.Now));
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void Verbose(this ICakeContext context, LogAction logAction)
         {
@@ -145,6 +185,11 @@ namespace Cake.Common.Diagnostics
         /// <param name="context">The context.</param>
         /// <param name="format">The format.</param>
         /// <param name="args">The arguments.</param>
+        /// <example>
+        /// <code>
+        /// Debug("Hello {0}! Today is an {1:dddd}", "World", DateTime.Now);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void Debug(this ICakeContext context, string format, params object[] args)
         {
@@ -161,6 +206,11 @@ namespace Cake.Common.Diagnostics
         /// </summary>
         /// <param name="context">the context.</param>
         /// <param name="logAction">The function called for message when logging.</param>
+        /// <example>
+        /// <code>
+        /// Debug(logAction=>logAction("Hello {0}! Today is an {1:dddd}", "World", DateTime.Now));
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void Debug(this ICakeContext context, LogAction logAction)
         {
