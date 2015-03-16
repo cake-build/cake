@@ -51,6 +51,11 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="filePath">The file path.</param>
         /// <param name="targetDirectoryPath">The target directory path.</param>
+        /// <example>
+        /// <code>
+        /// CopyFileToDirectory("test.txt", "./targetdir");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Copy")]
         public static void CopyFileToDirectory(this ICakeContext context, FilePath filePath, DirectoryPath targetDirectoryPath)
@@ -64,6 +69,11 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="filePath">The file path.</param>
         /// <param name="targetFilePath">The target file path.</param>
+        /// <example>
+        /// <code>
+        /// CopyFile("test.tmp", "test.txt");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Copy")]
         public static void CopyFile(this ICakeContext context, FilePath filePath, FilePath targetFilePath)
@@ -77,6 +87,11 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
         /// <param name="targetDirectoryPath">The target directory path.</param>
+        /// <example>
+        /// <code>
+        /// CopyFiles("Cake.*", "./publish");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Copy")]
         public static void CopyFiles(this ICakeContext context, string pattern, DirectoryPath targetDirectoryPath)
@@ -90,6 +105,12 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="filePaths">The file paths.</param>
         /// <param name="targetDirectoryPath">The target directory path.</param>
+        /// <example>
+        /// <code>
+        /// var files = GetFiles("./**/Cake.*");
+        /// CopyFiles(files, "destination");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Copy")]
         public static void CopyFiles(this ICakeContext context, IEnumerable<FilePath> filePaths, DirectoryPath targetDirectoryPath)
@@ -103,6 +124,16 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="filePaths">The file paths.</param>
         /// <param name="targetDirectoryPath">The target directory path.</param>
+        /// <example>
+        /// <code>
+        /// CreateDirectory("destination");
+        /// var files = new [] {
+        ///     "Cake.exe",
+        ///     "Cake.pdb"
+        /// };
+        /// CopyFiles(files, "destination");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Copy")]
         public static void CopyFiles(this ICakeContext context, IEnumerable<string> filePaths, DirectoryPath targetDirectoryPath)
@@ -121,6 +152,11 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="filePath">The file path.</param>
         /// <param name="targetDirectoryPath">The target directory path.</param>
+        /// <example>
+        /// <code>
+        /// MoveFileToDirectory("test.txt", "./targetdir");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Move")]
         public static void MoveFileToDirectory(this ICakeContext context, FilePath filePath, DirectoryPath targetDirectoryPath)
@@ -134,6 +170,11 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
         /// <param name="targetDirectoryPath">The target directory path.</param>
+        /// <example>
+        /// <code>
+        /// MoveFiles("./publish/Cake.*", "./destination");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Move")]
         public static void MoveFiles(this ICakeContext context, string pattern, DirectoryPath targetDirectoryPath)
@@ -147,6 +188,12 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="filePaths">The file paths.</param>
         /// <param name="targetDirectoryPath">The target directory path.</param>
+        /// <example>
+        /// <code>
+        /// var files = GetFiles("./publish/Cake.*");
+        /// MoveFiles(files, "destination");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Move")]
         public static void MoveFiles(this ICakeContext context, IEnumerable<FilePath> filePaths, DirectoryPath targetDirectoryPath)
@@ -160,6 +207,11 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="filePath">The file path.</param>
         /// <param name="targetFilePath">The target file path.</param>
+        /// <example>
+        /// <code>
+        /// MoveFile("test.tmp", "test.txt");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Move")]
         public static void MoveFile(this ICakeContext context, FilePath filePath, FilePath targetFilePath)
@@ -172,6 +224,11 @@ namespace Cake.Common.IO
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
+        /// <example>
+        /// <code>
+        /// DeleteFiles("./publish/Cake.*");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Delete")]
         public static void DeleteFiles(this ICakeContext context, string pattern)
@@ -184,6 +241,12 @@ namespace Cake.Common.IO
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="filePaths">The file paths.</param>
+        /// <example>
+        /// <code>
+        /// var files = GetFiles("./destination/Cake.*");
+        /// DeleteFiles(files);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Delete")]
         public static void DeleteFiles(this ICakeContext context, IEnumerable<FilePath> filePaths)
@@ -196,6 +259,11 @@ namespace Cake.Common.IO
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="filePath">The file path.</param>
+        /// <example>
+        /// <code>
+        /// DeleteFile("deleteme.txt");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Delete")]
         public static void DeleteFile(this ICakeContext context, FilePath filePath)
@@ -211,6 +279,14 @@ namespace Cake.Common.IO
         /// <returns><c>true</c> if <paramref name="filePath"/> refers to an existing file;
         /// <c>false</c> if the file does not exist or an error occurs when trying to
         /// determine if the specified file exists.</returns>
+        /// <example>
+        /// <code>
+        /// if (FileExists("findme.txt"))
+        /// {
+        ///     Information("File exists!");
+        /// }
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Exists")]
         public static bool FileExists(this ICakeContext context, FilePath filePath)
