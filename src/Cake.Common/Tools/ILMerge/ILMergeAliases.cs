@@ -19,6 +19,12 @@ namespace Cake.Common.Tools.ILMerge
         /// <param name="outputFile">The output file.</param>
         /// <param name="primaryAssembly">The primary assembly.</param>
         /// <param name="assemblyPaths">The assembly paths.</param>
+        /// <example>
+        /// <code>
+        /// var assemblyPaths = GetFiles("./**/Cake.*.dll");
+        /// ILMerge("./MergedCake.exe", "./Cake.exe", assemblyPaths);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void ILMerge(this ICakeContext context, FilePath outputFile, FilePath primaryAssembly,
             IEnumerable<FilePath> assemblyPaths)
@@ -40,6 +46,16 @@ namespace Cake.Common.Tools.ILMerge
         /// <param name="primaryAssembly">The primary assembly.</param>
         /// <param name="assemblyPaths">The assembly paths.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var assemblyPaths = GetFiles("./**/Cake.*.dll");
+        /// ILMerge(
+        ///     "./MergedCake.exe",
+        ///     "./Cake.exe",
+        ///     assemblyPaths,
+        ///     new ILMergeSettings { Internalize = true });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void ILMerge(this ICakeContext context, FilePath outputFile, FilePath primaryAssembly,
             IEnumerable<FilePath> assemblyPaths, ILMergeSettings settings)
