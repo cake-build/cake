@@ -18,6 +18,15 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="pattern">The glob pattern to match.</param>
         /// <returns>A <see cref="FilePathCollection" />.</returns>
+        /// <example>
+        /// <code>
+        /// var files = GetFiles("./**/Cake.*.dll");
+        /// foreach(var file in files)
+        /// {
+        ///     Information("File: {0}", file);
+        /// }
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Files")]
         public static FilePathCollection GetFiles(this ICakeContext context, string pattern)
@@ -37,6 +46,15 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="pattern">The glob pattern to match.</param>
         /// <returns>A <see cref="DirectoryPathCollection" />.</returns>
+        /// <example>
+        /// <code>
+        /// var directories = GetDirectories("./src/**/obj/*");
+        /// foreach(var directory in directories)
+        /// {
+        ///     Information("Directory: {0}", directory);
+        /// }
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Directories")]
         public static DirectoryPathCollection GetDirectories(this ICakeContext context, string pattern)
