@@ -1,5 +1,5 @@
 ### New in 0.2.1 (Released 2015/03/17)
-* Added path convertable and removed path add operators.
+* Added convertable paths and removed path add operators.
 
 ### New in 0.2.0 (Released 2015/03/15)
 * Added script dry run option.
