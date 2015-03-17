@@ -19,6 +19,11 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="rootPath">The root path.</param>
         /// <param name="outputPath">The output path.</param>
+        /// <example>
+        /// <code>
+        /// Zip("./publish", "publish.zip");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void Zip(this ICakeContext context, DirectoryPath rootPath, FilePath outputPath)
         {
@@ -33,6 +38,11 @@ namespace Cake.Common.IO
         /// <param name="rootPath">The root path.</param>
         /// <param name="outputPath">The output path.</param>
         /// <param name="pattern">The pattern.</param>
+        /// <example>
+        /// <code>
+        /// Zip("./", "xmlfiles.zip", "./*.xml");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void Zip(this ICakeContext context, DirectoryPath rootPath, FilePath outputPath, string pattern)
         {
@@ -47,6 +57,12 @@ namespace Cake.Common.IO
         /// <param name="rootPath">The root path.</param>
         /// <param name="outputPath">The output path.</param>
         /// <param name="filePaths">The file paths.</param>
+        /// <example>
+        /// <code>
+        /// var files = GetFiles("./**/Cake.*.dll");
+        /// Zip("./", "cakedlls.zip", files);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void Zip(this ICakeContext context, DirectoryPath rootPath, FilePath outputPath, IEnumerable<FilePath> filePaths)
         {
@@ -66,6 +82,17 @@ namespace Cake.Common.IO
         /// <param name="rootPath">The root path.</param>
         /// <param name="outputPath">The output path.</param>
         /// <param name="filePaths">The file paths.</param>
+        /// <example>
+        /// <code>
+        /// var files = new [] {
+        ///     "./src/Cake/bin/Debug/Autofac.dll",
+        ///     "./src/Cake/bin/Debug/Cake.Common.dll",
+        ///     "./src/Cake/bin/Debug/Cake.Core.dll",
+        ///     "./src/Cake/bin/Debug/Cake.exe"
+        /// };
+        /// Zip("./", "cakebinaries.zip", files);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void Zip(this ICakeContext context, DirectoryPath rootPath, FilePath outputPath, IEnumerable<string> filePaths)
         {
