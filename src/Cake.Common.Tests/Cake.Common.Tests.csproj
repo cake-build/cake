@@ -93,6 +93,8 @@
     <Compile Include="Unit\Build\AppVeyor\Data\AppVeyorRepositoryInfoTests.cs" />
     <Compile Include="Unit\Build\BuildSystemAliasesTests.cs" />
     <Compile Include="Unit\Build\BuildSystemTests.cs" />
+    <Compile Include="Unit\IO\Paths\ConvertableDirectoryPathTests.cs" />
+    <Compile Include="Unit\IO\Paths\ConvertableFilePathTests.cs" />
     <Compile Include="Unit\Security\FileHashCalculatorTests.cs" />
     <Compile Include="Unit\Solution\Project\Properties\AssemblyInfoCreatorTests.cs" />
     <Compile Include="Unit\Solution\Project\Properties\AssemblyInfoParserTests.cs" />

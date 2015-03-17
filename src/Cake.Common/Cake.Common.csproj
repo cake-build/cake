@@ -62,6 +62,8 @@
     <Compile Include="Build\BuildSystem.cs" />
     <Compile Include="Build\BuildSystemAliases.cs" />
     <Compile Include="Build\AppVeyor\IAppVeyorProvider.cs" />
+    <Compile Include="IO\Paths\ConvertableDirectoryPath.cs" />
+    <Compile Include="IO\Paths\ConvertableFilePath.cs" />
     <Compile Include="Properties\Namespaces.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>

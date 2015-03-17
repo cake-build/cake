@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cake.Common.IO.Paths;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -30,7 +31,8 @@ namespace Cake.Common.IO
         /// <param name="path">The path.</param>
         /// <returns>A directory path.</returns>
         [CakeMethodAlias]
-        public static DirectoryPath Directory(this ICakeContext context, string path)
+        [CakeNamespaceImport("Cake.Common.IO.Paths")]
+        public static ConvertableDirectoryPath Directory(this ICakeContext context, string path)
         {
             if (context == null)
             {
@@ -40,7 +42,7 @@ namespace Cake.Common.IO
             {
                 throw new ArgumentNullException("path");
             }
-            return new DirectoryPath(path);
+            return new ConvertableDirectoryPath(new DirectoryPath(path));
         }
 
         /// <summary>
@@ -49,6 +51,15 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="directories">The directory paths.</param>
         /// <param name="recursive">Will perform a recursive delete if set to <c>true</c>.</param>
+        /// <example>
+        /// <code>
+        /// var directoriesToDelete = new DirectoryPath[]{
+        ///     Directory("be"),
+        ///     Directory("gone")
+        /// };
+        /// DeleteDirectories(directoriesToDelete, recursive:true);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Delete")]
         public static void DeleteDirectories(this ICakeContext context, IEnumerable<DirectoryPath> directories, bool recursive = false)
@@ -70,6 +81,15 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="directories">The directory paths.</param>
         /// <param name="recursive">Will perform a recursive delete if set to <c>true</c>.</param>
+        /// <example>
+        /// <code>
+        /// var directoriesToDelete = new []{
+        ///     "be",
+        ///     "gone"
+        /// };
+        /// DeleteDirectories(directoriesToDelete, recursive:true);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Delete")]
         public static void DeleteDirectories(this ICakeContext context, IEnumerable<string> directories, bool recursive = false)
@@ -92,6 +112,11 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="path">The directory path.</param>
         /// <param name="recursive">Will perform a recursive delete if set to <c>true</c>.</param>
+        /// <example>
+        /// <code>
+        /// DeleteDirectory("./be/gone", recursive:true);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Delete")]
         public static void DeleteDirectory(this ICakeContext context, DirectoryPath path, bool recursive = false)
@@ -105,6 +130,11 @@ namespace Cake.Common.IO
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern to match.</param>
+        /// <example>
+        /// <code>
+        /// CleanDirectories("./src/**/bin/debug");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Clean")]
         public static void CleanDirectories(this ICakeContext context, string pattern)
@@ -119,6 +149,12 @@ namespace Cake.Common.IO
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="directories">The directory paths.</param>
+        /// <example>
+        /// <code>
+        /// var directoriesToClean = GetDirectories("./src/**/bin/");
+        /// CleanDirectories(directoriesToClean);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Clean")]
         public static void CleanDirectories(this ICakeContext context, IEnumerable<DirectoryPath> directories)
@@ -139,6 +175,15 @@ namespace Cake.Common.IO
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="directories">The directory paths.</param>
+        /// <example>
+        /// <code>
+        /// var directoriesToClean = new []{
+        ///     "./src/Cake/obj",
+        ///     "./src/Cake.Common/obj"
+        /// };
+        /// CleanDirectories(directoriesToClean);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Clean")]
         public static void CleanDirectories(this ICakeContext context, IEnumerable<string> directories)
@@ -159,6 +204,11 @@ namespace Cake.Common.IO
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="path">The directory path.</param>
+        /// <example>
+        /// <code>
+        /// CleanDirectory("./src/Cake.Common/obj");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Clean")]
         public static void CleanDirectory(this ICakeContext context, DirectoryPath path)
@@ -172,6 +222,11 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="path">The directory path.</param>
         /// <param name="predicate">Predicate used to determine which files/directories should get deleted.</param>
+        /// <example>
+        /// <code>
+        /// CleanDirectory("./src/Cake.Common/obj", fileSystemInfo=>!fileSystemInfo.Hidden);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Clean")]
         public static void CleanDirectory(this ICakeContext context, DirectoryPath path, Func<IFileSystemInfo, bool> predicate)
@@ -184,6 +239,11 @@ namespace Cake.Common.IO
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="path">The directory path.</param>
+        /// <example>
+        /// <code>
+        /// CreateDirectory("publish");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Create")]
         public static void CreateDirectory(this ICakeContext context, DirectoryPath path)
@@ -197,6 +257,11 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="source">The source directory path.</param>
         /// <param name="destination">The destination directory path.</param>
+        /// <example>
+        /// <code>
+        /// CopyDirectory("source_path", "destination_path");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Copy")]
         public static void CopyDirectory(this ICakeContext context, DirectoryPath source, DirectoryPath destination)
@@ -262,6 +327,15 @@ namespace Cake.Common.IO
         /// <returns><c>true</c> if <paramref name="path"/> refers to an existing directory;
         /// <c>false</c> if the directory does not exist or an error occurs when trying to
         /// determine if the specified path exists.</returns>
+        /// <example>
+        /// <code>
+        /// var dir = "publish";
+        /// if (!DirectoryExists(dir))
+        /// {
+        ///     CreateDirectory(dir);
+        /// }
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Exists")]
         public static bool DirectoryExists(this ICakeContext context, DirectoryPath path)
