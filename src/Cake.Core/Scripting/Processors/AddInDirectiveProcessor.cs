@@ -7,7 +7,7 @@ using Cake.Core.IO.NuGet;
 namespace Cake.Core.Scripting.Processors
 {
     /// <summary>
-    /// Processor for #r directives.
+    /// Processor for #addin directives.
     /// </summary>
     public sealed class AddInDirectiveProcessor : LineProcessor
     {
