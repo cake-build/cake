@@ -17,8 +17,7 @@
         }
 
         /// <summary>
-        /// Writes an error message to the log using the specified 
-        /// verbosity and format information.
+        /// Writes an error message to the log using the specified verbosity and format information.
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="verbosity">The verbosity.</param>
@@ -33,13 +32,12 @@
         }
 
         /// <summary>
-        /// Writes an error message to the log using the specified 
-        /// verbosity and log message action.
-        /// Evaluation message only if verbosity same or more verbose.
+        /// Writes an error message to the log using the specified verbosity and log message action.
+        /// Evaluates log message only if the verbosity is equal to or more verbose than the log's verbosity.
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="verbosity">The verbosity.</param>
-        /// <param name="logAction">The function called for message when logging.</param>
+        /// <param name="logAction">The log action.</param>
         public static void Error(this ICakeLog log, Verbosity verbosity, LogAction logAction)
         {
             Write(log, verbosity, LogLevel.Error, logAction);
@@ -47,10 +45,10 @@
 
         /// <summary>
         /// Writes an error message to the log using the specified log message action.
-        /// Evaluation message only if verbosity same or more verbose.
+        /// Evaluates log message only if the verbosity is equal to or more verbose than the log's verbosity.
         /// </summary>
         /// <param name="log">The log.</param>
-        /// <param name="logAction">The function called for message when logging.</param>
+        /// <param name="logAction">The log action.</param>
         public static void Error(this ICakeLog log, LogAction logAction)
         {
             Error(log, Verbosity.Quiet, logAction);
@@ -68,8 +66,7 @@
         }
 
         /// <summary>
-        /// Writes a warning message to the log using the specified 
-        /// verbosity and format information.
+        /// Writes a warning message to the log using the specified verbosity and format information.
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="verbosity">The verbosity.</param>
@@ -85,23 +82,22 @@
 
         /// <summary>
         /// Writes a warning message to the log using the specified log message action.
-        /// Evaluation message only if verbosity same or more verbose.
+        /// Evaluates log message only if the verbosity is equal to or more verbose than the log's verbosity.
         /// </summary>
         /// <param name="log">The log.</param>
-        /// <param name="logAction">The function called for message when logging.</param>
+        /// <param name="logAction">The log action.</param>
         public static void Warning(this ICakeLog log, LogAction logAction)
         {
             Warning(log, Verbosity.Minimal, logAction);
         }
 
         /// <summary>
-        /// Writes a warning message to the log using the specified 
-        /// verbosity and log message action.
-        /// Evaluation message only if verbosity same or more verbose.
+        /// Writes a warning message to the log using the specified verbosity and log message action.
+        /// Evaluates log message only if the verbosity is equal to or more verbose than the log's verbosity.
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="verbosity">The verbosity.</param>
-        /// <param name="logAction">The function called for message when logging.</param>
+        /// <param name="logAction">The log action.</param>
         public static void Warning(this ICakeLog log, Verbosity verbosity, LogAction logAction)
         {
             Write(log, verbosity, LogLevel.Warning, logAction);
@@ -119,8 +115,7 @@
         }
 
         /// <summary>
-        /// Writes an informational message to the log using the specified 
-        /// verbosity and format information.
+        /// Writes an informational message to the log using the specified verbosity and format information.
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="verbosity">The verbosity.</param>
@@ -135,13 +130,12 @@
         }
 
         /// <summary>
-        /// Writes an informational message to the log using the specified 
-        /// verbosity and log message action.
-        /// Evaluation message only if verbosity same or more verbose.
+        /// Writes an informational message to the log using the specified verbosity and log message action.
+        /// Evaluates log message only if the verbosity is equal to or more verbose than the log's verbosity.
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="verbosity">The verbosity.</param>
-        /// <param name="logAction">The function called for message when logging.</param>
+        /// <param name="logAction">The log action.</param>
         public static void Information(this ICakeLog log, Verbosity verbosity, LogAction logAction)
         {
             Write(log, verbosity, LogLevel.Information, logAction);
@@ -149,10 +143,10 @@
 
         /// <summary>
         /// Writes an informational message to the log using the specified log message action.
-        /// Evaluation message only if verbosity same or more verbose.
+        /// Evaluates log message only if the verbosity is equal to or more verbose than the log's verbosity.
         /// </summary>
         /// <param name="log">The log.</param>
-        /// <param name="logAction">The function called for message when logging.</param>
+        /// <param name="logAction">The log action.</param>
         public static void Information(this ICakeLog log, LogAction logAction)
         {
             Information(log, Verbosity.Normal, logAction);
@@ -170,8 +164,7 @@
         }
 
         /// <summary>
-        /// Writes a verbose message to the log using the specified 
-        /// verbosity and format information.
+        /// Writes a verbose message to the log using the specified verbosity and format information.
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="verbosity">The verbosity.</param>
@@ -187,23 +180,22 @@
 
         /// <summary>
         /// Writes a verbose message to the log using the specified log message action.
-        /// Evaluation message only if verbosity same or more verbose.
+        /// Evaluates log message only if the verbosity is equal to or more verbose than the log's verbosity.
         /// </summary>
         /// <param name="log">The log.</param>
-        /// <param name="logAction">The function called for message when logging.</param>
+        /// <param name="logAction">The log action.</param>
         public static void Verbose(this ICakeLog log, LogAction logAction)
         {
             Verbose(log, Verbosity.Verbose, logAction);
         }
 
         /// <summary>
-        /// Writes a verbose message to the log using the specified 
-        /// verbosity and log message action.
-        /// Evaluation message only if verbosity same or more verbose.
+        /// Writes a verbose message to the log using the specified verbosity and log message action.
+        /// Evaluates log message only if the verbosity is equal to or more verbose than the log's verbosity.
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="verbosity">The verbosity.</param>
-        /// <param name="logAction">The function called for message when logging.</param>
+        /// <param name="logAction">The log action.</param>
         public static void Verbose(this ICakeLog log, Verbosity verbosity, LogAction logAction)
         {
             Write(log, verbosity, LogLevel.Verbose, logAction);
@@ -221,8 +213,7 @@
         }
 
         /// <summary>
-        /// Writes a debug message to the log using the specified 
-        /// verbosity and format information.
+        /// Writes a debug message to the log using the specified verbosity and format information.
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="verbosity">The verbosity.</param>
@@ -238,36 +229,35 @@
 
         /// <summary>
         /// Writes a debug message to the log using the specified log message action.
-        /// Evaluation message only if verbosity same or more verbose.
+        /// Evaluates log message only if the verbosity is equal to or more verbose than the log's verbosity.
         /// </summary>
         /// <param name="log">The log.</param>
-        /// <param name="logAction">The function called for message when logging.</param>
+        /// <param name="logAction">The log action.</param>
         public static void Debug(this ICakeLog log, LogAction logAction)
         {
             Debug(log, Verbosity.Diagnostic, logAction);
         }
 
         /// <summary>
-        /// Writes a debug message to the log using the specified 
-        /// verbosity and log message action.
-        /// Evaluation message only if verbosity same or more verbose.
+        /// Writes a debug message to the log using the specified verbosity and log message action.
+        /// Evaluates log message only if the verbosity is equal to or more verbose than the log's verbosity.
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="verbosity">The verbosity.</param>
-        /// <param name="logAction">The function called for message when logging.</param>
+        /// <param name="logAction">The log action.</param>
         public static void Debug(this ICakeLog log, Verbosity verbosity, LogAction logAction)
         {
             Write(log, verbosity, LogLevel.Debug, logAction);
         }
 
         /// <summary>
-        /// Writes a message to the log using the specified verbosity, loglevel and logAction delegate
-        /// Evaluation message only if verbosity same or more verbose.
+        /// Writes a message to the log using the specified verbosity, log level and log action delegate.
+        /// Evaluates log message only if the verbosity is equal to or more verbose than the log's verbosity.
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="verbosity">The verbosity.</param>
         /// <param name="level">The log level.</param>
-        /// <param name="logAction">The function called for message when logging.</param>
+        /// <param name="logAction">The log action.</param>
         public static void Write(this ICakeLog log, Verbosity verbosity, LogLevel level, LogAction logAction)
         {
             if (log == null || logAction == null)
