@@ -76,7 +76,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
             {
                 // Given
                 var fixture = new ILMergeRunnerFixture(expected);
-                fixture.Settings.ToolPath = toolPath;               
+                fixture.Settings.ToolPath = toolPath;
 
                 // When
                 fixture.Run();
@@ -116,8 +116,9 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "/out:\"/Working/output.exe\" \"/Working/input.exe\" \"/Working/C.dll\" \"/Working/D.dll\""));
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() ==
+                        "/out:\"/Working/output.exe\" \"/Working/input.exe\" \"/Working/C.dll\" \"/Working/D.dll\""));
             }
 
             [Fact]
@@ -132,7 +133,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p => 
+                    Arg.Is<ProcessSettings>(p =>
                         p.WorkingDirectory.FullPath == "/Working"));
             }
 
@@ -141,7 +142,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
             {
                 // Given
                 var fixture = new ILMergeRunnerFixture();
-                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
+                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess) null);
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
@@ -155,7 +156,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
             public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
             {
                 // Given
-                var fixture = new ILMergeRunnerFixture(); 
+                var fixture = new ILMergeRunnerFixture();
                 fixture.Process.GetExitCode().Returns(1);
 
                 // When
@@ -178,8 +179,8 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "/out:\"/Working/output.exe\" /internalize \"/Working/input.exe\""));
             }
 
@@ -199,9 +200,47 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == expected));
+            }
+
+            [Fact]
+            public void Should_Set_Target_Platform_If_Enabled_In_Settings()
+            {
+
+                // Given
+
+                var path = @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1";
+                
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.TargetPlatform = new TargetPlatform(TargetPlatformVersion.v4, path);
+
+                // When
+                fixture.Run();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "/out:\"/Working/output.exe\" /targetPlatform:\"v4," + path  + "\" \"/Working/input.exe\""));
+            }
+            [Fact]
+            public void Should_Not_Set_Target_Platform_If_Not_Enabled_In_Settings()
+            {
+
+                // Given
+             
+                var fixture = new ILMergeRunnerFixture();
+             
+                // When
+                fixture.Run();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "/out:\"/Working/output.exe\" \"/Working/input.exe\""));
             }
         }
     }
