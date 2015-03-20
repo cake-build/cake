@@ -117,6 +117,8 @@
     <Compile Include="IO\FileCopier.cs" />
     <Compile Include="IO\FileAliases.cs" />
     <Compile Include="IO\GlobbingAliases.cs" />
+    <Compile Include="Tools\ILMerge\TargetPlatform.cs" />
+    <Compile Include="Tools\ILMerge\TargetPlatformVersion.cs" />
     <Compile Include="Tools\MSBuild\MSBuildAliases.cs" />
     <Compile Include="Tools\MSBuild\MSBuildResolver.cs" />
     <Compile Include="Tools\MSBuild\MSBuildRunner.cs" />

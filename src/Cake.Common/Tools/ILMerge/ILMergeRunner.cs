@@ -16,13 +16,14 @@ namespace Cake.Common.Tools.ILMerge
         private readonly IGlobber _globber;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ILMergeRunner"/> class.
+        /// Initializes a new instance of the <see cref="ILMergeRunner" /> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="globber">The globber.</param>
         /// <param name="processRunner">The process runner.</param>
-        public ILMergeRunner(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
+        public ILMergeRunner(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber,
+            IProcessRunner processRunner)
             : base(fileSystem, environment, processRunner)
         {
             _environment = environment;
@@ -36,7 +37,7 @@ namespace Cake.Common.Tools.ILMerge
         /// <param name="primaryAssemblyPath">The primary assembly path.</param>
         /// <param name="assemblyPaths">The assembly paths.</param>
         /// <param name="settings">The settings.</param>
-        public void Merge(FilePath outputAssemblyPath, FilePath primaryAssemblyPath, 
+        public void Merge(FilePath outputAssemblyPath, FilePath primaryAssemblyPath,
             IEnumerable<FilePath> assemblyPaths, ILMergeSettings settings = null)
         {
             if (outputAssemblyPath == null)
@@ -55,7 +56,8 @@ namespace Cake.Common.Tools.ILMerge
             settings = settings ?? new ILMergeSettings();
 
             // Get the ILMerge path.
-            Run(settings, GetArguments(outputAssemblyPath, primaryAssemblyPath, assemblyPaths, settings), settings.ToolPath);
+            Run(settings, GetArguments(outputAssemblyPath, primaryAssemblyPath, assemblyPaths, settings),
+                settings.ToolPath);
         }
 
         private ProcessArgumentBuilder GetArguments(FilePath outputAssemblyPath,
@@ -68,6 +70,11 @@ namespace Cake.Common.Tools.ILMerge
             if (settings.TargetKind != TargetKind.Default)
             {
                 builder.Append(GetTargetKindParameter(settings));
+            }
+
+            if (settings.TargetPlatform != null)
+            {
+                builder.Append(GetTargetPlatformParameter(settings));
             }
 
             if (settings.Internalize)
@@ -96,6 +103,11 @@ namespace Cake.Common.Tools.ILMerge
         private static string GetTargetKindParameter(ILMergeSettings settings)
         {
             return string.Concat("/target:", GetTargetKindName(settings.TargetKind).Quote());
+        }
+
+        private static string GetTargetPlatformParameter(ILMergeSettings settings)
+        {
+            return string.Concat("/targetPlatform:", CommandLineValue(settings.TargetPlatform));
         }
 
         private static string GetTargetKindName(TargetKind kind)
@@ -131,6 +143,38 @@ namespace Cake.Common.Tools.ILMerge
         {
             const string expression = "./tools/**/ILMerge.exe";
             return _globber.GetFiles(expression).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Command line option value
+        /// </summary>
+        /// <param name="targetPlatform">The target platform.</param>
+        /// <returns>Command line option string.</returns>
+        private static string CommandLineValue(TargetPlatform targetPlatform)
+        {
+            if (targetPlatform.Path == null)
+            {
+                return string.Format("{0}", GetTargetPlatformString(targetPlatform.Platform));
+            }
+            return string.Format("{0},{1}", GetTargetPlatformString(targetPlatform.Platform),
+                targetPlatform.Path.FullPath.Quote());
+        }
+
+        private static string GetTargetPlatformString(TargetPlatformVersion version)
+        {
+            switch (version)
+            {
+                case TargetPlatformVersion.v1:
+                    return "v1";
+                case TargetPlatformVersion.v11:
+                    return "v1.1";
+                case TargetPlatformVersion.v2:
+                    return "v2";
+                case TargetPlatformVersion.v4:
+                    return "v4";
+                default:
+                    throw new NotSupportedException("The provided ILMerge target platform is not valid.");
+            }
         }
     }
 }

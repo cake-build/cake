@@ -30,6 +30,12 @@ namespace Cake.Common.Tools.ILMerge
         public FilePath ToolPath { get; set; }
 
         /// <summary>
+        /// Gets or sets the target platform.
+        /// </summary>
+        /// <value>The target platform.</value>
+        public TargetPlatform TargetPlatform { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ILMergeSettings"/> class.
         /// </summary>
         public ILMergeSettings()
