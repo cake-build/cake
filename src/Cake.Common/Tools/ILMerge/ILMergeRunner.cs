@@ -69,6 +69,10 @@ namespace Cake.Common.Tools.ILMerge
             {
                 builder.Append(GetTargetKindParameter(settings));
             }
+            if (settings.TargetPlatform != null)
+            {
+                builder.Append(GetTargetPlatformParameter(settings));
+            }
 
             if (settings.Internalize)
             {
@@ -96,6 +100,10 @@ namespace Cake.Common.Tools.ILMerge
         private static string GetTargetKindParameter(ILMergeSettings settings)
         {
             return string.Concat("/target:", GetTargetKindName(settings.TargetKind).Quote());
+        }
+        private static string GetTargetPlatformParameter(ILMergeSettings settings)
+        {
+            return string.Concat("/targetPlatform:", (settings.TargetPlatform.CommandLineValue()).Quote());
         }
 
         private static string GetTargetKindName(TargetKind kind)
