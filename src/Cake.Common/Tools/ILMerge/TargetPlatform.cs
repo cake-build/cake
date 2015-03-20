@@ -21,18 +21,19 @@ namespace Cake.Common.Tools.ILMerge
         }
 
         /// <summary>
-        ///     .NET Framework target version
+        ///     Gets or sets .NET Framework target version
         /// </summary>
         public TargetPlatformVersion Platform { get; set; }
 
         /// <summary>
-        ///     This is a directory where mscorlib.dll can be found
+        ///     Gets or sets a directory where mscorlib.dll can be found
         /// </summary>
         public string Dir { get; set; }
 
         /// <summary>
         ///     Command line option value
         /// </summary>
+        /// <returns>Command line option string</returns>
         public string CommandLineValue()
         {
             return string.Format("{0},{1}", GetTargetPlatformVersionString(Platform), Dir);

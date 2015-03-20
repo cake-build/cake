@@ -35,7 +35,6 @@ namespace Cake.Common.Tools.ILMerge
         /// <value>The target platform.</value>
         public TargetPlatform TargetPlatform { get; set; }
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ILMergeSettings"/> class.
         /// </summary>
