@@ -58,7 +58,12 @@ Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-    NuGetRestore("./src/Cake.sln");
+    NuGetRestore("./src/Cake.sln", new NuGetRestoreSettings {
+        Source = new List<string> { 
+            "https://www.nuget.org/api/v2/", 
+            "https://www.myget.org/F/roslyn-nightly/" 
+        }
+    });
 });
 
 Task("Patch-Assembly-Info")
@@ -82,7 +87,8 @@ Task("Build")
     MSBuild("./src/Cake.sln", settings =>
         settings.SetConfiguration(configuration)
             .WithProperty("TreatWarningsAsErrors", "true")
-            .UseToolVersion(MSBuildToolVersion.NET45));
+            .UseToolVersion(MSBuildToolVersion.NET45)
+            .SetNodeReuse(false));
 });
 
 Task("Run-Unit-Tests")

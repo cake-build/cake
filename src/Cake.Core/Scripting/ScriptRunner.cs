@@ -57,9 +57,6 @@ namespace Cake.Core.Scripting
                 throw new ArgumentNullException("arguments");
             }
 
-            // SetArguments the script session factory.
-            _sessionFactory.Initialize();
-
             // Copy the arguments from the options.
             host.Context.Arguments.SetArguments(arguments);
 
@@ -71,7 +68,7 @@ namespace Cake.Core.Scripting
             script = script.GetFilename();
 
             // Create and prepare the session.
-            var session = _sessionFactory.CreateSession(host);
+            var session = _sessionFactory.CreateSession(host, arguments);
 
             // Process the script.
             var context = new ScriptProcessorContext();

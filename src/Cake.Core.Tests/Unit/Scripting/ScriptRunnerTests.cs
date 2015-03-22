@@ -87,20 +87,6 @@ namespace Cake.Core.Tests.Unit.Scripting
             }
 
             [Fact]
-            public void Should_Initialize_Script_Session_Factory()
-            {
-                // Given
-                var fixture = new ScriptRunnerFixture();
-                var runner = fixture.CreateScriptRunner();
-
-                // When
-                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
-
-                // Then
-                fixture.SessionFactory.Received(1).Initialize();
-            }
-
-            [Fact]
             public void Should_Set_Arguments()
             {
                 // Given
@@ -126,7 +112,8 @@ namespace Cake.Core.Tests.Unit.Scripting
                 runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
 
                 // Then
-                fixture.SessionFactory.Received(1).CreateSession(fixture.Host);
+                fixture.SessionFactory.Received(1)
+                    .CreateSession(fixture.Host, fixture.ArgumentDictionary);
             }
 
             [Fact]
