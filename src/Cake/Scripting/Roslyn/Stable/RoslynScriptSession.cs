@@ -5,8 +5,9 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting;
 using Roslyn.Scripting;
+using Roslyn.Scripting.CSharp;
 
-namespace Cake.Scripting.Roslyn
+namespace Cake.Scripting.Roslyn.Stable
 {
     internal sealed class RoslynScriptSession : IScriptSession
     {
@@ -14,17 +15,20 @@ namespace Cake.Scripting.Roslyn
         private readonly ICakeLog _log;
         private readonly HashSet<string> _importedNamespaces;
 
-        public RoslynScriptSession(Session roslynSession, ICakeLog log)
+        public RoslynScriptSession(IScriptHost host, ICakeLog log)
         {
-            if (roslynSession == null)
+            if (host == null)
             {
-                throw new ArgumentNullException("roslynSession");
+                throw new ArgumentNullException("host");
             }
             if (log == null)
             {
                 throw new ArgumentNullException("log");
             }
-            _roslynSession = roslynSession;
+
+            var roslynScriptEngine = new ScriptEngine();
+            _roslynSession = roslynScriptEngine.CreateSession(host, typeof(IScriptHost));
+
             _log = log;
             _importedNamespaces = new HashSet<string>();
         }

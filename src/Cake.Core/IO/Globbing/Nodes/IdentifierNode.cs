@@ -26,7 +26,7 @@ namespace Cake.Core.IO.Globbing.Nodes
 
         public override string Render()
         {
-            return _identifier;
+            return _identifier.Replace("+", "\\+");
         }
     }
 }
