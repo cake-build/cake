@@ -208,13 +208,12 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
             [Fact]
             public void Should_Set_Target_Platform_If_Enabled_In_Settings()
             {
-
                 // Given
-
-                var path = @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1";
-                
+                const string PATH =
+                    @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1";
+                var directoryPath = new DirectoryPath(PATH);
                 var fixture = new ILMergeRunnerFixture();
-                fixture.Settings.TargetPlatform = new TargetPlatform(TargetPlatformVersion.v4, path);
+                fixture.Settings.TargetPlatform = new TargetPlatform(TargetPlatformVersion.v4, directoryPath);
 
                 // When
                 fixture.Run();
@@ -223,16 +222,35 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
                     Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "/out:\"/Working/output.exe\" /targetPlatform:\"v4," + path  + "\" \"/Working/input.exe\""));
+                        p.Arguments.Render() ==
+                        "/out:\"/Working/output.exe\" /targetPlatform:v4,\"" + directoryPath.FullPath +
+                        "\" \"/Working/input.exe\""));
             }
+
+            [Fact]
+            public void Should_Set_Target_Platform_Without_NETFramework_Path_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.TargetPlatform = new TargetPlatform(TargetPlatformVersion.v4);
+
+                // When
+                fixture.Run();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() ==
+                        "/out:\"/Working/output.exe\" /targetPlatform:v4 \"/Working/input.exe\""));
+            }
+
             [Fact]
             public void Should_Not_Set_Target_Platform_If_Not_Enabled_In_Settings()
             {
-
                 // Given
-             
                 var fixture = new ILMergeRunnerFixture();
-             
+
                 // When
                 fixture.Run();
 

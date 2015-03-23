@@ -8,7 +8,7 @@ using Cake.Core.Utilities;
 namespace Cake.Common.Tools.ILMerge
 {
     /// <summary>
-    ///     The ILMerge runner.
+    /// The ILMerge runner.
     /// </summary>
     public sealed class ILMergeRunner : Tool<ILMergeSettings>
     {
@@ -16,7 +16,7 @@ namespace Cake.Common.Tools.ILMerge
         private readonly IGlobber _globber;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ILMergeRunner" /> class.
+        /// Initializes a new instance of the <see cref="ILMergeRunner" /> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
@@ -31,7 +31,7 @@ namespace Cake.Common.Tools.ILMerge
         }
 
         /// <summary>
-        ///     Merges the specified assemblies.
+        /// Merges the specified assemblies.
         /// </summary>
         /// <param name="outputAssemblyPath">The output assembly path.</param>
         /// <param name="primaryAssemblyPath">The primary assembly path.</param>
@@ -71,6 +71,7 @@ namespace Cake.Common.Tools.ILMerge
             {
                 builder.Append(GetTargetKindParameter(settings));
             }
+
             if (settings.TargetPlatform != null)
             {
                 builder.Append(GetTargetPlatformParameter(settings));
@@ -106,7 +107,7 @@ namespace Cake.Common.Tools.ILMerge
 
         private static string GetTargetPlatformParameter(ILMergeSettings settings)
         {
-            return string.Concat("/targetPlatform:", settings.TargetPlatform.CommandLineValue().Quote());
+            return string.Concat("/targetPlatform:", CommandLineValue(settings.TargetPlatform));
         }
 
         private static string GetTargetKindName(TargetKind kind)
@@ -125,7 +126,7 @@ namespace Cake.Common.Tools.ILMerge
         }
 
         /// <summary>
-        ///     Gets the name of the tool.
+        /// Gets the name of the tool.
         /// </summary>
         /// <returns>The name of the tool.</returns>
         protected override string GetToolName()
@@ -134,7 +135,7 @@ namespace Cake.Common.Tools.ILMerge
         }
 
         /// <summary>
-        ///     Gets the default tool path.
+        /// Gets the default tool path.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The default tool path.</returns>
@@ -142,6 +143,38 @@ namespace Cake.Common.Tools.ILMerge
         {
             const string expression = "./tools/**/ILMerge.exe";
             return _globber.GetFiles(expression).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Command line option value
+        /// </summary>
+        /// <param name="targetPlatform">The target platform.</param>
+        /// <returns>Command line option string.</returns>
+        private static string CommandLineValue(TargetPlatform targetPlatform)
+        {
+            if (targetPlatform.Path == null)
+            {
+                return string.Format("{0}", GetTargetPlatformVersionString(targetPlatform.Platform));
+            }
+            return string.Format("{0},{1}", GetTargetPlatformVersionString(targetPlatform.Platform),
+                targetPlatform.Path.FullPath.Quote());
+        }
+
+        private static string GetTargetPlatformVersionString(TargetPlatformVersion version)
+        {
+            switch (version)
+            {
+                case TargetPlatformVersion.v1:
+                    return "v1";
+                case TargetPlatformVersion.v11:
+                    return "v1.1";
+                case TargetPlatformVersion.v2:
+                    return "v2";
+                case TargetPlatformVersion.v4:
+                    return "v4";
+                default:
+                    throw new NotSupportedException("The provided ILMerge target platform is not valid.");
+            }
         }
     }
 }
