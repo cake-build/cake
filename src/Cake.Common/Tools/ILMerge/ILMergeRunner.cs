@@ -154,13 +154,13 @@ namespace Cake.Common.Tools.ILMerge
         {
             if (targetPlatform.Path == null)
             {
-                return string.Format("{0}", GetTargetPlatformVersionString(targetPlatform.Platform));
+                return string.Format("{0}", GetTargetPlatformString(targetPlatform.Platform));
             }
-            return string.Format("{0},{1}", GetTargetPlatformVersionString(targetPlatform.Platform),
+            return string.Format("{0},{1}", GetTargetPlatformString(targetPlatform.Platform),
                 targetPlatform.Path.FullPath.Quote());
         }
 
-        private static string GetTargetPlatformVersionString(TargetPlatformVersion version)
+        private static string GetTargetPlatformString(TargetPlatformVersion version)
         {
             switch (version)
             {
