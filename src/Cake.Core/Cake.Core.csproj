@@ -151,6 +151,7 @@
     <Compile Include="Scripting\IScriptSession.cs" />
     <Compile Include="Scripting\IScriptSessionFactory.cs" />
     <Compile Include="Scripting\LineProcessor.cs" />
+    <Compile Include="Scripting\Processors\ToolDirectiveProcessor.cs" />
     <Compile Include="Scripting\Processors\AddInDirectiveProcessor.cs" />
     <Compile Include="Scripting\Processors\LoadDirectiveProcessor.cs" />
     <Compile Include="Scripting\Processors\ReferenceDirectiveProcessor.cs" />

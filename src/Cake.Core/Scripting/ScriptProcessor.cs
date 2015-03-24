@@ -54,7 +54,8 @@ namespace Cake.Core.Scripting
                 new LoadDirectiveProcessor(_environment),
                 new ReferenceDirectiveProcessor(_fileSystem, _environment),
                 new UsingStatementProcessor(_environment),
-                new AddInDirectiveProcessor(_fileSystem, _environment, _log, nugetToolResolver)
+                new AddInDirectiveProcessor(_fileSystem, _environment, _log, nugetToolResolver),
+                new ToolDirectiveProcessor(_fileSystem, _environment, _log, nugetToolResolver)
             };
         }
 
