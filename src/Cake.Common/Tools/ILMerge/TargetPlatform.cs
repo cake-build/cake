@@ -4,20 +4,27 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.ILMerge
 {
     /// <summary>
-    /// Represents target platform option
-    /// Command line option: [/targetplatform:version[,platformdir] | /v1 | /v1.1 | /v2 | /v4]
+    /// Represents a target platform.
     /// </summary>
-    /// <example> /targetPlatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1" </example>
     public sealed class TargetPlatform
     {
         private readonly DirectoryPath _path;
         private readonly TargetPlatformVersion _platform;
 
         /// <summary>
-        /// Initializes a new instance of the TargetPlatform class.
+        /// Initializes a new instance of the <see cref="TargetPlatform"/> class.
         /// </summary>
-        /// <param name="platform">.NET Framework target version </param>
-        /// <param name="path">This is a directory where mscorlib.dll can be found</param>
+        /// <param name="platform">The .NET framework target version.</param>
+        public TargetPlatform(TargetPlatformVersion platform)
+        {
+            _platform = platform;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TargetPlatform"/> class.
+        /// </summary>
+        /// <param name="platform">The .NET framework target version.</param>
+        /// <param name="path">The directory where <c>mscorlib.dll</c> can be found.</param>
         public TargetPlatform(TargetPlatformVersion platform, DirectoryPath path)
         {
             if (path == null)
@@ -29,16 +36,7 @@ namespace Cake.Common.Tools.ILMerge
         }
 
         /// <summary>
-        /// Initializes a new instance of the TargetPlatform class.
-        /// </summary>
-        /// <param name="platform">.NET Framework target version </param>
-        public TargetPlatform(TargetPlatformVersion platform)
-        {
-            _platform = platform;
-        }
-
-        /// <summary>
-        /// Gets .NET Framework target version
+        /// Gets the .NET framework target version.
         /// </summary>
         public TargetPlatformVersion Platform
         {
@@ -46,7 +44,7 @@ namespace Cake.Common.Tools.ILMerge
         }
 
         /// <summary>
-        /// Gets a directory where mscorlib.dll can be found
+        /// Gets the directory where <c>mscorlib.dll</c> can be found.
         /// </summary>
         public DirectoryPath Path
         {
