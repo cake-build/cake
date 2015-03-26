@@ -60,6 +60,26 @@ namespace Cake.Common.Tools.ILMerge
                 settings.ToolPath);
         }
 
+        /// <summary>
+        /// Gets the name of the tool.
+        /// </summary>
+        /// <returns>The name of the tool.</returns>
+        protected override string GetToolName()
+        {
+            return "ILMerge";
+        }
+
+        /// <summary>
+        /// Gets the default tool path.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The default tool path.</returns>
+        protected override FilePath GetDefaultToolPath(ILMergeSettings settings)
+        {
+            const string expression = "./tools/**/ILMerge.exe";
+            return _globber.GetFiles(expression).FirstOrDefault();
+        }
+
         private ProcessArgumentBuilder GetArguments(FilePath outputAssemblyPath,
             FilePath primaryAssemblyFilePath, IEnumerable<FilePath> assemblyPaths, ILMergeSettings settings)
         {
@@ -107,57 +127,13 @@ namespace Cake.Common.Tools.ILMerge
 
         private static string GetTargetPlatformParameter(ILMergeSettings settings)
         {
-            return string.Concat("/targetPlatform:", CommandLineValue(settings.TargetPlatform));
-        }
-
-        private static string GetTargetKindName(TargetKind kind)
-        {
-            switch (kind)
+            var result = new List<string>();
+            result.Add(GetTargetPlatformString(settings.TargetPlatform.Platform));
+            if (settings.TargetPlatform.Path != null)
             {
-                case TargetKind.Dll:
-                    return "dll";
-                case TargetKind.Exe:
-                    return "exe";
-                case TargetKind.WinExe:
-                    return "winexe";
-                default:
-                    throw new NotSupportedException("The provided ILMerge target kind is not valid.");
+                result.Add(settings.TargetPlatform.Path.FullPath.Quote());
             }
-        }
-
-        /// <summary>
-        /// Gets the name of the tool.
-        /// </summary>
-        /// <returns>The name of the tool.</returns>
-        protected override string GetToolName()
-        {
-            return "ILMerge";
-        }
-
-        /// <summary>
-        /// Gets the default tool path.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The default tool path.</returns>
-        protected override FilePath GetDefaultToolPath(ILMergeSettings settings)
-        {
-            const string expression = "./tools/**/ILMerge.exe";
-            return _globber.GetFiles(expression).FirstOrDefault();
-        }
-
-        /// <summary>
-        /// Command line option value
-        /// </summary>
-        /// <param name="targetPlatform">The target platform.</param>
-        /// <returns>Command line option string.</returns>
-        private static string CommandLineValue(TargetPlatform targetPlatform)
-        {
-            if (targetPlatform.Path == null)
-            {
-                return string.Format("{0}", GetTargetPlatformString(targetPlatform.Platform));
-            }
-            return string.Format("{0},{1}", GetTargetPlatformString(targetPlatform.Platform),
-                targetPlatform.Path.FullPath.Quote());
+            return string.Concat("/targetPlatform:", string.Join(",", result));
         }
 
         private static string GetTargetPlatformString(TargetPlatformVersion version)
@@ -174,6 +150,21 @@ namespace Cake.Common.Tools.ILMerge
                     return "v4";
                 default:
                     throw new NotSupportedException("The provided ILMerge target platform is not valid.");
+            }
+        }
+
+        private static string GetTargetKindName(TargetKind kind)
+        {
+            switch (kind)
+            {
+                case TargetKind.Dll:
+                    return "dll";
+                case TargetKind.Exe:
+                    return "exe";
+                case TargetKind.WinExe:
+                    return "winexe";
+                default:
+                    throw new NotSupportedException("The provided ILMerge target kind is not valid.");
             }
         }
     }
