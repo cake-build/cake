@@ -150,6 +150,8 @@
     <Compile Include="Tools\NuGet\Restore\NugetRestoreSettings.cs" />
     <Compile Include="Tools\NuGet\NuGetVerbosity.cs" />
     <Compile Include="Tools\NuGet\Pack\NuspecTransformer.cs" />
+    <Compile Include="Tools\NuGet\Update\NuGetUpdater.cs" />
+    <Compile Include="Tools\NuGet\Update\NuGetUpdateSettings.cs" />
     <Compile Include="Tools\NUnit\NUnitAliases.cs" />
     <Compile Include="Tools\NUnit\NUnitRunner.cs" />
     <Compile Include="Tools\NUnit\NUnitSettings.cs" />
