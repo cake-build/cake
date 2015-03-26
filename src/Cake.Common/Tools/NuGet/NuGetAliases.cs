@@ -5,6 +5,7 @@ using Cake.Common.Tools.NuGet.Push;
 using Cake.Common.Tools.NuGet.Restore;
 using Cake.Common.Tools.NuGet.SetApiKey;
 using Cake.Common.Tools.NuGet.Sources;
+using Cake.Common.Tools.NuGet.Update;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -507,6 +508,57 @@ namespace Cake.Common.Tools.NuGet
         public static void NuGetSetApiKey(this ICakeContext context, string apiKey, string source)
         {
             context.NuGetSetApiKey(apiKey, source, new NuGetSetApiKeySettings());
+        }
+
+        /// <summary>
+        /// Updates NuGet packages.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="targetFile">The target to update.</param>
+        /// <example>
+        /// <code>
+        /// NuGetUpdate("./tools/packages.config");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Update")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Update")]
+        public static void NuGetUpdate(this ICakeContext context, FilePath targetFile)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var runner = new NuGetUpdater(context.FileSystem, context.Environment, context.ProcessRunner, context.GetToolResolver("NuGet"));
+            runner.Update(targetFile, new NuGetUpdateSettings());
+        }
+
+        /// <summary>
+        /// Updates NuGet packages using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="targetFile">The target to update.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// NuGetUpdate("./tools/packages.config", new NuGetUpdateSettings {
+        ///     Prerelease = true,
+        /// });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Update")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Update")]
+        public static void NuGetUpdate(this ICakeContext context, FilePath targetFile, NuGetUpdateSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var runner = new NuGetUpdater(context.FileSystem, context.Environment, context.ProcessRunner, context.GetToolResolver("NuGet"));
+            runner.Update(targetFile, settings);
         }
     }
 }
