@@ -9,8 +9,12 @@ namespace Cake.Core.Scripting
     /// <summary>
     /// Unique Script Reference
     /// </summary>
-    public class ScriptReference
+    internal sealed class ScriptReference
     {
+        private readonly string _origin;
+        private readonly FilePath _path;
+        private readonly string _id;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptReference" /> class.
         /// </summary>
@@ -23,37 +27,42 @@ namespace Cake.Core.Scripting
                 throw new ArgumentNullException("localPath");
             }
 
-            Path = localPath;
+            _path = localPath;
 
             if (origin == null)
             {
                 origin = localPath.ToString();
             }
-            Origin = origin;
 
-            var hasher = new SHA1CryptoServiceProvider();
-            var hash = hasher.ComputeHash(Encoding.UTF8.GetBytes(origin));
-            var sb = new StringBuilder();
-            foreach (byte part in hash)
-            {
-                sb.Append(part.ToString("x2", CultureInfo.InvariantCulture));
-            }
-            TokenId = sb.ToString();
+            _origin = origin;
+            
+            _id = (localPath + origin).ToString();
         }
 
         /// <summary>
         /// Gets the original file path or URI of the script.
         /// </summary>
-        public string Origin { get; private set; }
+        public string Origin
+        {
+            get { return _origin; }
+        }
 
         /// <summary>
         /// Gets the local script path.
         /// </summary>
-        public FilePath Path { get; private set; }
+        public FilePath Path
+        {
+            get { return _path; }
+        }
+
 
         /// <summary>
-        /// Gets the script's unique token identifier;
+        /// Gets the script's unique identifier;
         /// </summary>
-        public string TokenId { get; private set; } 
+        public string Id
+        {
+            get { return _id; }
+        }
+
     }
 }
