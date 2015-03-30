@@ -154,7 +154,7 @@ Task("Upload-AppVeyor-Artifacts")
     .WithCriteria(() => isRunningOnAppVeyor)
     .Does(() =>
 {
-    var artifact = buildResultDir + File("/Cake-bin-v" + semVersion + ".zip");
+    var artifact = buildResultDir + File("Cake-bin-v" + semVersion + ".zip");
     AppVeyor.UploadArtifact(artifact);
 }); 
 
@@ -170,7 +170,7 @@ Task("Publish-MyGet")
     }
 
     // Get the path to the package.
-    var package = nugetRoot + File("/Cake." + semVersion + ".nupkg");
+    var package = nugetRoot + File("Cake." + semVersion + ".nupkg");
 
     // Push the package.
     NuGetPush(package, new NuGetPushSettings {
