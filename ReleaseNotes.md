@@ -1,3 +1,9 @@
+### New in 0.2.2 (Released 2015/03/31)
+* Added lots of example code.
+* Added target platform option to ILMerge tool.
+* Added #tool line directive.
+* Added support for NuGet update command.
+
 ### New in 0.2.1 (Released 2015/03/17)
 * Added convertable paths and removed path add operators.
 
