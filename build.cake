@@ -23,11 +23,11 @@ var version = releaseNotes.Version.ToString();
 var semVersion = local ? version : (version + string.Concat("-build-", buildNumber));
 
 // Define directories.
-var buildDir = "./src/Cake/bin/" + configuration;
-var buildResultDir = "./build/v" + semVersion;
-var testResultsDir = buildResultDir + "/test-results";
-var nugetRoot = buildResultDir + "/nuget";
-var binDir = buildResultDir + "/bin";
+var buildDir = Directory("./src/Cake/bin") + Directory(configuration);
+var buildResultDir = Directory("./build") + Directory("v" + semVersion);
+var testResultsDir = buildResultDir + Directory("test-results");
+var nugetRoot = buildResultDir + Directory("nuget");
+var binDir = buildResultDir + Directory("bin");
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -36,11 +36,6 @@ var binDir = buildResultDir + "/bin";
 Setup(() =>
 {
     Information("Building version {0} of Cake.", semVersion);
-});
-
-Teardown(() =>
-{
-    Information("Finished building version {0} of Cake.", semVersion);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -82,7 +77,8 @@ Task("Build")
     MSBuild("./src/Cake.sln", settings =>
         settings.SetConfiguration(configuration)
             .WithProperty("TreatWarningsAsErrors", "true")
-            .UseToolVersion(MSBuildToolVersion.NET45));
+            .UseToolVersion(MSBuildToolVersion.NET45)
+            .SetNodeReuse(false));
 });
 
 Task("Run-Unit-Tests")
@@ -100,14 +96,15 @@ Task("Copy-Files")
     .IsDependentOn("Run-Unit-Tests")
     .Does(() =>
 {
-    CopyFileToDirectory(buildDir + "/Cake.exe", binDir);
-    CopyFileToDirectory(buildDir + "/Cake.Core.dll", binDir);
-    CopyFileToDirectory(buildDir + "/Cake.Core.xml", binDir);
-    CopyFileToDirectory(buildDir + "/Cake.Core.pdb", binDir);
-    CopyFileToDirectory(buildDir + "/Cake.Common.dll", binDir);
-    CopyFileToDirectory(buildDir + "/Cake.Common.xml", binDir);
-    CopyFileToDirectory(buildDir + "/Autofac.dll", binDir);
-    CopyFileToDirectory(buildDir + "/Nuget.Core.dll", binDir);
+    CopyFileToDirectory(buildDir + File("Cake.exe"), binDir);
+    CopyFileToDirectory(buildDir + File("Cake.Core.dll"), binDir);
+    CopyFileToDirectory(buildDir + File("Cake.Core.xml"), binDir);
+    CopyFileToDirectory(buildDir + File("Cake.Core.pdb"), binDir);
+    CopyFileToDirectory(buildDir + File("Cake.Common.dll"), binDir);
+    CopyFileToDirectory(buildDir + File("Cake.Common.xml"), binDir);
+    CopyFileToDirectory(buildDir + File("Autofac.dll"), binDir);
+    CopyFileToDirectory(buildDir + File("Nuget.Core.dll"), binDir);
+
     CopyFiles(new FilePath[] { "LICENSE", "README.md", "ReleaseNotes.md" }, binDir);
 });
 
@@ -115,14 +112,17 @@ Task("Zip-Files")
     .IsDependentOn("Copy-Files")
     .Does(() =>
 {
-    var filename = buildResultDir + "/Cake-bin-v" + semVersion + ".zip";
-    Zip(binDir, filename);
+    var packageFile = File("Cake-bin-v" + semVersion + ".zip");
+    var packagePath = buildResultDir + packageFile;
+
+    Zip(binDir, packagePath);
 });
 
-Task("Create-Cake-NuGet-Package")
+Task("Create-NuGet-Packages")
     .IsDependentOn("Copy-Files")
     .Does(() =>
 {
+    // Create Cake package.
     NuGetPack("./nuspec/Cake.nuspec", new NuGetPackSettings {
         Version = semVersion,
         ReleaseNotes = releaseNotes.Notes.ToArray(),
@@ -131,19 +131,15 @@ Task("Create-Cake-NuGet-Package")
         Symbols = false,
         NoPackageAnalysis = true
     });
-});
 
-Task("Create-Core-NuGet-Package")
-    .IsDependentOn("Copy-Files")
-    .Does(() =>
-{
+    // Create core package.
     NuGetPack("./nuspec/Cake.Core.nuspec", new NuGetPackSettings {
         Version = semVersion,
         ReleaseNotes = releaseNotes.Notes.ToArray(),
         BasePath = binDir,
         OutputDirectory = nugetRoot,        
         Symbols = true
-    });
+    });    
 });
 
 Task("Update-AppVeyor-Build-Number")
@@ -158,7 +154,7 @@ Task("Upload-AppVeyor-Artifacts")
     .WithCriteria(() => isRunningOnAppVeyor)
     .Does(() =>
 {
-    var artifact = new FilePath(buildResultDir + "/Cake-bin-v" + semVersion + ".zip");
+    var artifact = buildResultDir + File("Cake-bin-v" + semVersion + ".zip");
     AppVeyor.UploadArtifact(artifact);
 }); 
 
@@ -174,7 +170,7 @@ Task("Publish-MyGet")
     }
 
     // Get the path to the package.
-    var package = nugetRoot + "/Cake." + semVersion + ".nupkg";
+    var package = nugetRoot + File("Cake." + semVersion + ".nupkg");
 
     // Push the package.
     NuGetPush(package, new NuGetPushSettings {
@@ -189,8 +185,7 @@ Task("Publish-MyGet")
 
 Task("Package")
     .IsDependentOn("Zip-Files")
-    .IsDependentOn("Create-Cake-NuGet-Package")
-    .IsDependentOn("Create-Core-NuGet-Package");
+    .IsDependentOn("Create-NuGet-Packages");
 
 Task("Default")
     .IsDependentOn("Package");

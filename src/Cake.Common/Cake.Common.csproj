@@ -117,6 +117,8 @@
     <Compile Include="IO\FileCopier.cs" />
     <Compile Include="IO\FileAliases.cs" />
     <Compile Include="IO\GlobbingAliases.cs" />
+    <Compile Include="Tools\ILMerge\TargetPlatform.cs" />
+    <Compile Include="Tools\ILMerge\TargetPlatformVersion.cs" />
     <Compile Include="Tools\MSBuild\MSBuildAliases.cs" />
     <Compile Include="Tools\MSBuild\MSBuildResolver.cs" />
     <Compile Include="Tools\MSBuild\MSBuildRunner.cs" />
@@ -148,6 +150,8 @@
     <Compile Include="Tools\NuGet\Restore\NugetRestoreSettings.cs" />
     <Compile Include="Tools\NuGet\NuGetVerbosity.cs" />
     <Compile Include="Tools\NuGet\Pack\NuspecTransformer.cs" />
+    <Compile Include="Tools\NuGet\Update\NuGetUpdater.cs" />
+    <Compile Include="Tools\NuGet\Update\NuGetUpdateSettings.cs" />
     <Compile Include="Tools\NUnit\NUnitAliases.cs" />
     <Compile Include="Tools\NUnit\NUnitRunner.cs" />
     <Compile Include="Tools\NUnit\NUnitSettings.cs" />

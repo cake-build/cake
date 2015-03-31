@@ -15,6 +15,11 @@ namespace Cake.Common.Build
         /// Gets a <see cref="Cake.Common.Build.BuildSystem"/> instance that can
         /// be used to query for information about the current build system.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var isLocal = BuildSystem.IsLocalBuild;
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <returns>A <see cref="Cake.Common.Build.BuildSystem"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]
@@ -27,6 +32,11 @@ namespace Cake.Common.Build
         /// Gets a <see cref="Cake.Common.Build.AppVeyor.AppVeyorProvider"/> instance that can
         /// be used to manipulate the AppVeyor environment.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var isAppVeyorBuild = AppVeyor.IsRunningOnAppVeyor;
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <returns>A <see cref="Cake.Common.Build.AppVeyor"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]

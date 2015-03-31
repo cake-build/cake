@@ -18,6 +18,13 @@ namespace Cake.Common.Security
         /// <param name="context">The context.</param>
         /// <param name="filePath">The file path.</param>
         /// <returns>A <see cref="FileHash"/> instance representing the calculated hash.</returns>
+        /// <example>
+        /// <code>
+        /// Information(
+        ///    "Cake executable file SHA256 hash: {0}",
+        ///    CalculateFileHash("Cake.exe").ToHex());
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static FileHash CalculateFileHash(this ICakeContext context, FilePath filePath)
         {
@@ -31,6 +38,13 @@ namespace Cake.Common.Security
         /// <param name="filePath">The file path.</param>
         /// <param name="hashAlgorithm">The hash algorithm to use.</param>
         /// <returns>A <see cref="FileHash"/> instance representing the calculated hash.</returns>
+        /// <example>
+        /// <code>
+        /// Information(
+        ///     "Cake executable file MD5 hash: {0}",
+        ///     CalculateFileHash("Cake.exe", HashAlgorithm.MD5).ToHex());
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static FileHash CalculateFileHash(this ICakeContext context, FilePath filePath, HashAlgorithm hashAlgorithm)
         {

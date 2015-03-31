@@ -7,9 +7,9 @@ using Cake.Core.IO.NuGet;
 namespace Cake.Core.Scripting.Processors
 {
     /// <summary>
-    /// Processor for #addin directives.
+    /// Processor for #tool directives.
     /// </summary>
-    public sealed class AddInDirectiveProcessor : LineProcessor
+    public sealed class ToolDirectiveProcessor : LineProcessor
     {
         private static FilePath _nugetPath;
         private readonly IFileSystem _fileSystem;
@@ -18,13 +18,13 @@ namespace Cake.Core.Scripting.Processors
         private readonly IToolResolver _nugetToolResolver;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AddInDirectiveProcessor" /> class.
+        /// Initializes a new instance of the <see cref="ToolDirectiveProcessor" /> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="log">The log.</param>
         /// <param name="nugetToolResolver">The NuGet tool resolver.</param>
-        public AddInDirectiveProcessor(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log, INuGetToolResolver nugetToolResolver)
+        public ToolDirectiveProcessor(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log, INuGetToolResolver nugetToolResolver)
             : base(environment)
         {
             if (fileSystem == null)
@@ -74,17 +74,17 @@ namespace Cake.Core.Scripting.Processors
                 return false;
             }
 
-            if (!directive.Equals("#addin", StringComparison.OrdinalIgnoreCase))
+            if (!directive.Equals("#tool", StringComparison.OrdinalIgnoreCase))
             {
                 return false;
             }
 
-            // Fetch the addin NuGet ID.
-            var addInId = tokens
+            // Fetch the tool NuGet ID.
+            var toolId = tokens
                 .Select(value => value.UnQuote())
                 .Skip(1).FirstOrDefault();
 
-            if (string.IsNullOrWhiteSpace(addInId))
+            if (string.IsNullOrWhiteSpace(toolId))
             {
                 return false;
             }
@@ -96,57 +96,58 @@ namespace Cake.Core.Scripting.Processors
                 .FirstOrDefault();
 
             // Get the directory path to Cake.
-            var applicationRoot = _environment.GetApplicationRoot();
+            var applicationRoot = _environment.WorkingDirectory;
 
-            // Get the addin directory.
-            var addInRootDirectoryPath = applicationRoot
-                .Combine("..\\Addins")
+            // Get the tool directory.
+            var toolsRootDirectoryPath = applicationRoot
+                .Combine(".\\tools")
                 .Collapse()
                 .MakeAbsolute(_environment);
 
-            var addInDirectoryPath = addInRootDirectoryPath.Combine(addInId);
-            var addInRootDirectory = _fileSystem.GetDirectory(addInRootDirectoryPath);
+            var toolDirectoryPath = toolsRootDirectoryPath.Combine(toolId);
+            var toolsRootDirectory = _fileSystem.GetDirectory(toolsRootDirectoryPath);
 
-            // Create the addin directory if it doesn't exist.
-            if (!addInRootDirectory.Exists)
+            // Create the tool directory if it doesn't exist.
+            if (!toolsRootDirectory.Exists)
             {
-                _log.Verbose("Creating addin directory {0}", addInRootDirectoryPath.FullPath);
-                addInRootDirectory.Create();
+                _log.Verbose("Creating tool directory {0}", toolsRootDirectoryPath.FullPath);
+                toolsRootDirectory.Create();
             }
 
-            // Fetch available addin assemblies.
-            var addInAssemblies = GetAddInAssemblies(addInDirectoryPath);
+            // Fetch available tool executables.
+            var toolExecutables = GetToolExecutables(toolDirectoryPath);
 
-            // If no assemblies were found, try install addin from NuGet.
-            if (addInAssemblies.Length == 0)
+            // If no executables were found, try install tool from NuGet.
+            if (toolExecutables.Length == 0)
             {
-                InstallAddin(addInId, addInRootDirectory, source);
-                addInAssemblies = GetAddInAssemblies(addInDirectoryPath);
+                InstallTool(toolId, toolsRootDirectory, source);
+                toolExecutables = GetToolExecutables(toolDirectoryPath);
             }
 
             // Validate found assemblies.
-            if (addInAssemblies.Length == 0)
+            if (toolExecutables.Length == 0)
             {
-                throw new CakeException("Failed to find AddIn assemblies");
+                throw new CakeException("Failed to find tool executables.");
             }
-
-            // Reference found assemblies.
-            foreach (var assemblyPath in addInAssemblies.Select(assembly => assembly.Path.FullPath))
-            {
-                _log.Verbose("Addin: {0}, adding Reference {1}", addInId, assemblyPath);
-                context.AddReference(assemblyPath);
-            }
+            
+            _log.Debug(logAction =>
+                {
+                    foreach (var toolExecutable in toolExecutables)
+                    {
+                        logAction("Found tool executable: {0}.", toolExecutable.Path);
+                    }
+                });
 
             return true;
         }
 
-        private void InstallAddin(string addInId, IDirectory addInRootDirectory, string source)
+        private void InstallTool(string toolId, IDirectory toolRootDirectory, string source)
         {
             var nugetPath = GetNuGetPath();
             var runner = new ProcessRunner(_environment, _log);
             var process = runner.Start(nugetPath, new ProcessSettings 
             {
-                Arguments = GetNuGetAddinInstallArguments(addInId, addInRootDirectory, source)
+                Arguments = GetNuGetToolInstallArguments(toolId, toolRootDirectory, source)
             });
             process.WaitForExit();
         }
@@ -156,19 +157,19 @@ namespace Cake.Core.Scripting.Processors
             var nugetPath = _nugetPath ?? (_nugetPath = _nugetToolResolver.ResolveToolPath());
             if (nugetPath == null)
             {
-                throw new CakeException("Failed to find NuGet");
+                throw new CakeException("Failed to find NuGet.");
             }
             return nugetPath;
         }
 
-        private static ProcessArgumentBuilder GetNuGetAddinInstallArguments(string addInId, IDirectory addInRootDirectory,
+        private static ProcessArgumentBuilder GetNuGetToolInstallArguments(string toolId, IDirectory toolRootDirectory,
             string source)
         {
             var arguments = new ProcessArgumentBuilder();
             arguments.Append("install");
-            arguments.AppendQuoted(addInId);
+            arguments.AppendQuoted(toolId);
             arguments.Append("-OutputDirectory");
-            arguments.AppendQuoted(addInRootDirectory.Path.FullPath);
+            arguments.AppendQuoted(toolRootDirectory.Path.FullPath);
             if (!string.IsNullOrWhiteSpace(source))
             {
                 arguments.Append("-Source");
@@ -178,12 +179,11 @@ namespace Cake.Core.Scripting.Processors
             return arguments;
         }
 
-        private IFile[] GetAddInAssemblies(DirectoryPath addInDirectoryPath)
+        private IFile[] GetToolExecutables(DirectoryPath toolDirectoryPath)
         {
-            var addInDirectory = _fileSystem.GetDirectory(addInDirectoryPath);
-            return addInDirectory.Exists
-                ? addInDirectory.GetFiles("*.dll", SearchScope.Recursive)
-                    .Where(file => !file.Path.FullPath.EndsWith("Cake.Core.dll", StringComparison.OrdinalIgnoreCase))
+            var toolDirectory = _fileSystem.GetDirectory(toolDirectoryPath);
+            return toolDirectory.Exists
+                ? toolDirectory.GetFiles("*.exe", SearchScope.Recursive)
                     .ToArray()
                 : new IFile[0];
         }

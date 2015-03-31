@@ -69,6 +69,7 @@
     <Compile Include="Fixtures\NSISFixture.cs" />
     <Compile Include="Fixtures\NuGetFixture.cs" />
     <Compile Include="Fixtures\MSTestRunnerFixture.cs" />
+    <Compile Include="Fixtures\NuGetUpdateFixture.cs" />
     <Compile Include="Fixtures\NUnitRunnerFixture.cs" />
     <Compile Include="Fixtures\ProcessFixture.cs" />
     <Compile Include="Fixtures\SignToolSignRunnerFixture.cs" />
@@ -130,6 +131,8 @@
     <Compile Include="Unit\Tools\NuGet\SetApiKey\NuGetSetApiKeyTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Sources\NuGetSourcesSettingsTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Sources\NuGetSourcesTests.cs" />
+    <Compile Include="Unit\Tools\NuGet\Update\NuGetUpdaterTests.cs" />
+    <Compile Include="Unit\Tools\NuGet\Update\NuGetUpdateSettingsTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitRunnerTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitSettingsTests.cs" />
     <Compile Include="Unit\Tools\SignTool\SignToolSignRunnerTests.cs" />
