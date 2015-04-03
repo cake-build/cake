@@ -9,7 +9,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Cake.Core.IO.Globbing;
 using Cake.Core.IO.Globbing.Nodes;
-using Cake.Core.IO.Globbing.Nodes.Roots;
 
 namespace Cake.Core.IO
 {

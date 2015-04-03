@@ -5,7 +5,7 @@ namespace Cake.Common.Tools.XUnit
     /// <summary>
     /// Contains settings used by <see cref="XUnit2Runner"/>.
     /// </summary>
-    public class XUnit2Settings
+    public sealed class XUnit2Settings
     {
         /// <summary>
         /// Gets or sets a value indicating whether tests should be run as a shadow copy.

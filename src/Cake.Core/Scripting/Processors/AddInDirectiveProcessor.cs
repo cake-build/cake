@@ -11,11 +11,12 @@ namespace Cake.Core.Scripting.Processors
     /// </summary>
     public sealed class AddInDirectiveProcessor : LineProcessor
     {
-        private static FilePath _nugetPath;
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
         private readonly IToolResolver _nugetToolResolver;
+
+        private FilePath _nugetPath;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AddInDirectiveProcessor" /> class.

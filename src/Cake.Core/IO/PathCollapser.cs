@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Cake.Core.IO
 {
-    internal sealed class PathCollapser
+    internal static class PathCollapser
     {
         public static string Collapse(Path path)
         {

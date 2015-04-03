@@ -10,21 +10,21 @@ namespace Cake.Core.IO
     /// </summary>
     public sealed class ProcessArgumentBuilder
     {
-        private readonly List<ProcessArgument> _tokens;
+        private readonly List<IProcessArgument> _tokens;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessArgumentBuilder"/> class.
         /// </summary>
         public ProcessArgumentBuilder()
-        {            
-            _tokens = new List<ProcessArgument>();
+        {
+            _tokens = new List<IProcessArgument>();
         }
 
         /// <summary>
         /// Appends an argument.
         /// </summary>
         /// <param name="argument">The argument.</param>
-        public void Append(ProcessArgument argument)
+        public void Append(IProcessArgument argument)
         {
             _tokens.Add(argument);
         }

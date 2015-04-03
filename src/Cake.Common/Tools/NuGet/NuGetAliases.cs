@@ -181,7 +181,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Sources")]
         public static void NuGetAddSource(this ICakeContext context, string name, string source)
         {
-            context.NuGetAddSource(name, source, NuGetSourcesSettings.Default);
+            context.NuGetAddSource(name, source, new NuGetSourcesSettings());
         }
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Sources")]
         public static void NuGetRemoveSource(this ICakeContext context, string name, string source)
         {
-            context.NuGetRemoveSource(name, source, NuGetSourcesSettings.Default);
+            context.NuGetRemoveSource(name, source, new NuGetSourcesSettings());
         }
 
         /// <summary>
@@ -330,7 +330,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Sources")]
         public static bool NuGetHasSource(this ICakeContext context, string source)
         {
-            return context.NuGetHasSource(source, NuGetSourcesSettings.Default);
+            return context.NuGetHasSource(source, new NuGetSourcesSettings());
         }
 
         /// <summary>

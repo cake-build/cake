@@ -151,7 +151,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var sources = fixture.CreateSources();
 
                 // When
-                var result = Record.Exception(() => sources.AddSource("name", "source", NuGetSourcesSettings.Default));
+                var result = Record.Exception(() => sources.AddSource("name", "source", new NuGetSourcesSettings()));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -167,7 +167,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var sources = fixture.CreateSources();
 
                 // When
-                var result = Record.Exception(() => sources.AddSource("name", "source", NuGetSourcesSettings.Default));
+                var result = Record.Exception(() => sources.AddSource("name", "source", new NuGetSourcesSettings()));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -182,7 +182,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var sources = fixture.CreateSources();
 
                 // When
-                sources.AddSource("name", "source", NuGetSourcesSettings.Default);
+                sources.AddSource("name", "source", new NuGetSourcesSettings());
 
                 // Then
                 fixture.ProcessRunner.Received(2).Start(
@@ -198,7 +198,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var sources = fixture.CreateSources();
 
                 // When
-                sources.AddSource("name", "source", NuGetSourcesSettings.Default);
+                sources.AddSource("name", "source", new NuGetSourcesSettings());
                 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -407,7 +407,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var sources = fixture.CreateSources();
 
                 // When
-                var result = Record.Exception(() => sources.RemoveSource(source.Key, source.Value, NuGetSourcesSettings.Default));
+                var result = Record.Exception(() => sources.RemoveSource(source.Key, source.Value, new NuGetSourcesSettings()));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -424,7 +424,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var sources = fixture.CreateSources();
 
                 // When
-                var result = Record.Exception(() => sources.RemoveSource(source.Key, source.Value, NuGetSourcesSettings.Default));
+                var result = Record.Exception(() => sources.RemoveSource(source.Key, source.Value, new NuGetSourcesSettings()));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -440,7 +440,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var sources = fixture.CreateSources();
 
                 // When
-                sources.RemoveSource(source.Key, source.Value, NuGetSourcesSettings.Default);
+                sources.RemoveSource(source.Key, source.Value, new NuGetSourcesSettings());
 
                 // Then
                 fixture.ProcessRunner.Received(2).Start(
@@ -457,7 +457,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var sources = fixture.CreateSources();
 
                 // When
-                sources.RemoveSource(source.Key, source.Value, NuGetSourcesSettings.Default);
+                sources.RemoveSource(source.Key, source.Value, new NuGetSourcesSettings());
                 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(

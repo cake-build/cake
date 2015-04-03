@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a text argument.
     /// </summary>
-    public sealed class TextArgument : ProcessArgument
+    public sealed class TextArgument : IProcessArgument
     {
         private readonly string _text;
 
@@ -18,11 +18,26 @@
 
         /// <summary>
         /// Render the arguments as a <see cref="string" />.
+        /// Sensitive information will be included.
         /// </summary>
-        /// <returns>A string representation of the argument.</returns>
-        public override string Render()
+        /// <returns>
+        /// A string representation of the argument.
+        /// </returns>
+        public string Render()
         {
             return _text ?? string.Empty;
-        }        
+        }
+
+        /// <summary>
+        /// Renders the argument as a <see cref="string" />.
+        /// Sensitive information will be redacted.
+        /// </summary>
+        /// <returns>
+        /// A safe string representation of the argument.
+        /// </returns>
+        public string RenderSafe()
+        {
+            return Render();
+        }
     }
 }

@@ -40,7 +40,7 @@ namespace Cake.Core
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <param name="argument">The argument to be quoted and appended.</param>
-        public static void AppendQuoted(this ProcessArgumentBuilder builder, ProcessArgument argument)
+        public static void AppendQuoted(this ProcessArgumentBuilder builder, IProcessArgument argument)
         {
             if (builder != null)
             {
