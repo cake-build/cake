@@ -3,15 +3,15 @@
     /// <summary>
     /// Represents a secret argument.
     /// </summary>
-    public sealed class SecretArgument : ProcessArgument
+    public sealed class SecretArgument : IProcessArgument
     {
-        private readonly ProcessArgument _argument;
+        private readonly IProcessArgument _argument;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SecretArgument"/> class.
         /// </summary>
         /// <param name="argument">The argument.</param>
-        public SecretArgument(ProcessArgument argument)
+        public SecretArgument(IProcessArgument argument)
         {
             _argument = argument;
         }
@@ -21,7 +21,7 @@
         /// The secret text will be included.
         /// </summary>
         /// <returns>A string representation of the argument.</returns>
-        public override string Render()
+        public string Render()
         {
             return _argument.Render();
         }
@@ -31,7 +31,7 @@
         ///  The secret text will be redacted.
         /// </summary>
         /// <returns>A safe string representation of the argument.</returns>
-        public override string RenderSafe()
+        public string RenderSafe()
         {
             return "[REDACTED]";
         }

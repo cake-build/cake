@@ -10,7 +10,7 @@ namespace Cake.Common.Solution.Project.Properties
     /// <summary>
     /// The assembly info parser.
     /// </summary>
-    public class AssemblyInfoParser
+    public sealed class AssemblyInfoParser
     {
         private const string Pattern = @"{0}\(""([.]*(\d*|\*?)[.]*(\d*|\*?)[.]*(\d*|\*?)[.]*(\d*|\*?))""\)";
         private const string DefaultVersion = "1.0.0.0";

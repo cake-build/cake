@@ -3,9 +3,9 @@
 // https://github.com/kthompson/glob-js
 ///////////////////////////////////////////////////////////////////////
 
-namespace Cake.Core.IO.Globbing.Nodes.Roots
+namespace Cake.Core.IO.Globbing.Nodes
 {
-    internal sealed class WindowsRoot : RootNode
+    internal sealed class WindowsRoot : Node
     {
         private readonly string _drive;
 

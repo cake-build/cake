@@ -4,7 +4,7 @@ using Cake.Core.IO;
 
 namespace Cake.Common.Tools.MSBuild
 {
-    internal sealed class MSBuildResolver
+    internal static class MSBuildResolver
     {
         public static FilePath GetMSBuildPath(IFileSystem fileSystem, ICakeEnvironment environment, MSBuildToolVersion version, PlatformTarget target)
         {

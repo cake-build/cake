@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a MSBuild tool version.
     /// </summary>
-    public enum MSBuildToolVersion : byte
+    public enum MSBuildToolVersion
     {
         /// <summary>
         /// The highest available MSBuild tool version.

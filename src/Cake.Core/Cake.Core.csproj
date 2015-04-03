@@ -100,10 +100,9 @@
     <Compile Include="IO\Globber.cs" />
     <Compile Include="IO\Globbing\Node.cs" />
     <Compile Include="IO\Globbing\Nodes\IdentifierNode.cs" />
-    <Compile Include="IO\Globbing\Nodes\RootNode.cs" />
-    <Compile Include="IO\Globbing\Nodes\Roots\RelativeRoot.cs" />
-    <Compile Include="IO\Globbing\Nodes\Roots\UnixRoot.cs" />
-    <Compile Include="IO\Globbing\Nodes\Roots\WindowsRoot.cs" />
+    <Compile Include="IO\Globbing\Nodes\RelativeRoot.cs" />
+    <Compile Include="IO\Globbing\Nodes\UnixRoot.cs" />
+    <Compile Include="IO\Globbing\Nodes\WindowsRoot.cs" />
     <Compile Include="IO\Globbing\Nodes\SegmentNode.cs" />
     <Compile Include="IO\Globbing\Nodes\WildcardNode.cs" />
     <Compile Include="IO\Globbing\Nodes\WildcardSegmentNode.cs" />
@@ -165,7 +164,7 @@
     <Compile Include="Scripting\ScriptAliasFinder.cs" />
     <Compile Include="Scripting\ScriptAliasGenerator.cs" />
     <Compile Include="Scripting\ScriptHost.cs" />
-    <Compile Include="IO\ProcessArgument.cs" />
+    <Compile Include="IO\IProcessArgument.cs" />
     <Compile Include="IO\ProcessArgumentBuilder.cs" />
     <Compile Include="Scripting\ScriptRunner.cs" />
     <Compile Include="Text\ITextTransformationTemplate.cs" />

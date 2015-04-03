@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Cake.Common.Solution.Project.Properties
 {
-    internal class AssemblyInfoRegistration
+    internal sealed class AssemblyInfoRegistration
     {
         private readonly IDictionary<string, string> _dictionary;
         private readonly ISet<string> _namespaces;

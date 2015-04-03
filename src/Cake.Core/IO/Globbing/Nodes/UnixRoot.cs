@@ -3,9 +3,9 @@
 // https://github.com/kthompson/glob-js
 ///////////////////////////////////////////////////////////////////////
 
-namespace Cake.Core.IO.Globbing.Nodes.Roots
+namespace Cake.Core.IO.Globbing.Nodes
 {
-    internal sealed class RelativeRoot : RootNode
+    internal sealed class UnixRoot : Node
     {
         public override bool IsWildcard
         {
@@ -15,6 +15,6 @@ namespace Cake.Core.IO.Globbing.Nodes.Roots
         public override string Render()
         {
             return string.Empty;
-        } 
+        }
     }
 }
