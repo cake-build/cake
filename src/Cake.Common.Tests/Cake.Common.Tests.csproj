@@ -72,6 +72,7 @@
     <Compile Include="Fixtures\NuGetUpdateFixture.cs" />
     <Compile Include="Fixtures\NUnitRunnerFixture.cs" />
     <Compile Include="Fixtures\ProcessFixture.cs" />
+    <Compile Include="Fixtures\SignToolResolverFixture.cs" />
     <Compile Include="Fixtures\SignToolSignRunnerFixture.cs" />
     <Compile Include="Fixtures\TextTransformationFixture.cs" />
     <Compile Include="Fixtures\WiXFixture.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Unit\Tools\NuGet\Update\NuGetUpdateSettingsTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitRunnerTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitSettingsTests.cs" />
+    <Compile Include="Unit\Tools\SignTool\SignToolResolverTests.cs" />
     <Compile Include="Unit\Tools\SignTool\SignToolSignRunnerTests.cs" />
     <Compile Include="Unit\Tools\WiX\LightRunnerTests.cs" />
     <Compile Include="Unit\Tools\WiX\CandleRunnerTests.cs" />

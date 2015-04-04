@@ -14,6 +14,7 @@ namespace Cake.Common.Tools.SignTool
         private readonly ISignToolResolver _resolver;
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
+        private readonly IRegistry _registry;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SignToolSignRunner"/> class.
@@ -21,8 +22,11 @@ namespace Cake.Common.Tools.SignTool
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        public SignToolSignRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner)
-            : this(fileSystem, environment, processRunner, null)
+        /// <param name="registry">The registry.</param>
+        public SignToolSignRunner(IFileSystem fileSystem, 
+            ICakeEnvironment environment, 
+            IProcessRunner processRunner,
+            IRegistry registry) : this(fileSystem, environment, processRunner, registry, null)
         {
         }
 
@@ -32,17 +36,20 @@ namespace Cake.Common.Tools.SignTool
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
+        /// <param name="registry">The registry.</param>
         /// <param name="resolver">The resolver.</param>
         internal SignToolSignRunner(
             IFileSystem fileSystem, 
             ICakeEnvironment environment, 
             IProcessRunner processRunner,
+            IRegistry registry,
             ISignToolResolver resolver)
             : base(fileSystem, environment, processRunner)
         {
             _fileSystem = fileSystem;
             _environment = environment;
-            _resolver = resolver ?? new SignToolResolver();
+            _registry = registry;
+            _resolver = resolver ?? new SignToolResolver(_fileSystem, _environment, _registry);
         }
 
         /// <summary>
@@ -153,7 +160,7 @@ namespace Cake.Common.Tools.SignTool
         protected override FilePath GetDefaultToolPath(SignToolSignSettings settings)
         {
             return (settings == null ? null : settings.ToolPath)
-                ?? _resolver.GetSignToolPath(_environment);
+                ?? _resolver.GetPath();
         }
     }
 }

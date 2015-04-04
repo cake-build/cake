@@ -1,5 +1,4 @@
 ﻿using System;
-using Cake.Core;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.SignTool
@@ -12,9 +11,7 @@ namespace Cake.Common.Tools.SignTool
         /// <summary>
         /// Gets or sets the tool path.
         /// </summary>
-        /// <value>
-        /// The tool path. Defaults to path given by <see cref="SignToolResolver.GetSignToolPath(ICakeEnvironment)"/>
-        /// </value>
+        /// <value>The tool path.</value>
         public FilePath ToolPath { get; set; }
 
         /// <summary>
