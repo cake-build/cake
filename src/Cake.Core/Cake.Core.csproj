@@ -118,6 +118,8 @@
     <Compile Include="IO\IGlobber.cs" />
     <Compile Include="IO\IProcess.cs" />
     <Compile Include="IO\IProcessRunner.cs" />
+    <Compile Include="IO\IRegistry.cs" />
+    <Compile Include="IO\IRegistryKey.cs" />
     <Compile Include="IO\Machine.cs" />
     <Compile Include="IO\IToolResolver.cs" />
     <Compile Include="IO\NuGet\INuGetToolResolver.cs" />
@@ -135,6 +137,8 @@
     <Compile Include="IO\Arguments\SecretArgument.cs" />
     <Compile Include="IO\SpecialPath.cs" />
     <Compile Include="IO\Arguments\TextArgument.cs" />
+    <Compile Include="IO\WindowsRegistry.cs" />
+    <Compile Include="IO\WindowsRegistryKey.cs" />
     <Compile Include="Properties\Namespaces.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>

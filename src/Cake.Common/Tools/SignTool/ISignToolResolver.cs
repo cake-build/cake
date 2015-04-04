@@ -1,5 +1,4 @@
-﻿using Cake.Core;
-using Cake.Core.IO;
+﻿using Cake.Core.IO;
 
 namespace Cake.Common.Tools.SignTool
 {
@@ -15,8 +14,7 @@ namespace Cake.Common.Tools.SignTool
         /// <summary>
         /// Resolves the path to the sign tool.
         /// </summary>
-        /// <param name="environment">The environment.</param>
         /// <returns>The path to the sign tool.</returns>
-        FilePath GetSignToolPath(ICakeEnvironment environment);
+        FilePath GetPath();
     }
 }

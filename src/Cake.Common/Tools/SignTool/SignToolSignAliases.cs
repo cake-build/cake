@@ -144,18 +144,16 @@ namespace Cake.Common.Tools.SignTool
             {
                 throw new ArgumentNullException("context");
             }
-
             if (assemblies == null)
             {
                 throw new ArgumentNullException("assemblies");
             }
-
             if (settings == null)
             {
                 throw new ArgumentNullException("settings");
             }
 
-            var runner = new SignToolSignRunner(context.FileSystem, context.Environment, context.ProcessRunner);
+            var runner = new SignToolSignRunner(context.FileSystem, context.Environment, context.ProcessRunner, null);
             foreach (var assembly in assemblies)
             {
                 runner.Run(assembly, settings);
