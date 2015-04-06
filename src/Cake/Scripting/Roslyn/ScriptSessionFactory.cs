@@ -1,26 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.Scripting;
-using Cake.Scripting.Roslyn.Installation;
-using Roslyn.Scripting.CSharp;
+using Cake.Scripting.Roslyn.Nightly;
+using Cake.Scripting.Roslyn.Stable;
 
 namespace Cake.Scripting.Roslyn
 {
-    internal sealed class RoslynScriptSessionFactory : IScriptSessionFactory
+    internal sealed class ScriptSessionFactory : IScriptSessionFactory
     {
-        private readonly ICakeEnvironment _environment;
-        private readonly IRoslynInstaller _installer;
+        private readonly RoslynScriptSessionFactory _stableFactory;
+        private readonly RoslynNightlyScriptSessionFactory _nightlyFactory;
         private readonly ICakeLog _log;
 
-        public RoslynScriptSessionFactory(
-            ICakeEnvironment environment,
-            IRoslynInstaller installer, 
+        public ScriptSessionFactory(
+            RoslynScriptSessionFactory stableFactory,
+            RoslynNightlyScriptSessionFactory nightlyFactory,
             ICakeLog log)
         {
-            _environment = environment;
-            _installer = installer;
+            _nightlyFactory = nightlyFactory;
+            _stableFactory = stableFactory;
             _log = log;
         }
 
@@ -46,29 +45,17 @@ namespace Cake.Scripting.Roslyn
                 }
             }
 
-            // Get the installation instructions.
-            var root = _environment.GetApplicationRoot();
-            var instructions = RoslynHelpers.GetInstallationInstructions(experimental);
-
-            // Should we install Roslyn?
-            if (!_installer.IsInstalled(root, instructions))
-            {
-                _installer.Install(root, instructions);
-            }
-
             // Create the script session.
             _log.Debug("Creating script session...");
             if (experimental)
             {
                 // Use the nightly build.
                 _log.Information("Using nightly build of Roslyn.");
-                return new RoslynNightlyScriptSession(host, _log);
+                return _nightlyFactory.CreateSession(host);
             }
-
+            
             // Use the stable build.
-            var roslynScriptEngine = new ScriptEngine();
-            var session = roslynScriptEngine.CreateSession(host, typeof(IScriptHost));
-            return new RoslynScriptSession(session, _log);
+            return _stableFactory.CreateSession(host);
         }
     }
 }

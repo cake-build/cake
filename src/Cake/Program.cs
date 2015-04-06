@@ -14,7 +14,8 @@ using Cake.Core.Scripting;
 using Cake.Diagnostics;
 using Cake.Scripting;
 using Cake.Scripting.Roslyn;
-using Cake.Scripting.Roslyn.Installation;
+using Cake.Scripting.Roslyn.Nightly;
+using Cake.Scripting.Roslyn.Stable;
 
 namespace Cake
 {
@@ -103,8 +104,9 @@ namespace Cake
             builder.RegisterType<CakeContext>().As<ICakeContext>().SingleInstance();
 
             // Roslyn related services.
-            builder.RegisterType<RoslynInstaller>().As<IRoslynInstaller>().SingleInstance();
-            builder.RegisterType<RoslynScriptSessionFactory>().As<IScriptSessionFactory>().SingleInstance();
+            builder.RegisterType<ScriptSessionFactory>().As<IScriptSessionFactory>().SingleInstance();
+            builder.RegisterType<RoslynScriptSessionFactory>().SingleInstance();
+            builder.RegisterType<RoslynNightlyScriptSessionFactory>().SingleInstance();
 
             // Cake services.
             builder.RegisterType<ArgumentParser>().As<IArgumentParser>().SingleInstance();
