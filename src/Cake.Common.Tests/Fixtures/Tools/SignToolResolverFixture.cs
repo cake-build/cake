@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cake.Core.IO;
-using Cake.Common.Tools.SignTool;
+﻿using Cake.Common.Tools.SignTool;
 using Cake.Core;
+using Cake.Core.IO;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures
+namespace Cake.Common.Tests.Fixtures.Tools
 {
     internal sealed class SignToolResolverFixture
     {

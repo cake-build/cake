@@ -4,7 +4,7 @@ using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures
+namespace Cake.Common.Tests.Fixtures.Tools
 {
     internal sealed class SignToolSignRunnerFixture
     {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Cake.Core;
@@ -86,7 +87,7 @@ namespace Cake.Scripting.Roslyn.Nightly
                 }
             }
             const string format = "Could not find type '{0}' in assembly '{1}'.";
-            throw new CakeException(string.Format(format, typeName, assemblyName));
+            throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, typeName, assemblyName));
         }
 
         private static IEnumerable<Type> GetLoadableTypes(Assembly assembly)

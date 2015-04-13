@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Cake.Common.Tests.Fixtures;
+using Cake.Common.Tests.Fixtures.Tools;
+using Cake.Common.Tests.Fixtures.Tools.NuGet;
 using Cake.Common.Tools.NuGet;
 using Cake.Common.Tools.NuGet.SetApiKey;
 using Cake.Core;
@@ -11,33 +13,32 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
 {
     public sealed class NuGetSetApiKeyTests
     {
-        
         public sealed class TheSetApiKeyMethod
         {
             [Fact]
             public void Should_Throw_If_Target_Api_Key_Is_Null()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var installer = fixture.CreateSetApiKey();
-
+                var fixture = new NuGetSetApiKeyFixture();
+                fixture.ApiKey = null;
 
                 // When
-                var result = Record.Exception(() => installer.SetApiKey(null, "http://nugetfeed.com", new NuGetSetApiKeySettings()));
+                var result = Record.Exception(() => fixture.SetApiKey());
 
                 // Then
                 Assert.IsArgumentNullException(result, "apiKey");
             }
+
             [Fact]
             public void Should_Throw_If_Target_Source_Is_Null()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var installer = fixture.CreateSetApiKey();
+                var fixture = new NuGetSetApiKeyFixture();
+                fixture.Source = null;
 
 
                 // When
-                var result = Record.Exception(() => installer.SetApiKey("*secret key*", null, new NuGetSetApiKeySettings()));
+                var result = Record.Exception(() => fixture.SetApiKey());
 
                 // Then
                 Assert.IsArgumentNullException(result, "source");
@@ -47,46 +48,42 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
             public void Should_Throw_If_Settings_Are_Null()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var installer = fixture.CreateSetApiKey();
+                var fixture = new NuGetSetApiKeyFixture();
+                fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => installer.SetApiKey("*secret key*", "http://nugetfeed.com", null));
+                var result = Record.Exception(() => fixture.SetApiKey());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
             }
 
-
             [Fact]
-            public void Should_Throw_If_UnexpectedOutput()
+            public void Should_Throw_If_Encounter_Unexpected_Output()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var installer = fixture.CreateSetApiKey();
+                var fixture = new NuGetSetApiKeyFixture();
+                fixture.GivenUnexpectedOutput();
 
                 // When
-                var result = Record.Exception(() => installer.SetApiKey("*secret key*", "http://nugetfeed.com", new NuGetSetApiKeySettings()));
+                var result = Record.Exception(() => fixture.SetApiKey());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("SetApiKey returned unexpected response.", result.Message);
+                Assert.IsCakeException(result, "SetApiKey returned unexpected response.");
             }
-
 
             [Fact]
             public void Should_Throw_If_NuGet_Executable_Was_Not_Found()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var installer = fixture.CreateSetApiKey();
+                var fixture = new NuGetSetApiKeyFixture();
+                fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => installer.SetApiKey("*secret key*", "http://nugetfeed.com", new NuGetSetApiKeySettings()));
+                var result = Record.Exception(() => fixture.SetApiKey());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Could not locate executable.", result.Message);
+                Assert.IsCakeException(result, "NuGet: Could not locate executable.");
             }
 
             [Theory]
@@ -95,15 +92,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
             public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var apiKeySource = new KeyValuePair<string, string>("*secret key*", "http://nugetfeed.com");
-                var fixture = new NuGetFixture(setApiKey:apiKeySource, toolPath:expected);
-                var installer = fixture.CreateSetApiKey();
+                var fixture = new NuGetSetApiKeyFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenCustomToolPathExist(expected);
                 
                 // When
-                installer.SetApiKey(apiKeySource.Key, apiKeySource.Value, new NuGetSetApiKeySettings
-                {
-                    ToolPath = toolPath
-                });
+                fixture.SetApiKey();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -115,44 +109,38 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
             public void Should_Throw_If_Process_Was_Not_Started()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
-                var installer = fixture.CreateSetApiKey();
+                var fixture = new NuGetSetApiKeyFixture();
+                fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => installer.SetApiKey("*secret key*", "http://nugetfeed.com", new NuGetSetApiKeySettings()));
+                var result = Record.Exception(() => fixture.SetApiKey());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Process was not started.", result.Message);
+                Assert.IsCakeException(result, "NuGet: Process was not started.");
             }
 
             [Fact]
             public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                fixture.Process.GetExitCode().Returns(1);
-                var installer = fixture.CreateSetApiKey();
+                var fixture = new NuGetSetApiKeyFixture();
+                fixture.GivenProcessReturnError();
 
                 // When
-                var result = Record.Exception(() => installer.SetApiKey("*secret key*", "http://nugetfeed.com", new NuGetSetApiKeySettings()));
+                var result = Record.Exception(() => fixture.SetApiKey());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Process returned an error.", result.Message);
+                Assert.IsCakeException(result, "NuGet: Process returned an error.");
             }
 
             [Fact]
             public void Should_Find_NuGet_Executable_If_Tool_Path_Not_Provided()
             {
                 // Given
-                var apiKeySource = new KeyValuePair<string, string>("*secret key*", "http://nugetfeed.com");
-                var fixture = new NuGetFixture(setApiKey:apiKeySource);
-                var installer = fixture.CreateSetApiKey();
+                var fixture = new NuGetSetApiKeyFixture();
                 
                 // When
-                installer.SetApiKey("*secret key*", "http://nugetfeed.com", new NuGetSetApiKeySettings());
+                fixture.SetApiKey();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -164,37 +152,29 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
             public void Should_Add_Mandatory_Arguments()
             {
                 // Given
-                var apiKeySource = new KeyValuePair<string, string>("*secret key*", "http://nugetfeed.com");
-                var fixture = new NuGetFixture(setApiKey:apiKeySource);
-                var installer = fixture.CreateSetApiKey();
-                var expected = string.Format("setapikey \"{0}\" -Source \"{1}\" -NonInteractive", apiKeySource.Key, apiKeySource.Value);
+                var fixture = new NuGetSetApiKeyFixture();
 
                 // When
-                installer.SetApiKey(apiKeySource.Key, apiKeySource.Value, new NuGetSetApiKeySettings());
+                fixture.SetApiKey();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == expected));
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "setapikey \"SECRET\" -Source \"http://a.com\" -NonInteractive"));
             }
 
             [Theory]
-            [InlineData(NuGetVerbosity.Detailed, "detailed")]
-            [InlineData(NuGetVerbosity.Normal, "normal")]
-            [InlineData(NuGetVerbosity.Quiet, "quiet")]
-            public void Should_Add_Verbosity_To_Arguments_If_Set(NuGetVerbosity verbosity, string name)
+            [InlineData(NuGetVerbosity.Detailed, "setapikey \"SECRET\" -Source \"http://a.com\" -Verbosity detailed -NonInteractive")]
+            [InlineData(NuGetVerbosity.Normal, "setapikey \"SECRET\" -Source \"http://a.com\" -Verbosity normal -NonInteractive")]
+            [InlineData(NuGetVerbosity.Quiet, "setapikey \"SECRET\" -Source \"http://a.com\" -Verbosity quiet -NonInteractive")]
+            public void Should_Add_Verbosity_To_Arguments_If_Set(NuGetVerbosity verbosity, string expected)
             {
                 // Given
-                var apiKeySource = new KeyValuePair<string, string>("*secret key*", "http://nugetfeed.com");
-                var fixture = new NuGetFixture(setApiKey:apiKeySource);
-                var installer = fixture.CreateSetApiKey();
-                var expected = string.Format("setapikey \"{0}\" -Source \"{1}\" -Verbosity {2} -NonInteractive", apiKeySource.Key, apiKeySource.Value, name);
+                var fixture = new NuGetSetApiKeyFixture();
+                fixture.Settings.Verbosity = verbosity;
 
                 // When
-                installer.SetApiKey(apiKeySource.Key, apiKeySource.Value, new NuGetSetApiKeySettings
-                {
-                    Verbosity = verbosity
-                });
+                fixture.SetApiKey();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -206,21 +186,16 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
             public void Should_Add_ConfigFile_To_Arguments_If_Set()
             {
                 // Given
-                var apiKeySource = new KeyValuePair<string, string>("*secret key*", "http://nugetfeed.com");
-                var fixture = new NuGetFixture(setApiKey:apiKeySource);
-                var installer = fixture.CreateSetApiKey();
-                var expected = string.Format("setapikey \"{0}\" -Source \"{1}\" -ConfigFile \"/Working/nuget.config\" -NonInteractive", apiKeySource.Key, apiKeySource.Value);
+                var fixture = new NuGetSetApiKeyFixture();
+                fixture.Settings.ConfigFile = "./nuget.config";
                 
                 // When
-                installer.SetApiKey(apiKeySource.Key, apiKeySource.Value, new NuGetSetApiKeySettings
-                {
-                    ConfigFile = "./nuget.config"
-                });
+                fixture.SetApiKey();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                        p.Arguments.Render() == "setapikey \"SECRET\" -Source \"http://a.com\" -ConfigFile \"/Working/nuget.config\" -NonInteractive"));
 
             }
         }

@@ -1,23 +1,21 @@
-﻿using Cake.Common.Tools.MSTest;
+﻿using Cake.Common.Tools.NSIS;
 using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures
+namespace Cake.Common.Tests.Fixtures.Tools
 {
-    internal sealed class MSTestRunnerFixture
+    // ReSharper disable once InconsistentNaming
+    internal sealed class NSISFixture
     {
         public IFileSystem FileSystem { get; set; }
-        public ICakeEnvironment Environment { get; set; }
         public IProcess Process { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
+        public ICakeEnvironment Environment { get; set; }
+        public IGlobber Globber { get; set; }
 
-        public FilePath ToolPath { get; set; }
-
-        public MSTestRunnerFixture(FilePath toolPath = null, bool defaultToolExist = true)
+        public NSISFixture(FilePath toolPath = null)
         {
-            ToolPath = "/ProgramFilesX86/Microsoft Visual Studio 12.0/Common7/IDE/mstest.exe";
-
             Process = Substitute.For<IProcess>();
             Process.GetExitCode().Returns(0);
 
@@ -26,10 +24,12 @@ namespace Cake.Common.Tests.Fixtures
 
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory = "/Working";
-            Environment.GetSpecialPath(SpecialPath.ProgramFilesX86).Returns("/ProgramFilesX86");
+
+            Globber = Substitute.For<IGlobber>();
+            Globber.Match("./tools/**/makensis.exe").Returns(new[] { (FilePath)"/Working/tools/makensis.exe" });
 
             FileSystem = Substitute.For<IFileSystem>();
-            FileSystem.Exist(Arg.Is<FilePath>(p => p.FullPath.Equals(ToolPath.FullPath))).Returns(defaultToolExist);
+            FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == "/Working/tools/makensis.exe")).Returns(true);
 
             if (toolPath != null)
             {
@@ -37,9 +37,9 @@ namespace Cake.Common.Tests.Fixtures
             }
         }
 
-        public MSTestRunner CreateRunner()
+        public MakeNSISRunner CreateRunner()
         {
-            return new MSTestRunner(FileSystem, Environment, ProcessRunner);
+            return new MakeNSISRunner(FileSystem, Environment, Globber, ProcessRunner);
         }
     }
 }
