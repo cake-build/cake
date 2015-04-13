@@ -1,4 +1,5 @@
 ﻿using Cake.Common.Tests.Fixtures;
+using Cake.Common.Tests.Fixtures.Tools;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.SignTool

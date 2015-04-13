@@ -1,6 +1,5 @@
-﻿using Cake.Common.Tests.Fixtures;
+﻿using Cake.Common.Tests.Fixtures.Tools.NuGet;
 using Cake.Common.Tools.NuGet;
-using Cake.Common.Tools.NuGet.Install;
 using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
@@ -16,12 +15,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             public void Should_Throw_If_Target_Package_Id_Is_Null()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var installer = fixture.CreateInstaller();
-
+                var fixture = new NuGetInstallerFixture();
+                fixture.PackageId = null;
 
                 // When
-                var result = Record.Exception(() => installer.Install(null, new NuGetInstallSettings()));
+                var result = Record.Exception(() => fixture.Install());
 
                 // Then
                 Assert.IsArgumentNullException(result, "packageId");
@@ -31,30 +29,28 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             public void Should_Throw_If_Settings_Are_Null()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => installer.Install("Cake", null));
+                var result = Record.Exception(() => fixture.Install());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
             }
 
-
             [Fact]
             public void Should_Throw_If_NuGet_Executable_Was_Not_Found()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => installer.Install("Cake", new NuGetInstallSettings()));
+                var result = Record.Exception(() => fixture.Install());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Could not locate executable.", result.Message);
+                Assert.IsCakeException(result, "NuGet: Could not locate executable.");
             }
 
             [Theory]
@@ -63,14 +59,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new NuGetFixture(expected);
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.GivenCustomToolPathExist(expected);
+                fixture.Settings.ToolPath = toolPath;
 
                 // When
-                installer.Install("Cake", new NuGetInstallSettings
-                {
-                    ToolPath = toolPath
-                });
+                fixture.Install();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -82,43 +76,38 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             public void Should_Throw_If_Process_Was_Not_Started()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => installer.Install("Cake", new NuGetInstallSettings()));
+                var result = Record.Exception(() => fixture.Install());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Process was not started.", result.Message);
+                Assert.IsCakeException(result, "NuGet: Process was not started.");
             }
 
             [Fact]
             public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                fixture.Process.GetExitCode().Returns(1);
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.GivenProcessReturnError();
 
                 // When
-                var result = Record.Exception(() => installer.Install("Cake", new NuGetInstallSettings()));
+                var result = Record.Exception(() => fixture.Install());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Process returned an error.", result.Message);
+                Assert.IsCakeException(result, "NuGet: Process returned an error.");
             }
 
             [Fact]
             public void Should_Find_NuGet_Executable_If_Tool_Path_Not_Provided()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
 
                 // When
-                installer.Install("Cake", new NuGetInstallSettings());
+                fixture.Install();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -130,11 +119,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             public void Should_Add_Mandatory_Arguments()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
 
                 // When
-                installer.Install("Cake", new NuGetInstallSettings());
+                fixture.Install();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -146,14 +134,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             public void Should_Add_RequireConsent_To_Arguments_If_True()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.Settings.RequireConsent = true;
 
                 // When
-                installer.Install("Cake", new NuGetInstallSettings
-                {
-                    RequireConsent = true
-                });
+                fixture.Install();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -165,14 +150,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             public void Should_Add_SolutionDirectory_To_Arguments_If_Set()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.Settings.SolutionDirectory = "./solution";
 
                 // When
-                installer.Install("Cake", new NuGetInstallSettings
-                {
-                    SolutionDirectory = "./solution"
-                });
+                fixture.Install();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -184,34 +166,27 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             public void Should_Add_Sources_To_Arguments_If_Set()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.Settings.Source = new[] { "A;B;C" };
 
                 // When
-                installer.Install("Cake", new NuGetInstallSettings
-                {
-                    Source = new[] { "A;B;C" }
-                });
+                fixture.Install();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "install \"Cake\" -Source \"A;B;C\" -NonInteractive"));
-
             }
 
             [Fact]
             public void Should_Add_NoCache_To_Arguments_If_True()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.Settings.NoCache = true;
 
                 // When
-                installer.Install("Cake", new NuGetInstallSettings
-                {
-                    NoCache = true
-                });
+                fixture.Install();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -223,14 +198,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             public void Should_Add_DisableParallelProcessing_To_Arguments_If_Set()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.Settings.DisableParallelProcessing = true;
 
                 // When
-                installer.Install("Cake", new NuGetInstallSettings
-                {
-                    DisableParallelProcessing = true
-                });
+                fixture.Install();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -239,21 +211,17 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             }
 
             [Theory]
-            [InlineData(NuGetVerbosity.Detailed, "detailed")]
-            [InlineData(NuGetVerbosity.Normal, "normal")]
-            [InlineData(NuGetVerbosity.Quiet, "quiet")]
-            public void Should_Add_Verbosity_To_Arguments_If_Set(NuGetVerbosity verbosity, string name)
+            [InlineData(NuGetVerbosity.Detailed, "install \"Cake\" -Verbosity detailed -NonInteractive")]
+            [InlineData(NuGetVerbosity.Normal, "install \"Cake\" -Verbosity normal -NonInteractive")]
+            [InlineData(NuGetVerbosity.Quiet, "install \"Cake\" -Verbosity quiet -NonInteractive")]
+            public void Should_Add_Verbosity_To_Arguments_If_Set(NuGetVerbosity verbosity, string expected)
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var installer = fixture.CreateInstaller();
-                var expected = string.Format("install \"Cake\" -Verbosity {0} -NonInteractive", name);
+                var fixture = new NuGetInstallerFixture();
+                fixture.Settings.Verbosity = verbosity;
 
                 // When
-                installer.Install("Cake", new NuGetInstallSettings
-                {
-                    Verbosity = verbosity
-                });
+                fixture.Install();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -265,34 +233,30 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             public void Should_Add_ConfigFile_To_Arguments_If_Set()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.Settings.ConfigFile = "./nuget.config";
 
                 // When
-                installer.Install("Cake", new NuGetInstallSettings
-                {
-                    ConfigFile = "./nuget.config"
-                });
+                fixture.Install();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "install \"Cake\" -ConfigFile \"/Working/nuget.config\" -NonInteractive"));
-
             }
         }
+
         public sealed class TheInstallFromConfigMethod
         {
             [Fact]
             public void Should_Throw_If_Target_Package_Config_Path_Is_Null()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var installer = fixture.CreateInstaller();
-
+                var fixture = new NuGetInstallerFixture();
+                fixture.PackageConfigPath = null;
 
                 // When
-                var result = Record.Exception(() => installer.InstallFromConfig(null, new NuGetInstallSettings()));
+                var result = Record.Exception(() => fixture.InstallFromConfig());
 
                 // Then
                 Assert.IsArgumentNullException(result, "packageConfigPath");
@@ -302,30 +266,28 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             public void Should_Throw_If_Settings_Are_Null()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => installer.InstallFromConfig("./packages.config", null));
+                var result = Record.Exception(() => fixture.InstallFromConfig());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
             }
 
-
             [Fact]
             public void Should_Throw_If_NuGet_Executable_Was_Not_Found()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => installer.InstallFromConfig("./packages.config", new NuGetInstallSettings()));
+                var result = Record.Exception(() => fixture.InstallFromConfig());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Could not locate executable.", result.Message);
+                Assert.IsCakeException(result, "NuGet: Could not locate executable.");
             }
 
             [Theory]
@@ -334,14 +296,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new NuGetFixture(expected);
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenCustomToolPathExist(expected);
 
                 // When
-                installer.InstallFromConfig("./packages.config", new NuGetInstallSettings
-                {
-                    ToolPath = toolPath
-                });
+                fixture.InstallFromConfig();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -353,43 +313,38 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             public void Should_Throw_If_Process_Was_Not_Started()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => installer.InstallFromConfig("./packages.config", new NuGetInstallSettings()));
+                var result = Record.Exception(() => fixture.InstallFromConfig());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Process was not started.", result.Message);
+                Assert.IsCakeException(result, "NuGet: Process was not started.");
             }
 
             [Fact]
             public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                fixture.Process.GetExitCode().Returns(1);
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.GivenProcessReturnError();
 
                 // When
-                var result = Record.Exception(() => installer.InstallFromConfig("./packages.config", new NuGetInstallSettings()));
+                var result = Record.Exception(() => fixture.InstallFromConfig());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Process returned an error.", result.Message);
+                Assert.IsCakeException(result, "NuGet: Process returned an error.");
             }
 
             [Fact]
             public void Should_Find_NuGet_Executable_If_Tool_Path_Not_Provided()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
 
                 // When
-                installer.InstallFromConfig("./packages.config", new NuGetInstallSettings());
+                fixture.InstallFromConfig();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -401,11 +356,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             public void Should_Add_Mandatory_Arguments()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
 
                 // When
-                installer.InstallFromConfig("./packages.config", new NuGetInstallSettings());
+                fixture.InstallFromConfig();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -417,14 +371,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             public void Should_Add_RequireConsent_To_Arguments_If_True()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.Settings.RequireConsent = true;
 
                 // When
-                installer.InstallFromConfig("./packages.config", new NuGetInstallSettings
-                {
-                    RequireConsent = true
-                });
+                fixture.InstallFromConfig();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -436,14 +387,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             public void Should_Add_SolutionDirectory_To_Arguments_If_Set()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.Settings.SolutionDirectory = "./solution";
 
                 // When
-                installer.InstallFromConfig("./packages.config", new NuGetInstallSettings
-                {
-                    SolutionDirectory = "./solution"
-                });
+                fixture.InstallFromConfig();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -455,34 +403,27 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             public void Should_Add_Sources_To_Arguments_If_Set()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.Settings.Source = new[] { "A;B;C" };
 
                 // When
-                installer.InstallFromConfig("./packages.config", new NuGetInstallSettings
-                {
-                    Source = new[] { "A;B;C" }
-                });
+                fixture.InstallFromConfig();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "install \"/Working/packages.config\" -Source \"A;B;C\" -NonInteractive"));
-
             }
 
             [Fact]
             public void Should_Add_NoCache_To_Arguments_If_True()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.Settings.NoCache = true;
 
                 // When
-                installer.InstallFromConfig("./packages.config", new NuGetInstallSettings
-                {
-                    NoCache = true
-                });
+                fixture.InstallFromConfig();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -494,14 +435,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             public void Should_Add_DisableParallelProcessing_To_Arguments_If_Set()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.Settings.DisableParallelProcessing = true;
 
                 // When
-                installer.InstallFromConfig("./packages.config", new NuGetInstallSettings
-                {
-                    DisableParallelProcessing = true
-                });
+                fixture.InstallFromConfig();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -510,21 +448,17 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             }
 
             [Theory]
-            [InlineData(NuGetVerbosity.Detailed, "detailed")]
-            [InlineData(NuGetVerbosity.Normal, "normal")]
-            [InlineData(NuGetVerbosity.Quiet, "quiet")]
-            public void Should_Add_Verbosity_To_Arguments_If_Set(NuGetVerbosity verbosity, string name)
+            [InlineData(NuGetVerbosity.Detailed, "detailed", "install \"/Working/packages.config\" -Verbosity detailed -NonInteractive")]
+            [InlineData(NuGetVerbosity.Normal, "normal", "install \"/Working/packages.config\" -Verbosity normal -NonInteractive")]
+            [InlineData(NuGetVerbosity.Quiet, "quiet", "install \"/Working/packages.config\" -Verbosity quiet -NonInteractive")]
+            public void Should_Add_Verbosity_To_Arguments_If_Set(NuGetVerbosity verbosity, string name, string expected)
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var installer = fixture.CreateInstaller();
-                var expected = string.Format("install \"/Working/packages.config\" -Verbosity {0} -NonInteractive", name);
+                var fixture = new NuGetInstallerFixture();
+                fixture.Settings.Verbosity = verbosity;
 
                 // When
-                installer.InstallFromConfig("./packages.config", new NuGetInstallSettings
-                {
-                    Verbosity = verbosity
-                });
+                fixture.InstallFromConfig();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -536,20 +470,16 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             public void Should_Add_ConfigFile_To_Arguments_If_Set()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var installer = fixture.CreateInstaller();
+                var fixture = new NuGetInstallerFixture();
+                fixture.Settings.ConfigFile = "./nuget.config";
 
                 // When
-                installer.InstallFromConfig("./packages.config", new NuGetInstallSettings
-                {
-                    ConfigFile = "./nuget.config"
-                });
+                fixture.InstallFromConfig();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "install \"/Working/packages.config\" -ConfigFile \"/Working/nuget.config\" -NonInteractive"));
-
             }
         }
     }

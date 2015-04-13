@@ -79,6 +79,18 @@ namespace Cake.Testing.Fakes
         }
 
         /// <summary>
+        /// Ensures that the specified file do not exist.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        public void EnsureFileDoNotExist(FilePath path)
+        {
+            if (Files.ContainsKey(path))
+            {
+                Files.Remove(path);
+            }
+        }
+
+        /// <summary>
         /// Gets the created file.
         /// </summary>
         /// <param name="path">The path.</param>

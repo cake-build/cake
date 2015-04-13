@@ -5,7 +5,7 @@ using Cake.Core.IO;
 using Cake.Testing.Fakes;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures
+namespace Cake.Common.Tests.Fixtures.Tools
 {
     internal sealed class MSBuildRunnerFixture
     {

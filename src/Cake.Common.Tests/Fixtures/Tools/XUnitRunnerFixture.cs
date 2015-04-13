@@ -1,11 +1,11 @@
-﻿using Cake.Common.Tools.NUnit;
+﻿using Cake.Common.Tools.XUnit;
 using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures
+namespace Cake.Common.Tests.Fixtures.Tools
 {
-    internal sealed class NUnitRunnerFixture
+    internal sealed class XUnitRunnerFixture
     {
         public IFileSystem FileSystem { get; set; }
         public IProcess Process { get; set; }
@@ -13,7 +13,7 @@ namespace Cake.Common.Tests.Fixtures
         public ICakeEnvironment Environment { get; set; }
         public IGlobber Globber { get; set; }
 
-        public NUnitRunnerFixture(FilePath toolPath = null, bool defaultToolExist = true)
+        public XUnitRunnerFixture(FilePath toolPath = null, bool defaultToolExist = true)
         {
             Process = Substitute.For<IProcess>();
             Process.GetExitCode().Returns(0);
@@ -25,10 +25,10 @@ namespace Cake.Common.Tests.Fixtures
             Environment.WorkingDirectory = "/Working";
 
             Globber = Substitute.For<IGlobber>();
-            Globber.Match("./tools/**/nunit-console.exe").Returns(new[] { (FilePath)"/Working/tools/nunit-console.exe" });
+            Globber.Match("./tools/**/xunit.console.clr4.exe").Returns(new[] { (FilePath)"/Working/tools/xunit.console.clr4.exe" });
 
             FileSystem = Substitute.For<IFileSystem>();
-            FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == "/Working/tools/nunit-console.exe")).Returns(defaultToolExist);
+            FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == "/Working/tools/xunit.console.clr4.exe")).Returns(defaultToolExist);
 
             if (toolPath != null)
             {
@@ -36,9 +36,9 @@ namespace Cake.Common.Tests.Fixtures
             }
         }
 
-        public NUnitRunner CreateRunner()
+        public XUnitRunner CreateRunner()
         {
-            return new NUnitRunner(FileSystem, Environment, Globber, ProcessRunner);
+            return new XUnitRunner(FileSystem, Environment, Globber, ProcessRunner);
         }
     }
 }

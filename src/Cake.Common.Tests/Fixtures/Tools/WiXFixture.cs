@@ -1,11 +1,11 @@
-﻿using Cake.Common.Tools.XUnit;
+﻿using Cake.Common.Tools.WiX;
 using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures
+namespace Cake.Common.Tests.Fixtures.Tools
 {
-    internal sealed class XUnitRunnerFixture
+    internal sealed class WiXFixture
     {
         public IFileSystem FileSystem { get; set; }
         public IProcess Process { get; set; }
@@ -13,7 +13,7 @@ namespace Cake.Common.Tests.Fixtures
         public ICakeEnvironment Environment { get; set; }
         public IGlobber Globber { get; set; }
 
-        public XUnitRunnerFixture(FilePath toolPath = null, bool defaultToolExist = true)
+        public WiXFixture(FilePath toolPath = null)
         {
             Process = Substitute.For<IProcess>();
             Process.GetExitCode().Returns(0);
@@ -25,10 +25,12 @@ namespace Cake.Common.Tests.Fixtures
             Environment.WorkingDirectory = "/Working";
 
             Globber = Substitute.For<IGlobber>();
-            Globber.Match("./tools/**/xunit.console.clr4.exe").Returns(new[] { (FilePath)"/Working/tools/xunit.console.clr4.exe" });
+            Globber.Match("./tools/**/candle.exe").Returns(new[] { (FilePath)"/Working/tools/candle.exe" });
+            Globber.Match("./tools/**/light.exe").Returns(new[] { (FilePath)"/Working/tools/light.exe" });
 
             FileSystem = Substitute.For<IFileSystem>();
-            FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == "/Working/tools/xunit.console.clr4.exe")).Returns(defaultToolExist);
+            FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == "/Working/tools/candle.exe")).Returns(true);
+            FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == "/Working/tools/light.exe")).Returns(true);
 
             if (toolPath != null)
             {
@@ -36,9 +38,14 @@ namespace Cake.Common.Tests.Fixtures
             }
         }
 
-        public XUnitRunner CreateRunner()
+        public CandleRunner CreateCandleRunner()
         {
-            return new XUnitRunner(FileSystem, Environment, Globber, ProcessRunner);
+            return new CandleRunner(FileSystem, Environment, Globber, ProcessRunner);
+        }
+
+        public LightRunner CreateLightRunner()
+        {
+            return new LightRunner(FileSystem, Environment, Globber, ProcessRunner);
         }
     }
 }

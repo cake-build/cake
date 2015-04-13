@@ -1,5 +1,5 @@
 ﻿using System;
-using Cake.Common.Tests.Fixtures;
+using Cake.Common.Tests.Fixtures.Tools.NuGet;
 using Cake.Common.Tests.Properties;
 using Cake.Common.Tools.NuGet.Pack;
 using Cake.Core;
@@ -17,11 +17,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
             public void Should_Throw_If_Nuspec_File_Path_Is_Null()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var packer = fixture.CreatePacker();
+                var fixture = new NuGetPackerFixture();
+                fixture.NuSpecFilePath = null;
 
                 // When
-                var result = Record.Exception(() => packer.Pack(null, new NuGetPackSettings()));
+                var result = Record.Exception(() => fixture.Pack());
 
                 // Then
                 Assert.IsArgumentNullException(result, "nuspecFilePath");
@@ -31,11 +31,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
             public void Should_Throw_If_Settings_Is_Null()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var packer = fixture.CreatePacker();
+                var fixture = new NuGetPackerFixture();
+                fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => packer.Pack("./existing.nuspec", null));
+                var result = Record.Exception(() => fixture.Pack());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
@@ -45,15 +45,14 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
             public void Should_Throw_If_NuGet_Executable_Was_Not_Found()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var packer = fixture.CreatePacker();
+                var fixture = new NuGetPackerFixture();
+                fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => packer.Pack("./existing.nuspec", new NuGetPackSettings()));
+                var result = Record.Exception(() => fixture.Pack());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Could not locate executable.", result.Message);
+                Assert.IsCakeException(result, "NuGet: Could not locate executable.");
             }
 
             [Theory]
@@ -62,14 +61,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
             public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new NuGetFixture(expected);
-                var packer = fixture.CreatePacker();
+                var fixture = new NuGetPackerFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenCustomToolPathExist(expected);
 
                 // When
-                packer.Pack("./existing.nuspec", new NuGetPackSettings
-                {
-                    ToolPath = toolPath
-                });
+                fixture.Pack();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -81,11 +78,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
             public void Should_Find_NuGet_Executable_If_Tool_Path_Not_Provided()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var packer = fixture.CreatePacker();
+                var fixture = new NuGetPackerFixture();
 
                 // When
-                packer.Pack("./existing.nuspec", new NuGetPackSettings());
+                fixture.Pack();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -97,44 +93,38 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
             public void Should_Throw_If_Process_Was_Not_Started()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess) null);
-
-                var packer = fixture.CreatePacker();
+                var fixture = new NuGetPackerFixture();
+                fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => packer.Pack("./existing.nuspec", new NuGetPackSettings()));
+                var result = Record.Exception(() => fixture.Pack());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Process was not started.", result.Message);
+                Assert.IsCakeException(result, "NuGet: Process was not started.");
             }
 
             [Fact]
             public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                fixture.Process.GetExitCode().Returns(1);
-                var packer = fixture.CreatePacker();
+                var fixture = new NuGetPackerFixture();
+                fixture.GivenProcessReturnError();
 
                 // When
-                var result = Record.Exception(() => packer.Pack("./existing.nuspec", new NuGetPackSettings()));
+                var result = Record.Exception(() => fixture.Pack());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Process returned an error.", result.Message);
+                Assert.IsCakeException(result, "NuGet: Process returned an error.");
             }
 
             [Fact]
             public void Should_Delete_Transformed_Nuspec()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var packer = fixture.CreatePacker();
+                var fixture = new NuGetPackerFixture();
 
                 // When
-                packer.Pack("./existing.nuspec", new NuGetPackSettings());
+                fixture.Pack();
 
                 // Then
                 Assert.False(fixture.FileSystem.Exist((FilePath)"/Working/existing.temp.nuspec"));
@@ -144,52 +134,44 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
             public void Should_Throw_If_Nuspec_Do_Not_Exist()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var packer = fixture.CreatePacker();
+                var fixture = new NuGetPackerFixture();
+                fixture.NuSpecFilePath = "./nonexisting.nuspec";
 
                 // When
-                var result = Record.Exception(() =>
-                    packer.Pack("./nonexisting.nuspec", new NuGetPackSettings()));
+                var result = Record.Exception(() => fixture.Pack());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("Could not find nuspec file '/Working/nonexisting.nuspec'.", result.Message);
+                Assert.IsCakeException(result, "Could not find nuspec file '/Working/nonexisting.nuspec'.");
             }
 
             [Fact]
             public void Should_Throw_If_Temporary_Nuspec_Already_Exist()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                fixture.FileSystem.GetCreatedFile("/Working/existing.temp.nuspec");
-                var packer = fixture.CreatePacker();
+                var fixture = new NuGetPackerFixture();
+                fixture.GivenTemporaryNuSpecAlreadyExist();
 
                 // When
-                var result = Record.Exception(() =>
-                    packer.Pack("./existing.nuspec", new NuGetPackSettings()));
+                var result = Record.Exception(() => fixture.Pack());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("Could not create the nuspec file '/Working/existing.temp.nuspec' since it already exist.", result.Message);
+                Assert.IsCakeException(result, "Could not create the nuspec file '/Working/existing.temp.nuspec' since it already exist.");
             }
 
             [Fact]
             public void Should_Add_Version_To_Arguments_If_Not_Null()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var packer = fixture.CreatePacker();
+                var fixture = new NuGetPackerFixture();
+                fixture.Settings.Version = "1.0.0";
 
                 // When
-                packer.Pack("./existing.nuspec", new NuGetPackSettings
-                {
-                    Version = "1.0.0"
-                });
+                fixture.Pack();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "pack -Version \"1.0.0\" \"/Working/existing.temp.nuspec\""));
             }
 
@@ -197,19 +179,16 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
             public void Should_Add_Base_Path_To_Arguments_If_Not_Null()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var packer = fixture.CreatePacker();
+                var fixture = new NuGetPackerFixture();
+                fixture.Settings.BasePath = "./build";
 
                 // When
-                packer.Pack("./existing.nuspec", new NuGetPackSettings
-                {
-                    BasePath = "./build"
-                });
+                fixture.Pack();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "pack -BasePath \"/Working/build\" \"/Working/existing.temp.nuspec\""));
             }
 
@@ -217,19 +196,16 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
             public void Should_Add_Output_Directory_To_Arguments_If_Not_Null()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var packer = fixture.CreatePacker();
+                var fixture = new NuGetPackerFixture();
+                fixture.Settings.OutputDirectory = "./build/output";
 
                 // When
-                packer.Pack("./existing.nuspec", new NuGetPackSettings
-                {
-                    OutputDirectory = "./build/output"
-                });
+                fixture.Pack();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "pack -OutputDirectory \"/Working/build/output\" \"/Working/existing.temp.nuspec\""));
             }
 
@@ -237,19 +213,16 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
             public void Should_Add_No_Package_Analysis_Flag_To_Arguments_If_Set()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var packer = fixture.CreatePacker();
+                var fixture = new NuGetPackerFixture();
+                fixture.Settings.NoPackageAnalysis = true;
 
                 // When
-                packer.Pack("./existing.nuspec", new NuGetPackSettings
-                {
-                    NoPackageAnalysis = true
-                });
+                fixture.Pack();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "pack \"/Working/existing.temp.nuspec\" -NoPackageAnalysis"));
             }
 
@@ -257,19 +230,16 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
             public void Should_Add_Symbols_Flag_To_Arguments_If_Set()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var packer = fixture.CreatePacker();
+                var fixture = new NuGetPackerFixture();
+                fixture.Settings.Symbols = true;
 
                 // When
-                packer.Pack("./existing.nuspec", new NuGetPackSettings
-                {
-                    Symbols = true
-                });
+                fixture.Pack();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "pack \"/Working/existing.temp.nuspec\" -Symbols"));
             }
 
@@ -277,27 +247,26 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
             public void Should_Add_Metadata_Element_To_Nuspec_If_Missing()
             {
                 // Given
-                var fixture = new NuGetFixture(xml: Resources.Nuspec_NoMetadataElement);
-                var packer = fixture.CreatePacker();
+                var fixture = new NuGetPackerFixture();
+                fixture.WithNuSpecXml(Resources.Nuspec_NoMetadataElement);
+
+                fixture.Settings.Id = "The ID";
+                fixture.Settings.Version = "The version";
+                fixture.Settings.Title = "The title";
+                fixture.Settings.Authors = new[] { "Author #1", "Author #2" };
+                fixture.Settings.Owners = new[] { "Owner #1", "Owner #2" };
+                fixture.Settings.Description = "The description";
+                fixture.Settings.Summary = "The summary";
+                fixture.Settings.LicenseUrl = new Uri("https://license.com");
+                fixture.Settings.ProjectUrl = new Uri("https://project.com");
+                fixture.Settings.IconUrl = new Uri("https://icon.com");
+                fixture.Settings.RequireLicenseAcceptance = true;
+                fixture.Settings.Copyright = "The copyright";
+                fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
+                fixture.Settings.Tags = new[] { "Tag1", "Tag2", "Tag3" };
 
                 // When
-                packer.Pack("./existing.nuspec", new NuGetPackSettings
-                {
-                    Id = "The ID",
-                    Version = "The version",
-                    Title = "The title",
-                    Authors = new[] { "Author #1", "Author #2" },
-                    Owners = new[] { "Owner #1", "Owner #2" },
-                    Description = "The description",
-                    Summary = "The summary",
-                    LicenseUrl = new Uri("https://license.com"),
-                    ProjectUrl = new Uri("https://project.com"),
-                    IconUrl = new Uri("https://icon.com"),
-                    RequireLicenseAcceptance = true,
-                    Copyright = "The copyright",
-                    ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" },
-                    Tags = new[] { "Tag1", "Tag2", "Tag3" }
-                });
+                fixture.Pack();
 
                 // Then
                 Assert.Equal(
@@ -309,27 +278,25 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
             public void Should_Replace_Template_Tokens_In_Nuspec()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var packer = fixture.CreatePacker();
+                var fixture = new NuGetPackerFixture();
+
+                fixture.Settings.Id = "The ID";
+                fixture.Settings.Version = "The version";
+                fixture.Settings.Title = "The title";
+                fixture.Settings.Authors = new[] { "Author #1", "Author #2" };
+                fixture.Settings.Owners = new[] { "Owner #1", "Owner #2" };
+                fixture.Settings.Description = "The description";
+                fixture.Settings.Summary = "The summary";
+                fixture.Settings.LicenseUrl = new Uri("https://license.com");
+                fixture.Settings.ProjectUrl = new Uri("https://project.com");
+                fixture.Settings.IconUrl = new Uri("https://icon.com");
+                fixture.Settings.RequireLicenseAcceptance = true;
+                fixture.Settings.Copyright = "The copyright";
+                fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
+                fixture.Settings.Tags = new[] { "Tag1", "Tag2", "Tag3" };
 
                 // When
-                packer.Pack("./existing.nuspec", new NuGetPackSettings
-                {
-                    Id = "The ID",
-                    Version = "The version",
-                    Title = "The title",
-                    Authors = new[] { "Author #1", "Author #2" },
-                    Owners = new[] { "Owner #1", "Owner #2" },
-                    Description = "The description",
-                    Summary = "The summary",
-                    LicenseUrl = new Uri("https://license.com"),
-                    ProjectUrl = new Uri("https://project.com"),
-                    IconUrl = new Uri("https://icon.com"),
-                    RequireLicenseAcceptance = true,
-                    Copyright = "The copyright",
-                    ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" },
-                    Tags = new[] { "Tag1", "Tag2", "Tag3" }
-                });
+                fixture.Pack();
 
                 // Then
                 Assert.Equal(
@@ -341,27 +308,26 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
             public void Should_Replace_Template_Tokens_In_Nuspec_Without_Namespaces()
             {
                 // Given
-                var fixture = new NuGetFixture(xml: Resources.Nuspec_NoMetadataValues_WithoutNamespaces);
-                var packer = fixture.CreatePacker();
+                var fixture = new NuGetPackerFixture();
+                fixture.WithNuSpecXml(Resources.Nuspec_NoMetadataValues_WithoutNamespaces);
+
+                fixture.Settings.Id = "The ID";
+                fixture.Settings.Version = "The version";
+                fixture.Settings.Title = "The title";
+                fixture.Settings.Authors = new[] { "Author #1", "Author #2" };
+                fixture.Settings.Owners = new[] { "Owner #1", "Owner #2" };
+                fixture.Settings.Description = "The description";
+                fixture.Settings.Summary = "The summary";
+                fixture.Settings.LicenseUrl = new Uri("https://license.com");
+                fixture.Settings.ProjectUrl = new Uri("https://project.com");
+                fixture.Settings.IconUrl = new Uri("https://icon.com");
+                fixture.Settings.RequireLicenseAcceptance = true;
+                fixture.Settings.Copyright = "The copyright";
+                fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
+                fixture.Settings.Tags = new[] { "Tag1", "Tag2", "Tag3" };
 
                 // When
-                packer.Pack("./existing.nuspec", new NuGetPackSettings
-                {
-                    Id = "The ID",
-                    Version = "The version",
-                    Title = "The title",
-                    Authors = new[] { "Author #1", "Author #2" },
-                    Owners = new[] { "Owner #1", "Owner #2" },
-                    Description = "The description",
-                    Summary = "The summary",
-                    LicenseUrl = new Uri("https://license.com"),
-                    ProjectUrl = new Uri("https://project.com"),
-                    IconUrl = new Uri("https://icon.com"),
-                    RequireLicenseAcceptance = true,
-                    Copyright = "The copyright",
-                    ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" },
-                    Tags = new[] { "Tag1", "Tag2", "Tag3" }
-                });
+                fixture.Pack();
 
                 // Then
                 Assert.Equal(
@@ -370,82 +336,79 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
             }
         }
 
-            [Fact]
-            public void Should_Replace_Template_Tokens_In_Nuspec_With_Files()
+        [Fact]
+        public void Should_Replace_Template_Tokens_In_Nuspec_With_Files()
+        {
+            // Given
+            var fixture = new NuGetPackerFixture();
+
+            fixture.Settings.Id = "The ID";
+            fixture.Settings.Version = "The version";
+            fixture.Settings.Title = "The title";
+            fixture.Settings.Authors = new[] { "Author #1", "Author #2" };
+            fixture.Settings.Owners = new[] { "Owner #1", "Owner #2" };
+            fixture.Settings.Description = "The description";
+            fixture.Settings.Summary = "The summary";
+            fixture.Settings.LicenseUrl = new Uri("https://license.com");
+            fixture.Settings.ProjectUrl = new Uri("https://project.com");
+            fixture.Settings.IconUrl = new Uri("https://icon.com");
+            fixture.Settings.RequireLicenseAcceptance = true;
+            fixture.Settings.Copyright = "The copyright";
+            fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
+            fixture.Settings.Tags = new[] { "Tag1", "Tag2", "Tag3" };
+            fixture.Settings.Files = new[]
             {
-                // Given
-                var fixture = new NuGetFixture();
-                var packer = fixture.CreatePacker();
+                new NuSpecContent { Source = "Cake.Core.dll", Target = "lib/net45" },
+                new NuSpecContent { Source = "Cake.Core.xml", Target = "lib/net45" },
+                new NuSpecContent { Source = "Cake.Core.pdb", Target = "lib/net45" },
+                new NuSpecContent { Source = "LICENSE" }
+            };
 
-                // When
-                packer.Pack("./existing.nuspec", new NuGetPackSettings
-                {
-                    Id = "The ID",
-                    Version = "The version",
-                    Title = "The title",
-                    Authors = new[] { "Author #1", "Author #2" },
-                    Owners = new[] { "Owner #1", "Owner #2" },
-                    Description = "The description",
-                    Summary = "The summary",
-                    LicenseUrl = new Uri("https://license.com"),
-                    ProjectUrl = new Uri("https://project.com"),
-                    IconUrl = new Uri("https://icon.com"),
-                    RequireLicenseAcceptance = true,
-                    Copyright = "The copyright",
-                    ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" },
-                    Tags = new[] { "Tag1", "Tag2", "Tag3" },
-                    Files = new[]
-                    {
-                        new NuSpecContent {Source = "Cake.Core.dll", Target = "lib/net45"},
-                        new NuSpecContent {Source = "Cake.Core.xml", Target = "lib/net45"},
-                        new NuSpecContent {Source = "Cake.Core.pdb", Target = "lib/net45"},
-                        new NuSpecContent {Source = "LICENSE"}
-                    }
-                });
+            // When
+            fixture.Pack();
 
-                // Then
-                Assert.Equal(
-                    Resources.Nuspec_Metadata.NormalizeLineEndings(),
-                    fixture.FileSystem.GetTextContent("/Working/existing.temp.nuspec").NormalizeLineEndings());
-            }
+            // Then
+            Assert.Equal(
+                Resources.Nuspec_Metadata.NormalizeLineEndings(),
+                fixture.FileSystem.GetTextContent("/Working/existing.temp.nuspec").NormalizeLineEndings());
+        }
 
-            [Fact]
-            public void Should_Replace_Template_Tokens_In_Nuspec_With_Files_Without_Namespaces()
+        [Fact]
+        public void Should_Replace_Template_Tokens_In_Nuspec_With_Files_Without_Namespaces()
+        {
+            // Given
+            var fixture = new NuGetPackerFixture();
+            fixture.WithNuSpecXml(Resources.Nuspec_NoMetadataValues_WithoutNamespaces);
+
+            fixture.Settings.Id = "The ID";
+            fixture.Settings.Version = "The version";
+            fixture.Settings.Title = "The title";
+            fixture.Settings.Authors = new[] { "Author #1", "Author #2" };
+            fixture.Settings.Owners = new[] { "Owner #1", "Owner #2" };
+            fixture.Settings.Description = "The description";
+            fixture.Settings.Summary = "The summary";
+            fixture.Settings.LicenseUrl = new Uri("https://license.com");
+            fixture.Settings.ProjectUrl = new Uri("https://project.com");
+            fixture.Settings.IconUrl = new Uri("https://icon.com");
+            fixture.Settings.RequireLicenseAcceptance = true;
+            fixture.Settings.Copyright = "The copyright";
+            fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
+            fixture.Settings.Tags = new[] { "Tag1", "Tag2", "Tag3" };
+            fixture.Settings.Files = new[]
             {
-                // Given
-                var fixture = new NuGetFixture(xml: Resources.Nuspec_NoMetadataValues_WithoutNamespaces);
-                var packer = fixture.CreatePacker();
+                new NuSpecContent { Source = "Cake.Core.dll", Target = "lib/net45" },
+                new NuSpecContent { Source = "Cake.Core.xml", Target = "lib/net45" },
+                new NuSpecContent { Source = "Cake.Core.pdb", Target = "lib/net45" },
+                new NuSpecContent { Source = "LICENSE" }
+            };
 
-                // When
-                packer.Pack("./existing.nuspec", new NuGetPackSettings
-                {
-                    Id = "The ID",
-                    Version = "The version",
-                    Title = "The title",
-                    Authors = new[] { "Author #1", "Author #2" },
-                    Owners = new[] { "Owner #1", "Owner #2" },
-                    Description = "The description",
-                    Summary = "The summary",
-                    LicenseUrl = new Uri("https://license.com"),
-                    ProjectUrl = new Uri("https://project.com"),
-                    IconUrl = new Uri("https://icon.com"),
-                    RequireLicenseAcceptance = true,
-                    Copyright = "The copyright",
-                    ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" },
-                    Tags = new[] { "Tag1", "Tag2", "Tag3" },
-                    Files = new[]
-                    {
-                        new NuSpecContent {Source = "Cake.Core.dll", Target = "lib/net45"},
-                        new NuSpecContent {Source = "Cake.Core.xml", Target = "lib/net45"},
-                        new NuSpecContent {Source = "Cake.Core.pdb", Target = "lib/net45"},
-                        new NuSpecContent {Source = "LICENSE"}
-                    }
-                });
+            // When
+            fixture.Pack();
 
-                // Then
-                Assert.Equal(
-                    Resources.Nuspec_Metadata_WithoutNamespaces.NormalizeLineEndings(),
-                    fixture.FileSystem.GetTextContent("/Working/existing.temp.nuspec").NormalizeLineEndings());
-            }
+            // Then
+            Assert.Equal(
+                Resources.Nuspec_Metadata_WithoutNamespaces.NormalizeLineEndings(),
+                fixture.FileSystem.GetTextContent("/Working/existing.temp.nuspec").NormalizeLineEndings());
+        }
     }
 }

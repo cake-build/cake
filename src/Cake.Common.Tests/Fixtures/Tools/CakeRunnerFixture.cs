@@ -1,21 +1,23 @@
-﻿using Cake.Common.Tools.NSIS;
+﻿using Cake.Common.Tools.Cake;
 using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures
+namespace Cake.Common.Tests.Fixtures.Tools
 {
-    // ReSharper disable once InconsistentNaming
-    internal sealed class NSISFixture
+    internal sealed class CakeRunnerFixture
     {
         public IFileSystem FileSystem { get; set; }
         public IProcess Process { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
         public ICakeEnvironment Environment { get; set; }
         public IGlobber Globber { get; set; }
-
-        public NSISFixture(FilePath toolPath = null)
+        public FilePath ScriptPath { get; set; }
+        public CakeSettings Settings { get; set; }
+        public CakeRunnerFixture(FilePath toolPath = null, bool defaultToolExist = true, bool scriptExist = true)
         {
+            ScriptPath = "/Working/build.cake";
+
             Process = Substitute.For<IProcess>();
             Process.GetExitCode().Returns(0);
 
@@ -26,20 +28,24 @@ namespace Cake.Common.Tests.Fixtures
             Environment.WorkingDirectory = "/Working";
 
             Globber = Substitute.For<IGlobber>();
-            Globber.Match("./tools/**/makensis.exe").Returns(new[] { (FilePath)"/Working/tools/makensis.exe" });
+            Globber.Match("./tools/**/Cake.exe").Returns(new[] { (FilePath)"/Working/tools/Cake.exe" });
 
             FileSystem = Substitute.For<IFileSystem>();
-            FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == "/Working/tools/makensis.exe")).Returns(true);
+            FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == "/Working/tools/Cake.exe")).Returns(defaultToolExist);
+            FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == "/Working/build.cake")).Returns(scriptExist);
 
             if (toolPath != null)
             {
                 FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == toolPath.FullPath)).Returns(true);
             }
+
+            Settings = new CakeSettings();
         }
 
-        public MakeNSISRunner CreateRunner()
+        public void Run()
         {
-            return new MakeNSISRunner(FileSystem, Environment, Globber, ProcessRunner);
+            var runner = new CakeRunner(FileSystem, Environment, Globber, ProcessRunner);
+            runner.ExecuteScript(ScriptPath, Settings);
         }
     }
 }
