@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.Scripting;
@@ -40,6 +41,15 @@ namespace Cake.Scripting.Roslyn.Stable
             {
                 _log.Information("Downloading and installing Roslyn...");
                 Install(root);
+            }
+
+            // Load Roslyn assemblies dynamically.
+            foreach (var filePath in _paths)
+            {
+                Assembly.LoadFrom(_environment
+                    .GetApplicationRoot()
+                    .CombineWithFilePath(filePath.GetFilename())
+                    .FullPath);
             }
 
             // Create a new session.
