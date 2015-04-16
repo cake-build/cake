@@ -1,3 +1,6 @@
+### New in 0.3.1 (Released 2015/04/16)
+* Fixed an issue where Roslyn assemblies weren't loaded properly after install.
+
 ### New in 0.3.0 (Released 2015/04/16)
 * Added experimental support for nightly build of Roslyn.
 * Fixed an issue where passing multiple assemblies to NUnit resulted in multiple executions of NUnit.
