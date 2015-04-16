@@ -37,6 +37,7 @@ namespace Cake.Commands
             _console.WriteLine("    -dryrun             Performs a dry run.");
             _console.WriteLine("    -version            Displays version information.");
             _console.WriteLine("    -help               Displays usage information.");
+            _console.WriteLine("    -experimental       Uses the nightly builds of Roslyn script engine.");
             _console.WriteLine();
 
             return true;

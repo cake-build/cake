@@ -81,7 +81,6 @@
     <Compile Include="Asserts\Sdk\Exceptions\IsNotTypeException.cs" />
     <Compile Include="Asserts\Sdk\Exceptions\IsTypeException.cs" />
     <Compile Include="Asserts\Sdk\Exceptions\MatchesException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\NoneException.cs" />
     <Compile Include="Asserts\Sdk\Exceptions\NotEmptyException.cs" />
     <Compile Include="Asserts\Sdk\Exceptions\NotEqualException.cs" />
     <Compile Include="Asserts\Sdk\Exceptions\NotInRangeException.cs" />
@@ -113,7 +112,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">

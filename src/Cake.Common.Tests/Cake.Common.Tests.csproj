@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\xunit.core.2.0.0-beta5-build2785\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.0.0-beta5-build2785\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid\xunit.core.props')" />
+  <Import Project="..\packages\xunit.core.2.0.0\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.0.0\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\xunit.core.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,7 +12,7 @@
     <AssemblyName>Cake.Common.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>02c21e58</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>178fe826</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,38 +47,45 @@
     <Reference Include="System.Xml" />
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\xunit.abstractions.2.0.0-beta5-build2785\lib\net35\xunit.abstractions.dll</HintPath>
+      <HintPath>..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.core, Version=2.0.0.2785, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+    <Reference Include="xunit.core, Version=2.0.0.2929, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\xunit.core.2.0.0-beta5-build2785\lib\portable-net45+aspnetcore50+win+wpa81+wp80+monotouch+monoandroid\xunit.core.dll</HintPath>
+      <HintPath>..\packages\xunit.extensibility.core.2.0.0\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\xunit.core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Fixtures\AppVeyorFixture.cs" />
-    <Compile Include="Fixtures\AppVeyorInfoFixture.cs" />
+    <Compile Include="Fixtures\Build\AppVeyorFixture.cs" />
+    <Compile Include="Fixtures\Build\AppVeyorInfoFixture.cs" />
     <Compile Include="Fixtures\AssemblyInfoFixture.cs" />
     <Compile Include="Fixtures\AssemblyInfoParserFixture.cs" />
-    <Compile Include="Fixtures\CakeRunnerFixture.cs" />
-    <Compile Include="Fixtures\FileCopyFixture.cs" />
-    <Compile Include="Fixtures\FileDeleteFixture.cs" />
-    <Compile Include="Fixtures\FileSystemFixture.cs" />
-    <Compile Include="Fixtures\ILMergeRunnerFixture.cs" />
-    <Compile Include="Fixtures\LogActionFixture.cs" />
-    <Compile Include="Fixtures\MSBuildRunnerFixture.cs" />
-    <Compile Include="Fixtures\NSISFixture.cs" />
-    <Compile Include="Fixtures\NuGetFixture.cs" />
-    <Compile Include="Fixtures\MSTestRunnerFixture.cs" />
-    <Compile Include="Fixtures\NuGetUpdateFixture.cs" />
-    <Compile Include="Fixtures\NUnitRunnerFixture.cs" />
+    <Compile Include="Fixtures\Tools\CakeRunnerFixture.cs" />
+    <Compile Include="Fixtures\IO\FileCopyFixture.cs" />
+    <Compile Include="Fixtures\IO\FileDeleteFixture.cs" />
+    <Compile Include="Fixtures\IO\FileSystemFixture.cs" />
+    <Compile Include="Fixtures\Tools\ILMergeRunnerFixture.cs" />
+    <Compile Include="Fixtures\Diagnostics\LogActionFixture.cs" />
+    <Compile Include="Fixtures\Tools\MSBuildRunnerFixture.cs" />
+    <Compile Include="Fixtures\Tools\NSISFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGetFixture.cs" />
+    <Compile Include="Fixtures\Tools\MSTestRunnerFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\NuGetInstallerFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\NuGetPackerFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\NuGetPusherFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\NuGetRestorerFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\NuGetSetApiKeyFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\NuGetSourcesFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\NuGetUpdateFixture.cs" />
+    <Compile Include="Fixtures\Tools\NUnitRunnerFixture.cs" />
     <Compile Include="Fixtures\ProcessFixture.cs" />
-    <Compile Include="Fixtures\SignToolSignRunnerFixture.cs" />
+    <Compile Include="Fixtures\Tools\SignToolResolverFixture.cs" />
+    <Compile Include="Fixtures\Tools\SignToolSignRunnerFixture.cs" />
     <Compile Include="Fixtures\TextTransformationFixture.cs" />
-    <Compile Include="Fixtures\WiXFixture.cs" />
+    <Compile Include="Fixtures\Tools\WiXFixture.cs" />
     <Compile Include="Fixtures\XmlDocExampleCodeParserFixture.cs" />
     <Compile Include="Fixtures\XmlTransformationFixture.cs" />
-    <Compile Include="Fixtures\XUnit2RunnerFixture.cs" />
-    <Compile Include="Fixtures\XUnitRunnerFixture.cs" />
+    <Compile Include="Fixtures\Tools\XUnit2RunnerFixture.cs" />
+    <Compile Include="Fixtures\Tools\XUnitRunnerFixture.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -135,6 +142,7 @@
     <Compile Include="Unit\Tools\NuGet\Update\NuGetUpdateSettingsTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitRunnerTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitSettingsTests.cs" />
+    <Compile Include="Unit\Tools\SignTool\SignToolResolverTests.cs" />
     <Compile Include="Unit\Tools\SignTool\SignToolSignRunnerTests.cs" />
     <Compile Include="Unit\Tools\WiX\LightRunnerTests.cs" />
     <Compile Include="Unit\Tools\WiX\CandleRunnerTests.cs" />
@@ -163,7 +171,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
@@ -180,7 +190,7 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\xunit.core.2.0.0-beta5-build2785\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.0.0-beta5-build2785\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid\xunit.core.props'))" />
+    <Error Condition="!Exists('..\packages\xunit.core.2.0.0\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.0.0\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\xunit.core.props'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

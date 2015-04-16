@@ -9,6 +9,11 @@ $TOOLS_DIR = Join-Path $PSScriptRoot "tools"
 $NUGET_EXE = Join-Path $TOOLS_DIR "nuget.exe"
 $CAKE_EXE = Join-Path $TOOLS_DIR "Cake/Cake.exe"
 
+# Try download NuGet.exe if do not exist.
+if (!(Test-Path $NUGET_EXE)) {
+    Invoke-WebRequest -Uri http://nuget.org/nuget.exe -OutFile $NUGET_EXE
+}
+
 # Make sure NuGet exists where we expect it.
 if (!(Test-Path $NUGET_EXE)) {
     Throw "Could not find NuGet.exe"

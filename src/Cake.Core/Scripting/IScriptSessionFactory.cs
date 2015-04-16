@@ -1,4 +1,6 @@
-﻿namespace Cake.Core.Scripting
+﻿using System.Collections.Generic;
+
+namespace Cake.Core.Scripting
 {
     /// <summary>
     /// Represents a script session factory.
@@ -6,15 +8,11 @@
     public interface IScriptSessionFactory
     {
         /// <summary>
-        /// Initializes the script session factory.
-        /// </summary>
-        void Initialize();
-
-        /// <summary>
         /// Creates a new script session.
         /// </summary>
         /// <param name="host">The host.</param>
+        /// <param name="arguments">The script arguments.</param>
         /// <returns>A new script session.</returns>
-        IScriptSession CreateSession(IScriptHost host);
+        IScriptSession CreateSession(IScriptHost host, IDictionary<string, string> arguments);
     }
 }

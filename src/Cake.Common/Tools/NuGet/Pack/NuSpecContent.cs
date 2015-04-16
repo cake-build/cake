@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a NuGet nuspec file
     /// </summary>
-    public class NuSpecContent
+    public sealed class NuSpecContent
     {
         /// <summary>
         /// Gets or sets the location of the file or files to include. 

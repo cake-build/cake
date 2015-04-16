@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cake.Common.Tests.Fixtures;
+using Cake.Common.Tests.Fixtures.Tools;
+using Cake.Common.Tests.Fixtures.Tools.NuGet;
 using Cake.Common.Tools.NuGet;
 using Cake.Common.Tools.NuGet.Sources;
 using Cake.Core;
@@ -18,11 +20,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Throw_If_Name_Is_Null()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.Name = null;
 
                 // When
-                var result = Record.Exception(() => sources.AddSource(null, "source", new NuGetSourcesSettings()));
+                var result = Record.Exception(() => fixture.AddSources());
 
                 // Then
                 Assert.IsArgumentNullException(result, "name");
@@ -34,11 +36,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Throw_If_Name_Is_Empty(string name)
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.Name = string.Empty;
 
                 // When
-                var result = Record.Exception(() => sources.AddSource(name, "source", new NuGetSourcesSettings()));
+                var result = Record.Exception(() => fixture.AddSources());
 
                 // Then
                 Assert.Equal("name", ((ArgumentException)result).ParamName);
@@ -49,11 +51,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Throw_If_Source_Is_Null()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.Source = null;
 
                 // When
-                var result = Record.Exception(() => sources.AddSource("name", null, new NuGetSourcesSettings()));
+                var result = Record.Exception(() => fixture.AddSources());
 
                 // Then
                 Assert.IsArgumentNullException(result, "source");
@@ -65,11 +67,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Throw_If_Source_Is_Empty(string source)
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.Source = string.Empty;
 
                 // When
-                var result = Record.Exception(() => sources.AddSource("name", source, new NuGetSourcesSettings()));
+                var result = Record.Exception(() => fixture.AddSources());
 
                 // Then
                 Assert.Equal("source", ((ArgumentException)result).ParamName);
@@ -80,11 +82,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Throw_If_Settings_Are_Null()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => sources.AddSource("name", "source", null));
+                var result = Record.Exception(() => fixture.AddSources());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
@@ -94,12 +96,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Throw_If_Adding_Source_That_Has_Already_Been_Added()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var sources = fixture.CreateSources();
-                fixture.Process.GetStandardOutput().Returns(new[] {"existingsource"});
+                var fixture = new NuGetSourcesFixture();
+                fixture.Source = "existingsource";
+                fixture.GivenSourceAlreadyHasBeenAdded();
 
                 // When
-                var result = Record.Exception(() => sources.AddSource("name", "existingsource", new NuGetSourcesSettings()));
+                var result = Record.Exception(() => fixture.AddSources());
 
                 // Then
                 Assert.IsType<InvalidOperationException>(result);
@@ -110,11 +112,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Throw_If_NuGet_Executable_Was_Not_Found()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => sources.AddSource("name", "source", new NuGetSourcesSettings()));
+                var result = Record.Exception(() => fixture.AddSources());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -127,14 +129,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new NuGetFixture(expected);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.GivenCustomToolPathExist(expected);
+                fixture.Settings.ToolPath = toolPath;
 
                 // When
-                sources.AddSource("name", "source", new NuGetSourcesSettings
-                {
-                    ToolPath = toolPath
-                });
+                fixture.AddSources();
 
                 // Then
                 fixture.ProcessRunner.Received(2).Start(
@@ -146,12 +146,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Throw_If_Process_Was_Not_Started()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => sources.AddSource("name", "source", NuGetSourcesSettings.Default));
+                var result = Record.Exception(() => fixture.AddSources());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -162,12 +161,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                fixture.Process.GetExitCode().Returns(2);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.GivenProcessReturnError();
 
                 // When
-                var result = Record.Exception(() => sources.AddSource("name", "source", NuGetSourcesSettings.Default));
+                var result = Record.Exception(() => fixture.AddSources());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -178,11 +176,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Find_NuGet_Executable_If_Tool_Path_Not_Provided()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
 
                 // When
-                sources.AddSource("name", "source", NuGetSourcesSettings.Default);
+                fixture.AddSources();
 
                 // Then
                 fixture.ProcessRunner.Received(2).Start(
@@ -194,11 +191,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Add_Mandatory_Arguments()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
 
                 // When
-                sources.AddSource("name", "source", NuGetSourcesSettings.Default);
+                fixture.AddSources();
                 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -210,15 +206,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Add_UserName_And_Password_To_Arguments_If_Set()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.Settings.UserName = "username";
+                fixture.Settings.Password = "password";
 
                 // When
-                sources.AddSource("name", "source", new NuGetSourcesSettings
-                {
-                    UserName = "username",
-                    Password = "password"
-                });
+                fixture.AddSources();
                 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -230,14 +223,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Add_Verbosity_To_Arguments_If_Set()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.Settings.Verbosity = NuGetVerbosity.Detailed;
 
                 // When
-                sources.AddSource("name", "source", new NuGetSourcesSettings
-                {
-                    Verbosity = NuGetVerbosity.Detailed
-                });
+                fixture.AddSources();
                 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -249,14 +239,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Redact_Source_If_IsSensitiveSource_Set()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.Settings.IsSensitiveSource = true;
 
                 // When
-                sources.AddSource("name", "source", new NuGetSourcesSettings
-                {
-                    IsSensitiveSource = true
-                });
+                fixture.AddSources();
                 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -271,11 +258,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Throw_If_Name_Is_Null()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.Name = null;
 
                 // When
-                var result = Record.Exception(() => sources.RemoveSource(null, "source", new NuGetSourcesSettings()));
+                var result = Record.Exception(() => fixture.RemoveSource());
 
                 // Then
                 Assert.IsArgumentNullException(result, "name");
@@ -287,11 +274,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Throw_If_Name_Is_Empty(string name)
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.Name = string.Empty;
 
                 // When
-                var result = Record.Exception(() => sources.RemoveSource(name, "source", new NuGetSourcesSettings()));
+                var result = Record.Exception(() => fixture.RemoveSource());
 
                 // Then
                 Assert.Equal("name", ((ArgumentException)result).ParamName);
@@ -302,11 +289,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Throw_If_Source_Is_Null()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.Source = null;
 
                 // When
-                var result = Record.Exception(() => sources.RemoveSource("name", null, new NuGetSourcesSettings()));
+                var result = Record.Exception(() => fixture.RemoveSource());
 
                 // Then
                 Assert.IsArgumentNullException(result, "source");
@@ -318,11 +305,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Throw_If_Source_Is_Empty(string source)
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.Source = string.Empty;
 
                 // When
-                var result = Record.Exception(() => sources.RemoveSource("name", source, new NuGetSourcesSettings()));
+                var result = Record.Exception(() => fixture.RemoveSource());
 
                 // Then
                 Assert.Equal("source", ((ArgumentException)result).ParamName);
@@ -333,12 +320,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Throw_If_Settings_Are_Null()
             {
                 // Given
-                var source = new KeyValuePair<string, string>("name", "source");
-                var fixture = new NuGetFixture(defaultToolExist: false, sourceExists:source);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => sources.RemoveSource(source.Key, source.Value, null));
+                var result = Record.Exception(() => fixture.RemoveSource());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
@@ -348,27 +334,26 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Throw_If_Removing_Source_That_Do_Not_Exist()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
 
                 // When
-                var result = Record.Exception(() => sources.RemoveSource("name", "nonexistingsource", new NuGetSourcesSettings()));
+                var result = Record.Exception(() => fixture.RemoveSource());
 
                 // Then
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("The source 'nonexistingsource' does not exist.", result.Message);
+                Assert.Equal("The source 'source' does not exist.", result.Message);
             }
 
             [Fact]
             public void Should_Throw_If_NuGet_Executable_Was_Not_Found()
             {
                 // Given
-                var source = new KeyValuePair<string, string>("name", "source");
-                var fixture = new NuGetFixture(defaultToolExist: false, sourceExists:source);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.GivenExistingSource();
+                fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => sources.RemoveSource(source.Key, source.Value, new NuGetSourcesSettings()));
+                var result = Record.Exception(() => fixture.RemoveSource());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -381,15 +366,13 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var source = new KeyValuePair<string, string>("name", "source");
-                var fixture = new NuGetFixture(expected, sourceExists:source);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.GivenExistingSource();
+                fixture.GivenCustomToolPathExist(expected);
+                fixture.Settings.ToolPath = toolPath;
 
                 // When
-                sources.RemoveSource(source.Key, source.Value, new NuGetSourcesSettings
-                {
-                    ToolPath = toolPath
-                });
+                fixture.RemoveSource();
 
                 // Then
                 fixture.ProcessRunner.Received(2).Start(
@@ -401,13 +384,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Throw_If_Process_Was_Not_Started()
             {
                 // Given
-                var source = new KeyValuePair<string, string>("name", "source");
-                var fixture = new NuGetFixture(sourceExists:source);
-                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.GivenExistingSource();
+                fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => sources.RemoveSource(source.Key, source.Value, NuGetSourcesSettings.Default));
+                var result = Record.Exception(() => fixture.RemoveSource());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -418,13 +400,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
             {
                 // Given
-                var source = new KeyValuePair<string, string>("name", "source");
-                var fixture = new NuGetFixture(sourceExists:source);
-                fixture.Process.GetExitCode().Returns(2);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.GivenExistingSource();
+                fixture.GivenProcessReturnError();
 
                 // When
-                var result = Record.Exception(() => sources.RemoveSource(source.Key, source.Value, NuGetSourcesSettings.Default));
+                var result = Record.Exception(() => fixture.RemoveSource());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -435,12 +416,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Find_NuGet_Executable_If_Tool_Path_Not_Provided()
             {
                 // Given
-                var source = new KeyValuePair<string, string>("name", "source");
-                var fixture = new NuGetFixture(sourceExists:source);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.GivenExistingSource();
 
                 // When
-                sources.RemoveSource(source.Key, source.Value, NuGetSourcesSettings.Default);
+                fixture.RemoveSource();
 
                 // Then
                 fixture.ProcessRunner.Received(2).Start(
@@ -452,12 +432,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Add_Mandatory_Arguments()
             {
                 // Given
-                var source = new KeyValuePair<string, string>("name", "source");
-                var fixture = new NuGetFixture(sourceExists:source);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.GivenExistingSource();
 
                 // When
-                sources.RemoveSource(source.Key, source.Value, NuGetSourcesSettings.Default);
+                fixture.RemoveSource();
                 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -469,15 +448,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Add_Verbosity_To_Arguments_If_Set()
             {
                 // Given
-                var source = new KeyValuePair<string, string>("name", "source");
-                var fixture = new NuGetFixture(sourceExists:source);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.GivenExistingSource();
+                fixture.Settings.Verbosity = NuGetVerbosity.Detailed;
 
                 // When
-                sources.RemoveSource(source.Key, source.Value, new NuGetSourcesSettings
-                {
-                    Verbosity = NuGetVerbosity.Detailed
-                });
+                fixture.RemoveSource();
                 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -489,15 +465,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Redact_Source_If_IsSensitiveSource_Set()
             {
                 // Given
-                var source = new KeyValuePair<string, string>("name", "source");
-                var fixture = new NuGetFixture(sourceExists:source);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.GivenExistingSource();
+                fixture.Settings.IsSensitiveSource = true;
 
                 // When
-                sources.RemoveSource(source.Key, source.Value, new NuGetSourcesSettings
-                {
-                    IsSensitiveSource = true
-                });
+                fixture.RemoveSource();
                 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -512,11 +485,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Throw_If_Source_Is_Null()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.Source = null;
 
                 // When
-                var result = Record.Exception(() => sources.HasSource(null, new NuGetSourcesSettings()));
+                var result = Record.Exception(() => fixture.HasSource());
 
                 // Then
                 Assert.IsArgumentNullException(result, "source");
@@ -528,11 +501,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Throw_If_Source_Is_Empty(string source)
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.Source = string.Empty;
 
                 // When
-                var result = Record.Exception(() => sources.HasSource(source, new NuGetSourcesSettings()));
+                var result = Record.Exception(() => fixture.HasSource());
 
                 // Then
                 Assert.Equal("source", ((ArgumentException)result).ParamName);
@@ -543,11 +516,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             public void Should_Throw_If_Settings_Is_Null()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var sources = fixture.CreateSources();
+                var fixture = new NuGetSourcesFixture();
+                fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => sources.HasSource("source", null));
+                var result = Record.Exception(() => fixture.HasSource());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");

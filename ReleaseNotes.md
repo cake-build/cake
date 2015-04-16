@@ -1,3 +1,8 @@
+### New in 0.3.0 (Released 2015/04/16)
+* Added experimental support for nightly build of Roslyn.
+* Fixed an issue where passing multiple assemblies to NUnit resulted in multiple executions of NUnit.
+* Added Windows 10 OS support.
+
 ### New in 0.2.2 (Released 2015/03/31)
 * Added lots of example code.
 * Added target platform option to ILMerge tool.

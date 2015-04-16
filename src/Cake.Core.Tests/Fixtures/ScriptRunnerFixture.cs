@@ -44,7 +44,7 @@ namespace Cake.Core.Tests.Fixtures
 
             Session = Substitute.For<IScriptSession>();
             SessionFactory = Substitute.For<IScriptSessionFactory>();
-            SessionFactory.CreateSession(Arg.Any<IScriptHost>()).Returns(Session);
+            SessionFactory.CreateSession(Arg.Any<IScriptHost>(), ArgumentDictionary).Returns(Session);
 
             Arguments = Substitute.For<ICakeArguments>();
             AliasGenerator = Substitute.For<IScriptAliasGenerator>();            

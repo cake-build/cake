@@ -11,6 +11,8 @@
 build-results/
 tools/Cake/
 tools/xunit.runners/
+tools/xunit.runner.console/
+tools/nuget.exe
 
 # mstest test results
 TestResults

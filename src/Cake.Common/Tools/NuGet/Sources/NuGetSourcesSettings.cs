@@ -7,17 +7,6 @@ namespace Cake.Common.Tools.NuGet.Sources
     /// </summary>
     public sealed class NuGetSourcesSettings
     {
-        private static readonly NuGetSourcesSettings _default = new NuGetSourcesSettings();
-
-        /// <summary>
-        /// Gets the default settings.
-        /// </summary>
-        /// <value>The default settings.</value>
-        public static NuGetSourcesSettings Default
-        {
-            get { return _default; }
-        }
-
         /// <summary>
         /// Gets or sets the (optional) user name.
         /// </summary>

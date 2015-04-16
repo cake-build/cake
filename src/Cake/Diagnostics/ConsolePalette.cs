@@ -2,7 +2,7 @@
 
 namespace Cake.Diagnostics
 {
-    internal class ConsolePalette
+    internal sealed class ConsolePalette
     {
         public ConsoleColor Background { get; set; }
         

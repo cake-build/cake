@@ -1,7 +1,5 @@
-﻿using Cake.Common.Tests.Fixtures;
+﻿using Cake.Common.Tests.Fixtures.Tools.NuGet;
 using Cake.Common.Tools.NuGet;
-using Cake.Common.Tools.NuGet.Restore;
-using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
@@ -16,11 +14,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             public void Should_Throw_If_Target_File_Path_Is_Null()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var restorer = fixture.CreateRestorer();
+                var fixture = new NuGetRestorerFixture();
+                fixture.TargetFilePath = null;
 
                 // When
-                var result = Record.Exception(() => restorer.Restore(null, new NuGetRestoreSettings()));
+                var result = Record.Exception(() => fixture.Restore());
 
                 // Then
                 Assert.IsArgumentNullException(result, "targetFilePath");
@@ -30,11 +28,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             public void Should_Throw_If_Settings_Are_Null()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var restorer = fixture.CreateRestorer();
+                var fixture = new NuGetRestorerFixture();
+                fixture.Settings = null;
+                fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => restorer.Restore("./project.sln", null));
+                var result = Record.Exception(() => fixture.Restore());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
@@ -44,15 +43,14 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             public void Should_Throw_If_NuGet_Executable_Was_Not_Found()
             {
                 // Given
-                var fixture = new NuGetFixture(defaultToolExist: false);
-                var restorer = fixture.CreateRestorer();
+                var fixture = new NuGetRestorerFixture();
+                fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => restorer.Restore("./project.sln", new NuGetRestoreSettings()));
+                var result = Record.Exception(() => fixture.Restore());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Could not locate executable.", result.Message);
+                Assert.IsCakeException(result, "NuGet: Could not locate executable.");
             }
 
             [Theory]
@@ -61,14 +59,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new NuGetFixture(expected);
-                var restorer = fixture.CreateRestorer();
+                var fixture = new NuGetRestorerFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenCustomToolPathExist(expected);
 
                 // When
-                restorer.Restore("./project.sln", new NuGetRestoreSettings
-                {
-                    ToolPath = toolPath
-                });
+                fixture.Restore();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -80,43 +76,38 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             public void Should_Throw_If_Process_Was_Not_Started()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
-                var restorer = fixture.CreateRestorer();
+                var fixture = new NuGetRestorerFixture();
+                fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => restorer.Restore("./project.sln", new NuGetRestoreSettings()));
+                var result = Record.Exception(() => fixture.Restore());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Process was not started.", result.Message);
+                Assert.IsCakeException(result, "NuGet: Process was not started.");
             }
 
             [Fact]
             public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                fixture.Process.GetExitCode().Returns(1);
-                var restorer = fixture.CreateRestorer();
+                var fixture = new NuGetRestorerFixture();
+                fixture.GivenProcessReturnError();
 
                 // When
-                var result = Record.Exception(() => restorer.Restore("./project.sln", new NuGetRestoreSettings()));
+                var result = Record.Exception(() => fixture.Restore());
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Process returned an error.", result.Message);
+                Assert.IsCakeException(result, "NuGet: Process returned an error.");
             }
 
             [Fact]
             public void Should_Find_NuGet_Executable_If_Tool_Path_Not_Provided()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var restorer = fixture.CreateRestorer();
+                var fixture = new NuGetRestorerFixture();
 
                 // When
-                restorer.Restore("./project.sln", new NuGetRestoreSettings());
+                fixture.Restore();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -128,11 +119,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             public void Should_Add_Mandatory_Arguments()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var restorer = fixture.CreateRestorer();
+                var fixture = new NuGetRestorerFixture();
 
                 // When
-                restorer.Restore("./project.sln", new NuGetRestoreSettings());
+                fixture.Restore();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -144,14 +134,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             public void Should_Add_RequireConsent_To_Arguments_If_True()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var restorer = fixture.CreateRestorer();
+                var fixture = new NuGetRestorerFixture();
+                fixture.Settings.RequireConsent = true;
 
                 // When
-                restorer.Restore("./project.sln", new NuGetRestoreSettings
-                {
-                    RequireConsent = true
-                });
+                fixture.Restore();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -163,14 +150,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             public void Should_Add_PackageDirectory_To_Arguments_If_Set()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var restorer = fixture.CreateRestorer();
+                var fixture = new NuGetRestorerFixture();
+                fixture.Settings.PackagesDirectory = "./package";
 
                 // When
-                restorer.Restore("./project.sln", new NuGetRestoreSettings
-                {
-                    PackagesDirectory = "./package"
-                });
+                fixture.Restore();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -182,34 +166,27 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             public void Should_Add_Sources_To_Arguments_If_Set()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var restorer = fixture.CreateRestorer();
+                var fixture = new NuGetRestorerFixture();
+                fixture.Settings.Source = new[] { "A;B;C" };
 
                 // When
-                restorer.Restore("./project.sln", new NuGetRestoreSettings
-                {
-                    Source = new[] { "A;B;C" }
-                });
+                fixture.Restore();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "restore \"/Working/project.sln\" -Source \"A;B;C\" -NonInteractive"));
-
             }
 
             [Fact]
             public void Should_Add_NoCache_To_Arguments_If_True()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var restorer = fixture.CreateRestorer();
+                var fixture = new NuGetRestorerFixture();
+                fixture.Settings.NoCache = true;
 
                 // When
-                restorer.Restore("./project.sln", new NuGetRestoreSettings
-                {
-                    NoCache = true
-                });
+                fixture.Restore();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -221,14 +198,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             public void Should_Add_DisableParallelProcessing_To_Arguments_If_Set()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var restorer = fixture.CreateRestorer();
+                var fixture = new NuGetRestorerFixture();
+                fixture.Settings.DisableParallelProcessing = true;
 
                 // When
-                restorer.Restore("./project.sln", new NuGetRestoreSettings
-                {
-                    DisableParallelProcessing = true
-                });
+                fixture.Restore();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -237,21 +211,17 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             }
 
             [Theory]
-            [InlineData(NuGetVerbosity.Detailed, "detailed")]
-            [InlineData(NuGetVerbosity.Normal, "normal")]
-            [InlineData(NuGetVerbosity.Quiet, "quiet")]
-            public void Should_Add_Verbosity_To_Arguments_If_Set(NuGetVerbosity verbosity, string name)
+            [InlineData(NuGetVerbosity.Detailed, "restore \"/Working/project.sln\" -Verbosity detailed -NonInteractive")]
+            [InlineData(NuGetVerbosity.Normal, "restore \"/Working/project.sln\" -Verbosity normal -NonInteractive")]
+            [InlineData(NuGetVerbosity.Quiet, "restore \"/Working/project.sln\" -Verbosity quiet -NonInteractive")]
+            public void Should_Add_Verbosity_To_Arguments_If_Set(NuGetVerbosity verbosity, string expected)
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var restorer = fixture.CreateRestorer();
-                var expected = string.Format("restore \"/Working/project.sln\" -Verbosity {0} -NonInteractive", name);
+                var fixture = new NuGetRestorerFixture();
+                fixture.Settings.Verbosity = verbosity;
 
                 // When
-                restorer.Restore("./project.sln", new NuGetRestoreSettings
-                {
-                    Verbosity = verbosity
-                });
+                fixture.Restore();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -263,20 +233,16 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             public void Should_Add_ConfigFile_To_Arguments_If_Set()
             {
                 // Given
-                var fixture = new NuGetFixture();
-                var restorer = fixture.CreateRestorer();
+                var fixture = new NuGetRestorerFixture();
+                fixture.Settings.ConfigFile = "./nuget.config";
 
                 // When
-                restorer.Restore("./project.sln", new NuGetRestoreSettings
-                {
-                    ConfigFile = "./nuget.config"
-                });
+                fixture.Restore();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "restore \"/Working/project.sln\" -ConfigFile \"/Working/nuget.config\" -NonInteractive"));
-
             }
         }
     }

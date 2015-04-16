@@ -3,15 +3,15 @@
     /// <summary>
     /// Represents a quoted argument.
     /// </summary>
-    public sealed class QuotedArgument : ProcessArgument
+    public sealed class QuotedArgument : IProcessArgument
     {
-        private readonly ProcessArgument _argument;
+        private readonly IProcessArgument _argument;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QuotedArgument"/> class.
         /// </summary>
         /// <param name="argument">The argument.</param>
-        public QuotedArgument(ProcessArgument argument)
+        public QuotedArgument(IProcessArgument argument)
         {
             _argument = argument;
         }
@@ -21,7 +21,7 @@
         /// Sensitive information will be included.
         /// </summary>
         /// <returns>A string representation of the argument.</returns>
-        public override string Render()
+        public string Render()
         {
             return string.Concat("\"", _argument.Render(), "\"");
         }
@@ -31,7 +31,7 @@
         /// Sensitive information will be redacted.
         /// </summary>
         /// <returns>A safe string representation of the argument.</returns>
-        public override string RenderSafe()
+        public string RenderSafe()
         {
             return string.Concat("\"", _argument.RenderSafe(), "\"");
         }

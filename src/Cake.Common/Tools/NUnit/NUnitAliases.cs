@@ -113,11 +113,8 @@ namespace Cake.Common.Tools.NUnit
                 throw new ArgumentNullException("assemblies");
             }
 
-            var runner = new NUnitRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);            
-            foreach (var assembly in assemblies)
-            {
-                runner.Run(assembly, settings);
-            }
+            var runner = new NUnitRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            runner.Run(assemblies, settings);
         }
     }
 }

@@ -6,14 +6,14 @@ namespace Cake.Core.Tests.Unit.IO.Arguments
 {
     public sealed class QuotedArgumentTests
     {
-        private sealed class TestingArgument : ProcessArgument
+        private sealed class TestingArgument : IProcessArgument
         {
-            public override string Render()
+            public string Render()
             {
                 return "RENDER";
             }
 
-            public override string RenderSafe()
+            public string RenderSafe()
             {
                 return "RENDERSAFE";
             }
@@ -81,7 +81,7 @@ namespace Cake.Core.Tests.Unit.IO.Arguments
                 var result = argument.RenderSafe();
 
                 // Then
-                Assert.Equal("\"RENDERSAFE\"", result);                
+                Assert.Equal("\"RENDERSAFE\"", result);
             }
         }
     }

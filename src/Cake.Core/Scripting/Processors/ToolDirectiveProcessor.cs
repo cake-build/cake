@@ -11,11 +11,12 @@ namespace Cake.Core.Scripting.Processors
     /// </summary>
     public sealed class ToolDirectiveProcessor : LineProcessor
     {
-        private static FilePath _nugetPath;
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
         private readonly IToolResolver _nugetToolResolver;
+
+        private FilePath _nugetPath;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ToolDirectiveProcessor" /> class.
@@ -129,7 +130,7 @@ namespace Cake.Core.Scripting.Processors
             {
                 throw new CakeException("Failed to find tool executables.");
             }
-            
+
             _log.Debug(logAction =>
                 {
                     foreach (var toolExecutable in toolExecutables)
@@ -145,7 +146,7 @@ namespace Cake.Core.Scripting.Processors
         {
             var nugetPath = GetNuGetPath();
             var runner = new ProcessRunner(_environment, _log);
-            var process = runner.Start(nugetPath, new ProcessSettings 
+            var process = runner.Start(nugetPath, new ProcessSettings
             {
                 Arguments = GetNuGetToolInstallArguments(toolId, toolRootDirectory, source)
             });

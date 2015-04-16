@@ -1,4 +1,5 @@
 ﻿using Cake.Common.Tests.Fixtures;
+using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.XUnit;
 using Cake.Core;
 using Cake.Core.IO;

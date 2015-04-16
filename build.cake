@@ -53,7 +53,12 @@ Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-    NuGetRestore("./src/Cake.sln");
+    NuGetRestore("./src/Cake.sln", new NuGetRestoreSettings {
+        Source = new List<string> {
+            "https://www.nuget.org/api/v2/",
+            "https://www.myget.org/F/roslyn-nightly/"
+        }
+    });
 });
 
 Task("Patch-Assembly-Info")
@@ -88,7 +93,7 @@ Task("Run-Unit-Tests")
     XUnit2("./src/**/bin/" + configuration + "/*.Tests.dll", new XUnit2Settings {
         OutputDirectory = testResultsDir,
         XmlReportV1 = true
-    }); 
+    });
 });
 
 
@@ -127,7 +132,7 @@ Task("Create-NuGet-Packages")
         Version = semVersion,
         ReleaseNotes = releaseNotes.Notes.ToArray(),
         BasePath = binDir,
-        OutputDirectory = nugetRoot,        
+        OutputDirectory = nugetRoot,
         Symbols = false,
         NoPackageAnalysis = true
     });
@@ -137,9 +142,9 @@ Task("Create-NuGet-Packages")
         Version = semVersion,
         ReleaseNotes = releaseNotes.Notes.ToArray(),
         BasePath = binDir,
-        OutputDirectory = nugetRoot,        
+        OutputDirectory = nugetRoot,
         Symbols = true
-    });    
+    });
 });
 
 Task("Update-AppVeyor-Build-Number")
@@ -147,7 +152,7 @@ Task("Update-AppVeyor-Build-Number")
     .Does(() =>
 {
     AppVeyor.UpdateBuildVersion(semVersion);
-}); 
+});
 
 Task("Upload-AppVeyor-Artifacts")
     .IsDependentOn("Package")
@@ -156,11 +161,11 @@ Task("Upload-AppVeyor-Artifacts")
 {
     var artifact = buildResultDir + File("Cake-bin-v" + semVersion + ".zip");
     AppVeyor.UploadArtifact(artifact);
-}); 
+});
 
 Task("Publish-MyGet")
     .WithCriteria(() => !local)
-    .WithCriteria(() => !isPullRequest) 
+    .WithCriteria(() => !isPullRequest)
     .Does(() =>
 {
     // Resolve the API key.
@@ -176,7 +181,7 @@ Task("Publish-MyGet")
     NuGetPush(package, new NuGetPushSettings {
         Source = "https://www.myget.org/F/cake/api/v2/package",
         ApiKey = apiKey
-    }); 
+    });
 });
 
 //////////////////////////////////////////////////////////////////////

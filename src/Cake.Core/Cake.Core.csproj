@@ -100,10 +100,9 @@
     <Compile Include="IO\Globber.cs" />
     <Compile Include="IO\Globbing\Node.cs" />
     <Compile Include="IO\Globbing\Nodes\IdentifierNode.cs" />
-    <Compile Include="IO\Globbing\Nodes\RootNode.cs" />
-    <Compile Include="IO\Globbing\Nodes\Roots\RelativeRoot.cs" />
-    <Compile Include="IO\Globbing\Nodes\Roots\UnixRoot.cs" />
-    <Compile Include="IO\Globbing\Nodes\Roots\WindowsRoot.cs" />
+    <Compile Include="IO\Globbing\Nodes\RelativeRoot.cs" />
+    <Compile Include="IO\Globbing\Nodes\UnixRoot.cs" />
+    <Compile Include="IO\Globbing\Nodes\WindowsRoot.cs" />
     <Compile Include="IO\Globbing\Nodes\SegmentNode.cs" />
     <Compile Include="IO\Globbing\Nodes\WildcardNode.cs" />
     <Compile Include="IO\Globbing\Nodes\WildcardSegmentNode.cs" />
@@ -118,6 +117,8 @@
     <Compile Include="IO\IGlobber.cs" />
     <Compile Include="IO\IProcess.cs" />
     <Compile Include="IO\IProcessRunner.cs" />
+    <Compile Include="IO\IRegistry.cs" />
+    <Compile Include="IO\IRegistryKey.cs" />
     <Compile Include="IO\Machine.cs" />
     <Compile Include="IO\IToolResolver.cs" />
     <Compile Include="IO\NuGet\INuGetToolResolver.cs" />
@@ -135,6 +136,8 @@
     <Compile Include="IO\Arguments\SecretArgument.cs" />
     <Compile Include="IO\SpecialPath.cs" />
     <Compile Include="IO\Arguments\TextArgument.cs" />
+    <Compile Include="IO\WindowsRegistry.cs" />
+    <Compile Include="IO\WindowsRegistryKey.cs" />
     <Compile Include="Properties\Namespaces.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
@@ -161,7 +164,7 @@
     <Compile Include="Scripting\ScriptAliasFinder.cs" />
     <Compile Include="Scripting\ScriptAliasGenerator.cs" />
     <Compile Include="Scripting\ScriptHost.cs" />
-    <Compile Include="IO\ProcessArgument.cs" />
+    <Compile Include="IO\IProcessArgument.cs" />
     <Compile Include="IO\ProcessArgumentBuilder.cs" />
     <Compile Include="Scripting\ScriptRunner.cs" />
     <Compile Include="Text\ITextTransformationTemplate.cs" />

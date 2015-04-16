@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using Cake.Core.IO.Globbing.Nodes;
-using Cake.Core.IO.Globbing.Nodes.Roots;
 
 namespace Cake.Core.IO.Globbing
 {
@@ -51,7 +50,7 @@ namespace Cake.Core.IO.Globbing
             return items;
         }
 
-        private RootNode ParseRoot()
+        private Node ParseRoot()
         {
             if (_environment.IsUnix())
             {
