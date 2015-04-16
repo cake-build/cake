@@ -1,3 +1,6 @@
+### New in 0.3.2 (Released 2015/04/16)
+* NuGet package issue fix.
+
 ### New in 0.3.1 (Released 2015/04/16)
 * Fixed an issue where Roslyn assemblies weren't loaded properly after install.
 
