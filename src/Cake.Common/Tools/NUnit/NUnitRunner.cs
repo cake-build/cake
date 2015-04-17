@@ -124,6 +124,16 @@ namespace Cake.Common.Tools.NUnit
                 builder.Append("/trace:" + settings.Trace);
             }
 
+            if (settings.Output != null)
+            {
+                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/output:{0}", settings.Output.MakeAbsolute(_environment).FullPath));
+            }
+
+            if (settings.ErrorOutput != null)
+            {
+                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/err:{0}", settings.ErrorOutput.MakeAbsolute(_environment).FullPath));
+            }
+
             if (settings.ResultsFile != null && settings.NoResults)
             {
                 throw new ArgumentException(
