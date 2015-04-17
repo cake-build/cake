@@ -236,8 +236,8 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                     Include = "Database",
                     Exclude = "Database_Users",
                     Framework = "net1_1",
-                    Output = "stdout.txt",
-                    ErrorOutput = "stderr.txt"
+                    OutputFile = "stdout.txt",
+                    ErrorOutputFile = "stderr.txt"
                 });
 
                 // Then

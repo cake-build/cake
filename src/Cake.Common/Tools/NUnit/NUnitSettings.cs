@@ -104,13 +104,13 @@ namespace Cake.Common.Tools.NUnit
         /// Gets or sets the location that NUnit should write test output.
         /// </summary>
         /// <value>The location that NUnit should write test output.</value>
-        public FilePath Output { get; set; }
+        public FilePath OutputFile { get; set; }
 
         /// <summary>
         /// Gets or sets the location that NUnit should write test error output.
         /// </summary>
         /// <value>The location that NUnit should write test error output.</value>
-        public FilePath ErrorOutput { get; set; }
+        public FilePath ErrorOutputFile { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NUnitSettings" /> class.
