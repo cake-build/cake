@@ -172,7 +172,7 @@ The Cake [Bootstrapper](https://github.com/cake-build/bootstrapper) is a Powersh
 
 So you’re thinking about contributing to Cake? Great! It’s **really** appreciated.   
 
-Make sure you've read the [contribution guidelines](http://cakebuild.net/contribution-guidelines/) before sending that epic pull request.
+Make sure you've read the [contribution guidelines](http://cakebuild.net/contribute/contribution-guidelines/) before sending that epic pull request.
 
 * Fork the repository.
 * Make your feature addition or bug fix.
@@ -181,7 +181,7 @@ Make sure you've read the [contribution guidelines](http://cakebuild.net/contrib
 
 ## Contributors
 
-The full list of contributors can be found at [http://cakebuild.net/contributors/](http://cakebuild.net/contributors/).
+The full list of contributors can be found at [http://cakebuild.net/contribute/list-of-contributors/](http://cakebuild.net/contribute/list-of-contributors/).
 
 ## External add-ons
 
