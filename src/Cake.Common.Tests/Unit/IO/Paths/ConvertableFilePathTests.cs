@@ -1,4 +1,5 @@
-﻿using Cake.Common.IO.Paths;
+﻿using System;
+using Cake.Common.IO.Paths;
 using Cake.Core.IO;
 using Xunit;
 
@@ -93,6 +94,22 @@ namespace Cake.Common.Tests.Unit.IO.Paths
                     // Then
                     Assert.Null(result);
                 }
+            }
+        }
+
+        public sealed class TheToStringMethod
+        {
+            [Fact]
+            public void Should_Return_String_Representation_Of_Path()
+            {
+                // Given
+                var path = new ConvertableFilePath("./foo/bar.baz");
+                
+                // When
+                var result = path.ToString();
+
+                // Then
+                Assert.Equal("foo/bar.baz", result);
             }
         }
     }
