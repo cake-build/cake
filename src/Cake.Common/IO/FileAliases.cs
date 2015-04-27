@@ -303,5 +303,33 @@ namespace Cake.Common.IO
 
             return context.FileSystem.GetFile(filePath).Exists;
         }
+
+        /// <summary>
+        /// Makes the path absolute (if relative) using the current working directory.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>An absolute path.</returns>
+        /// <example>
+        /// <code>
+        /// var path = MakeAbsolute(File("./resources"));
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Path")]
+        public static FilePath GetAbsoluteFilePath(ICakeContext context, FilePath path)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+
+            return path.MakeAbsolute(context.Environment);
+        }
     }
 }

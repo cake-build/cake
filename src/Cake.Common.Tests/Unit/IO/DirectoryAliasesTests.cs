@@ -1035,5 +1035,45 @@ namespace Cake.Common.Tests.Unit.IO
                 Assert.True(result);
             }
         }
+
+        public sealed class TheGetAbsoluteDirectoryPathMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => DirectoryAliases.GetAbsoluteDirectoryPath(null, "./build"));
+
+                // Then
+                Assert.IsArgumentNullException(result, "context");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Path_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+
+                // When
+                var result = Record.Exception(() => DirectoryAliases.GetAbsoluteDirectoryPath(context, null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "path");
+            }
+
+            [Fact]
+            public void Should_Return_Absolute_Directory_Path()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                context.Environment.WorkingDirectory.Returns(d => "/Working");
+
+                // When
+                var result = DirectoryAliases.GetAbsoluteDirectoryPath(context, "./build");
+
+                // Then
+                Assert.Equal("/Working/build", result.FullPath);
+            }
+        }
     }
 }
