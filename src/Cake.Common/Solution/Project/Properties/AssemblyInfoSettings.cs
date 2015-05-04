@@ -60,6 +60,12 @@
         public string InformationalVersion { get; set; }
 
         /// <summary>
+        /// Gets or sets the name of the assembly that internals should be visible to.
+        /// </summary>
+        /// <value>The name of the assembly.</value>
+        public string InternalsVisibleTo { get; set; }
+
+        /// <summary>
         /// Gets or sets whether or not the assembly is COM visible.
         /// </summary>
         /// <value>Whether or not the assembly is COM visible.</value>

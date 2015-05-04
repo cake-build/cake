@@ -109,6 +109,7 @@ namespace Cake.Common.Solution.Project.Properties
             registration.AddString("AssemblyCopyright", "System.Reflection", settings.Copyright);
             registration.AddString("AssemblyTrademark", "System.Reflection", settings.Trademark);
             registration.AddString("Guid", "System.Runtime.InteropServices", settings.Guid);
+            registration.AddString("InternalsVisibleTo", "System.Runtime.CompilerServices", settings.InternalsVisibleTo);
             registration.AddBoolean("ComVisible", "System.Runtime.InteropServices", settings.ComVisible);
             registration.AddBoolean("CLSCompliant", "System", settings.CLSCompliant);
             return registration;

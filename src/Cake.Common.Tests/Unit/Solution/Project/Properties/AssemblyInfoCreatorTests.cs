@@ -278,6 +278,21 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 Assert.True(result.Contains("using System;"));
                 Assert.True(result.Contains("[assembly: CLSCompliant(true)]"));
             }
+
+            [Fact]
+            public void Should_Add_InternalsVisibleTo_Attribute_If_Set()
+            {
+                // Given
+                var fixture = new AssemblyInfoFixture();
+                fixture.Settings.InternalsVisibleTo = "Assembly.Tests";
+
+                // When
+                var result = fixture.CreateAndReturnContent();
+
+                // Then
+                Assert.True(result.Contains("using System.Runtime.CompilerServices;"));
+                Assert.True(result.Contains("[assembly: InternalsVisibleTo(\"Assembly.Tests\")]"));
+            }
         }
     }
 }
