@@ -9,7 +9,7 @@ namespace Cake.Common.Tools.MSBuild
         public static FilePath GetMSBuildPath(IFileSystem fileSystem, ICakeEnvironment environment, MSBuildToolVersion version, PlatformTarget target)
         {
             var binPath = (version == MSBuildToolVersion.Default)
-                ? GetHighestAvailableMSBuildVersion(fileSystem, environment, target) 
+                ? GetHighestAvailableMSBuildVersion(fileSystem, environment, target)
                 : GetMSBuildPath(environment, (MSBuildVersion)version, target);
 
             if (binPath == null)
@@ -25,6 +25,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             var versions = new[] 
             {
+                MSBuildVersion.MSBuild14,
                 MSBuildVersion.MSBuild12, 
                 MSBuildVersion.MSBuild4,
                 MSBuildVersion.MSBuild35,
@@ -46,8 +47,10 @@ namespace Cake.Common.Tools.MSBuild
         {
             switch (version)
             {
+                case MSBuildVersion.MSBuild14:
+                    return GetVisualStudioPath(environment, target, "14.0");
                 case MSBuildVersion.MSBuild12:
-                    return GetVisualStudioPath(environment, target);
+                    return GetVisualStudioPath(environment, target, "12.0");
                 case MSBuildVersion.MSBuild4:
                     return GetFrameworkPath(environment, target, "v4.0.30319");
                 case MSBuildVersion.MSBuild35:
@@ -59,11 +62,11 @@ namespace Cake.Common.Tools.MSBuild
             }
         }
 
-        private static DirectoryPath GetVisualStudioPath(ICakeEnvironment environment, PlatformTarget target)
+        private static DirectoryPath GetVisualStudioPath(ICakeEnvironment environment, PlatformTarget target, string version)
         {
             // Get the bin path.
             var programFilesPath = environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
-            var binPath = programFilesPath.Combine("MSBuild/12.0/Bin");
+            var binPath = programFilesPath.Combine(string.Concat("MSBuild/", version, "/Bin"));
             if (target == PlatformTarget.MSIL)
             {
                 if (environment.Is64BitOperativeSystem())
