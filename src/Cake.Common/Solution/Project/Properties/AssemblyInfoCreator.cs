@@ -80,6 +80,7 @@ namespace Cake.Common.Solution.Project.Properties
                 {
                     // Write namespaces.
                     var namespaces = registration.Namespaces.Select(n => string.Concat("using ", n, ";"));
+
                     foreach (var @namespace in namespaces)
                     {
                         writer.WriteLine(@namespace);
@@ -91,7 +92,7 @@ namespace Cake.Common.Solution.Project.Properties
                     foreach (var attribute in registration.Attributes)
                     {
                         writer.WriteLine(string.Concat("[assembly: ", attribute.Key, "(", attribute.Value, ")]"));
-                    }
+                    }  
                 }
             }
         }
@@ -109,7 +110,10 @@ namespace Cake.Common.Solution.Project.Properties
             registration.AddString("AssemblyCopyright", "System.Reflection", settings.Copyright);
             registration.AddString("AssemblyTrademark", "System.Reflection", settings.Trademark);
             registration.AddString("Guid", "System.Runtime.InteropServices", settings.Guid);
-            registration.AddString("InternalsVisibleTo", "System.Runtime.CompilerServices", settings.InternalsVisibleTo);
+            foreach (var assemblyName in settings.InternalsVisibleTo ?? Enumerable.Empty<string>())
+            {
+                registration.AddString("InternalsVisibleTo", "System.Runtime.CompilerServices", assemblyName);
+            }
             registration.AddBoolean("ComVisible", "System.Runtime.InteropServices", settings.ComVisible);
             registration.AddBoolean("CLSCompliant", "System", settings.CLSCompliant);
             return registration;
