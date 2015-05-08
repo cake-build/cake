@@ -302,5 +302,21 @@ namespace Cake.Common.Tests.Unit.IO.Paths
                 }
             }
         }
+
+        public sealed class TheToStringMethod
+        {
+            [Fact]
+            public void Should_Return_String_Representation_Of_Path()
+            {
+                // Given
+                var path = new ConvertableDirectoryPath("./foo/bar");
+
+                // When
+                var result = path.ToString();
+
+                // Then
+                Assert.Equal("foo/bar", result);
+            }
+        }
     }
 }
