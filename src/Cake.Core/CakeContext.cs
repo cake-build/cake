@@ -19,6 +19,7 @@ namespace Cake.Core
         private readonly ICakeArguments _arguments;
         private readonly IProcessRunner _processRunner;
         private readonly ILookup<string, IToolResolver> _toolResolverLookup;
+        private readonly IRegistry _registry;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeContext"/> class.
@@ -30,6 +31,7 @@ namespace Cake.Core
         /// <param name="arguments">The arguments.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="toolResolvers">The tool resolvers.</param>
+        /// <param name="registry">The registry.</param>
         public CakeContext(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
@@ -37,7 +39,8 @@ namespace Cake.Core
             ICakeLog log,
             ICakeArguments arguments,
             IProcessRunner processRunner,
-            IEnumerable<IToolResolver> toolResolvers)
+            IEnumerable<IToolResolver> toolResolvers,
+            IRegistry registry)
         {
             if (fileSystem == null)
             {
@@ -79,6 +82,8 @@ namespace Cake.Core
             _toolResolverLookup = toolResolvers.ToLookup(
                 key => key.Name, value => value,
                 StringComparer.OrdinalIgnoreCase);
+
+            _registry = registry;
         }
 
         /// <summary>
@@ -162,6 +167,17 @@ namespace Cake.Core
                 throw new CakeException(string.Format(CultureInfo.InvariantCulture, "Failed to resolve tool: {0}", toolName));
             }
             return toolResolver;
+        }
+
+        /// <summary>
+        /// Gets the registry.
+        /// </summary>
+        /// <value>
+        /// The registry.
+        /// </value>
+        public IRegistry Registry
+        {
+            get { return _registry; }
         }
     }
 }

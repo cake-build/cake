@@ -14,6 +14,7 @@ namespace Cake.Core.Tests.Fixtures
         public ICakeArguments Arguments { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
         public List<IToolResolver> ToolResolvers { get; set; }
+        public IRegistry Registry { get; set; }
 
         public CakeContextFixture()
         {
@@ -24,12 +25,13 @@ namespace Cake.Core.Tests.Fixtures
             Arguments = Substitute.For<ICakeArguments>();
             ProcessRunner = Substitute.For<IProcessRunner>();
             ToolResolvers = new List<IToolResolver>();
+            Registry = Substitute.For<IRegistry>();
         }
 
         public CakeContext CreateContext()
         {
             return new CakeContext(FileSystem, Environment, Globber, 
-                Log, Arguments, ProcessRunner, ToolResolvers);
+                Log, Arguments, ProcessRunner, ToolResolvers, Registry);
         }
     }
 }
