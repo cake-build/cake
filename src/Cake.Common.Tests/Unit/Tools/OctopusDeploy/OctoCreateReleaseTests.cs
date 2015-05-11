@@ -14,7 +14,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Throw_If_Project_Name_Is_Null()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.ProjectName = null;
 
                 // When
@@ -28,7 +28,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Throw_If_Server_Is_Null()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.Server = null;
 
                 // When
@@ -42,7 +42,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Throw_If_Api_Key_Is_Null()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.ApiKey = null;
 
                 // When
@@ -56,7 +56,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Throw_If_Settings_Is_Null()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.Settings = null;
 
                 // When
@@ -70,7 +70,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Throw_If_Octo_Executable_Was_Not_Found()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture(defaultToolExist: false);
+                var fixture = new OctopusDeployReleaseCreatorFixture(defaultToolExist: false);
                 
                 // When
                 var result = Record.Exception(() => fixture.CreateRelease());
@@ -85,7 +85,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Use_Octo_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture(expected);
+                var fixture = new OctopusDeployReleaseCreatorFixture(expected);
                 fixture.Settings.ToolPath = toolPath;
 
                 // When
@@ -101,7 +101,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Find_Octo_Executable_If_Tool_Path_Not_Provided()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
 
                 // When
                 fixture.CreateRelease();
@@ -116,7 +116,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Throw_If_Process_Was_Not_Started()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.GivenProcessCannotStart();
 
                 // When
@@ -130,7 +130,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.GivenProcessReturnError();
 
                 // When
@@ -144,7 +144,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Add_Project_Name_Server_And_Api_Key_To_Arguments()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.ProjectName = "myProject";
                 fixture.Server = "http://myoctopusserver/";
                 fixture.ApiKey = "API-ABCDEF123456";
@@ -164,7 +164,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Add_Username_To_Arguments_If_Not_Null()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.Settings.Username = "mike123";
 
                 // When
@@ -182,7 +182,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Add_Password_To_Arguments_If_Not_Null()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.Settings.Password = "secret";
 
                 // When
@@ -200,7 +200,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Add_Configuration_File_To_Arguments_If_Not_Null()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.Settings.ConfigurationFile = "configFile.txt";
 
                 // When
@@ -218,7 +218,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Add_Debug_Flag_To_Arguments_If_Not_Null()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.Settings.EnableDebugLogging = true;
 
                 // When
@@ -236,7 +236,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Add_Ignore_Ssl_Errors_Flag_To_Arguments_If_Not_Null()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.Settings.IgnoreSslErrors = true;
 
                 // When
@@ -254,7 +254,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Add_Enable_Service_Messages_Flag_To_Arguments_If_Not_Null()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.Settings.EnableServiceMessages = true;
 
                 // When
@@ -272,7 +272,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Add_Release_Number_To_Arguments_If_Not_Null()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.Settings.ReleaseNumber = "3.0.0";
 
                 // When
@@ -290,7 +290,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Add_Default_Package_Version_To_Arguments_If_Not_Null()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.Settings.DefaultPackageVersion = "1.5.2-beta";
 
                 // When
@@ -308,7 +308,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Add_Package_And_Step_To_Arguments_If_Specified()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.Settings.Packages = new Dictionary<string, string>
                 {
                     { "StepA", "1.0.1" }
@@ -329,7 +329,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Add_Multiple_Package_And_Step_To_Arguments_If_Specified()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.Settings.Packages = new Dictionary<string, string>
                 {
                     { "StepA", "1.0.1" },
@@ -351,7 +351,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Add_Packages_Folder_To_Arguments_If_Not_Null()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.Settings.PackagesFolder = @"some\folder";
 
                 // When
@@ -369,7 +369,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Add_Release_Notes_To_Arguments_If_Not_Null()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.Settings.ReleaseNotes = @"No significant changes in this version...";
 
                 // When
@@ -387,7 +387,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Add_Release_Notes_File_To_Arguments_If_Not_Null()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.Settings.ReleaseNotesFile = @"some\folder\releaseNotes.txt";
 
                 // When
@@ -405,7 +405,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Add_Ignore_Existing_Flag_To_Arguments_If_Not_Null()
             {
                 // Given
-                var fixture = new OctopusDeployRunnerFixture();
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.Settings.IgnoreExisting = true;
 
                 // When

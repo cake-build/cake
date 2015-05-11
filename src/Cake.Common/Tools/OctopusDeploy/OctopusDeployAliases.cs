@@ -7,7 +7,7 @@ namespace Cake.Common.Tools.OctopusDeploy
     /// <summary>
     /// Contains functionality for working with Octopus Deploy.
     /// </summary>
-    [CakeAliasCategory("Octo")]
+    [CakeAliasCategory("Octopus Deploy")]
     public static class OctopusDeployAliases
     {
         /// <summary>
@@ -26,7 +26,7 @@ namespace Cake.Common.Tools.OctopusDeploy
                 throw new ArgumentNullException("context");
             }
 
-            var packer = new OctopusDeployRunner(context.FileSystem, context.Environment, context.Globber,
+            var packer = new OctopusDeployReleaseCreator(context.FileSystem, context.Environment, context.Globber,
                 context.ProcessRunner);
             packer.CreateRelease(projectName, server, apiKey, settings);
         }

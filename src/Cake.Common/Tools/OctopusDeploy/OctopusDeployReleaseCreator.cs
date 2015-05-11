@@ -7,21 +7,21 @@ using Cake.Core.Utilities;
 namespace Cake.Common.Tools.OctopusDeploy
 {
     /// <summary>
-    /// The OctopusDeploy runner
+    /// The Octopus Deploy release creator runner
     /// </summary>
-    public sealed class OctopusDeployRunner : Tool<CreateReleaseSettings>
+    public sealed class OctopusDeployReleaseCreator : Tool<CreateReleaseSettings>
     {
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
 
         /// <summary> 
-        /// Initializes a new instance of the <see cref="OctopusDeployRunner"/> class.
+        /// Initializes a new instance of the <see cref="OctopusDeployReleaseCreator"/> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="globber">The globber.</param>
         /// <param name="processRunner">The process runner.</param>
-        public OctopusDeployRunner(IFileSystem fileSystem, ICakeEnvironment environment,
+        public OctopusDeployReleaseCreator(IFileSystem fileSystem, ICakeEnvironment environment,
             IGlobber globber, IProcessRunner processRunner) 
             : base(fileSystem, environment, processRunner)
         {
@@ -55,7 +55,7 @@ namespace Cake.Common.Tools.OctopusDeploy
                 throw new ArgumentNullException("apiKey");
             }
 
-            var argumentBuilder = new ArgumentBuilder(projectName, server, apiKey, settings, _environment);
+            var argumentBuilder = new CreateReleaseArgumentBuilder(projectName, server, apiKey, settings, _environment);
             Run(settings, argumentBuilder.Get(), settings.ToolPath);
         }
 

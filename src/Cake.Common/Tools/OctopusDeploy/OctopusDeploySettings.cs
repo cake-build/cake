@@ -3,7 +3,7 @@
 namespace Cake.Common.Tools.OctopusDeploy
 {
     /// <summary>
-    /// Contains the common settings used by all commands in <see cref="OctopusDeployRunner"/>.
+    /// Contains the common settings used by all commands in <see cref="OctopusDeployReleaseCreator"/>.
     /// </summary>
     public abstract class OctopusDeploySettings 
     {

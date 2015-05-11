@@ -4,7 +4,7 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.OctopusDeploy
 {
     /// <summary>
-    /// Contains settings used  <see cref="OctopusDeployRunner.CreateRelease"/>.
+    /// Contains settings used by <see cref="OctopusDeployReleaseCreator.CreateRelease"/>.
     /// </summary>
     public sealed class CreateReleaseSettings : OctopusDeploySettings
     {

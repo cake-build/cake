@@ -3,7 +3,7 @@ using Cake.Core.IO;
 
 namespace Cake.Common.Tools.OctopusDeploy
 {
-    internal class ArgumentBuilder
+    internal class CreateReleaseArgumentBuilder
     {
         private readonly string _projectName;
         private readonly string _server;
@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.OctopusDeploy
 
         private readonly ProcessArgumentBuilder _builder;
 
-        public ArgumentBuilder(string projectName, string server, string apiKey, CreateReleaseSettings settings, ICakeEnvironment environment)
+        public CreateReleaseArgumentBuilder(string projectName, string server, string apiKey, CreateReleaseSettings settings, ICakeEnvironment environment)
         {
             _projectName = projectName;
             _server = server;

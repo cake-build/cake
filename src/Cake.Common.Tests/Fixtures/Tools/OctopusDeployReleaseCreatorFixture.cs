@@ -5,7 +5,7 @@ using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Tools
 {
-    public sealed class OctopusDeployRunnerFixture
+    public sealed class OctopusDeployReleaseCreatorFixture
     {
         public string ProjectName { get; set; }
         public string Server { get; set; }
@@ -18,7 +18,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         public IProcessRunner ProcessRunner { get; set; }
         public IProcess Process { get; set; }
 
-        public OctopusDeployRunnerFixture(FilePath toolPath = null, bool defaultToolExist = true)
+        public OctopusDeployReleaseCreatorFixture(FilePath toolPath = null, bool defaultToolExist = true)
         {
             Process = Substitute.For<IProcess>();
             Process.GetExitCode().Returns(0);
@@ -48,7 +48,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         public void CreateRelease()
         {
-            var tool = new OctopusDeployRunner(FileSystem, Environment, Globber, ProcessRunner);
+            var tool = new OctopusDeployReleaseCreator(FileSystem, Environment, Globber, ProcessRunner);
             tool.CreateRelease(ProjectName, Server, ApiKey, Settings);
         }
 
