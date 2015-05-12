@@ -2,7 +2,8 @@ Param(
     [string]$Script = "build.cake",
     [string]$Target = "Default",
     [string]$Configuration = "Release",
-    [string]$Verbosity = "Verbose"
+    [string]$Verbosity = "Verbose",
+    [switch]$Experimental
 )
 
 $TOOLS_DIR = Join-Path $PSScriptRoot "tools"
@@ -24,8 +25,7 @@ Push-Location
 Set-Location $TOOLS_DIR
 Invoke-Expression "$NUGET_EXE install -ExcludeVersion"
 Pop-Location
-if ($LASTEXITCODE -ne 0)
-{
+if ($LASTEXITCODE -ne 0) {
     exit $LASTEXITCODE
 }
 
@@ -34,6 +34,12 @@ if (!(Test-Path $CAKE_EXE)) {
     Throw "Could not find Cake.exe"
 }
 
+# Should we use experimental build of Roslyn?
+$UseExperimental = "";
+if($Experimental.IsPresent) {
+    $UseExperimental = "-experimental"
+}
+
 # Start Cake
-Invoke-Expression "$CAKE_EXE `"$Script`" -target=`"$Target`" -configuration=`"$Configuration`" -verbosity=`"$Verbosity`""
+Invoke-Expression "$CAKE_EXE `"$Script`" -target=`"$Target`" -configuration=`"$Configuration`" -verbosity=`"$Verbosity`"  $UseExperimental"
 exit $LASTEXITCODE
