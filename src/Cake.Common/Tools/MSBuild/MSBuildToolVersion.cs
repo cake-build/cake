@@ -74,5 +74,15 @@
         /// MSBuild tool version: <c>Visual Studio 2013</c>
         /// </summary>
         VS2013 = 4,
+
+        /// <summary>
+        /// MSBuild tool version: <c>Visual Studio 2015</c>
+        /// </summary>
+        VS2015 = 5,
+
+        /// <summary>
+        /// MSBuild tool version: <c>.NET 4.6</c>
+        /// </summary>
+        NET46 = 5,
     }
 }
