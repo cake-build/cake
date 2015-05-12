@@ -49,17 +49,8 @@ namespace Cake.Scripting.Roslyn.Nightly
             // Is Roslyn installed?
             if (!IsInstalled())
             {
-                // Find out which is the latest Roslyn version.
-                _log.Information("Checking what the latest version of Roslyn is...");
-                var version = GetLatestVersion();
-                if (version == null)
-                {
-                    throw new CakeException("Could not resolve latest version of Roslyn.");
-                }
-
-                _log.Information("The latest Roslyn version is {0}.", version);
-                _log.Information("Downloading and installing Roslyn...");
-                Install(version);
+                _log.Information("Downloading and installing Roslyn (experimental)...");
+                Install(new SemanticVersion(1, 0, 0, "rc2"));
             }
 
             // Load Roslyn assemblies dynamically.
@@ -73,15 +64,6 @@ namespace Cake.Scripting.Roslyn.Nightly
 
             // Create the session.
             return new RoslynNightlyScriptSession(host, _log);
-        }
-
-        private static SemanticVersion GetLatestVersion()
-        {
-            var repository = PackageRepositoryFactory.Default.CreateRepository("https://www.myget.org/F/roslyn-nightly/");
-            var package = repository
-                .FindPackagesById("Microsoft.CodeAnalysis.Scripting.CSharp")
-                .FirstOrDefault(x => x.IsAbsoluteLatestVersion);
-            return package != null ? package.Version : null;
         }
 
         private bool IsInstalled()
@@ -106,7 +88,7 @@ namespace Cake.Scripting.Roslyn.Nightly
 
             var packages = new Dictionary<string, SemanticVersion>
             {
-                { "Microsoft.CodeAnalysis.Scripting.CSharp", version },
+                { "Microsoft.CodeAnalysis.Scripting", version },
                 { "Microsoft.CodeAnalysis.CSharp", version }
             };
 
@@ -128,7 +110,9 @@ namespace Cake.Scripting.Roslyn.Nightly
                 var foundFile = _globber.Match(exp).FirstOrDefault();
                 if (foundFile == null)
                 {
-                    throw new CakeException("Could not find file.");
+                    var format = "Could not find file {0}.";
+                    var message = string.Format(CultureInfo.InvariantCulture, format, path);
+                    throw new CakeException(message);
                 }
 
                 var source = _fileSystem.GetFile((FilePath)foundFile);
@@ -151,7 +135,6 @@ namespace Cake.Scripting.Roslyn.Nightly
         {
             var sources = new[]
             {
-                new PackageSource("https://www.myget.org/F/roslyn-nightly/"),
                 new PackageSource("https://packages.nuget.org/api/v2"),
             };
             var repo = AggregateRepository.Create(PackageRepositoryFactory.Default, sources, false);
