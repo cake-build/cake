@@ -101,6 +101,18 @@ namespace Cake.Common.Tools.NUnit
         public string Trace { get; set; }
 
         /// <summary>
+        /// Gets or sets the location that NUnit should write test output.
+        /// </summary>
+        /// <value>The location that NUnit should write test output.</value>
+        public FilePath OutputFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets the location that NUnit should write test error output.
+        /// </summary>
+        /// <value>The location that NUnit should write test error output.</value>
+        public FilePath ErrorOutputFile { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="NUnitSettings" /> class.
         /// </summary>
         public NUnitSettings()

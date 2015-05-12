@@ -101,6 +101,7 @@ namespace Cake
             builder.RegisterType<ScriptProcessor>().As<IScriptProcessor>().SingleInstance();
             builder.RegisterCollection<IToolResolver>("toolResolvers").As<IEnumerable<IToolResolver>>();
             builder.RegisterType<NuGetToolResolver>().As<IToolResolver>().As<INuGetToolResolver>().SingleInstance().MemberOf("toolResolvers");
+            builder.RegisterType<WindowsRegistry>().As<IRegistry>().SingleInstance();
             builder.RegisterType<CakeContext>().As<ICakeContext>().SingleInstance();
 
             // Roslyn related services.

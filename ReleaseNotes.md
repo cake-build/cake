@@ -1,3 +1,7 @@
+### New in 0.4.0 (Released 2015/05/12)
+* Now using RC2 of Roslyn from NuGet since MyGet distribution was no longer compatible.
+* Added support for MSBuild 14.0.
+
 ### New in 0.3.2 (Released 2015/04/16)
 * NuGet package issue fix.
 

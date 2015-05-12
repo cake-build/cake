@@ -7,6 +7,8 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
+using Microsoft.CodeAnalysis.Scripting.CSharp;
 
 namespace Cake.Scripting.Roslyn.Nightly
 {
@@ -60,74 +62,13 @@ namespace Cake.Scripting.Roslyn.Nightly
         public void Execute(string code)
         {
             // Create the script options dynamically.
-            var scriptOptionsDefault = GetDefaultScriptOptionsField();
-            dynamic options = scriptOptionsDefault.GetValue(null);
-            options = options.AddNamespaces(_namespaces);
-            options = options.AddReferences(_references);
-            options = options.AddReferences(_referencePaths.Select(r => r.FullPath));
+            var options = ScriptOptions.Default
+                .AddNamespaces(_namespaces)
+                .AddReferences(_references)
+                .AddReferences(_referencePaths.Select(r => r.FullPath));
 
-            // Execute the code.
-            var csharpScriptEvalMethod = GetEvalMethod();
             _log.Debug("Compiling build script...");
-            csharpScriptEvalMethod.Invoke(null, new object[] { code, options, _host });
-        }
-
-        private static Type FindType(string assemblyName, string typeName)
-        {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (var assembly in assemblies)
-            {
-                if (assembly.FullName.StartsWith(string.Concat(assemblyName, ",")))
-                {
-                    var type = GetLoadableTypes(assembly).FirstOrDefault(x => x.FullName == typeName);
-                    if (type != null)
-                    {
-                        return type;
-                    }
-                }
-            }
-            const string format = "Could not find type '{0}' in assembly '{1}'.";
-            throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, typeName, assemblyName));
-        }
-
-        private static IEnumerable<Type> GetLoadableTypes(Assembly assembly)
-        {
-            if (assembly == null)
-            {
-                throw new ArgumentNullException("assembly");
-            }
-            try
-            {
-                return assembly.GetTypes();
-            }
-            catch (ReflectionTypeLoadException e)
-            {
-                return e.Types.Where(t => t != null);
-            }
-        }
-
-        private static MethodInfo GetEvalMethod()
-        {
-            // Get the method.
-            var type = FindType("Microsoft.CodeAnalysis.Scripting.CSharp", "Microsoft.CodeAnalysis.Scripting.CSharp.CSharpScript");
-            var method = type.GetMethods(BindingFlags.Static | BindingFlags.Public)
-                .FirstOrDefault(y => y.Name == "Eval" && y.GetParameters().Length == 3);
-            if (method == null)
-            {
-                throw new CakeException("Could not resolve method 'Microsoft.CodeAnalysis.Scripting.CSharp.CSharpScript.Eval'.");
-            }
-            return method;
-        }
-
-        private static FieldInfo GetDefaultScriptOptionsField()
-        {
-            var scriptOptionsType = FindType("Microsoft.CodeAnalysis.Scripting", "Microsoft.CodeAnalysis.Scripting.ScriptOptions");
-            var scriptOptionsDefault = scriptOptionsType.GetField("Default", BindingFlags.Static | BindingFlags.Public);
-            if (scriptOptionsDefault == null)
-            {
-                throw new CakeException("Could not resolve field 'Microsoft.CodeAnalysis.Scripting.Default'.");
-            }
-            return scriptOptionsDefault;
+            CSharpScript.Eval(code, options, _host);
         }
     }
 }
