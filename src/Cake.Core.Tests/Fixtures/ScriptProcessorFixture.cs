@@ -36,7 +36,7 @@ namespace Cake.Core.Tests.Fixtures
                 FileSystem.GetCreatedFile(ScriptPath.MakeAbsolute(Environment), Source);
             }
 
-            NuGetToolResolver = new NuGetToolResolver(FileSystem, Globber, Environment);
+            NuGetToolResolver = new NuGetToolResolver(FileSystem, Environment, Globber);
         }
 
         public ScriptProcessor CreateProcessor()
