@@ -83,6 +83,7 @@
     <Compile Include="Unit\IO\FilePathCollectionTests.cs" />
     <Compile Include="Unit\IO\FileSystemExtensionsTest.cs" />
     <Compile Include="Unit\IO\GlobberTests.cs" />
+    <Compile Include="Unit\IO\NuGet\NuGetToolResolverTests.cs" />
     <Compile Include="Unit\IO\PathComparerTests.cs" />
     <Compile Include="Unit\IO\DirectoryPathTests.cs" />
     <Compile Include="Unit\IO\FilePathTests.cs" />
