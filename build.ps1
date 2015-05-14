@@ -5,12 +5,25 @@ Param(
     [string]$Configuration = "Release",
     [ValidateSet("Quiet", "Minimal", "Normal", "Verbose", "Diagnostic")]
     [string]$Verbosity = "Verbose",
-    [switch]$Experimental
+    [switch]$Experimental,
+    [switch]$WhatIf
 )
 
 $TOOLS_DIR = Join-Path $PSScriptRoot "tools"
 $NUGET_EXE = Join-Path $TOOLS_DIR "nuget.exe"
 $CAKE_EXE = Join-Path $TOOLS_DIR "Cake/Cake.exe"
+
+# Should we use experimental build of Roslyn?
+$UseExperimental = "";
+if($Experimental.IsPresent) {
+    $UseExperimental = "-experimental"
+}
+
+# Is this a dry run?
+$UseDryRun = "";
+if($WhatIf.IsPresent) {
+    $UseDryRun = "-dryrun"
+}
 
 # Try download NuGet.exe if do not exist.
 if (!(Test-Path $NUGET_EXE)) {
@@ -36,12 +49,6 @@ if (!(Test-Path $CAKE_EXE)) {
     Throw "Could not find Cake.exe"
 }
 
-# Should we use experimental build of Roslyn?
-$UseExperimental = "";
-if($Experimental.IsPresent) {
-    $UseExperimental = "-experimental"
-}
-
 # Start Cake
-Invoke-Expression "$CAKE_EXE `"$Script`" -target=`"$Target`" -configuration=`"$Configuration`" -verbosity=`"$Verbosity`"  $UseExperimental"
+Invoke-Expression "$CAKE_EXE `"$Script`" -target=`"$Target`" -configuration=`"$Configuration`" -verbosity=`"$Verbosity`" $UseDryRun $UseExperimental"
 exit $LASTEXITCODE
