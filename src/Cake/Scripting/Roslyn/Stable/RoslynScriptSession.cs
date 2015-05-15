@@ -26,7 +26,7 @@ namespace Cake.Scripting.Roslyn.Stable
                 throw new ArgumentNullException("log");
             }
 
-            var roslynScriptEngine = new ScriptEngine();
+            var roslynScriptEngine = new global::Roslyn.Scripting.CSharp.ScriptEngine();
             _roslynSession = roslynScriptEngine.CreateSession(host, typeof(IScriptHost));
 
             _log = log;

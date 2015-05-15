@@ -11,28 +11,28 @@ namespace Cake.Core.Scripting
     /// </summary>
     public sealed class ScriptRunner : IScriptRunner
     {
-        private readonly IScriptSessionFactory _sessionFactory;
-        private readonly IScriptAliasGenerator _aliasGenerator;
+        private readonly IScriptEngine _engine;
+        private readonly IScriptAliasFinder _aliasFinder;
         private readonly IScriptProcessor _scriptProcessor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptRunner"/> class.
         /// </summary>
-        /// <param name="sessionFactory">The session factory.</param>
-        /// <param name="aliasGenerator">The alias generator.</param>
+        /// <param name="engine">The session factory.</param>
+        /// <param name="aliasFinder">The alias generator.</param>
         /// <param name="scriptProcessor">The script processor.</param>
-        public ScriptRunner(IScriptSessionFactory sessionFactory, IScriptAliasGenerator aliasGenerator, IScriptProcessor scriptProcessor)
+        public ScriptRunner(IScriptEngine engine, IScriptAliasFinder aliasFinder, IScriptProcessor scriptProcessor)
         {
-            if (sessionFactory == null)
+            if (engine == null)
             {
-                throw new ArgumentNullException("sessionFactory");
+                throw new ArgumentNullException("engine");
             }
-            if (aliasGenerator == null)
+            if (aliasFinder == null)
             {
-                throw new ArgumentNullException("aliasGenerator");
+                throw new ArgumentNullException("aliasFinder");
             }
-            _sessionFactory = sessionFactory;
-            _aliasGenerator = aliasGenerator;
+            _engine = engine;
+            _aliasFinder = aliasFinder;
             _scriptProcessor = scriptProcessor;
         }
 
@@ -61,18 +61,14 @@ namespace Cake.Core.Scripting
             host.Context.Arguments.SetArguments(arguments);
 
             // Set the working directory.
-            host.Context.Environment.WorkingDirectory
-                = script.MakeAbsolute(host.Context.Environment).GetDirectory();
-
-            // Make sure that any directories are stripped from the script path.
-            script = script.GetFilename();
-
-            // Create and prepare the session.
-            var session = _sessionFactory.CreateSession(host, arguments);
+            host.Context.Environment.WorkingDirectory = script.MakeAbsolute(host.Context.Environment).GetDirectory();
 
             // Process the script.
             var context = new ScriptProcessorContext();
-            _scriptProcessor.Process(script, context);
+            _scriptProcessor.Process(script.GetFilename(), context);
+
+            // Create and prepare the session.
+            var session = _engine.CreateSession(host, arguments);
 
             // Load all references.
             var assemblies = new List<Assembly>();
@@ -91,11 +87,17 @@ namespace Cake.Core.Scripting
                 }
             }
 
+            var aliases = new List<ScriptAlias>();
+
             // Got any assemblies?
             if (assemblies.Count > 0)
             {
-                // Find all extension methods and generate proxy methods.    
-                _aliasGenerator.GenerateScriptAliases(context, assemblies);
+                // Find all script aliases.
+                var foundAliases = _aliasFinder.FindAliases(assemblies);
+                if (foundAliases.Length > 0)
+                {
+                    aliases.AddRange(foundAliases);
+                }
 
                 // Add assembly references to the session.
                 foreach (var assembly in assemblies)
@@ -105,18 +107,30 @@ namespace Cake.Core.Scripting
             }
 
             // Import all namespaces.
-            var namespaces = new List<string>(context.Namespaces);
+            var namespaces = new HashSet<string>(context.Namespaces, StringComparer.Ordinal);
             namespaces.AddRange(GetDefaultNamespaces());
+            namespaces.AddRange(aliases.SelectMany(x => x.Namespaces));
             foreach (var @namespace in namespaces.OrderBy(ns => ns))
             {
                 session.ImportNamespace(@namespace);
             }
 
-            // Execute the script.
-            session.Execute(context.GetScriptCode());
+            // Generate the script code.
+            var code = GenerateCode(context, aliases);
+
+            // Execute the script code.
+            session.Execute(code);
         }
 
-        private IEnumerable<Assembly> GetDefaultAssemblies(IFileSystem fileSystem)
+        private string GenerateCode(ScriptProcessorContext context, IEnumerable<ScriptAlias> aliases)
+        {
+            var generator = _engine.GetCodeGenerator();
+            var script = new Script(context.Namespaces, context.Lines, aliases);
+            var code = generator.Generate(script);
+            return code;
+        }
+
+        private static IEnumerable<Assembly> GetDefaultAssemblies(IFileSystem fileSystem)
         {
             var defaultAssemblies = new HashSet<Assembly> 
             {

@@ -1,9 +1,10 @@
 ﻿using System.Text;
-using Cake.Core.Scripting.CodeGen;
-using Cake.Core.Tests.Fixtures;
+using Cake.Core;
+using Cake.Scripting.Roslyn;
+using Cake.Tests.Fixtures;
 using Xunit;
 
-namespace Cake.Core.Tests.Unit.Scripting.CodeGen
+namespace Cake.Tests.Unit.Scripting.Roslyn
 {
     public sealed class PropertyAliasGeneratorTests
     {
@@ -30,7 +31,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("The type 'Cake.Core.Tests.Unit.Scripting.CodeGen.PropertyAliasGeneratorTests+TheGenerateMethod' is not static.",
+                Assert.Equal("The type 'Cake.Tests.Unit.Scripting.Roslyn.PropertyAliasGeneratorTests+TheGenerateMethod' is not static.",
                     result.Message);
             }
 
@@ -129,7 +130,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             {
                 // Given
                 const string expected = "public System.Int32 PropertyAliasReturningInteger{get{return " +
-                                        "Cake.Core.Tests.Fixtures.PropertyAliasGeneratorFixture.PropertyAliasReturningInteger(Context);}}";
+                                        "Cake.Tests.Fixtures.PropertyAliasGeneratorFixture.PropertyAliasReturningInteger(Context);}}";
 
                 var method = typeof(PropertyAliasGeneratorFixture).GetMethod("PropertyAliasReturningInteger");
 
@@ -148,7 +149,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
                 expected.Append("private System.String _PropertyAliasReturningCachedString;\n");
                 expected.Append("public System.String PropertyAliasReturningCachedString{get{");
                 expected.Append("if(_PropertyAliasReturningCachedString==null){_PropertyAliasReturningCachedString=");
-                expected.Append("Cake.Core.Tests.Fixtures.PropertyAliasGeneratorFixture.PropertyAliasReturningCachedString");
+                expected.Append("Cake.Tests.Fixtures.PropertyAliasGeneratorFixture.PropertyAliasReturningCachedString");
                 expected.Append("(Context);}return _PropertyAliasReturningCachedString;}}");
 
                 var method = typeof(PropertyAliasGeneratorFixture).GetMethod("PropertyAliasReturningCachedString");
@@ -168,7 +169,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
                 expected.Append("private System.Boolean? _PropertyAliasReturningCachedBoolean;\n");
                 expected.Append("public System.Boolean PropertyAliasReturningCachedBoolean{get{");
                 expected.Append("if(_PropertyAliasReturningCachedBoolean==null){_PropertyAliasReturningCachedBoolean=");
-                expected.Append("Cake.Core.Tests.Fixtures.PropertyAliasGeneratorFixture.PropertyAliasReturningCachedBoolean");
+                expected.Append("Cake.Tests.Fixtures.PropertyAliasGeneratorFixture.PropertyAliasReturningCachedBoolean");
                 expected.Append("(Context);}return _PropertyAliasReturningCachedBoolean.Value;}}");
 
                 var method = typeof(PropertyAliasGeneratorFixture).GetMethod("PropertyAliasReturningCachedBoolean");

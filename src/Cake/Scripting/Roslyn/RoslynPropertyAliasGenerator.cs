@@ -4,9 +4,10 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Cake.Core;
 using Cake.Core.Annotations;
 
-namespace Cake.Core.Scripting.CodeGen
+namespace Cake.Scripting.Roslyn
 {
     /// <summary>
     /// Responsible for generating script property aliases.
@@ -49,11 +50,13 @@ namespace Cake.Core.Scripting.CodeGen
                 const string format = "The type '{0}' is not static.";
                 throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, method.DeclaringType.FullName));
             }
+
             if (!method.IsDefined(typeof(ExtensionAttribute)))
             {
                 const string format = "The method '{0}' is not an extension method.";
                 throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, method.Name));
             }
+
             if (!method.IsDefined(typeof(CakePropertyAliasAttribute)))
             {
                 const string format = "The method '{0}' is not a property alias.";
@@ -72,6 +75,7 @@ namespace Cake.Core.Scripting.CodeGen
                     parameterCorrect = true;
                 }
             }
+
             if (!parameterCorrect)
             {
                 const string format = "The property alias '{0}' has an invalid signature.";

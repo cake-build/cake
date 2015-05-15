@@ -64,6 +64,8 @@
   <ItemGroup>
     <Compile Include="Fixtures\ArgumentParserFixture.cs" />
     <Compile Include="Fixtures\CakeApplicationFixture.cs" />
+    <Compile Include="Fixtures\MethodAliasGeneratorFixture.cs" />
+    <Compile Include="Fixtures\PropertyAliasGeneratorFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
@@ -83,6 +85,8 @@
     <Compile Include="Unit\Scripting\DescriptionScriptHostTests.cs" />
     <Compile Include="Unit\Scripting\DryRunExecutionStrategyTests.cs" />
     <Compile Include="Unit\Scripting\DryRunScriptHostTests.cs" />
+    <Compile Include="Unit\Scripting\Roslyn\MethodAliasGeneratorTests.cs" />
+    <Compile Include="Unit\Scripting\Roslyn\PropertyAliasGeneratorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">

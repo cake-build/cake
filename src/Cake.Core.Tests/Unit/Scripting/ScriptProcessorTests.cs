@@ -83,24 +83,11 @@ namespace Cake.Core.Tests.Unit.Scripting
             }
 
             [Fact]
-            public void Should_Return_Code_Read_From_File()
-            {
-                // Given
-                var fixture = new ScriptProcessorFixture();
-
-                // When                
-                var result = fixture.Process();
-
-                // Then                
-                Assert.Equal(fixture.GetExpectedSource(), result.GetScriptCode());                
-            }
-
-            [Fact]
             public void Should_Return_Single_Assembly_Reference_Found_In_Source()
             {
                 // Given
                 const string source = "#r \"hello.dll\"\r\nConsole.WriteLine();";
-                var fixture = new ScriptProcessorFixture(scriptSource: source);                
+                var fixture = new ScriptProcessorFixture(scriptSource: source);
 
                 // When
                 var result = fixture.Process();

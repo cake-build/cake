@@ -18,13 +18,13 @@ namespace Cake.Core.Tests.Unit.Scripting
             {
                 // Given
                 var fixture = new ScriptRunnerFixture();
-                fixture.SessionFactory = null;
+                fixture.Engine = null;
 
                 // When
                 var result = Record.Exception(() => fixture.CreateScriptRunner());
 
                 // Then
-                Assert.IsArgumentNullException(result, "sessionFactory");
+                Assert.IsArgumentNullException(result, "engine");
             }
 
             [Fact]
@@ -32,13 +32,13 @@ namespace Cake.Core.Tests.Unit.Scripting
             {
                 // Given
                 var fixture = new ScriptRunnerFixture();
-                fixture.AliasGenerator = null;
+                fixture.AliasFinder = null;
 
                 // When
                 var result = Record.Exception(() => fixture.CreateScriptRunner());
 
                 // Then
-                Assert.IsArgumentNullException(result, "aliasGenerator");
+                Assert.IsArgumentNullException(result, "aliasFinder");
             }
         }
 
@@ -112,7 +112,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
 
                 // Then
-                fixture.SessionFactory.Received(1)
+                fixture.Engine.Received(1)
                     .CreateSession(fixture.Host, fixture.ArgumentDictionary);
             }
 
@@ -188,8 +188,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
 
                 // Then
-                fixture.AliasGenerator.Received(1).GenerateScriptAliases(
-                    Arg.Any<ScriptProcessorContext>(),
+                fixture.AliasFinder.Received(1).FindAliases(
                     Arg.Any<IEnumerable<Assembly>>());
             }
 

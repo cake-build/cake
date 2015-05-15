@@ -73,6 +73,7 @@
     <Compile Include="Diagnostics\VerbosityTypeConverter.cs" />
     <Compile Include="Extensions\ConsoleExtensions.cs" />
     <Compile Include="Extensions\DirectoryExtensions.cs" />
+    <Compile Include="Extensions\HashSetExtensions.cs" />
     <Compile Include="Extensions\MethodInfoExtensions.cs" />
     <Compile Include="Extensions\ProcessArgumentListExtensions.cs" />
     <Compile Include="Extensions\ProcessRunnerExtensions.cs" />
@@ -145,24 +146,25 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Scripting\CodeGen\MethodAliasGenerator.cs" />
-    <Compile Include="Scripting\CodeGen\PropertyAliasGenerator.cs" />
-    <Compile Include="Scripting\IScriptAliasGenerator.cs" />
+    <Compile Include="Scripting\IScriptAliasFinder.cs" />
+    <Compile Include="Scripting\Script.cs" />
+    <Compile Include="Scripting\ScriptAliasType.cs" />
+    <Compile Include="Scripting\IScriptCodeGenerator.cs" />
     <Compile Include="Scripting\IScriptHost.cs" />
     <Compile Include="Scripting\IScriptProcessor.cs" />
     <Compile Include="Scripting\IScriptRunner.cs" />
     <Compile Include="Scripting\IScriptSession.cs" />
-    <Compile Include="Scripting\IScriptSessionFactory.cs" />
+    <Compile Include="Scripting\IScriptEngine.cs" />
     <Compile Include="Scripting\LineProcessor.cs" />
     <Compile Include="Scripting\Processors\ToolDirectiveProcessor.cs" />
     <Compile Include="Scripting\Processors\AddInDirectiveProcessor.cs" />
     <Compile Include="Scripting\Processors\LoadDirectiveProcessor.cs" />
     <Compile Include="Scripting\Processors\ReferenceDirectiveProcessor.cs" />
+    <Compile Include="Scripting\ScriptAlias.cs" />
     <Compile Include="Scripting\ScriptProcessor.cs" />
     <Compile Include="Scripting\ScriptProcessorContext.cs" />
     <Compile Include="Scripting\Processors\UsingStatementProcessor.cs" />
     <Compile Include="Scripting\ScriptAliasFinder.cs" />
-    <Compile Include="Scripting\ScriptAliasGenerator.cs" />
     <Compile Include="Scripting\ScriptHost.cs" />
     <Compile Include="IO\IProcessArgument.cs" />
     <Compile Include="IO\ProcessArgumentBuilder.cs" />

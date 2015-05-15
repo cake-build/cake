@@ -6,13 +6,13 @@ namespace Cake.Core.Scripting
     /// <summary>
     /// Represents a script alias generator.
     /// </summary>
-    public interface IScriptAliasGenerator
+    public interface IScriptAliasFinder
     {
         /// <summary>
-        /// Generates script aliases and adds them to the specified session.
+        /// Finds script aliases in the provided assemblies.
         /// </summary>
-        /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies to find script aliases in.</param>
-        void GenerateScriptAliases(ScriptProcessorContext context, IEnumerable<Assembly> assemblies);
+        /// <returns>The script aliases that were found.</returns>
+        ScriptAlias[] FindAliases(IEnumerable<Assembly> assemblies);
     }
 }

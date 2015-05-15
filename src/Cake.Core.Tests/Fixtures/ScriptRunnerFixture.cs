@@ -14,10 +14,11 @@ namespace Cake.Core.Tests.Fixtures
         public FakeFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
         public ICakeArguments Arguments { get; set; }
-        public IScriptSessionFactory SessionFactory { get; set; }
+        public IScriptEngine Engine { get; set; }
         public IScriptSession Session { get; set; }
         public IScriptProcessor ScriptProcessor { get; set; }
-        public IScriptAliasGenerator AliasGenerator { get; set; }
+        public IScriptAliasFinder AliasFinder { get; set; }
+        public IScriptCodeGenerator CodeGenerator { get; set; }
         public ICakeLog Log { get; set; }
 
         public IScriptHost Host { get; set; }
@@ -42,12 +43,16 @@ namespace Cake.Core.Tests.Fixtures
 
             Globber = Substitute.For<IGlobber>();
 
+            CodeGenerator = Substitute.For<IScriptCodeGenerator>();
+            CodeGenerator.Generate(Arg.Any<Script>()).Returns(c => GetExpectedSource());
+
             Session = Substitute.For<IScriptSession>();
-            SessionFactory = Substitute.For<IScriptSessionFactory>();
-            SessionFactory.CreateSession(Arg.Any<IScriptHost>(), ArgumentDictionary).Returns(Session);
+            Engine = Substitute.For<IScriptEngine>();
+            Engine.CreateSession(Arg.Any<IScriptHost>(), ArgumentDictionary).Returns(Session);
+            Engine.GetCodeGenerator().Returns(CodeGenerator);
 
             Arguments = Substitute.For<ICakeArguments>();
-            AliasGenerator = Substitute.For<IScriptAliasGenerator>();            
+            AliasFinder = Substitute.For<IScriptAliasFinder>();
             Log = Substitute.For<ICakeLog>();
             NuGetToolResolver = new NuGetToolResolver(FileSystem, Globber, Environment);
             ScriptProcessor = new ScriptProcessor(FileSystem, Environment, Log, NuGetToolResolver);
@@ -63,7 +68,7 @@ namespace Cake.Core.Tests.Fixtures
 
         public ScriptRunner CreateScriptRunner()
         {
-            return new ScriptRunner(SessionFactory, AliasGenerator, ScriptProcessor);
+            return new ScriptRunner(Engine, AliasFinder, ScriptProcessor);
         }
 
         public string GetExpectedSource()
