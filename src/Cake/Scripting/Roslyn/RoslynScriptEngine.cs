@@ -55,7 +55,7 @@ namespace Cake.Scripting.Roslyn
             if (experimental)
             {
                 // Use the nightly build.
-                _log.Information("Using nightly build of Roslyn.");
+                _log.Debug("Using prerelease build of Roslyn.");
                 return _nightlyFactory.CreateSession(host);
             }
 
