@@ -33,7 +33,7 @@ namespace Cake.Scripting.Roslyn.Stable
             _importedNamespaces = new HashSet<string>();
         }
 
-        public void AddReferencePath(FilePath path)
+        public void AddReference(FilePath path)
         {
             if (path == null)
             {
@@ -63,8 +63,12 @@ namespace Cake.Scripting.Roslyn.Stable
             }
         }
 
-        public void Execute(string code)
+        public void Execute(Script script)
         {
+            // Generate the script code.
+            var generator = new RoslynCodeGenerator();
+            var code = generator.Generate(script);
+
             _log.Debug("Compiling build script...");
             _roslynSession.Execute(code);
         }

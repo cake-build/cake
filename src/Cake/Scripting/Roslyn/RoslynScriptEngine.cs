@@ -7,13 +7,13 @@ using Cake.Scripting.Roslyn.Stable;
 
 namespace Cake.Scripting.Roslyn
 {
-    internal sealed class ScriptSessionFactory : IScriptSessionFactory
+    internal sealed class RoslynScriptEngine : IScriptEngine
     {
         private readonly RoslynScriptSessionFactory _stableFactory;
         private readonly RoslynNightlyScriptSessionFactory _nightlyFactory;
         private readonly ICakeLog _log;
 
-        public ScriptSessionFactory(
+        public RoslynScriptEngine(
             RoslynScriptSessionFactory stableFactory,
             RoslynNightlyScriptSessionFactory nightlyFactory,
             ICakeLog log)

@@ -7,8 +7,6 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting;
-using Microsoft.CodeAnalysis.Scripting;
-using Microsoft.CodeAnalysis.Scripting.CSharp;
 
 namespace Cake.Scripting.Roslyn.Nightly
 {
@@ -30,7 +28,7 @@ namespace Cake.Scripting.Roslyn.Nightly
             _namespaces = new HashSet<string>(StringComparer.Ordinal);
         }
 
-        public void AddReferencePath(FilePath path)
+        public void AddReference(FilePath path)
         {
             if (path == null)
             {
@@ -59,16 +57,20 @@ namespace Cake.Scripting.Roslyn.Nightly
             }
         }
 
-        public void Execute(string code)
+        public void Execute(Script script)
         {
+            // Generate the script code.
+            var generator = new RoslynCodeGenerator();
+            var code = generator.Generate(script);
+
             // Create the script options dynamically.
-            var options = ScriptOptions.Default
+            var options = Microsoft.CodeAnalysis.Scripting.ScriptOptions.Default
                 .AddNamespaces(_namespaces)
                 .AddReferences(_references)
                 .AddReferences(_referencePaths.Select(r => r.FullPath));
 
             _log.Debug("Compiling build script...");
-            CSharpScript.Eval(code, options, _host);
+            Microsoft.CodeAnalysis.Scripting.CSharp.CSharpScript.Eval(code, options, _host);
         }
     }
 }

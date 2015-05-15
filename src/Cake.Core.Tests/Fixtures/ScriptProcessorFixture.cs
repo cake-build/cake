@@ -27,7 +27,6 @@ namespace Cake.Core.Tests.Fixtures
             Environment.WorkingDirectory.Returns("/Working");
 
             Log = Substitute.For<ICakeLog>();
-
             Globber = Substitute.For<IGlobber>();
 
             FileSystem = new FakeFileSystem(true);
