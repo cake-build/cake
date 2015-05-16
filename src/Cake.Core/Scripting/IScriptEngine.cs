@@ -3,9 +3,9 @@
 namespace Cake.Core.Scripting
 {
     /// <summary>
-    /// Represents a script session factory.
+    /// Represents a script engine.
     /// </summary>
-    public interface IScriptSessionFactory
+    public interface IScriptEngine
     {
         /// <summary>
         /// Creates a new script session.

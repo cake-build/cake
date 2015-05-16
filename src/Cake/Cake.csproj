@@ -152,8 +152,11 @@
     <Compile Include="Scripting\DryRunScriptHost.cs" />
     <Compile Include="Scripting\Roslyn\Nightly\RoslynNightlyScriptSession.cs" />
     <Compile Include="Scripting\Roslyn\Nightly\RoslynNightlyScriptSessionFactory.cs" />
+    <Compile Include="Scripting\Roslyn\RoslynCodeGenerator.cs" />
+    <Compile Include="Scripting\Roslyn\RoslynMethodAliasGenerator.cs" />
+    <Compile Include="Scripting\Roslyn\RoslynPropertyAliasGenerator.cs" />
     <Compile Include="Scripting\Roslyn\Stable\RoslynScriptSession.cs" />
-    <Compile Include="Scripting\Roslyn\ScriptSessionFactory.cs" />
+    <Compile Include="Scripting\Roslyn\ScriptEngine.cs" />
     <Compile Include="Scripting\Roslyn\Stable\RoslynScriptSessionFactory.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -88,11 +88,11 @@ namespace Cake.Core.Tests.Unit.Scripting
                 // Given
                 var fixture = new ScriptProcessorFixture();
 
-                // When                
+                // When
                 var result = fixture.Process();
 
-                // Then                
-                Assert.Equal(fixture.GetExpectedSource(), result.GetScriptCode());                
+                // Then
+                Assert.Equal(fixture.GetExpectedSource(), fixture.GetActualSource(result));
             }
 
             [Fact]

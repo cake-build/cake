@@ -55,5 +55,10 @@ namespace Cake.Core.Tests.Fixtures
         {
             return string.Concat("#line 1 \"build.cake\"", "\r\n", Source);
         }
+
+        public string GetActualSource(ScriptProcessorContext context)
+        {
+            return string.Join("\r\n", context.Lines);
+        }
     }
 }

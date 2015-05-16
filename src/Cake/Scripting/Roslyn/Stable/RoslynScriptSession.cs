@@ -4,14 +4,12 @@ using System.Reflection;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting;
-using Roslyn.Scripting;
-using Roslyn.Scripting.CSharp;
 
 namespace Cake.Scripting.Roslyn.Stable
 {
     internal sealed class RoslynScriptSession : IScriptSession
     {
-        private readonly Session _roslynSession;
+        private readonly global::Roslyn.Scripting.Session _roslynSession;
         private readonly ICakeLog _log;
         private readonly HashSet<string> _importedNamespaces;
 
@@ -26,14 +24,14 @@ namespace Cake.Scripting.Roslyn.Stable
                 throw new ArgumentNullException("log");
             }
 
-            var roslynScriptEngine = new ScriptEngine();
+            var roslynScriptEngine = new global::Roslyn.Scripting.CSharp.ScriptEngine();
             _roslynSession = roslynScriptEngine.CreateSession(host, typeof(IScriptHost));
 
             _log = log;
             _importedNamespaces = new HashSet<string>();
         }
 
-        public void AddReferencePath(FilePath path)
+        public void AddReference(FilePath path)
         {
             if (path == null)
             {
@@ -63,8 +61,12 @@ namespace Cake.Scripting.Roslyn.Stable
             }
         }
 
-        public void Execute(string code)
+        public void Execute(Script script)
         {
+            // Generate the script code.
+            var generator = new RoslynCodeGenerator();
+            var code = generator.Generate(script);
+
             _log.Debug("Compiling build script...");
             _roslynSession.Execute(code);
         }
