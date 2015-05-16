@@ -149,7 +149,6 @@
     <Compile Include="Scripting\IScriptAliasFinder.cs" />
     <Compile Include="Scripting\Script.cs" />
     <Compile Include="Scripting\ScriptAliasType.cs" />
-    <Compile Include="Scripting\IScriptCodeGenerator.cs" />
     <Compile Include="Scripting\IScriptHost.cs" />
     <Compile Include="Scripting\IScriptProcessor.cs" />
     <Compile Include="Scripting\IScriptRunner.cs" />

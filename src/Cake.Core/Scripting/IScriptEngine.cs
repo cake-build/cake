@@ -8,12 +8,6 @@ namespace Cake.Core.Scripting
     public interface IScriptEngine
     {
         /// <summary>
-        /// Gets a script engine specific code generator.
-        /// </summary>
-        /// <returns>A script engine specific code generator.</returns>
-        IScriptCodeGenerator GetCodeGenerator();
-
-        /// <summary>
         /// Creates a new script session.
         /// </summary>
         /// <param name="host">The host.</param>

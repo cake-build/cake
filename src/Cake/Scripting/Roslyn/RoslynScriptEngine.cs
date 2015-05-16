@@ -23,11 +23,6 @@ namespace Cake.Scripting.Roslyn
             _log = log;
         }
 
-        public IScriptCodeGenerator GetCodeGenerator()
-        {
-            return new RoslynCodeGenerator();
-        }
-
         public IScriptSession CreateSession(IScriptHost host, IDictionary<string, string> arguments)
         {
             if (arguments == null)

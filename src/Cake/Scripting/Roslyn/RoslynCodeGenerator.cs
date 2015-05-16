@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using Cake.Core.Scripting;
-using Cake.Core.Scripting.CodeGen;
 
 namespace Cake.Scripting.Roslyn
 {
-    internal sealed class RoslynCodeGenerator : IScriptCodeGenerator
+    internal sealed class RoslynCodeGenerator
     {
         public string Generate(Script script)
         {

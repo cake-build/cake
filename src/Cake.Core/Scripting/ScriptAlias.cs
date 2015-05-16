@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Cake.Core.Scripting
@@ -59,10 +61,14 @@ namespace Cake.Core.Scripting
         /// <param name="namespaces">The namespaces that the alias need to be imported.</param>
         public ScriptAlias(MethodInfo method, ScriptAliasType type, ISet<string> namespaces)
         {
+            if (method == null)
+            {
+                throw new ArgumentNullException("method");
+            }
             _name = method.Name;
             _method = method;
             _type = type;
-            _namespaces = new List<string>(namespaces);
+            _namespaces = new List<string>(namespaces ?? Enumerable.Empty<string>());
         }
     }
 }

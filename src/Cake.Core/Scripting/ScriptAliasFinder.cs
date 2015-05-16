@@ -83,15 +83,15 @@ namespace Cake.Core.Scripting
 
                 return new ScriptAlias(method, type, namespaces);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Log this error.
                 const string format = "An error occured while generating code for alias {0}.";
                 _log.Error(format, method.GetSignature(false));
-
-                // Rethrow the original exception.
-                throw;
+                _log.Error("Error: {0}", ex.Message);
             }
+
+            return null;
         }
 
         private static IEnumerable<Tuple<MethodInfo, ScriptAliasType>> GetAliasMethods(Type type)

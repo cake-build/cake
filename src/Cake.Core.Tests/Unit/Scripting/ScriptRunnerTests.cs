@@ -69,7 +69,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => runner.Run(fixture.Host, null, fixture.ArgumentDictionary));
 
                 // Then
-                Assert.IsArgumentNullException(result, "script");
+                Assert.IsArgumentNullException(result, "scriptPath");
             }
 
             [Fact]
@@ -203,7 +203,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
 
                 // Then
-                fixture.Session.Received(1).Execute(fixture.GetExpectedSource());
+                fixture.Session.Received(1).Execute(Arg.Any<Script>());
             }
 
             [Theory]

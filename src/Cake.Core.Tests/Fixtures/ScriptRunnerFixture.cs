@@ -18,7 +18,6 @@ namespace Cake.Core.Tests.Fixtures
         public IScriptSession Session { get; set; }
         public IScriptProcessor ScriptProcessor { get; set; }
         public IScriptAliasFinder AliasFinder { get; set; }
-        public IScriptCodeGenerator CodeGenerator { get; set; }
         public ICakeLog Log { get; set; }
 
         public IScriptHost Host { get; set; }
@@ -43,13 +42,9 @@ namespace Cake.Core.Tests.Fixtures
 
             Globber = Substitute.For<IGlobber>();
 
-            CodeGenerator = Substitute.For<IScriptCodeGenerator>();
-            CodeGenerator.Generate(Arg.Any<Script>()).Returns(c => GetExpectedSource());
-
             Session = Substitute.For<IScriptSession>();
             Engine = Substitute.For<IScriptEngine>();
             Engine.CreateSession(Arg.Any<IScriptHost>(), ArgumentDictionary).Returns(Session);
-            Engine.GetCodeGenerator().Returns(CodeGenerator);
 
             Arguments = Substitute.For<ICakeArguments>();
             AliasFinder = Substitute.For<IScriptAliasFinder>();

@@ -40,17 +40,17 @@ namespace Cake.Core.Scripting
         /// Runs the script using the specified script host.
         /// </summary>
         /// <param name="host">The script host.</param>
-        /// <param name="script">The script.</param>
+        /// <param name="scriptPath">The script.</param>
         /// <param name="arguments">The arguments.</param>
-        public void Run(IScriptHost host, FilePath script, IDictionary<string, string> arguments)
+        public void Run(IScriptHost host, FilePath scriptPath, IDictionary<string, string> arguments)
         {
             if (host == null)
             {
                 throw new ArgumentNullException("host");
             }
-            if (script == null)
+            if (scriptPath == null)
             {
-                throw new ArgumentNullException("script");
+                throw new ArgumentNullException("scriptPath");
             }
             if (arguments == null)
             {
@@ -61,17 +61,17 @@ namespace Cake.Core.Scripting
             host.Context.Arguments.SetArguments(arguments);
 
             // Set the working directory.
-            host.Context.Environment.WorkingDirectory = script.MakeAbsolute(host.Context.Environment).GetDirectory();
+            host.Context.Environment.WorkingDirectory = scriptPath.MakeAbsolute(host.Context.Environment).GetDirectory();
 
             // Process the script.
             var context = new ScriptProcessorContext();
-            _scriptProcessor.Process(script.GetFilename(), context);
+            _scriptProcessor.Process(scriptPath.GetFilename(), context);
 
             // Create and prepare the session.
             var session = _engine.CreateSession(host, arguments);
 
             // Load all references.
-            var assemblies = new List<Assembly>();
+            var assemblies = new HashSet<Assembly>();
             assemblies.AddRange(GetDefaultAssemblies(host.Context.FileSystem));
             foreach (var reference in context.References)
             {
@@ -83,7 +83,7 @@ namespace Cake.Core.Scripting
                 else
                 {
                     // Add a reference to the session.
-                    session.AddReferencePath(reference);
+                    session.AddReference(reference);
                 }
             }
 
@@ -109,25 +109,15 @@ namespace Cake.Core.Scripting
             // Import all namespaces.
             var namespaces = new HashSet<string>(context.Namespaces, StringComparer.Ordinal);
             namespaces.AddRange(GetDefaultNamespaces());
-            namespaces.AddRange(aliases.SelectMany(x => x.Namespaces));
+            namespaces.AddRange(aliases.SelectMany(alias => alias.Namespaces));
             foreach (var @namespace in namespaces.OrderBy(ns => ns))
             {
                 session.ImportNamespace(@namespace);
             }
 
-            // Generate the script code.
-            var code = GenerateCode(context, aliases);
-
-            // Execute the script code.
-            session.Execute(code);
-        }
-
-        private string GenerateCode(ScriptProcessorContext context, IEnumerable<ScriptAlias> aliases)
-        {
-            var generator = _engine.GetCodeGenerator();
+            // Execute the script.
             var script = new Script(context.Namespaces, context.Lines, aliases);
-            var code = generator.Generate(script);
-            return code;
+            session.Execute(script);
         }
 
         private static IEnumerable<Assembly> GetDefaultAssemblies(IFileSystem fileSystem)

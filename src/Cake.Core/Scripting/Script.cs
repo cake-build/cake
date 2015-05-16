@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Cake.Core.Scripting
 {
@@ -49,9 +50,9 @@ namespace Cake.Core.Scripting
         /// <param name="aliases">The script aliases.</param>
         public Script(IEnumerable<string> namespaces, IEnumerable<string> lines, IEnumerable<ScriptAlias> aliases)
         {
-            _namespaces = new List<string>(namespaces);
-            _lines = new List<string>(lines);
-            _aliases = new List<ScriptAlias>(aliases);
+            _namespaces = new List<string>(namespaces ?? Enumerable.Empty<string>());
+            _lines = new List<string>(lines ?? Enumerable.Empty<string>());
+            _aliases = new List<ScriptAlias>(aliases ?? Enumerable.Empty<ScriptAlias>());
         }
     }
 }

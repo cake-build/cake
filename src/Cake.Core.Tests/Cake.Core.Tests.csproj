@@ -92,9 +92,11 @@
     </Compile>
     <Compile Include="Unit\IO\ProcessArgumentBuilderTests.cs" />
     <Compile Include="Unit\IO\ProcessRunnerTests.cs" />
+    <Compile Include="Unit\Scripting\ScriptAliasTests.cs" />
     <Compile Include="Unit\Scripting\ScriptHostTests.cs" />
     <Compile Include="Unit\Scripting\ScriptProcessorTests.cs" />
     <Compile Include="Unit\Scripting\ScriptRunnerTests.cs" />
+    <Compile Include="Unit\Scripting\ScriptTests.cs" />
     <Compile Include="Unit\Text\TextTransformationTemplateTests.cs" />
   </ItemGroup>
   <ItemGroup>
