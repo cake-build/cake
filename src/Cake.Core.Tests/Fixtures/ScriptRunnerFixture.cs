@@ -47,9 +47,9 @@ namespace Cake.Core.Tests.Fixtures
             SessionFactory.CreateSession(Arg.Any<IScriptHost>(), ArgumentDictionary).Returns(Session);
 
             Arguments = Substitute.For<ICakeArguments>();
-            AliasGenerator = Substitute.For<IScriptAliasGenerator>();            
+            AliasGenerator = Substitute.For<IScriptAliasGenerator>();
             Log = Substitute.For<ICakeLog>();
-            NuGetToolResolver = new NuGetToolResolver(FileSystem, Globber, Environment);
+            NuGetToolResolver = new NuGetToolResolver(FileSystem, Environment, Globber);
             ScriptProcessor = new ScriptProcessor(FileSystem, Environment, Log, NuGetToolResolver);
 
             var context = Substitute.For<ICakeContext>();

@@ -9,21 +9,33 @@ namespace Cake.Core.IO.NuGet
     public sealed class NuGetToolResolver : INuGetToolResolver
     {        
         private readonly IFileSystem _fileSystem;
-        private readonly IGlobber _globber;
         private readonly ICakeEnvironment _environment;
-        private IFile _nugetExeFile;
+        private readonly IGlobber _globber;
+        private IFile _cachedPath;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetToolResolver" /> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
-        /// <param name="globber">The globber.</param>
         /// <param name="environment">The environment.</param>
-        public NuGetToolResolver(IFileSystem fileSystem, IGlobber globber, ICakeEnvironment environment)
+        /// <param name="globber">The globber.</param>
+        public NuGetToolResolver(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber)
         {
+            if (fileSystem == null)
+            {
+                throw new ArgumentNullException("fileSystem");
+            }
+            if (environment == null)
+            {
+                throw new ArgumentNullException("environment");
+            }
+            if (globber == null)
+            {
+                throw new ArgumentNullException("globber");
+            }
             _fileSystem = fileSystem;
-            _globber = globber;
             _environment = environment;
+            _globber = globber;
         }
 
         /// <summary>
@@ -45,20 +57,9 @@ namespace Cake.Core.IO.NuGet
         public FilePath ResolveToolPath()
         {
             // Check if path allready resolved
-            if (_nugetExeFile != null && _nugetExeFile.Exists)
+            if (_cachedPath != null && _cachedPath.Exists)
             {
-                return _nugetExeFile.Path;
-            }
-
-            // Check if path set to environment variable
-            var environmentExe = _environment.GetEnvironmentVariable("NUGET_EXE");
-            if (!string.IsNullOrWhiteSpace(environmentExe))
-            {
-                var envFile = _fileSystem.GetFile(environmentExe);
-                if (envFile.Exists)
-                {
-                    return (_nugetExeFile = envFile).Path;
-                }
+                return _cachedPath.Path;
             }
 
             // Check if tool exists in tool folder
@@ -69,7 +70,20 @@ namespace Cake.Core.IO.NuGet
                 var toolsFile = _fileSystem.GetFile(toolsExe);
                 if (toolsFile.Exists)
                 {
-                    return (_nugetExeFile = toolsFile).Path;
+                    _cachedPath = toolsFile;
+                    return _cachedPath.Path;
+                }
+            }
+
+            // Check if path set to environment variable
+            var environmentExe = _environment.GetEnvironmentVariable("NUGET_EXE");
+            if (!string.IsNullOrWhiteSpace(environmentExe))
+            {
+                var envFile = _fileSystem.GetFile(environmentExe);
+                if (envFile.Exists)
+                {
+                    _cachedPath = envFile;
+                    return _cachedPath.Path;
                 }
             }
 
@@ -87,11 +101,12 @@ namespace Cake.Core.IO.NuGet
 
                 if (pathFile != null)
                 {
-                    return (_nugetExeFile = pathFile).Path;
+                    _cachedPath = pathFile;
+                    return _cachedPath.Path;
                 }
             }
 
-            throw new CakeException("No nuget.exe found by resolver.");
+            throw new CakeException("Could not locate nuget.exe.");
         }
     }
 }

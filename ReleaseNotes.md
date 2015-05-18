@@ -1,3 +1,7 @@
+### New in 0.4.1 (Released 2015/05/18)
+* Made Cake work on .NET 4.6 again without experimental flag.
+* The tools directory now have higher precedence than environment paths when resolving nuget.exe.
+
 ### New in 0.4.0 (Released 2015/05/12)
 * Now using RC2 of Roslyn from NuGet since MyGet distribution was no longer compatible.
 * Added support for MSBuild 14.0.
