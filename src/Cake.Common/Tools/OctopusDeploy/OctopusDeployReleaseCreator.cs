@@ -33,10 +33,8 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// Creates a release for the specified project in OctopusDeploy
         /// </summary>
         /// <param name="projectName">The target project name</param>
-        /// <param name="server">The octopus server url</param>
-        /// <param name="apiKey">The user's api key </param>
         /// <param name="settings">The settings</param>
-        public void CreateRelease(string projectName, string server, string apiKey, CreateReleaseSettings settings)
+        public void CreateRelease(string projectName, CreateReleaseSettings settings)
         {
             if (projectName == null)
             {
@@ -46,16 +44,16 @@ namespace Cake.Common.Tools.OctopusDeploy
             {
                 throw new ArgumentNullException("settings");
             }
-            if (server == null)
+            if (string.IsNullOrEmpty(settings.Server))
             {
                 throw new ArgumentNullException("server");
             }
-            if (apiKey == null)
+            if (string.IsNullOrEmpty(settings.ApiKey))
             {
                 throw new ArgumentNullException("apiKey");
             }
 
-            var argumentBuilder = new CreateReleaseArgumentBuilder(projectName, server, apiKey, settings, _environment);
+            var argumentBuilder = new CreateReleaseArgumentBuilder(projectName, settings, _environment);
             Run(settings, argumentBuilder.Get(), settings.ToolPath);
         }
 

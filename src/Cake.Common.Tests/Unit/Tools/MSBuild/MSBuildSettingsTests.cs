@@ -55,7 +55,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var settings = new MSBuildSettings(path);
 
                 // Then
-                Assert.Equal(Verbosity.Normal, settings.Verbosity);                
+                Assert.Equal(Verbosity.Normal, settings.Verbosity);
             }
         }
 
@@ -113,7 +113,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Be_Empty_By_Default()
             {
                 // Given
-                var solution = new FilePath("/src/Solution.sln");                
+                var solution = new FilePath("/src/Solution.sln");
 
                 // When
                 var configuration = new MSBuildSettings(solution);

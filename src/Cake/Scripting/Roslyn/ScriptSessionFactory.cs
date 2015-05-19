@@ -30,27 +30,14 @@ namespace Cake.Scripting.Roslyn
                 throw new ArgumentNullException("arguments");
             }
 
-            // Are we using the experimental bits?
-            var experimental = arguments.ContainsKey("experimental");
-            if (!experimental)
-            {
-                // Are we running Windows 10, build 10041?
-                var operativeSystemVersion = Environment.OSVersion.Version;
-                if (operativeSystemVersion.Major == 10 && operativeSystemVersion.Build >= 10041)
-                {
-                    // Since .NET 4.6.1 is default here and since Roslyn
-                    // isn't compatible with that framework version,
-                    // we default to the experimental bits.
-                    experimental = true;
-                }
-            }
-
             // Create the script session.
             _log.Debug("Creating script session...");
-            if (experimental)
+
+            // Are we using the experimental bits?
+            if (arguments.ContainsKey("experimental"))
             {
                 // Use the nightly build.
-                _log.Information("Using nightly build of Roslyn.");
+                _log.Debug("Using prerelease build of Roslyn.");
                 return _nightlyFactory.CreateSession(host);
             }
 

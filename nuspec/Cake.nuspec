@@ -6,14 +6,12 @@
     <authors>Patrik Svensson</authors>
     <owners>Patrik Svensson</owners>
     <description>The Cake script runner.</description>
-    <summary>Cake (C# Make) is a build automation system inspired by Fake.</summary>
+    <summary>Cake (C# Make) is a build automation system.</summary>
     <licenseUrl>https://github.com/cake-build/cake/blob/develop/LICENSE</licenseUrl>
     <projectUrl>https://github.com/cake-build/cake</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <copyright>Copyright (c) Patrik Svensson 2014</copyright>
-    <releaseNotes>Added WiX support.
-Added .nuspec metadata manipulation support to NuGet package creation.</releaseNotes>
+    <copyright>Copyright (c) Patrik Svensson, Mattias Karlsson and contributors</copyright>
     <tags>Cake Script Build</tags>
   </metadata>
   <files>

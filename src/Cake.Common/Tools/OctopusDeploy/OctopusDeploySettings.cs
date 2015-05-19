@@ -33,7 +33,7 @@ namespace Cake.Common.Tools.OctopusDeploy
         public bool EnableDebugLogging { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the ignore ssl errors flag is set
+        /// Gets or sets a value indicating whether the ignore SSL errors flag is set
         /// </summary>
         public bool IgnoreSslErrors { get; set; }
 

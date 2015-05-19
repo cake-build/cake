@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Cake.Common.Tests.Fixtures.Tools;
+using Cake.Common.Tools.OctopusDeploy;
 using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
@@ -29,7 +30,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             {
                 // Given
                 var fixture = new OctopusDeployReleaseCreatorFixture();
-                fixture.Server = null;
+                fixture.Settings.Server = null;
 
                 // When
                 var result = Record.Exception(() => fixture.CreateRelease());
@@ -43,7 +44,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             {
                 // Given
                 var fixture = new OctopusDeployReleaseCreatorFixture();
-                fixture.ApiKey = null;
+                fixture.Settings.ApiKey = null;
 
                 // When
                 var result = Record.Exception(() => fixture.CreateRelease());
@@ -71,7 +72,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             {
                 // Given
                 var fixture = new OctopusDeployReleaseCreatorFixture(defaultToolExist: false);
-                
+
                 // When
                 var result = Record.Exception(() => fixture.CreateRelease());
 
@@ -146,8 +147,11 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 // Given
                 var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.ProjectName = "myProject";
-                fixture.Server = "http://myoctopusserver/";
-                fixture.ApiKey = "API-ABCDEF123456";
+                fixture.Settings = new CreateReleaseSettings
+                    {
+                        Server = "http://myoctopusserver/",
+                        ApiKey = "API-ABCDEF123456"
+                    };
 
                 // When
                 fixture.CreateRelease();
@@ -156,8 +160,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
                     Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == 
-                            "create-release --project \"myProject\" --server http://myoctopusserver/ --apiKey API-ABCDEF123456"));
+                        p.Arguments.Render() == "create-release --project \"myProject\" --server http://myoctopusserver/ --apiKey API-ABCDEF123456"));
             }
 
             [Fact]
@@ -194,6 +197,29 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                     Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() ==
                             fixture.GetDefaultArguments() + " --password \"secret\""));
+            }
+
+            [Fact]
+            public void Should_Redact_Api_Key_And_Password_Arguments()
+            {
+                // Given
+                var fixture = new OctopusDeployReleaseCreatorFixture();
+                fixture.ProjectName = "myProject";
+                fixture.Settings = new CreateReleaseSettings
+                    {
+                        Server = "http://myoctopusserver/",
+                        ApiKey = "API-ABCDEF123456",
+                        Password = "abc123"
+                    };
+
+                // When
+                fixture.CreateRelease();
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.RenderSafe() ==
+                            "create-release --project \"myProject\" --server http://myoctopusserver/ --apiKey [REDACTED] --password \"[REDACTED]\""));
             }
 
             [Fact]

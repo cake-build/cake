@@ -15,11 +15,9 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// </summary>
         /// <param name="context">The cake context.</param>
         /// <param name="projectName">The name of the project.</param>
-        /// <param name="server">The octopus server url.</param>
-        /// <param name="apiKey">The user's api key.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
-        public static void OctoCreateRelease(this ICakeContext context, string projectName, string server, string apiKey, CreateReleaseSettings settings)
+        public static void OctoCreateRelease(this ICakeContext context, string projectName, CreateReleaseSettings settings)
         {
             if (context == null)
             {
@@ -28,7 +26,7 @@ namespace Cake.Common.Tools.OctopusDeploy
 
             var packer = new OctopusDeployReleaseCreator(context.FileSystem, context.Environment, context.Globber,
                 context.ProcessRunner);
-            packer.CreateRelease(projectName, server, apiKey, settings);
+            packer.CreateRelease(projectName, settings);
         }
     }
 }
