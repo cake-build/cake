@@ -9,6 +9,16 @@ namespace Cake.Common.Tools.OctopusDeploy
     public sealed class CreateReleaseSettings : OctopusDeploySettings
     {
         /// <summary>
+        /// Gets or sets the octopus server url.
+        /// </summary>
+        public string Server { get; set; }
+
+         /// <summary>
+        /// Gets or sets the user's API key.
+        /// </summary>
+        public string ApiKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the release number to use for the new release.
         /// </summary>
         public string ReleaseNumber { get; set; }

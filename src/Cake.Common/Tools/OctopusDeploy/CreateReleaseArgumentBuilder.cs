@@ -6,18 +6,14 @@ namespace Cake.Common.Tools.OctopusDeploy
     internal class CreateReleaseArgumentBuilder
     {
         private readonly string _projectName;
-        private readonly string _server;
-        private readonly string _apiKey;
         private readonly CreateReleaseSettings _settings;
         private readonly ICakeEnvironment _environment;
 
         private readonly ProcessArgumentBuilder _builder;
 
-        public CreateReleaseArgumentBuilder(string projectName, string server, string apiKey, CreateReleaseSettings settings, ICakeEnvironment environment)
+        public CreateReleaseArgumentBuilder(string projectName, CreateReleaseSettings settings, ICakeEnvironment environment)
         {
             _projectName = projectName;
-            _server = server;
-            _apiKey = apiKey;
             _settings = settings;
             _environment = environment;
             _builder = new ProcessArgumentBuilder();
@@ -50,17 +46,17 @@ namespace Cake.Common.Tools.OctopusDeploy
             _builder.AppendQuoted(_projectName);
 
             _builder.Append("--server");
-            _builder.Append(_server);
+            _builder.Append(_settings.Server);
 
             _builder.Append("--apiKey");
-            _builder.AppendSecret(_apiKey);
+            _builder.AppendSecret(_settings.ApiKey);
 
             AppendArgumentIfNotNull("username", _settings.Username);
 
             if (_settings.Password != null)
             {
-                _builder.Append("--" + "password");
-                _builder.AppendQuoted(_settings.Password);
+                _builder.Append("--password");
+                _builder.AppendQuotedSecret(_settings.Password);
             }
 
             AppendArgumentIfNotNull("configFile", _settings.ConfigurationFile);
@@ -106,7 +102,11 @@ namespace Cake.Common.Tools.OctopusDeploy
                 foreach (var package in settings.Packages)
                 {
                     builder.Append("--package");
-                    builder.AppendQuoted(string.Format("{0}:{1}", package.Key, package.Value));
+                    builder.AppendQuoted(string.Format(
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        "{0}:{1}",
+                        package.Key,
+                        package.Value));
                 }
             }
         }

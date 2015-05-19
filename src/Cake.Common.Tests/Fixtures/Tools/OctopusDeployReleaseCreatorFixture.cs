@@ -8,8 +8,6 @@ namespace Cake.Common.Tests.Fixtures.Tools
     public sealed class OctopusDeployReleaseCreatorFixture
     {
         public string ProjectName { get; set; }
-        public string Server { get; set; }
-        public string ApiKey { get; set; }
         public CreateReleaseSettings Settings { get; set; }
 
         public IFileSystem FileSystem { get; set; }
@@ -41,15 +39,17 @@ namespace Cake.Common.Tests.Fixtures.Tools
             }
 
             ProjectName = "testProject";
-            Server = "http://octopus";
-            ApiKey = "API-12345";
-            Settings = new CreateReleaseSettings();
+            Settings = new CreateReleaseSettings
+            {
+                Server = "http://octopus",
+                ApiKey = "API-12345"
+            };
         }
 
         public void CreateRelease()
         {
             var tool = new OctopusDeployReleaseCreator(FileSystem, Environment, Globber, ProcessRunner);
-            tool.CreateRelease(ProjectName, Server, ApiKey, Settings);
+            tool.CreateRelease(ProjectName, Settings);
         }
 
         public void GivenProcessCannotStart()
@@ -64,7 +64,9 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         public string GetDefaultArguments()
         {
-            return string.Format("create-release --project \"{0}\" --server {1} --apiKey {2}", ProjectName, Server, ApiKey);
+            return string.Format(
+                System.Globalization.CultureInfo.InvariantCulture,
+                "create-release --project \"{0}\" --server {1} --apiKey {2}", ProjectName, Settings.Server, Settings.ApiKey);
         }
     }
 }
