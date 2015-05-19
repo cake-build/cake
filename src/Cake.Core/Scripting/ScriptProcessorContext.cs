@@ -59,20 +59,20 @@ namespace Cake.Core.Scripting
         /// <summary>
         /// Determines whether the specified script has been processed.
         /// </summary>
-        /// <param name="script">The script.</param>
+        /// <param name="scriptTokenId">The script's token id.</param>
         /// <returns><c>true</c> if the script has been processed; else <c>false</c>.</returns>
-        public bool HasScriptBeenProcessed(string script)
+        public bool HasScriptBeenProcessed(string scriptTokenId)
         {
-            return _processedScripts.Contains(script);
+            return _processedScripts.Contains(scriptTokenId);
         }
 
         /// <summary>
         /// Marks the script as processed.
         /// </summary>
-        /// <param name="script">The script to mark as processed.</param>
-        public void MarkScriptAsProcessed(string script)
+        /// <param name="scriptTokenId">The script's token id to mark as processed.</param>
+        public void MarkScriptAsProcessed(string scriptTokenId)
         {
-            _processedScripts.Add(script);
+            _processedScripts.Add(scriptTokenId);
         }
 
         /// <summary>

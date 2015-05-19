@@ -1,4 +1,6 @@
 using System;
+using System.Globalization;
+using System.Net;
 using Cake.Core.IO;
 
 namespace Cake.Core.Scripting.Processors
@@ -46,10 +48,44 @@ namespace Cake.Core.Scripting.Processors
                 return false;
             }
 
-            var directoryPath = GetAbsoluteDirectory(currentScriptPath);
-            var scriptPath = new FilePath(tokens[1].UnQuote()).MakeAbsolute(directoryPath);
+            var scriptPathString = tokens[1].UnQuote();
+            if (string.IsNullOrWhiteSpace(scriptPathString))
+            {
+                throw new CakeException(
+                    string.Format(CultureInfo.InvariantCulture,
+                        "{0}{2}{1}",
+                        "Load directive may not contain empty path or Uri",
+                        line,
+                        Environment.NewLine));
+            }
 
-            processor.Process(scriptPath, context);
+            var directoryPath = GetAbsoluteDirectory(currentScriptPath);
+            ScriptReference scriptReference;
+            Uri scriptUri;
+            if (!Uri.TryCreate(scriptPathString, UriKind.RelativeOrAbsolute, out scriptUri)
+                || !scriptUri.IsAbsoluteUri || scriptUri.IsFile)
+            {
+                var scriptPath = new FilePath(scriptPathString);
+                scriptReference = new ScriptReference(scriptPath);
+            }
+            else
+            {
+                // Download the script to a local directory.
+                FilePath tempFile = System.IO.Path.GetTempFileName();
+                try
+                {
+                    var client = new WebClient();
+                    client.DownloadFile(scriptUri, tempFile.FullPath);
+                }
+                catch (WebException ex)
+                {
+                    throw new Exception("Failed to load file from web. See inner exception.", ex);
+                }
+
+                scriptReference = new ScriptReference(tempFile.FullPath, scriptUri.ToString());
+            }
+
+            processor.Process(scriptReference, context);
 
             return true;
         }

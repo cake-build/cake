@@ -2,6 +2,7 @@
 using Cake.Core.Scripting;
 using Cake.Core.Tests.Fixtures;
 using Xunit;
+using Cake.Core.IO;
 
 namespace Cake.Core.Tests.Unit.Scripting
 {
@@ -51,7 +52,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => processor.Process(null, new ScriptProcessorContext()));
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                Assert.IsArgumentNullException(result, "scriptReference");
             }
 
             [Fact]
@@ -60,9 +61,10 @@ namespace Cake.Core.Tests.Unit.Scripting
                 // Given
                 var fixture = new ScriptProcessorFixture();
                 var processor = fixture.CreateProcessor();
+                var scriptReference = new ScriptReference("./build.cake");
 
                 // When
-                var result = Record.Exception(() => processor.Process("./build.cake", null));
+                var result = Record.Exception(() => processor.Process(scriptReference, null));
 
                 // Then
                 Assert.IsArgumentNullException(result, "context");
@@ -154,14 +156,16 @@ namespace Cake.Core.Tests.Unit.Scripting
                 // Given
                 var fixture = new ScriptProcessorFixture(scriptSource: source);
                 fixture.FileSystem.GetCreatedFile("/Working/hello.cake");
+                var buildReference = new ScriptReference(fixture.ScriptPath);
+                var helloReference = new ScriptReference("hello.cake");
 
                 // When
                 var result = fixture.Process();
 
                 // Then
                 Assert.Equal(2, result.ProcessedScripts.Count);
-                Assert.Equal("/Working/build.cake", result.ProcessedScripts.ElementAt(0));
-                Assert.Equal("/Working/hello.cake", result.ProcessedScripts.ElementAt(1));
+                Assert.Equal(buildReference.TokenId, result.ProcessedScripts.ElementAt(0));
+                Assert.Equal(helloReference.TokenId, result.ProcessedScripts.ElementAt(1));
             }
 
             [Theory]
@@ -174,15 +178,39 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var fixture = new ScriptProcessorFixture(scriptSource: source);
                 fixture.FileSystem.GetCreatedFile("/Working/hello.cake");
                 fixture.FileSystem.GetCreatedFile("/Working/world.cake");
+                var buildReference = new ScriptReference(fixture.ScriptPath);
+                var helloReference = new ScriptReference("hello.cake");
+                var worldReference = new ScriptReference("world.cake");
 
                 // When
                 var result = fixture.Process();
 
                 // Then
                 Assert.Equal(3, result.ProcessedScripts.Count);
-                Assert.Equal("/Working/build.cake", result.ProcessedScripts.ElementAt(0));
-                Assert.Equal("/Working/hello.cake", result.ProcessedScripts.ElementAt(1));
-                Assert.Equal("/Working/world.cake", result.ProcessedScripts.ElementAt(2));
+                Assert.Equal(buildReference.TokenId, result.ProcessedScripts.ElementAt(0));
+                Assert.Equal(helloReference.TokenId, result.ProcessedScripts.ElementAt(1));
+                Assert.Equal(worldReference.TokenId, result.ProcessedScripts.ElementAt(2));
+            }
+
+            [Theory]
+            [InlineData("#l \"hello.cake\"\r\n#l \"hello.cake\"\r\nConsole.WriteLine();")]
+            [InlineData("#load \"hello.cake\"\r\n#load \"hello.cake\"\r\nConsole.WriteLine();")]
+            [InlineData("#load \"hello.cake\"\r\n#l \"hello.cake\"\r\nConsole.WriteLine();")]
+            public void Should_Not_Process_Duplicate_Script_References(string source)
+            {
+                // Given
+                var fixture = new ScriptProcessorFixture(scriptSource: source);
+                fixture.FileSystem.GetCreatedFile("/Working/hello.cake");
+                var buildReference = new ScriptReference(fixture.ScriptPath);
+                var helloReference = new ScriptReference("hello.cake");
+
+                // When
+                var result = fixture.Process();
+
+                // Then
+                Assert.Equal(2, result.ProcessedScripts.Count);
+                Assert.Equal(buildReference.TokenId, result.ProcessedScripts.ElementAt(0));
+                Assert.Equal(helloReference.TokenId, result.ProcessedScripts.ElementAt(1));
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Cake.Core.IO;
+using System;
 
 namespace Cake.Core.Scripting
 {
@@ -10,8 +11,8 @@ namespace Cake.Core.Scripting
         /// <summary>
         /// Processes the specified script.
         /// </summary>
-        /// <param name="path">The script path.</param>
+        /// <param name="scriptReference">The script reference.</param>
         /// <param name="context">The context.</param>
-        void Process(FilePath path, ScriptProcessorContext context);
+        void Process(ScriptReference scriptReference, ScriptProcessorContext context);
     }
 }

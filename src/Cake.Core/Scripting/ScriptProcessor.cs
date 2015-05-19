@@ -62,43 +62,53 @@ namespace Cake.Core.Scripting
         /// <summary>
         /// Processes the specified script.
         /// </summary>
-        /// <param name="path">The script path.</param>
+        /// <param name="scriptReference">The script reference.</param>
         /// <param name="context">The context.</param>
-        public void Process(FilePath path, ScriptProcessorContext context)
+        public void Process(ScriptReference scriptReference, ScriptProcessorContext context)
         {
-            if (path == null)
+            if (scriptReference == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException("scriptReference");
             }
             if (context == null)
             {
                 throw new ArgumentNullException("context");
             }
+            if (scriptReference.Path == null)
+            {
+                throw new ArgumentNullException("scriptReference", "Script Reference's path must have a value");
+            }
 
             // Already processed this script?
-            if (context.HasScriptBeenProcessed(path.FullPath))
+            if (context.HasScriptBeenProcessed(scriptReference.TokenId))
             {
-                _log.Debug("Skipping {0} since it's already been processed.", path.GetFilename().FullPath);
+                _log.Debug("Skipping \"{0}\" since it's already been processed.", scriptReference.Origin);
                 return;
             }
 
+            var scriptPath = scriptReference.Path;
+            if (scriptReference.Path.IsRelative)
+            {
+                scriptPath = scriptPath.MakeAbsolute(_environment);
+            }
+
             // Add the script.
-            context.MarkScriptAsProcessed(path.MakeAbsolute(_environment).FullPath);
+            context.MarkScriptAsProcessed(scriptReference.TokenId);
 
             // Read the source.
-            _log.Debug("Processing {0}...", path.GetFilename().FullPath);
-            var lines = ReadSource(path);
+            _log.Debug("Processing {0}...", scriptPath.GetFilename().FullPath);
+            var lines = ReadSource(scriptPath);
 
             // Iterate all lines in the script.
             var firstLine = true;
             foreach (var line in lines)
             {
-                if (!_lineProcessors.Any(p => p.Process(this, context, path, line)))
+                if (!_lineProcessors.Any(p => p.Process(this, context, scriptPath, line)))
                 {
                     if (firstLine)
                     {
                         // Append the line directive for the script.
-                        context.AppendScriptLine(string.Format(CultureInfo.InvariantCulture, "#line 1 \"{0}\"", path.GetFilename().FullPath));
+                        context.AppendScriptLine(string.Format(CultureInfo.InvariantCulture, "#line 1 \"{0}\"", scriptPath.GetFilename().FullPath));
                         firstLine = false;
                     }
 
@@ -110,8 +120,6 @@ namespace Cake.Core.Scripting
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         private IEnumerable<string> ReadSource(FilePath path)
         {
-            path = path.MakeAbsolute(_environment);
-
             // Get the file and make sure it exist.
             var file = _fileSystem.GetFile(path);
             if (!file.Exists)
