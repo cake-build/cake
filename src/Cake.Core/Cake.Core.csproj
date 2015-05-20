@@ -83,6 +83,7 @@
     <Compile Include="IExecutionStrategy.cs" />
     <Compile Include="ICakeReportPrinter.cs" />
     <Compile Include="IConsole.cs" />
+    <Compile Include="IO\Arguments\NamedArgument.cs" />
     <Compile Include="IO\DirectoryPathCollection.cs" />
     <Compile Include="IO\FilePathCollection.cs" />
     <Compile Include="IO\FileExtensions.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="IO\Globbing\Scanner.cs" />
     <Compile Include="IO\Globbing\Token.cs" />
     <Compile Include="IO\Globbing\TokenKind.cs" />
+    <Compile Include="IO\IProcessArgumentList.cs" />
     <Compile Include="IO\IDirectory.cs" />
     <Compile Include="IO\IFile.cs" />
     <Compile Include="IO\IFileSystem.cs" />

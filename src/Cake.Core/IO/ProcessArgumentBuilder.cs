@@ -3,31 +3,42 @@ using System.Linq;
 using System.Text;
 using Cake.Core.IO.Arguments;
 
+
+
 namespace Cake.Core.IO
 {
     /// <summary>
     /// Utility for building process arguments.
     /// </summary>
-    public sealed class ProcessArgumentBuilder
+    public sealed class ProcessArgumentBuilder : IProcessArgumentList<ProcessArgumentBuilder>
     {
-        private readonly List<IProcessArgument> _tokens;
+        private readonly List<IProcessArgument> _Arguments;
+
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessArgumentBuilder"/> class.
         /// </summary>
         public ProcessArgumentBuilder()
         {
-            _tokens = new List<IProcessArgument>();
+            _Arguments = new List<IProcessArgument>();
         }
+
+
 
         /// <summary>
         /// Appends an argument.
         /// </summary>
         /// <param name="argument">The argument.</param>
-        public void Append(IProcessArgument argument)
+        /// <returns>Itself</returns>
+        public ProcessArgumentBuilder Append(IProcessArgument argument)
         {
-            _tokens.Add(argument);
+            _Arguments.Add(argument);
+
+            return this;
         }
+
+
 
         /// <summary>
         /// Renders the arguments as a <see cref="string"/>.
@@ -36,7 +47,7 @@ namespace Cake.Core.IO
         /// <returns>A string representation of the arguments.</returns>
         public string Render()
         {
-            return string.Join(" ", _tokens.Select(t => t.Render()));
+            return string.Join(" ", _Arguments.Select(t => t.Render()));
         }
 
         /// <summary>
@@ -46,7 +57,7 @@ namespace Cake.Core.IO
         /// <returns>A safe string representation of the arguments.</returns>
         public string RenderSafe()
         {
-            return string.Join(" ", _tokens.Select(t => t.RenderSafe()));
+            return string.Join(" ", _Arguments.Select(t => t.RenderSafe()));
         }
 
         /// <summary>
@@ -61,7 +72,7 @@ namespace Cake.Core.IO
                 return source;
             }
 
-            return _tokens
+            return _Arguments
                 .Select(token => new
                 {
                     Safe = token.RenderSafe().Trim('"').Trim(),
@@ -73,6 +84,8 @@ namespace Cake.Core.IO
                     (sb, token) => sb.Replace(token.Unsafe, token.Safe),
                     sb => sb.ToString());
         }
+
+
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="System.String"/> to <see cref="ProcessArgumentBuilder"/>.
@@ -92,8 +105,8 @@ namespace Cake.Core.IO
         public static ProcessArgumentBuilder FromString(string value)
         {
             var builder = new ProcessArgumentBuilder();
-            builder.Append(new TextArgument(value));
-            return builder;
+
+            return builder.Append(new TextArgument(value));
         }
     }
 }

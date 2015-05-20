@@ -3,7 +3,7 @@
     /// <summary>
     /// Specifies a set of values that are used to start a process.
     /// </summary>
-    public sealed class ProcessSettings
+    public sealed class ProcessSettings : IProcessArgumentList<ProcessSettings>
     {
         /// <summary>
         /// Gets or sets the set of command-line arguments to use when starting the application.
@@ -27,5 +27,18 @@
         /// Gets or sets optional timeout for process execution
         /// </summary>
         public int? Timeout { get; set; }
+
+
+
+        /// <summary>
+        /// Appends the specified argument to the argument builder.
+        /// </summary>
+        /// <param name="argument">The argument to be appended.</param>
+        public ProcessSettings Append(IProcessArgument argument)
+        {
+            this.Arguments.Append(argument);
+
+            return this;
+        }
     }
 }
