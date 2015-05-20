@@ -28,12 +28,13 @@
         /// </summary>
         public int? Timeout { get; set; }
 
-
-
         /// <summary>
         /// Appends the specified argument to the argument builder.
         /// </summary>
         /// <param name="argument">The argument to be appended.</param>
+        /// <returns>
+        /// A <see cref="ProcessSettings" /> for fluent chaining.
+        /// </returns>
         public ProcessSettings Append(IProcessArgument argument)
         {
             this.Arguments.Append(argument);
