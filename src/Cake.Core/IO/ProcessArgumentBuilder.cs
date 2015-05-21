@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Cake.Core.IO.Arguments;
@@ -11,13 +12,46 @@ namespace Cake.Core.IO
     public sealed class ProcessArgumentBuilder : IProcessArgumentList<ProcessArgumentBuilder>
     {
         private readonly List<IProcessArgument> _tokens;
-
+        private string _namedFormat;
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessArgumentBuilder"/> class.
         /// </summary>
         public ProcessArgumentBuilder()
+            : this(NamedArgument.DefaultFormat)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProcessArgumentBuilder"/> class.
+        /// </summary>
+        /// <param name="format">The format of named arguments.</param>
+        public ProcessArgumentBuilder(string format)
+        {
+            if (string.IsNullOrEmpty(format))
+            {
+                throw new ArgumentNullException("format");
+            }
+
             _tokens = new List<IProcessArgument>();
+            _namedFormat = format;
+        }
+
+        /// <summary>
+        /// Gets or sets the default format for named arguments
+        /// </summary>
+        /// <value>The format of named arguments.</value>
+        public string NamedFormat
+        {
+            get
+            {
+                return _namedFormat;
+            }
+
+            set
+            {
+                _namedFormat = value;
+            }
         }
 
         /// <summary>
@@ -29,6 +63,16 @@ namespace Cake.Core.IO
         /// </returns>
         public ProcessArgumentBuilder Append(IProcessArgument argument)
         {
+            if (argument is NamedArgument)
+            {
+                NamedArgument named = (NamedArgument)argument;
+
+                if (named.Format == NamedArgument.DefaultFormat)
+                {
+                    named.Format = _namedFormat;
+                }
+            }
+
             _tokens.Add(argument);
 
             return this;

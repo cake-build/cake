@@ -37,6 +37,11 @@
         /// </returns>
         public ProcessSettings Append(IProcessArgument argument)
         {
+            if (this.Arguments == null)
+            {
+                this.Arguments = new ProcessArgumentBuilder();
+            }
+
             this.Arguments.Append(argument);
 
             return this;

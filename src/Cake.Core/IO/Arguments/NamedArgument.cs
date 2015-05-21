@@ -1,4 +1,7 @@
-﻿namespace Cake.Core.IO.Arguments
+﻿using System;
+using System.Globalization;
+
+namespace Cake.Core.IO.Arguments
 {
     /// <summary>
     /// Represents a named argument and its value.
@@ -8,12 +11,19 @@
         private readonly string _name;
         private readonly IProcessArgument _value;
 
+        private string _format;
+
+        /// <summary>
+        /// The default format for named arguments
+        /// </summary>
+        public const string DefaultFormat = "-{0} {1}";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="NamedArgument"/> class.
         /// </summary>
         /// <param name="name">The name of the argument.</param>
         public NamedArgument(string name)
-            : this(name, null)
+            : this(name, null, NamedArgument.DefaultFormat)
         {
         }
 
@@ -23,9 +33,43 @@
         /// <param name="name">The name of the argument.</param>
         /// <param name="value">The argument value.</param>
         public NamedArgument(string name, IProcessArgument value)
+            : this(name, null, NamedArgument.DefaultFormat)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NamedArgument"/> class.
+        /// </summary>
+        /// <param name="name">The name of the argument.</param>
+        /// <param name="value">The argument value.</param>
+        /// <param name="format">The format of argument.</param>
+        public NamedArgument(string name, IProcessArgument value, string format)
+        {
+            if (string.IsNullOrEmpty(format))
+            {
+                throw new ArgumentNullException("format");
+            }
+
             _name = name;
             _value = value;
+            _format = format;
+        }
+
+        /// <summary>
+        /// Gets or sets the format of the argument
+        /// </summary>
+        /// <value>The argument format.</value>
+        public string Format
+        {
+            get
+            {
+                return _format;
+            }
+
+            set
+            {
+                _format = value;
+            }
         }
 
         /// <summary>
@@ -36,11 +80,11 @@
         {
             if (_value != null)
             {
-                return "-" + _name + " " + _value.Render();
+                return string.Format(CultureInfo.CurrentCulture, _format, _name, _value.Render());
             }
             else
             {
-                return "-" + _name;
+                return _name;
             }
         }
 
@@ -53,11 +97,11 @@
         {
             if (_value != null)
             {
-                return "-" + _name + " " + _value.RenderSafe();
+                return string.Format(CultureInfo.CurrentCulture, _format, _name, _value.RenderSafe());
             }
             else
             {
-                return "-" + _name;
+                return _name;
             }
         }
 
