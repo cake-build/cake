@@ -22,18 +22,9 @@ namespace Cake.Core.IO.Arguments
         /// Initializes a new instance of the <see cref="NamedArgument"/> class.
         /// </summary>
         /// <param name="name">The name of the argument.</param>
-        public NamedArgument(string name)
-            : this(name, null, NamedArgument.DefaultFormat)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NamedArgument"/> class.
-        /// </summary>
-        /// <param name="name">The name of the argument.</param>
         /// <param name="value">The argument value.</param>
         public NamedArgument(string name, IProcessArgument value)
-            : this(name, null, NamedArgument.DefaultFormat)
+            : this(name, value, NamedArgument.DefaultFormat)
         {
         }
 
@@ -45,6 +36,15 @@ namespace Cake.Core.IO.Arguments
         /// <param name="format">The format of argument.</param>
         public NamedArgument(string name, IProcessArgument value, string format)
         {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("name");
+            }
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+
             if (string.IsNullOrEmpty(format))
             {
                 throw new ArgumentNullException("format");
@@ -78,14 +78,7 @@ namespace Cake.Core.IO.Arguments
         /// <returns>A string representation of the argument.</returns>
         public string Render()
         {
-            if (_value != null)
-            {
-                return string.Format(CultureInfo.CurrentCulture, _format, _name, _value.Render());
-            }
-            else
-            {
-                return _name;
-            }
+            return string.Format(CultureInfo.InvariantCulture, _format, _name, _value.Render());
         }
 
         /// <summary>
@@ -95,14 +88,7 @@ namespace Cake.Core.IO.Arguments
         /// <returns>A safe string representation of the argument.</returns>
         public string RenderSafe()
         {
-            if (_value != null)
-            {
-                return string.Format(CultureInfo.CurrentCulture, _format, _name, _value.RenderSafe());
-            }
-            else
-            {
-                return _name;
-            }
+            return string.Format(CultureInfo.InvariantCulture, _format, _name, _value.RenderSafe());
         }
 
         /// <summary>
