@@ -71,32 +71,24 @@ namespace Cake.Common.Tools.NuGet.SetApiKey
 
         private ProcessArgumentBuilder GetArguments(string apiKey, string source, NuGetSetApiKeySettings settings)
         {
-            var builder = new ProcessArgumentBuilder();
-
-            builder.Append("setapikey");
-            builder.AppendQuotedSecret(apiKey);
-
-            // Source
-            builder.Append("-Source");
-            builder.AppendQuoted(source);
+            var builder = new ProcessArgumentBuilder()
+                    .Append("setapikey")
+                    .AppendQuotedSecret(apiKey)
+                    .AppendNamedQuoted("Source", source);
 
             // Verbosity?
             if (settings.Verbosity.HasValue)
             {
-                builder.Append("-Verbosity");
-                builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
+                builder.AppendNamed("Verbosity", settings.Verbosity.Value.ToString().ToLowerInvariant());
             }
 
             // Configuration file
             if (settings.ConfigFile != null)
             {
-                builder.Append("-ConfigFile");
-                builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
+                builder.AppendNamedQuoted("ConfigFile", settings.ConfigFile.MakeAbsolute(_environment).FullPath);
             }
 
-            builder.Append("-NonInteractive");
-
-            return builder;
+            return builder.Append("-NonInteractive");
         }
 
         /// <summary>

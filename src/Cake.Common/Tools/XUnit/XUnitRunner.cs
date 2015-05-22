@@ -82,8 +82,8 @@ namespace Cake.Common.Tools.XUnit
                 var assemblyFilename = assemblyPath.GetFilename().AppendExtension(".html");
                 var outputPath = settings.OutputDirectory.MakeAbsolute(_environment).GetFilePath(assemblyFilename);
 
-                builder.AppendQuoted("/html");
-                builder.AppendQuoted(outputPath.FullPath);
+                builder.AppendQuoted("/html")
+                        .AppendQuoted(outputPath.FullPath);
             }
 
             // Generate XML report?
@@ -92,8 +92,8 @@ namespace Cake.Common.Tools.XUnit
                 var assemblyFilename = assemblyPath.GetFilename().AppendExtension(".xml");
                 var outputPath = settings.OutputDirectory.MakeAbsolute(_environment).GetFilePath(assemblyFilename);
 
-                builder.AppendQuoted("/xml");
-                builder.AppendQuoted(outputPath.FullPath);
+                builder.AppendQuoted("/xml")
+                        .AppendQuoted(outputPath.FullPath);
             }
 
             // Silent mode?

@@ -76,15 +76,13 @@ namespace Cake.Common.Build.AppVeyor
             path = path.IsRelative ? path.MakeAbsolute(_environment) : path;
 
             // Build the arguments.
-            var arguments = new ProcessArgumentBuilder();
-            arguments.Append("PushArtifact");
-            arguments.Append("-Path");
-            arguments.AppendQuoted(path.FullPath);
-            arguments.Append("-FileName");
-            arguments.AppendQuoted(path.GetFilename().FullPath);
+            var settings = new ProcessSettings()
+                    .Append("PushArtifact")
+                    .AppendNamedQuoted("Path", path.FullPath)
+                    .AppendNamedQuoted("FileName", path.GetFilename().FullPath);
 
             // Start the process.
-            _processRunner.Start("appveyor", new ProcessSettings { Arguments = arguments });
+            _processRunner.Start("appveyor", settings);
         }
 
         /// <summary>
@@ -108,13 +106,12 @@ namespace Cake.Common.Build.AppVeyor
             }
 
             // Build the arguments.
-            var arguments = new ProcessArgumentBuilder();
-            arguments.Append("UpdateBuild");
-            arguments.Append("-Version");
-            arguments.AppendQuoted(version);
+            var settings = new ProcessSettings()
+                    .Append("UpdateBuild")
+                    .AppendNamedQuoted("Version", version);
 
             // Start the process.
-            _processRunner.Start("appveyor", new ProcessSettings { Arguments = arguments });
+            _processRunner.Start("appveyor", settings);
         }
     }
 }

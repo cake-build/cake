@@ -49,10 +49,9 @@ namespace Cake.Common.Tools.NuGet.Restore
 
         private ProcessArgumentBuilder GetArguments(FilePath targetFilePath, NuGetRestoreSettings settings)
         {
-            var builder = new ProcessArgumentBuilder();
-
-            builder.Append("restore");
-            builder.AppendQuoted(targetFilePath.MakeAbsolute(_environment).FullPath);
+            var builder = new ProcessArgumentBuilder()
+                    .Append("restore")
+                    .AppendQuoted(targetFilePath.MakeAbsolute(_environment).FullPath);
 
             // RequireConsent?
             if (settings.RequireConsent)
@@ -63,15 +62,13 @@ namespace Cake.Common.Tools.NuGet.Restore
             // Packages Directory
             if (settings.PackagesDirectory != null)
             {
-                builder.Append("-PackagesDirectory");
-                builder.AppendQuoted(settings.PackagesDirectory.MakeAbsolute(_environment).FullPath);
+                builder.AppendNamedQuoted("PackagesDirectory", settings.PackagesDirectory.MakeAbsolute(_environment).FullPath);
             }
 
             // List of package sources
             if (settings.Source != null && settings.Source.Count > 0)
             {
-                builder.Append("-Source");
-                builder.AppendQuoted(string.Join(";", settings.Source));
+                builder.AppendNamedQuoted("Source", string.Join(";", settings.Source));
             }
 
             // No Cache?
@@ -89,20 +86,16 @@ namespace Cake.Common.Tools.NuGet.Restore
             // Verbosity?
             if (settings.Verbosity.HasValue)
             {
-                builder.Append("-Verbosity");
-                builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
+                builder.AppendNamed("Verbosity", settings.Verbosity.Value.ToString().ToLowerInvariant());
             }
 
             // Configuration file
             if (settings.ConfigFile != null)
             {
-                builder.Append("-ConfigFile");
-                builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
+                builder.AppendNamedQuoted("ConfigFile", settings.ConfigFile.MakeAbsolute(_environment).FullPath);
             }
 
-            builder.Append("-NonInteractive");
-
-            return builder;
+            return builder.Append("-NonInteractive");
         }
 
         /// <summary>

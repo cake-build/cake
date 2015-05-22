@@ -70,23 +70,20 @@ namespace Cake.Common.Tools.NuGet.Install
 
         private ProcessArgumentBuilder GetArguments(string packageId, NuGetInstallSettings settings)
         {
-            var builder = new ProcessArgumentBuilder();
-
-            builder.Append("install");
-            builder.AppendQuoted(packageId);
+            var builder = new ProcessArgumentBuilder()
+                    .Append("install")
+                    .AppendQuoted(packageId);
 
             // Output Directory
             if (settings.OutputDirectory != null)
             {
-                builder.Append("-OutputDirectory");
-                builder.AppendQuoted(settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
+                builder.AppendNamedQuoted("OutputDirectory", settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
             }
 
             // Version
             if (settings.Version != null)
             {
-                builder.Append("-Version");
-                builder.AppendQuoted(settings.Version);
+                builder.AppendNamedQuoted("Version", settings.Version);
             }
 
             // ExcludeVersion?
@@ -110,15 +107,13 @@ namespace Cake.Common.Tools.NuGet.Install
             // Solution Directory
             if (settings.SolutionDirectory != null)
             {
-                builder.Append("-SolutionDirectory");
-                builder.AppendQuoted(settings.SolutionDirectory.MakeAbsolute(_environment).FullPath);
+                builder.AppendNamedQuoted("SolutionDirectory", settings.SolutionDirectory.MakeAbsolute(_environment).FullPath);
             }
 
             // List of package sources
             if (settings.Source != null && settings.Source.Count > 0)
             {
-                builder.Append("-Source");
-                builder.AppendQuoted(string.Join(";", settings.Source));
+                builder.AppendNamedQuoted("Source", string.Join(";", settings.Source));
             }
 
             // No Cache?
@@ -136,20 +131,16 @@ namespace Cake.Common.Tools.NuGet.Install
             // Verbosity?
             if (settings.Verbosity.HasValue)
             {
-                builder.Append("-Verbosity");
-                builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
+                builder.AppendNamed("Verbosity", settings.Verbosity.Value.ToString().ToLowerInvariant());
             }
 
             // Configuration file
             if (settings.ConfigFile != null)
             {
-                builder.Append("-ConfigFile");
-                builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
+                builder.AppendNamedQuoted("ConfigFile", settings.ConfigFile.MakeAbsolute(_environment).FullPath);
             }
 
-            builder.Append("-NonInteractive");
-
-            return builder;
+            return builder.Append("-NonInteractive");
         }
 
         /// <summary>

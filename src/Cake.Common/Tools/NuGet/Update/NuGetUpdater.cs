@@ -68,30 +68,26 @@ namespace Cake.Common.Tools.NuGet.Update
 
         private ProcessArgumentBuilder GetArguments(FilePath targetFile, NuGetUpdateSettings settings)
         {
-            var builder = new ProcessArgumentBuilder();
-
-            builder.Append("update");
-            builder.AppendQuoted(targetFile.MakeAbsolute(_environment).FullPath);
+            var builder = new ProcessArgumentBuilder()
+                    .Append("update")
+                    .AppendQuoted(targetFile.MakeAbsolute(_environment).FullPath);
 
             // Packages?
             if (settings.Id != null && settings.Id.Count > 0)
             {
-                builder.Append("-Id");
-                builder.AppendQuoted(string.Join(";", settings.Id));
+                builder.AppendNamedQuoted("Id", string.Join(";", settings.Id));
             }
 
             // List of package sources
             if (settings.Source != null && settings.Source.Count > 0)
             {
-                builder.Append("-Source");
-                builder.AppendQuoted(string.Join(";", settings.Source));
+                builder.AppendNamedQuoted("Source", string.Join(";", settings.Source));
             }
 
             // Verbosity?
             if (settings.Verbosity.HasValue)
             {
-                builder.Append("-Verbosity");
-                builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
+                builder.AppendNamed("Verbosity", settings.Verbosity.Value.ToString().ToLowerInvariant());
             }
 
             // Safe?
@@ -106,9 +102,7 @@ namespace Cake.Common.Tools.NuGet.Update
                 builder.Append("-Prerelease");
             }
 
-            builder.Append("-NonInteractive");
-
-            return builder;
+            return builder.Append("-NonInteractive");
         }
     }
 }

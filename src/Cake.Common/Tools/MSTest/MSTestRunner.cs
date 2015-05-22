@@ -47,10 +47,10 @@ namespace Cake.Common.Tools.MSTest
 
         private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, MSTestSettings settings)
         {
-            var builder = new ProcessArgumentBuilder();
+            var builder = new ProcessArgumentBuilder("\"/{0}:{1}\"");
 
             // Add the assembly to build.
-            builder.Append(string.Concat("/testcontainer:", assemblyPath.MakeAbsolute(_environment).FullPath).Quote());
+            builder.AppendNamed("testcontainer", assemblyPath.MakeAbsolute(_environment).FullPath);
 
             if (settings.NoIsolation)
             {
