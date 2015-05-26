@@ -309,7 +309,7 @@ namespace Cake.Common.IO
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="path">The path.</param>
-        /// <returns>An absolute path.</returns>
+        /// <returns>An absolute file path.</returns>
         /// <example>
         /// <code>
         /// var path = MakeAbsolute(File("./resources"));
@@ -317,7 +317,7 @@ namespace Cake.Common.IO
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Path")]
-        public static FilePath GetAbsoluteFilePath(ICakeContext context, FilePath path)
+        public static FilePath MakeAbsolute(ICakeContext context, FilePath path)
         {
             if (context == null)
             {

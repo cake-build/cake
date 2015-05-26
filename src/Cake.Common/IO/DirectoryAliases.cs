@@ -358,7 +358,7 @@ namespace Cake.Common.IO
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="path">The path.</param>
-        /// <returns>An absolute path.</returns>
+        /// <returns>An absolute directory path.</returns>
         /// <example>
         /// <code>
         /// var path = MakeAbsolute(Directory("./resources"));
@@ -366,7 +366,7 @@ namespace Cake.Common.IO
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Path")]
-        public static DirectoryPath GetAbsoluteDirectoryPath(this ICakeContext context, DirectoryPath path)
+        public static DirectoryPath MakeAbsolute(this ICakeContext context, DirectoryPath path)
         {
             if (context == null)
             {

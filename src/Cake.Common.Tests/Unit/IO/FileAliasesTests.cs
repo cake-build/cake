@@ -1048,13 +1048,13 @@ namespace Cake.Common.Tests.Unit.IO
             }
         }
 
-        public sealed class TheGetAbsoluteFilePathMethod
+        public sealed class TheMakeAbsoluteMethod
         {
             [Fact]
             public void Should_Throw_If_Context_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => FileAliases.GetAbsoluteFilePath(null, "./build.txt"));
+                var result = Record.Exception(() => FileAliases.MakeAbsolute(null, "./build.txt"));
 
                 // Then
                 Assert.IsArgumentNullException(result, "context");
@@ -1067,7 +1067,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var context = Substitute.For<ICakeContext>();
 
                 // When
-                var result = Record.Exception(() => FileAliases.GetAbsoluteFilePath(context, null));
+                var result = Record.Exception(() => FileAliases.MakeAbsolute(context, null));
 
                 // Then
                 Assert.IsArgumentNullException(result, "path");
@@ -1081,7 +1081,7 @@ namespace Cake.Common.Tests.Unit.IO
                 context.Environment.WorkingDirectory.Returns(d => "/Working");
 
                 // When
-                var result = FileAliases.GetAbsoluteFilePath(context, "./build.txt");
+                var result = FileAliases.MakeAbsolute(context, "./build.txt");
 
                 // Then
                 Assert.Equal("/Working/build.txt", result.FullPath);
