@@ -17,7 +17,7 @@
         }
 
         /// <summary>
-        /// Render the arguments as a <see cref="string" />.
+        /// Render the arguments as a <see cref="System.String" />.
         /// Sensitive information will be included.
         /// </summary>
         /// <returns>
@@ -29,7 +29,7 @@
         }
 
         /// <summary>
-        /// Renders the argument as a <see cref="string" />.
+        /// Renders the argument as a <see cref="System.String" />.
         /// Sensitive information will be redacted.
         /// </summary>
         /// <returns>
@@ -38,6 +38,15 @@
         public string RenderSafe()
         {
             return Render();
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString()
+        {
+            return RenderSafe();
         }
     }
 }

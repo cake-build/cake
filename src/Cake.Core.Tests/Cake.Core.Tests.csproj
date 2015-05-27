@@ -95,6 +95,7 @@
     </Compile>
     <Compile Include="Unit\IO\ProcessArgumentBuilderTests.cs" />
     <Compile Include="Unit\IO\ProcessRunnerTests.cs" />
+    <Compile Include="Unit\IO\ProcessSettingsTests.cs" />
     <Compile Include="Unit\Scripting\ScriptAliasTests.cs" />
     <Compile Include="Unit\Scripting\ScriptHostTests.cs" />
     <Compile Include="Unit\Scripting\ScriptProcessorTests.cs" />
