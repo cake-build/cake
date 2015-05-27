@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Cake.Core.IO.Arguments;
@@ -8,10 +9,10 @@ namespace Cake.Core.IO
     /// <summary>
     /// Utility for building process arguments.
     /// </summary>
-    public sealed class ProcessArgumentBuilder
+    public sealed class ProcessArgumentBuilder : IProcessArgumentList<ProcessArgumentBuilder>
     {
         private readonly List<IProcessArgument> _tokens;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessArgumentBuilder"/> class.
         /// </summary>
@@ -24,9 +25,14 @@ namespace Cake.Core.IO
         /// Appends an argument.
         /// </summary>
         /// <param name="argument">The argument.</param>
-        public void Append(IProcessArgument argument)
+        /// <returns>
+        /// A <see cref="ProcessArgumentBuilder" /> for fluent chaining.
+        /// </returns>
+        public ProcessArgumentBuilder Append(IProcessArgument argument)
         {
             _tokens.Add(argument);
+
+            return this;
         }
 
         /// <summary>
@@ -92,8 +98,8 @@ namespace Cake.Core.IO
         public static ProcessArgumentBuilder FromString(string value)
         {
             var builder = new ProcessArgumentBuilder();
-            builder.Append(new TextArgument(value));
-            return builder;
+
+            return builder.Append(new TextArgument(value));
         }
     }
 }
