@@ -143,7 +143,7 @@ Task("Create-NuGet-Packages")
         ReleaseNotes = releaseNotes.Notes.ToArray(),
         BasePath = binDir,
         OutputDirectory = nugetRoot,
-        Symbols = true
+        Symbols = false
     });
 });
 
