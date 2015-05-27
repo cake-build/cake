@@ -95,22 +95,25 @@ namespace Cake.Common.Tools.Cake
 
         private ProcessArgumentBuilder GetArguments(FilePath scriptPath, CakeSettings settings)
         {
-            var builder = new ProcessArgumentBuilder("-{0}={1}")
-                    .AppendQuoted(scriptPath.MakeAbsolute(_environment).FullPath);
+            var builder = new ProcessArgumentBuilder();
+            builder.AppendQuoted(scriptPath.MakeAbsolute(_environment).FullPath);
 
             if (settings.Verbosity.HasValue)
             {
-                builder.AppendNamed("verbosity", settings.Verbosity.Value.ToString());
+                builder.Append(string.Concat("-verbosity=", settings.Verbosity.Value.ToString()));
             }
 
             if (settings.Arguments != null)
             {
                 foreach (var argument in settings.Arguments)
                 {
-                    builder.AppendNamed(argument.Key, (argument.Value ?? string.Empty).Quote());
+                    builder.Append(string.Format(
+                        CultureInfo.InvariantCulture,
+                        "-{0}={1}",
+                        argument.Key,
+                        (argument.Value ?? string.Empty).Quote()));
                 }
             }
-
             return builder;
         }
 

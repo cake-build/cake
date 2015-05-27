@@ -166,17 +166,17 @@ namespace Cake.Core.Scripting.Processors
             string source)
         {
             var arguments = new ProcessArgumentBuilder();
-
-            arguments.Append("install")
-                    .AppendQuoted(addInId)
-                    .AppendNamedQuoted("OutputDirectory", addInRootDirectory.Path.FullPath);
-
+            arguments.Append("install");
+            arguments.AppendQuoted(addInId);
+            arguments.Append("-OutputDirectory");
+            arguments.AppendQuoted(addInRootDirectory.Path.FullPath);
             if (!string.IsNullOrWhiteSpace(source))
             {
-                arguments.AppendNamedQuoted("Source", source);
+                arguments.Append("-Source");
+                arguments.AppendQuoted(source);
             }
-
-            return arguments.Append("-ExcludeVersion -NonInteractive -NoCache");
+            arguments.Append("-ExcludeVersion -NonInteractive -NoCache");
+            return arguments;
         }
 
         private IFile[] GetAddInAssemblies(DirectoryPath addInDirectoryPath)

@@ -106,7 +106,9 @@ namespace Cake.Common.Tools.NSIS
             }
 
             // Script file
-            return builder.Append(scriptFile.MakeAbsolute(_environment).FullPath);
+            builder.Append(scriptFile.MakeAbsolute(_environment).FullPath);
+
+            return builder;
         }
     }
 }

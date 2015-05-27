@@ -16,7 +16,7 @@ namespace Cake.Common.Tools.OctopusDeploy
             _projectName = projectName;
             _settings = settings;
             _environment = environment;
-            _builder = new ProcessArgumentBuilder("--{0} {1}");
+            _builder = new ProcessArgumentBuilder();
         }
 
         public ProcessArgumentBuilder Get()
@@ -40,16 +40,23 @@ namespace Cake.Common.Tools.OctopusDeploy
 
         private void AppendCommonArguments()
         {
-            _builder.Append("create-release")
-                .AppendNamedQuoted("project", _projectName)
-                .AppendNamed("server", _settings.Server)
-                .AppendNamedSecret("apiKey", _settings.ApiKey);
+            _builder.Append("create-release");
+
+            _builder.Append("--project");
+            _builder.AppendQuoted(_projectName);
+
+            _builder.Append("--server");
+            _builder.Append(_settings.Server);
+
+            _builder.Append("--apiKey");
+            _builder.AppendSecret(_settings.ApiKey);
 
             AppendArgumentIfNotNull("username", _settings.Username);
 
             if (_settings.Password != null)
             {
-                _builder.AppendNamedQuotedSecret("password", _settings.Password);
+                _builder.Append("--password");
+                _builder.AppendQuotedSecret(_settings.Password);
             }
 
             AppendArgumentIfNotNull("configFile", _settings.ConfigurationFile);
@@ -74,7 +81,8 @@ namespace Cake.Common.Tools.OctopusDeploy
         {
             if (value != null)
             {
-                _builder.AppendNamedQuoted(argumentName, value);
+                _builder.Append("--" + argumentName);
+                _builder.AppendQuoted(value);
             }
         }
 
@@ -82,7 +90,8 @@ namespace Cake.Common.Tools.OctopusDeploy
         {
             if (value != null)
             {
-                _builder.AppendNamedQuoted(argumentName, value.MakeAbsolute(_environment).FullPath);
+                _builder.Append("--" + argumentName);
+                _builder.AppendQuoted(value.MakeAbsolute(_environment).FullPath);
             }
         }
 
@@ -92,7 +101,12 @@ namespace Cake.Common.Tools.OctopusDeploy
             {
                 foreach (var package in settings.Packages)
                 {
-                    builder.AppendNamedQuoted("package", string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0}:{1}", package.Key, package.Value));
+                    builder.Append("--package");
+                    builder.AppendQuoted(string.Format(
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        "{0}:{1}",
+                        package.Key,
+                        package.Value));
                 }
             }
         }

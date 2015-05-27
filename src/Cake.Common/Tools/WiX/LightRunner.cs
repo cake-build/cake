@@ -97,7 +97,8 @@ namespace Cake.Common.Tools.WiX
             // Output file
             if (settings.OutputFile != null && !string.IsNullOrEmpty(settings.OutputFile.FullPath))
             {
-                builder.AppendNamedQuoted("o", settings.OutputFile.MakeAbsolute(_environment).FullPath);
+                builder.Append("-o");
+                builder.AppendQuoted(settings.OutputFile.MakeAbsolute(_environment).FullPath);
             }
 
             // Raw arguments

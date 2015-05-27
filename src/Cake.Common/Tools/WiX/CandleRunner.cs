@@ -71,7 +71,8 @@ namespace Cake.Common.Tools.WiX
             // Architecture
             if (settings.Architecture.HasValue)
             {
-                builder.AppendNamed("arch", GetArchitectureName(settings.Architecture.Value));
+                builder.Append("-arch");
+                builder.Append(GetArchitectureName(settings.Architecture.Value));
             }
 
             // Add defines
@@ -113,7 +114,8 @@ namespace Cake.Common.Tools.WiX
                 var separatorChar = System.IO.Path.DirectorySeparatorChar;
                 var fullPath = string.Concat(settings.OutputDirectory.MakeAbsolute(_environment).FullPath, separatorChar, separatorChar);
 
-                builder.AppendNamedQuoted("o", fullPath);
+                builder.Append("-o");
+                builder.AppendQuoted(fullPath);
             }
 
             // Pedantic

@@ -76,25 +76,28 @@ namespace Cake.Common.Tools.NuGet.Pack
 
         private ProcessArgumentBuilder GetArguments(FilePath nuspecFilePath, NuGetPackSettings settings)
         {
-            var builder = new ProcessArgumentBuilder()
-                    .Append("pack");
+            var builder = new ProcessArgumentBuilder();
+            builder.Append("pack");
 
             // Version
             if (!string.IsNullOrWhiteSpace(settings.Version))
             {
-                builder.AppendNamedQuoted("Version", settings.Version);
+                builder.Append("-Version");
+                builder.AppendQuoted(settings.Version);
             }
 
             // Base path
             if (settings.BasePath != null)
             {
-                builder.AppendNamedQuoted("BasePath", settings.BasePath.MakeAbsolute(_environment).FullPath);
+                builder.Append("-BasePath");
+                builder.AppendQuoted(settings.BasePath.MakeAbsolute(_environment).FullPath);
             }
 
             // Output directory
             if (settings.OutputDirectory != null)
             {
-                builder.AppendNamedQuoted("OutputDirectory", settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
+                builder.Append("-OutputDirectory");
+                builder.AppendQuoted(settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
             }
 
             // Nuspec file

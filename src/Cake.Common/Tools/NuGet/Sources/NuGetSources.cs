@@ -150,13 +150,15 @@ namespace Cake.Common.Tools.NuGet.Sources
             // User name specified?
             if (!string.IsNullOrWhiteSpace(settings.UserName))
             {
-                builder.AppendNamedQuoted("UserName", settings.UserName);
+                builder.Append("-UserName");
+                builder.AppendQuoted(settings.UserName);
             }
 
             // Password specified?
             if (!string.IsNullOrWhiteSpace(settings.Password))
             {
-                builder.AppendNamedQuotedSecret("Password", settings.Password);
+                builder.Append("-Password");
+                builder.AppendQuotedSecret(settings.Password);
             }
 
             return builder;
@@ -175,9 +177,10 @@ namespace Cake.Common.Tools.NuGet.Sources
 
         private static void AddCommonParameters(string name, string source, NuGetSourcesSettings settings, ProcessArgumentBuilder builder)
         {
-            builder.AppendNamedQuoted("Name", name)
-                    .Append("-Source");
-           
+            builder.Append("-Name");
+            builder.AppendQuoted(name);
+
+            builder.Append("-Source");           
             if (settings.IsSensitiveSource)
             {
                 // Sensitive information in source.
@@ -191,7 +194,8 @@ namespace Cake.Common.Tools.NuGet.Sources
             // Verbosity?
             if (settings.Verbosity.HasValue)
             {
-                builder.AppendNamed("Verbosity", settings.Verbosity.Value.ToString().ToLowerInvariant());
+                builder.Append("-Verbosity");
+                builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
             }
 
             builder.Append("-NonInteractive");

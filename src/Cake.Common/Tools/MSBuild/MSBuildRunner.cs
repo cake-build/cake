@@ -40,31 +40,25 @@ namespace Cake.Common.Tools.MSBuild
 
         private ProcessArgumentBuilder GetArguments(MSBuildSettings settings)
         {
-            var builder = new ProcessArgumentBuilder("/{0}:{1}");
+            var builder = new ProcessArgumentBuilder();
 
             // Set the maximum number of processors.
-            if (settings.MaxCpuCount > 0)
-            {
-                builder.AppendNamed("m", settings.MaxCpuCount.ToString(CultureInfo.InvariantCulture));
-            }
-            else
-            {
-                builder.Append("/m");
-            }
+            builder.Append(settings.MaxCpuCount > 0 ? string.Concat("/m:", settings.MaxCpuCount) : "/m");
 
             // Set the verbosity.
-            builder.AppendNamed("v", GetVerbosityName(settings.Verbosity));
+            builder.Append(string.Format(CultureInfo.InvariantCulture, "/v:{0}", GetVerbosityName(settings.Verbosity)));
 
             if (settings.NodeReuse != null)
             {
-                builder.AppendNamed("nr", settings.NodeReuse.Value ? "true" : "false");
+                builder.Append(string.Concat("/nr:", settings.NodeReuse.Value ? "true" : "false"));
             }
 
             // Got a specific configuration in mind?
             if (!string.IsNullOrWhiteSpace(settings.Configuration))
             {
                 // Add the configuration as a property.
-                builder.AppendNamed("p", string.Concat("\"Configuration\"=", settings.Configuration.Quote()));
+                var configuration = settings.Configuration;
+                builder.Append(string.Concat("/p:\"Configuration\"=", configuration.Quote()));
             }
 
             // Got any properties?
@@ -79,16 +73,19 @@ namespace Cake.Common.Tools.MSBuild
             // Got any targets?
             if (settings.Targets.Count > 0)
             {
-                builder.AppendNamed("target", string.Join(";", settings.Targets));
+                var targets = string.Join(";", settings.Targets);
+                builder.Append(string.Concat("/target:", targets));
             }
             else
             {
                 // Use default target.
-                builder.AppendNamed("target", "Build");
+                builder.Append("/target:Build");
             }
 
             // Add the solution as the last parameter.
-            return builder.AppendQuoted(settings.Solution.MakeAbsolute(_environment).FullPath);
+            builder.AppendQuoted(settings.Solution.MakeAbsolute(_environment).FullPath);
+
+            return builder;
         }
 
         private static string GetVerbosityName(Verbosity verbosity)

@@ -118,22 +118,27 @@ namespace Cake.Common.Tools.SignTool
                 throw new CakeException(message);
             }
 
-            var builder = new ProcessArgumentBuilder("/{0} {1}");
+            var builder = new ProcessArgumentBuilder();
 
             // SIGN Command.
             builder.Append("SIGN");
 
             // TimeStamp server.
-            builder.AppendNamedQuoted("t", settings.TimeStampUri.AbsoluteUri);
+            builder.Append("/t");
+            builder.AppendQuoted(settings.TimeStampUri.AbsoluteUri);
 
             // Path to PFX Certificate.
-            builder.AppendNamedQuoted("f", settings.CertPath.MakeAbsolute(_environment).FullPath);
+            builder.Append("/f");
+            builder.AppendQuoted(settings.CertPath.MakeAbsolute(_environment).FullPath);
 
             // PFX Password.
-            builder.AppendNamedSecret("p", settings.Password);
+            builder.Append("/p");
+            builder.AppendSecret(settings.Password);
 
             // Target Assembly to sign.
-            return builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
+            builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
+
+            return builder;
         }
 
         /// <summary>

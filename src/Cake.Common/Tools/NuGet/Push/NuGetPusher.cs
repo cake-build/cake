@@ -50,9 +50,10 @@ namespace Cake.Common.Tools.NuGet.Push
 
         private ProcessArgumentBuilder GetArguments(FilePath packageFilePath, NuGetPushSettings settings)
         {
-            var builder = new ProcessArgumentBuilder()
-                    .Append("push")
-                    .AppendQuoted(packageFilePath.MakeAbsolute(_environment).FullPath);
+            var builder = new ProcessArgumentBuilder();
+            builder.Append("push");
+
+            builder.AppendQuoted(packageFilePath.MakeAbsolute(_environment).FullPath);
 
             if (settings.ApiKey != null)
             {
@@ -63,22 +64,26 @@ namespace Cake.Common.Tools.NuGet.Push
 
             if (settings.ConfigFile != null)
             {
-                builder.AppendNamedQuoted("ConfigFile", settings.ConfigFile.MakeAbsolute(_environment).FullPath);
+                builder.Append("-ConfigFile");
+                builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
             }
 
             if (settings.Source != null)
             {
-                builder.AppendNamedQuoted("Source", settings.Source);
+                builder.Append("-Source");
+                builder.AppendQuoted(settings.Source);
             }
 
             if (settings.Timeout != null)
             {
-                builder.AppendNamed("Timeout", Convert.ToInt32(settings.Timeout.Value.TotalSeconds).ToString(CultureInfo.InvariantCulture));
+                builder.Append("-Timeout");
+                builder.Append(Convert.ToInt32(settings.Timeout.Value.TotalSeconds).ToString(CultureInfo.InvariantCulture));
             }
 
             if (settings.Verbosity != null)
             {
-                builder.AppendNamed("Verbosity", settings.Verbosity.Value.ToString().ToLowerInvariant());
+                builder.Append("-Verbosity");
+                builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
             }
 
             return builder;
