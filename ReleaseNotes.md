@@ -1,3 +1,7 @@
+### New in 0.4.2 (Released 2015/05/27)
+* Added aliases for making paths absolute.
+* Added support for creating Octopus Deploy releases.
+
 ### New in 0.4.1 (Released 2015/05/18)
 * Made Cake work on .NET 4.6 again without experimental flag.
 * The tools directory now have higher precedence than environment paths when resolving nuget.exe.

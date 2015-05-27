@@ -12,8 +12,8 @@ namespace Cake.Core.Scripting
         /// Runs the script using the specified script host.
         /// </summary>
         /// <param name="host">The script host.</param>
-        /// <param name="script">The script.</param>
+        /// <param name="scriptPath">The script path.</param>
         /// <param name="arguments">The arguments.</param>
-        void Run(IScriptHost host, FilePath script, IDictionary<string, string> arguments);
+        void Run(IScriptHost host, FilePath scriptPath, IDictionary<string, string> arguments);
     }
 }

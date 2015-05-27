@@ -1047,5 +1047,45 @@ namespace Cake.Common.Tests.Unit.IO
                 Assert.True(result);
             }
         }
+
+        public sealed class TheMakeAbsoluteMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => FileAliases.MakeAbsolute(null, "./build.txt"));
+
+                // Then
+                Assert.IsArgumentNullException(result, "context");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Path_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+
+                // When
+                var result = Record.Exception(() => FileAliases.MakeAbsolute(context, null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "path");
+            }
+
+            [Fact]
+            public void Should_Return_Absolute_Directory_Path()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                context.Environment.WorkingDirectory.Returns(d => "/Working");
+
+                // When
+                var result = FileAliases.MakeAbsolute(context, "./build.txt");
+
+                // Then
+                Assert.Equal("/Working/build.txt", result.FullPath);
+            }
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace Cake.Core.Scripting
         /// Adds a reference path to the session.
         /// </summary>
         /// <param name="path">The reference path.</param>
-        void AddReferencePath(FilePath path);
+        void AddReference(FilePath path);
 
         /// <summary>
         /// Adds an assembly reference to the session.
@@ -27,9 +27,9 @@ namespace Cake.Core.Scripting
         void ImportNamespace(string @namespace);
 
         /// <summary>
-        /// Executes the specified script code.
+        /// Executes the specified script.
         /// </summary>
-        /// <param name="code">The script code to execute.</param>
-        void Execute(string code);
+        /// <param name="script">The script to execute.</param>
+        void Execute(Script script);
     }
 }
