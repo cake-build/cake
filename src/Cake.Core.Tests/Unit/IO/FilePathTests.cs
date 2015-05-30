@@ -129,6 +129,24 @@ namespace Cake.Core.Tests.Unit.IO
             }
         }
 
+        public sealed class TheGetFilenameWithoutExtensionMethod
+        {
+            [Theory]
+            [InlineData("/input/test.txt", "test")]
+            [InlineData("/input/test", "test")]
+            public void Should_Return_Filename_Without_Extension_From_Path(string fullPath, string expected)
+            {
+                // Given
+                var path = new FilePath(fullPath);
+
+                // When
+                var result = path.GetFilenameWithoutExtension();
+
+                // Then
+                Assert.Equal(expected, result.FullPath);
+            }
+        }
+
         public sealed class TheMakeAbsoluteMethod
         {
             public sealed class WithEnvironment
