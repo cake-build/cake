@@ -52,7 +52,7 @@ namespace Cake.Common.Tests.Unit.IO
                 // When
                 var result = DirectoryAliases.Directory(context, "./temp");
 
-                // Then                
+                // Then
                 Assert.IsType<ConvertableDirectoryPath>(result);
             }
         }
@@ -80,7 +80,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    context.CleanDirectory(null));
+                    DirectoryAliases.CleanDirectory(context, null));
 
                 // Then
                 Assert.IsArgumentNullException(result, "path");
@@ -96,7 +96,7 @@ namespace Cake.Common.Tests.Unit.IO
                 context.FileSystem.Returns(fixture.FileSystem);
 
                 // When
-                context.CleanDirectory(directory);
+                DirectoryAliases.CleanDirectory(context, directory);
 
                 // Then
                 Assert.Empty(fixture.FileSystem.GetDirectory(directory).GetFiles("*", SearchScope.Recursive));
@@ -119,7 +119,7 @@ namespace Cake.Common.Tests.Unit.IO
                     .ToArray();
 
                 // When
-                context.CleanDirectory(directory, wherePredicate);
+                DirectoryAliases.CleanDirectory(context, directory, wherePredicate);
 
                 // Then
                 Assert.Empty(fixture.FileSystem.GetDirectory(directory).GetFiles("*", SearchScope.Recursive).Where(wherePredicate));
@@ -136,7 +136,7 @@ namespace Cake.Common.Tests.Unit.IO
                 context.FileSystem.Returns(fixture.FileSystem);
 
                 // When
-                context.CleanDirectory(directory);
+                DirectoryAliases.CleanDirectory(context, directory);
 
                 // Then
                 Assert.Empty(fixture.FileSystem.GetDirectory(directory).GetDirectories("*", SearchScope.Recursive));
@@ -158,7 +158,7 @@ namespace Cake.Common.Tests.Unit.IO
                     .ToArray();
 
                 // When
-                context.CleanDirectory(directory, wherePredicate);
+                DirectoryAliases.CleanDirectory(context, directory, wherePredicate);
 
                 // Then
                 Assert.Empty(fixture.FileSystem.GetDirectory(directory).GetDirectories("*", SearchScope.Recursive).Where(wherePredicate));
@@ -175,7 +175,7 @@ namespace Cake.Common.Tests.Unit.IO
                 context.FileSystem.Returns(fixture.FileSystem);
 
                 // When
-                context.CleanDirectory(directory);
+                DirectoryAliases.CleanDirectory(context, directory);
 
                 // Then
                 Assert.True(fixture.FileSystem.GetDirectory(directory).Exists);
@@ -191,10 +191,52 @@ namespace Cake.Common.Tests.Unit.IO
                 context.FileSystem.Returns(fixture.FileSystem);
 
                 // When
-                context.CleanDirectory(directory);
+                DirectoryAliases.CleanDirectory(context, directory);
 
                 // Then
                 Assert.True(fixture.FileSystem.Exist((DirectoryPath)"/NonExisting"));
+            }
+
+            [Fact]
+            public void Should_Skip_Predicate_Folder()
+            {
+                // Given
+                var directory = new DirectoryPath("/Temp");
+                var fixture = new FileSystemFixture();
+                var context = Substitute.For<ICakeContext>();
+                context.FileSystem.Returns(fixture.FileSystem);
+                var preHelloFiles = context.FileSystem
+                    .GetDirectory("/Temp/Hello/")
+                    .GetFiles("*.*", SearchScope.Recursive)
+                    .Select(file=>file.Path.FullPath)
+                    .ToArray();
+
+                var preGoodbyeFiles = context.FileSystem
+                    .GetDirectory("/Temp/Goodbye/")
+                    .GetFiles("*.*", SearchScope.Recursive)
+                    .Select(file=>file.Path.FullPath)
+                    .ToArray();
+
+                // When
+                DirectoryAliases.CleanDirectory(context, directory, predicate=>predicate.Path.FullPath!="/Temp/Goodbye");
+
+                // Then
+                var postHelloFiles = context.FileSystem
+                    .GetDirectory("/Temp/Hello/")
+                    .GetFiles("*.*", SearchScope.Recursive)
+                    .Select(file=>file.Path.FullPath)
+                    .ToArray();
+
+                var postGoodbyeFiles = context.FileSystem
+                    .GetDirectory("/Temp/Goodbye/")
+                    .GetFiles("*.*", SearchScope.Recursive)
+                    .Select(file=>file.Path.FullPath)
+                    .ToArray();
+
+                Assert.DoesNotContain(preHelloFiles, fileName=>fixture.FileSystem.Exist((FilePath)fileName));
+                Assert.Empty(postHelloFiles);
+                Assert.Equal(preGoodbyeFiles, postGoodbyeFiles);
+                Assert.All(preGoodbyeFiles, fileName=>fixture.FileSystem.Exist((FilePath)fileName));
             }
         }
 
@@ -224,12 +266,12 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        context.CleanDirectories((IEnumerable<DirectoryPath>)null));
+                        DirectoryAliases.CleanDirectories(context, (IEnumerable<DirectoryPath>)null));
 
                     // Then
                     Assert.IsArgumentNullException(result, "directories");
                 }
-                
+
                 [Fact]
                 public void Should_Delete_Files_In_Provided_Directories()
                 {
@@ -243,7 +285,7 @@ namespace Cake.Common.Tests.Unit.IO
                     };
 
                     // When
-                    Record.Exception(() => context.CleanDirectories(paths));
+                    Record.Exception(() => DirectoryAliases.CleanDirectories(context, paths));
 
                     // Then
                     Assert.Empty(fixture.FileSystem.GetDirectory(paths[0]).GetFiles("*", SearchScope.Recursive));
@@ -263,7 +305,7 @@ namespace Cake.Common.Tests.Unit.IO
                     };
 
                     // When
-                    context.CleanDirectories(paths);
+                    DirectoryAliases.CleanDirectories(context, paths);
 
                     // Then
                     Assert.True(fixture.FileSystem.GetDirectory(paths[0]).Exists);
@@ -283,7 +325,7 @@ namespace Cake.Common.Tests.Unit.IO
                     };
 
                     // When
-                    context.CleanDirectories(paths);
+                    DirectoryAliases.CleanDirectories(context, paths);
 
                     // Then
                     Assert.True(fixture.FileSystem.Exist((DirectoryPath)"/NonExisting"));
@@ -314,7 +356,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        context.CleanDirectories((IEnumerable<string>)null));
+                        DirectoryAliases.CleanDirectories(context, (IEnumerable<string>)null));
 
                     // Then
                     Assert.IsArgumentNullException(result, "directories");
@@ -333,7 +375,7 @@ namespace Cake.Common.Tests.Unit.IO
                     };
 
                     // When
-                    Record.Exception(() => context.CleanDirectories(paths));
+                    Record.Exception(() => DirectoryAliases.CleanDirectories(context, paths));
 
                     // Then
                     Assert.Empty(fixture.FileSystem.GetDirectory(paths[0]).GetFiles("*", SearchScope.Recursive));
@@ -353,7 +395,7 @@ namespace Cake.Common.Tests.Unit.IO
                     };
 
                     // When
-                    context.CleanDirectories(paths);
+                    DirectoryAliases.CleanDirectories(context, paths);
 
                     // Then
                     Assert.True(fixture.FileSystem.GetDirectory(paths[0]).Exists);
@@ -373,7 +415,7 @@ namespace Cake.Common.Tests.Unit.IO
                     };
 
                     // When
-                    context.CleanDirectories(paths);
+                    DirectoryAliases.CleanDirectories(context, paths);
 
                     // Then
                     Assert.True(fixture.FileSystem.Exist((DirectoryPath)"/NonExisting"));
@@ -405,7 +447,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    context.CreateDirectory(null));
+                    DirectoryAliases.CreateDirectory(context, null));
 
                 // Then
                 Assert.IsArgumentNullException(result, "path");
@@ -424,7 +466,7 @@ namespace Cake.Common.Tests.Unit.IO
                 context.FileSystem.Returns(fileSystem);
 
                 // When
-                context.CreateDirectory("/Temp");
+                DirectoryAliases.CreateDirectory(context, "/Temp");
 
                 // Then
                 directory.Received(1).Create();
@@ -443,7 +485,7 @@ namespace Cake.Common.Tests.Unit.IO
                 context.FileSystem.Returns(fileSystem);
 
                 // When
-                context.CreateDirectory("/Temp");
+                DirectoryAliases.CreateDirectory(context, "/Temp");
 
                 // Then
                 directory.Received(0).Create();
@@ -462,7 +504,7 @@ namespace Cake.Common.Tests.Unit.IO
                 context.Environment.Returns(environment);
 
                 // When
-                context.CreateDirectory("Hello");
+                DirectoryAliases.CreateDirectory(context, "Hello");
 
                 // Then
                 fileSystem.Received(1).GetDirectory(Arg.Is<DirectoryPath>(
@@ -702,7 +744,7 @@ namespace Cake.Common.Tests.Unit.IO
                     // Then
                     Assert.False(fixture.FileSystem.GetDirectory("/Temp/Hello").Exists);
                     Assert.False(fixture.FileSystem.GetDirectory("/Temp/Goodbye").Exists);
-                }                
+                }
             }
 
             public sealed class WithStrings
@@ -826,7 +868,7 @@ namespace Cake.Common.Tests.Unit.IO
                     // Then
                     Assert.False(fixture.FileSystem.GetDirectory("/Temp/Hello").Exists);
                     Assert.False(fixture.FileSystem.GetDirectory("/Temp/Goodbye").Exists);
-                }                
+                }
             }
         }
 
@@ -856,7 +898,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    context.CopyDirectory(null, null));
+                    DirectoryAliases.CopyDirectory(context, null, null));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -872,7 +914,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    context.CopyDirectory(sourcePath, null));
+                    DirectoryAliases.CopyDirectory(context, sourcePath, null));
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
@@ -890,7 +932,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() =>
-                    context.CopyDirectory(sourcePath, destinationPath));
+                    DirectoryAliases.CopyDirectory(context, sourcePath, destinationPath));
 
                 // Then
                 Assert.IsType<DirectoryNotFoundException>(result);
@@ -907,8 +949,8 @@ namespace Cake.Common.Tests.Unit.IO
                 var destinationPath = new DirectoryPath("C:/Temp2");
 
                 // When
-                context.CopyDirectory(sourcePath, destinationPath);
-                
+                DirectoryAliases.CopyDirectory(context, sourcePath, destinationPath);
+
                 // Then
                 Assert.True(fileSystem.Directories.ContainsKey(destinationPath));
             }
@@ -924,7 +966,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var destinationPath = new DirectoryPath("C:/Temp2");
 
                 // When
-                context.CopyDirectory(sourcePath, destinationPath);
+                DirectoryAliases.CopyDirectory(context, sourcePath, destinationPath);
 
                 // Then
                 Assert.True(fileSystem.Files.ContainsKey(new FilePath("C:/Temp/file1.txt")));
@@ -942,7 +984,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var destinationPath = new DirectoryPath("C:/Temp2");
 
                 // When
-                context.CopyDirectory(sourcePath, destinationPath);
+                DirectoryAliases.CopyDirectory(context, sourcePath, destinationPath);
 
                 // Then
                 // Directories should exist

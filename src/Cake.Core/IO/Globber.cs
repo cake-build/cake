@@ -51,10 +51,11 @@ namespace Cake.Core.IO
         /// Returns <see cref="Path" /> instances matching the specified pattern.
         /// </summary>
         /// <param name="pattern">The pattern to match.</param>
+        /// <param name="predicate">The predicate used to filter directories based on file system information.</param>
         /// <returns>
         ///   <see cref="Path" /> instances matching the specified pattern.
         /// </returns>
-        public IEnumerable<Path> Match(string pattern)
+        public IEnumerable<Path> Match(string pattern, Func<IFileSystemInfo, bool> predicate)
         {
             var scanner = new Scanner(pattern);
             var parser = new Parser(scanner, _environment);
@@ -95,7 +96,7 @@ namespace Cake.Core.IO
 
             // Walk the root and return the unique results.
             var segments = new Stack<Node>(((IEnumerable<Node>)path).Reverse());
-            var results = Walk(rootDirectory, segments);
+            var results = Walk(rootDirectory, segments, predicate ?? (p => true));
             return new HashSet<Path>(results, new PathComparer(_environment.IsUnix())).ToArray();
         }
 
@@ -147,7 +148,7 @@ namespace Cake.Core.IO
             return new Path[] { };
         }
 
-        private List<Path> Walk(DirectoryPath rootPath, Stack<Node> segments)
+        private List<Path> Walk(DirectoryPath rootPath, Stack<Node> segments, Func<IFileSystemInfo, bool> predicate)
         {
             var results = new List<Path>();
             var segment = segments.Pop();
@@ -168,7 +169,7 @@ namespace Cake.Core.IO
                 return results;
             }
             var rootFullPath = PathCollapser.Collapse(rootPath);
-            foreach (var directory in root.GetDirectories("*", SearchScope.Current))
+            foreach (var directory in root.GetDirectories("*", SearchScope.Current, predicate))
             {
                 var part = directory.Path.FullPath.Substring(rootFullPath.Length + 1);
                 var pathTest = expression.IsMatch(part);
@@ -179,7 +180,7 @@ namespace Cake.Core.IO
                 {
                     // Walk recursivly down the segment.
                     var nextSegments = new Stack<Node>(segments.Reverse());
-                    var subwalkResult = Walk(directory.Path, nextSegments);
+                    var subwalkResult = Walk(directory.Path, nextSegments, predicate);
                     if (subwalkResult.Count > 0)
                     {
                         results.AddRange(subwalkResult);
@@ -193,7 +194,7 @@ namespace Cake.Core.IO
                 {
                     // Walk the next segment in the list.
                     var nextSegments = new Stack<Node>(segments.Skip(subWalkCount).Reverse());
-                    var subwalkResult = Walk(directory.Path, nextSegments);
+                    var subwalkResult = Walk(directory.Path, nextSegments, predicate);
                     if (subwalkResult.Count > 0)
                     {
                         results.AddRange(subwalkResult);
@@ -207,7 +208,7 @@ namespace Cake.Core.IO
                 }
             }
 
-            foreach (var file in root.GetFiles("*", SearchScope.Current))
+            foreach (var file in root.GetFiles("*", SearchScope.Current, predicate))
             {
                 var part = file.Path.FullPath.Substring(rootFullPath.Length + 1);
                 var pathTest = expression.IsMatch(part);
@@ -228,7 +229,7 @@ namespace Cake.Core.IO
                     if (nextNode is WildcardSegmentNode)
                     {
                         var nextSegments = new Stack<Node>(segments.Skip(1).Reverse());
-                        var subwalkResult = Walk(root.Path, nextSegments);
+                        var subwalkResult = Walk(root.Path, nextSegments, predicate);
                         if (subwalkResult.Count > 0)
                         {
                             results.AddRange(subwalkResult);
