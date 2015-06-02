@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Autofac;
 using Autofac.Builder;
 using Cake.Arguments;
+using Cake.Autofac;
 using Cake.Commands;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -32,55 +31,33 @@ namespace Cake
         {
             using (var container = CreateContainer())
             {
-                var args = ParseArgs().ToArray();
-                var application = container.Resolve<CakeApplication>();
-                return application.Run(args);
-            }
-        }
+                // Parse all options.
+                var commandLine = Environment.CommandLine;
+                var args = ArgumentTokenizer.Tokenize(commandLine);
+                var parser = container.Resolve<IArgumentParser>();
+                var options = parser.Parse(args);
 
-        private static IEnumerable<string> ParseArgs()
-        {
-            var commandLine = Environment.CommandLine;
-            if (string.IsNullOrWhiteSpace(commandLine))
-            {
-                yield break;
-            }
-            var index = commandLine.IndexOf(' ');
-            if (index == -1)
-            {
-                yield break;
-            }
-            newvalue:
-            var sb = new StringBuilder();
-            var inQuote = false;
-            for (; ++index < commandLine.Length;)
-            {
-                var c = commandLine[index];
-                switch (c)
+                // Find all modules.
+                var finder = container.Resolve<CakeModuleFinder>();
+                var modules = finder.FindModules(options);
+                if (modules != null && modules.Count > 0)
                 {
-                    case '"':
+                    // Create the bootstrapper.
+                    var bootstrapper = new AutofacCakeContainer();
+
+                    // Let all modules register their dependencies.
+                    foreach (var module in modules)
                     {
-                        inQuote = !inQuote;
-                        break;
+                        module.Register(bootstrapper);
                     }
-                    case ' ':
-                    {
-                        if (inQuote)
-                        {
-                            break;
-                        }
-                        if (sb.Length > 1)
-                        {
-                            yield return sb.ToString();
-                        }
-                        goto newvalue;
-                    }
+
+                    // Update the container.
+                    bootstrapper.Update(container);
                 }
-                sb.Append(c);
-            }
-            if (sb.Length > 0)
-            {
-                yield return sb.ToString();
+
+                // Resolve the Cake application and run it.
+                var application = container.Resolve<CakeApplication>();
+                return application.Run(options);
             }
         }
 
@@ -88,35 +65,17 @@ namespace Cake
         {
             var builder = new ContainerBuilder();
 
-            // Core services.
-            builder.RegisterType<CakeEngine>().As<ICakeEngine>().SingleInstance();
-            builder.RegisterType<FileSystem>().As<IFileSystem>().SingleInstance();
-            builder.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().SingleInstance();
-            builder.RegisterType<CakeArguments>().As<ICakeArguments>().SingleInstance();
-            builder.RegisterType<Globber>().As<IGlobber>().SingleInstance();
-            builder.RegisterType<ProcessRunner>().As<IProcessRunner>().SingleInstance();
-            builder.RegisterType<ScriptAliasFinder>().As<IScriptAliasFinder>().SingleInstance();
-            builder.RegisterType<CakeReportPrinter>().As<ICakeReportPrinter>().SingleInstance();            
-            builder.RegisterType<CakeConsole>().As<IConsole>().SingleInstance();
-            builder.RegisterType<ScriptProcessor>().As<IScriptProcessor>().SingleInstance();
-            builder.RegisterCollection<IToolResolver>("toolResolvers").As<IEnumerable<IToolResolver>>();
-            builder.RegisterType<NuGetToolResolver>().As<IToolResolver>().As<INuGetToolResolver>().SingleInstance().MemberOf("toolResolvers");
-            builder.RegisterType<WindowsRegistry>().As<IRegistry>().SingleInstance();
-            builder.RegisterType<CakeContext>().As<ICakeContext>().SingleInstance();
-
-            // Roslyn related services.
-            builder.RegisterType<RoslynScriptEngine>().As<IScriptEngine>().SingleInstance();
-            builder.RegisterType<RoslynScriptSessionFactory>().SingleInstance();
-            builder.RegisterType<RoslynNightlyScriptSessionFactory>().SingleInstance();
-
-            // Cake services.
+            // Register Cake services.
             builder.RegisterType<ArgumentParser>().As<IArgumentParser>().SingleInstance();
+            builder.RegisterType<CakeModuleFinder>().SingleInstance();
             builder.RegisterType<CommandFactory>().As<ICommandFactory>().SingleInstance();
             builder.RegisterType<CakeApplication>().SingleInstance();
             builder.RegisterType<ScriptRunner>().As<IScriptRunner>().SingleInstance();
+
+            // Register log.
             builder.RegisterType<CakeBuildLog>().As<ICakeLog>().As<IVerbosityAwareLog>().SingleInstance();
 
-            // Register script hosts.
+            // Register hosts.
             builder.RegisterType<BuildScriptHost>().SingleInstance();
             builder.RegisterType<DescriptionScriptHost>().SingleInstance();
             builder.RegisterType<DryRunScriptHost>().SingleInstance();
@@ -127,6 +86,27 @@ namespace Cake
             builder.RegisterType<DryRunCommand>().AsSelf().InstancePerDependency();
             builder.RegisterType<HelpCommand>().AsSelf().InstancePerDependency();
             builder.RegisterType<VersionCommand>().AsSelf().InstancePerDependency();
+
+            // Register core services.
+            builder.RegisterType<CakeEngine>().As<ICakeEngine>().SingleInstance();
+            builder.RegisterType<FileSystem>().As<IFileSystem>().SingleInstance();
+            builder.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().SingleInstance();
+            builder.RegisterType<CakeArguments>().As<ICakeArguments>().SingleInstance();
+            builder.RegisterType<Globber>().As<IGlobber>().SingleInstance();
+            builder.RegisterType<ProcessRunner>().As<IProcessRunner>().SingleInstance();
+            builder.RegisterType<ScriptAliasFinder>().As<IScriptAliasFinder>().SingleInstance();
+            builder.RegisterType<CakeReportPrinter>().As<ICakeReportPrinter>().SingleInstance();
+            builder.RegisterType<CakeConsole>().As<IConsole>().SingleInstance();
+            builder.RegisterType<ScriptProcessor>().As<IScriptProcessor>().SingleInstance();
+            builder.RegisterCollection<IToolResolver>("toolResolvers").As<IEnumerable<IToolResolver>>();
+            builder.RegisterType<NuGetToolResolver>().As<IToolResolver>().As<INuGetToolResolver>().SingleInstance().MemberOf("toolResolvers");
+            builder.RegisterType<WindowsRegistry>().As<IRegistry>().SingleInstance();
+            builder.RegisterType<CakeContext>().As<ICakeContext>().SingleInstance();
+
+            // Register Roslyn services.
+            builder.RegisterType<RoslynScriptEngine>().As<IScriptEngine>().SingleInstance();
+            builder.RegisterType<RoslynScriptSessionFactory>().SingleInstance();
+            builder.RegisterType<RoslynNightlyScriptSessionFactory>().SingleInstance();
 
             return builder.Build();
         }

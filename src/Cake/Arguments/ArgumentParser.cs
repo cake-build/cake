@@ -162,6 +162,12 @@ namespace Cake.Arguments
                 options.ShowVersion = true;
             }
 
+            if (name.Equals("module", StringComparison.OrdinalIgnoreCase) ||
+                name.Equals("m", StringComparison.OrdinalIgnoreCase))
+            {
+                options.Module = new FilePath(value);
+            }
+
             if (options.Arguments.ContainsKey(name))
             {
                 _log.Error("Multiple arguments with the same name ({0}).", name);

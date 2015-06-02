@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 
@@ -14,7 +15,7 @@ namespace Cake.Commands
         // Delegate factory used by Autofac.
         public delegate HelpCommand Factory();
 
-        public HelpCommand(IConsole console)
+        public HelpCommand(IConsole console, IEnumerable<ICommand> commands)
         {
             _console = console;
         }

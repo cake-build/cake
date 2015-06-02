@@ -25,6 +25,12 @@ namespace Cake
         public FilePath Script { get; set; }
 
         /// <summary>
+        /// Gets or sets the module file path.
+        /// </summary>
+        /// <value>The module path.</value>
+        public FilePath Module { get; set; }
+
+        /// <summary>
         /// Gets the script arguments.
         /// </summary>
         /// <value>The script arguments.</value>

@@ -40,20 +40,6 @@ namespace Cake.Tests.Unit
             }
 
             [Fact]
-            public void Should_Throw_If_Argument_Parser_Is_Null()
-            {
-                // Given
-                var fixture = new CakeApplicationFixture();
-                fixture.ArgumentParser = null;
-
-                // When
-                var result = Record.Exception(() => fixture.CreateApplication());
-
-                // Then
-                Assert.IsArgumentNullException(result, "argumentParser");
-            }
-
-            [Fact]
             public void Should_Throw_If_Console_Is_Null()
             {
                 // Given

@@ -26,20 +26,17 @@ namespace Cake.Tests.Fixtures
             Log = Substitute.For<IVerbosityAwareLog>();
             CommandFactory = Substitute.For<ICommandFactory>();
 
-            ArgumentParser = Substitute.For<IArgumentParser>();
-            ArgumentParser.Parse(Arg.Any<IEnumerable<string>>()).Returns(c => Options);
-
             Console = Substitute.For<IConsole>();
         }
 
         public CakeApplication CreateApplication()
         {
-            return new CakeApplication(Log, CommandFactory, ArgumentParser, Console);
+            return new CakeApplication(Log, CommandFactory, Console);
         }
 
         public int RunApplication()
         {
-            return CreateApplication().Run(Enumerable.Empty<string>());
+            return CreateApplication().Run(Options);
         }
     }
 }
