@@ -39,6 +39,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8615F41E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.Testing", "Cake.Testing\Cake.Testing.csproj", "{5572610D-D857-450A-9CC9-F3E08B0E1449}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.Core.IO.LongPath", "Cake.Core.IO.LongPath\Cake.Core.IO.LongPath.csproj", "{A6DF2AD4-59C5-47DD-A26F-EC7C7D1304D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{5572610D-D857-450A-9CC9-F3E08B0E1449}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5572610D-D857-450A-9CC9-F3E08B0E1449}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5572610D-D857-450A-9CC9-F3E08B0E1449}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6DF2AD4-59C5-47DD-A26F-EC7C7D1304D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6DF2AD4-59C5-47DD-A26F-EC7C7D1304D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6DF2AD4-59C5-47DD-A26F-EC7C7D1304D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6DF2AD4-59C5-47DD-A26F-EC7C7D1304D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
