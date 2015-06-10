@@ -54,6 +54,13 @@
     <Compile Include="Annotations\CakeAliasCategoryAttribute.cs" />
     <Compile Include="Annotations\CakeNamespaceImportAttribute.cs" />
     <Compile Include="Annotations\CakePropertyAliasAttribute.cs" />
+    <Compile Include="Container\ContainerRegistration.cs" />
+    <Compile Include="Container\FactoryRegistration.cs" />
+    <Compile Include="Container\FactoryRegistrationContext.cs" />
+    <Compile Include="ICakeContainer.cs" />
+    <Compile Include="Container\Lifetime.cs" />
+    <Compile Include="Container\InstanceRegistration.cs" />
+    <Compile Include="Container\TypeRegistration.cs" />
     <Compile Include="CakeContext.cs" />
     <Compile Include="CakeEngine.cs" />
     <Compile Include="CakeException.cs" />
@@ -71,6 +78,7 @@
     <Compile Include="Diagnostics\NullLog.cs" />
     <Compile Include="Diagnostics\Verbosity.cs" />
     <Compile Include="Diagnostics\VerbosityTypeConverter.cs" />
+    <Compile Include="Extensions\CakeContainerExtensions.cs" />
     <Compile Include="Extensions\ConsoleExtensions.cs" />
     <Compile Include="Extensions\DirectoryExtensions.cs" />
     <Compile Include="Extensions\HashSetExtensions.cs" />
@@ -81,6 +89,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="ICakeArguments.cs" />
+    <Compile Include="ICakeModule.cs" />
     <Compile Include="IExecutionStrategy.cs" />
     <Compile Include="ICakeReportPrinter.cs" />
     <Compile Include="IConsole.cs" />

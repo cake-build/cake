@@ -113,14 +113,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arguments\ArgumentParser.cs" />
+    <Compile Include="Arguments\ArgumentTokenizer.cs" />
     <Compile Include="Arguments\IArgumentParser.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Autofac\AutofacCakeContainer.cs" />
     <Compile Include="CakeApplication.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CakeArguments.cs" />
     <Compile Include="CakeConsole.cs" />
+    <Compile Include="CakeModuleFinder.cs" />
     <Compile Include="CakeOptions.cs" />
     <Compile Include="CakeReportPrinter.cs" />
     <Compile Include="Commands\BuildCommand.cs" />

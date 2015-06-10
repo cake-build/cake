@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Cake.Arguments;
 using Cake.Commands;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -15,7 +13,6 @@ namespace Cake
     {
         private readonly IVerbosityAwareLog _log;
         private readonly ICommandFactory _commandFactory;
-        private readonly IArgumentParser _argumentParser;
         private readonly IConsole _console;
 
         /// <summary>
@@ -23,12 +20,10 @@ namespace Cake
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="commandFactory">The command factory.</param>
-        /// <param name="argumentParser">The argument parser.</param>
         /// <param name="console">The console.</param>
         public CakeApplication(
             IVerbosityAwareLog log,
             ICommandFactory commandFactory,
-            IArgumentParser argumentParser,
             IConsole console)
         {
             if (log == null)
@@ -39,10 +34,6 @@ namespace Cake
             {
                 throw new ArgumentNullException("commandFactory");
             }
-            if (argumentParser == null)
-            {
-                throw new ArgumentNullException("argumentParser");
-            }
             if (console == null)
             {
                 throw new ArgumentNullException("console");
@@ -50,21 +41,19 @@ namespace Cake
 
             _log = log;
             _commandFactory = commandFactory;
-            _argumentParser = argumentParser;
             _console = console;
         }
 
         /// <summary>
-        /// Runs the application with the specified arguments.
+        /// Runs the application with the specified options.
         /// </summary>
-        /// <param name="args">The arguments.</param>
+        /// <param name="options">The options.</param>
         /// <returns>The application exit code.</returns>
-        public int Run(IEnumerable<string> args)
+        public int Run(CakeOptions options)
         {
             try
             {
                 // Parse options.
-                var options = _argumentParser.Parse(args);
                 if (options != null)
                 {
                     _log.SetVerbosity(options.Verbosity);
