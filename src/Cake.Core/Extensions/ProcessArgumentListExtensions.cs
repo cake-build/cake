@@ -28,7 +28,7 @@ namespace Cake.Core
         /// Quotes and appends the specified text to the argument builder.
         /// </summary>
         /// <param name="builder">The builder.</param>
-        /// <param name="text">The text to be appended.</param>
+        /// <param name="text">The text to be quoted and appended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendQuoted(this ProcessArgumentBuilder builder, string text)
         {
@@ -70,6 +70,21 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Appends the specified secret text to the argument builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="argument">The secret argument to be appended.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder AppendSecret(this ProcessArgumentBuilder builder, IProcessArgument argument)
+        {
+            if (builder != null)
+            {
+                builder.Append(new SecretArgument(argument));
+            }
+            return builder;
+        }
+
+        /// <summary>
         /// Quotes and appends the specified secret text to the argument builder.
         /// </summary>
         /// <param name="builder">The builder.</param>
@@ -80,6 +95,21 @@ namespace Cake.Core
             if (builder != null)
             {
                 builder.AppendQuoted(new SecretArgument(new TextArgument(text)));
+            }
+            return builder;
+        }
+
+        /// <summary>
+        /// Quotes and appends the specified secret text to the argument builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="argument">The secret argument to be appended.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder AppendQuotedSecret(this ProcessArgumentBuilder builder, IProcessArgument argument)
+        {
+            if (builder != null)
+            {
+                builder.AppendQuoted(new SecretArgument(argument));
             }
             return builder;
         }
