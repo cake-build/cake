@@ -1,5 +1,6 @@
 ﻿using System;
 using Cake.Common.Build.AppVeyor;
+using Cake.Common.Build.TeamCity;
 using Cake.Core;
 using Cake.Core.Annotations;
 
@@ -25,7 +26,13 @@ namespace Cake.Common.Build
         [CakePropertyAlias(Cache = true)]
         public static BuildSystem BuildSystem(this ICakeContext context)
         {
-            return new BuildSystem(AppVeyor(context));
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            var appVeyorProvider = new AppVeyorProvider(context.Environment, context.ProcessRunner);
+            var teamCityProvider = new TeamCityProvider(context.Environment);
+            return new BuildSystem(appVeyorProvider, teamCityProvider);
         }
 
         /// <summary>
@@ -40,13 +47,36 @@ namespace Cake.Common.Build
         /// <param name="context">The context.</param>
         /// <returns>A <see cref="Cake.Common.Build.AppVeyor"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]
-        public static AppVeyorProvider AppVeyor(this ICakeContext context)
+        public static IAppVeyorProvider AppVeyor(this ICakeContext context)
         {
             if (context == null)
             {
                 throw new ArgumentNullException("context");
             }
-            return new AppVeyorProvider(context.Environment, context.ProcessRunner);
+            var buildSystem = context.BuildSystem();
+            return buildSystem.AppVeyor;
+        }
+
+        /// <summary>
+        /// Gets a <see cref="Cake.Common.Build.TeamCity.TeamCityProvider"/> instance that can
+        /// be used to manipulate the TeamCity environment.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var isTeamCityBuild = TeamCity.IsRunningOnTeamCity;
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <returns>A <see cref="Cake.Common.Build.TeamCity"/> instance.</returns>
+        [CakePropertyAlias(Cache = true)]
+        public static ITeamCityProvider TeamCity(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            var buildSystem = context.BuildSystem();
+            return buildSystem.TeamCity;
         }
     }
 }
