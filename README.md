@@ -1,6 +1,6 @@
 #Cake
 
-Cake (C# Make) is a build automation system using C#.
+Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/c6lw0vvj1mf4395a/branch/develop?svg=true)](https://ci.appveyor.com/project/patriksvensson/cake/branch/develop)
 [![Coverity Scan](https://scan.coverity.com/projects/4147/badge.svg)](https://scan.coverity.com/projects/4147) 
@@ -67,6 +67,8 @@ For a full list of supported tools, see the [DSL reference](http://cakebuild.net
 * [MSBuild Resource](http://cakebuild.net/dsl/#msbuildresource)
   * Solution file parsing
   * Project file parsing
+* [Octopus deploy](http://cakebuild.net/dsl/#octopusdeploy)
+  * Create release
 
 For more information and examples of how to use Cake, see the [Documentation](http://cakebuild.net/). 
 

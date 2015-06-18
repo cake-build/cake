@@ -140,7 +140,7 @@ namespace Cake.Core.Tests.Unit.IO
                 // When
                 var result = globber.Match("/Temp/Hello/World/Text.txt").ToArray();
 
-                // Then                
+                // Then
                 Assert.Equal(1, result.Length);
                 Assert.IsType<FilePath>(result[0]);
                 Assert.Equal("/Temp/Hello/World/Text.txt", result[0].FullPath);
@@ -156,7 +156,7 @@ namespace Cake.Core.Tests.Unit.IO
                 // When
                 var result = globber.Match("/Temp/Hello/World").ToArray();
 
-                // Then                
+                // Then
                 Assert.Equal(1, result.Length);
                 Assert.IsType<DirectoryPath>(result[0]);
                 Assert.Equal("/Temp/Hello/World", result[0].FullPath);
@@ -173,7 +173,7 @@ namespace Cake.Core.Tests.Unit.IO
                 // When
                 var result = globber.Match("./World/Text.txt").ToArray();
 
-                // Then                
+                // Then
                 Assert.Equal(1, result.Length);
                 Assert.IsType<FilePath>(result[0]);
                 Assert.Equal("/Temp/Hello/World/Text.txt", result[0].FullPath);
@@ -190,10 +190,28 @@ namespace Cake.Core.Tests.Unit.IO
                 // When
                 var result = globber.Match("./World").ToArray();
 
-                // Then                
+                // Then
                 Assert.Equal(1, result.Length);
                 Assert.IsType<DirectoryPath>(result[0]);
                 Assert.Equal("/Temp/Hello/World", result[0].FullPath);
+            }
+
+            [Fact]
+            public void Should_Return_Single_Path_Glob_Pattern_With_Predicate()
+            {
+                // Given
+                var fixture = new GlobberFixture();
+                var globber = fixture.CreateGlobber();
+
+                // When
+                var result = globber.Match(
+                    "./**/*.txt",
+                    predicate=>predicate.Path is DirectoryPath || predicate.Path.FullPath == "/Temp/Hello/World/Text.txt").ToArray();
+
+                // Then
+                Assert.Equal(1, result.Length);
+                Assert.IsType<FilePath>(result[0]);
+                Assert.Equal("/Temp/Hello/World/Text.txt", result[0].FullPath);
             }
         }
     }
