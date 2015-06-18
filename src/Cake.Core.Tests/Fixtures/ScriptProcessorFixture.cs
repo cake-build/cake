@@ -36,7 +36,7 @@ namespace Cake.Core.Tests.Fixtures
                 FileSystem.GetCreatedFile(ScriptPath.MakeAbsolute(Environment), Source);
             }
 
-            NuGetToolResolver = new NuGetToolResolver(FileSystem, Globber, Environment);
+            NuGetToolResolver = new NuGetToolResolver(FileSystem, Environment, Globber);
         }
 
         public ScriptProcessor CreateProcessor()
@@ -54,6 +54,11 @@ namespace Cake.Core.Tests.Fixtures
         public string GetExpectedSource()
         {
             return string.Concat("#line 1 \"build.cake\"", "\r\n", Source);
+        }
+
+        public string GetActualSource(ScriptProcessorContext context)
+        {
+            return string.Join("\r\n", context.Lines);
         }
     }
 }

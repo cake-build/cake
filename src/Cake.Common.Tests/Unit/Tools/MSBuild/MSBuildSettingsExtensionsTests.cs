@@ -31,7 +31,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var settings = new MSBuildSettings(solution);
 
                 // When
-                var result = settings.WithTarget("Target");          
+                var result = settings.WithTarget("Target");
 
                 // Then
                 Assert.Equal(settings, result);

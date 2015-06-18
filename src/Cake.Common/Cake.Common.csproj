@@ -155,6 +155,11 @@
     <Compile Include="Tools\NUnit\NUnitAliases.cs" />
     <Compile Include="Tools\NUnit\NUnitRunner.cs" />
     <Compile Include="Tools\NUnit\NUnitSettings.cs" />
+    <Compile Include="Tools\OctopusDeploy\CreateReleaseArgumentBuilder.cs" />
+    <Compile Include="Tools\OctopusDeploy\OctopusDeployAliases.cs" />
+    <Compile Include="Tools\OctopusDeploy\CreateReleaseSettings.cs" />
+    <Compile Include="Tools\OctopusDeploy\OctopusDeployReleaseCreator.cs" />
+    <Compile Include="Tools\OctopusDeploy\OctopusDeploySettings.cs" />
     <Compile Include="Tools\SignTool\ISignToolResolver.cs" />
     <Compile Include="Tools\SignTool\SignToolResolver.cs" />
     <Compile Include="Tools\SignTool\SignToolSignAliases.cs" />

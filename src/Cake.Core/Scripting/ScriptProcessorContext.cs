@@ -13,7 +13,7 @@ namespace Cake.Core.Scripting
         private readonly HashSet<string> _references;
         private readonly HashSet<string> _namespaces;
         private readonly LinkedList<string> _lines;
-        private readonly LinkedList<string> _aliases;
+        private readonly HashSet<ScriptAlias> _aliases;
 
         /// <summary>
         /// Gets the script's assembly references 
@@ -45,6 +45,26 @@ namespace Cake.Core.Scripting
         }
 
         /// <summary>
+        /// Gets the script lines.
+        /// </summary>
+        /// <value>
+        /// The lines.
+        /// </value>
+        public LinkedList<string> Lines
+        {
+            get { return _lines; }
+        }
+
+        /// <summary>
+        /// Gets the aliases.
+        /// </summary>
+        /// <value>The aliases.</value>
+        public HashSet<ScriptAlias> Aliases
+        {
+            get { return _aliases; }
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ScriptProcessorContext"/> class.
         /// </summary>
         public ScriptProcessorContext()
@@ -53,7 +73,7 @@ namespace Cake.Core.Scripting
             _references = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _namespaces = new HashSet<string>(StringComparer.Ordinal);
             _lines = new LinkedList<string>();
-            _aliases = new LinkedList<string>();
+            _aliases = new HashSet<ScriptAlias>();
         }
 
         /// <summary>
@@ -70,7 +90,7 @@ namespace Cake.Core.Scripting
         /// Marks the script as processed.
         /// </summary>
         /// <param name="script">The script to mark as processed.</param>
-        public void MarkScriptAsProcessed(string script)
+        internal void MarkScriptAsProcessed(string script)
         {
             _processedScripts.Add(script);
         }
@@ -94,12 +114,12 @@ namespace Cake.Core.Scripting
         }
 
         /// <summary>
-        /// Adds the code for a script alias.
+        /// Adds a script alias.
         /// </summary>
-        /// <param name="code">The code to add.</param>
-        public void AddScriptAliasCode(string code)
+        /// <param name="alias">The alias.</param>
+        public void AddScriptAlias(ScriptAlias alias)
         {
-            _aliases.AddLast(code);
+            _aliases.Add(alias);
         }
 
         /// <summary>
@@ -109,21 +129,6 @@ namespace Cake.Core.Scripting
         public void AppendScriptLine(string line)
         {
             _lines.AddLast(line);
-        }
-
-        /// <summary>
-        /// Gets the script code.
-        /// </summary>
-        /// <returns>The script code.</returns>
-        public string GetScriptCode()
-        {
-            var aliases = string.Join("\r\n", _aliases);
-            var code = string.Join("\r\n", _lines);
-            if (!string.IsNullOrWhiteSpace(aliases))
-            {
-                return string.Join("\r\n", aliases, code);
-            }
-            return code;
         }
     }
 }

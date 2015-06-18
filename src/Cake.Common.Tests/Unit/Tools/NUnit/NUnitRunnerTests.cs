@@ -235,19 +235,23 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                     Timeout = 5,
                     Include = "Database",
                     Exclude = "Database_Users",
-                    Framework = "net1_1"
+                    Framework = "net1_1",
+                    OutputFile = "stdout.txt",
+                    ErrorOutputFile = "stderr.txt"
                 });
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == 
-                            "\"/Working/Test1.dll\" " +
-                            "\"/framework:net1_1\" " +
-                            "\"/include:Database\" \"/exclude:Database_Users\" " +
-                            "/timeout:5 /nologo /nothread /stoponerror /trace:Debug " +
-                            "\"/result:/Working/NewTestResult.xml\""));
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() ==
+                        "\"/Working/Test1.dll\" " +
+                        "\"/framework:net1_1\" " +
+                        "\"/include:Database\" \"/exclude:Database_Users\" " +
+                        "/timeout:5 /nologo /nothread /stoponerror /trace:Debug " +
+                        "\"/output:/Working/stdout.txt\" " +
+                        "\"/err:/Working/stderr.txt\" " +
+                        "\"/result:/Working/NewTestResult.xml\""));
             }
         }
     }

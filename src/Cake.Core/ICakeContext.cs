@@ -50,5 +50,11 @@ namespace Cake.Core
         /// <param name="toolName">resolver tool name</param>
         /// <returns>IToolResolver for tool</returns>
         IToolResolver GetToolResolver(string toolName);
+
+        /// <summary>
+        /// Gets the registry.
+        /// </summary>
+        /// <value>The registry.</value>
+        IRegistry Registry { get; }
     }
 }
