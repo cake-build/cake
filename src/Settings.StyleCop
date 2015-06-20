@@ -15,6 +15,7 @@
       <Value>globbing</Value>
       <Value>nuget</Value>
       <Value>nuspec</Value>
+      <Value>teamcity</Value>
       <Value>templating</Value>
       <Value>veyor</Value>
       <Value>yml</Value>
