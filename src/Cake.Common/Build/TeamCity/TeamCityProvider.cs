@@ -31,7 +31,7 @@ namespace Cake.Common.Build.TeamCity
         /// <summary>
         /// Initializes a new instance of the <see cref="TeamCityProvider"/> class.
         /// </summary>
-        /// <param name="environment">The cake enviroment.</param>
+        /// <param name="environment">The cake environment.</param>
         public TeamCityProvider(ICakeEnvironment environment)
         {
             if (environment == null)
@@ -145,6 +145,15 @@ namespace Cake.Common.Build.TeamCity
         /// <param name="path">Data file path.</param>
         public void ImportData(string type, FilePath path)
         {
+            if (type == null)
+            {
+                throw new ArgumentNullException("type");
+            }
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+
             WriteServiceMessage("importData", new Dictionary<string, string>
             {
                 { "type", type },
@@ -197,7 +206,7 @@ namespace Cake.Common.Build.TeamCity
                             {
                                 return string.Format(CultureInfo.InvariantCulture, "'{0}'", Sanitize(keypair.Value));
                             }
-                            return string.Format("{0}='{1}'", keypair.Key, Sanitize(keypair.Value));
+                            return string.Format(CultureInfo.InvariantCulture, "{0}='{1}'", keypair.Key, Sanitize(keypair.Value));
                         })
                         .ToArray());
             Console.WriteLine("{0}{1} {2}{3}", MessagePrefix, messageName, valueString, MessagePostfix);

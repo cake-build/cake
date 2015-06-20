@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Cake.Common.Build.TeamCity
 {
     /// <summary>
-    /// A set of extensions for allowing "using" with teamcity "blocks".
+    /// A set of extensions for allowing "using" with TeamCity "blocks".
     /// </summary>
     public static class TeamCityDisposableExtensions
     {

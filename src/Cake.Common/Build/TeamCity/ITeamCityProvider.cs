@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace Cake.Common.Build.TeamCity
+﻿namespace Cake.Common.Build.TeamCity
 {
     /// <summary>
-    /// Inteface for TeamCity BuildSystem provider.
+    /// Represents a TeamCity provider.
     /// </summary>
     public interface ITeamCityProvider
     {
