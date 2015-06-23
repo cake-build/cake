@@ -1,4 +1,5 @@
-﻿using Cake.Common.Solution.Project.Properties;
+﻿using System.Collections.ObjectModel;
+using Cake.Common.Solution.Project.Properties;
 using Cake.Common.Tests.Fixtures;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -277,6 +278,38 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 // Then
                 Assert.True(result.Contains("using System;"));
                 Assert.True(result.Contains("[assembly: CLSCompliant(true)]"));
+            }
+
+            [Fact]
+            public void Should_Add_InternalsVisibleTo_Attribute_If_Set()
+            {
+                // Given
+                var fixture = new AssemblyInfoFixture();
+                fixture.Settings.InternalsVisibleTo = new Collection<string> { "Assembly1.Tests" };
+
+                // When
+                var result = fixture.CreateAndReturnContent();
+
+                // Then
+                Assert.True(result.Contains("using System.Runtime.CompilerServices;"));
+                Assert.True(result.Contains("[assembly: InternalsVisibleTo(\"Assembly1.Tests\")]"));
+            }
+
+            [Fact]
+            public void Should_Add_Multiple_InternalsVisibleTo_Attribute_If_Set()
+            {
+                // Given
+                var fixture = new AssemblyInfoFixture();
+                fixture.Settings.InternalsVisibleTo = new Collection<string> { "Assembly1.Tests", "Assembly2.Tests", "Assembly3.Tests" };
+
+                // When
+                var result = fixture.CreateAndReturnContent();
+
+                // Then
+                Assert.True(result.Contains("using System.Runtime.CompilerServices;"));
+                Assert.True(result.Contains("[assembly: InternalsVisibleTo(\"Assembly1.Tests\")]"));
+                Assert.True(result.Contains("[assembly: InternalsVisibleTo(\"Assembly2.Tests\")]"));
+                Assert.True(result.Contains("[assembly: InternalsVisibleTo(\"Assembly3.Tests\")]"));
             }
         }
     }

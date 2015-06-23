@@ -5,12 +5,12 @@ namespace Cake.Common.Solution.Project.Properties
 {
     internal sealed class AssemblyInfoRegistration
     {
-        private readonly IDictionary<string, string> _dictionary;
+        private readonly List<KeyValuePair<string,string>> _attributes;
         private readonly ISet<string> _namespaces;
 
-        public IDictionary<string, string> Attributes
+        public List<KeyValuePair<string, string>> Attributes
         {
-            get { return _dictionary; }
+            get { return _attributes; }
         }
 
         public ISet<string> Namespaces
@@ -20,7 +20,7 @@ namespace Cake.Common.Solution.Project.Properties
 
         public AssemblyInfoRegistration()
         {
-            _dictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            _attributes = new List<KeyValuePair<string, string>>(); 
             _namespaces = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         }
 
@@ -42,14 +42,7 @@ namespace Cake.Common.Solution.Project.Properties
 
         private void Add(string name, string @namespace, string value)
         {
-            if (Attributes.ContainsKey(name))
-            {
-                Attributes[name] = value;
-            }
-            else
-            {
-                Attributes.Add(name, value);   
-            }            
+            Attributes.Add(new KeyValuePair<string, string>(name, value));
             Namespaces.Add(@namespace);
         }
     }

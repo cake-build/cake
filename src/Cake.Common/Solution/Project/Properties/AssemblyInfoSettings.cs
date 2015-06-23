@@ -1,4 +1,6 @@
-﻿namespace Cake.Common.Solution.Project.Properties
+﻿using System.Collections.Generic;
+
+namespace Cake.Common.Solution.Project.Properties
 {
     /// <summary>
     /// Contains settings used by <see cref="AssemblyInfoCreator"/>.
@@ -58,6 +60,12 @@
         /// </summary>
         /// <value>The informational version.</value>
         public string InformationalVersion { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name(s) of the assembly(s) that internals should be visible to.
+        /// </summary>
+        /// <value>The name(s) of the assembly(s).</value>
+        public ICollection<string> InternalsVisibleTo { get; set; }
 
         /// <summary>
         /// Gets or sets whether or not the assembly is COM visible.
