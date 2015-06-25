@@ -136,12 +136,19 @@ namespace Cake.Common.Solution.Project.Properties
             AssemblyInfoRegistration registration)
         {
             if (!SettingsIncludeInternalsVisibleTo(settings))
+            {
                 return;
+            }
 
-            if(registration == null)
+            if (registration == null)
+            {
                 return;
+            }
 
-            if(registration.Namespaces.Contains("System.Runtime.CompilerServices")) return;
+            if (registration.Namespaces.Contains("System.Runtime.CompilerServices"))
+            {
+                return;
+            }
 
             registration.Namespaces.Add("System.Runtime.CompilerServices");
         }
@@ -149,7 +156,9 @@ namespace Cake.Common.Solution.Project.Properties
         private static IEnumerable<string> GetInternalsVisibleTo(AssemblyInfoSettings settings)
         {
             if (!SettingsIncludeInternalsVisibleTo(settings))
+            {
                 return null;
+            }
 
             var nonEmptyInternalsVisibleTo = settings.InternalsVisibleTo.Where(x => x != null).ToList();
 
@@ -161,10 +170,14 @@ namespace Cake.Common.Solution.Project.Properties
         private static bool SettingsIncludeInternalsVisibleTo(AssemblyInfoSettings settings)
         {
             if (settings == null)
+            {
                 return false;
+            }
 
             if (settings.InternalsVisibleTo == null || !settings.InternalsVisibleTo.Any())
+            {
                 return false;
+            }
 
             return true;
         }

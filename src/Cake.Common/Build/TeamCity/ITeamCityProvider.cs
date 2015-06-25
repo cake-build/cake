@@ -3,7 +3,7 @@
 namespace Cake.Common.Build.TeamCity
 {
     /// <summary>
-    /// Inteface for TeamCity BuildSystem provider.
+    /// Interface for TeamCity BuildSystem provider.
     /// </summary>
     public interface ITeamCityProvider
     {

@@ -31,7 +31,7 @@ namespace Cake.Common.Build.TeamCity
         /// <summary>
         /// Initializes a new instance of the <see cref="TeamCityProvider"/> class.
         /// </summary>
-        /// <param name="environment">The cake enviroment.</param>
+        /// <param name="environment">The cake environment.</param>
         public TeamCityProvider(ICakeEnvironment environment)
         {
             if (environment == null)
