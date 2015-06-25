@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Cake.Core;
@@ -61,6 +62,10 @@ namespace Cake.Common.Solution.Project.Properties
             // Create registrations.
             var registration = GetRegistrations(settings);
 
+            // Create internals visible to
+            var internalsVisibleTo = GetInternalsVisibleTo(settings);
+            EnsureInternalVisiblesToNamespace(settings, registration);
+
             // Get the absolute output path.
             var absoluteOutputPath = outputPath.MakeAbsolute(_environment);
 
@@ -76,7 +81,7 @@ namespace Cake.Common.Solution.Project.Properties
                 writer.WriteLine("// </auto-generated>");
                 writer.WriteLine("//------------------------------------------------------------------------------");
 
-                if (registration.Attributes.Count > 0)
+                if (registration.Namespaces.Any())
                 {
                     // Write namespaces.
                     var namespaces = registration.Namespaces.Select(n => string.Concat("using ", n, ";"));
@@ -86,12 +91,25 @@ namespace Cake.Common.Solution.Project.Properties
                     }
 
                     writer.WriteLine();
+                }
 
+                if (registration.Attributes.Count > 0)
+                {
                     // Write attributes.
                     foreach (var attribute in registration.Attributes)
                     {
                         writer.WriteLine(string.Concat("[assembly: ", attribute.Key, "(", attribute.Value, ")]"));
                     }
+
+                    writer.WriteLine();
+                }
+                
+                if (internalsVisibleTo != null && internalsVisibleTo.Any())
+                {
+                    // Write Internals visible true
+                    writer.WriteLine(string.Concat("[assembly: ", string.Join(", ", internalsVisibleTo), "]"));
+
+                    writer.WriteLine();
                 }
             }
         }
@@ -112,6 +130,43 @@ namespace Cake.Common.Solution.Project.Properties
             registration.AddBoolean("ComVisible", "System.Runtime.InteropServices", settings.ComVisible);
             registration.AddBoolean("CLSCompliant", "System", settings.CLSCompliant);
             return registration;
+        }
+
+        private static void EnsureInternalVisiblesToNamespace(AssemblyInfoSettings settings,
+            AssemblyInfoRegistration registration)
+        {
+            if (!SettingsIncludeInternalsVisibleTo(settings))
+                return;
+
+            if(registration == null)
+                return;
+
+            if(registration.Namespaces.Contains("System.Runtime.CompilerServices")) return;
+
+            registration.Namespaces.Add("System.Runtime.CompilerServices");
+        }
+
+        private static IEnumerable<string> GetInternalsVisibleTo(AssemblyInfoSettings settings)
+        {
+            if (!SettingsIncludeInternalsVisibleTo(settings))
+                return null;
+
+            var nonEmptyInternalsVisibleTo = settings.InternalsVisibleTo.Where(x => x != null).ToList();
+
+            return nonEmptyInternalsVisibleTo
+                .Select(x => string.Concat("InternalsVisibleTo(\"", x.UnQuote(), "\")"))
+                .ToList();
+        }
+
+        private static bool SettingsIncludeInternalsVisibleTo(AssemblyInfoSettings settings)
+        {
+            if (settings == null)
+                return false;
+
+            if (settings.InternalsVisibleTo == null || !settings.InternalsVisibleTo.Any())
+                return false;
+
+            return true;
         }
     }
 }
