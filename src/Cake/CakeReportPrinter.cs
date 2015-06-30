@@ -24,22 +24,33 @@ namespace Cake
 
             try
             {
+                var maxTaskNameLength = 29;
+                foreach (var item in report)
+                {
+                    if (item.TaskName.Length > maxTaskNameLength)
+                    {
+                        maxTaskNameLength = item.TaskName.Length;
+                    }
+                }
+
+                maxTaskNameLength++;
+                string lineFormat = "{0,-" + maxTaskNameLength + "}{1,-20}";
                 _console.ForegroundColor = ConsoleColor.Green;
 
                 // Write header.
                 _console.WriteLine();
-                _console.WriteLine("{0,-30}{1,-20}", "Task", "Duration");
-                _console.WriteLine(new string('-', 50));
+                _console.WriteLine(lineFormat, "Task", "Duration");
+                _console.WriteLine(new string('-', 20 + maxTaskNameLength));
 
                 // Write task status.
                 foreach (var item in report)
                 {
-                    _console.WriteLine("{0,-30}{1,-20}", item.TaskName, FormatTime(item.Duration));
+                    _console.WriteLine(lineFormat, item.TaskName, FormatTime(item.Duration));
                 }
 
                 // Write footer.
-                _console.WriteLine(new string('-', 50));
-                _console.WriteLine("{0,-30}{1,-20}", "Total:", FormatTime(GetTotalTime(report)));
+                _console.WriteLine(new string('-', 20 + maxTaskNameLength));
+                _console.WriteLine(lineFormat, "Total:", FormatTime(GetTotalTime(report)));
             }
             finally
             {
