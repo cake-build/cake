@@ -10,6 +10,10 @@ namespace Cake.Scripting.Mono
     /// </summary>
     public class MonoScriptHostProxy
     {
+        /// <summary>
+        /// Gets or sets the script host.
+        /// </summary>
+        /// <value>The script host.</value>
         public static IScriptHost ScriptHost { get; set; }
     }
 }
