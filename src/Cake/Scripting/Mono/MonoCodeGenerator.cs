@@ -55,13 +55,13 @@ namespace Cake.Scripting.Mono
         static string GetScriptHostProxy ()
         {
             return "    " + string.Join ("\r\n    ", new string[] {
-            "public static IScriptHost ScriptHost { get; set; }",
-            "public ICakeContext Context { get { return ScriptHost.Context; } }",
-            "public IReadOnlyList<CakeTask> Tasks { get { return ScriptHost.Tasks; } }",
-            "public CakeTaskBuilder<ActionTask> Task(string name) { return ScriptHost.Task (name); }",
-            "public void Setup (Action action) { ScriptHost.Setup (action); }",
-            "public void Teardown(Action action) { ScriptHost.Teardown (action); }",
-            "public CakeReport RunTarget(string target) { return ScriptHost.RunTarget (target); }" });
+            "IScriptHost ScriptHost { get; set; }",
+            "ICakeContext Context { get { return ScriptHost.Context; } }",
+            "IReadOnlyList<CakeTask> Tasks { get { return ScriptHost.Tasks; } }",
+            "CakeTaskBuilder<ActionTask> Task(string name) { return ScriptHost.Task (name); }",
+            "void Setup (Action action) { ScriptHost.Setup (action); }",
+            "void Teardown(Action action) { ScriptHost.Teardown (action); }",
+            "CakeReport RunTarget(string target) { return ScriptHost.RunTarget (target); }" });
         }
     }
 }
