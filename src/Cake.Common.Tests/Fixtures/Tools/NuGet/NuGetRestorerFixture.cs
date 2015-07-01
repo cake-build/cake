@@ -16,7 +16,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet
 
         public void Restore()
         {
-            var tool = new NuGetRestorer(FileSystem, Environment, ProcessRunner, NuGetToolResolver);
+            var tool = new NuGetRestorer(FileSystem, Environment, ProcessRunner, Globber, NuGetToolResolver);
             tool.Restore(TargetFilePath, Settings);
         }
     }

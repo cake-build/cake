@@ -18,8 +18,8 @@ namespace Cake.Scripting.Roslyn
             foreach (var alias in context.Aliases)
             {
                 result.Add(alias.Type == ScriptAliasType.Method
-                    ? MethodAliasGenerator.Generate(alias.Method)
-                    : PropertyAliasGenerator.Generate(alias.Method));
+                    ? RoslynMethodAliasGenerator.Generate(alias.Method)
+                    : RoslynPropertyAliasGenerator.Generate(alias.Method));
             }
             return string.Join("\r\n", result);
         }

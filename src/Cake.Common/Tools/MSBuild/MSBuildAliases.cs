@@ -43,7 +43,7 @@ namespace Cake.Common.Tools.MSBuild
             var settings = new MSBuildSettings(solution);
             configurator(settings);
 
-            var runner = new MSBuildRunner(context.FileSystem, context.Environment, context.ProcessRunner);
+            var runner = new MSBuildRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
             runner.Run(settings);
         }
     }

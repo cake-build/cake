@@ -13,6 +13,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         public ICakeEnvironment Environment { get; set; }
         public IProcess Process { get; set; }
         public IProcessRunner ProcessRunner { get; private set; }
+        public IGlobber Globber { get; set; }
 
         public MSBuildSettings Settings { get; set; }
 
@@ -32,6 +33,8 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
             ProcessRunner = Substitute.For<IProcessRunner>();
             ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns(Process);
+
+            Globber = Substitute.For<IGlobber>();
 
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.Is64BitOperativeSystem().Returns(is64BitOperativeSystem);
@@ -71,7 +74,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         public void Run()
         {
-            var runner = new MSBuildRunner(FileSystem, Environment, ProcessRunner);
+            var runner = new MSBuildRunner(FileSystem, Environment, ProcessRunner, Globber);
             runner.Run(Settings);
         }
 

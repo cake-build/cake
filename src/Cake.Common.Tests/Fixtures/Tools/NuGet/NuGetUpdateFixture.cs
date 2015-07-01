@@ -19,7 +19,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet
 
         public void Update()
         {
-            var tool = new NuGetUpdater(FileSystem, Environment, ProcessRunner, NuGetToolResolver);
+            var tool = new NuGetUpdater(FileSystem, Environment, ProcessRunner, Globber, NuGetToolResolver);
             tool.Update(TargetFile, Settings);
         }
     }

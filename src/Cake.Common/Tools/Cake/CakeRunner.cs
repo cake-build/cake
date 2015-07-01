@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
@@ -16,7 +17,6 @@ namespace Cake.Common.Tools.Cake
     public sealed class CakeRunner : Tool<CakeSettings>
     {
         private readonly ICakeEnvironment _environment;
-        private readonly IGlobber _globber;
         private readonly IFileSystem _fileSystem;
 
         /// <summary>
@@ -28,10 +28,9 @@ namespace Cake.Common.Tools.Cake
         /// <param name="processRunner">The process runner.</param>
         public CakeRunner(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber,
             IProcessRunner processRunner)
-            : base(fileSystem, environment, processRunner)
+            : base(fileSystem, environment, processRunner, globber)
         {
             _environment = environment;
-            _globber = globber;
             _fileSystem = fileSystem;
         }
 
@@ -127,14 +126,12 @@ namespace Cake.Common.Tools.Cake
         }
 
         /// <summary>
-        /// Gets the default tool path.
+        /// Gets the name of the tool executable.
         /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The default tool path.</returns>
-        protected override FilePath GetDefaultToolPath(CakeSettings settings)
+        /// <returns>The tool executable name.</returns>
+        protected override IEnumerable<string> GetToolExecutableNames()
         {
-            const string expression = "./tools/**/Cake.exe";
-            return _globber.GetFiles(expression).FirstOrDefault();
+            return new[] { "Cake.exe" };
         }
     }
 }

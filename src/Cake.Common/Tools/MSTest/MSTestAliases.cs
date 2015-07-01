@@ -74,7 +74,7 @@ namespace Cake.Common.Tools.MSTest
                 throw new ArgumentNullException("assemblyPaths");
             }
 
-            var runner = new MSTestRunner(context.FileSystem, context.Environment, context.ProcessRunner);
+            var runner = new MSTestRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
             foreach (var assembly in assemblyPaths)
             {
                 runner.Run(assembly, settings);

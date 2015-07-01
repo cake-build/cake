@@ -14,7 +14,6 @@ namespace Cake.Common.Tools.WiX
     public sealed class LightRunner : Tool<LightSettings>
     {
         private readonly ICakeEnvironment _environment;
-        private readonly IGlobber _globber;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LightRunner"/> class.
@@ -24,7 +23,7 @@ namespace Cake.Common.Tools.WiX
         /// <param name="globber">The globber.</param>
         /// <param name="processRunner">The process runner.</param>
         public LightRunner(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
-            : base(fileSystem, environment, processRunner)
+            : base(fileSystem, environment, processRunner, globber)
         {
             if (environment == null)
             {
@@ -36,7 +35,6 @@ namespace Cake.Common.Tools.WiX
             }
 
             _environment = environment;
-            _globber = globber;
         }
 
         /// <summary>
@@ -126,14 +124,12 @@ namespace Cake.Common.Tools.WiX
         }
 
         /// <summary>
-        /// Gets the default tool path.
+        /// Gets the possible names of the tool executable.
         /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The default tool path.</returns>
-        protected override FilePath GetDefaultToolPath(LightSettings settings)
+        /// <returns>The tool executable name.</returns>
+        protected override IEnumerable<string> GetToolExecutableNames()
         {
-            const string expression = "./tools/**/light.exe";
-            return _globber.GetFiles(expression).FirstOrDefault();
+            return new[] { "light.exe" };
         }
     }
 }

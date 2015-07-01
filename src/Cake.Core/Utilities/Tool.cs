@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Cake.Core.IO;
 
 namespace Cake.Core.Utilities
@@ -13,6 +15,7 @@ namespace Cake.Core.Utilities
         private readonly IFileSystem _fileSystem;        
         private readonly ICakeEnvironment _environment;
         private readonly IProcessRunner _processRunner;
+        private readonly IGlobber _globber;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Tool{TSettings}" /> class.
@@ -20,7 +23,8 @@ namespace Cake.Core.Utilities
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        protected Tool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner)
+        /// <param name="globber">The globber.</param>
+        protected Tool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IGlobber globber)
         {
             if (fileSystem == null)
             {
@@ -34,10 +38,15 @@ namespace Cake.Core.Utilities
             {
                 throw new ArgumentNullException("processRunner");
             }
+            if (globber == null)
+            {
+                throw new ArgumentNullException("globber");
+            }
 
-            _fileSystem = fileSystem;            
+            _fileSystem = fileSystem;
             _environment = environment;
             _processRunner = processRunner;
+            _globber = globber;
         }
 
         /// <summary>
@@ -92,7 +101,7 @@ namespace Cake.Core.Utilities
             if (workingDirectory == null)
             {
                 const string message = "{0}: Could not resolve working directory.";
-                throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, toolName));                
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, toolName));
             }
 
             // Create the process start info.
@@ -148,10 +157,57 @@ namespace Cake.Core.Utilities
             {
                 return toolPath.MakeAbsolute(_environment);
             }
-            var defaultToolPath = GetDefaultToolPath(settings);
-            return defaultToolPath != null
-                ? defaultToolPath.MakeAbsolute(_environment)
-                : null;
+
+            var toolExeNames = GetToolExecutableNames();
+            IEnumerable<string> pathDirs = null;
+
+            // Look for each possible executable name in various places.
+            foreach (var toolExeName in toolExeNames)
+            {                
+                // First look in ./tools/
+                toolPath = _globber.GetFiles("./tools/**/" + toolExeName).FirstOrDefault();
+                if (toolPath != null)
+                {
+                    return toolPath.MakeAbsolute(_environment);
+                }
+
+                // Cache the PATH directory list if we didn't already.
+                if (pathDirs == null)
+                {
+                    var pathEnv = _environment.GetEnvironmentVariable("PATH");
+                    if (!string.IsNullOrEmpty(pathEnv))
+                    {
+                        pathDirs = pathEnv.Split(_environment.IsUnix() ? ':' : ';');
+                    }
+                    else
+                    {
+                        pathDirs = Enumerable.Empty<string>();
+                    }
+                }
+
+                // Look in every PATH directory for the file.
+                foreach (var pathDir in pathDirs)
+                {
+                    var file = new DirectoryPath(pathDir).CombineWithFilePath(toolExeName);
+
+                    if (_fileSystem.Exist(file))
+                    {
+                        return file.MakeAbsolute(_environment);
+                    }
+                }
+            }
+
+            // Look through all the alternative directories for the tool.
+            var alternativePaths = GetAlternativeToolPaths(settings) ?? Enumerable.Empty<FilePath>();
+            foreach (var altPath in alternativePaths)
+            {
+                if (_fileSystem.Exist(altPath))
+                {
+                    return altPath.MakeAbsolute(_environment);
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -159,6 +215,12 @@ namespace Cake.Core.Utilities
         /// </summary>
         /// <returns>The name of the tool.</returns>
         protected abstract string GetToolName();
+
+        /// <summary>
+        /// Gets the possible names of the tool executable.
+        /// </summary>
+        /// <returns>The tool executable name.</returns>
+        protected abstract IEnumerable<string> GetToolExecutableNames();
 
         /// <summary>
         /// Gets the working directory.
@@ -172,10 +234,13 @@ namespace Cake.Core.Utilities
         }
 
         /// <summary>
-        /// Gets the default tool path.
+        /// Gets alternative file paths which the tool may exist in
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The default tool path.</returns>
-        protected abstract FilePath GetDefaultToolPath(TSettings settings);
+        protected virtual IEnumerable<FilePath> GetAlternativeToolPaths(TSettings settings)
+        {
+            return Enumerable.Empty<FilePath>();
+        }
     }
 }
