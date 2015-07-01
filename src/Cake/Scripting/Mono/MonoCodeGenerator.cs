@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Cake.Core.Scripting;
 using System.Text;
+using System;
 
 namespace Cake.Scripting.Mono
 {
@@ -9,6 +10,33 @@ namespace Cake.Scripting.Mono
         public string Generate(Script script)
         {
             var code = new StringBuilder ();
+
+            var scriptLines = new StringBuilder ();
+            var extrasLines = new StringBuilder ();
+
+            var isInExtras = false;
+
+            foreach (var l in script.Lines) {
+                var line = l;
+
+                if (line.StartsWith ("#line", StringComparison.InvariantCultureIgnoreCase))
+                    line = "// " + line;
+
+                if (line.StartsWith ("#region \"extras\"")) {
+                    isInExtras = true;
+                    continue;
+                }
+
+                if (isInExtras && line.StartsWith ("#endregion", StringComparison.InvariantCultureIgnoreCase)) {
+                    isInExtras = false;
+                    continue;
+                }
+
+                if (isInExtras)
+                    extrasLines.AppendLine (line);
+                else
+                    scriptLines.AppendLine (line);                
+            }
 
             code.AppendLine ("public class CakeBuildScriptImpl");
             code.AppendLine ("{");
@@ -24,15 +52,14 @@ namespace Cake.Scripting.Mono
             code.AppendLine (GetScriptHostProxy ());
             code.AppendLine ();
 
+            code.AppendLine (extrasLines.ToString ());
+            code.AppendLine ();
+
             code.AppendLine ("    public void Execute ()");
             code.AppendLine ("    {");
 
-            foreach (var l in script.Lines) {
-                if (l.StartsWith ("#line 1", System.StringComparison.InvariantCulture))
-                    code.AppendLine ("        // " + l);
-                else
-                    code.AppendLine ("        " + l);               
-            }
+            code.AppendLine (scriptLines.ToString ());
+            code.AppendLine ();
 
             code.AppendLine ("    }");
             code.AppendLine ("}");
