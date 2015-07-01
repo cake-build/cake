@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Cake.Core.Scripting;
+using System.Text;
 
 namespace Cake.Scripting.Mono
 {
@@ -7,21 +8,39 @@ namespace Cake.Scripting.Mono
     {
         public string Generate(Script script)
         {
-            var alteredLines = new List<string> ();
+            var code = new StringBuilder ();
+
+            code.AppendLine ("public class CakeBuildScriptImpl");
+            code.AppendLine ("{");
+            code.AppendLine ("    public CakeBuildScriptImpl (IScriptHost scriptHost)");
+            code.AppendLine ("    {");
+            code.AppendLine ("        ScriptHost = scriptHost;");
+            code.AppendLine ("    }");
+            code.AppendLine ();
+
+            code.Append (GetAliasCode (script));
+
+            code.AppendLine ();
+            code.AppendLine (GetScriptHostProxy ());
+            code.AppendLine ();
+
+            code.AppendLine ("    public void Execute ()");
+            code.AppendLine ("    {");
 
             foreach (var l in script.Lines) {
-                if (l.StartsWith ("#line 1"))
-                    alteredLines.Add ("// " + l);
+                if (l.StartsWith ("#line 1", System.StringComparison.InvariantCulture))
+                    code.AppendLine ("        // " + l);
                 else
-                    alteredLines.Add (l);               
+                    code.AppendLine ("        " + l);               
             }
 
-            var aliases = GetAliasCode(script);
-            var code = string.Join("\r\n", alteredLines);
-            return string.Join("\r\n", aliases, code);
+            code.AppendLine ("    }");
+            code.AppendLine ("}");
+
+            return code.ToString ();
         }
 
-        private static string GetAliasCode(Script context)
+        static string GetAliasCode(Script context)
         {
             var result = new List<string>();
             foreach (var alias in context.Aliases)
@@ -31,6 +50,18 @@ namespace Cake.Scripting.Mono
                     : PropertyAliasGenerator.Generate(alias.Method));
             }
             return string.Join("\r\n", result);
+        }
+
+        static string GetScriptHostProxy ()
+        {
+            return "    " + string.Join ("\r\n    ", new string[] {
+            "public static IScriptHost ScriptHost { get; set; }",
+            "public ICakeContext Context { get { return ScriptHost.Context; } }",
+            "public IReadOnlyList<CakeTask> Tasks { get { return ScriptHost.Tasks; } }",
+            "public CakeTaskBuilder<ActionTask> Task(string name) { return ScriptHost.Task (name); }",
+            "public void Setup (Action action) { ScriptHost.Setup (action); }",
+            "public void Teardown(Action action) { ScriptHost.Teardown (action); }",
+            "public CakeReport RunTarget(string target) { return ScriptHost.RunTarget (target); }" });
         }
     }
 }
