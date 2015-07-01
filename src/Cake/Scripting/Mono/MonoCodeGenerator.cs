@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using Cake.Core.Scripting;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
-using System;
+using Cake.Core.Scripting;
 
 namespace Cake.Scripting.Mono
 {
@@ -9,65 +9,68 @@ namespace Cake.Scripting.Mono
     {
         public string Generate(Script script)
         {
-            var code = new StringBuilder ();
+            var code = new StringBuilder();
 
-            var scriptLines = new StringBuilder ();
-            var extrasLines = new StringBuilder ();
+            var scriptLines = new StringBuilder();
+            var extrasLines = new StringBuilder();
 
             var isInExtras = false;
 
-            foreach (var l in script.Lines) {
+            foreach (var l in script.Lines) 
+            {
                 var line = l;
 
-                if (line.StartsWith ("#line", StringComparison.InvariantCultureIgnoreCase))
+                if (line.StartsWith("#line", StringComparison.InvariantCultureIgnoreCase)) 
+                {
                     line = "// " + line;
+                }
 
-                if (line.StartsWith ("#region \"extras\"")) {
+                if (line.StartsWith("#region \"extras\"")) 
+                {
                     isInExtras = true;
                     continue;
                 }
 
-                if (isInExtras && line.StartsWith ("#endregion", StringComparison.InvariantCultureIgnoreCase)) {
+                if (isInExtras && line.StartsWith("#endregion", StringComparison.InvariantCultureIgnoreCase)) 
+                {
                     isInExtras = false;
                     continue;
                 }
 
-                if (isInExtras)
-                    extrasLines.AppendLine (line);
-                else
-                    scriptLines.AppendLine (line);                
+                if (isInExtras) 
+                {
+                    extrasLines.AppendLine(line);
+                } 
+                else 
+                {
+                    scriptLines.AppendLine(line);                
+                }
             }
 
-            code.AppendLine ("public class CakeBuildScriptImpl");
-            code.AppendLine ("{");
-            code.AppendLine ("    public CakeBuildScriptImpl (IScriptHost scriptHost)");
-            code.AppendLine ("    {");
-            code.AppendLine ("        ScriptHost = scriptHost;");
-            code.AppendLine ("    }");
-            code.AppendLine ();
+            code.AppendLine("public class CakeBuildScriptImpl");
+            code.AppendLine("{");
+            code.AppendLine("    public CakeBuildScriptImpl (IScriptHost scriptHost)");
+            code.AppendLine("    {");
+            code.AppendLine("        ScriptHost = scriptHost;");
+            code.AppendLine("    }");
+            code.AppendLine();
+            code.AppendLine(GetAliasCode(script));
+            code.AppendLine();
+            code.AppendLine(GetScriptHostProxy());
+            code.AppendLine();
+            code.AppendLine(extrasLines.ToString());
+            code.AppendLine();
+            code.AppendLine("    public void Execute ()");
+            code.AppendLine("    {");
+            code.AppendLine(scriptLines.ToString());
+            code.AppendLine();
+            code.AppendLine("    }");
+            code.AppendLine("}");
 
-            code.Append (GetAliasCode (script));
-
-            code.AppendLine ();
-            code.AppendLine (GetScriptHostProxy ());
-            code.AppendLine ();
-
-            code.AppendLine (extrasLines.ToString ());
-            code.AppendLine ();
-
-            code.AppendLine ("    public void Execute ()");
-            code.AppendLine ("    {");
-
-            code.AppendLine (scriptLines.ToString ());
-            code.AppendLine ();
-
-            code.AppendLine ("    }");
-            code.AppendLine ("}");
-
-            return code.ToString ();
+            return code.ToString();
         }
 
-        static string GetAliasCode(Script context)
+        private static string GetAliasCode(Script context)
         {
             var result = new List<string>();
             foreach (var alias in context.Aliases)
@@ -79,16 +82,20 @@ namespace Cake.Scripting.Mono
             return string.Join("\r\n", result);
         }
 
-        static string GetScriptHostProxy ()
+        private static string GetScriptHostProxy()
         {
-            return "    " + string.Join ("\r\n    ", new string[] {
-            "IScriptHost ScriptHost { get; set; }",
-            "ICakeContext Context { get { return ScriptHost.Context; } }",
-            "IReadOnlyList<CakeTask> Tasks { get { return ScriptHost.Tasks; } }",
-            "CakeTaskBuilder<ActionTask> Task(string name) { return ScriptHost.Task (name); }",
-            "void Setup (Action action) { ScriptHost.Setup (action); }",
-            "void Teardown(Action action) { ScriptHost.Teardown (action); }",
-            "CakeReport RunTarget(string target) { return ScriptHost.RunTarget (target); }" });
+            var rules = new string[] 
+            {
+                "IScriptHost ScriptHost { get; set; }",
+                "ICakeContext Context { get { return ScriptHost.Context; } }",
+                "IReadOnlyList<CakeTask> Tasks { get { return ScriptHost.Tasks; } }",
+                "CakeTaskBuilder<ActionTask> Task(string name) { return ScriptHost.Task (name); }",
+                "void Setup (Action action) { ScriptHost.Setup (action); }",
+                "void Teardown(Action action) { ScriptHost.Teardown (action); }",
+                "CakeReport RunTarget(string target) { return ScriptHost.RunTarget (target); }" 
+            };
+
+            return "    " + string.Join("\r\n    ", rules);
         }
     }
 }

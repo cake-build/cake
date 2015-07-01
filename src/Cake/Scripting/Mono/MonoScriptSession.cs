@@ -1,33 +1,32 @@
 ﻿using System;
-using Mono.CSharp;
-using Cake.Core.Scripting;
-using System.Text;
 using System.Collections.Generic;
-using Cake.Scripting.Roslyn;
+using System.Linq;
+using System.Text;
+using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using System.Linq;
-using Cake.Core;
+using Cake.Core.Scripting;
+using Cake.Scripting.Roslyn;
+using Mono.CSharp;
 
 namespace Cake.Scripting.Mono
 {
-    public class MonoScriptSession : IScriptSession
-    {
-        
-        CompilerSettings compilerSettings;
-        ConsoleReportPrinter reportPrinter;
-        CompilerContext compilerContext;
-
-        readonly Evaluator evaluator;
-        readonly ICakeLog _log;
-
-        readonly string[] SKIP_ASSEMBLIES = {
+    internal sealed class MonoScriptSession : IScriptSession
+    {   
+        private readonly Evaluator evaluator;
+        private readonly ICakeLog _log;
+        private readonly string[] skipAssemblies = 
+        {
             "mscorlib",
             "System",
             "System.Core"
         };
 
-        public MonoScriptSession (IScriptHost host, ICakeLog log)
+        private CompilerSettings compilerSettings;
+        private ConsoleReportPrinter reportPrinter;
+        private CompilerContext compilerContext;
+
+        public MonoScriptSession(IScriptHost host, ICakeLog log)
         {
             if (host == null)
             {
@@ -40,11 +39,11 @@ namespace Cake.Scripting.Mono
 
             _log = log;
 
-            compilerSettings = new CompilerSettings ();
+            compilerSettings = new CompilerSettings();
 
-            reportPrinter = new ConsoleReportPrinter ();
-            compilerContext = new CompilerContext (compilerSettings, reportPrinter);
-            evaluator = new Evaluator (compilerContext);
+            reportPrinter = new ConsoleReportPrinter();
+            compilerContext = new CompilerContext(compilerSettings, reportPrinter);
+            evaluator = new Evaluator(compilerContext);
 
             // Set our instance of the script host to this static member
             MonoScriptHostProxy.ScriptHost = host;
@@ -54,31 +53,33 @@ namespace Cake.Scripting.Mono
             evaluator.InteractiveBaseClass = typeof(MonoScriptHostProxy);
         }
 
-        public void AddReference (FilePath path)
+        public void AddReference(FilePath path)
         {
             _log.Debug("Adding reference to {0}...", path.FullPath);
-            evaluator.ReferenceAssembly (System.Reflection.Assembly.LoadFile (path.FullPath));
+            evaluator.ReferenceAssembly(System.Reflection.Assembly.LoadFile(path.FullPath));
         }
 
-        public void AddReference (System.Reflection.Assembly assembly)
+        public void AddReference(System.Reflection.Assembly assembly)
         {
-            var name = assembly.GetName ().Name;
+            var name = assembly.GetName().Name;
 
             // We don't need to load these ones as they will already get loaded by Mono.CSharp
-            if (SKIP_ASSEMBLIES.Contains (name))
+            if (skipAssemblies.Contains(name)) 
+            {
                 return;
+            }
             
             _log.Debug("Adding reference to {0}...", new FilePath(assembly.Location).GetFilename().FullPath);
-            evaluator.ReferenceAssembly (assembly);
+            evaluator.ReferenceAssembly(assembly);
         }
 
-        public void ImportNamespace (string @namespace)
+        public void ImportNamespace(string @namespace)
         {
             _log.Debug("Importing namespace {0}...", @namespace);
-            evaluator.Run ("using " + @namespace + ";");
+            evaluator.Run("using " + @namespace + ";");
         }
 
-        public void Execute (Script script)
+        public void Execute(Script script)
         {
             var generator = new MonoCodeGenerator();
             var code = generator.Generate(script);
@@ -86,12 +87,12 @@ namespace Cake.Scripting.Mono
             _log.Debug("Compiling build script...");
 
             // Build the class we generated
-            evaluator.Run (code);
-            // Actually execute it
-            evaluator.Run ("new CakeBuildScriptImpl (ScriptHost).Execute ();");
+            evaluator.Run(code);
 
-            _log.Debug ("Execution complete...");
+            // Actually execute it
+            evaluator.Run("new CakeBuildScriptImpl (ScriptHost).Execute ();");
+
+            _log.Debug("Execution complete...");
         }            
     }
 }
-
