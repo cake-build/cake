@@ -46,10 +46,10 @@ namespace Cake.Scripting.Mono
             builder.Append("(");
             builder.Append(string.Concat(GetProxyParameters(parameters, true)));
             builder.Append(")");
-            builder.AppendLine ();
+            builder.AppendLine();
             builder.Append("{");
-            builder.AppendLine ();
-            builder.Append ("    ");
+            builder.AppendLine();
+            builder.Append("    ");
 
             if (isFunction)
             {
@@ -69,12 +69,12 @@ namespace Cake.Scripting.Mono
             builder.Append("(");
             builder.Append(string.Concat(GetProxyParameters(parameters, false)));
             builder.Append(");");
-            builder.AppendLine ();
+            builder.AppendLine();
 
             // End method.
             builder.Append("}");
-            builder.AppendLine ();
-            builder.AppendLine ();
+            builder.AppendLine();
+            builder.AppendLine();
 
             return builder.ToString();
         }

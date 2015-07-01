@@ -103,19 +103,19 @@ namespace Cake.Scripting.Mono
             builder.Append(GetReturnType(method));
             builder.Append(" ");
             builder.Append(method.Name);
-            builder.AppendLine ();
+            builder.AppendLine();
             builder.Append("{");
-            builder.AppendLine ();
-            builder.Append ("    get {");
-            builder.AppendLine ();
-            builder.Append ("        return ");
+            builder.AppendLine();
+            builder.Append("    get {");
+            builder.AppendLine();
+            builder.Append("        return ");
             builder.Append(method.GetFullName());
             builder.Append("(Context);");
-            builder.Append ("    }");
-            builder.AppendLine ();
-            builder.Append ("}");
-            builder.AppendLine ();
-            builder.AppendLine ();
+            builder.Append("    }");
+            builder.AppendLine();
+            builder.Append("}");
+            builder.AppendLine();
+            builder.AppendLine();
 
             return builder.ToString();
         }
@@ -141,32 +141,32 @@ namespace Cake.Scripting.Mono
             builder.Append(GetReturnType(method));
             builder.Append(" ");
             builder.Append(method.Name);
-            builder.AppendLine ();
+            builder.AppendLine();
             builder.Append("{");
-            builder.AppendLine ();
+            builder.AppendLine();
             builder.Append("    get { ");
-            builder.AppendLine ();
+            builder.AppendLine();
             builder.AppendFormat("        if (_{0}==null)", method.Name);
             builder.Append(" {");
-            builder.AppendLine ();
+            builder.AppendLine();
             builder.AppendFormat("            _{0} = ", method.Name);
             builder.Append(method.GetFullName());
             builder.Append("(Context);");
-            builder.AppendLine ();
+            builder.AppendLine();
             builder.Append("        }");
-            builder.AppendLine ();
+            builder.AppendLine();
             builder.AppendFormat("        return _{0}", method.Name);
             if (method.ReturnType.IsValueType)
             {
                 builder.Append(".Value");
             }
             builder.Append(";");
-            builder.AppendLine ();
+            builder.AppendLine();
             builder.Append("    }");
-            builder.AppendLine ();
+            builder.AppendLine();
             builder.Append("}");
-            builder.AppendLine ();
-            builder.AppendLine ();
+            builder.AppendLine();
+            builder.AppendLine();
 
             return builder.ToString();
         }

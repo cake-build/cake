@@ -1,7 +1,7 @@
 ﻿using System;
-using Cake.Core.Scripting;
-using Cake.Core.Diagnostics;
 using System.Collections.Generic;
+using Cake.Core.Diagnostics;
+using Cake.Core.Scripting;
 
 namespace Cake.Scripting.Mono
 {
@@ -24,8 +24,7 @@ namespace Cake.Scripting.Mono
             // Create the script session.
             _log.Debug("Creating script session...");
 
-            return new MonoScriptSession (host, _log);
+            return new MonoScriptSession(host, _log);
         }
     }
 }
-
