@@ -6,17 +6,26 @@ using System.Collections.Generic;
 using Cake.Scripting.Roslyn;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using System.Linq;
+using Cake.Core;
 
 namespace Cake.Scripting.Mono
 {
     public class MonoScriptSession : IScriptSession
     {
-        Evaluator evaluator;
+        
         CompilerSettings compilerSettings;
         ConsoleReportPrinter reportPrinter;
         CompilerContext compilerContext;
 
+        readonly Evaluator evaluator;
         readonly ICakeLog _log;
+
+        readonly string[] SKIP_ASSEMBLIES = {
+            "mscorlib",
+            "System",
+            "System.Core"
+        };
 
         public MonoScriptSession (IScriptHost host, ICakeLog log)
         {
@@ -33,7 +42,7 @@ namespace Cake.Scripting.Mono
 
             compilerSettings = new CompilerSettings ();
 
-            reportPrinter = new ConsoleReportPrinter ();// CakeReportPrinter (new CakeConsole ());
+            reportPrinter = new ConsoleReportPrinter ();
             compilerContext = new CompilerContext (compilerSettings, reportPrinter);
             evaluator = new Evaluator (compilerContext);
 
@@ -42,11 +51,10 @@ namespace Cake.Scripting.Mono
 
             // This will be our 'base' type from which the evaluator grants access
             // to static members to the script being run 
-            evaluator.ReferenceAssembly(typeof(MonoScriptHostProxy).Assembly);
             evaluator.InteractiveBaseClass = typeof(MonoScriptHostProxy);
         }
 
-        public void AddReference (Cake.Core.IO.FilePath path)
+        public void AddReference (FilePath path)
         {
             _log.Debug("Adding reference to {0}...", path.FullPath);
             evaluator.ReferenceAssembly (System.Reflection.Assembly.LoadFile (path.FullPath));
@@ -54,6 +62,12 @@ namespace Cake.Scripting.Mono
 
         public void AddReference (System.Reflection.Assembly assembly)
         {
+            var name = assembly.GetName ().Name;
+
+            // We don't need to load these ones as they will already get loaded by Mono.CSharp
+            if (SKIP_ASSEMBLIES.Contains (name))
+                return;
+            
             _log.Debug("Adding reference to {0}...", new FilePath(assembly.Location).GetFilename().FullPath);
             evaluator.ReferenceAssembly (assembly);
         }
@@ -61,8 +75,7 @@ namespace Cake.Scripting.Mono
         public void ImportNamespace (string @namespace)
         {
             _log.Debug("Importing namespace {0}...", @namespace);
-            var result = evaluator.Run ("using " + @namespace + ";");
-            _log.Debug ("Ran Import {0}...", result);
+            evaluator.Run ("using " + @namespace + ";");
         }
 
         public void Execute (Script script)
@@ -70,9 +83,14 @@ namespace Cake.Scripting.Mono
             var generator = new MonoCodeGenerator();
             var code = generator.Generate(script);
 
-            var result = evaluator.Evaluate (code);
+            _log.Debug("Compiling build script...");
 
-            _log.Debug ("Execution complete");
+            // Build the class we generated
+            evaluator.Run (code);
+            // Actually execute it
+            evaluator.Run ("new CakeBuildScriptImpl (ScriptHost).Execute ();");
+
+            _log.Debug ("Execution complete...");
         }            
     }
 }
