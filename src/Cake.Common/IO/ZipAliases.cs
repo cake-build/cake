@@ -115,6 +115,11 @@ namespace Cake.Common.IO
         [CakeMethodAlias]
         public static void Unzip(this ICakeContext context, FilePath zipFile, DirectoryPath outputPath)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             var zipper = new Zipper(context.FileSystem, context.Environment, context.Log);
             zipper.Unzip(zipFile, outputPath);
         }
