@@ -85,6 +85,9 @@
     <Reference Include="Microsoft.Web.XmlTransform">
       <HintPath>..\packages\Microsoft.Web.Xdt.2.1.1\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.CSharp">
+      <HintPath>..\packages\Mono.CSharp.4.0.0.143\lib\4.5\Mono.CSharp.dll</HintPath>
+    </Reference>
     <Reference Include="NuGet.Core, Version=2.8.50926.602, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NuGet.Core.2.8.3\lib\net40-Client\NuGet.Core.dll</HintPath>
@@ -159,6 +162,12 @@
     <Compile Include="Scripting\Roslyn\Stable\RoslynScriptSession.cs" />
     <Compile Include="Scripting\Roslyn\ScriptEngine.cs" />
     <Compile Include="Scripting\Roslyn\Stable\RoslynScriptSessionFactory.cs" />
+    <Compile Include="Scripting\Mono\MonoScriptSession.cs" />
+    <Compile Include="Scripting\Mono\MonoScriptEngine.cs" />
+    <Compile Include="Scripting\Mono\MonoCodeGenerator.cs" />
+    <Compile Include="Scripting\Mono\MonoPropertyAliasGenerator.cs" />
+    <Compile Include="Scripting\Mono\MonoMethodAliasGenerator.cs" />
+    <Compile Include="Scripting\Mono\MonoScriptHostProxy.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -208,4 +217,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Scripting\Mono\" />
+  </ItemGroup>
 </Project>
