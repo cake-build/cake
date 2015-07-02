@@ -49,6 +49,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Build\AppVeyor\Data\AppVeyorEnvironmentInfo.cs" />
@@ -188,6 +189,7 @@
     <Compile Include="Xml\XmlTransformation.cs" />
     <Compile Include="Xml\XmlTransformationAlias.cs" />
     <Compile Include="Xml\XmlTransformationSettings.cs" />
+    <Compile Include="IO\Net\HttpAliases.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
@@ -214,4 +216,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="IO\Net\" />
+  </ItemGroup>
 </Project>
