@@ -121,12 +121,9 @@ namespace Cake.Common.IO
             // Make root path and output file path absolute.
             zipPath = zipPath.MakeAbsolute(_environment);
             outputPath = outputPath.MakeAbsolute(_environment);
-
-            // Open up a stream to the output file.
-            _log.Verbose("Unzipping file: {0}", zipPath.FullPath);
-
+            
+            _log.Verbose("Unzipping file: {0}", zipPath.FullPath);        
             ZipFile.ExtractToDirectory(zipPath.FullPath, outputPath.FullPath);
-
             _log.Verbose("Unzipped to: {0}", outputPath.FullPath);
         }
        
