@@ -105,5 +105,18 @@ namespace Cake.Common.IO
             var zipper = new Zipper(context.FileSystem, context.Environment, context.Log);
             zipper.Zip(rootPath, outputPath, paths);
         }
+
+        /// <summary>
+        /// Unzips the specified file
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="zipFile">Zip file to unzip.</param>
+        /// <param name="outputPath">Output path to unzip into.</param>
+        [CakeMethodAlias]
+        public static void Unzip(this ICakeContext context, FilePath zipFile, DirectoryPath outputPath)
+        {
+            var zipper = new Zipper(context.FileSystem, context.Environment, context.Log);
+            zipper.Unzip(zipFile, outputPath);
+        }
     }
 }

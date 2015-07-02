@@ -102,6 +102,34 @@ namespace Cake.Common.IO
             _log.Verbose("Zip successfully created: {0}", outputPath.FullPath);
         }
 
+        /// <summary>
+        /// Unzips the specified file to the specified output path
+        /// </summary>
+        /// <param name="zipPath">Zip file path.</param>
+        /// <param name="outputPath">Output directory path.</param>
+        public void Unzip(FilePath zipPath, DirectoryPath outputPath)
+        {            
+            if (zipPath == null)
+            {
+                throw new ArgumentNullException("zipPath");
+            }
+            if (outputPath == null)
+            {
+                throw new ArgumentNullException("outputPath");
+            }
+
+            // Make root path and output file path absolute.
+            zipPath = zipPath.MakeAbsolute(_environment);
+            outputPath = outputPath.MakeAbsolute(_environment);
+
+            // Open up a stream to the output file.
+            _log.Verbose("Unzipping file: {0}", zipPath.FullPath);
+
+            ZipFile.ExtractToDirectory(zipPath.FullPath, outputPath.FullPath);
+
+            _log.Verbose("Unzipped to: {0}", outputPath.FullPath);
+        }
+       
         private FilePath GetRelativeFilePath(DirectoryPath root, FilePath file)
         {
             if (!file.FullPath.StartsWith(root.FullPath, _comparison))
