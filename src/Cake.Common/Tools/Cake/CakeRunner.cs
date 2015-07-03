@@ -133,6 +133,13 @@ namespace Cake.Common.Tools.Cake
         /// <returns>The default tool path.</returns>
         protected override FilePath GetDefaultToolPath(CakeSettings settings)
         {
+            // Look for the tool in our PATH first
+            var path = _environment.FindFileInPath("Cake.exe");
+            if (path != null)
+            {
+                return path;
+            }
+
             const string expression = "./tools/**/Cake.exe";
             return _globber.GetFiles(expression).FirstOrDefault();
         }

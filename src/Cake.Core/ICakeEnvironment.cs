@@ -39,6 +39,13 @@ namespace Cake.Core
         DirectoryPath GetApplicationRoot();
 
         /// <summary>
+        /// Looks in all the PATH locations for a given filename and returns the full path if found.
+        /// </summary>
+        /// <returns>The file in path.</returns>
+        /// <param name="fileName">File name.</param>
+        FilePath FindFileInPath(string fileName);
+
+        /// <summary>
         /// Gets an environment variable.
         /// </summary>
         /// <param name="variable">The variable.</param>
