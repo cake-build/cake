@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using Cake.Core.Scripting;
 
 namespace Cake.Scripting.Mono
 {
     internal sealed class MonoCodeGenerator
     {
-        public string Generate(Script script)
+        public string Generate(Script script, out int codeLineOffset)
         {
+            codeLineOffset = 0;
+
             var code = new StringBuilder();
 
             var scriptLines = new StringBuilder();
@@ -62,6 +65,10 @@ namespace Cake.Scripting.Mono
             code.AppendLine();
             code.AppendLine("    public void Execute ()");
             code.AppendLine("    {");
+
+            // Pass back where the 'user' code starts so we can calculate offsets of errors/warnings
+            codeLineOffset = Regex.Matches(code.ToString(), Environment.NewLine).Count;
+
             code.AppendLine(scriptLines.ToString());
             code.AppendLine();
             code.AppendLine("    }");
