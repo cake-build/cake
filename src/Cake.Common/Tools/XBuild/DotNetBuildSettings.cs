@@ -55,7 +55,7 @@ namespace Cake.Common.Tools.XBuild
         public Verbosity Verbosity { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="XBuildSettings"/> class.
+        /// Initializes a new instance of the <see cref="DotNetBuildSettings"/> class.
         /// </summary>
         /// <param name="solution">The solution.</param>
         public DotNetBuildSettings(FilePath solution)

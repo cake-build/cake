@@ -75,7 +75,6 @@ namespace Cake.Common.Tools.XBuild
             _targets = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _properties = new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
 
-            //PlatformTarget = PlatformTarget.MSIL;
             ToolVersion = XBuildToolVersion.Default;
             Configuration = string.Empty;
             Verbosity = Verbosity.Normal;

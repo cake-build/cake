@@ -129,7 +129,7 @@ namespace Cake.Common.Tools.XBuild
             {
                 throw new ArgumentNullException("settings");
             }
-            return XBuildResolver.GetXBuildPath (_fileSystem, _environment, settings.ToolVersion);
+            return XBuildResolver.GetXBuildPath(_fileSystem, _environment, settings.ToolVersion);
         }
     }
 }
