@@ -24,12 +24,16 @@ namespace Cake
     /// </summary>
     public static class Program
     {
+        private static bool isRunningOnMono = false;
+
         /// <summary>
         /// The application entry point.
         /// </summary>
         /// <returns>The application exit code.</returns>
         public static int Main()
         {
+            isRunningOnMono = Type.GetType("Mono.Runtime") != null;
+           
             using (var container = CreateContainer())
             {
                 // Parse arguments.
@@ -64,10 +68,18 @@ namespace Cake
             builder.RegisterType<WindowsRegistry>().As<IRegistry>().SingleInstance();
             builder.RegisterType<CakeContext>().As<ICakeContext>().SingleInstance();
 
-            // Roslyn related services.
-            builder.RegisterType<RoslynScriptEngine>().As<IScriptEngine>().SingleInstance();
-            builder.RegisterType<RoslynScriptSessionFactory>().SingleInstance();
-            builder.RegisterType<RoslynNightlyScriptSessionFactory>().SingleInstance();
+            if (isRunningOnMono) 
+            {
+                // Mono scripting
+                builder.RegisterType<Cake.Scripting.Mono.MonoScriptEngine>().As<IScriptEngine>().SingleInstance();
+            } 
+            else 
+            {
+                // Roslyn related services.
+                builder.RegisterType<RoslynScriptEngine>().As<IScriptEngine>().SingleInstance();
+                builder.RegisterType<RoslynScriptSessionFactory>().SingleInstance();
+                builder.RegisterType<RoslynNightlyScriptSessionFactory>().SingleInstance();
+            }
 
             // Cake services.
             builder.RegisterType<ArgumentParser>().As<IArgumentParser>().SingleInstance();
