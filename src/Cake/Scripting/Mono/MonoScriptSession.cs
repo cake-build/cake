@@ -82,9 +82,12 @@ namespace Cake.Scripting.Mono
         public void Execute(Script script)
         {
             var generator = new MonoCodeGenerator();
-            var code = generator.Generate(script);
+            int codeLineOffset = 0;
+            var code = generator.Generate(script, out codeLineOffset);
 
             _log.Debug("Compiling build script...");
+
+            _log.Information(Verbosity.Normal, "User Code Starts at Line # {0}", codeLineOffset);
 
             // Build the class we generated
             evaluator.Run(code);
