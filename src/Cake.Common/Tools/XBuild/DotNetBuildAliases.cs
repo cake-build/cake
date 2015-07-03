@@ -1,8 +1,8 @@
 ﻿using System;
+using Cake.Common.Tools.MSBuild;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
-using Cake.Common.Tools.MSBuild;
 
 namespace Cake.Common.Tools.XBuild
 {
@@ -42,10 +42,10 @@ namespace Cake.Common.Tools.XBuild
             }
 
             var dotNetSettings = new DotNetBuildSettings(solution);
-            configurator (dotNetSettings);
+            configurator(dotNetSettings);
 
             // On Mac/Linux/Unix run XBuild, on windows run MSBuild
-            if (context.Environment.IsUnix ()) 
+            if (context.Environment.IsUnix()) 
             {                
                 var xbuildSettings = new XBuildSettings(solution) 
                 {
@@ -53,32 +53,40 @@ namespace Cake.Common.Tools.XBuild
                     Verbosity = dotNetSettings.Verbosity
                 };
 
-                xbuildSettings.Targets.Clear ();
+                xbuildSettings.Targets.Clear();
                 foreach (var t in dotNetSettings.Targets)
-                    xbuildSettings.Targets.Add (t);
+                {
+                    xbuildSettings.Targets.Add(t);
+                }
 
-                xbuildSettings.Properties.Clear ();
+                xbuildSettings.Properties.Clear();
                 foreach (var kvp in dotNetSettings.Properties)
-                    xbuildSettings.Properties.Add (kvp);
+                {
+                    xbuildSettings.Properties.Add(kvp);
+                }
                 
                 var runner = new XBuildRunner(context.FileSystem, context.Environment, context.ProcessRunner);
                 runner.Run(xbuildSettings);
             } 
             else 
             {
-                var msbuildSettings = new MSBuildSettings (solution) 
+                var msbuildSettings = new MSBuildSettings(solution) 
                 {
                     Configuration = dotNetSettings.Configuration,
                     Verbosity = dotNetSettings.Verbosity
                 };
 
-                msbuildSettings.Targets.Clear ();
+                msbuildSettings.Targets.Clear();
                 foreach (var t in dotNetSettings.Targets)
-                    msbuildSettings.Targets.Add (t);
+                {
+                    msbuildSettings.Targets.Add(t);
+                }
 
-                msbuildSettings.Properties.Clear ();
+                msbuildSettings.Properties.Clear();
                 foreach (var kvp in dotNetSettings.Properties)
-                    msbuildSettings.Properties.Add (kvp);
+                {
+                    msbuildSettings.Properties.Add(kvp);
+                }
                 
                 var runner = new MSBuildRunner(context.FileSystem, context.Environment, context.ProcessRunner);
                 runner.Run(msbuildSettings);
