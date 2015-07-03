@@ -172,6 +172,7 @@
     <Compile Include="Text\ITextTransformationTemplate.cs" />
     <Compile Include="Text\TextTransformationTemplate.cs" />
     <Compile Include="Utilities\Tool.cs" />
+    <Compile Include="Utilities\EnvironmentPathDirectories.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

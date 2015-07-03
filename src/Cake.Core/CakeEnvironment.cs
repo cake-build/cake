@@ -102,31 +102,6 @@ namespace Cake.Core
             return Environment.GetEnvironmentVariable(variable);
         }
 
-        /// <summary>
-        /// Looks in all the PATH locations for a given filename and returns the full path if found.
-        /// </summary>
-        /// <returns>The file in path.</returns>
-        /// <param name="fileName">File name.</param>
-        public FilePath FindFileInPath(string fileName)
-        {
-            if (System.IO.File.Exists(fileName))
-                return System.IO.Path.GetFullPath(fileName);
-
-            var values = GetEnvironmentVariable("PATH");
-            var separator = IsUnix() ? ':' : ';';
-
-            foreach (var path in values.Split(separator))
-            {
-                var fullPath = System.IO.Path.Combine(path, fileName);
-                if (System.IO.File.Exists (fullPath))
-                {
-                    return fullPath;
-                }
-            }
-
-            return null;
-        }
-
         private static void SetWorkingDirectory(DirectoryPath path)
         {
             if (path.IsRelative)

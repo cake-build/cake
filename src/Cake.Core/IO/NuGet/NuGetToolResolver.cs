@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Cake.Core.Utilities;
 
 namespace Cake.Core.IO.NuGet
 {
@@ -87,28 +88,19 @@ namespace Cake.Core.IO.NuGet
                 }
             }
 
-            // Last resort try path
-            var envPath = _environment.GetEnvironmentVariable("path");
-            if (!string.IsNullOrWhiteSpace(envPath))
+            // If we're on unix, check the /usr/bin for nuget:
+            const string unixNuGetUsrBin = "/usr/bin/nuget";
+            if (_environment.IsUnix() && _fileSystem.Exist(new FilePath(unixNuGetUsrBin))) 
             {
-                var pathFile = envPath
-                    .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(path => _fileSystem.GetDirectory(path))
-                    .Where(path => path.Exists)
-                    .Select(path => path.Path.CombineWithFilePath("nuget.exe"))
-                    .Select(_fileSystem.GetFile)
-                    .FirstOrDefault(file => file.Exists);
-
-                if (pathFile != null)
-                {
-                    _cachedPath = pathFile;
-                    return _cachedPath.Path;
-                }
+                return unixNuGetUsrBin;
             }
 
-            if (_environment.IsUnix()) 
+            // As a last resort, try path
+            var pathFile = EnvironmentPathDirectories.FindFile(_fileSystem, _environment, "NuGet.exe");
+            if (pathFile != null && _fileSystem.Exist(pathFile))
             {
-                return "/usr/bin/nuget";
+                _cachedPath = _fileSystem.GetFile(pathFile);
+                return _cachedPath.Path;
             }
 
             throw new CakeException("Could not locate nuget.exe.");
