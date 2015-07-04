@@ -189,7 +189,7 @@
     <Compile Include="Xml\XmlTransformation.cs" />
     <Compile Include="Xml\XmlTransformationAlias.cs" />
     <Compile Include="Xml\XmlTransformationSettings.cs" />
-    <Compile Include="IO\Net\HttpAliases.cs" />
+    <Compile Include="Net\HttpAliases.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
@@ -216,7 +216,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <Folder Include="IO\Net\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
