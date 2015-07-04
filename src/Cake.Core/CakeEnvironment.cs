@@ -73,6 +73,8 @@ namespace Cake.Core
                     return new DirectoryPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86));
                 case SpecialPath.Windows:
                     return new DirectoryPath(Environment.GetFolderPath(Environment.SpecialFolder.Windows));
+                case SpecialPath.LocalTemp:
+                    return new DirectoryPath(System.IO.Path.GetTempPath());
             }
             const string format = "The special path '{0}' is not supported.";
             throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, format, path));
