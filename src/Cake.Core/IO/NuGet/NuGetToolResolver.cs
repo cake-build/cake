@@ -103,6 +103,11 @@ namespace Cake.Core.IO.NuGet
                 return _cachedPath.Path;
             }
 
+            if (_environment.IsUnix()) 
+            {
+                return "/usr/bin/nuget";
+            }
+
             throw new CakeException("Could not locate nuget.exe.");
         }
     }
