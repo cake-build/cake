@@ -1,3 +1,14 @@
+### New in 0.4.3 (Released 2015/07/05)
+* Added TeamCity support.
+* Added filter predicate to globber and clean directory methods.
+* Added Unzip alias.
+* Added DownloadFile alias.
+* Added method to retrieve filename without it's extension.
+* Added support for InternalsVisibleToAttribute when generating assembly info.
+* Added extension methods to ProcessSettings.
+* Fixed formatting in build report.
+* Fixed problems with whitespace in arguments.
+
 ### New in 0.4.2 (Released 2015/05/27)
 * Added aliases for making paths absolute.
 * Added support for creating Octopus Deploy releases.

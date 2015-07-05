@@ -48,6 +48,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Build\AppVeyor\Data\AppVeyorEnvironmentInfo.cs" />
@@ -59,9 +61,12 @@
     <Compile Include="Build\AppVeyor\Data\AppVeyorPullRequestInfo.cs" />
     <Compile Include="Build\AppVeyor\Data\AppVeyorRepositoryInfo.cs" />
     <Compile Include="Build\AppVeyor\Data\AppVeyorTagInfo.cs" />
+    <Compile Include="Build\AppVeyor\IAppVeyorProvider.cs" />
     <Compile Include="Build\BuildSystem.cs" />
     <Compile Include="Build\BuildSystemAliases.cs" />
-    <Compile Include="Build\AppVeyor\IAppVeyorProvider.cs" />
+    <Compile Include="Build\TeamCity\ITeamCityProvider.cs" />
+    <Compile Include="Build\TeamCity\TeamCityDisposableExtensions.cs" />
+    <Compile Include="Build\TeamCity\TeamCityProvider.cs" />
     <Compile Include="IO\Paths\ConvertableDirectoryPath.cs" />
     <Compile Include="IO\Paths\ConvertableFilePath.cs" />
     <Compile Include="Properties\Namespaces.cs">
@@ -184,6 +189,7 @@
     <Compile Include="Xml\XmlTransformation.cs" />
     <Compile Include="Xml\XmlTransformationAlias.cs" />
     <Compile Include="Xml\XmlTransformationSettings.cs" />
+    <Compile Include="Net\HttpAliases.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
@@ -203,11 +209,12 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\StyleCop.MSBuild.4.7.49.1\build\StyleCop.MSBuild.Targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\StyleCop.MSBuild.4.7.49.1\build\StyleCop.MSBuild.Targets'))" />
   </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup />
 </Project>

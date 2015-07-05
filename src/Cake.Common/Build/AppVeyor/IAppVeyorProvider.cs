@@ -29,5 +29,11 @@ namespace Cake.Common.Build.AppVeyor
         /// </summary>
         /// <param name="path">The file path of the artifact to upload.</param>
         void UploadArtifact(FilePath path);
+
+        /// <summary>
+        /// Updates the build version.
+        /// </summary>
+        /// <param name="version">The new build version.</param>
+        void UpdateBuildVersion(string version);
     }
 }

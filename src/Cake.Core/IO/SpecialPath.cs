@@ -37,5 +37,10 @@
         /// The Windows folder.
         /// </summary>
         Windows,
+
+        /// <summary>
+        /// The current user's temporary folder.
+        /// </summary>
+        LocalTemp
     }
 }

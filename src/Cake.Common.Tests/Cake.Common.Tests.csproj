@@ -12,7 +12,7 @@
     <AssemblyName>Cake.Common.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>178fe826</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>6d299839</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -102,6 +102,7 @@
     <Compile Include="Unit\Build\AppVeyor\Data\AppVeyorRepositoryInfoTests.cs" />
     <Compile Include="Unit\Build\BuildSystemAliasesTests.cs" />
     <Compile Include="Unit\Build\BuildSystemTests.cs" />
+    <Compile Include="Unit\Build\TeamCity\TeamCityProviderTests.cs" />
     <Compile Include="Unit\IO\Paths\ConvertableDirectoryPathTests.cs" />
     <Compile Include="Unit\IO\Paths\ConvertableFilePathTests.cs" />
     <Compile Include="Unit\Security\FileHashCalculatorTests.cs" />

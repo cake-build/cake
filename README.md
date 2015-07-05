@@ -1,8 +1,8 @@
 #Cake
 
-Cake (C# Make) is a build automation system using C#.
+Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/c6lw0vvj1mf4395a/branch/develop?svg=true)](https://ci.appveyor.com/project/patriksvensson/cake/branch/develop)
+[![Build status](https://ci.appveyor.com/api/projects/status/s9oscm9t7ase6h6d?svg=true)](https://ci.appveyor.com/project/cakebuild/cake)
 [![Coverity Scan](https://scan.coverity.com/projects/4147/badge.svg)](https://scan.coverity.com/projects/4147) 
 
 [![Follow @cakebuildnet](https://img.shields.io/badge/Twitter-Follow%20%40cakebuildnet-blue.svg)](https://twitter.com/intent/follow?screen_name=cakebuildnet)
@@ -67,6 +67,8 @@ For a full list of supported tools, see the [DSL reference](http://cakebuild.net
 * [MSBuild Resource](http://cakebuild.net/dsl/#msbuildresource)
   * Solution file parsing
   * Project file parsing
+* [Octopus deploy](http://cakebuild.net/dsl/#octopusdeploy)
+  * Create release
 
 For more information and examples of how to use Cake, see the [Documentation](http://cakebuild.net/). 
 
@@ -191,8 +193,8 @@ Cake.Slack: [https://github.com/WCOMAB/Cake.Slack](https://github.com/WCOMAB/Cak
 
 ## License
 
-Copyright (c) 2014, Patrik Svensson and contributors.   
-Cake is provided as-is under the MIT license. For more information see `LICENSE`.
+Copyright © 2014 - 2015, Patrik Svensson and contributors.   
+Cake is provided as-is under the MIT license. For more information see [`LICENSE`](https://github.com/cake-build/cake/blob/develop/LICENSE).
 
 * For Roslyn, see https://github.com/dotnet/roslyn/blob/master/License.txt
 * For Autofac, see https://github.com/autofac/Autofac/blob/master/LICENSE

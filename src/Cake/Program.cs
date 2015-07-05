@@ -32,55 +32,15 @@ namespace Cake
         {
             using (var container = CreateContainer())
             {
-                var args = ParseArgs().ToArray();
+                // Parse arguments.
+                var args = ArgumentTokenizer
+                    .Tokenize(Environment.CommandLine)
+                    .Skip(1) // Skip executable.
+                    .ToArray();
+
+                // Resolve and run the application.
                 var application = container.Resolve<CakeApplication>();
                 return application.Run(args);
-            }
-        }
-
-        private static IEnumerable<string> ParseArgs()
-        {
-            var commandLine = Environment.CommandLine;
-            if (string.IsNullOrWhiteSpace(commandLine))
-            {
-                yield break;
-            }
-            var index = commandLine.IndexOf(' ');
-            if (index == -1)
-            {
-                yield break;
-            }
-            newvalue:
-            var sb = new StringBuilder();
-            var inQuote = false;
-            for (; ++index < commandLine.Length;)
-            {
-                var c = commandLine[index];
-                switch (c)
-                {
-                    case '"':
-                    {
-                        inQuote = !inQuote;
-                        break;
-                    }
-                    case ' ':
-                    {
-                        if (inQuote)
-                        {
-                            break;
-                        }
-                        if (sb.Length > 1)
-                        {
-                            yield return sb.ToString();
-                        }
-                        goto newvalue;
-                    }
-                }
-                sb.Append(c);
-            }
-            if (sb.Length > 0)
-            {
-                yield return sb.ToString();
             }
         }
 

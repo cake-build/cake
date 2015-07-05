@@ -83,6 +83,7 @@ Task("Build")
         settings.SetConfiguration(configuration)
             .WithProperty("TreatWarningsAsErrors", "true")
             .UseToolVersion(MSBuildToolVersion.NET45)
+            .SetVerbosity(Verbosity.Minimal)
             .SetNodeReuse(false));
 });
 
@@ -143,7 +144,7 @@ Task("Create-NuGet-Packages")
         ReleaseNotes = releaseNotes.Notes.ToArray(),
         BasePath = binDir,
         OutputDirectory = nugetRoot,
-        Symbols = true
+        Symbols = false
     });
 });
 
