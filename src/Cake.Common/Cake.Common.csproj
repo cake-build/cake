@@ -190,6 +190,14 @@
     <Compile Include="Xml\XmlTransformationAlias.cs" />
     <Compile Include="Xml\XmlTransformationSettings.cs" />
     <Compile Include="Net\HttpAliases.cs" />
+    <Compile Include="Tools\XBuild\XBuildSettings.cs" />
+    <Compile Include="Tools\XBuild\XBuildVersion.cs" />
+    <Compile Include="Tools\XBuild\XBuildRunner.cs" />
+    <Compile Include="Tools\XBuild\XBuildToolVersion.cs" />
+    <Compile Include="Tools\XBuild\XBuildAliases.cs" />
+    <Compile Include="Tools\XBuild\XBuildResolver.cs" />
+    <Compile Include="Tools\XBuild\DotNetBuildSettings.cs" />
+    <Compile Include="Tools\XBuild\DotNetBuildAliases.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
