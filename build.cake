@@ -83,6 +83,7 @@ Task("Build")
         settings.SetConfiguration(configuration)
             .WithProperty("TreatWarningsAsErrors", "true")
             .UseToolVersion(MSBuildToolVersion.NET45)
+            .SetVerbosity(Verbosity.Minimal)
             .SetNodeReuse(false));
 });
 
