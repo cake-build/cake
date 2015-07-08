@@ -11,7 +11,7 @@ namespace Cake.Scripting.Mono
     /// <summary>
     /// Responsible for generating script method aliases.
     /// </summary>
-    public static class MethodAliasGenerator
+    public static class MonoMethodAliasGenerator
     {
         /// <summary>
         /// Generates a script method alias from the specified method.

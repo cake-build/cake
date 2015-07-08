@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Cake.Core;
-using Cake.Core.Scripting;
+﻿using Cake.Core.Scripting;
 
 namespace Cake.Scripting.Mono
 {

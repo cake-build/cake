@@ -12,7 +12,7 @@ namespace Cake.Scripting.Roslyn
     /// <summary>
     /// Responsible for generating script property aliases.
     /// </summary>
-    public static class PropertyAliasGenerator
+    public static class RoslynPropertyAliasGenerator
     {
         /// <summary>
         /// Generates a script property alias from the specified method.
