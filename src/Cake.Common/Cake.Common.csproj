@@ -196,8 +196,8 @@
     <Compile Include="Tools\XBuild\XBuildToolVersion.cs" />
     <Compile Include="Tools\XBuild\XBuildAliases.cs" />
     <Compile Include="Tools\XBuild\XBuildResolver.cs" />
-    <Compile Include="Tools\XBuild\DotNetBuildSettings.cs" />
-    <Compile Include="Tools\XBuild\DotNetBuildAliases.cs" />
+    <Compile Include="Tools\MSOrXBuildSettings.cs" />
+    <Compile Include="Tools\MSOrXBuildAliases.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
