@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -54,8 +53,6 @@ namespace Cake.Common.Tools.XBuild
 
         private static FilePath GetWhichXBuild()
         {
-            var which = string.Empty;
-
             var startInfo = new ProcessStartInfo
             {
                 FileName = "/usr/bin/which",
@@ -65,6 +62,7 @@ namespace Cake.Common.Tools.XBuild
                 CreateNoWindow = true
             };
 
+            string which;
             using (var proc = new Process { StartInfo = startInfo })
             {
                 proc.Start();
@@ -76,8 +74,6 @@ namespace Cake.Common.Tools.XBuild
 
         private static FilePath GetWhereMono()
         {
-            var where = string.Empty;
-
             var startInfo = new ProcessStartInfo
             {
                 FileName = "where",
@@ -87,13 +83,14 @@ namespace Cake.Common.Tools.XBuild
                 CreateNoWindow = true
             };
 
+            string path;
             using (var proc = new Process { StartInfo = startInfo })
             {
                 proc.Start();
-                where = proc.StandardOutput.ReadToEnd();
+                path = proc.StandardOutput.ReadToEnd();
             }
 
-            return string.IsNullOrEmpty(where) ? null : new FilePath(where.Trim());
+            return string.IsNullOrEmpty(path) ? null : new FilePath(path.Trim());
         }
 
         private static DirectoryPath GetMonoPathWindows()

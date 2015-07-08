@@ -10,8 +10,6 @@ namespace Cake.Scripting.Mono
     {
         public string Generate(Script script, out int codeLineOffset)
         {
-            codeLineOffset = 0;
-
             var code = new StringBuilder();
 
             var scriptLines = new StringBuilder();
@@ -46,7 +44,7 @@ namespace Cake.Scripting.Mono
                 } 
                 else 
                 {
-                    scriptLines.AppendLine(line);                
+                    scriptLines.AppendLine(line);
                 }
             }
 
@@ -83,15 +81,16 @@ namespace Cake.Scripting.Mono
             foreach (var alias in context.Aliases)
             {
                 result.Add(alias.Type == ScriptAliasType.Method
-                    ? MethodAliasGenerator.Generate(alias.Method)
-                    : PropertyAliasGenerator.Generate(alias.Method));
+                    ? MonoMethodAliasGenerator.Generate(alias.Method)
+                    : MonoPropertyAliasGenerator.Generate(alias.Method));
             }
             return string.Join("\r\n", result);
         }
 
         private static string GetScriptHostProxy()
         {
-            var rules = new string[] 
+            // TODO: Generate this from interface.
+            var rules = new[] 
             {
                 "IScriptHost ScriptHost { get; set; }",
                 "ICakeContext Context { get { return ScriptHost.Context; } }",

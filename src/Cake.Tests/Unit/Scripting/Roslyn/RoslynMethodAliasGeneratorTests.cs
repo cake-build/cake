@@ -13,7 +13,7 @@ namespace Cake.Tests.Unit.Scripting.Roslyn
             public void Should_Throw_If_Method_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => MethodAliasGenerator.Generate(null));
+                var result = Record.Exception(() => RoslynMethodAliasGenerator.Generate(null));
 
                 // Then
                 Assert.IsArgumentNullException(result, "method");
@@ -29,7 +29,7 @@ namespace Cake.Tests.Unit.Scripting.Roslyn
                 var method = typeof(RoslynMethodAliasGeneratorFixture).GetMethod("NonGeneric_ExtensionMethodWithNoParameters");
 
                 // When
-                var result = MethodAliasGenerator.Generate(method);
+                var result = RoslynMethodAliasGenerator.Generate(method);
 
                 // Then
                 Assert.Equal(expected, result);
@@ -45,7 +45,7 @@ namespace Cake.Tests.Unit.Scripting.Roslyn
                 var method = typeof(RoslynMethodAliasGeneratorFixture).GetMethod("NonGeneric_ExtensionMethodWithParameter");
 
                 // When
-                var result = MethodAliasGenerator.Generate(method);
+                var result = RoslynMethodAliasGenerator.Generate(method);
 
                 // Then
                 Assert.Equal(expected, result);
@@ -61,7 +61,7 @@ namespace Cake.Tests.Unit.Scripting.Roslyn
                 var method = typeof(RoslynMethodAliasGeneratorFixture).GetMethod("NonGeneric_ExtensionMethodWithGenericParameter");
 
                 // When
-                var result = MethodAliasGenerator.Generate(method);
+                var result = RoslynMethodAliasGenerator.Generate(method);
 
                 // Then
                 Assert.Equal(expected, result);
@@ -77,7 +77,7 @@ namespace Cake.Tests.Unit.Scripting.Roslyn
                 var method = typeof(RoslynMethodAliasGeneratorFixture).GetMethod("NonGeneric_ExtensionMethodWithReturnValue");
 
                 // When
-                var result = MethodAliasGenerator.Generate(method);
+                var result = RoslynMethodAliasGenerator.Generate(method);
 
                 // Then
                 Assert.Equal(expected, result);
@@ -93,7 +93,7 @@ namespace Cake.Tests.Unit.Scripting.Roslyn
                 var method = typeof(RoslynMethodAliasGeneratorFixture).GetMethods().SingleOrDefault(x => x.Name == "Generic_ExtensionMethod");
 
                 // When
-                var result = MethodAliasGenerator.Generate(method);
+                var result = RoslynMethodAliasGenerator.Generate(method);
 
                 // Then
                 Assert.Equal(expected, result);
@@ -109,7 +109,7 @@ namespace Cake.Tests.Unit.Scripting.Roslyn
                 var method = typeof(RoslynMethodAliasGeneratorFixture).GetMethods().SingleOrDefault(x => x.Name == "Generic_ExtensionMethodWithParameter");
 
                 // When
-                var result = MethodAliasGenerator.Generate(method);
+                var result = RoslynMethodAliasGenerator.Generate(method);
 
                 // Then
                 Assert.Equal(expected, result);
@@ -125,7 +125,7 @@ namespace Cake.Tests.Unit.Scripting.Roslyn
                 var method = typeof(RoslynMethodAliasGeneratorFixture).GetMethods().SingleOrDefault(x => x.Name == "Generic_ExtensionMethodWithGenericReturnValue");
 
                 // When
-                var result = MethodAliasGenerator.Generate(method);
+                var result = RoslynMethodAliasGenerator.Generate(method);
 
                 // Then
                 Assert.Equal(expected, result);
@@ -141,7 +141,7 @@ namespace Cake.Tests.Unit.Scripting.Roslyn
                 var method = typeof(RoslynMethodAliasGeneratorFixture).GetMethod("NonGeneric_ExtensionMethodWithParameterArray");
 
                 // When
-                var result = MethodAliasGenerator.Generate(method);
+                var result = RoslynMethodAliasGenerator.Generate(method);
 
                 // Then
                 Assert.Equal(expected, result);
