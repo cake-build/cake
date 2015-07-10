@@ -4,6 +4,7 @@ using System.Reflection;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting;
+using Cake.Scripting.Mono.CodeGen;
 using Mono.CSharp;
 
 namespace Cake.Scripting.Mono
@@ -35,7 +36,7 @@ namespace Cake.Scripting.Mono
 
             // Create the evaluator.
             var compilerSettings = new CompilerSettings();
-            var reportPrinter = new ConsoleReportPrinter();
+            var reportPrinter = new MonoConsoleReportPrinter(_log);
             var compilerContext = new CompilerContext(compilerSettings, reportPrinter);
             _evaluator = new Evaluator(compilerContext);
 
@@ -81,15 +82,13 @@ namespace Cake.Scripting.Mono
             var code = generator.Generate(script, out codeLineOffset);
 
             _log.Debug("Compiling build script...");
+            _log.Debug("User Code Starts at Line # {0}", codeLineOffset);
 
-            _log.Information(Verbosity.Normal, "User Code Starts at Line # {0}", codeLineOffset);
-
-            // Build the class we generated
+            // Build the class we generated.
             _evaluator.Run(code);
 
-            // Actually execute it
+            // Actually execute it.
             _evaluator.Run("new CakeBuildScriptImpl (ScriptHost).Execute ();");
-
             _log.Debug("Execution complete...");
         }
     }

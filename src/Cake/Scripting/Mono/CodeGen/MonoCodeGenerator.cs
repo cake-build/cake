@@ -3,51 +3,19 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using Cake.Core.Scripting;
+using Cake.Scripting.Mono.CodeGen.Parsing;
 
-namespace Cake.Scripting.Mono
+namespace Cake.Scripting.Mono.CodeGen
 {
     internal sealed class MonoCodeGenerator
     {
         public string Generate(Script script, out int codeLineOffset)
         {
+            // Process the script.
+            IReadOnlyList<CodeBlock> blocks;
+            script = MonoScriptProcessor.Process(script, out blocks);
+
             var code = new StringBuilder();
-
-            var scriptLines = new StringBuilder();
-            var extrasLines = new StringBuilder();
-
-            var isInExtras = false;
-
-            foreach (var l in script.Lines) 
-            {
-                var line = l;
-
-                if (line.StartsWith("#line", StringComparison.InvariantCultureIgnoreCase)) 
-                {
-                    line = "// " + line;
-                }
-
-                if (line.StartsWith("#region \"extras\"")) 
-                {
-                    isInExtras = true;
-                    continue;
-                }
-
-                if (isInExtras && line.StartsWith("#endregion", StringComparison.InvariantCultureIgnoreCase)) 
-                {
-                    isInExtras = false;
-                    continue;
-                }
-
-                if (isInExtras) 
-                {
-                    extrasLines.AppendLine(line);
-                } 
-                else 
-                {
-                    scriptLines.AppendLine(line);
-                }
-            }
-
             code.AppendLine("public class CakeBuildScriptImpl");
             code.AppendLine("{");
             code.AppendLine("    public CakeBuildScriptImpl (IScriptHost scriptHost)");
@@ -59,15 +27,20 @@ namespace Cake.Scripting.Mono
             code.AppendLine();
             code.AppendLine(GetScriptHostProxy());
             code.AppendLine();
-            code.AppendLine(extrasLines.ToString());
-            code.AppendLine();
+
+            foreach (var block in blocks)
+            {
+                code.AppendLine(block.Content);
+                code.AppendLine();
+            }
+
             code.AppendLine("    public void Execute ()");
             code.AppendLine("    {");
 
             // Pass back where the 'user' code starts so we can calculate offsets of errors/warnings
             codeLineOffset = Regex.Matches(code.ToString(), Environment.NewLine).Count;
 
-            code.AppendLine(scriptLines.ToString());
+            code.AppendLine(string.Join("\n", script.Lines));
             code.AppendLine();
             code.AppendLine("    }");
             code.AppendLine("}");
