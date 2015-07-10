@@ -35,19 +35,19 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet
 
         public void AddSources()
         {
-            var tool = new NuGetSources(FileSystem, Environment, ProcessRunner, NuGetToolResolver);
+            var tool = new NuGetSources(FileSystem, Environment, ProcessRunner, Globber, NuGetToolResolver);
             tool.AddSource(Name, Source, Settings);
         }
 
         public void RemoveSource()
         {
-            var tool = new NuGetSources(FileSystem, Environment, ProcessRunner, NuGetToolResolver);
+            var tool = new NuGetSources(FileSystem, Environment, ProcessRunner, Globber, NuGetToolResolver);
             tool.RemoveSource(Name, Source, Settings);
         }
 
         public void HasSource()
         {
-            var tool = new NuGetSources(FileSystem, Environment, ProcessRunner, NuGetToolResolver);
+            var tool = new NuGetSources(FileSystem, Environment, ProcessRunner, Globber, NuGetToolResolver);
             tool.HasSource(Source, Settings);
         }
     }

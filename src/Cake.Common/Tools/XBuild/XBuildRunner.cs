@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -22,8 +23,9 @@ namespace Cake.Common.Tools.XBuild
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="runner">The runner.</param>
-        public XBuildRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner runner)
-            : base(fileSystem, environment, runner)
+        /// <param name="globber">The globber.</param>
+        public XBuildRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner runner, IGlobber globber)
+            : base(fileSystem, environment, runner, globber)
         {
             _fileSystem = fileSystem;
             _environment = environment;
@@ -119,17 +121,34 @@ namespace Cake.Common.Tools.XBuild
         }
 
         /// <summary>
-        /// Gets the default tool path.
+        /// Gets the possible names of the tool executable.
+        /// </summary>
+        /// <returns>The tool executable name.</returns>
+        protected override IEnumerable<string> GetToolExecutableNames()
+        {
+            return new[] { "xunit", "xunit.bat" };
+        }
+
+        /// <summary>
+        /// Gets alternative file paths which the tool may exist in
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The default tool path.</returns>
-        protected override FilePath GetDefaultToolPath(XBuildSettings settings)
+        protected override IEnumerable<FilePath> GetAlternativeToolPaths(XBuildSettings settings)
         {
             if (settings == null)
             {
                 throw new ArgumentNullException("settings");
             }
-            return XBuildResolver.GetXBuildPath(_fileSystem, _environment, settings.ToolVersion);
+
+            var path = XBuildResolver.GetXBuildPath(_fileSystem, _environment, settings.ToolVersion);
+
+            if (path != null)
+            {
+                return new[] { path };
+            }
+
+            return Enumerable.Empty<FilePath>();
         }
     }
 }

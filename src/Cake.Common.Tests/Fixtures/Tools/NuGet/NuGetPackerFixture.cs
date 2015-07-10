@@ -29,7 +29,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet
 
         public void Pack()
         {
-            var tool = new NuGetPacker(FileSystem, Environment, ProcessRunner, Log, NuGetToolResolver);
+            var tool = new NuGetPacker(FileSystem, Environment, ProcessRunner, Log, Globber, NuGetToolResolver);
             tool.Pack(NuSpecFilePath, Settings);
         }
     }

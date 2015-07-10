@@ -62,19 +62,6 @@ namespace Cake.Core.IO.NuGet
                 return _cachedPath.Path;
             }
 
-            // Check if tool exists in tool folder
-            const string expression = "./tools/**/NuGet.exe";
-            var toolsExe = _globber.GetFiles(expression).FirstOrDefault();
-            if (toolsExe != null)
-            {
-                var toolsFile = _fileSystem.GetFile(toolsExe);
-                if (toolsFile.Exists)
-                {
-                    _cachedPath = toolsFile;
-                    return _cachedPath.Path;
-                }
-            }
-
             // Check if path set to environment variable
             var environmentExe = _environment.GetEnvironmentVariable("NUGET_EXE");
             if (!string.IsNullOrWhiteSpace(environmentExe))
@@ -87,31 +74,19 @@ namespace Cake.Core.IO.NuGet
                 }
             }
 
-            // Last resort try path
-            var envPath = _environment.GetEnvironmentVariable("path");
-            if (!string.IsNullOrWhiteSpace(envPath))
+            // On Unix /usr/bin/nuget is a viable option
+            if (_environment.IsUnix())
             {
-                var pathFile = envPath
-                    .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(path => _fileSystem.GetDirectory(path))
-                    .Where(path => path.Exists)
-                    .Select(path => path.Path.CombineWithFilePath("nuget.exe"))
-                    .Select(_fileSystem.GetFile)
-                    .FirstOrDefault(file => file.Exists);
+                var nugetUnixPath = new FilePath("/usr/bin/nuget");
 
-                if (pathFile != null)
+                if (_fileSystem.Exist(nugetUnixPath))
                 {
-                    _cachedPath = pathFile;
+                    _cachedPath = _fileSystem.GetFile(nugetUnixPath);
                     return _cachedPath.Path;
                 }
             }
 
-            if (_environment.IsUnix()) 
-            {
-                return "/usr/bin/nuget";
-            }
-
-            throw new CakeException("Could not locate nuget.exe.");
+            throw new CakeException("Could not locate nuget.");
         }
     }
 }

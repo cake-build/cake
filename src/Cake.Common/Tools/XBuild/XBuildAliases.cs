@@ -43,7 +43,7 @@ namespace Cake.Common.Tools.XBuild
             var settings = new XBuildSettings(solution);
             configurator(settings);
 
-            var runner = new XBuildRunner(context.FileSystem, context.Environment, context.ProcessRunner);
+            var runner = new XBuildRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
             runner.Run(settings);
         }
     }
