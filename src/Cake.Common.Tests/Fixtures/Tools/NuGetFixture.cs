@@ -18,6 +18,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         public IProcess Process { get; set; }
         public ICakeLog Log { get; set; }
         public IToolResolver NuGetToolResolver { get; set; }
+        public IGlobber Globber { get; set; }
 
         protected NuGetFixture()
         {
@@ -28,6 +29,10 @@ namespace Cake.Common.Tests.Fixtures.Tools
             Process.GetExitCode().Returns(0);
             ProcessRunner = Substitute.For<IProcessRunner>();
             ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns(Process);
+
+            Globber = Substitute.For<IGlobber>();
+            Globber.Match("./tools/**/nuget.exe").Returns(new[] { (FilePath)"/Working/tools/NuGet.exe" });
+            Globber.Match("./tools/**/NuGet.exe").Returns(new[] { (FilePath)"/Working/tools/NuGet.exe" });
 
             NuGetToolResolver = Substitute.For<IToolResolver>();
             NuGetToolResolver.Name.Returns("NuGet");

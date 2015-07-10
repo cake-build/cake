@@ -13,6 +13,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         public IProcessRunner ProcessRunner { get; set; }
         public IRegistry Registry { get; set; }
         public ISignToolResolver Resolver { get; set; }
+        public IGlobber Globber { get;set; }
 
         public IFile AssemblyFile { get; set; }
         public IFile CertificateFile { get; set; }
@@ -42,6 +43,9 @@ namespace Cake.Common.Tests.Fixtures.Tools
             Resolver = Substitute.For<ISignToolResolver>();
             Resolver.GetPath().Returns("/Working/Default/tool.exe");
 
+            Globber = Substitute.For<IGlobber>();
+            Globber.Match("./tools/**/signtool.exe").Returns(new[] { (FilePath)"/Working/Default/tool.exe" });
+
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory.Returns("/Working");
 
@@ -50,7 +54,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         public SignToolSignRunner CreateRunner()
         {
-            return new SignToolSignRunner(FileSystem, Environment, ProcessRunner, Registry, Resolver);
+            return new SignToolSignRunner(FileSystem, Environment, ProcessRunner, Globber, Registry, Resolver);
         }
 
         public void RunTool()

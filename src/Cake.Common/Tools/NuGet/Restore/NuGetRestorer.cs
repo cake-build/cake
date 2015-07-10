@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Utilities;
@@ -19,10 +21,11 @@ namespace Cake.Common.Tools.NuGet.Restore
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
+        /// <param name="globber">The globber.</param>
         /// <param name="nugetToolResolver">The NuGet tool resolver</param>
         public NuGetRestorer(IFileSystem fileSystem, ICakeEnvironment environment, 
-            IProcessRunner processRunner, IToolResolver nugetToolResolver)
-            : base(fileSystem, environment, processRunner)
+            IProcessRunner processRunner, IGlobber globber, IToolResolver nugetToolResolver)
+            : base(fileSystem, environment, processRunner, globber)
         {
             _environment = environment;
             _nugetToolResolver = nugetToolResolver;
@@ -115,13 +118,28 @@ namespace Cake.Common.Tools.NuGet.Restore
         }
 
         /// <summary>
-        /// Gets the default tool path.
+        /// Gets the possible names of the tool executable.
+        /// </summary>
+        /// <returns>The tool executable name.</returns>
+        protected override IEnumerable<string> GetToolExecutableNames()
+        {
+            return new[] { "NuGet.exe", "nuget.exe" };
+        }
+
+        /// <summary>
+        /// Gets alternative file paths which the tool may exist in
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The default tool path.</returns>
-        protected override FilePath GetDefaultToolPath(NuGetRestoreSettings settings)
+        protected override IEnumerable<FilePath> GetAlternativeToolPaths(NuGetRestoreSettings settings)
         {
-            return _nugetToolResolver.ResolveToolPath();
+            var path = _nugetToolResolver.ResolveToolPath();
+            if (path != null)
+            {
+                return new[] { path };
+            }
+
+            return Enumerable.Empty<FilePath>();
         }
     }
 }

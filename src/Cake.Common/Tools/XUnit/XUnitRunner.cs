@@ -12,7 +12,6 @@ namespace Cake.Common.Tools.XUnit
     public sealed class XUnitRunner : Tool<XUnitSettings>
     {
         private readonly ICakeEnvironment _environment;
-        private readonly IGlobber _globber;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XUnitRunner" /> class.
@@ -22,10 +21,9 @@ namespace Cake.Common.Tools.XUnit
         /// <param name="globber">The globber.</param>
         /// <param name="runner">The runner.</param>
         public XUnitRunner(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, IProcessRunner runner)
-            : base(fileSystem, environment, runner)
+            : base(fileSystem, environment, runner, globber)
         {
             _environment = environment;
-            _globber = globber;
         }
 
         /// <summary>
@@ -115,13 +113,12 @@ namespace Cake.Common.Tools.XUnit
         }
 
         /// <summary>
-        /// Gets the default tool path.
+        /// Gets the possible names of the tool executable.
         /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The default tool path.</returns>
-        protected override FilePath GetDefaultToolPath(XUnitSettings settings)
+        /// <returns>The tool executable name.</returns>
+        protected override System.Collections.Generic.IEnumerable<string> GetToolExecutableNames()
         {
-            return _globber.GetFiles("./tools/**/xunit.console.clr4.exe").FirstOrDefault();
+            return new[] { "xunit.console.clr4.exe" };
         }
     }
 }
