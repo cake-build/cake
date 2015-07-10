@@ -6,8 +6,11 @@ namespace Cake.Scripting.Mono.CodeGen.Parsing
     internal sealed class CodeBlock
     {
         public bool HasScope { get; set; }
+
         public int Start { get; set; }
+
         public int End { get; set; }
+
         public string Content { get; set; }
     }
 }
