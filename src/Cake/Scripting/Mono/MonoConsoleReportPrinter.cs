@@ -1,7 +1,5 @@
-﻿extern alias MonoCSharp;
-
-using Cake.Core.Diagnostics;
-using MonoCSharp::Mono.CSharp;
+﻿using Cake.Core.Diagnostics;
+using Mono.CSharp;
 
 namespace Cake.Scripting.Mono
 {

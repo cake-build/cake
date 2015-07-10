@@ -1,18 +1,17 @@
-﻿extern alias MonoCSharp;
-
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting;
 using Cake.Scripting.Mono.CodeGen;
+using Mono.CSharp;
 
 namespace Cake.Scripting.Mono
 {
     internal sealed class MonoScriptSession : IScriptSession
     {
-        private readonly MonoCSharp::Mono.CSharp.Evaluator _evaluator;
+        private readonly Evaluator _evaluator;
         private readonly ICakeLog _log;
 
         private readonly string[] _skipAssemblies = 
@@ -36,10 +35,10 @@ namespace Cake.Scripting.Mono
             _log = log;
 
             // Create the evaluator.
-            var compilerSettings = new MonoCSharp::Mono.CSharp.CompilerSettings();
+            var compilerSettings = new CompilerSettings();
             var reportPrinter = new MonoConsoleReportPrinter(_log);
-            var compilerContext = new MonoCSharp::Mono.CSharp.CompilerContext(compilerSettings, reportPrinter);
-            _evaluator = new MonoCSharp::Mono.CSharp.Evaluator(compilerContext);
+            var compilerContext = new CompilerContext(compilerSettings, reportPrinter);
+            _evaluator = new Evaluator(compilerContext);
 
             // Set our instance of the script host to this static member
             MonoScriptHostProxy.ScriptHost = host;

@@ -87,7 +87,7 @@
     </Reference>
     <Reference Include="Mono.CSharp">
       <HintPath>..\packages\Mono.CSharp.4.0.0.143\lib\4.5\Mono.CSharp.dll</HintPath>
-      <Aliases>global,MonoCSharp</Aliases>
+      <Aliases>global</Aliases>
     </Reference>
     <Reference Include="NuGet.Core, Version=2.8.50926.602, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
