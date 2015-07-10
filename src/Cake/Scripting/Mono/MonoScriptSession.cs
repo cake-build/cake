@@ -81,8 +81,7 @@ namespace Cake.Scripting.Mono
             var code = generator.Generate(script, out codeLineOffset);
 
             _log.Debug("Compiling build script...");
-
-            _log.Information(Verbosity.Normal, "User Code Starts at Line # {0}", codeLineOffset);
+            _log.Debug("User Code Starts at Line # {0}", codeLineOffset);
 
             // Build the class we generated
             _evaluator.Run(code);
