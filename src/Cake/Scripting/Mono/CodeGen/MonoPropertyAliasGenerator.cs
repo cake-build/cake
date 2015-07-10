@@ -7,7 +7,7 @@ using System.Text;
 using Cake.Core;
 using Cake.Core.Annotations;
 
-namespace Cake.Scripting.Mono
+namespace Cake.Scripting.Mono.CodeGen
 {
     /// <summary>
     /// Responsible for generating script property aliases.
