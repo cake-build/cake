@@ -66,10 +66,6 @@ namespace Cake.Scripting.Mono.CodeGen.Parsing
             var count = 0;
             while (true)
             {
-                if (_current == -1)
-                {
-                    throw new InvalidOperationException("Could not parse script code.");
-                }
                 if (_current == start)
                 {
                     count++;
@@ -82,7 +78,10 @@ namespace Cake.Scripting.Mono.CodeGen.Parsing
                 {
                     break;
                 }
-                Accept();
+                if (!Accept())
+                {
+                    break;
+                }
             }
         }
 
