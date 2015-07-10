@@ -7,7 +7,7 @@ namespace Cake.Core.IO.NuGet
     /// Contains NuGet path resolver functionality
     /// </summary>
     public sealed class NuGetToolResolver : INuGetToolResolver
-    {        
+    {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
@@ -62,6 +62,19 @@ namespace Cake.Core.IO.NuGet
                 return _cachedPath.Path;
             }
 
+            // Check if tool exists in tool folder
+            const string expression = "./tools/**/NuGet.exe";
+            var toolsExe = _globber.GetFiles(expression).FirstOrDefault();
+            if (toolsExe != null)
+            {
+                var toolsFile = _fileSystem.GetFile(toolsExe);
+                if (toolsFile.Exists)
+                {
+                    _cachedPath = toolsFile;
+                    return _cachedPath.Path;
+                }
+            }
+
             // Check if path set to environment variable
             var environmentExe = _environment.GetEnvironmentVariable("NUGET_EXE");
             if (!string.IsNullOrWhiteSpace(environmentExe))
@@ -86,7 +99,26 @@ namespace Cake.Core.IO.NuGet
                 }
             }
 
-            throw new CakeException("Could not locate nuget.");
+            // Last resort try path
+            var envPath = _environment.GetEnvironmentVariable("path");
+            if (!string.IsNullOrWhiteSpace(envPath))
+            {
+                var pathFile = envPath
+                    .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(path => _fileSystem.GetDirectory(path))
+                    .Where(path => path.Exists)
+                    .Select(path => path.Path.CombineWithFilePath("nuget.exe"))
+                    .Select(_fileSystem.GetFile)
+                    .FirstOrDefault(file => file.Exists);
+
+                if (pathFile != null)
+                {
+                    _cachedPath = pathFile;
+                    return _cachedPath.Path;
+                }
+            }
+
+            throw new CakeException("Could not locate nuget.exe.");
         }
     }
 }
