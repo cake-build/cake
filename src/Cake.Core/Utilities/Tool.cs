@@ -43,7 +43,7 @@ namespace Cake.Core.Utilities
                 throw new ArgumentNullException("globber");
             }
 
-            _fileSystem = fileSystem;            
+            _fileSystem = fileSystem;
             _environment = environment;
             _processRunner = processRunner;
             _globber = globber;
@@ -101,7 +101,7 @@ namespace Cake.Core.Utilities
             if (workingDirectory == null)
             {
                 const string message = "{0}: Could not resolve working directory.";
-                throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, toolName));                
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, toolName));
             }
 
             // Create the process start info.
@@ -161,7 +161,7 @@ namespace Cake.Core.Utilities
             var toolExeNames = GetToolExecutableNames();
             IEnumerable<string> pathDirs = null;
 
-            // Look for each possible executable name in various places
+            // Look for each possible executable name in various places.
             foreach (var toolExeName in toolExeNames)
             {                
                 // First look in ./tools/
@@ -171,9 +171,9 @@ namespace Cake.Core.Utilities
                     return toolPath.MakeAbsolute(_environment);
                 }
 
-                // Cache the PATH directory list if we didn't already
-                if (pathDirs == null) 
-                {                    
+                // Cache the PATH directory list if we didn't already.
+                if (pathDirs == null)
+                {
                     var pathEnv = _environment.GetEnvironmentVariable("PATH");
                     if (!string.IsNullOrEmpty(pathEnv))
                     {
@@ -185,7 +185,7 @@ namespace Cake.Core.Utilities
                     }
                 }
 
-                // Look in every PATH directory for the file
+                // Look in every PATH directory for the file.
                 foreach (var pathDir in pathDirs)
                 {
                     var file = new DirectoryPath(pathDir).CombineWithFilePath(toolExeName);
@@ -197,10 +197,8 @@ namespace Cake.Core.Utilities
                 }
             }
 
-            var alternativePaths = GetAlternativeToolPaths(settings) ??
-                    Enumerable.Empty<FilePath>();
-
-            // Look through all the alternative directories for the tool
+            // Look through all the alternative directories for the tool.
+            var alternativePaths = GetAlternativeToolPaths(settings) ?? Enumerable.Empty<FilePath>();
             foreach (var altPath in alternativePaths)
             {
                 if (_fileSystem.Exist(altPath))
