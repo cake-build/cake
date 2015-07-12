@@ -13,7 +13,6 @@ namespace Cake.Common.Tools.ILMerge
     public sealed class ILMergeRunner : Tool<ILMergeSettings>
     {
         private readonly ICakeEnvironment _environment;
-        private readonly IGlobber _globber;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ILMergeRunner" /> class.
@@ -24,10 +23,9 @@ namespace Cake.Common.Tools.ILMerge
         /// <param name="processRunner">The process runner.</param>
         public ILMergeRunner(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber,
             IProcessRunner processRunner)
-            : base(fileSystem, environment, processRunner)
+            : base(fileSystem, environment, processRunner, globber)
         {
             _environment = environment;
-            _globber = globber;
         }
 
         /// <summary>
@@ -70,14 +68,12 @@ namespace Cake.Common.Tools.ILMerge
         }
 
         /// <summary>
-        /// Gets the default tool path.
+        /// Gets the name of the tool executable.
         /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The default tool path.</returns>
-        protected override FilePath GetDefaultToolPath(ILMergeSettings settings)
+        /// <returns>The tool executable name.</returns>
+        protected override IEnumerable<string> GetToolExecutableNames()
         {
-            const string expression = "./tools/**/ILMerge.exe";
-            return _globber.GetFiles(expression).FirstOrDefault();
+            return new[] { "ILMerge.exe" };
         }
 
         private ProcessArgumentBuilder GetArguments(FilePath outputAssemblyPath,

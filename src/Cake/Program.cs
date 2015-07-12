@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Autofac;
 using Autofac.Builder;
 using Cake.Arguments;
@@ -30,21 +29,32 @@ namespace Cake
         /// <returns>The application exit code.</returns>
         public static int Main()
         {
-            using (var container = CreateContainer())
-            {
-                // Parse arguments.
-                var args = ArgumentTokenizer
-                    .Tokenize(Environment.CommandLine)
-                    .Skip(1) // Skip executable.
-                    .ToArray();
+            // Parse arguments.
+            var args = ArgumentTokenizer
+                .Tokenize(Environment.CommandLine)
+                .Skip(1) // Skip executable.
+                .ToArray();
 
+            // Are we running on Mono?
+            var mono = Type.GetType("Mono.Runtime") != null;
+            if (!mono)
+            {
+                // Not using the mono compiler, but do we want to?
+                if (args.Contains("-mono"))
+                {
+                    mono = true;
+                }
+            }
+
+            using (var container = CreateContainer(mono))
+            {
                 // Resolve and run the application.
                 var application = container.Resolve<CakeApplication>();
                 return application.Run(args);
             }
         }
 
-        private static IContainer CreateContainer()
+        private static IContainer CreateContainer(bool mono)
         {
             var builder = new ContainerBuilder();
 
@@ -64,10 +74,18 @@ namespace Cake
             builder.RegisterType<WindowsRegistry>().As<IRegistry>().SingleInstance();
             builder.RegisterType<CakeContext>().As<ICakeContext>().SingleInstance();
 
-            // Roslyn related services.
-            builder.RegisterType<RoslynScriptEngine>().As<IScriptEngine>().SingleInstance();
-            builder.RegisterType<RoslynScriptSessionFactory>().SingleInstance();
-            builder.RegisterType<RoslynNightlyScriptSessionFactory>().SingleInstance();
+            if (mono) 
+            {
+                // Mono scripting.
+                builder.RegisterType<Scripting.Mono.MonoScriptEngine>().As<IScriptEngine>().SingleInstance();
+            } 
+            else 
+            {
+                // Roslyn related services.
+                builder.RegisterType<RoslynScriptEngine>().As<IScriptEngine>().SingleInstance();
+                builder.RegisterType<RoslynScriptSessionFactory>().SingleInstance();
+                builder.RegisterType<RoslynNightlyScriptSessionFactory>().SingleInstance();
+            }
 
             // Cake services.
             builder.RegisterType<ArgumentParser>().As<IArgumentParser>().SingleInstance();

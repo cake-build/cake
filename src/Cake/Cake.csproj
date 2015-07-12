@@ -85,6 +85,10 @@
     <Reference Include="Microsoft.Web.XmlTransform">
       <HintPath>..\packages\Microsoft.Web.Xdt.2.1.1\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.CSharp">
+      <HintPath>..\packages\Mono.CSharp.4.0.0.143\lib\4.5\Mono.CSharp.dll</HintPath>
+      <Aliases>global</Aliases>
+    </Reference>
     <Reference Include="NuGet.Core, Version=2.8.50926.602, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NuGet.Core.2.8.3\lib\net40-Client\NuGet.Core.dll</HintPath>
@@ -151,14 +155,24 @@
     <Compile Include="Scripting\DescriptionScriptHost.cs" />
     <Compile Include="Scripting\DryRunExecutionStrategy.cs" />
     <Compile Include="Scripting\DryRunScriptHost.cs" />
+    <Compile Include="Scripting\Mono\MonoConsoleReportPrinter.cs" />
+    <Compile Include="Scripting\Mono\CodeGen\Parsing\CodeBlock.cs" />
+    <Compile Include="Scripting\Mono\CodeGen\Parsing\CodeBlockParser.cs" />
+    <Compile Include="Scripting\Mono\CodeGen\MonoScriptProcessor.cs" />
     <Compile Include="Scripting\Roslyn\Nightly\RoslynNightlyScriptSession.cs" />
     <Compile Include="Scripting\Roslyn\Nightly\RoslynNightlyScriptSessionFactory.cs" />
     <Compile Include="Scripting\Roslyn\RoslynCodeGenerator.cs" />
     <Compile Include="Scripting\Roslyn\RoslynMethodAliasGenerator.cs" />
     <Compile Include="Scripting\Roslyn\RoslynPropertyAliasGenerator.cs" />
     <Compile Include="Scripting\Roslyn\Stable\RoslynScriptSession.cs" />
-    <Compile Include="Scripting\Roslyn\ScriptEngine.cs" />
+    <Compile Include="Scripting\Roslyn\RoslynScriptEngine.cs" />
     <Compile Include="Scripting\Roslyn\Stable\RoslynScriptSessionFactory.cs" />
+    <Compile Include="Scripting\Mono\MonoScriptSession.cs" />
+    <Compile Include="Scripting\Mono\MonoScriptEngine.cs" />
+    <Compile Include="Scripting\Mono\CodeGen\MonoCodeGenerator.cs" />
+    <Compile Include="Scripting\Mono\CodeGen\MonoPropertyAliasGenerator.cs" />
+    <Compile Include="Scripting\Mono\CodeGen\MonoMethodAliasGenerator.cs" />
+    <Compile Include="Scripting\Mono\MonoScriptHostProxy.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -208,4 +222,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup />
 </Project>

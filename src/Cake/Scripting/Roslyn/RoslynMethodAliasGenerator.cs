@@ -11,7 +11,7 @@ namespace Cake.Scripting.Roslyn
     /// <summary>
     /// Responsible for generating script method aliases.
     /// </summary>
-    public static class MethodAliasGenerator
+    public static class RoslynMethodAliasGenerator
     {
         /// <summary>
         /// Generates a script method alias from the specified method.

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Cake.Core;
@@ -14,7 +15,6 @@ namespace Cake.Common.Tools.NSIS
     public sealed class MakeNSISRunner : Tool<MakeNSISSettings>
     {
         private readonly ICakeEnvironment _environment;
-        private readonly IGlobber _globber;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MakeNSISRunner"/> class.
@@ -24,7 +24,7 @@ namespace Cake.Common.Tools.NSIS
         /// <param name="globber">The globber.</param>
         /// <param name="processRunner">The process runner.</param>
         public MakeNSISRunner(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
-            : base(fileSystem, environment, processRunner)
+            : base(fileSystem, environment, processRunner, globber)
         {
             if (environment == null)
             {
@@ -37,7 +37,6 @@ namespace Cake.Common.Tools.NSIS
             }
 
             _environment = environment;
-            _globber = globber;
         }
 
         /// <summary>
@@ -70,14 +69,12 @@ namespace Cake.Common.Tools.NSIS
         }
 
         /// <summary>
-        /// Gets the default tool path.
+        /// Gets the possible names of the tool executable.
         /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The default tool path.</returns>
-        protected override FilePath GetDefaultToolPath(MakeNSISSettings settings)
+        /// <returns>The tool executable name.</returns>
+        protected override IEnumerable<string> GetToolExecutableNames()
         {
-            const string expression = "./tools/**/makensis.exe";
-            return _globber.GetFiles(expression).FirstOrDefault();
+            return new[] { "makensis.exe" };
         }
 
         private ProcessArgumentBuilder GetArguments(FilePath scriptFile, MakeNSISSettings settings)
