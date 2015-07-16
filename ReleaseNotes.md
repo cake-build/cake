@@ -1,3 +1,8 @@
+### New in 0.5.0
+* Added Mono support.
+* Added XBuild alias.
+* Improved tool resolution.
+
 ### New in 0.4.3 (Released 2015/07/05)
 * Added TeamCity support.
 * Added filter predicate to globber and clean directory methods.
