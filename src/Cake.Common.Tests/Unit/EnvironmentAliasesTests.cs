@@ -23,7 +23,7 @@ namespace Cake.Common.Tests.Unit
                 context.Environment.Returns(environment);
 
                 // When
-                var result = context.HasEnvironmentVariable(TestVariableName);
+                var result = EnvironmentAliases.HasEnvironmentVariable(context, TestVariableName);
 
                 // Then
                 Assert.True(result);
@@ -41,7 +41,7 @@ namespace Cake.Common.Tests.Unit
                 context.Environment.Returns(environment);
 
                 // When
-                var result = context.HasEnvironmentVariable(TestVariableName);
+                var result = EnvironmentAliases.HasEnvironmentVariable(context, TestVariableName);
 
                 // Then
                 Assert.True(result);
@@ -66,7 +66,7 @@ namespace Cake.Common.Tests.Unit
             }
         }
 
-        public sealed class TheGetEnvironmentVariableVariable
+        public sealed class TheGetEnvironmentVariableMethod
         {
             [Fact]
             public void Should_Return_Value()
@@ -80,7 +80,7 @@ namespace Cake.Common.Tests.Unit
                 context.Environment.Returns(environment);
 
                 // When
-                var result = context.EnvironmentVariable(TestVariableName);
+                var result = EnvironmentAliases.EnvironmentVariable(context, TestVariableName);
 
                 // Then
                 Assert.Equal(result, TestVariableValue);
@@ -98,10 +98,72 @@ namespace Cake.Common.Tests.Unit
                 context.Environment.Returns(environment);
 
                 // When
-                var result = context.EnvironmentVariable(TestVariableName);
+                var result = EnvironmentAliases.EnvironmentVariable(context, TestVariableName);
 
                 // Then
                 Assert.Null(result);
+            }
+        }
+
+        public sealed class TheIsRunningOnWindowsMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => EnvironmentAliases.IsRunningOnWindows(null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "context");
+            }
+
+            [Theory]
+            [InlineData(true, false)]
+            [InlineData(false, true)]
+            public void Should_Return_Correct_Value(bool isRunningOnUnix, bool expected)
+            {
+                // Given
+                var environment = Substitute.For<ICakeEnvironment>();
+                environment.IsUnix().Returns(x => isRunningOnUnix);
+                var context = Substitute.For<ICakeContext>();
+                context.Environment.Returns(c => environment);
+
+                // When
+                var result = EnvironmentAliases.IsRunningOnWindows(context);
+
+                // Then
+                Assert.Equal(result, expected);
+            }
+        }
+
+        public sealed class TheIsRunningOnUnixMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => EnvironmentAliases.IsRunningOnUnix(null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "context");
+            }
+
+            [Theory]
+            [InlineData(true, true)]
+            [InlineData(false, false)]
+            public void Should_Return_Correct_Value(bool isRunningOnUnix, bool expected)
+            {
+                // Given
+                var environment = Substitute.For<ICakeEnvironment>();
+                environment.IsUnix().Returns(x => isRunningOnUnix);
+                var context = Substitute.For<ICakeContext>();
+                context.Environment.Returns(c => environment);
+
+                // When
+                var result = EnvironmentAliases.IsRunningOnUnix(context);
+
+                // Then
+                Assert.Equal(result, expected);
             }
         }
     }
