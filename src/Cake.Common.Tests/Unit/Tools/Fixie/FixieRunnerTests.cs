@@ -222,6 +222,25 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
                     Arg.Is<ProcessSettings>(
                         p => p.Arguments.Render() == string.Format("\"/Working/Tests.dll\" --TeamCity {0}", teamCityValue)));
             }
+
+            [Fact]
+            public void Should_Set_custom_options()
+            {
+                // Given
+                var fixture = new FixieRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run("./Tests.dll", new FixieSettings()
+                    .WithOption("--include", "CategoryA")
+                    .WithOption("--include", "CategoryB"));
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(
+                        p => p.Arguments.Render() == string.Format("\"/Working/Tests.dll\" --include CategoryA --include CategoryB")));
+            }
         }
     }
 }

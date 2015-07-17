@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Utilities;
@@ -92,6 +93,15 @@ namespace Cake.Common.Tools.Fixie
             {
                 builder.Append("--TeamCity");
                 builder.Append(settings.TeamCity == TeamCityOutput.On ? "on" : "off");
+            }
+
+            if (settings.Options != null && settings.Options.Any())
+            {
+                foreach (var option in settings.Options)
+                {
+                    builder.Append(option.Key);
+                    builder.Append(option.Value);
+                }
             }
 
             return builder;
