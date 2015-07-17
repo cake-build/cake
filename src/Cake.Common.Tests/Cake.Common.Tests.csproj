@@ -12,7 +12,7 @@
     <AssemblyName>Cake.Common.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>6d299839</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>8e548008</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -75,6 +75,7 @@
     <Compile Include="Fixtures\Tools\NuGet\NuGetPusherFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGet\NuGetRestorerFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGet\NuGetSetApiKeyFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\NuGetSetProxyFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGet\NuGetSourcesFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGet\NuGetUpdateFixture.cs" />
     <Compile Include="Fixtures\Tools\NUnitRunnerFixture.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="Unit\Tools\NuGet\Restore\NuGetRestorerTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Restore\NuGetRestoreSettingsTests.cs" />
     <Compile Include="Unit\Tools\NuGet\SetApiKey\NuGetSetApiKeyTests.cs" />
+    <Compile Include="Unit\Tools\NuGet\SetProxy\NuGetSetProxyTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Sources\NuGetSourcesSettingsTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Sources\NuGetSourcesTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Update\NuGetUpdaterTests.cs" />
