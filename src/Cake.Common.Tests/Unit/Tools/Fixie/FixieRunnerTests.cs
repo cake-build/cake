@@ -162,7 +162,7 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
             }
 
             [Fact]
-            public void Should_set_NUnitXml_Output_File()
+            public void Should_Set_NUnitXml_Output_File()
             {
                 // Given
                 var fixture = new FixieRunnerFixture();
@@ -182,7 +182,7 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
             }
 
             [Fact]
-            public void Should_set_xUnitXml_Output_File()
+            public void Should_Set_xUnitXml_Output_File()
             {
                 // Given
                 var fixture = new FixieRunnerFixture();
@@ -204,7 +204,7 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
             [Theory]
             [InlineData(TeamCityOutput.On, "on")]
             [InlineData(TeamCityOutput.Off, "off")]
-            public void Should_Set_TeamCity_value(TeamCityOutput? teamCityOutput, string teamCityValue)
+            public void Should_Set_TeamCity_Value(TeamCityOutput? teamCityOutput, string teamCityValue)
             {
                 // Given
                 var fixture = new FixieRunnerFixture();
@@ -224,7 +224,7 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
             }
 
             [Fact]
-            public void Should_Set_custom_options()
+            public void Should_Set_Custom_Options()
             {
                 // Given
                 var fixture = new FixieRunnerFixture();

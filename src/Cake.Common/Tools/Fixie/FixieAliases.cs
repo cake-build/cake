@@ -10,7 +10,7 @@ namespace Cake.Common.Tools.Fixie
     /// <summary>
     /// Contains functionality related to running Fixie tests.
     /// </summary>
-    [CakeAliasCategory("NUnit")]
+    [CakeAliasCategory("Fixie")]
     public static class FixieAliases
     {
         /// <summary>
