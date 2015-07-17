@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.Fixie
 {
-    using System;
-
     /// <summary>
     /// Contains settings used by <see cref="FixieRunner" />.
     /// </summary>
