@@ -74,6 +74,20 @@ namespace Cake.Common.Tools.Fixie
                 builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
             }
 
+            // Add NUnit style reporting if necessary
+            if (settings.NUnitXml != null)
+            {
+                builder.Append("--NUnitXml");
+                builder.AppendQuoted(settings.NUnitXml.MakeAbsolute(_environment).FullPath);
+            }
+
+            // Add xUnit style reporting if necessary
+            if (settings.XUnitXml != null)
+            {
+                builder.Append("--xUnitXml");
+                builder.AppendQuoted(settings.XUnitXml.MakeAbsolute(_environment).FullPath);
+            }
+
             return builder;
         }
 

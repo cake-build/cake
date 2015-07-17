@@ -154,6 +154,46 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
                 Assert.IsType<CakeException>(result);
                 Assert.Equal("Fixie: Process returned an error.", result.Message);
             }
+
+            [Fact]
+            public void Should_set_NUnitXml_Output_File()
+            {
+                // Given
+                var fixture = new FixieRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run("./blarg.dll", new FixieSettings
+                {
+                    NUnitXml = "nunit-style-results.xml",
+                });
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "\"/Working/blarg.dll\" --NUnitXml \"/Working/nunit-style-results.xml\""));
+            }
+
+            [Fact]
+            public void Should_set_xUnitXml_Output_File()
+            {
+                // Given
+                var fixture = new FixieRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run("./blarg.dll", new FixieSettings
+                {
+                    XUnitXml = "xunit-results.xml",
+                });
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "\"/Working/blarg.dll\" --xUnitXml \"/Working/xunit-results.xml\""));
+            }
         }
     }
 }
