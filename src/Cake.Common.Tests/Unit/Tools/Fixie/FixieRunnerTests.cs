@@ -241,6 +241,26 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
                     Arg.Is<ProcessSettings>(
                         p => p.Arguments.Render() == string.Format("\"/Working/Tests.dll\" --include CategoryA --include CategoryB")));
             }
+
+            [Fact]
+            public void Should_Set_Multiple_Options()
+            {
+                // Given
+                var fixture = new FixieRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run("./Tests.dll", new FixieSettings()
+                    .WithOption("--type", "fast")
+                    .WithOption("--include", "CategoryA", "CategoryB")
+                    .WithOption("--output", "fixie-log.txt"));
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(
+                        p => p.Arguments.Render() == string.Format("\"/Working/Tests.dll\" --type fast --include CategoryA --include CategoryB --output fixie-log.txt")));
+            }
         }
     }
 }

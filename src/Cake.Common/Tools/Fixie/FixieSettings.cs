@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.Fixie
 {
+    using System;
+
     /// <summary>
     /// Contains settings used by <see cref="FixieRunner" />.
     /// </summary>
     public sealed class FixieSettings
     {
-        private readonly ICollection<KeyValuePair<string, string>> _options = new Collection<KeyValuePair<string, string>>();
+        private readonly IDictionary<string, IList<string>> _options = new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Gets or sets the tool path.
@@ -49,21 +50,9 @@ namespace Cake.Common.Tools.Fixie
         /// <value>
         /// The collection of keys and values.
         /// </value>
-        public ICollection<KeyValuePair<string, string>> Options
+        public IDictionary<string, IList<string>> Options
         {
             get { return _options; }
-        }
-
-        /// <summary>
-        /// Adds a custom Fixie Option to the settings.
-        /// </summary>
-        /// <param name="key">The key of the Option</param>
-        /// <param name="value">The value of the Option</param>
-        /// <returns>The instance of <see cref="FixieSettings"/> that the Option was added to.</returns>
-        public FixieSettings WithOption(string key, string value)
-        {
-            _options.Add(new KeyValuePair<string, string>(key, value));
-            return this;
         }
     }
 }

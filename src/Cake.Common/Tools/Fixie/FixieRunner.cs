@@ -97,10 +97,13 @@ namespace Cake.Common.Tools.Fixie
 
             if (settings.Options != null && settings.Options.Any())
             {
-                foreach (var option in settings.Options)
+                foreach (var optionGroup in settings.Options.Select(x => new { x.Key, Options = x.Value }))
                 {
-                    builder.Append(option.Key);
-                    builder.Append(option.Value);
+                    foreach (var option in optionGroup.Options)
+                    {
+                        builder.Append(optionGroup.Key);
+                        builder.Append(option);
+                    }
                 }
             }
 
