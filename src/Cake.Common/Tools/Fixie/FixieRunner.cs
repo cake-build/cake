@@ -88,6 +88,12 @@ namespace Cake.Common.Tools.Fixie
                 builder.AppendQuoted(settings.XUnitXml.MakeAbsolute(_environment).FullPath);
             }
 
+            if (settings.TeamCity != null)
+            {
+                builder.Append("--TeamCity");
+                builder.Append(settings.TeamCity == TeamCityOutput.On ? "on" : "off");
+            }
+
             return builder;
         }
 

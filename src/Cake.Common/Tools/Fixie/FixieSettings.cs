@@ -30,5 +30,13 @@
         /// The name of the file to write xUnit style of results.
         /// </value>
         public FilePath XUnitXml { get; set; }
+
+        /// <summary>
+        /// Gets or sets the the option to force TeamCity-formatted output on or off.
+        /// </summary>
+        /// <value>
+        /// The value of TeamCity-formatted output. Either "on" or "off".
+        /// </value>
+        public TeamCityOutput? TeamCity { get; set; }
     }
 }

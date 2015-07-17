@@ -200,6 +200,28 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
                     Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "\"/Working/blarg.dll\" --xUnitXml \"/Working/xunit-results.xml\""));
             }
+
+            [Theory]
+            [InlineData(TeamCityOutput.On, "on")]
+            [InlineData(TeamCityOutput.Off, "off")]
+            public void Should_Set_TeamCity_value(TeamCityOutput? teamCityOutput, string teamCityValue)
+            {
+                // Given
+                var fixture = new FixieRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run("./Tests.dll", new FixieSettings
+                {
+                    TeamCity = teamCityOutput,
+                });
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(
+                        p => p.Arguments.Render() == string.Format("\"/Working/Tests.dll\" --TeamCity {0}", teamCityValue)));
+            }
         }
     }
 }
