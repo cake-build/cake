@@ -22,6 +22,7 @@ namespace Cake.Common
         /// <param name="variable">The environment variable.</param>
         /// <returns>The environment variable or <c>null</c> if the environment variable do not exist.</returns>
         [CakeMethodAlias]
+        [CakeAliasCategory("Environment Variables")]
         public static string EnvironmentVariable(this ICakeContext context, string variable)
         {
             if (context == null)
@@ -52,6 +53,7 @@ namespace Cake.Common
         ///   <c>true</c> if the environment variable exist; otherwise <c>false</c>.
         /// </returns>
         [CakeMethodAlias]
+        [CakeAliasCategory("Environment Variables")]
         public static bool HasEnvironmentVariable(this ICakeContext context, string variable)
         {
             if (context == null)
@@ -81,6 +83,7 @@ namespace Cake.Common
         ///   <c>true</c> if the build script is running on Windows; otherwise <c>false</c>.
         /// </returns>
         [CakeMethodAlias]
+        [CakeAliasCategory("Platform")]
         public static bool IsRunningOnWindows(this ICakeContext context)
         {
             return !IsRunningOnUnix(context);
@@ -102,6 +105,7 @@ namespace Cake.Common
         ///   <c>true</c> if the build script running on a Unix or Linux based system; otherwise <c>false</c>.
         /// </returns>
         [CakeMethodAlias]
+        [CakeAliasCategory("Platform")]
         public static bool IsRunningOnUnix(this ICakeContext context)
         {
             if (context == null)
