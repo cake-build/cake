@@ -89,8 +89,10 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
                 runner.Run("./Test1.dll", new FixieSettings());
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(
-                    p => p.Arguments.Render() == "\"/Working/Test1.dll\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(
+                        p => p.Arguments.Render() == "\"/Working/Test1.dll\""));
             }
 
             [Fact]
@@ -104,8 +106,10 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
                 runner.Run(new List<FilePath> { "./Test1.dll", "./Test2.dll" }, new FixieSettings());
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(
-                    p => p.Arguments.Render() == "\"/Working/Test1.dll\" \"/Working/Test2.dll\""));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(
+                        p => p.Arguments.Render() == "\"/Working/Test1.dll\" \"/Working/Test2.dll\""));
             }
 
             [Fact]
@@ -119,8 +123,10 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
                 runner.Run("./Test1.dll", new FixieSettings());
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(
-                    p => p.WorkingDirectory.FullPath == "/Working"));
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(
+                        p => p.WorkingDirectory.FullPath == "/Working"));
             }
 
             [Fact]
