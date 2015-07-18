@@ -181,10 +181,6 @@ Make sure you've read the [contribution guidelines](http://cakebuild.net/contrib
 * Don't forget the unit tests.
 * Send a pull request. Bonus for topic branches. *Funny .gif will be your reward.*  
 
-## Contributors
-
-The full list of contributors can be found at [http://cakebuild.net/contribute/list-of-contributors/](http://cakebuild.net/contribute/list-of-contributors/).
-
 ## External add-ons
 
 Cake.AliaSql: [https://www.nuget.org/packages/Cake.AliaSql](https://www.nuget.org/packages/Cake.AliaSql)  
