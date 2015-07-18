@@ -22,9 +22,8 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
 4. [Documentation](https://github.com/cake-build/cake#documentation)
 5. [Bootstrapper](https://github.com/cake-build/cake#bootstrapper)
 6. [Contributing](https://github.com/cake-build/cake#contributing)
-7. [Contributors](https://github.com/cake-build/cake#contributors)
-8. [External add-ons](https://github.com/cake-build/cake#external-add-ons)
-9. [License](https://github.com/cake-build/cake#license)
+7. [External add-ons](https://github.com/cake-build/cake#external-add-ons)
+8. [License](https://github.com/cake-build/cake#license)
 
 ##Roadmap
 
