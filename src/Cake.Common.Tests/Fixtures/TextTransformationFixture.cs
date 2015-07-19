@@ -14,10 +14,11 @@ namespace Cake.Common.Tests.Fixtures
 
         public TextTransformationFixture()
         {
-            FileSystem = new FakeFileSystem(true);
-
             Enviroment = Substitute.For<ICakeEnvironment>();
             Enviroment.WorkingDirectory.Returns("/Working");
+
+            FileSystem = new FakeFileSystem(Enviroment);
+            FileSystem.CreateDirectory(Enviroment.WorkingDirectory);
 
             TransformationTemplate = Substitute.For<ITextTransformationTemplate>();
         }

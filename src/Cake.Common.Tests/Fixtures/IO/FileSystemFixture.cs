@@ -1,41 +1,44 @@
-﻿using Cake.Core.IO;
+﻿using Cake.Core;
+using Cake.Core.IO;
 using Cake.Testing.Fakes;
 
 namespace Cake.Common.Tests.Fixtures
 {
     internal sealed class FileSystemFixture
     {
+        public ICakeEnvironment Environment { get; set; }
         public IFileSystem FileSystem { get; set; }
 
-        public FileSystemFixture(bool isUnix = false)
+        public FileSystemFixture()
         {
-            FileSystem = CreateFileSystem(isUnix);
+            Environment = FakeEnvironment.CreateUnixEnvironment();
+            FileSystem = CreateFileSystem(Environment);
         }
 
-        private static FakeFileSystem CreateFileSystem(bool isUnix)
+        private static FakeFileSystem CreateFileSystem(ICakeEnvironment environment)
         {
-            var fileSystem = new FakeFileSystem(isUnix);
-            fileSystem.GetCreatedDirectory("/Temp");
-            fileSystem.GetCreatedDirectory("/Temp/HasDirectories");
-            fileSystem.GetCreatedDirectory("/Temp/HasDirectories/A");
-            fileSystem.GetCreatedDirectory("/Temp/HasFiles");
-            fileSystem.GetCreatedDirectory("/Temp/Hello");
-            fileSystem.GetCreatedDirectory("/Temp/Hello/Empty");
-            fileSystem.GetCreatedDirectory("/Temp/Hello/More/Empty");
-            fileSystem.GetCreatedDirectory("/Temp/Hello/World");
-            fileSystem.GetCreatedDirectory("/Temp/Goodbye");
-            fileSystem.GetCreatedDirectory("/Temp/Hello/Hidden", true);
-            fileSystem.GetCreatedFile("/Presentation.ppt");
-            fileSystem.GetCreatedFile("/Budget.xlsx");
-            fileSystem.GetCreatedFile("/Text.txt");
-            fileSystem.GetCreatedFile("/Temp");
-            fileSystem.GetCreatedFile("/Temp/Hello/Document.txt");
-            fileSystem.GetCreatedFile("/Temp/Hello/World/Text.txt");
-            fileSystem.GetCreatedFile("/Temp/Hello/World/Picture.png");
-            fileSystem.GetCreatedFile("/Temp/Hello/Hidden.txt", true);
-            fileSystem.GetCreatedFile("/Temp/Goodbye/OtherText.txt");
-            fileSystem.GetCreatedFile("/Temp/Goodbye/OtherPicture.png");
-            fileSystem.GetCreatedFile("/Temp/HasFiles/A.txt");
+            var fileSystem = new FakeFileSystem(environment);
+            fileSystem.CreateDirectory("/Temp");
+            fileSystem.CreateDirectory("/Temp/HasDirectories");
+            fileSystem.CreateDirectory("/Temp/HasDirectories/A");
+            fileSystem.CreateDirectory("/Temp/HasFiles");
+            fileSystem.CreateDirectory("/Temp/Hello");
+            fileSystem.CreateDirectory("/Temp/Hello/Empty");
+            fileSystem.CreateDirectory("/Temp/Hello/More/Empty");
+            fileSystem.CreateDirectory("/Temp/Hello/World");
+            fileSystem.CreateDirectory("/Temp/Goodbye");
+            fileSystem.CreateDirectory("/Temp/Hello/Hidden").Hide();
+            fileSystem.CreateFile("/Presentation.ppt");
+            fileSystem.CreateFile("/Budget.xlsx");
+            fileSystem.CreateFile("/Text.txt");
+            fileSystem.CreateFile("/Temp");
+            fileSystem.CreateFile("/Temp/Hello/Document.txt");
+            fileSystem.CreateFile("/Temp/Hello/World/Text.txt");
+            fileSystem.CreateFile("/Temp/Hello/World/Picture.png");
+            fileSystem.CreateFile("/Temp/Hello/Hidden.txt").Hide();
+            fileSystem.CreateFile("/Temp/Goodbye/OtherText.txt");
+            fileSystem.CreateFile("/Temp/Goodbye/OtherPicture.png");
+            fileSystem.CreateFile("/Temp/HasFiles/A.txt");
             return fileSystem;
         }
     }

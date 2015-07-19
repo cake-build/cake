@@ -22,8 +22,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         protected NuGetFixture()
         {
-            Environment = Substitute.For<ICakeEnvironment>();
-            Environment.WorkingDirectory.Returns("/Working");
+            Environment = FakeEnvironment.CreateUnixEnvironment();
 
             Process = Substitute.For<IProcess>();
             Process.GetExitCode().Returns(0);
@@ -38,11 +37,11 @@ namespace Cake.Common.Tests.Fixtures.Tools
             NuGetToolResolver.Name.Returns("NuGet");
 
             Log = Substitute.For<ICakeLog>();
-            FileSystem = new FakeFileSystem(true);
+            FileSystem = new FakeFileSystem(Environment);
 
             // By default, there is a default tool.
             NuGetToolResolver.ResolveToolPath().Returns("/Working/tools/NuGet.exe");
-            FileSystem.GetCreatedFile("/Working/tools/NuGet.exe");
+            FileSystem.CreateFile("/Working/tools/NuGet.exe");
 
             // Set standard output.
             Process.GetStandardOutput().Returns(new string[0]);
@@ -50,7 +49,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         public void GivenCustomToolPathExist(FilePath toolPath)
         {
-            FileSystem.GetCreatedFile(toolPath);
+            FileSystem.CreateFile(toolPath);
         }
 
         public void GivenDefaultToolDoNotExist()

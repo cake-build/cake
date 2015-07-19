@@ -145,8 +145,9 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Return_Empty_List_If_File_Contains_No_Lines()
             {
                 // Given
-                var fileSystem = new FakeFileSystem(true);
-                var file = fileSystem.GetCreatedFile("text.txt");
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
+                var file = fileSystem.CreateFile("text.txt");
 
                 // When
                 var result = file.ReadLines(Encoding.UTF8).ToList();
@@ -159,8 +160,9 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Read_File_With_Single_Line_Correctly()
             {
                 // Given
-                var fileSystem = new FakeFileSystem(true);
-                var file = fileSystem.GetCreatedFile("text.txt", "Hello World");
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
+                var file = fileSystem.CreateFile("text.txt").SetContent("Hello World");
 
                 // When
                 var result = file.ReadLines(Encoding.UTF8).ToList();
@@ -173,12 +175,13 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Read_File_With_Multiple_Lines_Correctly()
             {
                 // Given
-                var fileSystem = new FakeFileSystem(true);
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
                 var content = new StringBuilder();
                 content.AppendLine("1");
                 content.AppendLine("2");
                 content.AppendLine("3");
-                var file = fileSystem.GetCreatedFile("text.txt", content.ToString());
+                var file = fileSystem.CreateFile("text.txt").SetContent(content.ToString());
 
                 // When
                 var result = file.ReadLines(Encoding.UTF8).ToList();

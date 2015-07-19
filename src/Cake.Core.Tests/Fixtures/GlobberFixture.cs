@@ -11,30 +11,30 @@ namespace Cake.Core.Tests.Fixtures
 
         public GlobberFixture()
             : this(false)
-        {            
+        {
         }
 
         public GlobberFixture(bool isFileSystemCaseSensitive)
         {
-            FileSystem = new FakeFileSystem(isFileSystemCaseSensitive);
-            FileSystem.GetCreatedDirectory("/Temp");
-            FileSystem.GetCreatedDirectory("/Temp/Hello");
-            FileSystem.GetCreatedDirectory("/Temp/Hello/World");
-            FileSystem.GetCreatedDirectory("/Temp/Goodbye");
-            FileSystem.GetCreatedFile("/Presentation.ppt");
-            FileSystem.GetCreatedFile("/Budget.xlsx");
-            FileSystem.GetCreatedFile("/Text.txt");
-            FileSystem.GetCreatedFile("/Temp");
-            FileSystem.GetCreatedFile("/Temp/Hello/World/Text.txt");
-            FileSystem.GetCreatedFile("/Temp/Hello/World/Picture.png");
-            FileSystem.GetCreatedFile("/Temp/Goodbye/OtherText.txt");
-            FileSystem.GetCreatedFile("/Temp/Goodbye/OtherPicture.png");
-            FileSystem.GetCreatedFile("/Working/Text.txt");
-            FileSystem.GetCreatedFile("C:/Temp/Hello/World/Text.txt");
-
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.IsUnix().Returns(isFileSystemCaseSensitive);
             Environment.WorkingDirectory.Returns("/Temp");
+
+            FileSystem = new FakeFileSystem(Environment);
+            FileSystem.CreateDirectory("/Temp");
+            FileSystem.CreateDirectory("/Temp/Hello");
+            FileSystem.CreateDirectory("/Temp/Hello/World");
+            FileSystem.CreateDirectory("/Temp/Goodbye");
+            FileSystem.CreateFile("/Presentation.ppt");
+            FileSystem.CreateFile("/Budget.xlsx");
+            FileSystem.CreateFile("/Text.txt");
+            FileSystem.CreateFile("/Temp");
+            FileSystem.CreateFile("/Temp/Hello/World/Text.txt");
+            FileSystem.CreateFile("/Temp/Hello/World/Picture.png");
+            FileSystem.CreateFile("/Temp/Goodbye/OtherText.txt");
+            FileSystem.CreateFile("/Temp/Goodbye/OtherPicture.png");
+            FileSystem.CreateFile("/Working/Text.txt");
+            FileSystem.CreateFile("C:/Temp/Hello/World/Text.txt");
         }
 
         public void SetWorkingDirectory(DirectoryPath path)

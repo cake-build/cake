@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Cake.Core.Scripting;
 using Cake.Core.Tests.Fixtures;
+using Cake.Testing.Fakes;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit.Scripting
@@ -153,7 +154,7 @@ namespace Cake.Core.Tests.Unit.Scripting
             {
                 // Given
                 var fixture = new ScriptProcessorFixture(scriptSource: source);
-                fixture.FileSystem.GetCreatedFile("/Working/hello.cake");
+                fixture.FileSystem.CreateFile("/Working/hello.cake");
 
                 // When
                 var result = fixture.Process();
@@ -172,8 +173,8 @@ namespace Cake.Core.Tests.Unit.Scripting
             {
                 // Given
                 var fixture = new ScriptProcessorFixture(scriptSource: source);
-                fixture.FileSystem.GetCreatedFile("/Working/hello.cake");
-                fixture.FileSystem.GetCreatedFile("/Working/world.cake");
+                fixture.FileSystem.CreateFile("/Working/hello.cake");
+                fixture.FileSystem.CreateFile("/Working/world.cake");
 
                 // When
                 var result = fixture.Process();

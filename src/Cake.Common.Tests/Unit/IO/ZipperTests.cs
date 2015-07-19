@@ -109,11 +109,11 @@ namespace Cake.Common.Tests.Unit.IO
 
             [Fact]
             public void Should_Throw_If_File_Is_Not_Relative_To_Root()
-            {                
+            {
                 // Given
-                var fileSystem = new FakeFileSystem(false);
-                fileSystem.GetCreatedFile("/NotRoot/file.txt");
-                var environment = Substitute.For<ICakeEnvironment>();
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
+                fileSystem.CreateFile("/NotRoot/file.txt");
                 var log = Substitute.For<ICakeLog>();
                 var zipper = new Zipper(fileSystem, environment, log);
 
@@ -129,9 +129,9 @@ namespace Cake.Common.Tests.Unit.IO
             public void Should_Zip_Provided_Files()
             {
                 // Given
-                var fileSystem = new FakeFileSystem(false);
-                fileSystem.GetCreatedFile("/Root/file.txt", "HelloWorld");                
-                var environment = Substitute.For<ICakeEnvironment>();
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
+                fileSystem.CreateFile("/Root/file.txt").SetContent("HelloWorld");
                 var log = Substitute.For<ICakeLog>();
                 var zipper = new Zipper(fileSystem, environment, log);
 
@@ -146,9 +146,9 @@ namespace Cake.Common.Tests.Unit.IO
             public void Zipped_File_Should_Contain_Correct_Content()
             {
                 // Given
-                var fileSystem = new FakeFileSystem(false);
-                fileSystem.GetCreatedFile("/Root/Stuff/file.txt", "HelloWorld");
-                var environment = Substitute.For<ICakeEnvironment>();
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
+                fileSystem.CreateFile("/Root/Stuff/file.txt").SetContent("HelloWorld");
                 var log = Substitute.For<ICakeLog>();
                 var zipper = new Zipper(fileSystem, environment, log);
                 zipper.Zip("/Root", "/file.zip", new FilePath[] { "/Root/Stuff/file.txt" });
