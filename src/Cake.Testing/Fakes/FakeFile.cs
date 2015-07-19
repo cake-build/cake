@@ -1,21 +1,19 @@
-﻿using System;
+using System;
 using System.IO;
 using Cake.Core.IO;
+using Path = Cake.Core.IO.Path;
 
 namespace Cake.Testing.Fakes
 {
     /// <summary>
-    /// Implementation of a fake <see cref="IFile"/>.
+    /// Represents a fake file.
     /// </summary>
     public sealed class FakeFile : IFile
     {
-        private readonly FakeFileSystem _fileSystem;
+        private readonly FakeFileSystemTree _tree;
         private readonly FilePath _path;
         private readonly object _contentLock = new object();
-        private bool _exists;
         private byte[] _content = new byte[4096];
-        private long _contentLength;        
-        private bool _deleted;
 
         /// <summary>
         /// Gets the path to the file.
@@ -26,45 +24,26 @@ namespace Cake.Testing.Fakes
             get { return _path; }
         }
 
-        /// <summary>
-        /// Gets the path to the file.
-        /// </summary>
-        /// <value>The path.</value>
-        Core.IO.Path IFileSystemInfo.Path
+        Path IFileSystemInfo.Path
         {
             get { return _path; }
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="IFileSystemInfo" /> exists.
+        /// Gets a value indicating whether this <see cref="IFileSystemInfo" /> exists.
         /// </summary>
         /// <value>
         ///   <c>true</c> if the entry exists; otherwise, <c>false</c>.
         /// </value>
-        public bool Exists
-        {
-            get { return _exists; }
-            set { _exists = value; }
-        }
+        public bool Exists { get; internal set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="IFileSystemInfo" /> is hidden.
+        /// Gets a value indicating whether this <see cref="IFileSystemInfo" /> is hidden.
         /// </summary>
         /// <value>
         ///   <c>true</c> if the entry is hidden; otherwise, <c>false</c>.
         /// </value>
-        public bool Hidden { get; set; }
-
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="FakeFile"/> is deleted.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if deleted; otherwise, <c>false</c>.
-        /// </value>
-        public bool Deleted
-        {
-            get { return _deleted; }
-        }
+        public bool Hidden { get; internal set; }
 
         /// <summary>
         /// Gets the length of the file.
@@ -72,52 +51,40 @@ namespace Cake.Testing.Fakes
         /// <value>
         /// The length of the file.
         /// </value>
-        public long Length
-        {
-            get { return _contentLength; }
-        }
+        public long Length { get; private set; }
 
-        /// <summary>
-        /// Gets the content lock.
-        /// </summary>
-        /// <value>
-        /// The content lock.
-        /// </value>
-        public object ContentLock
+        internal object ContentLock
         {
             get { return _contentLock; }
         }
 
         /// <summary>
-        /// Gets or sets the length of the content.
+        /// Gets the length of the content.
         /// </summary>
-        /// <value>The length of the content.</value>
+        /// <value>
+        /// The length of the content.
+        /// </value>
         public long ContentLength
         {
-            get { return _contentLength; }
-            set { _contentLength = value; }
+            get { return Length; }
+            internal set { Length = value; }
         }
 
         /// <summary>
-        /// Gets or sets the content.
+        /// Gets the content.
         /// </summary>
         /// <value>The content.</value>
         public byte[] Content
         {
             get { return _content; }
-            set { _content = value; }
+            internal set { _content = value; }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FakeFile"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="path">The path.</param>
-        public FakeFile(FakeFileSystem fileSystem, FilePath path)
+        internal FakeFile(FakeFileSystemTree tree, FilePath path)
         {
-            _fileSystem = fileSystem;
+            _tree = tree;
             _path = path;
-            _exists = false;
+            Exists = false;
             Hidden = false;
         }
 
@@ -128,12 +95,7 @@ namespace Cake.Testing.Fakes
         /// <param name="overwrite">Will overwrite existing destination file if set to <c>true</c>.</param>
         public void Copy(FilePath destination, bool overwrite)
         {
-            var file = _fileSystem.GetCreatedFile(destination) as FakeFile;
-            if (file != null)
-            {
-                file.Content = Content;
-                file.ContentLength = ContentLength;
-            }
+            _tree.CopyFile(this, destination, overwrite);
         }
 
         /// <summary>
@@ -142,7 +104,7 @@ namespace Cake.Testing.Fakes
         /// <param name="destination">The destination path.</param>
         public void Move(FilePath destination)
         {
-            throw new NotImplementedException();
+            _tree.MoveFile(this, destination);
         }
 
         /// <summary>
@@ -151,34 +113,16 @@ namespace Cake.Testing.Fakes
         /// <param name="fileMode">The file mode.</param>
         /// <param name="fileAccess">The file access.</param>
         /// <param name="fileShare">The file share.</param>
-        /// <returns>
-        /// A <see cref="Stream" /> to the file.
-        /// </returns>
+        /// <returns>A <see cref="Stream" /> to the file.</returns>
         public Stream Open(FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
         {
-            var position = GetPosition(fileMode);
-            var stream = new FakeFileStream(this) { Position = position };
-            return stream;
-        }
-
-        /// <summary>
-        /// Resizes the specified offset.
-        /// </summary>
-        /// <param name="offset">The offset.</param>
-        public void Resize(long offset)
-        {
-            if (_contentLength < offset)
+            bool fileWasCreated;
+            var position = GetPosition(fileMode, out fileWasCreated);
+            if (fileWasCreated)
             {
-                _contentLength = offset;
+                _tree.CreateFile(this);
             }
-            if (_content.Length >= _contentLength)
-            {
-                return;
-            }
-
-            var buffer = new byte[_contentLength * 2];
-            Buffer.BlockCopy(_content, 0, buffer, 0, _content.Length);
-            _content = buffer;
+            return new FakeFileStream(this) { Position = position };
         }
 
         /// <summary>
@@ -186,12 +130,32 @@ namespace Cake.Testing.Fakes
         /// </summary>
         public void Delete()
         {
-            _exists = false;
-            _deleted = true;
+            _tree.DeleteFile(this);
         }
 
-        private long GetPosition(FileMode fileMode)
+        /// <summary>
+        /// Resizes the file.
+        /// </summary>
+        /// <param name="offset">The offset.</param>
+        public void Resize(long offset)
         {
+            if (Length < offset)
+            {
+                Length = offset;
+            }
+            if (_content.Length >= Length)
+            {
+                return;
+            }
+            var buffer = new byte[Length * 2];
+            Buffer.BlockCopy(_content, 0, buffer, 0, _content.Length);
+            _content = buffer;
+        }
+
+        private long GetPosition(FileMode fileMode, out bool fileWasCreated)
+        {
+            fileWasCreated = false;
+
             if (Exists)
             {
                 switch (fileMode)
@@ -200,13 +164,13 @@ namespace Cake.Testing.Fakes
                         throw new IOException();
                     case FileMode.Create:
                     case FileMode.Truncate:
-                        _contentLength = 0;
+                        Length = 0;
                         return 0;
                     case FileMode.Open:
                     case FileMode.OpenOrCreate:
                         return 0;
                     case FileMode.Append:
-                        return _contentLength;
+                        return Length;
                 }
             }
             else
@@ -217,8 +181,9 @@ namespace Cake.Testing.Fakes
                     case FileMode.Append:
                     case FileMode.CreateNew:
                     case FileMode.OpenOrCreate:
-                        _exists = true;
-                        return _contentLength;
+                        fileWasCreated = true;
+                        Exists = true;
+                        return Length;
                     case FileMode.Open:
                     case FileMode.Truncate:
                         throw new FileNotFoundException();

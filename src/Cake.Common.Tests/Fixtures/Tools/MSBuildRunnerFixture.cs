@@ -40,6 +40,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
             Environment.Is64BitOperativeSystem().Returns(is64BitOperativeSystem);
             Environment.GetSpecialPath(SpecialPath.ProgramFilesX86).Returns("/Program86");
             Environment.GetSpecialPath(SpecialPath.Windows).Returns("/Windows");
+            Environment.IsUnix().Returns(true);
             Environment.WorkingDirectory.Returns("/Working");
 
             Settings = new MSBuildSettings("./src/Solution.sln");
@@ -48,12 +49,12 @@ namespace Cake.Common.Tests.Fixtures.Tools
             if (existingMSBuildPaths != null)
             {
                 // Add all existing MSBuild tool paths.
-                var fileSystem = new FakeFileSystem(true);
+                var fileSystem = new FakeFileSystem(Environment);
                 FileSystem = fileSystem;
                 foreach (var existingPath in existingMSBuildPaths)
                 {
-                    fileSystem.GetCreatedDirectory(existingPath);
-                    fileSystem.GetCreatedFile(existingPath.GetFilePath("MSBuild.exe"));
+                    fileSystem.CreateDirectory(existingPath);
+                    fileSystem.CreateFile(existingPath.GetFilePath("MSBuild.exe"));
                 }
             }
             else

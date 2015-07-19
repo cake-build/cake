@@ -103,11 +103,17 @@
     <Compile Include="Asserts\StringAsserts.cs" />
     <Compile Include="Asserts\TypeAsserts.cs" />
     <Compile Include="ExceptionAsserts.cs" />
+    <Compile Include="Extensions\FakeDirectoryExtensions.cs" />
+    <Compile Include="Extensions\FakeFileExtensions.cs" />
+    <Compile Include="Extensions\FakeFileSystemExtensions.cs" />
     <Compile Include="Fakes\FakeConsole.cs" />
     <Compile Include="Fakes\FakeDirectory.cs" />
+    <Compile Include="Fakes\FakeDirectoryContent.cs" />
+    <Compile Include="Fakes\FakeEnvironment.cs" />
     <Compile Include="Fakes\FakeFile.cs" />
     <Compile Include="Fakes\FakeFileStream.cs" />
     <Compile Include="Fakes\FakeFileSystem.cs" />
+    <Compile Include="Fakes\FakeFileSystemTree.cs" />
     <Compile Include="Fakes\FakeLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

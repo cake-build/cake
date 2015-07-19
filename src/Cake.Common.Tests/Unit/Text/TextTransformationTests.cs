@@ -1,4 +1,5 @@
 ﻿using Cake.Common.Tests.Fixtures;
+using Cake.Testing.Fakes;
 using NSubstitute;
 using Xunit;
 
@@ -51,7 +52,7 @@ namespace Cake.Common.Tests.Unit.Text
                 transformation.Save("./output.txt");
 
                 // Then
-                Assert.Equal("Hello World", fixture.FileSystem.GetTextContent("/Working/output.txt"));
+                Assert.Equal("Hello World", fixture.FileSystem.GetFile("/Working/output.txt").GetTextContent());
             }
         }
 

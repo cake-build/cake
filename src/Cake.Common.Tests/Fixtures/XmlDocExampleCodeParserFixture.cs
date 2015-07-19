@@ -19,9 +19,10 @@ namespace Cake.Common.Tests.Fixtures
             XmlFilePath = "/Working/Cake.Common.xml";
             Pattern = "/Working/Cake.*.xml";
 
-            var fileSystem = new FakeFileSystem(false);
-            fileSystem.GetCreatedFile(XmlFilePath.FullPath, Resources.XmlDoc_ExampeCode_Cake_Common_Xml);
-            fileSystem.GetCreatedFile("/Working/Cake.UnCommon.xml" , Resources.XmlDoc_ExampeCode_Cake_Common_Xml);
+            var environment = FakeEnvironment.CreateUnixEnvironment();
+            var fileSystem = new FakeFileSystem(environment);
+            fileSystem.CreateFile(XmlFilePath.FullPath).SetContent(Resources.XmlDoc_ExampeCode_Cake_Common_Xml);
+            fileSystem.CreateFile("/Working/Cake.UnCommon.xml").SetContent(Resources.XmlDoc_ExampeCode_Cake_Common_Xml);
             FileSystem = fileSystem;
 
             Globber = Substitute.For<IGlobber>();

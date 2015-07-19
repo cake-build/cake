@@ -46,10 +46,9 @@ namespace Cake.Common.Tests.Unit
             {
                 // Given
                 var context = Substitute.For<ICakeContext>();
-                var environment = Substitute.For<ICakeEnvironment>();
-                environment.WorkingDirectory = "/Working";
-                var fileSystem = new FakeFileSystem(true);
-                fileSystem.GetCreatedFile("/Working/ReleaseNotes.md", "### New in 1.2.3");
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
+                fileSystem.CreateFile("/Working/ReleaseNotes.md").SetContent("### New in 1.2.3");
                 context.FileSystem.Returns(fileSystem);
                 context.Environment.Returns(environment);
 
@@ -68,10 +67,9 @@ namespace Cake.Common.Tests.Unit
             {
                 // Given
                 var context = Substitute.For<ICakeContext>();
-                var environment = Substitute.For<ICakeEnvironment>();
-                environment.WorkingDirectory = "/Working";
-                var fileSystem = new FakeFileSystem(true);
-                fileSystem.GetCreatedFile("/Working/ReleaseNotes.md", "* 1.2.3 - Line 1\n* 1.2.5 Line 2\n* 1.2.4 Line 3");
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
+                fileSystem.CreateFile("/Working/ReleaseNotes.md").SetContent("* 1.2.3 - Line 1\n* 1.2.5 Line 2\n* 1.2.4 Line 3");
                 context.FileSystem.Returns(fileSystem);
                 context.Environment.Returns(environment);
 

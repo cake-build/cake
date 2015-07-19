@@ -11,7 +11,7 @@ namespace Cake.Common.Tests.Fixtures
 {
     internal sealed class AssemblyInfoFixture
     {
-        public IFileSystem FileSystem { get; set; }
+        public FakeFileSystem FileSystem { get; set; }
         public ICakeLog Log { get; set; }
         public ICakeEnvironment Environment { get; set; }
 
@@ -20,10 +20,11 @@ namespace Cake.Common.Tests.Fixtures
 
         public AssemblyInfoFixture()
         {
-            FileSystem = new FakeFileSystem(false);
-            
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory.Returns(new DirectoryPath("/Working"));
+
+            FileSystem = new FakeFileSystem(Environment);
+            FileSystem.CreateDirectory(Environment.WorkingDirectory);
 
             Log = Substitute.For<ICakeLog>();
             Settings = new AssemblyInfoSettings();

@@ -1021,7 +1021,8 @@ namespace Cake.Common.Tests.Unit.IO
             {
                 // Given
                 var context = Substitute.For<ICakeContext>();
-                var fileSystem = new FakeFileSystem(false);
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
                 context.FileSystem.Returns(fileSystem);
 
                 // When
@@ -1036,8 +1037,9 @@ namespace Cake.Common.Tests.Unit.IO
             {
                 // Given
                 var context = Substitute.For<ICakeContext>();
-                var fileSystem = new FakeFileSystem(false);
-                fileSystem.GetCreatedFile("some file.txt");
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
+                fileSystem.CreateFile("some file.txt");
                 context.FileSystem.Returns(fileSystem);
 
                 // When

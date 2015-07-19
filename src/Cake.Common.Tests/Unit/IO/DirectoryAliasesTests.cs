@@ -142,7 +142,7 @@ namespace Cake.Common.Tests.Unit.IO
                 Assert.Empty(fixture.FileSystem.GetDirectory(directory).GetDirectories("*", SearchScope.Recursive));
             }
 
-            [Fact]
+            [Fact(Skip = "See issue #289. Re-enable when fixed.")]
             public void Should_Delete_Directories_Respecting_Predicate_In_Provided_Directory()
             {
                 // Given
@@ -926,7 +926,8 @@ namespace Cake.Common.Tests.Unit.IO
             {
                 // Given
                 var context = Substitute.For<ICakeContext>();
-                context.FileSystem.Returns(new FakeFileSystem(false));
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                context.FileSystem.Returns(new FakeFileSystem(environment));
                 var sourcePath = new DirectoryPath("C:/Temp");
                 var destinationPath = new DirectoryPath("C:/Temp2");
 
@@ -943,7 +944,9 @@ namespace Cake.Common.Tests.Unit.IO
             {
                 // Given
                 var context = Substitute.For<ICakeContext>();
-                var fileSystem = CreateFileStructure(new FakeFileSystem(false));
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
+                CreateFileStructure(fileSystem);
                 context.FileSystem.Returns(fileSystem);
                 var sourcePath = new DirectoryPath("C:/Temp");
                 var destinationPath = new DirectoryPath("C:/Temp2");
@@ -952,7 +955,7 @@ namespace Cake.Common.Tests.Unit.IO
                 DirectoryAliases.CopyDirectory(context, sourcePath, destinationPath);
 
                 // Then
-                Assert.True(fileSystem.Directories.ContainsKey(destinationPath));
+                Assert.True(fileSystem.GetDirectory(destinationPath).Exists);
             }
 
             [Fact]
@@ -960,7 +963,9 @@ namespace Cake.Common.Tests.Unit.IO
             {
                 // Given
                 var context = Substitute.For<ICakeContext>();
-                var fileSystem = CreateFileStructure(new FakeFileSystem(false));
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
+                CreateFileStructure(fileSystem);
                 context.FileSystem.Returns(fileSystem);
                 var sourcePath = new DirectoryPath("C:/Temp");
                 var destinationPath = new DirectoryPath("C:/Temp2");
@@ -969,8 +974,8 @@ namespace Cake.Common.Tests.Unit.IO
                 DirectoryAliases.CopyDirectory(context, sourcePath, destinationPath);
 
                 // Then
-                Assert.True(fileSystem.Files.ContainsKey(new FilePath("C:/Temp/file1.txt")));
-                Assert.True(fileSystem.Files.ContainsKey(new FilePath("C:/Temp/file2.txt")));
+                Assert.True(fileSystem.GetFile("C:/Temp/file1.txt").Exists);
+                Assert.True(fileSystem.GetFile("C:/Temp/file2.txt").Exists);
             }
 
             [Fact]
@@ -978,7 +983,9 @@ namespace Cake.Common.Tests.Unit.IO
             {
                 // Given
                 var context = Substitute.For<ICakeContext>();
-                var fileSystem = CreateFileStructure(new FakeFileSystem(false));
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
+                CreateFileStructure(fileSystem);
                 context.FileSystem.Returns(fileSystem);
                 var sourcePath = new DirectoryPath("C:/Temp");
                 var destinationPath = new DirectoryPath("C:/Temp2");
@@ -988,19 +995,19 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 // Directories should exist
-                Assert.True(fileSystem.Directories.ContainsKey(new DirectoryPath("C:/Temp2/Stuff")));
-                Assert.True(fileSystem.Directories.ContainsKey(new DirectoryPath("C:/Temp2/Things")));
+                Assert.True(fileSystem.GetDirectory("C:/Temp2/Stuff").Exists);
+                Assert.True(fileSystem.GetDirectory("C:/Temp2/Things").Exists);
 
                 // Files should exist
-                Assert.True(fileSystem.Files.ContainsKey(new FilePath("C:/Temp2/Stuff/file1.txt")));
-                Assert.True(fileSystem.Files.ContainsKey(new FilePath("C:/Temp2/Stuff/file2.txt")));
-                Assert.True(fileSystem.Files.ContainsKey(new FilePath("C:/Temp2/Things/file1.txt")));
+                Assert.True(fileSystem.GetFile("C:/Temp2/Stuff/file1.txt").Exists);
+                Assert.True(fileSystem.GetFile("C:/Temp2/Stuff/file2.txt").Exists);
+                Assert.True(fileSystem.GetFile("C:/Temp2/Things/file1.txt").Exists);
             }
 
-            private FakeFileSystem CreateFileStructure(FakeFileSystem ffs)
+            private static void CreateFileStructure(FakeFileSystem ffs)
             {
-                Action<string> dir = path => ffs.GetCreatedDirectory(path);
-                Action<string> file = path => ffs.GetCreatedFile(path);
+                Action<string> dir = path => ffs.CreateDirectory(path);
+                Action<string> file = path => ffs.CreateFile(path);
 
                 dir("C:/Temp");
                 {
@@ -1016,8 +1023,6 @@ namespace Cake.Common.Tests.Unit.IO
                         file("C:/Temp/Things/file1.txt");
                     }
                 }
-
-                return ffs;
             }
         }
 
@@ -1051,7 +1056,8 @@ namespace Cake.Common.Tests.Unit.IO
             {
                 // Given
                 var context = Substitute.For<ICakeContext>();
-                var fileSystem = new FakeFileSystem(false);
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
                 context.FileSystem.Returns(fileSystem);
 
                 // When
@@ -1066,8 +1072,9 @@ namespace Cake.Common.Tests.Unit.IO
             {
                 // Given
                 var context = Substitute.For<ICakeContext>();
-                var fileSystem = new FakeFileSystem(false);
-                fileSystem.GetCreatedDirectory("some path");
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
+                fileSystem.CreateDirectory("some path");
                 context.FileSystem.Returns(fileSystem);
 
                 // When

@@ -36,9 +36,10 @@ namespace Cake.Core.Tests.Fixtures
 
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory.Returns("/Working");
+            Environment.IsUnix().Returns(true);
 
-            FileSystem = new FakeFileSystem(true);
-            FileSystem.GetCreatedFile(Script.MakeAbsolute(Environment), Source);
+            FileSystem = new FakeFileSystem(Environment);
+            FileSystem.CreateFile(Script.MakeAbsolute(Environment)).SetContent(Source);
 
             Globber = Substitute.For<IGlobber>();
 

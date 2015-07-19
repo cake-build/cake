@@ -23,17 +23,14 @@ namespace Cake.Core.Tests.Fixtures
             ScriptPath = new FilePath(scriptPath);
             Source = scriptSource;
 
-            Environment = Substitute.For<ICakeEnvironment>();
-            Environment.WorkingDirectory.Returns("/Working");
-
             Log = Substitute.For<ICakeLog>();
-
             Globber = Substitute.For<IGlobber>();
 
-            FileSystem = new FakeFileSystem(true);
+            Environment = FakeEnvironment.CreateUnixEnvironment();
+            FileSystem = new FakeFileSystem(Environment);
             if (scriptExist)
             {
-                FileSystem.GetCreatedFile(ScriptPath.MakeAbsolute(Environment), Source);
+                FileSystem.CreateFile(ScriptPath.MakeAbsolute(Environment)).SetContent(Source);
             }
 
             NuGetToolResolver = new NuGetToolResolver(FileSystem, Environment, Globber);
