@@ -148,6 +148,8 @@
     <Compile Include="Tools\NuGet\Pack\NuSpecContent.cs" />
     <Compile Include="Tools\NuGet\SetApiKey\NuGetSetApiKey.cs" />
     <Compile Include="Tools\NuGet\SetApiKey\NuGetSetApiKeySettings.cs" />
+    <Compile Include="Tools\NuGet\SetProxy\NuGetSetProxy.cs" />
+    <Compile Include="Tools\NuGet\SetProxy\NuGetSetProxySettings.cs" />
     <Compile Include="Tools\NuGet\Sources\NuGetSources.cs" />
     <Compile Include="Tools\NuGet\Sources\NuGetSourcesSettings.cs" />
     <Compile Include="Tools\NuGet\NuGetAliases.cs" />

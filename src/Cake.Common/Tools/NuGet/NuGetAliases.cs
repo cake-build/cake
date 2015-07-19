@@ -4,6 +4,7 @@ using Cake.Common.Tools.NuGet.Pack;
 using Cake.Common.Tools.NuGet.Push;
 using Cake.Common.Tools.NuGet.Restore;
 using Cake.Common.Tools.NuGet.SetApiKey;
+using Cake.Common.Tools.NuGet.SetProxy;
 using Cake.Common.Tools.NuGet.Sources;
 using Cake.Common.Tools.NuGet.Update;
 using Cake.Core;
@@ -508,6 +509,43 @@ namespace Cake.Common.Tools.NuGet
         public static void NuGetSetApiKey(this ICakeContext context, string apiKey, string source)
         {
             context.NuGetSetApiKey(apiKey, source, new NuGetSetApiKeySettings());
+        }
+
+        /// <summary>
+        /// Set the proxy settings to be used while connecting to your NuGet feed, including settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="proxy">The url of the proxy.</param>
+        /// <param name="username">The username used to access the proxy.</param>
+        /// <param name="password">The password used to access the proxy.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("SetProxy")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.SetProxy")]
+        public static void NuGetSetProxy(this ICakeContext context, string proxy, string username, string password, NuGetSetProxySettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var runner = new NuGetSetProxy(context.Log, context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.GetToolResolver("NuGet"));
+            runner.SetProxy(proxy, username, password, settings);
+        }
+
+        /// <summary>
+        /// Set the proxy settings to be used while connecting to your NuGet feed.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="proxy">The url of the proxy.</param>
+        /// <param name="username">The username used to access the proxy.</param>
+        /// <param name="password">The password used to access the proxy.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("SetProxy")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.SetProxy")]
+        public static void NuGetSetProxy(this ICakeContext context, string proxy, string username, string password)
+        {
+            context.NuGetSetProxy(proxy, username, password, new NuGetSetProxySettings());
         }
 
         /// <summary>
