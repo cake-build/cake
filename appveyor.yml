@@ -15,3 +15,7 @@ branches:
   only:
     - develop
     - main
+
+# Build cache
+cache:
+- src\packages -> **\packages.config
