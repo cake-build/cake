@@ -4,6 +4,7 @@ using Cake.Common.Tests.Properties;
 using Cake.Common.Tools.NuGet.Pack;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Testing.Fakes;
 using NSubstitute;
 using Xunit;
 
@@ -266,12 +267,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 fixture.Settings.Tags = new[] { "Tag1", "Tag2", "Tag3" };
 
                 // When
-                fixture.Pack();
+                var result = fixture.Pack();
 
                 // Then
                 Assert.Equal(
                     Resources.Nuspec_Metadata.NormalizeLineEndings(),
-                    fixture.FileSystem.GetTextContent("/Working/existing.temp.nuspec").NormalizeLineEndings());
+                    result.NormalizeLineEndings());
             }
 
             [Fact]
@@ -296,12 +297,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 fixture.Settings.Tags = new[] { "Tag1", "Tag2", "Tag3" };
 
                 // When
-                fixture.Pack();
+                var result = fixture.Pack();
 
                 // Then
                 Assert.Equal(
                     Resources.Nuspec_Metadata.NormalizeLineEndings(),
-                    fixture.FileSystem.GetTextContent("/Working/existing.temp.nuspec").NormalizeLineEndings());
+                    result.NormalizeLineEndings());
             }
 
             [Fact]
@@ -327,12 +328,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 fixture.Settings.Tags = new[] { "Tag1", "Tag2", "Tag3" };
 
                 // When
-                fixture.Pack();
+                var result = fixture.Pack();
 
                 // Then
                 Assert.Equal(
                     Resources.Nuspec_Metadata_WithoutNamespaces.NormalizeLineEndings(),
-                    fixture.FileSystem.GetTextContent("/Working/existing.temp.nuspec").NormalizeLineEndings());
+                    result.NormalizeLineEndings());
             }
         }
 
@@ -365,12 +366,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
             };
 
             // When
-            fixture.Pack();
+            var result = fixture.Pack();
 
             // Then
             Assert.Equal(
                 Resources.Nuspec_Metadata.NormalizeLineEndings(),
-                fixture.FileSystem.GetTextContent("/Working/existing.temp.nuspec").NormalizeLineEndings());
+                result.NormalizeLineEndings());
         }
 
         [Fact]
@@ -403,12 +404,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
             };
 
             // When
-            fixture.Pack();
+            var result = fixture.Pack();
 
             // Then
             Assert.Equal(
                 Resources.Nuspec_Metadata_WithoutNamespaces.NormalizeLineEndings(),
-                fixture.FileSystem.GetTextContent("/Working/existing.temp.nuspec").NormalizeLineEndings());
+                result.NormalizeLineEndings());
         }
     }
 }

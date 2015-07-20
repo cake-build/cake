@@ -35,6 +35,10 @@ namespace Cake.Common.Net
         [CakeAliasCategory("Download")]
         public static FilePath DownloadFile(this ICakeContext context, Uri address)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
             var tempFolder = context.Environment.GetSpecialPath(SpecialPath.LocalTemp);
             var tempFilename = tempFolder.CombineWithFilePath(new FilePath(System.IO.Path.GetRandomFileName()));
             DownloadFile(context, address, tempFilename);

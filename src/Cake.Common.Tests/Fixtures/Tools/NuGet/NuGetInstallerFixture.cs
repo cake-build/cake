@@ -18,13 +18,13 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet
 
         public void Install()
         {
-            var tool = new NuGetInstaller(FileSystem, Environment, ProcessRunner, NuGetToolResolver);
+            var tool = new NuGetInstaller(FileSystem, Environment, ProcessRunner, Globber, NuGetToolResolver);
             tool.Install(PackageId, Settings);
         }
 
         public void InstallFromConfig()
         {
-            var tool = new NuGetInstaller(FileSystem, Environment, ProcessRunner, NuGetToolResolver);
+            var tool = new NuGetInstaller(FileSystem, Environment, ProcessRunner, Globber, NuGetToolResolver);
             tool.InstallFromConfig(PackageConfigPath, Settings);
         }
     }

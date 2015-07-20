@@ -109,6 +109,11 @@
     <Compile Include="Tools\Cake\CakeAliases.cs" />
     <Compile Include="Tools\Cake\CakeRunner.cs" />
     <Compile Include="Tools\Cake\CakeSettings.cs" />
+    <Compile Include="Tools\Fixie\FixieAliases.cs" />
+    <Compile Include="Tools\Fixie\FixieRunner.cs" />
+    <Compile Include="Tools\Fixie\FixieSettings.cs" />
+    <Compile Include="Tools\Fixie\FixieSettingsExtensions.cs" />
+    <Compile Include="Tools\Fixie\TeamCityOutput.cs" />
     <Compile Include="Tools\ILMerge\ILMergeAliases.cs" />
     <Compile Include="Tools\ILMerge\ILMergeRunner.cs" />
     <Compile Include="Tools\ILMerge\ILMergeSettings.cs" />
@@ -143,6 +148,8 @@
     <Compile Include="Tools\NuGet\Pack\NuSpecContent.cs" />
     <Compile Include="Tools\NuGet\SetApiKey\NuGetSetApiKey.cs" />
     <Compile Include="Tools\NuGet\SetApiKey\NuGetSetApiKeySettings.cs" />
+    <Compile Include="Tools\NuGet\SetProxy\NuGetSetProxy.cs" />
+    <Compile Include="Tools\NuGet\SetProxy\NuGetSetProxySettings.cs" />
     <Compile Include="Tools\NuGet\Sources\NuGetSources.cs" />
     <Compile Include="Tools\NuGet\Sources\NuGetSourcesSettings.cs" />
     <Compile Include="Tools\NuGet\NuGetAliases.cs" />
@@ -176,6 +183,7 @@
     <Compile Include="Tools\WiX\LightRunner.cs" />
     <Compile Include="Tools\WiX\LightSettings.cs" />
     <Compile Include="Tools\WiX\WiXAliases.cs" />
+    <Compile Include="Tools\XBuild\XBuildSettingsExtensions.cs" />
     <Compile Include="Tools\XUnit\XUnit2Aliases.cs" />
     <Compile Include="Tools\XUnit\XUnitAliases.cs" />
     <Compile Include="Tools\XUnit\XUnitSettings.cs" />
@@ -190,6 +198,14 @@
     <Compile Include="Xml\XmlTransformationAlias.cs" />
     <Compile Include="Xml\XmlTransformationSettings.cs" />
     <Compile Include="Net\HttpAliases.cs" />
+    <Compile Include="Tools\XBuild\XBuildSettings.cs" />
+    <Compile Include="Tools\XBuild\XBuildVersion.cs" />
+    <Compile Include="Tools\XBuild\XBuildRunner.cs" />
+    <Compile Include="Tools\XBuild\XBuildToolVersion.cs" />
+    <Compile Include="Tools\XBuild\XBuildAliases.cs" />
+    <Compile Include="Tools\XBuild\XBuildResolver.cs" />
+    <Compile Include="Tools\MSOrXBuildSettings.cs" />
+    <Compile Include="Tools\MSOrXBuildAliases.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">

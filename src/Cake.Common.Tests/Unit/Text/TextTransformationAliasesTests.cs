@@ -187,11 +187,9 @@ namespace Cake.Common.Tests.Unit.Text
                 public void Should_Create_Text_Transformation_From_Disc_Template()
                 {
                     // Given
-                    var fileSystem = new FakeFileSystem(false);
-                    fileSystem.GetCreatedFile("/Working/template.txt", "Hello World");
-
-                    var environment = Substitute.For<ICakeEnvironment>();
-                    environment.WorkingDirectory.Returns("/Working");
+                    var environment = FakeEnvironment.CreateUnixEnvironment();
+                    var fileSystem = new FakeFileSystem(environment);
+                    fileSystem.CreateFile("/Working/template.txt").SetContent("Hello World");
 
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fileSystem);
@@ -209,11 +207,9 @@ namespace Cake.Common.Tests.Unit.Text
                 public void Should_Transform_Text_From_Disc_Template_Using_Default_Placeholders()
                 {
                     // Given
-                    var fileSystem = new FakeFileSystem(false);
-                    fileSystem.GetCreatedFile("/Working/template.txt", "Hello <%subject%>");
-
-                    var environment = Substitute.For<ICakeEnvironment>();
-                    environment.WorkingDirectory.Returns("/Working");
+                    var environment = FakeEnvironment.CreateUnixEnvironment();
+                    var fileSystem = new FakeFileSystem(environment);
+                    fileSystem.CreateFile("/Working/template.txt").SetContent("Hello <%subject%>");
 
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fileSystem);
@@ -293,11 +289,9 @@ namespace Cake.Common.Tests.Unit.Text
                 public void Should_Create_Text_Transformation_From_Disc_Template()
                 {
                     // Given
-                    var fileSystem = new FakeFileSystem(false);
-                    fileSystem.GetCreatedFile("/Working/template.txt", "Hello World");
-
-                    var environment = Substitute.For<ICakeEnvironment>();
-                    environment.WorkingDirectory.Returns("/Working");
+                    var environment = FakeEnvironment.CreateUnixEnvironment();
+                    var fileSystem = new FakeFileSystem(environment);
+                    fileSystem.CreateFile("/Working/template.txt").SetContent("Hello World");
 
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fileSystem);
@@ -315,11 +309,9 @@ namespace Cake.Common.Tests.Unit.Text
                 public void Should_Transform_Text_From_Disc_Template_Using_Specified_Placeholders()
                 {
                     // Given
-                    var fileSystem = new FakeFileSystem(false);
-                    fileSystem.GetCreatedFile("/Working/template.txt", "Hello {subject}");
-
-                    var environment = Substitute.For<ICakeEnvironment>();
-                    environment.WorkingDirectory.Returns("/Working");
+                    var environment = FakeEnvironment.CreateUnixEnvironment();
+                    var fileSystem = new FakeFileSystem(environment);
+                    fileSystem.CreateFile("/Working/template.txt").SetContent("Hello {subject}");
 
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fileSystem);

@@ -11,6 +11,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         public ICakeEnvironment Environment { get; set; }
         public IProcess Process { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
+        public IGlobber Globber { get; set; }
 
         public FilePath ToolPath { get; set; }
 
@@ -23,6 +24,8 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
             ProcessRunner = Substitute.For<IProcessRunner>();
             ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns(Process);
+
+            Globber = Substitute.For<IGlobber>();
 
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory = "/Working";
@@ -39,7 +42,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         public MSTestRunner CreateRunner()
         {
-            return new MSTestRunner(FileSystem, Environment, ProcessRunner);
+            return new MSTestRunner(FileSystem, Environment, ProcessRunner, Globber);
         }
     }
 }

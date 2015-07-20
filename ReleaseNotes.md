@@ -1,3 +1,14 @@
+### New in 0.5.0 (Released 2015/07/20)
+* Added Mono support.
+* Added XBuild alias.
+* Improved tool resolution.
+* Added Fixie support.
+* Added IsRunningOnWindows() alias.
+* Added IsRunningOnUnix() alias.
+* Added NuGet proxy support.
+* Fixed MSBuild verbosity bug.
+* Added shebang line support.
+
 ### New in 0.4.3 (Released 2015/07/05)
 * Added TeamCity support.
 * Added filter predicate to globber and clean directory methods.

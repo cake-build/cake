@@ -21,6 +21,7 @@
     <file src="Cake.Common.dll" />
     <file src="Cake.Common.xml" />
     <file src="NuGet.Core.dll" />
+    <file src="Mono.CSharp.dll" />
     <file src="Autofac.dll" />
     <file src="LICENSE" />
   </files>

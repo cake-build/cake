@@ -28,7 +28,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
             public void Should_Throw_If_Environment_Is_Null()
             {
                 // Given
-                var fileSystem = new FakeFileSystem(false);
+                var fileSystem = Substitute.For<IFileSystem>();
                 var globber = Substitute.For<IGlobber>();
 
                 // When
@@ -42,7 +42,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
             public void Should_Throw_If_Globber_Is_Null()
             {
                 // Given
-                var fileSystem = new FakeFileSystem(false);
+                var fileSystem = Substitute.For<IFileSystem>();
                 var environment = Substitute.For<ICakeEnvironment>();
 
                 // When
@@ -59,12 +59,14 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
             public void Should_Throw_If_NuGet_Exe_Could_Not_Be_Found()
             {
                 // Given
-                var fileSystem = new FakeFileSystem(false);
-                var globber = Substitute.For<IGlobber>();
-                globber.GetFiles("./tools/**/NuGet.exe").Returns(new FilePath[] { });
                 var environment = Substitute.For<ICakeEnvironment>();
+                environment.WorkingDirectory.Returns("/Working");
+                environment.IsUnix().Returns(false);
                 environment.GetEnvironmentVariable("NUGET_EXE").Returns(c => null);
                 environment.GetEnvironmentVariable("path").Returns(c => null);
+                var fileSystem = new FakeFileSystem(environment);
+                var globber = Substitute.For<IGlobber>();
+                globber.GetFiles("./tools/**/NuGet.exe").Returns(new FilePath[] { });
                 var resolver = new NuGetToolResolver(fileSystem, environment, globber);
 
                 // When
@@ -78,12 +80,14 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
             public void Should_Resolve_In_Correct_Order()
             {
                 // Given
-                var fileSystem = new FakeFileSystem(false);
-                var globber = Substitute.For<IGlobber>();
-                globber.GetFiles("./tools/**/NuGet.exe").Returns(new FilePath[] { });
                 var environment = Substitute.For<ICakeEnvironment>();
+                environment.WorkingDirectory.Returns("/Working");
+                environment.IsUnix().Returns(false);
                 environment.GetEnvironmentVariable("NUGET_EXE").Returns(c => null);
                 environment.GetEnvironmentVariable("path").Returns(c => null);
+                var fileSystem = new FakeFileSystem(environment);
+                var globber = Substitute.For<IGlobber>();
+                globber.GetFiles("./tools/**/NuGet.exe").Returns(new FilePath[] { });
                 var resolver = new NuGetToolResolver(fileSystem, environment, globber);
 
                 // When
@@ -105,12 +109,11 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
             public void Should_Be_Able_To_Resolve_Path_From_The_Tools_Directory()
             {
                 // Given
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
                 var globber = Substitute.For<IGlobber>();
                 globber.Match("./tools/**/NuGet.exe").Returns(p => new FilePath[] { "/root/tools/nuget.exe" });
-                var fileSystem = new FakeFileSystem(false);
-                fileSystem.GetCreatedFile("/root/tools/nuget.exe");
-
-                var environment = Substitute.For<ICakeEnvironment>();
+                fileSystem.CreateFile("/root/tools/nuget.exe");
                 var resolver = new NuGetToolResolver(fileSystem, environment, globber);
 
                 // When
@@ -126,9 +129,11 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                 // Given
                 var globber = Substitute.For<IGlobber>();
                 var environment = Substitute.For<ICakeEnvironment>();
+                environment.WorkingDirectory.Returns("/Working");
+                environment.IsUnix().Returns(false);
                 environment.GetEnvironmentVariable("NUGET_EXE").Returns("/programs/nuget.exe");
-                var fileSystem = new FakeFileSystem(false);
-                fileSystem.GetCreatedFile("/programs/nuget.exe");
+                var fileSystem = new FakeFileSystem(environment);
+                fileSystem.CreateFile("/programs/nuget.exe");
                 var resolver = new NuGetToolResolver(fileSystem, environment, globber);
 
                 // When
@@ -144,10 +149,12 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                 // Given
                 var globber = Substitute.For<IGlobber>();
                 var environment = Substitute.For<ICakeEnvironment>();
+                environment.WorkingDirectory.Returns("/Working");
+                environment.IsUnix().Returns(false);
                 environment.GetEnvironmentVariable("path").Returns("/temp;stuff/programs;/programs");
-                var fileSystem = new FakeFileSystem(false);
-                fileSystem.GetCreatedDirectory("stuff/programs");
-                fileSystem.GetCreatedFile("stuff/programs/nuget.exe");
+                var fileSystem = new FakeFileSystem(environment);
+                fileSystem.CreateDirectory("stuff/programs");
+                fileSystem.CreateFile("stuff/programs/nuget.exe");
                 var resolver = new NuGetToolResolver(fileSystem, environment, globber);
 
                 // When

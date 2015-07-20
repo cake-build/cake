@@ -6,7 +6,9 @@ Param(
     [ValidateSet("Quiet", "Minimal", "Normal", "Verbose", "Diagnostic")]
     [string]$Verbosity = "Verbose",
     [switch]$Experimental,
-    [switch]$WhatIf
+    [switch]$WhatIf,
+    [switch]$Mono,
+    [switch]$SkipToolPackageRestore
 )
 
 $TOOLS_DIR = Join-Path $PSScriptRoot "tools"
@@ -25,6 +27,12 @@ if($WhatIf.IsPresent) {
     $UseDryRun = "-dryrun"
 }
 
+# Should we use mono?
+$UseMono = "";
+if($Mono.IsPresent) {
+    $UseMono = "-mono"
+}
+
 # Try download NuGet.exe if do not exist.
 if (!(Test-Path $NUGET_EXE)) {
     Invoke-WebRequest -Uri http://nuget.org/nuget.exe -OutFile $NUGET_EXE
@@ -35,13 +43,16 @@ if (!(Test-Path $NUGET_EXE)) {
     Throw "Could not find NuGet.exe"
 }
 
-# Restore tools from NuGet.
-Push-Location
-Set-Location $TOOLS_DIR
-Invoke-Expression "$NUGET_EXE install -ExcludeVersion"
-Pop-Location
-if ($LASTEXITCODE -ne 0) {
-    exit $LASTEXITCODE
+# Restore tools from NuGet?
+if(-Not $SkipToolPackageRestore.IsPresent)
+{
+    Push-Location
+    Set-Location $TOOLS_DIR
+    Invoke-Expression "$NUGET_EXE install -ExcludeVersion"
+    Pop-Location
+    if ($LASTEXITCODE -ne 0) {
+        exit $LASTEXITCODE
+    }
 }
 
 # Make sure that Cake has been installed.
@@ -50,5 +61,5 @@ if (!(Test-Path $CAKE_EXE)) {
 }
 
 # Start Cake
-Invoke-Expression "$CAKE_EXE `"$Script`" -target=`"$Target`" -configuration=`"$Configuration`" -verbosity=`"$Verbosity`" $UseDryRun $UseExperimental"
+Invoke-Expression "$CAKE_EXE `"$Script`" -target=`"$Target`" -configuration=`"$Configuration`" -verbosity=`"$Verbosity`" $UseMono $UseDryRun $UseExperimental"
 exit $LASTEXITCODE

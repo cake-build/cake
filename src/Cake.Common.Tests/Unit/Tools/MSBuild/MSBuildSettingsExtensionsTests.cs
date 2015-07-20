@@ -13,8 +13,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Add_Target_To_Configuration()
             {
                 // Given
-                var solution = new FilePath("/src/Solution.sln");
-                var settings = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings();
 
                 // When
                 settings.WithTarget("Target");
@@ -27,8 +26,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Return_The_Same_Configuration()
             {
                 // Given
-                var solution = new FilePath("/src/Solution.sln");
-                var settings = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings();
 
                 // When
                 var result = settings.WithTarget("Target");
@@ -44,8 +42,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Set_Tool_Version()
             {
                 // Given
-                var solution = new FilePath("/src/Solution.sln");
-                var settings = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings();
 
                 // When
                 settings.UseToolVersion(MSBuildToolVersion.NET35);
@@ -58,8 +55,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Return_The_Same_Configuration()
             {
                 // Given
-                var solution = new FilePath("/src/Solution.sln");
-                var settings = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings();
 
                 // When
                 var result = settings.UseToolVersion(MSBuildToolVersion.NET35);
@@ -75,8 +71,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Set_Platform_Target()
             {
                 // Given
-                var solution = new FilePath("/src/Solution.sln");
-                var settings = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings();
 
                 // When
                 settings.SetPlatformTarget(PlatformTarget.x64);
@@ -89,8 +84,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Return_The_Same_Configuration()
             {
                 // Given
-                var solution = new FilePath("/src/Solution.sln");
-                var settings = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings();
 
                 // When
                 var result = settings.SetPlatformTarget(PlatformTarget.x64);
@@ -106,8 +100,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Add_Property_To_Configuration()
             {
                 // Given
-                var solution = new FilePath("/src/Solution.sln");
-                var settings = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings();
 
                 // When
                 settings.WithProperty("PropertyName", "Value");
@@ -120,8 +113,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Return_The_Same_Configuration()
             {
                 // Given
-                var solution = new FilePath("/src/Solution.sln");
-                var settings = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings();
 
                 // When
                 var result = settings.WithProperty("PropertyName", "Value");
@@ -137,8 +129,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Set_Configuration()
             {
                 // Given
-                var solution = new FilePath("/src/Solution.sln");
-                var settings = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings();
 
                 // When
                 settings.SetConfiguration("TheConfiguration");
@@ -151,8 +142,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Return_The_Same_Configuration()
             {
                 // Given
-                var solution = new FilePath("/src/Solution.sln");
-                var settings = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings();
 
                 // When
                 var result = settings.SetConfiguration("TheConfiguration");
@@ -168,8 +158,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Set_MaxCpuCount()
             {
                 // Given
-                var solution = new FilePath("/src/Solution.sln");
-                var settings = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings();
 
                 // When
                 settings.SetMaxCpuCount(4);
@@ -182,8 +171,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Set_MaxCpuCount_To_Zero_If_Negative_Value()
             {
                 // Given
-                var solution = new FilePath("/src/Solution.sln");
-                var settings = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings();
 
                 // When
                 settings.SetMaxCpuCount(-1);
@@ -196,8 +184,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Return_The_Same_Configuration()
             {
                 // Given
-                var solution = new FilePath("/src/Solution.sln");
-                var settings = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings();
 
                 // When
                 var result = settings.SetMaxCpuCount(4);
@@ -215,8 +202,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Set_Node_Reuse(bool reuse)
             {
                 // Given
-                var solution = new FilePath("/src/Solution.sln");
-                var settings = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings();
 
                 // When
                 settings.SetNodeReuse(reuse);
@@ -229,8 +215,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Return_The_Same_Configuration()
             {
                 // Given
-                var solution = new FilePath("/src/Solution.sln");
-                var settings = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings();
 
                 // When
                 var result = settings.SetNodeReuse(true);
@@ -251,8 +236,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Set_Verbosity(Verbosity verbosity)
             {
                 // Given
-                var solution = new FilePath("/src/Solution.sln");
-                var settings = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings();
 
                 // When
                 settings.SetVerbosity(verbosity);
@@ -265,8 +249,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Return_The_Same_Configuration()
             {
                 // Given
-                var solution = new FilePath("/src/Solution.sln");
-                var settings = new MSBuildSettings(solution);
+                var settings = new MSBuildSettings();
 
                 // When
                 var result = settings.SetVerbosity(Verbosity.Normal);

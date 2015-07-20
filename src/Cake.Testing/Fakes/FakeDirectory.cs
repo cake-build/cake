@@ -1,20 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Cake.Core.IO;
 
 namespace Cake.Testing.Fakes
 {
     /// <summary>
-    /// Implementation of a fake <see cref="IDirectory"/>.
+    /// Represents a fake directory.
     /// </summary>
     public sealed class FakeDirectory : IDirectory
     {
-        private readonly FakeFileSystem _fileSystem;
+        private readonly FakeFileSystemTree _tree;
         private readonly DirectoryPath _path;
-        private readonly bool _creatable;
-        private readonly bool _hidden;
-        private bool _exist;        
+        private readonly FakeDirectoryContent _content;
+
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="IFileSystemInfo" /> exists.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the entry exists; otherwise, <c>false</c>.
+        /// </value>
+        public bool Exists { get; internal set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="IFileSystemInfo" /> is hidden.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the entry is hidden; otherwise, <c>false</c>.
+        /// </value>
+        public bool Hidden { get; internal set; }
 
         /// <summary>
         /// Gets the path to the directory.
@@ -25,51 +38,23 @@ namespace Cake.Testing.Fakes
             get { return _path; }
         }
 
-        /// <summary>
-        /// Gets the path to the directory.
-        /// </summary>
-        /// <value>The path.</value>
         Path IFileSystemInfo.Path
         {
             get { return _path; }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="IFileSystemInfo" /> exists.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if the entry exists; otherwise, <c>false</c>.
-        /// </value>
-        public bool Exists
+        internal FakeDirectory Parent { get; set; }
+
+        internal FakeDirectoryContent Content
         {
-            get { return _exist; }
+            get { return _content; }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="IFileSystemInfo" /> is hidden.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if the entry is hidden; otherwise, <c>false</c>.
-        /// </value>
-        public bool Hidden
+        internal FakeDirectory(FakeFileSystemTree tree, DirectoryPath path)
         {
-            get { return _exist && _hidden; }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FakeDirectory"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="path">The path.</param>
-        /// <param name="creatable">if set to <c>true</c> the directory is creatable.</param>
-        /// <param name="hidden">if set to <c>true</c> the directory is hidden.</param>
-        public FakeDirectory(FakeFileSystem fileSystem, DirectoryPath path, bool creatable, bool hidden)
-        {
-            _fileSystem = fileSystem;
+            _tree = tree;
             _path = path;
-            _exist = false;
-            _creatable = creatable;
-            _hidden = hidden;
+            _content = new FakeDirectoryContent(this, tree.Comparer);
         }
 
         /// <summary>
@@ -77,10 +62,7 @@ namespace Cake.Testing.Fakes
         /// </summary>
         public void Create()
         {
-            if (_creatable)
-            {
-                _exist = true;
-            }
+            _tree.CreateDirectory(this);
         }
 
         /// <summary>
@@ -89,18 +71,7 @@ namespace Cake.Testing.Fakes
         /// <param name="recursive">Will perform a recursive delete if set to <c>true</c>.</param>
         public void Delete(bool recursive)
         {
-            if (recursive)
-            {
-                foreach (var directory in GetDirectories("*", SearchScope.Current))
-                {
-                    directory.Delete(true);
-                }
-                foreach (var file in GetFiles("*", SearchScope.Current))
-                {
-                    file.Delete();
-                }
-            }
-            _exist = false;
+            _tree.DeleteDirectory(this, recursive);
         }
 
         /// <summary>
@@ -108,21 +79,46 @@ namespace Cake.Testing.Fakes
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <param name="scope">The search scope.</param>
-        /// <returns>
-        /// Directories matching the filter and scope.
-        /// </returns>
+        /// <returns>Directories matching the filter and scope.</returns>
         public IEnumerable<IDirectory> GetDirectories(string filter, SearchScope scope)
         {
             var result = new List<IDirectory>();
-            var children = _fileSystem.Directories.Where(x => x.Key.FullPath.StartsWith(_path.FullPath + "/", StringComparison.OrdinalIgnoreCase));
-            foreach (var child in children.Where(c => c.Value.Exists))
+            var stack = new Stack<FakeDirectory>();
+            foreach (var child in _content.Directories.Values)
             {
-                var relative = child.Key.FullPath.Substring(_path.FullPath.Length + 1);
-                if (!relative.Contains("/"))
+                if (child.Exists)
                 {
-                    result.Add(child.Value);
+                    stack.Push(child);
                 }
             }
+
+            // Rewrite the filter to a regex expression.
+            var exression = CreateRegex(filter);
+
+            while (stack.Count > 0)
+            {
+                // Pop a directory from the stack.
+                var current = stack.Pop();
+
+                // Is this a match? In that case, add it to the result.
+                if (exression.IsMatch(current.Path.GetDirectoryName()))
+                {
+                    result.Add(current);
+                }
+
+                // Recurse?
+                if (scope == SearchScope.Recursive)
+                {
+                    foreach (var child in current.Content.Directories.Values)
+                    {
+                        if (child.Exists)
+                        {
+                            stack.Push(child);
+                        }
+                    }
+                }
+            }
+
             return result;
         }
 
@@ -131,22 +127,66 @@ namespace Cake.Testing.Fakes
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <param name="scope">The search scope.</param>
-        /// <returns>
-        /// Files matching the specified filter and scope.
-        /// </returns>
+        /// <returns>Files matching the specified filter and scope.</returns>
         public IEnumerable<IFile> GetFiles(string filter, SearchScope scope)
         {
             var result = new List<IFile>();
-            var children = _fileSystem.Files.Where(x => x.Key.FullPath.StartsWith(_path.FullPath + "/", StringComparison.OrdinalIgnoreCase));
-            foreach (var child in children.Where(c => c.Value.Exists))
+            var stack = new Stack<FakeDirectory>();
+
+            // Rewrite the filter to a regex expression.
+            var expression = CreateRegex(filter);
+
+            // Just interested in this directory?
+            if (scope == SearchScope.Current)
             {
-                var relative = child.Key.FullPath.Substring(_path.FullPath.Length + 1);
-                if (!relative.Contains("/"))
+                return GetFiles(this, expression);
+            }
+
+            stack.Push(this);
+            while (stack.Count > 0)
+            {
+                // Pop a directory from the stack.
+                var current = stack.Pop();
+
+                // Add all files we can find.
+                result.AddRange(GetFiles(current, expression));
+
+                // Recurse?
+                if (scope == SearchScope.Recursive)
                 {
-                    result.Add(child.Value);
+                    foreach (var child in current.Content.Directories.Values)
+                    {
+                        if (child.Exists)
+                        {
+                            stack.Push(child);
+                        }
+                    }
                 }
             }
             return result;
+        }
+
+        private static IEnumerable<FakeFile> GetFiles(FakeDirectory current, Regex exression)
+        {
+            var result = new List<FakeFile>();
+            foreach (var file in current.Content.Files)
+            {
+                if (file.Value.Exists)
+                {
+                    // Is this a match? In that case, add it to the result.
+                    if (exression.IsMatch(file.Key.GetFilename().FullPath))
+                    {
+                        result.Add(current.Content.Files[file.Key]);
+                    }
+                }
+            }
+            return result;
+        }
+
+        private static Regex CreateRegex(string pattern)
+        {
+            pattern = pattern.Replace(".", "\\.").Replace("*", ".*").Replace("?", ".{1}");
+            return new Regex(pattern, RegexOptions.Singleline | RegexOptions.Compiled);
         }
     }
 }

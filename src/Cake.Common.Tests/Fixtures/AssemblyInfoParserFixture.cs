@@ -17,10 +17,11 @@ namespace Cake.Common.Tests.Fixtures
             string informationalVersion = "4.2.3.1", 
             bool createAssemblyInfo = true)
         {
-            FileSystem = new FakeFileSystem(false);            
-
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory.Returns("/Working");
+
+            FileSystem = new FakeFileSystem(Environment);
+            FileSystem.CreateDirectory(Environment.WorkingDirectory);
 
             if (createAssemblyInfo)
             {
