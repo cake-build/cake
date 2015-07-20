@@ -17,7 +17,9 @@ namespace Cake.Core.Tests.Fixtures
         public IGlobber Globber{ get; set; }
         public INuGetToolResolver NuGetToolResolver{ get; private set; }
         
-        public ScriptProcessorFixture(string scriptPath = "./build.cake", bool scriptExist = true,
+        public ScriptProcessorFixture(
+            string scriptPath = "./build.cake", 
+            bool scriptExist = true,
             string scriptSource = "Console.WriteLine();")
         {            
             ScriptPath = new FilePath(scriptPath);
