@@ -7,7 +7,8 @@ Param(
     [string]$Verbosity = "Verbose",
     [switch]$Experimental,
     [switch]$WhatIf,
-    [switch]$Mono
+    [switch]$Mono,
+    [switch]$SkipToolPackageRestore
 )
 
 $TOOLS_DIR = Join-Path $PSScriptRoot "tools"
@@ -42,13 +43,16 @@ if (!(Test-Path $NUGET_EXE)) {
     Throw "Could not find NuGet.exe"
 }
 
-# Restore tools from NuGet.
-Push-Location
-Set-Location $TOOLS_DIR
-Invoke-Expression "$NUGET_EXE install -ExcludeVersion"
-Pop-Location
-if ($LASTEXITCODE -ne 0) {
-    exit $LASTEXITCODE
+# Restore tools from NuGet?
+if(-Not $SkipToolPackageRestore.IsPresent)
+{
+    Push-Location
+    Set-Location $TOOLS_DIR
+    Invoke-Expression "$NUGET_EXE install -ExcludeVersion"
+    Pop-Location
+    if ($LASTEXITCODE -ne 0) {
+        exit $LASTEXITCODE
+    }
 }
 
 # Make sure that Cake has been installed.
