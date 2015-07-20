@@ -108,6 +108,7 @@ Task("Copy-Files")
     CopyFileToDirectory(buildDir + File("Cake.Core.pdb"), binDir);
     CopyFileToDirectory(buildDir + File("Cake.Common.dll"), binDir);
     CopyFileToDirectory(buildDir + File("Cake.Common.xml"), binDir);
+    CopyFileToDirectory(buildDir + File("Mono.CSharp.dll"), binDir);
     CopyFileToDirectory(buildDir + File("Autofac.dll"), binDir);
     CopyFileToDirectory(buildDir + File("Nuget.Core.dll"), binDir);
 
