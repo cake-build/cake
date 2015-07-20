@@ -102,8 +102,8 @@ namespace Cake.Common.Tools.MSBuild
                 case Verbosity.Normal:
                     return "normal";
                 case Verbosity.Verbose:
-                    return "verbose";
-                case Verbosity.Diagnostic: 
+                    return "detailed";
+                case Verbosity.Diagnostic:
                     return "diagnostic";
             }
             throw new CakeException("Encountered unknown MSBuild build log verbosity.");
