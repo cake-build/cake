@@ -15,6 +15,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         public IProcessRunner ProcessRunner { get; private set; }
         public IGlobber Globber { get; set; }
 
+        public FilePath Solution { get; set; }
         public MSBuildSettings Settings { get; set; }
 
         public MSBuildRunnerFixture(IEnumerable<DirectoryPath> existingMSBuildPaths)
@@ -43,7 +44,8 @@ namespace Cake.Common.Tests.Fixtures.Tools
             Environment.IsUnix().Returns(true);
             Environment.WorkingDirectory.Returns("/Working");
 
-            Settings = new MSBuildSettings("./src/Solution.sln");
+            Solution = new FilePath("./src/Solution.sln");
+            Settings = new MSBuildSettings();
             Settings.ToolVersion = MSBuildToolVersion.VS2013;
 
             if (existingMSBuildPaths != null)
@@ -76,7 +78,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         public void Run()
         {
             var runner = new MSBuildRunner(FileSystem, Environment, ProcessRunner, Globber);
-            runner.Run(Settings);
+            runner.Run(Solution, Settings);
         }
 
         public void AssertReceivedFilePath(FilePath path)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cake.Core.Diagnostics;
-using Cake.Core.IO;
 
 namespace Cake.Common.Tools.XBuild
 {
@@ -10,18 +9,8 @@ namespace Cake.Common.Tools.XBuild
     /// </summary>
     public sealed class XBuildSettings
     {
-        private readonly FilePath _solution;
         private readonly HashSet<string> _targets;
         private readonly Dictionary<string, IList<string>> _properties;
-
-        /// <summary>
-        /// Gets the solution path.
-        /// </summary>
-        /// <value>The solution.</value>
-        public FilePath Solution
-        {
-            get { return _solution; }
-        }
 
         /// <summary>
         /// Gets the targets.
@@ -63,15 +52,8 @@ namespace Cake.Common.Tools.XBuild
         /// <summary>
         /// Initializes a new instance of the <see cref="XBuildSettings"/> class.
         /// </summary>
-        /// <param name="solution">The solution.</param>
-        public XBuildSettings(FilePath solution)
+        public XBuildSettings()
         {
-            if (solution == null)
-            {
-                throw new ArgumentNullException("solution");
-            }
-
-            _solution = solution;
             _targets = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _properties = new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
 

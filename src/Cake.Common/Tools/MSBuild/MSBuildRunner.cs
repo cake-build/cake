@@ -34,13 +34,14 @@ namespace Cake.Common.Tools.MSBuild
         /// <summary>
         /// Runs MSBuild with the specified settings.
         /// </summary>
+        /// <param name="solution">The solution to build.</param>
         /// <param name="settings">The settings.</param>
-        public void Run(MSBuildSettings settings)
+        public void Run(FilePath solution, MSBuildSettings settings)
         {
-            Run(settings, GetArguments(settings));
+            Run(settings, GetArguments(solution, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(MSBuildSettings settings)
+        private ProcessArgumentBuilder GetArguments(FilePath solution, MSBuildSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
 
@@ -85,7 +86,7 @@ namespace Cake.Common.Tools.MSBuild
             }
 
             // Add the solution as the last parameter.
-            builder.AppendQuoted(settings.Solution.MakeAbsolute(_environment).FullPath);
+            builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
 
             return builder;
         }
