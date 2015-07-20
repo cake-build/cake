@@ -5,6 +5,7 @@
 * Added Fixie support.
 * Added IsRunningOnWindows() alias.
 * Added IsRunningOnUnix() alias.
+* Added NuGet proxy support.
 
 ### New in 0.4.3 (Released 2015/07/05)
 * Added TeamCity support.
