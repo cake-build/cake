@@ -98,7 +98,8 @@ namespace Cake.Core.Scripting
                     if (firstLine)
                     {
                         // Append the line directive for the script.
-                        context.AppendScriptLine(string.Format(CultureInfo.InvariantCulture, "#line 1 \"{0}\"", path.GetFilename().FullPath));
+                        var scriptFullPath = path.MakeAbsolute(_environment);
+                        context.AppendScriptLine(string.Format(CultureInfo.InvariantCulture, "#line 1 \"{0}\"", scriptFullPath.FullPath));
                         firstLine = false;
                     }
 

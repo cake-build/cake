@@ -9,7 +9,8 @@ namespace Cake.Scripting.Mono.CodeGen
     {
         public static Script Process(Script script, out IReadOnlyList<CodeBlock> blocks)
         {
-            var parsedBlocks = ParseBlocks(GetCode(script));
+            var code = string.Join(Environment.NewLine, script.Lines);
+            var parsedBlocks = ParseBlocks(code);
             var lines = new List<string>();
             var result = new List<CodeBlock>();
             foreach (var codeBlock in parsedBlocks)
@@ -43,33 +44,6 @@ namespace Cake.Scripting.Mono.CodeGen
                 }
             }
             return result;
-        }
-
-        private static string GetCode(Script script)
-        {
-            // TODO: Kind of optimistic but will work for now.
-            var result = new List<string>();
-            foreach (var line in script.Lines)
-            {
-                if (line.StartsWith("#"))
-                {
-                    continue;
-                }
-                if (line.StartsWith("//"))
-                {
-                    continue;
-                }
-                if (line.StartsWith("/*"))
-                {
-                    continue;
-                }
-                if (line.EndsWith("*/"))
-                {
-                    continue;
-                }
-                result.Add(line);
-            }
-            return string.Join(Environment.NewLine, result);
         }
     }
 }

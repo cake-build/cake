@@ -50,7 +50,7 @@ namespace Cake.Core.Tests.Fixtures
 
         public string GetExpectedSource()
         {
-            return string.Concat("#line 1 \"build.cake\"", "\r\n", Source);
+            return string.Concat("#line 1 \"/Working/build.cake\"", "\r\n", Source);
         }
 
         public string GetActualSource(ScriptProcessorContext context)

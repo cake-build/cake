@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting;
@@ -85,20 +86,22 @@ namespace Cake.Scripting.Mono
 
         public void Execute(Script script)
         {
-            var generator = new MonoCodeGenerator();
-            
-            int codeLineOffset;
-            var code = generator.Generate(script, out codeLineOffset);
+            var code = MonoCodeGenerator.Generate(script);
 
-            _log.Debug("Compiling build script...");
-            _log.Debug("User Code Starts at Line # {0}", codeLineOffset);
+            try
+            {
+                // Build the class we generated.
+                _log.Debug("Compiling build script...");
+                _evaluator.Run(code);
 
-            // Build the class we generated.
-            _evaluator.Run(code);
-
-            // Actually execute it.
-            _evaluator.Run("new CakeBuildScriptImpl (ScriptHost).Execute ();");
-            _log.Debug("Execution complete...");
+                // Actually execute it.
+                _evaluator.Run("new CakeBuildScriptImpl (ScriptHost).Execute ();");
+            }
+            catch (InternalErrorException)
+            {
+                // The error will be logged via the report printer.
+                throw new CakeException("An error occured while executing build script.");
+            }
         }
     }
 }
