@@ -172,6 +172,10 @@
     <Compile Include="Tools\OctopusDeploy\CreateReleaseSettings.cs" />
     <Compile Include="Tools\OctopusDeploy\OctopusDeployReleaseCreator.cs" />
     <Compile Include="Tools\OctopusDeploy\OctopusDeploySettings.cs" />
+    <Compile Include="Tools\Roundhouse\RecoveryMode.cs" />
+    <Compile Include="Tools\Roundhouse\RoundhouseAliases.cs" />
+    <Compile Include="Tools\Roundhouse\RoundhouseRunner.cs" />
+    <Compile Include="Tools\Roundhouse\RoundhouseSettings.cs" />
     <Compile Include="Tools\SignTool\ISignToolResolver.cs" />
     <Compile Include="Tools\SignTool\SignToolResolver.cs" />
     <Compile Include="Tools\SignTool\SignToolSignAliases.cs" />

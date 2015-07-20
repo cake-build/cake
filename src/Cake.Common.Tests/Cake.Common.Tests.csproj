@@ -81,6 +81,7 @@
     <Compile Include="Fixtures\Tools\NUnitRunnerFixture.cs" />
     <Compile Include="Fixtures\ProcessFixture.cs" />
     <Compile Include="Fixtures\Tools\OctopusDeployReleaseCreatorFixture.cs" />
+    <Compile Include="Fixtures\Tools\RoundhouseRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\SignToolResolverFixture.cs" />
     <Compile Include="Fixtures\Tools\SignToolSignRunnerFixture.cs" />
     <Compile Include="Fixtures\TextTransformationFixture.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Unit\Tools\NUnit\NUnitRunnerTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitSettingsTests.cs" />
     <Compile Include="Unit\Tools\OctopusDeploy\OctoCreateReleaseTests.cs" />
+    <Compile Include="Unit\Tools\Roundhouse\RoundhouseRunnerTests.cs" />
     <Compile Include="Unit\Tools\SignTool\SignToolResolverTests.cs" />
     <Compile Include="Unit\Tools\SignTool\SignToolSignRunnerTests.cs" />
     <Compile Include="Unit\Tools\WiX\LightRunnerTests.cs" />
