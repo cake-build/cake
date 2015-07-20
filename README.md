@@ -192,5 +192,6 @@ Copyright © 2014 - 2015, Patrik Svensson, Mattias Karlsson and contributors.
 Cake is provided as-is under the MIT license. For more information see [LICENSE](https://github.com/cake-build/cake/blob/develop/LICENSE).
 
 * For Roslyn, see https://github.com/dotnet/roslyn/blob/master/License.txt
+* For Mono.CSharp, see https://github.com/mono/mono/blob/master/mcs/LICENSE
 * For Autofac, see https://github.com/autofac/Autofac/blob/master/LICENSE
 * For NuGet.Core, see https://nuget.codeplex.com/license
