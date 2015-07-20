@@ -30,15 +30,17 @@ namespace Cake.Scripting.Mono.CodeGen
         private static IEnumerable<CodeBlock> ParseBlocks(string code)
         {
             var result = new List<CodeBlock>();
-            var scanner = new CodeBlockParser(code);
-            while (true)
+            using (var scanner = new CodeBlockParser(code))
             {
-                var block = scanner.GetBlock();
-                if (block == null)
+                while (true)
                 {
-                    break;
+                    var block = scanner.GetBlock();
+                    if (block == null)
+                    {
+                        break;
+                    }
+                    result.Add(block);
                 }
-                result.Add(block);
             }
             return result;
         }

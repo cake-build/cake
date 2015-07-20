@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Cake.Scripting.Mono.CodeGen.Parsing
 {
-    internal sealed class CodeBlockParser
+    internal sealed class CodeBlockParser : IDisposable
     {
         private readonly string _code;
         private readonly StringReader _reader;
@@ -17,6 +17,11 @@ namespace Cake.Scripting.Mono.CodeGen.Parsing
             _reader = new StringReader(_code);
             _current = (char)_reader.Peek();
             _position = -1;
+        }
+
+        public void Dispose()
+        {
+            _reader.Dispose();
         }
 
         public CodeBlock GetBlock()

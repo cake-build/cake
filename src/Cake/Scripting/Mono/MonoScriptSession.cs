@@ -50,12 +50,21 @@ namespace Cake.Scripting.Mono
 
         public void AddReference(FilePath path)
         {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
             _log.Debug("Adding reference to {0}...", path.FullPath);
             _evaluator.ReferenceAssembly(Assembly.LoadFile(path.FullPath));
         }
 
         public void AddReference(Assembly assembly)
         {
+            if (assembly == null)
+            {
+                throw new ArgumentNullException("assembly");
+            }
+
             var name = assembly.GetName().Name;
 
             // We don't need to load these ones as they will already get loaded by Mono.CSharp

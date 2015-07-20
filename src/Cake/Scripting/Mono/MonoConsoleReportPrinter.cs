@@ -14,11 +14,14 @@ namespace Cake.Scripting.Mono
 
         public override void Print(AbstractMessage msg, bool showFullPath)
         {
-            if (msg.IsWarning)
+            if (msg != null)
             {
-                _log.Warning("Warning: {0}", msg.Text);
+                if (msg.IsWarning)
+                {
+                    _log.Warning(msg.Text);
+                }
+                _log.Verbose("{0}: {1}", msg.MessageType, msg.Text);
             }
-            _log.Verbose("{0}: {1}", msg.MessageType, msg.Text);
         }
     }
 }
