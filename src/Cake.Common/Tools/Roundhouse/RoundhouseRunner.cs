@@ -27,13 +27,15 @@ namespace Cake.Common.Tools.Roundhouse
         /// Runs Roundhouse with the given settings.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        public void Run(RoundhouseSettings settings)
+        /// <param name="drop">Will drop/delete the database if set to <c>true</c>.</param>
+        public void Run(RoundhouseSettings settings, bool drop = false)
         {
             if (settings == null)
             {
                 throw new ArgumentNullException("settings");
             }
 
+            settings.Drop |= drop;
             Run(settings, GetArguments(settings), settings.ToolPath);
         }
 

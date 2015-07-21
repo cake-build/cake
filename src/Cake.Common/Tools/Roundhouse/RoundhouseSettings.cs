@@ -277,7 +277,7 @@ namespace Cake.Common.Tools.Roundhouse
         /// <value>
         /// This instructs RH to remove a database and not run migration scripts.
         /// </value>
-        public bool Drop { get; set; }
+        internal bool Drop { get; set; }
 
         /// <summary>
         ///  Gets or sets a value indicating whether to use transactions.
