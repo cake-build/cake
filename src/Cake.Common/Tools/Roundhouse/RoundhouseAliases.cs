@@ -16,7 +16,7 @@ namespace Cake.Common.Tools.Roundhouse
         /// <param name="context">The context.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
-        public static void Migrate(this ICakeContext context, RoundhouseSettings settings)
+        public static void RoundhouseMigrate(this ICakeContext context, RoundhouseSettings settings)
         {
             if (context == null)
             {
@@ -33,7 +33,7 @@ namespace Cake.Common.Tools.Roundhouse
         /// <param name="context">The context.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
-        public static void Drop(this ICakeContext context, RoundhouseSettings settings)
+        public static void RoundhouseDrop(this ICakeContext context, RoundhouseSettings settings)
         {
             if (context == null)
             {
