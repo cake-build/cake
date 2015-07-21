@@ -82,8 +82,8 @@ namespace Cake.Common.Tools.Roundhouse
         {
             AppendQuotedIfExists(builder, "ct", settings.CommandTimeout);
             AppendQuotedIfExists(builder, "cta", settings.CommandTimeoutAdmin);
-            AppendQuotedIfExists(builder, "cs", settings.ConnectionString);
-            AppendQuotedIfExists(builder, "csa", settings.ConnectionStringAdmin);
+            AppendQuotedSecretIfExists(builder, "cs", settings.ConnectionString);
+            AppendQuotedSecretIfExists(builder, "csa", settings.ConnectionStringAdmin);
             AppendQuotedIfExists(builder, "d", settings.DatabaseName);
             AppendQuotedIfExists(builder, "rcm", settings.RecoveryMode);
             AppendQuotedIfExists(builder, "rfp", settings.RestoreFilePath);
@@ -116,6 +116,14 @@ namespace Cake.Common.Tools.Roundhouse
             if (value != null)
             {
                 builder.AppendQuoted(string.Format("--{0}={1}", key, value));
+            }
+        }
+
+        private static void AppendQuotedSecretIfExists(ProcessArgumentBuilder builder, string key, object value)
+        {
+            if (value != null)
+            {
+                builder.AppendQuotedSecret(string.Format("--{0}={1}", key, value));
             }
         }
 

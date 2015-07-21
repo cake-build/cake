@@ -196,7 +196,7 @@ namespace Cake.Common.Tests.Unit.Tools.Roundhouse
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
                     Arg.Is<ProcessSettings>(
-                        p => p.Arguments.Render() == "\"--ct=12\" \"--cta=23\" \"--cs=server=foo;db=bar\" \"--csa=server=fooAd;db=barAd\" " +
+                        p => p.Arguments.RenderSafe() == "\"--ct=12\" \"--cta=23\" \"[REDACTED]\" \"[REDACTED]\" " +
                              "\"--d=qux\" \"--rcm=Full\" \"--rfp=/backs/restore\" \"--sc=RH\" \"--s=Server Foo\""));
             }
 
