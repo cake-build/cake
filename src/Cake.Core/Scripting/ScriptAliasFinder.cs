@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Cake.Core.Annotations;
@@ -35,18 +36,49 @@ namespace Cake.Core.Scripting
             {
                 foreach (var reference in assemblies)
                 {
-                    foreach (var type in reference.GetTypes())
+                    try
                     {
-                        if (type.IsStatic())
+                        foreach (var type in reference.GetTypes())
                         {
-                            foreach (var method in GetAliasMethods(type))
+                            if (type.IsStatic())
                             {
-                                var alias = CreateAlias(method);
-                                if (alias != null)
+                                foreach (var method in GetAliasMethods(type))
                                 {
-                                    result.Add(alias);
+                                    var alias = CreateAlias(method);
+                                    if (alias != null)
+                                    {
+                                        result.Add(alias);
+                                    }
                                 }
                             }
+                        }
+                    }
+                    catch (ReflectionTypeLoadException ex)
+                    {
+                        HashSet<string> notFound = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                        foreach (Exception loaderException in ex.LoaderExceptions)
+                        {
+                            _log.Debug(loaderException.Message);
+                            FileNotFoundException fileNotFoundException = loaderException as FileNotFoundException;
+                            if (fileNotFoundException != null)
+                            {
+                                if (!notFound.Contains(fileNotFoundException.FileName))
+                                {
+                                    notFound.Add(fileNotFoundException.FileName);
+                                }
+
+                                if (!string.IsNullOrEmpty(fileNotFoundException.FusionLog))
+                                {
+                                    _log.Debug("Fusion Log:");
+                                    _log.Debug(fileNotFoundException.FusionLog);
+                                }
+                            }
+                            _log.Debug(string.Empty);
+                        }
+
+                        foreach (var file in notFound)
+                        {
+                            _log.Warning("Could not load {0} (missing {1})", reference.Location, file);
                         }
                     }
                 }
@@ -109,7 +141,7 @@ namespace Cake.Core.Scripting
                 {
                     continue;
                 }
-                    
+
                 var parameters = method.GetParameters();
                 if (parameters.Length == 0)
                 {
