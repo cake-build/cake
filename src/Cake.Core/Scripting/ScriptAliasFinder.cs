@@ -56,24 +56,24 @@ namespace Cake.Core.Scripting
                     catch (ReflectionTypeLoadException ex)
                     {
                         HashSet<string> notFound = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-                        foreach (Exception exSub in ex.LoaderExceptions)
+                        foreach (Exception loaderException in ex.LoaderExceptions)
                         {
-                            _log.Debug(exSub.Message);
-                            FileNotFoundException exFileNotFound = exSub as FileNotFoundException;
-                            if (exFileNotFound != null)
+                            _log.Debug(loaderException.Message);
+                            FileNotFoundException fileNotFoundException = loaderException as FileNotFoundException;
+                            if (fileNotFoundException != null)
                             {
-                                if (!notFound.Contains(exFileNotFound.FileName))
+                                if (!notFound.Contains(fileNotFoundException.FileName))
                                 {
-                                    notFound.Add(exFileNotFound.FileName);
+                                    notFound.Add(fileNotFoundException.FileName);
                                 }
 
-                                if (!string.IsNullOrEmpty(exFileNotFound.FusionLog))
+                                if (!string.IsNullOrEmpty(fileNotFoundException.FusionLog))
                                 {
                                     _log.Debug("Fusion Log:");
-                                    _log.Debug(exFileNotFound.FusionLog);
+                                    _log.Debug(fileNotFoundException.FusionLog);
                                 }
                             }
-                            _log.Debug(String.Empty);
+                            _log.Debug(string.Empty);
                         }
 
                         foreach (var file in notFound)
