@@ -194,8 +194,8 @@
     <Compile Include="Tools\XUnit\XUnitRunner.cs" />
     <Compile Include="Tools\XUnit\XUnit2Runner.cs" />
     <Compile Include="Tools\XUnit\XUnit2Settings.cs" />
-    <Compile Include="Xml\XmlQuickAliases.cs" />
-    <Compile Include="Xml\XmlQuickSettings.cs" />
+    <Compile Include="Xml\XmlPokeAliases.cs" />
+    <Compile Include="Xml\XmlPokeSettings.cs" />
     <Compile Include="Xml\XmlTransformation.cs" />
     <Compile Include="Xml\XmlTransformationAlias.cs" />
     <Compile Include="Xml\XmlTransformationSettings.cs" />
