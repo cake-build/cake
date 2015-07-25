@@ -10,7 +10,7 @@ namespace Cake.Scripting.Mono.CodeGen
         public static string Generate(Script script)
         {
             // Process the script.
-            IReadOnlyList<CodeBlock> blocks;
+            IReadOnlyList<ScriptBlock> blocks;
             script = MonoScriptProcessor.Process(script, out blocks);
 
             var code = new StringBuilder();
