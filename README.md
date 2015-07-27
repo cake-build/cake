@@ -75,82 +75,51 @@ For more information and examples of how to use Cake, see the [Documentation](ht
 
 ###1. Download Cake
 
-```Batchfile
+```batchfile
 C:\Project> NuGet.exe install Cake -OutputDirectory Tools -ExcludeVersion
 ```
 
 ###2. Create build script
 
-```CSharp
-var target = Argument("target", "NuGet");
+```csharp
+var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
+
+// Define directories.
+var buildDir = Directory("./src/Example/bin") + Directory(configuration);
 
 Task("Clean")
     .Does(() =>
 {
-    // Clean directories.
-    CleanDirectory("./build");
-    CleanDirectory("./build/bin");
-    CleanDirectories("./src/**/bin/" + configuration);
+    CleanDirectory(buildDir);
 });
 
 Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean")
-    .Does(context =>
+    .Does(() =>
 {
-    // Restore NuGet packages.
-    NuGetRestore("./src/Cake.sln");    
+    NuGetRestore("./src/Example.sln");
 });
 
 Task("Build")
     .IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
 {
-    MSBuild("./src/Cake.sln", s => 
-        s.SetConfiguration(configuration));
+    MSBuild("./src/Example.sln", new MSBuildSettings()
+        .UseToolVersion(MSBuildToolVersion.NET45)
+        .SetVerbosity(Verbosity.Minimal)
+        .SetConfiguration(configuration));
 });
 
-Task("Unit-Tests")
+Task("Run-Unit-Tests")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    XUnit("./src/**/bin/" + configuration + "/*.Tests.dll");
+    XUnit2("./src/**/bin/" + configuration + "/*.Tests.dll");
 });
 
-Task("Copy-Files")
-    .IsDependentOn("Unit-Tests")
-    .Does(() =>
-{
-    var sourcePath = "./src/Cake/bin/" + configuration;    
-    var files = GetFiles(sourcePath + "/**/*.dll") + GetFiles(sourcePath + "/**/*.exe");
-    var destinationPath = "./build/bin";
-
-    CopyFiles(files, destinationPath);
-});
-
-Task("Pack")
-    .IsDependentOn("Copy-Files")
-    .Does(() =>
-{   
-    var root = "./build/bin";
-    var output = "./build/" + configuration + ".zip";
-
-    Zip(root, output);
-});
-
-Task("NuGet")
-    .Description("Create NuGet package")
-    .IsDependentOn("Pack")
-    .Does(() =>
-{
-    // Create NuGet package.
-    NuGetPack("./Cake.nuspec", new NuGetPackSettings {
-        Version = "0.1.0",
-        BasePath = "./build/bin",
-        OutputDirectory = "./build",
-        NoPackageAnalysis = true
-    });
-});
+Task("Default")
+    .IsDependentOn("Run-Unit-Tests");
 
 RunTarget(target);
 ```
@@ -158,8 +127,10 @@ RunTarget(target);
 ###3. Run build script
 
 ```
-C:\Project\Tools\Cake> Cake.exe ../../build.csx -verbosity=verbose -target=Pack
+C:\Project\Tools\Cake> Cake.exe ../../build.cake -verbosity=verbose -target=Build
 ```
+
+You could of course use a [bootstrapper script](https://github.com/cake-build/cake/blob/develop/build.ps1) like we do in the Cake repository.
 
 ## Documentation
 
