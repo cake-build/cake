@@ -84,6 +84,10 @@ namespace Cake.Core
         {
             if (task != null)
             {
+                _log.Verbose(string.Empty);
+                _log.Verbose("========================================");
+                _log.Verbose(task.Name);
+                _log.Verbose("========================================");
                 _log.Verbose("Skipping task: {0}", task.Name);
             }
         }
