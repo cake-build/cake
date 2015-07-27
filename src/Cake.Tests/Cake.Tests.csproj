@@ -62,8 +62,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\StreamReaderExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Fixtures\ArgumentParserFixture.cs" />
     <Compile Include="Fixtures\CakeApplicationFixture.cs" />
+    <Compile Include="Fixtures\MonoScriptProcessorFixture.cs" />
     <Compile Include="Fixtures\RoslynMethodAliasGeneratorFixture.cs" />
     <Compile Include="Fixtures\RoslynPropertyAliasGeneratorFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -86,6 +89,9 @@
     <Compile Include="Unit\Scripting\DescriptionScriptHostTests.cs" />
     <Compile Include="Unit\Scripting\DryRunExecutionStrategyTests.cs" />
     <Compile Include="Unit\Scripting\DryRunScriptHostTests.cs" />
+    <Compile Include="Unit\Scripting\Mono\MonoScriptProcessorTests.cs" />
+    <Compile Include="Unit\Scripting\Mono\ScriptParserTests.cs" />
+    <Compile Include="Unit\Scripting\Mono\ScriptTokenizerTests.cs" />
     <Compile Include="Unit\Scripting\Roslyn\RoslynMethodAliasGeneratorTests.cs" />
     <Compile Include="Unit\Scripting\Roslyn\RoslynPropertyAliasGeneratorTests.cs" />
   </ItemGroup>
@@ -104,6 +110,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Data\MonoScriptProcessor\Simple\input" />
+    <EmbeddedResource Include="Data\MonoScriptProcessor\Simple\output" />
+    <EmbeddedResource Include="Data\MonoScriptProcessor\MixedComments\input" />
+    <EmbeddedResource Include="Data\MonoScriptProcessor\MixedComments\output" />
+    <EmbeddedResource Include="Data\MonoScriptProcessor\ArrayInitializer\input" />
+    <EmbeddedResource Include="Data\MonoScriptProcessor\ArrayInitializer\output" />
+    <EmbeddedResource Include="Data\MonoScriptProcessor\Blocks\input" />
+    <EmbeddedResource Include="Data\MonoScriptProcessor\Blocks\output" />
+    <EmbeddedResource Include="Data\MonoScriptProcessor\Complex\input" />
+    <EmbeddedResource Include="Data\MonoScriptProcessor\Complex\output" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -111,6 +127,11 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\MonoScriptProcessor\Mixed\input" />
+    <EmbeddedResource Include="Data\MonoScriptProcessor\Mixed\output" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
