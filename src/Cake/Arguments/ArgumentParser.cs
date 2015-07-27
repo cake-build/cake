@@ -41,13 +41,16 @@ namespace Cake.Arguments
             foreach (var arg in arguments)
             {
                 var value = arg.UnQuote();
-                processedArguments.Add(IsOption(arg) ? ParseOption(arg, position) : new Argument(string.Empty, value, position));
+                processedArguments.Add(IsOption(arg) ? ParseOption(arg, position) : new Argument { Key = string.Empty, Value = value, Position = position });
                 position++;
             }
 
             foreach (var arg in processedArguments)
             {
-                ProcessOption(arg, options);
+                if (!ProcessOption(arg, options))
+                {
+                    return null;
+                }
             }
             return options;
         }
@@ -84,10 +87,10 @@ namespace Cake.Arguments
                     value = value.Substring(1, value.Length - 2);
                 }
             }
-            return new Argument(name, value, position);
+            return new Argument { Key = name, Value = value, Position = position };
         }
 
-        private void ProcessOption(Argument argument, CakeOptions options)
+        private bool ProcessOption(Argument argument, CakeOptions options)
         {
             if (string.IsNullOrWhiteSpace(argument.Key))
             {
@@ -105,60 +108,78 @@ namespace Cake.Arguments
                             options.Arguments.Add("Target", argument.Value);
                             options.Script = GetDefaultScript();
                         }
-                        return;
+                        break;
                     case 1:
+                        // If we have a dot, we're a script file.
+                        if (argument.Value.Contains("."))
+                        {
+                            if (options.Script != null)
+                            {
+                                _log.Error("More than one build script specified.");
+                                return false;
+                            }
+
+                            _log.Error("The script path must be first argument.");
+                            return false;
+                        }
+
                         if (options.Arguments.ContainsKey("Target"))
                         {
-                            _log.Error("Attempted to add two targets: \"{0}\" and \"{1}\".", options.Arguments["Target"], argument.Value);
-                            return;
+                            _log.Error("Attempted to add two targets: \"{0}\" and \"{1}\".", options.Arguments["Target"],
+                                argument.Value);
+                            return false;
                         }
                         options.Arguments.Add("Target", argument.Value);
-                        return;
+                        break;
                     default:
-                        _log.Error("Attempted to add unknown argument \"{0}\" at position {1}.", argument.Value, argument.Position);
-                        return;
+                        _log.Error("Attempted to add unknown argument \"{0}\" at position {1}.", argument.Value,
+                            argument.Position);
+                        return false;
                 }
             }
-
-            switch (argument.Key.ToLowerInvariant())
+            else
             {
-                case "verbosity":
-                case "v":
-                    // Parse verbosity.
-                    var converter = TypeDescriptor.GetConverter(typeof(Verbosity));
-                    var verbosity = converter.ConvertFromInvariantString(argument.Value);
-                    if (verbosity != null)
-                    {
-                        options.Verbosity = (Verbosity)verbosity;
-                    }
-                    break;
-                case "showdescriptions":
-                case "s":
-                    options.ShowDescription = true;
-                    break;
-                case "dryrun":
-                case "noop":
-                case "whatif":
-                    options.PerformDryRun = true;
-                    break;
-                case "help":
-                case "?":
-                    options.ShowHelp = true;
-                    break;
-                case "version":
-                case "ver":
-                    options.ShowVersion = true;
-                    break;
-                default:
-                    if (options.Arguments.ContainsKey(argument.Key))
-                    {
-                        _log.Error("Multiple arguments with the same name ({0}).", argument.Key);
+                switch (argument.Key.ToLowerInvariant())
+                {
+                    case "verbosity":
+                    case "v":
+                        // Parse verbosity.
+                        var converter = TypeDescriptor.GetConverter(typeof(Verbosity));
+                        var verbosity = converter.ConvertFromInvariantString(argument.Value);
+                        if (verbosity != null)
+                        {
+                            options.Verbosity = (Verbosity)verbosity;
+                        }
                         break;
-                    }
+                    case "showdescription":
+                    case "s":
+                        options.ShowDescription = true;
+                        break;
+                    case "dryrun":
+                    case "noop":
+                    case "whatif":
+                        options.PerformDryRun = true;
+                        break;
+                    case "help":
+                    case "?":
+                        options.ShowHelp = true;
+                        break;
+                    case "version":
+                    case "ver":
+                        options.ShowVersion = true;
+                        break;
+                    default:
+                        if (options.Arguments.ContainsKey(argument.Key))
+                        {
+                            _log.Error("Multiple arguments with the same name ({0}).", argument.Key);
+                            return false;
+                        }
 
-                    options.Arguments.Add(argument.Key, argument.Key);
-                    break;
+                        options.Arguments.Add(argument.Key, argument.Key);
+                        break;
+                }
             }
+            return true;
         }
 
         private readonly string[] _defaultScriptNameConventions =
