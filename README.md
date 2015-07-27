@@ -26,40 +26,41 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
 This is a list of some the currently implemented functionality.   
 For a full list of supported tools, see the [DSL reference](http://cakebuild.net/dsl/).
 
-* [MSBuild](http://cakebuild.net/dsl/#msbuild) 
-* [MSTest](http://cakebuild.net/dsl/#mstest)
-* [xUnit (v1 and v2)](http://cakebuild.net/dsl/#xunit)
-* [NUnit](http://cakebuild.net/dsl/#nunit)
-* [NuGet](http://cakebuild.net/dsl/#nuget)
+* [MSBuild](http://cakebuild.net/dsl/msbuild) 
+* [MSTest](http://cakebuild.net/dsl/mstest)
+* [xUnit (v1)](http://cakebuild.net/dsl/xunit)
+* [xUnit (v2)](http://cakebuild.net/dsl/xunit-v2)
+* [NUnit](http://cakebuild.net/dsl/nunit)
+* [NuGet](http://cakebuild.net/dsl/nuget)
   * Pack
   * Push
   * Restore
   * Sources
-* [ILMerge](http://cakebuild.net/dsl/#ilmerge)
-* [WiX](http://cakebuild.net/dsl/#wix)
+* [ILMerge](http://cakebuild.net/dsl/ilmerge)
+* [WiX](http://cakebuild.net/dsl/wix)
   * Candle
   * Light
-* [SignTool](http://cakebuild.net/dsl/#signing)
-* [File operations](http://cakebuild.net/dsl/#fileoperations)
+* [SignTool](http://cakebuild.net/dsl/signing)
+* [File operations](http://cakebuild.net/dsl/file-operations)
   * Copying
   * Moving
   * Deleting
-* [Directory operations](http://cakebuild.net/dsl/#directoryoperations)
+* [Directory operations](http://cakebuild.net/dsl/directory-operations)
   * Creation
   * Cleaning
   * Deleting
-* [File/Directory globbing](http://cakebuild.net/dsl/#globbing)
-* [Compression (zip)](http://cakebuild.net/dsl/#compression)
-* [AssemblyInfo patching](http://cakebuild.net/dsl/#assemblyinfo)
-* [Release notes parser](http://cakebuild.net/dsl/#releasenotes)
-* [AppVeyor](http://cakebuild.net/dsl/#buildsystem)
-* [MSBuild Resource](http://cakebuild.net/dsl/#msbuildresource)
+* [File/Directory globbing](http://cakebuild.net/dsl/globbing)
+* [Compression (zip)](http://cakebuild.net/dsl/compression)
+* [AssemblyInfo patching](http://cakebuild.net/dsl/assembly-info)
+* [Release notes parser](http://cakebuild.net/dsl/release-notes)
+* [AppVeyor](http://cakebuild.net/dsl/build-system)
+* [MSBuild Resource](http://cakebuild.net/dsl/msbuild-resource)
   * Solution file parsing
   * Project file parsing
-* [Octopus deploy](http://cakebuild.net/dsl/#octopusdeploy)
+* [Octopus deploy](http://cakebuild.net/dsl/octopus-deploy)
   * Create release
 
-For more information and examples of how to use Cake, see the [Documentation](http://cakebuild.net/). 
+For more information and examples of how to use Cake, see the [Documentation](http://cakebuild.net/docs). 
 
 ##Example
 
@@ -120,7 +121,7 @@ RunTarget(target);
 C:\Project\Tools\Cake> Cake.exe ../../build.cake -verbosity=verbose -target=Build
 ```
 
-You could of course use a [bootstrapper script](https://github.com/cake-build/cake/blob/develop/build.ps1) for this if you want to.
+You could of course use a [bootstrapper script](https://github.com/cake-build/cake/blob/develop/build.ps1) if you want to.
 
 ## Documentation
 
