@@ -13,7 +13,9 @@ namespace Cake.Common.Tests.Fixtures.Tools
         public ICakeEnvironment Environment { get; set; }
         public IProcess Process { get; set; }
         public IProcessRunner ProcessRunner { get; private set; }
+        public IGlobber Globber { get; set; }
 
+        public FilePath Solution { get; set; }
         public MSBuildSettings Settings { get; set; }
 
         public MSBuildRunnerFixture(IEnumerable<DirectoryPath> existingMSBuildPaths)
@@ -33,24 +35,28 @@ namespace Cake.Common.Tests.Fixtures.Tools
             ProcessRunner = Substitute.For<IProcessRunner>();
             ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns(Process);
 
+            Globber = Substitute.For<IGlobber>();
+
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.Is64BitOperativeSystem().Returns(is64BitOperativeSystem);
             Environment.GetSpecialPath(SpecialPath.ProgramFilesX86).Returns("/Program86");
             Environment.GetSpecialPath(SpecialPath.Windows).Returns("/Windows");
+            Environment.IsUnix().Returns(true);
             Environment.WorkingDirectory.Returns("/Working");
 
-            Settings = new MSBuildSettings("./src/Solution.sln");
+            Solution = new FilePath("./src/Solution.sln");
+            Settings = new MSBuildSettings();
             Settings.ToolVersion = MSBuildToolVersion.VS2013;
 
             if (existingMSBuildPaths != null)
             {
                 // Add all existing MSBuild tool paths.
-                var fileSystem = new FakeFileSystem(true);
+                var fileSystem = new FakeFileSystem(Environment);
                 FileSystem = fileSystem;
                 foreach (var existingPath in existingMSBuildPaths)
                 {
-                    fileSystem.GetCreatedDirectory(existingPath);
-                    fileSystem.GetCreatedFile(existingPath.GetFilePath("MSBuild.exe"));
+                    fileSystem.CreateDirectory(existingPath);
+                    fileSystem.CreateFile(existingPath.GetFilePath("MSBuild.exe"));
                 }
             }
             else
@@ -71,8 +77,8 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         public void Run()
         {
-            var runner = new MSBuildRunner(FileSystem, Environment, ProcessRunner);
-            runner.Run(Settings);
+            var runner = new MSBuildRunner(FileSystem, Environment, ProcessRunner, Globber);
+            runner.Run(Solution, Settings);
         }
 
         public void AssertReceivedFilePath(FilePath path)

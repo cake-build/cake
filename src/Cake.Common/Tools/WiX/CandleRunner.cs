@@ -14,7 +14,6 @@ namespace Cake.Common.Tools.WiX
     public sealed class CandleRunner : Tool<CandleSettings>
     {
         private readonly ICakeEnvironment _environment;
-        private readonly IGlobber _globber;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CandleRunner"/> class.
@@ -24,18 +23,13 @@ namespace Cake.Common.Tools.WiX
         /// <param name="globber">The globber.</param>
         /// <param name="processRunner">The process runner.</param>
         public CandleRunner(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner)
-            : base(fileSystem, environment, processRunner)
+            : base(fileSystem, environment, processRunner, globber)
         {
             if (environment == null)
             {
                 throw new ArgumentNullException("environment");
             }
-            if (globber == null)
-            {
-                throw new ArgumentNullException("globber");
-            }
             _environment = environment;
-            _globber = globber;
         }
 
         /// <summary>
@@ -170,14 +164,12 @@ namespace Cake.Common.Tools.WiX
         }
 
         /// <summary>
-        /// Gets the default tool path.
+        /// Gets the possible names of the tool executable.
         /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The default tool path.</returns>
-        protected override FilePath GetDefaultToolPath(CandleSettings settings)
+        /// <returns>The tool executable name.</returns>
+        protected override IEnumerable<string> GetToolExecutableNames()
         {
-            const string expression = "./tools/**/candle.exe";
-            return _globber.GetFiles(expression).FirstOrDefault();
+            return new[] { "candle.exe" };
         }
     }
 }

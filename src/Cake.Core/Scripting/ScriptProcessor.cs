@@ -55,7 +55,8 @@ namespace Cake.Core.Scripting
                 new ReferenceDirectiveProcessor(_fileSystem, _environment),
                 new UsingStatementProcessor(_environment),
                 new AddInDirectiveProcessor(_fileSystem, _environment, _log, nugetToolResolver),
-                new ToolDirectiveProcessor(_fileSystem, _environment, _log, nugetToolResolver)
+                new ToolDirectiveProcessor(_fileSystem, _environment, _log, nugetToolResolver),
+                new ShebangProcessor(_environment), 
             };
         }
 
@@ -98,7 +99,8 @@ namespace Cake.Core.Scripting
                     if (firstLine)
                     {
                         // Append the line directive for the script.
-                        context.AppendScriptLine(string.Format(CultureInfo.InvariantCulture, "#line 1 \"{0}\"", path.GetFilename().FullPath));
+                        var scriptFullPath = path.MakeAbsolute(_environment);
+                        context.AppendScriptLine(string.Format(CultureInfo.InvariantCulture, "#line 1 \"{0}\"", scriptFullPath.FullPath));
                         firstLine = false;
                     }
 

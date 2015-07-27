@@ -59,13 +59,11 @@ namespace Cake.Tests.Unit.Arguments
             public void Should_Add_Unknown_Arguments_To_Argument_List_Without_Script()
             {
                 // Given
-                var fakeFileSystem = new FakeFileSystem(isCaseSensitive: false);
-                var fakePath = new FilePath("build.cake");
-                var fakeFile = new FakeFile(fakeFileSystem, fakePath) { Exists = true };
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fakeFileSystem = new FakeFileSystem(environment);
+                fakeFileSystem.CreateFile(new FilePath("build.cake"));
                 var fixture = new ArgumentParserFixture { FileSystem = fakeFileSystem };
                 var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
-
-                fakeFileSystem.Files.Add(fakePath, fakeFile);
 
                 // When
                 var result = parser.Parse(new[] { "-unknown" });

@@ -13,29 +13,29 @@ namespace Cake.Common.Tests.Fixtures
        public FilePath ResultPath { get; set; }
        public XmlTransformationSettings Settings { get; set; }
 
-
        public XmlTransformationFixture(bool xmlExists = true, bool xslExists = true, bool resultExist = false)
        {
            Settings = new XmlTransformationSettings();
 
-           var fileSystem = new FakeFileSystem(false);
-           fileSystem.GetCreatedDirectory("/Working");
+           var environment = FakeEnvironment.CreateUnixEnvironment();
+           var fileSystem = new FakeFileSystem(environment);
+           fileSystem.CreateDirectory("/Working");
 
            if (xmlExists)
            {
-               var xmlFile = fileSystem.GetCreatedFile("/Working/breakfast_menu.xml", Resources.XmlTransformation_Xml);
+               var xmlFile = fileSystem.CreateFile("/Working/breakfast_menu.xml").SetContent(Resources.XmlTransformation_Xml);
                XmlPath = xmlFile.Path;
            }
 
            if (xslExists)
            {
-               var xslFile = fileSystem.GetCreatedFile("/Working/breakfast_menu.xsl", Resources.XmlTransformation_Xsl);
+               var xslFile = fileSystem.CreateFile("/Working/breakfast_menu.xsl").SetContent(Resources.XmlTransformation_Xsl);
                XslPath = xslFile.Path;
            }
 
            if (resultExist)
            {
-               var resultFile = fileSystem.GetCreatedFile("/Working/breakfast_menu.htm", Resources.XmlTransformation_Htm);
+               var resultFile = fileSystem.CreateFile("/Working/breakfast_menu.htm").SetContent(Resources.XmlTransformation_Htm);
                ResultPath = resultFile.Path;
            }
            else

@@ -14,7 +14,7 @@ namespace Cake.Tests.Unit.Scripting.Roslyn
             public void Should_Throw_If_Method_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => PropertyAliasGenerator.Generate(null));
+                var result = Record.Exception(() => RoslynPropertyAliasGenerator.Generate(null));
 
                 // Then
                 Assert.IsArgumentNullException(result, "method");
@@ -27,7 +27,7 @@ namespace Cake.Tests.Unit.Scripting.Roslyn
                 var method = GetType().GetMethod("Should_Throw_If_Declaring_Type_Is_Not_Static");
 
                 // When
-                var result = Record.Exception(() => PropertyAliasGenerator.Generate(method));
+                var result = Record.Exception(() => RoslynPropertyAliasGenerator.Generate(method));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -42,7 +42,7 @@ namespace Cake.Tests.Unit.Scripting.Roslyn
                 var method = typeof(RoslynPropertyAliasGeneratorFixture).GetMethod("NotAnExtensionMethod");
 
                 // When
-                var result = Record.Exception(() => PropertyAliasGenerator.Generate(method));
+                var result = Record.Exception(() => RoslynPropertyAliasGenerator.Generate(method));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -57,7 +57,7 @@ namespace Cake.Tests.Unit.Scripting.Roslyn
                 var method = typeof(RoslynPropertyAliasGeneratorFixture).GetMethod("NotAScriptMethod");
 
                 // When
-                var result = Record.Exception(() => PropertyAliasGenerator.Generate(method));
+                var result = Record.Exception(() => RoslynPropertyAliasGenerator.Generate(method));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -72,7 +72,7 @@ namespace Cake.Tests.Unit.Scripting.Roslyn
                 var method = typeof(RoslynPropertyAliasGeneratorFixture).GetMethod("PropertyAliasWithMoreThanOneMethod");
 
                 // When
-                var result = Record.Exception(() => PropertyAliasGenerator.Generate(method));
+                var result = Record.Exception(() => RoslynPropertyAliasGenerator.Generate(method));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -87,7 +87,7 @@ namespace Cake.Tests.Unit.Scripting.Roslyn
                 var method = typeof(RoslynPropertyAliasGeneratorFixture).GetMethod("PropertyAliasWithoutContext");
 
                 // When
-                var result = Record.Exception(() => PropertyAliasGenerator.Generate(method));
+                var result = Record.Exception(() => RoslynPropertyAliasGenerator.Generate(method));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -102,7 +102,7 @@ namespace Cake.Tests.Unit.Scripting.Roslyn
                 var method = typeof(RoslynPropertyAliasGeneratorFixture).GetMethod("GenericScriptMethod");
 
                 // When
-                var result = Record.Exception(() => PropertyAliasGenerator.Generate(method));
+                var result = Record.Exception(() => RoslynPropertyAliasGenerator.Generate(method));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -117,7 +117,7 @@ namespace Cake.Tests.Unit.Scripting.Roslyn
                 var method = typeof(RoslynPropertyAliasGeneratorFixture).GetMethod("PropertyAliasReturningVoid");
 
                 // When
-                var result = Record.Exception(() => PropertyAliasGenerator.Generate(method));
+                var result = Record.Exception(() => RoslynPropertyAliasGenerator.Generate(method));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -135,7 +135,7 @@ namespace Cake.Tests.Unit.Scripting.Roslyn
                 var method = typeof(RoslynPropertyAliasGeneratorFixture).GetMethod("PropertyAliasReturningInteger");
 
                 // When
-                var result = PropertyAliasGenerator.Generate(method);
+                var result = RoslynPropertyAliasGenerator.Generate(method);
 
                 // Then
                 Assert.Equal(expected, result);
@@ -155,7 +155,7 @@ namespace Cake.Tests.Unit.Scripting.Roslyn
                 var method = typeof(RoslynPropertyAliasGeneratorFixture).GetMethod("PropertyAliasReturningCachedString");
 
                 // When
-                var result = PropertyAliasGenerator.Generate(method);
+                var result = RoslynPropertyAliasGenerator.Generate(method);
 
                 // Then
                 Assert.Equal(expected.ToString(), result);
@@ -175,7 +175,7 @@ namespace Cake.Tests.Unit.Scripting.Roslyn
                 var method = typeof(RoslynPropertyAliasGeneratorFixture).GetMethod("PropertyAliasReturningCachedBoolean");
 
                 // When
-                var result = PropertyAliasGenerator.Generate(method);
+                var result = RoslynPropertyAliasGenerator.Generate(method);
 
                 // Then
                 Assert.Equal(expected.ToString(), result);

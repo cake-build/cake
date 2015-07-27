@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
@@ -12,7 +13,6 @@ namespace Cake.Common.Tools.OctopusDeploy
     public sealed class OctopusDeployReleaseCreator : Tool<CreateReleaseSettings>
     {
         private readonly ICakeEnvironment _environment;
-        private readonly IGlobber _globber;
 
         /// <summary> 
         /// Initializes a new instance of the <see cref="OctopusDeployReleaseCreator"/> class.
@@ -23,10 +23,9 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// <param name="processRunner">The process runner.</param>
         public OctopusDeployReleaseCreator(IFileSystem fileSystem, ICakeEnvironment environment,
             IGlobber globber, IProcessRunner processRunner) 
-            : base(fileSystem, environment, processRunner)
+            : base(fileSystem, environment, processRunner, globber)
         {
             _environment = environment;
-            _globber = globber;
         }
 
         /// <summary>
@@ -67,13 +66,12 @@ namespace Cake.Common.Tools.OctopusDeploy
         }
 
         /// <summary>
-        /// Gets the default tool path.
+        /// Gets the possible names of the tool executable.
         /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The default tool path.</returns>
-        protected override FilePath GetDefaultToolPath(CreateReleaseSettings settings)
+        /// <returns>The tool executable name.</returns>
+        protected override IEnumerable<string> GetToolExecutableNames()
         {
-            return _globber.GetFiles("./tools/**/Octo.exe").FirstOrDefault();
+            return new[] { "Octo.exe" };
         }
     }
 }

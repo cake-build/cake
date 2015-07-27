@@ -64,8 +64,8 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(2, result.Length);
-                Assert.Equal("/Temp/Hello/World/Text.txt", result[0].FullPath);
-                Assert.Equal("/Temp/Goodbye/OtherText.txt", result[1].FullPath);
+                Assert.True(result.Any(p => p.FullPath == "/Temp/Hello/World/Text.txt"));
+                Assert.True(result.Any(p => p.FullPath == "/Temp/Goodbye/OtherText.txt"));
             }
 
             [Fact]

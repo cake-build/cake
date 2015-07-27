@@ -7,7 +7,7 @@ namespace Cake.Core.IO.NuGet
     /// Contains NuGet path resolver functionality
     /// </summary>
     public sealed class NuGetToolResolver : INuGetToolResolver
-    {        
+    {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
@@ -83,6 +83,18 @@ namespace Cake.Core.IO.NuGet
                 if (envFile.Exists)
                 {
                     _cachedPath = envFile;
+                    return _cachedPath.Path;
+                }
+            }
+
+            // On Unix /usr/bin/nuget is a viable option
+            if (_environment.IsUnix())
+            {
+                var nugetUnixPath = new FilePath("/usr/bin/nuget");
+
+                if (_fileSystem.Exist(nugetUnixPath))
+                {
+                    _cachedPath = _fileSystem.GetFile(nugetUnixPath);
                     return _cachedPath.Path;
                 }
             }

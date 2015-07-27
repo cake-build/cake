@@ -22,9 +22,8 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
 4. [Documentation](https://github.com/cake-build/cake#documentation)
 5. [Bootstrapper](https://github.com/cake-build/cake#bootstrapper)
 6. [Contributing](https://github.com/cake-build/cake#contributing)
-7. [Contributors](https://github.com/cake-build/cake#contributors)
-8. [External add-ons](https://github.com/cake-build/cake#external-add-ons)
-9. [License](https://github.com/cake-build/cake#license)
+7. [External add-ons](https://github.com/cake-build/cake#external-add-ons)
+8. [License](https://github.com/cake-build/cake#license)
 
 ##Roadmap
 
@@ -181,10 +180,6 @@ Make sure you've read the [contribution guidelines](http://cakebuild.net/contrib
 * Don't forget the unit tests.
 * Send a pull request. Bonus for topic branches. *Funny .gif will be your reward.*  
 
-## Contributors
-
-The full list of contributors can be found at [http://cakebuild.net/contribute/list-of-contributors/](http://cakebuild.net/contribute/list-of-contributors/).
-
 ## External add-ons
 
 Cake.AliaSql: [https://www.nuget.org/packages/Cake.AliaSql](https://www.nuget.org/packages/Cake.AliaSql)  
@@ -193,9 +188,10 @@ Cake.Slack: [https://github.com/WCOMAB/Cake.Slack](https://github.com/WCOMAB/Cak
 
 ## License
 
-Copyright © 2014 - 2015, Patrik Svensson and contributors.   
-Cake is provided as-is under the MIT license. For more information see [`LICENSE`](https://github.com/cake-build/cake/blob/develop/LICENSE).
+Copyright © 2014 - 2015, Patrik Svensson, Mattias Karlsson and contributors.
+Cake is provided as-is under the MIT license. For more information see [LICENSE](https://github.com/cake-build/cake/blob/develop/LICENSE).
 
 * For Roslyn, see https://github.com/dotnet/roslyn/blob/master/License.txt
+* For Mono.CSharp, see https://github.com/mono/mono/blob/master/mcs/LICENSE
 * For Autofac, see https://github.com/autofac/Autofac/blob/master/LICENSE
 * For NuGet.Core, see https://nuget.codeplex.com/license

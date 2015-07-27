@@ -10,18 +10,8 @@ namespace Cake.Common.Tools.MSBuild
     /// </summary>
     public sealed class MSBuildSettings
     {
-        private readonly FilePath _solution;
         private readonly HashSet<string> _targets;
         private readonly Dictionary<string, IList<string>> _properties;
-
-        /// <summary>
-        /// Gets the solution path.
-        /// </summary>
-        /// <value>The solution.</value>
-        public FilePath Solution
-        {
-            get { return _solution; }
-        }
 
         /// <summary>
         /// Gets the targets.
@@ -82,15 +72,8 @@ namespace Cake.Common.Tools.MSBuild
         /// <summary>
         /// Initializes a new instance of the <see cref="MSBuildSettings"/> class.
         /// </summary>
-        /// <param name="solution">The solution.</param>
-        public MSBuildSettings(FilePath solution)
+        public MSBuildSettings()
         {
-            if (solution == null)
-            {
-                throw new ArgumentNullException("solution");
-            }
-            
-            _solution = solution;
             _targets = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _properties = new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
 

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Cake.Core.Scripting;
 using Cake.Core.Tests.Fixtures;
+using Cake.Testing.Fakes;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit.Scripting
@@ -100,7 +101,7 @@ namespace Cake.Core.Tests.Unit.Scripting
             {
                 // Given
                 const string source = "#r \"hello.dll\"\r\nConsole.WriteLine();";
-                var fixture = new ScriptProcessorFixture(scriptSource: source);                
+                var fixture = new ScriptProcessorFixture(scriptSource: source);
 
                 // When
                 var result = fixture.Process();
@@ -153,7 +154,7 @@ namespace Cake.Core.Tests.Unit.Scripting
             {
                 // Given
                 var fixture = new ScriptProcessorFixture(scriptSource: source);
-                fixture.FileSystem.GetCreatedFile("/Working/hello.cake");
+                fixture.FileSystem.CreateFile("/Working/hello.cake");
 
                 // When
                 var result = fixture.Process();
@@ -172,8 +173,8 @@ namespace Cake.Core.Tests.Unit.Scripting
             {
                 // Given
                 var fixture = new ScriptProcessorFixture(scriptSource: source);
-                fixture.FileSystem.GetCreatedFile("/Working/hello.cake");
-                fixture.FileSystem.GetCreatedFile("/Working/world.cake");
+                fixture.FileSystem.CreateFile("/Working/hello.cake");
+                fixture.FileSystem.CreateFile("/Working/world.cake");
 
                 // When
                 var result = fixture.Process();
@@ -183,6 +184,21 @@ namespace Cake.Core.Tests.Unit.Scripting
                 Assert.Equal("/Working/build.cake", result.ProcessedScripts.ElementAt(0));
                 Assert.Equal("/Working/hello.cake", result.ProcessedScripts.ElementAt(1));
                 Assert.Equal("/Working/world.cake", result.ProcessedScripts.ElementAt(2));
+            }
+
+            [Fact]
+            public void Should_Remove_Shebang()
+            {
+                // Given
+                var fixture = new ScriptProcessorFixture(scriptSource: "#!usr/bin/cake\r\nConsole.WriteLine();");
+
+                // When
+                var result = fixture.Process();
+
+                // Then
+                Assert.Equal(2, result.Lines.Count);
+                Assert.Equal("#line 1 \"/Working/build.cake\"", result.Lines.ElementAt(0));
+                Assert.Equal("Console.WriteLine();", result.Lines.ElementAt(1));
             }
         }
     }

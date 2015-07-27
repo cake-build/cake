@@ -33,6 +33,7 @@ namespace Cake.Common.Xml
             set { XmlWriterSettings.ConformanceLevel = value; }
         }
 
+        #if !__MonoCS__
         /// <summary>
         /// Gets or sets a value indicating whether the XmlWriter does not escape URI attributes.
         /// </summary>
@@ -41,6 +42,7 @@ namespace Cake.Common.Xml
             get { return XmlWriterSettings.DoNotEscapeUriAttributes; }
             set { XmlWriterSettings.DoNotEscapeUriAttributes = value; }
         }
+        #endif
 
         /// <summary>
         /// Gets or sets the type of text encoding to use.

@@ -153,7 +153,7 @@ namespace Cake.Common.Tools.SignTool
                 throw new ArgumentNullException("settings");
             }
 
-            var runner = new SignToolSignRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Registry);
+            var runner = new SignToolSignRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.Registry);
             foreach (var assembly in assemblies)
             {
                 runner.Run(assembly, settings);

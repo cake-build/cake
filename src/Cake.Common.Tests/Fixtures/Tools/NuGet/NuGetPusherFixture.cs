@@ -16,7 +16,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet
 
         public void Push()
         {
-            var tool = new NuGetPusher(FileSystem, Environment, ProcessRunner, NuGetToolResolver);
+            var tool = new NuGetPusher(FileSystem, Environment, ProcessRunner, Globber, NuGetToolResolver);
             tool.Push(PackageFilePath, Settings);
         }
     }

@@ -385,7 +385,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             [InlineData(Verbosity.Quiet, "quiet")]
             [InlineData(Verbosity.Minimal, "minimal")]
             [InlineData(Verbosity.Normal, "normal")]
-            [InlineData(Verbosity.Verbose, "verbose")]
+            [InlineData(Verbosity.Verbose, "detailed")]
             [InlineData(Verbosity.Diagnostic, "diagnostic")]
             public void Should_Append_Correct_Verbosity(Verbosity verbosity, string expected)
             {

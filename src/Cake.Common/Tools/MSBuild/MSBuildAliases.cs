@@ -26,8 +26,8 @@ namespace Cake.Common.Tools.MSBuild
         /// Builds the specified solution using MSBuild.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="solution">The solution.</param>
-        /// <param name="configurator">The configurator.</param>
+        /// <param name="solution">The solution to build.</param>
+        /// <param name="configurator">The settings configurator.</param>
         [CakeMethodAlias]
         public static void MSBuild(this ICakeContext context, FilePath solution, Action<MSBuildSettings> configurator)
         {
@@ -40,11 +40,33 @@ namespace Cake.Common.Tools.MSBuild
                 throw new ArgumentNullException("configurator");
             }
 
-            var settings = new MSBuildSettings(solution);
+            var settings = new MSBuildSettings();
             configurator(settings);
 
-            var runner = new MSBuildRunner(context.FileSystem, context.Environment, context.ProcessRunner);
-            runner.Run(settings);
+            // Perform the build.
+            MSBuild(context, solution, settings);
+        }
+
+        /// <summary>
+        /// Builds the specified solution using MSBuild.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="solution">The solution to build.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        public static void MSBuild(this ICakeContext context, FilePath solution, MSBuildSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+
+            var runner = new MSBuildRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            runner.Run(solution, settings);
         }
     }
 }

@@ -12,7 +12,7 @@
     <AssemblyName>Cake.Common.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>6d299839</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>8e548008</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -63,6 +63,7 @@
     <Compile Include="Fixtures\IO\FileCopyFixture.cs" />
     <Compile Include="Fixtures\IO\FileDeleteFixture.cs" />
     <Compile Include="Fixtures\IO\FileSystemFixture.cs" />
+    <Compile Include="Fixtures\Tools\FixieRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\ILMergeRunnerFixture.cs" />
     <Compile Include="Fixtures\Diagnostics\LogActionFixture.cs" />
     <Compile Include="Fixtures\Tools\MSBuildRunnerFixture.cs" />
@@ -74,11 +75,13 @@
     <Compile Include="Fixtures\Tools\NuGet\NuGetPusherFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGet\NuGetRestorerFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGet\NuGetSetApiKeyFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\NuGetSetProxyFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGet\NuGetSourcesFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGet\NuGetUpdateFixture.cs" />
     <Compile Include="Fixtures\Tools\NUnitRunnerFixture.cs" />
     <Compile Include="Fixtures\ProcessFixture.cs" />
     <Compile Include="Fixtures\Tools\OctopusDeployReleaseCreatorFixture.cs" />
+    <Compile Include="Fixtures\Tools\RoundhouseRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\SignToolResolverFixture.cs" />
     <Compile Include="Fixtures\Tools\SignToolSignRunnerFixture.cs" />
     <Compile Include="Fixtures\TextTransformationFixture.cs" />
@@ -119,6 +122,7 @@
     <Compile Include="Unit\Text\TextTransformationExtensionsTests.cs" />
     <Compile Include="Unit\Text\TextTransformationTests.cs" />
     <Compile Include="Unit\Tools\Cake\CakeRunnerTests.cs" />
+    <Compile Include="Unit\Tools\Fixie\FixieRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeSettingsTests.cs" />
     <Compile Include="Unit\IO\ZipperTests.cs" />
@@ -138,6 +142,7 @@
     <Compile Include="Unit\Tools\NuGet\Restore\NuGetRestorerTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Restore\NuGetRestoreSettingsTests.cs" />
     <Compile Include="Unit\Tools\NuGet\SetApiKey\NuGetSetApiKeyTests.cs" />
+    <Compile Include="Unit\Tools\NuGet\SetProxy\NuGetSetProxyTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Sources\NuGetSourcesSettingsTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Sources\NuGetSourcesTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Update\NuGetUpdaterTests.cs" />
@@ -145,10 +150,13 @@
     <Compile Include="Unit\Tools\NUnit\NUnitRunnerTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitSettingsTests.cs" />
     <Compile Include="Unit\Tools\OctopusDeploy\OctoCreateReleaseTests.cs" />
+    <Compile Include="Unit\Tools\Roundhouse\RoundhouseRunnerTests.cs" />
     <Compile Include="Unit\Tools\SignTool\SignToolResolverTests.cs" />
     <Compile Include="Unit\Tools\SignTool\SignToolSignRunnerTests.cs" />
     <Compile Include="Unit\Tools\WiX\LightRunnerTests.cs" />
     <Compile Include="Unit\Tools\WiX\CandleRunnerTests.cs" />
+    <Compile Include="Unit\Tools\XBuild\XBuildSettingsExtensionsTests.cs" />
+    <Compile Include="Unit\Tools\XBuild\XBuildSettingsTests.cs" />
     <Compile Include="Unit\Tools\XUnit\XUnit2SettingsTests.cs" />
     <Compile Include="Unit\Tools\XUnit\XUnit2RunnerTests.cs" />
     <Compile Include="Unit\Tools\XUnit\XUnitRunnerTests.cs" />
