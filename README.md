@@ -13,23 +13,16 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
 
 ##Table of contents
 
-1. [Roadmap](https://github.com/cake-build/cake#roadmap)
-2. [Implemented functionality](https://github.com/cake-build/cake#implemented-functionality)
-3. [Example](https://github.com/cake-build/cake#example)
+1. [Implemented functionality](https://github.com/cake-build/cake#implemented-functionality)
+2. [Example](https://github.com/cake-build/cake#example)
     - [Download Cake](https://github.com/cake-build/cake#1-download-cake)
     - [Create build script](https://github.com/cake-build/cake#2-create-build-script)
     - [Run build script](https://github.com/cake-build/cake#3-run-build-script)
-4. [Documentation](https://github.com/cake-build/cake#documentation)
-5. [Bootstrapper](https://github.com/cake-build/cake#bootstrapper)
-6. [Contributing](https://github.com/cake-build/cake#contributing)
-7. [External add-ons](https://github.com/cake-build/cake#external-add-ons)
-8. [License](https://github.com/cake-build/cake#license)
-
-##Roadmap
-
-The Cake engine is pretty much done, but there are still improvements to be made. I'm still experimenting with the script API to make it as easy and intuitive as possible, so expect changes along the road.
-
-A roadmap can be found [here](https://github.com/cake-build/cake/milestones).
+3. [Documentation](https://github.com/cake-build/cake#documentation)
+4. [Bootstrapper](https://github.com/cake-build/cake#bootstrapper)
+5. [Contributing](https://github.com/cake-build/cake#contributing)
+6. [External add-ons](https://github.com/cake-build/cake#external-add-ons)
+7. [License](https://github.com/cake-build/cake#license)
 
 ##Implemented functionality
 
@@ -130,7 +123,7 @@ RunTarget(target);
 C:\Project\Tools\Cake> Cake.exe ../../build.cake -verbosity=verbose -target=Build
 ```
 
-You could of course use a [bootstrapper script](https://github.com/cake-build/cake/blob/develop/build.ps1) like we do in the Cake repository.
+You could of course use a [bootstrapper script](https://github.com/cake-build/cake/blob/develop/build.ps1) for this if you want to.
 
 ## Documentation
 
