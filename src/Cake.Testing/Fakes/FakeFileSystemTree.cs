@@ -47,7 +47,7 @@ namespace Cake.Testing.Fakes
         public FakeDirectory CreateDirectory(FakeDirectory directory)
         {
             var path = directory.Path;
-            var queue = GetSegmentQueue(path);
+            var queue = new Queue<string>(path.Segments);
 
             FakeDirectory current = null;
             var children = _root.Content;
@@ -170,7 +170,7 @@ namespace Cake.Testing.Fakes
                 return _root;
             }
 
-            var queue = GetSegmentQueue(path);
+            var queue = new Queue<string>(path.Segments);
 
             FakeDirectory current = null;
             var children = _root.Content;
@@ -257,19 +257,6 @@ namespace Cake.Testing.Fakes
             
             // Delete the original file.
             fakeFile.Delete();
-        }
-
-        private static Queue<string> GetSegmentQueue(Path path)
-        {
-            // Workaround for absolute paths being relative.
-            // ISSUE: https://github.com/cake-build/cake/issues/279
-            var segments = new List<string>(path.Segments);
-            if (!path.IsRelative && path.FullPath.StartsWith("/"))
-            {
-                segments[0] = string.Concat("/", segments[0]);
-            }
-            var queue = new Queue<string>(segments);
-            return queue;
         }
     }
 }
