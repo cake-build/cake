@@ -35,7 +35,7 @@ namespace Cake.Testing.Fakes
         /// <summary>
         /// Creates a Windows environment.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A Windows environment.</returns>
         public static FakeEnvironment CreateWindowsEnvironment()
         {
             var environment = new FakeEnvironment(false);
