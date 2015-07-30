@@ -211,8 +211,6 @@
     <Compile Include="Tools\DotNetBuildSettings.cs" />
     <Compile Include="Tools\DotNetBuildAliases.cs" />
     <Compile Include="Tools\ILRepack\ILRepackSettings.cs" />
-    <Compile Include="Tools\ILRepack\TargetKind.cs" />
-    <Compile Include="Tools\ILRepack\TargetPlatformVersion.cs" />
     <Compile Include="Tools\ILRepack\ILRepackRunner.cs" />
     <Compile Include="Tools\ILRepack\ILRepackAliases.cs" />
   </ItemGroup>

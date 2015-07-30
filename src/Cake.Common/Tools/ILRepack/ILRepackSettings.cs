@@ -99,13 +99,13 @@ namespace Cake.Common.Tools.ILRepack
         /// Gets or sets the specify target assembly kind (library, exe, winexe supported, default is same as first assembly)
         /// </summary>
         /// <value>The kind of the target assembly to create.</value>
-        public TargetKind TargetKind { get; set; }
+        public ILMerge.TargetKind TargetKind { get; set; }
 
         /// <summary>
         /// Gets or sets the target platform (v1, v1.1, v2, v4 supported)
         /// </summary>
         /// <value>The target platform.</value>
-        public TargetPlatformVersion? TargetPlatform { get; set; }
+        public ILMerge.TargetPlatformVersion? TargetPlatform { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to merge XML documentation as well

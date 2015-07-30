@@ -121,7 +121,7 @@ namespace Cake.Common.Tools.ILRepack
                 builder.Append("/allowmultiple");
             }
 
-            if (settings.TargetKind != TargetKind.Default)
+            if (settings.TargetKind != ILMerge.TargetKind.Default)
             {
                 builder.Append(GetTargetKindParameter(settings));
             }
@@ -214,32 +214,32 @@ namespace Cake.Common.Tools.ILRepack
             return string.Concat("/target:", GetTargetKindName(settings.TargetKind).Quote());
         }
 
-        private static string GetTargetPlatformString(TargetPlatformVersion version)
+        private static string GetTargetPlatformString(ILMerge.TargetPlatformVersion version)
         {
             switch (version)
             {
-                case TargetPlatformVersion.v1:
+                case ILMerge.TargetPlatformVersion.v1:
                     return "v1";
-                case TargetPlatformVersion.v11:
+                case ILMerge.TargetPlatformVersion.v11:
                     return "v1.1";
-                case TargetPlatformVersion.v2:
+                case ILMerge.TargetPlatformVersion.v2:
                     return "v2";
-                case TargetPlatformVersion.v4:
+                case ILMerge.TargetPlatformVersion.v4:
                     return "v4";
                 default:
                     throw new NotSupportedException("The provided ILRepack target platform is not valid.");
             }
         }
 
-        private static string GetTargetKindName(TargetKind kind)
+        private static string GetTargetKindName(ILMerge.TargetKind kind)
         {
             switch (kind)
             {
-                case TargetKind.Dll:
+                case ILMerge.TargetKind.Dll:
                     return "library";
-                case TargetKind.Exe:
+                case ILMerge.TargetKind.Exe:
                     return "exe";
-                case TargetKind.WinExe:
+                case ILMerge.TargetKind.WinExe:
                     return "winexe";
                 default:
                     throw new NotSupportedException("The provided ILRepack target kind is not valid.");
