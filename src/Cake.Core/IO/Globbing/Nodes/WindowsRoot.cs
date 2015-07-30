@@ -5,7 +5,7 @@
 
 namespace Cake.Core.IO.Globbing.Nodes
 {
-    internal sealed class WindowsRoot : Node
+    internal sealed class WindowsRoot : GlobNode
     {
         private readonly string _drive;
 
@@ -19,14 +19,19 @@ namespace Cake.Core.IO.Globbing.Nodes
             get { return _drive; }
         }
 
-        public override bool IsWildcard
-        {
-            get { return false; }
-        }
-
         public override string Render()
         {
             return Drive + ":";
+        }
+
+        public override void Accept(GlobVisitor visitor, GlobVisitorContext context)
+        {
+            visitor.VisitWindowsRoot(this, context);
+        }
+
+        public override string ToString()
+        {
+            return string.Concat(_drive ?? "?", ":");
         }
     }
 }

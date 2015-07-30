@@ -9,20 +9,24 @@ using System.Text.RegularExpressions;
 
 namespace Cake.Core.IO.Globbing
 {
-    internal sealed class Scanner
+    internal sealed class GlobTokenizer
     {
         private readonly string _pattern;
         private readonly Regex _identifierRegex;
         private int _sourceIndex;
         private char _currentCharacter;
         private string _currentContent;
-        private TokenKind _currentKind;
+        private GlobTokenKind _currentKind;
 
-        public Scanner(string pattern)
+        public GlobTokenizer(string pattern)
         {
             if (pattern == null)
             {
                 throw new ArgumentNullException("pattern");
+            }
+            if (string.IsNullOrWhiteSpace(pattern))
+            {
+                throw new ArgumentException("Pattern cannot be empty.", "pattern");
             }
             _pattern = pattern;
             _sourceIndex = 0;
@@ -31,15 +35,15 @@ namespace Cake.Core.IO.Globbing
             _identifierRegex = new Regex("^[0-9a-zA-Z\\. _-]$", RegexOptions.Compiled);
         }
 
-        public Token Scan()
+        public GlobToken Scan()
         {
             _currentContent = string.Empty;
             _currentKind = ScanToken();
 
-            return new Token(_currentKind, _currentContent);
+            return new GlobToken(_currentKind, _currentContent);
         }
 
-        public Token Peek()
+        public GlobToken Peek()
         {
             var index = _sourceIndex;
             var token = Scan();
@@ -48,7 +52,7 @@ namespace Cake.Core.IO.Globbing
             return token;
         }
 
-        private TokenKind ScanToken()
+        private GlobTokenKind ScanToken()
         {
             if (IsAlphaNumberic(_currentCharacter))
             {
@@ -56,7 +60,7 @@ namespace Cake.Core.IO.Globbing
                 {
                     TakeCharacter();
                 }
-                return TokenKind.Identifier;
+                return GlobTokenKind.Identifier;
             }
 
             if (_currentCharacter == '*')
@@ -65,28 +69,28 @@ namespace Cake.Core.IO.Globbing
                 if (_currentCharacter == '*')
                 {
                     TakeCharacter();
-                    return TokenKind.DirectoryWildcard;
+                    return GlobTokenKind.DirectoryWildcard;
                 }
-                return TokenKind.Wildcard;
+                return GlobTokenKind.Wildcard;
             }
             if (_currentCharacter == '?')
             {
                 TakeCharacter();
-                return TokenKind.CharacterWildcard;
+                return GlobTokenKind.CharacterWildcard;
             }
             if (_currentCharacter == '/' || _currentCharacter == '\\')
             {
                 TakeCharacter();
-                return TokenKind.PathSeparator;
+                return GlobTokenKind.PathSeparator;
             }
             if (_currentCharacter == ':')
             {
                 TakeCharacter();
-                return TokenKind.WindowsRoot;
+                return GlobTokenKind.WindowsRoot;
             }
             if (_currentCharacter == '\0')
             {
-                return TokenKind.EndOfText;
+                return GlobTokenKind.EndOfText;
             }
 
             throw new NotSupportedException("Unknown token");

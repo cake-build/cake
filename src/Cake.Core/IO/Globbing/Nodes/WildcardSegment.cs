@@ -5,21 +5,21 @@
 
 namespace Cake.Core.IO.Globbing.Nodes
 {
-    internal sealed class UnixRoot : GlobNode
+    internal sealed class WildcardSegment : GlobNode
     {
         public override string Render()
         {
-            return string.Empty;
+            return ".*";
         }
 
         public override void Accept(GlobVisitor visitor, GlobVisitorContext context)
         {
-            visitor.VisitUnixRoot(this, context);
+            visitor.VisitWildcardSegmentNode(this, context);
         }
 
         public override string ToString()
         {
-            return "$";
+            return "*";
         }
     }
 }

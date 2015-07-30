@@ -5,18 +5,18 @@
 
 namespace Cake.Core.IO.Globbing
 {
-    internal sealed class Token
+    internal sealed class GlobToken
     {
-        private readonly TokenKind _kind;
+        private readonly GlobTokenKind _kind;
         private readonly string _value;
 
-        public Token(TokenKind kind, string value)
+        public GlobToken(GlobTokenKind kind, string value)
         {
             _kind = kind;
             _value = value;
         }
 
-        public TokenKind Kind
+        public GlobTokenKind Kind
         {
             get { return _kind; }
         }

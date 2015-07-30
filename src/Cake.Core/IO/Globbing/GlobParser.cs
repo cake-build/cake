@@ -5,57 +5,58 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cake.Core.IO.Globbing.Nodes;
 
 namespace Cake.Core.IO.Globbing
 {
-    internal sealed class Parser
+    internal sealed class GlobParser
     {
-        private readonly Scanner _scanner;
+        private readonly GlobTokenizer _tokenizer;
         private readonly ICakeEnvironment _environment;
-        private Token _currentToken;
+        private GlobToken _currentToken;
 
-        public Parser(Scanner scanner, ICakeEnvironment environment)
+        public GlobParser(GlobTokenizer tokenizer, ICakeEnvironment environment)
         {
-            _scanner = scanner;
+            _tokenizer = tokenizer;
             _environment = environment;
             _currentToken = null;
         }
 
-        public List<Node> Parse()
+        public GlobNode Parse()
         {
             Accept();
 
             // Parse the root.
-            var items = new List<Node> { ParseRoot() };
+            var items = new List<GlobNode> { ParseRoot() };
             if (items.Count == 1 && items[0] is RelativeRoot)
             {
                 items.Add(ParseSegment());
             }
 
             // Parse all path segments.
-            while (_currentToken.Kind == TokenKind.PathSeparator)
+            while (_currentToken.Kind == GlobTokenKind.PathSeparator)
             {
                 Accept();
                 items.Add(ParseSegment());
             }
 
             // Not an end of text token?
-            if (_currentToken.Kind != TokenKind.EndOfText)
+            if (_currentToken.Kind != GlobTokenKind.EndOfText)
             {
                 throw new InvalidOperationException("Expected EOT");
             }
 
             // Return the path node.
-            return items;
+            return GlobNodeRewriter.Rewrite(items);
         }
 
-        private Node ParseRoot()
+        private GlobNode ParseRoot()
         {
             if (_environment.IsUnix())
             {
                 // Starts with a separator?
-                if (_currentToken.Kind == TokenKind.PathSeparator)
+                if (_currentToken.Kind == GlobTokenKind.PathSeparator)
                 {
                     return new UnixRoot();
                 }
@@ -63,9 +64,9 @@ namespace Cake.Core.IO.Globbing
             else
             {
                 // Starts with a separator?
-                if (_currentToken.Kind == TokenKind.PathSeparator)
+                if (_currentToken.Kind == GlobTokenKind.PathSeparator)
                 {
-                    if (_scanner.Peek().Kind == TokenKind.PathSeparator)
+                    if (_tokenizer.Peek().Kind == GlobTokenKind.PathSeparator)
                     {
                         throw new NotSupportedException("UNC paths are not supported.");
                     }
@@ -73,103 +74,104 @@ namespace Cake.Core.IO.Globbing
                 }
 
                 // Is this a drive?
-                if (_currentToken.Kind == TokenKind.Identifier &&
+                if (_currentToken.Kind == GlobTokenKind.Identifier &&
                     _currentToken.Value.Length == 1 &&
-                    _scanner.Peek().Kind == TokenKind.WindowsRoot)
+                    _tokenizer.Peek().Kind == GlobTokenKind.WindowsRoot)
                 {
                     var identifier = ParseIdentifier();
-                    Accept(TokenKind.WindowsRoot);
-                    return new WindowsRoot(identifier.Identifier);
+                    Accept(GlobTokenKind.WindowsRoot);
+                    return new WindowsRoot(identifier.Value);
                 }
             }
 
             // Starts with an identifier?
-            if (_currentToken.Kind == TokenKind.Identifier)
+            if (_currentToken.Kind == GlobTokenKind.Identifier)
             {
                 // Is the identifer indicating a current directory?
                 if (_currentToken.Value == ".")
                 {
                     Accept();
-                    if (_currentToken.Kind != TokenKind.PathSeparator)
+                    if (_currentToken.Kind != GlobTokenKind.PathSeparator)
                     {
                         throw new InvalidOperationException();
                     }
                     Accept();
                 }
-                return new RelativeRoot();
             }
 
-            throw new NotImplementedException();
+            return new RelativeRoot();
         }
 
-        private Node ParseSegment()
+        private GlobNode ParseSegment()
         {
-            if (_currentToken.Kind == TokenKind.DirectoryWildcard)
+            if (_currentToken.Kind == GlobTokenKind.DirectoryWildcard)
             {
                 Accept();
-                return new WildcardSegmentNode();
+                return new RecursiveWildcardSegment();
             }
 
-            var items = new List<Node>();
+            var items = new List<GlobToken>();
             while (true)
             {
                 switch (_currentToken.Kind)
                 {
-                    case TokenKind.Identifier:
-                    case TokenKind.CharacterWildcard:
-                    case TokenKind.Wildcard:
+                    case GlobTokenKind.Identifier:
+                    case GlobTokenKind.CharacterWildcard:
+                    case GlobTokenKind.Wildcard:
                         items.Add(ParseSubSegment());
                         continue;
                 }
                 break;
             }
-            return new SegmentNode(items);
+            return new PathSegment(items);
         }
 
-        private Node ParseSubSegment()
+        private GlobToken ParseSubSegment()
         {
             switch (_currentToken.Kind)
             {
-                case TokenKind.Identifier:
+                case GlobTokenKind.Identifier:
                     return ParseIdentifier();
-                case TokenKind.CharacterWildcard:
-                case TokenKind.Wildcard:
-                    return ParseWildcard(_currentToken.Kind);
+                case GlobTokenKind.CharacterWildcard:
+                case GlobTokenKind.Wildcard:
+                    return ParseWildcard();
             }
 
             throw new NotSupportedException("Unable to parse sub segment.");
         }
 
-        private IdentifierNode ParseIdentifier()
+        private GlobToken ParseIdentifier()
         {
-            if (_currentToken.Kind == TokenKind.Identifier)
-            {
-                var identifier = new IdentifierNode(_currentToken.Value);
-                Accept();
-                return identifier;
-            }
-            throw new InvalidOperationException("Unable to parse identifier.");
+            var token = _currentToken;
+            Accept(GlobTokenKind.Identifier);
+            return token;
         }
 
-        private Node ParseWildcard(TokenKind kind)
+        private GlobToken ParseWildcard()
         {
-            Accept(kind);
-            return new WildcardNode(kind);
+            var token = _currentToken;
+            Accept(GlobTokenKind.Wildcard, GlobTokenKind.CharacterWildcard);
+            return token;
         }
 
-        private void Accept(TokenKind kind)
+        private void Accept()
         {
-            if (_currentToken.Kind == kind)
+            _currentToken = _tokenizer.Scan();
+        }
+
+        private void Accept(GlobTokenKind kind)
+        {
+            Accept(new[] { kind });
+        }
+
+        private void Accept(params GlobTokenKind[] kind)
+        {
+            if (kind.Any(k => k == _currentToken.Kind))
             {
                 Accept();
                 return;
             }
             throw new InvalidOperationException("Unexpected token kind.");
-        }
-
-        private void Accept()
-        {
-            _currentToken = _scanner.Scan();
         }
     }
 }

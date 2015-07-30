@@ -9,37 +9,37 @@ namespace Cake.Core.Tests.Fixtures
         public FakeFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
 
-        public GlobberFixture()
-            : this(false)
+        public GlobberFixture(bool windows = false)
         {
-        }
-
-        public GlobberFixture(bool isFileSystemCaseSensitive)
-        {
-            Environment = Substitute.For<ICakeEnvironment>();
-            Environment.IsUnix().Returns(isFileSystemCaseSensitive);
-            Environment.WorkingDirectory.Returns("/Temp");
+            Environment = windows ? FakeEnvironment.CreateWindowsEnvironment() : FakeEnvironment.CreateUnixEnvironment();
+            Environment.WorkingDirectory = new DirectoryPath("/Temp");
 
             FileSystem = new FakeFileSystem(Environment);
+            
             FileSystem.CreateDirectory("/Temp");
-            FileSystem.CreateDirectory("/Temp/Hello");
             FileSystem.CreateDirectory("/Temp/Hello/World");
             FileSystem.CreateDirectory("/Temp/Goodbye");
+
             FileSystem.CreateFile("/Presentation.ppt");
             FileSystem.CreateFile("/Budget.xlsx");
             FileSystem.CreateFile("/Text.txt");
-            FileSystem.CreateFile("/Temp");
+            FileSystem.CreateFile("/Working/Text.txt");
+
             FileSystem.CreateFile("/Temp/Hello/World/Text.txt");
             FileSystem.CreateFile("/Temp/Hello/World/Picture.png");
+           
             FileSystem.CreateFile("/Temp/Goodbye/OtherText.txt");
             FileSystem.CreateFile("/Temp/Goodbye/OtherPicture.png");
-            FileSystem.CreateFile("/Working/Text.txt");
-            FileSystem.CreateFile("C:/Temp/Hello/World/Text.txt");
+
+            if (windows)
+            {
+                FileSystem.CreateFile("C:/Temp/Hello/World/Text.txt");
+            }
         }
 
         public void SetWorkingDirectory(DirectoryPath path)
         {
-            Environment.WorkingDirectory.Returns(path);
+            Environment.WorkingDirectory = path;
         }
 
         public Globber CreateGlobber()

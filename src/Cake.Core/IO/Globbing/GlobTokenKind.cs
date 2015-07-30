@@ -5,7 +5,7 @@
 
 namespace Cake.Core.IO.Globbing
 {
-    internal enum TokenKind
+    internal enum GlobTokenKind
     {
         Wildcard,
         CharacterWildcard,

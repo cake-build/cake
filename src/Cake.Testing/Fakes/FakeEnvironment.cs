@@ -33,6 +33,17 @@ namespace Cake.Testing.Fakes
         }
 
         /// <summary>
+        /// Creates a Windows environment.
+        /// </summary>
+        /// <returns></returns>
+        public static FakeEnvironment CreateWindowsEnvironment()
+        {
+            var environment = new FakeEnvironment(false);
+            environment.WorkingDirectory = new DirectoryPath("C:/Working");
+            return environment;
+        }
+
+        /// <summary>
         /// Gets whether or not the current operative system is 64 bit.
         /// </summary>
         /// <returns>Whether or not the current operative system is 64 bit.</returns>

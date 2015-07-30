@@ -5,16 +5,21 @@
 
 namespace Cake.Core.IO.Globbing.Nodes
 {
-    internal sealed class RelativeRoot : Node
+    internal sealed class RelativeRoot : GlobNode
     {
-        public override bool IsWildcard
-        {
-            get { return false; }
-        }
-
         public override string Render()
         {
             return string.Empty;
+        }
+
+        public override void Accept(GlobVisitor globber, GlobVisitorContext context)
+        {
+            globber.VisitRelativeRoot(this, context);
+        }
+
+        public override string ToString()
+        {
+            return "./";
         }
     }
 }
