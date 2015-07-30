@@ -210,6 +210,9 @@
     <Compile Include="Tools\XBuild\XBuildResolver.cs" />
     <Compile Include="Tools\DotNetBuildSettings.cs" />
     <Compile Include="Tools\DotNetBuildAliases.cs" />
+    <Compile Include="Tools\ILRepack\ILRepackSettings.cs" />
+    <Compile Include="Tools\ILRepack\ILRepackRunner.cs" />
+    <Compile Include="Tools\ILRepack\ILRepackAliases.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
