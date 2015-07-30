@@ -118,6 +118,13 @@ namespace Cake.Common.Tools.NuGet.Pack
                 builder.Append("-Symbols");
             }
 
+            // Verbosity
+            if (settings.Verbosity != null)
+            {
+                builder.Append("-Verbosity");
+                builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
+            }
+
             return builder;
         }
 
