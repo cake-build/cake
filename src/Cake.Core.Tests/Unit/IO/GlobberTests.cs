@@ -74,12 +74,15 @@ namespace Cake.Core.Tests.Unit.IO
                 var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Temp/**/*.txt").ToArray();
+                var result = globber.Match("/Working/**/*.c").ToArray();
 
                 // Then
-                Assert.Equal(2, result.Length);
-                Assert.ContainsFilePath(result, "/Temp/Hello/World/Text.txt");
-                Assert.ContainsFilePath(result, "/Temp/Goodbye/OtherText.txt");
+                Assert.Equal(5, result.Length);
+                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                Assert.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
+                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
+                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Baz/Qux.c");
+                Assert.ContainsFilePath(result, "/Working/Bar/Qux.c");
             }
 
             [Fact]
@@ -90,11 +93,11 @@ namespace Cake.Core.Tests.Unit.IO
                 var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("Hello/World/Text.txt").ToArray();
+                var result = globber.Match("Foo/Bar/Qux.c").ToArray();
 
                 // Then
                 Assert.Equal(1, result.Length);
-                Assert.ContainsFilePath(result, "/Temp/Hello/World/Text.txt");
+                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
             }
 
             [Fact]
@@ -105,11 +108,11 @@ namespace Cake.Core.Tests.Unit.IO
                 var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Temp/Hello/World/Text.txt").ToArray();
+                var result = globber.Match("/Working/Foo/Bar/Qux.c").ToArray();
 
                 // Then
                 Assert.Equal(1, result.Length);
-                Assert.ContainsFilePath(result, "C:/Temp/Hello/World/Text.txt");
+                Assert.ContainsFilePath(result, "C:/Working/Foo/Bar/Qux.c");
             }
 
             [Fact]
@@ -120,7 +123,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var globber = fixture.CreateGlobber();
 
                 // When
-                var result = Record.Exception(() => globber.Match("//Hello/World/Text.txt"));
+                var result = Record.Exception(() => globber.Match("//Foo/Bar/Qux.c"));
 
                 // Then
                 Assert.IsType<NotSupportedException>(result);
@@ -135,12 +138,12 @@ namespace Cake.Core.Tests.Unit.IO
                 var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("C:/Temp/**/text.txt").ToArray();
+                var result = globber.Match("C:/Working/**/qux.c").ToArray();
 
                 // Then
                 Assert.Equal(1, result.Length);
                 Assert.IsType<FilePath>(result[0]);
-                Assert.ContainsFilePath(result, "C:/Temp/Hello/World/Text.txt");
+                Assert.ContainsFilePath(result, "C:/Working/Foo/Bar/Qux.c");
             }
 
             [Fact]
@@ -151,12 +154,12 @@ namespace Cake.Core.Tests.Unit.IO
                 var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Temp/Hello/World/Text.txt").ToArray();
+                var result = globber.Match("/Working/Foo/Bar/Qux.c").ToArray();
 
                 // Then
                 Assert.Equal(1, result.Length);
                 Assert.IsType<FilePath>(result[0]);
-                Assert.ContainsFilePath(result, "/Temp/Hello/World/Text.txt");
+                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
             }
 
             [Fact]
@@ -167,11 +170,11 @@ namespace Cake.Core.Tests.Unit.IO
                 var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Temp/Hello/World").ToArray();
+                var result = globber.Match("/Working/Foo/Bar").ToArray();
 
                 // Then
                 Assert.Equal(1, result.Length);
-                Assert.ContainsDirectoryPath(result, "/Temp/Hello/World");
+                Assert.ContainsDirectoryPath(result, "/Working/Foo/Bar");
             }
 
             [Fact]
@@ -179,15 +182,15 @@ namespace Cake.Core.Tests.Unit.IO
             {
                 // Given
                 var fixture = new GlobberFixture();
-                fixture.SetWorkingDirectory("/Temp/Hello");
+                fixture.SetWorkingDirectory("/Working/Foo");
                 var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("./World/Text.txt").ToArray();
+                var result = globber.Match("./Bar/Qux.c").ToArray();
 
                 // Then
                 Assert.Equal(1, result.Length);
-                Assert.ContainsFilePath(result, "/Temp/Hello/World/Text.txt");
+                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
             }
 
             [Fact]
@@ -195,15 +198,15 @@ namespace Cake.Core.Tests.Unit.IO
             {
                 // Given
                 var fixture = new GlobberFixture();
-                fixture.SetWorkingDirectory("/Temp/Hello");
+                fixture.SetWorkingDirectory("/Working/Foo");
                 var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("./World").ToArray();
+                var result = globber.Match("./Bar").ToArray();
 
                 // Then
                 Assert.Equal(1, result.Length);
-                Assert.ContainsDirectoryPath(result, "/Temp/Hello/World");
+                Assert.ContainsDirectoryPath(result, "/Working/Foo/Bar");
             }
 
             [Fact]
@@ -215,12 +218,12 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // When
                 var result = globber.Match(
-                    "./**/*.txt",
-                    predicate => predicate.Path is DirectoryPath || predicate.Path.FullPath == "/Temp/Hello/World/Text.txt").ToArray();
+                    "./**/*.c",
+                    predicate => predicate.Path is DirectoryPath || predicate.Path.FullPath == "/Working/Foo/Bar/Qux.c").ToArray();
 
                 // Then
                 Assert.Equal(1, result.Length);
-                Assert.ContainsFilePath(result, "/Temp/Hello/World/Text.txt");
+                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
             }
 
             [Fact]
@@ -231,17 +234,22 @@ namespace Cake.Core.Tests.Unit.IO
                 var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Temp/**/*").ToArray();
+                var result = globber.Match("/Working/**/*").ToArray();
 
                 // Then
-                Assert.Equal(7, result.Length);
-                Assert.ContainsDirectoryPath(result, "/Temp/Hello");
-                Assert.ContainsDirectoryPath(result, "/Temp/Hello/World");
-                Assert.ContainsDirectoryPath(result, "/Temp/Goodbye");
-                Assert.ContainsFilePath(result, "/Temp/Hello/World/Text.txt");
-                Assert.ContainsFilePath(result, "/Temp/Hello/World/Picture.png");
-                Assert.ContainsFilePath(result, "/Temp/Goodbye/OtherText.txt");
-                Assert.ContainsFilePath(result, "/Temp/Goodbye/OtherPicture.png");
+                Assert.Equal(12, result.Length);
+                Assert.ContainsDirectoryPath(result, "/Working/Foo");
+                Assert.ContainsDirectoryPath(result, "/Working/Foo/Bar");
+                Assert.ContainsDirectoryPath(result, "/Working/Foo/Baz");
+                Assert.ContainsDirectoryPath(result, "/Working/Foo/Bar/Baz");
+                Assert.ContainsDirectoryPath(result, "/Working/Bar");
+                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
+                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.h");
+                Assert.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
+                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Baz/Qux.c");
+                Assert.ContainsFilePath(result, "/Working/Bar/Qux.c");
+                Assert.ContainsFilePath(result, "/Working/Bar/Qux.h");
             }
 
             [Fact]
@@ -252,11 +260,12 @@ namespace Cake.Core.Tests.Unit.IO
                 var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Temp/Hello/*/Text.txt").ToArray();
+                var result = globber.Match("/Working/Foo/*/Qux.c").ToArray();
 
                 // Then
-                Assert.Equal(1, result.Length);
-                Assert.ContainsFilePath(result, "/Temp/Hello/World/Text.txt");
+                Assert.Equal(2, result.Length);
+                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                Assert.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
             }
 
             [Fact]
@@ -267,11 +276,12 @@ namespace Cake.Core.Tests.Unit.IO
                 var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Temp/**/Te?t.txt").ToArray();
+                var result = globber.Match("/Working/Foo/Bar/Q?x.c").ToArray();
 
                 // Then
-                Assert.Equal(1, result.Length);
-                Assert.ContainsFilePath(result, "/Temp/Hello/World/Text.txt");
+                Assert.Equal(2, result.Length);
+                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
             }
 
             [Fact]
@@ -282,11 +292,12 @@ namespace Cake.Core.Tests.Unit.IO
                 var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Temp/Hello/W???d/Text.txt").ToArray();
+                var result = globber.Match("/Working/Foo/Ba?/Qux.c").ToArray();
 
                 // Then
-                Assert.Equal(1, result.Length);
-                Assert.ContainsFilePath(result, "/Temp/Hello/World/Text.txt");
+                Assert.Equal(2, result.Length);
+                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                Assert.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
             }
 
             [Fact]
@@ -297,12 +308,15 @@ namespace Cake.Core.Tests.Unit.IO
                 var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Temp/**/*.txt").ToArray();
+                var result = globber.Match("/Working/**/*.c").ToArray();
 
                 // Then
-                Assert.Equal(2, result.Length);
-                Assert.ContainsFilePath(result, "/Temp/Hello/World/Text.txt");
-                Assert.ContainsFilePath(result, "/Temp/Goodbye/OtherText.txt");
+                Assert.Equal(5, result.Length);
+                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
+                Assert.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
+                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Baz/Qux.c");
+                Assert.ContainsFilePath(result, "/Working/Bar/Qux.c");
             }
 
             [Fact]
@@ -313,14 +327,16 @@ namespace Cake.Core.Tests.Unit.IO
                 var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Temp/**").ToArray();
+                var result = globber.Match("/Working/**").ToArray();
 
                 // Then
-                Assert.Equal(4, result.Length);
-                Assert.ContainsDirectoryPath(result, "/Temp");
-                Assert.ContainsDirectoryPath(result, "/Temp/Hello");
-                Assert.ContainsDirectoryPath(result, "/Temp/Hello/World");
-                Assert.ContainsDirectoryPath(result, "/Temp/Goodbye");
+                Assert.Equal(6, result.Length);
+                Assert.ContainsDirectoryPath(result, "/Working");
+                Assert.ContainsDirectoryPath(result, "/Working/Foo");
+                Assert.ContainsDirectoryPath(result, "/Working/Foo/Bar");
+                Assert.ContainsDirectoryPath(result, "/Working/Foo/Baz");
+                Assert.ContainsDirectoryPath(result, "/Working/Foo/Bar/Baz");
+                Assert.ContainsDirectoryPath(result, "/Working/Bar");
             }
 
             [Fact]
@@ -331,11 +347,11 @@ namespace Cake.Core.Tests.Unit.IO
                 var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Working/**/Text.txt").ToArray();
+                var result = globber.Match("/Foo/**/Bar.baz").ToArray();
 
                 // Then
                 Assert.Equal(1, result.Length);
-                Assert.ContainsFilePath(result, "/Working/Text.txt");
+                Assert.ContainsFilePath(result, "/Foo/Bar.baz");
             }
 
             [Fact]
@@ -346,11 +362,11 @@ namespace Cake.Core.Tests.Unit.IO
                 var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Working/**/NotWorking").ToArray();
+                var result = globber.Match("/Foo/**/Bar").ToArray();
 
                 // Then
                 Assert.Equal(1, result.Length);
-                Assert.ContainsDirectoryPath(result, "/Working/NotWorking");
+                Assert.ContainsDirectoryPath(result, "/Foo/Bar");
             }
         }
     }

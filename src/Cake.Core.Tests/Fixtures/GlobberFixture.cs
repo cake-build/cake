@@ -21,30 +21,33 @@ namespace Cake.Core.Tests.Fixtures
 
             if (windows)
             {
-                Environment.WorkingDirectory.Returns("C:/Temp");
+                Environment.WorkingDirectory.Returns("C:/Working");
             }
             else
             {
-                Environment.WorkingDirectory.Returns("/Temp");
+                Environment.WorkingDirectory.Returns("/Working");
             }
 
             FileSystem = new FakeFileSystem(Environment);
-            FileSystem.CreateDirectory("/Temp");
-            FileSystem.CreateDirectory("/Temp/Hello");
-            FileSystem.CreateDirectory("/Temp/Hello/World");
-            FileSystem.CreateDirectory("/Temp/Goodbye");
+
             FileSystem.CreateDirectory("/Working");
-            FileSystem.CreateDirectory("/Working/NotWorking");
-            FileSystem.CreateFile("/Presentation.ppt");
-            FileSystem.CreateFile("/Budget.xlsx");
-            FileSystem.CreateFile("/Text.txt");
-            FileSystem.CreateFile("/Temp");
-            FileSystem.CreateFile("/Temp/Hello/World/Text.txt");
-            FileSystem.CreateFile("/Temp/Hello/World/Picture.png");
-            FileSystem.CreateFile("/Temp/Goodbye/OtherText.txt");
-            FileSystem.CreateFile("/Temp/Goodbye/OtherPicture.png");
-            FileSystem.CreateFile("/Working/Text.txt");
-            FileSystem.CreateFile("C:/Temp/Hello/World/Text.txt");
+            FileSystem.CreateDirectory("/Working/Foo");
+            FileSystem.CreateDirectory("/Working/Foo/Bar");
+            FileSystem.CreateDirectory("/Working/Bar");
+
+            FileSystem.CreateFile("/Working");
+            FileSystem.CreateFile("/Working/Foo/Bar/Qux.c");
+            FileSystem.CreateFile("/Working/Foo/Bar/Qex.c");
+            FileSystem.CreateFile("/Working/Foo/Bar/Qux.h");
+            FileSystem.CreateFile("/Working/Foo/Baz/Qux.c");
+            FileSystem.CreateFile("/Working/Foo/Bar/Baz/Qux.c");
+            FileSystem.CreateFile("/Working/Bar/Qux.c");
+            FileSystem.CreateFile("/Working/Bar/Qux.h");
+
+            FileSystem.CreateFile("C:/Working/Foo/Bar/Qux.c");
+
+            FileSystem.CreateDirectory("/Foo/Bar");
+            FileSystem.CreateFile("/Foo/Bar.baz");
         }
 
         public void SetWorkingDirectory(DirectoryPath path)
