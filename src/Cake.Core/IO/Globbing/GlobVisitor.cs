@@ -7,14 +7,41 @@ namespace Cake.Core.IO.Globbing
 {
     internal sealed class GlobVisitor
     {
+        private readonly IFileSystem _fileSystem;
+        private readonly ICakeEnvironment _environment;
+
+        public GlobVisitor(IFileSystem fileSystem, ICakeEnvironment environment)
+        {
+            _fileSystem = fileSystem;
+            _environment = environment;
+        }
+
+        public IEnumerable<IFileSystemInfo> Walk(GlobNode node)
+        {
+            var context = new GlobVisitorContext(_fileSystem, _environment);
+            node.Accept(this, context);
+            return context.Results;
+        }
+
         public void VisitRecursiveWildcardSegment(RecursiveWildcardSegment node, GlobVisitorContext context)
         {
             var path = context.FileSystem.GetDirectory(context.FullPath);
             if (context.FileSystem.Exist(path.Path))
             {
-                foreach (var candidate in FindCandidates(path.Path, node, context, SearchScope.Recursive, includeFiles: false))
+                // Check if folders match
+                var candidates = new List<IFileSystemInfo>();
+                candidates.Add(path);
+                candidates.AddRange(FindCandidates(path.Path, node, context, SearchScope.Recursive, includeFiles: false));
+
+                foreach (var candidate in candidates)
                 {
-                    context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + 1));
+                    var pushed = false;
+                    if (context.FullPath != candidate.Path.FullPath)
+                    {
+                        context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + 1));
+                        pushed = true;
+                    }
+
                     if (node.Next != null)
                     {
                         node.Next.Accept(this, context);
@@ -23,7 +50,11 @@ namespace Cake.Core.IO.Globbing
                     {
                         context.AddResult(candidate);
                     }
-                    context.Pop();
+
+                    if (pushed)
+                    {
+                        context.Pop();
+                    }
                 }
             }
         }
@@ -102,11 +133,6 @@ namespace Cake.Core.IO.Globbing
             var path = context.FileSystem.GetDirectory(context.FullPath);
             if (context.FileSystem.Exist(path.Path))
             {
-                if (node.Next == null)
-                {
-                    context.AddResult(path);
-                }
-
                 foreach (var candidate in FindCandidates(path.Path, node, context, SearchScope.Current))
                 {
                     context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + 1));
@@ -140,7 +166,7 @@ namespace Cake.Core.IO.Globbing
             context.Pop();
         }
 
-        private static IReadOnlyList<IFileSystemInfo> FindCandidates(
+        private static List<IFileSystemInfo> FindCandidates(
             DirectoryPath path, 
             GlobNode node, 
             GlobVisitorContext context, 
@@ -149,6 +175,7 @@ namespace Cake.Core.IO.Globbing
             bool includeDirectories = true)
         {
             var result = new List<IFileSystemInfo>();
+
             var current = context.FileSystem.GetDirectory(path);
             var expression = new Regex("^" + node.Render() + "$", context.Options);
 
@@ -175,7 +202,7 @@ namespace Cake.Core.IO.Globbing
                     {
                         result.Add(file);
                     }
-                }                
+                }
             }
 
             return result;

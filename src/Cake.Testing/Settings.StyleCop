@@ -22,6 +22,7 @@
     <SourceFile>Guards.cs</SourceFile>
     <SourceFile>IdentityAsserts.cs</SourceFile>
     <SourceFile>NullAsserts.cs</SourceFile>
+    <SourceFile>PathAsserts.cs</SourceFile>
     <SourceFile>PropertyAsserts.cs</SourceFile>
     <SourceFile>RangeAsserts.cs</SourceFile>
     <SourceFile>Record.cs</SourceFile>

@@ -10,8 +10,9 @@ namespace Cake.Core.IO
     /// </summary>
     public sealed class Globber : IGlobber
     {
-        private readonly IFileSystem _fileSystem;
-        private readonly ICakeEnvironment _environment;
+        private readonly GlobParser _parser;
+        private readonly GlobVisitor _visitor;
+        private readonly PathComparer _comparer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Globber"/> class.
@@ -28,8 +29,10 @@ namespace Cake.Core.IO
             {
                 throw new ArgumentNullException("environment");
             }
-            _fileSystem = fileSystem;
-            _environment = environment;
+
+            _parser = new GlobParser(environment);
+            _visitor = new GlobVisitor(fileSystem, environment);
+            _comparer = new PathComparer(environment.IsUnix());
         }
 
         /// <summary>
@@ -42,19 +45,23 @@ namespace Cake.Core.IO
         /// </returns>
         public IEnumerable<Path> Match(string pattern, Func<IFileSystemInfo, bool> predicate)
         {
-            // Create the visitor and context.
-            var visitor = new GlobVisitor();
-            var context = new GlobVisitorContext(_fileSystem, _environment);
+            if (pattern == null)
+            {
+                throw new ArgumentNullException("pattern");
+            }
+            if (string.IsNullOrWhiteSpace(pattern))
+            {
+                return Enumerable.Empty<Path>();
+            }
 
-            // Parse the pattern.
-            var tree = new GlobParser(new GlobTokenizer(pattern), _environment).Parse();
+            // Parse the pattern into an AST.
+            var root = _parser.Parse(pattern);
             
             // Visit all nodes in the parsed patterns and filter the result.
-            tree.Accept(visitor, context);
-
-            // Get all unique items.
-            var result = context.Results.Where(predicate ?? (info => true)).Select(x => x.Path);
-            return new HashSet<Path>(result, new PathComparer(_environment.IsUnix()));
+            return _visitor.Walk(root)
+                .Where(predicate ?? (info => true))
+                .Select(x => x.Path)
+                .Distinct(_comparer);
         }
     }
 }

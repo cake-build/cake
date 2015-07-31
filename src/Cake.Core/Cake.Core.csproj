@@ -102,6 +102,7 @@
     <Compile Include="IO\Globber.cs" />
     <Compile Include="IO\Globbing\GlobNode.cs" />
     <Compile Include="IO\Globbing\GlobNodeRewriter.cs" />
+    <Compile Include="IO\Globbing\GlobParserContext.cs" />
     <Compile Include="IO\Globbing\Nodes\RecursiveWildcardSegment.cs" />
     <Compile Include="IO\Globbing\Nodes\RelativeRoot.cs" />
     <Compile Include="IO\Globbing\Nodes\UnixRoot.cs" />

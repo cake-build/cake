@@ -20,14 +20,6 @@ namespace Cake.Core.IO.Globbing
 
         public GlobTokenizer(string pattern)
         {
-            if (pattern == null)
-            {
-                throw new ArgumentNullException("pattern");
-            }
-            if (string.IsNullOrWhiteSpace(pattern))
-            {
-                throw new ArgumentException("Pattern cannot be empty.", "pattern");
-            }
             _pattern = pattern;
             _sourceIndex = 0;
             _currentContent = string.Empty;
