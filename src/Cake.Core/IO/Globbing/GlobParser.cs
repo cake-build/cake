@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cake.Core.IO.Globbing.Nodes;
 
 namespace Cake.Core.IO.Globbing
@@ -18,9 +19,9 @@ namespace Cake.Core.IO.Globbing
             _environment = environment;
         }
 
-        public GlobNode Parse(string pattern)
+        public GlobNode Parse(string pattern, bool caseSensitive)
         {
-            return Parse(new GlobParserContext(pattern));
+            return Parse(new GlobParserContext(pattern, caseSensitive));
         }
 
         private GlobNode Parse(GlobParserContext context)
@@ -70,7 +71,11 @@ namespace Cake.Core.IO.Globbing
                     {
                         throw new NotSupportedException("UNC paths are not supported.");
                     }
-                    return new WindowsRoot(string.Empty);
+
+                    // Get the drive from the working directory.
+                    var workingDirectory = _environment.WorkingDirectory;
+                    var root = workingDirectory.FullPath.Split(':').First();
+                    return new WindowsRoot(root);
                 }
 
                 // Is this a drive?
@@ -123,7 +128,7 @@ namespace Cake.Core.IO.Globbing
                 }
                 break;
             }
-            return new PathSegment(items);
+            return new PathSegment(items, context.Options);
         }
 
         private static GlobToken ParseSubSegment(GlobParserContext context)

@@ -3,6 +3,9 @@
 // https://github.com/kthompson/glob-js
 ///////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Diagnostics;
+
 namespace Cake.Core.IO.Globbing.Nodes
 {
     internal sealed class WindowsRoot : GlobNode
@@ -11,6 +14,10 @@ namespace Cake.Core.IO.Globbing.Nodes
 
         public WindowsRoot(string drive)
         {
+            if (drive == null)
+            {
+                throw new ArgumentNullException("drive");
+            }
             _drive = drive;
         }
 
@@ -19,19 +26,15 @@ namespace Cake.Core.IO.Globbing.Nodes
             get { return _drive; }
         }
 
-        public override string Render()
+        public override bool IsMatch(string value)
         {
-            return Drive + ":";
+            return false;
         }
 
+        [DebuggerStepThrough]
         public override void Accept(GlobVisitor visitor, GlobVisitorContext context)
         {
             visitor.VisitWindowsRoot(this, context);
-        }
-
-        public override string ToString()
-        {
-            return string.Concat(_drive ?? "?", ":");
         }
     }
 }

@@ -14,11 +14,19 @@ namespace Cake.Core.Tests.Fixtures
         {
         }
 
-        public GlobberFixture(bool isFileSystemCaseSensitive)
+        public GlobberFixture(bool windows)
         {
             Environment = Substitute.For<ICakeEnvironment>();
-            Environment.IsUnix().Returns(isFileSystemCaseSensitive);
-            Environment.WorkingDirectory.Returns("/Temp");
+            Environment.IsUnix().Returns(!windows);
+
+            if (windows)
+            {
+                Environment.WorkingDirectory.Returns("C:/Temp");
+            }
+            else
+            {
+                Environment.WorkingDirectory.Returns("/Temp");
+            }
 
             FileSystem = new FakeFileSystem(Environment);
             FileSystem.CreateDirectory("/Temp");

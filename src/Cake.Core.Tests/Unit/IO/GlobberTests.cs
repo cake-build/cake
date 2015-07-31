@@ -101,8 +101,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Will_Fix_Root_If_Drive_Is_Missing_By_Using_The_Drive_From_The_Working_Directory()
             {
                 // Given
-                var fixture = new GlobberFixture();
-                fixture.SetWorkingDirectory("C:/Working/");
+                var fixture = new GlobberFixture(windows: true);
                 var globber = fixture.CreateGlobber();
 
                 // When
@@ -117,7 +116,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Throw_If_Unc_Root_Was_Encountered()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = new GlobberFixture(windows: true);
                 var globber = fixture.CreateGlobber();
 
                 // When
@@ -132,16 +131,16 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Ignore_Case_Sensitivity_On_Case_Insensitive_Operative_System()
             {
                 // Given
-                var fixture = new GlobberFixture(isFileSystemCaseSensitive: false);
+                var fixture = new GlobberFixture(windows: true);
                 var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Temp/**/text.txt").ToArray();
+                var result = globber.Match("C:/Temp/**/text.txt").ToArray();
 
                 // Then
                 Assert.Equal(1, result.Length);
                 Assert.IsType<FilePath>(result[0]);
-                Assert.ContainsFilePath(result, "/Temp/Hello/World/Text.txt");
+                Assert.ContainsFilePath(result, "C:/Temp/Hello/World/Text.txt");
             }
 
             [Fact]
@@ -246,7 +245,52 @@ namespace Cake.Core.Tests.Unit.IO
             }
 
             [Fact]
-            public void Should_Return_File_For_Recursive_Wildcard_Pattern_Ending_With_Extension_Regex()
+            public void Should_Return_Files_And_Folders_For_Pattern_Containing_Wildcard()
+            {
+                // Given
+                var fixture = new GlobberFixture();
+                var globber = fixture.CreateGlobber();
+
+                // When
+                var result = globber.Match("/Temp/Hello/*/Text.txt").ToArray();
+
+                // Then
+                Assert.Equal(1, result.Length);
+                Assert.ContainsFilePath(result, "/Temp/Hello/World/Text.txt");
+            }
+
+            [Fact]
+            public void Should_Return_Files_And_Folders_For_Pattern_Ending_With_Character_Wildcard()
+            {
+                // Given
+                var fixture = new GlobberFixture();
+                var globber = fixture.CreateGlobber();
+
+                // When
+                var result = globber.Match("/Temp/**/Te?t.txt").ToArray();
+
+                // Then
+                Assert.Equal(1, result.Length);
+                Assert.ContainsFilePath(result, "/Temp/Hello/World/Text.txt");
+            }
+
+            [Fact]
+            public void Should_Return_Files_And_Folders_For_Pattern_Containing_Character_Wildcard()
+            {
+                // Given
+                var fixture = new GlobberFixture();
+                var globber = fixture.CreateGlobber();
+
+                // When
+                var result = globber.Match("/Temp/Hello/W???d/Text.txt").ToArray();
+
+                // Then
+                Assert.Equal(1, result.Length);
+                Assert.ContainsFilePath(result, "/Temp/Hello/World/Text.txt");
+            }
+
+            [Fact]
+            public void Should_Return_File_For_Recursive_Wildcard_Pattern_Ending_With_Wildcard_Regex()
             {
                 // Given
                 var fixture = new GlobberFixture();
@@ -259,6 +303,24 @@ namespace Cake.Core.Tests.Unit.IO
                 Assert.Equal(2, result.Length);
                 Assert.ContainsFilePath(result, "/Temp/Hello/World/Text.txt");
                 Assert.ContainsFilePath(result, "/Temp/Goodbye/OtherText.txt");
+            }
+
+            [Fact]
+            public void Should_Return_Only_Folders_For_Pattern_Ending_With_Recursive_Wildcard()
+            {
+                // Given
+                var fixture = new GlobberFixture();
+                var globber = fixture.CreateGlobber();
+
+                // When
+                var result = globber.Match("/Temp/**").ToArray();
+
+                // Then
+                Assert.Equal(4, result.Length);
+                Assert.ContainsDirectoryPath(result, "/Temp");
+                Assert.ContainsDirectoryPath(result, "/Temp/Hello");
+                Assert.ContainsDirectoryPath(result, "/Temp/Hello/World");
+                Assert.ContainsDirectoryPath(result, "/Temp/Goodbye");
             }
 
             [Fact]
@@ -277,7 +339,7 @@ namespace Cake.Core.Tests.Unit.IO
             }
 
             [Fact]
-            public void Should_Include_Folder_In_Folder_When_Using_Recursive_Wildcard()
+            public void Should_Include_Folder_In_Root_Folder_When_Using_Recursive_Wildcard()
             {
                 // Given
                 var fixture = new GlobberFixture();

@@ -3,23 +3,21 @@
 // https://github.com/kthompson/glob-js
 ///////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics;
+
 namespace Cake.Core.IO.Globbing.Nodes
 {
     internal sealed class RelativeRoot : GlobNode
     {
-        public override string Render()
+        public override bool IsMatch(string value)
         {
-            return string.Empty;
+            return true;
         }
 
+        [DebuggerStepThrough]
         public override void Accept(GlobVisitor globber, GlobVisitorContext context)
         {
             globber.VisitRelativeRoot(this, context);
-        }
-
-        public override string ToString()
-        {
-            return "./";
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Cake.Core.IO.Globbing;
 
 namespace Cake.Core.IO
@@ -13,6 +14,7 @@ namespace Cake.Core.IO
         private readonly GlobParser _parser;
         private readonly GlobVisitor _visitor;
         private readonly PathComparer _comparer;
+        private readonly ICakeEnvironment _environment;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Globber"/> class.
@@ -30,6 +32,7 @@ namespace Cake.Core.IO
                 throw new ArgumentNullException("environment");
             }
 
+            _environment = environment;
             _parser = new GlobParser(environment);
             _visitor = new GlobVisitor(fileSystem, environment);
             _comparer = new PathComparer(environment.IsUnix());
@@ -55,7 +58,7 @@ namespace Cake.Core.IO
             }
 
             // Parse the pattern into an AST.
-            var root = _parser.Parse(pattern);
+            var root = _parser.Parse(pattern, _environment.IsUnix());
             
             // Visit all nodes in the parsed patterns and filter the result.
             return _visitor.Walk(root)

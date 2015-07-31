@@ -5,6 +5,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Cake.Core.IO.Globbing
 {
@@ -13,7 +14,7 @@ namespace Cake.Core.IO.Globbing
     {
         public GlobNode Next { get; internal set; }
 
-        public abstract string Render();
+        public abstract bool IsMatch(string value);
 
         public abstract void Accept(GlobVisitor visitor, GlobVisitorContext context);
 

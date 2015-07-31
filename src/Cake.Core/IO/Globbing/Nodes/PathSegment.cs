@@ -4,13 +4,17 @@
 ///////////////////////////////////////////////////////////////////////
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Cake.Core.IO.Globbing.Nodes
 {
     internal sealed class PathSegment : GlobNode
     {
         private readonly List<GlobToken> _tokens;
+        private readonly Regex _regex;
+        private readonly bool _isIdentifier;
 
         public IReadOnlyList<GlobToken> Tokens
         {
@@ -19,21 +23,41 @@ namespace Cake.Core.IO.Globbing.Nodes
 
         public bool IsIdentifier
         {
-            get
-            {
-                return _tokens.Count == 1 && _tokens[0].Kind == GlobTokenKind.Identifier;
-            }
+            get { return _isIdentifier; }
         }
 
-        public PathSegment(List<GlobToken> tokens)
+        public PathSegment(List<GlobToken> tokens, RegexOptions options)
         {
             _tokens = tokens;
+            _isIdentifier = _tokens.Count == 1 && _tokens[0].Kind == GlobTokenKind.Identifier;
+            _regex = CreateRegex(tokens, options);
         }
 
-        public override string Render()
+        public override bool IsMatch(string value)
+        {
+            return _regex.IsMatch(value);
+        }
+
+        public string GetPath()
         {
             var builder = new StringBuilder();
             foreach (var token in _tokens)
+            {
+                builder.Append(token.Value);
+            }
+            return builder.ToString();
+        }
+
+        [DebuggerStepThrough]
+        public override void Accept(GlobVisitor globber, GlobVisitorContext context)
+        {
+            globber.VisitSegment(this, context);
+        }
+
+        private static Regex CreateRegex(List<GlobToken> tokens, RegexOptions options)
+        {
+            var builder = new StringBuilder();
+            foreach (var token in tokens)
             {
                 if (token.Kind == GlobTokenKind.Identifier)
                 {
@@ -48,22 +72,7 @@ namespace Cake.Core.IO.Globbing.Nodes
                     builder.Append(".{1}");
                 }
             }
-            return builder.ToString();
-        }
-
-        public override void Accept(GlobVisitor globber, GlobVisitorContext context)
-        {
-            globber.VisitSegment(this, context);
-        }
-
-        public override string ToString()
-        {
-            var builder = new StringBuilder();
-            foreach (var token in _tokens)
-            {
-                builder.Append(token.Value);
-            }
-            return builder.ToString();
+            return new Regex(string.Concat("^", builder.ToString(), "$"), options);
         }
     }
 }

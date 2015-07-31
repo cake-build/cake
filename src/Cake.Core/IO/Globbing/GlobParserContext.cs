@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Cake.Core.IO.Globbing
 {
     internal sealed class GlobParserContext
     {
         private readonly GlobTokenizer _tokenizer;
+        private readonly RegexOptions _regexOptions;
         private GlobToken _currentToken;
 
         public GlobToken CurrentToken
@@ -13,10 +15,21 @@ namespace Cake.Core.IO.Globbing
             get { return _currentToken; }
         }
 
-        public GlobParserContext(string pattern)
+        public RegexOptions Options
+        {
+            get { return _regexOptions; }
+        }
+
+        public GlobParserContext(string pattern, bool caseSensitive)
         {
             _tokenizer = new GlobTokenizer(pattern);
             _currentToken = null;
+            _regexOptions = RegexOptions.Compiled | RegexOptions.Singleline;
+
+            if (!caseSensitive)
+            {
+                _regexOptions |= RegexOptions.IgnoreCase;
+            }
         }
 
         public GlobToken Peek()

@@ -72,7 +72,7 @@ namespace Cake.Core.IO.Globbing
             {
                 if (node.Next == null)
                 {
-                    var segmentPath = node.Render();
+                    var segmentPath = node.GetPath();
 
                     // Directories
                     var directoryPath = context.FileSystem.GetDirectory(new DirectoryPath(context.FullPath).Combine(segmentPath));
@@ -90,7 +90,7 @@ namespace Cake.Core.IO.Globbing
                 }
                 else
                 {
-                    context.Push(node.Render());
+                    context.Push(node.GetPath());
                     node.Next.Accept(this, context);
                     context.Pop();
                 }
@@ -102,10 +102,9 @@ namespace Cake.Core.IO.Globbing
                     var path = context.FileSystem.GetDirectory(context.FullPath);
                     if (path.Exists)
                     {
-                        var next = node.Next;
                         foreach (var candidate in FindCandidates(path.Path, node, context, SearchScope.Current))
                         {
-                            if (next != null)
+                            if (node.Next != null)
                             {
                                 context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + 1));
                                 node.Next.Accept(this, context);
@@ -151,17 +150,7 @@ namespace Cake.Core.IO.Globbing
 
         public void VisitWindowsRoot(WindowsRoot node, GlobVisitorContext context)
         {
-            if (string.IsNullOrWhiteSpace(node.Drive))
-            {
-                // Get the drive from the working directory.
-                var workingDirectory = context.Environment.WorkingDirectory;
-                var root = workingDirectory.FullPath.Split('/').First();
-                context.Push(root);
-            }
-            else
-            {
-                context.Push(node.Drive + ":");
-            }
+            context.Push(node.Drive + ":");
             node.Next.Accept(this, context);
             context.Pop();
         }
@@ -175,9 +164,7 @@ namespace Cake.Core.IO.Globbing
             bool includeDirectories = true)
         {
             var result = new List<IFileSystemInfo>();
-
             var current = context.FileSystem.GetDirectory(path);
-            var expression = new Regex("^" + node.Render() + "$", context.Options);
 
             // Directories
             if (includeDirectories)
@@ -185,7 +172,7 @@ namespace Cake.Core.IO.Globbing
                 foreach (var directory in current.GetDirectories("*", option))
                 {
                     var lastPath = directory.Path.Segments.Last();
-                    if (expression.IsMatch(lastPath))
+                    if (node.IsMatch(lastPath))
                     {
                         result.Add(directory);
                     }
@@ -198,7 +185,7 @@ namespace Cake.Core.IO.Globbing
                 foreach (var file in current.GetFiles("*", option))
                 {
                     var lastPath = file.Path.Segments.Last();
-                    if (expression.IsMatch(lastPath))
+                    if (node.IsMatch(lastPath))
                     {
                         result.Add(file);
                     }
