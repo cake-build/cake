@@ -66,6 +66,7 @@
     <Compile Include="Fixtures\Tools\FixieRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\ILMergeRunnerFixture.cs" />
     <Compile Include="Fixtures\Diagnostics\LogActionFixture.cs" />
+    <Compile Include="Fixtures\Tools\InspectCodeRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\MSBuildRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\NSISFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGetFixture.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="Unit\IO\ZipperTests.cs" />
     <Compile Include="Unit\IO\DirectoryAliasesTests.cs" />
     <Compile Include="Unit\IO\FileAliasesTests.cs" />
+    <Compile Include="Unit\Tools\InspectCode\InspectCodeRunnerTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildRunnerTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsExtensionsTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsTests.cs" />
