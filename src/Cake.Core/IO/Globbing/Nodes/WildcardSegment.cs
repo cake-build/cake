@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace Cake.Core.IO.Globbing.Nodes
 {
+    [DebuggerDisplay("*")]
     internal sealed class WildcardSegment : GlobNode
     {
         public override bool IsMatch(string value)
@@ -19,11 +20,6 @@ namespace Cake.Core.IO.Globbing.Nodes
         public override void Accept(GlobVisitor visitor, GlobVisitorContext context)
         {
             visitor.VisitWildcardSegmentNode(this, context);
-        }
-
-        public override string ToString()
-        {
-            return "*";
         }
     }
 }

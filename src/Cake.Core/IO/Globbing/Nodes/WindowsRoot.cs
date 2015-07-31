@@ -8,9 +8,15 @@ using System.Diagnostics;
 
 namespace Cake.Core.IO.Globbing.Nodes
 {
+    [DebuggerDisplay("{Drive,nq}:")]
     internal sealed class WindowsRoot : GlobNode
     {
         private readonly string _drive;
+
+        public string Drive
+        {
+            get { return _drive; }
+        }
 
         public WindowsRoot(string drive)
         {
@@ -19,11 +25,6 @@ namespace Cake.Core.IO.Globbing.Nodes
                 throw new ArgumentNullException("drive");
             }
             _drive = drive;
-        }
-
-        public string Drive
-        {
-            get { return _drive; }
         }
 
         public override bool IsMatch(string value)

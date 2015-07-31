@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 
 namespace Cake.Core.IO.Globbing.Nodes
 {
+    [DebuggerDisplay("{GetPath(),nq}")]
     internal sealed class PathSegment : GlobNode
     {
         private readonly List<GlobToken> _tokens;

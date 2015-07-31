@@ -7,6 +7,7 @@ using System.Diagnostics;
 
 namespace Cake.Core.IO.Globbing.Nodes
 {
+    [DebuggerDisplay("$")]
     internal sealed class UnixRoot : GlobNode
     {
         public override bool IsMatch(string value)
