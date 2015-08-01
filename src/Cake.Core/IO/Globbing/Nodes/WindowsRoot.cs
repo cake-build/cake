@@ -1,9 +1,4 @@
-﻿///////////////////////////////////////////////////////////////////////
-// Portions of this code was ported from glob-js by Kevin Thompson.
-// https://github.com/kthompson/glob-js
-///////////////////////////////////////////////////////////////////////
-
-using System;
+﻿using System;
 using System.Diagnostics;
 
 namespace Cake.Core.IO.Globbing.Nodes
@@ -25,11 +20,6 @@ namespace Cake.Core.IO.Globbing.Nodes
                 throw new ArgumentNullException("drive");
             }
             _drive = drive;
-        }
-
-        public override bool IsMatch(string value)
-        {
-            return false;
         }
 
         [DebuggerStepThrough]

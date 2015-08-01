@@ -100,6 +100,7 @@
     <Compile Include="IO\File.cs" />
     <Compile Include="IO\FileSystem.cs" />
     <Compile Include="IO\Globber.cs" />
+    <Compile Include="IO\Globbing\Nodes\MatchableNode.cs" />
     <Compile Include="IO\Globbing\GlobNode.cs" />
     <Compile Include="IO\Globbing\GlobNodeRewriter.cs" />
     <Compile Include="IO\Globbing\GlobParserContext.cs" />

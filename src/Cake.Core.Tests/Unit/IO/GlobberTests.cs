@@ -38,15 +38,78 @@ namespace Cake.Core.Tests.Unit.IO
 
         public sealed class TheMatchMethod
         {
+            public sealed class WindowsSpecific
+            {
+                [Fact]
+                public void Will_Fix_Root_If_Drive_Is_Missing_By_Using_The_Drive_From_The_Working_Directory()
+                {
+                    // Given
+                    var fixture = new GlobberFixture(windows: true);
+
+                    // When
+                    var result = fixture.Match("/Working/Foo/Bar/Qux.c");
+
+                    // Then
+                    Assert.Equal(1, result.Length);
+                    Assert.ContainsFilePath(result, "C:/Working/Foo/Bar/Qux.c");
+                }
+
+                [Fact]
+                public void Should_Throw_If_Unc_Root_Was_Encountered()
+                {
+                    // Given
+                    var fixture = new GlobberFixture(windows: true);
+
+                    // When
+                    var result = Record.Exception(() => fixture.Match("//Foo/Bar/Qux.c"));
+
+                    // Then
+                    Assert.IsType<NotSupportedException>(result);
+                    Assert.Equal("UNC paths are not supported.", result.Message);
+                }
+
+                [Fact]
+                public void Should_Ignore_Case_Sensitivity_On_Case_Insensitive_Operative_System()
+                {
+                    // Given
+                    var fixture = new GlobberFixture(windows: true);
+
+                    // When
+                    var result = fixture.Match("C:/Working/**/qux.c");
+
+                    // Then
+                    Assert.Equal(1, result.Length);
+                    Assert.IsType<FilePath>(result[0]);
+                    Assert.ContainsFilePath(result, "C:/Working/Foo/Bar/Qux.c");
+                }
+            }
+
+            public sealed class WithPredicate
+            {
+                [Fact]
+                public void Should_Return_Single_Path_Glob_Pattern_With_Predicate()
+                {
+                    // Given
+                    var fixture = new GlobberFixture();
+                    var predicate = new Func<IFileSystemInfo, bool>(i => i.Path.FullPath == "/Working/Foo/Bar/Qux.c");
+
+                    // When
+                    var result = fixture.Match("./**/*.c", predicate);
+
+                    // Then
+                    Assert.Equal(1, result.Length);
+                    Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                }
+            }
+
             [Fact]
             public void Should_Throw_If_Pattern_Is_Null()
             {
                 // Given
                 var fixture = new GlobberFixture();
-                var globber = fixture.CreateGlobber();
 
                 // When
-                var result = Record.Exception(() => globber.Match(null));
+                var result = Record.Exception(() => fixture.Match(null));
 
                 // Then
                 Assert.IsArgumentNullException(result, "pattern");
@@ -57,10 +120,9 @@ namespace Cake.Core.Tests.Unit.IO
             {
                 // Given
                 var fixture = new GlobberFixture();
-                var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match(string.Empty);
+                var result = fixture.Match(string.Empty);
 
                 // Then
                 Assert.Equal(0, result.Count());
@@ -71,10 +133,9 @@ namespace Cake.Core.Tests.Unit.IO
             {
                 // Given
                 var fixture = new GlobberFixture();
-                var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Working/**/*.c").ToArray();
+                var result = fixture.Match("/Working/**/*.c");
 
                 // Then
                 Assert.Equal(5, result.Length);
@@ -90,10 +151,9 @@ namespace Cake.Core.Tests.Unit.IO
             {
                 // Given
                 var fixture = new GlobberFixture();
-                var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("Foo/Bar/Qux.c").ToArray();
+                var result = fixture.Match("Foo/Bar/Qux.c");
 
                 // Then
                 Assert.Equal(1, result.Length);
@@ -101,60 +161,13 @@ namespace Cake.Core.Tests.Unit.IO
             }
 
             [Fact]
-            public void Will_Fix_Root_If_Drive_Is_Missing_By_Using_The_Drive_From_The_Working_Directory()
-            {
-                // Given
-                var fixture = new GlobberFixture(windows: true);
-                var globber = fixture.CreateGlobber();
-
-                // When
-                var result = globber.Match("/Working/Foo/Bar/Qux.c").ToArray();
-
-                // Then
-                Assert.Equal(1, result.Length);
-                Assert.ContainsFilePath(result, "C:/Working/Foo/Bar/Qux.c");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Unc_Root_Was_Encountered()
-            {
-                // Given
-                var fixture = new GlobberFixture(windows: true);
-                var globber = fixture.CreateGlobber();
-
-                // When
-                var result = Record.Exception(() => globber.Match("//Foo/Bar/Qux.c"));
-
-                // Then
-                Assert.IsType<NotSupportedException>(result);
-                Assert.Equal("UNC paths are not supported.", result.Message);
-            }
-
-            [Fact]
-            public void Should_Ignore_Case_Sensitivity_On_Case_Insensitive_Operative_System()
-            {
-                // Given
-                var fixture = new GlobberFixture(windows: true);
-                var globber = fixture.CreateGlobber();
-
-                // When
-                var result = globber.Match("C:/Working/**/qux.c").ToArray();
-
-                // Then
-                Assert.Equal(1, result.Length);
-                Assert.IsType<FilePath>(result[0]);
-                Assert.ContainsFilePath(result, "C:/Working/Foo/Bar/Qux.c");
-            }
-
-            [Fact]
             public void Should_Return_Single_Path_For_Absolute_File_Path_Without_Glob_Pattern()
             {
                 // Given
                 var fixture = new GlobberFixture();
-                var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Working/Foo/Bar/Qux.c").ToArray();
+                var result = fixture.Match("/Working/Foo/Bar/Qux.c");
 
                 // Then
                 Assert.Equal(1, result.Length);
@@ -167,10 +180,9 @@ namespace Cake.Core.Tests.Unit.IO
             {
                 // Given
                 var fixture = new GlobberFixture();
-                var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Working/Foo/Bar").ToArray();
+                var result = fixture.Match("/Working/Foo/Bar");
 
                 // Then
                 Assert.Equal(1, result.Length);
@@ -183,10 +195,9 @@ namespace Cake.Core.Tests.Unit.IO
                 // Given
                 var fixture = new GlobberFixture();
                 fixture.SetWorkingDirectory("/Working/Foo");
-                var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("./Bar/Qux.c").ToArray();
+                var result = fixture.Match("./Bar/Qux.c");
 
                 // Then
                 Assert.Equal(1, result.Length);
@@ -199,10 +210,9 @@ namespace Cake.Core.Tests.Unit.IO
                 // Given
                 var fixture = new GlobberFixture();
                 fixture.SetWorkingDirectory("/Working/Foo");
-                var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("./Bar").ToArray();
+                var result = fixture.Match("./Bar");
 
                 // Then
                 Assert.Equal(1, result.Length);
@@ -210,31 +220,13 @@ namespace Cake.Core.Tests.Unit.IO
             }
 
             [Fact]
-            public void Should_Return_Single_Path_Glob_Pattern_With_Predicate()
-            {
-                // Given
-                var fixture = new GlobberFixture();
-                var globber = fixture.CreateGlobber();
-
-                // When
-                var result = globber.Match(
-                    "./**/*.c",
-                    predicate => predicate.Path is DirectoryPath || predicate.Path.FullPath == "/Working/Foo/Bar/Qux.c").ToArray();
-
-                // Then
-                Assert.Equal(1, result.Length);
-                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
-            }
-
-            [Fact]
             public void Should_Return_Files_And_Folders_For_Pattern_Ending_With_Wildcard()
             {
                 // Given
                 var fixture = new GlobberFixture();
-                var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Working/**/*").ToArray();
+                var result = fixture.Match("/Working/**/*");
 
                 // Then
                 Assert.Equal(12, result.Length);
@@ -257,10 +249,9 @@ namespace Cake.Core.Tests.Unit.IO
             {
                 // Given
                 var fixture = new GlobberFixture();
-                var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Working/Foo/*/Qux.c").ToArray();
+                var result = fixture.Match("/Working/Foo/*/Qux.c");
 
                 // Then
                 Assert.Equal(2, result.Length);
@@ -273,10 +264,9 @@ namespace Cake.Core.Tests.Unit.IO
             {
                 // Given
                 var fixture = new GlobberFixture();
-                var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Working/Foo/Bar/Q?x.c").ToArray();
+                var result = fixture.Match("/Working/Foo/Bar/Q?x.c");
 
                 // Then
                 Assert.Equal(2, result.Length);
@@ -289,10 +279,9 @@ namespace Cake.Core.Tests.Unit.IO
             {
                 // Given
                 var fixture = new GlobberFixture();
-                var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Working/Foo/Ba?/Qux.c").ToArray();
+                var result = fixture.Match("/Working/Foo/Ba?/Qux.c");
 
                 // Then
                 Assert.Equal(2, result.Length);
@@ -305,10 +294,9 @@ namespace Cake.Core.Tests.Unit.IO
             {
                 // Given
                 var fixture = new GlobberFixture();
-                var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Working/**/*.c").ToArray();
+                var result = fixture.Match("/Working/**/*.c");
 
                 // Then
                 Assert.Equal(5, result.Length);
@@ -324,10 +312,9 @@ namespace Cake.Core.Tests.Unit.IO
             {
                 // Given
                 var fixture = new GlobberFixture();
-                var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Working/**").ToArray();
+                var result = fixture.Match("/Working/**");
 
                 // Then
                 Assert.Equal(6, result.Length);
@@ -344,10 +331,9 @@ namespace Cake.Core.Tests.Unit.IO
             {
                 // Given
                 var fixture = new GlobberFixture();
-                var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Foo/**/Bar.baz").ToArray();
+                var result = fixture.Match("/Foo/**/Bar.baz");
 
                 // Then
                 Assert.Equal(1, result.Length);
@@ -359,10 +345,9 @@ namespace Cake.Core.Tests.Unit.IO
             {
                 // Given
                 var fixture = new GlobberFixture();
-                var globber = fixture.CreateGlobber();
 
                 // When
-                var result = globber.Match("/Foo/**/Bar").ToArray();
+                var result = fixture.Match("/Foo/**/Bar");
 
                 // Then
                 Assert.Equal(1, result.Length);

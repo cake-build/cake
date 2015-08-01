@@ -1,9 +1,4 @@
-﻿///////////////////////////////////////////////////////////////////////
-// Portions of this code was ported from glob-js by Kevin Thompson.
-// https://github.com/kthompson/glob-js
-///////////////////////////////////////////////////////////////////////
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -11,7 +6,7 @@ using System.Text.RegularExpressions;
 namespace Cake.Core.IO.Globbing.Nodes
 {
     [DebuggerDisplay("{GetPath(),nq}")]
-    internal sealed class PathSegment : GlobNode
+    internal sealed class PathSegment : MatchableNode
     {
         private readonly List<GlobToken> _tokens;
         private readonly Regex _regex;

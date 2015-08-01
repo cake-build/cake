@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Cake.Core.IO.Globbing.Nodes;
 
 namespace Cake.Core.IO.Globbing
@@ -156,8 +155,8 @@ namespace Cake.Core.IO.Globbing
         }
 
         private static List<IFileSystemInfo> FindCandidates(
-            DirectoryPath path, 
-            GlobNode node, 
+            DirectoryPath path,
+            MatchableNode node, 
             GlobVisitorContext context, 
             SearchScope option,
             bool includeFiles = true,

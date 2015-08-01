@@ -1,6 +1,7 @@
-﻿using Cake.Core.IO;
+﻿using System;
+using System.Linq;
+using Cake.Core.IO;
 using Cake.Testing.Fakes;
-using NSubstitute;
 
 namespace Cake.Core.Tests.Fixtures
 {
@@ -9,33 +10,45 @@ namespace Cake.Core.Tests.Fixtures
         public FakeFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
 
-        public GlobberFixture()
-            : this(false)
+        public GlobberFixture(bool windows = false)
         {
-        }
-
-        public GlobberFixture(bool windows)
-        {
-            Environment = Substitute.For<ICakeEnvironment>();
-            Environment.IsUnix().Returns(!windows);
-
             if (windows)
             {
-                Environment.WorkingDirectory.Returns("C:/Working");
+                PrepareWindowsFixture();
             }
             else
             {
-                Environment.WorkingDirectory.Returns("/Working");
+                PrepareUnixFixture();
             }
+        }
 
+        private void PrepareWindowsFixture()
+        {
+            Environment = FakeEnvironment.CreateWindowsEnvironment();
             FileSystem = new FakeFileSystem(Environment);
 
+            // Directories
+            FileSystem.CreateDirectory("C://Working");
+            FileSystem.CreateDirectory("C://Working/Foo");
+            FileSystem.CreateDirectory("C://Working/Foo/Bar");
+
+            // Files
+            FileSystem.CreateFile("C:/Working/Foo/Bar/Qux.c");
+        }
+
+        private void PrepareUnixFixture()
+        {
+            Environment = FakeEnvironment.CreateUnixEnvironment();
+            FileSystem = new FakeFileSystem(Environment);
+
+            // Directories
             FileSystem.CreateDirectory("/Working");
             FileSystem.CreateDirectory("/Working/Foo");
             FileSystem.CreateDirectory("/Working/Foo/Bar");
             FileSystem.CreateDirectory("/Working/Bar");
+            FileSystem.CreateDirectory("/Foo/Bar");
 
-            FileSystem.CreateFile("/Working");
+            // Files
             FileSystem.CreateFile("/Working/Foo/Bar/Qux.c");
             FileSystem.CreateFile("/Working/Foo/Bar/Qex.c");
             FileSystem.CreateFile("/Working/Foo/Bar/Qux.h");
@@ -43,21 +56,24 @@ namespace Cake.Core.Tests.Fixtures
             FileSystem.CreateFile("/Working/Foo/Bar/Baz/Qux.c");
             FileSystem.CreateFile("/Working/Bar/Qux.c");
             FileSystem.CreateFile("/Working/Bar/Qux.h");
-
-            FileSystem.CreateFile("C:/Working/Foo/Bar/Qux.c");
-
-            FileSystem.CreateDirectory("/Foo/Bar");
             FileSystem.CreateFile("/Foo/Bar.baz");
         }
 
         public void SetWorkingDirectory(DirectoryPath path)
         {
-            Environment.WorkingDirectory.Returns(path);
+            Environment.WorkingDirectory = path;
         }
 
-        public Globber CreateGlobber()
+        public Path[] Match(string pattern)
         {
-            return new Globber(FileSystem, Environment);
+            return Match(pattern, null);
+        }
+
+        public Path[] Match(string pattern, Func<IFileSystemInfo, bool> predicate)
+        {
+            return new Globber(FileSystem, Environment)
+                .Match(pattern, predicate)
+                .ToArray();
         }
     }
 }
