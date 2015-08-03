@@ -12,7 +12,7 @@ namespace Cake.Core.Scripting.Processors
         /// Initializes a new instance of the <see cref="UsingStatementProcessor"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        public UsingStatementProcessor(ICakeEnvironment environment) 
+        public UsingStatementProcessor(ICakeEnvironment environment)
             : base(environment)
         {
         }
@@ -35,7 +35,7 @@ namespace Cake.Core.Scripting.Processors
             }
 
             var tokens = Split(line);
-            if (tokens.Length <= 0)
+            if (tokens.Length <= 1)
             {
                 return false;
             }
@@ -46,6 +46,12 @@ namespace Cake.Core.Scripting.Processors
             }
 
             var @namespace = tokens[1].TrimEnd(';');
+
+            if (@namespace.StartsWith("("))
+            {
+                return false;
+            }
+
             context.AddNamespace(@namespace);
 
             return true;
