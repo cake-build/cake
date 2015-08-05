@@ -81,9 +81,9 @@ namespace Cake.Common.Tools.ILRepack
         {
             var builder = new ProcessArgumentBuilder();
 
-            if (!string.IsNullOrEmpty(settings.Keyfile))
+            if (settings.Keyfile != null)
             {
-                builder.Append("/keyfile:" + new FilePath(settings.Keyfile).MakeAbsolute(_environment).FullPath.Quote());
+                builder.Append("/keyfile:" + settings.Keyfile.MakeAbsolute(_environment).FullPath.Quote());
             }
 
             if (!string.IsNullOrEmpty(settings.Log))
@@ -111,9 +111,9 @@ namespace Cake.Common.Tools.ILRepack
                 builder.Append("/copyattrs");
             }
 
-            if (!string.IsNullOrEmpty(settings.Attr))
+            if (settings.Attr != null)
             {
-                builder.Append("/attr:" + new FilePath(settings.Attr).MakeAbsolute(_environment).FullPath.Quote());
+                builder.Append("/attr:" + settings.Attr.MakeAbsolute(_environment).FullPath.Quote());
             }
 
             if (settings.AllowMultiple)
@@ -140,7 +140,7 @@ namespace Cake.Common.Tools.ILRepack
             {
                 foreach (var lib in settings.Libs)
                 {
-                    builder.Append("/lib:" + new FilePath(lib).MakeAbsolute(_environment).FullPath.Quote());
+                    builder.Append("/lib:" + lib.MakeAbsolute(_environment).FullPath.Quote());
                 }
             }
 

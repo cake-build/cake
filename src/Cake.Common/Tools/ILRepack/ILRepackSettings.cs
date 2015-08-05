@@ -51,7 +51,7 @@ namespace Cake.Common.Tools.ILRepack
         /// Gets or sets a keyfile to sign the output assembly
         /// </summary>
         /// <value>The keyfile.</value>
-        public string Keyfile { get; set; }
+        public FilePath Keyfile { get; set; }
 
         /// <summary>
         /// Gets or sets a file to enable logging to (no logging if null or empty)
@@ -87,7 +87,7 @@ namespace Cake.Common.Tools.ILRepack
         /// Gets or sets the assembly file to take attributes from
         /// </summary>
         /// <value>The assembly file to take attributes from.</value>
-        public string Attr { get; set; }
+        public FilePath Attr { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to allow multiple attributes (if type allows)
@@ -117,7 +117,7 @@ namespace Cake.Common.Tools.ILRepack
         /// Gets or sets the paths to search directories for referenced assemblies (can be specified multiple times)
         /// </summary>
         /// <value>The libs.</value>
-        public List<string> Libs { get; set; }
+        public List<FilePath> Libs { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to set all types but the ones from the first assembly 'internal'
