@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using Cake.Core;
@@ -64,6 +65,13 @@ namespace Cake.Common.Tools.MSBuild
                 builder.Append(string.Concat("/p:\"Configuration\"=", configuration.Quote()));
             }
 
+            // Buid for a specific platform?
+            if (settings.PlatformTarget.HasValue)
+            {
+                var platform = settings.PlatformTarget.Value;
+                builder.Append(string.Concat("/p:\"Platform\"=", GetPlatformName(platform).Quote()));
+            }
+
             // Got any properties?
             if (settings.Properties.Count > 0)
             {
@@ -89,6 +97,21 @@ namespace Cake.Common.Tools.MSBuild
             builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
 
             return builder;
+        }
+
+        private static string GetPlatformName(PlatformTarget platform)
+        {
+            switch (platform)
+            {
+                case PlatformTarget.MSIL:
+                    return "AnyCPU";
+                case PlatformTarget.x86:
+                    return "x86";
+                case PlatformTarget.x64:
+                    return "x64";
+                default:
+                    throw new InvalidEnumArgumentException("platform", (int)platform, typeof(PlatformTarget));
+            }
         }
 
         private static string GetVerbosityName(Verbosity verbosity)
@@ -150,7 +173,7 @@ namespace Cake.Common.Tools.MSBuild
                 throw new ArgumentNullException("settings");
             }
 
-            var path = MSBuildResolver.GetMSBuildPath(_fileSystem, _environment, settings.ToolVersion, settings.PlatformTarget);
+            var path = MSBuildResolver.GetMSBuildPath(_fileSystem, _environment, settings.ToolVersion, settings.PlatformTarget ?? PlatformTarget.MSIL);
             if (path != null)
             {
                 return new[] { path };
