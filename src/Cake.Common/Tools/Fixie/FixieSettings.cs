@@ -41,7 +41,7 @@ namespace Cake.Common.Tools.Fixie
         /// <value>
         /// The value of TeamCity-formatted output. Either "on" or "off".
         /// </value>
-        public TeamCityOutput? TeamCity { get; set; }
+        public bool? TeamCity { get; set; }
 
         /// <summary>
         /// Gets the collection of Options as KeyValuePairs.

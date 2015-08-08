@@ -75,24 +75,27 @@ namespace Cake.Common.Tools.Fixie
                 builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
             }
 
-            // Add NUnit style reporting if necessary
+            // Add NUnit style reporting if necessary.
             if (settings.NUnitXml != null)
             {
                 builder.Append("--NUnitXml");
                 builder.AppendQuoted(settings.NUnitXml.MakeAbsolute(_environment).FullPath);
             }
 
-            // Add xUnit style reporting if necessary
+            // Add xUnit style reporting if necessary.
             if (settings.XUnitXml != null)
             {
                 builder.Append("--xUnitXml");
                 builder.AppendQuoted(settings.XUnitXml.MakeAbsolute(_environment).FullPath);
             }
 
+            // Check if TeamCity output should be enabled.
+            // Note that even if this variable hasn't been set, Fixie itself
+            // will enable this if the environment variabel TEAMCITY_PROJECT_NAME is present.
             if (settings.TeamCity != null)
             {
                 builder.Append("--TeamCity");
-                builder.Append(settings.TeamCity == TeamCityOutput.On ? "on" : "off");
+                builder.Append(settings.TeamCity.Value ? "on" : "off");
             }
 
             if (settings.Options != null && settings.Options.Any())
