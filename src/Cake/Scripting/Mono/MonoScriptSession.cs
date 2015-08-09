@@ -86,6 +86,11 @@ namespace Cake.Scripting.Mono
 
         public void Execute(Script script)
         {
+            if (script.UsingAliasDirectives.Count > 0)
+            {
+                throw new CakeException("The Mono scripting engine do not support using alias directives.");
+            }
+
             var code = MonoCodeGenerator.Generate(script);
 
             try

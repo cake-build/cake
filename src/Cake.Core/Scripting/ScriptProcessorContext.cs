@@ -14,6 +14,7 @@ namespace Cake.Core.Scripting
         private readonly HashSet<string> _namespaces;
         private readonly LinkedList<string> _lines;
         private readonly HashSet<ScriptAlias> _aliases;
+        private readonly LinkedList<string> _usingAliasDirectives;
 
         /// <summary>
         /// Gets the script's assembly references 
@@ -65,6 +66,15 @@ namespace Cake.Core.Scripting
         }
 
         /// <summary>
+        /// Gets the using alias directives.
+        /// </summary>
+        /// <value>The using alias directives.</value>
+        public LinkedList<string> UsingAliasDirectives
+        {
+            get { return _usingAliasDirectives; }
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ScriptProcessorContext"/> class.
         /// </summary>
         public ScriptProcessorContext()
@@ -74,6 +84,7 @@ namespace Cake.Core.Scripting
             _namespaces = new HashSet<string>(StringComparer.Ordinal);
             _lines = new LinkedList<string>();
             _aliases = new HashSet<ScriptAlias>();
+            _usingAliasDirectives = new LinkedList<string>();
         }
 
         /// <summary>
@@ -129,6 +140,15 @@ namespace Cake.Core.Scripting
         public void AppendScriptLine(string line)
         {
             _lines.AddLast(line);
+        }
+
+        /// <summary>
+        /// Adds a using alias directive.
+        /// </summary>
+        /// <param name="line">The using alias directive.</param>
+        public void AddUsingAliasDirective(string line)
+        {
+            _usingAliasDirectives.AddLast(line);
         }
     }
 }
