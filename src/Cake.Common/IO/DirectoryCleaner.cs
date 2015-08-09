@@ -9,10 +9,10 @@ namespace Cake.Common.IO
     {
         public static void Clean(ICakeContext context, DirectoryPath path)
         {
-            Clean(context, path, null, null);
+            Clean(context, path, null);
         }
 
-        public static void Clean(ICakeContext context, DirectoryPath path, Func<IFileSystemInfo, bool> wherePredicate, Action<IFileSystemInfo> predicateFiltered)
+        public static void Clean(ICakeContext context, DirectoryPath path, Func<IFileSystemInfo, bool> predicate)
         {
             if (context == null)
             {
@@ -37,38 +37,50 @@ namespace Cake.Common.IO
                 return;
             }
 
-            context.Log.Verbose("Deleting contents of {0}", path);
+            predicate = predicate ?? (info => true);
+            CleanDirectory(root, predicate, 0);
+        }
 
-            var hasFilteredDirs = false;
+        private static bool CleanDirectory(IDirectory root, Func<IFileSystemInfo, bool> predicate, int level)
+        {
+            var shouldDeleteRoot = predicate(root);
 
-            // Delete all directories.
-            Action<IFileSystemInfo> directoryFiltered = filteredEntry =>
+            // Delete all child directories.
+            var directories = root.GetDirectories("*", SearchScope.Current);
+            foreach (var directory in directories)
             {
-                hasFilteredDirs = true;
-                if (predicateFiltered != null)
+                if (!CleanDirectory(directory, predicate, level + 1))
                 {
-                    predicateFiltered(filteredEntry);
+                    // Since the child directory reported it shouldn't be
+                    // removed, we should not remove the current directory either.
+                    shouldDeleteRoot = false;
+                }
+            }
+
+            // Delete all files in the directory.
+            var files = root.GetFiles("*", SearchScope.Current);
+            foreach (var file in files)
+            {
+                if (predicate(file))
+                {
+                    file.Delete();
                 }
                 else
                 {
-                    context.Log.Verbose("Skipping {0} because specified predicate", filteredEntry.Path.FullPath);
-                }
-            };
-
-            foreach (var directory in root.GetDirectories("*", SearchScope.Current, wherePredicate, directoryFiltered))
-            {
-                Clean(context, directory.Path.FullPath, wherePredicate, directoryFiltered);
-                if (!hasFilteredDirs)
-                {
-                    directory.Delete(false);
+                    shouldDeleteRoot = false;
                 }
             }
 
-            // Delete all files.
-            foreach (var file in root.GetFiles("*", SearchScope.Current, wherePredicate, predicateFiltered))
+            // Should we delete current directory?
+            // Make sure it's not the initial directory.
+            if (shouldDeleteRoot && level > 0)
             {
-                file.Delete();
+                root.Delete(false);
+                return true;
             }
+
+            // We did not delete this directory.
+            return false;
         }
     }
 }

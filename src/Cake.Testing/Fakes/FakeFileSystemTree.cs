@@ -122,7 +122,14 @@ namespace Cake.Testing.Fakes
                 var node = root.Pop();
                 result.Push(node);
 
-                foreach (var child in node.Content.Directories)
+                var directories = node.Content.Directories;
+
+                if (directories.Count > 0 && !recursive)
+                {
+                    throw new IOException("The directory is not empty.");
+                }
+
+                foreach (var child in directories)
                 {
                     root.Push(child.Value);
                 }
@@ -131,7 +138,14 @@ namespace Cake.Testing.Fakes
             while (result.Count > 0)
             {
                 var directory = result.Pop();
-                foreach (var file in directory.Content.Files.Select(x => x).ToArray())
+
+                var files = directory.Content.Files.Select(x => x).ToArray();
+                if (files.Length > 0 && !recursive)
+                {
+                    throw new IOException("The directory is not empty.");
+                }
+
+                foreach (var file in files)
                 {
                     // Delete the file.
                     DeleteFile(file.Value);
