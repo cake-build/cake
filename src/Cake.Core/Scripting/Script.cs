@@ -11,6 +11,7 @@ namespace Cake.Core.Scripting
         private readonly List<string> _namespaces;
         private readonly List<string> _lines;
         private readonly List<ScriptAlias> _aliases;
+        private readonly List<string> _usingAliasDirectives;
 
         /// <summary>
         /// Gets the namespaces imported via the <c>using</c> statement.
@@ -42,16 +43,31 @@ namespace Cake.Core.Scripting
         }
 
         /// <summary>
+        /// Gets the using alias directives.
+        /// </summary>
+        /// <value>The using alias directives.</value>
+        public List<string> UsingAliasDirectives
+        {
+            get { return _usingAliasDirectives; }
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Script" /> class.
         /// </summary>
         /// <param name="namespaces">The namespaces.</param>
         /// <param name="lines">The scrip lines.</param>
         /// <param name="aliases">The script aliases.</param>
-        public Script(IEnumerable<string> namespaces, IEnumerable<string> lines, IEnumerable<ScriptAlias> aliases)
+        /// <param name="usingAliasDirectives">The using alias directives.</param>
+        public Script(
+            IEnumerable<string> namespaces, 
+            IEnumerable<string> lines, 
+            IEnumerable<ScriptAlias> aliases,
+            IEnumerable<string> usingAliasDirectives)
         {
             _namespaces = new List<string>(namespaces ?? Enumerable.Empty<string>());
             _lines = new List<string>(lines ?? Enumerable.Empty<string>());
             _aliases = new List<ScriptAlias>(aliases ?? Enumerable.Empty<ScriptAlias>());
+            _usingAliasDirectives = new List<string>(usingAliasDirectives);
         }
     }
 }

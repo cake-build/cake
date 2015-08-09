@@ -11,7 +11,7 @@ namespace Cake.Core.Tests.Unit.Scripting
             public void Should_Not_Throw_If_Namespaces_Are_Null()
             {
                 // Given, When
-                var script = new Script(null, new string[] { }, new ScriptAlias[] { });
+                var script = new Script(null, new string[] { }, new ScriptAlias[] { }, new string[] { });
 
                 // Then
                 Assert.Equal(0, script.Namespaces.Count);
@@ -21,7 +21,7 @@ namespace Cake.Core.Tests.Unit.Scripting
             public void Should_Not_Throw_If_Lines_Are_Null()
             {
                 // Given, When
-                var script = new Script(new string[] { }, null, new ScriptAlias[] { });
+                var script = new Script(new string[] { }, null, new ScriptAlias[] { }, new string[] { });
 
                 // Then
                 Assert.Equal(0, script.Lines.Count);
@@ -31,7 +31,7 @@ namespace Cake.Core.Tests.Unit.Scripting
             public void Should_Not_Throw_If_Aliases_Are_Null()
             {
                 // Given, When
-                var script = new Script(new string[] { }, new string[] { }, null);
+                var script = new Script(new string[] { }, new string[] { }, null, new string[] { });
 
                 // Then
                 Assert.Equal(0, script.Aliases.Count);

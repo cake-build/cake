@@ -7,9 +7,10 @@ namespace Cake.Scripting.Roslyn
     {
         public string Generate(Script script)
         {
+            var usingDirectives = string.Join("\r\n", script.UsingAliasDirectives);
             var aliases = GetAliasCode(script);
             var code = string.Join("\r\n", script.Lines);
-            return string.Join("\r\n", aliases, code);
+            return string.Join("\r\n", usingDirectives, aliases, code);
         }
 
         private static string GetAliasCode(Script context)
