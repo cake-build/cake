@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Cake.Core.IO;
 
 namespace Cake.Core.Scripting.Processors
@@ -45,15 +46,22 @@ namespace Cake.Core.Scripting.Processors
                 return false;
             }
 
+            // Using block?
             var @namespace = tokens[1].TrimEnd(';');
-
             if (@namespace.StartsWith("("))
             {
                 return false;
             }
 
-            context.AddNamespace(@namespace);
+            // Using alias directive?
+            if (tokens.Any(t => t == "="))
+            {
+                context.AddUsingAliasDirective(string.Join(" ", tokens));
+                return true;
+            }
 
+            // Namespace
+            context.AddNamespace(@namespace);
             return true;
         }
     }

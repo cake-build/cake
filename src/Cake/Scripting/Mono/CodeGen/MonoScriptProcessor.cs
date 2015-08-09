@@ -24,7 +24,7 @@ namespace Cake.Scripting.Mono.CodeGen
                 }
             }
             blocks = result; // Assign the parsed blocks.
-            return new Script(script.Namespaces, lines, script.Aliases);
+            return new Script(script.Namespaces, lines, script.Aliases, script.UsingAliasDirectives);
         }
 
         private static IEnumerable<ScriptBlock> ParseBlocks(Script script)
