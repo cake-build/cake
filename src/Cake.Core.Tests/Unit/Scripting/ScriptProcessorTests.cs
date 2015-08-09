@@ -190,7 +190,7 @@ namespace Cake.Core.Tests.Unit.Scripting
             public void Should_Process_Using_Directives()
             {
                 // Given
-                var source = "using System.IO\r\nConsole.WriteLine();";
+                var source = "using System.IO;\r\nConsole.WriteLine();";
                 var fixture = new ScriptProcessorFixture(scriptSource: source);
 
                 // When
@@ -198,6 +198,21 @@ namespace Cake.Core.Tests.Unit.Scripting
 
                 // Then
                 Assert.Contains("System.IO", result.Namespaces);
+            }
+
+            [Fact]
+            public void Should_Process_Using_Alias_Directives()
+            {
+                // Given
+                var fixture = new ScriptProcessorFixture(scriptSource: "using ClassAlias = N1.N2.Class;\r\nConsole.WriteLine();");
+
+                // When
+                var result = fixture.Process();
+
+                // Then
+                Assert.Equal(2, result.Lines.Count);
+                Assert.Equal("#line 1 \"/Working/build.cake\"", result.Lines.ElementAt(0));
+                Assert.Equal("Console.WriteLine();", result.Lines.ElementAt(1));
             }
 
             [Fact]
@@ -216,21 +231,6 @@ namespace Cake.Core.Tests.Unit.Scripting
                 Assert.Equal("{", result.Lines.ElementAt(2));
                 Assert.Equal("}", result.Lines.ElementAt(3));
                 Assert.Equal("Console.WriteLine();", result.Lines.ElementAt(4));
-            }
-
-            [Fact]
-            public void Should_Keep_Using_Alias_Directives()
-            {
-                // Given
-                var fixture = new ScriptProcessorFixture(scriptSource: "using ClassAlias = N1.N2.Class;\r\nConsole.WriteLine();");
-
-                // When
-                var result = fixture.Process();
-
-                // Then
-                Assert.Equal(2, result.Lines.Count);
-                Assert.Equal("#line 1 \"/Working/build.cake\"", result.Lines.ElementAt(0));
-                Assert.Equal("Console.WriteLine();", result.Lines.ElementAt(1));
             }
 
             [Fact]
