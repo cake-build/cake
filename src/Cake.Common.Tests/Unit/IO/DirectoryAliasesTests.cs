@@ -57,7 +57,6 @@ namespace Cake.Common.Tests.Unit.IO
             }
         }
 
-
         public sealed class TheCleanMethod
         {
             [Fact]
@@ -109,13 +108,13 @@ namespace Cake.Common.Tests.Unit.IO
                 var directory = new DirectoryPath("/Temp/Hello");
                 var fixture = new FileSystemFixture();
                 var context = Substitute.For<ICakeContext>();
-                Func<IFileSystemInfo, bool> wherePredicate = entry=>!entry.Hidden;
+                Func<IFileSystemInfo, bool> wherePredicate = entry => !entry.Hidden;
                 context.FileSystem.Returns(fixture.FileSystem);
                 var filesNotMatchingPredicate = fixture
                     .FileSystem
                     .GetDirectory(directory)
                     .GetFiles("*", SearchScope.Recursive)
-                    .Where(entry=>!wherePredicate(entry))
+                    .Where(entry => !wherePredicate(entry))
                     .ToArray();
 
                 // When
@@ -142,27 +141,39 @@ namespace Cake.Common.Tests.Unit.IO
                 Assert.Empty(fixture.FileSystem.GetDirectory(directory).GetDirectories("*", SearchScope.Recursive));
             }
 
-            [Fact(Skip = "See issue #289. Re-enable when fixed.")]
+            [Fact]
             public void Should_Delete_Directories_Respecting_Predicate_In_Provided_Directory()
             {
                 // Given
-                var directory = new DirectoryPath("/Temp/Hello");
                 var fixture = new FileSystemFixture();
                 var context = Substitute.For<ICakeContext>();
                 context.FileSystem.Returns(fixture.FileSystem);
-                Func<IFileSystemInfo, bool> wherePredicate = entry=>!entry.Hidden;
-                var directoriesNotMatchingPredicate = fixture.FileSystem
-                    .GetDirectory(directory)
-                    .GetDirectories("*", SearchScope.Recursive)
-                    .Where(entry => !wherePredicate(entry))
-                    .ToArray();
+                var directory = fixture.FileSystem.GetDirectory("/Temp/Hello");
 
                 // When
-                DirectoryAliases.CleanDirectory(context, directory, wherePredicate);
+                DirectoryAliases.CleanDirectory(context, directory.Path, info => !info.Hidden);
 
                 // Then
-                Assert.Empty(fixture.FileSystem.GetDirectory(directory).GetDirectories("*", SearchScope.Recursive).Where(wherePredicate));
-                Assert.Equal(directoriesNotMatchingPredicate, fixture.FileSystem.GetDirectory(directory).GetDirectories("*", SearchScope.Recursive));
+                Assert.Equal(1, directory.GetDirectories("*", SearchScope.Recursive).Count());
+                Assert.True(fixture.FileSystem.GetDirectory("/Temp/Hello/Hidden").Exists);
+            }
+
+            [Fact]
+            public void Should_Delete_Files_And_Directories_In_Provided_Directory_Using_Relative_Path()
+            {
+                // Given
+                var directory = new DirectoryPath("./Hello");
+                var fixture = new FileSystemFixture();
+                var context = Substitute.For<ICakeContext>();
+                context.FileSystem.Returns(fixture.FileSystem);
+                context.Environment.WorkingDirectory.Returns(info => new DirectoryPath("/Temp"));
+
+                // When
+                DirectoryAliases.CleanDirectory(context, directory);
+
+                // Then
+                Assert.Empty(fixture.FileSystem.GetDirectory(directory).GetFiles("*", SearchScope.Recursive));
+                Assert.Empty(fixture.FileSystem.GetDirectory(directory).GetDirectories("*", SearchScope.Recursive));
             }
 
             [Fact]
@@ -201,42 +212,18 @@ namespace Cake.Common.Tests.Unit.IO
             public void Should_Skip_Predicate_Folder()
             {
                 // Given
-                var directory = new DirectoryPath("/Temp");
                 var fixture = new FileSystemFixture();
                 var context = Substitute.For<ICakeContext>();
                 context.FileSystem.Returns(fixture.FileSystem);
-                var preHelloFiles = context.FileSystem
-                    .GetDirectory("/Temp/Hello/")
-                    .GetFiles("*.*", SearchScope.Recursive)
-                    .Select(file=>file.Path.FullPath)
-                    .ToArray();
-
-                var preGoodbyeFiles = context.FileSystem
-                    .GetDirectory("/Temp/Goodbye/")
-                    .GetFiles("*.*", SearchScope.Recursive)
-                    .Select(file=>file.Path.FullPath)
-                    .ToArray();
+                var directory = context.FileSystem.GetDirectory("/Temp");
 
                 // When
-                DirectoryAliases.CleanDirectory(context, directory, predicate=>predicate.Path.FullPath!="/Temp/Goodbye");
+                DirectoryAliases.CleanDirectory(context, directory.Path, predicate => predicate.Path.FullPath != "/Temp/Goodbye");
 
                 // Then
-                var postHelloFiles = context.FileSystem
-                    .GetDirectory("/Temp/Hello/")
-                    .GetFiles("*.*", SearchScope.Recursive)
-                    .Select(file=>file.Path.FullPath)
-                    .ToArray();
-
-                var postGoodbyeFiles = context.FileSystem
-                    .GetDirectory("/Temp/Goodbye/")
-                    .GetFiles("*.*", SearchScope.Recursive)
-                    .Select(file=>file.Path.FullPath)
-                    .ToArray();
-
-                Assert.DoesNotContain(preHelloFiles, fileName=>fixture.FileSystem.Exist((FilePath)fileName));
-                Assert.Empty(postHelloFiles);
-                Assert.Equal(preGoodbyeFiles, postGoodbyeFiles);
-                Assert.All(preGoodbyeFiles, fileName=>fixture.FileSystem.Exist((FilePath)fileName));
+                Assert.True(context.FileSystem.GetDirectory("/Temp").Exists);
+                Assert.Equal(1, directory.GetDirectories("*", SearchScope.Recursive).Count());
+                Assert.True(context.FileSystem.GetDirectory("/Temp/Goodbye").Exists);
             }
         }
 
@@ -280,8 +267,8 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new DirectoryPath[] {
-                        "/Temp/Hello", "/Temp/Goodbye"
+                    var paths = new DirectoryPath[] { 
+                        "/Temp/Hello", "/Temp/Goodbye" 
                     };
 
                     // When
@@ -300,8 +287,8 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new DirectoryPath[] {
-                        "/Temp/Hello", "/Temp/Goodbye"
+                    var paths = new DirectoryPath[] { 
+                        "/Temp/Hello", "/Temp/Goodbye" 
                     };
 
                     // When
@@ -320,7 +307,7 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new DirectoryPath[] {
+                    var paths = new DirectoryPath[] { 
                         "/Temp/Hello", "/NonExisting"
                     };
 
@@ -370,8 +357,8 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new[] {
-                        "/Temp/Hello", "/Temp/Goodbye"
+                    var paths = new[] { 
+                        "/Temp/Hello", "/Temp/Goodbye" 
                     };
 
                     // When
@@ -390,8 +377,8 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new[] {
-                        "/Temp/Hello", "/Temp/Goodbye"
+                    var paths = new[] { 
+                        "/Temp/Hello", "/Temp/Goodbye" 
                     };
 
                     // When
@@ -410,8 +397,8 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new[] {
-                        "/Temp/Hello", "/NonExisting"
+                    var paths = new[] { 
+                        "/Temp/Hello", "/NonExisting" 
                     };
 
                     // When
