@@ -36,6 +36,16 @@ namespace Cake.Core.Tests.Unit.Scripting
                 // Then
                 Assert.Equal(0, script.Aliases.Count);
             }
+
+            [Fact]
+            public void Should_Not_Throw_If_Using_Alias_Directives_Are_Null()
+            {
+                // Given, When
+                var script = new Script(new string[] { }, new string[] { }, new ScriptAlias[] { }, null);
+
+                // Then
+                Assert.Equal(0, script.UsingAliasDirectives.Count);
+            }
         }
     }
 }

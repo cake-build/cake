@@ -67,7 +67,7 @@ namespace Cake.Core.Scripting
             _namespaces = new List<string>(namespaces ?? Enumerable.Empty<string>());
             _lines = new List<string>(lines ?? Enumerable.Empty<string>());
             _aliases = new List<ScriptAlias>(aliases ?? Enumerable.Empty<ScriptAlias>());
-            _usingAliasDirectives = new List<string>(usingAliasDirectives);
+            _usingAliasDirectives = new List<string>(usingAliasDirectives ?? Enumerable.Empty<string>());
         }
     }
 }
