@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Cake.Core.IO
 {
     /// <summary>
     /// Represents a process.
     /// </summary>
-    public interface IProcess
+    public interface IProcess : IDisposable
     {
         /// <summary>
         /// Waits for the process to exit.
@@ -30,5 +31,10 @@ namespace Cake.Core.IO
         /// </summary>
         /// <returns>Returns process output <see cref="ProcessSettings.RedirectStandardOutput">RedirectStandardOutput</see> is true</returns>
         IEnumerable<string> GetStandardOutput();
+
+        /// <summary>
+        /// Immediately stops the associated process.
+        /// </summary>
+        void Kill();
     }
 }
