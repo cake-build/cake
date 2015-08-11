@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Cake.Common.Tools.XBuild;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools
 {
     /// <summary>
-    /// Contains settings used by the <c>MSOrXBuild</c> alias.
+    /// Contains settings used by the <c>DotNetBuild</c> alias.
     /// </summary>
-    // ReSharper disable once InconsistentNaming
-    public sealed class MSOrXBuildSettings
+    public sealed class DotNetBuildSettings
     {
         private readonly FilePath _solution;
         private readonly HashSet<string> _targets;
@@ -57,10 +55,10 @@ namespace Cake.Common.Tools
         public Verbosity Verbosity { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MSOrXBuildSettings"/> class.
+        /// Initializes a new instance of the <see cref="DotNetBuildSettings"/> class.
         /// </summary>
         /// <param name="solution">The solution.</param>
-        public MSOrXBuildSettings(FilePath solution)
+        public DotNetBuildSettings(FilePath solution)
         {
             if (solution == null)
             {

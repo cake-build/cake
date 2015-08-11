@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Cake.Core.IO;
 
@@ -7,6 +8,7 @@ namespace Cake.Testing.Fakes
     /// <summary>
     /// Represents a fake directory.
     /// </summary>
+    [DebuggerDisplay("{Path,nq}")]
     public sealed class FakeDirectory : IDirectory
     {
         private readonly FakeFileSystemTree _tree;

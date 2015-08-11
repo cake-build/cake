@@ -136,5 +136,11 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// </summary>
         /// <value>The package files.</value>
         public ICollection<NuSpecContent> Files { get; set; }
+
+        /// <summary>
+        /// Gets or sets the verbosity.
+        /// </summary>
+        /// <value>The verbosity.</value>
+        public NuGetVerbosity? Verbosity { get; set; }
     }
 }

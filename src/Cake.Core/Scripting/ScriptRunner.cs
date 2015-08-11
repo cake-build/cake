@@ -116,7 +116,7 @@ namespace Cake.Core.Scripting
             }
 
             // Execute the script.
-            var script = new Script(context.Namespaces, context.Lines, aliases);
+            var script = new Script(context.Namespaces, context.Lines, aliases, context.UsingAliasDirectives);
             session.Execute(script);
         }
 

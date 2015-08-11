@@ -1,0 +1,7 @@
+﻿// BLOCKS
+public class Hello 
+{
+}
+
+// LINES
+int n = 0;
