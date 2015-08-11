@@ -87,6 +87,7 @@
     <Compile Include="Fixtures\TextTransformationFixture.cs" />
     <Compile Include="Fixtures\Tools\WiXFixture.cs" />
     <Compile Include="Fixtures\XmlDocExampleCodeParserFixture.cs" />
+    <Compile Include="Fixtures\XmlPokeFixture.cs" />
     <Compile Include="Fixtures\XmlTransformationFixture.cs" />
     <Compile Include="Fixtures\Tools\XUnit2RunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\XUnitRunnerFixture.cs" />
@@ -165,6 +166,7 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="Unit\XML\XmlPokeTests.cs" />
     <Compile Include="Unit\XML\XmlTransformationTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +195,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
