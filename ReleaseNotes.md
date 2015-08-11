@@ -1,3 +1,13 @@
+### New in 0.5.2 (Released 2015/08/11)
+* Globber performance improvements.
+* Increased visibility of skipped tasks.
+* Added ILRepack support.
+* Fix for PlatformTarget not used in MSBuild runner.
+* Changed TeamCityOutput to a nullable boolean.
+* Fix for CleanDirectory bug.
+* Added support for using-alias-directives (Roslyn only).
+* Added XmlPoke support.
+
 ### New in 0.5.1 (Released 2015/07/27)
 * Increased stability when running on Mono.
 * Added MSTest support for Visual Studio 2015 (version 14.0).
