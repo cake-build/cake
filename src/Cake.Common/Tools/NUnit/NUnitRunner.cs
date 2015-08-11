@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Utilities;
@@ -148,6 +147,22 @@ namespace Cake.Common.Tools.NUnit
             else if (settings.NoResults)
             {
                 builder.AppendQuoted("/noresult");
+            }
+
+            // don't include the default value
+            if (settings.Process != NUnitProcessOption.Single)
+            {
+                builder.AppendQuoted("/process:" + settings.Process);
+            }
+
+            if (settings.UseSingleThreadedApartment)
+            {
+                builder.AppendQuoted("/apartment:STA");
+            }
+
+            if (settings.AppDomainUsage != NUnitAppDomainUsage.Default)
+            {
+                builder.AppendQuoted("/domain:" + settings.AppDomainUsage);
             }
 
             return builder;
