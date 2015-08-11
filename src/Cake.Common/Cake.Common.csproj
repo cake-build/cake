@@ -113,7 +113,6 @@
     <Compile Include="Tools\Fixie\FixieRunner.cs" />
     <Compile Include="Tools\Fixie\FixieSettings.cs" />
     <Compile Include="Tools\Fixie\FixieSettingsExtensions.cs" />
-    <Compile Include="Tools\Fixie\TeamCityOutput.cs" />
     <Compile Include="Tools\ILMerge\ILMergeAliases.cs" />
     <Compile Include="Tools\ILMerge\ILMergeRunner.cs" />
     <Compile Include="Tools\ILMerge\ILMergeSettings.cs" />
@@ -198,6 +197,8 @@
     <Compile Include="Tools\XUnit\XUnitRunner.cs" />
     <Compile Include="Tools\XUnit\XUnit2Runner.cs" />
     <Compile Include="Tools\XUnit\XUnit2Settings.cs" />
+    <Compile Include="Xml\XmlPokeAliases.cs" />
+    <Compile Include="Xml\XmlPokeSettings.cs" />
     <Compile Include="Xml\XmlTransformation.cs" />
     <Compile Include="Xml\XmlTransformationAlias.cs" />
     <Compile Include="Xml\XmlTransformationSettings.cs" />
@@ -210,6 +211,9 @@
     <Compile Include="Tools\XBuild\XBuildResolver.cs" />
     <Compile Include="Tools\DotNetBuildSettings.cs" />
     <Compile Include="Tools\DotNetBuildAliases.cs" />
+    <Compile Include="Tools\ILRepack\ILRepackSettings.cs" />
+    <Compile Include="Tools\ILRepack\ILRepackRunner.cs" />
+    <Compile Include="Tools\ILRepack\ILRepackAliases.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">

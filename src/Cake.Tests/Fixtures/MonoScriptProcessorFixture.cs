@@ -32,7 +32,11 @@ namespace Cake.Tests.Fixtures
             }
 
             // Create the script.
-            var script = new Script(Enumerable.Empty<string>(), lines, Enumerable.Empty<ScriptAlias>());
+            var script = new Script(
+                Enumerable.Empty<string>(), 
+                lines, 
+                Enumerable.Empty<ScriptAlias>(),
+                Enumerable.Empty<string>());
 
             // Process the script.
             IReadOnlyList<ScriptBlock> blocks;

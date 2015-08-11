@@ -255,7 +255,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Clean")]
         public static void CleanDirectory(this ICakeContext context, DirectoryPath path, Func<IFileSystemInfo, bool> predicate)
         {
-            DirectoryCleaner.Clean(context, path, predicate, null);
+            DirectoryCleaner.Clean(context, path, predicate);
         }
 
         /// <summary>
