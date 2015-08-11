@@ -37,7 +37,7 @@ namespace Cake.Arguments
             }
 
             var processedArguments = new List<Argument>();
-            uint position = 0;
+            var position = 0;
             foreach (var arg in arguments)
             {
                 var value = arg.UnQuote();
@@ -64,7 +64,7 @@ namespace Cake.Arguments
             return arg[0] == '-';
         }
 
-        private Argument ParseOption(string arg, uint position)
+        private Argument ParseOption(string arg, int position)
         {
             string name, value;
 

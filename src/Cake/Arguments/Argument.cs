@@ -1,6 +1,6 @@
 ﻿namespace Cake.Arguments
 {
-    internal struct Argument
+    internal class Argument
     {
         /// <summary>
         /// Gets or sets the key for this argument.
@@ -15,6 +15,6 @@
         /// <summary>
         /// Gets or sets the position in which the argument appeared.
         /// </summary>
-        public uint Position { get; set; }
+        public int Position { get; set; }
     }
 }
