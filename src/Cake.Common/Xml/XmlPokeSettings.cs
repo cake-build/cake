@@ -9,15 +9,6 @@ namespace Cake.Common.Xml
     public sealed class XmlPokeSettings
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="XmlPokeSettings"/> class.
-        /// </summary>
-        public XmlPokeSettings()
-        {
-            Namespaces = new Dictionary<string, string>();
-            Encoding = Encoding.Default;
-        }
-
-        /// <summary>
         /// Gets or sets a value indicating whether to preserve white space.
         /// </summary>
         public bool PreserveWhitespace { get; set; }
@@ -25,11 +16,20 @@ namespace Cake.Common.Xml
         /// <summary>
         /// Gets or sets namespaces to include for xpath recognition.
         /// </summary>
-        public Dictionary<string, string> Namespaces { get; set; }
+        public IDictionary<string, string> Namespaces { get; set; }
 
         /// <summary>
         /// Gets or sets the type of text encoding to use.
         /// </summary>
         public Encoding Encoding { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlPokeSettings"/> class.
+        /// </summary>
+        public XmlPokeSettings()
+        {
+            Namespaces = new Dictionary<string, string>();
+            Encoding = Encoding.UTF8;
+        }
     }
 }

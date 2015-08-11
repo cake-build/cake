@@ -21,6 +21,94 @@ namespace Cake.Common.Xml
         /// <param name="xpath">The xpath of the nodes to set.</param>
         /// <param name="value">The value to set too. Leave blank to remove the selected nodes.</param>
         /// <param name="settings">Additional settings to tweak Xml Poke behavior.</param>
+        /// <example>
+        ///   <para>
+        ///   Change the <c>server</c> setting in the configuration from <c>testhost.somecompany.com</c> 
+        ///   to <c>productionhost.somecompany.com</c>.
+        ///   </para>
+        ///   <para>XML file:</para>
+        ///   <code>
+        ///     <![CDATA[
+        /// <?xml version="1.0" encoding="utf-8" ?>
+        /// <configuration>
+        ///     <appSettings>
+        ///         <add key="server" value="testhost.somecompany.com" />
+        ///     </appSettings>
+        /// </configuration>
+        ///     ]]>
+        ///   </code>
+        ///   <para>Cake Task:</para>
+        ///   <code>
+        ///     <![CDATA[
+        /// Task("Transform")
+        ///     .Does(() =>
+        /// {
+        ///     var file = File("test.xml");
+        ///     XmlPoke(file, "/configuration/appSettings/add[@key = 'server']/@value", "productionhost.somecompany.com");
+        /// });
+        ///     ]]>
+        ///   </code>
+        /// </example>
+        /// <example>
+        ///   <para>
+        ///   Modify the <c>noNamespaceSchemaLocation</c> in an XML file.
+        ///   </para>
+        ///   <para>XML file:</para>
+        ///   <code>
+        ///     <![CDATA[
+        /// <?xml version="1.0" encoding="utf-8" ?>
+        /// <Commands xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Path Value">
+        /// </Commands>
+        ///     ]]>
+        ///   </code>
+        ///   <para>Cake Task:</para>
+        ///   <code>
+        ///     <![CDATA[
+        /// Task("Transform")
+        ///     .Does(() =>
+        /// {
+        ///     var file = File("test.xml");
+        ///     XmlPoke(file, "/Commands/@xsi:noNamespaceSchemaLocation", "d:\Commands.xsd", new XmlPokeSettings {
+        ///         Namespaces = new Dictionary<string, string> {
+        ///             { /* Prefix */ "xsi", /* URI */ "http://www.w3.org/2001/XMLSchema-instance" }
+        ///         }
+        ///     });
+        /// });
+        ///     ]]>
+        ///   </code>        
+        /// <example>
+        ///   <para>
+        ///   Remove an app setting from a config file.
+        ///   </para>
+        ///   <para>XML file:</para>
+        ///   <code>
+        ///     <![CDATA[
+        /// <?xml version="1.0" encoding="utf-8" ?>
+        /// <configuration>
+        ///     <appSettings>
+        ///         <add key="server" value="testhost.somecompany.com" />
+        ///         <add key="testing" value="true" />
+        ///     </appSettings>
+        /// </configuration>
+        ///     ]]>
+        ///   </code>
+        ///   <para>Cake Task:</para>
+        ///   <code>
+        ///     <![CDATA[
+        /// Task("Transform")
+        ///     .Does(() =>
+        /// {
+        ///     var file = File("test.xml");
+        ///     XmlPoke(file, "/configuration/appSettings/add[@testing]", null);
+        /// });
+        ///     ]]>
+        ///   </code>
+        /// </example>
+        /// <para>
+        /// Credit to NAnt for the original example.
+        /// http://nant.sourceforge.net/release/latest/help/tasks/xmlpoke.html
+        /// </para>
+        /// </example>
         [CakeMethodAlias]
         public static void XmlPoke(this ICakeContext context, FilePath filePath, string xpath, string value, XmlPokeSettings settings = null)
         {
@@ -44,17 +132,17 @@ namespace Cake.Common.Xml
                 settings = new XmlPokeSettings();
             }
 
-            var sourceFile = context.FileSystem.GetFile(filePath);
-            if (!sourceFile.Exists)
+            var file = context.FileSystem.GetFile(filePath);
+            if (!file.Exists)
             {
-                throw new FileNotFoundException("Source File not found.", sourceFile.Path.FullPath);
+                throw new FileNotFoundException("Source File not found.", file.Path.FullPath);
             }
-            
-            using (var sourceReader = sourceFile.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+
+            using (var fileReader = file.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            using (var xmlReader = XmlReader.Create(fileReader))
+            using (var xmlWriter = XmlWriter.Create(fileReader))
             {
-                var xmlReader = XmlReader.Create(sourceReader);
-                var xmlWriter = XmlWriter.Create(sourceReader);
-                XmlPoke(context, xmlReader, xmlWriter, xpath, value, settings);
+                XmlPoke(xmlReader, xmlWriter, xpath, value, settings);
             }
         }
 
@@ -67,6 +155,91 @@ namespace Cake.Common.Xml
         /// <param name="value">The value to set too. Leave blank to remove the selected nodes.</param>
         /// <param name="settings">Additional settings to tweak Xml Poke behavior.</param>
         /// <returns>Resulting XML.</returns>
+        /// <example>
+        ///   <para>
+        ///   Change the <c>server</c> setting in the configuration from <c>testhost.somecompany.com</c> 
+        ///   to <c>productionhost.somecompany.com</c>.
+        ///   </para>
+        ///   <para>XML string:</para>
+        ///   <code>
+        ///     <![CDATA[
+        /// <?xml version="1.0" encoding="utf-8" ?>
+        /// <configuration>
+        ///     <appSettings>
+        ///         <add key="server" value="testhost.somecompany.com" />
+        ///     </appSettings>
+        /// </configuration>
+        ///     ]]>
+        ///   </code>
+        ///   <para>Cake Task:</para>
+        ///   <code>
+        ///     <![CDATA[
+        /// Task("Transform")
+        ///     .Does(() =>
+        /// {
+        ///     var result = XmlPoke(xmlString, "/configuration/appSettings/add[@key = 'server']/@value", "productionhost.somecompany.com");
+        /// });
+        ///     ]]>
+        ///   </code>
+        /// </example>
+        /// <example>
+        ///   <para>
+        ///   Modify the <c>noNamespaceSchemaLocation</c> in an XML file.
+        ///   </para>
+        ///   <para>XML string:</para>
+        ///   <code>
+        ///     <![CDATA[
+        /// <?xml version="1.0" encoding="utf-8" ?>
+        /// <Commands xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Path Value">
+        /// </Commands>
+        ///     ]]>
+        ///   </code>
+        ///   <para>Cake Task:</para>
+        ///   <code>
+        ///     <![CDATA[
+        /// Task("Transform")
+        ///     .Does(() =>
+        /// {
+        ///     var result = XmlPoke(xmlString, "/Commands/@xsi:noNamespaceSchemaLocation", "d:\Commands.xsd", new XmlPokeSettings {
+        ///         Namespaces = new Dictionary<string, string> {
+        ///             { /* Prefix */ "xsi", /* URI */ "http://www.w3.org/2001/XMLSchema-instance" }
+        ///         }
+        ///     });
+        /// });
+        ///     ]]>
+        ///   </code>        
+        /// <example>
+        ///   <para>
+        ///   Remove an app setting from a config file.
+        ///   </para>
+        ///   <para>XML string:</para>
+        ///   <code>
+        ///     <![CDATA[
+        /// <?xml version="1.0" encoding="utf-8" ?>
+        /// <configuration>
+        ///     <appSettings>
+        ///         <add key="server" value="testhost.somecompany.com" />
+        ///         <add key="testing" value="true" />
+        ///     </appSettings>
+        /// </configuration>
+        ///     ]]>
+        ///   </code>
+        ///   <para>Cake Task:</para>
+        ///   <code>
+        ///     <![CDATA[
+        /// Task("Transform")
+        ///     .Does(() =>
+        /// {
+        ///     var result = XmlPoke(xmlString, "/configuration/appSettings/add[@testing]", null);
+        /// });
+        ///     ]]>
+        ///   </code>
+        /// </example>
+        /// <para>
+        /// Credit to NAnt for the original example.
+        /// http://nant.sourceforge.net/release/latest/help/tasks/xmlpoke.html
+        /// </para>
+        /// </example>
         [CakeMethodAlias]
         public static string XmlPoke(this ICakeContext context, string sourceXml, string xpath, string value, XmlPokeSettings settings = null)
         {
@@ -91,11 +264,11 @@ namespace Cake.Common.Xml
             }
 
             using (var resultStream = new MemoryStream())
-            using (var sourceReader = new StringReader(sourceXml))
+            using (var fileReader = new StringReader(sourceXml))
+            using (var xmlReader = XmlReader.Create(fileReader))
+            using (var xmlWriter = XmlWriter.Create(resultStream))
             {
-                var xmlReader = XmlReader.Create(sourceReader);
-                var xmlWriter = XmlWriter.Create(resultStream);
-                XmlPoke(context, xmlReader, xmlWriter, xpath, value, settings);
+                XmlPoke(xmlReader, xmlWriter, xpath, value, settings);
                 resultStream.Position = 0;
                 return settings.Encoding.GetString(resultStream.ToArray());
             }
@@ -104,20 +277,14 @@ namespace Cake.Common.Xml
         /// <summary>
         /// Set the value of, or remove, target nodes.
         /// </summary>
-        /// <param name="context">The context.</param>
         /// <param name="source">The source xml to transform.</param>
         /// <param name="destination">The destination to write too.</param>
         /// <param name="xpath">The xpath of the nodes to set.</param>
         /// <param name="value">The value to set too. Leave blank to remove the selected nodes.</param>
         /// <param name="settings">Additional settings to tweak Xml Poke behavior.</param>
         [CakeMethodAlias]
-        public static void XmlPoke(this ICakeContext context, XmlReader source, XmlWriter destination, string xpath, string value, XmlPokeSettings settings)
+        private static void XmlPoke(XmlReader source, XmlWriter destination, string xpath, string value, XmlPokeSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
-
             if (source == null)
             {
                 throw new ArgumentNullException("source");
