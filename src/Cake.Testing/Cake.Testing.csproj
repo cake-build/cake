@@ -115,6 +115,7 @@
     <Compile Include="Fakes\FakeFileSystem.cs" />
     <Compile Include="Fakes\FakeFileSystemTree.cs" />
     <Compile Include="Fakes\FakeLog.cs" />
+    <Compile Include="PathAsserts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

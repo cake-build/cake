@@ -6,151 +6,111 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
 [![Coverity Scan](https://scan.coverity.com/projects/4147/badge.svg)](https://scan.coverity.com/projects/4147) 
 
 [![Follow @cakebuildnet](https://img.shields.io/badge/Twitter-Follow%20%40cakebuildnet-blue.svg)](https://twitter.com/intent/follow?screen_name=cakebuildnet)
-
-[![cakebuild.net](https://img.shields.io/badge/WWW-cakebuild.net-blue.svg)](http://cakebuild.net/)
-
 [![Join the chat at https://gitter.im/cake-build/cake](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/cake-build/cake?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ##Table of contents
 
-1. [Roadmap](https://github.com/cake-build/cake#roadmap)
-2. [Implemented functionality](https://github.com/cake-build/cake#implemented-functionality)
-3. [Example](https://github.com/cake-build/cake#example)
+1. [Implemented functionality](https://github.com/cake-build/cake#implemented-functionality)
+2. [Example](https://github.com/cake-build/cake#example)
     - [Download Cake](https://github.com/cake-build/cake#1-download-cake)
     - [Create build script](https://github.com/cake-build/cake#2-create-build-script)
     - [Run build script](https://github.com/cake-build/cake#3-run-build-script)
-4. [Documentation](https://github.com/cake-build/cake#documentation)
-5. [Bootstrapper](https://github.com/cake-build/cake#bootstrapper)
-6. [Contributing](https://github.com/cake-build/cake#contributing)
-7. [External add-ons](https://github.com/cake-build/cake#external-add-ons)
-8. [License](https://github.com/cake-build/cake#license)
-
-##Roadmap
-
-The Cake engine is pretty much done, but there are still improvements to be made. I'm still experimenting with the script API to make it as easy and intuitive as possible, so expect changes along the road.
-
-A roadmap can be found [here](https://github.com/cake-build/cake/milestones).
+3. [Documentation](https://github.com/cake-build/cake#documentation)
+4. [Bootstrapper](https://github.com/cake-build/cake#bootstrapper)
+5. [Contributing](https://github.com/cake-build/cake#contributing)
+6. [External add-ons](https://github.com/cake-build/cake#external-add-ons)
+7. [License](https://github.com/cake-build/cake#license)
 
 ##Implemented functionality
 
 This is a list of some the currently implemented functionality.   
 For a full list of supported tools, see the [DSL reference](http://cakebuild.net/dsl/).
 
-* [MSBuild](http://cakebuild.net/dsl/#msbuild) 
-* [MSTest](http://cakebuild.net/dsl/#mstest)
-* [xUnit (v1 and v2)](http://cakebuild.net/dsl/#xunit)
-* [NUnit](http://cakebuild.net/dsl/#nunit)
-* [NuGet](http://cakebuild.net/dsl/#nuget)
+* [MSBuild](http://cakebuild.net/dsl/msbuild) 
+* [MSTest](http://cakebuild.net/dsl/mstest)
+* [xUnit (v1)](http://cakebuild.net/dsl/xunit)
+* [xUnit (v2)](http://cakebuild.net/dsl/xunit-v2)
+* [NUnit](http://cakebuild.net/dsl/nunit)
+* [NuGet](http://cakebuild.net/dsl/nuget)
   * Pack
   * Push
   * Restore
   * Sources
-* [ILMerge](http://cakebuild.net/dsl/#ilmerge)
-* [WiX](http://cakebuild.net/dsl/#wix)
+* [ILMerge](http://cakebuild.net/dsl/ilmerge)
+* [WiX](http://cakebuild.net/dsl/wix)
   * Candle
   * Light
-* [SignTool](http://cakebuild.net/dsl/#signing)
-* [File operations](http://cakebuild.net/dsl/#fileoperations)
+* [SignTool](http://cakebuild.net/dsl/signing)
+* [File operations](http://cakebuild.net/dsl/file-operations)
   * Copying
   * Moving
   * Deleting
-* [Directory operations](http://cakebuild.net/dsl/#directoryoperations)
+* [Directory operations](http://cakebuild.net/dsl/directory-operations)
   * Creation
   * Cleaning
   * Deleting
-* [File/Directory globbing](http://cakebuild.net/dsl/#globbing)
-* [Compression (zip)](http://cakebuild.net/dsl/#compression)
-* [AssemblyInfo patching](http://cakebuild.net/dsl/#assemblyinfo)
-* [Release notes parser](http://cakebuild.net/dsl/#releasenotes)
-* [AppVeyor](http://cakebuild.net/dsl/#buildsystem)
-* [MSBuild Resource](http://cakebuild.net/dsl/#msbuildresource)
+* [File/Directory globbing](http://cakebuild.net/dsl/globbing)
+* [Compression (zip)](http://cakebuild.net/dsl/compression)
+* [AssemblyInfo patching](http://cakebuild.net/dsl/assembly-info)
+* [Release notes parser](http://cakebuild.net/dsl/release-notes)
+* [AppVeyor](http://cakebuild.net/dsl/build-system)
+* [MSBuild Resource](http://cakebuild.net/dsl/msbuild-resource)
   * Solution file parsing
   * Project file parsing
-* [Octopus deploy](http://cakebuild.net/dsl/#octopusdeploy)
+* [Octopus deploy](http://cakebuild.net/dsl/octopus-deploy)
   * Create release
 
-For more information and examples of how to use Cake, see the [Documentation](http://cakebuild.net/). 
+For more information and examples of how to use Cake, see the [Documentation](http://cakebuild.net/docs). 
 
 ##Example
 
 ###1. Download Cake
 
-```Batchfile
+```batchfile
 C:\Project> NuGet.exe install Cake -OutputDirectory Tools -ExcludeVersion
 ```
 
 ###2. Create build script
 
-```CSharp
-var target = Argument("target", "NuGet");
+```csharp
+var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
+
+// Define directories.
+var buildDir = Directory("./src/Example/bin") + Directory(configuration);
 
 Task("Clean")
     .Does(() =>
 {
-    // Clean directories.
-    CleanDirectory("./build");
-    CleanDirectory("./build/bin");
-    CleanDirectories("./src/**/bin/" + configuration);
+    CleanDirectory(buildDir);
 });
 
 Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean")
-    .Does(context =>
+    .Does(() =>
 {
-    // Restore NuGet packages.
-    NuGetRestore("./src/Cake.sln");    
+    NuGetRestore("./src/Example.sln");
 });
 
 Task("Build")
     .IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
 {
-    MSBuild("./src/Cake.sln", s => 
-        s.SetConfiguration(configuration));
+    MSBuild("./src/Example.sln", new MSBuildSettings()
+        .UseToolVersion(MSBuildToolVersion.NET45)
+        .SetVerbosity(Verbosity.Minimal)
+        .SetConfiguration(configuration));
 });
 
-Task("Unit-Tests")
+Task("Run-Unit-Tests")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    XUnit("./src/**/bin/" + configuration + "/*.Tests.dll");
+    XUnit2("./src/**/bin/" + configuration + "/*.Tests.dll");
 });
 
-Task("Copy-Files")
-    .IsDependentOn("Unit-Tests")
-    .Does(() =>
-{
-    var sourcePath = "./src/Cake/bin/" + configuration;    
-    var files = GetFiles(sourcePath + "/**/*.dll") + GetFiles(sourcePath + "/**/*.exe");
-    var destinationPath = "./build/bin";
-
-    CopyFiles(files, destinationPath);
-});
-
-Task("Pack")
-    .IsDependentOn("Copy-Files")
-    .Does(() =>
-{   
-    var root = "./build/bin";
-    var output = "./build/" + configuration + ".zip";
-
-    Zip(root, output);
-});
-
-Task("NuGet")
-    .Description("Create NuGet package")
-    .IsDependentOn("Pack")
-    .Does(() =>
-{
-    // Create NuGet package.
-    NuGetPack("./Cake.nuspec", new NuGetPackSettings {
-        Version = "0.1.0",
-        BasePath = "./build/bin",
-        OutputDirectory = "./build",
-        NoPackageAnalysis = true
-    });
-});
+Task("Default")
+    .IsDependentOn("Run-Unit-Tests");
 
 RunTarget(target);
 ```
@@ -158,8 +118,10 @@ RunTarget(target);
 ###3. Run build script
 
 ```
-C:\Project\Tools\Cake> Cake.exe ../../build.csx -verbosity=verbose -target=Pack
+C:\Project\Tools\Cake> Cake.exe ../../build.cake -verbosity=verbose -target=Build
 ```
+
+You could of course use a [bootstrapper script](https://github.com/cake-build/cake/blob/develop/build.ps1) if you want to.
 
 ## Documentation
 

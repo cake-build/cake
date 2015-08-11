@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Cake.Core.IO;
 
 namespace Cake.Core.Scripting.Processors
@@ -12,7 +13,7 @@ namespace Cake.Core.Scripting.Processors
         /// Initializes a new instance of the <see cref="UsingStatementProcessor"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        public UsingStatementProcessor(ICakeEnvironment environment) 
+        public UsingStatementProcessor(ICakeEnvironment environment)
             : base(environment)
         {
         }
@@ -35,7 +36,7 @@ namespace Cake.Core.Scripting.Processors
             }
 
             var tokens = Split(line);
-            if (tokens.Length <= 0)
+            if (tokens.Length <= 1)
             {
                 return false;
             }
@@ -45,9 +46,22 @@ namespace Cake.Core.Scripting.Processors
                 return false;
             }
 
+            // Using block?
             var @namespace = tokens[1].TrimEnd(';');
-            context.AddNamespace(@namespace);
+            if (@namespace.StartsWith("("))
+            {
+                return false;
+            }
 
+            // Using alias directive?
+            if (tokens.Any(t => t == "="))
+            {
+                context.AddUsingAliasDirective(string.Join(" ", tokens));
+                return true;
+            }
+
+            // Namespace
+            context.AddNamespace(@namespace);
             return true;
         }
     }

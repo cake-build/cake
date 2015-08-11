@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cake.Core.Diagnostics;
-using Cake.Core.IO;
 
 namespace Cake.Common.Tools.MSBuild
 {
@@ -35,7 +34,7 @@ namespace Cake.Common.Tools.MSBuild
         /// Gets or sets the platform target.
         /// </summary>
         /// <value>The platform target.</value>
-        public PlatformTarget PlatformTarget { get; set; }
+        public PlatformTarget? PlatformTarget { get; set; }
 
         /// <summary>
         /// Gets or sets the tool version.
@@ -77,7 +76,6 @@ namespace Cake.Common.Tools.MSBuild
             _targets = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _properties = new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
 
-            PlatformTarget = PlatformTarget.MSIL;
             ToolVersion = MSBuildToolVersion.Default;
             Configuration = string.Empty;
             Verbosity = Verbosity.Normal;

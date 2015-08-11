@@ -1,3 +1,11 @@
+### New in 0.5.1 (Released 2015/07/27)
+* Increased stability when running on Mono.
+* Added MSTest support for Visual Studio 2015 (version 14.0).
+* Renamed MSOrXBuild to DotNetBuild.
+* Better error reporting on Mono.
+* Fixed path bug affecting non Windows systems.
+* Cake now logs a warning if an assembly can't be loaded.
+
 ### New in 0.5.0 (Released 2015/07/20)
 * Added Mono support.
 * Added XBuild alias.

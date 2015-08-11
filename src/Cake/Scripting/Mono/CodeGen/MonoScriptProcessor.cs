@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cake.Core;
 using Cake.Core.Scripting;
 using Cake.Scripting.Mono.CodeGen.Parsing;
 
@@ -7,13 +8,11 @@ namespace Cake.Scripting.Mono.CodeGen
 {
     internal static class MonoScriptProcessor
     {
-        public static Script Process(Script script, out IReadOnlyList<CodeBlock> blocks)
+        public static Script Process(Script script, out IReadOnlyList<ScriptBlock> blocks)
         {
-            var code = string.Join(Environment.NewLine, script.Lines);
-            var parsedBlocks = ParseBlocks(code);
             var lines = new List<string>();
-            var result = new List<CodeBlock>();
-            foreach (var codeBlock in parsedBlocks)
+            var result = new List<ScriptBlock>();
+            foreach (var codeBlock in ParseBlocks(script))
             {
                 if (codeBlock.HasScope)
                 {
@@ -21,29 +20,30 @@ namespace Cake.Scripting.Mono.CodeGen
                 }
                 else
                 {
-                    lines.Add(codeBlock.Content);
+                    lines.AddRange(codeBlock.Content.SplitLines());
                 }
             }
             blocks = result; // Assign the parsed blocks.
-            return new Script(script.Namespaces, lines, script.Aliases);
+            return new Script(script.Namespaces, lines, script.Aliases, script.UsingAliasDirectives);
         }
 
-        private static IEnumerable<CodeBlock> ParseBlocks(string code)
+        private static IEnumerable<ScriptBlock> ParseBlocks(Script script)
         {
-            var result = new List<CodeBlock>();
-            using (var scanner = new CodeBlockParser(code))
+            var code = string.Join(Environment.NewLine, script.Lines);
+            using (var parser = new ScriptParser(code))
             {
+                var result = new List<ScriptBlock>();
                 while (true)
                 {
-                    var block = scanner.GetBlock();
+                    var block = parser.ParseNext();
                     if (block == null)
                     {
                         break;
                     }
                     result.Add(block);
                 }
+                return result;
             }
-            return result;
         }
     }
 }

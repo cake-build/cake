@@ -113,7 +113,6 @@
     <Compile Include="Tools\Fixie\FixieRunner.cs" />
     <Compile Include="Tools\Fixie\FixieSettings.cs" />
     <Compile Include="Tools\Fixie\FixieSettingsExtensions.cs" />
-    <Compile Include="Tools\Fixie\TeamCityOutput.cs" />
     <Compile Include="Tools\ILMerge\ILMergeAliases.cs" />
     <Compile Include="Tools\ILMerge\ILMergeRunner.cs" />
     <Compile Include="Tools\ILMerge\ILMergeSettings.cs" />
@@ -172,6 +171,10 @@
     <Compile Include="Tools\OctopusDeploy\CreateReleaseSettings.cs" />
     <Compile Include="Tools\OctopusDeploy\OctopusDeployReleaseCreator.cs" />
     <Compile Include="Tools\OctopusDeploy\OctopusDeploySettings.cs" />
+    <Compile Include="Tools\Roundhouse\RecoveryMode.cs" />
+    <Compile Include="Tools\Roundhouse\RoundhouseAliases.cs" />
+    <Compile Include="Tools\Roundhouse\RoundhouseRunner.cs" />
+    <Compile Include="Tools\Roundhouse\RoundhouseSettings.cs" />
     <Compile Include="Tools\SignTool\ISignToolResolver.cs" />
     <Compile Include="Tools\SignTool\SignToolResolver.cs" />
     <Compile Include="Tools\SignTool\SignToolSignAliases.cs" />
@@ -204,8 +207,11 @@
     <Compile Include="Tools\XBuild\XBuildToolVersion.cs" />
     <Compile Include="Tools\XBuild\XBuildAliases.cs" />
     <Compile Include="Tools\XBuild\XBuildResolver.cs" />
-    <Compile Include="Tools\MSOrXBuildSettings.cs" />
-    <Compile Include="Tools\MSOrXBuildAliases.cs" />
+    <Compile Include="Tools\DotNetBuildSettings.cs" />
+    <Compile Include="Tools\DotNetBuildAliases.cs" />
+    <Compile Include="Tools\ILRepack\ILRepackSettings.cs" />
+    <Compile Include="Tools\ILRepack\ILRepackRunner.cs" />
+    <Compile Include="Tools\ILRepack\ILRepackAliases.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">

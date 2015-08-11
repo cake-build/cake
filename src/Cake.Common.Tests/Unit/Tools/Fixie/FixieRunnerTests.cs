@@ -202,9 +202,9 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
             }
 
             [Theory]
-            [InlineData(TeamCityOutput.On, "on")]
-            [InlineData(TeamCityOutput.Off, "off")]
-            public void Should_Set_TeamCity_Value(TeamCityOutput? teamCityOutput, string teamCityValue)
+            [InlineData(true, "on")]
+            [InlineData(false, "off")]
+            public void Should_Set_TeamCity_Value(bool teamCityOutput, string teamCityValue)
             {
                 // Given
                 var fixture = new FixieRunnerFixture();

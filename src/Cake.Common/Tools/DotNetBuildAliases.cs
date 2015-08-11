@@ -10,9 +10,8 @@ namespace Cake.Common.Tools
     /// <summary>
     /// Contains functionality to run either MSBuild on Windows or XBuild on Mac/Linux/Unix.
     /// </summary>
-    [CakeAliasCategory("MSOrXBuild")]
-    // ReSharper disable once InconsistentNaming
-    public static class MSOrXBuildAliases
+    [CakeAliasCategory("DotNetBuild")]
+    public static class DotNetBuildAliases
     {
         /// <summary>
         /// Builds the specified solution using MSBuild or XBuild.
@@ -32,7 +31,7 @@ namespace Cake.Common.Tools
         /// <param name="solution">The solution.</param>
         /// <param name="configurator">The configurator.</param>
         [CakeMethodAlias]
-        public static void DotNetBuild(this ICakeContext context, FilePath solution, Action<MSOrXBuildSettings> configurator)
+        public static void DotNetBuild(this ICakeContext context, FilePath solution, Action<DotNetBuildSettings> configurator)
         {
             if (context == null)
             {
@@ -44,7 +43,7 @@ namespace Cake.Common.Tools
             }
 
             // Create the settings using the delegate.
-            var dotNetSettings = new MSOrXBuildSettings(solution);
+            var dotNetSettings = new DotNetBuildSettings(solution);
             configurator(dotNetSettings);
 
             // Running on Mac/Linux/Unix?

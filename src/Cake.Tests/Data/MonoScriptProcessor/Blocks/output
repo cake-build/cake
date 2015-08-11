@@ -1,0 +1,13 @@
+﻿// BLOCKS
+public class Foo
+{
+}
+public class Bar
+{
+}
+public class Baz
+{
+	public class Qux
+	{
+	}
+}
