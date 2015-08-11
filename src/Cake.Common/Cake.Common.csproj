@@ -171,6 +171,8 @@
     <Compile Include="Tools\NuGet\Update\NuGetUpdater.cs" />
     <Compile Include="Tools\NuGet\Update\NuGetUpdateSettings.cs" />
     <Compile Include="Tools\NUnit\NUnitAliases.cs" />
+    <Compile Include="Tools\NUnit\NUnitAppDomainUsage.cs" />
+    <Compile Include="Tools\NUnit\NUnitProcessOption.cs" />
     <Compile Include="Tools\NUnit\NUnitRunner.cs" />
     <Compile Include="Tools\NUnit\NUnitSettings.cs" />
     <Compile Include="Tools\OctopusDeploy\CreateReleaseArgumentBuilder.cs" />

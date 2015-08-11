@@ -237,7 +237,10 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                     Exclude = "Database_Users",
                     Framework = "net1_1",
                     OutputFile = "stdout.txt",
-                    ErrorOutputFile = "stderr.txt"
+                    ErrorOutputFile = "stderr.txt",
+                    Process = NUnitProcessOption.Multiple,
+                    UseSingleThreadedApartment = true,
+                    AppDomainUsage = NUnitAppDomainUsage.Single
                 });
 
                 // Then
@@ -251,7 +254,44 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                         "/timeout:5 /nologo /nothread /stoponerror /trace:Debug " +
                         "\"/output:/Working/stdout.txt\" " +
                         "\"/err:/Working/stderr.txt\" " +
-                        "\"/result:/Working/NewTestResult.xml\""));
+                        "\"/result:/Working/NewTestResult.xml\" " +
+                        "\"/process:Multiple\" " + 
+                        "\"/apartment:STA\" " + 
+                        "\"/domain:Single\""));
+            }
+
+            [Fact]
+            public void Should_Not_Set_Process_Switch_For_DefaultSingleValue()
+            {
+                // Given
+                var fixture = new NUnitRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run("./Test1.dll", new NUnitSettings{Process = NUnitProcessOption.Single});
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "\"/Working/Test1.dll\""));
+            }
+
+            [Fact]
+            public void Should_Not_Set_Switch_For_Default_AppDomainUsage()
+            {
+                // Given
+                var fixture = new NUnitRunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run("./Test1.dll", new NUnitSettings { AppDomainUsage = NUnitAppDomainUsage.Default });
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "\"/Working/Test1.dll\""));
             }
         }
     }
