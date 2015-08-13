@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.Core", "Cake.Core\Cake.Core.csproj", "{8074B833-11B8-459F-BB98-BFBA2BC5C698}"
 EndProject
@@ -31,6 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{A01118B7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuspec", "nuspec", "{B38B35F5-812A-4E4C-B267-71254A7EEF17}"
 	ProjectSection(SolutionItems) = preProject
+		..\nuspec\Cake.Common.nuspec = ..\nuspec\Cake.Common.nuspec
 		..\nuspec\Cake.Core.nuspec = ..\nuspec\Cake.Core.nuspec
 		..\nuspec\Cake.nuspec = ..\nuspec\Cake.nuspec
 	EndProjectSection

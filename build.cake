@@ -108,6 +108,7 @@ Task("Copy-Files")
     CopyFileToDirectory(buildDir + File("Cake.Core.pdb"), binDir);
     CopyFileToDirectory(buildDir + File("Cake.Common.dll"), binDir);
     CopyFileToDirectory(buildDir + File("Cake.Common.xml"), binDir);
+    CopyFileToDirectory(buildDir + File("Cake.Common.pdb"), binDir);
     CopyFileToDirectory(buildDir + File("Mono.CSharp.dll"), binDir);
     CopyFileToDirectory(buildDir + File("Autofac.dll"), binDir);
     CopyFileToDirectory(buildDir + File("Nuget.Core.dll"), binDir);
@@ -139,8 +140,17 @@ Task("Create-NuGet-Packages")
         NoPackageAnalysis = true
     });
 
-    // Create core package.
+    // Create Core package.
     NuGetPack("./nuspec/Cake.Core.nuspec", new NuGetPackSettings {
+        Version = semVersion,
+        ReleaseNotes = releaseNotes.Notes.ToArray(),
+        BasePath = binDir,
+        OutputDirectory = nugetRoot,
+        Symbols = false
+    });
+
+    // Create Common package.
+    NuGetPack("./nuspec/Cake.Common.nuspec", new NuGetPackSettings {
         Version = semVersion,
         ReleaseNotes = releaseNotes.Notes.ToArray(),
         BasePath = binDir,
