@@ -138,11 +138,20 @@ namespace Cake.Common.Xml
                 throw new FileNotFoundException("Source File not found.", file.Path.FullPath);
             }
 
-            using (var fileReader = file.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None))
-            using (var xmlReader = XmlReader.Create(fileReader))
-            using (var xmlWriter = XmlWriter.Create(fileReader))
+            using (var memoryStream = new MemoryStream())
             {
-                XmlPoke(xmlReader, xmlWriter, xpath, value, settings);
+                using (var fileStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None))
+                using (var xmlReader = XmlReader.Create(fileStream))
+                using (var xmlWriter = XmlWriter.Create(memoryStream))
+                {
+                    XmlPoke(xmlReader, xmlWriter, xpath, value, settings);
+                }
+
+                using (var fileStream = file.Open(FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    memoryStream.Position = 0;
+                    memoryStream.CopyTo(fileStream);
+                }
             }
         }
 
