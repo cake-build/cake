@@ -93,5 +93,15 @@ namespace Cake.Core.Scripting
         /// <param name="target">The target to run.</param>
         /// <returns>The resulting report.</returns>
         public abstract CakeReport RunTarget(string target);
+
+        /// <summary>
+        /// Sets the name of the target to run.
+        /// Can be safely called multiple times.
+        /// </summary>
+        /// <param name="target">The target to run.</param>
+        public void SetTarget(string target)
+        {
+            _engine.Target = target;
+        }
     }
 }

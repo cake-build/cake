@@ -46,6 +46,13 @@ namespace Cake.Core.Scripting
         /// </summary>
         /// <param name="target">The target to run.</param>
         /// <returns>The resulting report.</returns>
+        [Obsolete("Use SetTarget instead.")]
         CakeReport RunTarget(string target);
+
+        /// <summary>
+        /// Declares the specified target as the running one.
+        /// </summary>
+        /// <param name="target">The target to run.</param>
+        void SetTarget(string target);
     }
 }

@@ -86,54 +86,56 @@ namespace Cake.Core.Tests.Unit
 
         public sealed class TheRunTargetMethod
         {
-            public sealed class WithTarget
+            public sealed class HandlingDefaultTarget
             {
                 [Fact]
-                public void Should_Throw_If_Target_Is_Null()
+                public void Should_Run_Engine_Configured_Target_If_Target_Is_Null()
                 {
                     // Given
                     var fixture = new CakeEngineFixture();
                     var engine = fixture.CreateEngine();
+                    engine.Target = "A";
+                    bool targetCalled = false;
+                    engine.RegisterTask("Default").Does(() => { throw new Exception(); });
+                    engine.RegisterTask("A").Does(() => targetCalled = true );
 
                     // When
-                    var result = Record.Exception(() =>
-                        engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, null));
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, null);
 
                     // Then
-                    Assert.IsArgumentNullException(result, "target");
+                    Assert.True(targetCalled);
                 }
+
+                [Fact]
+                public void Should_Run_Default_Target_If_Target_And_Engine_Configured_Target_Are_Both_Null()
+                {
+                    // Given
+                    var fixture = new CakeEngineFixture();
+                    var engine = fixture.CreateEngine();
+                    bool defaultTargetCalled = false;
+                    engine.RegisterTask("Default").Does(() => defaultTargetCalled = true);
+
+                    // When
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, null);
+
+                    // Then
+                    Assert.True(defaultTargetCalled);
+                }
+
             }
 
-            public sealed class WithExecutionStrategy
+            [Fact]
+            public void Should_Throw_If_Execution_Strategy_Is_Null()
             {
-                [Fact]
-                public void Should_Throw_If_Target_Is_Null()
-                {
-                    // Given
-                    var fixture = new CakeEngineFixture();
-                    var engine = fixture.CreateEngine();
+                // Given
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
 
-                    // When
-                    var result = Record.Exception(() =>
-                        engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, null));
+                // When
+                var result = Record.Exception(() => engine.RunTarget(fixture.Context, null, "A"));
 
-                    // Then
-                    Assert.IsArgumentNullException(result, "target");
-                }
-
-                [Fact]
-                public void Should_Throw_If_Execution_Strategy_Is_Null()
-                {
-                    // Given
-                    var fixture = new CakeEngineFixture();
-                    var engine = fixture.CreateEngine();
-
-                    // When
-                    var result = Record.Exception(() => engine.RunTarget(fixture.Context, null, "A"));
-
-                    // Then
-                    Assert.IsArgumentNullException(result, "strategy");
-                }
+                // Then
+                Assert.IsArgumentNullException(result, "strategy");
             }
 
             [Fact]

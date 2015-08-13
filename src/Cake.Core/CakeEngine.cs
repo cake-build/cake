@@ -17,6 +17,7 @@ namespace Cake.Core
         private readonly List<CakeTask> _tasks;
         private Action _setupAction;
         private Action _teardownAction;
+        private string _target;
 
         /// <summary>
         /// Gets all registered tasks.
@@ -25,6 +26,23 @@ namespace Cake.Core
         public IReadOnlyList<CakeTask> Tasks
         {
             get { return _tasks; }
+        }
+
+        /// <summary>
+        /// Gets or sets the name of the target to run.
+        /// When null or empty, defaults to "Default".
+        /// </summary>
+        public string Target
+        {
+            get
+            {
+                return string.IsNullOrEmpty(_target) ? "Default" : _target; 
+            }
+
+            set
+            {
+                _target = value;
+            }
         }
 
         /// <summary>
@@ -85,17 +103,17 @@ namespace Cake.Core
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="strategy">The execution strategy.</param>
-        /// <param name="target">The target to run.</param>
+        /// <param name="target">The target to run. When let to null, <see cref="Target"/> property is used.</param>
         /// <returns>The resulting report.</returns>
-        public CakeReport RunTarget(ICakeContext context, IExecutionStrategy strategy, string target)
+        public CakeReport RunTarget(ICakeContext context, IExecutionStrategy strategy, string target = null)
         {
-            if (target == null)
-            {
-                throw new ArgumentNullException("target");
-            }
             if (strategy == null)
             {
                 throw new ArgumentNullException("strategy");
+            }
+            if (target == null)
+            {
+                target = Target;
             }
 
             var graph = CakeGraphBuilder.Build(_tasks);
