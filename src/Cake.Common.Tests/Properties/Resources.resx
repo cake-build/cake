@@ -282,6 +282,15 @@ Line #3&lt;/releaseNotes&gt;
     &lt;/members&gt;
 &lt;/doc&gt;</value>
   </data>
+  <data name="XmlPoke_Xml" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;configuration&gt;
+    &lt;appSettings&gt;
+        &lt;add key="server" value="testhost.somecompany.com" /&gt;
+        &lt;add key="test" value="true" /&gt;
+    &lt;/appSettings&gt;
+&lt;/configuration&gt;</value>
+  </data>
   <data name="XmlTransformation_Htm" xml:space="preserve">
     <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;&lt;html&gt;&lt;body style="font-family:Arial;font-size:12pt;background-color:#EEEEEE"&gt;&lt;div style="background-color:teal;color:white;padding:4px"&gt;&lt;span style="font-weight:bold"&gt;Belgian Waffles
                     -

@@ -28,6 +28,7 @@ namespace Cake.Common.Xml
         /// </summary>
         public XmlPokeSettings()
         {
+            PreserveWhitespace = true;
             Namespaces = new Dictionary<string, string>();
             Encoding = Encoding.UTF8;
         }
