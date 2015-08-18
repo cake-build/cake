@@ -74,7 +74,7 @@ namespace Cake.Common.Tests.Unit.XML
             public void Should_Throw_If_Xml_Not_Exists()
             {
                 // Given
-                var fixture = new XmlTransformationFixture(xmlExists:false)
+                var fixture = new XmlTransformationFixture(xmlExists: false)
                 {
                     XmlPath = "/Working/non_existsing.xml"
                 };
@@ -139,7 +139,7 @@ namespace Cake.Common.Tests.Unit.XML
                         resultString = streamReader.ReadToEnd();
                     }
                 }
-                Assert.Equal(Resources.XmlTransformation_Htm, resultString);
+                Assert.Equal(Resources.XmlTransformation_Htm, resultString, ignoreLineEndingDifferences: true);
             }
 
             [Fact]
@@ -154,7 +154,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = XmlTransformation.Transform(xsl, xml);
 
                 // Then
-                Assert.Equal(htm, result);
+                Assert.Equal(htm, result, ignoreLineEndingDifferences: true);
             }
 
             [Fact]
@@ -173,7 +173,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = XmlTransformation.Transform(xsl, xml, settings);
 
                 // Then
-                Assert.Equal(htm, result);
+                Assert.Equal(htm, result, ignoreLineEndingDifferences: true);
             }
 
             [Fact]
