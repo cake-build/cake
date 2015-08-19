@@ -71,7 +71,13 @@ namespace Cake.Common.Tools.XUnit
             // No shadow copy?
             if (!settings.ShadowCopy)
             {
-                builder.AppendQuoted("-noshadow");
+                builder.Append("-noshadow");
+            }
+
+            // No app domain?
+            if (settings.NoAppDomain)
+            {
+                builder.Append("-noappdomain");
             }
 
             // Generate HTML report?
@@ -80,7 +86,7 @@ namespace Cake.Common.Tools.XUnit
                 var assemblyFilename = assemblyPath.GetFilename().AppendExtension(".html");
                 var outputPath = settings.OutputDirectory.MakeAbsolute(_environment).GetFilePath(assemblyFilename);
 
-                builder.AppendQuoted("-html");
+                builder.Append("-html");
                 builder.AppendQuoted(outputPath.FullPath);
             }
 
@@ -90,7 +96,7 @@ namespace Cake.Common.Tools.XUnit
                 var assemblyFilename = assemblyPath.GetFilename().AppendExtension(".xml");
                 var outputPath = settings.OutputDirectory.MakeAbsolute(_environment).GetFilePath(assemblyFilename);
 
-                builder.AppendQuoted(settings.XmlReportV1 ? "-xmlv1" : "-xml");
+                builder.Append(settings.XmlReportV1 ? "-xmlv1" : "-xml");
                 builder.AppendQuoted(outputPath.FullPath);
             }
 
