@@ -139,7 +139,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("xUnit.net (v2): Process returned an error.", result.Message);                  
+                Assert.Equal("xUnit.net (v2): Process returned an error.", result.Message);
             }
 
             [Fact]
@@ -178,7 +178,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), 
                     Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "\"/Working/Test1.dll\" \"-html\" \"/Output/Test1.dll.html\""));
+                        p.Arguments.Render() == "\"/Working/Test1.dll\" -html \"/Output/Test1.dll.html\""));
             }
 
             [Fact]
@@ -217,7 +217,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), 
                     Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "\"/Working/Test1.dll\" \"-xml\" \"/Output/Test1.dll.xml\""));
+                        p.Arguments.Render() == "\"/Working/Test1.dll\" -xml \"/Output/Test1.dll.xml\""));
             }
 
 
@@ -257,9 +257,8 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
                     Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "\"/Working/Test1.dll\" \"-xmlv1\" \"/Output/Test1.dll.xml\""));
+                        p.Arguments.Render() == "\"/Working/Test1.dll\" -xmlv1 \"/Output/Test1.dll.xml\""));
             }
-
 
             [Fact]
             public void Should_Not_Use_Shadow_Copying_If_Disabled_In_Settings()
@@ -278,7 +277,26 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), 
                     Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "\"/Working/Test1.dll\" \"-noshadow\""));
+                        p.Arguments.Render() == "\"/Working/Test1.dll\" -noshadow"));
+            }
+
+            [Fact]
+            public void Should_Not_Use_App_Domains_If_Disabled_In_Settings()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run("./Test1.dll", new XUnit2Settings {
+                    NoAppDomain = true
+                });
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "\"/Working/Test1.dll\" -noappdomain"));
             }
         }
     }
