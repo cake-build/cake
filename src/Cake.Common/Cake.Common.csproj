@@ -109,6 +109,9 @@
     <Compile Include="Tools\Cake\CakeAliases.cs" />
     <Compile Include="Tools\Cake\CakeRunner.cs" />
     <Compile Include="Tools\Cake\CakeSettings.cs" />
+    <Compile Include="Tools\DupFinder\DupFinderAliases.cs" />
+    <Compile Include="Tools\DupFinder\DupFinderRunner.cs" />
+    <Compile Include="Tools\DupFinder\DupFinderSettings.cs" />
     <Compile Include="Tools\Fixie\FixieAliases.cs" />
     <Compile Include="Tools\Fixie\FixieRunner.cs" />
     <Compile Include="Tools\Fixie\FixieSettings.cs" />
