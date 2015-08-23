@@ -31,9 +31,12 @@ namespace Cake.Core.Tests.Fixtures
             FileSystem.CreateDirectory("C://Working");
             FileSystem.CreateDirectory("C://Working/Foo");
             FileSystem.CreateDirectory("C://Working/Foo/Bar");
+            FileSystem.CreateDirectory("C:");
+            FileSystem.CreateDirectory("C:/Program Files (x86)");
 
             // Files
             FileSystem.CreateFile("C:/Working/Foo/Bar/Qux.c");
+            FileSystem.CreateFile("C:/Program Files (x86)/Foo.c");
         }
 
         private void PrepareUnixFixture()
@@ -47,6 +50,7 @@ namespace Cake.Core.Tests.Fixtures
             FileSystem.CreateDirectory("/Working/Foo/Bar");
             FileSystem.CreateDirectory("/Working/Bar");
             FileSystem.CreateDirectory("/Foo/Bar");
+            FileSystem.CreateDirectory("/Foo (Bar)");
 
             // Files
             FileSystem.CreateFile("/Working/Foo/Bar/Qux.c");
@@ -57,6 +61,7 @@ namespace Cake.Core.Tests.Fixtures
             FileSystem.CreateFile("/Working/Bar/Qux.c");
             FileSystem.CreateFile("/Working/Bar/Qux.h");
             FileSystem.CreateFile("/Foo/Bar.baz");
+            FileSystem.CreateFile("/Foo (Bar)/Baz.c");
         }
 
         public void SetWorkingDirectory(DirectoryPath path)
