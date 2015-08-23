@@ -104,7 +104,7 @@ namespace Cake.Common.Tools.MSBuild
             switch (platform)
             {
                 case PlatformTarget.MSIL:
-                    return "AnyCPU";
+                    return "Any CPU";
                 case PlatformTarget.x86:
                     return "x86";
                 case PlatformTarget.x64:
