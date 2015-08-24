@@ -83,6 +83,10 @@ namespace Cake.Core.IO
 
             // Extract path segments.
             _segments = _path.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            if (_path.StartsWith("/") && _segments.Length > 0)
+            {
+                _segments[0] = "/" + _segments[0];
+            }
 
             // Validate the path.
             foreach (var character in path)

@@ -335,6 +335,36 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                     "/m /v:normal /p:\"Configuration\"=\"Release\" /target:Build \"/Working/src/Solution.sln\"");
             }
 
+            [Theory]
+            [InlineData(PlatformTarget.MSIL, "/m /v:normal /p:\"Platform\"=\"Any CPU\" /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(PlatformTarget.x86, "/m /v:normal /p:\"Platform\"=\"x86\" /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(PlatformTarget.x64, "/m /v:normal /p:\"Platform\"=\"x64\" /target:Build \"/Working/src/Solution.sln\"")]
+            public void Should_Append_Platform_As_Property_To_Process_Arguments(PlatformTarget? platform, string argumentsString)
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, true);
+                fixture.Settings.SetPlatformTarget(platform.Value);
+
+                // When
+                fixture.Run();
+
+                // Then
+                fixture.AssertReceivedArguments(argumentsString);
+            }
+
+            [Fact]
+            public void Should_Omit_Platform_Property_In_Process_Arguments_If_It_Is_Null()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, true);
+
+                // When
+                fixture.Run();
+
+                // Then
+                fixture.AssertReceivedArguments("/m /v:normal /target:Build \"/Working/src/Solution.sln\"");
+            }
+
             [Fact]
             public void Should_Set_Working_Directory()
             {

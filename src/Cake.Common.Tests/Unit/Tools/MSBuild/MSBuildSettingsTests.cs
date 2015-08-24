@@ -18,14 +18,14 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.Equal(MSBuildToolVersion.Default, settings.ToolVersion);
             }
 
-            [Fact]
-            public void Should_Set_Default_Platform_Target_To_MSIL()
+            [Fact()]
+            public void Should_Set_Default_Platform_Target_To_Null()
             {
                 // Given, When
                 var settings = new MSBuildSettings();
 
                 // Then
-                Assert.Equal(PlatformTarget.MSIL, settings.PlatformTarget);
+                Assert.Null(settings.PlatformTarget);
             }
 
             [Fact]
@@ -81,6 +81,19 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 Assert.Equal(string.Empty, settings.Configuration);
+            }
+        }
+
+        public sealed class ThePlatformProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given, When
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Null(settings.PlatformTarget);
             }
         }
 

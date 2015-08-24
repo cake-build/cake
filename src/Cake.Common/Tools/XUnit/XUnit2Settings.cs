@@ -44,6 +44,14 @@ namespace Cake.Common.Tools.XUnit
         public bool HtmlReport { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to not use app domains to run test code.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> to not use app domains to run test code; otherwise, <c>false</c>.
+        /// </value>
+        public bool NoAppDomain { get; set; }
+
+        /// <summary>
         /// Gets or sets the tool path.
         /// </summary>
         /// <value>The tool path.</value>

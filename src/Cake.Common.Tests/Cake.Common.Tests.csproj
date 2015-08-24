@@ -63,9 +63,11 @@
     <Compile Include="Fixtures\IO\FileCopyFixture.cs" />
     <Compile Include="Fixtures\IO\FileDeleteFixture.cs" />
     <Compile Include="Fixtures\IO\FileSystemFixture.cs" />
+    <Compile Include="Fixtures\Tools\DupFinderRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\FixieRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\ILMergeRunnerFixture.cs" />
     <Compile Include="Fixtures\Diagnostics\LogActionFixture.cs" />
+    <Compile Include="Fixtures\Tools\InspectCodeRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\MSBuildRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\NSISFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGetFixture.cs" />
@@ -87,6 +89,7 @@
     <Compile Include="Fixtures\TextTransformationFixture.cs" />
     <Compile Include="Fixtures\Tools\WiXFixture.cs" />
     <Compile Include="Fixtures\XmlDocExampleCodeParserFixture.cs" />
+    <Compile Include="Fixtures\XmlPokeFixture.cs" />
     <Compile Include="Fixtures\XmlTransformationFixture.cs" />
     <Compile Include="Fixtures\Tools\XUnit2RunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\XUnitRunnerFixture.cs" />
@@ -122,12 +125,14 @@
     <Compile Include="Unit\Text\TextTransformationExtensionsTests.cs" />
     <Compile Include="Unit\Text\TextTransformationTests.cs" />
     <Compile Include="Unit\Tools\Cake\CakeRunnerTests.cs" />
+    <Compile Include="Unit\Tools\DupFinder\DupFinderRunnerTests.cs" />
     <Compile Include="Unit\Tools\Fixie\FixieRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeSettingsTests.cs" />
     <Compile Include="Unit\IO\ZipperTests.cs" />
     <Compile Include="Unit\IO\DirectoryAliasesTests.cs" />
     <Compile Include="Unit\IO\FileAliasesTests.cs" />
+    <Compile Include="Unit\Tools\InspectCode\InspectCodeRunnerTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildRunnerTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsExtensionsTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsTests.cs" />
@@ -165,6 +170,7 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="Unit\XML\XmlPokeTests.cs" />
     <Compile Include="Unit\XML\XmlTransformationTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +199,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

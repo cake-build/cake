@@ -1,6 +1,7 @@
 ﻿using System;
 using Cake.Common.Tests.Fixtures.Tools.NuGet;
 using Cake.Common.Tests.Properties;
+using Cake.Common.Tools.NuGet;
 using Cake.Common.Tools.NuGet.Pack;
 using Cake.Core;
 using Cake.Core.IO;
@@ -242,6 +243,25 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     Arg.Any<FilePath>(),
                     Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "pack \"/Working/existing.temp.nuspec\" -Symbols"));
+            }
+
+            [Theory]
+            [InlineData(NuGetVerbosity.Detailed, "pack \"/Working/existing.temp.nuspec\" -Verbosity detailed")]
+            [InlineData(NuGetVerbosity.Normal, "pack \"/Working/existing.temp.nuspec\" -Verbosity normal")]
+            [InlineData(NuGetVerbosity.Quiet, "pack \"/Working/existing.temp.nuspec\" -Verbosity quiet")]
+            public void Should_Add_Verbosity_To_Arguments_If_Set(NuGetVerbosity verbosity, string expected)
+            {
+                // Given
+                var fixture = new NuGetPackerFixture();
+                fixture.Settings.Verbosity = verbosity;
+
+                // When
+                fixture.Pack();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == expected));
             }
 
             [Fact]

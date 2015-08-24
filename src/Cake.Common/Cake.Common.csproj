@@ -109,11 +109,13 @@
     <Compile Include="Tools\Cake\CakeAliases.cs" />
     <Compile Include="Tools\Cake\CakeRunner.cs" />
     <Compile Include="Tools\Cake\CakeSettings.cs" />
+    <Compile Include="Tools\DupFinder\DupFinderAliases.cs" />
+    <Compile Include="Tools\DupFinder\DupFinderRunner.cs" />
+    <Compile Include="Tools\DupFinder\DupFinderSettings.cs" />
     <Compile Include="Tools\Fixie\FixieAliases.cs" />
     <Compile Include="Tools\Fixie\FixieRunner.cs" />
     <Compile Include="Tools\Fixie\FixieSettings.cs" />
     <Compile Include="Tools\Fixie\FixieSettingsExtensions.cs" />
-    <Compile Include="Tools\Fixie\TeamCityOutput.cs" />
     <Compile Include="Tools\ILMerge\ILMergeAliases.cs" />
     <Compile Include="Tools\ILMerge\ILMergeRunner.cs" />
     <Compile Include="Tools\ILMerge\ILMergeSettings.cs" />
@@ -129,6 +131,10 @@
     <Compile Include="IO\GlobbingAliases.cs" />
     <Compile Include="Tools\ILMerge\TargetPlatform.cs" />
     <Compile Include="Tools\ILMerge\TargetPlatformVersion.cs" />
+    <Compile Include="Tools\InspectCode\InspectCodeAliases.cs" />
+    <Compile Include="Tools\InspectCode\InspectCodeRunner.cs" />
+    <Compile Include="Tools\InspectCode\InspectCodeSettings.cs" />
+    <Compile Include="Tools\InspectCode\SettingsLayer.cs" />
     <Compile Include="Tools\MSBuild\MSBuildAliases.cs" />
     <Compile Include="Tools\MSBuild\MSBuildResolver.cs" />
     <Compile Include="Tools\MSBuild\MSBuildRunner.cs" />
@@ -198,6 +204,8 @@
     <Compile Include="Tools\XUnit\XUnitRunner.cs" />
     <Compile Include="Tools\XUnit\XUnit2Runner.cs" />
     <Compile Include="Tools\XUnit\XUnit2Settings.cs" />
+    <Compile Include="Xml\XmlPokeAliases.cs" />
+    <Compile Include="Xml\XmlPokeSettings.cs" />
     <Compile Include="Xml\XmlTransformation.cs" />
     <Compile Include="Xml\XmlTransformationAlias.cs" />
     <Compile Include="Xml\XmlTransformationSettings.cs" />
@@ -210,6 +218,9 @@
     <Compile Include="Tools\XBuild\XBuildResolver.cs" />
     <Compile Include="Tools\DotNetBuildSettings.cs" />
     <Compile Include="Tools\DotNetBuildAliases.cs" />
+    <Compile Include="Tools\ILRepack\ILRepackSettings.cs" />
+    <Compile Include="Tools\ILRepack\ILRepackRunner.cs" />
+    <Compile Include="Tools\ILRepack\ILRepackAliases.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">

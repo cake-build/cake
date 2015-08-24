@@ -1,6 +1,7 @@
-﻿using Cake.Core.IO;
+﻿using System;
+using System.Linq;
+using Cake.Core.IO;
 using Cake.Testing.Fakes;
-using NSubstitute;
 
 namespace Cake.Core.Tests.Fixtures
 {
@@ -9,42 +10,75 @@ namespace Cake.Core.Tests.Fixtures
         public FakeFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
 
-        public GlobberFixture()
-            : this(false)
+        public GlobberFixture(bool windows = false)
         {
+            if (windows)
+            {
+                PrepareWindowsFixture();
+            }
+            else
+            {
+                PrepareUnixFixture();
+            }
         }
 
-        public GlobberFixture(bool isFileSystemCaseSensitive)
+        private void PrepareWindowsFixture()
         {
-            Environment = Substitute.For<ICakeEnvironment>();
-            Environment.IsUnix().Returns(isFileSystemCaseSensitive);
-            Environment.WorkingDirectory.Returns("/Temp");
-
+            Environment = FakeEnvironment.CreateWindowsEnvironment();
             FileSystem = new FakeFileSystem(Environment);
-            FileSystem.CreateDirectory("/Temp");
-            FileSystem.CreateDirectory("/Temp/Hello");
-            FileSystem.CreateDirectory("/Temp/Hello/World");
-            FileSystem.CreateDirectory("/Temp/Goodbye");
-            FileSystem.CreateFile("/Presentation.ppt");
-            FileSystem.CreateFile("/Budget.xlsx");
-            FileSystem.CreateFile("/Text.txt");
-            FileSystem.CreateFile("/Temp");
-            FileSystem.CreateFile("/Temp/Hello/World/Text.txt");
-            FileSystem.CreateFile("/Temp/Hello/World/Picture.png");
-            FileSystem.CreateFile("/Temp/Goodbye/OtherText.txt");
-            FileSystem.CreateFile("/Temp/Goodbye/OtherPicture.png");
-            FileSystem.CreateFile("/Working/Text.txt");
-            FileSystem.CreateFile("C:/Temp/Hello/World/Text.txt");
+
+            // Directories
+            FileSystem.CreateDirectory("C://Working");
+            FileSystem.CreateDirectory("C://Working/Foo");
+            FileSystem.CreateDirectory("C://Working/Foo/Bar");
+            FileSystem.CreateDirectory("C:");
+            FileSystem.CreateDirectory("C:/Program Files (x86)");
+
+            // Files
+            FileSystem.CreateFile("C:/Working/Foo/Bar/Qux.c");
+            FileSystem.CreateFile("C:/Program Files (x86)/Foo.c");
+        }
+
+        private void PrepareUnixFixture()
+        {
+            Environment = FakeEnvironment.CreateUnixEnvironment();
+            FileSystem = new FakeFileSystem(Environment);
+
+            // Directories
+            FileSystem.CreateDirectory("/Working");
+            FileSystem.CreateDirectory("/Working/Foo");
+            FileSystem.CreateDirectory("/Working/Foo/Bar");
+            FileSystem.CreateDirectory("/Working/Bar");
+            FileSystem.CreateDirectory("/Foo/Bar");
+            FileSystem.CreateDirectory("/Foo (Bar)");
+
+            // Files
+            FileSystem.CreateFile("/Working/Foo/Bar/Qux.c");
+            FileSystem.CreateFile("/Working/Foo/Bar/Qex.c");
+            FileSystem.CreateFile("/Working/Foo/Bar/Qux.h");
+            FileSystem.CreateFile("/Working/Foo/Baz/Qux.c");
+            FileSystem.CreateFile("/Working/Foo/Bar/Baz/Qux.c");
+            FileSystem.CreateFile("/Working/Bar/Qux.c");
+            FileSystem.CreateFile("/Working/Bar/Qux.h");
+            FileSystem.CreateFile("/Foo/Bar.baz");
+            FileSystem.CreateFile("/Foo (Bar)/Baz.c");
         }
 
         public void SetWorkingDirectory(DirectoryPath path)
         {
-            Environment.WorkingDirectory.Returns(path);
+            Environment.WorkingDirectory = path;
         }
 
-        public Globber CreateGlobber()
+        public Path[] Match(string pattern)
         {
-            return new Globber(FileSystem, Environment);
+            return Match(pattern, null);
+        }
+
+        public Path[] Match(string pattern, Func<IFileSystemInfo, bool> predicate)
+        {
+            return new Globber(FileSystem, Environment)
+                .Match(pattern, predicate)
+                .ToArray();
         }
     }
 }

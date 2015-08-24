@@ -21,18 +21,13 @@ namespace Cake.Scripting.Mono
                 return;
             }
 
-            var path = GetSourcePath(msg);
-            var row = msg.Location.Row;
-            var column = msg.Location.Column;
-            var message = string.Format("{0} ({1},{2}): {3}", path.FullPath, row, column, msg.Text);
-
-            var isError = msg.MessageType != null && msg.MessageType.Equals("error", StringComparison.OrdinalIgnoreCase);
+            var message = GetFormattedLogMessage(msg);
 
             if (msg.IsWarning)
             {
                 _log.Warning(message);
             }
-            else if (isError)
+            else if (IsError(msg))
             {
                 _log.Error(message);
             }
@@ -42,18 +37,40 @@ namespace Cake.Scripting.Mono
             }
         }
 
-        private static FilePath GetSourcePath(AbstractMessage msg)
+        private static string GetFormattedLogMessage(AbstractMessage message)
         {
-            // Get the source name.
-            var sourceName = "unknown.cake";
-            if (msg.Location.SourceFile != null)
+            var path = GetSourcePath(message);
+            var row = message.Location.Row;
+            var column = message.Location.Column;
+
+            return string.Format("{0} ({1},{2}): {3}", path.FullPath, row, column, message.Text);
+        }
+
+        private static FilePath GetSourcePath(AbstractMessage message)
+        {
+            string filename = null;
+
+            try
             {
-                // Get the source name.
-                sourceName = msg.Location.SourceFile.Name ?? "unknown";
+                if (message.Location.SourceFile != null && message.Location.SourceFile.Name != null)
+                {
+                    filename = message.Location.SourceFile.Name;
+                }
+            }
+            catch
+            {
+                // Fix for issue #298 (https://github.com/cake-build/cake/issues/298)
+                // Not pretty but it should take care of the exception being thrown 
+                // in certain situations when accessing the SourceFile property.
             }
 
-            var path = new FilePath(sourceName).GetFilename();
-            return path;
+            return new FilePath(filename ?? "unknown.cake").GetFilename();
+        }
+
+        private static bool IsError(AbstractMessage message)
+        {
+            return message.MessageType != null && 
+                message.MessageType.Equals("error", StringComparison.OrdinalIgnoreCase);
         }
     }
 }
