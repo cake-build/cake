@@ -12,10 +12,10 @@ namespace Cake.Core.Utilities
     /// <typeparam name="TSettings">The settings type.</typeparam>
     public abstract class Tool<TSettings>
     {
-        private readonly IFileSystem _fileSystem;        
         private readonly ICakeEnvironment _environment;
-        private readonly IProcessRunner _processRunner;
+        private readonly IFileSystem _fileSystem;
         private readonly IGlobber _globber;
+        private readonly IProcessRunner _processRunner;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Tool{TSettings}" /> class.
@@ -24,7 +24,8 @@ namespace Cake.Core.Utilities
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="globber">The globber.</param>
-        protected Tool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IGlobber globber)
+        protected Tool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner,
+            IGlobber globber)
         {
             if (fileSystem == null)
             {
@@ -64,7 +65,7 @@ namespace Cake.Core.Utilities
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="arguments">The arguments.</param>
-        /// <param name="toolPath">The tool path to use.</param> 
+        /// <param name="toolPath">The tool path to use.</param>
         protected void Run(TSettings settings, ProcessArgumentBuilder arguments, FilePath toolPath)
         {
             Run(settings, arguments, toolPath, null, null);
@@ -77,8 +78,72 @@ namespace Cake.Core.Utilities
         /// <param name="arguments">The arguments.</param>
         /// <param name="toolPath">The tool path to use.</param>
         /// <param name="processSettings">The process settings</param>
-        /// <param name="postAction">If specified called after process exit</param> 
-        protected void Run(TSettings settings, ProcessArgumentBuilder arguments, FilePath toolPath, ProcessSettings processSettings, Action<IProcess> postAction)
+        /// <param name="postAction">If specified called after process exit</param>
+        protected void Run(TSettings settings, ProcessArgumentBuilder arguments, FilePath toolPath,
+            ProcessSettings processSettings, Action<IProcess> postAction)
+        {
+            if (arguments == null && (processSettings == null || processSettings.Arguments == null))
+            {
+                throw new ArgumentNullException("arguments");
+            }
+
+            var process = RunProcess(settings, arguments, toolPath, processSettings);
+
+            // Wait for the process to exit.
+            process.WaitForExit();
+
+            try
+            {
+                // Did an error occur?
+                if (process.GetExitCode() != 0)
+                {
+                    const string message = "{0}: Process returned an error.";
+                    throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, GetToolName()));
+                }
+            }
+            finally
+            {
+                // Post action specified?
+                if (postAction != null)
+                {
+                    postAction(process);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Runs the tool using a custom tool path and the specified settings.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="arguments">The arguments.</param>
+        /// <returns>The process that the tool is running under.</returns>
+        protected IProcess RunProcess(TSettings settings, ProcessArgumentBuilder arguments)
+        {
+            return RunProcess(settings, arguments, null);
+        }
+
+        /// <summary>
+        /// Runs the tool using a custom tool path and the specified settings.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="arguments">The arguments.</param>
+        /// <param name="toolPath">The tool path to use.</param>
+        /// <returns>The process that the tool is running under.</returns>
+        protected IProcess RunProcess(TSettings settings, ProcessArgumentBuilder arguments, FilePath toolPath)
+        {
+            return RunProcess(settings, arguments, toolPath, null);
+        }
+
+        /// <summary>
+        /// Runs the tool using a custom tool path and the specified settings.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="arguments">The arguments.</param>
+        /// <param name="toolPath">The tool path to use.</param>
+        /// <param name="processSettings">The process settings</param>
+        /// <returns>The process that the tool is running under.</returns>
+        protected IProcess RunProcess(TSettings settings, ProcessArgumentBuilder arguments, FilePath toolPath,
+            ProcessSettings processSettings)
         {
             if (arguments == null && (processSettings == null || processSettings.Arguments == null))
             {
@@ -122,27 +187,7 @@ namespace Cake.Core.Utilities
                 const string message = "{0}: Process was not started.";
                 throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, toolName));
             }
-
-            // Wait for the process to exit.
-            process.WaitForExit();
-
-            try
-            {
-                // Did an error occur?
-                if (process.GetExitCode() != 0)
-                {
-                    const string message = "{0}: Process returned an error.";
-                    throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, toolName));
-                }
-            }
-            finally
-            {
-                // Post action specified?
-                if (postAction != null)
-                {
-                    postAction(process);
-                }
-            }
+            return process;
         }
 
         /// <summary>
@@ -163,7 +208,7 @@ namespace Cake.Core.Utilities
 
             // Look for each possible executable name in various places.
             foreach (var toolExeName in toolExeNames)
-            {                
+            {
                 // First look in ./tools/
                 toolPath = _globber.GetFiles("./tools/**/" + toolExeName).FirstOrDefault();
                 if (toolPath != null)

@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
@@ -31,6 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{A01118B7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuspec", "nuspec", "{B38B35F5-812A-4E4C-B267-71254A7EEF17}"
 	ProjectSection(SolutionItems) = preProject
+		..\nuspec\Cake.Common.nuspec = ..\nuspec\Cake.Common.nuspec
 		..\nuspec\Cake.Core.nuspec = ..\nuspec\Cake.Core.nuspec
 		..\nuspec\Cake.nuspec = ..\nuspec\Cake.nuspec
 	EndProjectSection
