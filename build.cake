@@ -186,14 +186,17 @@ Task("Publish-MyGet")
         throw new InvalidOperationException("Could not resolve MyGet API key.");
     }
 
-    // Get the path to the package.
-    var package = nugetRoot + File("Cake." + semVersion + ".nupkg");
+    foreach(var package in new[]{"Cake", "Cake.Core", "Cake.Common"})
+    {
+        // Get the path to the package.
+        var packagePath = nugetRoot + File(string.Concat(package, ".",semVersion,".nupkg"));
 
-    // Push the package.
-    NuGetPush(package, new NuGetPushSettings {
-        Source = "https://www.myget.org/F/cake/api/v2/package",
-        ApiKey = apiKey
-    });
+        // Push the package.
+        NuGetPush(packagePath, new NuGetPushSettings {
+            Source = "https://www.myget.org/F/cake/api/v2/package",
+            ApiKey = apiKey
+        });
+    }
 });
 
 //////////////////////////////////////////////////////////////////////
