@@ -1,6 +1,5 @@
 ﻿using System;
 using Cake.Core.IO;
-using Cake.Core.IO.Arguments;
 
 namespace Cake.Core
 {
@@ -74,6 +73,23 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Sets a value indicating whether the error output of an application is written to the <see cref="P:System.Diagnostics.Process.StandardError"/> stream.
+        /// </summary>
+        /// <param name="settings">The process settings.</param>
+        /// <param name="redirect">true if error output should be written to <see cref="P:System.Diagnostics.Process.StandardError"/>; otherwise, false. The default is false.</param>
+        /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessSettings SetRedirectStandardError(this ProcessSettings settings, bool redirect)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+
+            settings.RedirectStandardError = redirect;
+            return settings;
+        }
+
+        /// <summary>
         /// Sets the optional timeout for process execution
         /// </summary>
         /// <param name="settings">The process settings.</param>
@@ -87,6 +103,31 @@ namespace Cake.Core
             }
 
             settings.Timeout = timeout;
+            return settings;
+        }
+
+        /// <summary>
+        /// Defines and sets the value of an environment variable that applies to this process and child processes 
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="name">The name of the environment variable.</param>
+        /// <param name="value">The value of the environment variable.</param>
+        /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <exception cref="System.ArgumentNullException"><paramref name="settings"/> or <paramref name="name"/> is null.</exception>
+        public static ProcessSettings WithEnvironmentVariable(this ProcessSettings settings, string name, string value)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+
+            if (name == null)
+            {
+                throw new ArgumentNullException("name");
+            }
+
+            settings.EnvironmentVariables[name] = value;
+
             return settings;
         }
     }

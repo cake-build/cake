@@ -33,8 +33,45 @@ namespace Cake.Core.IO
         IEnumerable<string> GetStandardOutput();
 
         /// <summary>
+        /// Get the standard error output of process
+        /// </summary>
+        /// <returns>Returns process error output <see cref="ProcessSettings.RedirectStandardError">RedirectStandardError</see> is true</returns>
+        IEnumerable<string> GetStandardError();
+
+        /// <summary>
+        /// Gets the unique identifier for the associated process.
+        /// </summary>
+        /// <value>
+        /// The process identifier.
+        /// </value>
+        int ProcessId { get; }
+
+        /// <summary>
         /// Immediately stops the associated process.
         /// </summary>
         void Kill();
+
+        /// <summary>
+        /// Gets a value indicating whether this instance has exited.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance has exited; otherwise, <c>false</c>.
+        /// </value>
+        bool HasExited { get; }
+
+        /// <summary>
+        /// Occurs when process exits.
+        /// </summary>
+        event EventHandler<ProcessExitedEventArgs> Exited;
+
+        /// <summary>
+        /// Occurs when an application writes to its redirected StandardError stream..
+        /// </summary>
+        event EventHandler<ProcessDataReceivedEventArgs> ErrorDataReceived;
+
+        /// <summary>
+        /// Occurs when an application writes to its redirected StandardOutput stream..
+        /// </summary>
+        event EventHandler<ProcessDataReceivedEventArgs> OutputDataReceived;
     }
 }
