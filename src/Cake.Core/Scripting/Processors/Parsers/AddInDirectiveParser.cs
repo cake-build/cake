@@ -65,7 +65,7 @@ namespace Cake.Core.Scripting.Processors.Parsers
               argumentBuilder.Append("install");
               argumentBuilder.AppendQuoted(arguments.AddInId);
 
-              ExtractNetVersion(tokenList, arguments);
+              ExtractVersionFolder(tokenList, arguments);
 
               if (tokenList.Count > 2)
               {
@@ -113,18 +113,18 @@ namespace Cake.Core.Scripting.Processors.Parsers
       return arguments;
     }
 
-    private void ExtractNetVersion(List<string> tokenList, AddInDirectiveArguments arguments)
+    private void ExtractVersionFolder(List<string> tokenList, AddInDirectiveArguments arguments)
     {
       string found =
-        tokenList.FirstOrDefault(t => String.Compare(t, "-NetVersion", StringComparison.InvariantCultureIgnoreCase) == 0);
+        tokenList.FirstOrDefault(t => String.Compare(t, "-VersionFolder", StringComparison.InvariantCultureIgnoreCase) == 0);
       if (found == null)
       {
-        arguments.NetVersion = GetCurrentNetVersion();
+        arguments.VersionFolder = GetCurrentNetVersion();
       }
       else
       {
-        arguments.NetVersion = tokenList[tokenList.IndexOf(found) + 1];
-        RemoveToken(tokenList, "-NetVersion", true);
+        arguments.VersionFolder = tokenList[tokenList.IndexOf(found) + 1];
+        RemoveToken(tokenList, "-VersionFolder", true);
       }
     }
     private const string NetFrameworkIdentifier = ".NETFramework";
@@ -288,7 +288,7 @@ namespace Cake.Core.Scripting.Processors.Parsers
       /// <summary>
       /// Gets or sets a .Net version e.g. "net45"
       /// </summary>
-      public string NetVersion { get; set; }
+      public string VersionFolder { get; set; }
     }
   }
 
