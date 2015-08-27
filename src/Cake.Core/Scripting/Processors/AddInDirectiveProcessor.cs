@@ -89,7 +89,7 @@ namespace Cake.Core.Scripting.Processors
             // If no assemblies were found, try install addin from NuGet.
             if (addInAssemblies.Length == 0)
             {
-                InstallAddin(arguments.AddInId, arguments.AddInRootDirectory, arguments.Source);
+                InstallAddin(arguments.InstallArguments);
                 addInAssemblies = GetAddInAssemblies(arguments.AddInDirectoryPath);
             }
 
@@ -109,13 +109,13 @@ namespace Cake.Core.Scripting.Processors
             return true;
         }
 
-        private void InstallAddin(string addInId, IDirectory addInRootDirectory, string source)
+        private void InstallAddin(ProcessArgumentBuilder arguments)
         {
             var nugetPath = GetNuGetPath();
             var runner = new ProcessRunner(_environment, _log);
             var process = runner.Start(nugetPath, new ProcessSettings 
             {
-                Arguments = GetNuGetAddinInstallArguments(addInId, addInRootDirectory, source)
+                Arguments = arguments
             });
             process.WaitForExit();
         }
@@ -128,23 +128,6 @@ namespace Cake.Core.Scripting.Processors
                 throw new CakeException("Failed to find NuGet");
             }
             return nugetPath;
-        }
-
-        private static ProcessArgumentBuilder GetNuGetAddinInstallArguments(string addInId, IDirectory addInRootDirectory,
-            string source)
-        {
-            var arguments = new ProcessArgumentBuilder();
-            arguments.Append("install");
-            arguments.AppendQuoted(addInId);
-            arguments.Append("-OutputDirectory");
-            arguments.AppendQuoted(addInRootDirectory.Path.FullPath);
-            if (!string.IsNullOrWhiteSpace(source))
-            {
-                arguments.Append("-Source");
-                arguments.AppendQuoted(source);
-            }
-            arguments.Append("-ExcludeVersion -NonInteractive -NoCache");
-            return arguments;
         }
 
         private IFile[] GetAddInAssemblies(DirectoryPath addInDirectoryPath)
