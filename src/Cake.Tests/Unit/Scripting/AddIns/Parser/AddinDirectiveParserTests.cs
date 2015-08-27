@@ -140,10 +140,10 @@ namespace Cake.Tests.Unit.Scripting.AddIns.Parser
       }
 
       [Theory]
-      [InlineData("#addin ninject -netVersion net45", "install \"ninject\" -ExcludeVersion -NonInteractive -NoCache -OutputDirectory \"c:/Addins\"", "net45")]
-      [InlineData("#addin yyy -Source http://yourserver.org/ -Pre  -netVersion net40", "install \"yyy\" -Source http://yourserver.org/ -Pre -ExcludeVersion -NonInteractive -NoCache -OutputDirectory \"c:/Addins\"", "net40")]
-      [InlineData("#addin yyy http://yourserver.org/  -netVersion net35", "install \"yyy\" -Source \"http://yourserver.org/\" -ExcludeVersion -NonInteractive -NoCache -OutputDirectory \"c:/Addins\"", "net35")]
-      public void Should_Populate_NetVersion_Argument(string input, string expected, string netVersion)
+      [InlineData("#addin ninject -VersionFolder net45", "install \"ninject\" -ExcludeVersion -NonInteractive -NoCache -OutputDirectory \"c:/Addins\"", "net45")]
+      [InlineData("#addin yyy -Source http://yourserver.org/ -Pre  -versionFolder net40", "install \"yyy\" -Source http://yourserver.org/ -Pre -ExcludeVersion -NonInteractive -NoCache -OutputDirectory \"c:/Addins\"", "net40")]
+      [InlineData("#addin yyy http://yourserver.org/  -VersionFolder net35", "install \"yyy\" -Source \"http://yourserver.org/\" -ExcludeVersion -NonInteractive -NoCache -OutputDirectory \"c:/Addins\"", "net35")]
+      public void Should_Populate_VersionFolder_Argument(string input, string expected, string versionFolder)
       {
         // Given
         var fixture = new AddInDirectiveParserFixture();
@@ -157,11 +157,11 @@ namespace Cake.Tests.Unit.Scripting.AddIns.Parser
         Assert.NotNull(result);
         Assert.NotNull(result.InstallArguments);
         Assert.Equal(expected, result.InstallArguments.Render());
-        Assert.Equal(netVersion, result.NetVersion);
+        Assert.Equal(versionFolder, result.VersionFolder);
       }
 
       [Fact]
-      public void Will_Populate_Default_NetVersion()
+      public void Will_Populate_Default_VersionFolder()
       {
         // Given
         var fixture = new AddInDirectiveParserFixture();
@@ -173,7 +173,7 @@ namespace Cake.Tests.Unit.Scripting.AddIns.Parser
 
         // Then
         Assert.NotNull(result);
-        Assert.Equal("net45", result.NetVersion);
+        Assert.Equal("net45", result.VersionFolder);
       }
     }
   }
