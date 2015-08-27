@@ -84,13 +84,13 @@ namespace Cake.Core.Scripting.Processors
             }
 
             // Fetch available addin assemblies.
-            var addInAssemblies = GetAddInAssemblies(arguments.AddInDirectoryPath);
+            var addInAssemblies = GetAddInAssemblies(arguments.AddInDirectoryPath, arguments.VersionFolder);
 
             // If no assemblies were found, try install addin from NuGet.
             if (addInAssemblies.Length == 0)
             {
                 InstallAddin(arguments.InstallArguments);
-                addInAssemblies = GetAddInAssemblies(arguments.AddInDirectoryPath);
+                addInAssemblies = GetAddInAssemblies(arguments.AddInDirectoryPath, arguments.VersionFolder);
             }
 
             // Validate found assemblies.
@@ -113,7 +113,7 @@ namespace Cake.Core.Scripting.Processors
         {
             var nugetPath = GetNuGetPath();
             var runner = new ProcessRunner(_environment, _log);
-            var process = runner.Start(nugetPath, new ProcessSettings 
+            var process = runner.Start(nugetPath, new ProcessSettings
             {
                 Arguments = arguments
             });
@@ -130,14 +130,28 @@ namespace Cake.Core.Scripting.Processors
             return nugetPath;
         }
 
+        private IFile[] GetAddInAssemblies(DirectoryPath addInDirectoryPath, string versionFolder)
+        {
+            var files = GetAddInAssemblies(addInDirectoryPath.Combine(versionFolder));
+            if (!files.Any())
+            {
+                files = GetAddInAssemblies(addInDirectoryPath);
+            }
+
+            return files;
+        }
+
         private IFile[] GetAddInAssemblies(DirectoryPath addInDirectoryPath)
         {
             var addInDirectory = _fileSystem.GetDirectory(addInDirectoryPath);
-            return addInDirectory.Exists
-                ? addInDirectory.GetFiles("*.dll", SearchScope.Recursive)
-                    .Where(file => !file.Path.FullPath.EndsWith("Cake.Core.dll", StringComparison.OrdinalIgnoreCase))
-                    .ToArray()
-                : new IFile[0];
+            var files = addInDirectory.Exists
+                    ? addInDirectory.GetFiles("*.dll", SearchScope.Recursive)
+                            .Where(file => !file.Path.FullPath.EndsWith("Cake.Core.dll", StringComparison.OrdinalIgnoreCase))
+                            .ToArray()
+                    : new IFile[0];
+
+            _log.Debug("Dlls {0}found in {1}", files.Any() ? string.Empty : "not ", addInDirectory.Path);
+            return files;
         }
     }
 }
