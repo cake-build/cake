@@ -5,8 +5,14 @@ using Xunit;
 
 namespace Cake.Tests.Unit.Scripting.AddIns.Parser
 {
+    /// <summary>
+    /// Test the Add-in Directives Parser
+    /// </summary>
   public class AddinDirectiveParserTests
   {
+      /// <summary>
+      /// Test the Parse Method
+      /// </summary>
     public class TheParseMethod
     {
       [Fact]
