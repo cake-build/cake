@@ -3,6 +3,7 @@ using System.Linq;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
+using Cake.Core.Scripting.Processors.Parsers;
 
 namespace Cake.Core.Scripting.Processors
 {
@@ -68,61 +69,28 @@ namespace Cake.Core.Scripting.Processors
                 throw new ArgumentNullException("context");
             }
 
-            var tokens = Split(line);
-            var directive = tokens.FirstOrDefault();
-            if (string.IsNullOrWhiteSpace(directive))
+            var parser = new AddInDirectiveParser(_environment, _fileSystem, _log);
+            var arguments = parser.Parse(Split(line));
+            if (!arguments.Valid)
             {
                 return false;
             }
-
-            if (!directive.Equals("#addin", StringComparison.OrdinalIgnoreCase))
-            {
-                return false;
-            }
-
-            // Fetch the addin NuGet ID.
-            var addInId = tokens
-                .Select(value => value.UnQuote())
-                .Skip(1).FirstOrDefault();
-
-            if (string.IsNullOrWhiteSpace(addInId))
-            {
-                return false;
-            }
-
-            // Fetch optional NuGet source.
-            var source = tokens
-                .Skip(2)
-                .Select(value => value.UnQuote())
-                .FirstOrDefault();
-
-            // Get the directory path to Cake.
-            var applicationRoot = _environment.GetApplicationRoot();
-
-            // Get the addin directory.
-            var addInRootDirectoryPath = applicationRoot
-                .Combine("..\\Addins")
-                .Collapse()
-                .MakeAbsolute(_environment);
-
-            var addInDirectoryPath = addInRootDirectoryPath.Combine(addInId);
-            var addInRootDirectory = _fileSystem.GetDirectory(addInRootDirectoryPath);
 
             // Create the addin directory if it doesn't exist.
-            if (!addInRootDirectory.Exists)
+            if (!arguments.AddInRootDirectory.Exists)
             {
-                _log.Verbose("Creating addin directory {0}", addInRootDirectoryPath.FullPath);
-                addInRootDirectory.Create();
+                _log.Verbose("Creating addin directory {0}", arguments.AddInRootDirectory.Path);
+                arguments.AddInRootDirectory.Create();
             }
 
             // Fetch available addin assemblies.
-            var addInAssemblies = GetAddInAssemblies(addInDirectoryPath);
+            var addInAssemblies = GetAddInAssemblies(arguments.AddInDirectoryPath);
 
             // If no assemblies were found, try install addin from NuGet.
             if (addInAssemblies.Length == 0)
             {
-                InstallAddin(addInId, addInRootDirectory, source);
-                addInAssemblies = GetAddInAssemblies(addInDirectoryPath);
+                InstallAddin(arguments.AddInId, arguments.AddInRootDirectory, arguments.Source);
+                addInAssemblies = GetAddInAssemblies(arguments.AddInDirectoryPath);
             }
 
             // Validate found assemblies.
@@ -134,7 +102,7 @@ namespace Cake.Core.Scripting.Processors
             // Reference found assemblies.
             foreach (var assemblyPath in addInAssemblies.Select(assembly => assembly.Path.FullPath))
             {
-                _log.Verbose("Addin: {0}, adding Reference {1}", addInId, assemblyPath);
+                _log.Verbose("Addin: {0}, adding Reference {1}", arguments.AddInId, assemblyPath);
                 context.AddReference(assemblyPath);
             }
 
