@@ -80,29 +80,7 @@ namespace Cake.Common
         [CakeMethodAlias]
         public static int StartProcess(this ICakeContext context, FilePath fileName, ProcessSettings settings, out IEnumerable<string> redirectedOutput)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
-            if (fileName == null)
-            {
-                throw new ArgumentNullException("fileName");
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException("settings");
-            }
-
-            // Get the working directory.
-            var workingDirectory = settings.WorkingDirectory ?? context.Environment.WorkingDirectory;
-            settings.WorkingDirectory = workingDirectory.MakeAbsolute(context.Environment);
-
-            // Start the process.
-            var process = context.ProcessRunner.Start(fileName, settings);
-            if (process == null)
-            {
-                throw new CakeException("Could not start process.");
-            }
+            var process = StartAndReturnProcess(context, fileName, settings);
 
             // Wait for the process to stop.
             if (settings.Timeout.HasValue)
@@ -128,6 +106,77 @@ namespace Cake.Common
            
             // Return the exit code.
             return process.GetExitCode();
+        }
+
+        /// <summary>
+        /// Starts the process resource that is specified by the filename and settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The newly started process.</returns>
+        /// <example>
+        /// <code>
+        /// using(var process = StartAndReturnProcess("ping", new ProcessSettings{ Arguments = "localhost" }))
+        /// {
+        ///     process.WaitForExit();
+        ///     // This should output 0 as valid arguments supplied
+        ///     Information("Exit code: {0}", process.GetExitCode());
+        /// }
+        /// </code>
+        /// </example>
+        /// <exception cref="ArgumentNullException"><paramref name="context"/>, <paramref name="fileName"/>, or <paramref name="settings"/>  is null.</exception>
+        [CakeMethodAlias]
+        public static IProcess StartAndReturnProcess(this ICakeContext context, FilePath fileName, ProcessSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            if (fileName == null)
+            {
+                throw new ArgumentNullException("fileName");
+            }
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+
+            // Get the working directory.
+            var workingDirectory = settings.WorkingDirectory ?? context.Environment.WorkingDirectory;
+            settings.WorkingDirectory = workingDirectory.MakeAbsolute(context.Environment);
+
+            // Start the process.
+            var process = context.ProcessRunner.Start(fileName, settings);
+            if (process == null)
+            {
+                throw new CakeException("Could not start process.");
+            }
+
+            return process;
+        }
+
+        /// <summary>
+        /// Starts the process resource that is specified by the filename.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns>The newly started process.</returns>
+        /// <example>
+        /// <code>
+        /// using(var process = StartAndReturnProcess("ping"))
+        /// {
+        ///     process.WaitForExit();
+        ///     // This should output 0 as valid arguments supplied
+        ///     Information("Exit code: {0}", process.GetExitCode());
+        /// }
+        /// </code>
+        /// </example>
+        /// <exception cref="ArgumentNullException"><paramref name="context"/>, <paramref name="fileName"/> is null.</exception>
+        [CakeMethodAlias]
+        public static IProcess StartAndReturnProcess(this ICakeContext context, FilePath fileName)
+        {
+            return StartAndReturnProcess(context, fileName, new ProcessSettings());
         }
     }
 }
