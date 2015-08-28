@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Threading;
 using Cake.Core;
 using Cake.Testing.Fakes;
 using NSubstitute;
@@ -123,6 +125,90 @@ namespace Cake.Tests.Unit
               expected =        "TaskName2 1.01:01:05.00";
               Assert.Equal(expected, console.Messages[3]);
             }
+
+            [Fact]
+            public void Should_Format_Decimal_For_Culture()
+            {
+              // Given
+              using (CultureHelper.SetCulture("de-DE"))
+              {
+                var console = new FakeConsole();
+                var report = new CakeReport();
+                string taskName = "TaskName";
+                string taskName2 = "Task2";
+                TimeSpan duration = TimeSpan.FromSeconds(10);
+
+                report.Add(taskName, duration);
+                report.Add(taskName2, duration);
+                var printer = new CakeReportPrinter(console);
+
+
+                // When
+                printer.Write(report);
+
+                // Then
+                Assert.Equal(",", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+                string expected = "TaskName    10,00";
+                Assert.Equal(expected, console.Messages[2]);
+                expected = "   Task2    10,00";
+                Assert.Equal(expected, console.Messages[3]);
+              }
+            }
+
+       
+          [Fact]
+            public void Should_Format_Time_Separator_For_Culture()
+            {
+              // Given
+              using (CultureHelper.SetCulture("ml-IN"))
+              {
+                var console = new FakeConsole();
+                var report = new CakeReport();
+                string taskName = "TaskName";
+                string taskName2 = "Task2";
+                TimeSpan duration = TimeSpan.FromSeconds(70);
+
+                report.Add(taskName, duration);
+                report.Add(taskName2, duration);
+                var printer = new CakeReportPrinter(console);
+
+
+                // When
+                printer.Write(report);
+
+                // Then
+                Assert.Equal(".", Thread.CurrentThread.CurrentCulture.DateTimeFormat.TimeSeparator);
+                string expected = "TaskName  1.10.00";
+                Assert.Equal(expected, console.Messages[2]);
+                expected = "   Task2  1.10.00";
+                Assert.Equal(expected, console.Messages[3]);
+              }
+            }
+
+          private class CultureHelper : IDisposable
+          {
+            private readonly CultureInfo _currentCulture;
+
+            private CultureHelper(string culture)
+            {
+              _currentCulture = Thread.CurrentThread.CurrentCulture;
+              Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(culture);
+              Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture;
+            }
+
+            public static CultureHelper SetCulture(string culture)
+            {
+              var helper = new CultureHelper(culture);
+              return helper;
+            }
+
+            public void Dispose()
+            {
+              Thread.CurrentThread.CurrentUICulture = _currentCulture;
+              Thread.CurrentThread.CurrentCulture = _currentCulture;
+            }
+          }
+
         }
     }
 }

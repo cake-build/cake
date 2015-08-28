@@ -8,8 +8,6 @@ namespace Cake
 {
     internal sealed class CakeReportPrinter : ICakeReportPrinter
     {
-        private static readonly string _decimalSeparator = '\\' + CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-        private static readonly string _timeSeparator = '\\' + CultureInfo.CurrentCulture.DateTimeFormat.TimeSeparator;
         private readonly IConsole _console;
 
         public CakeReportPrinter(IConsole console)
@@ -65,38 +63,41 @@ namespace Cake
 
         private static string FormatTime(TimeSpan time)
         {
-            return time.ToString(GetTimeFormat(time));
+            string decimalSeparator = '\\' + CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            string timeSeparator = '\\' + CultureInfo.CurrentCulture.DateTimeFormat.TimeSeparator;
+            string format = GetTimeFormat(time).Replace(".", decimalSeparator).Replace(":", timeSeparator);
+            return time.ToString(format, CultureInfo.CurrentCulture);
         }
 
         private static string GetTimeFormat(TimeSpan time)
         {
-          string format = "s.ff";
-          if (time.TotalSeconds > 9)
-          {
-            format = "s" + format;
-            if (time.TotalMinutes > 1)
+            string format = "s.ff";
+            if (time.TotalSeconds > 9)
             {
-              format = "m:" + format;
-              if (time.TotalMinutes > 9)
-              {
-                format = "m" + format;
-                if (time.TotalHours > 1)
+                format = "s" + format;
+                if (time.TotalMinutes > 1)
                 {
-                  format = "h:" + format;
-                  if (time.TotalHours > 9)
-                  {
-                    format = "h" + format;
-                    if (time.TotalDays > 1)
+                    format = "m:" + format;
+                    if (time.TotalMinutes > 9)
                     {
-                      format = "d." + format;
+                        format = "m" + format;
+                        if (time.TotalHours > 1)
+                        {
+                            format = "h:" + format;
+                            if (time.TotalHours > 9)
+                            {
+                                format = "h" + format;
+                                if (time.TotalDays > 1)
+                                {
+                                    format = "d." + format;
+                                }
+                            }
+                        }
                     }
-                  }
                 }
-              }
             }
-          }
 
-          return format.Replace(".", _decimalSeparator).Replace(":", _timeSeparator);
+            return format;
         }
 
         private static TimeSpan GetTotalTime(IEnumerable<CakeReportEntry> entries)
