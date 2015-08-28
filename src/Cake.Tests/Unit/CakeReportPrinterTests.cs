@@ -25,23 +25,28 @@ namespace Cake.Tests.Unit
             }
 
             [Fact]
-            public void Should_Default_To_30_Width()
+            public void Should_Default_To_Width_Of_Longest_Task()
             {
                 // Given
                 var console = new FakeConsole();
                 var report = new CakeReport();
                 string taskName = "TaskName";
+                string taskName2 = "Task2";
                 TimeSpan duration = TimeSpan.FromSeconds(10);
 
                 report.Add(taskName, duration);
+                report.Add(taskName2, duration);
                 var printer = new CakeReportPrinter(console);
+
 
                 // When
                 printer.Write(report);
 
                 // Then
-                string expected = String.Format("{0,-30}{1,-20}", taskName, duration);
-                Assert.Contains(console.Messages, s => s == expected);
+                string expected = "TaskName    10.00";
+                Assert.Equal(expected, console.Messages[2]);
+                expected =        "   Task2    10.00";
+                Assert.Equal(expected, console.Messages[3]);
             }
 
             [Fact]
@@ -62,8 +67,61 @@ namespace Cake.Tests.Unit
                 printer.Write(report);
 
                 // Then
-                string expected = String.Format("{0,-45}{1,-20}", taskName, duration);
-                Assert.Contains(console.Messages, s => s == expected);
+                string expected = "                                    TaskName    10.00";
+                Assert.Equal(expected, console.Messages[2]);
+                expected =        "Task-Name-That-Has-A-Length-Of-44-Characters    10.00";
+                Assert.Equal(expected, console.Messages[3]);
+            }
+
+            [Theory]
+            [InlineData("00:00:10", "   10.00")]
+            [InlineData("00:00:10.56789", "   10.56")]
+            [InlineData("00:01:10", " 1:10.00")]
+            [InlineData("00:11:10", "11:10.00")]
+            [InlineData("01:11:10", "1:11:10.00")]
+            [InlineData("11:11:10", "11:11:10.00")]
+            [InlineData("1.11:11:10", "1.11:11:10.00")]
+            public void Should_Format_Time_Based_On_Significance(string durationText, string expectedFormat)
+            {
+              // Given
+              var console = new FakeConsole();
+              var report = new CakeReport();
+              string taskName = "TaskName";
+              TimeSpan duration = TimeSpan.Parse(durationText);
+
+              report.Add(taskName, duration);
+              var printer = new CakeReportPrinter(console);
+
+              // When
+              printer.Write(report);
+
+              // Then
+              string expected = "TaskName " + expectedFormat;
+              Assert.Equal(expected, console.Messages[2]);
+            }
+
+            [Fact]
+            public void Should_Format_Line_Time_Based_On_Significance()
+            {
+              // Given
+              var console = new FakeConsole();
+              var report = new CakeReport();
+              string taskName = "TaskName";
+              string taskName2 = "TaskName2";
+
+              report.Add(taskName, new TimeSpan(0, 0, 0, 5, 232));
+              report.Add(taskName2, new TimeSpan(1, 1, 1, 5, 0));
+
+              var printer = new CakeReportPrinter(console);
+
+              // When
+              printer.Write(report);
+
+              // Then
+              string expected = " TaskName          5.23";
+              Assert.Equal(expected, console.Messages[2]);
+              expected =        "TaskName2 1.01:01:05.00";
+              Assert.Equal(expected, console.Messages[3]);
             }
         }
     }
