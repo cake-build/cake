@@ -108,6 +108,7 @@ Task("Copy-Files")
     CopyFileToDirectory(buildDir + File("Cake.Core.pdb"), binDir);
     CopyFileToDirectory(buildDir + File("Cake.Common.dll"), binDir);
     CopyFileToDirectory(buildDir + File("Cake.Common.xml"), binDir);
+    CopyFileToDirectory(buildDir + File("Cake.Common.pdb"), binDir);
     CopyFileToDirectory(buildDir + File("Mono.CSharp.dll"), binDir);
     CopyFileToDirectory(buildDir + File("Autofac.dll"), binDir);
     CopyFileToDirectory(buildDir + File("Nuget.Core.dll"), binDir);
@@ -139,8 +140,17 @@ Task("Create-NuGet-Packages")
         NoPackageAnalysis = true
     });
 
-    // Create core package.
+    // Create Core package.
     NuGetPack("./nuspec/Cake.Core.nuspec", new NuGetPackSettings {
+        Version = semVersion,
+        ReleaseNotes = releaseNotes.Notes.ToArray(),
+        BasePath = binDir,
+        OutputDirectory = nugetRoot,
+        Symbols = false
+    });
+
+    // Create Common package.
+    NuGetPack("./nuspec/Cake.Common.nuspec", new NuGetPackSettings {
         Version = semVersion,
         ReleaseNotes = releaseNotes.Notes.ToArray(),
         BasePath = binDir,
@@ -176,14 +186,17 @@ Task("Publish-MyGet")
         throw new InvalidOperationException("Could not resolve MyGet API key.");
     }
 
-    // Get the path to the package.
-    var package = nugetRoot + File("Cake." + semVersion + ".nupkg");
+    foreach(var package in new[]{"Cake", "Cake.Core", "Cake.Common"})
+    {
+        // Get the path to the package.
+        var packagePath = nugetRoot + File(string.Concat(package, ".",semVersion,".nupkg"));
 
-    // Push the package.
-    NuGetPush(package, new NuGetPushSettings {
-        Source = "https://www.myget.org/F/cake/api/v2/package",
-        ApiKey = apiKey
-    });
+        // Push the package.
+        NuGetPush(packagePath, new NuGetPushSettings {
+            Source = "https://www.myget.org/F/cake/api/v2/package",
+            ApiKey = apiKey
+        });
+    }
 });
 
 //////////////////////////////////////////////////////////////////////

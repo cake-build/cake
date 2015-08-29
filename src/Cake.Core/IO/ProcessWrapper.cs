@@ -51,5 +51,16 @@ namespace Cake.Core.IO
                 yield return line;
             }
         }
+
+        public void Kill()
+        {
+            _process.Kill();
+            _process.WaitForExit();
+        }
+
+        public void Dispose()
+        {
+            _process.Dispose();
+        }
     }
 }
