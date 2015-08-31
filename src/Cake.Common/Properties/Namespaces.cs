@@ -54,6 +54,19 @@ namespace Cake.Common.Build.AppVeyor.Data
 }
 
 // ReSharper disable once CheckNamespace
+namespace Cake.Common.Build.TeamCity
+{
+    /// <summary>
+    /// This namespace contain types used
+    /// to interact with TeamCity.
+    /// </summary>
+    [CompilerGenerated]
+    internal class NamespaceDoc
+    {
+    }
+}
+
+// ReSharper disable once CheckNamespace
 namespace Cake.Common.Diagnostics
 {
     /// <summary>
@@ -73,6 +86,45 @@ namespace Cake.Common.IO
     /// This namespace contain types that support input and output, 
     /// including the ability to read and write data to streams and to
     /// interact with the file system.
+    /// </summary>
+    [CompilerGenerated]
+    internal class NamespaceDoc
+    {
+    }
+}
+
+// ReSharper disable once CheckNamespace
+namespace Cake.Common.IO.Paths
+{
+    /// <summary>
+    /// This namespace contain types related 
+    /// to file system paths.
+    /// </summary>
+    [CompilerGenerated]
+    internal class NamespaceDoc
+    {
+    }
+}
+
+// ReSharper disable once CheckNamespace
+namespace Cake.Common.IO.Net
+{
+    /// <summary>
+    /// This namespace contain types related 
+    /// to network operations.
+    /// </summary>
+    [CompilerGenerated]
+    internal class NamespaceDoc
+    {
+    }
+}
+
+// ReSharper disable once CheckNamespace
+namespace Cake.Common.Net
+{
+    /// <summary>
+    /// This namespace contain types related 
+    /// to security aspects such as hashing.
     /// </summary>
     [CompilerGenerated]
     internal class NamespaceDoc
@@ -271,6 +323,32 @@ namespace Cake.Common.Tools.NuGet.Restore
 }
 
 // ReSharper disable once CheckNamespace
+namespace Cake.Common.Tools.NuGet.SetApiKey
+{
+    /// <summary>
+    /// This namespace contain types used to 
+    /// set NuGet API keys.
+    /// </summary>
+    [CompilerGenerated]
+    internal class NamespaceDoc
+    {
+    }
+}
+
+// ReSharper disable once CheckNamespace
+namespace Cake.Common.Tools.NuGet.SetProxy
+{
+    /// <summary>
+    /// This namespace contain types used to 
+    /// set proxy settings.
+    /// </summary>
+    [CompilerGenerated]
+    internal class NamespaceDoc
+    {
+    }
+}
+
+// ReSharper disable once CheckNamespace
 namespace Cake.Common.Tools.NuGet.Sources
 {
     /// <summary>
@@ -284,10 +362,49 @@ namespace Cake.Common.Tools.NuGet.Sources
 }
 
 // ReSharper disable once CheckNamespace
+namespace Cake.Common.Tools.NuGet.Update
+{
+    /// <summary>
+    /// This namespace contain types used to 
+    /// update NuGet packages.
+    /// </summary>
+    [CompilerGenerated]
+    internal class NamespaceDoc
+    {
+    }
+}
+
+// ReSharper disable once CheckNamespace
 namespace Cake.Common.Tools.NUnit
 {
     /// <summary>
     /// This namespace contain types used to interact with NUnit.
+    /// </summary>
+    [CompilerGenerated]
+    internal class NamespaceDoc
+    {
+    }
+}
+
+// ReSharper disable once CheckNamespace
+namespace Cake.Common.Tools.OctopusDeploy
+{
+    /// <summary>
+    /// This namespace contain types used 
+    /// to interact with Octopus Deploy.
+    /// </summary>
+    [CompilerGenerated]
+    internal class NamespaceDoc
+    {
+    }
+}
+
+// ReSharper disable once CheckNamespace
+namespace Cake.Common.Tools.Roundhouse
+{
+    /// <summary>
+    /// This namespace contain types used 
+    /// to interact with Roundhouse.
     /// </summary>
     [CompilerGenerated]
     internal class NamespaceDoc
@@ -321,10 +438,36 @@ namespace Cake.Common.Tools.WiX
 }
 
 // ReSharper disable once CheckNamespace
+namespace Cake.Common.Tools.XBuild
+{
+    /// <summary>
+    /// This namespace contain types used 
+    /// to interact with XBuild.
+    /// </summary>
+    [CompilerGenerated]
+    internal class NamespaceDoc
+    {
+    }
+}
+
+// ReSharper disable once CheckNamespace
 namespace Cake.Common.Tools.XUnit
 {
     /// <summary>
     /// This namespace contain types used to interact with XUnit.
+    /// </summary>
+    [CompilerGenerated]
+    internal class NamespaceDoc
+    {
+    }
+}
+
+// ReSharper disable once CheckNamespace
+namespace Cake.Common.Tools.Xml
+{
+    /// <summary>
+    /// This namespace contain types used to 
+    /// interact with XML documents.
     /// </summary>
     [CompilerGenerated]
     internal class NamespaceDoc
