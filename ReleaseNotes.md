@@ -1,3 +1,5 @@
+### New in 0.5.4 (Work in progress)
+
 ### New in 0.5.3 (Released 2015/08/31)
 * Additional NUnit switches.
 * Made IProcess disposable and added Kill method.
