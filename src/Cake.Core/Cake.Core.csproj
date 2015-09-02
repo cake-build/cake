@@ -27,6 +27,7 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRuleSet>..\Cake.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -127,7 +128,6 @@
     <Compile Include="IO\IRegistry.cs" />
     <Compile Include="IO\IRegistryKey.cs" />
     <Compile Include="IO\Machine.cs" />
-    <Compile Include="IO\IToolResolver.cs" />
     <Compile Include="IO\NuGet\INuGetToolResolver.cs" />
     <Compile Include="IO\NuGet\NuGetToolResolver.cs" />
     <Compile Include="IO\Path.cs" />

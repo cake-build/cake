@@ -70,7 +70,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                 var resolver = new NuGetToolResolver(fileSystem, environment, globber);
 
                 // When
-                var result = Record.Exception(() => resolver.ResolveToolPath());
+                var result = Record.Exception(() => resolver.ResolvePath());
 
                 // Assert
                 Assert.IsCakeException(result, "Could not locate nuget.exe.");
@@ -91,7 +91,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                 var resolver = new NuGetToolResolver(fileSystem, environment, globber);
 
                 // When
-                Record.Exception(() => resolver.ResolveToolPath());
+                Record.Exception(() => resolver.ResolvePath());
 
                 // Then
                 Received.InOrder(() =>
@@ -117,7 +117,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                 var resolver = new NuGetToolResolver(fileSystem, environment, globber);
 
                 // When
-                var result = resolver.ResolveToolPath();
+                var result = resolver.ResolvePath();
 
                 // Then
                 Assert.Equal("/root/tools/nuget.exe", result.FullPath);
@@ -137,7 +137,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                 var resolver = new NuGetToolResolver(fileSystem, environment, globber);
 
                 // When
-                var result = resolver.ResolveToolPath();
+                var result = resolver.ResolvePath();
 
                 // Then
                 Assert.Equal("/programs/nuget.exe", result.FullPath);
@@ -158,7 +158,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                 var resolver = new NuGetToolResolver(fileSystem, environment, globber);
 
                 // When
-                var result = resolver.ResolveToolPath();
+                var result = resolver.ResolvePath();
 
                 // Then
                 Assert.Equal("stuff/programs/nuget.exe", result.FullPath);

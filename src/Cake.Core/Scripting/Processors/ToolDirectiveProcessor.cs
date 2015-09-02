@@ -14,7 +14,7 @@ namespace Cake.Core.Scripting.Processors
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
-        private readonly IToolResolver _nugetToolResolver;
+        private readonly INuGetToolResolver _nugetToolResolver;
 
         private FilePath _nugetPath;
 
@@ -25,7 +25,11 @@ namespace Cake.Core.Scripting.Processors
         /// <param name="environment">The environment.</param>
         /// <param name="log">The log.</param>
         /// <param name="nugetToolResolver">The NuGet tool resolver.</param>
-        public ToolDirectiveProcessor(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log, INuGetToolResolver nugetToolResolver)
+        public ToolDirectiveProcessor(
+            IFileSystem fileSystem, 
+            ICakeEnvironment environment, 
+            ICakeLog log, 
+            INuGetToolResolver nugetToolResolver)
             : base(environment)
         {
             if (fileSystem == null)
@@ -131,13 +135,13 @@ namespace Cake.Core.Scripting.Processors
                 throw new CakeException("Failed to find tool executables.");
             }
 
-            _log.Debug(logAction =>
+            _log.Debug(logAction => 
+            {
+                foreach (var toolExecutable in toolExecutables)
                 {
-                    foreach (var toolExecutable in toolExecutables)
-                    {
-                        logAction("Found tool executable: {0}.", toolExecutable.Path);
-                    }
-                });
+                    logAction("Found tool executable: {0}.", toolExecutable.Path);
+                }
+            });
 
             return true;
         }
@@ -155,7 +159,7 @@ namespace Cake.Core.Scripting.Processors
 
         private FilePath GetNuGetPath()
         {
-            var nugetPath = _nugetPath ?? (_nugetPath = _nugetToolResolver.ResolveToolPath());
+            var nugetPath = _nugetPath ?? (_nugetPath = _nugetToolResolver.ResolvePath());
             if (nugetPath == null)
             {
                 throw new CakeException("Failed to find NuGet.");

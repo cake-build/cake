@@ -45,13 +45,6 @@ namespace Cake.Core
         IProcessRunner ProcessRunner { get; }
 
         /// <summary>
-        /// Gets resolver by tool name
-        /// </summary>
-        /// <param name="toolName">resolver tool name</param>
-        /// <returns>IToolResolver for tool</returns>
-        IToolResolver GetToolResolver(string toolName);
-
-        /// <summary>
         /// Gets the registry.
         /// </summary>
         /// <value>The registry.</value>

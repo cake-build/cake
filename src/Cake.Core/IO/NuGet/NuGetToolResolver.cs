@@ -39,22 +39,10 @@ namespace Cake.Core.IO.NuGet
         }
 
         /// <summary>
-        /// Gets the tool name.
+        /// Resolves the path to nuget.exe.
         /// </summary>
-        /// <value>The tool name.</value>
-        public string Name
-        {
-            get { return "NuGet"; }
-        }
-
-        /// <summary>
-        /// Resolves the tool path.
-        /// </summary>
-        /// <returns>
-        /// The tool path.
-        /// </returns>
-        /// <exception cref="CakeException">No nuget.exe found by resolver.</exception>
-        public FilePath ResolveToolPath()
+        /// <returns>The path to nuget.exe.</returns>
+        public FilePath ResolvePath()
         {
             // Check if path allready resolved
             if (_cachedPath != null && _cachedPath.Exists)

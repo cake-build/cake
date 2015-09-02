@@ -105,7 +105,8 @@ namespace Cake.Core.Tests.Unit.IO
                 {
                     // Given
                     var fixture = new GlobberFixture();
-                    var predicate = new Func<IFileSystemInfo, bool>(i => i.Path.FullPath == "/Working/Foo/Bar/Qux.c");
+                    var predicate = new Func<IFileSystemInfo, bool>(
+                        i => i.Path.FullPath == "/Working/Foo/Bar/Qux.c");
 
                     // When
                     var result = fixture.Match("./**/*.c", predicate);

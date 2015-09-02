@@ -92,20 +92,6 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.IsArgumentNullException(result, "processRunner");
             }
-
-            [Fact]
-            public void Should_Throw_If_Tool_Resolvers_Are_Null()
-            {
-                // Given
-                var fixture = new CakeContextFixture();
-                fixture.ToolResolvers = null;
-
-                // When
-                var result = Record.Exception(() => fixture.CreateContext());
-
-                // Then
-                Assert.IsArgumentNullException(result, "toolResolvers");
-            }
         }
 
         public sealed class TheFileSystemProperty
@@ -192,43 +178,6 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.Same(fixture.ProcessRunner, processRunner);
-            }
-        }
-
-        public sealed class TheGetToolResolverMethod
-        {
-            [Fact]
-            public void Should_Throw_If_Resolver_Could_Not_Be_Found()
-            {
-                // Given
-                var fixture = new CakeContextFixture();
-                var context = fixture.CreateContext();
-
-                // When
-                var result = Record.Exception(() => context.GetToolResolver("Foo"));
-
-                // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("Failed to resolve tool: Foo", result.Message);
-            }
-
-            [Theory]
-            [InlineData("Foo")]
-            [InlineData("foo")]
-            public void Should_Find_Tool_By_Name_Regardless_Of_Casing(string name)
-            {
-                // Given
-                var fixture = new CakeContextFixture();
-                var resolver = Substitute.For<IToolResolver>();
-                resolver.Name.Returns("Foo");
-                fixture.ToolResolvers.Add(resolver);
-                var context = fixture.CreateContext();
-
-                // When
-                var result = context.GetToolResolver(name);
-
-                // Then
-                Assert.Equal(resolver, result);
             }
         }
     }
