@@ -18,10 +18,6 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        ///     <packages>
-        ///      <package id="OctopusTools" version="3.0.18.71" />
-        ///     </packages>
-        /// 
         ///     // Minimum required
         ///     OctoCreateRelease(projectNameOnServer, new CreateReleaseSettings {
         ///         Server = "http://octopus-deploy.example",
