@@ -26,6 +26,7 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRuleSet>..\Cake.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -151,6 +152,7 @@
     <Compile Include="Tools\NSIS\NSISAliases.cs" />
     <Compile Include="Tools\NuGet\Install\NuGetInstaller.cs" />
     <Compile Include="Tools\NuGet\Install\NugetInstallSettings.cs" />
+    <Compile Include="Tools\NuGet\NuGetTool.cs" />
     <Compile Include="Tools\NuGet\Pack\NuSpecContent.cs" />
     <Compile Include="Tools\NuGet\SetApiKey\NuGetSetApiKey.cs" />
     <Compile Include="Tools\NuGet\SetApiKey\NuGetSetApiKeySettings.cs" />

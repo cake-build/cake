@@ -10,6 +10,7 @@ using Cake.Common.Tools.NuGet.Update;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
+using Cake.Core.IO.NuGet;
 
 namespace Cake.Common.Tools.NuGet
 {
@@ -64,8 +65,8 @@ namespace Cake.Common.Tools.NuGet
                 throw new ArgumentNullException("context");
             }
 
-            var packer = new NuGetPacker(context.FileSystem, context.Environment, 
-                context.ProcessRunner, context.Log, context.Globber, context.GetToolResolver("NuGet"));
+            var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Globber);
+            var packer = new NuGetPacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Log, context.Globber, resolver);
             packer.Pack(nuspecFilePath, settings);
         }
 
@@ -121,7 +122,8 @@ namespace Cake.Common.Tools.NuGet
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new NuGetRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.GetToolResolver("NuGet"));
+            var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Globber);
+            var runner = new NuGetRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             runner.Restore(targetFilePath, settings);
         }
 
@@ -153,7 +155,8 @@ namespace Cake.Common.Tools.NuGet
                 throw new ArgumentNullException("context");
             }
 
-            var packer = new NuGetPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.GetToolResolver("NuGet"));
+            var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Globber);
+            var packer = new NuGetPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             packer.Push(packageFilePath, settings);
         }
 
@@ -225,7 +228,8 @@ namespace Cake.Common.Tools.NuGet
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new NuGetSources(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.GetToolResolver("NuGet"));
+            var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Globber);
+            var runner = new NuGetSources(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             runner.AddSource(name, source, settings);
         }
 
@@ -297,7 +301,8 @@ namespace Cake.Common.Tools.NuGet
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new NuGetSources(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.GetToolResolver("NuGet"));
+            var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Globber);
+            var runner = new NuGetSources(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             runner.RemoveSource(name, source, settings);
         }
 
@@ -378,7 +383,8 @@ namespace Cake.Common.Tools.NuGet
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new NuGetSources(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.GetToolResolver("NuGet"));
+            var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Globber);
+            var runner = new NuGetSources(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             return runner.HasSource(source, settings);
         }
 
@@ -425,7 +431,8 @@ namespace Cake.Common.Tools.NuGet
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new NuGetInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.GetToolResolver("NuGet"));
+            var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Globber);
+            var runner = new NuGetInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             runner.Install(packageId, settings);
         }
         
@@ -472,7 +479,8 @@ namespace Cake.Common.Tools.NuGet
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new NuGetInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.GetToolResolver("NuGet"));
+            var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Globber);
+            var runner = new NuGetInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             runner.InstallFromConfig(packageConfigPath, settings);
         }
 
@@ -493,7 +501,8 @@ namespace Cake.Common.Tools.NuGet
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new NuGetSetApiKey(context.Log, context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.GetToolResolver("NuGet"));
+            var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Globber);
+            var runner = new NuGetSetApiKey(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             runner.SetApiKey(apiKey, source, settings);
         }
 
@@ -529,7 +538,8 @@ namespace Cake.Common.Tools.NuGet
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new NuGetSetProxy(context.Log, context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.GetToolResolver("NuGet"));
+            var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Globber);
+            var runner = new NuGetSetProxy(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             runner.SetProxy(proxy, username, password, settings);
         }
 
@@ -568,7 +578,8 @@ namespace Cake.Common.Tools.NuGet
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new NuGetUpdater(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.GetToolResolver("NuGet"));
+            var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Globber);
+            var runner = new NuGetUpdater(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             runner.Update(targetFile, new NuGetUpdateSettings());
         }
 
@@ -595,7 +606,8 @@ namespace Cake.Common.Tools.NuGet
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new NuGetUpdater(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.GetToolResolver("NuGet"));
+            var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Globber);
+            var runner = new NuGetUpdater(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             runner.Update(targetFile, settings);
         }
     }

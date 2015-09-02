@@ -28,7 +28,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet
 
         public void SetApiKey()
         {
-            var tool = new NuGetSetApiKey(Log, FileSystem, Environment, ProcessRunner, Globber, NuGetToolResolver);
+            var tool = new NuGetSetApiKey(FileSystem, Environment, ProcessRunner, Globber, NuGetToolResolver);
             tool.SetApiKey(ApiKey, Source, Settings);
         }
     }

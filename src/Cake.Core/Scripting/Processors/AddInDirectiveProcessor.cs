@@ -14,7 +14,7 @@ namespace Cake.Core.Scripting.Processors
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
-        private readonly IToolResolver _nugetToolResolver;
+        private readonly INuGetToolResolver _nugetToolResolver;
 
         private FilePath _nugetPath;
 
@@ -25,7 +25,11 @@ namespace Cake.Core.Scripting.Processors
         /// <param name="environment">The environment.</param>
         /// <param name="log">The log.</param>
         /// <param name="nugetToolResolver">The NuGet tool resolver.</param>
-        public AddInDirectiveProcessor(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log, INuGetToolResolver nugetToolResolver)
+        public AddInDirectiveProcessor(
+            IFileSystem fileSystem, 
+            ICakeEnvironment environment, 
+            ICakeLog log, 
+            INuGetToolResolver nugetToolResolver) 
             : base(environment)
         {
             if (fileSystem == null)
@@ -154,7 +158,7 @@ namespace Cake.Core.Scripting.Processors
 
         private FilePath GetNuGetPath()
         {
-            var nugetPath = _nugetPath ?? (_nugetPath = _nugetToolResolver.ResolveToolPath());
+            var nugetPath = _nugetPath ?? (_nugetPath = _nugetToolResolver.ResolvePath());
             if (nugetPath == null)
             {
                 throw new CakeException("Failed to find NuGet");
