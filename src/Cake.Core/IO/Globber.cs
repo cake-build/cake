@@ -45,7 +45,7 @@ namespace Cake.Core.IO
         /// <returns>
         ///   <see cref="Path" /> instances matching the specified pattern.
         /// </returns>
-        public IEnumerable<Path> Match(string pattern, Func<IFileSystemInfo, bool> predicate)
+        public IEnumerable<Path> Match(string pattern, Func<IDirectory, bool> predicate)
         {
             if (pattern == null)
             {
@@ -60,8 +60,7 @@ namespace Cake.Core.IO
             var root = _parser.Parse(pattern, _environment.IsUnix());
             
             // Visit all nodes in the parsed patterns and filter the result.
-            return _visitor.Walk(root)
-                .Where(predicate ?? (info => true))
+            return _visitor.Walk(root, predicate)
                 .Select(x => x.Path)
                 .Distinct(_comparer);
         }

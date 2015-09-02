@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Cake.Core.IO
 {
@@ -15,6 +16,6 @@ namespace Cake.Core.IO
         /// <returns>
         ///   <see cref="Path" /> instances matching the specified pattern.
         /// </returns>
-        IEnumerable<Path> Match(string pattern, System.Func<IFileSystemInfo, bool> predicate);
+        IEnumerable<Path> Match(string pattern, Func<IDirectory, bool> predicate);
     }
 }
