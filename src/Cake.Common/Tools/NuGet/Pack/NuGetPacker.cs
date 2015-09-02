@@ -39,6 +39,44 @@ namespace Cake.Common.Tools.NuGet.Pack
         }
 
         /// <summary>
+        /// Creates a NuGet package from the specified settings.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        public void Pack(NuGetPackSettings settings)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+            if (settings.OutputDirectory == null || !_fileSystem.Exist(settings.OutputDirectory))
+            {
+                throw new CakeException("Required setting OutputDirectory not specified or doesn't exists.");
+            }
+            if (string.IsNullOrWhiteSpace(settings.Id))
+            {
+                throw new CakeException("Required setting Id not specified.");
+            }
+            if (string.IsNullOrWhiteSpace(settings.Version))
+            {
+                throw new CakeException("Required setting Version not specified.");
+            }
+            if (settings.Authors == null || settings.Authors.Count == 0)
+            {
+                throw new CakeException("Required setting Authors not specified.");
+            }
+            if (string.IsNullOrWhiteSpace(settings.Description))
+            {
+                throw new CakeException("Required setting Description not specified.");
+            }
+            if (settings.Files == null || settings.Files.Count == 0)
+            {
+                throw new CakeException("Required setting Files not specified.");
+            }
+
+            Pack(settings, () => _processor.Process(settings));
+        }
+
+        /// <summary>
         /// Creates a NuGet package from the specified Nuspec file.
         /// </summary>
         /// <param name="nuspecFilePath">The nuspec file path.</param>
@@ -54,11 +92,16 @@ namespace Cake.Common.Tools.NuGet.Pack
                 throw new ArgumentNullException("settings");
             }
 
+            Pack(settings, () => _processor.Process(nuspecFilePath, settings));
+        }
+
+        private void Pack(NuGetPackSettings settings, Func<FilePath> process)
+        {
             FilePath procesedNuspecFilePath = null;
             try
             {
                 // Transform the nuspec and return the new filename.
-                procesedNuspecFilePath = _processor.Process(nuspecFilePath, settings);
+                procesedNuspecFilePath = process();
 
                 // Start the process.
                 Run(settings, GetArguments(procesedNuspecFilePath, settings), settings.ToolPath);

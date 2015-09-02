@@ -34,24 +34,24 @@ namespace Cake.Common.Tools.NuGet
         ///                                     Authors                 = new[] {"John Doe"},
         ///                                     Owners                  = new[] {"Contoso"},
         ///                                     Description             = "The description of the package",
-        ///                                     Summary                 = "Excellent summare of what the package does", 
+        ///                                     Summary                 = "Excellent summare of what the package does",
         ///                                     ProjectUrl              = new Uri("https://github.com/SomeUser/TestNuget/"),
         ///                                     IconUrl                 = new Uri("http://cdn.rawgit.com/SomeUser/TestNuget/master/icons/testnuget.png"),
         ///                                     LicenseUrl              = new Uri("https://github.com/SomeUser/TestNuget/blob/master/LICENSE.md"),
         ///                                     Copyright               = "Some company 2015",
         ///                                     ReleaseNotes            = new [] {"Bug fixes", "Issue fixes", "Typos"},
         ///                                     Tags                    = new [] {"Cake", "Script", "Build"},
-        ///                                     RequireLicenseAcceptance= false,        
+        ///                                     RequireLicenseAcceptance= false,
         ///                                     Symbols                 = false,
         ///                                     NoPackageAnalysis       = true,
         ///                                     Files                   = new [] {
-        ///                                                                          new NuSpecContent {Source = "bin/SlackPRTGCommander.dll", Target = "bin"},
+        ///                                                                          new NuSpecContent {Source = "bin/TestNuget.dll", Target = "bin"},
         ///                                                                       },
-        ///                                     BasePath                = "./src/TestNuget/bin/release", 
+        ///                                     BasePath                = "./src/TestNuget/bin/release",
         ///                                     OutputDirectory         = "./nuget"
         ///                                 };
-        ///     
-        ///     NuGetPack("./nuspec/SlackPRTGCommander.nuspec", nuGetPackSettings);
+        ///
+        ///     NuGetPack("./nuspec/TestNuget.nuspec", nuGetPackSettings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -64,9 +64,58 @@ namespace Cake.Common.Tools.NuGet
                 throw new ArgumentNullException("context");
             }
 
-            var packer = new NuGetPacker(context.FileSystem, context.Environment, 
+            var packer = new NuGetPacker(context.FileSystem, context.Environment,
                 context.ProcessRunner, context.Log, context.Globber, context.GetToolResolver("NuGet"));
             packer.Pack(nuspecFilePath, settings);
+        }
+
+        /// <summary>
+        /// Creates a NuGet package using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        ///     var nuGetPackSettings   = new NuGetPackSettings {
+        ///                                     Id                      = "TestNuget",
+        ///                                     Version                 = "0.0.0.1",
+        ///                                     Title                   = "The tile of the package",
+        ///                                     Authors                 = new[] {"John Doe"},
+        ///                                     Owners                  = new[] {"Contoso"},
+        ///                                     Description             = "The description of the package",
+        ///                                     Summary                 = "Excellent summare of what the package does",
+        ///                                     ProjectUrl              = new Uri("https://github.com/SomeUser/TestNuget/"),
+        ///                                     IconUrl                 = new Uri("http://cdn.rawgit.com/SomeUser/TestNuget/master/icons/testnuget.png"),
+        ///                                     LicenseUrl              = new Uri("https://github.com/SomeUser/TestNuget/blob/master/LICENSE.md"),
+        ///                                     Copyright               = "Some company 2015",
+        ///                                     ReleaseNotes            = new [] {"Bug fixes", "Issue fixes", "Typos"},
+        ///                                     Tags                    = new [] {"Cake", "Script", "Build"},
+        ///                                     RequireLicenseAcceptance= false,
+        ///                                     Symbols                 = false,
+        ///                                     NoPackageAnalysis       = true,
+        ///                                     Files                   = new [] {
+        ///                                                                          new NuSpecContent {Source = "bin/TestNuget.dll", Target = "bin"},
+        ///                                                                       },
+        ///                                     BasePath                = "./src/TestNuget/bin/release",
+        ///                                     OutputDirectory         = "./nuget"
+        ///                                 };
+        ///
+        ///     NuGetPack(nuGetPackSettings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Pack")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Pack")]
+        public static void NuGetPack(this ICakeContext context, NuGetPackSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var packer = new NuGetPacker(context.FileSystem, context.Environment,
+                context.ProcessRunner, context.Log, context.Globber, context.GetToolResolver("NuGet"));
+            packer.Pack(settings);
         }
 
         /// <summary>
@@ -135,12 +184,12 @@ namespace Cake.Common.Tools.NuGet
         /// <code>
         /// // Get the path to the package.
         /// var package = "./nuget/SlackPRTGCommander.0.0.1.nupkg";
-        /// 
+        ///
         /// // Push the package.
         /// NuGetPush(package, new NuGetPushSettings {
         ///     Source = "http://example.com/nugetfeed",
         ///     ApiKey = "4003d786-cc37-4004-bfdf-c4f3e8ef9b3a"
-        /// }); 
+        /// });
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -170,7 +219,7 @@ namespace Cake.Common.Tools.NuGet
         ///                 Name = EnvironmentVariable("PUBLIC_FEED_NAME"),
         ///                 Source = EnvironmentVariable("PUBLIC_FEED_SOURCE")
         ///             };
-        /// 
+        ///
         /// NuGetAddSource(
         ///     name:feed.Name,
         ///     source:feed.Source
@@ -201,13 +250,13 @@ namespace Cake.Common.Tools.NuGet
         ///                                 IsSensitiveSource = true,
         ///                                 Verbosity = NuGetVerbosity.Detailed
         ///                             };
-        /// 
+        ///
         /// var feed = new
         ///             {
         ///                 Name = EnvironmentVariable("PRIVATE_FEED_NAME"),
         ///                 Source = EnvironmentVariable("PRIVATE_FEED_SOURCE")
         ///             };
-        /// 
+        ///
         /// NuGetAddSource(
         ///     name:feed.Name,
         ///     source:feed.Source,
@@ -242,7 +291,7 @@ namespace Cake.Common.Tools.NuGet
         ///                 Name = EnvironmentVariable("PRIVATE_FEED_NAME"),
         ///                 Source = EnvironmentVariable("PRIVATE_FEED_SOURCE")
         ///             };
-        /// 
+        ///
         /// NuGetRemoveSource(
         ///    name:feed.Name,
         ///    source:feed.Source
@@ -273,13 +322,13 @@ namespace Cake.Common.Tools.NuGet
         ///                                 IsSensitiveSource = true,
         ///                                 Verbosity = NuGetVerbosity.Detailed
         ///                             };
-        /// 
+        ///
         /// var feed = new
         ///             {
         ///                 Name = EnvironmentVariable("PRIVATE_FEED_NAME"),
         ///                 Source = EnvironmentVariable("PRIVATE_FEED_SOURCE")
         ///             };
-        /// 
+        ///
         /// NuGetRemoveSource(
         ///    name:feed.Name,
         ///    source:feed.Source,
@@ -428,7 +477,7 @@ namespace Cake.Common.Tools.NuGet
             var runner = new NuGetInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.GetToolResolver("NuGet"));
             runner.Install(packageId, settings);
         }
-        
+
         /// <summary>
         /// Installs NuGet packages using the specified package configuration.
         /// </summary>

@@ -33,7 +33,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet
             FileSystem.CreateFile("/Working/existing.temp.nuspec");
         }
 
-        public string Pack()
+        public string Pack(bool nuspec = true)
         {
             string content = null;
             ProcessRunner.When(p => p.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()))
@@ -42,7 +42,14 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet
                 });
 
             var tool = new NuGetPacker(FileSystem, Environment, ProcessRunner, Log, Globber, NuGetToolResolver);
-            tool.Pack(NuSpecFilePath, Settings);
+            if (nuspec)
+            {
+                tool.Pack(NuSpecFilePath, Settings);
+            }
+            else
+            {
+                tool.Pack(Settings);
+            }
 
             // Return the content.
             return content;
