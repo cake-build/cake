@@ -61,6 +61,8 @@ namespace Cake.Common
         /// }
         /// </code>
         /// </example>
+        /// <exception cref="CakeException">Argument value is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="context"/> is null.</exception>
         [CakeMethodAlias]
         public static T Argument<T>(this ICakeContext context, string name)
         {
@@ -72,7 +74,7 @@ namespace Cake.Common
             var value = context.Arguments.GetArgument(name);
             if (value == null)
             {
-                throw new CakeException("Argument was not set.");
+                throw new CakeException(string.Format("Argument '{0}' was not set.", name));
             }
             return Convert<T>(value);
         }
