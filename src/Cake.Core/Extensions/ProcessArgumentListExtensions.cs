@@ -1,4 +1,6 @@
-﻿using Cake.Core.IO;
+﻿using System;
+using System.Globalization;
+using Cake.Core.IO;
 using Cake.Core.IO.Arguments;
 
 // ReSharper disable once CheckNamespace
@@ -25,6 +27,21 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Formats and appends the specified text to the argument builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="format">A composite format string.</param>
+        /// <param name="args">An object array that contains zero or more objects to format.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="format" /> or <paramref name="args" /> is null. </exception>
+        /// <exception cref="FormatException"><paramref name="format" /> is invalid.-or- The index of a format item is less than zero, or greater than or equal to the length of the <paramref name="args" /> array. </exception>
+        public static ProcessArgumentBuilder Append(this ProcessArgumentBuilder builder, string format, params object[] args)
+        {
+            var text = string.Format(CultureInfo.InvariantCulture, format, args);
+            return Append(builder, text);
+        }
+
+        /// <summary>
         /// Quotes and appends the specified text to the argument builder.
         /// </summary>
         /// <param name="builder">The builder.</param>
@@ -37,6 +54,21 @@ namespace Cake.Core
                 builder.Append(new QuotedArgument(new TextArgument(text)));
             }
             return builder;
+        }
+
+        /// <summary>
+        /// Formats, quotes and appends the specified text to the argument builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="format">A composite format string to be quoted and appended.</param>
+        /// <param name="args">An object array that contains zero or more objects to format.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="format" /> or <paramref name="args" /> is null. </exception>
+        /// <exception cref="FormatException"><paramref name="format" /> is invalid.-or- The index of a format item is less than zero, or greater than or equal to the length of the <paramref name="args" /> array. </exception>
+        public static ProcessArgumentBuilder AppendQuoted(this ProcessArgumentBuilder builder, string format, params object[] args)
+        {
+            var text = string.Format(CultureInfo.InvariantCulture, format, args);
+            return AppendQuoted(builder, text);
         }
 
         /// <summary>
@@ -70,6 +102,22 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Formats and appends the specified secret text to the argument builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="format">A composite format string for the secret text to be appended.</param>
+        /// <param name="args">An object array that contains zero or more objects to format.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="format" /> or <paramref name="args" /> is null. </exception>
+        /// <exception cref="FormatException"><paramref name="format" /> is invalid.-or- The index of a format item is less than zero, or greater than or equal to the length of the <paramref name="args" /> array. </exception>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder AppendSecret(this ProcessArgumentBuilder builder, string format, params object[] args)
+        {
+            var text = string.Format(CultureInfo.InvariantCulture, format, args);
+            return AppendSecret(builder, text);
+        }
+
+        /// <summary>
         /// Appends the specified secret text to the argument builder.
         /// </summary>
         /// <param name="builder">The builder.</param>
@@ -97,6 +145,22 @@ namespace Cake.Core
                 builder.AppendQuoted(new SecretArgument(new TextArgument(text)));
             }
             return builder;
+        }
+
+        /// <summary>
+        /// Formats, quotes and appends the specified secret text to the argument builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="format">A composite format string for the secret text to be quoted and appended.</param>
+        /// <param name="args">An object array that contains zero or more objects to format.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="format" /> or <paramref name="args" /> is null. </exception>
+        /// <exception cref="FormatException"><paramref name="format" /> is invalid.-or- The index of a format item is less than zero, or greater than or equal to the length of the <paramref name="args" /> array. </exception>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder AppendQuotedSecret(this ProcessArgumentBuilder builder, string format, params object[] args)
+        {
+            var text = string.Format(CultureInfo.InvariantCulture, format, args);
+            return AppendQuotedSecret(builder, text);
         }
 
         /// <summary>

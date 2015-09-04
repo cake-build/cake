@@ -73,6 +73,7 @@
     <Compile Include="Unit\Diagnostics\VerbosityTypeConverterTests.cs" />
     <Compile Include="Fixtures\CakeEngineFixture.cs" />
     <Compile Include="Fixtures\GlobberFixture.cs" />
+    <Compile Include="Unit\Extensions\ProcessArgumentListExtensionsTests.cs" />
     <Compile Include="Unit\Graph\CakeGraphBuilderTests.cs" />
     <Compile Include="Unit\Graph\CakeGraphTests.cs" />
     <Compile Include="Unit\IO\Arguments\QuotedArgumentTests.cs" />
