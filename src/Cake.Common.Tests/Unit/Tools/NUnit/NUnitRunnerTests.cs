@@ -174,7 +174,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), 
                     Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "\"/Working/Test1.dll\" /noshadow"));
+                        p.Arguments.Render() == "\"/Working/Test1.dll\" -noshadow"));
             }
 
             [Fact]
@@ -214,7 +214,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), 
                     Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "\"/Working/Test1.dll\" \"/result:/Working/NewTestResult.xml\""));
+                        p.Arguments.Render() == "\"/Working/Test1.dll\" \"-result:/Working/NewTestResult.xml\""));
             }
 
             [Fact]
@@ -249,15 +249,15 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                     Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() ==
                         "\"/Working/Test1.dll\" " +
-                        "\"/framework:net1_1\" " +
-                        "\"/include:Database\" \"/exclude:Database_Users\" " +
-                        "/timeout:5 /nologo /nothread /stoponerror /trace:Debug " +
-                        "\"/output:/Working/stdout.txt\" " +
-                        "\"/err:/Working/stderr.txt\" " +
-                        "\"/result:/Working/NewTestResult.xml\" " +
-                        "\"/process:Multiple\" " + 
-                        "\"/apartment:STA\" " + 
-                        "\"/domain:Single\""));
+                        "\"-framework:net1_1\" " +
+                        "\"-include:Database\" \"-exclude:Database_Users\" " +
+                        "-timeout:5 -nologo -nothread -stoponerror -trace:Debug " +
+                        "\"-output:/Working/stdout.txt\" " +
+                        "\"-err:/Working/stderr.txt\" " +
+                        "\"-result:/Working/NewTestResult.xml\" " +
+                        "\"-process:Multiple\" " + 
+                        "\"-apartment:STA\" " + 
+                        "\"-domain:Single\""));
             }
 
             [Fact]

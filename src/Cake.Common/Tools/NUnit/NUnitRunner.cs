@@ -77,58 +77,58 @@ namespace Cake.Common.Tools.NUnit
 
             if (settings.Framework != null)
             {
-                builder.AppendQuoted("/framework:" + settings.Framework);
+                builder.AppendQuoted("-framework:" + settings.Framework);
             }
 
             if (settings.Include != null)
             {
-                builder.AppendQuoted("/include:" + settings.Include);
+                builder.AppendQuoted("-include:" + settings.Include);
             }
 
             if (settings.Exclude != null)
             {
-                builder.AppendQuoted("/exclude:" + settings.Exclude);
+                builder.AppendQuoted("-exclude:" + settings.Exclude);
             }
 
             if (settings.Timeout.HasValue)
             {
-                builder.Append("/timeout:" + settings.Timeout.Value);
+                builder.Append("-timeout:" + settings.Timeout.Value);
             }
 
             // No shadow copy?
             if (!settings.ShadowCopy)
             {
-                builder.Append("/noshadow");
+                builder.Append("-noshadow");
             }
 
             if (settings.NoLogo)
             {
-                builder.Append("/nologo");
+                builder.Append("-nologo");
             }
 
             if (settings.NoThread)
             {
-                builder.Append("/nothread");
+                builder.Append("-nothread");
             }
 
             if (settings.StopOnError)
             {
-                builder.Append("/stoponerror");
+                builder.Append("-stoponerror");
             }
 
             if (settings.Trace != null)
             {
-                builder.Append("/trace:" + settings.Trace);
+                builder.Append("-trace:" + settings.Trace);
             }
 
             if (settings.OutputFile != null)
             {
-                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/output:{0}", settings.OutputFile.MakeAbsolute(_environment).FullPath));
+                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "-output:{0}", settings.OutputFile.MakeAbsolute(_environment).FullPath));
             }
 
             if (settings.ErrorOutputFile != null)
             {
-                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/err:{0}", settings.ErrorOutputFile.MakeAbsolute(_environment).FullPath));
+                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "-err:{0}", settings.ErrorOutputFile.MakeAbsolute(_environment).FullPath));
             }
 
             if (settings.ResultsFile != null && settings.NoResults)
@@ -141,28 +141,28 @@ namespace Cake.Common.Tools.NUnit
             {
                 builder.AppendQuoted(
                     string.Format(
-                    CultureInfo.InvariantCulture,
-                    "/result:{0}", settings.ResultsFile.MakeAbsolute(_environment).FullPath));
+                        CultureInfo.InvariantCulture,
+                        "-result:{0}", settings.ResultsFile.MakeAbsolute(_environment).FullPath));
             }
             else if (settings.NoResults)
             {
-                builder.AppendQuoted("/noresult");
+                builder.AppendQuoted("-noresult");
             }
 
             // don't include the default value
             if (settings.Process != NUnitProcessOption.Single)
             {
-                builder.AppendQuoted("/process:" + settings.Process);
+                builder.AppendQuoted("-process:" + settings.Process);
             }
 
             if (settings.UseSingleThreadedApartment)
             {
-                builder.AppendQuoted("/apartment:STA");
+                builder.AppendQuoted("-apartment:STA");
             }
 
             if (settings.AppDomainUsage != NUnitAppDomainUsage.Default)
             {
-                builder.AppendQuoted("/domain:" + settings.AppDomainUsage);
+                builder.AppendQuoted("-domain:" + settings.AppDomainUsage);
             }
 
             return builder;
