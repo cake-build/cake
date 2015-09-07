@@ -7,7 +7,7 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.ILRepack
 {
     /// <summary>
-    /// Contains functionality related to ILMerge.
+    /// Contains functionality related to ILRepack.
     /// </summary>
     [CakeAliasCategory("ILRepack")]
     public static class ILRepackAliases
@@ -22,11 +22,14 @@ namespace Cake.Common.Tools.ILRepack
         /// <example>
         /// <code>
         /// var assemblyPaths = GetFiles("./**/Cake.*.dll");
-        /// ILMerge("./MergedCake.exe", "./Cake.exe", assemblyPaths);
+        /// ILRepack("./MergedCake.exe", "./Cake.exe", assemblyPaths);
         /// </code>
         /// </example>
         [CakeMethodAlias]
-        public static void ILRepack(this ICakeContext context, FilePath outputFile, FilePath primaryAssembly,
+        public static void ILRepack(
+            this ICakeContext context, 
+            FilePath outputFile, 
+            FilePath primaryAssembly,
             IEnumerable<FilePath> assemblyPaths)
         {
             if (context == null)
@@ -49,16 +52,20 @@ namespace Cake.Common.Tools.ILRepack
         /// <example>
         /// <code>
         /// var assemblyPaths = GetFiles("./**/Cake.*.dll");
-        /// ILMerge(
+        /// ILRepack(
         ///     "./MergedCake.exe",
         ///     "./Cake.exe",
         ///     assemblyPaths,
-        ///     new ILMergeSettings { Internalize = true });
+        ///     new ILRepackSettings { Internalize = true });
         /// </code>
         /// </example>
         [CakeMethodAlias]
-        public static void ILRepack(this ICakeContext context, FilePath outputFile, FilePath primaryAssembly,
-            IEnumerable<FilePath> assemblyPaths, ILRepackSettings settings)
+        public static void ILRepack(
+            this ICakeContext context, 
+            FilePath outputFile, 
+            FilePath primaryAssembly,
+            IEnumerable<FilePath> assemblyPaths, 
+            ILRepackSettings settings)
         {
             if (context == null)
             {

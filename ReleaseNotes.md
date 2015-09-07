@@ -1,11 +1,13 @@
-### New in 0.5.3 (Pre-release)
-* Additional NUnit switches
-* Made IProcess disposable & added Kill method
+### New in 0.5.4 (Work in progress)
+
+### New in 0.5.3 (Released 2015/08/31)
+* Additional NUnit switches.
+* Made IProcess disposable and added Kill method.
 * Fix for glob paths containing parentheses.
-* Fix for MSBuild Platform target
+* Fix for MSBuild Platform target.
 * xUnit: Added support for -noappdomain option.
-* DupFinder support added
-* InspectCode Support added
+* DupFinder support added.
+* InspectCode Support added.
 
 ### New in 0.5.2 (Released 2015/08/11)
 * Globber performance improvements.
