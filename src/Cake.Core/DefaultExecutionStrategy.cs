@@ -129,5 +129,45 @@ namespace Cake.Core
                 action();
             }
         }
+
+        /// <summary>
+        /// Performs the specified setup action before each task is invoked.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <param name="context">The context.</param>
+        /// <param name="setupContext">The setup context.</param>
+        public void PerformTaskSetup(Action<ICakeContext, ITaskSetupContext> action, ICakeContext context, ITaskSetupContext setupContext)
+        {
+            if (action != null)
+            {
+                _log.Information(string.Empty);
+                _log.Information("----------------------------------------");
+                _log.Information("Task Setup ({0})", setupContext.Task.Name);
+                _log.Information("----------------------------------------");
+                _log.Verbose("Executing custom task setup action ({0})...", setupContext.Task.Name);
+
+                action(context, setupContext);
+            }
+        }
+
+        /// <summary>
+        /// Performs the specified teardown action after each task is invoked.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <param name="context">The context.</param>
+        /// <param name="teardownContext">The teardown context.</param>
+        public void PerformTaskTeardown(Action<ICakeContext, ITaskTeardownContext> action, ICakeContext context, ITaskTeardownContext teardownContext)
+        {
+            if (action != null)
+            {
+                _log.Information(string.Empty);
+                _log.Information("----------------------------------------");
+                _log.Information("Task Teardown ({0})", teardownContext.Task.Name);
+                _log.Information("----------------------------------------");
+                _log.Verbose("Executing custom task teardown action ({0})...", teardownContext.Task.Name);
+
+                action(context, teardownContext);
+            }
+        }
     }
 }

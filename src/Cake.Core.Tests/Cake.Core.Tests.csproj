@@ -103,6 +103,8 @@
     <Compile Include="Unit\Scripting\ScriptProcessorTests.cs" />
     <Compile Include="Unit\Scripting\ScriptRunnerTests.cs" />
     <Compile Include="Unit\Scripting\ScriptTests.cs" />
+    <Compile Include="Unit\TaskSetupContextTests.cs" />
+    <Compile Include="Unit\TaskTeardownContextTests.cs" />
     <Compile Include="Unit\Text\TextTransformationTemplateTests.cs" />
   </ItemGroup>
   <ItemGroup>

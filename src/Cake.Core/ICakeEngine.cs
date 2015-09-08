@@ -43,5 +43,19 @@ namespace Cake.Core
         /// <param name="target">The target to run.</param>
         /// <returns>The resulting report.</returns>
         CakeReport RunTarget(ICakeContext context, IExecutionStrategy strategy, string target);
+
+        /// <summary>
+        /// Allows registration of an action that's executed before each task is run.
+        /// If the task setup fails, the task will not be executed but the task's teardown will be performed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        void RegisterTaskSetupAction(Action<ICakeContext, ITaskSetupContext> action);
+
+        /// <summary>
+        /// Allows registration of an action that's executed after each task has been run.
+        /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        void RegisterTaskTeardownAction(Action<ICakeContext, ITaskTeardownContext> action);
     }
 }

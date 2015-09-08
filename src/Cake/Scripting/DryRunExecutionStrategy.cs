@@ -51,5 +51,13 @@ namespace Cake.Scripting
         public void InvokeFinally(Action action)
         {
         }
+
+        public void PerformTaskSetup(Action<ICakeContext, ITaskSetupContext> action, ICakeContext context, ITaskSetupContext setupContext)
+        {
+        }
+
+        public void PerformTaskTeardown(Action<ICakeContext, ITaskTeardownContext> action, ICakeContext context, ITaskTeardownContext teardownContext)
+        {
+        }
     }
 }

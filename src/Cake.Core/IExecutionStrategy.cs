@@ -51,5 +51,21 @@ namespace Cake.Core
         /// </summary>
         /// <param name="action">The action.</param>
         void InvokeFinally(Action action);
+        
+        /// <summary>
+        /// Performs the specified setup action before each task is invoked.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <param name="context">The context.</param>
+        /// <param name="setupContext">The setup context.</param>
+        void PerformTaskSetup(Action<ICakeContext, ITaskSetupContext> action, ICakeContext context, ITaskSetupContext setupContext);
+
+        /// <summary>
+        /// Performs the specified teardown action after each task is invoked.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <param name="context">The context.</param>
+        /// <param name="teardownContext">The teardown context.</param>
+        void PerformTaskTeardown(Action<ICakeContext, ITaskTeardownContext> action, ICakeContext context, ITaskTeardownContext teardownContext);
     }
 }
