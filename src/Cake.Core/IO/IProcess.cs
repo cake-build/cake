@@ -60,18 +60,23 @@ namespace Cake.Core.IO
         bool HasExited { get; }
 
         /// <summary>
-        /// Occurs when process exits.
+        /// Specify a callback to be invoked when the process exits.
         /// </summary>
-        event EventHandler<ProcessExitedEventArgs> Exited;
+        /// <param name="action">The action.</param>
+        void HandleExited(Action<ProcessExitedEventArgs> action);
 
         /// <summary>
-        /// Occurs when an application writes to its redirected StandardError stream..
+        /// Specify a callback to be invoked when the process writes to its redirected StandardError stream.
         /// </summary>
-        event EventHandler<ProcessDataReceivedEventArgs> ErrorDataReceived;
+        /// <remarks>May not be used with <see cref="GetStandardError"/>.</remarks>
+        /// <param name="action">The action.</param>
+        void HandleErrorOutput(Action<ProcessOutputReceivedEventArgs> action);
 
         /// <summary>
-        /// Occurs when an application writes to its redirected StandardOutput stream..
+        /// Specify a callback to be invoked when the process writes to its redirected StandardOutput stream.
         /// </summary>
-        event EventHandler<ProcessDataReceivedEventArgs> OutputDataReceived;
+        /// <remarks>May not be used with <see cref="GetStandardOutput"/>.</remarks>
+        /// <param name="action">The action.</param>
+        void HandleStandardOutput(Action<ProcessOutputReceivedEventArgs> action);
     }
 }

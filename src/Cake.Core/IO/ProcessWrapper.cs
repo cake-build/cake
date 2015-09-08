@@ -11,11 +11,9 @@ namespace Cake.Core.IO
         private readonly ICakeLog _log;
         private readonly Func<string, string> _filterOutput;
 
-        private event EventHandler<ProcessExitedEventArgs> ProcessExited;
-
-        private event EventHandler<ProcessDataReceivedEventArgs> ProcessOutputDataReceived;
-
-        private event EventHandler<ProcessDataReceivedEventArgs> ProcessErrorDataReceived;
+        private Action<ProcessExitedEventArgs> _processExitedCallback;
+        private Action<ProcessOutputReceivedEventArgs> _standardErrorReceivedCallback;
+        private Action<ProcessOutputReceivedEventArgs> _standardOutputReceivedCallback;
 
         public ProcessWrapper(Process process, ICakeLog log, Func<string, string> filterOutput)
         {
@@ -101,140 +99,83 @@ namespace Cake.Core.IO
             }
         }
 
-        event EventHandler<ProcessExitedEventArgs> IProcess.Exited
-        {
-            add
-            {
-                if (ProcessExited == null)
-                {
-                    if (!_process.EnableRaisingEvents)
-                    {
-                        _process.EnableRaisingEvents = true;
-                    }
-                    _process.Exited += Process_Exited;
-                }
-
-                ProcessExited += value;
-
-                if (HasExited)
-                {
-                    Process_Exited(_process, new EventArgs());
-                }
-            }
-
-            remove
-            {
-                ProcessExited -= value;
-            }
-        }
-
         private void Process_Exited(object sender, EventArgs args)
         {
-            OnProcessExited(new ProcessExitedEventArgs(GetExitCode()));
-        }
-
-        private void OnProcessExited(ProcessExitedEventArgs e)
-        {
-            var handler = ProcessExited;
-            if (handler != null)
+            if (_processExitedCallback != null)
             {
-                handler(this, e);
+                _processExitedCallback(new ProcessExitedEventArgs(GetExitCode()));
             }
         }
 
-        /// <summary>
-        /// Occurs when an application writes to its redirected StandardError stream.
-        /// </summary>
-        /// <remarks>
-        /// The ErrorDataReceived event indicates that the associated process has written to its redirected StandardError stream.
-        /// The event only occurs during asynchronous read operations on StandardError. To start asynchronous read operations, 
-        /// you must redirect the StandardError stream of a Process, add your event handler to the ErrorDataReceived event, 
-        /// and call BeginErrorReadLine. Thereafter, the ErrorDataReceived event signals each time the process writes a 
-        /// line to the redirected StandardError stream, until the process exits or calls CancelErrorRead.
-        /// <note>The application that is processing the asynchronous output should call the WaitForExit method to ensure that the output buffer has been flushed.</note>
-        /// </remarks>
-        event EventHandler<ProcessDataReceivedEventArgs> IProcess.ErrorDataReceived
+        public void HandleExited(Action<ProcessExitedEventArgs> action)
         {
-            add
+            if (action == null)
             {
-                if (ProcessErrorDataReceived == null)
+                throw new ArgumentNullException("action");
+            }
+
+            if (_processExitedCallback == null)
+            {
+                if (!_process.EnableRaisingEvents)
                 {
-                    _process.ErrorDataReceived += Process_ErrorDataReceived;
-                    _process.BeginErrorReadLine();
+                    _process.EnableRaisingEvents = true;
                 }
-
-                ProcessErrorDataReceived += value;
+                _process.Exited += Process_Exited;
             }
 
-            remove
+            _processExitedCallback = action;
+
+            if (HasExited)
             {
-                _process.CancelErrorRead();
-                ProcessErrorDataReceived -= value;
+                Process_Exited(_process, new EventArgs());
             }
+        }
+
+        public void HandleErrorOutput(Action<ProcessOutputReceivedEventArgs> action)
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException("action");
+            }
+
+            if (_standardErrorReceivedCallback == null)
+            {
+                _process.ErrorDataReceived += Process_ErrorDataReceived;
+                _process.BeginErrorReadLine();
+            }
+
+            _standardErrorReceivedCallback = action;
+        }
+
+        public void HandleStandardOutput(Action<ProcessOutputReceivedEventArgs> action)
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException("action");
+            }
+
+            if (_standardOutputReceivedCallback == null)
+            {
+                _process.OutputDataReceived += Process_OutputDataReceived;
+                _process.BeginOutputReadLine();
+            }
+
+            _standardOutputReceivedCallback = action;
         }
 
         private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
-            if (e.Data != null)
+            if (e.Data != null && _standardErrorReceivedCallback != null)
             {
-                OnProcessErrorDataReceived(new ProcessDataReceivedEventArgs(e.Data));
-            }
-        }
-
-        private void OnProcessErrorDataReceived(ProcessDataReceivedEventArgs e)
-        {
-            var handler = ProcessErrorDataReceived;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
-        /// <summary>
-        /// Occurs when an application writes to its redirected StandardOutput stream.
-        /// </summary>
-        /// <remarks>
-        /// The OutputDataReceived event indicates that the associated process has written to its redirected StandardOutput stream.
-        /// The event only occurs during asynchronous read operations on StandardOutput. To start asynchronous read operations, 
-        /// you must redirect the StandardOutput stream of a Process, add your event handler to the OutputDataReceived event, 
-        /// and call BeginOutputReadLine. Thereafter, the OutputDataReceived event signals each time the process writes a 
-        /// line to the redirected StandardOutput stream, until the process exits or calls CancelOutputRead.
-        /// <note>The application that is processing the asynchronous output should call the WaitForExit method to ensure that the output buffer has been flushed.</note>
-        /// </remarks>
-        event EventHandler<ProcessDataReceivedEventArgs> IProcess.OutputDataReceived
-        {
-            add
-            {
-                if (ProcessOutputDataReceived == null)
-                {
-                    _process.OutputDataReceived += Process_OutputDataReceived;
-                    _process.BeginOutputReadLine();
-                }
-
-                ProcessOutputDataReceived += value;
-            }
-
-            remove
-            {
-                _process.CancelOutputRead();
-                ProcessOutputDataReceived -= value;
+                _standardErrorReceivedCallback(new ProcessOutputReceivedEventArgs(e.Data));
             }
         }
 
         private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            if (e.Data != null)
+            if (e.Data != null && _standardOutputReceivedCallback != null)
             {
-                OnProcessOutputDataReceived(new ProcessDataReceivedEventArgs(e.Data));
-            }
-        }
-
-        private void OnProcessOutputDataReceived(ProcessDataReceivedEventArgs e)
-        {
-            var handler = ProcessOutputDataReceived;
-            if (handler != null)
-            {
-                handler(this, e);
+                _standardOutputReceivedCallback(new ProcessOutputReceivedEventArgs(e.Data));
             }
         }
 
@@ -244,19 +185,21 @@ namespace Cake.Core.IO
         /// <remarks>This also closes the underlying process handle, but does not stop the process if it is still running.</remarks>
         public void Dispose()
         {
-            ProcessExited = null;
-            ProcessErrorDataReceived = null;
-            ProcessOutputDataReceived = null;
-
             _process.Exited -= Process_Exited;
-            if (_process.StartInfo.RedirectStandardError)
+            if (_process.StartInfo.RedirectStandardError && _standardErrorReceivedCallback != null)
             {
+                _process.CancelErrorRead();
                 _process.ErrorDataReceived -= Process_ErrorDataReceived;
             }
-            if (_process.StartInfo.RedirectStandardOutput)
+            if (_process.StartInfo.RedirectStandardOutput && _standardOutputReceivedCallback != null)
             {
+                _process.CancelOutputRead();
                 _process.OutputDataReceived -= Process_OutputDataReceived;
             }
+
+            _processExitedCallback = null;
+            _standardErrorReceivedCallback = null;
+            _standardOutputReceivedCallback = null;
 
             _process.Dispose();
         }
