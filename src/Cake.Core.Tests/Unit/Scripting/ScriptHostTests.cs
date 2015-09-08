@@ -1,4 +1,5 @@
-﻿using Cake.Core.Tests.Fixtures;
+﻿using System;
+using Cake.Core.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
 
@@ -53,6 +54,42 @@ namespace Cake.Core.Tests.Unit.Scripting
 
                 // Then
                 fixture.Engine.Received(1).RegisterTask("Task");
+            }
+        }
+
+        public sealed class TheTaskSetupMethod
+        {
+            [Fact]
+            public void Should_Proxy_Call_To_Engine()
+            {
+                // Given
+                var fixture = new ScriptHostFixture();
+                var host = fixture.CreateHost();
+                Action<ICakeContext, ITaskSetupContext> action = (context, setupContext) => { };
+
+                // When
+                host.TaskSetup(action);
+
+                // Then
+                fixture.Engine.Received().RegisterTaskSetupAction(action);
+            }
+        }
+
+        public sealed class TheTaskTeardownMethod
+        {
+            [Fact]
+            public void Should_Proxy_Call_To_Engine()
+            {
+                // Given
+                var fixture = new ScriptHostFixture();
+                var host = fixture.CreateHost();
+                Action<ICakeContext, ITaskTeardownContext> action = (context, setupContext) => { };
+
+                // When
+                host.TaskTeardown(action);
+
+                // Then
+                fixture.Engine.Received().RegisterTaskTeardownAction(action);
             }
         }
     }

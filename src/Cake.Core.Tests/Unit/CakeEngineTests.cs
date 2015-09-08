@@ -629,6 +629,260 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.Equal("Error", result.Message);
             }
+
+            [Fact]
+            public void Should_Run_Task_Setup_Before_Each_Task()
+            {
+                // Given
+                var result = new List<string>();
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTaskSetupAction((cc, sc) => result.Add("TASK_SETUP:" + sc.Task.Name));
+                engine.RegisterTask("A").Does(()=>result.Add("Executing A"));
+                engine.RegisterTask("B").Does(() => result.Add("Executing B")).IsDependentOn("A");
+
+                // When
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "B");
+
+                // Then
+                Assert.Equal(new List<string> { "TASK_SETUP:A", "Executing A", "TASK_SETUP:B", "Executing B" }, result);
+            }
+
+            [Fact]
+            public void Should_Not_Run_Task_If_Task_Setup_Failed()
+            {
+                // Given
+                var result = new List<string>();
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTaskSetupAction((cc, sc) => { throw new Exception("fake exception"); });
+                engine.RegisterTask("A").Does(() => result.Add("Executing A"));
+                engine.RegisterTask("B").Does(() => result.Add("Executing B")).IsDependentOn("A");
+
+                // When
+                Record.Exception(() => engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "B"));
+
+                // Then
+                Assert.Equal(new List<string>(), result);
+                
+                Assert.True(fixture.Log.Messages.Contains("Executing custom task setup action (A)..."));
+                Assert.False(fixture.Log.Messages.Contains("Executing custom task setup action (B)..."));
+            }
+
+            [Fact]
+            public void Should_Run_Task_Teardown_After_Each_Running_Task()
+            {
+                // Given
+                var result = new List<string>();
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTaskSetupAction((cc, sc) => result.Add("TASK_SETUP:" + sc.Task.Name));
+                engine.RegisterTaskTeardownAction((cc, sc) => result.Add("TASK_TEARDOWN:" + sc.Task.Name));
+                engine.RegisterTask("A").Does(() => result.Add("Executing A"));
+                engine.RegisterTask("B").Does(() => result.Add("Executing B")).IsDependentOn("A");
+
+                // When
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "B");
+
+                // Then
+                Assert.Equal(new List<string> { "TASK_SETUP:A", "Executing A", "TASK_TEARDOWN:A", "TASK_SETUP:B", "Executing B", "TASK_TEARDOWN:B" }, result);
+            }
+
+            [Fact]
+            public void Should_Run_Task_Teardown_After_Each_Running_Task_Even_If_Task_Is_Skipped()
+            {
+                // Given
+                var result = new List<string>();
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTaskSetupAction((cc, sc) => result.Add("TASK_SETUP:" + sc.Task.Name));
+                engine.RegisterTaskTeardownAction((cc, sc) => result.Add("TASK_TEARDOWN:" + sc.Task.Name));
+                engine.RegisterTask("A").Does(() => result.Add("Executing A"));
+                engine.RegisterTask("B").Does(() => result.Add("Executing B")).WithCriteria(() => false).IsDependentOn("A");
+                engine.RegisterTask("C").Does(() => result.Add("Executing C")).IsDependentOn("B");
+
+                // When
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "C");
+
+                // Then
+                Assert.Equal(
+                    new List<string>
+                    {
+                        "TASK_SETUP:A",
+                        "Executing A",
+                        "TASK_TEARDOWN:A",
+                        "TASK_SETUP:B",
+                        "TASK_TEARDOWN:B",
+                        "TASK_SETUP:C",
+                        "Executing C",
+                        "TASK_TEARDOWN:C"
+                    }, result);
+            }
+
+            [Fact]
+            public void Should_Run_Task_Teardown_After_Each_Running_Task_Even_If_Task_Failed()
+            {
+                // Given
+                var result = new List<string>();
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTaskSetupAction((cc, sc) => result.Add("TASK_SETUP:" + sc.Task.Name));
+                engine.RegisterTaskTeardownAction((cc, sc) => result.Add("TASK_TEARDOWN:" + sc.Task.Name));
+                engine.RegisterTask("A").Does(() =>
+                {
+                    result.Add("FAILING (A)");
+                    throw new InvalidOperationException("Fail");
+                });
+
+                // When
+                var exception = Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
+
+                // Then
+                Assert.NotNull(exception);
+                Assert.IsType<InvalidOperationException>(exception);
+                Assert.Equal("Fail", exception.Message);
+                Assert.Equal(
+                    new List<string>
+                    {
+                        "TASK_SETUP:A",
+                        "FAILING (A)",
+                        "TASK_TEARDOWN:A"
+                    }, result);
+            }
+
+            [Fact]
+            public void Should_Run_Task_Teardown_If_Task_Setup_Failed()
+            {
+                // Given
+                var result = new List<string>();
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTaskSetupAction((cc, sc) =>
+                {
+                    throw new InvalidOperationException("Fail");
+                });
+                engine.RegisterTaskTeardownAction((cc, sc) => result.Add("TASK_TEARDOWN:" + sc.Task.Name));
+                engine.RegisterTask("A").Does(() =>
+                {
+                    result.Add("Executing A");
+                });
+
+                // When
+                var exception = Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
+
+                // Then
+                Assert.NotNull(exception);
+                Assert.IsType<InvalidOperationException>(exception);
+                Assert.Equal("Fail", exception.Message);
+                Assert.Equal(
+                    new List<string>
+                    {
+                        "TASK_TEARDOWN:A"
+                    }, result);
+            }
+
+            [Fact]
+            public void Should_Throw_Exception_Thrown_From_Task_Setup_Action_If_Both_Task_Setup_And_Task_Teardown_Actions_Throw()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+
+                engine.RegisterTaskSetupAction((cc,sc) => { throw new InvalidOperationException("Task Setup: " + sc.Task.Name); });
+                engine.RegisterTaskTeardownAction((cc, tc) => { throw new InvalidOperationException("Task Teardown: " + tc.Task.Name); });
+                engine.RegisterTask("A").Does(() => { });
+
+                // When
+                var result = Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
+
+                // Then
+                Assert.NotNull(result);
+                Assert.IsType<InvalidOperationException>(result);
+                Assert.Equal("Task Setup: A", result.Message);
+            }
+
+            [Fact]
+            public void Should_Throw_Exception_Occuring_In_Task_Teardown_If_No_Previous_Exception_Was_Thrown()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+
+                engine.RegisterTaskTeardownAction((cc, tc) => { throw new InvalidOperationException("Task Teardown: " + tc.Task.Name); });
+                engine.RegisterTask("A");
+
+                // When
+                var result = Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
+
+                // Then
+                Assert.NotNull(result);
+                Assert.IsType<InvalidOperationException>(result);
+                Assert.Equal("Task Teardown: A", result.Message);
+            }
+
+            [Fact]
+            public void Should_Log_Task_Teardown_Exception_If_Both_Task_Setup_And_Task_Teardown_Actions_Throw()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+
+                engine.RegisterTaskSetupAction((cc, sc) => { throw new InvalidOperationException("Task Setup: " + sc.Task.Name); });
+                engine.RegisterTaskTeardownAction((cc, tc) => { throw new InvalidOperationException("Task Teardown: " + tc.Task.Name); });
+                engine.RegisterTask("A").Does(() => { });
+
+                // When
+                var result = Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
+
+                // Then
+                Assert.NotNull(result);
+                Assert.IsType<InvalidOperationException>(result);
+                Assert.Equal("Task Setup: A", result.Message);
+                Assert.True(fixture.Log.Messages.Any(x => x.StartsWith("Task Teardown error (A):")));
+            }
+
+            [Fact]
+            public void Should_Log_Exception_Thrown_From_Task_If_Both_Task_And_Task_Teardown_Actions_Throw()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+
+                engine.RegisterTaskTeardownAction((cc, tc) => { throw new InvalidOperationException("Task Teardown: " + tc.Task.Name); });
+                engine.RegisterTask("A").Does(() => { throw new InvalidOperationException("Task: A"); });
+
+                // When
+                var result = Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
+
+                // Then
+                Assert.NotNull(result);
+                Assert.IsType<InvalidOperationException>(result);
+                Assert.Equal("Task: A", result.Message);
+            }
+
+            [Fact]
+            public void Should_Log_Task_Teardown_Exception_If_Both_Task_And_Task_Teardown_Actions_Throw()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+
+                engine.RegisterTaskTeardownAction((cc, tc) => { throw new InvalidOperationException("Task Teardown: " + tc.Task.Name); });
+                engine.RegisterTask("A").Does(() => { throw new InvalidOperationException("Task: A"); });
+
+                // When
+                var result = Record.Exception(() =>
+                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
+
+                // Then
+                Assert.True(fixture.Log.Messages.Any(x => x.StartsWith("Task Teardown error (A):")));
+            }
         }
     }
 }

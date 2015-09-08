@@ -81,6 +81,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="ICakeArguments.cs" />
+    <Compile Include="ICakeTaskInfo.cs" />
     <Compile Include="IExecutionStrategy.cs" />
     <Compile Include="ICakeReportPrinter.cs" />
     <Compile Include="IConsole.cs" />
@@ -144,6 +145,8 @@
     <Compile Include="IO\Arguments\TextArgument.cs" />
     <Compile Include="IO\WindowsRegistry.cs" />
     <Compile Include="IO\WindowsRegistryKey.cs" />
+    <Compile Include="ITaskSetupContext.cs" />
+    <Compile Include="ITaskTeardownContext.cs" />
     <Compile Include="Properties\Namespaces.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
@@ -174,6 +177,8 @@
     <Compile Include="Scripting\ScriptProcessor.cs" />
     <Compile Include="Scripting\ScriptProcessorContext.cs" />
     <Compile Include="Scripting\ScriptRunner.cs" />
+    <Compile Include="TaskSetupContext.cs" />
+    <Compile Include="TaskTeardownContext.cs" />
     <Compile Include="Text\ITextTransformationTemplate.cs" />
     <Compile Include="Text\TextTransformationTemplate.cs" />
     <Compile Include="Utilities\Tool.cs" />
