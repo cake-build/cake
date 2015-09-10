@@ -9,6 +9,7 @@ namespace Cake.Common.Tools.NUnit
 {
     /// <summary>
     /// Contains functionality related to running NUnit unit tests.
+    /// Requires the NUnit.Runners package.
     /// </summary>
     [CakeAliasCategory("NUnit")]
     public static class NUnitAliases
