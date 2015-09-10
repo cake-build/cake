@@ -121,7 +121,7 @@ RunTarget(target);
 C:\Project\Tools\Cake> Cake.exe ../../build.cake -verbosity=verbose -target=Build
 ```
 
-You could of course use a [bootstrapper script](https://github.com/cake-build/cake/blob/develop/build.ps1) if you want to.
+You could of course use our bootstrapper script if you want to. More information can be found in the [tutorial](http://cakebuild.net/docs/tutorials/setting-up-a-new-project)
 
 ## Documentation
 
