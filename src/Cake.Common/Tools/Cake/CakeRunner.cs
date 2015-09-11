@@ -18,6 +18,7 @@ namespace Cake.Common.Tools.Cake
     {
         private readonly ICakeEnvironment _environment;
         private readonly IFileSystem _fileSystem;
+        private readonly IGlobber _globber;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeRunner"/> class.
@@ -32,6 +33,7 @@ namespace Cake.Common.Tools.Cake
         {
             _environment = environment;
             _fileSystem = fileSystem;
+            _globber = globber;
         }
 
         /// <summary>
@@ -132,6 +134,35 @@ namespace Cake.Common.Tools.Cake
         protected override IEnumerable<string> GetToolExecutableNames()
         {
             return new[] { "Cake.exe" };
+        }
+
+        /// <summary>
+        /// Gets alternative file paths which the tool may exist in
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The default tool path.</returns>
+        protected override IEnumerable<FilePath> GetAlternativeToolPaths(CakeSettings settings)
+        {
+            const string homebrewCakePath = "/usr/local/Cellar/cake/";
+
+            if (!_environment.IsUnix())
+            {
+                return Enumerable.Empty<FilePath>();
+            }
+
+            if (!_fileSystem.Exist(new DirectoryPath(homebrewCakePath)))
+            {
+                return Enumerable.Empty<FilePath>();
+            }
+
+            var files = _globber.GetFiles(homebrewCakePath + "**/Cake.exe");
+
+            if (!files.Any())
+            {
+                return Enumerable.Empty<FilePath>();
+            }
+
+            return files.OrderByDescending(f => f.FullPath);
         }
     }
 }
