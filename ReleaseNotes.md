@@ -1,3 +1,5 @@
+### New in 0.5.5 (Work in progress)
+
 ### New in 0.5.4 (Released 2015/09/12)
 * Removed .nuspec requirement for NuGetPack.
 * Enhanced exception message to include name of missing argument.
