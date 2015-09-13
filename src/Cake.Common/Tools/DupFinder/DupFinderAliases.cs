@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.Annotations;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DupFinder
@@ -105,7 +106,13 @@ namespace Cake.Common.Tools.DupFinder
             {
                 throw new ArgumentNullException("pattern");
             }
-            var sourceFiles = context.Globber.Match(pattern).OfType<FilePath>();
+
+            var sourceFiles = context.Globber.GetFiles(pattern).ToArray();
+            if (sourceFiles.Length == 0)
+            {
+                context.Log.Verbose("The provided pattern did not match any files.");
+                return;
+            }
 
             var runner = new DupFinderRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
             runner.Run(sourceFiles, settings);

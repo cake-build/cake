@@ -206,6 +206,21 @@ namespace Cake.Core.Tests.Unit.IO
             }
 
             [Fact]
+            public void Should_Be_Able_To_Back_Down_One_Directory_Using_Double_Dots()
+            {
+                // Given
+                var fixture = new GlobberFixture();
+
+                // When
+                var result = fixture.Match("/Working/Foo/../Foo/Bar/Qux.c");
+
+                // Then
+                Assert.Equal(1, result.Length);
+                Assert.IsType<FilePath>(result[0]);
+                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+            }
+
+            [Fact]
             public void Should_Return_Single_Path_For_Absolute_File_Path_Without_Glob_Pattern()
             {
                 // Given
