@@ -3,7 +3,7 @@
 Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/s9oscm9t7ase6h6d?svg=true)](https://ci.appveyor.com/project/cakebuild/cake)
-[![Coverity Scan](https://scan.coverity.com/projects/4147/badge.svg)](https://scan.coverity.com/projects/4147) 
+[![Coverity Scan](https://scan.coverity.com/projects/4147/badge.svg)](https://scan.coverity.com/projects/4147)
 
 [![Follow @cakebuildnet](https://img.shields.io/badge/Twitter-Follow%20%40cakebuildnet-blue.svg)](https://twitter.com/intent/follow?screen_name=cakebuildnet)
 [![Join the chat at https://gitter.im/cake-build/cake](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/cake-build/cake?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -26,7 +26,7 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
 This is a list of some the currently implemented functionality.   
 For a full list of supported tools, see the [DSL reference](http://cakebuild.net/dsl/).
 
-* [MSBuild](http://cakebuild.net/dsl/msbuild) 
+* [MSBuild](http://cakebuild.net/dsl/msbuild)
 * [MSTest](http://cakebuild.net/dsl/mstest)
 * [xUnit (v1)](http://cakebuild.net/dsl/xunit)
 * [xUnit (v2)](http://cakebuild.net/dsl/xunit-v2)
@@ -60,7 +60,7 @@ For a full list of supported tools, see the [DSL reference](http://cakebuild.net
 * [Octopus deploy](http://cakebuild.net/dsl/octopus-deploy)
   * Create release
 
-For more information and examples of how to use Cake, see the [Documentation](http://cakebuild.net/docs). 
+For more information and examples of how to use Cake, see the [Documentation](http://cakebuild.net/docs).
 
 ##Example
 
@@ -140,13 +140,7 @@ Make sure you've read the [contribution guidelines](http://cakebuild.net/contrib
 * Fork the repository.
 * Make your feature addition or bug fix.
 * Don't forget the unit tests.
-* Send a pull request. Bonus for topic branches. *Funny .gif will be your reward.*  
-
-## External add-ons
-
-Cake.AliaSql: [https://www.nuget.org/packages/Cake.AliaSql](https://www.nuget.org/packages/Cake.AliaSql)  
-Cake.Unity: [https://github.com/patriksvensson/Cake.Unity](https://github.com/patriksvensson/Cake.Unity)  
-Cake.Slack: [https://github.com/WCOMAB/Cake.Slack](https://github.com/WCOMAB/Cake.Slack)
+* Send a pull request.
 
 ## License
 
