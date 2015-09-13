@@ -11,6 +11,8 @@ var configuration = Argument("configuration", "Release");
 
 // Get whether or not this is a local build.
 var local = BuildSystem.IsLocalBuild;
+var isRunningOnUnix = IsRunningOnUnix();
+var isRunningOnWindows = IsRunningOnWindows();
 var isRunningOnAppVeyor = AppVeyor.IsRunningOnAppVeyor;
 var isPullRequest = AppVeyor.Environment.PullRequest.IsPullRequest;
 
@@ -43,6 +45,7 @@ Setup(() =>
 //////////////////////////////////////////////////////////////////////
 
 Task("Clean")
+    .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
 {
     CleanDirectories(new DirectoryPath[] {
@@ -79,20 +82,33 @@ Task("Build")
     .IsDependentOn("Patch-Assembly-Info")
     .Does(() =>
 {
-    MSBuild("./src/Cake.sln", settings =>
-        settings.SetConfiguration(configuration)
+    if(isRunningOnUnix)
+    {
+        XBuild("./src/Cake.sln", new XBuildSettings()
+            .SetConfiguration("Debug")
+            .WithProperty("TreatWarningsAsErrors", "true")
+            .SetVerbosity(Verbosity.Minimal)
+        );
+    }
+    else
+    {
+        MSBuild("./src/Cake.sln", new MSBuildSettings()
+            .SetConfiguration(configuration)
             .WithProperty("TreatWarningsAsErrors", "true")
             .UseToolVersion(MSBuildToolVersion.NET45)
             .SetVerbosity(Verbosity.Minimal)
             .SetNodeReuse(false));
+    }
 });
 
 Task("Run-Unit-Tests")
     .IsDependentOn("Build")
+    .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
 {
     XUnit2("./src/**/bin/" + configuration + "/*.Tests.dll", new XUnit2Settings {
         OutputDirectory = testResultsDir,
+        NoAppDomain = true,
         XmlReportV1 = true
     });
 });
@@ -100,15 +116,16 @@ Task("Run-Unit-Tests")
 
 Task("Copy-Files")
     .IsDependentOn("Run-Unit-Tests")
+    .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
 {
     CopyFileToDirectory(buildDir + File("Cake.exe"), binDir);
     CopyFileToDirectory(buildDir + File("Cake.Core.dll"), binDir);
-    CopyFileToDirectory(buildDir + File("Cake.Core.xml"), binDir);
     CopyFileToDirectory(buildDir + File("Cake.Core.pdb"), binDir);
+    CopyFileToDirectory(buildDir + File("Cake.Core.xml"), binDir);
     CopyFileToDirectory(buildDir + File("Cake.Common.dll"), binDir);
-    CopyFileToDirectory(buildDir + File("Cake.Common.xml"), binDir);
     CopyFileToDirectory(buildDir + File("Cake.Common.pdb"), binDir);
+    CopyFileToDirectory(buildDir + File("Cake.Common.xml"), binDir);
     CopyFileToDirectory(buildDir + File("Mono.CSharp.dll"), binDir);
     CopyFileToDirectory(buildDir + File("Autofac.dll"), binDir);
     CopyFileToDirectory(buildDir + File("Nuget.Core.dll"), binDir);
@@ -118,6 +135,7 @@ Task("Copy-Files")
 
 Task("Zip-Files")
     .IsDependentOn("Copy-Files")
+    .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
 {
     var packageFile = File("Cake-bin-v" + semVersion + ".zip");
@@ -128,6 +146,7 @@ Task("Zip-Files")
 
 Task("Create-NuGet-Packages")
     .IsDependentOn("Copy-Files")
+    .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
 {
     // Create Cake package.
@@ -161,6 +180,7 @@ Task("Create-NuGet-Packages")
 
 Task("Update-AppVeyor-Build-Number")
     .WithCriteria(() => isRunningOnAppVeyor)
+    .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
 {
     AppVeyor.UpdateBuildVersion(semVersion);
@@ -169,6 +189,7 @@ Task("Update-AppVeyor-Build-Number")
 Task("Upload-AppVeyor-Artifacts")
     .IsDependentOn("Package")
     .WithCriteria(() => isRunningOnAppVeyor)
+    .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
 {
     var artifact = buildResultDir + File("Cake-bin-v" + semVersion + ".zip");
@@ -178,6 +199,7 @@ Task("Upload-AppVeyor-Artifacts")
 Task("Publish-MyGet")
     .WithCriteria(() => !local)
     .WithCriteria(() => !isPullRequest)
+    .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
 {
     // Resolve the API key.
@@ -214,6 +236,9 @@ Task("AppVeyor")
     .IsDependentOn("Update-AppVeyor-Build-Number")
     .IsDependentOn("Upload-AppVeyor-Artifacts")
     .IsDependentOn("Publish-MyGet");
+
+Task("Travis")
+    .IsDependentOn("Build");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION

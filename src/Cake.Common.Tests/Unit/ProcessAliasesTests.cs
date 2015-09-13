@@ -444,7 +444,7 @@ namespace Cake.Common.Tests.Unit
                     fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns(p => expected);
 
                     // When
-                    var result = fixture.StartNewProcess(fileName, settings);
+                    fixture.StartNewProcess(fileName, settings);
 
                     // Then
                     Assert.IsAssignableFrom<IProcess>(expected);
