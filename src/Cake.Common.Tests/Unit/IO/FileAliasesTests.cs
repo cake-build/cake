@@ -430,7 +430,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileAliases.CopyFiles(fixture.Context, "", null));
+                        FileAliases.CopyFiles(fixture.Context, "*", null));
 
                     // Then
                     Assert.IsArgumentNullException(result, "targetDirectoryPath");
@@ -840,7 +840,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileAliases.MoveFiles(fixture.Context, "", null));
+                        FileAliases.MoveFiles(fixture.Context, "*", null));
 
                     // Then
                     Assert.IsArgumentNullException(result, "targetDirectoryPath");

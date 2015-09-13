@@ -44,7 +44,7 @@ namespace Cake.Common.Solution.Project.XmlDoc
                 throw new ArgumentNullException("xmlFilePath");
             }
 
-            var parser = new XmlDocExampleCodeParser(context.FileSystem, context.Globber);
+            var parser = new XmlDocExampleCodeParser(context.FileSystem, context.Globber, context.Log);
             return parser.Parse(xmlFilePath);
         }
 
@@ -80,7 +80,7 @@ namespace Cake.Common.Solution.Project.XmlDoc
                 throw new ArgumentNullException("pattern");
             }
 
-            var parser = new XmlDocExampleCodeParser(context.FileSystem, context.Globber);
+            var parser = new XmlDocExampleCodeParser(context.FileSystem, context.Globber, context.Log);
             return parser.ParseFiles(pattern);
         }
     }

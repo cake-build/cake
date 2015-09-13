@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Common.IO
@@ -65,6 +66,11 @@ namespace Cake.Common.IO
                 throw new ArgumentNullException("pattern");
             }
             var files = context.GetFiles(pattern);
+            if (files.Count == 0)
+            {
+                context.Log.Verbose("The provided pattern did not match any files.");
+                return;
+            }
             CopyFiles(context, files, targetDirectoryPath);
         }
 

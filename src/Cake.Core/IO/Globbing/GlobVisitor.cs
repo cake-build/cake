@@ -61,9 +61,22 @@ namespace Cake.Core.IO.Globbing
 
         public void VisitRelativeRoot(RelativeRoot node, GlobVisitorContext context)
         {
-            context.Push(context.Environment.WorkingDirectory.FullPath);
+            // Push each path to the context.
+            var pushedSegmentCount = 0;
+            var path = context.Environment.WorkingDirectory;
+            foreach (var segment in path.Segments)
+            {
+                context.Push(segment);
+                pushedSegmentCount++;
+            }
+
             node.Next.Accept(this, context);
-            context.Pop();
+
+            // Pop all segments we added to the context.
+            for (var index = 0; index < pushedSegmentCount; index++)
+            {
+                context.Pop();
+            }
         }
 
         public void VisitSegment(PathSegment node, GlobVisitorContext context)
@@ -105,9 +118,23 @@ namespace Cake.Core.IO.Globbing
                 }
                 else
                 {
-                    context.Push(node.GetPath());
-                    node.Next.Accept(this, context);
-                    context.Pop();
+                    if (node.GetPath() == "..")
+                    {
+                        // Back up one level.
+                        var last = context.Pop();
+                        node.Next.Accept(this, context);
+
+                        // Push the segment back so pop/push 
+                        // count remains balanced.
+                        context.Push(last);
+                    }
+                    else
+                    {
+                        // Push the current node to the context.
+                        context.Push(node.GetPath());
+                        node.Next.Accept(this, context);
+                        context.Pop();
+                    }
                 }
             }
             else

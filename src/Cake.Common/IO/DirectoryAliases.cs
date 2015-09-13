@@ -4,6 +4,7 @@ using System.Linq;
 using Cake.Common.IO.Paths;
 using Cake.Core;
 using Cake.Core.Annotations;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Common.IO
@@ -140,6 +141,11 @@ namespace Cake.Common.IO
         public static void CleanDirectories(this ICakeContext context, string pattern)
         {
             var directories = context.GetDirectories(pattern);
+            if (directories.Count == 0)
+            {
+                context.Log.Verbose("The provided pattern did not match any directories.");
+                return;
+            }
             CleanDirectories(context, directories);
         }
 
@@ -164,6 +170,11 @@ namespace Cake.Common.IO
         public static void CleanDirectories(this ICakeContext context, string pattern, Func<IFileSystemInfo, bool> predicate)
         {
             var directories = context.GetDirectories(pattern, predicate);
+            if (directories.Count == 0)
+            {
+                context.Log.Verbose("The provided pattern did not match any directories.");
+                return;
+            }
             CleanDirectories(context, directories);
         }
 
