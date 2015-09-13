@@ -108,7 +108,6 @@ Task("Run-Unit-Tests")
 {
     XUnit2("./src/**/bin/" + configuration + "/*.Tests.dll", new XUnit2Settings {
         OutputDirectory = testResultsDir,
-        NoAppDomain = true,
         XmlReportV1 = true
     });
 });
