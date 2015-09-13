@@ -76,8 +76,8 @@ if $SHOW_VERSION; then
     mono $CAKE_EXE -version
 elif $DRYRUN; then
     mono $CAKE_EXE $SCRIPT -verbosity=$VERBOSITY -configuration=$CONFIGURATION -target=$TARGET -dryrun
-    echo
 else
     mono $CAKE_EXE $SCRIPT -verbosity=$VERBOSITY -configuration=$CONFIGURATION -target=$TARGET
-    echo
 fi
+
+exit $?
