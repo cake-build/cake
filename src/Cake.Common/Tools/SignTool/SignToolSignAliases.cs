@@ -28,7 +28,7 @@ namespace Cake.Common.Tools.SignTool
         ///     .Does(() =>
         /// {
         ///     var file = "Core.dll";
-        ///     Sign(files, new SignToolSignSettings {
+        ///     Sign(file, new SignToolSignSettings {
         ///             TimeStampUri = new Uri("http://timestamp.digicert.com"),
         ///             CertPath = "digicert.pfx",
         ///             Password = "TopSecret"
