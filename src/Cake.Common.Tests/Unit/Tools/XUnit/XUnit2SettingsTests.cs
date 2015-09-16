@@ -1,4 +1,5 @@
-﻿using Cake.Common.Tools.XUnit;
+﻿using System;
+using Cake.Common.Tools.XUnit;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.XUnit
@@ -55,6 +56,56 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
 
                 // Then
                 Assert.False(settings.NoAppDomain);
+            }
+
+            [Fact]
+            public void Should_Set_Parallelism_Option_To_None_By_Default()
+            {
+                // Given, When
+                var settings = new XUnit2Settings();
+
+                // Then
+                Assert.Equal(settings.Parallelism, ParallelismOption.None);
+            }
+
+            [Fact]
+            public void Should_Set_MaxThreads_Option_To_Null_By_Default()
+            {
+                // Given, When
+                var settings = new XUnit2Settings();
+
+                // Then
+                Assert.Null(settings.MaxThreads);
+            }
+
+            [Fact]
+            public void MaxThreads_Must_Not_Be_Negative()
+            {
+                // Given
+                var settings = new XUnit2Settings();
+
+                // When, Then
+                Assert.Throws<ArgumentOutOfRangeException>(() => settings.MaxThreads = -1);
+            }
+
+            [Fact]
+            public void Should_Set_TraitsToInclude_To_Empty_By_Default()
+            {
+                // Given, When
+                var settings = new XUnit2Settings();
+
+                // Then
+                Assert.Empty(settings.TraitsToInclude);
+            }
+
+            [Fact]
+            public void Should_Set_TraitsToExclude_To_Empty_By_Default()
+            {
+                // Given, When
+                var settings = new XUnit2Settings();
+
+                // Then
+                Assert.Empty(settings.TraitsToExclude);
             }
         }
     }

@@ -1,5 +1,4 @@
-﻿using Cake.Common.Tests.Fixtures;
-using Cake.Common.Tests.Fixtures.Tools;
+﻿using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.XUnit;
 using Cake.Core;
 using Cake.Core.IO;
@@ -297,6 +296,97 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                     Arg.Any<FilePath>(),
                     Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "\"/Working/Test1.dll\" -noappdomain"));
+            }
+
+            [Theory]
+            [InlineData(ParallelismOption.All," -parallel all")]
+            [InlineData(ParallelismOption.Assemblies," -parallel assemblies")]
+            [InlineData(ParallelismOption.Collections," -parallel collections")]
+            [InlineData(ParallelismOption.None,"")]
+            public void Should_Use_Parallel_Switch_If_Settings_Value_Is_Not_None(ParallelismOption option, string expectedSwitch)
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run("./Test1.dll", new XUnit2Settings
+                {
+                    Parallelism = option
+                });
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "\"/Working/Test1.dll\"" + expectedSwitch));
+            }
+
+            [Theory]
+            [InlineData(null, "")]
+            [InlineData(0, " -maxthreads unlimited")]
+            [InlineData(3, " -maxthreads 3")]
+            public void Should_Use_MaxThreads_Switch_If_Settings_Value_Is_Not_Null(int? option, string expectedSwitch)
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                var runner = fixture.CreateRunner();
+
+                // When
+                runner.Run("./Test1.dll", new XUnit2Settings
+                {
+                    MaxThreads = option
+                });
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "\"/Working/Test1.dll\"" + expectedSwitch));
+            }
+
+            [Fact]
+            public void Should_Set_Switches_For_TraitsToInclude_Defined_In_Settings()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                var runner = fixture.CreateRunner();
+                var settings =
+                    new XUnit2Settings()
+                        .IncludeTrait("Trait1", "value1A", "value1B")
+                        .IncludeTrait("Trait2", "value2");
+
+                // When
+                runner.Run("./Test1.dll", settings);
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() ==
+                        "\"/Working/Test1.dll\" -trait \"Trait1=value1A\" -trait \"Trait1=value1B\" -trait \"Trait2=value2\""));
+            }
+
+            [Fact]
+            public void Should_Set_Switches_For_TraitsToExclude_Defined_In_Settings()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                var runner = fixture.CreateRunner();
+                var settings =
+                    new XUnit2Settings()
+                        .ExcludeTrait("Trait1", "value1A", "value1B")
+                        .ExcludeTrait("Trait2", "value2");
+
+                // When
+                runner.Run("./Test1.dll", settings);
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() ==
+                        "\"/Working/Test1.dll\" -notrait \"Trait1=value1A\" -notrait \"Trait1=value1B\" -notrait \"Trait2=value2\""));
             }
         }
     }

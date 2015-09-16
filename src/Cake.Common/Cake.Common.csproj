@@ -198,7 +198,9 @@
     <Compile Include="Tools\WiX\LightSettings.cs" />
     <Compile Include="Tools\WiX\WiXAliases.cs" />
     <Compile Include="Tools\XBuild\XBuildSettingsExtensions.cs" />
+    <Compile Include="Tools\XUnit\ParallelismOption.cs" />
     <Compile Include="Tools\XUnit\XUnit2Aliases.cs" />
+    <Compile Include="Tools\XUnit\XUnit2SettingsExtensions.cs" />
     <Compile Include="Tools\XUnit\XUnitAliases.cs" />
     <Compile Include="Tools\XUnit\XUnitSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
