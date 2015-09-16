@@ -1,4 +1,6 @@
-﻿using Cake.Core.IO;
+﻿using System;
+using System.Collections.Generic;
+using Cake.Core.IO;
 
 namespace Cake.Common.Tools.XUnit
 {
@@ -7,6 +9,8 @@ namespace Cake.Common.Tools.XUnit
     /// </summary>
     public sealed class XUnit2Settings
     {
+        private int? _maxThreads;
+
         /// <summary>
         /// Gets or sets a value indicating whether tests should be run as a shadow copy.
         /// Default value is <c>true</c>.
@@ -58,10 +62,71 @@ namespace Cake.Common.Tools.XUnit
         public FilePath ToolPath { get; set; }
 
         /// <summary>
+        /// Gets or sets the parallelism option.
+        /// Corresponds to the -parallel command line switch.
+        /// </summary>
+        /// <value>
+        /// The parallelism option.
+        /// </value>
+        public ParallelismOption Parallelism { get; set; }
+
+        /// <summary>
+        /// Gets or sets the maximum thread count for collection parallelization.
+        /// </summary>
+        /// <value>
+        ///   <c>null</c> (default);
+        ///   <c>0</c>: run with unbounded thread count;
+        ///   <c>&gt;0</c>: limit task thread pool size to value;
+        /// </value>
+        /// <exception cref="ArgumentOutOfRangeException" accessor="set">value &lt; 0</exception>
+        public int? MaxThreads
+        {
+            get
+            {
+                return _maxThreads;
+            }
+
+            set
+            {
+                if (value.HasValue && value < 0)
+                {
+                    throw new ArgumentOutOfRangeException("value", value, "Value may not be negative.");
+                }
+                _maxThreads = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the traits to include.
+        /// </summary>
+        /// <remarks>
+        /// Only run tests with matching name/value traits.
+        /// If more than one is specified, it acts as an OR operation.
+        /// </remarks>
+        /// <value>
+        /// The traits to include.
+        /// </value>
+        public IDictionary<string, IList<string>> TraitsToInclude { get; private set; }
+
+        /// <summary>
+        /// Gets the traits to exclude.
+        /// </summary>
+        /// <remarks>
+        /// Do not run tests with matching name/value traits.
+        /// If more than one is specified, it acts as an AND operation.
+        /// </remarks>
+        /// <value>
+        /// The traits to exclude.
+        /// </value>
+        public IDictionary<string, IList<string>> TraitsToExclude { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="XUnit2Settings"/> class.
         /// </summary>
         public XUnit2Settings()
         {
+            TraitsToInclude = new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
+            TraitsToExclude = new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
             ShadowCopy = true;
         }
     }
