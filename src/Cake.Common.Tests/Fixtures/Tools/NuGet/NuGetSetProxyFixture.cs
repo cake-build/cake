@@ -29,7 +29,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet
 
         public void SetProxy()
         {
-            var tool = new NuGetSetProxy(Log, FileSystem, Environment, ProcessRunner, Globber, NuGetToolResolver);
+            var tool = new NuGetSetProxy(FileSystem, Environment, ProcessRunner, Globber, NuGetToolResolver);
             tool.SetProxy(Url, Username, Password, Settings);
         }
     }

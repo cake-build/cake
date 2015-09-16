@@ -1,35 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.IO.NuGet;
 
 namespace Cake.Common.Tools.NuGet.SetApiKey
 {
     /// <summary>
     /// The NuGet set API key used to set API key used for API/feed authentication.
     /// </summary>
-    public sealed class NuGetSetApiKey : Tool<NuGetSetApiKeySettings>
+    public sealed class NuGetSetApiKey : NuGetTool<NuGetSetApiKeySettings>
     {
-        private readonly IToolResolver _nugetToolResolver;
         private readonly ICakeEnvironment _environment;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetSetApiKey"/> class.
         /// </summary>
-        /// <param name="log">The log.</param>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="globber">The globber.</param>
-        /// <param name="nugetToolResolver">The NuGet tool resolver.</param>
-        public NuGetSetApiKey(ICakeLog log, IFileSystem fileSystem, ICakeEnvironment environment, 
-            IProcessRunner processRunner, IGlobber globber, IToolResolver nugetToolResolver)
-            : base(fileSystem, environment, processRunner, globber)
+        /// <param name="resolver">The NuGet tool resolver.</param>
+        public NuGetSetApiKey(
+            IFileSystem fileSystem, 
+            ICakeEnvironment environment, 
+            IProcessRunner processRunner, 
+            IGlobber globber, 
+            INuGetToolResolver resolver)
+            : base(fileSystem, environment, processRunner, globber, resolver)
         {
-            _nugetToolResolver = nugetToolResolver;
             _environment = environment;
         }
 
@@ -98,40 +96,6 @@ namespace Cake.Common.Tools.NuGet.SetApiKey
             builder.Append("-NonInteractive");
 
             return builder;
-        }
-
-        /// <summary>
-        /// Gets the name of the tool.
-        /// </summary>
-        /// <returns>The name of the tool.</returns>
-        protected override string GetToolName()
-        {
-            return _nugetToolResolver.Name;
-        }
-
-        /// <summary>
-        /// Gets the possible names of the tool executable.
-        /// </summary>
-        /// <returns>The tool executable name.</returns>
-        protected override IEnumerable<string> GetToolExecutableNames()
-        {
-            return new[] { "NuGet.exe", "nuget.exe" };
-        }
-
-        /// <summary>
-        /// Gets alternative file paths which the tool may exist in
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The default tool path.</returns>
-        protected override IEnumerable<FilePath> GetAlternativeToolPaths(NuGetSetApiKeySettings settings)
-        {
-            var path = _nugetToolResolver.ResolveToolPath();
-            if (path != null)
-            {
-                return new[] { path };
-            }
-
-            return Enumerable.Empty<FilePath>();
         }
     }
 }

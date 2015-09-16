@@ -431,5 +431,133 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 Resources.Nuspec_Metadata_WithoutNamespaces.NormalizeLineEndings(),
                 result.NormalizeLineEndings());
         }
+
+        public sealed class TheSettingsPackMethod
+        {
+
+
+            [Fact]
+            public void Should_Pack_If_Sufficent_Settings_Specified()
+            {
+                // Given
+                var fixture = new NuGetPackerFixture();
+                fixture.NuSpecFilePath = null;
+                fixture.Settings.OutputDirectory = "/Working/";
+                fixture.Settings.Id = "nonexisting";
+                fixture.Settings.Version = "1.0.0";
+                fixture.Settings.Description = "The description";
+                fixture.Settings.Authors = new[] { "Author #1", "Author #2" };
+                fixture.Settings.Files = new NuSpecContent[] {
+                    new NuSpecContent { Source = "LICENSE" }
+                };
+
+                // When
+                fixture.Pack(false);
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p => p.Arguments.Render() == "pack -Version \"1.0.0\" -OutputDirectory \"/Working\" \"/Working/nonexisting.temp.nuspec\""));
+            }
+
+            [Fact]
+            public void Should_Throw_If_OutputDirectory_Setting_Not_Specified()
+            {
+                // Given
+                var fixture = new NuGetPackerFixture();
+                fixture.NuSpecFilePath = null;
+
+                // When
+                var result = Record.Exception(() => fixture.Pack(false));
+
+                // Then
+                Assert.IsCakeException(result, "Required setting OutputDirectory not specified or doesn't exists.");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Id_Setting_Not_Specified()
+            {
+                // Given
+                var fixture = new NuGetPackerFixture();
+                fixture.NuSpecFilePath = null;
+                fixture.Settings.OutputDirectory = "/Working/";
+
+                // When
+                var result = Record.Exception(() => fixture.Pack(false));
+
+                // Then
+                Assert.IsCakeException(result, "Required setting Id not specified.");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Version_Setting_Not_Specified()
+            {
+                // Given
+                var fixture = new NuGetPackerFixture();
+                fixture.NuSpecFilePath = null;
+                fixture.Settings.OutputDirectory = "/Working/";
+                fixture.Settings.Id = "nonexisting";
+
+                // When
+                var result = Record.Exception(() => fixture.Pack(false));
+
+                // Then
+                Assert.IsCakeException(result, "Required setting Version not specified.");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Authors_Setting_Not_Specified()
+            {
+                // Given
+                var fixture = new NuGetPackerFixture();
+                fixture.NuSpecFilePath = null;
+                fixture.Settings.OutputDirectory = "/Working/";
+                fixture.Settings.Id = "nonexisting";
+                fixture.Settings.Version = "1.0.0";
+
+                // When
+                var result = Record.Exception(() => fixture.Pack(false));
+
+                // Then
+                Assert.IsCakeException(result, "Required setting Authors not specified.");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Description_Setting_Not_Specified()
+            {
+                // Given
+                var fixture = new NuGetPackerFixture();
+                fixture.NuSpecFilePath = null;
+                fixture.Settings.OutputDirectory = "/Working/";
+                fixture.Settings.Id = "nonexisting";
+                fixture.Settings.Version = "1.0.0";
+                fixture.Settings.Authors = new[] { "Author #1", "Author #2" };
+
+                // When
+                var result = Record.Exception(() => fixture.Pack(false));
+
+                // Then
+                Assert.IsCakeException(result, "Required setting Description not specified.");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Files_Setting_Not_Specified()
+            {
+                // Given
+                var fixture = new NuGetPackerFixture();
+                fixture.NuSpecFilePath = null;
+                fixture.Settings.OutputDirectory = "/Working/";
+                fixture.Settings.Id = "nonexisting";
+                fixture.Settings.Version = "1.0.0";
+                fixture.Settings.Authors = new[] { "Author #1", "Author #2" };
+                fixture.Settings.Description = "The description";
+
+                // When
+                var result = Record.Exception(() => fixture.Pack(false));
+
+                // Then
+                Assert.IsCakeException(result, "Required setting Files not specified.");
+            }
+        }
     }
 }

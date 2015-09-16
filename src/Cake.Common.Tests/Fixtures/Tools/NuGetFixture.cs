@@ -1,10 +1,7 @@
-﻿using Cake.Common.Tools.NuGet.Install;
-using Cake.Common.Tools.NuGet.Pack;
-using Cake.Common.Tools.NuGet.Push;
-using Cake.Common.Tools.NuGet.Restore;
-using Cake.Core;
+﻿using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.IO.NuGet;
 using Cake.Testing.Fakes;
 using NSubstitute;
 
@@ -17,7 +14,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         public IProcessRunner ProcessRunner { get; set; }
         public IProcess Process { get; set; }
         public ICakeLog Log { get; set; }
-        public IToolResolver NuGetToolResolver { get; set; }
+        public INuGetToolResolver NuGetToolResolver { get; set; }
         public IGlobber Globber { get; set; }
 
         protected NuGetFixture()
@@ -33,14 +30,13 @@ namespace Cake.Common.Tests.Fixtures.Tools
             Globber.Match("./tools/**/nuget.exe").Returns(new[] { (FilePath)"/Working/tools/NuGet.exe" });
             Globber.Match("./tools/**/NuGet.exe").Returns(new[] { (FilePath)"/Working/tools/NuGet.exe" });
 
-            NuGetToolResolver = Substitute.For<IToolResolver>();
-            NuGetToolResolver.Name.Returns("NuGet");
+            NuGetToolResolver = Substitute.For<INuGetToolResolver>();
 
             Log = Substitute.For<ICakeLog>();
             FileSystem = new FakeFileSystem(Environment);
 
             // By default, there is a default tool.
-            NuGetToolResolver.ResolveToolPath().Returns("/Working/tools/NuGet.exe");
+            NuGetToolResolver.ResolvePath().Returns("/Working/tools/NuGet.exe");
             FileSystem.CreateFile("/Working/tools/NuGet.exe");
 
             // Set standard output.
@@ -56,7 +52,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         {
             var toolPath = new FilePath("/Working/tools/NuGet.exe");
             FileSystem.EnsureFileDoNotExist(toolPath);
-            NuGetToolResolver.ResolveToolPath().Returns("/NonWorking/tools/NuGet.exe");
+            NuGetToolResolver.ResolvePath().Returns("/NonWorking/tools/NuGet.exe");
         }
 
         public void GivenProcessCannotStart()

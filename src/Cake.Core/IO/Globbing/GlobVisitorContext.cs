@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Cake.Core.IO.Globbing
 {
@@ -8,10 +9,12 @@ namespace Cake.Core.IO.Globbing
         private readonly List<IFileSystemInfo> _results;
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
+        private readonly Func<IDirectory, bool> _predicate;
+        private DirectoryPath _path;
 
-        internal string FullPath
+        internal DirectoryPath Path
         {
-            get { return string.Join("/", _pathParts); }
+            get { return _path; }
         }
 
         public IFileSystem FileSystem
@@ -29,10 +32,14 @@ namespace Cake.Core.IO.Globbing
             get { return _results; }
         }
 
-        public GlobVisitorContext(IFileSystem fileSystem, ICakeEnvironment environment)
+        public GlobVisitorContext(
+            IFileSystem fileSystem, 
+            ICakeEnvironment environment,
+            Func<IDirectory, bool> predicate)
         {
             _fileSystem = fileSystem;
             _environment = environment;
+            _predicate = predicate;
             _results = new List<IFileSystemInfo>();
             _pathParts = new LinkedList<string>();
         }
@@ -45,11 +52,32 @@ namespace Cake.Core.IO.Globbing
         public void Push(string path)
         {
             _pathParts.AddLast(path);
+            _path = GenerateFullPath();
         }
 
         public void Pop()
         {
             _pathParts.RemoveLast();
+            _path = GenerateFullPath();
+        }
+
+        private DirectoryPath GenerateFullPath()
+        {
+            var path = string.Join("/", _pathParts);
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                path = "./";
+            }
+            return new DirectoryPath(path);
+        }
+
+        public bool ShouldTraverse(IDirectory info)
+        {
+            if (_predicate != null)
+            {
+                return _predicate(info);
+            }
+            return true;
         }
     }
 }

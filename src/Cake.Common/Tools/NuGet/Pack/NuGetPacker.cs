@@ -1,22 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.IO.NuGet;
 
 namespace Cake.Common.Tools.NuGet.Pack
 {
     /// <summary>
     /// The NuGet packer.
     /// </summary>
-    public sealed class NuGetPacker : Tool<NuGetPackSettings>
+    public sealed class NuGetPacker : NuGetTool<NuGetPackSettings>
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly NuspecProcessor _processor;
-        private readonly IToolResolver _nugetToolResolver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetPacker"/> class.
@@ -26,16 +23,53 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <param name="processRunner">The process runner.</param>
         /// <param name="log">The log.</param>
         /// <param name="globber">The globber.</param>
-        /// <param name="nugetToolResolver">The NuGet tool resolver</param>
+        /// <param name="resolver">The NuGet tool resolver</param>
         public NuGetPacker(IFileSystem fileSystem, ICakeEnvironment environment,
             IProcessRunner processRunner, ICakeLog log, IGlobber globber,
-            IToolResolver nugetToolResolver)
-            : base(fileSystem, environment, processRunner, globber)
+            INuGetToolResolver resolver)
+            : base(fileSystem, environment, processRunner, globber, resolver)
         {
             _fileSystem = fileSystem;
             _environment = environment;
             _processor = new NuspecProcessor(_fileSystem, _environment, log);
-            _nugetToolResolver = nugetToolResolver;
+        }
+
+        /// <summary>
+        /// Creates a NuGet package from the specified settings.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        public void Pack(NuGetPackSettings settings)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+            if (settings.OutputDirectory == null || !_fileSystem.Exist(settings.OutputDirectory))
+            {
+                throw new CakeException("Required setting OutputDirectory not specified or doesn't exists.");
+            }
+            if (string.IsNullOrWhiteSpace(settings.Id))
+            {
+                throw new CakeException("Required setting Id not specified.");
+            }
+            if (string.IsNullOrWhiteSpace(settings.Version))
+            {
+                throw new CakeException("Required setting Version not specified.");
+            }
+            if (settings.Authors == null || settings.Authors.Count == 0)
+            {
+                throw new CakeException("Required setting Authors not specified.");
+            }
+            if (string.IsNullOrWhiteSpace(settings.Description))
+            {
+                throw new CakeException("Required setting Description not specified.");
+            }
+            if (settings.Files == null || settings.Files.Count == 0)
+            {
+                throw new CakeException("Required setting Files not specified.");
+            }
+
+            Pack(settings, () => _processor.Process(settings));
         }
 
         /// <summary>
@@ -54,11 +88,16 @@ namespace Cake.Common.Tools.NuGet.Pack
                 throw new ArgumentNullException("settings");
             }
 
+            Pack(settings, () => _processor.Process(nuspecFilePath, settings));
+        }
+
+        private void Pack(NuGetPackSettings settings, Func<FilePath> process)
+        {
             FilePath procesedNuspecFilePath = null;
             try
             {
                 // Transform the nuspec and return the new filename.
-                procesedNuspecFilePath = _processor.Process(nuspecFilePath, settings);
+                procesedNuspecFilePath = process();
 
                 // Start the process.
                 Run(settings, GetArguments(procesedNuspecFilePath, settings), settings.ToolPath);
@@ -126,40 +165,6 @@ namespace Cake.Common.Tools.NuGet.Pack
             }
 
             return builder;
-        }
-
-        /// <summary>
-        /// Gets the name of the tool.
-        /// </summary>
-        /// <returns>The name of the tool.</returns>
-        protected override string GetToolName()
-        {
-            return _nugetToolResolver.Name;
-        }
-
-        /// <summary>
-        /// Gets the possible names of the tool executable.
-        /// </summary>
-        /// <returns>The tool executable name.</returns>
-        protected override IEnumerable<string> GetToolExecutableNames()
-        {
-            return new[] { "NuGet.exe", "nuget.exe" };
-        }
-
-        /// <summary>
-        /// Gets alternative file paths which the tool may exist in
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The default tool path.</returns>
-        protected override IEnumerable<FilePath> GetAlternativeToolPaths(NuGetPackSettings settings)
-        {
-            var path = _nugetToolResolver.ResolveToolPath();
-            if (path != null)
-            {
-                return new[] { path };
-            }
-
-            return Enumerable.Empty<FilePath>();
         }
     }
 }

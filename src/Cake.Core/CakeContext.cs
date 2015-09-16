@@ -18,7 +18,6 @@ namespace Cake.Core
         private readonly ICakeLog _log;
         private readonly ICakeArguments _arguments;
         private readonly IProcessRunner _processRunner;
-        private readonly ILookup<string, IToolResolver> _toolResolverLookup;
         private readonly IRegistry _registry;
 
         /// <summary>
@@ -30,7 +29,6 @@ namespace Cake.Core
         /// <param name="log">The log.</param>
         /// <param name="arguments">The arguments.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="toolResolvers">The tool resolvers.</param>
         /// <param name="registry">The registry.</param>
         public CakeContext(
             IFileSystem fileSystem,
@@ -39,7 +37,6 @@ namespace Cake.Core
             ICakeLog log,
             ICakeArguments arguments,
             IProcessRunner processRunner,
-            IEnumerable<IToolResolver> toolResolvers,
             IRegistry registry)
         {
             if (fileSystem == null)
@@ -66,10 +63,6 @@ namespace Cake.Core
             {
                 throw new ArgumentNullException("processRunner");
             }
-            if (toolResolvers == null)
-            {
-                throw new ArgumentNullException("toolResolvers");
-            }
 
             _fileSystem = fileSystem;
             _environment = environment;
@@ -77,11 +70,6 @@ namespace Cake.Core
             _log = log;
             _arguments = arguments;
             _processRunner = processRunner;
-
-            // Create the tool resolver lookup table.
-            _toolResolverLookup = toolResolvers.ToLookup(
-                key => key.Name, value => value,
-                StringComparer.OrdinalIgnoreCase);
 
             _registry = registry;
         }
@@ -150,23 +138,6 @@ namespace Cake.Core
         public IProcessRunner ProcessRunner
         {
             get { return _processRunner; }
-        }
-
-        /// <summary>
-        /// Gets resolver by tool name
-        /// </summary>
-        /// <param name="toolName">resolver tool name</param>
-        /// <returns>
-        /// IToolResolver for tool
-        /// </returns>
-        public IToolResolver GetToolResolver(string toolName)
-        {
-            var toolResolver = _toolResolverLookup[toolName].FirstOrDefault();
-            if (toolResolver == null)
-            {
-                throw new CakeException(string.Format(CultureInfo.InvariantCulture, "Failed to resolve tool: {0}", toolName));
-            }
-            return toolResolver;
         }
 
         /// <summary>

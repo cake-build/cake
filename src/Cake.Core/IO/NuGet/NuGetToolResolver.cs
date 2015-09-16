@@ -13,6 +13,8 @@ namespace Cake.Core.IO.NuGet
         private readonly IGlobber _globber;
         private IFile _cachedPath;
 
+        private static readonly FilePath[] unixSystemPaths = new[] { new FilePath("/usr/local/bin/nuget"), new FilePath("/usr/bin/nuget") };
+
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetToolResolver" /> class.
         /// </summary>
@@ -39,22 +41,10 @@ namespace Cake.Core.IO.NuGet
         }
 
         /// <summary>
-        /// Gets the tool name.
+        /// Resolves the path to nuget.exe.
         /// </summary>
-        /// <value>The tool name.</value>
-        public string Name
-        {
-            get { return "NuGet"; }
-        }
-
-        /// <summary>
-        /// Resolves the tool path.
-        /// </summary>
-        /// <returns>
-        /// The tool path.
-        /// </returns>
-        /// <exception cref="CakeException">No nuget.exe found by resolver.</exception>
-        public FilePath ResolveToolPath()
+        /// <returns>The path to nuget.exe.</returns>
+        public FilePath ResolvePath()
         {
             // Check if path allready resolved
             if (_cachedPath != null && _cachedPath.Exists)
@@ -87,16 +77,17 @@ namespace Cake.Core.IO.NuGet
                 }
             }
 
-            // On Unix /usr/bin/nuget is a viable option
+            // On Unix /usr/bin/nuget or /usr/local/bin/nuget are viable options
             if (_environment.IsUnix())
-            {
-                var nugetUnixPath = new FilePath("/usr/bin/nuget");
-
-                if (_fileSystem.Exist(nugetUnixPath))
+            {                
+                foreach (var systemPath in unixSystemPaths)
                 {
-                    _cachedPath = _fileSystem.GetFile(nugetUnixPath);
-                    return _cachedPath.Path;
-                }
+                    if (_fileSystem.Exist(systemPath))
+                    {
+                        _cachedPath = _fileSystem.GetFile(systemPath);
+                        return _cachedPath.Path;
+                    }    
+                }                
             }
 
             // Last resort try path

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cake.Core.IO.Globbing.Nodes;
 
@@ -15,19 +16,19 @@ namespace Cake.Core.IO.Globbing
             _environment = environment;
         }
 
-        public IEnumerable<IFileSystemInfo> Walk(GlobNode node)
+        public IEnumerable<IFileSystemInfo> Walk(GlobNode node, Func<IDirectory, bool> predicate)
         {
-            var context = new GlobVisitorContext(_fileSystem, _environment);
+            var context = new GlobVisitorContext(_fileSystem, _environment, predicate);
             node.Accept(this, context);
             return context.Results;
         }
 
         public void VisitRecursiveWildcardSegment(RecursiveWildcardSegment node, GlobVisitorContext context)
         {
-            var path = context.FileSystem.GetDirectory(context.FullPath);
+            var path = context.FileSystem.GetDirectory(context.Path);
             if (context.FileSystem.Exist(path.Path))
             {
-                // Check if folders match
+                // Check if folders match.
                 var candidates = new List<IFileSystemInfo>();
                 candidates.Add(path);
                 candidates.AddRange(FindCandidates(path.Path, node, context, SearchScope.Recursive, includeFiles: false));
@@ -35,7 +36,7 @@ namespace Cake.Core.IO.Globbing
                 foreach (var candidate in candidates)
                 {
                     var pushed = false;
-                    if (context.FullPath != candidate.Path.FullPath)
+                    if (context.Path.FullPath != candidate.Path.FullPath)
                     {
                         context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + 1));
                         pushed = true;
@@ -69,22 +70,37 @@ namespace Cake.Core.IO.Globbing
         {
             if (node.IsIdentifier)
             {
+                // Get the (relative) path to the current node.
+                var segment = node.GetPath();
+
+                // Get a directory that matches this segment.
+                // This might be a file but we can't be sure so we need to check.
+                var directoryPath = context.Path.Combine(segment);
+                var directory = context.FileSystem.GetDirectory(directoryPath);
+
+                // Should we not traverse this directory?
+                if (directory.Exists && !context.ShouldTraverse(directory))
+                {
+                    return;
+                }
+
                 if (node.Next == null)
                 {
-                    var segmentPath = node.GetPath();
-
-                    // Directories
-                    var directoryPath = context.FileSystem.GetDirectory(new DirectoryPath(context.FullPath).Combine(segmentPath));
-                    if (directoryPath.Exists)
+                    if (directory.Exists)
                     {
-                        context.AddResult(directoryPath);
+                        // Directory
+                        context.AddResult(directory);
                     }
-
-                    // Files
-                    var filePath = context.FileSystem.GetFile(new DirectoryPath(context.FullPath).CombineWithFilePath(segmentPath));
-                    if (filePath.Exists)
+                    else
                     {
-                        context.AddResult(filePath);
+                        // Then it must be a file (if it exist).
+                        var filePath = context.Path.CombineWithFilePath(segment);
+                        var file = context.FileSystem.GetFile(filePath);
+                        if (file.Exists)
+                        {
+                            // File
+                            context.AddResult(file);
+                        }
                     }
                 }
                 else
@@ -98,7 +114,7 @@ namespace Cake.Core.IO.Globbing
             {
                 if (node.Tokens.Count > 1)
                 {
-                    var path = context.FileSystem.GetDirectory(context.FullPath);
+                    var path = context.FileSystem.GetDirectory(context.Path);
                     if (path.Exists)
                     {
                         foreach (var candidate in FindCandidates(path.Path, node, context, SearchScope.Current))
@@ -128,7 +144,7 @@ namespace Cake.Core.IO.Globbing
 
         public void VisitWildcardSegmentNode(WildcardSegment node, GlobVisitorContext context)
         {
-            var path = context.FileSystem.GetDirectory(context.FullPath);
+            var path = context.FileSystem.GetDirectory(context.Path);
             if (context.FileSystem.Exist(path.Path))
             {
                 foreach (var candidate in FindCandidates(path.Path, node, context, SearchScope.Current))
@@ -154,10 +170,10 @@ namespace Cake.Core.IO.Globbing
             context.Pop();
         }
 
-        private static List<IFileSystemInfo> FindCandidates(
+        private static IEnumerable<IFileSystemInfo> FindCandidates(
             DirectoryPath path,
-            MatchableNode node, 
-            GlobVisitorContext context, 
+            MatchableNode node,
+            GlobVisitorContext context,
             SearchScope option,
             bool includeFiles = true,
             bool includeDirectories = true)
@@ -171,7 +187,7 @@ namespace Cake.Core.IO.Globbing
                 foreach (var directory in current.GetDirectories("*", option))
                 {
                     var lastPath = directory.Path.Segments.Last();
-                    if (node.IsMatch(lastPath))
+                    if (node.IsMatch(lastPath) && context.ShouldTraverse(directory))
                     {
                         result.Add(directory);
                     }

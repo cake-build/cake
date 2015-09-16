@@ -14,7 +14,6 @@ namespace Cake.Common.Tools.DupFinder
     public sealed class DupFinderRunner : Tool<DupFinderSettings>
     {
         private readonly ICakeEnvironment _environment;
-        private readonly IGlobber _globber;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DupFinderRunner"/> class.
@@ -27,7 +26,6 @@ namespace Cake.Common.Tools.DupFinder
             : base(fileSystem, environment, processRunner, globber)
         {
             _environment = environment;
-            _globber = globber;
         }
 
         /// <summary>

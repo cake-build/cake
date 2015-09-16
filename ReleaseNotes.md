@@ -1,4 +1,14 @@
-### New in 0.5.4 (Work in progress)
+### New in 0.5.5 (Work in progress)
+
+### New in 0.5.4 (Released 2015/09/12)
+* Removed .nuspec requirement for NuGetPack.
+* Enhanced exception message to include name of missing argument.
+* Extended ProcessAliases with methods returning IProcess.
+* Added string formatting for process argument builder.
+* Added path to NuGet resolver for Mono on OS X 10.11.
+* Added Homebrew install paths to Cake tool resolver.
+* Changed NUnit argument prefix from '/' to '-'.
+* Restored accidental sematic change with globber predicates.
 
 ### New in 0.5.3 (Released 2015/08/31)
 * Additional NUnit switches.

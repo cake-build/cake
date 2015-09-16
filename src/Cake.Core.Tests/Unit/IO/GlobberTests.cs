@@ -101,18 +101,49 @@ namespace Cake.Core.Tests.Unit.IO
             public sealed class WithPredicate
             {
                 [Fact]
-                public void Should_Return_Single_Path_Glob_Pattern_With_Predicate()
+                public void Should_Return_Paths_Not_Affected_By_Walker_Hints()
                 {
                     // Given
                     var fixture = new GlobberFixture();
-                    var predicate = new Func<IFileSystemInfo, bool>(i => i.Path.FullPath == "/Working/Foo/Bar/Qux.c");
+                    var predicate = new Func<IFileSystemInfo, bool>(i => 
+                        i.Path.FullPath != "/Working/Bar");
 
                     // When
-                    var result = fixture.Match("./**/*.c", predicate);
+                    var result = fixture.Match("./**/Qux.h", predicate);
 
                     // Then
                     Assert.Equal(1, result.Length);
-                    Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                    Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.h");
+                }
+
+                [Fact]
+                public void Should_Not_Return_Path_If_Walker_Hint_Matches_Part_Of_Pattern()
+                {
+                    // Given
+                    var fixture = new GlobberFixture();
+                    var predicate = new Func<IFileSystemInfo, bool>(i =>
+                        i.Path.FullPath != "/Working/Bar");
+
+                    // When
+                    var result = fixture.Match("/Working/Bar/Qux.h", predicate);
+
+                    // Then
+                    Assert.Equal(0, result.Length);
+                }
+
+                [Fact]
+                public void Should_Not_Return_Path_If_Walker_Hint_Exactly_Match_Pattern()
+                {
+                    // Given
+                    var fixture = new GlobberFixture();
+                    var predicate = new Func<IFileSystemInfo, bool>(i =>
+                        i.Path.FullPath != "/Working/Bar");
+
+                    // When
+                    var result = fixture.Match("/Working/Bar", predicate);
+
+                    // Then
+                    Assert.Equal(0, result.Length);
                 }
             }
 

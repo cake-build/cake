@@ -19,6 +19,17 @@ namespace Cake.Common.Tools.NuGet.Pack
             _log = log;
         }
 
+        public FilePath Process(NuGetPackSettings settings)
+        {
+            var nuspecFilePath = settings.OutputDirectory
+                                    .CombineWithFilePath(string.Concat(settings.Id, ".nuspec"))
+                                    .MakeAbsolute(_environment);
+
+            var xml = LoadEmptyNuSpec();
+
+            return ProcessXml(nuspecFilePath, settings, xml);
+        }
+
         public FilePath Process(FilePath nuspecFilePath, NuGetPackSettings settings)
         {
             // Make the nuspec file path absolute.
@@ -36,6 +47,11 @@ namespace Cake.Common.Tools.NuGet.Pack
             _log.Debug("Parsing nuspec...");
             var xml = LoadNuspecXml(nuspecFile);
 
+            return ProcessXml(nuspecFilePath, settings, xml);
+        }
+
+        private FilePath ProcessXml(FilePath nuspecFilePath, NuGetPackSettings settings, XmlDocument xml)
+        {
             // Process the XML.
             _log.Debug("Transforming nuspec...");
             NuspecTransformer.Transform(xml, settings);
@@ -53,6 +69,23 @@ namespace Cake.Common.Tools.NuGet.Pack
                 document.Load(stream);
                 return document;
             }
+        }
+
+        private static XmlDocument LoadEmptyNuSpec()
+        {
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(@"<?xml version=""1.0"" encoding=""utf-8""?>
+<package xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <metadata xmlns=""http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"">
+    <id></id>
+    <version>0.0.0</version>
+    <authors></authors>
+    <description></description>
+  </metadata>
+  <files>
+  </files>
+</package>");
+            return xml;
         }
 
         private FilePath SaveNuspecXml(FilePath nuspecFilePath, XmlDocument document)
