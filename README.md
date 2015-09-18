@@ -2,13 +2,13 @@
 
 Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/s9oscm9t7ase6h6d?svg=true)](https://ci.appveyor.com/project/cakebuild/cake)
-[![Coverity Scan](https://scan.coverity.com/projects/4147/badge.svg)](https://scan.coverity.com/projects/4147)
+Windows: [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/s9oscm9t7ase6h6d?svg=true)](https://ci.appveyor.com/project/cakebuild/cake)
+Linux & Mac OSX: [![Travis Build Status](https://travis-ci.org/cake-build/cake.svg?branch=develop)](https://travis-ci.org/cake-build/cake)
 
 [![Follow @cakebuildnet](https://img.shields.io/badge/Twitter-Follow%20%40cakebuildnet-blue.svg)](https://twitter.com/intent/follow?screen_name=cakebuildnet)
 [![Join the chat at https://gitter.im/cake-build/cake](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/cake-build/cake?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-##Table of contents
+## Table of contents
 
 1. [Implemented functionality](https://github.com/cake-build/cake#implemented-functionality)
 2. [Example](https://github.com/cake-build/cake#example)
@@ -21,7 +21,7 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
 6. [External add-ons](https://github.com/cake-build/cake#external-add-ons)
 7. [License](https://github.com/cake-build/cake#license)
 
-##Implemented functionality
+## Implemented functionality
 
 This is a list of some the currently implemented functionality.   
 For a full list of supported tools, see the [DSL reference](http://cakebuild.net/dsl/).
@@ -62,15 +62,15 @@ For a full list of supported tools, see the [DSL reference](http://cakebuild.net
 
 For more information and examples of how to use Cake, see the [Documentation](http://cakebuild.net/docs).
 
-##Example
+## Example
 
-###1. Download Cake
+### 1. Download Cake
 
 ```batchfile
 C:\Project> NuGet.exe install Cake -OutputDirectory Tools -ExcludeVersion
 ```
 
-###2. Create build script
+### 2. Create build script
 
 ```csharp
 var target = Argument("target", "Default");
@@ -115,7 +115,7 @@ Task("Default")
 RunTarget(target);
 ```
 
-###3. Run build script
+### 3. Run build script
 
 ```
 C:\Project\Tools\Cake> Cake.exe ../../build.cake -verbosity=verbose -target=Build
