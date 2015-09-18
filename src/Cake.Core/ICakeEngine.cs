@@ -36,12 +36,18 @@ namespace Cake.Core
         void RegisterTeardownAction(Action action);
 
         /// <summary>
+        /// Gets or sets the name of the target to run.
+        /// When null or empty, defaults to "Default".
+        /// </summary>
+        string Target { get; set; }
+
+        /// <summary>
         /// Runs the specified target using the specified <see cref="IExecutionStrategy"/>.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="strategy">The execution strategy.</param>
-        /// <param name="target">The target to run.</param>
+        /// <param name="target">The target to run. When let to null, <see cref="Target"/> property is used.</param>
         /// <returns>The resulting report.</returns>
-        CakeReport RunTarget(ICakeContext context, IExecutionStrategy strategy, string target);
+        CakeReport RunTarget(ICakeContext context, IExecutionStrategy strategy, string target = null);
     }
 }
