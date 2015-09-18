@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -92,6 +93,15 @@ namespace Cake.Testing.Fakes
         /// The value of the environment variable.
         /// </returns>
         public string GetEnvironmentVariable(string variable)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets all environment variables.
+        /// </summary>
+        /// <returns>The environment variables as IDictionary&lt;string, string&gt; </returns>
+        public IDictionary<string, string> GetEnvironmentVariables()
         {
             throw new NotImplementedException();
         }

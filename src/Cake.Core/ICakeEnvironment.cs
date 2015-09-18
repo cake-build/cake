@@ -1,4 +1,5 @@
-﻿using Cake.Core.IO;
+﻿using System.Collections.Generic;
+using Cake.Core.IO;
 
 namespace Cake.Core
 {
@@ -44,5 +45,11 @@ namespace Cake.Core
         /// <param name="variable">The variable.</param>
         /// <returns>The value of the environment variable.</returns>
         string GetEnvironmentVariable(string variable);
+
+        /// <summary>
+        /// Gets all environment variables.
+        /// </summary>
+        /// <returns>The environment variables as IDictionary&lt;string, string&gt; </returns>
+        IDictionary<string, string> GetEnvironmentVariables();
     }
 }
