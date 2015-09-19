@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
-using Cake.Core.Scripting.Processors;
+using Cake.Core.Scripting.Analysis;
 
 namespace Cake.Core.Scripting
 {
     /// <summary>
-    /// Responsible for processing script files.
+    /// Implementation of a script processor.
     /// </summary>
     public sealed class ScriptProcessor : IScriptProcessor
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
-        private readonly IEnumerable<LineProcessor> _lineProcessors;
         private readonly ICakeLog _log;
+        private readonly INuGetPackageInstaller _installer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptProcessor"/> class.
@@ -26,8 +25,12 @@ namespace Cake.Core.Scripting
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="log">The log.</param>
-        /// <param name="nugetToolResolver">Nuget tool resolver</param>
-        public ScriptProcessor(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log, INuGetToolResolver nugetToolResolver)
+        /// <param name="installer">The NuGet package installer.</param>
+        public ScriptProcessor(
+            IFileSystem fileSystem, 
+            ICakeEnvironment environment,
+            ICakeLog log, 
+            INuGetPackageInstaller installer)
         {
             if (fileSystem == null)
             {
@@ -41,96 +44,149 @@ namespace Cake.Core.Scripting
             {
                 throw new ArgumentNullException("log");
             }
-            if (nugetToolResolver == null)
+            if (installer == null)
             {
-                throw new ArgumentNullException("nugetToolResolver");
+                throw new ArgumentNullException("installer");
             }
+
             _fileSystem = fileSystem;
             _environment = environment;
             _log = log;
-
-            _lineProcessors = new LineProcessor[]
-            {
-                new LoadDirectiveProcessor(_environment),
-                new ReferenceDirectiveProcessor(_fileSystem, _environment),
-                new UsingStatementProcessor(_environment),
-                new AddInDirectiveProcessor(_fileSystem, _environment, _log, nugetToolResolver),
-                new ToolDirectiveProcessor(_fileSystem, _environment, _log, nugetToolResolver),
-                new ShebangProcessor(_environment),
-            };
+            _installer = installer;
         }
 
         /// <summary>
-        /// Processes the specified script.
+        /// Installs the addins.
         /// </summary>
-        /// <param name="path">The script path.</param>
-        /// <param name="context">The context.</param>
-        public void Process(FilePath path, ScriptProcessorContext context)
+        /// <param name="analyzerResult">The analyzer result.</param>
+        /// <param name="installationRoot">The installation root path.</param>
+        /// <returns>A list containing file paths to installed addin assemblies.</returns>
+        public IReadOnlyList<FilePath> InstallAddins(
+            ScriptAnalyzerResult analyzerResult,
+            DirectoryPath installationRoot)
         {
-            if (path == null)
+            if (analyzerResult == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException("analyzerResult");
             }
-            if (context == null)
+            if (installationRoot == null)
             {
-                throw new ArgumentNullException("context");
-            }
-
-            // Already processed this script?
-            if (context.HasScriptBeenProcessed(path.FullPath))
-            {
-                _log.Debug("Skipping {0} since it's already been processed.", path.GetFilename().FullPath);
-                return;
+                throw new ArgumentNullException("installationRoot");
             }
 
-            // Add the script.
-            context.MarkScriptAsProcessed(path.MakeAbsolute(_environment).FullPath);
+            // Make the installation root absolute.
+            installationRoot = installationRoot.MakeAbsolute(_environment);
 
-            // Read the source.
-            _log.Debug("Processing {0}...", path.GetFilename().FullPath);
-            var lines = ReadSource(path);
-
-            // Iterate all lines in the script.
-            var firstLine = true;
-            foreach (var line in lines)
+            var result = new List<FilePath>();
+            if (analyzerResult.Addins.Count > 0)
             {
-                if (!_lineProcessors.Any(p => p.Process(this, context, path, line)))
+                _log.Verbose("Installing addins...");
+                foreach (var addin in analyzerResult.Addins)
                 {
-                    if (firstLine)
+                    var addInAssemblies = InstallPackage(addin, installationRoot, GetAddInAssemblies);
+                    if (addInAssemblies.Length == 0)
                     {
-                        // Append the line directive for the script.
-                        var scriptFullPath = path.MakeAbsolute(_environment);
-                        context.AppendScriptLine(string.Format(CultureInfo.InvariantCulture, "#line 1 \"{0}\"", scriptFullPath.FullPath));
-                        firstLine = false;
+                        const string format = "Failed to install addin '{0}'.";
+                        var message = string.Format(CultureInfo.InvariantCulture, format, addin.PackageId);
+                        throw new CakeException(message);
                     }
 
-                    context.AppendScriptLine(line);
+                    // Reference found assemblies.
+                    foreach (var assemblyPath in addInAssemblies)
+                    {
+                        _log.Debug("The addin {0} will reference {1}.", addin.PackageId, assemblyPath.Path.GetFilename());
+                        result.Add(assemblyPath.Path);
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Installs the tools specified in the build scripts.
+        /// </summary>
+        /// <param name="analyzerResult">The analyzer result.</param>
+        /// <param name="installationRoot">The installation root path.</param>
+        public void InstallTools(
+            ScriptAnalyzerResult analyzerResult, 
+            DirectoryPath installationRoot)
+        {
+            if (analyzerResult == null)
+            {
+                throw new ArgumentNullException("analyzerResult");
+            }
+            if (installationRoot == null)
+            {
+                throw new ArgumentNullException("installationRoot");
+            }
+
+            // Make the installation root absolute.
+            installationRoot = installationRoot.MakeAbsolute(_environment);
+
+            if (analyzerResult.Tools.Count > 0)
+            {
+                _log.Verbose("Installing tools...");
+                foreach (var addin in analyzerResult.Tools)
+                {
+                    var toolExecutables = InstallPackage(addin, installationRoot, GetToolExecutables);
+                    if (toolExecutables.Length == 0)
+                    {
+                        const string format = "Failed to install tool '{0}'.";
+                        var message = string.Format(CultureInfo.InvariantCulture, format, addin.PackageId);
+                        throw new CakeException(message);
+                    }
                 }
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
-        private IEnumerable<string> ReadSource(FilePath path)
+        private IFile[] InstallPackage(
+            NuGetPackage package, 
+            DirectoryPath installationRoot, 
+            Func<DirectoryPath, IFile[]> fetcher)
         {
-            path = path.MakeAbsolute(_environment);
+            var root = _fileSystem.GetDirectory(installationRoot);
+            var packagePath = installationRoot.Combine(package.PackageId);
 
-            // Get the file and make sure it exist.
-            var file = _fileSystem.GetFile(path);
-            if (!file.Exists)
+            // Create the addin directory if it doesn't exist.
+            if (!root.Exists)
             {
-                var message = string.Format(CultureInfo.InvariantCulture, "Could not find script '{0}'.", path);
-                throw new CakeException(message);
+                _log.Debug("Creating addin directory {0}", installationRoot);
+                root.Create();
             }
 
-            // Read the content from the file.
-            using (var stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (var reader = new StreamReader(stream))
+            // Fetch available content from disc.
+            var content = fetcher(packagePath);
+            if (content.Any())
             {
-                var code = reader.ReadToEnd();
-                return string.IsNullOrWhiteSpace(code)
-                    ? new string[] { }
-                    : code.SplitLines();
+                _log.Debug("Package {0} has already been installed.", package.PackageId);
+                return content;
             }
+
+            // Install the package.
+            _log.Debug("Installing package {0}...", package.PackageId);
+            _installer.InstallPackage(package, installationRoot);
+
+            // Return the files.
+            return fetcher(packagePath);
+        }
+
+        private IFile[] GetAddInAssemblies(DirectoryPath addInDirectoryPath)
+        {
+            var addInDirectory = _fileSystem.GetDirectory(addInDirectoryPath);
+            return addInDirectory.Exists
+                ? addInDirectory.GetFiles("*.dll", SearchScope.Recursive)
+                    .Where(file => !file.Path.FullPath.EndsWith("Cake.Core.dll", StringComparison.OrdinalIgnoreCase))
+                    .ToArray()
+                : new IFile[0];
+        }
+
+        private IFile[] GetToolExecutables(DirectoryPath toolDirectoryPath)
+        {
+            var toolDirectory = _fileSystem.GetDirectory(toolDirectoryPath);
+            return toolDirectory.Exists
+                ? toolDirectory.GetFiles("*.exe", SearchScope.Recursive)
+                    .ToArray()
+                : new IFile[0];
         }
     }
 }

@@ -1,12 +1,13 @@
 ﻿using System;
 using Cake.Core.IO;
+using Cake.Core.Scripting.Analysis;
 
-namespace Cake.Core.Scripting
+namespace Cake.Core.Scripting.Processors
 {
     /// <summary>
     /// Abstract line processor.
     /// </summary>
-    public abstract class LineProcessor
+    internal abstract class LineProcessor
     {
         private readonly ICakeEnvironment _environment;
 
@@ -22,14 +23,11 @@ namespace Cake.Core.Scripting
         /// <summary>
         /// Processes the specified line.
         /// </summary>
-        /// <param name="processor">The script processor.</param>
-        /// <param name="context">The script processor context.</param>
-        /// <param name="currentScriptPath">The current script path.</param>
-        /// <param name="line">The line to process.</param>
-        /// <returns>
-        ///   <c>true</c> if the processor handled the line; otherwise <c>false</c>.
-        /// </returns>
-        public abstract bool Process(IScriptProcessor processor, ScriptProcessorContext context, FilePath currentScriptPath, string line);
+        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="line">The line.</param>
+        /// <returns><c>true</c> if the line was processed 
+        /// by this processor; otherwise <c>false</c>.</returns>
+        public abstract bool Process(IScriptAnalyzerContext analyzer, string line);
 
         /// <summary>
         /// Splits the specified line into tokens.

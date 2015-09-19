@@ -30,7 +30,6 @@ namespace Cake.Testing
             _is64Bit = is64Bit;
             _environmentVariables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _specialPaths = new Dictionary<SpecialPath, DirectoryPath>();
-            WorkingDirectory = new DirectoryPath("/Working");
         }
 
         /// <summary>
@@ -40,7 +39,10 @@ namespace Cake.Testing
         /// <returns>A Unix environment.</returns>
         public static FakeEnvironment CreateUnixEnvironment(bool is64Bit = true)
         {
-            return new FakeEnvironment(true, is64Bit);
+            var environment = new FakeEnvironment(true, is64Bit);
+            environment.WorkingDirectory = new DirectoryPath("/Working");
+            environment.SetApplicationRoot("/Working/bin");
+            return environment;
         }
 
         /// <summary>
@@ -52,6 +54,7 @@ namespace Cake.Testing
         {
             var environment = new FakeEnvironment(false, is64Bit);
             environment.WorkingDirectory = new DirectoryPath("C:/Working");
+            environment.SetApplicationRoot("C:/Working/bin");
             return environment;
         }
 

@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using Cake.Core.Scripting;
+﻿using Cake.Core.IO;
+using Cake.Core.IO.NuGet;
 using Cake.Core.Tests.Fixtures;
-using Cake.Testing;
+using NSubstitute;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit.Scripting
@@ -37,215 +37,131 @@ namespace Cake.Core.Tests.Unit.Scripting
                 // Then
                 Assert.IsArgumentNullException(result, "environment");
             }
+
+            [Fact]
+            public void Should_Throw_If_Log_Is_Null()
+            {
+                // Given
+                var fixture = new ScriptProcessorFixture();
+                fixture.Log = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateProcessor());
+
+                // Then
+                Assert.IsArgumentNullException(result, "log");
+            }
+
+            [Fact]
+            public void Should_Throw_If_NuGet_Package_Installer_Is_Null()
+            {
+                // Given
+                var fixture = new ScriptProcessorFixture();
+                fixture.Installer = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateProcessor());
+
+                // Then
+                Assert.IsArgumentNullException(result, "installer");
+            }
         }
 
-        public sealed class TheProcessMethod
+        public sealed class TheInstallAddinsMethod
         {
             [Fact]
-            public void Should_Throw_If_File_Path_Is_Null()
-            {
-                // Given
-                var fixture = new ScriptProcessorFixture();
-                var processor = fixture.CreateProcessor();
-
-                // When
-                var result = Record.Exception(() => processor.Process(null, new ScriptProcessorContext()));
-
-                // Then
-                Assert.IsArgumentNullException(result, "path");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Context_Is_Null()
-            {
-                // Given
-                var fixture = new ScriptProcessorFixture();
-                var processor = fixture.CreateProcessor();
-
-                // When
-                var result = Record.Exception(() => processor.Process("./build.cake", null));
-
-                // Then
-                Assert.IsArgumentNullException(result, "context");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Script_Was_Not_Found()
-            {
-                // Given
-                var fixture = new ScriptProcessorFixture("./build.cake", scriptExist: false);
-
-                // When
-                var result = Record.Exception(() => fixture.Process());
-
-                // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("Could not find script '/Working/build.cake'.", result.Message);
-            }
-
-            [Fact]
-            public void Should_Return_Code_Read_From_File()
+            public void Should_Throw_If_Addins_Could_Not_Be_Found()
             {
                 // Given
                 var fixture = new ScriptProcessorFixture();
 
                 // When
-                var result = fixture.Process();
+                var result = Record.Exception(() => fixture.InstallAddins());
 
                 // Then
-                Assert.Equal(fixture.GetExpectedSource(), fixture.GetActualSource(result));
+                Assert.IsCakeException(result, "Failed to install addin 'Addin'.");
             }
 
             [Fact]
-            public void Should_Return_Single_Assembly_Reference_Found_In_Source()
+            public void Should_Install_Addins_Referenced_By_Scripts()
             {
                 // Given
-                const string source = "#r \"hello.dll\"\r\nConsole.WriteLine();";
-                var fixture = new ScriptProcessorFixture(scriptSource: source);
+                var fixture = new ScriptProcessorFixture();
+                fixture.GivenAddinFilesAreDownloaded();
 
                 // When
-                var result = fixture.Process();
+                fixture.InstallAddins();
 
                 // Then
-                Assert.Equal(1, result.References.Count);
-                Assert.Equal("hello.dll", result.References.ElementAt(0));
-            }
-
-            [Theory]
-            [InlineData("#r \"hello.dll\"\r\n#r \"world.dll\"\r\nConsole.WriteLine();")]
-            [InlineData("#reference \"hello.dll\"\r\n#reference \"world.dll\"\r\nConsole.WriteLine();")]
-            [InlineData("#reference \"hello.dll\"\r\n#r \"world.dll\"\r\nConsole.WriteLine();")]
-            public void Should_Return_Multiple_Assembly_References_Found_In_Source(string source)
-            {
-                // Given
-                var fixture = new ScriptProcessorFixture(scriptSource: source);
-
-                // When
-                var result = fixture.Process();
-
-                // Then
-                Assert.Equal(2, result.References.Count);
-                Assert.Equal("hello.dll", result.References.ElementAt(0));
-                Assert.Equal("world.dll", result.References.ElementAt(1));
-            }
-
-            [Theory]
-            [InlineData("#r \"hello.dll\"\r\nConsole.WriteLine();\r\n#r \"world.dll\"")]
-            [InlineData("#reference \"hello.dll\"\r\nConsole.WriteLine();\r\n#reference \"world.dll\"")]
-            [InlineData("#reference \"hello.dll\"\r\nConsole.WriteLine();\r\n#r \"world.dll\"")]
-            public void Should_Return_Multiple_Assembly_References_Found_In_Source_Regardless_Of_Location(string source)
-            {
-                // Given
-                var fixture = new ScriptProcessorFixture(scriptSource: source);
-
-                // When
-                var result = fixture.Process();
-
-                // Then
-                Assert.Equal(2, result.References.Count);
-                Assert.Equal("hello.dll", result.References.ElementAt(0));
-                Assert.Equal("world.dll", result.References.ElementAt(1));
-            }
-
-            [Theory]
-            [InlineData("#l \"hello.cake\"\r\nConsole.WriteLine();")]
-            [InlineData("#load \"hello.cake\"\r\nConsole.WriteLine();")]
-            public void Should_Process_Single_Script_Reference_Found_In_Source(string source)
-            {
-                // Given
-                var fixture = new ScriptProcessorFixture(scriptSource: source);
-                fixture.FileSystem.CreateFile("/Working/hello.cake");
-
-                // When
-                var result = fixture.Process();
-
-                // Then
-                Assert.Equal(2, result.ProcessedScripts.Count);
-                Assert.Equal("/Working/build.cake", result.ProcessedScripts.ElementAt(0));
-                Assert.Equal("/Working/hello.cake", result.ProcessedScripts.ElementAt(1));
-            }
-
-            [Theory]
-            [InlineData("#l \"hello.cake\"\r\n#l \"world.cake\"\r\nConsole.WriteLine();")]
-            [InlineData("#load \"hello.cake\"\r\n#load \"world.cake\"\r\nConsole.WriteLine();")]
-            [InlineData("#load \"hello.cake\"\r\n#l \"world.cake\"\r\nConsole.WriteLine();")]
-            public void Should_Process_Multiple_Script_References_Found_In_Source(string source)
-            {
-                // Given
-                var fixture = new ScriptProcessorFixture(scriptSource: source);
-                fixture.FileSystem.CreateFile("/Working/hello.cake");
-                fixture.FileSystem.CreateFile("/Working/world.cake");
-
-                // When
-                var result = fixture.Process();
-
-                // Then
-                Assert.Equal(3, result.ProcessedScripts.Count);
-                Assert.Equal("/Working/build.cake", result.ProcessedScripts.ElementAt(0));
-                Assert.Equal("/Working/hello.cake", result.ProcessedScripts.ElementAt(1));
-                Assert.Equal("/Working/world.cake", result.ProcessedScripts.ElementAt(2));
+                fixture.Installer.Received(1).InstallPackage(
+                    Arg.Is<NuGetPackage>(package =>
+                        package.PackageId == "Addin" &&
+                        package.Source == "http://example.com"), 
+                    Arg.Any<DirectoryPath>());
             }
 
             [Fact]
-            public void Should_Process_Using_Directives()
+            public void Should_Not_Install_Addins_Present_On_Disc()
             {
                 // Given
-                var source = "using System.IO;\r\nConsole.WriteLine();";
-                var fixture = new ScriptProcessorFixture(scriptSource: source);
+                var fixture = new ScriptProcessorFixture();
+                fixture.GivenAddinFilesAlreadyHaveBeenDownloaded();
 
                 // When
-                var result = fixture.Process();
+                fixture.InstallAddins();
 
                 // Then
-                Assert.Contains("System.IO", result.Namespaces);
+                fixture.Installer.Received(0)
+                    .InstallPackage(Arg.Any<NuGetPackage>(), Arg.Any<DirectoryPath>());
+            }
+        }
+
+        public sealed class TheInstallToolsMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Tools_Could_Not_Be_Found()
+            {
+                // Given
+                var fixture = new ScriptProcessorFixture();
+
+                // When
+                var result = Record.Exception(() => fixture.InstallTools());
+
+                // Then
+                Assert.IsCakeException(result, "Failed to install tool 'Tool'.");
             }
 
             [Fact]
-            public void Should_Process_Using_Alias_Directives()
+            public void Should_Install_Tools_Referenced_By_Scripts()
             {
                 // Given
-                var fixture = new ScriptProcessorFixture(scriptSource: "using ClassAlias = N1.N2.Class;\r\nConsole.WriteLine();");
+                var fixture = new ScriptProcessorFixture();
+                fixture.GivenToolFilesAreDownloaded();
 
                 // When
-                var result = fixture.Process();
+                fixture.InstallTools();
 
                 // Then
-                Assert.Equal(2, result.Lines.Count);
-                Assert.Equal("#line 1 \"/Working/build.cake\"", result.Lines.ElementAt(0));
-                Assert.Equal("Console.WriteLine();", result.Lines.ElementAt(1));
+                fixture.Installer.Received(1).InstallPackage(
+                    Arg.Is<NuGetPackage>(package =>
+                        package.PackageId == "Tool" &&
+                        package.Source == "http://example.com"),
+                    Arg.Any<DirectoryPath>());
             }
 
             [Fact]
-            public void Should_Keep_Using_Block()
+            public void Should_Not_Install_Addins_Present_On_Disc()
             {
                 // Given
-                var fixture = new ScriptProcessorFixture(scriptSource: "using (ClassAlias)\r\n{\r\n}\r\nConsole.WriteLine();");
+                var fixture = new ScriptProcessorFixture();
+                fixture.GivenToolFilesAlreadyHaveBeenDownloaded();
 
                 // When
-                var result = fixture.Process();
+                fixture.InstallTools();
 
                 // Then
-                Assert.Equal(5, result.Lines.Count);
-                Assert.Equal("#line 1 \"/Working/build.cake\"", result.Lines.ElementAt(0));
-                Assert.Equal("using (ClassAlias)", result.Lines.ElementAt(1));
-                Assert.Equal("{", result.Lines.ElementAt(2));
-                Assert.Equal("}", result.Lines.ElementAt(3));
-                Assert.Equal("Console.WriteLine();", result.Lines.ElementAt(4));
-            }
-
-            [Fact]
-            public void Should_Remove_Shebang()
-            {
-                // Given
-                var fixture = new ScriptProcessorFixture(scriptSource: "#!usr/bin/cake\r\nConsole.WriteLine();");
-
-                // When
-                var result = fixture.Process();
-
-                // Then
-                Assert.Equal(2, result.Lines.Count);
-                Assert.Equal("#line 1 \"/Working/build.cake\"", result.Lines.ElementAt(0));
-                Assert.Equal("Console.WriteLine();", result.Lines.ElementAt(1));
+                fixture.Installer.Received(0)
+                    .InstallPackage(Arg.Any<NuGetPackage>(), Arg.Any<DirectoryPath>());
             }
         }
     }

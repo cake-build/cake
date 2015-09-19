@@ -1,63 +1,84 @@
-﻿using Cake.Core.Diagnostics;
+﻿using System.Collections.Generic;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
 using Cake.Core.Scripting;
+using Cake.Core.Scripting.Analysis;
 using Cake.Testing;
 using NSubstitute;
 
 namespace Cake.Core.Tests.Fixtures
 {
-    internal sealed class ScriptProcessorFixture
+    public sealed class ScriptProcessorFixture
     {
         public FakeFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
         public ICakeLog Log { get; set; }
-        public FilePath ScriptPath { get; set; }
-        public string Source { get; private set; }
-        public IGlobber Globber{ get; set; }
-        public INuGetToolResolver NuGetToolResolver{ get; private set; }
+        public INuGetPackageInstaller Installer { get; set; }
 
-        public ScriptProcessorFixture(
-            string scriptPath = "./build.cake",
-            bool scriptExist = true,
-            string scriptSource = "Console.WriteLine();")
+        public ScriptAnalyzerResult Result { get; set; }
+        public DirectoryPath ApplicationRoot { get; set; }
+
+        public ScriptProcessorFixture()
         {
-            ScriptPath = new FilePath(scriptPath);
-            Source = scriptSource;
-
-            Log = Substitute.For<ICakeLog>();
-            Globber = Substitute.For<IGlobber>();
-
             Environment = FakeEnvironment.CreateUnixEnvironment();
             FileSystem = new FakeFileSystem(Environment);
-            if (scriptExist)
-            {
-                FileSystem.CreateFile(ScriptPath.MakeAbsolute(Environment)).SetContent(Source);
-            }
 
-            NuGetToolResolver = new NuGetToolResolver(FileSystem, Environment, Globber);
+            Log = Substitute.For<ICakeLog>();
+            Installer = Substitute.For<INuGetPackageInstaller>();
+            ApplicationRoot = new DirectoryPath("/Working/Bin");
+
+            // Create the script analyzer result.
+            var script1 = new ScriptInformation("/Working/build.cake");
+            script1.Addins.Add(new NuGetPackage("Addin")
+            {
+                Source = "http://example.com"
+            });
+            script1.Tools.Add(new NuGetPackage("Tool")
+            {
+                Source = "http://example.com"
+            });
+            Result = new ScriptAnalyzerResult(script1, new List<string>());
+        }
+
+        public void GivenAddinFilesAreDownloaded()
+        {
+            // Create the addin file when the installer is invoked.
+            Installer.When(i => i.InstallPackage(Arg.Any<NuGetPackage>(), Arg.Any<DirectoryPath>()))
+                .Do(info => GivenAddinFilesAlreadyHaveBeenDownloaded());
+        }
+
+        public void GivenAddinFilesAlreadyHaveBeenDownloaded()
+        {
+            FileSystem.CreateFile("/Working/Bin/Addin/Temp.dll");
+        }
+
+        public void GivenToolFilesAreDownloaded()
+        {
+            // Create the tool file when the installer is invoked.
+            Installer.When(i => i.InstallPackage(Arg.Any<NuGetPackage>(), Arg.Any<DirectoryPath>()))
+                .Do(info => GivenToolFilesAlreadyHaveBeenDownloaded());
+        }
+
+        public void GivenToolFilesAlreadyHaveBeenDownloaded()
+        {
+            FileSystem.CreateFile("/Working/tools/Tool/Temp.exe");
         }
 
         public ScriptProcessor CreateProcessor()
         {
-            return new ScriptProcessor(FileSystem, Environment, Log, NuGetToolResolver);
+            return new ScriptProcessor(FileSystem, Environment, Log, Installer);
         }
 
-        public ScriptProcessorContext Process()
+        public void InstallAddins()
         {
-            var context = new ScriptProcessorContext();
-            CreateProcessor().Process(ScriptPath, context);
-            return context;
+            CreateProcessor().InstallAddins(Result, ApplicationRoot);
         }
 
-        public string GetExpectedSource()
+        public void InstallTools()
         {
-            return string.Concat("#line 1 \"/Working/build.cake\"", "\r\n", Source);
-        }
-
-        public string GetActualSource(ScriptProcessorContext context)
-        {
-            return string.Join("\r\n", context.Lines);
+            CreateProcessor().InstallTools(
+                Result, Result.Script.Path.GetDirectory().Combine("tools"));
         }
     }
 }

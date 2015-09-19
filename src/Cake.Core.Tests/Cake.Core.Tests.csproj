@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Fixtures\CakeContextFixture.cs" />
+    <Compile Include="Fixtures\ScriptAnalyzerFixture.cs" />
     <Compile Include="Fixtures\MethodAliasGeneratorFixture.cs" />
     <Compile Include="Fixtures\PropertyAliasGeneratorFixture.cs" />
     <Compile Include="Fixtures\ScriptHostFixture.cs" />
@@ -98,6 +99,8 @@
     <Compile Include="Unit\IO\ProcessArgumentBuilderTests.cs" />
     <Compile Include="Unit\IO\ProcessRunnerTests.cs" />
     <Compile Include="Unit\IO\ProcessSettingsTests.cs" />
+    <Compile Include="Unit\Scripting\Analysis\ScriptAnalyzerResultTests.cs" />
+    <Compile Include="Unit\Scripting\Analysis\ScriptAnalyzerTests.cs" />
     <Compile Include="Unit\Scripting\ScriptAliasTests.cs" />
     <Compile Include="Unit\Scripting\ScriptHostTests.cs" />
     <Compile Include="Unit\Scripting\ScriptProcessorTests.cs" />

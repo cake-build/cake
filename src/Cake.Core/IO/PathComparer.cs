@@ -37,6 +37,19 @@ namespace Cake.Core.IO
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="PathComparer"/> class.
+        /// </summary>
+        /// <param name="environment">The environment.</param>
+        public PathComparer(ICakeEnvironment environment)
+        {
+            if (environment == null)
+            {
+                throw new ArgumentNullException("environment");
+            }
+            _isCaseSensitive = environment.IsUnix();
+        }
+
+        /// <summary>
         /// Determines whether the specified <see cref="Path"/> instances are equal.
         /// </summary>
         /// <param name="x">The first <see cref="Path"/> to compare.</param>
