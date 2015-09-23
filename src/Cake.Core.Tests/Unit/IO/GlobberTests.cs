@@ -206,7 +206,7 @@ namespace Cake.Core.Tests.Unit.IO
             }
 
             [Fact]
-            public void Should_Be_Able_To_Back_Down_One_Directory_Using_Double_Dots()
+            public void Should_Be_Able_To_Visit_Parent_Using_Double_Dots()
             {
                 // Given
                 var fixture = new GlobberFixture();
@@ -218,6 +218,21 @@ namespace Cake.Core.Tests.Unit.IO
                 Assert.Equal(1, result.Length);
                 Assert.IsType<FilePath>(result[0]);
                 Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Visiting_Parent_That_Is_Recursive_Wildcard()
+            {
+                // Given
+                var fixture = new GlobberFixture();
+
+                // When
+                var result = Record.Exception(() => fixture.Match("/Working/Foo/**/../Foo/Bar/Qux.c"));
+
+                // Then
+                Assert.NotNull(result);
+                Assert.IsType<NotSupportedException>(result);
+                Assert.Equal("Visiting a parent that is a recursive wildcard is not supported.", result.Message);
             }
 
             [Fact]

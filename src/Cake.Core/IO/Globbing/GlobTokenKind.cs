@@ -8,6 +8,7 @@
         PathSeparator,
         Identifier,
         WindowsRoot,
+        Parent,
         EndOfText
     }
 }
