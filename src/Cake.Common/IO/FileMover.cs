@@ -116,7 +116,8 @@ namespace Cake.Common.IO
                 throw new FileNotFoundException(message, filePath.FullPath);
             }
 
-            // Move the file.            
+            // Move the file.
+            context.Log.Verbose("Moving file {0} to {1}", filePath.GetFilename(), targetFilePath);
             file.Move(targetFilePath.MakeAbsolute(context.Environment));
         }
     }

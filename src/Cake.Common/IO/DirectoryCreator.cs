@@ -1,5 +1,6 @@
 ﻿using System;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Common.IO
@@ -24,7 +25,8 @@ namespace Cake.Common.IO
 
             var directory = context.FileSystem.GetDirectory(path);
             if (!directory.Exists)
-            {                
+            {
+                context.Log.Verbose("Creating directory {0}", path);
                 directory.Create();
             }
         }
