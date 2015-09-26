@@ -118,23 +118,10 @@ namespace Cake.Core.IO.Globbing
                 }
                 else
                 {
-                    if (node.GetPath() == "..")
-                    {
-                        // Back up one level.
-                        var last = context.Pop();
-                        node.Next.Accept(this, context);
-
-                        // Push the segment back so pop/push 
-                        // count remains balanced.
-                        context.Push(last);
-                    }
-                    else
-                    {
-                        // Push the current node to the context.
-                        context.Push(node.GetPath());
-                        node.Next.Accept(this, context);
-                        context.Pop();
-                    }
+                    // Push the current node to the context.
+                    context.Push(node.GetPath());
+                    node.Next.Accept(this, context);
+                    context.Pop();
                 }
             }
             else
@@ -195,6 +182,17 @@ namespace Cake.Core.IO.Globbing
             context.Push(node.Drive + ":");
             node.Next.Accept(this, context);
             context.Pop();
+        }
+
+        public void VisitParent(ParentSegment node, GlobVisitorContext context)
+        {
+            // Back up one level.
+            var last = context.Pop();
+            node.Next.Accept(this, context);
+
+            // Push the segment back so pop/push 
+            // count remains balanced.
+            context.Push(last);
         }
 
         private static IEnumerable<IFileSystemInfo> FindCandidates(

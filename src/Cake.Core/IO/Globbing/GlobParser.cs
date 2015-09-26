@@ -48,8 +48,10 @@ namespace Cake.Core.IO.Globbing
                 throw new InvalidOperationException("Expected EOT");
             }
 
-            // Return the path node.
-            return GlobNodeRewriter.Rewrite(items);
+            // Rewrite the items into a linked list.
+            var result = GlobNodeRewriter.Rewrite(items);
+            GlobNodeValidator.Validate(result);
+            return result;
         }
 
         private GlobNode ParseRoot(GlobParserContext context)
@@ -113,6 +115,11 @@ namespace Cake.Core.IO.Globbing
             {
                 context.Accept();
                 return new RecursiveWildcardSegment();
+            }
+            if (context.CurrentToken.Kind == GlobTokenKind.Parent)
+            {
+                context.Accept();
+                return new ParentSegment();
             }
 
             var items = new List<GlobToken>();

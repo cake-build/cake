@@ -48,6 +48,15 @@ namespace Cake.Core.IO.Globbing
         {
             if (IsAlphaNumberic(_currentCharacter))
             {
+                if (_currentCharacter == '.')
+                {
+                    TakeCharacter();
+                    if (_currentCharacter == '.')
+                    {
+                        TakeCharacter();
+                        return GlobTokenKind.Parent;
+                    }
+                }
                 while (IsAlphaNumberic(_currentCharacter))
                 {
                     TakeCharacter();
