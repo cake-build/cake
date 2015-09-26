@@ -36,6 +36,11 @@ namespace Cake.Common.Tests.Fixtures
             return Context.StartAndReturnProcess(filename);
         }
 
+        public int Start(string filename, string processArguments)
+        {
+            return Start(filename, new ProcessSettings { Arguments = processArguments });
+        }
+
         public int Start(string filename, ProcessSettings settings)
         {
             return Context.StartProcess(filename, settings);
