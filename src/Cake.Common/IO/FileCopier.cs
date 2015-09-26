@@ -119,6 +119,7 @@ namespace Cake.Common.IO
             }
 
             // Copy the file.
+            context.Log.Verbose("Copying file {0} to {1}", absoluteFilePath.GetFilename(), absoluteFilePath);
             var file = context.FileSystem.GetFile(absoluteFilePath);
             file.Copy(targetFilePath.MakeAbsolute(context.Environment), true);
         }

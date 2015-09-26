@@ -68,7 +68,8 @@ namespace Cake.Common.IO
                 var message = string.Format(CultureInfo.InvariantCulture, format, filePath.FullPath);
                 throw new FileNotFoundException(message, filePath.FullPath);
             }
-            
+
+            context.Log.Verbose("Deleting file {0}", filePath);
             file.Delete();
         }
     }
