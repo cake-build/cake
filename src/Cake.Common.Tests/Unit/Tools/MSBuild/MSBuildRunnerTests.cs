@@ -301,7 +301,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 fixture.AssertReceivedArguments(
-                    "/m /v:normal /p:\"A\"=\"B\" /p:\"C\"=\"D\" /target:Build \"/Working/src/Solution.sln\"");
+                    "/m /v:normal /p:A=B /p:C=D /target:Build \"/Working/src/Solution.sln\"");
             }
 
             [Fact]
@@ -317,7 +317,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 fixture.AssertReceivedArguments(
-                    "/m /v:normal /p:\"A\"=\"B\" /p:\"A\"=\"E\" /p:\"C\"=\"D\" /target:Build \"/Working/src/Solution.sln\"");
+                    "/m /v:normal /p:A=B /p:A=E /p:C=D /target:Build \"/Working/src/Solution.sln\"");
             }
 
             [Fact]
@@ -332,13 +332,13 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 fixture.AssertReceivedArguments(
-                    "/m /v:normal /p:\"Configuration\"=\"Release\" /target:Build \"/Working/src/Solution.sln\"");
+                    "/m /v:normal /p:Configuration=Release /target:Build \"/Working/src/Solution.sln\"");
             }
 
             [Theory]
-            [InlineData(PlatformTarget.MSIL, "/m /v:normal /p:\"Platform\"=\"Any CPU\" /target:Build \"/Working/src/Solution.sln\"")]
-            [InlineData(PlatformTarget.x86, "/m /v:normal /p:\"Platform\"=\"x86\" /target:Build \"/Working/src/Solution.sln\"")]
-            [InlineData(PlatformTarget.x64, "/m /v:normal /p:\"Platform\"=\"x64\" /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(PlatformTarget.MSIL, "/m /v:normal /p:Platform=\"Any CPU\" /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(PlatformTarget.x86, "/m /v:normal /p:Platform=x86 /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(PlatformTarget.x64, "/m /v:normal /p:Platform=x64 /target:Build \"/Working/src/Solution.sln\"")]
             public void Should_Append_Platform_As_Property_To_Process_Arguments(PlatformTarget? platform, string argumentsString)
             {
                 // Given

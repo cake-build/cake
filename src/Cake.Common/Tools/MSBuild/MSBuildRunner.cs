@@ -62,14 +62,14 @@ namespace Cake.Common.Tools.MSBuild
             {
                 // Add the configuration as a property.
                 var configuration = settings.Configuration;
-                builder.Append(string.Concat("/p:\"Configuration\"=", configuration.Quote()));
+                builder.Append(string.Concat("/p:Configuration=", configuration));
             }
 
             // Buid for a specific platform?
             if (settings.PlatformTarget.HasValue)
             {
                 var platform = settings.PlatformTarget.Value;
-                builder.Append(string.Concat("/p:\"Platform\"=", GetPlatformName(platform).Quote()));
+                builder.Append(string.Concat("/p:Platform=", GetPlatformName(platform)));
             }
 
             // Got any properties?
@@ -104,7 +104,7 @@ namespace Cake.Common.Tools.MSBuild
             switch (platform)
             {
                 case PlatformTarget.MSIL:
-                    return "Any CPU";
+                    return "\"Any CPU\"";
                 case PlatformTarget.x86:
                     return "x86";
                 case PlatformTarget.x64:
@@ -138,7 +138,7 @@ namespace Cake.Common.Tools.MSBuild
             {
                 foreach (var propertyValue in properties[propertyKey])
                 {
-                    yield return string.Concat("/p:", propertyKey.Quote(), "=", propertyValue.Quote());
+                    yield return string.Concat("/p:", propertyKey, "=", propertyValue);
                 }
             }
         }
