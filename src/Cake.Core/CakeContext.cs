@@ -19,6 +19,8 @@ namespace Cake.Core
         private readonly ICakeArguments _arguments;
         private readonly IProcessRunner _processRunner;
         private readonly IRegistry _registry;
+        private IFileSystem _testFileSystem;
+        private IGlobber _testGlobber;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeContext"/> class.
@@ -82,7 +84,7 @@ namespace Cake.Core
         /// </value>
         public IFileSystem FileSystem
         {
-            get { return _fileSystem; }
+            get { return _testFileSystem ?? _fileSystem; }
         }
 
         /// <summary>
@@ -104,7 +106,7 @@ namespace Cake.Core
         /// </value>
         public IGlobber Globber
         {
-            get { return _globber; }
+            get { return _testGlobber ?? _globber; }
         }
 
         /// <summary>
@@ -149,6 +151,16 @@ namespace Cake.Core
         public IRegistry Registry
         {
             get { return _registry; }
+        }
+
+        /// <summary>
+        /// This will never be merged just quick n dirty test...
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        public void OmgTestFileSystemMethod(IFileSystem fileSystem)
+        {
+            _testFileSystem = fileSystem;
+            _testGlobber = new Globber(FileSystem, Environment);
         }
     }
 }

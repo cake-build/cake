@@ -49,5 +49,11 @@ namespace Cake.Core
         /// </summary>
         /// <value>The registry.</value>
         IRegistry Registry { get; }
+
+        /// <summary>
+        /// This goes against all I believe, it's just a test
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        void OmgTestFileSystemMethod(IFileSystem fileSystem);
     }
 }
