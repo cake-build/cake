@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Cake.Core;
 
-namespace Cake.Testing.Fakes
+namespace Cake.Testing
 {
     /// <summary>
     /// Implementation of a fake <see cref="IConsole"/>.

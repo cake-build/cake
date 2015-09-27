@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using Cake.Common.IO;
 using Cake.Common.IO.Paths;
-using Cake.Common.Tests.Fixtures;
+using Cake.Common.Tests.Fixtures.IO;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Testing.Fakes;
+using Cake.Testing;
 using NSubstitute;
 using Xunit;
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Utilities;
@@ -45,11 +44,11 @@ namespace Cake.Common.Tools.OctopusDeploy
             }
             if (string.IsNullOrEmpty(settings.Server))
             {
-                throw new ArgumentNullException("server");
+                throw new ArgumentException("No server specified.", "settings");
             }
             if (string.IsNullOrEmpty(settings.ApiKey))
             {
-                throw new ArgumentNullException("apiKey");
+                throw new ArgumentException("No API key specified.", "settings");
             }
 
             var argumentBuilder = new CreateReleaseArgumentBuilder(projectName, settings, _environment);

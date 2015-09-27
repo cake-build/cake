@@ -1,7 +1,6 @@
 ﻿using System;
 using Cake.Common.Build.AppVeyor;
 using Cake.Common.Build.TeamCity;
-using Cake.Core;
 
 namespace Cake.Common.Build
 {

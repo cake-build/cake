@@ -1,5 +1,5 @@
 // ReSharper disable once CheckNamespace
-namespace Cake.Testing.Fakes
+namespace Cake.Testing
 {
     /// <summary>
     /// Contains extensions for <see cref="FakeDirectory"/>.

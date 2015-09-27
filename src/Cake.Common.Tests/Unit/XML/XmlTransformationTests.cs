@@ -198,11 +198,10 @@ namespace Cake.Common.Tests.Unit.XML
             public void Should_Throw_If_Xml_Was_Null()
             {
                 // Given
-                string xml = null;
                 var xsl = Resources.XmlTransformation_Xsl;
 
                 // When
-                var result = Record.Exception(() => XmlTransformation.Transform(xsl, xml));
+                var result = Record.Exception(() => XmlTransformation.Transform(xsl, null));
 
                 // Then
                 Assert.IsArgumentNullException(result, "xml");
@@ -213,10 +212,9 @@ namespace Cake.Common.Tests.Unit.XML
             {
                 // Given
                 var xml = Resources.XmlTransformation_Xml;
-                string xsl = null;
 
                 // When
-                var result = Record.Exception(() => XmlTransformation.Transform(xsl, xml));
+                var result = Record.Exception(() => XmlTransformation.Transform(null, xml));
 
                 // Then
                 Assert.IsArgumentNullException(result, "xsl");

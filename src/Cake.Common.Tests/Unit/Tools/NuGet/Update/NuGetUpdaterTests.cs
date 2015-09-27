@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using Cake.Common.Tests.Fixtures;
-using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tests.Fixtures.Tools.NuGet;
 using Cake.Common.Tools.NuGet;
 using Cake.Core;

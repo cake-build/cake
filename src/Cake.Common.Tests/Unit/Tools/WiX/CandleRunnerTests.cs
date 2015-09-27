@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.WiX;
 using Cake.Core;

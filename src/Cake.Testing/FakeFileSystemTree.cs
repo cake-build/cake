@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
-using Path = Cake.Core.IO.Path;
 
-namespace Cake.Testing.Fakes
+namespace Cake.Testing
 {
     internal sealed class FakeFileSystemTree
     {

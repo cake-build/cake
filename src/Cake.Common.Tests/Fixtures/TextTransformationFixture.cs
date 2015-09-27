@@ -1,7 +1,7 @@
 ﻿using Cake.Common.Text;
 using Cake.Core;
 using Cake.Core.Text;
-using Cake.Testing.Fakes;
+using Cake.Testing;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures

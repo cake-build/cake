@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Cake.Core.Diagnostics;
 
-namespace Cake.Testing.Fakes
+namespace Cake.Testing
 {
     /// <summary>
     /// Implementation of a <see cref="ICakeLog"/> that saves all messages written to it.

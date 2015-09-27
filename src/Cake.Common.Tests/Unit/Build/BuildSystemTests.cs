@@ -1,7 +1,6 @@
 ﻿using Cake.Common.Build;
 using Cake.Common.Build.AppVeyor;
 using Cake.Common.Build.TeamCity;
-using Cake.Core;
 using NSubstitute;
 using Xunit;
 

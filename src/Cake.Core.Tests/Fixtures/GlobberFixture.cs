@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Cake.Core.IO;
-using Cake.Testing.Fakes;
+using Cake.Testing;
 
 namespace Cake.Core.Tests.Fixtures
 {

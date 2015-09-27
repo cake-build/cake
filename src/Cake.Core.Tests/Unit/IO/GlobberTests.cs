@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Cake.Core.IO;
 using Cake.Core.Tests.Fixtures;
 using NSubstitute;
@@ -170,7 +169,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = fixture.Match(string.Empty);
 
                 // Then
-                Assert.Equal(0, result.Count());
+                Assert.Equal(0, result.Length);
             }
 
             [Fact]

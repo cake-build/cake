@@ -4,7 +4,7 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
 using Cake.Core.Scripting;
-using Cake.Testing.Fakes;
+using Cake.Testing;
 using NSubstitute;
 
 namespace Cake.Core.Tests.Fixtures

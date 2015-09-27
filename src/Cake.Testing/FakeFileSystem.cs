@@ -1,7 +1,7 @@
 ﻿using Cake.Core;
 using Cake.Core.IO;
 
-namespace Cake.Testing.Fakes
+namespace Cake.Testing
 {
     /// <summary>
     /// Represents a fake file system.

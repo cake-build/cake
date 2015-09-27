@@ -175,12 +175,5 @@ namespace Cake.Common.Tools.ILRepack
         /// </summary>
         /// <value><c>true</c> if more logs should be output during execution; otherwise, <c>false</c>.</value>
         public bool Verbose { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ILRepackSettings"/> class.
-        /// </summary>
-        public ILRepackSettings()
-        {
-        }
     }
 }

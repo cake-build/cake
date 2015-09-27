@@ -36,7 +36,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 var result = Record.Exception(() => fixture.CreateRelease());
 
                 // Then
-                Assert.IsArgumentNullException(result, "server");
+                Assert.IsArgumentException(result, "settings", "No server specified.");
             }
 
             [Fact]
@@ -50,7 +50,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 var result = Record.Exception(() => fixture.CreateRelease());
 
                 // Then
-                Assert.IsArgumentNullException(result, "apiKey");
+                Assert.IsArgumentException(result, "settings", "No API key specified.");
             }
 
             [Fact]

@@ -1,8 +1,5 @@
 ﻿using Cake.Common.Tools.NuGet.Update;
-using Cake.Core;
 using Cake.Core.IO;
-using Cake.Testing.Fakes;
-using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Tools.NuGet
 {
@@ -11,7 +8,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet
         public FilePath TargetFile { get; set; }
         public NuGetUpdateSettings Settings { get; set; }
 
-        public NuGetUpdateFixture(FilePath toolPath = null, bool defaultToolExist = true)
+        public NuGetUpdateFixture()
         {
             TargetFile = "./packages.config";
             Settings = new NuGetUpdateSettings();

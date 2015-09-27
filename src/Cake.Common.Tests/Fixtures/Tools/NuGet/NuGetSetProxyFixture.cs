@@ -24,7 +24,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet
         public void GivenUnexpectedOutput()
         {
             Process.GetStandardOutput()
-                .Returns(new string[] { "Unknown Command" });
+                .Returns(new[] { "Unknown Command" });
         }
 
         public void SetProxy()

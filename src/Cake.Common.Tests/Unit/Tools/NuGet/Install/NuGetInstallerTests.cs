@@ -1,6 +1,5 @@
 ﻿using Cake.Common.Tests.Fixtures.Tools.NuGet;
 using Cake.Common.Tools.NuGet;
-using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
 using Xunit;

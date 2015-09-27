@@ -1,7 +1,4 @@
 ﻿using Cake.Common.Build.TeamCity;
-using Cake.Common.Tests.Fixtures;
-using Cake.Core;
-using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
 

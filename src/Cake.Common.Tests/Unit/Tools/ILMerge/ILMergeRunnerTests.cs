@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.ILMerge;
 using Cake.Core;
@@ -210,9 +209,8 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
             public void Should_Set_Target_Platform_If_Enabled_In_Settings()
             {
                 // Given
-                const string PATH =
-                    @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1";
-                var directoryPath = new DirectoryPath(PATH);
+                const string path = @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1";
+                var directoryPath = new DirectoryPath(path);
                 var fixture = new ILMergeRunnerFixture();
                 fixture.Settings.TargetPlatform = new TargetPlatform(TargetPlatformVersion.v4, directoryPath);
 

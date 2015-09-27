@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Cake.Core.Scripting;
 using Cake.Core.Tests.Fixtures;
-using Cake.Testing.Fakes;
+using Cake.Testing;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit.Scripting

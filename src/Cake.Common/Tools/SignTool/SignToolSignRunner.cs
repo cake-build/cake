@@ -16,7 +16,6 @@ namespace Cake.Common.Tools.SignTool
         private readonly ISignToolResolver _resolver;
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
-        private readonly IRegistry _registry;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SignToolSignRunner"/> class.
@@ -30,7 +29,8 @@ namespace Cake.Common.Tools.SignTool
             ICakeEnvironment environment,
             IProcessRunner processRunner,
             IGlobber globber,
-            IRegistry registry) : this(fileSystem, environment, processRunner, globber, registry, null)
+            IRegistry registry) 
+            : this(fileSystem, environment, processRunner, globber, registry, null)
         {
         }
 
@@ -54,8 +54,7 @@ namespace Cake.Common.Tools.SignTool
         {
             _fileSystem = fileSystem;
             _environment = environment;
-            _registry = registry;
-            _resolver = resolver ?? new SignToolResolver(_fileSystem, _environment, _registry);
+            _resolver = resolver ?? new SignToolResolver(_fileSystem, _environment, registry);
         }
 
         /// <summary>
