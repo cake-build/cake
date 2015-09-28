@@ -13,7 +13,16 @@ namespace Cake.Core.IO.NuGet
         private readonly IGlobber _globber;
         private IFile _cachedPath;
 
-        private static readonly FilePath[] unixSystemPaths = new[] { new FilePath("/usr/local/bin/nuget"), new FilePath("/usr/bin/nuget") };
+        private static readonly FilePath[] _unixSystemPaths;
+
+        static NuGetToolResolver()
+        {
+            _unixSystemPaths = new[]
+            {
+                new FilePath("/usr/local/bin/nuget"),
+                new FilePath("/usr/bin/nuget")
+            };
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetToolResolver" /> class.
@@ -80,7 +89,7 @@ namespace Cake.Core.IO.NuGet
             // On Unix /usr/bin/nuget or /usr/local/bin/nuget are viable options
             if (_environment.IsUnix())
             {                
-                foreach (var systemPath in unixSystemPaths)
+                foreach (var systemPath in _unixSystemPaths)
                 {
                     if (_fileSystem.Exist(systemPath))
                     {

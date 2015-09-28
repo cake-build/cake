@@ -239,7 +239,7 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
                     Arg.Is<ProcessSettings>(
-                        p => p.Arguments.Render() == string.Format("\"/Working/Tests.dll\" --include CategoryA --include CategoryB")));
+                        p => p.Arguments.Render() == "\"/Working/Tests.dll\" --include CategoryA --include CategoryB"));
             }
 
             [Fact]
@@ -259,7 +259,7 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
                     Arg.Is<ProcessSettings>(
-                        p => p.Arguments.Render() == string.Format("\"/Working/Tests.dll\" --type fast --include CategoryA --include CategoryB --output fixie-log.txt")));
+                        p => p.Arguments.Render() == "\"/Working/Tests.dll\" --type fast --include CategoryA --include CategoryB --output fixie-log.txt"));
             }
         }
     }

@@ -1,7 +1,5 @@
-﻿using Cake.Common.Tests.Fixtures;
-using Cake.Common.Tests.Fixtures.Tools;
+﻿using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.MSBuild;
-using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using NSubstitute;

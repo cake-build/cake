@@ -1,6 +1,5 @@
 ﻿using Cake.Common.Tools.MSBuild;
 using Cake.Core.Diagnostics;
-using Cake.Core.IO;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.MSBuild

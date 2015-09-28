@@ -1,4 +1,4 @@
-﻿using Cake.Common.Tests.Fixtures;
+﻿using Cake.Common.Tests.Fixtures.Build;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build.AppVeyor.Data

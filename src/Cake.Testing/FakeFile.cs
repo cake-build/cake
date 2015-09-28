@@ -3,7 +3,7 @@ using System.IO;
 using Cake.Core.IO;
 using Path = Cake.Core.IO.Path;
 
-namespace Cake.Testing.Fakes
+namespace Cake.Testing
 {
     /// <summary>
     /// Represents a fake file.

@@ -2,7 +2,7 @@
 using Cake.Core;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures
+namespace Cake.Common.Tests.Fixtures.Build
 {
     internal sealed class AppVeyorInfoFixture
     {

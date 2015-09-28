@@ -1,7 +1,7 @@
 ﻿using Cake.Common.Tests.Properties;
 using Cake.Common.Xml;
 using Cake.Core.IO;
-using Cake.Testing.Fakes;
+using Cake.Testing;
 
 namespace Cake.Common.Tests.Fixtures
 {

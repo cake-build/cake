@@ -3,7 +3,7 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures
+namespace Cake.Common.Tests.Fixtures.Diagnostics
 {
     public sealed class LogActionFixture
     {

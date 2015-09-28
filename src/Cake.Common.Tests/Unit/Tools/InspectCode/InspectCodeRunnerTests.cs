@@ -21,7 +21,7 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
                 var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run((FilePath)null, new InspectCodeSettings()));
+                var result = Record.Exception(() => runner.Run(null, new InspectCodeSettings()));
 
                 // Then
                 Assert.IsArgumentNullException(result, "solution");
@@ -365,7 +365,7 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
                 var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => runner.RunFromConfig((FilePath)null));
+                var result = Record.Exception(() => runner.RunFromConfig(null));
 
                 // Then
                 Assert.IsArgumentNullException(result, "configFile");

@@ -1,6 +1,6 @@
 ﻿using Cake.Core;
 using Cake.Scripting;
-using Cake.Testing.Fakes;
+using Cake.Testing;
 using NSubstitute;
 using Xunit;
 

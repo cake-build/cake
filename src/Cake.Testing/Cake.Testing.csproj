@@ -25,6 +25,7 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <CodeAnalysisRuleSet>..\Cake.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Debug\Cake.Testing.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,6 +37,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRuleSet>..\Cake.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Release\Cake.Testing.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -50,73 +52,18 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Asserts\Assert.cs" />
-    <Compile Include="Asserts\BooleanAsserts.cs" />
-    <Compile Include="Asserts\CollectionAsserts.cs" />
-    <Compile Include="Asserts\Comparers.cs" />
-    <Compile Include="Asserts\EqualityAsserts.cs" />
-    <Compile Include="Asserts\ExceptionAsserts.cs" />
-    <Compile Include="Asserts\Guards.cs" />
-    <Compile Include="Asserts\IdentityAsserts.cs" />
-    <Compile Include="Asserts\NullAsserts.cs" />
-    <Compile Include="Asserts\PropertyAsserts.cs" />
-    <Compile Include="Asserts\RangeAsserts.cs" />
-    <Compile Include="Asserts\Record.cs" />
-    <Compile Include="Asserts\Sdk\ArgumentFormatter.cs" />
-    <Compile Include="Asserts\Sdk\AssertComparer.cs" />
-    <Compile Include="Asserts\Sdk\AssertEqualityComparer.cs" />
-    <Compile Include="Asserts\Sdk\AssertEqualityComparerAdapter.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\AllException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\AssertActualExpectedException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\AssertCollectionCountException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\CollectionException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\ContainsException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\DoesNotContainException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\DoesNotMatchException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\EmptyException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\EndsWithException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\EqualException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\FalseException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\InRangeException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\IsAssignableFromException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\IsNotTypeException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\IsTypeException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\MatchesException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\NotEmptyException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\NotEqualException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\NotInRangeException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\NotNullException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\NotSameException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\NullException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\ParameterCountMismatchException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\ProperSubsetException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\ProperSupersetException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\PropertyChangedException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\SameException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\SingleException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\StartsWithException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\SubsetException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\SupersetException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\ThrowsException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\TrueException.cs" />
-    <Compile Include="Asserts\Sdk\Exceptions\XunitException.cs" />
-    <Compile Include="Asserts\SetAsserts.cs" />
-    <Compile Include="Asserts\StringAsserts.cs" />
-    <Compile Include="Asserts\TypeAsserts.cs" />
-    <Compile Include="ExceptionAsserts.cs" />
     <Compile Include="Extensions\FakeDirectoryExtensions.cs" />
     <Compile Include="Extensions\FakeFileExtensions.cs" />
     <Compile Include="Extensions\FakeFileSystemExtensions.cs" />
-    <Compile Include="Fakes\FakeConsole.cs" />
-    <Compile Include="Fakes\FakeDirectory.cs" />
-    <Compile Include="Fakes\FakeDirectoryContent.cs" />
-    <Compile Include="Fakes\FakeEnvironment.cs" />
-    <Compile Include="Fakes\FakeFile.cs" />
-    <Compile Include="Fakes\FakeFileStream.cs" />
-    <Compile Include="Fakes\FakeFileSystem.cs" />
-    <Compile Include="Fakes\FakeFileSystemTree.cs" />
-    <Compile Include="Fakes\FakeLog.cs" />
-    <Compile Include="PathAsserts.cs" />
+    <Compile Include="FakeConsole.cs" />
+    <Compile Include="FakeDirectory.cs" />
+    <Compile Include="FakeDirectoryContent.cs" />
+    <Compile Include="FakeEnvironment.cs" />
+    <Compile Include="FakeFile.cs" />
+    <Compile Include="FakeFileStream.cs" />
+    <Compile Include="FakeFileSystem.cs" />
+    <Compile Include="FakeFileSystemTree.cs" />
+    <Compile Include="FakeLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

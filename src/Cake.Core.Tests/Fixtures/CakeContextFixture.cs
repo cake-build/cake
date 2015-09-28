@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Cake.Core.Diagnostics;
+﻿using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using NSubstitute;
 

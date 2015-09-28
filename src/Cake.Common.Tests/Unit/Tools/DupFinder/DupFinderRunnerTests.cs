@@ -20,7 +20,7 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
                 var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run((IEnumerable<FilePath>)null, new DupFinderSettings()));
+                var result = Record.Exception(() => runner.Run(null, new DupFinderSettings()));
 
                 // Then
                 Assert.IsArgumentNullException(result, "files");
@@ -430,7 +430,7 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
                 var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => runner.RunFromConfig((FilePath)null));
+                var result = Record.Exception(() => runner.RunFromConfig(null));
 
                 // Then
                 Assert.IsArgumentNullException(result, "configFile");

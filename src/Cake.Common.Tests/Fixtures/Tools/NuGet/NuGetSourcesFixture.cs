@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Cake.Common.Tools.NuGet.Sources;
+﻿using Cake.Common.Tools.NuGet.Sources;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Tools.NuGet

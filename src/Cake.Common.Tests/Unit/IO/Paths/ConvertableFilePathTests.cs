@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Common.IO.Paths;
+﻿using Cake.Common.IO.Paths;
 using Cake.Core.IO;
 using Xunit;
 

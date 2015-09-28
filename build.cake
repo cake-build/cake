@@ -130,6 +130,12 @@ Task("Copy-Files")
     CopyFileToDirectory(buildDir + File("Autofac.dll"), binDir);
     CopyFileToDirectory(buildDir + File("Nuget.Core.dll"), binDir);
 
+    // Copy testing assemblies.
+    var testingDir = Directory("./src/Cake.Testing/bin") + Directory(configuration);
+    CopyFileToDirectory(testingDir + File("Cake.Testing.dll"), binDir);
+    CopyFileToDirectory(testingDir + File("Cake.Testing.pdb"), binDir);
+    CopyFileToDirectory(testingDir + File("Cake.Testing.xml"), binDir);
+
     CopyFiles(new FilePath[] { "LICENSE", "README.md", "ReleaseNotes.md" }, binDir);
 });
 
@@ -141,7 +147,10 @@ Task("Zip-Files")
     var packageFile = File("Cake-bin-v" + semVersion + ".zip");
     var packagePath = buildResultDir + packageFile;
 
-    Zip(binDir, packagePath);
+    var files = GetFiles(binDir.Path.FullPath + "/*")
+      - GetFiles(binDir.Path.FullPath + "/*.Testing.*");
+
+    Zip(binDir, packagePath, files);
 });
 
 Task("Create-NuGet-Packages")
@@ -170,6 +179,15 @@ Task("Create-NuGet-Packages")
 
     // Create Common package.
     NuGetPack("./nuspec/Cake.Common.nuspec", new NuGetPackSettings {
+        Version = semVersion,
+        ReleaseNotes = releaseNotes.Notes.ToArray(),
+        BasePath = binDir,
+        OutputDirectory = nugetRoot,
+        Symbols = false
+    });
+
+    // Create Testing package.
+    NuGetPack("./nuspec/Cake.Testing.nuspec", new NuGetPackSettings {
         Version = semVersion,
         ReleaseNotes = releaseNotes.Notes.ToArray(),
         BasePath = binDir,

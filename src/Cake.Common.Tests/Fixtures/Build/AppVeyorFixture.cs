@@ -3,7 +3,7 @@ using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures
+namespace Cake.Common.Tests.Fixtures.Build
 {
     internal sealed class AppVeyorFixture
     {

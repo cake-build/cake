@@ -1,4 +1,6 @@
-﻿namespace Cake.Common.Build.TeamCity
+﻿using Cake.Core.IO;
+
+namespace Cake.Common.Build.TeamCity
 {
     /// <summary>
     /// Represents a TeamCity provider.
@@ -17,7 +19,7 @@
         /// </summary>
         /// <param name="type">Date type.</param>
         /// <param name="path">Data file path.</param>
-        void ImportData(string type, Cake.Core.IO.FilePath path);
+        void ImportData(string type, FilePath path);
 
         /// <summary>
         /// Gets a value indicating whether the current build is running on TeamCity.

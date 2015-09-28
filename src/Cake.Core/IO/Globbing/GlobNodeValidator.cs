@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Cake.Core.IO.Globbing.Nodes;
 
 namespace Cake.Core.IO.Globbing
@@ -15,7 +11,7 @@ namespace Cake.Core.IO.Globbing
             var current = node;
             while (current != null)
             {
-                if (previous != null && previous is RecursiveWildcardSegment)
+                if (previous is RecursiveWildcardSegment)
                 {
                     if (current is ParentSegment)
                     {
