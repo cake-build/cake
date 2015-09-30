@@ -11,9 +11,9 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
 
 1. [Implemented functionality](https://github.com/cake-build/cake#implemented-functionality)
 2. [Example](https://github.com/cake-build/cake#example)
-    - [Download Cake](https://github.com/cake-build/cake#1-download-cake)
-    - [Create build script](https://github.com/cake-build/cake#2-create-build-script)
-    - [Run build script](https://github.com/cake-build/cake#3-run-build-script)
+    - [Install the Cake bootstrapper](https://github.com/cake-build/cake#1-install-the-cake-bootstrapper)
+    - [Create a Cake script](https://github.com/cake-build/cake#2-create-a-cake-script)
+    - [Run it!](https://github.com/cake-build/cake#3-run-it)
 3. [Documentation](https://github.com/cake-build/cake#documentation)
 5. [Contributing](https://github.com/cake-build/cake#contributing)
 6. [Get in touch](https://github.com/cake-build/cake#get-in-touch)
@@ -62,64 +62,77 @@ For more information and examples of how to use Cake, see the [Documentation](ht
 
 ## Example
 
-### 1. Download Cake
+This example dowloads the Cake bootstrapper and executes a simple build script.
+The bootstrapper is used to bootstrap Cake in a simple way and is not in 
+required in any way to execute build scripts. If you prefer to invoke the Cake 
+executable yourself, [take a look at the command line usage](http://cakebuild.net/docs/cli/usage).
 
-```batchfile
-C:\Project> NuGet.exe install Cake -OutputDirectory Tools -ExcludeVersion
+This example is also available on our homepage: 
+[http://cakebuild.net/docs/tutorials/setting-up-a-new-project](http://cakebuild.net/docs/tutorials/setting-up-a-new-project)
+
+### 1. Install the Cake bootstrapper
+
+The bootstrapper is used to download Cake and the tools required by the 
+build script.
+
+#### Windows
+
+```powershell
+Invoke-WebRequest http://cakebuild.net/bootstrapper/windows -OutFile build.ps1
 ```
 
-### 2. Create build script
+#### Linux
+
+```console
+curl -Lsfo build.sh http://cakebuild.net/bootstrapper/linux
+```
+
+#### OS X
+
+```console
+curl -Lsfo build.sh http://cakebuild.net/bootstrapper/linux
+```
+
+### 2. Create a Cake script
+
+Add a cake script called `build.cake` to the same location as the 
+bootstrapper script that you downloaded.
 
 ```csharp
 var target = Argument("target", "Default");
-var configuration = Argument("configuration", "Release");
-
-// Define directories.
-var buildDir = Directory("./src/Example/bin") + Directory(configuration);
-
-Task("Clean")
-    .Does(() =>
-{
-    CleanDirectory(buildDir);
-});
-
-Task("Restore-NuGet-Packages")
-    .IsDependentOn("Clean")
-    .Does(() =>
-{
-    NuGetRestore("./src/Example.sln");
-});
-
-Task("Build")
-    .IsDependentOn("Restore-NuGet-Packages")
-    .Does(() =>
-{
-    MSBuild("./src/Example.sln", new MSBuildSettings()
-        .UseToolVersion(MSBuildToolVersion.NET45)
-        .SetVerbosity(Verbosity.Minimal)
-        .SetConfiguration(configuration));
-});
-
-Task("Run-Unit-Tests")
-    .IsDependentOn("Build")
-    .Does(() =>
-{
-    XUnit2("./src/**/bin/" + configuration + "/*.Tests.dll");
-});
 
 Task("Default")
-    .IsDependentOn("Run-Unit-Tests");
+  .Does(() =>
+{
+  Information("Hello World!");
+});
 
 RunTarget(target);
 ```
 
-### 3. Run build script
+### 3. Run it!
 
-```
-C:\Project\Tools\Cake> Cake.exe ../../build.cake -verbosity=verbose -target=Build
+#### Windows
+
+Execute the script via the bootstrapper.
+
+```powershell
+./build.ps1
 ```
 
-You could of course use our bootstrapper script if you want to. More information can be found in the [tutorial](http://cakebuild.net/docs/tutorials/setting-up-a-new-project)
+#### Linux / OS X
+
+Give the owner of the script permission to execute it.
+
+```console
+chmod +x build.sh
+```
+
+Execute the script via the bootstrapper.
+
+```console
+./build.sh
+```
 
 ## Documentation
 
