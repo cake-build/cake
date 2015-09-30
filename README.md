@@ -1,7 +1,5 @@
 #Cake [![NuGet](https://img.shields.io/nuget/v/Cake.svg)](https://www.nuget.org/packages/Cake)
 
-Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.
-
 | Platform    | Status                                                                                                                    |
 |-------------|---------------------------------------------------------------------------------------------------------------------------|
 | Windows     | [![AppVeyor](https://img.shields.io/appveyor/ci/cakebuild/cake.svg)](https://ci.appveyor.com/project/cakebuild/cake)      |
@@ -9,56 +7,25 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
 
 ## Table of contents
 
-1. [Implemented functionality](https://github.com/cake-build/cake#implemented-functionality)
-2. [Example](https://github.com/cake-build/cake#example)
+1. [What is Cake?](https://github.com/cake-build/cake#what-is-cake)
+2. [Documentation](https://github.com/cake-build/cake#documentation)
+3. [Example](https://github.com/cake-build/cake#example)
     - [Install the Cake bootstrapper](https://github.com/cake-build/cake#1-install-the-cake-bootstrapper)
     - [Create a Cake script](https://github.com/cake-build/cake#2-create-a-cake-script)
     - [Run it!](https://github.com/cake-build/cake#3-run-it)
-3. [Documentation](https://github.com/cake-build/cake#documentation)
-5. [Contributing](https://github.com/cake-build/cake#contributing)
-6. [Get in touch](https://github.com/cake-build/cake#get-in-touch)
-7. [License](https://github.com/cake-build/cake#license)
+4. [Contributing](https://github.com/cake-build/cake#contributing)
+5. [Get in touch](https://github.com/cake-build/cake#get-in-touch)
+6. [License](https://github.com/cake-build/cake#license)
 
-## Implemented functionality
+## What is Cake?
 
-This is a list of some the currently implemented functionality.   
-For a full list of supported tools, see the [DSL reference](http://cakebuild.net/dsl/).
+Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.
 
-* [MSBuild](http://cakebuild.net/dsl/msbuild)
-* [MSTest](http://cakebuild.net/dsl/mstest)
-* [xUnit (v1)](http://cakebuild.net/dsl/xunit)
-* [xUnit (v2)](http://cakebuild.net/dsl/xunit-v2)
-* [NUnit](http://cakebuild.net/dsl/nunit)
-* [NuGet](http://cakebuild.net/dsl/nuget)
-  * Pack
-  * Push
-  * Restore
-  * Sources
-* [ILMerge](http://cakebuild.net/dsl/ilmerge)
-* [WiX](http://cakebuild.net/dsl/wix)
-  * Candle
-  * Light
-* [SignTool](http://cakebuild.net/dsl/signing)
-* [File operations](http://cakebuild.net/dsl/file-operations)
-  * Copying
-  * Moving
-  * Deleting
-* [Directory operations](http://cakebuild.net/dsl/directory-operations)
-  * Creation
-  * Cleaning
-  * Deleting
-* [File/Directory globbing](http://cakebuild.net/dsl/globbing)
-* [Compression (zip)](http://cakebuild.net/dsl/compression)
-* [AssemblyInfo patching](http://cakebuild.net/dsl/assembly-info)
-* [Release notes parser](http://cakebuild.net/dsl/release-notes)
-* [AppVeyor](http://cakebuild.net/dsl/build-system)
-* [MSBuild Resource](http://cakebuild.net/dsl/msbuild-resource)
-  * Solution file parsing
-  * Project file parsing
-* [Octopus deploy](http://cakebuild.net/dsl/octopus-deploy)
-  * Create release
+For a full list of supported tools and features, see the [DSL reference](http://cakebuild.net/dsl/).
 
-For more information and examples of how to use Cake, see the [Documentation](http://cakebuild.net/docs).
+## Documentation
+
+You can read the latest documentation at [http://cakebuild.net/](http://cakebuild.net/).
 
 ## Example
 
@@ -128,10 +95,6 @@ chmod +x build.sh
 # Execute the bootstrapper script.
 ./build.sh
 ```
-
-## Documentation
-
-You can read the latest documentation at [http://cakebuild.net/](http://cakebuild.net/).
 
 ## Contributing
 
