@@ -15,10 +15,8 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
     - [Create build script](https://github.com/cake-build/cake#2-create-build-script)
     - [Run build script](https://github.com/cake-build/cake#3-run-build-script)
 3. [Documentation](https://github.com/cake-build/cake#documentation)
-4. [Bootstrapper](https://github.com/cake-build/cake#bootstrapper)
 5. [Contributing](https://github.com/cake-build/cake#contributing)
-6. [External add-ons](https://github.com/cake-build/cake#external-add-ons)
-7. [Get in touch](https://github.com/cake-build/cake#get-in-touch)
+6. [Get in touch](https://github.com/cake-build/cake#get-in-touch)
 7. [License](https://github.com/cake-build/cake#license)
 
 ## Implemented functionality
@@ -126,10 +124,6 @@ You could of course use our bootstrapper script if you want to. More information
 ## Documentation
 
 You can read the latest documentation at [http://cakebuild.net/](http://cakebuild.net/).
-
-## Bootstrapper
-
-The Cake [Bootstrapper](https://github.com/cake-build/bootstrapper) is a Powershell cmdlet that helps you set up a new Cake build by downloading dependencies, setting up the bootstrapper script and creating a Cake build script.
 
 ## Contributing
 
