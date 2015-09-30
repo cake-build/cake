@@ -5,7 +5,7 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
 | Platform    | Status                                                                                                                    |
 |-------------|---------------------------------------------------------------------------------------------------------------------------|
 | Windows     | [![AppVeyor](https://img.shields.io/appveyor/ci/cakebuild/cake.svg)](https://ci.appveyor.com/project/cakebuild/cake)      |
-| Linux / OSX | [![Travis build status](https://travis-ci.org/cake-build/cake.svg?branch=develop)](https://travis-ci.org/cake-build/cake) |
+| Linux / OS X | [![Travis build status](https://travis-ci.org/cake-build/cake.svg?branch=develop)](https://travis-ci.org/cake-build/cake) |
 
 ## Table of contents
 
@@ -75,19 +75,19 @@ This example is also available on our homepage:
 The bootstrapper is used to download Cake and the tools required by the 
 build script.
 
-#### Windows
+##### Windows
 
 ```powershell
 Invoke-WebRequest http://cakebuild.net/bootstrapper/windows -OutFile build.ps1
 ```
 
-#### Linux
+##### Linux
 
 ```console
 curl -Lsfo build.sh http://cakebuild.net/bootstrapper/linux
 ```
 
-#### OS X
+##### OS X
 
 ```console
 curl -Lsfo build.sh http://cakebuild.net/bootstrapper/linux
@@ -112,7 +112,7 @@ RunTarget(target);
 
 ### 3. Run it!
 
-#### Windows
+##### Windows
 
 Execute the script via the bootstrapper.
 
@@ -120,7 +120,7 @@ Execute the script via the bootstrapper.
 ./build.ps1
 ```
 
-#### Linux / OS X
+##### Linux / OS X
 
 Give the owner of the script permission to execute it.
 
