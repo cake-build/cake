@@ -114,23 +114,18 @@ RunTarget(target);
 
 ##### Windows
 
-Execute the script via the bootstrapper.
-
-```powershell
+```powershell 
+# Execute the bootstrapper script.
 ./build.ps1
 ```
 
 ##### Linux / OS X
 
-Give the owner of the script permission to execute it.
-
 ```console
+# Adjust the permissions for the bootstrapper script.
 chmod +x build.sh
-```
 
-Execute the script via the bootstrapper.
-
-```console
+# Execute the bootstrapper script.
 ./build.sh
 ```
 
