@@ -1,5 +1,7 @@
 #Cake [![NuGet](https://img.shields.io/nuget/v/Cake.svg)](https://www.nuget.org/packages/Cake)
 
+Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.
+
 | Platform    | Status                                                                                                                    |
 |-------------|---------------------------------------------------------------------------------------------------------------------------|
 | Windows     | [![AppVeyor](https://img.shields.io/appveyor/ci/cakebuild/cake.svg)](https://ci.appveyor.com/project/cakebuild/cake)      |
@@ -7,21 +9,14 @@
 
 ## Table of contents
 
-1. [What is Cake?](https://github.com/cake-build/cake#what-is-cake)
-2. [Documentation](https://github.com/cake-build/cake#documentation)
-3. [Example](https://github.com/cake-build/cake#example)
+1. [Documentation](https://github.com/cake-build/cake#documentation)
+2. [Example](https://github.com/cake-build/cake#example)
     - [Install the Cake bootstrapper](https://github.com/cake-build/cake#1-install-the-cake-bootstrapper)
     - [Create a Cake script](https://github.com/cake-build/cake#2-create-a-cake-script)
     - [Run it!](https://github.com/cake-build/cake#3-run-it)
-4. [Contributing](https://github.com/cake-build/cake#contributing)
-5. [Get in touch](https://github.com/cake-build/cake#get-in-touch)
-6. [License](https://github.com/cake-build/cake#license)
-
-## What is Cake?
-
-Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.
-
-For a full list of supported tools and features, see the [DSL reference](http://cakebuild.net/dsl/).
+3. [Contributing](https://github.com/cake-build/cake#contributing)
+4. [Get in touch](https://github.com/cake-build/cake#get-in-touch)
+5. [License](https://github.com/cake-build/cake#license)
 
 ## Documentation
 
