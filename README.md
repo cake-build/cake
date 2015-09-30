@@ -1,12 +1,11 @@
-#Cake
+#Cake [![NuGet](https://img.shields.io/nuget/v/Cake.svg)](https://www.nuget.org/packages/Cake)
 
 Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.
 
-Windows: [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/s9oscm9t7ase6h6d?svg=true)](https://ci.appveyor.com/project/cakebuild/cake)
-Linux & Mac OSX: [![Travis Build Status](https://travis-ci.org/cake-build/cake.svg?branch=develop)](https://travis-ci.org/cake-build/cake)
-
-[![Follow @cakebuildnet](https://img.shields.io/badge/Twitter-Follow%20%40cakebuildnet-blue.svg)](https://twitter.com/intent/follow?screen_name=cakebuildnet)
-[![Join the chat at https://gitter.im/cake-build/cake](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/cake-build/cake?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+| Platform    | Status                                                                                                                    |
+|-------------|---------------------------------------------------------------------------------------------------------------------------|
+| Windows     | [![AppVeyor](https://img.shields.io/appveyor/ci/cakebuild/cake.svg)](https://ci.appveyor.com/project/cakebuild/cake)      |
+| Linux / OSX | [![Travis build status](https://travis-ci.org/cake-build/cake.svg?branch=develop)](https://travis-ci.org/cake-build/cake) |
 
 ## Table of contents
 
@@ -19,6 +18,7 @@ Linux & Mac OSX: [![Travis Build Status](https://travis-ci.org/cake-build/cake.s
 4. [Bootstrapper](https://github.com/cake-build/cake#bootstrapper)
 5. [Contributing](https://github.com/cake-build/cake#contributing)
 6. [External add-ons](https://github.com/cake-build/cake#external-add-ons)
+7. [Get in touch](https://github.com/cake-build/cake#get-in-touch)
 7. [License](https://github.com/cake-build/cake#license)
 
 ## Implemented functionality
@@ -141,6 +141,12 @@ Make sure you've read the [contribution guidelines](http://cakebuild.net/contrib
 * Make your feature addition or bug fix.
 * Don't forget the unit tests.
 * Send a pull request.
+
+## Get in touch
+
+[![Follow @cakebuildnet](https://img.shields.io/badge/Twitter-Follow%20%40cakebuildnet-blue.svg)](https://twitter.com/intent/follow?screen_name=cakebuildnet)
+
+[![Join the chat at https://gitter.im/cake-build/cake](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/cake-build/cake?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## License
 
