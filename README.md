@@ -52,7 +52,7 @@ curl -Lsfo build.sh http://cakebuild.net/bootstrapper/linux
 ##### OS X
 
 ```console
-curl -Lsfo build.sh http://cakebuild.net/bootstrapper/linux
+curl -Lsfo build.sh http://cakebuild.net/bootstrapper/osx
 ```
 
 ### 2. Create a Cake script
