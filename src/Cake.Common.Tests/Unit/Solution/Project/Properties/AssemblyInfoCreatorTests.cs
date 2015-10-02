@@ -311,6 +311,20 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 Assert.True(result.Contains("[assembly: InternalsVisibleTo(\"Assembly1.Tests\"), InternalsVisibleTo(\"Assembly2.Tests\"), InternalsVisibleTo(\"Assembly3.Tests\")]"));
             }
 
+            [Fact]
+            public void Should_Add_Configuration_Attribute_If_Set()
+            {
+                // Given
+                var fixture = new AssemblyInfoFixture();
+                fixture.Settings.Configuration = "TheConfiguration";
+
+                // When
+                var result = fixture.CreateAndReturnContent();
+
+                // Then
+                Assert.True(result.Contains("using System.Reflection;"));
+                Assert.True(result.Contains("[assembly: AssemblyConfiguration(\"TheConfiguration\")]"));
+            }
         }
     }
 }
