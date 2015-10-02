@@ -56,7 +56,7 @@ namespace Cake.Scripting.Mono
                 throw new ArgumentNullException("path");
             }
             _log.Debug("Adding reference to {0}...", path.FullPath);
-            _evaluator.ReferenceAssembly(Assembly.LoadFile(path.FullPath));
+            _evaluator.ReferenceAssembly(Assembly.LoadFrom(path.FullPath));
         }
 
         public void AddReference(Assembly assembly)
