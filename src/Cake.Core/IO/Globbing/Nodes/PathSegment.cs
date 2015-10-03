@@ -57,7 +57,7 @@ namespace Cake.Core.IO.Globbing.Nodes
             {
                 if (token.Kind == GlobTokenKind.Identifier)
                 {
-                    builder.Append(token.Value.Replace("+", "\\+"));
+                    builder.Append(token.Value.Replace("+", "\\+").Replace(".", "\\."));
                 }
                 if (token.Kind == GlobTokenKind.Wildcard)
                 {
