@@ -77,7 +77,7 @@ namespace Cake.Core.Scripting
             {
                 if (host.Context.FileSystem.Exist((FilePath)reference))
                 {
-                    var assembly = Assembly.LoadFile(reference);
+                    var assembly = Assembly.LoadFrom(reference);
                     assemblies.Add(assembly);
                 }
                 else
@@ -144,7 +144,7 @@ namespace Cake.Core.Scripting
                 var cakeAssemblies = assemblyDirectory.GetFiles(pattern, SearchScope.Current);
                 foreach (var cakeAssembly in cakeAssemblies)
                 {
-                    var assembly = Assembly.LoadFile(cakeAssembly.Path.FullPath);
+                    var assembly = Assembly.LoadFrom(cakeAssembly.Path.FullPath);
                     defaultAssemblies.Add(assembly);
                     loaded.Add(pattern);
                 }
