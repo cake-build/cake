@@ -364,6 +364,21 @@ namespace Cake.Core.Tests.Unit.IO
             }
 
             [Fact]
+            public void Should_Return_Files_For_Pattern_Ending_With_Character_Wildcard_And_Dot()
+            {
+                // Given
+                var fixture = new GlobberFixture(true);
+
+                // When
+                var result = fixture.Match("C:/Working/*.Test.dll");
+
+                // Then
+                Assert.Equal(2, result.Length);
+                Assert.ContainsFilePath(result, "C:/Working/Project.A.Test.dll");
+                Assert.ContainsFilePath(result, "C:/Working/Project.B.Test.dll");
+            }
+
+            [Fact]
             public void Should_Return_File_For_Recursive_Wildcard_Pattern_Ending_With_Wildcard_Regex()
             {
                 // Given
