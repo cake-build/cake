@@ -1,4 +1,16 @@
 ### New in 0.5.5 (Work in progress)
+* Added alias to retrieve all environment variables.
+* Added additional xUnit settings.
+* Added verbose message when glob pattern did not match anything.
+* Added task setup/teardown functionality.
+* Fix for referencing parent directory in glob patterns.
+* Added verbose logging for file and directory aliases.
+* Removed quotes from MSBuild arguments.
+* Added StartProcess alias overload taking process arguments as string.
+* Added Cake.Testing NuGet package.
+* Added support for AssemblyConfiguration when patching assembly information.
+* Fixed bug with dots in glob patterns.
+* Fixed bug with reference loading (affects #tool and #addin directives).
 
 ### New in 0.5.4 (Released 2015/09/12)
 * Removed .nuspec requirement for NuGetPack.
