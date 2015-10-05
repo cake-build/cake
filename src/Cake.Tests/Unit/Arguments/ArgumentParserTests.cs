@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cake.Arguments;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -257,6 +258,90 @@ namespace Cake.Tests.Unit.Arguments
 
                 // Then
                 Assert.NotNull(result.Script);
+            }
+
+            [Theory]
+            [InlineData(".cakefile")]
+            [InlineData("build.cake")]
+            public void Can_Accept_Default_Target(string scriptName)
+            {
+                // Given
+                var fixture = new ArgumentParserFixture();
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                var file = Substitute.For<IFile>();
+                file.Exists.Returns(true);
+
+                fixture.FileSystem.GetFile(Arg.Is<FilePath>(fp => fp.FullPath == scriptName))
+                    .Returns(file);
+
+                var target = "Default";
+
+                // When
+                var result = parser.Parse(new [] { target });
+
+                // Then
+                Assert.NotNull(result.Script);
+                Assert.True(result.Arguments.ContainsKey("Target"));
+            }
+
+            [Fact]
+            public void Should_Return_Error_If_Script_And_Target_Are_In_Wrong_Order()
+            {
+                // Given
+                var fixture = new ArgumentParserFixture();
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                // When
+                var result = parser.Parse( new [] { "Default", "build.csx" });
+
+                // Then
+                Assert.Null(result);
+                Assert.True(fixture.Log.Messages.Contains("The script path must be first argument."));
+            }
+
+            [Fact]
+            public void Should_Return_Error_If_Two_Positional_Targets()
+            {
+                // Given
+                var fixture = new ArgumentParserFixture();
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                // When
+                var result = parser.Parse(new[] { "Default", "Default" });
+
+                // Then
+                Assert.Null(result);
+                Assert.True(fixture.Log.Messages.Contains("Attempted to add two targets: \"Default\" and \"Default\"."));
+            }
+
+            [Fact]
+            public void Should_Return_Error_If_Two_Targets()
+            {
+                // Given
+                var fixture = new ArgumentParserFixture();
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                // When
+                var result = parser.Parse(new[] { "Default", "-Target=Default" });
+
+                // Then
+                Assert.Null(result);
+                Assert.True(fixture.Log.Messages.Contains("Multiple arguments with the same name (Target)."));
+            }
+
+            [Fact]
+            public void Should_Return_Error_If_More_Than_Two_Positional_Arguments()
+            {
+                // Given
+                var fixture = new ArgumentParserFixture();
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                // When
+                var result = parser.Parse(new[] { "build.csx", "Default", "unknown" });
+
+                // Then
+                Assert.Null(result);
+                Assert.True(fixture.Log.Messages.Contains("Attempted to add unknown argument \"unknown\" at position 2."));
             }
         }
     }

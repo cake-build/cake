@@ -117,6 +117,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arguments\Argument.cs" />
     <Compile Include="Arguments\ArgumentParser.cs" />
     <Compile Include="Arguments\ArgumentTokenizer.cs" />
     <Compile Include="Arguments\IArgumentParser.cs">
