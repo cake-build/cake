@@ -222,7 +222,7 @@ namespace Cake.Core.Utilities
                     var pathEnv = _environment.GetEnvironmentVariable("PATH");
                     if (!string.IsNullOrEmpty(pathEnv))
                     {
-                        pathDirs = pathEnv.Split(_environment.IsUnix() ? ':' : ';');
+                        pathDirs = pathEnv.Split(new char[] { _environment.IsUnix() ? ':' : ';' }, StringSplitOptions.RemoveEmptyEntries);
                     }
                     else
                     {
