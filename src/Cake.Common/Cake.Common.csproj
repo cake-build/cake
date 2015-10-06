@@ -114,6 +114,8 @@
     <Compile Include="Tools\Chocolatey\ChocolateyToolResolver.cs" />
     <Compile Include="Tools\Chocolatey\ChocolateyTool.cs" />
     <Compile Include="Tools\Chocolatey\IChocolateyToolResolver.cs" />
+    <Compile Include="Tools\Chocolatey\Install\ChocolateyInstaller.cs" />
+    <Compile Include="Tools\Chocolatey\Install\ChocolateyInstallSettings.cs" />
     <Compile Include="Tools\Chocolatey\Pack\ChocolateyNuSpecContent.cs" />
     <Compile Include="Tools\Chocolatey\Pack\ChocolateyNuSpecProcessor.cs" />
     <Compile Include="Tools\Chocolatey\Pack\ChocolateyNuSpecTransformer.cs" />
@@ -247,7 +249,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Tools\Chocolatey\Install\" />
     <Folder Include="Tools\Chocolatey\Push\" />
     <Folder Include="Tools\Chocolatey\SetApiKey\" />
     <Folder Include="Tools\Chocolatey\Sources\" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using Cake.Common.Tools.Chocolatey.Install;
 using Cake.Common.Tools.Chocolatey.Pack;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -51,6 +52,76 @@ namespace Cake.Common.Tools.Chocolatey
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var packer = new ChocolateyPacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Log, context.Globber, resolver);
             packer.Pack(settings);
+        }
+
+        /// <summary>
+        /// Installs a Chocolatey package.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageId">The id of the package to install.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Install")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Install")]
+        public static void ChocolateyInstall(this ICakeContext context, string packageId)
+        {
+            var settings = new ChocolateyInstallSettings();
+            ChocolateyInstall(context, packageId, settings);
+        }
+
+        /// <summary>
+        /// Installs a Chocolatey package using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageId">The id of the package to install.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Install")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Install")]
+        public static void ChocolateyInstall(this ICakeContext context, string packageId, ChocolateyInstallSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
+            var runner = new ChocolateyInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            runner.Install(packageId, settings);
+        }
+
+        /// <summary>
+        /// Installs Chocolatey packages using the specified package configuration.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageConfigPath">The package configuration to install.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Install")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Install")]
+        public static void ChocolateyInstallFromConfig(this ICakeContext context, FilePath packageConfigPath)
+        {
+            var settings = new ChocolateyInstallSettings();
+            ChocolateyInstallFromConfig(context, packageConfigPath, settings);
+        }
+
+        /// <summary>
+        /// Installs Chocolatey packages using the specified package configuration and settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageConfigPath">The package configuration to install.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Install")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Install")]
+        public static void ChocolateyInstallFromConfig(this ICakeContext context, FilePath packageConfigPath, ChocolateyInstallSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
+            var runner = new ChocolateyInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            runner.InstallFromConfig(packageConfigPath, settings);
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿namespace Cake.Common.Tools.Chocolatey.Pack
-{
-    using System.Globalization;
-    using System.Xml;
-    using global::Cake.Core;
-    using global::Cake.Core.Diagnostics;
-    using global::Cake.Core.IO;
+﻿using System.Globalization;
+using System.Xml;
+using Cake.Core;
+using Cake.Core.Diagnostics;
+using Cake.Core.IO;
 
+namespace Cake.Common.Tools.Chocolatey.Pack
+{
     internal sealed class ChocolateyNuSpecProcessor
     {
         private readonly IFileSystem _fileSystem;

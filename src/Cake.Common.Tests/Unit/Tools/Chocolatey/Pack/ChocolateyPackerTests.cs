@@ -212,6 +212,24 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             }
 
             [Theory]
+            [InlineData(true, "pack -y --noop \"/Working/existing.temp.nuspec\"")]
+            [InlineData(false, "pack -y \"/Working/existing.temp.nuspec\"")]
+            public void Should_Add_Noop_Flag_To_Arguments_If_Set(bool noop, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPackerFixture();
+                fixture.Settings.Noop = noop;
+
+                // When
+                fixture.Pack();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == expected));
+            }
+
+            [Theory]
             [InlineData(true, "pack -y -r \"/Working/existing.temp.nuspec\"")]
             [InlineData(false, "pack -y \"/Working/existing.temp.nuspec\"")]
             public void Should_Add_LimitOutput_Flag_To_Arguments_If_Set(bool limitOutput, string expected)
@@ -219,6 +237,24 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
                 // Given
                 var fixture = new ChocolateyPackerFixture();
                 fixture.Settings.LimitOutput = limitOutput;
+
+                // When
+                fixture.Pack();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == expected));
+            }
+
+            [Theory]
+            [InlineData(5, "pack -y --execution-timeout \"5\" \"/Working/existing.temp.nuspec\"")]
+            [InlineData(0, "pack -y \"/Working/existing.temp.nuspec\"")]
+            public void Should_Add_ExecutionTimeout_To_Arguments_If_Set(int executionTimeout, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPackerFixture();
+                fixture.Settings.ExecutionTimeout = executionTimeout;
 
                 // When
                 fixture.Pack();

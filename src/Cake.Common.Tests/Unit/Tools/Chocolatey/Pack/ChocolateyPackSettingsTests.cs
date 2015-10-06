@@ -1,6 +1,4 @@
-﻿using Xunit;
-
-namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
+﻿namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
 {
     public sealed class ChocolateyPackSettingsTests
     {
