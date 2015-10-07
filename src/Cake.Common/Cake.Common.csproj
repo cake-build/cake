@@ -115,6 +115,8 @@
     <Compile Include="Tools\Chocolatey\ChocolateyAliases.cs" />
     <Compile Include="Tools\Chocolatey\ChocolateyToolResolver.cs" />
     <Compile Include="Tools\Chocolatey\ChocolateyTool.cs" />
+    <Compile Include="Tools\Chocolatey\Config\ChocolateyConfigSetter.cs" />
+    <Compile Include="Tools\Chocolatey\Config\ChocolateyConfigSettings.cs" />
     <Compile Include="Tools\Chocolatey\IChocolateyToolResolver.cs" />
     <Compile Include="Tools\Chocolatey\Install\ChocolateyInstaller.cs" />
     <Compile Include="Tools\Chocolatey\Install\ChocolateyInstallSettings.cs" />
