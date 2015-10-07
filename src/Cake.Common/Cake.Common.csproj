@@ -110,6 +110,8 @@
     <Compile Include="Tools\Cake\CakeAliases.cs" />
     <Compile Include="Tools\Cake\CakeRunner.cs" />
     <Compile Include="Tools\Cake\CakeSettings.cs" />
+    <Compile Include="Tools\Chocolatey\ApiKey\ChocolateyApiKeySetter.cs" />
+    <Compile Include="Tools\Chocolatey\ApiKey\ChocolateyApiKeySettings.cs" />
     <Compile Include="Tools\Chocolatey\ChocolateyAliases.cs" />
     <Compile Include="Tools\Chocolatey\ChocolateyToolResolver.cs" />
     <Compile Include="Tools\Chocolatey\ChocolateyTool.cs" />
@@ -252,7 +254,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Tools\Chocolatey\Push\" />
-    <Folder Include="Tools\Chocolatey\SetApiKey\" />
     <Folder Include="Tools\Chocolatey\Sources\" />
     <Folder Include="Tools\Chocolatey\Upgrade\" />
   </ItemGroup>

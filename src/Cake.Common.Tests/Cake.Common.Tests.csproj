@@ -65,6 +65,7 @@
     <Compile Include="Fixtures\IO\FileDeleteFixture.cs" />
     <Compile Include="Fixtures\IO\FileSystemFixture.cs" />
     <Compile Include="Fixtures\Tools\ChocolateyFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyApiKeySetterFixture.cs" />
     <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyInstallerFixture.cs" />
     <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyPackerFixture.cs" />
     <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyPinnerFixture.cs" />
@@ -130,6 +131,8 @@
     <Compile Include="Unit\Text\TextTransformationExtensionsTests.cs" />
     <Compile Include="Unit\Text\TextTransformationTests.cs" />
     <Compile Include="Unit\Tools\Cake\CakeRunnerTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\ApiKey\ChocolateyApiKeySetterTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\ApiKey\ChocolateyApiKeySettingsTests.cs" />
     <Compile Include="Unit\Tools\Chocolatey\Install\ChocolateyInstallerSettingsTests.cs" />
     <Compile Include="Unit\Tools\Chocolatey\Install\ChocolateyInstallerTests.cs" />
     <Compile Include="Unit\Tools\Chocolatey\Pack\ChocolateyPackerTests.cs" />
@@ -219,7 +222,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Unit\Tools\Chocolatey\Push\" />
-    <Folder Include="Unit\Tools\Chocolatey\SetApiKey\" />
     <Folder Include="Unit\Tools\Chocolatey\Sources\" />
     <Folder Include="Unit\Tools\Chocolatey\Upgrade\" />
   </ItemGroup>

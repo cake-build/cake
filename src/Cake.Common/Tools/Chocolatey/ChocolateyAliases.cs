@@ -1,4 +1,5 @@
 ﻿using System;
+using Cake.Common.Tools.Chocolatey.ApiKey;
 using Cake.Common.Tools.Chocolatey.Install;
 using Cake.Common.Tools.Chocolatey.Pack;
 using Cake.Common.Tools.Chocolatey.Pin;
@@ -144,6 +145,28 @@ namespace Cake.Common.Tools.Chocolatey
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var packer = new ChocolateyPinner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             packer.Pin(name, settings);
+        }
+
+        /// <summary>
+        /// Sets the Api Key for a Chocolatey Source using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="apiKey">The API Key.</param>
+        /// <param name="source">The source.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("ApiKey")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.ApiKey")]
+        public static void ChocolateyApiKey(this ICakeContext context, string apiKey, string source, ChocolateyApiKeySettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
+            var packer = new ChocolateyApiKeySetter(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            packer.Set(apiKey, source, settings);
         }
     }
 }
