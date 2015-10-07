@@ -1,6 +1,7 @@
 ﻿using System;
 using Cake.Common.Tools.Chocolatey.Install;
 using Cake.Common.Tools.Chocolatey.Pack;
+using Cake.Common.Tools.Chocolatey.Pin;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -122,6 +123,27 @@ namespace Cake.Common.Tools.Chocolatey
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateyInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             runner.InstallFromConfig(packageConfigPath, settings);
+        }
+
+        /// <summary>
+        /// Pins a Chocolatey package using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Pin")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Pin")]
+        public static void ChocolateyPin(this ICakeContext context, string name, ChocolateyPinSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
+            var packer = new ChocolateyPinner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            packer.Pin(name, settings);
         }
     }
 }

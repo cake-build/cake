@@ -121,6 +121,8 @@
     <Compile Include="Tools\Chocolatey\Pack\ChocolateyNuSpecTransformer.cs" />
     <Compile Include="Tools\Chocolatey\Pack\ChocolateyPacker.cs" />
     <Compile Include="Tools\Chocolatey\Pack\ChocolateyPackSettings.cs" />
+    <Compile Include="Tools\Chocolatey\Pin\ChocolateyPinner.cs" />
+    <Compile Include="Tools\Chocolatey\Pin\ChocolateyPinSettings.cs" />
     <Compile Include="Tools\DupFinder\DupFinderAliases.cs" />
     <Compile Include="Tools\DupFinder\DupFinderRunner.cs" />
     <Compile Include="Tools\DupFinder\DupFinderSettings.cs" />
