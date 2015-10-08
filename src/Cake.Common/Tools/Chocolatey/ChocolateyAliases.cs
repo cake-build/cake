@@ -10,6 +10,9 @@ using Cake.Core.IO;
 
 namespace Cake.Common.Tools.Chocolatey
 {
+    using global::Cake.Common.Tools.Chocolatey.Features;
+    using global::Cake.Common.Tools.NuGet.Sources;
+
     /// <summary>
     /// Contains functionality for working with Chocolatey.
     /// </summary>
@@ -190,6 +193,74 @@ namespace Cake.Common.Tools.Chocolatey
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var packer = new ChocolateyConfigSetter(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             packer.Set(name, value, settings);
+        }
+
+        /// <summary>
+        /// Enables a Chocolatey Feature using the specified name
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">Name of the feature.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("EnableFeature")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Features")]
+        public static void ChocolateyEnableFeature(this ICakeContext context, string name)
+        {
+            context.ChocolateyEnableFeature(name, new ChocolateyFeatureSettings());
+        }
+
+        /// <summary>
+        /// Enables a Chocolatey Feature using the specified name and settings
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">Name of the feature.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("EnableFeature")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Features")]
+        public static void ChocolateyEnableFeature(this ICakeContext context, string name, ChocolateyFeatureSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
+            var runner = new ChocolateyFeatureToggler(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            runner.EnableFeature(name, settings);
+        }
+
+        /// <summary>
+        /// Disables a Chocolatey Feature using the specified name
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">Name of the feature.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("DisableFeature")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Features")]
+        public static void ChocolateyDisableFeature(this ICakeContext context, string name)
+        {
+            context.ChocolateyDisableFeature(name, new ChocolateyFeatureSettings());
+        }
+
+        /// <summary>
+        /// Disables a Chocolatey Feature using the specified name and settings
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">Name of the feature.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("DisableFeature")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Features")]
+        public static void ChocolateyDisableFeature(this ICakeContext context, string name, ChocolateyFeatureSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
+            var runner = new ChocolateyFeatureToggler(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            runner.DisableFeature(name, settings);
         }
     }
 }

@@ -67,6 +67,7 @@
     <Compile Include="Fixtures\Tools\ChocolateyFixture.cs" />
     <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyApiKeySetterFixture.cs" />
     <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyConfigSetterFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyFeatureTogglerFixture.cs" />
     <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyInstallerFixture.cs" />
     <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyPackerFixture.cs" />
     <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyPinnerFixture.cs" />
@@ -136,6 +137,8 @@
     <Compile Include="Unit\Tools\Chocolatey\ApiKey\ChocolateyApiKeySettingsTests.cs" />
     <Compile Include="Unit\Tools\Chocolatey\Config\ChocolateyConfigSetterTests.cs" />
     <Compile Include="Unit\Tools\Chocolatey\Config\ChocolateyConfigSettingsTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Features\ChocolateyFeatureSettingsTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Features\ChocolateyFeatureTogglerTests.cs" />
     <Compile Include="Unit\Tools\Chocolatey\Install\ChocolateyInstallerSettingsTests.cs" />
     <Compile Include="Unit\Tools\Chocolatey\Install\ChocolateyInstallerTests.cs" />
     <Compile Include="Unit\Tools\Chocolatey\Pack\ChocolateyPackerTests.cs" />
