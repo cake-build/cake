@@ -129,6 +129,8 @@
     <Compile Include="Tools\Chocolatey\Pack\ChocolateyPackSettings.cs" />
     <Compile Include="Tools\Chocolatey\Pin\ChocolateyPinner.cs" />
     <Compile Include="Tools\Chocolatey\Pin\ChocolateyPinSettings.cs" />
+    <Compile Include="Tools\Chocolatey\Sources\ChocolateySources.cs" />
+    <Compile Include="Tools\Chocolatey\Sources\ChocolateySourcesSettings.cs" />
     <Compile Include="Tools\DupFinder\DupFinderAliases.cs" />
     <Compile Include="Tools\DupFinder\DupFinderRunner.cs" />
     <Compile Include="Tools\DupFinder\DupFinderSettings.cs" />
@@ -258,7 +260,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Tools\Chocolatey\Push\" />
-    <Folder Include="Tools\Chocolatey\Sources\" />
     <Folder Include="Tools\Chocolatey\Upgrade\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

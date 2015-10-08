@@ -1,18 +1,17 @@
 ﻿using System;
 using Cake.Common.Tools.Chocolatey.ApiKey;
 using Cake.Common.Tools.Chocolatey.Config;
+using Cake.Common.Tools.Chocolatey.Features;
 using Cake.Common.Tools.Chocolatey.Install;
 using Cake.Common.Tools.Chocolatey.Pack;
 using Cake.Common.Tools.Chocolatey.Pin;
+using Cake.Common.Tools.Chocolatey.Sources;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.Chocolatey
 {
-    using global::Cake.Common.Tools.Chocolatey.Features;
-    using global::Cake.Common.Tools.NuGet.Sources;
-
     /// <summary>
     /// Contains functionality for working with Chocolatey.
     /// </summary>
@@ -261,6 +260,144 @@ namespace Cake.Common.Tools.Chocolatey
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateyFeatureToggler(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             runner.DisableFeature(name, settings);
+        }
+
+        /// <summary>
+        /// Adds Chocolatey package source using the specified name &amp;source to global user config
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">Name of the source.</param>
+        /// <param name="source">Path to the package(s) source.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("AddSource")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Sources")]
+        public static void ChocolateyAddSource(this ICakeContext context, string name, string source)
+        {
+            context.ChocolateyAddSource(name, source, new ChocolateySourcesSettings());
+        }
+
+        /// <summary>
+        /// Adds Chocolatey package source using the specified name, source &amp; settings to global user config
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">Name of the source.</param>
+        /// <param name="source">Path to the package(s) source.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("AddSource")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Sources")]
+        public static void ChocolateyAddSource(this ICakeContext context, string name, string source, ChocolateySourcesSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
+            var runner = new ChocolateySources(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            runner.AddSource(name, source, settings);
+        }
+
+        /// <summary>
+        /// Removes Chocolatey package source using the specified name &amp; source from global user config
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">Name of the source.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("RemoveSource")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Sources")]
+        public static void ChocolateyRemoveSource(this ICakeContext context, string name)
+        {
+            context.ChocolateyRemoveSource(name, new ChocolateySourcesSettings());
+        }
+
+        /// <summary>
+        /// Removes Chocolatey package source using the specified name, source &amp; settings from global user config
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">Name of the source.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("RemoveSource")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Sources")]
+        public static void ChocolateyRemoveSource(this ICakeContext context, string name, ChocolateySourcesSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
+            var runner = new ChocolateySources(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            runner.RemoveSource(name, settings);
+        }
+
+        /// <summary>
+        /// Enables a Chocolatey Source using the specified name
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">Name of the source.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("EnableSource")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Sources")]
+        public static void ChocolateyEnableSource(this ICakeContext context, string name)
+        {
+            context.ChocolateyEnableSource(name, new ChocolateySourcesSettings());
+        }
+
+        /// <summary>
+        /// Enables a Chocolatey Source using the specified name and settings
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">Name of the source.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("EnableSource")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Sources")]
+        public static void ChocolateyEnableSource(this ICakeContext context, string name, ChocolateySourcesSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
+            var runner = new ChocolateySources(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            runner.EnableSource(name, settings);
+        }
+
+        /// <summary>
+        /// Disables a Chocolatey Source using the specified name
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">Name of the source.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("DisableSource")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Sources")]
+        public static void ChocolateyDisableSource(this ICakeContext context, string name)
+        {
+            context.ChocolateyDisableSource(name, new ChocolateySourcesSettings());
+        }
+
+        /// <summary>
+        /// Disables a Chocolatey Source using the specified name and settings
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">Name of the source.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("DisableSource")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Sources")]
+        public static void ChocolateyDisableSource(this ICakeContext context, string name, ChocolateySourcesSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
+            var runner = new ChocolateySources(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            runner.DisableSource(name, settings);
         }
     }
 }
