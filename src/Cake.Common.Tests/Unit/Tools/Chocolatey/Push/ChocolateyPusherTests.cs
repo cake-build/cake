@@ -1,0 +1,314 @@
+﻿using System;
+using Cake.Common.Tests.Fixtures.Tools.Chocolatey;
+using Cake.Core.IO;
+using NSubstitute;
+using Xunit;
+
+namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Push
+{
+    public sealed class ChocolateyPusherTests
+    {
+        public sealed class ThePushMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Settings_Are_Null()
+            {
+                // Given
+                var fixture = new ChocolateyPusherFixture();
+                fixture.Settings = null;
+
+                // When
+                var result = Record.Exception(() => fixture.Push());
+
+                // Then
+                Assert.IsArgumentNullException(result, "settings");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Chocolatey_Executable_Was_Not_Found()
+            {
+                // Given
+                var fixture = new ChocolateyPusherFixture();
+                fixture.GivenDefaultToolDoNotExist();
+
+                // When
+                var result = Record.Exception(() => fixture.Push());
+
+                // Then
+                Assert.IsCakeException(result, "Chocolatey: Could not locate executable.");
+            }
+
+            [Theory]
+            [InlineData("C:/ProgramData/chocolatey/choco.exe", "C:/ProgramData/chocolatey/choco.exe")]
+            public void Should_Use_Chocolatey_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPusherFixture();
+                fixture.GivenCustomToolPathExist(expected);
+                fixture.Settings.ToolPath = toolPath;
+
+                // When
+                fixture.Push();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == expected),
+                    Arg.Any<ProcessSettings>());
+            }
+
+            [Fact]
+            public void Should_Throw_If_Process_Was_Not_Started()
+            {
+                // Given
+                var fixture = new ChocolateyPusherFixture();
+                fixture.GivenProcessCannotStart();
+
+                // When
+                var result = Record.Exception(() => fixture.Push());
+
+                // Then
+                Assert.IsCakeException(result, "Chocolatey: Process was not started.");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
+            {
+                // Given
+                var fixture = new ChocolateyPusherFixture();
+                fixture.GivenProcessReturnError();
+
+                // When
+                var result = Record.Exception(() => fixture.Push());
+
+                // Then
+                Assert.IsCakeException(result, "Chocolatey: Process returned an error.");
+            }
+
+            [Fact]
+            public void Should_Find_Chocolatey_Executable_If_Tool_Path_Not_Provided()
+            {
+                // Given
+                var fixture = new ChocolateyPusherFixture();
+
+                // When
+                fixture.Push();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/choco.exe"),
+                    Arg.Any<ProcessSettings>());
+            }
+
+            [Fact]
+            public void Should_Add_Mandatory_Arguments()
+            {
+                // Given
+                var fixture = new ChocolateyPusherFixture();
+
+                // When
+                fixture.Push();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "push \"/Working/existing.nupkg\" -y"));
+            }
+
+            [Fact]
+            public void Should_Add_Api_Key_To_Arguments_If_Not_Null()
+            {
+                // Given
+                var fixture = new ChocolateyPusherFixture();
+                fixture.Settings.ApiKey = "1234";
+
+                // When
+                fixture.Push();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "push \"/Working/existing.nupkg\" -k 1234 -y"));
+            }
+
+
+            [Fact]
+            public void Should_Add_Source_To_Arguments_If_Not_Null()
+            {
+                // Given
+                var fixture = new ChocolateyPusherFixture();
+                fixture.Settings.Source = "http://customsource/";
+
+                // When
+                fixture.Push();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "push \"/Working/existing.nupkg\" -s \"http://customsource/\" -y"));
+            }
+
+            [Fact]
+            public void Should_Add_Timeout_To_Arguments_If_Not_Null()
+            {
+                // Given
+                var fixture = new ChocolateyPusherFixture();
+                fixture.Settings.Timeout = TimeSpan.FromSeconds(987);
+
+                // When
+                fixture.Push();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "push \"/Working/existing.nupkg\" -t 987 -y"));
+            }
+
+            [Theory]
+            [InlineData(true, "push \"/Working/existing.nupkg\" -d -y")]
+            [InlineData(false, "push \"/Working/existing.nupkg\" -y")]
+            public void Should_Add_Debug_Flag_To_Arguments_If_Set(bool debug, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPusherFixture();
+                fixture.Settings.Debug = debug;
+
+                // When
+                fixture.Push();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == expected));
+            }
+
+            [Theory]
+            [InlineData(true, "push \"/Working/existing.nupkg\" -v -y")]
+            [InlineData(false, "push \"/Working/existing.nupkg\" -y")]
+            public void Should_Add_Verbose_Flag_To_Arguments_If_Set(bool verbose, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPusherFixture();
+                fixture.Settings.Verbose = verbose;
+
+                // When
+                fixture.Push();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == expected));
+            }
+
+            [Theory]
+            [InlineData(true, "push \"/Working/existing.nupkg\" -y -f")]
+            [InlineData(false, "push \"/Working/existing.nupkg\" -y")]
+            public void Should_Add_Force_Flag_To_Arguments_If_Set(bool force, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPusherFixture();
+                fixture.Settings.Force = force;
+
+                // When
+                fixture.Push();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == expected));
+            }
+
+            [Theory]
+            [InlineData(true, "push \"/Working/existing.nupkg\" -y --noop")]
+            [InlineData(false, "push \"/Working/existing.nupkg\" -y")]
+            public void Should_Add_Noop_Flag_To_Arguments_If_Set(bool noop, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPusherFixture();
+                fixture.Settings.Noop = noop;
+
+                // When
+                fixture.Push();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == expected));
+            }
+
+            [Theory]
+            [InlineData(true, "push \"/Working/existing.nupkg\" -y -r")]
+            [InlineData(false, "push \"/Working/existing.nupkg\" -y")]
+            public void Should_Add_LimitOutput_Flag_To_Arguments_If_Set(bool limitOutput, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPusherFixture();
+                fixture.Settings.LimitOutput = limitOutput;
+
+                // When
+                fixture.Push();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == expected));
+            }
+
+            [Theory]
+            [InlineData(5, "push \"/Working/existing.nupkg\" -y --execution-timeout \"5\"")]
+            [InlineData(0, "push \"/Working/existing.nupkg\" -y")]
+            public void Should_Add_ExecutionTimeout_To_Arguments_If_Set(int executionTimeout, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPusherFixture();
+                fixture.Settings.ExecutionTimeout = executionTimeout;
+
+                // When
+                fixture.Push();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == expected));
+            }
+
+            [Theory]
+            [InlineData(@"c:\temp", "push \"/Working/existing.nupkg\" -y -c \"c:\\temp\"")]
+            [InlineData("", "push \"/Working/existing.nupkg\" -y")]
+            public void Should_Add_CacheLocation_Flag_To_Arguments_If_Set(string cacheLocation, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPusherFixture();
+                fixture.Settings.CacheLocation = cacheLocation;
+
+                // When
+                fixture.Push();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == expected));
+            }
+
+            [Theory]
+            [InlineData(true, "push \"/Working/existing.nupkg\" -y --allowunofficial")]
+            [InlineData(false, "push \"/Working/existing.nupkg\" -y")]
+            public void Should_Add_AllowUnofficial_Flag_To_Arguments_If_Set(bool allowUnofficial, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPusherFixture();
+                fixture.Settings.AllowUnoffical = allowUnofficial;
+
+                // When
+                fixture.Push();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == expected));
+            }
+        }
+    }
+}

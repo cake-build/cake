@@ -5,6 +5,7 @@ using Cake.Common.Tools.Chocolatey.Features;
 using Cake.Common.Tools.Chocolatey.Install;
 using Cake.Common.Tools.Chocolatey.Pack;
 using Cake.Common.Tools.Chocolatey.Pin;
+using Cake.Common.Tools.Chocolatey.Push;
 using Cake.Common.Tools.Chocolatey.Sources;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -398,6 +399,27 @@ namespace Cake.Common.Tools.Chocolatey
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateySources(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             runner.DisableSource(name, settings);
+        }
+
+        /// <summary>
+        /// Pushes a Chocolatey package to a Chocolatey server and publishes it.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageFilePath">The <c>.nupkg</c> file path.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Push")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Push")]
+        public static void ChocolateyPush(this ICakeContext context, FilePath packageFilePath, ChocolateyPushSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
+            var packer = new ChocolateyPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            packer.Push(packageFilePath, settings);
         }
     }
 }
