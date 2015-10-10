@@ -7,6 +7,7 @@ using Cake.Common.Tools.Chocolatey.Pack;
 using Cake.Common.Tools.Chocolatey.Pin;
 using Cake.Common.Tools.Chocolatey.Push;
 using Cake.Common.Tools.Chocolatey.Sources;
+using Cake.Common.Tools.Chocolatey.Upgrade;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -420,6 +421,47 @@ namespace Cake.Common.Tools.Chocolatey
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var packer = new ChocolateyPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             packer.Push(packageFilePath, settings);
+        }
+
+        /// <summary>
+        /// Upgrades Chocolatey package.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageId">The id of the package to upgrade.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Upgrade")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Upgrade")]
+        public static void ChocolateyUpgrade(this ICakeContext context, string packageId)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
+            var runner = new ChocolateyUpgrader(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            runner.Upgrade(packageId, new ChocolateyUpgradeSettings());
+        }
+
+        /// <summary>
+        /// Upgrades Chocolatey package using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageId">The id of the package to upgrade.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Update")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Update")]
+        public static void ChocolateyUpgrade(this ICakeContext context, string packageId, ChocolateyUpgradeSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
+            var runner = new ChocolateyUpgrader(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            runner.Upgrade(packageId, settings);
         }
     }
 }

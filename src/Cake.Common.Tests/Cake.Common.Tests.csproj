@@ -73,6 +73,7 @@
     <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyPinnerFixture.cs" />
     <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyPusherFixture.cs" />
     <Compile Include="Fixtures\Tools\Chocolatey\ChocolateySourcesFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyUpgraderFixture.cs" />
     <Compile Include="Fixtures\Tools\DupFinderRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\FixieRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\ILMergeRunnerFixture.cs" />
@@ -150,6 +151,8 @@
     <Compile Include="Unit\Tools\Chocolatey\Push\ChocolateyPusherTests.cs" />
     <Compile Include="Unit\Tools\Chocolatey\Sources\ChocolateySourcesSettingsTests.cs" />
     <Compile Include="Unit\Tools\Chocolatey\Sources\ChocolateySourcesTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Upgrade\ChocolateyUpgraderTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Upgrade\ChocolateyUpgradeSettingsTests.cs" />
     <Compile Include="Unit\Tools\DupFinder\DupFinderRunnerTests.cs" />
     <Compile Include="Unit\Tools\Fixie\FixieRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeRunnerTests.cs" />
@@ -231,9 +234,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Unit\Tools\Chocolatey\Upgrade\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
