@@ -35,7 +35,7 @@ namespace Cake.Common.Tools.NuGet
         ///                                     Authors                 = new[] {"John Doe"},
         ///                                     Owners                  = new[] {"Contoso"},
         ///                                     Description             = "The description of the package",
-        ///                                     Summary                 = "Excellent summare of what the package does",
+        ///                                     Summary                 = "Excellent summary of what the package does",
         ///                                     ProjectUrl              = new Uri("https://github.com/SomeUser/TestNuget/"),
         ///                                     IconUrl                 = new Uri("http://cdn.rawgit.com/SomeUser/TestNuget/master/icons/testnuget.png"),
         ///                                     LicenseUrl              = new Uri("https://github.com/SomeUser/TestNuget/blob/master/LICENSE.md"),
@@ -84,7 +84,7 @@ namespace Cake.Common.Tools.NuGet
         ///                                     Authors                 = new[] {"John Doe"},
         ///                                     Owners                  = new[] {"Contoso"},
         ///                                     Description             = "The description of the package",
-        ///                                     Summary                 = "Excellent summare of what the package does",
+        ///                                     Summary                 = "Excellent summary of what the package does",
         ///                                     ProjectUrl              = new Uri("https://github.com/SomeUser/TestNuget/"),
         ///                                     IconUrl                 = new Uri("http://cdn.rawgit.com/SomeUser/TestNuget/master/icons/testnuget.png"),
         ///                                     LicenseUrl              = new Uri("https://github.com/SomeUser/TestNuget/blob/master/LICENSE.md"),
@@ -492,7 +492,7 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="packageConfigPath">The package configuration to install.</param>
         /// <example>
         /// <code>
-        /// NuGetInstall("./tools/packages.config");
+        /// NuGetInstallFromConfig("./tools/packages.config");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -512,7 +512,7 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        /// NuGetInstall("./tools/packages.config", new NuGetInstallSettings {
+        /// NuGetInstallFromConfig("./tools/packages.config", new NuGetInstallSettings {
         ///     ExcludeVersion  = true,
         ///     OutputDirectory = "./tools"
         ///     });

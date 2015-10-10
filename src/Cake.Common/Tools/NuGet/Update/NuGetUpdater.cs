@@ -24,14 +24,14 @@ namespace Cake.Common.Tools.NuGet.Update
             ICakeEnvironment environment,
             IProcessRunner processRunner,
             IGlobber globber,
-            INuGetToolResolver resolver) 
+            INuGetToolResolver resolver)
             : base(fileSystem, environment, processRunner, globber, resolver)
         {
             _environment = environment;
         }
 
         /// <summary>
-        /// Restores NuGet packages using the specified settings.
+        /// Updates NuGet packages using the specified settings.
         /// </summary>
         /// <param name="targetFile">The target file path.</param>
         /// <param name="settings">The settings.</param>
