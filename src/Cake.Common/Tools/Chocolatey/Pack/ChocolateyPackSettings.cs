@@ -62,30 +62,35 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         /// Gets or sets the package Source URL.
         /// </summary>
         /// <value>The package Source URL.</value>
+        /// <remarks>Requires at least Chocolatey 0.9.9.7.</remarks>
         public Uri PackageSourceUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the package project Source URL.
         /// </summary>
         /// <value>The package project Source URL.</value>
+        /// <remarks>Requires at least Chocolatey 0.9.9.7.</remarks>
         public Uri ProjectSourceUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the package documentation URL.
         /// </summary>
         /// <value>The package documenation URL.</value>
+        /// <remarks>Requires at least Chocolatey 0.9.9.7.</remarks>
         public Uri DocsUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the package mailing list URL.
         /// </summary>
         /// <value>The package mailing list URL.</value>
+        /// <remarks>Requires at least Chocolatey 0.9.9.7.</remarks>
         public Uri MailingListUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the package bug tracker URL.
         /// </summary>
         /// <value>The package bug tracker URL.</value>
+        /// <remarks>Requires at least Chocolatey 0.9.9.7.</remarks>
         public Uri BugTrackerUrl { get; set; }
 
         /// <summary>

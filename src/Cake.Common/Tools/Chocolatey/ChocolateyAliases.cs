@@ -26,6 +26,44 @@ namespace Cake.Common.Tools.Chocolatey
         /// <param name="context">The context.</param>
         /// <param name="nuspecFilePath">The nuspec file path.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        ///     var chocolateyPackSettings   = new ChocolateyPackSettings {
+        ///                                     Id                      = "TestChocolatey",
+        ///                                     Title                   = "The tile of the package",
+        ///                                     Version                 = "0.0.0.1",
+        ///                                     Authors                 = new[] {"John Doe"},
+        ///                                     Owners                  = new[] {"Contoso"},
+        ///                                     Summary                 = "Excellent summary of what the package does",
+        ///                                     Description             = "The description of the package",
+        ///                                     ProjectUrl              = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     PackageSourceUrl        = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     ProjectSourceUrl        = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     DocsUrl                 = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     MailingListUrl          = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     BugTrackerUrl           = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     Tags                    = new [] {"Cake", "Script", "Build"},
+        ///                                     Copyright               = "Some company 2015",
+        ///                                     LicenseUrl              = new Uri("https://github.com/SomeUser/TestChocolatey/blob/master/LICENSE.md"),
+        ///                                     RequireLicenseAcceptance= false,
+        ///                                     IconUrl                 = new Uri("http://cdn.rawgit.com/SomeUser/TestChocolatey/master/icons/testchocolatey.png"),
+        ///                                     ReleaseNotes            = new [] {"Bug fixes", "Issue fixes", "Typos"},
+        ///                                     Files                   = new [] {
+        ///                                                                          new ChocolateyNuSpecContent {Source = "bin/TestChocolatey.dll", Target = "bin"},
+        ///                                                                       },
+        ///                                     Debug                   = false,
+        ///                                     Verbose                 = false,
+        ///                                     Force                   = false,
+        ///                                     Noop                    = false,
+        ///                                     LimitOutput             = false,
+        ///                                     ExecutionTimeout        = 13,
+        ///                                     CacheLocation           = @"C:\temp",
+        ///                                     AllowUnoffical          = false
+        ///                                 };
+        ///
+        ///     ChocolateyPack("./nuspec/TestChocolatey.nuspec", chocolateyPackSettings);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Pack")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Pack")]
@@ -46,6 +84,44 @@ namespace Cake.Common.Tools.Chocolatey
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        ///     var chocolateyPackSettings   = new ChocolateyPackSettings {
+        ///                                     Id                      = "TestChocolatey",
+        ///                                     Title                   = "The tile of the package",
+        ///                                     Version                 = "0.0.0.1",
+        ///                                     Authors                 = new[] {"John Doe"},
+        ///                                     Owners                  = new[] {"Contoso"},
+        ///                                     Summary                 = "Excellent summary of what the package does",
+        ///                                     Description             = "The description of the package",
+        ///                                     ProjectUrl              = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     PackageSourceUrl        = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     ProjectSourceUrl        = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     DocsUrl                 = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     MailingListUrl          = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     BugTrackerUrl           = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     Tags                    = new [] {"Cake", "Script", "Build"},
+        ///                                     Copyright               = "Some company 2015",
+        ///                                     LicenseUrl              = new Uri("https://github.com/SomeUser/TestChocolatey/blob/master/LICENSE.md"),
+        ///                                     RequireLicenseAcceptance= false,
+        ///                                     IconUrl                 = new Uri("http://cdn.rawgit.com/SomeUser/TestChocolatey/master/icons/testchocolatey.png"),
+        ///                                     ReleaseNotes            = new [] {"Bug fixes", "Issue fixes", "Typos"},
+        ///                                     Files                   = new [] {
+        ///                                                                          new ChocolateyNuSpecContent {Source = "bin/TestChocolatey.dll", Target = "bin"},
+        ///                                                                       },
+        ///                                     Debug                   = false,
+        ///                                     Verbose                 = false,
+        ///                                     Force                   = false,
+        ///                                     Noop                    = false,
+        ///                                     LimitOutput             = false,
+        ///                                     ExecutionTimeout        = 13,
+        ///                                     CacheLocation           = @"C:\temp",
+        ///                                     AllowUnoffical          = false
+        ///                                 };
+        ///
+        ///     ChocolateyPack(chocolateyPackSettings);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Pack")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Pack")]
@@ -66,6 +142,11 @@ namespace Cake.Common.Tools.Chocolatey
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="packageId">The id of the package to install.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyInstall("MyChocolateyPackage");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Install")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Install")]
@@ -81,6 +162,36 @@ namespace Cake.Common.Tools.Chocolatey
         /// <param name="context">The context.</param>
         /// <param name="packageId">The id of the package to install.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyInstall("MyChocolateyPackage", new ChocolateyInstallSettings {
+        ///     Source                = true,
+        ///     Version               = "1.2.3",
+        ///     Prerelease            = false,
+        ///     Forcex86              = false,
+        ///     InstallArguments      = "arg1",
+        ///     OverrideArguments     = false,
+        ///     NotSilent             = false,
+        ///     PackageParameters     = "param1",
+        ///     AllowDowngrade        = false,
+        ///     SideBySide            = false,
+        ///     IgnoreDependencies    = false,
+        ///     ForceDependencies     = false,
+        ///     SkipPowerShell        = false,
+        ///     User                  = "user",
+        ///     Password              = "password",
+        ///     IgnoreChecksums       = false,
+        ///     Debug                 = false,
+        ///     Verbose               = false,
+        ///     Force                 = false,
+        ///     Noop                  = false,
+        ///     LimitOutput           = false,
+        ///     ExecutionTimeout      = 13,
+        ///     CacheLocation         = @"C:\temp",
+        ///     AllowUnoffical        = false
+        ///     });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Install")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Install")]
@@ -101,6 +212,11 @@ namespace Cake.Common.Tools.Chocolatey
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="packageConfigPath">The package configuration to install.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyInstallFromConfig("./tools/packages.config");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Install")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Install")]
@@ -116,6 +232,36 @@ namespace Cake.Common.Tools.Chocolatey
         /// <param name="context">The context.</param>
         /// <param name="packageConfigPath">The package configuration to install.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyInstallFromConfig("./tools/packages.config", new ChocolateyInstallSettings {
+        ///     Source                = true,
+        ///     Version               = "1.2.3",
+        ///     Prerelease            = false,
+        ///     Forcex86              = false,
+        ///     InstallArguments      = "arg1",
+        ///     OverrideArguments     = false,
+        ///     NotSilent             = false,
+        ///     PackageParameters     = "param1",
+        ///     AllowDowngrade        = false,
+        ///     SideBySide            = false,
+        ///     IgnoreDependencies    = false,
+        ///     ForceDependencies     = false,
+        ///     SkipPowerShell        = false,
+        ///     User                  = "user",
+        ///     Password              = "password",
+        ///     IgnoreChecksums       = false,
+        ///     Debug                 = false,
+        ///     Verbose               = false,
+        ///     Force                 = false,
+        ///     Noop                  = false,
+        ///     LimitOutput           = false,
+        ///     ExecutionTimeout      = 13,
+        ///     CacheLocation         = @"C:\temp",
+        ///     AllowUnoffical        = false
+        ///     });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Install")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Install")]
@@ -137,6 +283,21 @@ namespace Cake.Common.Tools.Chocolatey
         /// <param name="context">The context.</param>
         /// <param name="name">The name.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyPin("MyChocolateyPackage", new ChocolateyPinSettings {
+        ///     Version               = "1.2.3",
+        ///     Debug                 = false,
+        ///     Verbose               = false,
+        ///     Force                 = false,
+        ///     Noop                  = false,
+        ///     LimitOutput           = false,
+        ///     ExecutionTimeout      = 13,
+        ///     CacheLocation         = @"C:\temp",
+        ///     AllowUnoffical        = false
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Pin")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Pin")]
@@ -159,6 +320,20 @@ namespace Cake.Common.Tools.Chocolatey
         /// <param name="apiKey">The API Key.</param>
         /// <param name="source">The source.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyApiKey("myApiKey", "http://www.mysource.com", new ChocolateyApiKeySettings {
+        ///     Debug                 = false,
+        ///     Verbose               = false,
+        ///     Force                 = false,
+        ///     Noop                  = false,
+        ///     LimitOutput           = false,
+        ///     ExecutionTimeout      = 13,
+        ///     CacheLocation         = @"C:\temp",
+        ///     AllowUnoffical        = false
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("ApiKey")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.ApiKey")]
@@ -181,6 +356,20 @@ namespace Cake.Common.Tools.Chocolatey
         /// <param name="name">The name.</param>
         /// <param name="value">The value.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyConfig("cacheLocation", @"c:\temp", new ChocolateyConfigSettings {
+        ///     Debug                 = false,
+        ///     Verbose               = false,
+        ///     Force                 = false,
+        ///     Noop                  = false,
+        ///     LimitOutput           = false,
+        ///     ExecutionTimeout      = 13,
+        ///     CacheLocation         = @"C:\temp",
+        ///     AllowUnoffical        = false
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Config")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Config")]
@@ -201,6 +390,11 @@ namespace Cake.Common.Tools.Chocolatey
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the feature.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyEnableFeature("checkSumFiles");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("EnableFeature")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Features")]
@@ -215,6 +409,20 @@ namespace Cake.Common.Tools.Chocolatey
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the feature.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyEnableFeature("checkSumFiles", new ChocolateyFeatureSettings {
+        ///     Debug                 = false,
+        ///     Verbose               = false,
+        ///     Force                 = false,
+        ///     Noop                  = false,
+        ///     LimitOutput           = false,
+        ///     ExecutionTimeout      = 13,
+        ///     CacheLocation         = @"C:\temp",
+        ///     AllowUnoffical        = false
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("EnableFeature")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Features")]
@@ -235,6 +443,11 @@ namespace Cake.Common.Tools.Chocolatey
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the feature.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyDisableFeature("checkSumFiles");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("DisableFeature")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Features")]
@@ -249,6 +462,20 @@ namespace Cake.Common.Tools.Chocolatey
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the feature.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyDisableFeature("checkSumFiles", new ChocolateyFeatureSettings {
+        ///     Debug                 = false,
+        ///     Verbose               = false,
+        ///     Force                 = false,
+        ///     Noop                  = false,
+        ///     LimitOutput           = false,
+        ///     ExecutionTimeout      = 13,
+        ///     CacheLocation         = @"C:\temp",
+        ///     AllowUnoffical        = false
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("DisableFeature")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Features")]
@@ -270,6 +497,11 @@ namespace Cake.Common.Tools.Chocolatey
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
         /// <param name="source">Path to the package(s) source.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyAddSource("MySource", "http://www.mysource.com");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("AddSource")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Sources")]
@@ -285,6 +517,23 @@ namespace Cake.Common.Tools.Chocolatey
         /// <param name="name">Name of the source.</param>
         /// <param name="source">Path to the package(s) source.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyAddSource("MySource", "http://www.mysource.com", new ChocolateySourcesSettings {
+        ///     UserName              = "user",
+        ///     Password              = "password",
+        ///     Priority              = 13,
+        ///     Debug                 = false,
+        ///     Verbose               = false,
+        ///     Force                 = false,
+        ///     Noop                  = false,
+        ///     LimitOutput           = false,
+        ///     ExecutionTimeout      = 13,
+        ///     CacheLocation         = @"C:\temp",
+        ///     AllowUnoffical        = false
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("AddSource")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Sources")]
@@ -305,6 +554,11 @@ namespace Cake.Common.Tools.Chocolatey
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyRemoveSource("MySource");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("RemoveSource")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Sources")]
@@ -319,6 +573,20 @@ namespace Cake.Common.Tools.Chocolatey
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyRemoveSource("MySource", new ChocolateySourcesSettings {
+        ///     Debug                 = false,
+        ///     Verbose               = false,
+        ///     Force                 = false,
+        ///     Noop                  = false,
+        ///     LimitOutput           = false,
+        ///     ExecutionTimeout      = 13,
+        ///     CacheLocation         = @"C:\temp",
+        ///     AllowUnoffical        = false
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("RemoveSource")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Sources")]
@@ -339,6 +607,11 @@ namespace Cake.Common.Tools.Chocolatey
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyEnableSource("MySource");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("EnableSource")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Sources")]
@@ -353,6 +626,20 @@ namespace Cake.Common.Tools.Chocolatey
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyEnableSource("MySource", new ChocolateySourcesSettings {
+        ///     Debug                 = false,
+        ///     Verbose               = false,
+        ///     Force                 = false,
+        ///     Noop                  = false,
+        ///     LimitOutput           = false,
+        ///     ExecutionTimeout      = 13,
+        ///     CacheLocation         = @"C:\temp",
+        ///     AllowUnoffical        = false
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("EnableSource")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Sources")]
@@ -373,6 +660,11 @@ namespace Cake.Common.Tools.Chocolatey
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyDisableSource("MySource");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("DisableSource")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Sources")]
@@ -387,6 +679,20 @@ namespace Cake.Common.Tools.Chocolatey
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyDisableSource("MySource", new ChocolateySourcesSettings {
+        ///     Debug                 = false,
+        ///     Verbose               = false,
+        ///     Force                 = false,
+        ///     Noop                  = false,
+        ///     LimitOutput           = false,
+        ///     ExecutionTimeout      = 13,
+        ///     CacheLocation         = @"C:\temp",
+        ///     AllowUnoffical        = false
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("DisableSource")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Sources")]
@@ -408,6 +714,27 @@ namespace Cake.Common.Tools.Chocolatey
         /// <param name="context">The context.</param>
         /// <param name="packageFilePath">The <c>.nupkg</c> file path.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// // Get the path to the package.
+        /// var package = "./chocolatey/MyChocolateyPackage.0.0.1.nupkg";
+        ///
+        /// // Push the package.
+        /// ChocolateyPush(package, new ChocolateyPushSettings {
+        ///     Source                = "http://example.com/chocolateyfeed",
+        ///     ApiKey                = "4003d786-cc37-4004-bfdf-c4f3e8ef9b3a"
+        ///     Timeout               = 300
+        ///     Debug                 = false,
+        ///     Verbose               = false,
+        ///     Force                 = false,
+        ///     Noop                  = false,
+        ///     LimitOutput           = false,
+        ///     ExecutionTimeout      = 13,
+        ///     CacheLocation         = @"C:\temp",
+        ///     AllowUnoffical        = false
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Push")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Push")]
@@ -428,6 +755,11 @@ namespace Cake.Common.Tools.Chocolatey
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="packageId">The id of the package to upgrade.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyUpgrade("MyChocolateyPackage");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Upgrade")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Upgrade")]
@@ -449,9 +781,40 @@ namespace Cake.Common.Tools.Chocolatey
         /// <param name="context">The context.</param>
         /// <param name="packageId">The id of the package to upgrade.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyUpgrade("MyChocolateyPackage", new ChocolateyUpgradeSettings {
+        ///     Source                = true,
+        ///     Version               = "1.2.3",
+        ///     Prerelease            = false,
+        ///     Forcex86              = false,
+        ///     InstallArguments      = "arg1",
+        ///     OverrideArguments     = false,
+        ///     NotSilent             = false,
+        ///     PackageParameters     = "param1",
+        ///     AllowDowngrade        = false,
+        ///     SideBySide            = false,
+        ///     IgnoreDependencies    = false,
+        ///     SkipPowerShell        = false,
+        ///     FailOnUnfound        = false,
+        ///     FailOnNotInstalled        = false,
+        ///     User                  = "user",
+        ///     Password              = "password",
+        ///     IgnoreChecksums       = false,
+        ///     Debug                 = false,
+        ///     Verbose               = false,
+        ///     Force                 = false,
+        ///     Noop                  = false,
+        ///     LimitOutput           = false,
+        ///     ExecutionTimeout      = 13,
+        ///     CacheLocation         = @"C:\temp",
+        ///     AllowUnoffical        = false
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
-        [CakeAliasCategory("Update")]
-        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Update")]
+        [CakeAliasCategory("Upgrade")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Upgrade")]
         public static void ChocolateyUpgrade(this ICakeContext context, string packageId, ChocolateyUpgradeSettings settings)
         {
             if (context == null)
