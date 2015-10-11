@@ -55,7 +55,7 @@ namespace Cake.Core.IO.NuGet
         /// <returns>The path to nuget.exe.</returns>
         public FilePath ResolvePath()
         {
-            // Check if path allready resolved
+            // Check if path already resolved
             if (_cachedPath != null && _cachedPath.Exists)
             {
                 return _cachedPath.Path;
@@ -88,15 +88,15 @@ namespace Cake.Core.IO.NuGet
 
             // On Unix /usr/bin/nuget or /usr/local/bin/nuget are viable options
             if (_environment.IsUnix())
-            {                
+            {
                 foreach (var systemPath in _unixSystemPaths)
                 {
                     if (_fileSystem.Exist(systemPath))
                     {
                         _cachedPath = _fileSystem.GetFile(systemPath);
                         return _cachedPath.Path;
-                    }    
-                }                
+                    }
+                }
             }
 
             // Last resort try path
