@@ -29,6 +29,11 @@ namespace Cake.Core.Scripting.Processors
         /// </returns>
         public override bool Process(IScriptProcessor processor, ScriptProcessorContext context, FilePath currentScriptPath, string line)
         {
+            if (line == null)
+            {
+                throw new ArgumentNullException("line");
+            }
+            
             // Remove all shebang lines that we encounter.
             return line.StartsWith("#!", StringComparison.OrdinalIgnoreCase);
         }

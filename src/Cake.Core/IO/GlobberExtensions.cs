@@ -49,6 +49,10 @@ namespace Cake.Core.IO
         /// </returns>
         public static IEnumerable<Path> Match(this IGlobber globber, string pattern)
         {
+            if (globber == null)
+            {
+                throw new ArgumentNullException("globber");
+            }
             return globber.Match(pattern, null);
         }
     }

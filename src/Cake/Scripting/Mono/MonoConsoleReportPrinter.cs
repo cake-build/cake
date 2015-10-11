@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Mono.CSharp;
@@ -43,7 +44,10 @@ namespace Cake.Scripting.Mono
             var row = message.Location.Row;
             var column = message.Location.Column;
 
-            return string.Format("{0} ({1},{2}): {3}", path.FullPath, row, column, message.Text);
+            return string.Format(
+                CultureInfo.InvariantCulture, 
+                "{0} ({1},{2}): {3}", 
+                path.FullPath, row, column, message.Text);
         }
 
         private static FilePath GetSourcePath(AbstractMessage message)

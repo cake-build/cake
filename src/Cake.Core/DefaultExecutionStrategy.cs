@@ -138,6 +138,11 @@ namespace Cake.Core
         /// <param name="setupContext">The setup context.</param>
         public void PerformTaskSetup(Action<ICakeContext, ITaskSetupContext> action, ICakeContext context, ITaskSetupContext setupContext)
         {
+            if (setupContext == null)
+            {
+                throw new ArgumentNullException("setupContext");
+            }
+
             if (action != null)
             {
                 _log.Information(string.Empty);
@@ -158,6 +163,11 @@ namespace Cake.Core
         /// <param name="teardownContext">The teardown context.</param>
         public void PerformTaskTeardown(Action<ICakeContext, ITaskTeardownContext> action, ICakeContext context, ITaskTeardownContext teardownContext)
         {
+            if (teardownContext == null)
+            {
+                throw new ArgumentNullException("teardownContext");
+            }
+
             if (action != null)
             {
                 _log.Information(string.Empty);

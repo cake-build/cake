@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Xml;
 using Cake.Core;
@@ -210,6 +211,7 @@ namespace Cake.Common.Xml
         /// http://nant.sourceforge.net/release/latest/help/tasks/xmlpoke.html
         /// </para>
         /// </example>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         [CakeMethodAlias]
         public static void XmlPoke(this ICakeContext context, FilePath filePath, string xpath, string value, XmlPokeSettings settings)
         {
@@ -440,6 +442,7 @@ namespace Cake.Common.Xml
         /// </para>
         /// </example>
         [CakeMethodAlias]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public static string XmlPoke(this ICakeContext context, string sourceXml, string xpath, string value, XmlPokeSettings settings)
         {
             if (context == null)
@@ -504,10 +507,11 @@ namespace Cake.Common.Xml
             }
 
             var nodes = document.SelectNodes(xpath, namespaceManager);
-
             if (nodes == null || nodes.Count == 0)
             {
-                throw new CakeException(string.Format("Failed to find nodes matching the XPath '{0}'", xpath));
+                const string format = "Failed to find nodes matching the XPath '{0}'";
+                var message = string.Format(CultureInfo.InvariantCulture, format, xpath);
+                throw new CakeException(message);
             }
 
             if (value == null)
