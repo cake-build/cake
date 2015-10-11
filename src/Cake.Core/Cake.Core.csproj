@@ -137,6 +137,8 @@
     <Compile Include="IO\FilePath.cs" />
     <Compile Include="IO\PathCollapser.cs" />
     <Compile Include="IO\PathComparer.cs" />
+    <Compile Include="IO\ProcessOutputReceivedEventArgs.cs" />
+    <Compile Include="IO\ProcessExitedEventArgs.cs" />
     <Compile Include="IO\ProcessRunner.cs" />
     <Compile Include="IO\ProcessSettings.cs" />
     <Compile Include="IO\ProcessWrapper.cs" />

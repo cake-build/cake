@@ -1,4 +1,5 @@
-﻿using Cake.Core.IO;
+﻿using System;
+using Cake.Core.IO;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit.IO
@@ -40,6 +41,16 @@ namespace Cake.Core.Tests.Unit.IO
             }
 
             [Theory]
+            [InlineData(true, true)]
+            [InlineData(false, false)]
+            public void Should_Return_Settings_With_Correct_StandardError(bool value, bool expected)
+            {
+                var settings = new ProcessSettings().SetRedirectStandardError(value);
+
+                Assert.Equal(expected, settings.RedirectStandardError);
+            }
+
+            [Theory]
             [InlineData(0, 0)]
             [InlineData(5000, 5000)]
             [InlineData(15000, 15000)]
@@ -48,6 +59,42 @@ namespace Cake.Core.Tests.Unit.IO
                 var settings = new ProcessSettings().SetTimeout(value);
 
                 Assert.Equal(expected, settings.Timeout);
+            }
+
+            [Fact]
+            public void Should_Return_Settings_With_Correct_EnvironmentVariables()
+            {
+                var settings =
+                    new ProcessSettings().WithEnvironmentVariable("Key1", "Value1")
+                        .WithEnvironmentVariable("Key2", "Value2");
+
+                Assert.Equal("Value1", settings.EnvironmentVariables["Key1"]);
+                Assert.Equal("Value2", settings.EnvironmentVariables["Key2"]);
+            }
+
+            [Fact]
+            public void EnvironmentVariable_Set_Multiple_Times_Should_Use_The_Last_One()
+            {
+                var settings =
+                    new ProcessSettings().WithEnvironmentVariable("Key1", "Value1")
+                        .WithEnvironmentVariable("Key1", "Value1-A");
+
+                Assert.Equal("Value1-A", settings.EnvironmentVariables["Key1"]);
+            }
+
+            [Fact]
+            public void EnvironmentVariable_Key_Should_Not_Be_Null()
+            {
+                Assert.Throws<ArgumentNullException>(() => new ProcessSettings().WithEnvironmentVariable(null, "Value1"));
+            }
+
+            [Fact]
+            public void EnvironmentVariables_Should_Be_Empty_By_Default()
+            {
+                var settings = new ProcessSettings();
+
+                Assert.NotNull(settings.EnvironmentVariables);
+                Assert.Empty(settings.EnvironmentVariables.Keys);
             }
         }
     }

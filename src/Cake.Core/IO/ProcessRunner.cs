@@ -37,6 +37,7 @@ namespace Cake.Core.IO
         /// <param name="filePath">The file name such as an application or document with which to start the process.</param>
         /// <param name="settings">The information about the process to start.</param>
         /// <returns>A process handle.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="filePath"/> or <paramref name="settings"/> is null.</exception>
         public IProcess Start(FilePath filePath, ProcessSettings settings)
         {
             if (filePath == null)
@@ -50,7 +51,7 @@ namespace Cake.Core.IO
 
             // Get the arguments.
             var arguments = settings.Arguments ?? new ProcessArgumentBuilder();
-            
+
             // Log the filename and arguments.
             var message = string.Concat(filePath, " ", arguments.RenderSafe().TrimEnd());
             _log.Verbose(Verbosity.Diagnostic, "Executing: {0}", message);
@@ -65,8 +66,17 @@ namespace Cake.Core.IO
                 Arguments = arguments.Render(),
                 WorkingDirectory = workingDirectory.FullPath,
                 UseShellExecute = false,
-                RedirectStandardOutput = settings.RedirectStandardOutput
+                RedirectStandardOutput = settings.RedirectStandardOutput,
+                RedirectStandardError = settings.RedirectStandardError
             };
+
+            if (settings.EnvironmentVariables != null)
+            {
+                foreach (string key in settings.EnvironmentVariables.Keys)
+                {
+                    info.EnvironmentVariables[key] = settings.EnvironmentVariables[key];
+                }
+            }
 
             // Start and return the process.
             var process = Process.Start(info);
