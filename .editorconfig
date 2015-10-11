@@ -1,0 +1,19 @@
+; This file is for unifying the coding style for different editors and IDEs.
+; More information at http://EditorConfig.org
+
+root = true
+
+[*]
+end_of_line = CRLF
+
+[*.ps1]
+indent_style = space
+indent_size = 2
+
+[*.cs]
+indent_style = space
+indent_size = 4
+
+[*.js]
+indent_style = tab
+indent_size = 2
