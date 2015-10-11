@@ -1,4 +1,4 @@
-### New in 0.5.5 (Work in progress)
+### New in 0.5.5 (Released 2015/10/12)
 * Added alias to retrieve all environment variables.
 * Added additional xUnit settings.
 * Added verbose message when glob pattern did not match anything.
