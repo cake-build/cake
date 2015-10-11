@@ -227,7 +227,7 @@ namespace Cake.Core.Tests.Unit
                 Assert.Equal("There can only be one error reporter per task.", result.Message);
             }
         }
-        
+
         [Fact]
         public void Should_Implement_ICakeTaskInfo()
         {

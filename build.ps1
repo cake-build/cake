@@ -36,7 +36,7 @@ if($Mono.IsPresent) {
 }
 
 # Try download NuGet.exe if do not exist.
-if (!(Test-Path $NUGET_EXE)) {   
+if (!(Test-Path $NUGET_EXE)) {
     (New-Object System.Net.WebClient).DownloadFile($NUGET_URL, $NUGET_EXE)
 }
 

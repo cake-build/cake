@@ -8,11 +8,11 @@ namespace Cake.Common.Tools.ILMerge
     public sealed class ILMergeSettings
     {
         /// <summary>
-        /// Gets or sets a value indicating whether whether types in assemblies other 
+        /// Gets or sets a value indicating whether whether types in assemblies other
         /// than the primary assembly should have their visibility modified to internal.
         /// </summary>
         /// <value>
-        /// <c>true</c> if types in assemblies other than the primary assembly should 
+        /// <c>true</c> if types in assemblies other than the primary assembly should
         /// have their visibility modified to internal; otherwise, <c>false</c>.
         /// </value>
         public bool Internalize { get; set; }

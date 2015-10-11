@@ -1,7 +1,5 @@
 ﻿using System.IO;
-
 using Cake.Common.Tests.Fixtures;
-
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.XML

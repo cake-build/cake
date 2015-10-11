@@ -122,21 +122,21 @@ namespace Cake.Common.Tools.NUnit
         public FilePath ErrorOutputFile { get; set; }
 
         /// <summary>
-        ///     Gets or sets a value indicating how NUnit should load tests in processes.  
+        ///     Gets or sets a value indicating how NUnit should load tests in processes.
         ///     The Default value is <see cref="NUnitProcessOption.Single"/>
         /// </summary>
         public NUnitProcessOption Process { get; set; }
 
         /// <summary>
         ///     Gets or sets a value indicating whether Single Threaded Apartment state (STA) will be used.
-        ///     Corresponds to the /apartment command line option 
+        ///     Corresponds to the /apartment command line option
         /// </summary>
         public bool UseSingleThreadedApartment { get; set; }
 
         /// <summary>
         ///     Gets or sets a value to control creation of AppDomains for running tests.
         ///     Corresponds to the /domain command line switch.
-        ///     The default is to use multiple domains if multiple assemblies are listed on the command line. 
+        ///     The default is to use multiple domains if multiple assemblies are listed on the command line.
         ///     Otherwise a single domain is used.
         /// </summary>
         public NUnitAppDomainUsage AppDomainUsage { get; set; }

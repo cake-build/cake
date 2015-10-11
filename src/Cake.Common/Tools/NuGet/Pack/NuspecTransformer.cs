@@ -108,7 +108,7 @@ namespace Cake.Common.Tools.NuGet.Pack
         private static XmlNode CreateAndAppendElement(this XmlDocument document, XmlNode parent, string name)
         {
             // If the parent didn't have a namespace specified, then skip adding one.
-            // Otherwise add the parent's namespace. This is a little hackish, but it 
+            // Otherwise add the parent's namespace. This is a little hackish, but it
             // will avoid empty namespaces. This should probably be done better...
             return parent.AppendChild(
                 string.IsNullOrWhiteSpace(parent.NamespaceURI)

@@ -9,13 +9,13 @@
         /// PlatformTarget: <c>MSIL</c> (AnyCPU)
         /// </summary>
         MSIL = 0,
-        
+
         /// <summary>
         /// PlatformTarget: <c>x86</c>
         /// </summary>
         // ReSharper disable once InconsistentNaming
         x86 = 1,
-        
+
         /// <summary>
         /// PlatformTarget: <c>x64</c>
         /// </summary>

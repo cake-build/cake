@@ -44,6 +44,6 @@ namespace Cake.Core.IO
         /// <param name="fileAccess">The file access.</param>
         /// <param name="fileShare">The file share.</param>
         /// <returns>A <see cref="Stream"/> to the file.</returns>
-        Stream Open(FileMode fileMode, FileAccess fileAccess, FileShare fileShare);        
+        Stream Open(FileMode fileMode, FileAccess fileAccess, FileShare fileShare);
     }
 }

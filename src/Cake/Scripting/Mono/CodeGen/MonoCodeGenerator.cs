@@ -68,7 +68,7 @@ namespace Cake.Scripting.Mono.CodeGen
         private static string GetScriptHostProxy()
         {
             // TODO: Generate this from interface.
-            var rules = new[] 
+            var rules = new[]
             {
                 "IScriptHost ScriptHost { get; set; }",
                 "ICakeContext Context { get { return ScriptHost.Context; } }",
@@ -76,7 +76,7 @@ namespace Cake.Scripting.Mono.CodeGen
                 "CakeTaskBuilder<ActionTask> Task(string name) { return ScriptHost.Task (name); }",
                 "void Setup (Action action) { ScriptHost.Setup (action); }",
                 "void Teardown(Action action) { ScriptHost.Teardown (action); }",
-                "CakeReport RunTarget(string target) { return ScriptHost.RunTarget (target); }" 
+                "CakeReport RunTarget(string target) { return ScriptHost.RunTarget (target); }"
             };
 
             return "    " + string.Join("\r\n    ", rules);

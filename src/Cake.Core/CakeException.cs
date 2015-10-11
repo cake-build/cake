@@ -13,7 +13,7 @@ namespace Cake.Core
         /// Initializes a new instance of the <see cref="CakeException"/> class.
         /// </summary>
         public CakeException()
-        {            
+        {
         }
 
         /// <summary>

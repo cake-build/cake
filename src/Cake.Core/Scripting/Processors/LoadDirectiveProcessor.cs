@@ -12,7 +12,7 @@ namespace Cake.Core.Scripting.Processors
         /// Initializes a new instance of the <see cref="LoadDirectiveProcessor"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        public LoadDirectiveProcessor(ICakeEnvironment environment) 
+        public LoadDirectiveProcessor(ICakeEnvironment environment)
             : base(environment)
         {
         }

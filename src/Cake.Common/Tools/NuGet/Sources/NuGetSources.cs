@@ -21,10 +21,10 @@ namespace Cake.Common.Tools.NuGet.Sources
         /// <param name="globber">The globber.</param>
         /// <param name="resolver">The NuGet tool resolver.</param>
         public NuGetSources(
-            IFileSystem fileSystem, 
-            ICakeEnvironment environment, 
-            IProcessRunner processRunner, 
-            IGlobber globber, 
+            IFileSystem fileSystem,
+            ICakeEnvironment environment,
+            IProcessRunner processRunner,
+            IGlobber globber,
             INuGetToolResolver resolver)
             : base(fileSystem, environment, processRunner, globber, resolver)
         {
@@ -182,7 +182,7 @@ namespace Cake.Common.Tools.NuGet.Sources
             builder.Append("-Name");
             builder.AppendQuoted(name);
 
-            builder.Append("-Source");           
+            builder.Append("-Source");
             if (settings.IsSensitiveSource)
             {
                 // Sensitive information in source.

@@ -73,7 +73,7 @@ namespace Cake.Common.Tools.WiX
                 foreach (var define in defines)
                 {
                     builder.Append(define);
-                }       
+                }
             }
 
             // Add extensions

@@ -26,9 +26,9 @@ namespace Cake.Core.Scripting.Processors
         /// <param name="log">The log.</param>
         /// <param name="nugetToolResolver">The NuGet tool resolver.</param>
         public ToolDirectiveProcessor(
-            IFileSystem fileSystem, 
-            ICakeEnvironment environment, 
-            ICakeLog log, 
+            IFileSystem fileSystem,
+            ICakeEnvironment environment,
+            ICakeLog log,
             INuGetToolResolver nugetToolResolver)
             : base(environment)
         {
@@ -135,7 +135,7 @@ namespace Cake.Core.Scripting.Processors
                 throw new CakeException("Failed to find tool executables.");
             }
 
-            _log.Debug(logAction => 
+            _log.Debug(logAction =>
             {
                 foreach (var toolExecutable in toolExecutables)
                 {

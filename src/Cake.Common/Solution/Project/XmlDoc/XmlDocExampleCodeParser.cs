@@ -82,7 +82,7 @@ namespace Cake.Common.Solution.Project.XmlDoc
         }
 
         /// <summary>
-        /// Parses Xml documentation example code from file(s) using given pattern 
+        /// Parses Xml documentation example code from file(s) using given pattern
         /// </summary>
         /// <param name="pattern">The globber file pattern.</param>
         /// <returns>Parsed Example Code</returns>

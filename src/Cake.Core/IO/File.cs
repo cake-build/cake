@@ -65,6 +65,6 @@ namespace Cake.Core.IO
         public Stream Open(FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
         {
             return _file.Open(fileMode, fileAccess, fileShare);
-        }        
+        }
     }
 }

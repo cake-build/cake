@@ -161,7 +161,7 @@ namespace Cake.Core.Tests.Unit.Scripting
             [InlineData("System.Threading.Tasks")]
             [InlineData("System.IO")]
             [InlineData("Cake.Core")]
-            [InlineData("Cake.Core.IO")]            
+            [InlineData("Cake.Core.IO")]
             [InlineData("Cake.Core.Scripting")]
             [InlineData("Cake.Core.Diagnostics")]
             public void Should_Add_Namespaces_To_Session(string @namespace)
@@ -222,7 +222,7 @@ namespace Cake.Core.Tests.Unit.Scripting
 
                 // Then
                 fixture.ScriptProcessor.Received(1).Process(
-                    Arg.Is<FilePath>(p => p.FullPath == "build.cake"), 
+                    Arg.Is<FilePath>(p => p.FullPath == "build.cake"),
                     Arg.Any<ScriptProcessorContext>());
             }
         }

@@ -48,7 +48,7 @@ namespace Cake.Common.IO.Paths
         }
 
         /// <summary>
-        /// Operator that combines A <see cref="ConvertableDirectoryPath"/> instance 
+        /// Operator that combines A <see cref="ConvertableDirectoryPath"/> instance
         /// with another <see cref="ConvertableDirectoryPath"/> instance.
         /// </summary>
         /// <param name="left">The left directory path operand.</param>
@@ -68,7 +68,7 @@ namespace Cake.Common.IO.Paths
         }
 
         /// <summary>
-        /// Operator that combines A <see cref="ConvertableDirectoryPath"/> instance 
+        /// Operator that combines A <see cref="ConvertableDirectoryPath"/> instance
         /// with a <see cref="DirectoryPath"/> instance.
         /// </summary>
         /// <param name="left">The left directory path operand.</param>
@@ -88,7 +88,7 @@ namespace Cake.Common.IO.Paths
         }
 
         /// <summary>
-        /// Operator that combines A <see cref="ConvertableDirectoryPath"/> instance 
+        /// Operator that combines A <see cref="ConvertableDirectoryPath"/> instance
         /// with a <see cref="ConvertableFilePath"/> instance.
         /// </summary>
         /// <param name="directory">The left directory path operand.</param>
@@ -108,7 +108,7 @@ namespace Cake.Common.IO.Paths
         }
 
         /// <summary>
-        /// Operator that combines A <see cref="ConvertableDirectoryPath"/> instance 
+        /// Operator that combines A <see cref="ConvertableDirectoryPath"/> instance
         /// with a <see cref="FilePath"/> instance.
         /// </summary>
         /// <param name="directory">The left directory path operand.</param>

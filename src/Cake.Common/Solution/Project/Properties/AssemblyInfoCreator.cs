@@ -103,7 +103,7 @@ namespace Cake.Common.Solution.Project.Properties
 
                     writer.WriteLine();
                 }
-                
+
                 if (internalsVisibleTo != null && internalsVisibleTo.Any())
                 {
                     // Write Internals visible true

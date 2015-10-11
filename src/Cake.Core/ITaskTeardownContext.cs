@@ -1,7 +1,7 @@
 using System;
 
 namespace Cake.Core
-{    
+{
     /// <summary>
     /// Acts as a context providing info about a <see cref="CakeTask"/> following its invocation.
     /// </summary>

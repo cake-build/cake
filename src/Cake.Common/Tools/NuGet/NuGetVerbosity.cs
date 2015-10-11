@@ -14,7 +14,7 @@ namespace Cake.Common.Tools.NuGet
         /// Verbosity: <c>Quiet</c>
         /// </summary>
         Quiet = 2,
-        
+
         /// <summary>
         /// Verbosity: <c>Detailed</c>
         /// </summary>

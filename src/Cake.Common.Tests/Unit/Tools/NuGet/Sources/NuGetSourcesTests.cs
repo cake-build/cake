@@ -191,10 +191,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
 
                 // When
                 fixture.AddSources();
-                
+
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "sources Add -Name \"name\" -Source \"source\" -NonInteractive"));
             }
 
@@ -208,10 +208,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
 
                 // When
                 fixture.AddSources();
-                
+
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "sources Add -Name \"name\" -Source \"source\" -NonInteractive -UserName \"username\" -Password \"password\""));
             }
 
@@ -224,10 +224,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
 
                 // When
                 fixture.AddSources();
-                
+
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "sources Add -Name \"name\" -Source \"source\" -Verbosity detailed -NonInteractive"));
             }
 
@@ -240,14 +240,14 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
 
                 // When
                 fixture.AddSources();
-                
+
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
                         p.Arguments.RenderSafe() == "sources Add -Name \"name\" -Source \"[REDACTED]\" -NonInteractive"));
             }
         }
-        
+
         public sealed class TheRemoveSourceMethod
         {
             [Fact]
@@ -433,10 +433,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
 
                 // When
                 fixture.RemoveSource();
-                
+
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "sources Remove -Name \"name\" -Source \"source\" -NonInteractive"));
             }
 
@@ -450,10 +450,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
 
                 // When
                 fixture.RemoveSource();
-                
+
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "sources Remove -Name \"name\" -Source \"source\" -Verbosity detailed -NonInteractive"));
             }
 
@@ -467,10 +467,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
 
                 // When
                 fixture.RemoveSource();
-                
+
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
                         p.Arguments.RenderSafe() == "sources Remove -Name \"name\" -Source \"[REDACTED]\" -NonInteractive"));
             }
         }

@@ -44,7 +44,7 @@ namespace Cake.Common.IO
 
             var targetDirectoryPath = targetFilePath.GetDirectory().MakeAbsolute(context.Environment);
 
-            // Make sure the target directory exist.            
+            // Make sure the target directory exist.
             if (!context.FileSystem.Exist(targetDirectoryPath))
             {
                 const string format = "The directory '{0}' do not exist.";
@@ -91,7 +91,7 @@ namespace Cake.Common.IO
 
             var absoluteTargetDirectoryPath = targetDirectoryPath.MakeAbsolute(context.Environment);
 
-            // Make sure the target directory exist.            
+            // Make sure the target directory exist.
             if (!context.FileSystem.Exist(absoluteTargetDirectoryPath))
             {
                 const string format = "The directory '{0}' do not exist.";

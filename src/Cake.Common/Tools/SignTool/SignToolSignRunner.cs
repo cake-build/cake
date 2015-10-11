@@ -29,7 +29,7 @@ namespace Cake.Common.Tools.SignTool
             ICakeEnvironment environment,
             IProcessRunner processRunner,
             IGlobber globber,
-            IRegistry registry) 
+            IRegistry registry)
             : this(fileSystem, environment, processRunner, globber, registry, null)
         {
         }

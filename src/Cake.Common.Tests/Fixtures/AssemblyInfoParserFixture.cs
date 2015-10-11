@@ -12,9 +12,9 @@ namespace Cake.Common.Tests.Fixtures
         public FakeFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
 
-        public AssemblyInfoParserFixture(string version = "1.2.3.4", 
-            string fileVersion = "4.3.2.1", 
-            string informationalVersion = "4.2.3.1", 
+        public AssemblyInfoParserFixture(string version = "1.2.3.4",
+            string fileVersion = "4.3.2.1",
+            string informationalVersion = "4.2.3.1",
             bool createAssemblyInfo = true)
         {
             Environment = Substitute.For<ICakeEnvironment>();

@@ -27,7 +27,7 @@ namespace Cake.Core.Tests.Fixtures
 
         public CakeContext CreateContext()
         {
-            return new CakeContext(FileSystem, Environment, Globber, 
+            return new CakeContext(FileSystem, Environment, Globber,
                 Log, Arguments, ProcessRunner, Registry);
         }
     }

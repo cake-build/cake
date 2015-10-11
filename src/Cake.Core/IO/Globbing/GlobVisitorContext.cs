@@ -33,7 +33,7 @@ namespace Cake.Core.IO.Globbing
         }
 
         public GlobVisitorContext(
-            IFileSystem fileSystem, 
+            IFileSystem fileSystem,
             ICakeEnvironment environment,
             Func<IDirectory, bool> predicate)
         {

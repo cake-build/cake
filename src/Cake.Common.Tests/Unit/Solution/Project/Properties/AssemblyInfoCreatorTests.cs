@@ -48,7 +48,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 // Given
                 var fileSystem = Substitute.For<IFileSystem>();
                 var environment = Substitute.For<ICakeEnvironment>();
- 
+
                 // When
                 var result = Record.Exception(() => new AssemblyInfoCreator(fileSystem, environment, null));
 

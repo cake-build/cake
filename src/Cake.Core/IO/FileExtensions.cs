@@ -21,8 +21,8 @@ namespace Cake.Core.IO
             {
                 throw new ArgumentNullException("file");
             }
-            return file.Open(mode, 
-                mode == FileMode.Append ? FileAccess.Write : FileAccess.ReadWrite, 
+            return file.Open(mode,
+                mode == FileMode.Append ? FileAccess.Write : FileAccess.ReadWrite,
                 FileShare.None);
         }
 

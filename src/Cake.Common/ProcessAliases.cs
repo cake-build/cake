@@ -92,7 +92,7 @@ namespace Cake.Common
         /// );
         /// //Output last line of process output
         /// Information("Last line of output: {0}", redirectedOutput.LastOrDefault());
-        /// 
+        ///
         /// // This should output 0 as valid arguments supplied
         /// Information("Exit code: {0}", exitCodeWithArgument);
         /// </code>

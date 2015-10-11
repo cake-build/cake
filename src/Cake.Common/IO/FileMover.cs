@@ -98,7 +98,7 @@ namespace Cake.Common.IO
             filePath = filePath.MakeAbsolute(context.Environment);
             targetFilePath = targetFilePath.MakeAbsolute(context.Environment);
 
-            // Make sure the target directory exist.            
+            // Make sure the target directory exist.
             var targetDirectoryPath = targetFilePath.GetDirectory().MakeAbsolute(context.Environment);
             if (!context.FileSystem.Exist(targetDirectoryPath))
             {

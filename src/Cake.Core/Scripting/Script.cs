@@ -59,8 +59,8 @@ namespace Cake.Core.Scripting
         /// <param name="aliases">The script aliases.</param>
         /// <param name="usingAliasDirectives">The using alias directives.</param>
         public Script(
-            IEnumerable<string> namespaces, 
-            IEnumerable<string> lines, 
+            IEnumerable<string> namespaces,
+            IEnumerable<string> lines,
             IEnumerable<ScriptAlias> aliases,
             IEnumerable<string> usingAliasDirectives)
         {

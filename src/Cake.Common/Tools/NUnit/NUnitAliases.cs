@@ -38,7 +38,7 @@ namespace Cake.Common.Tools.NUnit
         }
 
         /// <summary>
-        /// Runs all NUnit unit tests in the assemblies matching the specified pattern, 
+        /// Runs all NUnit unit tests in the assemblies matching the specified pattern,
         /// using the specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -90,7 +90,7 @@ namespace Cake.Common.Tools.NUnit
         }
 
         /// <summary>
-        /// Runs all NUnit unit tests in the specified assemblies, 
+        /// Runs all NUnit unit tests in the specified assemblies,
         /// using the specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -108,7 +108,7 @@ namespace Cake.Common.Tools.NUnit
         }
 
         /// <summary>
-        /// Runs all NUnit unit tests in the specified assemblies, 
+        /// Runs all NUnit unit tests in the specified assemblies,
         /// using the specified settings.
         /// </summary>
         /// <param name="context">The context.</param>

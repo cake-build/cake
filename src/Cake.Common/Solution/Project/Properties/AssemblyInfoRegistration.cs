@@ -28,16 +28,16 @@ namespace Cake.Common.Solution.Project.Properties
         {
             if (value != null)
             {
-                Add(name, @namespace, value.Value ? "true" : "false");   
-            }            
+                Add(name, @namespace, value.Value ? "true" : "false");
+            }
         }
 
         public void AddString(string name, string @namespace, string value)
         {
             if (value != null)
             {
-                Add(name, @namespace, string.Concat("\"", value, "\""));   
-            }            
+                Add(name, @namespace, string.Concat("\"", value, "\""));
+            }
         }
 
         private void Add(string name, string @namespace, string value)
@@ -48,8 +48,8 @@ namespace Cake.Common.Solution.Project.Properties
             }
             else
             {
-                Attributes.Add(name, value);   
-            }            
+                Attributes.Add(name, value);
+            }
             Namespaces.Add(@namespace);
         }
     }

@@ -69,7 +69,7 @@ namespace Cake.Common.Tests.Unit.XML
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
             }
-            
+
             [Fact]
             public void Should_Throw_If_Xml_Not_Exists()
             {

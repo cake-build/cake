@@ -17,7 +17,7 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("APPVEYOR_PROJECT_ID").Returns("85364");
             Environment.GetEnvironmentVariable("APPVEYOR_PROJECT_NAME").Returns("Cake");
             Environment.GetEnvironmentVariable("APPVEYOR_PROJECT_SLUG").Returns("cake");
-            
+
             Environment.GetEnvironmentVariable("APPVEYOR_BUILD_FOLDER").Returns(@"C:\projects\cake");
             Environment.GetEnvironmentVariable("APPVEYOR_BUILD_ID").Returns("378354");
             Environment.GetEnvironmentVariable("APPVEYOR_BUILD_NUMBER").Returns("2");

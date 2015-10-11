@@ -57,7 +57,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <param name="environment">The environment.</param>
         public AppVeyorBuildInfo(ICakeEnvironment environment)
             : base(environment)
-        {            
+        {
         }
     }
 }

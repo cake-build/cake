@@ -20,7 +20,7 @@ namespace Cake.Common.Tools.NuGet.Restore
         /// <param name="processRunner">The process runner.</param>
         /// <param name="globber">The globber.</param>
         /// <param name="resolver">The NuGet tool resolver</param>
-        public NuGetRestorer(IFileSystem fileSystem, ICakeEnvironment environment, 
+        public NuGetRestorer(IFileSystem fileSystem, ICakeEnvironment environment,
             IProcessRunner processRunner, IGlobber globber, INuGetToolResolver resolver)
             : base(fileSystem, environment, processRunner, globber, resolver)
         {

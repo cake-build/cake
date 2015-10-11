@@ -95,7 +95,7 @@ namespace Cake.Common.Tools.XBuild
                 return "normal";
             case Verbosity.Verbose:
                 return "detailed";
-            case Verbosity.Diagnostic: 
+            case Verbosity.Diagnostic:
                 return "diagnostic";
             }
             throw new CakeException("Encountered unknown XBuild build log verbosity.");

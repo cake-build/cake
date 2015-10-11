@@ -17,7 +17,7 @@ namespace Cake.Core.Scripting
         private readonly LinkedList<string> _usingAliasDirectives;
 
         /// <summary>
-        /// Gets the script's assembly references 
+        /// Gets the script's assembly references
         /// referenced via the <c>#r</c> directive.
         /// </summary>
         /// <value>The references.</value>

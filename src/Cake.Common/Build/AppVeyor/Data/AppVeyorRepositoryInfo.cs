@@ -13,17 +13,17 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <summary>
         /// Gets the repository provider.
         /// <list type="bullet">
-        ///   <item> 
-        ///     <description>github</description> 
-        ///   </item> 
-        ///   <item> 
-        ///     <description>bitbucket</description> 
+        ///   <item>
+        ///     <description>github</description>
         ///   </item>
-        ///   <item> 
-        ///     <description>kiln</description> 
+        ///   <item>
+        ///     <description>bitbucket</description>
         ///   </item>
-        /// </list> 
-        /// </summary> 
+        ///   <item>
+        ///     <description>kiln</description>
+        ///   </item>
+        /// </list>
+        /// </summary>
         /// <value>
         ///   The repository provider.
         /// </value>
@@ -35,13 +35,13 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <summary>
         /// Gets the revision control system.
         /// <list type="bullet">
-        ///   <item> 
-        ///     <description>git</description> 
-        ///   </item> 
-        ///   <item> 
-        ///     <description>mercurial</description> 
+        ///   <item>
+        ///     <description>git</description>
         ///   </item>
-        /// </list> 
+        ///   <item>
+        ///     <description>mercurial</description>
+        ///   </item>
+        /// </list>
         /// </summary>
         /// <value>
         ///   The revision control system.

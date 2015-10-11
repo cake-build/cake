@@ -43,13 +43,13 @@ namespace Cake.Common
         /// <example>
         /// <code>
         /// var envVars = EnvironmentVariables();
-        /// 
+        ///
         /// string path;
         /// if (envVars.TryGetValue("PATH", out path))
         /// {
         ///     Information("Path: {0}", path);
         /// }
-        /// 
+        ///
         /// foreach(var envVar in envVars)
         /// {
         ///     Information(

@@ -23,10 +23,10 @@ namespace Cake.Common.Tools.MSBuild
 
         private static DirectoryPath GetHighestAvailableMSBuildVersion(IFileSystem fileSystem, ICakeEnvironment environment, PlatformTarget target)
         {
-            var versions = new[] 
+            var versions = new[]
             {
                 MSBuildVersion.MSBuild14,
-                MSBuildVersion.MSBuild12, 
+                MSBuildVersion.MSBuild12,
                 MSBuildVersion.MSBuild4,
                 MSBuildVersion.MSBuild35,
                 MSBuildVersion.MSBuild20

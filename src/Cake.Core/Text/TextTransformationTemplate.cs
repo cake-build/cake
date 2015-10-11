@@ -77,10 +77,10 @@ namespace Cake.Core.Text
         {
             placeholder = placeholder ?? new Tuple<string, string>("<%", "%>");
             return string.Concat(
-                placeholder.Item1, 
-                @"(?<key>[^", 
-                placeholder.Item2[0], 
-                "]+)", 
+                placeholder.Item1,
+                @"(?<key>[^",
+                placeholder.Item2[0],
+                "]+)",
                 placeholder.Item2);
         }
 

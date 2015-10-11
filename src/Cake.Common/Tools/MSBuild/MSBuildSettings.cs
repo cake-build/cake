@@ -56,13 +56,13 @@ namespace Cake.Common.Tools.MSBuild
 
         /// <summary>
         /// Gets or sets whether or not node reuse is used.
-        /// When you’re doing multiple builds in a row, this helps reduce your total build time, 
+        /// When you’re doing multiple builds in a row, this helps reduce your total build time,
         /// by avoiding the start up costs of each MSBuild child node.
         /// </summary>
         public bool? NodeReuse { get; set; }
 
         /// <summary>
-        /// Gets or sets the amount of information to display in the build log. 
+        /// Gets or sets the amount of information to display in the build log.
         /// Each logger displays events based on the verbosity level that you set for that logger.
         /// </summary>
         /// <value>The build log verbosity.</value>

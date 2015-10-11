@@ -44,7 +44,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// Initializes a new instance of the <see cref="AppVeyorPullRequestInfo"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        public AppVeyorPullRequestInfo(ICakeEnvironment environment) 
+        public AppVeyorPullRequestInfo(ICakeEnvironment environment)
             : base(environment)
         {
         }

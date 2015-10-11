@@ -74,7 +74,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             public void Should_Read_AssemblyVersion(string value, string expected)
             {
                 // Given
-                var fixture = new AssemblyInfoParserFixture(value);                
+                var fixture = new AssemblyInfoParserFixture(value);
 
                 // When
                 var result = fixture.Parse();

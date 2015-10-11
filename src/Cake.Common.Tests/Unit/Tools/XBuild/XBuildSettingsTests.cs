@@ -52,7 +52,7 @@ namespace Cake.Common.Tests.Unit.Tools.XBuild
             {
                 // Given
                 var settings = new XBuildSettings();
-                
+
                 // When
                 settings.Properties.Add("THEKEY", new []{"THEVALUE"});
 

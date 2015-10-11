@@ -65,19 +65,19 @@ namespace Cake
             builder.RegisterType<Globber>().As<IGlobber>().SingleInstance();
             builder.RegisterType<ProcessRunner>().As<IProcessRunner>().SingleInstance();
             builder.RegisterType<ScriptAliasFinder>().As<IScriptAliasFinder>().SingleInstance();
-            builder.RegisterType<CakeReportPrinter>().As<ICakeReportPrinter>().SingleInstance();            
+            builder.RegisterType<CakeReportPrinter>().As<ICakeReportPrinter>().SingleInstance();
             builder.RegisterType<CakeConsole>().As<IConsole>().SingleInstance();
             builder.RegisterType<ScriptProcessor>().As<IScriptProcessor>().SingleInstance();
             builder.RegisterType<NuGetToolResolver>().As<INuGetToolResolver>().SingleInstance().MemberOf("toolResolvers");
             builder.RegisterType<WindowsRegistry>().As<IRegistry>().SingleInstance();
             builder.RegisterType<CakeContext>().As<ICakeContext>().SingleInstance();
 
-            if (mono) 
+            if (mono)
             {
                 // Mono scripting.
                 builder.RegisterType<Scripting.Mono.MonoScriptEngine>().As<IScriptEngine>().SingleInstance();
-            } 
-            else 
+            }
+            else
             {
                 // Roslyn related services.
                 builder.RegisterType<RoslynScriptEngine>().As<IScriptEngine>().SingleInstance();

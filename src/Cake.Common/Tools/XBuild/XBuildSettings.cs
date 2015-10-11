@@ -43,7 +43,7 @@ namespace Cake.Common.Tools.XBuild
         public string Configuration { get; set; }
 
         /// <summary>
-        /// Gets or sets the amount of information to display in the build log. 
+        /// Gets or sets the amount of information to display in the build log.
         /// Each logger displays events based on the verbosity level that you set for that logger.
         /// </summary>
         /// <value>The build log verbosity.</value>

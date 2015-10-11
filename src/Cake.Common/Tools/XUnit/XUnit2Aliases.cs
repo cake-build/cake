@@ -127,7 +127,7 @@ namespace Cake.Common.Tools.XUnit
             foreach (var assembly in assemblies)
             {
                 runner.Run(assembly, settings);
-            }    
+            }
         }
     }
 }

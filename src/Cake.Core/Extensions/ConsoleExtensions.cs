@@ -14,8 +14,8 @@ namespace Cake.Core
         {
             if (console != null)
             {
-                console.WriteLine(string.Empty);   
-            }            
+                console.WriteLine(string.Empty);
+            }
         }
     }
 }

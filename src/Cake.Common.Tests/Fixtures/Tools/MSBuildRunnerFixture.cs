@@ -71,7 +71,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
                         file.Exists.Returns(msBuildFileExist);
                         file.Path.Returns(c.Arg<FilePath>());
                         return file;
-                    });                
+                    });
             }
         }
 
@@ -85,7 +85,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         {
             ProcessRunner.Received(1).Start(
                 Arg.Is<FilePath>(p => p.FullPath == path.FullPath),
-                Arg.Any<ProcessSettings>());   
+                Arg.Any<ProcessSettings>());
         }
 
         public void AssertReceivedArguments(string format, params object[] args)
@@ -94,7 +94,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
             ProcessRunner.Received(1).Start(
                 Arg.Any<FilePath>(),
                 Arg.Is<ProcessSettings>(p =>
-                    p.Arguments.Render() == arguments));   
+                    p.Arguments.Render() == arguments));
         }
     }
 }

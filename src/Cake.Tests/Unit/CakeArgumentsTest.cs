@@ -11,7 +11,7 @@ namespace Cake.Tests.Unit
             public void Should_Set_Arguments()
             {
                 // Given
-                var arguments = new CakeArguments();                
+                var arguments = new CakeArguments();
 
                 // When
                 arguments.SetArguments(new Dictionary<string, string> { { "A", "B" } });

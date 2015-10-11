@@ -6,7 +6,7 @@ namespace Cake.Diagnostics.Formatting
     internal sealed class PropertyToken : FormatToken
     {
         private readonly int _position;
-        private readonly string _format;        
+        private readonly string _format;
 
         public string Format
         {

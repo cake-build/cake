@@ -18,9 +18,9 @@ namespace Cake.Common.Tools.NuGet.Install
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="globber">The globber.</param> 
+        /// <param name="globber">The globber.</param>
         /// <param name="resolver">The NuGet tool resolver.</param>
-        public NuGetInstaller(IFileSystem fileSystem, ICakeEnvironment environment, 
+        public NuGetInstaller(IFileSystem fileSystem, ICakeEnvironment environment,
             IProcessRunner processRunner, IGlobber globber, INuGetToolResolver resolver)
             : base(fileSystem, environment, processRunner, globber, resolver)
         {

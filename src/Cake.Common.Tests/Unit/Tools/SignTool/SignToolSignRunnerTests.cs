@@ -179,7 +179,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
             {
                 // Given
                 var fixture = new SignToolSignRunnerFixture();
-           
+
                 var tool = Substitute.For<IFile>();
                 tool.Exists.Returns(true);
 
@@ -206,8 +206,8 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "SIGN /t \"https://t.com/\" /f \"/Working/cert.pfx\" /p secret \"/Working/a.dll\""));                
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
+                        p.Arguments.Render() == "SIGN /t \"https://t.com/\" /f \"/Working/cert.pfx\" /p secret \"/Working/a.dll\""));
             }
         }
     }
