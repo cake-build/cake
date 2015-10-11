@@ -25,7 +25,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{A01118B7
 	ProjectSection(SolutionItems) = preProject
 		..\build.cake = ..\build.cake
 		..\build.ps1 = ..\build.ps1
-		..\utilities.cake = ..\utilities.cake
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuspec", "nuspec", "{B38B35F5-812A-4E4C-B267-71254A7EEF17}"
