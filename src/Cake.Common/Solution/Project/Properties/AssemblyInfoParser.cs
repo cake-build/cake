@@ -83,7 +83,7 @@ namespace Cake.Common.Solution.Project.Properties
                 if (!string.IsNullOrWhiteSpace(value))
                 {
                     return value;
-                }   
+                }
             }
             return DefaultVersion;
         }

@@ -12,7 +12,7 @@
         Verbosity Verbosity { get; }
 
         /// <summary>
-        /// Writes the text representation of the specified array of objects to the 
+        /// Writes the text representation of the specified array of objects to the
         /// log using the specified verbosity, log level and format information.
         /// </summary>
         /// <param name="verbosity">The verbosity.</param>

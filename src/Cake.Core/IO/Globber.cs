@@ -58,7 +58,7 @@ namespace Cake.Core.IO
 
             // Parse the pattern into an AST.
             var root = _parser.Parse(pattern, _environment.IsUnix());
-            
+
             // Visit all nodes in the parsed patterns and filter the result.
             return _visitor.Walk(root, predicate)
                 .Select(x => x.Path)

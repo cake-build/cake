@@ -31,7 +31,7 @@ namespace Cake.Core
         {
             if (IsQuoted(value))
             {
-                value = value.Trim('"');                
+                value = value.Trim('"');
             }
             return value;
         }
@@ -58,7 +58,7 @@ namespace Cake.Core
             {
                 value = value.Replace("\r\n", "\n");
                 value = value.Replace("\r", string.Empty);
-                return value.Replace("\n", "\r\n");   
+                return value.Replace("\n", "\r\n");
             }
             return string.Empty;
         }

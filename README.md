@@ -25,16 +25,16 @@ You can read the latest documentation at [http://cakebuild.net/](http://cakebuil
 ## Example
 
 This example dowloads the Cake bootstrapper and executes a simple build script.
-The bootstrapper is used to bootstrap Cake in a simple way and is not in 
-required in any way to execute build scripts. If you prefer to invoke the Cake 
+The bootstrapper is used to bootstrap Cake in a simple way and is not in
+required in any way to execute build scripts. If you prefer to invoke the Cake
 executable yourself, [take a look at the command line usage](http://cakebuild.net/docs/cli/usage).
 
-This example is also available on our homepage: 
+This example is also available on our homepage:
 [http://cakebuild.net/docs/tutorials/setting-up-a-new-project](http://cakebuild.net/docs/tutorials/setting-up-a-new-project)
 
 ### 1. Install the Cake bootstrapper
 
-The bootstrapper is used to download Cake and the tools required by the 
+The bootstrapper is used to download Cake and the tools required by the
 build script.
 
 ##### Windows
@@ -57,7 +57,7 @@ curl -Lsfo build.sh http://cakebuild.net/bootstrapper/osx
 
 ### 2. Create a Cake script
 
-Add a cake script called `build.cake` to the same location as the 
+Add a cake script called `build.cake` to the same location as the
 bootstrapper script that you downloaded.
 
 ```csharp

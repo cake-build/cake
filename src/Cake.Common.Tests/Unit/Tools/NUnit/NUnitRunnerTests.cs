@@ -171,8 +171,8 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "\"/Working/Test1.dll\" -noshadow"));
             }
 
@@ -184,7 +184,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => 
+                var result = Record.Exception(() =>
                     runner.Run("./Test1.dll", new NUnitSettings
                     {
                         ResultsFile = "NewResults.xml",
@@ -211,8 +211,8 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "\"/Working/Test1.dll\" \"-result:/Working/NewTestResult.xml\""));
             }
 
@@ -254,8 +254,8 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                         "\"-output:/Working/stdout.txt\" " +
                         "\"-err:/Working/stderr.txt\" " +
                         "\"-result:/Working/NewTestResult.xml\" " +
-                        "\"-process:Multiple\" " + 
-                        "\"-apartment:STA\" " + 
+                        "\"-process:Multiple\" " +
+                        "\"-apartment:STA\" " +
                         "\"-domain:Single\""));
             }
 

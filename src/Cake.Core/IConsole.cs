@@ -20,7 +20,7 @@ namespace Cake.Core
         ConsoleColor BackgroundColor { get; set; }
 
         /// <summary>
-        /// Writes the text representation of the specified array of objects to the 
+        /// Writes the text representation of the specified array of objects to the
         /// console output using the specified format information.
         /// </summary>
         /// <param name="format">A composite format string</param>

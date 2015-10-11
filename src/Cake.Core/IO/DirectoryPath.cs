@@ -118,7 +118,7 @@ namespace Cake.Core.IO
             {
                 throw new ArgumentNullException("environment");
             }
-            return IsRelative 
+            return IsRelative
                 ? environment.WorkingDirectory.Combine(this).Collapse()
                 : new DirectoryPath(FullPath);
         }

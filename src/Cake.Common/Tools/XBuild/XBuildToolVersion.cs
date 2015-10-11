@@ -24,7 +24,7 @@
         /// MSBuild tool version: <c>.NET 3.5</c>
         /// </summary>
         NET35 = 2,
-               
+
         /// <summary>
         /// MSBuild tool version: <c>.NET 4.0</c>
         /// </summary>

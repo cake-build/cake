@@ -15,7 +15,7 @@ namespace Cake.Scripting.Mono
         private readonly Evaluator _evaluator;
         private readonly ICakeLog _log;
 
-        private readonly string[] _skipAssemblies = 
+        private readonly string[] _skipAssemblies =
         {
             "mscorlib",
             "System",
@@ -45,7 +45,7 @@ namespace Cake.Scripting.Mono
             MonoScriptHostProxy.ScriptHost = host;
 
             // This will be our 'base' type from which the evaluator grants access
-            // to static members to the script being run 
+            // to static members to the script being run
             _evaluator.InteractiveBaseClass = typeof(MonoScriptHostProxy);
         }
 

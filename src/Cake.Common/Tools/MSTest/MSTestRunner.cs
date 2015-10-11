@@ -21,7 +21,7 @@ namespace Cake.Common.Tools.MSTest
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="globber">The globber.</param> 
+        /// <param name="globber">The globber.</param>
         public MSTestRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IGlobber globber)
             : base(fileSystem, environment, processRunner, globber)
         {

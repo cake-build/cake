@@ -12,7 +12,7 @@ namespace Cake.Core.Scripting.Processors
         /// Initializes a new instance of the <see cref="ShebangProcessor"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        public ShebangProcessor(ICakeEnvironment environment) 
+        public ShebangProcessor(ICakeEnvironment environment)
             : base(environment)
         {
         }

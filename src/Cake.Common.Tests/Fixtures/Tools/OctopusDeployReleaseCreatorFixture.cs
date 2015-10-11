@@ -70,4 +70,3 @@ namespace Cake.Common.Tests.Fixtures.Tools
         }
     }
 }
-

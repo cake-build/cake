@@ -33,7 +33,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
             CertificateFile = Substitute.For<IFile>();
             CertificateFile.Exists.Returns(true);
             DefaultToolFile = Substitute.For<IFile>();
-            DefaultToolFile.Exists.Returns(true);           
+            DefaultToolFile.Exists.Returns(true);
 
             FileSystem = Substitute.For<IFileSystem>();
             FileSystem.GetFile(Arg.Is<FilePath>(p => p.FullPath == "/Working/a.dll")).Returns(AssemblyFile);

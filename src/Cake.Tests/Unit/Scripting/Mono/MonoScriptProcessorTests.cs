@@ -8,11 +8,11 @@ namespace Cake.Tests.Unit.Scripting.Mono
         ///////////////////////////////////////////////////////////////////////////////
         // Ok, this test setup isn't intuitive at all, and I apologize for this.
         //
-        // In this project, there's a folder called Data. This folder contains 
+        // In this project, there's a folder called Data. This folder contains
         // sub folders which in turn contain files as embedded resources.
         // There are two files in each folder; input and output.
         //
-        // We will call the `Process` method on the fixture class that will 
+        // We will call the `Process` method on the fixture class that will
         // read the content of `input`, process it and return it to us.
         // We then call the `GetExpectedOutput` method that will load the `output`
         // file and return it as a string to us. We can then compare the
@@ -34,7 +34,7 @@ namespace Cake.Tests.Unit.Scripting.Mono
         {
             // Given
             var fixture = new MonoScriptProcessorFixture(resource);
-            
+
             // When
             var result = fixture.Process();
 

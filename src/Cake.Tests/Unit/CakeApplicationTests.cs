@@ -92,7 +92,7 @@ namespace Cake.Tests.Unit
                 command.Execute(fixture.Options).Returns(true);
                 fixture.Options.Script = "./build.cake";
                 fixture.CommandFactory.CreateBuildCommand().Returns(command);
-                
+
                 // When
                 var result = fixture.RunApplication();
 

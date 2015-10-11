@@ -67,7 +67,7 @@ namespace Cake.Common.Tests.Unit.Tools.Cake
             {
                 // Given
                 var fixture = new CakeRunnerFixture(expected);
-                fixture.Settings.ToolPath = toolPath;               
+                fixture.Settings.ToolPath = toolPath;
 
                 // When
                 fixture.Run();
@@ -90,7 +90,7 @@ namespace Cake.Common.Tests.Unit.Tools.Cake
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p => 
+                    Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "\"/Working/build.cake\""));
             }
 
@@ -107,7 +107,7 @@ namespace Cake.Common.Tests.Unit.Tools.Cake
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p => 
+                    Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "\"/Working/build.cake\" -verbosity=Diagnostic"));
             }
 
@@ -131,7 +131,7 @@ namespace Cake.Common.Tests.Unit.Tools.Cake
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p => 
+                    Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "\"/Working/build.cake\" -target=\"Build\" -configuration=\"Debug\""));
             }
         }

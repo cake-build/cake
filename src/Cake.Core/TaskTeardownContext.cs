@@ -28,7 +28,7 @@ namespace Cake.Core
             _duration = duration;
             _skipped = skipped;
         }
-        
+
         /// <summary>
         /// Gets the <see cref="ICakeTaskInfo" /> describing the <see cref="CakeTask" /> that has just been invoked.
         /// </summary>

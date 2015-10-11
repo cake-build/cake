@@ -54,7 +54,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 var settings = new XUnitSettings();
 
                 // Then
-                Assert.False(settings.Silent);                
+                Assert.False(settings.Silent);
             }
         }
     }

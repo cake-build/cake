@@ -75,7 +75,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetProxy
                 var fixture = new NuGetSetProxyFixture();
                 fixture.Settings.ToolPath = toolPath;
                 fixture.GivenCustomToolPathExist(expected);
-                
+
                 // When
                 fixture.SetProxy();
 
@@ -118,7 +118,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetProxy
             {
                 // Given
                 var fixture = new NuGetSetProxyFixture();
-                
+
                 // When
                 fixture.SetProxy();
 

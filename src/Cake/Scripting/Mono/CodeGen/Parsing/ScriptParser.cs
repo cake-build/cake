@@ -161,7 +161,7 @@ namespace Cake.Scripting.Mono.CodeGen.Parsing
                 scope = nextIsBrace ? ParseScope() : ParseNext();
             }
 
-            // Create a new script block using 
+            // Create a new script block using
             // the start token and the parsed scope.
             return CreateBlock(start, scope);
         }
@@ -181,7 +181,7 @@ namespace Cake.Scripting.Mono.CodeGen.Parsing
             var shouldParseScope = nextIsBrace || requireBraces;
             var scope = shouldParseScope ? ParseScope() : ParseNext();
 
-            // Create a new script block using 
+            // Create a new script block using
             // the start token and the parsed scope.
             return CreateBlock(start, scope);
         }

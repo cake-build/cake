@@ -31,6 +31,6 @@ namespace Cake.Core.Diagnostics
         /// <summary>
         /// Diagnostic verbosity.
         /// </summary>
-        Diagnostic = 4 
+        Diagnostic = 4
     }
 }

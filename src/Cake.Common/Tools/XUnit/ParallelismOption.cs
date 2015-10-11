@@ -14,12 +14,12 @@ namespace Cake.Common.Tools.XUnit
         /// Only parallelize collections
         /// </summary>
         Collections,
-        
+
         /// <summary>
         /// Only parallelize assemblies
         /// </summary>
         Assemblies,
-        
+
         /// <summary>
         /// Parallelize assemblies and collections.
         /// </summary>

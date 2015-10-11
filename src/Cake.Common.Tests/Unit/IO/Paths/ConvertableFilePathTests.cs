@@ -103,7 +103,7 @@ namespace Cake.Common.Tests.Unit.IO.Paths
             {
                 // Given
                 var path = new ConvertableFilePath("./foo/bar.baz");
-                
+
                 // When
                 var result = path.ToString();
 

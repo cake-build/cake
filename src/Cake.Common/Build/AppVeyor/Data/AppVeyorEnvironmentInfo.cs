@@ -10,7 +10,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         private readonly AppVeyorProjectInfo _projectProvider;
         private readonly AppVeyorBuildInfo _buildProvider;
         private readonly AppVeyorPullRequestInfo _pullRequestProvider;
-        private readonly AppVeyorRepositoryInfo _repositoryProvider;        
+        private readonly AppVeyorRepositoryInfo _repositoryProvider;
 
         /// <summary>
         /// Gets the AppVeyor build agent API URL.
@@ -115,7 +115,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// Initializes a new instance of the <see cref="AppVeyorEnvironmentInfo"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        public AppVeyorEnvironmentInfo(ICakeEnvironment environment) 
+        public AppVeyorEnvironmentInfo(ICakeEnvironment environment)
             : base(environment)
         {
             _projectProvider = new AppVeyorProjectInfo(environment);

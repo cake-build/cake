@@ -134,7 +134,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 settings.SetConfiguration("TheConfiguration");
 
                 // Then
-                Assert.Equal("TheConfiguration", settings.Configuration);  
+                Assert.Equal("TheConfiguration", settings.Configuration);
             }
 
             [Fact]
@@ -221,7 +221,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 Assert.Equal(settings, result);
-            }        
+            }
         }
 
         public sealed class TheSetVerbosityMethod
@@ -255,7 +255,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 Assert.Equal(settings, result);
-            } 
+            }
         }
     }
 }

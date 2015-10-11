@@ -23,7 +23,7 @@ namespace Cake.Core
         /// Initializes a new instance of the <see cref="ActionTask"/> class.
         /// </summary>
         /// <param name="name">The name of the task.</param>
-        public ActionTask(string name) 
+        public ActionTask(string name)
             : base(name)
         {
             _actions = new List<Action<ICakeContext>>();

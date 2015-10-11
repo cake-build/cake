@@ -11,7 +11,7 @@ namespace Cake.Common.Tools.NUnit
         Default,
 
         /// <summary>
-        ///     No domain is created - the tests are run in the primary domain. 
+        ///     No domain is created - the tests are run in the primary domain.
         ///     This normally requires copying the NUnit assemblies into the same directory as your tests.
         /// </summary>
         None,

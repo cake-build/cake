@@ -69,7 +69,7 @@ namespace Cake.Common.Tools.MSTest
         [CakeMethodAlias]
         public static void MSTest(this ICakeContext context, IEnumerable<FilePath> assemblyPaths)
         {
-            MSTest(context, assemblyPaths, new MSTestSettings());            
+            MSTest(context, assemblyPaths, new MSTestSettings());
         }
 
         /// <summary>

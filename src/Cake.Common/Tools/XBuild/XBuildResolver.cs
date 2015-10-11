@@ -15,13 +15,13 @@ namespace Cake.Common.Tools.XBuild
             _environment = environment;
             _fileSystem = fileSystem;
 
-            if (_environment.IsUnix()) 
+            if (_environment.IsUnix())
             {
                 return GetWhichXBuild();
             }
-            else 
+            else
             {
-                return GetWindowsXBuild();   
+                return GetWindowsXBuild();
             }
         }
 
@@ -94,7 +94,7 @@ namespace Cake.Common.Tools.XBuild
         }
 
         private static DirectoryPath GetMonoPathWindows()
-        {            
+        {
             DirectoryPath programFiles;
 
             if (_environment.Is64BitOperativeSystem())
@@ -105,7 +105,7 @@ namespace Cake.Common.Tools.XBuild
             {
                 programFiles = new DirectoryPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles));
             }
-             
+
             var monoPath = programFiles.Combine("Mono").Combine("bin");
 
             if (_fileSystem.GetDirectory(monoPath).Exists)

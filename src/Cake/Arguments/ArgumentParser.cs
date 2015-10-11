@@ -133,8 +133,8 @@ namespace Cake.Arguments
                 var verbosity = converter.ConvertFromInvariantString(value);
                 if (verbosity != null)
                 {
-                    options.Verbosity = (Verbosity)verbosity;   
-                }                    
+                    options.Verbosity = (Verbosity)verbosity;
+                }
             }
 
             if (name.Equals("showdescription", StringComparison.OrdinalIgnoreCase) ||

@@ -51,7 +51,7 @@ namespace Cake.Core
         /// </summary>
         /// <param name="action">The action.</param>
         void InvokeFinally(Action action);
-        
+
         /// <summary>
         /// Performs the specified setup action before each task is invoked.
         /// </summary>

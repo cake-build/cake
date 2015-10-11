@@ -82,7 +82,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         {
             // Given
             var fixture = new MSTestRunnerFixture();
-            fixture.ToolPath = new FilePath(existingToolPath); 
+            fixture.ToolPath = new FilePath(existingToolPath);
             var runner = fixture.CreateRunner();
 
             // When
@@ -107,7 +107,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
 
             // Then
             fixture.ProcessRunner.Received(1).Start(
-                Arg.Any<FilePath>(),Arg.Is<ProcessSettings>(p => 
+                Arg.Any<FilePath>(),Arg.Is<ProcessSettings>(p =>
                     p.WorkingDirectory.FullPath == "/Working"));
         }
 
@@ -155,8 +155,8 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
 
             // Then
             fixture.ProcessRunner.Received(1).Start(
-                Arg.Any<FilePath>(), 
-                Arg.Is<ProcessSettings>(p => 
+                Arg.Any<FilePath>(),
+                Arg.Is<ProcessSettings>(p =>
                     p.Arguments.Render() == "\"/testcontainer:/Working/Test1.dll\" \"/noisolation\""));
         }
 
@@ -175,8 +175,8 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
 
             // Then
             fixture.ProcessRunner.Received(1).Start(
-                Arg.Any<FilePath>(), 
-                Arg.Is<ProcessSettings>(p => 
+                Arg.Any<FilePath>(),
+                Arg.Is<ProcessSettings>(p =>
                     p.Arguments.Render() == "\"/testcontainer:/Working/Test1.dll\""));
         }
     }

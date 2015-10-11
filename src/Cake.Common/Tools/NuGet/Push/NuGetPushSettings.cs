@@ -9,9 +9,9 @@ namespace Cake.Common.Tools.NuGet.Push
     public sealed class NuGetPushSettings
     {
         /// <summary>
-        /// Gets or sets  the server URL. If not specified, nuget.org is used unless 
-        /// DefaultPushSource config value is set in the NuGet config file. 
-        /// Starting with NuGet 2.5, if NuGet.exe identifies a UNC/folder source, 
+        /// Gets or sets  the server URL. If not specified, nuget.org is used unless
+        /// DefaultPushSource config value is set in the NuGet config file.
+        /// Starting with NuGet 2.5, if NuGet.exe identifies a UNC/folder source,
         /// it will perform the file copy to the source.
         /// </summary>
         /// <value>The server URL.</value>
@@ -24,7 +24,7 @@ namespace Cake.Common.Tools.NuGet.Push
         public string ApiKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the timeout for pushing to a server. 
+        /// Gets or sets the timeout for pushing to a server.
         /// Defaults to 300 seconds (5 minutes).
         /// </summary>
         /// <value>The timeout for pushing to a server.</value>

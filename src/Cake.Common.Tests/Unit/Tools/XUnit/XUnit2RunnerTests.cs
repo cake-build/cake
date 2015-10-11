@@ -40,7 +40,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 Assert.Equal("xUnit.net (v2): Could not locate executable.", result.Message);
             }
 
-            [Theory]            
+            [Theory]
             [InlineData("C:/xUnit/xunit.exe", "C:/xUnit/xunit.exe")]
             [InlineData("./tools/xUnit/xunit.exe", "/Working/tools/xUnit/xunit.exe")]
             public void Should_Use_XUnit_Runner_From_Tool_Path_If_Provided(string toolPath, string expected)
@@ -81,7 +81,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             public void Should_Use_Provided_Assembly_Paths_In_Process_Arguments()
             {
                 // Given
-                var fixture = new XUnit2RunnerFixture();                                
+                var fixture = new XUnit2RunnerFixture();
                 var runner = fixture.CreateRunner();
 
                 // When
@@ -89,7 +89,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
+                    Arg.Any<FilePath>(),
                     Arg.Is<ProcessSettings>(p => p.Arguments.Render() == "\"/Working/Test1.dll\""));
             }
 
@@ -105,8 +105,8 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => p.WorkingDirectory.FullPath == "/Working"));                
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p => p.WorkingDirectory.FullPath == "/Working"));
             }
 
             [Fact]
@@ -122,7 +122,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("xUnit.net (v2): Process was not started.", result.Message);     
+                Assert.Equal("xUnit.net (v2): Process was not started.", result.Message);
             }
 
             [Fact]
@@ -156,7 +156,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Cannot generate HTML report when no output directory has been set.", result.Message); 
+                Assert.Equal("Cannot generate HTML report when no output directory has been set.", result.Message);
             }
 
             [Fact]
@@ -175,8 +175,8 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "\"/Working/Test1.dll\" -html \"/Output/Test1.dll.html\""));
             }
 
@@ -214,8 +214,8 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "\"/Working/Test1.dll\" -xml \"/Output/Test1.dll.xml\""));
             }
 
@@ -274,8 +274,8 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "\"/Working/Test1.dll\" -noshadow"));
             }
 

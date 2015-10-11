@@ -32,10 +32,10 @@ namespace Cake.Core.Graph
                 throw new ArgumentNullException("node");
             }
             if (_nodes.Any(x => x == node))
-            {                
+            {
                 throw new CakeException("Node has already been added to graph.");
             }
-            _nodes.Add(node);   
+            _nodes.Add(node);
         }
 
         public void Connect(string start, string end)
@@ -44,7 +44,7 @@ namespace Cake.Core.Graph
             {
                 throw new CakeException("Reflexive edges in graph are not allowed.");
             }
-            if (_edges.Any(x => x.Start.Equals(end, StringComparison.OrdinalIgnoreCase) 
+            if (_edges.Any(x => x.Start.Equals(end, StringComparison.OrdinalIgnoreCase)
                 && x.End.Equals(start, StringComparison.OrdinalIgnoreCase)))
             {
                 throw new CakeException("Unidirectional edges in graph are not allowed.");

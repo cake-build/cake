@@ -190,7 +190,7 @@ namespace Cake.Core.IO.Globbing
             var last = context.Pop();
             node.Next.Accept(this, context);
 
-            // Push the segment back so pop/push 
+            // Push the segment back so pop/push
             // count remains balanced.
             context.Push(last);
         }

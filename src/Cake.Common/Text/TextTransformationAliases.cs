@@ -20,15 +20,15 @@ namespace Cake.Common.Text
         /// <param name="context">The context.</param>
         /// <param name="template">The template.</param>
         /// <returns>A <see cref="TextTransformation{TTemplate}"/> representing the provided template.</returns>
-        /// <example>  
+        /// <example>
         /// This sample shows how to create a <see cref="TextTransformation{TTemplate}"/> using
         /// the specified template.
-        /// <code> 
+        /// <code>
         /// string text = TransformText("Hello &lt;%subject%&gt;!")
         ///    .WithToken("subject", "world")
         ///    .ToString();
-        /// </code> 
-        /// </example> 
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static TextTransformation<TextTransformationTemplate> TransformText(this ICakeContext context, string template)
         {
@@ -43,15 +43,15 @@ namespace Cake.Common.Text
         /// <param name="leftPlaceholder">The left placeholder.</param>
         /// <param name="rightPlaceholder">The right placeholder.</param>
         /// <returns>A <see cref="TextTransformation{TTemplate}"/> representing the provided template.</returns>
-        /// <example>  
+        /// <example>
         /// This sample shows how to create a <see cref="TextTransformation{TTemplate}"/> using
         /// the specified template and placeholder.
-        /// <code> 
+        /// <code>
         /// string text = TransformText("Hello {subject}!", "{", "}")
         ///    .WithToken("subject", "world")
         ///    .ToString();
-        /// </code> 
-        /// </example> 
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static TextTransformation<TextTransformationTemplate> TransformText(
             this ICakeContext context,
@@ -87,15 +87,15 @@ namespace Cake.Common.Text
         /// <param name="context">The context.</param>
         /// <param name="path">The template file path.</param>
         /// <returns>A <see cref="TextTransformation{TTemplate}"/> representing the provided template.</returns>
-        /// <example>  
+        /// <example>
         /// This sample shows how to create a <see cref="TextTransformation{TTemplate}"/> using
         /// the specified template file with the placeholder format <c>&lt;%key%&gt;</c>.
-        /// <code> 
+        /// <code>
         /// string text = TransformTextFile("./template.txt")
         ///    .WithToken("subject", "world")
         ///    .ToString();
-        /// </code> 
-        /// </example> 
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "Stream reader leaves stream open.")]
         public static TextTransformation<TextTransformationTemplate> TransformTextFile(this ICakeContext context, FilePath path)
@@ -111,15 +111,15 @@ namespace Cake.Common.Text
         /// <param name="leftPlaceholder">The left placeholder.</param>
         /// <param name="rightPlaceholder">The right placeholder.</param>
         /// <returns>A <see cref="TextTransformation{TTemplate}"/> representing the provided template.</returns>
-        /// <example>  
+        /// <example>
         /// This sample shows how to create a <see cref="TextTransformation{TTemplate}"/> using
         /// the specified template file and placeholder.
-        /// <code> 
+        /// <code>
         /// string text = TransformTextFile("./template.txt", "{", "}")
         ///    .WithToken("subject", "world")
         ///    .ToString();
-        /// </code> 
-        /// </example> 
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "Stream reader leaves stream open.")]
         public static TextTransformation<TextTransformationTemplate> TransformTextFile(

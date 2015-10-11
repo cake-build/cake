@@ -14,7 +14,7 @@ namespace Cake.Common.Tools.NuGet.Install
         public FilePath ToolPath { get; set; }
 
         /// <summary>
-        /// Gets or sets the directory in which packages will be installed. 
+        /// Gets or sets the directory in which packages will be installed.
         /// If none is specified, the current directory will be used.
         /// </summary>
         public DirectoryPath OutputDirectory { get; set; }

@@ -6,19 +6,19 @@
     public enum SpecialPath
     {
         /// <summary>
-        /// The directory that serves as a common repository for application-specific 
+        /// The directory that serves as a common repository for application-specific
         /// data for the current roaming user.
         /// </summary>
         ApplicationData,
 
         /// <summary>
-        /// The directory that serves as a common repository for application-specific 
+        /// The directory that serves as a common repository for application-specific
         /// data that is used by all users.
         /// </summary>
         CommonApplicationData,
 
         /// <summary>
-        /// The directory that serves as a common repository for application-specific 
+        /// The directory that serves as a common repository for application-specific
         /// data that is used by the current, non-roaming user.
         /// </summary>
         LocalApplicationData,

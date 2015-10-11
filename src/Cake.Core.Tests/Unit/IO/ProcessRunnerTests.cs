@@ -35,7 +35,7 @@ namespace Cake.Core.Tests.Unit.IO
                 Assert.IsArgumentNullException(result, "log");
             }
         }
-        
+
         public sealed class TheStartMethod
         {
             [Fact]

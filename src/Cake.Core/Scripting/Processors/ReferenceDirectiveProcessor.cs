@@ -15,7 +15,7 @@ namespace Cake.Core.Scripting.Processors
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
-        public ReferenceDirectiveProcessor(IFileSystem fileSystem, ICakeEnvironment environment) 
+        public ReferenceDirectiveProcessor(IFileSystem fileSystem, ICakeEnvironment environment)
             : base(environment)
         {
             _fileSystem = fileSystem;
@@ -44,7 +44,7 @@ namespace Cake.Core.Scripting.Processors
                 return false;
             }
 
-            if (!tokens[0].Equals("#r", StringComparison.Ordinal) && 
+            if (!tokens[0].Equals("#r", StringComparison.Ordinal) &&
                 !tokens[0].Equals("#reference", StringComparison.Ordinal))
             {
                 return false;
@@ -55,7 +55,7 @@ namespace Cake.Core.Scripting.Processors
             var directoryPath = GetAbsoluteDirectory(currentScriptPath);
             var absoluteReferencePath = referencePath.MakeAbsolute(directoryPath);
 
-            context.AddReference(_fileSystem.Exist(absoluteReferencePath) 
+            context.AddReference(_fileSystem.Exist(absoluteReferencePath)
                 ? absoluteReferencePath.FullPath : referencePath.FullPath);
 
             return true;

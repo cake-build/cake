@@ -266,7 +266,7 @@ namespace Cake.Testing
         {
             // Copy the file to the new location.
             CopyFile(fakeFile, destination, false);
-            
+
             // Delete the original file.
             fakeFile.Delete();
         }

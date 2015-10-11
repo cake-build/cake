@@ -71,7 +71,7 @@ namespace Cake.Common.Tools.XUnit
         /// <param name="assemblies">The assemblies.</param>
         [CakeMethodAlias]
         public static void XUnit(this ICakeContext context, IEnumerable<FilePath> assemblies)
-        {            
+        {
             XUnit(context, assemblies, new XUnitSettings());
         }
 
@@ -114,7 +114,7 @@ namespace Cake.Common.Tools.XUnit
             foreach (var assembly in assemblies)
             {
                 runner.Run(assembly, settings);
-            }    
+            }
         }
     }
 }

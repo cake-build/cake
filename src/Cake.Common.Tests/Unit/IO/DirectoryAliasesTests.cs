@@ -267,8 +267,8 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new DirectoryPath[] { 
-                        "/Temp/Hello", "/Temp/Goodbye" 
+                    var paths = new DirectoryPath[] {
+                        "/Temp/Hello", "/Temp/Goodbye"
                     };
 
                     // When
@@ -287,8 +287,8 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new DirectoryPath[] { 
-                        "/Temp/Hello", "/Temp/Goodbye" 
+                    var paths = new DirectoryPath[] {
+                        "/Temp/Hello", "/Temp/Goodbye"
                     };
 
                     // When
@@ -307,7 +307,7 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new DirectoryPath[] { 
+                    var paths = new DirectoryPath[] {
                         "/Temp/Hello", "/NonExisting"
                     };
 
@@ -357,8 +357,8 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new[] { 
-                        "/Temp/Hello", "/Temp/Goodbye" 
+                    var paths = new[] {
+                        "/Temp/Hello", "/Temp/Goodbye"
                     };
 
                     // When
@@ -377,8 +377,8 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new[] { 
-                        "/Temp/Hello", "/Temp/Goodbye" 
+                    var paths = new[] {
+                        "/Temp/Hello", "/Temp/Goodbye"
                     };
 
                     // When
@@ -397,8 +397,8 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new[] { 
-                        "/Temp/Hello", "/NonExisting" 
+                    var paths = new[] {
+                        "/Temp/Hello", "/NonExisting"
                     };
 
                     // When

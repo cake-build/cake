@@ -104,7 +104,7 @@ namespace Cake.Core.Tests.Unit.IO
                 {
                     // Given
                     var fixture = new GlobberFixture();
-                    var predicate = new Func<IFileSystemInfo, bool>(i => 
+                    var predicate = new Func<IFileSystemInfo, bool>(i =>
                         i.Path.FullPath != "/Working/Bar");
 
                     // When

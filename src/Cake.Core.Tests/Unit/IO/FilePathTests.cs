@@ -172,7 +172,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var environment = Substitute.For<ICakeEnvironment>();
                     environment.WorkingDirectory.Returns(new DirectoryPath("/absolute"));
 
-                    // When 
+                    // When
                     var result = path.MakeAbsolute(environment);
 
                     // Then
@@ -187,7 +187,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var environment = Substitute.For<ICakeEnvironment>();
                     environment.WorkingDirectory.Returns(new DirectoryPath("/absolute"));
 
-                    // When 
+                    // When
                     var result = path.MakeAbsolute(environment);
 
                     // Then
@@ -203,7 +203,7 @@ namespace Cake.Core.Tests.Unit.IO
                     // Given
                     var path = new FilePath("./test.txt");
 
-                    // When 
+                    // When
                     var result = Record.Exception(() => path.MakeAbsolute((DirectoryPath)null));
 
                     // Then
@@ -217,7 +217,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var path = new FilePath("./test.txt");
                     var directory = new DirectoryPath("./relative");
 
-                    // When 
+                    // When
                     var result = Record.Exception(() => path.MakeAbsolute(directory));
 
                     // Then
@@ -232,11 +232,11 @@ namespace Cake.Core.Tests.Unit.IO
                     var path = new FilePath("./test.txt");
                     var directory = new DirectoryPath("/absolute");
 
-                    // When 
+                    // When
                     var result = path.MakeAbsolute(directory);
 
                     // Then
-                    Assert.Equal("/absolute/test.txt", result.FullPath); 
+                    Assert.Equal("/absolute/test.txt", result.FullPath);
                 }
 
                 [Fact]
@@ -246,7 +246,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var path = new FilePath("/test.txt");
                     var directory = new DirectoryPath("/absolute");
 
-                    // When 
+                    // When
                     var result = path.MakeAbsolute(directory);
 
                     // Then

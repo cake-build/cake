@@ -125,7 +125,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "install \"Cake\" -NonInteractive"));
             }
 
@@ -362,7 +362,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "install \"/Working/packages.config\" -NonInteractive"));
             }
 

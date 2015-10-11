@@ -22,7 +22,7 @@ namespace Cake.Common.Xml
         /// <param name="value">The value to set too. Leave blank to remove the selected nodes.</param>
         /// <example>
         ///   <para>
-        ///   Change the <c>server</c> setting in the configuration from <c>testhost.somecompany.com</c> 
+        ///   Change the <c>server</c> setting in the configuration from <c>testhost.somecompany.com</c>
         ///   to <c>productionhost.somecompany.com</c>.
         ///   </para>
         ///   <para>XML file:</para>
@@ -74,7 +74,7 @@ namespace Cake.Common.Xml
         ///     });
         /// });
         ///     ]]>
-        ///   </code>        
+        ///   </code>
         /// <example>
         ///   <para>
         ///   Remove an app setting from a config file.
@@ -124,7 +124,7 @@ namespace Cake.Common.Xml
         /// <param name="settings">Additional settings to tweak Xml Poke behavior.</param>
         /// <example>
         ///   <para>
-        ///   Change the <c>server</c> setting in the configuration from <c>testhost.somecompany.com</c> 
+        ///   Change the <c>server</c> setting in the configuration from <c>testhost.somecompany.com</c>
         ///   to <c>productionhost.somecompany.com</c>.
         ///   </para>
         ///   <para>XML file:</para>
@@ -176,7 +176,7 @@ namespace Cake.Common.Xml
         ///     });
         /// });
         ///     ]]>
-        ///   </code>        
+        ///   </code>
         /// <example>
         ///   <para>
         ///   Remove an app setting from a config file.
@@ -256,7 +256,7 @@ namespace Cake.Common.Xml
         /// <returns>Resulting XML.</returns>
         /// <example>
         ///   <para>
-        ///   Change the <c>server</c> setting in the configuration from <c>testhost.somecompany.com</c> 
+        ///   Change the <c>server</c> setting in the configuration from <c>testhost.somecompany.com</c>
         ///   to <c>productionhost.somecompany.com</c>.
         ///   </para>
         ///   <para>XML string:</para>
@@ -306,7 +306,7 @@ namespace Cake.Common.Xml
         ///     });
         /// });
         ///     ]]>
-        ///   </code>        
+        ///   </code>
         /// <example>
         ///   <para>
         ///   Remove an app setting from a config file.
@@ -356,7 +356,7 @@ namespace Cake.Common.Xml
         /// <returns>Resulting XML.</returns>
         /// <example>
         ///   <para>
-        ///   Change the <c>server</c> setting in the configuration from <c>testhost.somecompany.com</c> 
+        ///   Change the <c>server</c> setting in the configuration from <c>testhost.somecompany.com</c>
         ///   to <c>productionhost.somecompany.com</c>.
         ///   </para>
         ///   <para>XML string:</para>
@@ -406,7 +406,7 @@ namespace Cake.Common.Xml
         ///     });
         /// });
         ///     ]]>
-        ///   </code>        
+        ///   </code>
         /// <example>
         ///   <para>
         ///   Remove an app setting from a config file.

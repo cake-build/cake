@@ -59,8 +59,8 @@ namespace Cake.Testing
         {
             if (!string.IsNullOrWhiteSpace(format))
             {
-                Messages.Add(string.Format(format, arg));   
-            }            
+                Messages.Add(string.Format(format, arg));
+            }
         }
 
         /// <summary>

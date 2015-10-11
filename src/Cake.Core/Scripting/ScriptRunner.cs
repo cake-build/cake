@@ -122,7 +122,7 @@ namespace Cake.Core.Scripting
 
         private static IEnumerable<Assembly> GetDefaultAssemblies(IFileSystem fileSystem)
         {
-            var defaultAssemblies = new HashSet<Assembly> 
+            var defaultAssemblies = new HashSet<Assembly>
             {
                 typeof(Action).Assembly, // mscorlib
                 typeof(Uri).Assembly, // System
@@ -155,7 +155,7 @@ namespace Cake.Core.Scripting
 
         private static IEnumerable<string> GetDefaultNamespaces()
         {
-            var defaultNamespaces = new HashSet<string> 
+            var defaultNamespaces = new HashSet<string>
             {
                 "System", "System.Collections.Generic", "System.Linq",
                 "System.Text", "System.Threading.Tasks", "System.IO",

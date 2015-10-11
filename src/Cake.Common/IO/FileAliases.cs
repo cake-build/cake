@@ -22,7 +22,7 @@ namespace Cake.Common.IO
         /// // Get the temp file.
         /// var root = Directory("./");
         /// var temp = root + File("temp");
-        /// 
+        ///
         /// // Delete the file.
         /// CleanDirectory(temp);
         /// </code>

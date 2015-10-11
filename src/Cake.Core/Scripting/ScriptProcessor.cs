@@ -56,7 +56,7 @@ namespace Cake.Core.Scripting
                 new UsingStatementProcessor(_environment),
                 new AddInDirectiveProcessor(_fileSystem, _environment, _log, nugetToolResolver),
                 new ToolDirectiveProcessor(_fileSystem, _environment, _log, nugetToolResolver),
-                new ShebangProcessor(_environment), 
+                new ShebangProcessor(_environment),
             };
         }
 
@@ -127,8 +127,8 @@ namespace Cake.Core.Scripting
             using (var reader = new StreamReader(stream))
             {
                 var code = reader.ReadToEnd();
-                return string.IsNullOrWhiteSpace(code) 
-                    ? new string[] { } 
+                return string.IsNullOrWhiteSpace(code)
+                    ? new string[] { }
                     : code.SplitLines();
             }
         }

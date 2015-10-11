@@ -26,10 +26,10 @@ namespace Cake.Core.Scripting.Processors
         /// <param name="log">The log.</param>
         /// <param name="nugetToolResolver">The NuGet tool resolver.</param>
         public AddInDirectiveProcessor(
-            IFileSystem fileSystem, 
-            ICakeEnvironment environment, 
-            ICakeLog log, 
-            INuGetToolResolver nugetToolResolver) 
+            IFileSystem fileSystem,
+            ICakeEnvironment environment,
+            ICakeLog log,
+            INuGetToolResolver nugetToolResolver)
             : base(environment)
         {
             if (fileSystem == null)
@@ -149,7 +149,7 @@ namespace Cake.Core.Scripting.Processors
         {
             var nugetPath = GetNuGetPath();
             var runner = new ProcessRunner(_environment, _log);
-            var process = runner.Start(nugetPath, new ProcessSettings 
+            var process = runner.Start(nugetPath, new ProcessSettings
             {
                 Arguments = GetNuGetAddinInstallArguments(addInId, addInRootDirectory, source)
             });

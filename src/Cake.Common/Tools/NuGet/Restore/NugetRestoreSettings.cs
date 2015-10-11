@@ -53,7 +53,7 @@ namespace Cake.Common.Tools.NuGet.Restore
         public NuGetVerbosity? Verbosity { get; set; }
 
         /// <summary>
-        /// Gets or sets the NuGet configuration file. 
+        /// Gets or sets the NuGet configuration file.
         /// If not specified, the file <c>%AppData%\NuGet\NuGet.config</c> is used as the configuration file.
         /// </summary>
         public FilePath ConfigFile { get; set; }

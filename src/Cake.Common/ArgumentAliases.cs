@@ -30,7 +30,7 @@ namespace Cake.Common
         /// else
         /// {
         ///     Warning("{0} not specified", argumentName);
-        /// } 
+        /// }
         /// </code>
         /// </example>
         [CakeMethodAlias]

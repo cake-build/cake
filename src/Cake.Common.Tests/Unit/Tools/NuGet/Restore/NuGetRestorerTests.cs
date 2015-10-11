@@ -126,7 +126,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p => 
+                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
                         p.Arguments.Render() == "restore \"/Working/project.sln\" -NonInteractive"));
             }
 

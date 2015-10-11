@@ -77,7 +77,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// Initializes a new instance of the <see cref="AppVeyorCommitInfo"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        public AppVeyorCommitInfo(ICakeEnvironment environment) 
+        public AppVeyorCommitInfo(ICakeEnvironment environment)
             : base(environment)
         {
         }

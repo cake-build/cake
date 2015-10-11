@@ -90,7 +90,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
                 var fixture = new NuGetSetApiKeyFixture();
                 fixture.Settings.ToolPath = toolPath;
                 fixture.GivenCustomToolPathExist(expected);
-                
+
                 // When
                 fixture.SetApiKey();
 
@@ -133,7 +133,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
             {
                 // Given
                 var fixture = new NuGetSetApiKeyFixture();
-                
+
                 // When
                 fixture.SetApiKey();
 
@@ -183,7 +183,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
                 // Given
                 var fixture = new NuGetSetApiKeyFixture();
                 fixture.Settings.ConfigFile = "./nuget.config";
-                
+
                 // When
                 fixture.SetApiKey();
 

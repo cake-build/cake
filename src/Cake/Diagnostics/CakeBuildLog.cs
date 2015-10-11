@@ -38,7 +38,7 @@ namespace Cake.Diagnostics
                     {
                         SetPalette(token, palette);
                         _console.Write("{0}", token.Render(args));
-                    }                    
+                    }
                 }
                 finally
                 {

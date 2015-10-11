@@ -123,7 +123,7 @@ namespace Cake.Common.Tools.ILRepack
         /// Gets or sets a value indicating whether to set all types but the ones from the first assembly 'internal'
         /// </summary>
         /// <value>
-        /// <c>true</c> if types in assemblies other than the primary assembly should 
+        /// <c>true</c> if types in assemblies other than the primary assembly should
         /// have their visibility modified to internal; otherwise, <c>false</c>.
         /// </value>
         public bool Internalize { get; set; }

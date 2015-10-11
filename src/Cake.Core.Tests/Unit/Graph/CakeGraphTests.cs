@@ -74,8 +74,8 @@ namespace Cake.Core.Tests.Unit.Graph
                 graph.Add("end");
 
                 // When
-                graph.Connect("start", "end");      
-     
+                graph.Connect("start", "end");
+
                 // Then
                 Assert.Equal(2, graph.Nodes.Count);
             }
@@ -105,7 +105,7 @@ namespace Cake.Core.Tests.Unit.Graph
                 graph.Connect("start", "end");
 
                 // Then
-                Assert.Equal(1, graph.Edges.Count);                
+                Assert.Equal(1, graph.Edges.Count);
             }
 
             [Fact]
@@ -269,10 +269,10 @@ namespace Cake.Core.Tests.Unit.Graph
                 graph.Connect("A", "B");
                 graph.Connect("B", "C");
                 graph.Connect("B", "D");
-                graph.Connect("D", "E");                
+                graph.Connect("D", "E");
 
                 // When
-                var result = graph.Traverse("E").ToArray();                
+                var result = graph.Traverse("E").ToArray();
 
                 // Then
                 Assert.Equal(4, result.Length);

@@ -27,7 +27,7 @@ namespace Cake.Core
         /// </summary>
         public CakeEnvironment()
         {
-            WorkingDirectory = new DirectoryPath(Environment.CurrentDirectory);    
+            WorkingDirectory = new DirectoryPath(Environment.CurrentDirectory);
         }
 
         /// <summary>

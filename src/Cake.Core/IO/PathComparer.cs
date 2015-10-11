@@ -67,7 +67,7 @@ namespace Cake.Core.IO
         /// </summary>
         /// <param name="obj">The path.</param>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         public int GetHashCode(Path obj)
         {

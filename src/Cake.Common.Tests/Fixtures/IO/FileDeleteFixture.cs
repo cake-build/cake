@@ -27,7 +27,7 @@ namespace Cake.Common.Tests.Fixtures.IO
         }
 
         public FileDeleteFixture()
-        {            
+        {
             // Setup the files in the file system.
             _paths = new List<FilePath>();
             _files = new List<IFile>();
@@ -43,7 +43,7 @@ namespace Cake.Common.Tests.Fixtures.IO
             FileSystem = Substitute.For<IFileSystem>();
             FileSystem.GetFile(Arg.Is<FilePath>(c => _lookup.ContainsKey(c.FullPath)))
                 .Returns(c => _lookup[c.Arg<FilePath>().FullPath]);
-              
+
             // Set the working directory.
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory.Returns("/Working");
