@@ -64,6 +64,7 @@
     <Compile Include="FakeFileSystem.cs" />
     <Compile Include="FakeFileSystemTree.cs" />
     <Compile Include="FakeLog.cs" />
+    <Compile Include="FakeLogMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -36,9 +36,9 @@ namespace Cake.Tests.Unit.Scripting
                 strategy.Execute(new ActionTask("Second"), context);
 
                 // Then
-                Assert.Equal(2, log.Messages.Count);
-                Assert.Equal("1. First", log.Messages[0]);
-                Assert.Equal("2. Second", log.Messages[1]);
+                Assert.Equal(2, log.Entries.Count);
+                Assert.Equal("1. First", log.Entries[0].Message);
+                Assert.Equal("2. Second", log.Entries[1].Message);
             }
         }
     }

@@ -296,7 +296,7 @@ namespace Cake.Core.Tests.Unit
                     engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
-                Assert.True(fixture.Log.Messages.Contains("Error: Whoopsie"));
+                Assert.True(fixture.Log.Entries.Any(x => x.Message == "Error: Whoopsie"));
             }
 
             [Fact]
@@ -352,7 +352,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.False(runTask, "Task A was executed although it shouldn't have been.");
-                Assert.True(fixture.Log.Messages.Contains("Executing custom setup action..."));
+                Assert.True(fixture.Log.Entries.Any(x => x.Message == "Executing custom setup action..."));
             }
 
             [Fact]
@@ -394,7 +394,7 @@ namespace Cake.Core.Tests.Unit
                 Assert.NotNull(result);
                 Assert.IsType<InvalidOperationException>(result);
                 Assert.Equal("Fail", result.Message);
-                Assert.True(fixture.Log.Messages.Contains("Executing custom teardown action..."));
+                Assert.True(fixture.Log.Entries.Any(x => x.Message == "Executing custom teardown action..."));
             }
 
             [Fact]
@@ -416,7 +416,7 @@ namespace Cake.Core.Tests.Unit
                 Assert.NotNull(result);
                 Assert.IsType<InvalidOperationException>(result);
                 Assert.Equal("Fail", result.Message);
-                Assert.True(fixture.Log.Messages.Contains("Executing custom teardown action..."));
+                Assert.True(fixture.Log.Entries.Any(x => x.Message == "Executing custom teardown action..."));
             }
 
             [Fact]
@@ -475,7 +475,7 @@ namespace Cake.Core.Tests.Unit
                     engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
-                Assert.True(fixture.Log.Messages.Any(x => x.StartsWith("Teardown error:")));
+                Assert.True(fixture.Log.Entries.Any(x => x.Message.StartsWith("Teardown error:")));
             }
 
             [Fact]
@@ -513,7 +513,7 @@ namespace Cake.Core.Tests.Unit
                     engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
-                Assert.True(fixture.Log.Messages.Any(x => x.StartsWith("Teardown error:")));
+                Assert.True(fixture.Log.Entries.Any(x => x.Message.StartsWith("Teardown error:")));
             }
 
             [Fact]
@@ -665,8 +665,8 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.Equal(new List<string>(), result);
 
-                Assert.True(fixture.Log.Messages.Contains("Executing custom task setup action (A)..."));
-                Assert.False(fixture.Log.Messages.Contains("Executing custom task setup action (B)..."));
+                Assert.True(fixture.Log.Entries.Any(x => x.Message == "Executing custom task setup action (A)..."));
+                Assert.False(fixture.Log.Entries.Any(x => x.Message == "Executing custom task setup action (B)..."));
             }
 
             [Fact]
@@ -843,7 +843,7 @@ namespace Cake.Core.Tests.Unit
                 Assert.NotNull(result);
                 Assert.IsType<InvalidOperationException>(result);
                 Assert.Equal("Task Setup: A", result.Message);
-                Assert.True(fixture.Log.Messages.Any(x => x.StartsWith("Task Teardown error (A):")));
+                Assert.True(fixture.Log.Entries.Any(x => x.Message.StartsWith("Task Teardown error (A):")));
             }
 
             [Fact]
@@ -880,7 +880,7 @@ namespace Cake.Core.Tests.Unit
                 Record.Exception(() => engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
-                Assert.True(fixture.Log.Messages.Any(x => x.StartsWith("Task Teardown error (A):")));
+                Assert.True(fixture.Log.Entries.Any(x => x.Message.StartsWith("Task Teardown error (A):")));
             }
         }
     }

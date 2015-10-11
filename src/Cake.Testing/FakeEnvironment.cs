@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -8,9 +10,13 @@ namespace Cake.Testing
     /// <summary>
     /// Represents a fake environment.
     /// </summary>
-    public class FakeEnvironment : ICakeEnvironment
+    public sealed class FakeEnvironment : ICakeEnvironment
     {
         private readonly bool _isUnix;
+        private readonly bool _is64Bit;
+        private readonly Dictionary<string, string> _environmentVariables;
+        private readonly Dictionary<SpecialPath, DirectoryPath> _specialPaths;
+        private DirectoryPath _applicationRoot;
 
         /// <summary>
         /// Gets or sets the working directory.
@@ -18,28 +24,33 @@ namespace Cake.Testing
         /// <value>The working directory.</value>
         public DirectoryPath WorkingDirectory { get; set; }
 
-        private FakeEnvironment(bool isUnix)
+        private FakeEnvironment(bool isUnix, bool is64Bit)
         {
             _isUnix = isUnix;
+            _is64Bit = is64Bit;
+            _environmentVariables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            _specialPaths = new Dictionary<SpecialPath, DirectoryPath>();
             WorkingDirectory = new DirectoryPath("/Working");
         }
 
         /// <summary>
         /// Creates a Unix environment.
         /// </summary>
+        /// <param name="is64Bit">if set to <c>true</c> the operating system is 64 bit.</param>
         /// <returns>A Unix environment.</returns>
-        public static FakeEnvironment CreateUnixEnvironment()
+        public static FakeEnvironment CreateUnixEnvironment(bool is64Bit = true)
         {
-            return new FakeEnvironment(true);
+            return new FakeEnvironment(true, is64Bit);
         }
 
         /// <summary>
         /// Creates a Windows environment.
         /// </summary>
+        /// <param name="is64Bit">if set to <c>true</c> the operating system is 64 bit.</param>
         /// <returns>A Windows environment.</returns>
-        public static FakeEnvironment CreateWindowsEnvironment()
+        public static FakeEnvironment CreateWindowsEnvironment(bool is64Bit = true)
         {
-            var environment = new FakeEnvironment(false);
+            var environment = new FakeEnvironment(false, is64Bit);
             environment.WorkingDirectory = new DirectoryPath("C:/Working");
             return environment;
         }
@@ -50,7 +61,7 @@ namespace Cake.Testing
         /// <returns>Whether or not the current operative system is 64 bit.</returns>
         public bool Is64BitOperativeSystem()
         {
-            throw new NotImplementedException();
+            return _is64Bit;
         }
 
         /// <summary>
@@ -71,7 +82,22 @@ namespace Cake.Testing
         /// </returns>
         public DirectoryPath GetSpecialPath(SpecialPath path)
         {
-            throw new NotImplementedException();
+            if (_specialPaths.ContainsKey(path))
+            {
+                return _specialPaths[path];
+            }
+            const string format = "The special path '{0}' is not supported.";
+            throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, format, path));
+        }
+
+        /// <summary>
+        /// Sets a special path.
+        /// </summary>
+        /// <param name="kind">The special path kind.</param>
+        /// <param name="path">The path.</param>
+        public void SetSpecialPath(SpecialPath kind, DirectoryPath path)
+        {
+            _specialPaths[kind] = path;
         }
 
         /// <summary>
@@ -82,7 +108,16 @@ namespace Cake.Testing
         /// </returns>
         public DirectoryPath GetApplicationRoot()
         {
-            throw new NotImplementedException();
+            return _applicationRoot;
+        }
+
+        /// <summary>
+        /// Sets the application root path.
+        /// </summary>
+        /// <param name="applicationRoot">The application root path.</param>
+        public void SetApplicationRoot(DirectoryPath applicationRoot)
+        {
+            _applicationRoot = applicationRoot;
         }
 
         /// <summary>
@@ -94,7 +129,21 @@ namespace Cake.Testing
         /// </returns>
         public string GetEnvironmentVariable(string variable)
         {
-            throw new NotImplementedException();
+            if (_environmentVariables.ContainsKey(variable))
+            {
+                return _environmentVariables[variable];
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Sets an environment variable.
+        /// </summary>
+        /// <param name="variable">The variable.</param>
+        /// <param name="value">The value.</param>
+        public void SetEnvironmentVariable(string variable, string value)
+        {
+            _environmentVariables[variable] = value;
         }
 
         /// <summary>
@@ -103,7 +152,7 @@ namespace Cake.Testing
         /// <returns>The environment variables as IDictionary&lt;string, string&gt; </returns>
         public IDictionary<string, string> GetEnvironmentVariables()
         {
-            throw new NotImplementedException();
+            return new Dictionary<string, string>(_environmentVariables, StringComparer.OrdinalIgnoreCase);
         }
     }
 }

@@ -8,15 +8,15 @@ namespace Cake.Testing
     /// </summary>
     public sealed class FakeLog : ICakeLog
     {
-        private readonly List<string> _messages;
+        private readonly List<FakeLogMessage> _entries;
 
         /// <summary>
         /// Gets the messages.
         /// </summary>
         /// <value>The messages.</value>
-        public List<string> Messages
+        public IReadOnlyList<FakeLogMessage> Entries
         {
-            get { return _messages; }
+            get { return _entries; }
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Cake.Testing
         /// </summary>
         public FakeLog()
         {
-            _messages = new List<string>();
+            _entries = new List<FakeLogMessage>();
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Cake.Testing
         /// <param name="args">An array of objects to write using format.</param>
         public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
         {
-            _messages.Add(string.Format(format, args));
+            _entries.Add(new FakeLogMessage(verbosity, level, string.Format(format, args)));
         }
     }
 }
