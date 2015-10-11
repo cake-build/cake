@@ -76,6 +76,8 @@
     <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyUpgraderFixture.cs" />
     <Compile Include="Fixtures\Tools\DupFinderRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\FixieRunnerFixture.cs" />
+    <Compile Include="Fixtures\Tools\GitReleaseManagerFixture.cs" />
+    <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerCreatorFixture.cs" />
     <Compile Include="Fixtures\Tools\ILMergeRunnerFixture.cs" />
     <Compile Include="Fixtures\Diagnostics\LogActionFixture.cs" />
     <Compile Include="Fixtures\Tools\InspectCodeRunnerFixture.cs" />
@@ -155,6 +157,7 @@
     <Compile Include="Unit\Tools\Chocolatey\Upgrade\ChocolateyUpgradeSettingsTests.cs" />
     <Compile Include="Unit\Tools\DupFinder\DupFinderRunnerTests.cs" />
     <Compile Include="Unit\Tools\Fixie\FixieRunnerTests.cs" />
+    <Compile Include="Unit\Tools\GitReleaseManager\Create\GitReleaseManagerCreatorTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeSettingsTests.cs" />
     <Compile Include="Unit\IO\ZipperTests.cs" />
@@ -233,6 +236,12 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Unit\Tools\GitReleaseManager\AddAsset\" />
+    <Folder Include="Unit\Tools\GitReleaseManager\Close\" />
+    <Folder Include="Unit\Tools\GitReleaseManager\Export\" />
+    <Folder Include="Unit\Tools\GitReleaseManager\Publish\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

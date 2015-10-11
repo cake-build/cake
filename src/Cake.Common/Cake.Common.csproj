@@ -142,6 +142,12 @@
     <Compile Include="Tools\Fixie\FixieRunner.cs" />
     <Compile Include="Tools\Fixie\FixieSettings.cs" />
     <Compile Include="Tools\Fixie\FixieSettingsExtensions.cs" />
+    <Compile Include="Tools\GitReleaseManager\Create\GitReleaseManagerCreateSettings.cs" />
+    <Compile Include="Tools\GitReleaseManager\Create\GitReleaseManagerCreator.cs" />
+    <Compile Include="Tools\GitReleaseManager\GitReleaseManagerAliases.cs" />
+    <Compile Include="Tools\GitReleaseManager\GitReleaseManagerTool.cs" />
+    <Compile Include="Tools\GitReleaseManager\GitReleaseManagerToolResolver.cs" />
+    <Compile Include="Tools\GitReleaseManager\IGitReleaseManagerToolResolver.cs" />
     <Compile Include="Tools\ILMerge\ILMergeAliases.cs" />
     <Compile Include="Tools\ILMerge\ILMergeRunner.cs" />
     <Compile Include="Tools\ILMerge\ILMergeSettings.cs" />
@@ -261,6 +267,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tools\GitReleaseManager\AddAsset\" />
+    <Folder Include="Tools\GitReleaseManager\Close\" />
+    <Folder Include="Tools\GitReleaseManager\Export\" />
+    <Folder Include="Tools\GitReleaseManager\Publish\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
