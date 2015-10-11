@@ -227,10 +227,10 @@ Task("Publish-MyGet")
         throw new InvalidOperationException("Could not resolve MyGet API key.");
     }
 
-    foreach(var package in new[]{"Cake", "Cake.Core", "Cake.Common"})
+    foreach(var package in new[] { "Cake", "Cake.Core", "Cake.Common", "Cake.Testing" })
     {
         // Get the path to the package.
-        var packagePath = nugetRoot + File(string.Concat(package, ".",semVersion,".nupkg"));
+        var packagePath = nugetRoot + File(string.Concat(package, ".", semVersion, ".nupkg"));
 
         // Push the package.
         NuGetPush(packagePath, new NuGetPushSettings {
@@ -240,24 +240,50 @@ Task("Publish-MyGet")
     }
 });
 
+Task("Publish-NuGet")
+  .IsDependentOn("Create-NuGet-Packages")
+  .WithCriteria(() => local)
+  .Does(() =>
+{
+    // Resolve the API key.
+    var apiKey = EnvironmentVariable("NUGET_API_KEY");
+    if(string.IsNullOrEmpty(apiKey)) {
+        throw new InvalidOperationException("Could not resolve NuGet API key.");
+    }
+
+    foreach(var package in new[] { "Cake", "Cake.Core", "Cake.Common", "Cake.Testing" })
+    {
+        // Get the path to the package.
+        var packagePath = nugetRoot + File(string.Concat(package, ".", semVersion, ".nupkg"));
+
+        // Push the package.
+        NuGetPush(packagePath, new NuGetPushSettings {
+          ApiKey = apiKey
+        });
+    }
+});
+
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
 Task("Package")
-    .IsDependentOn("Zip-Files")
-    .IsDependentOn("Create-NuGet-Packages");
+  .IsDependentOn("Zip-Files")
+  .IsDependentOn("Create-NuGet-Packages");
 
 Task("Default")
-    .IsDependentOn("Package");
+  .IsDependentOn("Package");
+
+Task("Publish")
+  .IsDependentOn("Publish-NuGet");
 
 Task("AppVeyor")
-    .IsDependentOn("Update-AppVeyor-Build-Number")
-    .IsDependentOn("Upload-AppVeyor-Artifacts")
-    .IsDependentOn("Publish-MyGet");
+  .IsDependentOn("Update-AppVeyor-Build-Number")
+  .IsDependentOn("Upload-AppVeyor-Artifacts")
+  .IsDependentOn("Publish-MyGet");
 
 Task("Travis")
-    .IsDependentOn("Build");
+  .IsDependentOn("Build");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
