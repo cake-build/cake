@@ -79,6 +79,7 @@
     <Compile Include="Fixtures\Tools\GitReleaseManagerFixture.cs" />
     <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerAssetsAdderFixture.cs" />
     <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerCreatorFixture.cs" />
+    <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerMilestoneCloserFixture.cs" />
     <Compile Include="Fixtures\Tools\ILMergeRunnerFixture.cs" />
     <Compile Include="Fixtures\Diagnostics\LogActionFixture.cs" />
     <Compile Include="Fixtures\Tools\InspectCodeRunnerFixture.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Unit\Tools\DupFinder\DupFinderRunnerTests.cs" />
     <Compile Include="Unit\Tools\Fixie\FixieRunnerTests.cs" />
     <Compile Include="Unit\Tools\GitReleaseManager\AddAssets\GitReleaseManagerAssetsAdderTests.cs" />
+    <Compile Include="Unit\Tools\GitReleaseManager\Close\GitReleaseManagerMilestoneCloserTests.cs" />
     <Compile Include="Unit\Tools\GitReleaseManager\Create\GitReleaseManagerCreatorTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeSettingsTests.cs" />
@@ -240,7 +242,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Unit\Tools\GitReleaseManager\Close\" />
     <Folder Include="Unit\Tools\GitReleaseManager\Export\" />
     <Folder Include="Unit\Tools\GitReleaseManager\Publish\" />
   </ItemGroup>
