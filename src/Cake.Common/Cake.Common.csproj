@@ -142,6 +142,8 @@
     <Compile Include="Tools\Fixie\FixieRunner.cs" />
     <Compile Include="Tools\Fixie\FixieSettings.cs" />
     <Compile Include="Tools\Fixie\FixieSettingsExtensions.cs" />
+    <Compile Include="Tools\GitReleaseManager\AddAssets\GitReleaseManagerAddAssetsSettings.cs" />
+    <Compile Include="Tools\GitReleaseManager\AddAssets\GitReleaseManagerAssetsAdder.cs" />
     <Compile Include="Tools\GitReleaseManager\Create\GitReleaseManagerCreateSettings.cs" />
     <Compile Include="Tools\GitReleaseManager\Create\GitReleaseManagerCreator.cs" />
     <Compile Include="Tools\GitReleaseManager\GitReleaseManagerAliases.cs" />
@@ -269,7 +271,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Tools\GitReleaseManager\AddAsset\" />
     <Folder Include="Tools\GitReleaseManager\Close\" />
     <Folder Include="Tools\GitReleaseManager\Export\" />
     <Folder Include="Tools\GitReleaseManager\Publish\" />
