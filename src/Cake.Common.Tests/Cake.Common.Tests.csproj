@@ -64,6 +64,16 @@
     <Compile Include="Fixtures\IO\FileCopyFixture.cs" />
     <Compile Include="Fixtures\IO\FileDeleteFixture.cs" />
     <Compile Include="Fixtures\IO\FileSystemFixture.cs" />
+    <Compile Include="Fixtures\Tools\ChocolateyFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyApiKeySetterFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyConfigSetterFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyFeatureTogglerFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyInstallerFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyPackerFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyPinnerFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyPusherFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\ChocolateySourcesFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyUpgraderFixture.cs" />
     <Compile Include="Fixtures\Tools\DupFinderRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\FixieRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\ILMergeRunnerFixture.cs" />
@@ -126,6 +136,23 @@
     <Compile Include="Unit\Text\TextTransformationExtensionsTests.cs" />
     <Compile Include="Unit\Text\TextTransformationTests.cs" />
     <Compile Include="Unit\Tools\Cake\CakeRunnerTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\ApiKey\ChocolateyApiKeySetterTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\ApiKey\ChocolateyApiKeySettingsTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Config\ChocolateyConfigSetterTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Config\ChocolateyConfigSettingsTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Features\ChocolateyFeatureSettingsTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Features\ChocolateyFeatureTogglerTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Install\ChocolateyInstallerSettingsTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Install\ChocolateyInstallerTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Pack\ChocolateyPackerTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Pack\ChocolateyPackSettingsTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Pin\ChocolateyPinnerTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Pin\ChocolateyPinSettingsTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Push\ChocolateyPusherTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Sources\ChocolateySourcesSettingsTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Sources\ChocolateySourcesTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Upgrade\ChocolateyUpgraderTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Upgrade\ChocolateyUpgradeSettingsTests.cs" />
     <Compile Include="Unit\Tools\DupFinder\DupFinderRunnerTests.cs" />
     <Compile Include="Unit\Tools\Fixie\FixieRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeRunnerTests.cs" />
@@ -207,6 +234,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

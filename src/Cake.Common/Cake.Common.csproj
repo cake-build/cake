@@ -110,6 +110,31 @@
     <Compile Include="Tools\Cake\CakeAliases.cs" />
     <Compile Include="Tools\Cake\CakeRunner.cs" />
     <Compile Include="Tools\Cake\CakeSettings.cs" />
+    <Compile Include="Tools\Chocolatey\ApiKey\ChocolateyApiKeySetter.cs" />
+    <Compile Include="Tools\Chocolatey\ApiKey\ChocolateyApiKeySettings.cs" />
+    <Compile Include="Tools\Chocolatey\ChocolateyAliases.cs" />
+    <Compile Include="Tools\Chocolatey\ChocolateyToolResolver.cs" />
+    <Compile Include="Tools\Chocolatey\ChocolateyTool.cs" />
+    <Compile Include="Tools\Chocolatey\Config\ChocolateyConfigSetter.cs" />
+    <Compile Include="Tools\Chocolatey\Config\ChocolateyConfigSettings.cs" />
+    <Compile Include="Tools\Chocolatey\Features\ChocolateyFeatureSettings.cs" />
+    <Compile Include="Tools\Chocolatey\Features\ChocolateyFeatureToggler.cs" />
+    <Compile Include="Tools\Chocolatey\IChocolateyToolResolver.cs" />
+    <Compile Include="Tools\Chocolatey\Install\ChocolateyInstaller.cs" />
+    <Compile Include="Tools\Chocolatey\Install\ChocolateyInstallSettings.cs" />
+    <Compile Include="Tools\Chocolatey\Pack\ChocolateyNuSpecContent.cs" />
+    <Compile Include="Tools\Chocolatey\Pack\ChocolateyNuSpecProcessor.cs" />
+    <Compile Include="Tools\Chocolatey\Pack\ChocolateyNuSpecTransformer.cs" />
+    <Compile Include="Tools\Chocolatey\Pack\ChocolateyPacker.cs" />
+    <Compile Include="Tools\Chocolatey\Pack\ChocolateyPackSettings.cs" />
+    <Compile Include="Tools\Chocolatey\Pin\ChocolateyPinner.cs" />
+    <Compile Include="Tools\Chocolatey\Pin\ChocolateyPinSettings.cs" />
+    <Compile Include="Tools\Chocolatey\Push\ChocolateyPusher.cs" />
+    <Compile Include="Tools\Chocolatey\Push\ChocolateyPushSettings.cs" />
+    <Compile Include="Tools\Chocolatey\Sources\ChocolateySources.cs" />
+    <Compile Include="Tools\Chocolatey\Sources\ChocolateySourcesSettings.cs" />
+    <Compile Include="Tools\Chocolatey\Upgrade\ChocolateyUpgrader.cs" />
+    <Compile Include="Tools\Chocolatey\Upgrade\ChocolateyUpgradeSettings.cs" />
     <Compile Include="Tools\DupFinder\DupFinderAliases.cs" />
     <Compile Include="Tools\DupFinder\DupFinderRunner.cs" />
     <Compile Include="Tools\DupFinder\DupFinderSettings.cs" />
@@ -237,6 +262,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\StyleCop.MSBuild.4.7.49.1\build\StyleCop.MSBuild.Targets" Condition="Exists('..\packages\StyleCop.MSBuild.4.7.49.1\build\StyleCop.MSBuild.Targets') and $(Configuration)=='Release'" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

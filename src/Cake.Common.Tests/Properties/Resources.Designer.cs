@@ -62,6 +62,91 @@ namespace Cake.Common.Tests.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. --&gt;
+        ///&lt;package xmlns=&quot;http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd&quot;&gt;
+        ///  &lt;metadata&gt;
+        ///    &lt;id&gt;The ID&lt;/id&gt;
+        ///    &lt;title&gt;The title&lt;/title&gt;
+        ///    &lt;version&gt;The version&lt;/version&gt;
+        ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+        ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+        ///    &lt;summary&gt;The summa [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ChocolateyNuspec_Metadata {
+            get {
+                return ResourceManager.GetString("ChocolateyNuspec_Metadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. --&gt;
+        ///&lt;package&gt;
+        ///  &lt;metadata&gt;
+        ///    &lt;id&gt;The ID&lt;/id&gt;
+        ///    &lt;title&gt;The title&lt;/title&gt;
+        ///    &lt;version&gt;The version&lt;/version&gt;
+        ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+        ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+        ///    &lt;summary&gt;The summary&lt;/summary&gt;
+        ///    &lt;description&gt;The description&lt;/description&gt;
+        ///     [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ChocolateyNuspec_Metadata_WithoutNamespaces {
+            get {
+                return ResourceManager.GetString("ChocolateyNuspec_Metadata_WithoutNamespaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. --&gt;
+        ///&lt;package xmlns=&quot;http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd&quot;&gt;
+        ///  &lt;files&gt;
+        ///    &lt;file src=&quot;tools\**&quot; target=&quot;tools&quot; /&gt;
+        ///  &lt;/files&gt;
+        ///&lt;/package&gt;.
+        /// </summary>
+        internal static string ChocolateyNuspec_NoMetadataElement {
+            get {
+                return ResourceManager.GetString("ChocolateyNuspec_NoMetadataElement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. --&gt;
+        ///&lt;package xmlns=&quot;http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd&quot;&gt;
+        ///  &lt;metadata /&gt;
+        ///  &lt;files&gt;
+        ///    &lt;file src=&quot;tools\**&quot; target=&quot;tools&quot; /&gt;
+        ///  &lt;/files&gt;
+        ///&lt;/package&gt;.
+        /// </summary>
+        internal static string ChocolateyNuspec_NoMetadataValues {
+            get {
+                return ResourceManager.GetString("ChocolateyNuspec_NoMetadataValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. --&gt;
+        ///&lt;package&gt;
+        ///  &lt;metadata /&gt;
+        ///  &lt;files&gt;
+        ///    &lt;file src=&quot;tools\**&quot; target=&quot;tools&quot; /&gt;
+        ///  &lt;/files&gt;
+        ///&lt;/package&gt;.
+        /// </summary>
+        internal static string ChocolateyNuspec_NoMetadataValues_WithoutNamespaces {
+            get {
+                return ResourceManager.GetString("ChocolateyNuspec_NoMetadataValues_WithoutNamespaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
         ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
         ///    &lt;id&gt;The ID&lt;/id&gt;
