@@ -152,6 +152,8 @@
     <Compile Include="Tools\GitReleaseManager\GitReleaseManagerTool.cs" />
     <Compile Include="Tools\GitReleaseManager\GitReleaseManagerToolResolver.cs" />
     <Compile Include="Tools\GitReleaseManager\IGitReleaseManagerToolResolver.cs" />
+    <Compile Include="Tools\GitReleaseManager\Publish\GitReleaseManagerPublisher.cs" />
+    <Compile Include="Tools\GitReleaseManager\Publish\GitReleaseManagerPublishSettings.cs" />
     <Compile Include="Tools\ILMerge\ILMergeAliases.cs" />
     <Compile Include="Tools\ILMerge\ILMergeRunner.cs" />
     <Compile Include="Tools\ILMerge\ILMergeSettings.cs" />
@@ -274,7 +276,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Tools\GitReleaseManager\Export\" />
-    <Folder Include="Tools\GitReleaseManager\Publish\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
