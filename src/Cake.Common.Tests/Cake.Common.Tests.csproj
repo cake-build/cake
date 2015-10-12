@@ -79,6 +79,7 @@
     <Compile Include="Fixtures\Tools\GitReleaseManagerFixture.cs" />
     <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerAssetsAdderFixture.cs" />
     <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerCreatorFixture.cs" />
+    <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerExporterFixture.cs" />
     <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerMilestoneCloserFixture.cs" />
     <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerPublisherFixture.cs" />
     <Compile Include="Fixtures\Tools\ILMergeRunnerFixture.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="Unit\Tools\GitReleaseManager\AddAssets\GitReleaseManagerAssetsAdderTests.cs" />
     <Compile Include="Unit\Tools\GitReleaseManager\Close\GitReleaseManagerMilestoneCloserTests.cs" />
     <Compile Include="Unit\Tools\GitReleaseManager\Create\GitReleaseManagerCreatorTests.cs" />
+    <Compile Include="Unit\Tools\GitReleaseManager\Export\GitReleaseManagerExporterTests.cs" />
     <Compile Include="Unit\Tools\GitReleaseManager\Publish\GitReleaseManagerPublisherTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeSettingsTests.cs" />
@@ -243,9 +245,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Unit\Tools\GitReleaseManager\Export\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

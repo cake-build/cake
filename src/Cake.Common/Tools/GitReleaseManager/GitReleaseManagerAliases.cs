@@ -2,9 +2,11 @@
 using Cake.Common.Tools.GitReleaseManager.AddAssets;
 using Cake.Common.Tools.GitReleaseManager.Close;
 using Cake.Common.Tools.GitReleaseManager.Create;
+using Cake.Common.Tools.GitReleaseManager.Export;
 using Cake.Common.Tools.GitReleaseManager.Publish;
 using Cake.Core;
 using Cake.Core.Annotations;
+using Cake.Core.IO;
 
 namespace Cake.Common.Tools.GitReleaseManager
 {
@@ -112,6 +114,31 @@ namespace Cake.Common.Tools.GitReleaseManager
             var resolver = new GitReleaseManagerToolResolver(context.FileSystem, context.Environment, context.Globber);
             var publisher = new GitReleaseManagerPublisher(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             publisher.Publish(userName, password, owner, repository, tagName, settings);
+        }
+
+        /// <summary>
+        /// Exports the release notes using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="userName">The user name.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="owner">The owner.</param>
+        /// <param name="repository">The repository.</param>
+        /// <param name="fileOutputPath">The output file path.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Export")]
+        [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Export")]
+        public static void GitReleaseManagerExport(this ICakeContext context, string userName, string password, string owner, string repository, FilePath fileOutputPath, GitReleaseManagerExportSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var resolver = new GitReleaseManagerToolResolver(context.FileSystem, context.Environment, context.Globber);
+            var publisher = new GitReleaseManagerExporter(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            publisher.Export(userName, password, owner, repository, fileOutputPath, settings);
         }
     }
 }
