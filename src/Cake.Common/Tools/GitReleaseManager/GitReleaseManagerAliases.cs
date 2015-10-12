@@ -25,6 +25,31 @@ namespace Cake.Common.Tools.GitReleaseManager
         /// <param name="owner">The owner.</param>
         /// <param name="repository">The repository.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// GitReleaseManagerCreate("user", "password", "owner", "repo", new GitReleaseManagerCreateSettings {
+        ///     Milestone         = "0.1.0",
+        ///     Prerelease        = false,
+        ///     Assets            = "c:/temp/asset1.txt,c:/temp/asset2.txt",
+        ///     TargetCommitish   = "master",
+        ///     TargetDirectory   = "c:/repo",
+        ///     LogFilePath       = "c:/temp/grm.log"
+        /// });
+        /// </code>
+        /// </example>
+        /// <example>
+        /// <code>
+        /// GitReleaseManagerCreate("user", "password", "owner", "repo", new GitReleaseManagerCreateSettings {
+        ///     Name              = "0.1.0",
+        ///     InputFilePath     = "c:/repo/releasenotes.md",
+        ///     Prerelease        = false,
+        ///     Assets            = "c:/temp/asset1.txt,c:/temp/asset2.txt",
+        ///     TargetCommitish   = "master",
+        ///     TargetDirectory   = "c:/repo",
+        ///     LogFilePath       = "c:/temp/grm.log"
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Create")]
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Create")]
@@ -51,6 +76,14 @@ namespace Cake.Common.Tools.GitReleaseManager
         /// <param name="tagName">The tag name.</param>
         /// <param name="assets">The assets.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// GitReleaseManagerAddAssets("user", "password", "owner", "repo", "0.1.0", "c:/temp/asset1.txt,c:/temp/asset2.txt" new GitReleaseManagerAddAssetsSettings {
+        ///     TargetDirectory   = "c:/repo",
+        ///     LogFilePath       = "c:/temp/grm.log"
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("AddAssets")]
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.AddAssets")]
@@ -76,6 +109,14 @@ namespace Cake.Common.Tools.GitReleaseManager
         /// <param name="repository">The repository.</param>
         /// <param name="milestone">The milestone.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// GitReleaseManagerClose("user", "password", "owner", "repo", "0.1.0", new GitReleaseManagerCloseMilestoneSettings {
+        ///     TargetDirectory   = "c:/repo",
+        ///     LogFilePath       = "c:/temp/grm.log"
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Close")]
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Close")]
@@ -92,7 +133,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         }
 
         /// <summary>
-        /// Closes the milestone associated with a release using the specified settings.
+        /// Publishes the release using the specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="userName">The user name.</param>
@@ -101,6 +142,14 @@ namespace Cake.Common.Tools.GitReleaseManager
         /// <param name="repository">The repository.</param>
         /// <param name="tagName">The tag name.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// GitReleaseManagerPublish("user", "password", "owner", "repo", "0.1.0", new GitReleaseManagerPublishSettings {
+        ///     TargetDirectory   = "c:/repo",
+        ///     LogFilePath       = "c:/temp/grm.log"
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Publish")]
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Publish")]
@@ -126,6 +175,15 @@ namespace Cake.Common.Tools.GitReleaseManager
         /// <param name="repository">The repository.</param>
         /// <param name="fileOutputPath">The output file path.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// GitReleaseManagerExport("user", "password", "owner", "repo", "c:/temp/releasenotes.md", new GitReleaseManagerExportSettings {
+        ///     TagName           = "0.1.0",
+        ///     TargetDirectory   = "c:/repo",
+        ///     LogFilePath       = "c:/temp/grm.log"
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Export")]
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Export")]
