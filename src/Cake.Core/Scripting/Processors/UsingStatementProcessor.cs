@@ -1,34 +1,17 @@
 using System;
 using System.Linq;
-using Cake.Core.IO;
+using Cake.Core.Scripting.Analysis;
 
 namespace Cake.Core.Scripting.Processors
 {
-    /// <summary>
-    /// Processor for using statements.
-    /// </summary>
-    public sealed class UsingStatementProcessor : LineProcessor
+    internal sealed class UsingStatementProcessor : LineProcessor
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UsingStatementProcessor"/> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
         public UsingStatementProcessor(ICakeEnvironment environment)
             : base(environment)
         {
         }
 
-        /// <summary>
-        /// Processes the specified line.
-        /// </summary>
-        /// <param name="processor">The script processor.</param>
-        /// <param name="context">The script processor context.</param>
-        /// <param name="currentScriptPath">The current script path.</param>
-        /// <param name="line">The line to process.</param>
-        /// <returns>
-        ///   <c>true</c> if the processor handled the line; otherwise <c>false</c>.
-        /// </returns>
-        public override bool Process(IScriptProcessor processor, ScriptProcessorContext context, FilePath currentScriptPath, string line)
+        public override bool Process(IScriptAnalyzerContext context, string line)
         {
             if (context == null)
             {
@@ -56,12 +39,12 @@ namespace Cake.Core.Scripting.Processors
             // Using alias directive?
             if (tokens.Any(t => t == "="))
             {
-                context.AddUsingAliasDirective(string.Join(" ", tokens));
+                context.Script.UsingAliases.Add(string.Join(" ", tokens));
                 return true;
             }
 
             // Namespace
-            context.AddNamespace(@namespace);
+            context.Script.Namespaces.Add(@namespace);
             return true;
         }
     }

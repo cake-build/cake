@@ -27,5 +27,13 @@
         /// Gets or sets optional timeout for process execution
         /// </summary>
         public int? Timeout { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether process output will be suppressed.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if process output will be suppressed; otherwise, <c>false</c>.
+        /// </value>
+        public bool Silent { get; set; }
     }
 }

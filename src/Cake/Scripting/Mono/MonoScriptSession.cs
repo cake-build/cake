@@ -101,7 +101,7 @@ namespace Cake.Scripting.Mono
             try
             {
                 // Build the class we generated.
-                _log.Debug("Compiling build script...");
+                _log.Verbose("Compiling build script...");
                 _evaluator.Run(code);
 
                 // Actually execute it.

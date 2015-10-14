@@ -9,6 +9,7 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
 using Cake.Core.Scripting;
+using Cake.Core.Scripting.Analysis;
 using Cake.Diagnostics;
 using Cake.Scripting;
 using Cake.Scripting.Roslyn;
@@ -67,8 +68,11 @@ namespace Cake
             builder.RegisterType<ScriptAliasFinder>().As<IScriptAliasFinder>().SingleInstance();
             builder.RegisterType<CakeReportPrinter>().As<ICakeReportPrinter>().SingleInstance();
             builder.RegisterType<CakeConsole>().As<IConsole>().SingleInstance();
+            builder.RegisterType<ScriptAnalyzer>().As<IScriptAnalyzer>().SingleInstance();
             builder.RegisterType<ScriptProcessor>().As<IScriptProcessor>().SingleInstance();
-            builder.RegisterType<NuGetToolResolver>().As<INuGetToolResolver>().SingleInstance().MemberOf("toolResolvers");
+            builder.RegisterType<ScriptConventions>().As<IScriptConventions>().SingleInstance();
+            builder.RegisterType<NuGetToolResolver>().As<INuGetToolResolver>().SingleInstance();
+            builder.RegisterType<NuGetPackageInstaller>().As<INuGetPackageInstaller>().SingleInstance();
             builder.RegisterType<WindowsRegistry>().As<IRegistry>().SingleInstance();
             builder.RegisterType<CakeContext>().As<ICakeContext>().SingleInstance();
 

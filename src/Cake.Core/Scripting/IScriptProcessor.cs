@@ -1,4 +1,6 @@
-﻿using Cake.Core.IO;
+using System.Collections.Generic;
+using Cake.Core.IO;
+using Cake.Core.Scripting.Analysis;
 
 namespace Cake.Core.Scripting
 {
@@ -8,10 +10,18 @@ namespace Cake.Core.Scripting
     public interface IScriptProcessor
     {
         /// <summary>
-        /// Processes the specified script.
+        /// Installs the addins.
         /// </summary>
-        /// <param name="path">The script path.</param>
-        /// <param name="context">The context.</param>
-        void Process(FilePath path, ScriptProcessorContext context);
+        /// <param name="analyzerResult">The analyzer result.</param>
+        /// <param name="installationRoot">The installation root path.</param>
+        /// <returns>A list containing file paths to installed addin assemblies.</returns>
+        IReadOnlyList<FilePath> InstallAddins(ScriptAnalyzerResult analyzerResult, DirectoryPath installationRoot);
+
+        /// <summary>
+        /// Installs the tools specified in the build scripts.
+        /// </summary>
+        /// <param name="analyzerResult">The analyzer result.</param>
+        /// <param name="installationRoot">The installation root path.</param>
+        void InstallTools(ScriptAnalyzerResult analyzerResult, DirectoryPath installationRoot);
     }
 }

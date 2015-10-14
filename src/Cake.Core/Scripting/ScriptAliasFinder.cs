@@ -29,7 +29,7 @@ namespace Cake.Core.Scripting
         /// </summary>
         /// <param name="assemblies">The assemblies to find script aliases in.</param>
         /// <returns>The script aliases that were found.</returns>
-        public ScriptAlias[] FindAliases(IEnumerable<Assembly> assemblies)
+        public IReadOnlyList<ScriptAlias> FindAliases(IEnumerable<Assembly> assemblies)
         {
             var result = new List<ScriptAlias>();
             if (assemblies != null)
@@ -83,7 +83,7 @@ namespace Cake.Core.Scripting
                     }
                 }
             }
-            return result.ToArray();
+            return result;
         }
 
         private ScriptAlias CreateAlias(Tuple<MethodInfo, ScriptAliasType> alias)

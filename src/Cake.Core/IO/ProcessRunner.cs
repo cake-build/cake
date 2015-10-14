@@ -51,9 +51,12 @@ namespace Cake.Core.IO
             // Get the arguments.
             var arguments = settings.Arguments ?? new ProcessArgumentBuilder();
 
-            // Log the filename and arguments.
-            var message = string.Concat(filePath, " ", arguments.RenderSafe().TrimEnd());
-            _log.Verbose(Verbosity.Diagnostic, "Executing: {0}", message);
+            if (!settings.Silent)
+            {
+                // Log the filename and arguments.
+                var message = string.Concat(filePath, " ", arguments.RenderSafe().TrimEnd());
+                _log.Verbose(Verbosity.Diagnostic, "Executing: {0}", message);
+            }
 
             // Get the working directory.
             var workingDirectory = settings.WorkingDirectory ?? _environment.WorkingDirectory;

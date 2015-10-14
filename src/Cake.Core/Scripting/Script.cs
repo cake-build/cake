@@ -46,7 +46,7 @@ namespace Cake.Core.Scripting
         /// Gets the using alias directives.
         /// </summary>
         /// <value>The using alias directives.</value>
-        public List<string> UsingAliasDirectives
+        public IReadOnlyList<string> UsingAliasDirectives
         {
             get { return _usingAliasDirectives; }
         }

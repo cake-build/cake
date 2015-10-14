@@ -94,19 +94,6 @@ namespace Cake.Core.Scripting
 }
 
 // ReSharper disable once CheckNamespace
-namespace Cake.Core.Scripting.CodeGen
-{
-    /// <summary>
-    /// This namespace contain types
-    /// related to code generation.
-    /// </summary>
-    [CompilerGenerated]
-    internal class NamespaceDoc
-    {
-    }
-}
-
-// ReSharper disable once CheckNamespace
 namespace Cake.Core.Scripting.Processors
 {
     /// <summary>

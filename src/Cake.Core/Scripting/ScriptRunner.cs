@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.Scripting.Analysis;
 
 namespace Cake.Core.Scripting
 {
@@ -11,18 +13,41 @@ namespace Cake.Core.Scripting
     /// </summary>
     public sealed class ScriptRunner : IScriptRunner
     {
+        private readonly ICakeEnvironment _environment;
+        private readonly ICakeLog _log;
         private readonly IScriptEngine _engine;
         private readonly IScriptAliasFinder _aliasFinder;
-        private readonly IScriptProcessor _scriptProcessor;
+        private readonly IScriptAnalyzer _analyzer;
+        private readonly IScriptProcessor _processor;
+        private readonly IScriptConventions _conventions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptRunner"/> class.
         /// </summary>
+        /// <param name="environment">The environment.</param>
+        /// <param name="log">The log.</param>
         /// <param name="engine">The session factory.</param>
         /// <param name="aliasFinder">The alias finder.</param>
-        /// <param name="scriptProcessor">The script processor.</param>
-        public ScriptRunner(IScriptEngine engine, IScriptAliasFinder aliasFinder, IScriptProcessor scriptProcessor)
+        /// <param name="analyzer">The script analyzer.</param>
+        /// <param name="processor">The script processor.</param>
+        /// <param name="conventions">The script conventions.</param>
+        public ScriptRunner(
+            ICakeEnvironment environment,
+            ICakeLog log,
+            IScriptEngine engine, 
+            IScriptAliasFinder aliasFinder,
+            IScriptAnalyzer analyzer,
+            IScriptProcessor processor,
+            IScriptConventions conventions)
         {
+            if (environment == null)
+            {
+                throw new ArgumentNullException("environment");
+            }
+            if (log == null)
+            {
+                throw new ArgumentNullException("log");
+            }
             if (engine == null)
             {
                 throw new ArgumentNullException("engine");
@@ -31,9 +56,26 @@ namespace Cake.Core.Scripting
             {
                 throw new ArgumentNullException("aliasFinder");
             }
+            if (analyzer == null)
+            {
+                throw new ArgumentNullException("analyzer");
+            }
+            if (processor == null)
+            {
+                throw new ArgumentNullException("processor");
+            }
+            if (conventions == null)
+            {
+                throw new ArgumentNullException("conventions");
+            }
+
+            _environment = environment;
+            _log = log;
             _engine = engine;
             _aliasFinder = aliasFinder;
-            _scriptProcessor = scriptProcessor;
+            _analyzer = analyzer;
+            _processor = processor;
+            _conventions = conventions;
         }
 
         /// <summary>
@@ -57,23 +99,36 @@ namespace Cake.Core.Scripting
                 throw new ArgumentNullException("arguments");
             }
 
-            // Copy the arguments from the options.
+            // Prepare the context.
             host.Context.Arguments.SetArguments(arguments);
-
-            // Set the working directory.
             host.Context.Environment.WorkingDirectory = scriptPath.MakeAbsolute(host.Context.Environment).GetDirectory();
 
-            // Process the script.
-            var context = new ScriptProcessorContext();
-            _scriptProcessor.Process(scriptPath.GetFilename(), context);
+            // Analyze the script file.
+            _log.Verbose("Analyzing build script...");
+            scriptPath = scriptPath.IsRelative ? scriptPath.MakeAbsolute(_environment) : scriptPath;
+            var result = _analyzer.Analyze(scriptPath.GetFilename());
+
+            // Install tools.
+            _log.Verbose("Processing build script...");
+            var toolsPath = scriptPath.GetDirectory().Combine("tools");
+            _processor.InstallTools(result, toolsPath);
+
+            // Install addins.
+            var applicationRoot = _environment.GetApplicationRoot();
+            var addinRoot = applicationRoot.Combine("../Addins").Collapse();
+            var addinReferences = _processor.InstallAddins(result, addinRoot);
+            foreach (var addinReference in addinReferences)
+            {
+                result.References.Add(addinReference.FullPath);
+            }
 
             // Create and prepare the session.
             var session = _engine.CreateSession(host, arguments);
 
             // Load all references.
             var assemblies = new HashSet<Assembly>();
-            assemblies.AddRange(GetDefaultAssemblies(host.Context.FileSystem));
-            foreach (var reference in context.References)
+            assemblies.AddRange(_conventions.GetDefaultAssemblies(applicationRoot));
+            foreach (var reference in result.References)
             {
                 if (host.Context.FileSystem.Exist((FilePath)reference))
                 {
@@ -94,7 +149,7 @@ namespace Cake.Core.Scripting
             {
                 // Find all script aliases.
                 var foundAliases = _aliasFinder.FindAliases(assemblies);
-                if (foundAliases.Length > 0)
+                if (foundAliases.Count > 0)
                 {
                     aliases.AddRange(foundAliases);
                 }
@@ -107,8 +162,8 @@ namespace Cake.Core.Scripting
             }
 
             // Import all namespaces.
-            var namespaces = new HashSet<string>(context.Namespaces, StringComparer.Ordinal);
-            namespaces.AddRange(GetDefaultNamespaces());
+            var namespaces = new HashSet<string>(result.Namespaces, StringComparer.Ordinal);
+            namespaces.AddRange(_conventions.GetDefaultNamespaces());
             namespaces.AddRange(aliases.SelectMany(alias => alias.Namespaces));
             foreach (var @namespace in namespaces.OrderBy(ns => ns))
             {
@@ -116,53 +171,8 @@ namespace Cake.Core.Scripting
             }
 
             // Execute the script.
-            var script = new Script(context.Namespaces, context.Lines, aliases, context.UsingAliasDirectives);
+            var script = new Script(result.Namespaces, result.Lines, aliases, result.UsingAliases);
             session.Execute(script);
-        }
-
-        private static IEnumerable<Assembly> GetDefaultAssemblies(IFileSystem fileSystem)
-        {
-            var defaultAssemblies = new HashSet<Assembly>
-            {
-                typeof(Action).Assembly, // mscorlib
-                typeof(Uri).Assembly, // System
-                typeof(IQueryable).Assembly, // System.Core
-                typeof(System.Data.DataTable).Assembly, // System.Data
-                typeof(System.Xml.XmlReader).Assembly, // System.Xml
-                typeof(System.Xml.Linq.XDocument).Assembly, // System.Xml.Linq
-                typeof(ICakeContext).Assembly, // Cake.Core
-            };
-
-            // Load other assemblies that we need.
-            // TODO: Make this less hackish...
-            var assemblyPath = new FilePath(typeof(ScriptRunner).Assembly.Location);
-            var assemblyDirectory = fileSystem.GetDirectory(assemblyPath.GetDirectory());
-            var patterns = new[] { "Cake.Common.dll", "Cake.exe" };
-            var loaded = new HashSet<FilePath>();
-            foreach (var pattern in patterns)
-            {
-                var cakeAssemblies = assemblyDirectory.GetFiles(pattern, SearchScope.Current);
-                foreach (var cakeAssembly in cakeAssemblies)
-                {
-                    var assembly = Assembly.LoadFrom(cakeAssembly.Path.FullPath);
-                    defaultAssemblies.Add(assembly);
-                    loaded.Add(pattern);
-                }
-            }
-
-            return defaultAssemblies;
-        }
-
-        private static IEnumerable<string> GetDefaultNamespaces()
-        {
-            var defaultNamespaces = new HashSet<string>
-            {
-                "System", "System.Collections.Generic", "System.Linq",
-                "System.Text", "System.Threading.Tasks", "System.IO",
-                "Cake.Core", "Cake.Core.IO",
-                "Cake.Core.Scripting", "Cake.Core.Diagnostics"
-            };
-            return defaultNamespaces;
         }
     }
 }

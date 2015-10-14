@@ -130,7 +130,10 @@
     <Compile Include="IO\IRegistry.cs" />
     <Compile Include="IO\IRegistryKey.cs" />
     <Compile Include="IO\Machine.cs" />
+    <Compile Include="IO\NuGet\INuGetPackageInstaller.cs" />
     <Compile Include="IO\NuGet\INuGetToolResolver.cs" />
+    <Compile Include="IO\NuGet\NuGetPackage.cs" />
+    <Compile Include="IO\NuGet\NuGetPackageInstaller.cs" />
     <Compile Include="IO\NuGet\NuGetToolResolver.cs" />
     <Compile Include="IO\Path.cs" />
     <Compile Include="IO\DirectoryPath.cs" />
@@ -156,13 +159,21 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="Scripting\Analysis\IScriptAnalyzer.cs" />
+    <Compile Include="Scripting\Analysis\IScriptAnalyzerContext.cs" />
+    <Compile Include="Scripting\Analysis\IScriptInformation.cs" />
+    <Compile Include="Scripting\Analysis\ScriptAnalyzer.cs" />
+    <Compile Include="Scripting\Analysis\ScriptAnalyzerResult.cs" />
+    <Compile Include="Scripting\Analysis\ScriptInformation.cs" />
+    <Compile Include="Scripting\Analysis\ScriptAnalyzerContext.cs" />
     <Compile Include="Scripting\IScriptAliasFinder.cs" />
+    <Compile Include="Scripting\IScriptConventions.cs" />
     <Compile Include="Scripting\IScriptEngine.cs" />
     <Compile Include="Scripting\IScriptHost.cs" />
     <Compile Include="Scripting\IScriptProcessor.cs" />
     <Compile Include="Scripting\IScriptRunner.cs" />
     <Compile Include="Scripting\IScriptSession.cs" />
-    <Compile Include="Scripting\LineProcessor.cs" />
+    <Compile Include="Scripting\Processors\LineProcessor.cs" />
     <Compile Include="Scripting\Processors\ShebangProcessor.cs" />
     <Compile Include="Scripting\Processors\ToolDirectiveProcessor.cs" />
     <Compile Include="Scripting\Processors\AddInDirectiveProcessor.cs" />
@@ -175,9 +186,9 @@
     <Compile Include="Scripting\ScriptAlias.cs" />
     <Compile Include="Scripting\ScriptAliasFinder.cs" />
     <Compile Include="Scripting\ScriptAliasType.cs" />
+    <Compile Include="Scripting\ScriptConventions.cs" />
     <Compile Include="Scripting\ScriptHost.cs" />
     <Compile Include="Scripting\ScriptProcessor.cs" />
-    <Compile Include="Scripting\ScriptProcessorContext.cs" />
     <Compile Include="Scripting\ScriptRunner.cs" />
     <Compile Include="TaskSetupContext.cs" />
     <Compile Include="TaskTeardownContext.cs" />
@@ -188,6 +199,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\StyleCop.MSBuild.4.7.49.1\build\StyleCop.MSBuild.Targets" Condition="Exists('..\packages\StyleCop.MSBuild.4.7.49.1\build\StyleCop.MSBuild.Targets') and $(Configuration)=='Release'" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

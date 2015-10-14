@@ -67,7 +67,7 @@ namespace Cake.Scripting.Roslyn.Nightly
                 .AddReferences(_references)
                 .AddReferences(_referencePaths.Select(r => r.FullPath));
 
-            _log.Debug("Compiling build script...");
+            _log.Verbose("Compiling build script...");
             Microsoft.CodeAnalysis.Scripting.CSharp.CSharpScript.Eval(code, options, _host);
         }
     }
