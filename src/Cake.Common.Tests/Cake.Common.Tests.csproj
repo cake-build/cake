@@ -41,6 +41,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -90,6 +91,7 @@
     <Compile Include="Fixtures\Tools\DupFinder\DupFinderRunnerConfigFixture.cs" />
     <Compile Include="Fixtures\Tools\DupFinder\DupFinderRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\FixieRunnerFixture.cs" />
+    <Compile Include="Fixtures\Tools\GitVersionRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\GitReleaseManagerFixture.cs" />
     <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerAssetsAdderFixture.cs" />
     <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerCreatorFixture.cs" />
@@ -181,6 +183,7 @@
     <Compile Include="Unit\Tools\Chocolatey\Upgrade\ChocolateyUpgradeSettingsTests.cs" />
     <Compile Include="Unit\Tools\DupFinder\DupFinderRunnerTests.cs" />
     <Compile Include="Unit\Tools\Fixie\FixieRunnerTests.cs" />
+    <Compile Include="Unit\Tools\GitVersion\GitVersionRunnerTests.cs" />
     <Compile Include="Unit\Tools\GitReleaseManager\AddAssets\GitReleaseManagerAssetsAdderTests.cs" />
     <Compile Include="Unit\Tools\GitReleaseManager\Close\GitReleaseManagerMilestoneCloserTests.cs" />
     <Compile Include="Unit\Tools\GitReleaseManager\Create\GitReleaseManagerCreatorTests.cs" />

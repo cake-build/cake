@@ -44,6 +44,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -145,6 +146,11 @@
     <Compile Include="Tools\Fixie\FixieRunner.cs" />
     <Compile Include="Tools\Fixie\FixieSettings.cs" />
     <Compile Include="Tools\Fixie\FixieSettingsExtensions.cs" />
+    <Compile Include="Tools\GitVersion\GitVersion.cs" />
+    <Compile Include="Tools\GitVersion\GitVersionAliases.cs" />
+    <Compile Include="Tools\GitVersion\GitVersionOutput.cs" />
+    <Compile Include="Tools\GitVersion\GitVersionRunner.cs" />
+    <Compile Include="Tools\GitVersion\GitVersionSettings.cs" />
     <Compile Include="Tools\GitReleaseManager\AddAssets\GitReleaseManagerAddAssetsSettings.cs" />
     <Compile Include="Tools\GitReleaseManager\AddAssets\GitReleaseManagerAssetsAdder.cs" />
     <Compile Include="Tools\GitReleaseManager\Close\GitReleaseManagerCloseMilestoneSettings.cs" />
