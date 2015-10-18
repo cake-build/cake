@@ -36,6 +36,12 @@ namespace Cake.Common.Build.TeamCity
         void PublishArtifacts(string path);
 
         /// <summary>
+        /// Tells TeamCity to change the current build number.
+        /// </summary>
+        /// <param name="buildNumber">The required build number.</param>
+        void SetBuildNumber(string buildNumber);
+
+        /// <summary>
         /// Write the end of a message block to the TeamCity build log.
         /// </summary>
         /// <param name="blockName">Block name.</param>
