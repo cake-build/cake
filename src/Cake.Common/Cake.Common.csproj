@@ -65,6 +65,9 @@
     <Compile Include="Build\AppVeyor\IAppVeyorProvider.cs" />
     <Compile Include="Build\BuildSystem.cs" />
     <Compile Include="Build\BuildSystemAliases.cs" />
+    <Compile Include="Build\MyGet\IMyGetProvider.cs" />
+    <Compile Include="Build\MyGet\MyGetProvider.cs" />
+    <Compile Include="Build\MyGet\MyGetBuildStatus.cs" />
     <Compile Include="Build\TeamCity\ITeamCityProvider.cs" />
     <Compile Include="Build\TeamCity\TeamCityDisposableExtensions.cs" />
     <Compile Include="Build\TeamCity\TeamCityProvider.cs" />
