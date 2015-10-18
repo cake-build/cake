@@ -187,6 +187,15 @@ namespace Cake.Common.Build.TeamCity
             WriteServiceMessage("publishArtifacts", " ", path);
         }
 
+        /// <summary>
+        /// Tells TeamCity to change the current build number.
+        /// </summary>
+        /// <param name="buildNumber">The required build number.</param>
+        public void SetBuildNumber(string buildNumber)
+        {
+            WriteServiceMessage("buildNumber", buildNumber);
+        }
+
         private static void WriteServiceMessage(string messageName, string attributeValue)
         {
             WriteServiceMessage(messageName, new Dictionary<string, string> { { " ", attributeValue } });
