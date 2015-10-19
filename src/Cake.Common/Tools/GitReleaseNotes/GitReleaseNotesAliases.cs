@@ -17,6 +17,27 @@ namespace Cake.Common.Tools.GitReleaseNotes
         /// <param name="context">The context.</param>
         /// <param name="outputFile">The output file.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// GitReleaseNotes("c:/temp/releasenotes.md", new GitReleaseNotesSettings {
+        ///     WorkingDirectory         = "c:/temp",
+        ///     Verbose                  = true,
+        ///     IssueTracker             = IssueTracker.GitHub,
+        ///     AllTags                  = true,
+        ///     RepoUserName             = "bob",
+        ///     RepoPassword             = "password",
+        ///     RepoUrl                  = "http://myrepo.co.uk",
+        ///     RepoBranch               = "master",
+        ///     IssueTrackerUrl          = "http://myissuetracker.co.uk",
+        ///     IssueTrackerUserName     = "bob",
+        ///     IssueTrackerPassword     = "password",
+        ///     IssueTrackerProjectId    = "1234",
+        ///     Categories               = "Category1",
+        ///     Version                  = "1.2.3.4",
+        ///     AllLabels                = true
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("GitReleaseNotes")]
         public static void GitReleaseNotes(this ICakeContext context, FilePath outputFile, GitReleaseNotesSettings settings)
