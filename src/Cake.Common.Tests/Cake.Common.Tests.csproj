@@ -96,6 +96,7 @@
     <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerExporterFixture.cs" />
     <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerMilestoneCloserFixture.cs" />
     <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerPublisherFixture.cs" />
+    <Compile Include="Fixtures\Tools\GitReleaseNotesRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\ILMergeRunnerFixture.cs" />
     <Compile Include="Fixtures\Diagnostics\LogActionFixture.cs" />
     <Compile Include="Fixtures\Tools\InspectCode\InspectCodeFixture.cs" />
@@ -183,6 +184,7 @@
     <Compile Include="Unit\Tools\GitReleaseManager\Create\GitReleaseManagerCreatorTests.cs" />
     <Compile Include="Unit\Tools\GitReleaseManager\Export\GitReleaseManagerExporterTests.cs" />
     <Compile Include="Unit\Tools\GitReleaseManager\Publish\GitReleaseManagerPublisherTests.cs" />
+    <Compile Include="Unit\Tools\GitReleaseNotes\GitReleaseNotesRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeSettingsTests.cs" />
     <Compile Include="Unit\IO\ZipperTests.cs" />
