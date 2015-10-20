@@ -140,9 +140,9 @@
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
-    &lt;releaseNotes&gt;Line #1
+    &lt;releaseNotes&gt;&lt;![CDATA[Line #1
 Line #2
-Line #3&lt;/releaseNotes&gt;
+Line #3]]&gt;&lt;/releaseNotes&gt;
   &lt;/metadata&gt;
   &lt;files&gt;
     &lt;file src="tools\**" target="tools" /&gt;
@@ -172,9 +172,9 @@ Line #3&lt;/releaseNotes&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
-    &lt;releaseNotes&gt;Line #1
+    &lt;releaseNotes&gt;&lt;![CDATA[Line #1
 Line #2
-Line #3&lt;/releaseNotes&gt;
+Line #3]]&gt;&lt;/releaseNotes&gt;
   &lt;/metadata&gt;
   &lt;files&gt;
     &lt;file src="tools\**" target="tools" /&gt;
@@ -226,9 +226,9 @@ Line #3&lt;/releaseNotes&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;copyright&gt;The copyright&lt;/copyright&gt;
-    &lt;releaseNotes&gt;Line #1
+    &lt;releaseNotes&gt;&lt;![CDATA[Line #1
 Line #2
-Line #3&lt;/releaseNotes&gt;
+Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
   &lt;/metadata&gt;
   &lt;files&gt;
@@ -255,9 +255,9 @@ Line #3&lt;/releaseNotes&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;copyright&gt;The copyright&lt;/copyright&gt;
-    &lt;releaseNotes&gt;Line #1
+    &lt;releaseNotes&gt;&lt;![CDATA[Line #1
 Line #2
-Line #3&lt;/releaseNotes&gt;
+Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
   &lt;/metadata&gt;
   &lt;files&gt;
