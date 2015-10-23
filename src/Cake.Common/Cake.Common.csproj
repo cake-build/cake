@@ -228,6 +228,9 @@
     <Compile Include="Tools\OctopusDeploy\CreateReleaseSettings.cs" />
     <Compile Include="Tools\OctopusDeploy\OctopusDeployReleaseCreator.cs" />
     <Compile Include="Tools\OctopusDeploy\OctopusDeploySettings.cs" />
+    <Compile Include="Tools\ReportUnit\ReportUnitAliases.cs" />
+    <Compile Include="Tools\ReportUnit\ReportUnitRunner.cs" />
+    <Compile Include="Tools\ReportUnit\ReportUnitSettings.cs" />
     <Compile Include="Tools\Roundhouse\RecoveryMode.cs" />
     <Compile Include="Tools\Roundhouse\RoundhouseAliases.cs" />
     <Compile Include="Tools\Roundhouse\RoundhouseRunner.cs" />
