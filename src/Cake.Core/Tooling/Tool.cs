@@ -68,9 +68,9 @@ namespace Cake.Core.Tooling
         /// <param name="processSettings">The process settings</param>
         /// <param name="postAction">If specified called after process exit</param>
         protected void Run(
-            TSettings settings, 
+            TSettings settings,
             ProcessArgumentBuilder arguments,
-            ProcessSettings processSettings, 
+            ProcessSettings processSettings,
             Action<IProcess> postAction)
         {
             if (arguments == null && (processSettings == null || processSettings.Arguments == null))

@@ -17,7 +17,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 fixture.UserName = string.Empty;
 
                 // When
-                var result = Record.Exception(() => fixture.Publish());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "userName");
@@ -31,7 +31,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 fixture.Password = string.Empty;
 
                 // When
-                var result = Record.Exception(() => fixture.Publish());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "password");
@@ -45,7 +45,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 fixture.Owner = string.Empty;
 
                 // When
-                var result = Record.Exception(() => fixture.Publish());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "owner");
@@ -59,7 +59,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 fixture.Repository = string.Empty;
 
                 // When
-                var result = Record.Exception(() => fixture.Publish());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "repository");
@@ -73,7 +73,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 fixture.TagName = string.Empty;
 
                 // When
-                var result = Record.Exception(() => fixture.Publish());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "tagName");
@@ -87,7 +87,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => fixture.Publish());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
@@ -101,7 +101,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => fixture.Publish());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "GitReleaseManager: Could not locate executable.");
@@ -114,11 +114,11 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
             {
                 // Given
                 var fixture = new GitReleaseManagerPublisherFixture();
-                fixture.GivenCustomToolPathExist(expected);
                 fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
 
                 // When
-                fixture.Publish();
+                fixture.Run();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -134,7 +134,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => fixture.Publish());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "GitReleaseManager: Process was not started.");
@@ -145,10 +145,10 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
             {
                 // Given
                 var fixture = new GitReleaseManagerPublisherFixture();
-                fixture.GivenProcessReturnError();
+                fixture.GivenProcessExitsWithCode(1);
 
                 // When
-                var result = Record.Exception(() => fixture.Publish());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "GitReleaseManager: Process returned an error.");
@@ -161,7 +161,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 var fixture = new GitReleaseManagerPublisherFixture();
 
                 // When
-                fixture.Publish();
+                fixture.Run();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -176,7 +176,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 var fixture = new GitReleaseManagerPublisherFixture();
 
                 // When
-                fixture.Publish();
+                fixture.Run();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -192,7 +192,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 fixture.Settings.TargetDirectory = @"c:/temp";
 
                 // When
-                fixture.Publish();
+                fixture.Run();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
@@ -208,7 +208,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 fixture.Settings.LogFilePath = @"c:/temp/log.txt";
 
                 // When
-                fixture.Publish();
+                fixture.Run();
 
                 // Then
                 fixture.ProcessRunner.Received(1).Start(

@@ -1,6 +1,4 @@
-﻿using Cake.Common.Tests.Fixtures.Tools.Chocolatey;
-using Cake.Core.IO;
-using NSubstitute;
+﻿using Cake.Common.Tests.Fixtures.Tools.Chocolatey.Pin;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
@@ -17,7 +15,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
                 fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => fixture.Pin());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
@@ -31,7 +29,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
                 fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => fixture.Pin());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Chocolatey: Could not locate executable.");
@@ -43,16 +41,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
             {
                 // Given
                 var fixture = new ChocolateyPinnerFixture();
-                fixture.GivenCustomToolPathExist(expected);
                 fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
 
                 // When
-                fixture.Pin();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -63,7 +59,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
                 fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => fixture.Pin());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Chocolatey: Process was not started.");
@@ -74,10 +70,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
             {
                 // Given
                 var fixture = new ChocolateyPinnerFixture();
-                fixture.GivenProcessReturnError();
+                fixture.GivenProcessExitsWithCode(1);
 
                 // When
-                var result = Record.Exception(() => fixture.Pin());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Chocolatey: Process returned an error.");
@@ -90,12 +86,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
                 var fixture = new ChocolateyPinnerFixture();
 
                 // When
-                fixture.Pin();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/choco.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/tools/choco.exe", result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -105,12 +99,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
                 var fixture = new ChocolateyPinnerFixture();
 
                 // When
-                fixture.Pin();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "pin add -n \"Cake\" -y"));
+                Assert.Equal("pin add -n \"Cake\" -y", result.Args);
             }
 
             [Theory]
@@ -123,12 +115,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
                 fixture.Settings.Debug = debug;
 
                 // When
-                fixture.Pin();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -141,12 +131,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
                 fixture.Settings.Verbose = verbose;
 
                 // When
-                fixture.Pin();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -159,12 +147,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
                 fixture.Settings.Force = force;
 
                 // When
-                fixture.Pin();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -177,12 +163,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
                 fixture.Settings.Noop = noop;
 
                 // When
-                fixture.Pin();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -195,12 +179,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
                 fixture.Settings.LimitOutput = limitOutput;
 
                 // When
-                fixture.Pin();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -213,12 +195,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
                 fixture.Settings.ExecutionTimeout = executionTimeout;
 
                 // When
-                fixture.Pin();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -231,12 +211,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
                 fixture.Settings.CacheLocation = cacheLocation;
 
                 // When
-                fixture.Pin();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -249,12 +227,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
                 fixture.Settings.AllowUnoffical = allowUnofficial;
 
                 // When
-                fixture.Pin();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]
@@ -265,13 +241,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
                 fixture.Settings.Version = "1.0.0";
 
                 // When
-                fixture.Pin();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "pin add -n \"Cake\" --version \"1.0.0\" -y"));
+                Assert.Equal("pin add -n \"Cake\" --version \"1.0.0\" -y", result.Args);
             }
         }
     }

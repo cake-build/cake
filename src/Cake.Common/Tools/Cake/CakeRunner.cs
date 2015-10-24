@@ -48,6 +48,7 @@ namespace Cake.Common.Tools.Cake
                 throw new ArgumentNullException("scriptPath");
             }
 
+            scriptPath = scriptPath.MakeAbsolute(_environment);
             if (!_fileSystem.GetFile(scriptPath).Exists)
             {
                 throw new FileNotFoundException("Cake script file not found.", scriptPath.FullPath);

@@ -2,7 +2,7 @@
 
 namespace Cake.Common.Tests.Fixtures.Tools.GitReleaseManager
 {
-    public sealed class GitReleaseManagerAssetsAdderFixture : GitReleaseManagerFixture
+    internal sealed class GitReleaseManagerAssetsAdderFixture : GitReleaseManagerFixture<GitReleaseManagerAddAssetsSettings>
     {
         public string UserName { get; set; }
         public string Password { get; set; }
@@ -10,7 +10,6 @@ namespace Cake.Common.Tests.Fixtures.Tools.GitReleaseManager
         public string Repository { get; set; }
         public string TagName { get; set; }
         public string Assets { get; set; }
-        public GitReleaseManagerAddAssetsSettings Settings { get; set; }
 
         public GitReleaseManagerAssetsAdderFixture()
         {
@@ -20,12 +19,11 @@ namespace Cake.Common.Tests.Fixtures.Tools.GitReleaseManager
             Repository = "repo";
             TagName = "0.1.0";
             Assets = @"c:/temp/asset1.txt";
-            Settings = new GitReleaseManagerAddAssetsSettings();
         }
 
-        public void AddAssets()
+        protected override void RunTool()
         {
-            var tool = new GitReleaseManagerAssetsAdder(FileSystem, Environment, ProcessRunner, Globber, GitReleaseManagerToolResolver);
+            var tool = new GitReleaseManagerAssetsAdder(FileSystem, Environment, ProcessRunner, Globber, Resolver);
             tool.AddAssets(UserName, Password, Owner, Repository, TagName, Assets, Settings);
         }
     }

@@ -163,7 +163,7 @@ namespace Cake.Common.Tools.SignTool
         /// <returns>The tool executable name.</returns>
         protected override IEnumerable<string> GetToolExecutableNames()
         {
-            return Enumerable.Empty<string>();
+            return new[] { "signtool.exe" };
         }
 
         /// <summary>
@@ -174,13 +174,9 @@ namespace Cake.Common.Tools.SignTool
         protected override IEnumerable<FilePath> GetAlternativeToolPaths(SignToolSignSettings settings)
         {
             var path = _resolver.GetPath();
-
-            if (path != null)
-            {
-                return new[] { path };
-            }
-
-            return Enumerable.Empty<FilePath>();
+            return path != null 
+                ? new[] { path } 
+                : Enumerable.Empty<FilePath>();
         }
     }
 }

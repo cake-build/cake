@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Cake.Common.Tests.Fixtures.Tools;
+using Cake.Common.Tests.Fixtures.Tools.InspectCode;
 using Cake.Common.Tools.InspectCode;
 using Cake.Core;
-using Cake.Core.IO;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.InspectCode
@@ -17,11 +15,11 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
             public void Should_Throw_If_Solution_Is_Null()
             {
                 // Given
-                var fixture = new InspectCodeRunnerFixture();
-                var runner = fixture.CreateRunner();
+                var fixture = new InspectCodeRunFixture();
+                fixture.Solution = null;
 
                 // When
-                var result = Record.Exception(() => runner.Run(null, new InspectCodeSettings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "solution");
@@ -31,45 +29,37 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
             public void Should_Find_Inspect_Code_Runner()
             {
                 // Given
-                var fixture = new InspectCodeRunnerFixture();
-                var runner = fixture.CreateRunner();
+                var fixture = new InspectCodeRunFixture();
 
                 // When
-                runner.Run("./Test.sln", new InspectCodeSettings());
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/inspectcode.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/tools/inspectcode.exe", result.ToolPath.FullPath);
             }
 
             [Fact]
             public void Should_Use_Provided_Solution_In_Process_Arguments()
             {
                 // Given
-                var fixture = new InspectCodeRunnerFixture();
-                var runner = fixture.CreateRunner();
+                var fixture = new InspectCodeRunFixture();
 
                 // When
-                runner.Run("./Test.sln", new InspectCodeSettings());
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Any<ProcessSettings>());
-                Assert.Equal("\"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("\"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
             public void Should_Throw_If_Process_Was_Not_Started()
             {
                 // Given
-                var fixture = new InspectCodeRunnerFixture();
-                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
-                var runner = fixture.CreateRunner();
+                var fixture = new InspectCodeRunFixture();
+                fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test.sln", new InspectCodeSettings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -80,12 +70,11 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
             public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
             {
                 // Given
-                var fixture = new InspectCodeRunnerFixture();
-                fixture.Process.GetExitCode().Returns(1);
-                var runner = fixture.CreateRunner();
+                var fixture = new InspectCodeRunFixture();
+                fixture.GivenProcessExitsWithCode(1);
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test.sln", new InspectCodeSettings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -96,36 +85,27 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
             public void Should_Set_Output()
             {
                 // Given
-                var fixture = new InspectCodeRunnerFixture();
-                var runner = fixture.CreateRunner();
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.OutputFile = "build/inspect_code.xml";
 
                 // When
-                runner.Run("./Test.sln", new InspectCodeSettings
-                    {
-                        OutputFile = FilePath.FromString("build/inspect_code.xml")
-                    });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                   Arg.Any<FilePath>(),
-                   Arg.Any<ProcessSettings>()
-                );
-                Assert.Equal("\"/output:/Working/build/inspect_code.xml\" \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("\"/output:/Working/build/inspect_code.xml\" " +
+                             "\"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
             public void Should_Throw_If_Solution_Wide_Analysis_Is_Both_Disabled_And_Enabled()
             {
                 // Given
-                var fixture = new InspectCodeRunnerFixture();
-                var runner = fixture.CreateRunner();
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.SolutionWideAnalysis = true;
+                fixture.Settings.NoSolutionWideAnalysis = true;
 
                 //When
-                var result = Record.Exception(() => runner.Run("./Test.sln", new InspectCodeSettings
-                    {
-                        SolutionWideAnalysis = true,
-                        NoSolutionWideAnalysis = true
-                    }));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<ArgumentException>(result);
@@ -136,222 +116,158 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
             public void Should_Set_Solution_Wide_Analysis_Switch()
             {
                 // Given
-                var fixture = new InspectCodeRunnerFixture();
-                var runner = fixture.CreateRunner();
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.SolutionWideAnalysis = true;
 
                 // When
-                runner.Run("./Test.sln", new InspectCodeSettings
-                       {
-                           SolutionWideAnalysis = true
-                       });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                   Arg.Any<FilePath>(),
-                   Arg.Any<ProcessSettings>()
-                );
-                Assert.Equal("/swea \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("/swea \"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
             public void Should_Set_No_Solution_Wide_Analysis_Switch()
             {
                 // Given
-                var fixture = new InspectCodeRunnerFixture();
-                var runner = fixture.CreateRunner();
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.NoSolutionWideAnalysis = true;
 
                 // When
-                runner.Run("./Test.sln", new InspectCodeSettings
-                       {
-                           NoSolutionWideAnalysis = true
-                       });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                   Arg.Any<FilePath>(),
-                   Arg.Any<ProcessSettings>()
-                );
-                Assert.Equal("/no-swea \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("/no-swea \"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
             public void Should_Set_Project_Filter()
             {
                 // Given
-                var fixture = new InspectCodeRunnerFixture();
-                var runner = fixture.CreateRunner();
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.ProjectFilter = "Test.*";
 
                 // When
-                runner.Run("./Test.sln", new InspectCodeSettings
-                {
-                    ProjectFilter = "Test.*"
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                   Arg.Any<FilePath>(),
-                   Arg.Any<ProcessSettings>()
-                );
-                Assert.Equal("\"/project=Test.*\" \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("\"/project=Test.*\" \"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
             public void Should_Set_MsBuild_Properties()
             {
                 // Given
-                var fixture = new InspectCodeRunnerFixture();
-                var runner = fixture.CreateRunner();
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.MsBuildProperties = new Dictionary<string, string>();
+                fixture.Settings.MsBuildProperties.Add("TreatWarningsAsErrors", "true");
+                fixture.Settings.MsBuildProperties.Add("Optimize", "false");
 
                 // When
-                runner.Run("./Test.sln", new InspectCodeSettings
-                {
-                    MsBuildProperties = new Dictionary<string, string>
-                    {
-                        {"TreatWarningsAsErrors", "true"},
-                        {"Optimize", "false"}
-                    }
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                  Arg.Any<FilePath>(),
-                  Arg.Any<ProcessSettings>()
-               );
-                Assert.Equal("\"/properties:TreatWarningsAsErrors=true\" \"/properties:Optimize=false\" \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("\"/properties:TreatWarningsAsErrors=true\" " +
+                             "\"/properties:Optimize=false\" " +
+                             "\"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
             public void Should_Set_Caches_Home()
             {
                 // Given
-                var fixture = new InspectCodeRunnerFixture();
-                var runner = fixture.CreateRunner();
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.CachesHome = "caches/";
 
                 // When
-                runner.Run("./Test.sln", new InspectCodeSettings
-                {
-                    CachesHome = DirectoryPath.FromString("caches/")
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                   Arg.Any<FilePath>(),
-                   Arg.Any<ProcessSettings>()
-                );
-                Assert.Equal("\"/caches-home=/Working/caches\" \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("\"/caches-home=/Working/caches\" " +
+                             "\"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
             public void Should_Set_Resharper_Plugins()
             {
                 // Given
-                var fixture = new InspectCodeRunnerFixture();
-                var runner = fixture.CreateRunner();
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.Extensions = new[] { "ReSharper.AgentSmith", "X.Y" };
 
                 // When
-                runner.Run("./Test.sln", new InspectCodeSettings
-                {
-                    Extensions = new[] { "ReSharper.AgentSmith", "X.Y" }
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                   Arg.Any<FilePath>(),
-                   Arg.Any<ProcessSettings>()
-                );
-                Assert.Equal("\"/extensions=ReSharper.AgentSmith;X.Y\" \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("\"/extensions=ReSharper.AgentSmith;X.Y\" " +
+                             "\"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
             public void Should_Set_Debug_Switch()
             {
                 // Given
-                var fixture = new InspectCodeRunnerFixture();
-                var runner = fixture.CreateRunner();
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.Debug = true;
 
                 // When
-                runner.Run("./Test.sln", new InspectCodeSettings
-                {
-                    Debug = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                   Arg.Any<FilePath>(),
-                   Arg.Any<ProcessSettings>()
-                );
-                Assert.Equal("/debug \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("/debug \"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
             public void Should_Set_No_Buildin_Settings_Switch()
             {
                 // Given
-                var fixture = new InspectCodeRunnerFixture();
-                var runner = fixture.CreateRunner();
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.NoBuildinSettings = true;
 
                 // When
-                runner.Run("./Test.sln", new InspectCodeSettings
-                {
-                    NoBuildinSettings = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                   Arg.Any<FilePath>(),
-                   Arg.Any<ProcessSettings>()
-                );
-                Assert.Equal("/no-buildin-settings \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("/no-buildin-settings \"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
             public void Should_Set_Disabled_Settings_Layers()
             {
                 // Given
-                var fixture = new InspectCodeRunnerFixture();
-                var runner = fixture.CreateRunner();
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.DisabledSettingsLayers = new[]
+                {
+                    SettingsLayer.GlobalAll,
+                    SettingsLayer.GlobalPerProduct,
+                    SettingsLayer.SolutionShared,
+                    SettingsLayer.SolutionPersonal,
+                    SettingsLayer.ProjectShared,
+                    SettingsLayer.ProjectPersonal,
+                };
 
                 // When
-                runner.Run("./Test.sln", new InspectCodeSettings
-                {
-                    DisabledSettingsLayers = new[]
-                    {
-                        SettingsLayer.GlobalAll,
-                        SettingsLayer.GlobalPerProduct,
-                        SettingsLayer.SolutionShared,
-                        SettingsLayer.SolutionPersonal,
-                        SettingsLayer.ProjectShared,
-                        SettingsLayer.ProjectPersonal,
-                    }
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                   Arg.Any<FilePath>(),
-                   Arg.Any<ProcessSettings>()
-                );
-                Assert.Equal("\"/dsl=GlobalAll;GlobalPerProduct;SolutionShared;SolutionPersonal;ProjectShared;ProjectPersonal\" \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("\"/dsl=GlobalAll;GlobalPerProduct;" +
+                             "SolutionShared;SolutionPersonal;" +
+                             "ProjectShared;ProjectPersonal\" " +
+                             "\"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
             public void Should_Set_Profile()
             {
                 // Given
-                var fixture = new InspectCodeRunnerFixture();
-                var runner = fixture.CreateRunner();
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.Profile = "profile.DotSettings";
 
                 // When
-                runner.Run("./Test.sln", new InspectCodeSettings
-                {
-                    Profile = FilePath.FromString("profile.DotSettings")
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                   Arg.Any<FilePath>(),
-                   Arg.Any<ProcessSettings>()
-                );
-                Assert.Equal("\"/profile=/Working/profile.DotSettings\" \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("\"/profile=/Working/profile.DotSettings\" " +
+                             "\"/Working/Test.sln\"", result.Args);
             }
         }
 
@@ -361,11 +277,11 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
             public void Should_Throw_If_Config_File_Is_Null()
             {
                 // Given
-                var fixture = new InspectCodeRunnerFixture();
-                var runner = fixture.CreateRunner();
+                var fixture = new InspectCodeRunFromConfigFixture();
+                fixture.Config = null;
 
                 // When
-                var result = Record.Exception(() => runner.RunFromConfig(null));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "configFile");
@@ -375,17 +291,14 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
             public void Should_Use_Provided_Config_File()
             {
                 // Given
-                var fixture = new InspectCodeRunnerFixture();
-                var runner = fixture.CreateRunner();
+                var fixture = new InspectCodeRunFromConfigFixture();
+                fixture.Config = "config.xml";
 
                 // Then
-                runner.RunFromConfig(FilePath.FromString("config.xml"));
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Any<ProcessSettings>());
-                Assert.Equal("\"/config=/Working/config.xml\"", fixture.ProcessArguments);
+                Assert.Equal("\"/config=/Working/config.xml\"", result.Args);
             }
         }
     }

@@ -18,11 +18,11 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
             public void Should_Throw_If_Environment_Is_Null()
             {
                 // Given
-                var fixture = new WiXFixture();
+                var fixture = new CandleFixture();
                 fixture.Environment = null;
 
                 // When
-                var result = Record.Exception(() => fixture.CreateCandleRunner());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "environment");
@@ -32,11 +32,11 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
             public void Should_Throw_If_Globber_Is_Null()
             {
                 // Given
-                var fixture = new WiXFixture();
+                var fixture = new CandleFixture();
                 fixture.Globber = null;
 
                 // When
-                var result = Record.Exception(() => fixture.CreateCandleRunner());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "globber");
@@ -49,11 +49,11 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
             public void Should_Throw_If_Source_Files_Is_Null()
             {
                 // Given
-                var fixture = new WiXFixture();
-                var runner = fixture.CreateCandleRunner();
+                var fixture = new CandleFixture();
+                fixture.SourceFiles = null;
 
                 // When
-                var result = Record.Exception(() => runner.Run(null, new CandleSettings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "sourceFiles");
@@ -63,11 +63,11 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
             public void Should_Throw_If_Source_Files_Is_Empty()
             {
                 // Given
-                var fixture = new WiXFixture();
-                var runner = fixture.CreateCandleRunner();
+                var fixture = new CandleFixture();
+                fixture.SourceFiles = new List<FilePath>();
 
                 // When
-                var result = Record.Exception(() => runner.Run(new FilePath[0], new CandleSettings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<ArgumentException>(result);
@@ -78,11 +78,11 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
             public void Should_Throw_If_Settings_Is_Null()
             {
                 // Given
-                var fixture = new WiXFixture();
-                var runner = fixture.CreateCandleRunner();
+                var fixture = new CandleFixture();
+                fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => runner.Run(new[] {new FilePath("/Working/AssemblyFile.lol")}, null));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
@@ -92,12 +92,11 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
             public void Should_Throw_If_Candle_Runner_Was_Not_Found()
             {
                 // Given
-                var fixture = new WiXFixture();
-                fixture.Globber.Match("./tools/**/candle.exe").Returns(Enumerable.Empty<Path>());
-                var runner = fixture.CreateCandleRunner();
+                var fixture = new CandleFixture();
+                fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => runner.Run(new[] {new FilePath("/Test.wxs")}, new CandleSettings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -110,81 +109,68 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
             public void Should_Use_Candle_Runner_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new WiXFixture(expected);
-                var runner = fixture.CreateCandleRunner();
+                var fixture = new CandleFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
 
                 // When
-                runner.Run(new[] {new FilePath("./Test.wxs")}, new CandleSettings
-                {
-                    ToolPath = toolPath
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Fact]
             public void Should_Find_Candle_Runner_If_Tool_Path_Not_Provided()
             {
                 // Given
-                var fixture = new WiXFixture();
-                var runner = fixture.CreateCandleRunner();
+                var fixture = new CandleFixture();
 
                 // When
-                runner.Run(new[] {new FilePath("./Test.wxs")}, new CandleSettings());
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/candle.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/tools/candle.exe", result.ToolPath.FullPath);
             }
 
             [Fact]
             public void Should_Use_Provided_Source_Files_In_Process_Arguments()
             {
                 // Given
-                var fixture = new WiXFixture();
-                var runner = fixture.CreateCandleRunner();
+                var fixture = new CandleFixture();
+                fixture.SourceFiles.Clear();
+                fixture.SourceFiles.Add("./Test.wxs");
+                fixture.SourceFiles.Add("./Test2.wxs");
 
                 // When
-                runner.Run(new[] {new FilePath("./Test.wxs"), new FilePath("./Test2.wxs")}, new CandleSettings());
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "\"/Working/Test.wxs\" \"/Working/Test2.wxs\""));
+                Assert.Equal("\"/Working/Test.wxs\" \"/Working/Test2.wxs\"", result.Args);
             }
 
             [Fact]
             public void Should_Set_Working_Directory()
             {
                 // Given
-                var fixture = new WiXFixture();
-                var runner = fixture.CreateCandleRunner();
+                var fixture = new CandleFixture();
 
                 // When
-                runner.Run(new[] { new FilePath("./Test.wxs") }, new CandleSettings());
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.WorkingDirectory.FullPath == "/Working"));
+                Assert.Equal("/Working", result.Process.WorkingDirectory.FullPath);
             }
 
             [Fact]
             public void Should_Throw_If_Process_Was_Not_Started()
             {
                 // Given
-                var fixture = new WiXFixture();
-                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
-                var runner = fixture.CreateCandleRunner();
+                var fixture = new CandleFixture();
+                fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => runner.Run(new[] { new FilePath("./Test.wxs") }, new CandleSettings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -195,12 +181,11 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
             public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
             {
                 // Given
-                var fixture = new WiXFixture();
-                fixture.Process.GetExitCode().Returns(1);
-                var runner = fixture.CreateCandleRunner();
+                var fixture = new CandleFixture();
+                fixture.GivenProcessExitsWithCode(1);
 
                 // When
-                var result = Record.Exception(() => runner.Run(new[] { new FilePath("./Test.wxs") }, new CandleSettings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -208,189 +193,133 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
             }
 
             [Theory]
-            [InlineData(Architecture.IA64, "-arch ia64")]
-            [InlineData(Architecture.X64, "-arch x64")]
-            [InlineData(Architecture.X86, "-arch x86")]
+            [InlineData(Architecture.IA64, "-arch ia64 \"/Working/Test.wxs\"")]
+            [InlineData(Architecture.X64, "-arch x64 \"/Working/Test.wxs\"")]
+            [InlineData(Architecture.X86, "-arch x86 \"/Working/Test.wxs\"")]
             public void Should_Add_Architecture_To_Arguments_If_Provided(Architecture arch, string expected)
             {
                 // Given
-                var fixture = new WiXFixture();
-                var runner = fixture.CreateCandleRunner();
+                var fixture = new CandleFixture();
+                fixture.Settings.Architecture = arch;
 
                 // When
-                runner.Run(new[] { new FilePath("./Test.wxs") }, new CandleSettings
-                {
-                    Architecture = arch
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == string.Concat(expected, " \"/Working/Test.wxs\"")));
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]
             public void Should_Add_Defines_To_Arguments_If_Provided()
             {
                 // Given
-                var fixture = new WiXFixture();
-                var runner = fixture.CreateCandleRunner();
+                var fixture = new CandleFixture();
+                fixture.Settings.Defines = new Dictionary<string, string>();
+                fixture.Settings.Defines.Add("Foo", "Bar");
 
                 // When
-                runner.Run(new[] { new FilePath("./Test.wxs") }, new CandleSettings
-                {
-                    Defines = new Dictionary<string, string>
-                    {
-                        { "Foo", "Bar" }
-                    }
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "-dFoo=Bar \"/Working/Test.wxs\""));
+                Assert.Equal("-dFoo=Bar \"/Working/Test.wxs\"", result.Args);
             }
 
             [Fact]
             public void Should_Add_Extensions_To_Arguments_If_Provided()
             {
                 // Given
-                var fixture = new WiXFixture();
-                var runner = fixture.CreateCandleRunner();
+                var fixture = new CandleFixture();
+                fixture.Settings.Extensions = new[] { "WixUIExtension" };
 
                 // When
-                runner.Run(new[] {new FilePath("./Test.wxs")}, new CandleSettings
-                {
-                    Extensions = new[] {"WixUIExtension"}
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "-ext WixUIExtension \"/Working/Test.wxs\""));
+                Assert.Equal("-ext WixUIExtension \"/Working/Test.wxs\"", result.Args);
             }
 
             [Fact]
             public void Should_Add_FIPS_To_Arguments_If_Provided()
             {
                 // Given
-                var fixture = new WiXFixture();
-                var runner = fixture.CreateCandleRunner();
+                var fixture = new CandleFixture();
+                fixture.Settings.FIPS = true;
 
                 // When
-                runner.Run(new[] { new FilePath("./Test.wxs") }, new CandleSettings
-                {
-                    FIPS = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "-fips \"/Working/Test.wxs\""));
+                Assert.Equal("-fips \"/Working/Test.wxs\"", result.Args);
             }
 
             [Fact]
             public void Should_Add_NoLogo_To_Arguments_If_Provided()
             {
                 // Given
-                var fixture = new WiXFixture();
-                var runner = fixture.CreateCandleRunner();
+                var fixture = new CandleFixture();
+                fixture.Settings.NoLogo = true;
 
                 // When
-                runner.Run(new[] { new FilePath("./Test.wxs") }, new CandleSettings
-                {
-                    NoLogo = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "-nologo \"/Working/Test.wxs\""));
+                Assert.Equal("-nologo \"/Working/Test.wxs\"", result.Args);
             }
 
             [Fact]
             public void Should_Add_Output_Directory_To_Arguments_If_Provided()
             {
                 // Given
-                var fixture = new WiXFixture();
-                var runner = fixture.CreateCandleRunner();
+                var fixture = new CandleFixture();
+                fixture.Settings.OutputDirectory = "obj";
 
                 // When
-                runner.Run(new[] { new FilePath("./Test.wxs") }, new CandleSettings
-                {
-                    OutputDirectory =  "obj"
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "-o \"/Working/obj\\\\\" \"/Working/Test.wxs\""));
+                Assert.Equal("-o \"/Working/obj\\\\\" \"/Working/Test.wxs\"", result.Args);
             }
 
             [Fact]
             public void Should_Add_Pedantic_To_Arguments_If_Provided()
             {
                 // Given
-                var fixture = new WiXFixture();
-                var runner = fixture.CreateCandleRunner();
+                var fixture = new CandleFixture();
+                fixture.Settings.Pedantic = true;
 
                 // When
-                runner.Run(new[] { new FilePath("./Test.wxs") }, new CandleSettings
-                {
-                    Pedantic = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "-pedantic \"/Working/Test.wxs\""));
+                Assert.Equal("-pedantic \"/Working/Test.wxs\"", result.Args);
             }
 
             [Fact]
             public void Should_Add_Show_Source_Trace_To_Arguments_If_Provided()
             {
                 // Given
-                var fixture = new WiXFixture();
-                var runner = fixture.CreateCandleRunner();
+                var fixture = new CandleFixture();
+                fixture.Settings.ShowSourceTrace = true;
 
                 // When
-                runner.Run(new[] { new FilePath("./Test.wxs") }, new CandleSettings
-                {
-                    ShowSourceTrace = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "-trace \"/Working/Test.wxs\""));
+                Assert.Equal("-trace \"/Working/Test.wxs\"", result.Args);
             }
 
             [Fact]
             public void Should_Add_Verbose_To_Arguments_If_Provided()
             {
                 // Given
-                var fixture = new WiXFixture();
-                var runner = fixture.CreateCandleRunner();
+                var fixture = new CandleFixture();
+                fixture.Settings.Verbose = true;
 
                 // When
-                runner.Run(new[] { new FilePath("./Test.wxs") }, new CandleSettings
-                {
-                    Verbose = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "-v \"/Working/Test.wxs\""));
+                Assert.Equal("-v \"/Working/Test.wxs\"", result.Args);
             }
         }
     }

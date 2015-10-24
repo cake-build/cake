@@ -2,13 +2,12 @@
 
 namespace Cake.Common.Tests.Fixtures.Tools.GitReleaseManager
 {
-    public sealed class GitReleaseManagerCreatorFixture : GitReleaseManagerFixture
+    internal sealed class GitReleaseManagerCreatorFixture : GitReleaseManagerFixture<GitReleaseManagerCreateSettings>
     {
         public string UserName { get; set; }
         public string Password { get; set; }
         public string Owner { get; set; }
         public string Repository { get; set; }
-        public GitReleaseManagerCreateSettings Settings { get; set; }
 
         public GitReleaseManagerCreatorFixture()
         {
@@ -16,12 +15,11 @@ namespace Cake.Common.Tests.Fixtures.Tools.GitReleaseManager
             Password = "password";
             Owner = "repoOwner";
             Repository = "repo";
-            Settings = new GitReleaseManagerCreateSettings();
         }
 
-        public void Create()
+        protected override void RunTool()
         {
-            var tool = new GitReleaseManagerCreator(FileSystem, Environment, ProcessRunner, Globber, GitReleaseManagerToolResolver);
+            var tool = new GitReleaseManagerCreator(FileSystem, Environment, ProcessRunner, Globber, Resolver);
             tool.Create(UserName, Password, Owner, Repository, Settings);
         }
     }

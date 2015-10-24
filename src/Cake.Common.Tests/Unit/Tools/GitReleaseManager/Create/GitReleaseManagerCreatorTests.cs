@@ -1,6 +1,4 @@
 ﻿using Cake.Common.Tests.Fixtures.Tools.GitReleaseManager;
-using Cake.Core.IO;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
@@ -17,7 +15,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
                 fixture.UserName = string.Empty;
 
                 // When
-                var result = Record.Exception(() => fixture.Create());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "userName");
@@ -31,7 +29,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
                 fixture.Password = string.Empty;
 
                 // When
-                var result = Record.Exception(() => fixture.Create());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "password");
@@ -45,7 +43,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
                 fixture.Owner = string.Empty;
 
                 // When
-                var result = Record.Exception(() => fixture.Create());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "owner");
@@ -59,7 +57,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
                 fixture.Repository = string.Empty;
 
                 // When
-                var result = Record.Exception(() => fixture.Create());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "repository");
@@ -73,7 +71,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
                 fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => fixture.Create());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
@@ -87,7 +85,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
                 fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => fixture.Create());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "GitReleaseManager: Could not locate executable.");
@@ -100,16 +98,14 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
             {
                 // Given
                 var fixture = new GitReleaseManagerCreatorFixture();
-                fixture.GivenCustomToolPathExist(expected);
                 fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
 
                 // When
-                fixture.Create();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -120,7 +116,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
                 fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => fixture.Create());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "GitReleaseManager: Process was not started.");
@@ -131,10 +127,10 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
             {
                 // Given
                 var fixture = new GitReleaseManagerCreatorFixture();
-                fixture.GivenProcessReturnError();
+                fixture.GivenProcessExitsWithCode(1);
 
                 // When
-                var result = Record.Exception(() => fixture.Create());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "GitReleaseManager: Process returned an error.");
@@ -147,12 +143,10 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
                 var fixture = new GitReleaseManagerCreatorFixture();
 
                 // When
-                fixture.Create();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/GitReleaseManager.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/tools/GitReleaseManager.exe", result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -162,12 +156,11 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
                 var fixture = new GitReleaseManagerCreatorFixture();
 
                 // When
-                fixture.Create();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "create -u \"bob\" -p \"password\" -o \"repoOwner\" -r \"repo\""));
+                Assert.Equal("create -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\"", result.Args);
             }
 
             [Fact]
@@ -178,12 +171,11 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
                 fixture.Settings.Milestone = "1.0.0";
 
                 // When
-                fixture.Create();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "create -u \"bob\" -p \"password\" -o \"repoOwner\" -r \"repo\" -m \"1.0.0\""));
+                Assert.Equal("create -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\" -m \"1.0.0\"", result.Args);
             }
 
             [Fact]
@@ -194,12 +186,11 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
                 fixture.Settings.Name = "1.0.0";
 
                 // When
-                fixture.Create();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "create -u \"bob\" -p \"password\" -o \"repoOwner\" -r \"repo\" -n \"1.0.0\""));
+                Assert.Equal("create -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\" -n \"1.0.0\"", result.Args);
             }
 
             [Fact]
@@ -210,12 +201,11 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
                 fixture.Settings.InputFilePath = @"c:/temp";
 
                 // When
-                fixture.Create();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "create -u \"bob\" -p \"password\" -o \"repoOwner\" -r \"repo\" -i \"c:/temp\""));
+                Assert.Equal("create -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\" -i \"c:/temp\"", result.Args);
             }
 
             [Fact]
@@ -226,12 +216,11 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
                 fixture.Settings.Prerelease = true;
 
                 // When
-                fixture.Create();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "create -u \"bob\" -p \"password\" -o \"repoOwner\" -r \"repo\" -pre"));
+                Assert.Equal("create -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\" -pre", result.Args);
             }
 
             [Fact]
@@ -242,12 +231,12 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
                 fixture.Settings.Assets = "asset1,asset2";
 
                 // When
-                fixture.Create();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "create -u \"bob\" -p \"password\" -o \"repoOwner\" -r \"repo\" -a \"asset1,asset2\""));
+                Assert.Equal("create -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\" " +
+                             "-a \"asset1,asset2\"", result.Args);
             }
 
             [Fact]
@@ -258,12 +247,11 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
                 fixture.Settings.TargetCommitish = "master";
 
                 // When
-                fixture.Create();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "create -u \"bob\" -p \"password\" -o \"repoOwner\" -r \"repo\" -c \"master\""));
+                Assert.Equal("create -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\" -c \"master\"", result.Args);
             }
 
             [Fact]
@@ -274,12 +262,11 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
                 fixture.Settings.TargetDirectory = @"c:/temp";
 
                 // When
-                fixture.Create();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "create -u \"bob\" -p \"password\" -o \"repoOwner\" -r \"repo\" -d \"c:/temp\""));
+                Assert.Equal("create -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\" -d \"c:/temp\"", result.Args);
             }
 
             [Fact]
@@ -290,12 +277,12 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
                 fixture.Settings.LogFilePath = @"c:/temp/log.txt";
 
                 // When
-                fixture.Create();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "create -u \"bob\" -p \"password\" -o \"repoOwner\" -r \"repo\" -l \"c:/temp/log.txt\""));
+                Assert.Equal("create -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\" " +
+                             "-l \"c:/temp/log.txt\"", result.Args);
             }
         }
     }

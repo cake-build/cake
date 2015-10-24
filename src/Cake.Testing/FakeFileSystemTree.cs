@@ -71,7 +71,7 @@ namespace Cake.Testing
                         current = new FakeDirectory(this, path);
                     }
 
-                    current.Parent = parent;
+                    current.Parent = parent ?? _root;
                     current.Hidden = false;
                     children.Add(current);
                 }

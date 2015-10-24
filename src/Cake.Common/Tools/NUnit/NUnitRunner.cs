@@ -28,25 +28,6 @@ namespace Cake.Common.Tools.NUnit
         }
 
         /// <summary>
-        /// Runs the tests in the specified assembly, using the specified settings.
-        /// </summary>
-        /// <param name="assemblyPath">The assembly path.</param>
-        /// <param name="settings">The settings.</param>
-        public void Run(FilePath assemblyPath, NUnitSettings settings)
-        {
-            if (assemblyPath == null)
-            {
-                throw new ArgumentNullException("assemblyPath");
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException("settings");
-            }
-
-            Run(settings, GetArguments(new[] { assemblyPath }, settings));
-        }
-
-        /// <summary>
         /// Runs the tests in the specified assemblies, using the specified settings.
         /// </summary>
         /// <param name="assemblyPaths">The assembly paths.</param>
