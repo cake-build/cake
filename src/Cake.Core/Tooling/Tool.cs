@@ -4,14 +4,13 @@ using System.Globalization;
 using System.Linq;
 using Cake.Core.IO;
 
-namespace Cake.Core.Utilities
+namespace Cake.Core.Tooling
 {
     /// <summary>
     /// Base class for tools.
     /// </summary>
     /// <typeparam name="TSettings">The settings type.</typeparam>
-    [Obsolete("Please use Cake.Core.Tooling.Tool<TToolSettings> instead.")]
-    public abstract class Tool<TSettings>
+    public abstract class Tool<TSettings> where TSettings : ToolSettings
     {
         private readonly ICakeEnvironment _environment;
         private readonly IFileSystem _fileSystem;
@@ -58,7 +57,7 @@ namespace Cake.Core.Utilities
         /// <param name="arguments">The arguments.</param>
         protected void Run(TSettings settings, ProcessArgumentBuilder arguments)
         {
-            Run(settings, arguments, null);
+            Run(settings, arguments, null, null);
         }
 
         /// <summary>
@@ -66,29 +65,20 @@ namespace Cake.Core.Utilities
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="arguments">The arguments.</param>
-        /// <param name="toolPath">The tool path to use.</param>
-        protected void Run(TSettings settings, ProcessArgumentBuilder arguments, FilePath toolPath)
-        {
-            Run(settings, arguments, toolPath, null, null);
-        }
-
-        /// <summary>
-        /// Runs the tool using a custom tool path and the specified settings.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <param name="arguments">The arguments.</param>
-        /// <param name="toolPath">The tool path to use.</param>
         /// <param name="processSettings">The process settings</param>
         /// <param name="postAction">If specified called after process exit</param>
-        protected void Run(TSettings settings, ProcessArgumentBuilder arguments, FilePath toolPath,
-            ProcessSettings processSettings, Action<IProcess> postAction)
+        protected void Run(
+            TSettings settings, 
+            ProcessArgumentBuilder arguments,
+            ProcessSettings processSettings, 
+            Action<IProcess> postAction)
         {
             if (arguments == null && (processSettings == null || processSettings.Arguments == null))
             {
                 throw new ArgumentNullException("arguments");
             }
 
-            var process = RunProcess(settings, arguments, toolPath, processSettings);
+            var process = RunProcess(settings, arguments, processSettings);
 
             // Wait for the process to exit.
             process.WaitForExit();
@@ -128,22 +118,11 @@ namespace Cake.Core.Utilities
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="arguments">The arguments.</param>
-        /// <param name="toolPath">The tool path to use.</param>
-        /// <returns>The process that the tool is running under.</returns>
-        protected IProcess RunProcess(TSettings settings, ProcessArgumentBuilder arguments, FilePath toolPath)
-        {
-            return RunProcess(settings, arguments, toolPath, null);
-        }
-
-        /// <summary>
-        /// Runs the tool using a custom tool path and the specified settings.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <param name="arguments">The arguments.</param>
-        /// <param name="toolPath">The tool path to use.</param>
         /// <param name="processSettings">The process settings</param>
         /// <returns>The process that the tool is running under.</returns>
-        protected IProcess RunProcess(TSettings settings, ProcessArgumentBuilder arguments, FilePath toolPath,
+        protected IProcess RunProcess(
+            TSettings settings, 
+            ProcessArgumentBuilder arguments,
             ProcessSettings processSettings)
         {
             if (arguments == null && (processSettings == null || processSettings.Arguments == null))
@@ -155,7 +134,7 @@ namespace Cake.Core.Utilities
             var toolName = GetToolName();
 
             // Get the tool path.
-            toolPath = GetToolPath(settings, toolPath);
+            var toolPath = GetToolPath(settings);
             if (toolPath == null || !_fileSystem.Exist(toolPath))
             {
                 const string message = "{0}: Could not locate executable.";
@@ -192,13 +171,41 @@ namespace Cake.Core.Utilities
         }
 
         /// <summary>
-        /// Gets the tool path.
+        /// Gets the name of the tool.
+        /// </summary>
+        /// <returns>The name of the tool.</returns>
+        protected abstract string GetToolName();
+
+        /// <summary>
+        /// Gets the possible names of the tool executable.
+        /// </summary>
+        /// <returns>The tool executable name.</returns>
+        protected abstract IEnumerable<string> GetToolExecutableNames();
+
+        /// <summary>
+        /// Gets the working directory.
+        /// Defaults to the currently set working directory.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        /// <param name="toolPath">The provided tool path (if any).</param>
-        /// <returns>The tool path.</returns>
-        protected FilePath GetToolPath(TSettings settings, FilePath toolPath)
+        /// <returns>The working directory for the tool.</returns>
+        protected virtual DirectoryPath GetWorkingDirectory(TSettings settings)
         {
+            return _environment.WorkingDirectory;
+        }
+
+        /// <summary>
+        /// Gets alternative file paths which the tool may exist in
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The default tool path.</returns>
+        protected virtual IEnumerable<FilePath> GetAlternativeToolPaths(TSettings settings)
+        {
+            return Enumerable.Empty<FilePath>();
+        }
+
+        private FilePath GetToolPath(TSettings settings)
+        {
+            var toolPath = settings.ToolPath;
             if (toolPath != null)
             {
                 return toolPath.MakeAbsolute(_environment);
@@ -254,39 +261,6 @@ namespace Cake.Core.Utilities
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Gets the name of the tool.
-        /// </summary>
-        /// <returns>The name of the tool.</returns>
-        protected abstract string GetToolName();
-
-        /// <summary>
-        /// Gets the possible names of the tool executable.
-        /// </summary>
-        /// <returns>The tool executable name.</returns>
-        protected abstract IEnumerable<string> GetToolExecutableNames();
-
-        /// <summary>
-        /// Gets the working directory.
-        /// Defaults to the currently set working directory.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The working directory for the tool.</returns>
-        protected virtual DirectoryPath GetWorkingDirectory(TSettings settings)
-        {
-            return _environment.WorkingDirectory;
-        }
-
-        /// <summary>
-        /// Gets alternative file paths which the tool may exist in
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The default tool path.</returns>
-        protected virtual IEnumerable<FilePath> GetAlternativeToolPaths(TSettings settings)
-        {
-            return Enumerable.Empty<FilePath>();
         }
     }
 }

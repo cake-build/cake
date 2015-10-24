@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.Cake
 {
@@ -55,7 +55,7 @@ namespace Cake.Common.Tools.Cake
 
             settings = settings ?? new CakeSettings();
 
-            Run(settings, GetArguments(scriptPath, settings), settings.ToolPath);
+            Run(settings, GetArguments(scriptPath, settings));
         }
 
         /// <summary>

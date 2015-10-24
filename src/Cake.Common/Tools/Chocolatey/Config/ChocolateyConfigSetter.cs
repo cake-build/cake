@@ -47,7 +47,7 @@ namespace Cake.Common.Tools.Chocolatey.Config
                 throw new ArgumentNullException("value");
             }
 
-            Run(settings, GetArguments(name, value, settings), settings.ToolPath);
+            Run(settings, GetArguments(name, value, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(string name, string value, ChocolateyConfigSettings settings)

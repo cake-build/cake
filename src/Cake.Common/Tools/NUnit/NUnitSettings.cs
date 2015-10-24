@@ -1,11 +1,12 @@
 ﻿using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.NUnit
 {
     /// <summary>
     ///     Contains settings used by <see cref="NUnitRunner" />.
     /// </summary>
-    public sealed class NUnitSettings
+    public sealed class NUnitSettings : ToolSettings
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="NUnitSettings" /> class.
@@ -14,14 +15,6 @@ namespace Cake.Common.Tools.NUnit
         {
             ShadowCopy = true;
         }
-
-        /// <summary>
-        ///     Gets or sets the tool path.
-        /// </summary>
-        /// <value>
-        ///     The tool path. Defaults to <c>./tools/**/nunit-console.exe</c>.
-        /// </value>
-        public FilePath ToolPath { get; set; }
 
         /// <summary>
         ///     Gets or sets the name of the XML result file.

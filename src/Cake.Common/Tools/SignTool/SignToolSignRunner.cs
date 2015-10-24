@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.SignTool
 {
@@ -78,7 +78,7 @@ namespace Cake.Common.Tools.SignTool
                 assemblyPath = assemblyPath.MakeAbsolute(_environment);
             }
 
-            Run(settings, GetArguments(assemblyPath, settings), settings.ToolPath);
+            Run(settings, GetArguments(assemblyPath, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, SignToolSignSettings settings)

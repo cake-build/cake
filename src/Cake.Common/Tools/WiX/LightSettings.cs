@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.WiX
 {
     /// <summary>
     /// Contains settings used by the <see cref="LightRunner"/>.
     /// </summary>
-    public sealed class LightSettings
+    public sealed class LightSettings : ToolSettings
     {
         /// <summary>
         /// Gets or sets the defined WiX variables.
@@ -32,10 +33,5 @@ namespace Cake.Common.Tools.WiX
         /// Gets or sets the path to the output file (i.e. the resulting MSI package).
         /// </summary>
         public FilePath OutputFile { get; set; }
-
-        /// <summary>
-        /// Gets or sets the path to <c>Light.exe</c>.
-        /// </summary>
-        public FilePath ToolPath { get; set; }
     }
 }

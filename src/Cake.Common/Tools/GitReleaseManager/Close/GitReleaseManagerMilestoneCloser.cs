@@ -67,7 +67,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Close
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetArguments(userName, password, owner, repository, milestone, settings), settings.ToolPath);
+            Run(settings, GetArguments(userName, password, owner, repository, milestone, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(string userName, string password, string owner, string repository, string milestone, GitReleaseManagerCloseMilestoneSettings settings)

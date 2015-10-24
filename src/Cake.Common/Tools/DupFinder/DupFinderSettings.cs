@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.DupFinder
 {
     /// <summary>
     /// Contains settings used by <see cref="DupFinderRunner"/> .
     /// </summary>
-    public sealed class DupFinderSettings
+    public sealed class DupFinderSettings : ToolSettings
     {
         /// <summary>
         /// Gets or sets a value indicating whether the debug output should be enabled.

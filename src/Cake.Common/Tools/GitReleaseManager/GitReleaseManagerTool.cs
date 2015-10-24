@@ -2,7 +2,7 @@
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.GitReleaseManager
 {
@@ -11,6 +11,7 @@ namespace Cake.Common.Tools.GitReleaseManager
     /// </summary>
     /// <typeparam name="TSettings">The settings type.</typeparam>
     public abstract class GitReleaseManagerTool<TSettings> : Tool<TSettings>
+        where TSettings : ToolSettings
     {
         private readonly IGitReleaseManagerToolResolver _resolver;
 

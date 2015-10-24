@@ -41,7 +41,7 @@ namespace Cake.Common.Tools.Chocolatey.Pin
                 throw new ArgumentNullException("name");
             }
 
-            Run(settings, GetArguments(name, settings), settings.ToolPath);
+            Run(settings, GetArguments(name, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(string name, ChocolateyPinSettings settings)

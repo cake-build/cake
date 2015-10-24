@@ -1,20 +1,13 @@
 ﻿using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.Roundhouse
 {
     /// <summary>
     /// Contains settings used by <see cref="RoundhouseRunner" />.
     /// </summary>
-    public sealed class RoundhouseSettings
+    public sealed class RoundhouseSettings : ToolSettings
     {
-        /// <summary>
-        /// Gets or sets the path to the Roundhouse executable.
-        /// </summary>
-        /// <value>
-        /// The tool path. Defaults to <c>./tools/**/rh.exe</c>.
-        /// </value>
-        public FilePath ToolPath { get; set; }
-
         /// <summary>
         /// Gets or sets the server name.
         /// </summary>

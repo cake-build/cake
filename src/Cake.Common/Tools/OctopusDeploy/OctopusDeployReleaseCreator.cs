@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.OctopusDeploy
 {
@@ -52,7 +52,7 @@ namespace Cake.Common.Tools.OctopusDeploy
             }
 
             var argumentBuilder = new CreateReleaseArgumentBuilder(projectName, settings, _environment);
-            Run(settings, argumentBuilder.Get(), settings.ToolPath);
+            Run(settings, argumentBuilder.Get());
         }
 
         /// <summary>

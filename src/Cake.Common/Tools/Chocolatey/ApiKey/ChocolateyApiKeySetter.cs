@@ -47,7 +47,7 @@ namespace Cake.Common.Tools.Chocolatey.ApiKey
                 throw new ArgumentNullException("source");
             }
 
-            Run(settings, GetArguments(apiKey, source, settings), settings.ToolPath);
+            Run(settings, GetArguments(apiKey, source, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(string apiKey, string source, ChocolateyApiKeySettings settings)

@@ -1,7 +1,7 @@
 ﻿using System;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.XUnit
 {
@@ -54,7 +54,7 @@ namespace Cake.Common.Tools.XUnit
                 }
             }
 
-            Run(settings, GetArguments(assemblyPath, settings), settings.ToolPath);
+            Run(settings, GetArguments(assemblyPath, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, XUnitSettings settings)

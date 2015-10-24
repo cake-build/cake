@@ -2,7 +2,7 @@
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.Chocolatey
 {
@@ -11,6 +11,7 @@ namespace Cake.Common.Tools.Chocolatey
     /// </summary>
     /// <typeparam name="TSettings">The settings type.</typeparam>
     public abstract class ChocolateyTool<TSettings> : Tool<TSettings>
+        where TSettings : ToolSettings
     {
         private readonly IChocolateyToolResolver _resolver;
 

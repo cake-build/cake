@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.Fixie
 {
@@ -43,7 +43,7 @@ namespace Cake.Common.Tools.Fixie
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetArguments(new[] { assemblyPath }, settings), settings.ToolPath);
+            Run(settings, GetArguments(new[] { assemblyPath }, settings));
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Cake.Common.Tools.Fixie
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetArguments(assemblyPaths, settings), settings.ToolPath);
+            Run(settings, GetArguments(assemblyPaths, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(IEnumerable<FilePath> assemblyPaths, FixieSettings settings)

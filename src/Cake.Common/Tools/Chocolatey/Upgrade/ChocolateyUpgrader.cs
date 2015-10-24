@@ -44,7 +44,7 @@ namespace Cake.Common.Tools.Chocolatey.Upgrade
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetArguments(packageId, settings), settings.ToolPath);
+            Run(settings, GetArguments(packageId, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(string packageId, ChocolateyUpgradeSettings settings)

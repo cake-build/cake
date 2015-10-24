@@ -1,11 +1,12 @@
 ﻿using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.Chocolatey.ApiKey
 {
     /// <summary>
     /// Contains settings used by <see cref="ChocolateyApiKeySetter"/>.
     /// </summary>
-    public sealed class ChocolateyApiKeySettings
+    public sealed class ChocolateyApiKeySettings : ToolSettings
     {
         /// <summary>
         /// Gets or sets a value indicating whether to run in debug mode.
@@ -55,11 +56,5 @@ namespace Cake.Common.Tools.Chocolatey.ApiKey
         /// </summary>
         /// <value>The allow unofficial flag</value>
         public bool AllowUnoffical { get; set; }
-
-        /// <summary>
-        /// Gets or sets the tool path.
-        /// </summary>
-        /// <value>The tool path.</value>
-        public FilePath ToolPath { get; set; }
     }
 }

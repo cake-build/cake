@@ -45,7 +45,7 @@ namespace Cake.Common.Tools.NuGet.Update
             {
                 throw new ArgumentNullException("settings");
             }
-            Run(settings, GetArguments(targetFile, settings), settings.ToolPath);
+            Run(settings, GetArguments(targetFile, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(FilePath targetFile, NuGetUpdateSettings settings)

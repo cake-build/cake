@@ -1,18 +1,14 @@
 ﻿using System.Collections.Generic;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.NuGet.Update
 {
     /// <summary>
     /// Contains settings used by <see cref="NuGetUpdater"/>.
     /// </summary>
-    public sealed class NuGetUpdateSettings
+    public sealed class NuGetUpdateSettings : ToolSettings
     {
-        /// <summary>
-        /// Gets or sets the path to <c>nuget.exe</c>.
-        /// </summary>
-        public FilePath ToolPath { get; set; }
-
         /// <summary>
         /// Gets or sets the package ids to update.
         /// </summary>

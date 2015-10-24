@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.NSIS
 {
@@ -7,7 +8,7 @@ namespace Cake.Common.Tools.NSIS
     /// Contains settings used by the <see cref="MakeNSISRunner"/>.
     /// </summary>
     // ReSharper disable once InconsistentNaming
-    public sealed class MakeNSISSettings
+    public sealed class MakeNSISSettings : ToolSettings
     {
         /// <summary>
         /// Gets or sets the script compiler defines.
@@ -23,10 +24,5 @@ namespace Cake.Common.Tools.NSIS
         /// Gets or sets a value indicating whether to disable inclusion of the <c>nsisconf.nsh</c> file.
         /// </summary>
         public bool NoConfig { get; set; }
-
-        /// <summary>
-        /// Gets or sets the path to <c>makensis.exe</c>.
-        /// </summary>
-        public FilePath ToolPath { get; set; }
     }
 }

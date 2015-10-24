@@ -1,11 +1,12 @@
 ﻿using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.Chocolatey.Features
 {
     /// <summary>
     /// Contains settings used by <see cref="ChocolateyFeatureToggler"/>.
     /// </summary>
-    public sealed class ChocolateyFeatureSettings
+    public sealed class ChocolateyFeatureSettings : ToolSettings
     {
         /// <summary>
         /// Gets or sets a value indicating whether to run in debug mode.
@@ -55,11 +56,5 @@ namespace Cake.Common.Tools.Chocolatey.Features
         /// </summary>
         /// <value>The allow unofficial flag</value>
         public bool AllowUnoffical { get; set; }
-
-        /// <summary>
-        /// Gets or sets the tool path.
-        /// </summary>
-        /// <value>The tool path.</value>
-        public FilePath ToolPath { get; set; }
     }
 }

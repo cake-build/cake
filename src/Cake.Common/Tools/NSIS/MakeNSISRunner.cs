@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.NSIS
 {
@@ -55,7 +55,7 @@ namespace Cake.Common.Tools.NSIS
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetArguments(scriptFile, settings), settings.ToolPath);
+            Run(settings, GetArguments(scriptFile, settings));
         }
 
         /// <summary>
