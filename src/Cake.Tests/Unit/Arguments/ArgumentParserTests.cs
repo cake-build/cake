@@ -85,7 +85,7 @@ namespace Cake.Tests.Unit.Arguments
 
                 // Then
                 Assert.Null(result);
-                Assert.True(fixture.Log.Entries.Any(x => x.Message == "Multiple arguments with the same name (unknown)."));
+                Assert.True(fixture.Log.Entries.Any(x => x.Message == "Using a argument-name more than once is not allowed: -unknown"));
             }
 
             [Theory]
@@ -152,7 +152,7 @@ namespace Cake.Tests.Unit.Arguments
                 parser.Parse(arguments);
 
                 // Then
-                Assert.Equal("More than one build script specified.", fixture.Log.Entries[0].Message);
+                Assert.Equal("An \"--key\" should preceed the value.", fixture.Log.Entries[0].Message);
             }
 
             [Theory]

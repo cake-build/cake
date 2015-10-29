@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cake.Arguments;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
@@ -16,6 +17,9 @@ namespace Cake
         /// Gets or sets the output verbosity.
         /// </summary>
         /// <value>The output verbosity.</value>
+        [CommandArgumentName("-v")]
+        [CommandArgumentName("--verbosity")]
+        [CommandArgumentName("-verbosity", true)]
         public Verbosity Verbosity { get; set; }
 
         /// <summary>
@@ -39,6 +43,9 @@ namespace Cake
         /// <value>
         ///   <c>true</c> to show task description; otherwise, <c>false</c>.
         /// </value>
+        [CommandArgumentName("-s")]
+        [CommandArgumentName("--showdescription")]
+        [CommandArgumentName("-showdescription", true)]
         public bool ShowDescription { get; set; }
 
         /// <summary>
@@ -47,6 +54,12 @@ namespace Cake
         /// <value>
         ///   <c>true</c> if a dry run should be performed; otherwise, <c>false</c>.
         /// </value>
+        [CommandArgumentName("--noop")]
+        [CommandArgumentName("--dryrun")]
+        [CommandArgumentName("--whatif")]
+        [CommandArgumentName("-noop", true)]
+        [CommandArgumentName("-dryrun", true)]
+        [CommandArgumentName("-whatif", true)]
         public bool PerformDryRun { get; set; }
 
         /// <summary>
@@ -55,6 +68,9 @@ namespace Cake
         /// <value>
         ///   <c>true</c> to show help; otherwise, <c>false</c>.
         /// </value>
+        [CommandArgumentName("-?")]
+        [CommandArgumentName("--help")]
+        [CommandArgumentName("-help", true)]
         public bool ShowHelp { get; set; }
 
         /// <summary>
@@ -63,6 +79,10 @@ namespace Cake
         /// <value>
         ///   <c>true</c> to show version information; otherwise, <c>false</c>.
         /// </value>
+        [CommandArgumentName("--version")]
+        [CommandArgumentName("--ver")]
+        [CommandArgumentName("-version", true)]
+        [CommandArgumentName("-ver", true)]
         public bool ShowVersion { get; set; }
 
         /// <summary>
