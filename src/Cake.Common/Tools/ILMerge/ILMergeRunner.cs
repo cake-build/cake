@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.ILMerge
 {
@@ -53,8 +53,7 @@ namespace Cake.Common.Tools.ILMerge
             settings = settings ?? new ILMergeSettings();
 
             // Get the ILMerge path.
-            Run(settings, GetArguments(outputAssemblyPath, primaryAssemblyPath, assemblyPaths, settings),
-                settings.ToolPath);
+            Run(settings, GetArguments(outputAssemblyPath, primaryAssemblyPath, assemblyPaths, settings));
         }
 
         /// <summary>

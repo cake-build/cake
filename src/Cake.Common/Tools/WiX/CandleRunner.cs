@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.WiX
 {
@@ -55,7 +55,7 @@ namespace Cake.Common.Tools.WiX
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetArguments(sourceFilesArray, settings), settings.ToolPath);
+            Run(settings, GetArguments(sourceFilesArray, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(IEnumerable<FilePath> sourceFiles, CandleSettings settings)

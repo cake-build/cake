@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.SignTool
 {
@@ -78,7 +78,7 @@ namespace Cake.Common.Tools.SignTool
                 assemblyPath = assemblyPath.MakeAbsolute(_environment);
             }
 
-            Run(settings, GetArguments(assemblyPath, settings), settings.ToolPath);
+            Run(settings, GetArguments(assemblyPath, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, SignToolSignSettings settings)
@@ -163,7 +163,7 @@ namespace Cake.Common.Tools.SignTool
         /// <returns>The tool executable name.</returns>
         protected override IEnumerable<string> GetToolExecutableNames()
         {
-            return Enumerable.Empty<string>();
+            return new[] { "signtool.exe" };
         }
 
         /// <summary>
@@ -174,13 +174,9 @@ namespace Cake.Common.Tools.SignTool
         protected override IEnumerable<FilePath> GetAlternativeToolPaths(SignToolSignSettings settings)
         {
             var path = _resolver.GetPath();
-
-            if (path != null)
-            {
-                return new[] { path };
-            }
-
-            return Enumerable.Empty<FilePath>();
+            return path != null 
+                ? new[] { path } 
+                : Enumerable.Empty<FilePath>();
         }
     }
 }

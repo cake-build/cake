@@ -73,7 +73,7 @@ namespace Cake.Common.Tools.GitReleaseManager.AddAssets
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetArguments(userName, password, owner, repository, tagName, assets, settings), settings.ToolPath);
+            Run(settings, GetArguments(userName, password, owner, repository, tagName, assets, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(string userName, string password, string owner, string repository, string tagName, string assets, GitReleaseManagerAddAssetsSettings settings)

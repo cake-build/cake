@@ -194,6 +194,8 @@
     <Compile Include="TaskTeardownContext.cs" />
     <Compile Include="Text\ITextTransformationTemplate.cs" />
     <Compile Include="Text\TextTransformationTemplate.cs" />
+    <Compile Include="Tooling\Tool.cs" />
+    <Compile Include="Tooling\ToolSettings.cs" />
     <Compile Include="Utilities\Tool.cs" />
   </ItemGroup>
   <ItemGroup>

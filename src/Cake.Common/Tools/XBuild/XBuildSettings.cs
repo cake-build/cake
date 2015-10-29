@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cake.Core.Diagnostics;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.XBuild
 {
     /// <summary>
     /// Contains settings used by <see cref="XBuildRunner"/>.
     /// </summary>
-    public sealed class XBuildSettings
+    public sealed class XBuildSettings : ToolSettings
     {
         private readonly HashSet<string> _targets;
         private readonly Dictionary<string, IList<string>> _properties;

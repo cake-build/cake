@@ -1,44 +1,21 @@
 ﻿using Cake.Common.Tools.Roundhouse;
-using Cake.Core;
-using Cake.Core.IO;
-using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Tools
 {
-    internal sealed class RoundhouseRunnerFixture
+    internal sealed class RoundhouseRunnerFixture : ToolFixture<RoundhouseSettings>
     {
-        public IProcess Process { get; set; }
-        public IFileSystem FileSystem { get; set; }
-        public ICakeEnvironment Environment { get; set; }
-        public IProcessRunner ProcessRunner { get; set; }
-        public IGlobber Globber { get; set; }
+        public bool Drop { get; set; }
 
-        public RoundhouseRunnerFixture(FilePath toolPath = null, bool defaultToolExist = true)
+        public RoundhouseRunnerFixture()
+            : base("rh.exe")
         {
-            Process = Substitute.For<IProcess>();
-            Process.GetExitCode().Returns(0);
-
-            ProcessRunner = Substitute.For<IProcessRunner>();
-            ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns(Process);
-
-            Environment = Substitute.For<ICakeEnvironment>();
-            Environment.WorkingDirectory = "/Working";
-
-            Globber = Substitute.For<IGlobber>();
-            Globber.Match("./tools/**/rh.exe").Returns(new[] { (FilePath)"/Working/tools/rh.exe" });
-
-            FileSystem = Substitute.For<IFileSystem>();
-            FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == "/Working/tools/rh.exe")).Returns(defaultToolExist);
-
-            if (toolPath != null)
-            {
-                FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == toolPath.FullPath)).Returns(true);
-            }
+            Drop = false;
         }
 
-        public RoundhouseRunner CreateRunner()
+        protected override void RunTool()
         {
-            return new RoundhouseRunner(FileSystem, Environment, ProcessRunner, Globber);
+            var tool = new RoundhouseRunner(FileSystem, Environment, ProcessRunner, Globber);
+            tool.Run(Settings, Drop);
         }
     }
 }

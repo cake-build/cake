@@ -59,7 +59,7 @@ namespace Cake.Common.Tools.NuGet.SetApiKey
                 Arguments = GetArguments(apiKey, source, settings),
                 RedirectStandardOutput = true
             };
-            Run(settings, null, settings.ToolPath, processSettings, process => output = string.Join("\r\n", process.GetStandardOutput()));
+            Run(settings, null, processSettings, process => output = string.Join("\r\n", process.GetStandardOutput()));
 
             if (string.IsNullOrWhiteSpace(output) ||
                 !output.Contains(string.Concat("The API Key '", apiKey, "' was saved for '", source, "'.")))

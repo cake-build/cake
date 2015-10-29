@@ -52,7 +52,7 @@ namespace Cake.Common.Tools.NuGet.SetProxy
                 Arguments = GetArguments(url, username, password, settings),
                 RedirectStandardOutput = true
             };
-            Run(settings, null, settings.ToolPath, processSettings, process => output = string.Join("\r\n", process.GetStandardOutput()));
+            Run(settings, null, processSettings, process => output = string.Join("\r\n", process.GetStandardOutput()));
 
             if (!string.IsNullOrWhiteSpace(output))
             {

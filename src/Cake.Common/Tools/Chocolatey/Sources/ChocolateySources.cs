@@ -57,7 +57,7 @@ namespace Cake.Common.Tools.Chocolatey.Sources
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetAddArguments(name, source, settings), settings.ToolPath);
+            Run(settings, GetAddArguments(name, source, settings));
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Cake.Common.Tools.Chocolatey.Sources
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetRemoveArguments(name, settings), settings.ToolPath);
+            Run(settings, GetRemoveArguments(name, settings));
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace Cake.Common.Tools.Chocolatey.Sources
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetEnableArguments(name, settings), settings.ToolPath);
+            Run(settings, GetEnableArguments(name, settings));
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace Cake.Common.Tools.Chocolatey.Sources
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetDisableArguments(name, settings), settings.ToolPath);
+            Run(settings, GetDisableArguments(name, settings));
         }
 
         private static ProcessArgumentBuilder GetAddArguments(string name, string source, ChocolateySourcesSettings settings)

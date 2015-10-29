@@ -65,7 +65,7 @@ namespace Cake.Common.Tools.NuGet.Sources
                 throw new InvalidOperationException(message);
             }
 
-            Run(settings, GetAddArguments(name, source, settings), settings.ToolPath);
+            Run(settings, GetAddArguments(name, source, settings));
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace Cake.Common.Tools.NuGet.Sources
                 throw new InvalidOperationException(message);
             }
 
-            Run(settings, GetRemoveArguments(name, source, settings), settings.ToolPath);
+            Run(settings, GetRemoveArguments(name, source, settings));
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Cake.Common.Tools.NuGet.Sources
             };
 
             var result = false;
-            Run(settings, null, settings.ToolPath, processSettings,
+            Run(settings, null,  processSettings, 
                 process => result = process.GetStandardOutput().Any(line => line.TrimStart() == source));
 
             // Return whether or not the source exist.

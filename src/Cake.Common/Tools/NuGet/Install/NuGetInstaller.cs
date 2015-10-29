@@ -45,7 +45,7 @@ namespace Cake.Common.Tools.NuGet.Install
 
             var packageId = packageConfigPath.MakeAbsolute(_environment).FullPath;
 
-            Run(settings, GetArguments(packageId, settings), settings.ToolPath);
+            Run(settings, GetArguments(packageId, settings));
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Cake.Common.Tools.NuGet.Install
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetArguments(packageId, settings), settings.ToolPath);
+            Run(settings, GetArguments(packageId, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(string packageId, NuGetInstallSettings settings)

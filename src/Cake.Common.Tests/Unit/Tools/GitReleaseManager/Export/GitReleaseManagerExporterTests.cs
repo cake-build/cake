@@ -17,7 +17,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Export
                 fixture.UserName = string.Empty;
 
                 // When
-                var result = Record.Exception(() => fixture.Export());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "userName");
@@ -31,7 +31,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Export
                 fixture.Password = string.Empty;
 
                 // When
-                var result = Record.Exception(() => fixture.Export());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "password");
@@ -45,7 +45,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Export
                 fixture.Owner = string.Empty;
 
                 // When
-                var result = Record.Exception(() => fixture.Export());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "owner");
@@ -59,7 +59,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Export
                 fixture.Repository = string.Empty;
 
                 // When
-                var result = Record.Exception(() => fixture.Export());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "repository");
@@ -73,7 +73,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Export
                 fixture.FileOutputPath = null;
 
                 // When
-                var result = Record.Exception(() => fixture.Export());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "fileOutputPath");
@@ -87,7 +87,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Export
                 fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => fixture.Export());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
@@ -101,7 +101,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Export
                 fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => fixture.Export());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "GitReleaseManager: Could not locate executable.");
@@ -114,16 +114,14 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Export
             {
                 // Given
                 var fixture = new GitReleaseManagerExporterFixture();
-                fixture.GivenCustomToolPathExist(expected);
                 fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
 
                 // When
-                fixture.Export();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -134,7 +132,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Export
                 fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => fixture.Export());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "GitReleaseManager: Process was not started.");
@@ -145,10 +143,10 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Export
             {
                 // Given
                 var fixture = new GitReleaseManagerExporterFixture();
-                fixture.GivenProcessReturnError();
+                fixture.GivenProcessExitsWithCode(1);
 
                 // When
-                var result = Record.Exception(() => fixture.Export());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "GitReleaseManager: Process returned an error.");
@@ -161,12 +159,10 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Export
                 var fixture = new GitReleaseManagerExporterFixture();
 
                 // When
-                fixture.Export();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/GitReleaseManager.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/tools/GitReleaseManager.exe", result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -176,12 +172,12 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Export
                 var fixture = new GitReleaseManagerExporterFixture();
 
                 // When
-                fixture.Export();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "export -u \"bob\" -p \"password\" -o \"repoOwner\" -r \"repo\" -f \"c:/temp\""));
+                Assert.Equal("export -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\" " +
+                             "-f \"c:/temp\"", result.Args);
             }
 
             [Fact]
@@ -192,12 +188,12 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Export
                 fixture.Settings.TagName = "0.1.0";
 
                 // When
-                fixture.Export();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "export -u \"bob\" -p \"password\" -o \"repoOwner\" -r \"repo\" -f \"c:/temp\" -t \"0.1.0\""));
+                Assert.Equal("export -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\" -f \"c:/temp\" " +
+                             "-t \"0.1.0\"", result.Args);
             }
 
             [Fact]
@@ -208,12 +204,12 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Export
                 fixture.Settings.TargetDirectory = @"c:/temp";
 
                 // When
-                fixture.Export();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "export -u \"bob\" -p \"password\" -o \"repoOwner\" -r \"repo\" -f \"c:/temp\" -d \"c:/temp\""));
+                Assert.Equal("export -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\" -f \"c:/temp\" " +
+                             "-d \"c:/temp\"", result.Args);
             }
 
             [Fact]
@@ -224,12 +220,12 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Export
                 fixture.Settings.LogFilePath = @"c:/temp/log.txt";
 
                 // When
-                fixture.Export();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "export -u \"bob\" -p \"password\" -o \"repoOwner\" -r \"repo\" -f \"c:/temp\" -l \"c:/temp/log.txt\""));
+                Assert.Equal("export -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\" -f \"c:/temp\" " +
+                             "-l \"c:/temp/log.txt\"", result.Args);
             }
         }
     }

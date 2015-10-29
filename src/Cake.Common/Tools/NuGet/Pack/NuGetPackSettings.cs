@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.NuGet.Pack
 {
     /// <summary>
     /// Contains settings used by <see cref="NuGetPacker"/>.
     /// </summary>
-    public sealed class NuGetPackSettings
+    public sealed class NuGetPackSettings : ToolSettings
     {
         /// <summary>
         /// Gets or sets the base path.
@@ -124,12 +125,6 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <c>true</c> if users has to accept the package license; otherwise, <c>false</c>.
         /// </value>
         public bool RequireLicenseAcceptance { get; set; }
-
-        /// <summary>
-        /// Gets or sets the tool path.
-        /// </summary>
-        /// <value>The tool path.</value>
-        public FilePath ToolPath { get; set; }
 
         /// <summary>
         /// Gets or sets the package files.

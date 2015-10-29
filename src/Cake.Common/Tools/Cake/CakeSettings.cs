@@ -1,20 +1,15 @@
 ﻿using System.Collections.Generic;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.Cake
 {
     /// <summary>
     /// Contains settings used by <see cref="CakeRunner"/>.
     /// </summary>
-    public sealed class CakeSettings
+    public sealed class CakeSettings : ToolSettings
     {
-        /// <summary>
-        /// Gets or sets the tool path.
-        /// </summary>
-        /// <value>The tool path.</value>
-        public FilePath ToolPath { get; set; }
-
         /// <summary>
         /// Gets or sets the output verbosity.
         /// </summary>

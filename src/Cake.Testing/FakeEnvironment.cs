@@ -13,10 +13,10 @@ namespace Cake.Testing
     public sealed class FakeEnvironment : ICakeEnvironment
     {
         private readonly bool _isUnix;
-        private readonly bool _is64Bit;
         private readonly Dictionary<string, string> _environmentVariables;
         private readonly Dictionary<SpecialPath, DirectoryPath> _specialPaths;
         private DirectoryPath _applicationRoot;
+        private bool _is64Bit;
 
         /// <summary>
         /// Gets or sets the working directory.
@@ -65,6 +65,15 @@ namespace Cake.Testing
         public bool Is64BitOperativeSystem()
         {
             return _is64Bit;
+        }
+
+        /// <summary>
+        /// Changes the operative system bitness.
+        /// </summary>
+        /// <param name="is64Bit">if set to <c>true</c>, this is a 64-bit operative system.</param>
+        public void ChangeOperativeSystemBitness(bool is64Bit)
+        {
+            _is64Bit = is64Bit;
         }
 
         /// <summary>

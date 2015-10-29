@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.Chocolatey.Pack
 {
     /// <summary>
     /// Contains settings used by <see cref="ChocolateyPacker"/>.
     /// </summary>
-    public sealed class ChocolateyPackSettings
+    public sealed class ChocolateyPackSettings : ToolSettings
     {
         /// <summary>
         /// Gets or sets the package ID.
@@ -131,12 +132,6 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         /// <value>The package release notes.</value>
         /// <remarks>Markdown format is allowed for this property</remarks>
         public ICollection<string> ReleaseNotes { get; set; }
-
-        /// <summary>
-        /// Gets or sets the tool path.
-        /// </summary>
-        /// <value>The tool path.</value>
-        public FilePath ToolPath { get; set; }
 
         /// <summary>
         /// Gets or sets the package files.

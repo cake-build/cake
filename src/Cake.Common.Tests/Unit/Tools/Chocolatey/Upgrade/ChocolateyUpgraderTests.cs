@@ -1,6 +1,4 @@
-﻿using Cake.Common.Tests.Fixtures.Tools.Chocolatey;
-using Cake.Core.IO;
-using NSubstitute;
+﻿using Cake.Common.Tests.Fixtures.Tools.Chocolatey.Upgrade;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
@@ -17,7 +15,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.PackageId = null;
 
                 // When
-                var result = Record.Exception(() => fixture.Upgrade());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "packageId");
@@ -31,7 +29,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => fixture.Upgrade());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
@@ -45,7 +43,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => fixture.Upgrade());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Chocolatey: Could not locate executable.");
@@ -57,16 +55,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
             {
                 // Given
                 var fixture = new ChocolateyUpgraderFixture();
-                fixture.GivenCustomToolPathExist(expected);
                 fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -77,7 +73,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => fixture.Upgrade());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Chocolatey: Process was not started.");
@@ -88,10 +84,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
             {
                 // Given
                 var fixture = new ChocolateyUpgraderFixture();
-                fixture.GivenProcessReturnError();
+                fixture.GivenProcessExitsWithCode(1);
 
                 // When
-                var result = Record.Exception(() => fixture.Upgrade());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Chocolatey: Process returned an error.");
@@ -104,12 +100,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 var fixture = new ChocolateyUpgraderFixture();
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/choco.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/tools/choco.exe", result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -119,12 +113,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 var fixture = new ChocolateyUpgraderFixture();
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "upgrade \"Cake\" -y"));
+                Assert.Equal("upgrade \"Cake\" -y", result.Args);
             }
 
             [Theory]
@@ -137,12 +129,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.Debug = debug;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -155,12 +145,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.Verbose = verbose;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -173,12 +161,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.AcceptLicense = acceptLicense;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -191,12 +177,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.Force = force;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -209,12 +193,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.Noop = noop;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -227,12 +209,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.LimitOutput = limitOutput;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -245,12 +225,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.ExecutionTimeout = executionTimeout;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -263,12 +241,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.CacheLocation = cacheLocation;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -281,12 +257,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.AllowUnoffical = allowUnofficial;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]
@@ -297,12 +271,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.Source = "A";
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "upgrade \"Cake\" -y -s \"A\""));
+                Assert.Equal("upgrade \"Cake\" -y -s \"A\"", result.Args);
             }
 
             [Fact]
@@ -313,13 +285,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.Version = "1.0.0";
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "upgrade \"Cake\" -y --version \"1.0.0\""));
+                Assert.Equal("upgrade \"Cake\" -y --version \"1.0.0\"", result.Args);
             }
 
             [Theory]
@@ -332,12 +301,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.Prerelease = prerelease;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -350,12 +317,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.Forcex86 = forcex86;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -368,12 +333,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.InstallArguments = installArgs;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -386,12 +349,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.OverrideArguments = overrideArguments;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -404,12 +365,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.NotSilent = notSilent;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -422,12 +381,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.PackageParameters = packageParamters;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -440,12 +397,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.AllowDowngrade = allowDowngrade;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -458,12 +413,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.SideBySide = sideBySide;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -476,12 +429,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.IgnoreDependencies = ignoreDependencies;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -494,12 +445,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.SkipPowerShell = skipPowerShell;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -512,12 +461,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.FailOnUnfound = failOnUnfound;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -530,12 +477,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.FailOnNotInstalled = failOnNotInstalled;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -548,12 +493,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.User = user;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -566,12 +509,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.Password = password;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -584,12 +525,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Upgrade
                 fixture.Settings.IgnoreChecksums = ignoreChecksums;
 
                 // When
-                fixture.Upgrade();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
         }
     }

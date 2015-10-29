@@ -1,11 +1,12 @@
 ﻿using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.GitReleaseManager.Create
 {
     /// <summary>
     /// Contains settings used by <see cref="GitReleaseManagerCreator"/>.
     /// </summary>
-    public sealed class GitReleaseManagerCreateSettings
+    public sealed class GitReleaseManagerCreateSettings : ToolSettings
     {
         /// <summary>
         /// Gets or sets the milestone to be used when creating the release.
@@ -46,10 +47,5 @@ namespace Cake.Common.Tools.GitReleaseManager.Create
         /// Gets or sets the path to the GitReleaseManager log file.
         /// </summary>
         public FilePath LogFilePath { get; set; }
-
-        /// <summary>
-        /// Gets or sets the path to <c>GitReleaseManager.exe</c>.
-        /// </summary>
-        public FilePath ToolPath { get; set; }
     }
 }

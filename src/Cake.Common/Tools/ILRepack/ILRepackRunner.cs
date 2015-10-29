@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.ILRepack
 {
@@ -54,8 +54,7 @@ namespace Cake.Common.Tools.ILRepack
             settings = settings ?? new ILRepackSettings();
 
             // Get the ILMerge path.
-            Run(settings, GetArguments(outputAssemblyPath, primaryAssemblyPath, assemblyPaths, settings),
-                settings.ToolPath);
+            Run(settings, GetArguments(outputAssemblyPath, primaryAssemblyPath, assemblyPaths, settings));
         }
 
         /// <summary>

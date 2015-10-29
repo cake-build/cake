@@ -1,6 +1,4 @@
-﻿using Cake.Common.Tests.Fixtures.Tools.Chocolatey;
-using Cake.Core.IO;
-using NSubstitute;
+﻿using Cake.Common.Tests.Fixtures.Tools.Chocolatey.Installer;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
@@ -13,11 +11,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Throw_If_Target_Package_Id_Is_Null()
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.PackageId = null;
 
                 // When
-                var result = Record.Exception(() => fixture.Install());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "packageId");
@@ -27,11 +25,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Throw_If_Settings_Are_Null()
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => fixture.Install());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
@@ -41,11 +39,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Throw_If_Chocolatey_Executable_Was_Not_Found()
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => fixture.Install());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Chocolatey: Could not locate executable.");
@@ -56,28 +54,26 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Use_Chocolatey_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
-                fixture.GivenCustomToolPathExist(expected);
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Fact]
             public void Should_Throw_If_Process_Was_Not_Started()
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => fixture.Install());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Chocolatey: Process was not started.");
@@ -87,11 +83,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
-                fixture.GivenProcessReturnError();
+                var fixture = new ChocolateyInstallFixture();
+                fixture.GivenProcessExitsWithCode(1);
 
                 // When
-                var result = Record.Exception(() => fixture.Install());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Chocolatey: Process returned an error.");
@@ -101,30 +97,26 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Find_Chocolatey_Executable_If_Tool_Path_Not_Provided()
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/choco.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/tools/choco.exe", result.ToolPath.FullPath);
             }
 
             [Fact]
             public void Should_Add_Mandatory_Arguments()
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "install \"Cake\" -y"));
+                Assert.Equal("install \"Cake\" -y", result.Args);
             }
 
             [Theory]
@@ -133,16 +125,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_Debug_Flag_To_Arguments_If_Set(bool debug, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.Debug = debug;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -151,16 +141,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_Verbose_Flag_To_Arguments_If_Set(bool verbose, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.Verbose = verbose;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -169,16 +157,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_AcceptLicense_Flag_To_Arguments_If_Set(bool acceptLicense, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.AcceptLicense = acceptLicense;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -187,16 +173,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_Force_Flag_To_Arguments_If_Set(bool force, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.Force = force;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -205,16 +189,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_Noop_Flag_To_Arguments_If_Set(bool noop, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.Noop = noop;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -223,16 +205,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_LimitOutput_Flag_To_Arguments_If_Set(bool limitOutput, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.LimitOutput = limitOutput;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -241,16 +221,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_ExecutionTimeout_To_Arguments_If_Set(int executionTimeout, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.ExecutionTimeout = executionTimeout;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -259,16 +237,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_CacheLocation_Flag_To_Arguments_If_Set(string cacheLocation, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.CacheLocation = cacheLocation;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -277,49 +253,42 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_AllowUnofficial_Flag_To_Arguments_If_Set(bool allowUnofficial, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.AllowUnoffical = allowUnofficial;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]
             public void Should_Add_Source_To_Arguments_If_Set()
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.Source = "A";
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "install \"Cake\" -y -s \"A\""));
+                Assert.Equal("install \"Cake\" -y -s \"A\"", result.Args);
             }
 
             [Fact]
             public void Should_Add_Version_To_Arguments_If_Not_Null()
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.Version = "1.0.0";
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "install \"Cake\" -y --version \"1.0.0\""));
+                Assert.Equal("install \"Cake\" -y --version \"1.0.0\"", result.Args);
             }
 
             [Theory]
@@ -328,16 +297,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_Prerelease_Flag_To_Arguments_If_Set(bool prerelease, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.Prerelease = prerelease;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -346,16 +313,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_Forcex86_Flag_To_Arguments_If_Set(bool forcex86, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.Forcex86 = forcex86;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -364,16 +329,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_InstallArguments_To_Arguments_If_Set(string installArgs, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.InstallArguments = installArgs;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -382,16 +345,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_OverrideArguments_Flag_To_Arguments_If_Set(bool overrideArguments, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.OverrideArguments = overrideArguments;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -400,16 +361,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_NotSilent_Flag_To_Arguments_If_Set(bool notSilent, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.NotSilent = notSilent;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -418,16 +377,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_PackageParameters_To_Arguments_If_Set(string packageParamters, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.PackageParameters = packageParamters;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -436,16 +393,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_AllowDowngrade_Flag_To_Arguments_If_Set(bool allowDowngrade, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.AllowDowngrade = allowDowngrade;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -454,16 +409,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_SideBySide_Flag_To_Arguments_If_Set(bool sideBySide, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.SideBySide = sideBySide;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -472,16 +425,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_IgnoreDependencies_Flag_To_Arguments_If_Set(bool ignoreDependencies, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.IgnoreDependencies = ignoreDependencies;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -490,16 +441,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_ForceDependencies_Flag_To_Arguments_If_Set(bool forceDependencies, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.ForceDependencies = forceDependencies;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -508,16 +457,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_SkipPowerShell_Flag_To_Arguments_If_Set(bool skipPowerShell, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.SkipPowerShell = skipPowerShell;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -526,16 +473,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_User_To_Arguments_If_Set(string user, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.User = user;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -544,16 +489,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_Password_To_Arguments_If_Set(string password, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.Password = password;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -562,16 +505,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_IgnoreChecksums_Flag_To_Arguments_If_Set(bool ignoreChecksums, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFixture();
                 fixture.Settings.IgnoreChecksums = ignoreChecksums;
 
                 // When
-                fixture.Install();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
         }
 
@@ -581,11 +522,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Throw_If_Target_Package_Config_Path_Is_Null()
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFromConfigFixture();
                 fixture.PackageConfigPath = null;
 
                 // When
-                var result = Record.Exception(() => fixture.InstallFromConfig());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "packageConfigPath");
@@ -595,11 +536,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Throw_If_Settings_Are_Null()
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFromConfigFixture();
                 fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => fixture.InstallFromConfig());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
@@ -609,11 +550,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Throw_If_Chocolatey_Executable_Was_Not_Found()
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFromConfigFixture();
                 fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => fixture.InstallFromConfig());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Chocolatey: Could not locate executable.");
@@ -624,28 +565,26 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Use_Chocolatey_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFromConfigFixture();
                 fixture.Settings.ToolPath = toolPath;
-                fixture.GivenCustomToolPathExist(expected);
+                fixture.GivenSettingsToolPathExist();
 
                 // When
-                fixture.InstallFromConfig();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Fact]
             public void Should_Throw_If_Process_Was_Not_Started()
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFromConfigFixture();
                 fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => fixture.InstallFromConfig());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Chocolatey: Process was not started.");
@@ -655,11 +594,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
-                fixture.GivenProcessReturnError();
+                var fixture = new ChocolateyInstallFromConfigFixture();
+                fixture.GivenProcessExitsWithCode(1);
 
                 // When
-                var result = Record.Exception(() => fixture.InstallFromConfig());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Chocolatey: Process returned an error.");
@@ -669,30 +608,26 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Find_Chocolatey_Executable_If_Tool_Path_Not_Provided()
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFromConfigFixture();
 
                 // When
-                fixture.InstallFromConfig();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/choco.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/tools/choco.exe", result.ToolPath.FullPath);
             }
 
             [Fact]
             public void Should_Add_Mandatory_Arguments()
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFromConfigFixture();
 
                 // When
-                fixture.InstallFromConfig();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "install \"/Working/packages.config\" -y"));
+                Assert.Equal("install \"/Working/packages.config\" -y", result.Args);
             }
 
             [Theory]
@@ -701,16 +636,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_Debug_Flag_To_Arguments_If_Set(bool debug, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFromConfigFixture();
                 fixture.Settings.Debug = debug;
 
                 // When
-                fixture.InstallFromConfig();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -719,16 +652,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_Verbose_Flag_To_Arguments_If_Set(bool verbose, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFromConfigFixture();
                 fixture.Settings.Verbose = verbose;
 
                 // When
-                fixture.InstallFromConfig();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -737,16 +668,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_Force_Flag_To_Arguments_If_Set(bool force, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFromConfigFixture();
                 fixture.Settings.Force = force;
 
                 // When
-                fixture.InstallFromConfig();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -755,16 +684,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_Noop_Flag_To_Arguments_If_Set(bool noop, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFromConfigFixture();
                 fixture.Settings.Noop = noop;
 
                 // When
-                fixture.InstallFromConfig();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -773,16 +700,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_LimitOutput_Flag_To_Arguments_If_Set(bool limitOutput, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFromConfigFixture();
                 fixture.Settings.LimitOutput = limitOutput;
 
                 // When
-                fixture.InstallFromConfig();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -791,16 +716,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_ExecutionTimeout_To_Arguments_If_Set(int executionTimeout, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFromConfigFixture();
                 fixture.Settings.ExecutionTimeout = executionTimeout;
 
                 // When
-                fixture.InstallFromConfig();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -809,16 +732,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_CacheLocation_Flag_To_Arguments_If_Set(string cacheLocation, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFromConfigFixture();
                 fixture.Settings.CacheLocation = cacheLocation;
 
                 // When
-                fixture.InstallFromConfig();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -827,32 +748,28 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             public void Should_Add_AllowUnofficial_Flag_To_Arguments_If_Set(bool allowUnofficial, string expected)
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFromConfigFixture();
                 fixture.Settings.AllowUnoffical = allowUnofficial;
 
                 // When
-                fixture.InstallFromConfig();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]
             public void Should_Add_Source_To_Arguments_If_Set()
             {
                 // Given
-                var fixture = new ChocolateyInstallerFixture();
+                var fixture = new ChocolateyInstallFromConfigFixture();
                 fixture.Settings.Source = "A";
 
                 // When
-                fixture.InstallFromConfig();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "install \"/Working/packages.config\" -y -s \"A\""));
+                Assert.Equal("install \"/Working/packages.config\" -y -s \"A\"", result.Args);
             }
         }
     }

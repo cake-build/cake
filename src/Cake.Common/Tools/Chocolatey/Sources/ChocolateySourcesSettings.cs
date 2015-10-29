@@ -1,11 +1,12 @@
 ﻿using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.Chocolatey.Sources
 {
     /// <summary>
     /// Contains settings used by <see cref="ChocolateySources"/>.
     /// </summary>
-    public sealed class ChocolateySourcesSettings
+    public sealed class ChocolateySourcesSettings : ToolSettings
     {
         /// <summary>
         /// Gets or sets a value indicating whether to run in debug mode.
@@ -73,11 +74,5 @@ namespace Cake.Common.Tools.Chocolatey.Sources
         /// </summary>
         /// <value>Optional priority to be used when creating source.</value>
         public int Priority { get; set; }
-
-        /// <summary>
-        /// Gets or sets the tool path.
-        /// </summary>
-        /// <value>The tool path.</value>
-        public FilePath ToolPath { get; set; }
     }
 }

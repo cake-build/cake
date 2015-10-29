@@ -1,18 +1,14 @@
 using System.Collections.Generic;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.NuGet.Restore
 {
     /// <summary>
     /// Contains settings used by <see cref="NuGetRestorer"/>.
     /// </summary>
-    public sealed class NuGetRestoreSettings
+    public sealed class NuGetRestoreSettings : ToolSettings
     {
-        /// <summary>
-        /// Gets or sets the path to <c>nuget.exe</c>.
-        /// </summary>
-        public FilePath ToolPath { get; set; }
-
         /// <summary>
         /// Gets or sets a value indicating whether package restore consent is granted before installing a package.
         /// </summary>

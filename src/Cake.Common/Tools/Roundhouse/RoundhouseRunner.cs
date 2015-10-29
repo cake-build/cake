@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.Roundhouse
 {
@@ -37,7 +37,7 @@ namespace Cake.Common.Tools.Roundhouse
             }
 
             settings.Drop |= drop;
-            Run(settings, GetArguments(settings), settings.ToolPath);
+            Run(settings, GetArguments(settings));
         }
 
         private ProcessArgumentBuilder GetArguments(RoundhouseSettings settings)

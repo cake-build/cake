@@ -43,7 +43,7 @@ namespace Cake.Common.Tools.Chocolatey.Push
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetArguments(packageFilePath, settings), settings.ToolPath);
+            Run(settings, GetArguments(packageFilePath, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(FilePath packageFilePath, ChocolateyPushSettings settings)

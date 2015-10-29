@@ -5,7 +5,7 @@ using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Diagnostics
 {
-    public sealed class LogActionFixture
+    internal sealed class LogActionFixture
     {
         public string Format { get; private set; }
         public object[] Args { get; private set; }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Cake.Common.Tests.Fixtures.Tools;
+using Cake.Common.Tests.Fixtures.Tools.DupFinder;
 using Cake.Common.Tools.DupFinder;
 using Cake.Core;
 using Cake.Core.IO;
@@ -13,17 +14,17 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
         public sealed class TheRunMethodWithFiles
         {
             [Fact]
-            public void Should_Throw_If_Projects_Are_Null()
+            public void Should_Throw_If_Files_Are_Null()
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.FilePaths = null;
 
                 // When
-                var result = Record.Exception(() => runner.Run(null, new DupFinderSettings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "files");
+                Assert.IsArgumentNullException(result, "filePaths");
             }
 
             [Fact]
@@ -31,15 +32,12 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
 
                 // When
-                runner.Run(new[] { FilePath.FromString("./Test.sln") }, new DupFinderSettings());
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/dupfinder.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/tools/dupfinder.exe", result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -47,13 +45,10 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
-                var runner = fixture.CreateRunner();
+                fixture.GivenProcessCannotStart();
 
                 // When
-                var result =
-                    Record.Exception(
-                        () => runner.Run(new[] { FilePath.FromString("./Test.sln") }, new DupFinderSettings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -65,13 +60,10 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                fixture.Process.GetExitCode().Returns(1);
-                var runner = fixture.CreateRunner();
+                fixture.GivenProcessExitsWithCode(1);
 
                 // When
-                var result =
-                    Record.Exception(
-                        () => runner.Run(new[] { FilePath.FromString("./Test.sln") }, new DupFinderSettings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -83,16 +75,15 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.FilePaths.Clear();
+                fixture.FilePaths.Add(new FilePath("./Test.sln"));
+                fixture.FilePaths.Add(new FilePath("./Test.csproj"));
 
                 // When
-                runner.Run(new[] { FilePath.FromString("./Test.sln"), FilePath.FromString("./Test.csproj") }, new DupFinderSettings());
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Any<ProcessSettings>());
-                Assert.Equal("\"/Working/Test.sln\" \"/Working/Test.csproj\"", fixture.ProcessArguments);
+                Assert.Equal("\"/Working/Test.sln\" \"/Working/Test.csproj\"", result.Args);
             }
 
             [Fact]
@@ -100,19 +91,14 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.OutputFile = new FilePath("build/dupfinder.xml");
 
                 // Then
-                runner.Run(new[] { FilePath.FromString("./Test.sln") }, new DupFinderSettings
-                {
-                    OutputFile = FilePath.FromString("build/dupfinder.xml")
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Any<ProcessSettings>());
-                Assert.Equal("\"/output=/Working/build/dupfinder.xml\" \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("\"/output=/Working/build/dupfinder.xml\" " +
+                             "\"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
@@ -120,19 +106,13 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.Debug = true;
 
                 // Then
-                runner.Run(new[] { FilePath.FromString("./Test.sln") }, new DupFinderSettings
-                {
-                    Debug = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Any<ProcessSettings>());
-                Assert.Equal("/debug \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("/debug \"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
@@ -140,19 +120,13 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.DiscardCost = 50;
 
                 // Then
-                runner.Run(new[] { FilePath.FromString("./Test.sln") }, new DupFinderSettings
-                {
-                    DiscardCost = 50,
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Any<ProcessSettings>());
-                Assert.Equal("/discard-cost=50 \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("/discard-cost=50 \"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
@@ -160,19 +134,13 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.DiscardFieldsName = true;
 
                 // Then
-                runner.Run(new[] { FilePath.FromString("./Test.sln") }, new DupFinderSettings
-                {
-                    DiscardFieldsName = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Any<ProcessSettings>());
-                Assert.Equal("/discard-fields \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("/discard-fields \"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
@@ -180,19 +148,13 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.DiscardLiterals = true;
 
                 // Then
-                runner.Run(new[] { FilePath.FromString("./Test.sln") }, new DupFinderSettings
-                {
-                    DiscardLiterals = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Any<ProcessSettings>());
-                Assert.Equal("/discard-literals \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("/discard-literals \"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
@@ -200,19 +162,13 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.DiscardLocalVariablesName = true;
 
                 // Then
-                runner.Run(new[] { FilePath.FromString("./Test.sln") }, new DupFinderSettings
-                {
-                    DiscardLocalVariablesName = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Any<ProcessSettings>());
-                Assert.Equal("/discard-local-vars \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("/discard-local-vars \"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
@@ -220,19 +176,13 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.DiscardTypes = true;
 
                 // Then
-                runner.Run(new[] { FilePath.FromString("./Test.sln") }, new DupFinderSettings
-                {
-                    DiscardTypes = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Any<ProcessSettings>());
-                Assert.Equal("/discard-types \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("/discard-types \"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
@@ -240,19 +190,13 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.IdlePriority = true;
 
                 // Then
-                runner.Run(new[] { FilePath.FromString("./Test.sln") }, new DupFinderSettings
-                {
-                    IdlePriority = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Any<ProcessSettings>());
-                Assert.Equal("/idle-priority \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("/idle-priority \"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
@@ -260,19 +204,13 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.ExcludeFilesByStartingCommentSubstring = new[] { "test", "asdf" };
 
                 // Then
-                runner.Run(new[] { FilePath.FromString("./Test.sln") }, new DupFinderSettings
-                {
-                    ExcludeFilesByStartingCommentSubstring = new[] { "test", "asdf" }
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Any<ProcessSettings>());
-                Assert.Equal("\"/exclude-by-comment=test;asdf\" \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("\"/exclude-by-comment=test;asdf\" \"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
@@ -280,19 +218,14 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.ExcludeCodeRegionsByNameSubstring = new[] { "generated code", "test" };
 
                 // Then
-                runner.Run(new[] { FilePath.FromString("./Test.sln") }, new DupFinderSettings
-                {
-                    ExcludeCodeRegionsByNameSubstring = new[] { "generated code", "test" }
-                });
+                var restult = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Any<ProcessSettings>());
-                Assert.Equal("\"/exclude-code-regions=generated code;test\" \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("\"/exclude-code-regions=generated code;test\" " +
+                             "\"/Working/Test.sln\"", restult.Args);
             }
 
             [Fact]
@@ -300,19 +233,13 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.ExcludePattern = new[] { "*Tests.cs", "*Test.cs" };
 
                 // Then
-                runner.Run(new[] { FilePath.FromString("./Test.sln") }, new DupFinderSettings
-                {
-                    ExcludePattern = new[] { "*Tests.cs", "*Test.cs" }
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Any<ProcessSettings>());
-                Assert.Equal("\"/exclude=*Tests.cs;*Test.cs\" \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("\"/exclude=*Tests.cs;*Test.cs\" \"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
@@ -320,23 +247,17 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.MsBuildProperties = new Dictionary<string, string>();
+                fixture.Settings.MsBuildProperties.Add("TreatWarningsAsErrors", "true");
+                fixture.Settings.MsBuildProperties.Add("Optimize", "false");
 
                 // Then
-                runner.Run(new[] { FilePath.FromString("./Test.sln") }, new DupFinderSettings
-                {
-                    MsBuildProperties = new Dictionary<string, string>
-                    {
-                        {"TreatWarningsAsErrors", "true"},
-                        {"Optimize", "false"}
-                    }
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Any<ProcessSettings>());
-                Assert.Equal("\"/properties:TreatWarningsAsErrors=true\" \"/properties:Optimize=false\" \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("\"/properties:TreatWarningsAsErrors=true\" " +
+                             "\"/properties:Optimize=false\" " +
+                             "\"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
@@ -344,19 +265,13 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.NormalizeTypes = true;
 
                 // Then
-                runner.Run(new[] { FilePath.FromString("./Test.sln") }, new DupFinderSettings
-                {
-                    NormalizeTypes = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Any<ProcessSettings>());
-                Assert.Equal("/normalize-types \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("/normalize-types \"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
@@ -364,19 +279,13 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.CachesHome = DirectoryPath.FromString("caches/");
 
                 // Then
-                runner.Run(new[] { FilePath.FromString("./Test.sln") }, new DupFinderSettings
-                {
-                    CachesHome = DirectoryPath.FromString("caches/")
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Any<ProcessSettings>());
-                Assert.Equal("\"/caches-home=/Working/caches\" \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("\"/caches-home=/Working/caches\" \"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
@@ -384,19 +293,13 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.ShowStats = true;
 
                 // Then
-                runner.Run(new[] { FilePath.FromString("./Test.sln") }, new DupFinderSettings
-                {
-                    ShowStats = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Any<ProcessSettings>());
-                Assert.Equal("/show-stats \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("/show-stats \"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]
@@ -404,19 +307,13 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.ShowText = true;
 
                 // Then
-                runner.Run(new[] { FilePath.FromString("./Test.sln") }, new DupFinderSettings
-                {
-                    ShowText = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Any<ProcessSettings>());
-                Assert.Equal("/show-text \"/Working/Test.sln\"", fixture.ProcessArguments);
+                Assert.Equal("/show-text \"/Working/Test.sln\"", result.Args);
             }
         }
 
@@ -426,11 +323,11 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             public void Should_Throw_If_Config_File_Is_Null()
             {
                 // Given
-                var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
+                var fixture = new DupFinderRunnerConfigFixture();
+                fixture.ConfigPath = null;
 
                 // When
-                var result = Record.Exception(() => runner.RunFromConfig(null));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "configFile");
@@ -440,17 +337,13 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             public void Should_Use_Provided_Config_File()
             {
                 // Given
-                var fixture = new DupFinderRunnerFixture();
-                var runner = fixture.CreateRunner();
+                var fixture = new DupFinderRunnerConfigFixture();
 
                 // When
-                runner.RunFromConfig(FilePath.FromString("config.xml"));
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Any<ProcessSettings>());
-                Assert.Equal("\"/config=/Working/config.xml\"", fixture.ProcessArguments);
+                Assert.Equal("\"/config=/Working/Config.xml\"", result.Args);
             }
         }
     }

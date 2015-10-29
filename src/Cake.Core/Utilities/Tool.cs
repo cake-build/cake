@@ -10,6 +10,7 @@ namespace Cake.Core.Utilities
     /// Base class for tools.
     /// </summary>
     /// <typeparam name="TSettings">The settings type.</typeparam>
+    [Obsolete("Please use Cake.Core.Tooling.Tool<TToolSettings> instead.")]
     public abstract class Tool<TSettings>
     {
         private readonly ICakeEnvironment _environment;

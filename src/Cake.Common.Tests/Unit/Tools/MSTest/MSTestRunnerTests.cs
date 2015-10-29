@@ -2,6 +2,7 @@
 using Cake.Common.Tools.MSTest;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Testing;
 using NSubstitute;
 using Xunit;
 
@@ -14,10 +15,10 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         {
             // Given
             var fixture = new MSTestRunnerFixture();
-            var runner = fixture.CreateRunner();
+            fixture.AssemblyPath = null;
 
             // When
-            var result = Record.Exception(() => runner.Run(null, new MSTestSettings()));
+            var result = Record.Exception(() => fixture.Run());
 
             // Then
             Assert.IsArgumentNullException(result, "assemblyPath");
@@ -28,10 +29,10 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         {
             // Given
             var fixture = new MSTestRunnerFixture();
-            var runner = fixture.CreateRunner();
+            fixture.Settings = null;
 
             // When
-            var result = Record.Exception(() => runner.Run("Test1.dll", null));
+            var result = Record.Exception(() => fixture.Run());
 
             // Then
             Assert.IsArgumentNullException(result, "settings");
@@ -41,11 +42,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         public void Should_Throw_If_Tool_Path_Was_Not_Found()
         {
             // Given
-            var fixture = new MSTestRunnerFixture(defaultToolExist: false);
-            var runner = fixture.CreateRunner();
+            var fixture = new MSTestRunnerFixture();
+            fixture.GivenDefaultToolDoNotExist();
 
             // When
-            var result = Record.Exception(() => runner.Run("Test1.dll", new MSTestSettings()));
+            var result = Record.Exception(() => fixture.Run());
 
             // Then
             Assert.IsType<CakeException>(result);
@@ -58,19 +59,15 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         public void Should_Use_MSTest_From_Tool_Path_If_Provided(string toolPath, string expected)
         {
             // Given
-            var fixture = new MSTestRunnerFixture(expected);
-            var runner = fixture.CreateRunner();
+            var fixture = new MSTestRunnerFixture();
+            fixture.Settings.ToolPath = toolPath;
+            fixture.GivenSettingsToolPathExist();
 
             // When
-            runner.Run("./Test1.dll", new MSTestSettings
-            {
-                ToolPath = toolPath
-            });
+            var result = fixture.Run();
 
             // Then
-            fixture.ProcessRunner.Received(1).Start(
-                Arg.Is<FilePath>(p => p.FullPath == expected),
-                Arg.Any<ProcessSettings>());
+            Assert.Equal(expected, result.ToolPath.FullPath);
         }
 
         [Theory]
@@ -82,17 +79,14 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         {
             // Given
             var fixture = new MSTestRunnerFixture();
-            fixture.ToolPath = new FilePath(existingToolPath);
-            var runner = fixture.CreateRunner();
+            fixture.GivenDefaultToolDoNotExist();
+            fixture.FileSystem.CreateFile(existingToolPath);
 
             // When
-            runner.Run("Test1.dll", new MSTestSettings());
+            var result = fixture.Run();
 
             // Then
-            fixture.ProcessRunner.Received(1).Start(
-                Arg.Is<FilePath>(p => p.FullPath == existingToolPath),
-                Arg.Any<ProcessSettings>());
-
+            Assert.Equal(existingToolPath, result.ToolPath.FullPath);
         }
 
         [Fact]
@@ -100,15 +94,12 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         {
             // Given
             var fixture = new MSTestRunnerFixture();
-            var runner = fixture.CreateRunner();
 
             // When
-            runner.Run("./Test1.dll", new MSTestSettings());
+            var result = fixture.Run();
 
             // Then
-            fixture.ProcessRunner.Received(1).Start(
-                Arg.Any<FilePath>(),Arg.Is<ProcessSettings>(p =>
-                    p.WorkingDirectory.FullPath == "/Working"));
+            Assert.Equal("/Working", result.Process.WorkingDirectory.FullPath);
         }
 
         [Fact]
@@ -116,11 +107,10 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         {
             // Given
             var fixture = new MSTestRunnerFixture();
-            fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
-            var runner = fixture.CreateRunner();
+            fixture.GivenProcessCannotStart();
 
             // When
-            var result = Record.Exception(() => runner.Run("./Test1.dll", new MSTestSettings()));
+            var result = Record.Exception(() => fixture.Run());
 
             // Then
             Assert.IsType<CakeException>(result);
@@ -132,11 +122,10 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         {
             // Given
             var fixture = new MSTestRunnerFixture();
-            fixture.Process.GetExitCode().Returns(1);
-            var runner = fixture.CreateRunner();
+            fixture.GivenProcessExitsWithCode(1);
 
             // When
-            var result = Record.Exception(() => runner.Run("./Test1.dll", new MSTestSettings()));
+            var result = Record.Exception(() => fixture.Run());
 
             // Then
             Assert.IsType<CakeException>(result);
@@ -148,16 +137,12 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         {
             // Given
             var fixture = new MSTestRunnerFixture();
-            var runner = fixture.CreateRunner();
 
             // When
-            runner.Run("./Test1.dll", new MSTestSettings());
+            var result = fixture.Run();
 
             // Then
-            fixture.ProcessRunner.Received(1).Start(
-                Arg.Any<FilePath>(),
-                Arg.Is<ProcessSettings>(p =>
-                    p.Arguments.Render() == "\"/testcontainer:/Working/Test1.dll\" \"/noisolation\""));
+            Assert.Equal("\"/testcontainer:/Working/Test1.dll\" \"/noisolation\"", result.Args);
         }
 
         [Fact]
@@ -165,19 +150,13 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         {
             // Given
             var fixture = new MSTestRunnerFixture();
-            var runner = fixture.CreateRunner();
+            fixture.Settings.NoIsolation = false;
 
             // When
-            runner.Run("./Test1.dll", new MSTestSettings
-            {
-                NoIsolation = false
-            });
+            var result = fixture.Run();
 
             // Then
-            fixture.ProcessRunner.Received(1).Start(
-                Arg.Any<FilePath>(),
-                Arg.Is<ProcessSettings>(p =>
-                    p.Arguments.Render() == "\"/testcontainer:/Working/Test1.dll\""));
+            Assert.Equal("\"/testcontainer:/Working/Test1.dll\"", result.Args);
         }
     }
 }

@@ -1,10 +1,9 @@
 ﻿using System;
-using Cake.Common.Tests.Fixtures.Tools.Chocolatey;
+using Cake.Common.Tests.Fixtures.Tools.Chocolatey.Packer;
 using Cake.Common.Tests.Properties;
 using Cake.Common.Tools.Chocolatey.Pack;
 using Cake.Core;
 using Cake.Core.IO;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
@@ -17,11 +16,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Throw_If_Nuspec_File_Path_Is_Null()
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
                 fixture.NuSpecFilePath = null;
 
                 // When
-                var result = Record.Exception(() => fixture.Pack());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "nuspecFilePath");
@@ -31,11 +30,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Throw_If_Settings_Is_Null()
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
                 fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => fixture.Pack());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
@@ -45,11 +44,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Throw_If_Chocolatey_Executable_Was_Not_Found()
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
                 fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => fixture.Pack());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Chocolatey: Could not locate executable.");
@@ -60,43 +59,39 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Use_Chocolatey_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
                 fixture.Settings.ToolPath = toolPath;
-                fixture.GivenCustomToolPathExist(expected);
+                fixture.GivenSettingsToolPathExist();
 
                 // When
-                fixture.Pack();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Fact]
             public void Should_Find_Chocolatey_Executable_If_Tool_Path_Not_Provided()
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
 
                 // When
-                fixture.Pack();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/choco.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/tools/choco.exe", result.ToolPath.FullPath);
             }
 
             [Fact]
             public void Should_Throw_If_Process_Was_Not_Started()
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
                 fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => fixture.Pack());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Chocolatey: Process was not started.");
@@ -106,11 +101,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
-                fixture.GivenProcessReturnError();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
+                fixture.GivenProcessExitsWithCode(1);
 
                 // When
-                var result = Record.Exception(() => fixture.Pack());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Chocolatey: Process returned an error.");
@@ -120,10 +115,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Delete_Transformed_Nuspec()
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
 
                 // When
-                fixture.Pack();
+                fixture.Run();
 
                 // Then
                 Assert.False(fixture.FileSystem.Exist((FilePath)"/Working/existing.temp.nuspec"));
@@ -133,11 +128,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Throw_If_Nuspec_Do_Not_Exist()
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
                 fixture.NuSpecFilePath = "./nonexisting.nuspec";
 
                 // When
-                var result = Record.Exception(() => fixture.Pack());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Could not find nuspec file '/Working/nonexisting.nuspec'.");
@@ -147,11 +142,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Throw_If_Temporary_Nuspec_Already_Exist()
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
                 fixture.GivenTemporaryNuSpecAlreadyExist();
 
                 // When
-                var result = Record.Exception(() => fixture.Pack());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Could not create the nuspec file '/Working/existing.temp.nuspec' since it already exist.");
@@ -163,16 +158,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Add_Debug_Flag_To_Arguments_If_Set(bool debug, string expected)
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
                 fixture.Settings.Debug = debug;
 
                 // When
-                fixture.Pack();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -181,16 +174,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Add_Verbose_Flag_To_Arguments_If_Set(bool verbose, string expected)
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
                 fixture.Settings.Verbose = verbose;
 
                 // When
-                fixture.Pack();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -199,16 +190,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Add_Force_Flag_To_Arguments_If_Set(bool force, string expected)
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
                 fixture.Settings.Force = force;
 
                 // When
-                fixture.Pack();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -217,16 +206,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Add_Noop_Flag_To_Arguments_If_Set(bool noop, string expected)
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
                 fixture.Settings.Noop = noop;
 
                 // When
-                fixture.Pack();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -235,16 +222,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Add_LimitOutput_Flag_To_Arguments_If_Set(bool limitOutput, string expected)
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
                 fixture.Settings.LimitOutput = limitOutput;
 
                 // When
-                fixture.Pack();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -253,16 +238,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Add_ExecutionTimeout_To_Arguments_If_Set(int executionTimeout, string expected)
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
                 fixture.Settings.ExecutionTimeout = executionTimeout;
 
                 // When
-                fixture.Pack();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -271,16 +254,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Add_CacheLocation_Flag_To_Arguments_If_Set(string cacheLocation, string expected)
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
                 fixture.Settings.CacheLocation = cacheLocation;
 
                 // When
-                fixture.Pack();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
@@ -289,40 +270,36 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Add_AllowUnofficial_Flag_To_Arguments_If_Set(bool allowUnofficial, string expected)
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
                 fixture.Settings.AllowUnoffical = allowUnofficial;
 
                 // When
-                fixture.Pack();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]
             public void Should_Add_Version_To_Arguments_If_Not_Null()
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
                 fixture.Settings.Version = "1.0.0";
 
                 // When
-                fixture.Pack();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "pack -y --version \"1.0.0\" \"/Working/existing.temp.nuspec\""));
+                Assert.Equal("pack -y --version \"1.0.0\" " +
+                             "\"/Working/existing.temp.nuspec\"", result.Args);
             }
 
             [Fact]
             public void Should_Add_Metadata_Element_To_Nuspec_If_Missing()
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
                 fixture.WithNuSpecXml(Resources.ChocolateyNuspec_NoMetadataElement);
 
                 fixture.Settings.Id = "The ID";
@@ -346,19 +323,19 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
                 fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
 
                 // When
-                var result = fixture.Pack();
+                var result = fixture.Run();
 
                 // Then
                 Assert.Equal(
                     Resources.ChocolateyNuspec_Metadata.NormalizeLineEndings(),
-                    result.NormalizeLineEndings());
+                    result.NuspecContent);
             }
 
             [Fact]
             public void Should_Replace_Template_Tokens_In_Nuspec()
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
 
                 fixture.Settings.Id = "The ID";
                 fixture.Settings.Title = "The title";
@@ -381,19 +358,19 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
                 fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
 
                 // When
-                var result = fixture.Pack();
+                var result = fixture.Run();
 
                 // Then
                 Assert.Equal(
                     Resources.ChocolateyNuspec_Metadata.NormalizeLineEndings(),
-                    result.NormalizeLineEndings());
+                    result.NuspecContent);
             }
 
             [Fact]
             public void Should_Replace_Template_Tokens_In_Nuspec_Without_Namespaces()
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
                 fixture.WithNuSpecXml(Resources.ChocolateyNuspec_NoMetadataValues_WithoutNamespaces);
 
                 fixture.Settings.Id = "The ID";
@@ -417,12 +394,12 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
                 fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
 
                 // When
-                var result = fixture.Pack();
+                var result = fixture.Run();
 
                 // Then
                 Assert.Equal(
                     Resources.ChocolateyNuspec_Metadata_WithoutNamespaces.NormalizeLineEndings(),
-                    result.NormalizeLineEndings());
+                    result.NuspecContent);
             }
         }
 
@@ -430,7 +407,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
         public void Should_Replace_Template_Tokens_In_Nuspec_With_Files()
         {
             // Given
-            var fixture = new ChocolateyPackerFixture();
+            var fixture = new ChocolateyPackerWithNuSpecFixture();
 
             fixture.Settings.Id = "The ID";
             fixture.Settings.Title = "The title";
@@ -457,19 +434,19 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             };
 
             // When
-            var result = fixture.Pack();
+            var result = fixture.Run();
 
             // Then
             Assert.Equal(
                 Resources.ChocolateyNuspec_Metadata.NormalizeLineEndings(),
-                result.NormalizeLineEndings());
+                result.NuspecContent);
         }
 
         [Fact]
         public void Should_Replace_Template_Tokens_In_Nuspec_With_Files_Without_Namespaces()
         {
             // Given
-            var fixture = new ChocolateyPackerFixture();
+            var fixture = new ChocolateyPackerWithNuSpecFixture();
             fixture.WithNuSpecXml(Resources.ChocolateyNuspec_NoMetadataValues_WithoutNamespaces);
 
             fixture.Settings.Id = "The ID";
@@ -497,12 +474,12 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             };
 
             // When
-            var result = fixture.Pack();
+            var result = fixture.Run();
 
             // Then
             Assert.Equal(
                 Resources.ChocolateyNuspec_Metadata_WithoutNamespaces.NormalizeLineEndings(),
-                result.NormalizeLineEndings());
+                result.NuspecContent);
         }
 
         public sealed class TheSettingsPackMethod
@@ -511,33 +488,29 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Pack_If_Sufficent_Settings_Specified()
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
-                fixture.NuSpecFilePath = null;
+                var fixture = new ChocolateyPackerWithoutNuSpecFixture();
                 fixture.Settings.Id = "nonexisting";
                 fixture.Settings.Version = "1.0.0";
                 fixture.Settings.Description = "The description";
                 fixture.Settings.Authors = new[] { "Author #1", "Author #2" };
-                fixture.Settings.Files = new[] { new ChocolateyNuSpecContent { Source = @"tools\**" }
-                };
+                fixture.Settings.Files = new[] { new ChocolateyNuSpecContent { Source = @"tools\**" } };
 
                 // When
-                fixture.Pack(false);
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p => p.Arguments.Render() == "pack -y --version \"1.0.0\" \"/Working/nonexisting.temp.nuspec\""));
+                Assert.Equal("pack -y --version \"1.0.0\" " +
+                             "\"/Working/nonexisting.temp.nuspec\"", result.Args);
             }
 
             [Fact]
             public void Should_Throw_If_Id_Setting_Not_Specified()
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
-                fixture.NuSpecFilePath = null;
+                var fixture = new ChocolateyPackerWithoutNuSpecFixture();
 
                 // When
-                var result = Record.Exception(() => fixture.Pack(false));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Required setting Id not specified.");
@@ -547,12 +520,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Throw_If_Version_Setting_Not_Specified()
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
-                fixture.NuSpecFilePath = null;
+                var fixture = new ChocolateyPackerWithoutNuSpecFixture();
                 fixture.Settings.Id = "nonexisting";
 
                 // When
-                var result = Record.Exception(() => fixture.Pack(false));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Required setting Version not specified.");
@@ -562,13 +534,12 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Throw_If_Authors_Setting_Not_Specified()
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
-                fixture.NuSpecFilePath = null;
+                var fixture = new ChocolateyPackerWithoutNuSpecFixture();
                 fixture.Settings.Id = "nonexisting";
                 fixture.Settings.Version = "1.0.0";
 
                 // When
-                var result = Record.Exception(() => fixture.Pack(false));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Required setting Authors not specified.");
@@ -578,14 +549,13 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Throw_If_Description_Setting_Not_Specified()
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
-                fixture.NuSpecFilePath = null;
+                var fixture = new ChocolateyPackerWithoutNuSpecFixture();
                 fixture.Settings.Id = "nonexisting";
                 fixture.Settings.Version = "1.0.0";
                 fixture.Settings.Authors = new[] { "Author #1", "Author #2" };
 
                 // When
-                var result = Record.Exception(() => fixture.Pack(false));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Required setting Description not specified.");
@@ -595,15 +565,14 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             public void Should_Throw_If_Files_Setting_Not_Specified()
             {
                 // Given
-                var fixture = new ChocolateyPackerFixture();
-                fixture.NuSpecFilePath = null;
+                var fixture = new ChocolateyPackerWithoutNuSpecFixture();
                 fixture.Settings.Id = "nonexisting";
                 fixture.Settings.Version = "1.0.0";
                 fixture.Settings.Authors = new[] { "Author #1", "Author #2" };
                 fixture.Settings.Description = "The description";
 
                 // When
-                var result = Record.Exception(() => fixture.Pack(false));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Required setting Files not specified.");

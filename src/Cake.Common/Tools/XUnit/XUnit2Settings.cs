@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.XUnit
 {
     /// <summary>
     /// Contains settings used by <see cref="XUnit2Runner"/>.
     /// </summary>
-    public sealed class XUnit2Settings
+    public sealed class XUnit2Settings : ToolSettings
     {
         private int? _maxThreads;
 
@@ -54,12 +55,6 @@ namespace Cake.Common.Tools.XUnit
         ///   <c>true</c> to not use app domains to run test code; otherwise, <c>false</c>.
         /// </value>
         public bool NoAppDomain { get; set; }
-
-        /// <summary>
-        /// Gets or sets the tool path.
-        /// </summary>
-        /// <value>The tool path.</value>
-        public FilePath ToolPath { get; set; }
 
         /// <summary>
         /// Gets or sets the parallelism option.

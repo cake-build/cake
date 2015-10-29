@@ -43,7 +43,7 @@ namespace Cake.Common.Tools.NuGet.Restore
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetArguments(targetFilePath, settings), settings.ToolPath);
+            Run(settings, GetArguments(targetFilePath, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(FilePath targetFilePath, NuGetRestoreSettings settings)

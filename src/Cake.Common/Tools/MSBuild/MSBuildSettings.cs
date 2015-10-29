@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cake.Core.Diagnostics;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.MSBuild
 {
     /// <summary>
     /// Contains settings used by <see cref="MSBuildRunner"/>.
     /// </summary>
-    public sealed class MSBuildSettings
+    public sealed class MSBuildSettings : ToolSettings
     {
         private readonly HashSet<string> _targets;
         private readonly Dictionary<string, IList<string>> _properties;

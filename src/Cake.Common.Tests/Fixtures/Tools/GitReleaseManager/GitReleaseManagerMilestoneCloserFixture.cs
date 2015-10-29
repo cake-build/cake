@@ -2,14 +2,13 @@
 
 namespace Cake.Common.Tests.Fixtures.Tools.GitReleaseManager
 {
-    public sealed class GitReleaseManagerMilestoneCloserFixture : GitReleaseManagerFixture
+    internal sealed class GitReleaseManagerMilestoneCloserFixture : GitReleaseManagerFixture<GitReleaseManagerCloseMilestoneSettings>
     {
         public string UserName { get; set; }
         public string Password { get; set; }
         public string Owner { get; set; }
         public string Repository { get; set; }
         public string Milestone { get; set; }
-        public GitReleaseManagerCloseMilestoneSettings Settings { get; set; }
 
         public GitReleaseManagerMilestoneCloserFixture()
         {
@@ -18,12 +17,11 @@ namespace Cake.Common.Tests.Fixtures.Tools.GitReleaseManager
             Owner = "repoOwner";
             Repository = "repo";
             Milestone = "0.1.0";
-            Settings = new GitReleaseManagerCloseMilestoneSettings();
         }
 
-        public void Close()
+        protected override void RunTool()
         {
-            var tool = new GitReleaseManagerMilestoneCloser(FileSystem, Environment, ProcessRunner, Globber, GitReleaseManagerToolResolver);
+            var tool = new GitReleaseManagerMilestoneCloser(FileSystem, Environment, ProcessRunner, Globber, Resolver);
             tool.Close(UserName, Password, Owner, Repository, Milestone, Settings);
         }
     }

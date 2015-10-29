@@ -1,4 +1,5 @@
 ﻿using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.Chocolatey.Push
 {
@@ -7,7 +8,7 @@ namespace Cake.Common.Tools.Chocolatey.Push
     /// <summary>
     /// Contains settings used by <see cref="ChocolateyPusher"/>.
     /// </summary>
-    public sealed class ChocolateyPushSettings
+    public sealed class ChocolateyPushSettings : ToolSettings
     {
         /// <summary>
         /// Gets or sets a value indicating whether to run in debug mode.
@@ -76,11 +77,5 @@ namespace Cake.Common.Tools.Chocolatey.Push
         /// </summary>
         /// <value>The timeout for pushing to a server.</value>
         public TimeSpan? Timeout { get; set; }
-
-        /// <summary>
-        /// Gets or sets the tool path.
-        /// </summary>
-        /// <value>The tool path.</value>
-        public FilePath ToolPath { get; set; }
     }
 }

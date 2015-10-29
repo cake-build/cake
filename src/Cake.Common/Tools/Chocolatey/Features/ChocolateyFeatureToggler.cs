@@ -41,7 +41,7 @@ namespace Cake.Common.Tools.Chocolatey.Features
                 throw new ArgumentNullException("name");
             }
 
-            Run(settings, GetArguments(true, name, settings), settings.ToolPath);
+            Run(settings, GetArguments(true, name, settings));
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Cake.Common.Tools.Chocolatey.Features
                 throw new ArgumentNullException("name");
             }
 
-            Run(settings, GetArguments(false, name, settings), settings.ToolPath);
+            Run(settings, GetArguments(false, name, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(bool enableDisableToggle, string name, ChocolateyFeatureSettings settings)

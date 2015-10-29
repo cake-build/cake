@@ -19,7 +19,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 fixture.FileSystem = null;
 
                 // When
-                var result = Record.Exception(() => fixture.CreateRunner());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "fileSystem");
@@ -33,7 +33,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 fixture.Environment = null;
 
                 // When
-                var result = Record.Exception(() => fixture.CreateRunner());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "environment");
@@ -47,7 +47,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 fixture.ProcessRunner = null;
 
                 // When
-                var result = Record.Exception(() => fixture.CreateRunner());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "processRunner");
@@ -61,10 +61,10 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
             {
                 // Given
                 var fixture = new SignToolSignRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.AssemblyPath = null;
 
                 // When
-                var result = Record.Exception(() => runner.Run(null, new SignToolSignSettings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "assemblyPath");
@@ -75,10 +75,10 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
             {
                 // Given
                 var fixture = new SignToolSignRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => runner.Run("./a.dll", null));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
@@ -89,10 +89,10 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
             {
                 // Given
                 var fixture = new SignToolSignRunnerFixture();
-                fixture.AssemblyFile.Exists.Returns(false);
+                fixture.FileSystem.GetFile("/Working/a.dll").Delete();
 
                 // When
-                var result = Record.Exception(() => fixture.RunTool());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -107,7 +107,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 fixture.Settings.TimeStampUri = null;
 
                 // When
-                var result = Record.Exception(() => fixture.RunTool());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -122,7 +122,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 fixture.Settings.CertPath = null;
 
                 // When
-                var result = Record.Exception(() => fixture.RunTool());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -134,10 +134,10 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
             {
                 // Given
                 var fixture = new SignToolSignRunnerFixture();
-                fixture.CertificateFile.Exists.Returns(false);
+                fixture.FileSystem.GetFile("/Working/cert.pfx").Delete();
 
                 // When
-                var result = Record.Exception(() => fixture.RunTool());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -152,7 +152,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 fixture.Settings.Password = null;
 
                 // When
-                var result = Record.Exception(() => fixture.RunTool());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -166,12 +166,10 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var fixture = new SignToolSignRunnerFixture();
 
                 // When
-                fixture.RunTool();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/Default/tool.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/tools/signtool.exe", result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -179,20 +177,14 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
             {
                 // Given
                 var fixture = new SignToolSignRunnerFixture();
-
-                var tool = Substitute.For<IFile>();
-                tool.Exists.Returns(true);
-
-                fixture.FileSystem.GetFile(Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/SignTool.exe")).Returns(tool);
-                fixture.Settings.ToolPath = "./tools/SignTool.exe";
+                fixture.Settings.ToolPath = "/Working/other/signtool.exe";
+                fixture.GivenSettingsToolPathExist();
 
                 // When
-                fixture.RunTool();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/SignTool.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/other/signtool.exe", result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -202,12 +194,10 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var fixture = new SignToolSignRunnerFixture();
 
                 // When
-                fixture.RunTool();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "SIGN /t \"https://t.com/\" /f \"/Working/cert.pfx\" /p secret \"/Working/a.dll\""));
+                Assert.Equal("SIGN /t \"https://t.com/\" /f \"/Working/cert.pfx\" /p secret \"/Working/a.dll\"", result.Args);
             }
         }
     }

@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.WiX
 {
     /// <summary>
     /// Contains settings used by <see cref="CandleRunner"/>.
     /// </summary>
-    public sealed class CandleSettings
+    public sealed class CandleSettings : ToolSettings
     {
         /// <summary>
         /// Gets or sets a value indicating which architecture to build the MSI package for.
@@ -55,10 +56,5 @@ namespace Cake.Common.Tools.WiX
         /// Gets or sets a value indicating whether to show verbose output.
         /// </summary>
         public bool Verbose { get; set; }
-
-        /// <summary>
-        /// Gets or sets the path to <c>Candle.exe</c>.
-        /// </summary>
-        public FilePath ToolPath { get; set; }
     }
 }

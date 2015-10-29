@@ -1,19 +1,14 @@
 ﻿using System;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.SignTool
 {
     /// <summary>
     /// Contains settings used by  <see cref="SignToolSignRunner"/>.
     /// </summary>
-    public sealed class SignToolSignSettings
+    public sealed class SignToolSignSettings : ToolSettings
     {
-        /// <summary>
-        /// Gets or sets the tool path.
-        /// </summary>
-        /// <value>The tool path.</value>
-        public FilePath ToolPath { get; set; }
-
         /// <summary>
         /// Gets or sets the timestamp server's URL.
         /// </summary>

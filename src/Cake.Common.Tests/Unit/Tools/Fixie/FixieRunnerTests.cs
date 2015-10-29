@@ -13,28 +13,28 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
         public sealed class TheRunMethod
         {
             [Fact]
-            public void Should_Throw_If_Assembly_Path_Is_Null()
+            public void Should_Throw_If_Assembly_Paths_Are_Null()
             {
                 // Given
                 var fixture = new FixieRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.AssemblyPaths = null;
 
                 // When
-                var result = Record.Exception(() => runner.Run((FilePath) null, new FixieSettings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "assemblyPath");
+                Assert.IsArgumentNullException(result, "assemblyPaths");
             }
 
             [Fact]
             public void Should_Throw_If_Fixie_Runner_Was_Not_Found()
             {
                 // Given
-                var fixture = new FixieRunnerFixture(defaultToolExist: false);
-                var runner = fixture.CreateRunner();
+                var fixture = new FixieRunnerFixture();
+                fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test1.dll", new FixieSettings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -47,19 +47,15 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
             public void Should_Use_Fixie_Runner_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new FixieRunnerFixture(expected);
-                var runner = fixture.CreateRunner();
+                var fixture = new FixieRunnerFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
 
                 // When
-                runner.Run("./Test1.dll", new FixieSettings
-                {
-                    ToolPath = toolPath
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -67,15 +63,12 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
             {
                 // Given
                 var fixture = new FixieRunnerFixture();
-                var runner = fixture.CreateRunner();
 
                 // When
-                runner.Run("./Test1.dll", new FixieSettings());
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/Fixie.Console.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/tools/Fixie.Console.exe", result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -83,16 +76,12 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
             {
                 // Given
                 var fixture = new FixieRunnerFixture();
-                var runner = fixture.CreateRunner();
 
                 // When
-                runner.Run("./Test1.dll", new FixieSettings());
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(
-                        p => p.Arguments.Render() == "\"/Working/Test1.dll\""));
+                Assert.Equal("\"/Working/Test1.dll\"", result.Args);
             }
 
             [Fact]
@@ -100,16 +89,15 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
             {
                 // Given
                 var fixture = new FixieRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.AssemblyPaths.Clear();
+                fixture.AssemblyPaths.Add("./Test1.dll");
+                fixture.AssemblyPaths.Add("./Test2.dll");
 
                 // When
-                runner.Run(new List<FilePath> { "./Test1.dll", "./Test2.dll" }, new FixieSettings());
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(
-                        p => p.Arguments.Render() == "\"/Working/Test1.dll\" \"/Working/Test2.dll\""));
+                Assert.Equal("\"/Working/Test1.dll\" \"/Working/Test2.dll\"", result.Args);
             }
 
             [Fact]
@@ -117,16 +105,12 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
             {
                 // Given
                 var fixture = new FixieRunnerFixture();
-                var runner = fixture.CreateRunner();
 
                 // When
-                runner.Run("./Test1.dll", new FixieSettings());
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(
-                        p => p.WorkingDirectory.FullPath == "/Working"));
+                Assert.Equal("/Working", result.Process.WorkingDirectory.FullPath);
             }
 
             [Fact]
@@ -134,11 +118,10 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
             {
                 // Given
                 var fixture = new FixieRunnerFixture();
-                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
-                var runner = fixture.CreateRunner();
+                fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test1.dll", new FixieSettings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -150,11 +133,10 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
             {
                 // Given
                 var fixture = new FixieRunnerFixture();
-                fixture.Process.GetExitCode().Returns(1);
-                var runner = fixture.CreateRunner();
+                fixture.GivenProcessExitsWithCode(1);
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test1.dll", new FixieSettings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -166,19 +148,15 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
             {
                 // Given
                 var fixture = new FixieRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.NUnitXml = "nunit-style-results.xml";
 
                 // When
-                runner.Run("./blarg.dll", new FixieSettings
-                {
-                    NUnitXml = "nunit-style-results.xml",
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "\"/Working/blarg.dll\" --NUnitXml \"/Working/nunit-style-results.xml\""));
+                Assert.Equal("\"/Working/Test1.dll\" " +
+                             "--NUnitXml \"/Working/nunit-style-results.xml\"",
+                             result.Args);
             }
 
             [Fact]
@@ -186,41 +164,31 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
             {
                 // Given
                 var fixture = new FixieRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.XUnitXml = "xunit-results.xml";
 
                 // When
-                runner.Run("./blarg.dll", new FixieSettings
-                {
-                    XUnitXml = "xunit-results.xml",
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "\"/Working/blarg.dll\" --xUnitXml \"/Working/xunit-results.xml\""));
+                Assert.Equal("\"/Working/Test1.dll\" " +
+                             "--xUnitXml \"/Working/xunit-results.xml\"",
+                             result.Args);
             }
 
             [Theory]
-            [InlineData(true, "on")]
-            [InlineData(false, "off")]
-            public void Should_Set_TeamCity_Value(bool teamCityOutput, string teamCityValue)
+            [InlineData(true, "on", "\"/Working/Test1.dll\" --TeamCity on")]
+            [InlineData(false, "off", "\"/Working/Test1.dll\" --TeamCity off")]
+            public void Should_Set_TeamCity_Value(bool teamCityOutput, string teamCityValue, string expected)
             {
                 // Given
                 var fixture = new FixieRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.TeamCity = teamCityOutput;
 
                 // When
-                runner.Run("./Tests.dll", new FixieSettings
-                {
-                    TeamCity = teamCityOutput,
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(
-                        p => p.Arguments.Render() == string.Format("\"/Working/Tests.dll\" --TeamCity {0}", teamCityValue)));
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]
@@ -228,18 +196,16 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
             {
                 // Given
                 var fixture = new FixieRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.WithOption("--include", "CategoryA");
+                fixture.Settings.WithOption("--include", "CategoryB");
 
                 // When
-                runner.Run("./Tests.dll", new FixieSettings()
-                    .WithOption("--include", "CategoryA")
-                    .WithOption("--include", "CategoryB"));
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(
-                        p => p.Arguments.Render() == "\"/Working/Tests.dll\" --include CategoryA --include CategoryB"));
+                Assert.Equal("\"/Working/Test1.dll\" " +
+                             "--include CategoryA " +
+                             "--include CategoryB", result.Args);
             }
 
             [Fact]
@@ -247,19 +213,17 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
             {
                 // Given
                 var fixture = new FixieRunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.WithOption("--type", "fast");
+                fixture.Settings.WithOption("--include", "CategoryA", "CategoryB");
+                fixture.Settings.WithOption("--output", "fixie-log.txt");
 
                 // When
-                runner.Run("./Tests.dll", new FixieSettings()
-                    .WithOption("--type", "fast")
-                    .WithOption("--include", "CategoryA", "CategoryB")
-                    .WithOption("--output", "fixie-log.txt"));
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(
-                        p => p.Arguments.Render() == "\"/Working/Tests.dll\" --type fast --include CategoryA --include CategoryB --output fixie-log.txt"));
+                Assert.Equal("\"/Working/Test1.dll\" --type fast " +
+                             "--include CategoryA --include CategoryB " +
+                             "--output fixie-log.txt", result.Args);
             }
         }
     }

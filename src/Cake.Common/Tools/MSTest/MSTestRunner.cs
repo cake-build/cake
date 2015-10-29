@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.MSTest
 {
@@ -45,7 +45,7 @@ namespace Cake.Common.Tools.MSTest
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetArguments(assemblyPath, settings), settings.ToolPath);
+            Run(settings, GetArguments(assemblyPath, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, MSTestSettings settings)

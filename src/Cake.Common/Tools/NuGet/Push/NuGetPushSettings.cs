@@ -1,12 +1,13 @@
 ﻿using System;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.NuGet.Push
 {
     /// <summary>
     /// Contains settings used by <see cref="NuGetPusher"/>.
     /// </summary>
-    public sealed class NuGetPushSettings
+    public sealed class NuGetPushSettings : ToolSettings
     {
         /// <summary>
         /// Gets or sets  the server URL. If not specified, nuget.org is used unless
@@ -41,11 +42,5 @@ namespace Cake.Common.Tools.NuGet.Push
         /// </summary>
         /// <value>The NuGet configuration file.</value>
         public FilePath ConfigFile { get; set; }
-
-        /// <summary>
-        /// Gets or sets the tool path.
-        /// </summary>
-        /// <value>The tool path.</value>
-        public FilePath ToolPath { get; set; }
     }
 }
