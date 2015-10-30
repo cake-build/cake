@@ -10,6 +10,7 @@ namespace Cake.Common.Tools.NuGet.Pack
     internal static class NuspecTransformer
     {
         private static readonly Dictionary<string, Func<NuGetPackSettings, string>> _mappings;
+        private static readonly List<string> cdataElements;
         private const string NuSpecXsd = "http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd";
 
         static NuspecTransformer()
@@ -31,6 +32,11 @@ namespace Cake.Common.Tools.NuGet.Pack
                 { "releaseNotes", settings => ToMultiLineString(settings.ReleaseNotes) },
                 { "tags", settings => ToSpaceSeparatedString(settings.Tags) }
             };
+
+            cdataElements = new List<string>
+                                {
+                                    "releaseNotes"
+                                };
         }
 
         public static void Transform(XmlDocument document, NuGetPackSettings settings)
@@ -46,7 +52,15 @@ namespace Cake.Common.Tools.NuGet.Pack
                 {
                     // Replace the node content.
                     var node = FindOrCreateElement(document, namespaceManager, elementName);
-                    node.InnerText = content;
+
+                    if (cdataElements.Contains(elementName))
+                    {
+                        node.AppendChild(document.CreateCDataSection(content));
+                    }
+                    else
+                    {
+                        node.InnerText = content;
+                    }
                 }
             }
 
