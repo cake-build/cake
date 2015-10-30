@@ -1,5 +1,6 @@
 ﻿using Cake.Common.Build;
 using Cake.Common.Build.AppVeyor;
+using Cake.Common.Build.MyGet;
 using Cake.Common.Build.TeamCity;
 using NSubstitute;
 using Xunit;
@@ -15,9 +16,10 @@ namespace Cake.Common.Tests.Unit.Build
             {
                 // Given
                 var teamCityProvider = Substitute.For<ITeamCityProvider>();
+                var myGetProvider = Substitute.For<IMyGetProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(null, teamCityProvider));
+                var result = Record.Exception(() => new BuildSystem(null, teamCityProvider, myGetProvider));
 
                 // Then
                 Assert.IsArgumentNullException(result, "appVeyorProvider");
@@ -28,12 +30,27 @@ namespace Cake.Common.Tests.Unit.Build
             {
                 // Given
                 var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
+                var myGetProvider = Substitute.For<IMyGetProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, null));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, null, myGetProvider));
 
                 // Then
                 Assert.IsArgumentNullException(result, "teamCityProvider");
+            }
+
+            [Fact]
+            public void Should_Throw_If_MyGet_Is_Null()
+            {
+                // Given
+                var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
+                var teamCityProvider = Substitute.For<ITeamCityProvider>();
+
+                // When
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "myGetProvider");
             }
         }
 
@@ -45,8 +62,9 @@ namespace Cake.Common.Tests.Unit.Build
                 // Given
                 var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
                 var teamCityProvider = Substitute.For<ITeamCityProvider>();
+                var myGetProvider = Substitute.For<IMyGetProvider>();
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(true);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider);
 
                 // When
                 var result = buildSystem.IsRunningOnAppVeyor;
@@ -63,11 +81,32 @@ namespace Cake.Common.Tests.Unit.Build
                 // Given
                 var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
                 var teamCityProvider = Substitute.For<ITeamCityProvider>();
+                var myGetProvider = Substitute.For<IMyGetProvider>();
                 teamCityProvider.IsRunningOnTeamCity.Returns(true);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider);
 
                 // When
                 var result = buildSystem.IsRunningOnTeamCity;
+
+                // Then
+                Assert.True(result);
+            }
+        }
+
+        public sealed class TheIsRunningOnMyGetProperty
+        {
+            [Fact]
+            public void Should_Return_True_If_Running_On_MyGet()
+            {
+                // Given
+                var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
+                var teamCityProvider = Substitute.For<ITeamCityProvider>();
+                var myGetProvider = Substitute.For<IMyGetProvider>();
+                myGetProvider.IsRunningOnMyGet.Returns(true);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider);
+
+                // When
+                var result = buildSystem.IsRunningOnMyGet;
 
                 // Then
                 Assert.True(result);
@@ -82,9 +121,11 @@ namespace Cake.Common.Tests.Unit.Build
                 // Given
                 var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
                 var teamCityProvider = Substitute.For<ITeamCityProvider>();
+                var myGetProvider = Substitute.For<IMyGetProvider>();
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(true);
                 teamCityProvider.IsRunningOnTeamCity.Returns(false);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider);
+                myGetProvider.IsRunningOnMyGet.Returns(false);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider);
 
                 // When
                 var result = buildSystem.IsLocalBuild;
@@ -99,9 +140,30 @@ namespace Cake.Common.Tests.Unit.Build
                 // Given
                 var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
                 var teamCityProvider = Substitute.For<ITeamCityProvider>();
+                var myGetProvider = Substitute.For<IMyGetProvider>();
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(false);
                 teamCityProvider.IsRunningOnTeamCity.Returns(true);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider);
+                myGetProvider.IsRunningOnMyGet.Returns(false);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider);
+
+                // When
+                var result = buildSystem.IsLocalBuild;
+
+                // Then
+                Assert.False(result);
+            }
+
+            [Fact]
+            public void Should_Return_False_If_Running_On_MyGet()
+            {
+                // Given
+                var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
+                var teamCityProvider = Substitute.For<ITeamCityProvider>();
+                var myGetProvider = Substitute.For<IMyGetProvider>();
+                appVeyorProvider.IsRunningOnAppVeyor.Returns(false);
+                teamCityProvider.IsRunningOnTeamCity.Returns(false);
+                myGetProvider.IsRunningOnMyGet.Returns(true);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider);
 
                 // When
                 var result = buildSystem.IsLocalBuild;
@@ -116,9 +178,11 @@ namespace Cake.Common.Tests.Unit.Build
                 // Given
                 var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
                 var teamCityProvider = Substitute.For<ITeamCityProvider>();
+                var myGetProvider = Substitute.For<IMyGetProvider>();
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(false);
                 teamCityProvider.IsRunningOnTeamCity.Returns(false);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider);
+                myGetProvider.IsRunningOnMyGet.Returns(false);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider);
 
                 // When
                 var result = buildSystem.IsLocalBuild;

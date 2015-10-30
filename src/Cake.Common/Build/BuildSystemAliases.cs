@@ -1,5 +1,6 @@
 ﻿using System;
 using Cake.Common.Build.AppVeyor;
+using Cake.Common.Build.MyGet;
 using Cake.Common.Build.TeamCity;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -32,7 +33,8 @@ namespace Cake.Common.Build
             }
             var appVeyorProvider = new AppVeyorProvider(context.Environment, context.ProcessRunner);
             var teamCityProvider = new TeamCityProvider(context.Environment);
-            return new BuildSystem(appVeyorProvider, teamCityProvider);
+            var myGetProvider = new MyGetProvider(context.Environment);
+            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider);
         }
 
         /// <summary>
@@ -77,6 +79,28 @@ namespace Cake.Common.Build
             }
             var buildSystem = context.BuildSystem();
             return buildSystem.TeamCity;
+        }
+
+        /// <summary>
+        /// Gets a <see cref="Cake.Common.Build.MyGet.MyGetProvider"/> instance that can
+        /// be used to manipulate the MyGet environment.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var isMyGetBuild = MyGet.IsRunningOnMyGet;
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <returns>A <see cref="Cake.Common.Build.MyGet"/> instance.</returns>
+        [CakePropertyAlias(Cache = true)]
+        public static IMyGetProvider MyGet(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            var buildSystem = context.BuildSystem();
+            return buildSystem.MyGet;
         }
     }
 }
