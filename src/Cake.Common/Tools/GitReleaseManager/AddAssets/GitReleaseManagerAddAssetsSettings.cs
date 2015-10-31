@@ -1,9 +1,8 @@
-﻿using Cake.Core.Tooling;
+﻿using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.GitReleaseManager.AddAssets
 {
-    using global::Cake.Core.IO;
-
     /// <summary>
     /// Contains settings used by <see cref="GitReleaseManagerAssetsAdder"/>.
     /// </summary>

@@ -159,6 +159,10 @@
     <Compile Include="Tools\GitReleaseManager\IGitReleaseManagerToolResolver.cs" />
     <Compile Include="Tools\GitReleaseManager\Publish\GitReleaseManagerPublisher.cs" />
     <Compile Include="Tools\GitReleaseManager\Publish\GitReleaseManagerPublishSettings.cs" />
+    <Compile Include="Tools\GitReleaseNotes\GitReleaseNotesAliases.cs" />
+    <Compile Include="Tools\GitReleaseNotes\GitReleaseNotesRunner.cs" />
+    <Compile Include="Tools\GitReleaseNotes\GitReleaseNotesSettings.cs" />
+    <Compile Include="Tools\GitReleaseNotes\GitReleaseNotesIssueTracker.cs" />
     <Compile Include="Tools\ILMerge\ILMergeAliases.cs" />
     <Compile Include="Tools\ILMerge\ILMergeRunner.cs" />
     <Compile Include="Tools\ILMerge\ILMergeSettings.cs" />
