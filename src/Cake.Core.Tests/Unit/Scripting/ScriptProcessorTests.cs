@@ -101,7 +101,7 @@ namespace Cake.Core.Tests.Unit.Scripting
             }
 
             [Fact]
-            public void Should_Not_Install_Addins_Present_On_Disc()
+            public void Should_Not_Install_Addins_Present_On_Disk()
             {
                 // Given
                 var fixture = new ScriptProcessorFixture();
