@@ -204,13 +204,13 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             {
                 // Given
                 var fixture = new DupFinderRunnerFixture();
-                fixture.Settings.ExcludeFilesByStartingCommentSubstring = new[] { "test", "asdf" };
+                fixture.Settings.ExcludeFilesByStartingCommentSubstring = new[] { "test", "test1" };
 
                 // Then
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("\"/exclude-by-comment=test;asdf\" \"/Working/Test.sln\"", result.Args);
+                Assert.Equal("\"/exclude-by-comment=test;test1\" \"/Working/Test.sln\"", result.Args);
             }
 
             [Fact]

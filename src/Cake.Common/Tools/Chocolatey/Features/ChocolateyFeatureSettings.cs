@@ -55,6 +55,6 @@ namespace Cake.Common.Tools.Chocolatey.Features
         /// Gets or sets a value indicating whether to run in allow unofficial mode.
         /// </summary>
         /// <value>The allow unofficial flag</value>
-        public bool AllowUnoffical { get; set; }
+        public bool AllowUnofficial { get; set; }
     }
 }

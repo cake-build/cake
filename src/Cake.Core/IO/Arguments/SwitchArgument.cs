@@ -9,19 +9,19 @@ namespace Cake.Core.IO.Arguments
     {
         private readonly string _switch;
         private readonly IProcessArgument _argument;
-        private readonly string _seperator;
+        private readonly string _separator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SwitchArgument"/> class.
         /// </summary>
         /// <param name="switch">The switch.</param>
         /// <param name="argument">The argument.</param>
-        /// <param name="seperator">The separator between the <paramref name="switch"/> and the <paramref name="argument"/>.</param>
-        public SwitchArgument(string @switch, IProcessArgument argument, string seperator = " ")
+        /// <param name="separator">The separator between the <paramref name="switch"/> and the <paramref name="argument"/>.</param>
+        public SwitchArgument(string @switch, IProcessArgument argument, string separator = " ")
         {
             _switch = @switch;
             _argument = argument;
-            _seperator = seperator;
+            _separator = separator;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Cake.Core.IO.Arguments
         /// </returns>
         public string Render()
         {
-            return string.Concat(_switch, _seperator, _argument.Render());
+            return string.Concat(_switch, _separator, _argument.Render());
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Cake.Core.IO.Arguments
         /// <returns>A safe string representation of the argument.</returns>
         public string RenderSafe()
         {
-            return string.Concat(_switch, _seperator, _argument.RenderSafe());
+            return string.Concat(_switch, _separator, _argument.RenderSafe());
         }
 
         /// <summary>

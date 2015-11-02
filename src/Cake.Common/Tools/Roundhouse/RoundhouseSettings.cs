@@ -76,7 +76,7 @@ namespace Cake.Common.Tools.Roundhouse
         /// Gets or sets the version file.
         /// </summary>
         /// <value>
-        /// Path to the file to use for versioning. Either a .XML file, a .DLL or a .TXT file that a version can be resolved from.
+        /// Path to the file to use for applying version number. Either a .XML file, a .DLL or a .TXT file that a version can be resolved from.
         /// </value>
         public string VersionFile { get; set; }
 

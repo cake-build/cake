@@ -417,7 +417,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
             public sealed class WithoutNuSpec
             {
                 [Fact]
-                public void Should_Pack_If_Sufficent_Settings_Specified()
+                public void Should_Pack_If_Sufficient_Settings_Specified()
                 {
                     // Given
                     var fixture = new NuGetPackerWithoutNuSpecFixture();

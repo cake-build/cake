@@ -14,7 +14,7 @@
         private readonly string _assemblyFileVersion;
         private readonly string _guid;
         private readonly string _assemblyInformationalVersion;
-        private readonly string _internalsVisibileTo;
+        private readonly string _internalsVisibleTo;
         private readonly string _product;
         private readonly string _title;
         private readonly string _trademark;
@@ -102,12 +102,12 @@
         }
 
         /// <summary>
-        /// Gets the assembly InternalsVisibileTo Attribute.
+        /// Gets the assembly InternalsVisibleTo Attribute.
         /// </summary>
-        /// <value>The assembly InternalsVisibileTo attribute.</value>
-        public string InternalsVisibileTo
+        /// <value>The assembly InternalsVisibleTo attribute.</value>
+        public string InternalsVisibleTo
         {
-            get { return _internalsVisibileTo; }
+            get { return _internalsVisibleTo; }
         }
 
         /// <summary>
@@ -187,7 +187,7 @@
             _assemblyFileVersion = assemblyFileVersion;
             _guid = guid;
             _assemblyInformationalVersion = assemblyInformationalVersion;
-            _internalsVisibileTo = internalsVisibleTo;
+            _internalsVisibleTo = internalsVisibleTo;
             _product = product;
             _title = title;
             _trademark = trademark;

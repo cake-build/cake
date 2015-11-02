@@ -224,7 +224,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Features
             {
                 // Given
                 var fixture = new ChocolateyEnableFeatureFixture();
-                fixture.Settings.AllowUnoffical = allowUnofficial;
+                fixture.Settings.AllowUnofficial = allowUnofficial;
 
                 // When
                 var result = fixture.Run();
@@ -453,7 +453,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Features
             {
                 // Given
                 var fixture = new ChocolateyDisableFeatureFixture();
-                fixture.Settings.AllowUnoffical = allowUnofficial;
+                fixture.Settings.AllowUnofficial = allowUnofficial;
 
                 // When
                 var result = fixture.Run();

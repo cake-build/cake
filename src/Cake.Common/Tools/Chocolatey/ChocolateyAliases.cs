@@ -58,7 +58,7 @@ namespace Cake.Common.Tools.Chocolatey
         ///                                     LimitOutput             = false,
         ///                                     ExecutionTimeout        = 13,
         ///                                     CacheLocation           = @"C:\temp",
-        ///                                     AllowUnoffical          = false
+        ///                                     AllowUnofficial          = false
         ///                                 };
         ///
         ///     ChocolateyPack("./nuspec/TestChocolatey.nuspec", chocolateyPackSettings);
@@ -116,7 +116,7 @@ namespace Cake.Common.Tools.Chocolatey
         ///                                     LimitOutput             = false,
         ///                                     ExecutionTimeout        = 13,
         ///                                     CacheLocation           = @"C:\temp",
-        ///                                     AllowUnoffical          = false
+        ///                                     AllowUnofficial          = false
         ///                                 };
         ///
         ///     ChocolateyPack(chocolateyPackSettings);
@@ -188,7 +188,7 @@ namespace Cake.Common.Tools.Chocolatey
         ///     LimitOutput           = false,
         ///     ExecutionTimeout      = 13,
         ///     CacheLocation         = @"C:\temp",
-        ///     AllowUnoffical        = false
+        ///     AllowUnofficial        = false
         ///     });
         /// </code>
         /// </example>
@@ -258,7 +258,7 @@ namespace Cake.Common.Tools.Chocolatey
         ///     LimitOutput           = false,
         ///     ExecutionTimeout      = 13,
         ///     CacheLocation         = @"C:\temp",
-        ///     AllowUnoffical        = false
+        ///     AllowUnofficial        = false
         ///     });
         /// </code>
         /// </example>
@@ -294,7 +294,7 @@ namespace Cake.Common.Tools.Chocolatey
         ///     LimitOutput           = false,
         ///     ExecutionTimeout      = 13,
         ///     CacheLocation         = @"C:\temp",
-        ///     AllowUnoffical        = false
+        ///     AllowUnofficial        = false
         /// });
         /// </code>
         /// </example>
@@ -330,7 +330,7 @@ namespace Cake.Common.Tools.Chocolatey
         ///     LimitOutput           = false,
         ///     ExecutionTimeout      = 13,
         ///     CacheLocation         = @"C:\temp",
-        ///     AllowUnoffical        = false
+        ///     AllowUnofficial        = false
         /// });
         /// </code>
         /// </example>
@@ -366,7 +366,7 @@ namespace Cake.Common.Tools.Chocolatey
         ///     LimitOutput           = false,
         ///     ExecutionTimeout      = 13,
         ///     CacheLocation         = @"C:\temp",
-        ///     AllowUnoffical        = false
+        ///     AllowUnofficial        = false
         /// });
         /// </code>
         /// </example>
@@ -419,7 +419,7 @@ namespace Cake.Common.Tools.Chocolatey
         ///     LimitOutput           = false,
         ///     ExecutionTimeout      = 13,
         ///     CacheLocation         = @"C:\temp",
-        ///     AllowUnoffical        = false
+        ///     AllowUnofficial        = false
         /// });
         /// </code>
         /// </example>
@@ -472,7 +472,7 @@ namespace Cake.Common.Tools.Chocolatey
         ///     LimitOutput           = false,
         ///     ExecutionTimeout      = 13,
         ///     CacheLocation         = @"C:\temp",
-        ///     AllowUnoffical        = false
+        ///     AllowUnofficial        = false
         /// });
         /// </code>
         /// </example>
@@ -530,7 +530,7 @@ namespace Cake.Common.Tools.Chocolatey
         ///     LimitOutput           = false,
         ///     ExecutionTimeout      = 13,
         ///     CacheLocation         = @"C:\temp",
-        ///     AllowUnoffical        = false
+        ///     AllowUnofficial        = false
         /// });
         /// </code>
         /// </example>
@@ -583,7 +583,7 @@ namespace Cake.Common.Tools.Chocolatey
         ///     LimitOutput           = false,
         ///     ExecutionTimeout      = 13,
         ///     CacheLocation         = @"C:\temp",
-        ///     AllowUnoffical        = false
+        ///     AllowUnofficial        = false
         /// });
         /// </code>
         /// </example>
@@ -636,7 +636,7 @@ namespace Cake.Common.Tools.Chocolatey
         ///     LimitOutput           = false,
         ///     ExecutionTimeout      = 13,
         ///     CacheLocation         = @"C:\temp",
-        ///     AllowUnoffical        = false
+        ///     AllowUnofficial        = false
         /// });
         /// </code>
         /// </example>
@@ -689,7 +689,7 @@ namespace Cake.Common.Tools.Chocolatey
         ///     LimitOutput           = false,
         ///     ExecutionTimeout      = 13,
         ///     CacheLocation         = @"C:\temp",
-        ///     AllowUnoffical        = false
+        ///     AllowUnofficial        = false
         /// });
         /// </code>
         /// </example>
@@ -731,7 +731,7 @@ namespace Cake.Common.Tools.Chocolatey
         ///     LimitOutput           = false,
         ///     ExecutionTimeout      = 13,
         ///     CacheLocation         = @"C:\temp",
-        ///     AllowUnoffical        = false
+        ///     AllowUnofficial        = false
         /// });
         /// </code>
         /// </example>
@@ -808,7 +808,7 @@ namespace Cake.Common.Tools.Chocolatey
         ///     LimitOutput           = false,
         ///     ExecutionTimeout      = 13,
         ///     CacheLocation         = @"C:\temp",
-        ///     AllowUnoffical        = false
+        ///     AllowUnofficial        = false
         /// });
         /// </code>
         /// </example>

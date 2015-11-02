@@ -288,7 +288,7 @@ namespace Cake.Core.Tests.Unit
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A")
-                    .Does(() => { throw new InvalidOperationException("Whoopsie"); })
+                    .Does(() => { throw new InvalidOperationException("Whoops"); })
                     .OnError(exception => { throw new InvalidOperationException("Totally my fault"); });
 
                 // When
@@ -296,7 +296,7 @@ namespace Cake.Core.Tests.Unit
                     engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
-                Assert.True(fixture.Log.Entries.Any(x => x.Message == "Error: Whoopsie"));
+                Assert.True(fixture.Log.Entries.Any(x => x.Message == "Error: Whoops"));
             }
 
             [Fact]

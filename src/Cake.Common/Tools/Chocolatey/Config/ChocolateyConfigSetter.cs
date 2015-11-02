@@ -110,8 +110,8 @@ namespace Cake.Common.Tools.Chocolatey.Config
                 builder.AppendQuoted(settings.CacheLocation);
             }
 
-            // Allow Unoffical
-            if (settings.AllowUnoffical)
+            // Allow Unofficial
+            if (settings.AllowUnofficial)
             {
                 builder.Append("--allowunofficial");
             }

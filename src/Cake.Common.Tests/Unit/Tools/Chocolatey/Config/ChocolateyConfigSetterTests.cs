@@ -225,7 +225,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Config
             {
                 // Given
                 var fixture = new ChocolateyConfigSetterFixture();
-                fixture.Settings.AllowUnoffical = allowUnofficial;
+                fixture.Settings.AllowUnofficial = allowUnofficial;
 
                 // When
                 var result = fixture.Run();

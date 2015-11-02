@@ -19,12 +19,12 @@ namespace Cake.Common.Tools.GitVersion
         public GitVersionOutput? OutputType { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to update all the assembly infos.
+        /// Gets or sets a value indicating whether to update all the assemblyinfo files.
         /// </summary>
         public bool UpdateAssemblyInfo { get; set; }
 
         /// <summary>
-        /// Gets or sets whether to update all the assembly infos.
+        /// Gets or sets whether to update all the assemblyinfo files.
         /// </summary>
         public FilePath UpdateAssemblyInfoFilePath { get; set; }
 
