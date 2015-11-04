@@ -12,7 +12,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
 {
     public sealed class CandleRunnerTests
     {
-        public sealed class TheContructor
+        public sealed class TheConstructor
         {
             [Fact]
             public void Should_Throw_If_Environment_Is_Null()

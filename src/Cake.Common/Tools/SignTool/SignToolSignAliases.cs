@@ -30,7 +30,7 @@ namespace Cake.Common.Tools.SignTool
         ///     var file = "Core.dll";
         ///     Sign(file, new SignToolSignSettings {
         ///             TimeStampUri = new Uri("http://timestamp.digicert.com"),
-        ///             CertPath = "digicert.pfx",
+        ///             CertPath = "digitalcertificate.pfx",
         ///             Password = "TopSecret"
         ///     });
         /// });
@@ -63,7 +63,7 @@ namespace Cake.Common.Tools.SignTool
         ///     var file = new FilePath("Core.dll");
         ///     Sign(files, new SignToolSignSettings {
         ///             TimeStampUri = new Uri("http://timestamp.digicert.com"),
-        ///             CertPath = "digicert.pfx",
+        ///             CertPath = "digitalcertificate.pfx",
         ///             Password = "TopSecret"
         ///     });
         /// });
@@ -97,7 +97,7 @@ namespace Cake.Common.Tools.SignTool
         ///     var files = new string[] { "Core.dll", "Common.dll" };
         ///     Sign(files, new SignToolSignSettings {
         ///             TimeStampUri = new Uri("http://timestamp.digicert.com"),
-        ///             CertPath = "digicert.pfx",
+        ///             CertPath = "digitalcertificate.pfx",
         ///             Password = "TopSecret"
         ///     });
         /// });
@@ -131,7 +131,7 @@ namespace Cake.Common.Tools.SignTool
         ///     var files = GetFiles(solutionDir + "/**/bin/" + configuration + "/**/*.exe");
         ///     Sign(files, new SignToolSignSettings {
         ///             TimeStampUri = new Uri("http://timestamp.digicert.com"),
-        ///             CertPath = "digicert.pfx",
+        ///             CertPath = "digitalcertificate.pfx",
         ///             Password = "TopSecret"
         ///     });
         /// });

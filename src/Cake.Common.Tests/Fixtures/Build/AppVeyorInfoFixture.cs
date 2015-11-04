@@ -78,7 +78,7 @@ namespace Cake.Common.Tests.Fixtures.Build
             return new AppVeyorTagInfo(Environment);
         }
 
-        public AppVeyorEnvironmentInfo CreateEnvironementInfo()
+        public AppVeyorEnvironmentInfo CreateEnvironmentInfo()
         {
             return new AppVeyorEnvironmentInfo(Environment);
         }

@@ -195,14 +195,14 @@ namespace Cake.Core
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <param name="switch">The switch preceding the text.</param>
-        /// <param name="seperator">The seperator between the switch and argument.</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
         /// <param name="text">The text to be appended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
-        public static ProcessArgumentBuilder AppendSwitch(this ProcessArgumentBuilder builder, string @switch, string seperator, string text)
+        public static ProcessArgumentBuilder AppendSwitch(this ProcessArgumentBuilder builder, string @switch, string separator, string text)
         {
             if (builder != null)
             {
-                builder.Append(new SwitchArgument(@switch, new TextArgument(text), seperator));
+                builder.Append(new SwitchArgument(@switch, new TextArgument(text), separator));
             }
             return builder;
         }
@@ -224,14 +224,14 @@ namespace Cake.Core
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <param name="switch">The switch preceding the text.</param>
-        /// <param name="seperator">The seperator between the switch and argument.</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
         /// <param name="text">The text to be quoted and appended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
-        public static ProcessArgumentBuilder AppendSwitchQuoted(this ProcessArgumentBuilder builder, string @switch, string seperator, string text)
+        public static ProcessArgumentBuilder AppendSwitchQuoted(this ProcessArgumentBuilder builder, string @switch, string separator, string text)
         {
             if (builder != null)
             {
-                builder.Append(new SwitchArgument(@switch, new QuotedArgument(new TextArgument(text)), seperator));
+                builder.Append(new SwitchArgument(@switch, new QuotedArgument(new TextArgument(text)), separator));
             }
             return builder;
         }
@@ -253,14 +253,14 @@ namespace Cake.Core
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <param name="switch">The switch preceding the text.</param>
-        /// <param name="seperator">The seperator between the switch and argument.</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
         /// <param name="argument">The argument to be quoted and appended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
-        public static ProcessArgumentBuilder AppendSwitchQuoted(this ProcessArgumentBuilder builder, string @switch, string seperator, IProcessArgument argument)
+        public static ProcessArgumentBuilder AppendSwitchQuoted(this ProcessArgumentBuilder builder, string @switch, string separator, IProcessArgument argument)
         {
             if (builder != null)
             {
-                builder.Append(new SwitchArgument(@switch, new QuotedArgument(argument), seperator));
+                builder.Append(new SwitchArgument(@switch, new QuotedArgument(argument), separator));
             }
             return builder;
         }
@@ -282,14 +282,14 @@ namespace Cake.Core
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <param name="switch">The switch preceding the text.</param>
-        /// <param name="seperator">The seperator between the switch and argument</param>
+        /// <param name="separator">The separator between the switch and argument</param>
         /// <param name="text">The secret text to be appended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
-        public static ProcessArgumentBuilder AppendSwitchSecret(this ProcessArgumentBuilder builder, string @switch, string seperator, string text)
+        public static ProcessArgumentBuilder AppendSwitchSecret(this ProcessArgumentBuilder builder, string @switch, string separator, string text)
         {
             if (builder != null)
             {
-                builder.Append(new SwitchArgument(@switch, new SecretArgument(new TextArgument(text)), seperator));
+                builder.Append(new SwitchArgument(@switch, new SecretArgument(new TextArgument(text)), separator));
             }
             return builder;
         }
@@ -311,14 +311,14 @@ namespace Cake.Core
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <param name="switch">The switch preceding the text.</param>
-        /// <param name="seperator">The seperator between the switch and argument</param>
+        /// <param name="separator">The separator between the switch and argument</param>
         /// <param name="argument">The secret argument to be appended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
-        public static ProcessArgumentBuilder AppendSwitchSecret(this ProcessArgumentBuilder builder, string @switch, string seperator, IProcessArgument argument)
+        public static ProcessArgumentBuilder AppendSwitchSecret(this ProcessArgumentBuilder builder, string @switch, string separator, IProcessArgument argument)
         {
             if (builder != null)
             {
-                builder.Append(new SwitchArgument(@switch, new SecretArgument(argument), seperator));
+                builder.Append(new SwitchArgument(@switch, new SecretArgument(argument), separator));
             }
             return builder;
         }
@@ -340,14 +340,14 @@ namespace Cake.Core
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <param name="switch">The switch preceding the text.</param>
-        /// <param name="seperator">The seperator between the switch and argument.</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
         /// <param name="text">The secret text to be quoted and appended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
-        public static ProcessArgumentBuilder AppendSwitchQuotedSecret(this ProcessArgumentBuilder builder, string @switch, string seperator, string text)
+        public static ProcessArgumentBuilder AppendSwitchQuotedSecret(this ProcessArgumentBuilder builder, string @switch, string separator, string text)
         {
             if (builder != null)
             {
-                builder.AppendSwitchQuoted(@switch, seperator, new SecretArgument(new TextArgument(text)));
+                builder.AppendSwitchQuoted(@switch, separator, new SecretArgument(new TextArgument(text)));
             }
             return builder;
         }
@@ -369,14 +369,14 @@ namespace Cake.Core
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <param name="switch">The switch preceding the text.</param>
-        /// <param name="seperator">The seperator between the switch and argument</param>
+        /// <param name="separator">The separator between the switch and argument</param>
         /// <param name="argument">The secret argument to be appended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
-        public static ProcessArgumentBuilder AppendQuotedSecret(this ProcessArgumentBuilder builder, string @switch, string seperator, IProcessArgument argument)
+        public static ProcessArgumentBuilder AppendQuotedSecret(this ProcessArgumentBuilder builder, string @switch, string separator, IProcessArgument argument)
         {
             if (builder != null)
             {
-                builder.AppendSwitchQuoted(@switch, seperator, new SecretArgument(argument));
+                builder.AppendSwitchQuoted(@switch, separator, new SecretArgument(argument));
             }
             return builder;
         }

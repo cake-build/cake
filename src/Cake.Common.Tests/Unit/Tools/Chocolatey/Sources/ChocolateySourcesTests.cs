@@ -224,7 +224,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Sources
             {
                 // Given
                 var fixture = new ChocolateyAddSourceFixture();
-                fixture.Settings.AllowUnoffical = allowUnofficial;
+                fixture.Settings.AllowUnofficial = allowUnofficial;
 
                 // When
                 var result = fixture.Run();
@@ -469,7 +469,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Sources
             {
                 // Given
                 var fixture = new ChocolateyRemoveSourceFixture();
-                fixture.Settings.AllowUnoffical = allowUnofficial;
+                fixture.Settings.AllowUnofficial = allowUnofficial;
 
                 // When
                 var result = fixture.Run();
@@ -698,7 +698,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Sources
             {
                 // Given
                 var fixture = new ChocolateyEnableSourceFixture();
-                fixture.Settings.AllowUnoffical = allowUnofficial;
+                fixture.Settings.AllowUnofficial = allowUnofficial;
 
                 // When
                 var result = fixture.Run();
@@ -927,7 +927,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Sources
             {
                 // Given
                 var fixture = new ChocolateyDisableSourceFixture();
-                fixture.Settings.AllowUnoffical = allowUnofficial;
+                fixture.Settings.AllowUnofficial = allowUnofficial;
 
                 // When
                 var result = fixture.Run();

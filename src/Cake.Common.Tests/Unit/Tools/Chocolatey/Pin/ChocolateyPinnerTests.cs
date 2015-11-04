@@ -224,7 +224,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
             {
                 // Given
                 var fixture = new ChocolateyPinnerFixture();
-                fixture.Settings.AllowUnoffical = allowUnofficial;
+                fixture.Settings.AllowUnofficial = allowUnofficial;
 
                 // When
                 var result = fixture.Run();

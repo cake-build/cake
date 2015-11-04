@@ -173,7 +173,7 @@ namespace Cake.Core.Tests.Unit.IO
             }
 
             [Fact]
-            public void Can_Traverse_Recursivly()
+            public void Can_Traverse_Recursively()
             {
                 // Given
                 var fixture = new GlobberFixture();

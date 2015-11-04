@@ -72,7 +72,7 @@ namespace Cake.Common.Tools.Fixie
 
             // Check if TeamCity output should be enabled.
             // Note that even if this variable hasn't been set, Fixie itself
-            // will enable this if the environment variabel TEAMCITY_PROJECT_NAME is present.
+            // will enable this if the environment variable TEAMCITY_PROJECT_NAME is present.
             if (settings.TeamCity != null)
             {
                 builder.Append("--TeamCity");

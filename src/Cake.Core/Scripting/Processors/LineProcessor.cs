@@ -59,7 +59,7 @@ namespace Cake.Core.Scripting.Processors
             var scriptLocation = path.GetDirectory();
             if (scriptLocation.IsRelative)
             {
-                // Concatinate the starting working directory
+                // Concatenate the starting working directory
                 // with the script file path.
                 scriptLocation = _environment.WorkingDirectory
                     .CombineWithFilePath(path).GetDirectory();

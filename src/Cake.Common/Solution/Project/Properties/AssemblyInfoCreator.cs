@@ -64,7 +64,7 @@ namespace Cake.Common.Solution.Project.Properties
 
             // Create internals visible to
             var internalsVisibleTo = GetInternalsVisibleTo(settings);
-            EnsureInternalVisiblesToNamespace(settings, registration);
+            EnsureInternalsVisibleToNamespace(settings, registration);
 
             // Get the absolute output path.
             var absoluteOutputPath = outputPath.MakeAbsolute(_environment);
@@ -133,7 +133,7 @@ namespace Cake.Common.Solution.Project.Properties
             return registration;
         }
 
-        private static void EnsureInternalVisiblesToNamespace(AssemblyInfoSettings settings,
+        private static void EnsureInternalsVisibleToNamespace(AssemblyInfoSettings settings,
             AssemblyInfoRegistration registration)
         {
             if (!SettingsIncludeInternalsVisibleTo(settings))

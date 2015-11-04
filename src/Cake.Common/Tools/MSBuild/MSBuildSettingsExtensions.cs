@@ -72,13 +72,13 @@ namespace Cake.Common.Tools.MSBuild
                 throw new ArgumentNullException("settings");
             }
 
-            IList<string> currValue;
-            currValue = new List<string>(
-                settings.Properties.TryGetValue(name, out currValue) && currValue != null
-                    ? currValue.Concat(values)
+            IList<string> currentValue;
+            currentValue = new List<string>(
+                settings.Properties.TryGetValue(name, out currentValue) && currentValue != null
+                    ? currentValue.Concat(values)
                     : values);
 
-            settings.Properties[name] = currValue;
+            settings.Properties[name] = currentValue;
 
             return settings;
         }
