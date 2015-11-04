@@ -26,6 +26,10 @@ namespace Cake.Common.Tools.ReportGenerator
         [CakeMethodAlias]
         public static void ReportGenerator(this ICakeContext context, string pattern, DirectoryPath targetDir)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
             var reports = context.Globber.GetFiles(pattern);
             ReportGenerator(context, reports, targetDir);
         }
@@ -47,6 +51,10 @@ namespace Cake.Common.Tools.ReportGenerator
         [CakeMethodAlias]
         public static void ReportGenerator(this ICakeContext context, string pattern, DirectoryPath targetDir, ReportGeneratorSettings settings)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
             var reports = context.Globber.GetFiles(pattern);
             ReportGenerator(context, reports, targetDir, settings);
         }
