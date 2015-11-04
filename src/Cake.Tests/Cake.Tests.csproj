@@ -76,6 +76,8 @@
     </Compile>
     <Compile Include="Unit\Arguments\ArgumentParserTests.cs" />
     <Compile Include="Unit\Arguments\ArgumentTokenizerTests.cs" />
+    <Compile Include="Unit\Arguments\UnixCommandArgumentParserTests.cs" />
+    <Compile Include="Unit\Arguments\UnixArgumentParserTests.cs" />
     <Compile Include="Unit\CakeApplicationTests.cs">
       <SubType>Code</SubType>
     </Compile>

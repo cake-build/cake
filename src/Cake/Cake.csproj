@@ -119,6 +119,8 @@
   <ItemGroup>
     <Compile Include="Arguments\ArgumentParser.cs" />
     <Compile Include="Arguments\ArgumentTokenizer.cs" />
+    <Compile Include="Arguments\UnixCommandParser.cs" />
+    <Compile Include="Arguments\CommandArgumentNameAttribute.cs" />
     <Compile Include="Arguments\IArgumentParser.cs">
       <SubType>Code</SubType>
     </Compile>
