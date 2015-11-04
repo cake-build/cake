@@ -22,7 +22,7 @@ namespace Cake.Common.Tests.Unit.XML
             }
 
             [Fact]
-            public void Should_Throw_If_File_Doesnt_Exists()
+            public void Should_Throw_If_File_Does_Not_Exists()
             {
                 // Given
                 var fixture = new XmlPokeFixture(false);

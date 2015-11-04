@@ -46,27 +46,27 @@
         public string MajorMinorPatch { get; set; }
 
         /// <summary>
-        /// Gets or sets the semver.
+        /// Gets or sets the Semantic Version.
         /// </summary>
         public string SemVer { get; set; }
 
         /// <summary>
-        /// Gets or sets the legacy semver.
+        /// Gets or sets the legacy Semantic Version.
         /// </summary>
         public string LegacySemVer { get; set; }
 
         /// <summary>
-        /// Gets or sets the padded legacy semver.
+        /// Gets or sets the padded legacy Semantic Version.
         /// </summary>
         public string LegacySemVerPadded { get; set; }
 
         /// <summary>
-        /// Gets or sets the assembly semver.
+        /// Gets or sets the assembly Semantic Version.
         /// </summary>
         public string AssemblySemVer { get; set; }
 
         /// <summary>
-        /// Gets or sets the full semver.
+        /// Gets or sets the full Semantic Version.
         /// </summary>
         public string FullSemVer { get; set; }
 

@@ -5,7 +5,7 @@ namespace Cake.Core.Tests.Unit.Annotations
 {
     public sealed class CakeNamespaceImportAttributeTests
     {
-        public sealed class TheConstuctor
+        public sealed class TheConstructor
         {
             [Fact]
             public void Should_Throw_If_Namespace_Is_Null()

@@ -111,7 +111,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
             }
 
             [Fact]
-            public void Should_Add_Vebose_To_Arguments_If_Set()
+            public void Should_Add_Verbose_To_Arguments_If_Set()
             {
                 // Given
                 var fixture = new GitReleaseNotesRunnerFixture();

@@ -593,7 +593,7 @@ namespace Cake.Common.Tests.Unit.IO
             }
 
             [Fact]
-            public void Should_Delete_Directory_With_Content_If_Recurive()
+            public void Should_Delete_Directory_With_Content_If_Recursive()
             {
                 // Given
                 var fixture = new FileSystemFixture();
@@ -716,7 +716,7 @@ namespace Cake.Common.Tests.Unit.IO
                 }
 
                 [Fact]
-                public void Should_Delete_Directory_With_Content_If_Recurive()
+                public void Should_Delete_Directory_With_Content_If_Recursive()
                 {
                     // Given
                     var fixture = new FileSystemFixture();
@@ -840,7 +840,7 @@ namespace Cake.Common.Tests.Unit.IO
                 }
 
                 [Fact]
-                public void Should_Delete_Directory_With_Content_If_Recurive()
+                public void Should_Delete_Directory_With_Content_If_Recursive()
                 {
                     // Given
                     var fixture = new FileSystemFixture();

@@ -5,7 +5,7 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.GitReleaseManager.Export
 {
     /// <summary>
-    /// The GitReleaseManager Reelase Publisher used to publish releases.
+    /// The GitReleaseManager Release Publisher used to publish releases.
     /// </summary>
     public sealed class GitReleaseManagerExporter : GitReleaseManagerTool<GitReleaseManagerExportSettings>
     {

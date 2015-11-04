@@ -271,7 +271,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             {
                 // Given
                 var fixture = new ChocolateyPackerWithNuSpecFixture();
-                fixture.Settings.AllowUnoffical = allowUnofficial;
+                fixture.Settings.AllowUnofficial = allowUnofficial;
 
                 // When
                 var result = fixture.Run();
@@ -485,7 +485,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
         public sealed class TheSettingsPackMethod
         {
             [Fact]
-            public void Should_Pack_If_Sufficent_Settings_Specified()
+            public void Should_Pack_If_Sufficient_Settings_Specified()
             {
                 // Given
                 var fixture = new ChocolateyPackerWithoutNuSpecFixture();

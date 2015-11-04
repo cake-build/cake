@@ -219,7 +219,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = fixture.Parse();
 
                 // Then
-                Assert.Equal(expected, result.InternalsVisibileTo);
+                Assert.Equal(expected, result.InternalsVisibleTo);
             }
 
             [Theory]

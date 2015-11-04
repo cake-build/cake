@@ -88,7 +88,7 @@ namespace Cake.Common.Tools.DupFinder
         public bool ShowStats { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to show duplactes text in the report.
+        /// Gets or sets a value indicating whether to show duplicates text in the report.
         /// </summary>
         public bool ShowText { get; set; }
     }
