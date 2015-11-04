@@ -1,4 +1,18 @@
 ### New in 0.6.0 (Work in progress)
+* Added Chocolatey support.
+* Added GitReleaseManager support.
+* Added GitReleaseNotes support.
+* Added GitVersion support.
+* Added MyGet build system support.
+* Added OpenCover support.
+* Added ReportGenerator support.
+* Added ReportUnit support.
+* Added Cake script analyzer support.
+* Extended AssemblyInfo parser.
+* Extended ProcessArgumentBuilder with switch.
+* Extended TeamCity build system support.
+* Improved NuGet release notes handling.
+* Refactored Cake Tool handling & tests.
 
 ### New in 0.5.5 (Released 2015/10/12)
 * Added alias to retrieve all environment variables.
