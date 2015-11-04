@@ -89,21 +89,21 @@ namespace Cake.Common.Tools.Chocolatey.Pack
 
         private void Pack(ChocolateyPackSettings settings, Func<FilePath> process)
         {
-            FilePath procesedNuspecFilePath = null;
+            FilePath processedNuspecFilePath = null;
             try
             {
                 // Transform the nuspec and return the new filename.
-                procesedNuspecFilePath = process();
+                processedNuspecFilePath = process();
 
                 // Start the process.
-                Run(settings, GetArguments(procesedNuspecFilePath, settings));
+                Run(settings, GetArguments(processedNuspecFilePath, settings));
             }
             finally
             {
-                if (procesedNuspecFilePath != null)
+                if (processedNuspecFilePath != null)
                 {
                     // Delete the processed file.
-                    var file = _fileSystem.GetFile(procesedNuspecFilePath);
+                    var file = _fileSystem.GetFile(processedNuspecFilePath);
                     if (file.Exists)
                     {
                         file.Delete();
@@ -164,8 +164,8 @@ namespace Cake.Common.Tools.Chocolatey.Pack
                 builder.AppendQuoted(settings.CacheLocation);
             }
 
-            // Allow Unoffical
-            if (settings.AllowUnoffical)
+            // Allow Unofficial
+            if (settings.AllowUnofficial)
             {
                 builder.Append("--allowunofficial");
             }

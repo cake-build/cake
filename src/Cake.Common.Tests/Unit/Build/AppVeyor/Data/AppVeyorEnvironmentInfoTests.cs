@@ -12,7 +12,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor.Data
             public void Should_Return_Correct_Value()
             {
                 // Given
-                var info = new AppVeyorInfoFixture().CreateEnvironementInfo();
+                var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
 
                 // When
                 var result = info.ApiUrl;
@@ -28,7 +28,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor.Data
             public void Should_Return_Correct_Value()
             {
                 // Given
-                var info = new AppVeyorInfoFixture().CreateEnvironementInfo();
+                var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
 
                 // When
                 var result = info.Configuration;
@@ -44,7 +44,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor.Data
             public void Should_Return_Correct_Value()
             {
                 // Given
-                var info = new AppVeyorInfoFixture().CreateEnvironementInfo();
+                var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
 
                 // When
                 var result = info.JobId;
@@ -60,7 +60,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor.Data
             public void Should_Return_Correct_Value()
             {
                 // Given
-                var info = new AppVeyorInfoFixture().CreateEnvironementInfo();
+                var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
 
                 // When
                 var result = info.Platform;
@@ -83,7 +83,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor.Data
                 // Given
                 var fixture = new AppVeyorInfoFixture();
                 fixture.Environment.GetEnvironmentVariable("APPVEYOR_SCHEDULED_BUILD").Returns(value);
-                var info = fixture.CreateEnvironementInfo();
+                var info = fixture.CreateEnvironmentInfo();
 
                 // When
                 var result = info.ScheduledBuild;
@@ -99,7 +99,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor.Data
             public void Should_Return_Correct_Value()
             {
                 // Given
-                var info = new AppVeyorInfoFixture().CreateEnvironementInfo();
+                var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
 
                 // When
                 var result = info.Build;
@@ -115,7 +115,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor.Data
             public void Should_Return_Correct_Value()
             {
                 // Given
-                var info = new AppVeyorInfoFixture().CreateEnvironementInfo();
+                var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
 
                 // When
                 var result = info.Project;
@@ -131,7 +131,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor.Data
             public void Should_Return_Correct_Value()
             {
                 // Given
-                var info = new AppVeyorInfoFixture().CreateEnvironementInfo();
+                var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
 
                 // When
                 var result = info.PullRequest;
@@ -147,7 +147,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor.Data
             public void Should_Return_Correct_Value()
             {
                 // Given
-                var info = new AppVeyorInfoFixture().CreateEnvironementInfo();
+                var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
 
                 // When
                 var result = info.Repository;

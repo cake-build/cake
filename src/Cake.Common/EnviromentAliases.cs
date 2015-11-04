@@ -61,7 +61,7 @@ namespace Cake.Common
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
-        /// <returns>The environment varia</returns>
+        /// <returns>The environment variables</returns>
         [CakeMethodAlias]
         [CakeAliasCategory("Environment Variables")]
         public static IDictionary<string, string> EnvironmentVariables(this ICakeContext context)

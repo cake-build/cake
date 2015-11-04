@@ -273,7 +273,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Push
             {
                 // Given
                 var fixture = new ChocolateyPusherFixture();
-                fixture.Settings.AllowUnoffical = allowUnofficial;
+                fixture.Settings.AllowUnofficial = allowUnofficial;
 
                 // When
                 var result = fixture.Run();

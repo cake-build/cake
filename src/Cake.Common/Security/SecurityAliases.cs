@@ -53,8 +53,8 @@ namespace Cake.Common.Security
                 throw new ArgumentNullException("context");
             }
 
-            var fileHashCalulator = new FileHashCalculator(context.FileSystem);
-            return fileHashCalulator.Calculate(filePath, hashAlgorithm);
+            var fileHashCalculator = new FileHashCalculator(context.FileSystem);
+            return fileHashCalculator.Calculate(filePath, hashAlgorithm);
         }
     }
 }

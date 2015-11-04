@@ -94,7 +94,7 @@ namespace Cake.Core.IO.Globbing
             // Starts with an identifier?
             if (context.CurrentToken.Kind == GlobTokenKind.Identifier)
             {
-                // Is the identifer indicating a current directory?
+                // Is the identifier indicating a current directory?
                 if (context.CurrentToken.Value == ".")
                 {
                     context.Accept();

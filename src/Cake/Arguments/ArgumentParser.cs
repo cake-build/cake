@@ -60,7 +60,7 @@ namespace Cake.Arguments
                 {
                     try
                     {
-                        // If they didn't provide a specific build script, search for a defualt.
+                        // If they didn't provide a specific build script, search for a default.
                         if (IsOption(arg))
                         {
                             // Make sure we parse the option

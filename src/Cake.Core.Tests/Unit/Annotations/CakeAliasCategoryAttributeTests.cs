@@ -5,7 +5,7 @@ namespace Cake.Core.Tests.Unit.Annotations
 {
     public sealed class CakeAliasCategoryAttributeTests
     {
-        public sealed class TheConstuctor
+        public sealed class TheConstructor
         {
             [Fact]
             public void Should_Throw_If_Category_Name_Is_Null()

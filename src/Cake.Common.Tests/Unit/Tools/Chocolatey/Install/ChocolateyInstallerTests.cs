@@ -254,7 +254,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             {
                 // Given
                 var fixture = new ChocolateyInstallFixture();
-                fixture.Settings.AllowUnoffical = allowUnofficial;
+                fixture.Settings.AllowUnofficial = allowUnofficial;
 
                 // When
                 var result = fixture.Run();
@@ -374,11 +374,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             [Theory]
             [InlineData("param1", "install \"Cake\" -y --params \"param1\"")]
             [InlineData("", "install \"Cake\" -y")]
-            public void Should_Add_PackageParameters_To_Arguments_If_Set(string packageParamters, string expected)
+            public void Should_Add_PackageParameters_To_Arguments_If_Set(string packageParameters, string expected)
             {
                 // Given
                 var fixture = new ChocolateyInstallFixture();
-                fixture.Settings.PackageParameters = packageParamters;
+                fixture.Settings.PackageParameters = packageParameters;
 
                 // When
                 var result = fixture.Run();
@@ -749,7 +749,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
             {
                 // Given
                 var fixture = new ChocolateyInstallFromConfigFixture();
-                fixture.Settings.AllowUnoffical = allowUnofficial;
+                fixture.Settings.AllowUnofficial = allowUnofficial;
 
                 // When
                 var result = fixture.Run();

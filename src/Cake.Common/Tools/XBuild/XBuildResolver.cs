@@ -63,10 +63,10 @@ namespace Cake.Common.Tools.XBuild
             };
 
             string which;
-            using (var proc = new Process { StartInfo = startInfo })
+            using (var process = new Process { StartInfo = startInfo })
             {
-                proc.Start();
-                which = proc.StandardOutput.ReadToEnd();
+                process.Start();
+                which = process.StandardOutput.ReadToEnd();
             }
 
             return string.IsNullOrEmpty(which) ? null : new FilePath(which.Trim());
@@ -84,10 +84,10 @@ namespace Cake.Common.Tools.XBuild
             };
 
             string path;
-            using (var proc = new Process { StartInfo = startInfo })
+            using (var process = new Process { StartInfo = startInfo })
             {
-                proc.Start();
-                path = proc.StandardOutput.ReadToEnd();
+                process.Start();
+                path = process.StandardOutput.ReadToEnd();
             }
 
             return string.IsNullOrEmpty(path) ? null : new FilePath(path.Trim());

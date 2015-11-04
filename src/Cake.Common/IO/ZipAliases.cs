@@ -66,7 +66,7 @@ namespace Cake.Common.IO
         /// <example>
         /// <code>
         /// var files = GetFiles("./**/Cake.*.dll");
-        /// Zip("./", "cakedlls.zip", files);
+        /// Zip("./", "cakeassemblies.zip", files);
         /// </code>
         /// </example>
         [CakeMethodAlias]

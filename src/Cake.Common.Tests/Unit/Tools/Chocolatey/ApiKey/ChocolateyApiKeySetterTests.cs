@@ -243,7 +243,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.ApiKey
             {
                 // Given
                 var fixture = new ChocolateyApiKeySetterFixture();
-                fixture.Settings.AllowUnoffical = allowUnofficial;
+                fixture.Settings.AllowUnofficial = allowUnofficial;
 
                 // When
                 var result = fixture.Run();

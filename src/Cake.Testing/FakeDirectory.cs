@@ -95,7 +95,7 @@ namespace Cake.Testing
             }
 
             // Rewrite the filter to a regex expression.
-            var exression = CreateRegex(filter);
+            var expression = CreateRegex(filter);
 
             while (stack.Count > 0)
             {
@@ -103,7 +103,7 @@ namespace Cake.Testing
                 var current = stack.Pop();
 
                 // Is this a match? In that case, add it to the result.
-                if (exression.IsMatch(current.Path.GetDirectoryName()))
+                if (expression.IsMatch(current.Path.GetDirectoryName()))
                 {
                     result.Add(current);
                 }
@@ -168,7 +168,7 @@ namespace Cake.Testing
             return result;
         }
 
-        private static IEnumerable<FakeFile> GetFiles(FakeDirectory current, Regex exression)
+        private static IEnumerable<FakeFile> GetFiles(FakeDirectory current, Regex expression)
         {
             var result = new List<FakeFile>();
             foreach (var file in current.Content.Files)
@@ -176,7 +176,7 @@ namespace Cake.Testing
                 if (file.Value.Exists)
                 {
                     // Is this a match? In that case, add it to the result.
-                    if (exression.IsMatch(file.Key.GetFilename().FullPath))
+                    if (expression.IsMatch(file.Key.GetFilename().FullPath))
                     {
                         result.Add(current.Content.Files[file.Key]);
                     }
