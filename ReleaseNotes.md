@@ -1,4 +1,4 @@
-### New in 0.6.0 (Work in progress)
+### New in 0.6.0 (Released 2015/11/04)
 * Added Chocolatey support.
 * Added GitReleaseManager support.
 * Added GitReleaseNotes support.
