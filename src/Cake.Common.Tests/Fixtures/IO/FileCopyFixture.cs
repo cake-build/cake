@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Testing;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.IO
@@ -12,6 +14,7 @@ namespace Cake.Common.Tests.Fixtures.IO
         public ICakeContext Context { get; set; }
         public IGlobber Globber { get; set; }
         public IDirectory TargetDirectory { get; set; }
+        public FakeLog Log { get; set; }
 
         public List<FilePath> SourceFilePaths { get; set; }
         public List<IFile> TargetFiles { get; set; }
@@ -44,11 +47,15 @@ namespace Cake.Common.Tests.Fixtures.IO
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory.Returns("/Working");
 
+            // Setup the logger
+            Log = new FakeLog();
+
             // Prepare the context.
             Context = Substitute.For<ICakeContext>();
             Context.FileSystem.Returns(FileSystem);
             Context.Environment.Returns(Environment);
             Context.Globber.Returns(Globber);
+            Context.Log.Returns(Log);
         }
 
         private void CreateTargetFile(FilePath sourcePath, FilePath targetPath)
