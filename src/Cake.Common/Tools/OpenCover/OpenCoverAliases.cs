@@ -27,10 +27,10 @@ namespace Cake.Common.Tools.OpenCover
         ///       ShadowCopy = false
         ///     });
         ///   },
+        ///   new FilePath("./result.xml"),
         ///   new OpenCoverSettings()
         ///     .WithFilter("+[App]*")
-        ///     .WithFilter("-[App.Tests]*")
-        ///     .SetOutputFile("./result.xml"));
+        ///     .WithFilter("-[App.Tests]*"));
         /// </code>
         /// </example>
         [CakeMethodAlias]
