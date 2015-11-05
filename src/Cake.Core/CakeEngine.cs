@@ -17,6 +17,8 @@ namespace Cake.Core
         private readonly List<CakeTask> _tasks;
         private Action _setupAction;
         private Action _teardownAction;
+        private Action<ICakeContext, ITaskSetupContext> _taskSetupAction;
+        private Action<ICakeContext, ITaskTeardownContext> _taskTeardownAction;
 
         /// <summary>
         /// Gets all registered tasks.
@@ -135,7 +137,7 @@ namespace Cake.Core
                     }
                     else
                     {
-                        SkipTask(strategy, task);
+                        SkipTask(context, strategy, task);
                     }
                 }
 
@@ -150,6 +152,26 @@ namespace Cake.Core
             {
                 PerformTeardown(strategy, exceptionWasThrown);
             }
+        }
+
+        /// <summary>
+        /// Allows registration of an action that's executed before each task is run.
+        /// If the task setup fails, the task will not be executed but the task's teardown will be performed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        public void RegisterTaskSetupAction(Action<ICakeContext, ITaskSetupContext> action)
+        {
+            _taskSetupAction = action;
+        }
+
+        /// <summary>
+        /// Allows registration of an action that's executed after each task has been run.
+        /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        public void RegisterTaskTeardownAction(Action<ICakeContext, ITaskTeardownContext> action)
+        {
+            _taskTeardownAction = action;
         }
 
         private void PerformSetup(IExecutionStrategy strategy)
@@ -186,6 +208,9 @@ namespace Cake.Core
             stopWatch.Reset();
             stopWatch.Start();
 
+            PerformTaskSetup(context, strategy, task, false);
+
+            bool exceptionWasThrown = false;
             try
             {
                 // Execute the task.
@@ -194,6 +219,8 @@ namespace Cake.Core
             catch (Exception exception)
             {
                 _log.Error("An error occured when executing task.", task.Name);
+
+                exceptionWasThrown = true;
 
                 // Got an error reporter?
                 if (task.ErrorReporter != null)
@@ -219,15 +246,59 @@ namespace Cake.Core
                 {
                     strategy.InvokeFinally(task.FinallyHandler);
                 }
+
+                PerformTaskTeardown(context, strategy, task, stopWatch.Elapsed, false, exceptionWasThrown);
             }
 
             // Add the task results to the report.
             report.Add(task.Name, stopWatch.Elapsed);
         }
 
-        private static void SkipTask(IExecutionStrategy strategy, CakeTask task)
+        private void PerformTaskSetup(ICakeContext context, IExecutionStrategy strategy, ICakeTaskInfo task, bool skipped)
         {
+            // Trying to stay consistent with the behavior of script-level Setup & Teardown (if setup fails, don't run the task, but still run the teardown)
+            if (_taskSetupAction != null)
+            {
+                try
+                {
+                    var taskSetupContext = new TaskSetupContext(task);
+                    strategy.PerformTaskSetup(_taskSetupAction, context, taskSetupContext);
+                }
+                catch
+                {
+                    PerformTaskTeardown(context, strategy, task, TimeSpan.Zero, skipped, true);
+                    throw;
+                }
+            }
+        }
+
+        private void PerformTaskTeardown(ICakeContext context, IExecutionStrategy strategy, ICakeTaskInfo task, TimeSpan duration, bool skipped, bool exceptionWasThrown)
+        {
+            if (_taskTeardownAction != null)
+            {
+                var taskTeardownContext = new TaskTeardownContext(task, duration, skipped);
+                try
+                {
+                    strategy.PerformTaskTeardown(_taskTeardownAction, context, taskTeardownContext);
+                }
+                catch (Exception ex)
+                {
+                    _log.Error("An error occured in the custom task teardown action ({0}).", task.Name);
+                    if (!exceptionWasThrown)
+                    {
+                        // If no other exception was thrown, we throw this one.
+                        throw;
+                    }
+                    _log.Error("Task Teardown error ({0}): {1}", task.Name, ex.ToString());
+                }
+            }
+        }
+
+        private void SkipTask(ICakeContext context, IExecutionStrategy strategy, CakeTask task)
+        {
+            PerformTaskSetup(context, strategy, task, true);
             strategy.Skip(task);
+            PerformTaskTeardown(context, strategy, task, TimeSpan.Zero, true, false);
         }
 
         private static void ReportErrors(IExecutionStrategy strategy, Action<Exception> errorReporter, Exception taskException)

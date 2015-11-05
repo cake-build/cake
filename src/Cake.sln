@@ -1,7 +1,6 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.Core", "Cake.Core\Cake.Core.csproj", "{8074B833-11B8-459F-BB98-BFBA2BC5C698}"
 EndProject
@@ -26,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{A01118B7
 	ProjectSection(SolutionItems) = preProject
 		..\build.cake = ..\build.cake
 		..\build.ps1 = ..\build.ps1
-		..\utilities.cake = ..\utilities.cake
+		..\build.sh = ..\build.sh
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuspec", "nuspec", "{B38B35F5-812A-4E4C-B267-71254A7EEF17}"
@@ -34,11 +33,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuspec", "nuspec", "{B38B35
 		..\nuspec\Cake.Common.nuspec = ..\nuspec\Cake.Common.nuspec
 		..\nuspec\Cake.Core.nuspec = ..\nuspec\Cake.Core.nuspec
 		..\nuspec\Cake.nuspec = ..\nuspec\Cake.nuspec
+		..\nuspec\Cake.Testing.nuspec = ..\nuspec\Cake.Testing.nuspec
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8615F41E-65C7-4BE5-AFD4-C9C78912AF80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.Testing", "Cake.Testing\Cake.Testing.csproj", "{5572610D-D857-450A-9CC9-F3E08B0E1449}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.Testing.Xunit", "Cake.Testing.Xunit\Cake.Testing.Xunit.csproj", "{5AF751D1-BB54-4268-9E42-3A898B034B06}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{DD6045D3-D869-48FE-9BB1-9F61EF73F192}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,6 +78,10 @@ Global
 		{5572610D-D857-450A-9CC9-F3E08B0E1449}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5572610D-D857-450A-9CC9-F3E08B0E1449}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5572610D-D857-450A-9CC9-F3E08B0E1449}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AF751D1-BB54-4268-9E42-3A898B034B06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AF751D1-BB54-4268-9E42-3A898B034B06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AF751D1-BB54-4268-9E42-3A898B034B06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AF751D1-BB54-4268-9E42-3A898B034B06}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,5 +91,7 @@ Global
 		{9FF2440F-1ADC-4263-831A-A687543383AD} = {8615F41E-65C7-4BE5-AFD4-C9C78912AF80}
 		{9C5DC58C-D8BF-4E80-962C-05E6457EB5A9} = {8615F41E-65C7-4BE5-AFD4-C9C78912AF80}
 		{B38B35F5-812A-4E4C-B267-71254A7EEF17} = {A01118B7-C6FC-4B0B-8B5C-F580F31FE57D}
+		{5572610D-D857-450A-9CC9-F3E08B0E1449} = {DD6045D3-D869-48FE-9BB1-9F61EF73F192}
+		{5AF751D1-BB54-4268-9E42-3A898B034B06} = {DD6045D3-D869-48FE-9BB1-9F61EF73F192}
 	EndGlobalSection
 EndGlobal

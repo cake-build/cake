@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Fixtures\CakeContextFixture.cs" />
+    <Compile Include="Fixtures\ScriptAnalyzerFixture.cs" />
     <Compile Include="Fixtures\MethodAliasGeneratorFixture.cs" />
     <Compile Include="Fixtures\PropertyAliasGeneratorFixture.cs" />
     <Compile Include="Fixtures\ScriptHostFixture.cs" />
@@ -98,11 +99,15 @@
     <Compile Include="Unit\IO\ProcessArgumentBuilderTests.cs" />
     <Compile Include="Unit\IO\ProcessRunnerTests.cs" />
     <Compile Include="Unit\IO\ProcessSettingsTests.cs" />
+    <Compile Include="Unit\Scripting\Analysis\ScriptAnalyzerResultTests.cs" />
+    <Compile Include="Unit\Scripting\Analysis\ScriptAnalyzerTests.cs" />
     <Compile Include="Unit\Scripting\ScriptAliasTests.cs" />
     <Compile Include="Unit\Scripting\ScriptHostTests.cs" />
     <Compile Include="Unit\Scripting\ScriptProcessorTests.cs" />
     <Compile Include="Unit\Scripting\ScriptRunnerTests.cs" />
     <Compile Include="Unit\Scripting\ScriptTests.cs" />
+    <Compile Include="Unit\TaskSetupContextTests.cs" />
+    <Compile Include="Unit\TaskTeardownContextTests.cs" />
     <Compile Include="Unit\Text\TextTransformationTemplateTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +119,10 @@
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
       <Project>{8074b833-11b8-459f-bb98-bfba2bc5c698}</Project>
       <Name>Cake.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cake.Testing.Xunit\Cake.Testing.Xunit.csproj">
+      <Project>{5af751d1-bb54-4268-9e42-3a898b034b06}</Project>
+      <Name>Cake.Testing.Xunit</Name>
     </ProjectReference>
     <ProjectReference Include="..\Cake.Testing\Cake.Testing.csproj">
       <Project>{5572610d-d857-450a-9cc9-f3e08b0e1449}</Project>

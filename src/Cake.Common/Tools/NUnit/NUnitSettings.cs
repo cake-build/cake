@@ -1,11 +1,12 @@
 ﻿using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.NUnit
 {
     /// <summary>
     ///     Contains settings used by <see cref="NUnitRunner" />.
     /// </summary>
-    public sealed class NUnitSettings
+    public sealed class NUnitSettings : ToolSettings
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="NUnitSettings" /> class.
@@ -14,14 +15,6 @@ namespace Cake.Common.Tools.NUnit
         {
             ShadowCopy = true;
         }
-
-        /// <summary>
-        ///     Gets or sets the tool path.
-        /// </summary>
-        /// <value>
-        ///     The tool path. Defaults to <c>./tools/**/nunit-console.exe</c>.
-        /// </value>
-        public FilePath ToolPath { get; set; }
 
         /// <summary>
         ///     Gets or sets the name of the XML result file.
@@ -122,21 +115,21 @@ namespace Cake.Common.Tools.NUnit
         public FilePath ErrorOutputFile { get; set; }
 
         /// <summary>
-        ///     Gets or sets a value indicating how NUnit should load tests in processes.  
+        ///     Gets or sets a value indicating how NUnit should load tests in processes.
         ///     The Default value is <see cref="NUnitProcessOption.Single"/>
         /// </summary>
         public NUnitProcessOption Process { get; set; }
 
         /// <summary>
         ///     Gets or sets a value indicating whether Single Threaded Apartment state (STA) will be used.
-        ///     Corresponds to the /apartment command line option 
+        ///     Corresponds to the /apartment command line option
         /// </summary>
         public bool UseSingleThreadedApartment { get; set; }
 
         /// <summary>
         ///     Gets or sets a value to control creation of AppDomains for running tests.
         ///     Corresponds to the /domain command line switch.
-        ///     The default is to use multiple domains if multiple assemblies are listed on the command line. 
+        ///     The default is to use multiple domains if multiple assemblies are listed on the command line.
         ///     Otherwise a single domain is used.
         /// </summary>
         public NUnitAppDomainUsage AppDomainUsage { get; set; }

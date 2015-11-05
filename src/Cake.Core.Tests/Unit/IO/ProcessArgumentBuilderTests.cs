@@ -18,7 +18,7 @@ namespace Cake.Core.Tests.Unit.IO
                 {
                     var builder = (ProcessArgumentBuilder)value;
 
-                    // Render 
+                    // Render
                     Assert.Equal(expected, builder.Render());
                 }
             }

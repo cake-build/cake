@@ -1,7 +1,5 @@
-﻿using Cake.Common.Tests.Fixtures.Tools.NuGet;
+﻿using Cake.Common.Tests.Fixtures.Tools.NuGet.Restorer;
 using Cake.Common.Tools.NuGet;
-using Cake.Core.IO;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
@@ -18,7 +16,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 fixture.TargetFilePath = null;
 
                 // When
-                var result = Record.Exception(() => fixture.Restore());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "targetFilePath");
@@ -33,7 +31,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => fixture.Restore());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
@@ -47,7 +45,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => fixture.Restore());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "NuGet: Could not locate executable.");
@@ -61,15 +59,13 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 // Given
                 var fixture = new NuGetRestorerFixture();
                 fixture.Settings.ToolPath = toolPath;
-                fixture.GivenCustomToolPathExist(expected);
+                fixture.GivenSettingsToolPathExist();
 
                 // When
-                fixture.Restore();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -80,7 +76,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => fixture.Restore());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "NuGet: Process was not started.");
@@ -91,10 +87,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             {
                 // Given
                 var fixture = new NuGetRestorerFixture();
-                fixture.GivenProcessReturnError();
+                fixture.GivenProcessExitsWithCode(1);
 
                 // When
-                var result = Record.Exception(() => fixture.Restore());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "NuGet: Process returned an error.");
@@ -107,12 +103,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 var fixture = new NuGetRestorerFixture();
 
                 // When
-                fixture.Restore();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/NuGet.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/tools/NuGet.exe", result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -122,12 +116,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 var fixture = new NuGetRestorerFixture();
 
                 // When
-                fixture.Restore();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "restore \"/Working/project.sln\" -NonInteractive"));
+                Assert.Equal("restore \"/Working/project.sln\" -NonInteractive", result.Args);
             }
 
             [Fact]
@@ -138,12 +130,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 fixture.Settings.RequireConsent = true;
 
                 // When
-                fixture.Restore();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "restore \"/Working/project.sln\" -RequireConsent -NonInteractive"));
+                Assert.Equal("restore \"/Working/project.sln\" -RequireConsent " +
+                             "-NonInteractive", result.Args);
             }
 
             [Fact]
@@ -154,12 +145,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 fixture.Settings.PackagesDirectory = "./package";
 
                 // When
-                fixture.Restore();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "restore \"/Working/project.sln\" -PackagesDirectory \"/Working/package\" -NonInteractive"));
+                Assert.Equal("restore \"/Working/project.sln\" " +
+                             "-PackagesDirectory \"/Working/package\" " +
+                             "-NonInteractive", result.Args);
             }
 
             [Fact]
@@ -170,12 +161,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 fixture.Settings.Source = new[] { "A;B;C" };
 
                 // When
-                fixture.Restore();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "restore \"/Working/project.sln\" -Source \"A;B;C\" -NonInteractive"));
+                Assert.Equal("restore \"/Working/project.sln\" -Source \"A;B;C\" " +
+                             "-NonInteractive", result.Args);
             }
 
             [Fact]
@@ -186,12 +176,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 fixture.Settings.NoCache = true;
 
                 // When
-                fixture.Restore();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "restore \"/Working/project.sln\" -NoCache -NonInteractive"));
+                Assert.Equal("restore \"/Working/project.sln\" -NoCache -NonInteractive", result.Args);
             }
 
             [Fact]
@@ -202,12 +190,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 fixture.Settings.DisableParallelProcessing = true;
 
                 // When
-                fixture.Restore();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "restore \"/Working/project.sln\" -DisableParallelProcessing -NonInteractive"));
+                Assert.Equal("restore \"/Working/project.sln\" -DisableParallelProcessing " +
+                             "-NonInteractive", result.Args);
             }
 
             [Theory]
@@ -221,12 +208,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 fixture.Settings.Verbosity = verbosity;
 
                 // When
-                fixture.Restore();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]
@@ -237,12 +222,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 fixture.Settings.ConfigFile = "./nuget.config";
 
                 // When
-                fixture.Restore();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "restore \"/Working/project.sln\" -ConfigFile \"/Working/nuget.config\" -NonInteractive"));
+                Assert.Equal("restore \"/Working/project.sln\" -ConfigFile \"/Working/nuget.config\" -NonInteractive", result.Args);
             }
         }
     }

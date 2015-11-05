@@ -2,7 +2,7 @@
 using Cake.Core;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures
+namespace Cake.Common.Tests.Fixtures.Build
 {
     internal sealed class AppVeyorInfoFixture
     {
@@ -17,7 +17,7 @@ namespace Cake.Common.Tests.Fixtures
             Environment.GetEnvironmentVariable("APPVEYOR_PROJECT_ID").Returns("85364");
             Environment.GetEnvironmentVariable("APPVEYOR_PROJECT_NAME").Returns("Cake");
             Environment.GetEnvironmentVariable("APPVEYOR_PROJECT_SLUG").Returns("cake");
-            
+
             Environment.GetEnvironmentVariable("APPVEYOR_BUILD_FOLDER").Returns(@"C:\projects\cake");
             Environment.GetEnvironmentVariable("APPVEYOR_BUILD_ID").Returns("378354");
             Environment.GetEnvironmentVariable("APPVEYOR_BUILD_NUMBER").Returns("2");
@@ -78,7 +78,7 @@ namespace Cake.Common.Tests.Fixtures
             return new AppVeyorTagInfo(Environment);
         }
 
-        public AppVeyorEnvironmentInfo CreateEnvironementInfo()
+        public AppVeyorEnvironmentInfo CreateEnvironmentInfo()
         {
             return new AppVeyorEnvironmentInfo(Environment);
         }

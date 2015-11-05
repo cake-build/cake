@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace Cake.Core.IO
+﻿namespace Cake.Core.IO
 {
     /// <summary>
     /// Represents an Windows implementation of <see cref="IRegistry"/>.

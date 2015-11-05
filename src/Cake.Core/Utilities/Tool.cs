@@ -10,6 +10,7 @@ namespace Cake.Core.Utilities
     /// Base class for tools.
     /// </summary>
     /// <typeparam name="TSettings">The settings type.</typeparam>
+    [Obsolete("Please use Cake.Core.Tooling.Tool<TToolSettings> instead.")]
     public abstract class Tool<TSettings>
     {
         private readonly ICakeEnvironment _environment;
@@ -222,7 +223,7 @@ namespace Cake.Core.Utilities
                     var pathEnv = _environment.GetEnvironmentVariable("PATH");
                     if (!string.IsNullOrEmpty(pathEnv))
                     {
-                        pathDirs = pathEnv.Split(_environment.IsUnix() ? ':' : ';');
+                        pathDirs = pathEnv.Split(new char[] { _environment.IsUnix() ? ':' : ';' }, StringSplitOptions.RemoveEmptyEntries);
                     }
                     else
                     {

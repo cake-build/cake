@@ -1,17 +1,13 @@
 ﻿using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.OctopusDeploy
 {
     /// <summary>
     /// Contains the common settings used by all commands in <see cref="OctopusDeployReleaseCreator"/>.
     /// </summary>
-    public abstract class OctopusDeploySettings
+    public abstract class OctopusDeploySettings : ToolSettings
     {
-        /// <summary>
-        /// Gets or sets the tool path.
-        /// </summary>
-        public FilePath ToolPath { get; set; }
-
         /// <summary>
         /// Gets or sets the username to use when authenticating with the server
         /// </summary>

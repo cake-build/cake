@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Mono.CSharp;
@@ -43,7 +44,10 @@ namespace Cake.Scripting.Mono
             var row = message.Location.Row;
             var column = message.Location.Column;
 
-            return string.Format("{0} ({1},{2}): {3}", path.FullPath, row, column, message.Text);
+            return string.Format(
+                CultureInfo.InvariantCulture, 
+                "{0} ({1},{2}): {3}", 
+                path.FullPath, row, column, message.Text);
         }
 
         private static FilePath GetSourcePath(AbstractMessage message)
@@ -60,7 +64,7 @@ namespace Cake.Scripting.Mono
             catch
             {
                 // Fix for issue #298 (https://github.com/cake-build/cake/issues/298)
-                // Not pretty but it should take care of the exception being thrown 
+                // Not pretty but it should take care of the exception being thrown
                 // in certain situations when accessing the SourceFile property.
             }
 
@@ -69,7 +73,7 @@ namespace Cake.Scripting.Mono
 
         private static bool IsError(AbstractMessage message)
         {
-            return message.MessageType != null && 
+            return message.MessageType != null &&
                 message.MessageType.Equals("error", StringComparison.OrdinalIgnoreCase);
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Common.IO
@@ -19,7 +20,15 @@ namespace Cake.Common.IO
             {
                 throw new ArgumentNullException("pattern");
             }
-            DeleteFiles(context, context.GetFiles(pattern));
+
+            var files = context.GetFiles(pattern);
+            if (files.Count == 0)
+            {
+                context.Log.Verbose("The provided pattern did not match any files.");
+                return;
+            }
+
+            DeleteFiles(context, files);
         }
 
         public static void DeleteFiles(ICakeContext context, IEnumerable<FilePath> filePaths)
@@ -59,7 +68,8 @@ namespace Cake.Common.IO
                 var message = string.Format(CultureInfo.InvariantCulture, format, filePath.FullPath);
                 throw new FileNotFoundException(message, filePath.FullPath);
             }
-            
+
+            context.Log.Verbose("Deleting file {0}", filePath);
             file.Delete();
         }
     }

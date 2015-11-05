@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.NSIS;
 using Cake.Core;
@@ -20,10 +19,10 @@ namespace Cake.Common.Tests.Unit.Tools.NSIS
             {
                 // Given
                 var fixture = new NSISFixture();
-                var runner = fixture.CreateRunner();
+                fixture.ScriptPath = null;
 
                 // When
-                var result = Record.Exception(() => runner.Run(null, new MakeNSISSettings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "scriptFile");
@@ -34,10 +33,10 @@ namespace Cake.Common.Tests.Unit.Tools.NSIS
             {
                 // Given
                 var fixture = new NSISFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => runner.Run("/Working/File.lol", null));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
@@ -48,11 +47,10 @@ namespace Cake.Common.Tests.Unit.Tools.NSIS
             {
                 // Given
                 var fixture = new NSISFixture();
-                fixture.Globber.Match("./tools/**/makensis.exe").Returns(Enumerable.Empty<Path>());
-                var runner = fixture.CreateRunner();
+                fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => runner.Run("/Test.nsi", new MakeNSISSettings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -65,19 +63,15 @@ namespace Cake.Common.Tests.Unit.Tools.NSIS
             public void Should_Use_MakeNSIS_Runner_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new NSISFixture(expected);
-                var runner = fixture.CreateRunner();
+                var fixture = new NSISFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
 
                 // When
-                runner.Run("./Test.nsi", new MakeNSISSettings
-                {
-                    ToolPath = toolPath
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -85,15 +79,12 @@ namespace Cake.Common.Tests.Unit.Tools.NSIS
             {
                 // Given
                 var fixture = new NSISFixture();
-                var runner = fixture.CreateRunner();
 
                 // When
-                runner.Run("./Test.nsi", new MakeNSISSettings());
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/makensis.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/tools/makensis.exe", result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -101,16 +92,12 @@ namespace Cake.Common.Tests.Unit.Tools.NSIS
             {
                 // Given
                 var fixture = new NSISFixture();
-                var runner = fixture.CreateRunner();
 
                 // When
-                runner.Run("./Test.nsi", new MakeNSISSettings());
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.WorkingDirectory.FullPath == "/Working"));
+                Assert.Equal("/Working", result.Process.WorkingDirectory.FullPath);
             }
 
             [Fact]
@@ -118,11 +105,10 @@ namespace Cake.Common.Tests.Unit.Tools.NSIS
             {
                 // Given
                 var fixture = new NSISFixture();
-                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
-                var runner = fixture.CreateRunner();
+                fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test.nsi", new MakeNSISSettings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -134,11 +120,10 @@ namespace Cake.Common.Tests.Unit.Tools.NSIS
             {
                 // Given
                 var fixture = new NSISFixture();
-                fixture.Process.GetExitCode().Returns(1);
-                var runner = fixture.CreateRunner();
+                fixture.GivenProcessExitsWithCode(1);
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test.nsi", new MakeNSISSettings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -150,24 +135,16 @@ namespace Cake.Common.Tests.Unit.Tools.NSIS
             {
                 // Given
                 var fixture = new NSISFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.Defines = new Dictionary<string, string>();
+                fixture.Settings.Defines.Add("Foo", "Bar");
+                fixture.Settings.Defines.Add("Test", null);
+                fixture.Settings.Defines.Add("Test2", string.Empty);
 
                 // When
-                runner.Run("./Test.nsi", new MakeNSISSettings
-                {
-                    Defines = new Dictionary<string, string>
-                    {
-                        { "Foo", "Bar" },
-                        { "Test", null },
-                        { "Test2", string.Empty }
-                    }
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "/DFoo=Bar /DTest /DTest2 /Working/Test.nsi"));
+                Assert.Equal("/DFoo=Bar /DTest /DTest2 /Working/Test.nsi", result.Args);
             }
 
             [Fact]
@@ -175,19 +152,13 @@ namespace Cake.Common.Tests.Unit.Tools.NSIS
             {
                 // Given
                 var fixture = new NSISFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.NoChangeDirectory = true;
 
                 // When
-                runner.Run("./Test.nsi", new MakeNSISSettings
-                {
-                    NoChangeDirectory = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "/NOCD /Working/Test.nsi"));
+                Assert.Equal("/NOCD /Working/Test.nsi", result.Args);
             }
 
             [Fact]
@@ -195,19 +166,13 @@ namespace Cake.Common.Tests.Unit.Tools.NSIS
             {
                 // Given
                 var fixture = new NSISFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.NoConfig = true;
 
                 // When
-                runner.Run("./Test.nsi", new MakeNSISSettings
-                {
-                    NoConfig = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "/NOCONFIG /Working/Test.nsi"));
+                Assert.Equal("/NOCONFIG /Working/Test.nsi", result.Args);
             }
         }
     }

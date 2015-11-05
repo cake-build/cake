@@ -23,12 +23,12 @@
                 throw new ArgumentNullException("settings");
             }
 
-            IList<string> currValue;
-            currValue = new List<string>(settings.Options.TryGetValue(name, out currValue) && currValue != null
-                    ? currValue.Concat(values)
+            IList<string> currentValue;
+            currentValue = new List<string>(settings.Options.TryGetValue(name, out currentValue) && currentValue != null
+                    ? currentValue.Concat(values)
                     : values);
 
-            settings.Options[name] = currValue;
+            settings.Options[name] = currentValue;
 
             return settings;
         }

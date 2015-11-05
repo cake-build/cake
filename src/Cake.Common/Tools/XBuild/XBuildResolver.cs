@@ -15,13 +15,13 @@ namespace Cake.Common.Tools.XBuild
             _environment = environment;
             _fileSystem = fileSystem;
 
-            if (_environment.IsUnix()) 
+            if (_environment.IsUnix())
             {
                 return GetWhichXBuild();
             }
-            else 
+            else
             {
-                return GetWindowsXBuild();   
+                return GetWindowsXBuild();
             }
         }
 
@@ -63,10 +63,10 @@ namespace Cake.Common.Tools.XBuild
             };
 
             string which;
-            using (var proc = new Process { StartInfo = startInfo })
+            using (var process = new Process { StartInfo = startInfo })
             {
-                proc.Start();
-                which = proc.StandardOutput.ReadToEnd();
+                process.Start();
+                which = process.StandardOutput.ReadToEnd();
             }
 
             return string.IsNullOrEmpty(which) ? null : new FilePath(which.Trim());
@@ -84,17 +84,17 @@ namespace Cake.Common.Tools.XBuild
             };
 
             string path;
-            using (var proc = new Process { StartInfo = startInfo })
+            using (var process = new Process { StartInfo = startInfo })
             {
-                proc.Start();
-                path = proc.StandardOutput.ReadToEnd();
+                process.Start();
+                path = process.StandardOutput.ReadToEnd();
             }
 
             return string.IsNullOrEmpty(path) ? null : new FilePath(path.Trim());
         }
 
         private static DirectoryPath GetMonoPathWindows()
-        {            
+        {
             DirectoryPath programFiles;
 
             if (_environment.Is64BitOperativeSystem())
@@ -105,7 +105,7 @@ namespace Cake.Common.Tools.XBuild
             {
                 programFiles = new DirectoryPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles));
             }
-             
+
             var monoPath = programFiles.Combine("Mono").Combine("bin");
 
             if (_fileSystem.GetDirectory(monoPath).Exists)

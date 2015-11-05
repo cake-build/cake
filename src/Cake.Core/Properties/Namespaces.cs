@@ -4,7 +4,7 @@
 namespace Cake.Core
 {
     /// <summary>
-    /// The <see cref="Cake.Core"/> namespace contains fundamental classes and 
+    /// The <see cref="Cake.Core"/> namespace contains fundamental classes and
     /// base classes for Cake and the Cake scripting environment.
     /// </summary>
     [CompilerGenerated]
@@ -30,8 +30,8 @@ namespace Cake.Core.Annotations
 namespace Cake.Core.Diagnostics
 {
     /// <summary>
-    /// This namespace contain types that 
-    /// enable you to implement custom logging support 
+    /// This namespace contain types that
+    /// enable you to implement custom logging support
     /// and interact with build logs.
     /// </summary>
     [CompilerGenerated]
@@ -44,8 +44,8 @@ namespace Cake.Core.Diagnostics
 namespace Cake.Core.IO
 {
     /// <summary>
-    /// This namespace contain fundamental types that support 
-    /// input and output, including the ability to read and write data 
+    /// This namespace contain fundamental types that support
+    /// input and output, including the ability to read and write data
     /// to streams and to interact with the file system.
     /// </summary>
     [CompilerGenerated]
@@ -86,19 +86,6 @@ namespace Cake.Core.Scripting
     /// <summary>
     /// This namespace contain types
     /// related to script processing and execution.
-    /// </summary>
-    [CompilerGenerated]
-    internal class NamespaceDoc
-    {
-    }
-}
-
-// ReSharper disable once CheckNamespace
-namespace Cake.Core.Scripting.CodeGen
-{
-    /// <summary>
-    /// This namespace contain types
-    /// related to code generation.
     /// </summary>
     [CompilerGenerated]
     internal class NamespaceDoc

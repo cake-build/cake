@@ -117,6 +117,99 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ChocolateyNuspec_Metadata" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. --&gt;
+&lt;package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd"&gt;
+  &lt;metadata&gt;
+    &lt;id&gt;The ID&lt;/id&gt;
+    &lt;title&gt;The title&lt;/title&gt;
+    &lt;version&gt;The version&lt;/version&gt;
+    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+    &lt;summary&gt;The summary&lt;/summary&gt;
+    &lt;description&gt;The description&lt;/description&gt;
+    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;packageSourceUrl&gt;https://packagesource.com&lt;/packageSourceUrl&gt;
+    &lt;projectSourceUrl&gt;https://projectsource.com&lt;/projectSourceUrl&gt;
+    &lt;docsUrl&gt;https://docs.com&lt;/docsUrl&gt;
+    &lt;mailingListUrl&gt;https://mailing.com&lt;/mailingListUrl&gt;
+    &lt;bugTrackerUrl&gt;https://bug.com&lt;/bugTrackerUrl&gt;
+    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
+    &lt;copyright&gt;The copyright&lt;/copyright&gt;
+    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+    &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
+    &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
+    &lt;releaseNotes&gt;&lt;![CDATA[Line #1
+Line #2
+Line #3]]&gt;&lt;/releaseNotes&gt;
+  &lt;/metadata&gt;
+  &lt;files&gt;
+    &lt;file src="tools\**" target="tools" /&gt;
+  &lt;/files&gt;
+&lt;/package&gt;</value>
+  </data>
+  <data name="ChocolateyNuspec_Metadata_WithoutNamespaces" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. --&gt;
+&lt;package&gt;
+  &lt;metadata&gt;
+    &lt;id&gt;The ID&lt;/id&gt;
+    &lt;title&gt;The title&lt;/title&gt;
+    &lt;version&gt;The version&lt;/version&gt;
+    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+    &lt;summary&gt;The summary&lt;/summary&gt;
+    &lt;description&gt;The description&lt;/description&gt;
+    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;packageSourceUrl&gt;https://packagesource.com&lt;/packageSourceUrl&gt;
+    &lt;projectSourceUrl&gt;https://projectsource.com&lt;/projectSourceUrl&gt;
+    &lt;docsUrl&gt;https://docs.com&lt;/docsUrl&gt;
+    &lt;mailingListUrl&gt;https://mailing.com&lt;/mailingListUrl&gt;
+    &lt;bugTrackerUrl&gt;https://bug.com&lt;/bugTrackerUrl&gt;
+    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
+    &lt;copyright&gt;The copyright&lt;/copyright&gt;
+    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+    &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
+    &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
+    &lt;releaseNotes&gt;&lt;![CDATA[Line #1
+Line #2
+Line #3]]&gt;&lt;/releaseNotes&gt;
+  &lt;/metadata&gt;
+  &lt;files&gt;
+    &lt;file src="tools\**" target="tools" /&gt;
+  &lt;/files&gt;
+&lt;/package&gt;</value>
+  </data>
+  <data name="ChocolateyNuspec_NoMetadataElement" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. --&gt;
+&lt;package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd"&gt;
+  &lt;files&gt;
+    &lt;file src="tools\**" target="tools" /&gt;
+  &lt;/files&gt;
+&lt;/package&gt;</value>
+  </data>
+  <data name="ChocolateyNuspec_NoMetadataValues" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. --&gt;
+&lt;package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd"&gt;
+  &lt;metadata /&gt;
+  &lt;files&gt;
+    &lt;file src="tools\**" target="tools" /&gt;
+  &lt;/files&gt;
+&lt;/package&gt;</value>
+  </data>
+  <data name="ChocolateyNuspec_NoMetadataValues_WithoutNamespaces" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. --&gt;
+&lt;package&gt;
+  &lt;metadata /&gt;
+  &lt;files&gt;
+    &lt;file src="tools\**" target="tools" /&gt;
+  &lt;/files&gt;
+&lt;/package&gt;</value>
+  </data>
   <data name="Nuspec_Metadata" xml:space="preserve">
     <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
@@ -133,9 +226,9 @@
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;copyright&gt;The copyright&lt;/copyright&gt;
-    &lt;releaseNotes&gt;Line #1
+    &lt;releaseNotes&gt;&lt;![CDATA[Line #1
 Line #2
-Line #3&lt;/releaseNotes&gt;
+Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
   &lt;/metadata&gt;
   &lt;files&gt;
@@ -162,9 +255,9 @@ Line #3&lt;/releaseNotes&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;copyright&gt;The copyright&lt;/copyright&gt;
-    &lt;releaseNotes&gt;Line #1
+    &lt;releaseNotes&gt;&lt;![CDATA[Line #1
 Line #2
-Line #3&lt;/releaseNotes&gt;
+Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
   &lt;/metadata&gt;
   &lt;files&gt;

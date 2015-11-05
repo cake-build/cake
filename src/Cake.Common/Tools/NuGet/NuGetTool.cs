@@ -3,7 +3,7 @@ using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.NuGet
 {
@@ -12,6 +12,7 @@ namespace Cake.Common.Tools.NuGet
     /// </summary>
     /// <typeparam name="TSettings">The settings type.</typeparam>
     public abstract class NuGetTool<TSettings> : Tool<TSettings>
+        where TSettings : ToolSettings
     {
         private readonly INuGetToolResolver _resolver;
 
@@ -24,11 +25,11 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="globber">The globber.</param>
         /// <param name="resolver">The NuGet tool resolver.</param>
         protected NuGetTool(
-            IFileSystem fileSystem, 
-            ICakeEnvironment environment, 
-            IProcessRunner processRunner, 
+            IFileSystem fileSystem,
+            ICakeEnvironment environment,
+            IProcessRunner processRunner,
             IGlobber globber,
-            INuGetToolResolver resolver) 
+            INuGetToolResolver resolver)
             : base(fileSystem, environment, processRunner, globber)
         {
             _resolver = resolver;

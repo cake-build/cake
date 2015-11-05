@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Common.Solution.Project.XmlDoc
@@ -16,13 +17,15 @@ namespace Cake.Common.Solution.Project.XmlDoc
     {
         private readonly IFileSystem _fileSystem;
         private readonly IGlobber _globber;
+        private readonly ICakeLog _log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlDocExampleCodeParser"/> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="globber">The globber.</param>
-        public XmlDocExampleCodeParser(IFileSystem fileSystem, IGlobber globber)
+        /// <param name="log">The log.</param>
+        public XmlDocExampleCodeParser(IFileSystem fileSystem, IGlobber globber, ICakeLog log)
         {
             if (fileSystem == null)
             {
@@ -36,6 +39,7 @@ namespace Cake.Common.Solution.Project.XmlDoc
 
             _fileSystem = fileSystem;
             _globber = globber;
+            _log = log;
         }
 
         /// <summary>
@@ -78,7 +82,7 @@ namespace Cake.Common.Solution.Project.XmlDoc
         }
 
         /// <summary>
-        /// Parses Xml documentation example code from file(s) using given pattern 
+        /// Parses Xml documentation example code from file(s) using given pattern
         /// </summary>
         /// <param name="pattern">The globber file pattern.</param>
         /// <returns>Parsed Example Code</returns>
@@ -89,8 +93,14 @@ namespace Cake.Common.Solution.Project.XmlDoc
                 throw new ArgumentNullException("pattern", "Invalid pattern supplied.");
             }
 
-            return _globber.GetFiles(pattern)
-                .SelectMany(Parse);
+            var files = _globber.GetFiles(pattern).ToArray();
+            if (files.Length == 0)
+            {
+                _log.Verbose("The provided pattern did not match any files.");
+                return Enumerable.Empty<XmlDocExampleCode>();
+            }
+
+            return files.SelectMany(Parse);
         }
     }
 }

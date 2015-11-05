@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using Cake.Core.IO;
 
@@ -25,7 +27,7 @@ namespace Cake.Core
         /// </summary>
         public CakeEnvironment()
         {
-            WorkingDirectory = new DirectoryPath(Environment.CurrentDirectory);    
+            WorkingDirectory = new DirectoryPath(Environment.CurrentDirectory);
         }
 
         /// <summary>
@@ -102,6 +104,20 @@ namespace Cake.Core
         public string GetEnvironmentVariable(string variable)
         {
             return Environment.GetEnvironmentVariable(variable);
+        }
+
+        /// <summary>
+        /// Gets all environment variables.
+        /// </summary>
+        /// <returns>The environment variables as IDictionary&lt;string, string&gt; </returns>
+        public IDictionary<string, string> GetEnvironmentVariables()
+        {
+            return Environment.GetEnvironmentVariables()
+                .Cast<System.Collections.DictionaryEntry>()
+                .ToDictionary(
+                key => (string)key.Key,
+                value => value.Value as string,
+                StringComparer.OrdinalIgnoreCase);
         }
 
         private static void SetWorkingDirectory(DirectoryPath path)

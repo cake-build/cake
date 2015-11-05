@@ -18,9 +18,9 @@ namespace Cake.Common.Tools.NuGet.Install
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="globber">The globber.</param> 
+        /// <param name="globber">The globber.</param>
         /// <param name="resolver">The NuGet tool resolver.</param>
-        public NuGetInstaller(IFileSystem fileSystem, ICakeEnvironment environment, 
+        public NuGetInstaller(IFileSystem fileSystem, ICakeEnvironment environment,
             IProcessRunner processRunner, IGlobber globber, INuGetToolResolver resolver)
             : base(fileSystem, environment, processRunner, globber, resolver)
         {
@@ -45,7 +45,7 @@ namespace Cake.Common.Tools.NuGet.Install
 
             var packageId = packageConfigPath.MakeAbsolute(_environment).FullPath;
 
-            Run(settings, GetArguments(packageId, settings), settings.ToolPath);
+            Run(settings, GetArguments(packageId, settings));
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Cake.Common.Tools.NuGet.Install
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetArguments(packageId, settings), settings.ToolPath);
+            Run(settings, GetArguments(packageId, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(string packageId, NuGetInstallSettings settings)

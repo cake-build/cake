@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.Annotations;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Common.IO
@@ -47,6 +48,11 @@ namespace Cake.Common.IO
         public static void Zip(this ICakeContext context, DirectoryPath rootPath, FilePath outputPath, string pattern)
         {
             var filePaths = context.GetFiles(pattern);
+            if (filePaths.Count == 0)
+            {
+                context.Log.Verbose("The provided pattern did not match any files.");
+                return;
+            }
             Zip(context, rootPath, outputPath, filePaths);
         }
 
@@ -60,7 +66,7 @@ namespace Cake.Common.IO
         /// <example>
         /// <code>
         /// var files = GetFiles("./**/Cake.*.dll");
-        /// Zip("./", "cakedlls.zip", files);
+        /// Zip("./", "cakeassemblies.zip", files);
         /// </code>
         /// </example>
         [CakeMethodAlias]

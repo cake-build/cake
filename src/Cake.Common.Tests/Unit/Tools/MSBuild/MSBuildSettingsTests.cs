@@ -62,7 +62,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var settings = new MSBuildSettings();
-                
+
                 // When
                 settings.Properties.Add("THEKEY", new []{"THEVALUE"});
 

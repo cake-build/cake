@@ -5,7 +5,7 @@ namespace Cake.Common
 {
     /// <summary>
     /// This namespace contain types used for common operations
-    /// such as parsing release notes, retrieving arguments and 
+    /// such as parsing release notes, retrieving arguments and
     /// to read and write environment variables.
     /// </summary>
     [CompilerGenerated]
@@ -18,7 +18,7 @@ namespace Cake.Common
 namespace Cake.Common.Build
 {
     /// <summary>
-    /// This namespace contain types that 
+    /// This namespace contain types that
     /// support different build system related tasks.
     /// </summary>
     [CompilerGenerated]
@@ -44,7 +44,7 @@ namespace Cake.Common.Build.AppVeyor
 namespace Cake.Common.Build.AppVeyor.Data
 {
     /// <summary>
-    /// This namespace contain types 
+    /// This namespace contain types
     /// representing data used for interaction with AppVeyor.
     /// </summary>
     [CompilerGenerated]
@@ -70,7 +70,7 @@ namespace Cake.Common.Build.TeamCity
 namespace Cake.Common.Diagnostics
 {
     /// <summary>
-    /// This namespace contain types that 
+    /// This namespace contain types that
     /// enable you to interact with build logs.
     /// </summary>
     [CompilerGenerated]
@@ -83,7 +83,7 @@ namespace Cake.Common.Diagnostics
 namespace Cake.Common.IO
 {
     /// <summary>
-    /// This namespace contain types that support input and output, 
+    /// This namespace contain types that support input and output,
     /// including the ability to read and write data to streams and to
     /// interact with the file system.
     /// </summary>
@@ -97,7 +97,7 @@ namespace Cake.Common.IO
 namespace Cake.Common.IO.Paths
 {
     /// <summary>
-    /// This namespace contain types related 
+    /// This namespace contain types related
     /// to file system paths.
     /// </summary>
     [CompilerGenerated]
@@ -110,7 +110,7 @@ namespace Cake.Common.IO.Paths
 namespace Cake.Common.IO.Net
 {
     /// <summary>
-    /// This namespace contain types related 
+    /// This namespace contain types related
     /// to network operations.
     /// </summary>
     [CompilerGenerated]
@@ -123,7 +123,7 @@ namespace Cake.Common.IO.Net
 namespace Cake.Common.Net
 {
     /// <summary>
-    /// This namespace contain types related 
+    /// This namespace contain types related
     /// to security aspects such as hashing.
     /// </summary>
     [CompilerGenerated]
@@ -136,7 +136,7 @@ namespace Cake.Common.Net
 namespace Cake.Common.Solution
 {
     /// <summary>
-    /// This namespace contain types that 
+    /// This namespace contain types that
     /// support interaction with MSBuild solution files.
     /// </summary>
     [CompilerGenerated]
@@ -149,7 +149,7 @@ namespace Cake.Common.Solution
 namespace Cake.Common.Solution.Project
 {
     /// <summary>
-    /// This namespace contain types that 
+    /// This namespace contain types that
     /// support interaction with MSBuild project files.
     /// </summary>
     [CompilerGenerated]
@@ -162,7 +162,7 @@ namespace Cake.Common.Solution.Project
 namespace Cake.Common.Solution.Project.Properties
 {
     /// <summary>
-    /// This namespace contain types that 
+    /// This namespace contain types that
     /// enable you to read or create assembly information files.
     /// </summary>
     [CompilerGenerated]
@@ -175,7 +175,7 @@ namespace Cake.Common.Solution.Project.Properties
 namespace Cake.Common.Solution.Project.XmlDoc
 {
     /// <summary>
-    /// This namespace contain types that 
+    /// This namespace contain types that
     /// enable you to read XML documentation comments.
     /// </summary>
     [CompilerGenerated]
@@ -201,7 +201,7 @@ namespace Cake.Common.Text
 namespace Cake.Common.Tools
 {
     /// <summary>
-    /// This namespace contain types used to interact 
+    /// This namespace contain types used to interact
     /// with different third party tools.
     /// </summary>
     [CompilerGenerated]
@@ -274,7 +274,7 @@ namespace Cake.Common.Tools.NuGet
 namespace Cake.Common.Tools.NuGet.Install
 {
     /// <summary>
-    /// This namespace contain types used to interact 
+    /// This namespace contain types used to interact
     /// with the NuGet package installer.
     /// </summary>
     [CompilerGenerated]
@@ -287,7 +287,7 @@ namespace Cake.Common.Tools.NuGet.Install
 namespace Cake.Common.Tools.NuGet.Pack
 {
     /// <summary>
-    /// This namespace contain types used to 
+    /// This namespace contain types used to
     /// pack NuGet packages.
     /// </summary>
     [CompilerGenerated]
@@ -300,7 +300,7 @@ namespace Cake.Common.Tools.NuGet.Pack
 namespace Cake.Common.Tools.NuGet.Push
 {
     /// <summary>
-    /// This namespace contain types used to 
+    /// This namespace contain types used to
     /// push NuGet packages.
     /// </summary>
     [CompilerGenerated]
@@ -313,7 +313,7 @@ namespace Cake.Common.Tools.NuGet.Push
 namespace Cake.Common.Tools.NuGet.Restore
 {
     /// <summary>
-    /// This namespace contain types used to 
+    /// This namespace contain types used to
     /// restore NuGet packages.
     /// </summary>
     [CompilerGenerated]
@@ -326,7 +326,7 @@ namespace Cake.Common.Tools.NuGet.Restore
 namespace Cake.Common.Tools.NuGet.SetApiKey
 {
     /// <summary>
-    /// This namespace contain types used to 
+    /// This namespace contain types used to
     /// set NuGet API keys.
     /// </summary>
     [CompilerGenerated]
@@ -339,7 +339,7 @@ namespace Cake.Common.Tools.NuGet.SetApiKey
 namespace Cake.Common.Tools.NuGet.SetProxy
 {
     /// <summary>
-    /// This namespace contain types used to 
+    /// This namespace contain types used to
     /// set proxy settings.
     /// </summary>
     [CompilerGenerated]
@@ -352,7 +352,7 @@ namespace Cake.Common.Tools.NuGet.SetProxy
 namespace Cake.Common.Tools.NuGet.Sources
 {
     /// <summary>
-    /// This namespace contain types used to 
+    /// This namespace contain types used to
     /// interact with NuGet sources.
     /// </summary>
     [CompilerGenerated]
@@ -365,7 +365,7 @@ namespace Cake.Common.Tools.NuGet.Sources
 namespace Cake.Common.Tools.NuGet.Update
 {
     /// <summary>
-    /// This namespace contain types used to 
+    /// This namespace contain types used to
     /// update NuGet packages.
     /// </summary>
     [CompilerGenerated]
@@ -390,7 +390,7 @@ namespace Cake.Common.Tools.NUnit
 namespace Cake.Common.Tools.OctopusDeploy
 {
     /// <summary>
-    /// This namespace contain types used 
+    /// This namespace contain types used
     /// to interact with Octopus Deploy.
     /// </summary>
     [CompilerGenerated]
@@ -403,7 +403,7 @@ namespace Cake.Common.Tools.OctopusDeploy
 namespace Cake.Common.Tools.Roundhouse
 {
     /// <summary>
-    /// This namespace contain types used 
+    /// This namespace contain types used
     /// to interact with Roundhouse.
     /// </summary>
     [CompilerGenerated]
@@ -416,7 +416,7 @@ namespace Cake.Common.Tools.Roundhouse
 namespace Cake.Common.Tools.SignTool
 {
     /// <summary>
-    /// This namespace contain types used for 
+    /// This namespace contain types used for
     /// signing assemblies with SignTool.
     /// </summary>
     [CompilerGenerated]
@@ -441,7 +441,7 @@ namespace Cake.Common.Tools.WiX
 namespace Cake.Common.Tools.XBuild
 {
     /// <summary>
-    /// This namespace contain types used 
+    /// This namespace contain types used
     /// to interact with XBuild.
     /// </summary>
     [CompilerGenerated]
@@ -466,7 +466,7 @@ namespace Cake.Common.Tools.XUnit
 namespace Cake.Common.Tools.Xml
 {
     /// <summary>
-    /// This namespace contain types used to 
+    /// This namespace contain types used to
     /// interact with XML documents.
     /// </summary>
     [CompilerGenerated]

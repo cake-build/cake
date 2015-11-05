@@ -127,8 +127,8 @@ namespace Cake.Common.Solution
                     {
                         if (position++ >= result.Length)
                         {
-                            break;   
-                        }                            
+                            break;
+                        }
                     }
                     continue;
                 }

@@ -2,7 +2,7 @@
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.XUnit
 {
@@ -55,7 +55,7 @@ namespace Cake.Common.Tools.XUnit
                 }
             }
 
-            Run(settings, GetArguments(assemblyPath, settings), settings.ToolPath);
+            Run(settings, GetArguments(assemblyPath, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, XUnit2Settings settings)
@@ -98,6 +98,37 @@ namespace Cake.Common.Tools.XUnit
 
                 builder.Append(settings.XmlReportV1 ? "-xmlv1" : "-xml");
                 builder.AppendQuoted(outputPath.FullPath);
+            }
+
+            // parallelize test execution?
+            if (settings.Parallelism != ParallelismOption.None)
+            {
+                builder.Append("-parallel " + settings.Parallelism.ToString().ToLowerInvariant());
+            }
+
+            // max thread count for collection parallelization
+            if (settings.MaxThreads.HasValue)
+            {
+                if (settings.MaxThreads.Value == 0)
+                {
+                    builder.Append("-maxthreads unlimited");
+                }
+                else
+                {
+                    builder.Append("-maxthreads " + settings.MaxThreads.Value);
+                }
+            }
+
+            foreach (var trait in settings.TraitsToInclude
+                .SelectMany(pair => pair.Value.Select(v => new { Name = pair.Key, Value = v })))
+            {
+                builder.Append("-trait \"{0}={1}\"", trait.Name, trait.Value);
+            }
+
+            foreach (var trait in settings.TraitsToExclude
+                .SelectMany(pair => pair.Value.Select(v => new { Name = pair.Key, Value = v })))
+            {
+                builder.Append("-notrait \"{0}={1}\"", trait.Name, trait.Value);
             }
 
             return builder;

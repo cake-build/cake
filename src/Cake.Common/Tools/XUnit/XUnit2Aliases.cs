@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.Annotations;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.XUnit
@@ -26,7 +27,13 @@ namespace Cake.Common.Tools.XUnit
                 throw new ArgumentNullException("context");
             }
 
-            var assemblies = context.Globber.GetFiles(pattern);
+            var assemblies = context.Globber.GetFiles(pattern).ToArray();
+            if (assemblies.Length == 0)
+            {
+                context.Log.Verbose("The provided pattern did not match any files.");
+                return;
+            }
+
             XUnit2(context, assemblies, new XUnit2Settings());
         }
 
@@ -44,7 +51,13 @@ namespace Cake.Common.Tools.XUnit
                 throw new ArgumentNullException("context");
             }
 
-            var assemblies = context.Globber.GetFiles(pattern);
+            var assemblies = context.Globber.GetFiles(pattern).ToArray();
+            if (assemblies.Length == 0)
+            {
+                context.Log.Verbose("The provided pattern did not match any files.");
+                return;
+            }
+
             XUnit2(context, assemblies, settings);
         }
 
@@ -114,7 +127,7 @@ namespace Cake.Common.Tools.XUnit
             foreach (var assembly in assemblies)
             {
                 runner.Run(assembly, settings);
-            }    
+            }
         }
     }
 }

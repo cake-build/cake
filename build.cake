@@ -15,6 +15,7 @@ var isRunningOnUnix = IsRunningOnUnix();
 var isRunningOnWindows = IsRunningOnWindows();
 var isRunningOnAppVeyor = AppVeyor.IsRunningOnAppVeyor;
 var isPullRequest = AppVeyor.Environment.PullRequest.IsPullRequest;
+var isMainCakeRepo = StringComparer.OrdinalIgnoreCase.Equals("cake-build/cake", AppVeyor.Environment.Repository.Name);
 
 // Parse release notes.
 var releaseNotes = ParseReleaseNotes("./ReleaseNotes.md");
@@ -74,7 +75,7 @@ Task("Patch-Assembly-Info")
         Version = version,
         FileVersion = version,
         InformationalVersion = semVersion,
-        Copyright = "Copyright (c) Patrik Svensson, Mattias Karlsson and contributors"
+        Copyright = "Copyright (c) Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors"
     });
 });
 
@@ -129,6 +130,12 @@ Task("Copy-Files")
     CopyFileToDirectory(buildDir + File("Autofac.dll"), binDir);
     CopyFileToDirectory(buildDir + File("Nuget.Core.dll"), binDir);
 
+    // Copy testing assemblies.
+    var testingDir = Directory("./src/Cake.Testing/bin") + Directory(configuration);
+    CopyFileToDirectory(testingDir + File("Cake.Testing.dll"), binDir);
+    CopyFileToDirectory(testingDir + File("Cake.Testing.pdb"), binDir);
+    CopyFileToDirectory(testingDir + File("Cake.Testing.xml"), binDir);
+
     CopyFiles(new FilePath[] { "LICENSE", "README.md", "ReleaseNotes.md" }, binDir);
 });
 
@@ -140,7 +147,10 @@ Task("Zip-Files")
     var packageFile = File("Cake-bin-v" + semVersion + ".zip");
     var packagePath = buildResultDir + packageFile;
 
-    Zip(binDir, packagePath);
+    var files = GetFiles(binDir.Path.FullPath + "/*")
+      - GetFiles(binDir.Path.FullPath + "/*.Testing.*");
+
+    Zip(binDir, packagePath, files);
 });
 
 Task("Create-NuGet-Packages")
@@ -175,6 +185,15 @@ Task("Create-NuGet-Packages")
         OutputDirectory = nugetRoot,
         Symbols = false
     });
+
+    // Create Testing package.
+    NuGetPack("./nuspec/Cake.Testing.nuspec", new NuGetPackSettings {
+        Version = semVersion,
+        ReleaseNotes = releaseNotes.Notes.ToArray(),
+        BasePath = binDir,
+        OutputDirectory = nugetRoot,
+        Symbols = false
+    });
 });
 
 Task("Update-AppVeyor-Build-Number")
@@ -199,6 +218,7 @@ Task("Publish-MyGet")
     .WithCriteria(() => !local)
     .WithCriteria(() => !isPullRequest)
     .WithCriteria(() => isRunningOnWindows)
+    .WithCriteria(() => isMainCakeRepo)
     .Does(() =>
 {
     // Resolve the API key.
@@ -207,10 +227,10 @@ Task("Publish-MyGet")
         throw new InvalidOperationException("Could not resolve MyGet API key.");
     }
 
-    foreach(var package in new[]{"Cake", "Cake.Core", "Cake.Common"})
+    foreach(var package in new[] { "Cake", "Cake.Core", "Cake.Common", "Cake.Testing" })
     {
         // Get the path to the package.
-        var packagePath = nugetRoot + File(string.Concat(package, ".",semVersion,".nupkg"));
+        var packagePath = nugetRoot + File(string.Concat(package, ".", semVersion, ".nupkg"));
 
         // Push the package.
         NuGetPush(packagePath, new NuGetPushSettings {
@@ -220,24 +240,50 @@ Task("Publish-MyGet")
     }
 });
 
+Task("Publish-NuGet")
+  .IsDependentOn("Create-NuGet-Packages")
+  .WithCriteria(() => local)
+  .Does(() =>
+{
+    // Resolve the API key.
+    var apiKey = EnvironmentVariable("NUGET_API_KEY");
+    if(string.IsNullOrEmpty(apiKey)) {
+        throw new InvalidOperationException("Could not resolve NuGet API key.");
+    }
+
+    foreach(var package in new[] { "Cake", "Cake.Core", "Cake.Common", "Cake.Testing" })
+    {
+        // Get the path to the package.
+        var packagePath = nugetRoot + File(string.Concat(package, ".", semVersion, ".nupkg"));
+
+        // Push the package.
+        NuGetPush(packagePath, new NuGetPushSettings {
+          ApiKey = apiKey
+        });
+    }
+});
+
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
 Task("Package")
-    .IsDependentOn("Zip-Files")
-    .IsDependentOn("Create-NuGet-Packages");
+  .IsDependentOn("Zip-Files")
+  .IsDependentOn("Create-NuGet-Packages");
 
 Task("Default")
-    .IsDependentOn("Package");
+  .IsDependentOn("Package");
+
+Task("Publish")
+  .IsDependentOn("Publish-NuGet");
 
 Task("AppVeyor")
-    .IsDependentOn("Update-AppVeyor-Build-Number")
-    .IsDependentOn("Upload-AppVeyor-Artifacts")
-    .IsDependentOn("Publish-MyGet");
+  .IsDependentOn("Update-AppVeyor-Build-Number")
+  .IsDependentOn("Upload-AppVeyor-Artifacts")
+  .IsDependentOn("Publish-MyGet");
 
 Task("Travis")
-    .IsDependentOn("Build");
+  .IsDependentOn("Build");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION

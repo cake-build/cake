@@ -33,6 +33,26 @@ namespace Cake.Common
         }
 
         /// <summary>
+        /// Starts the process resource that is specified by the filename and arguments
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="processArguments">The arguments used in the process settings.</param>
+        /// <returns>The exit code that the started process specified when it terminated.</returns>
+        /// <example>
+        /// <code>
+        /// var exitCodeWithArgument = StartProcess("ping", "localhost");
+        /// // This should output 0 as valid arguments supplied
+        /// Information("Exit code: {0}", exitCodeWithArgument);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        public static int StartProcess(this ICakeContext context, FilePath fileName, string processArguments)
+        {
+            return StartProcess(context, fileName, new ProcessSettings { Arguments = processArguments });
+        }
+
+        /// <summary>
         /// Starts the process resource that is specified by the filename and settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -72,7 +92,7 @@ namespace Cake.Common
         /// );
         /// //Output last line of process output
         /// Information("Last line of output: {0}", redirectedOutput.LastOrDefault());
-        /// 
+        ///
         /// // This should output 0 as valid arguments supplied
         /// Information("Exit code: {0}", exitCodeWithArgument);
         /// </code>
@@ -103,7 +123,7 @@ namespace Cake.Common
             redirectedOutput = settings.RedirectStandardOutput
                 ? process.GetStandardOutput()
                 : null;
-           
+
             // Return the exit code.
             return process.GetExitCode();
         }

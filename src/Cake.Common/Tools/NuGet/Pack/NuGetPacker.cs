@@ -93,21 +93,21 @@ namespace Cake.Common.Tools.NuGet.Pack
 
         private void Pack(NuGetPackSettings settings, Func<FilePath> process)
         {
-            FilePath procesedNuspecFilePath = null;
+            FilePath processedNuspecFilePath = null;
             try
             {
                 // Transform the nuspec and return the new filename.
-                procesedNuspecFilePath = process();
+                processedNuspecFilePath = process();
 
                 // Start the process.
-                Run(settings, GetArguments(procesedNuspecFilePath, settings), settings.ToolPath);
+                Run(settings, GetArguments(processedNuspecFilePath, settings));
             }
             finally
             {
-                if (procesedNuspecFilePath != null)
+                if (processedNuspecFilePath != null)
                 {
                     // Delete the processed file.
-                    var file = _fileSystem.GetFile(procesedNuspecFilePath);
+                    var file = _fileSystem.GetFile(processedNuspecFilePath);
                     if (file.Exists)
                     {
                         file.Delete();

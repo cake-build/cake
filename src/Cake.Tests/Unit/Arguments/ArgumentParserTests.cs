@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Linq;
 using Cake.Arguments;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Testing.Fakes;
+using Cake.Testing;
 using Cake.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
@@ -84,7 +85,7 @@ namespace Cake.Tests.Unit.Arguments
 
                 // Then
                 Assert.Null(result);
-                Assert.True(fixture.Log.Messages.Contains("Multiple arguments with the same name (unknown)."));
+                Assert.True(fixture.Log.Entries.Any(x => x.Message == "Multiple arguments with the same name (unknown)."));
             }
 
             [Theory]
@@ -151,7 +152,7 @@ namespace Cake.Tests.Unit.Arguments
                 parser.Parse(arguments);
 
                 // Then
-                Assert.Equal("More than one build script specified.", fixture.Log.Messages[0]);
+                Assert.Equal("More than one build script specified.", fixture.Log.Entries[0].Message);
             }
 
             [Theory]

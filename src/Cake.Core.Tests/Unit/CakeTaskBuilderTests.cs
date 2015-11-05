@@ -4,7 +4,7 @@ namespace Cake.Core.Tests.Unit
 {
     public sealed class CakeTaskBuilderTests
     {
-        public sealed class TheConstuctor
+        public sealed class TheConstructor
         {
             [Fact]
             public void Should_Throw_Is_Provided_Task_Is_Null()
@@ -20,7 +20,7 @@ namespace Cake.Core.Tests.Unit
         public sealed class TheTaskProperty
         {
             [Fact]
-            public void Should_Return_The_Task_Provided_To_The_Constuctor()
+            public void Should_Return_The_Task_Provided_To_The_Constructor()
             {
                 // Given, When
                 var task = new ActionTask("task");

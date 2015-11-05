@@ -233,7 +233,7 @@ namespace Cake.Core.Tests.Unit.Text
                 var result = transformation.Render();
 
                 // Then
-                Assert.Equal("Hello a700936f-8e15-4bb7-82ce-312547b66440!", result);                
+                Assert.Equal("Hello a700936f-8e15-4bb7-82ce-312547b66440!", result);
             }
         }
     }

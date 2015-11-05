@@ -1,18 +1,19 @@
 ﻿using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.ILMerge
 {
     /// <summary>
     /// Contains settings used by <see cref="ILMergeRunner"/>.
     /// </summary>
-    public sealed class ILMergeSettings
+    public sealed class ILMergeSettings : ToolSettings
     {
         /// <summary>
-        /// Gets or sets a value indicating whether whether types in assemblies other 
+        /// Gets or sets a value indicating whether whether types in assemblies other
         /// than the primary assembly should have their visibility modified to internal.
         /// </summary>
         /// <value>
-        /// <c>true</c> if types in assemblies other than the primary assembly should 
+        /// <c>true</c> if types in assemblies other than the primary assembly should
         /// have their visibility modified to internal; otherwise, <c>false</c>.
         /// </value>
         public bool Internalize { get; set; }
@@ -22,12 +23,6 @@ namespace Cake.Common.Tools.ILMerge
         /// </summary>
         /// <value>The target kind.</value>
         public TargetKind TargetKind { get; set; }
-
-        /// <summary>
-        /// Gets or sets the tool path.
-        /// </summary>
-        /// <value>The tool path.</value>
-        public FilePath ToolPath { get; set; }
 
         /// <summary>
         /// Gets or sets the target platform.

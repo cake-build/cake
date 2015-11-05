@@ -37,6 +37,7 @@ namespace Cake.Common.IO
                 return;
             }
 
+            context.Log.Verbose("Cleaning directory {0}", path);
             predicate = predicate ?? (info => true);
             CleanDirectory(root, predicate, 0);
         }

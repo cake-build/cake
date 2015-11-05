@@ -1,48 +1,28 @@
 ﻿using Cake.Common.Tools.MSTest;
-using Cake.Core;
 using Cake.Core.IO;
-using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Tools
 {
-    internal sealed class MSTestRunnerFixture
+    internal sealed class MSTestRunnerFixture : ToolFixture<MSTestSettings>
     {
-        public IFileSystem FileSystem { get; set; }
-        public ICakeEnvironment Environment { get; set; }
-        public IProcess Process { get; set; }
-        public IProcessRunner ProcessRunner { get; set; }
-        public IGlobber Globber { get; set; }
+        public FilePath AssemblyPath { get; set; }
 
-        public FilePath ToolPath { get; set; }
-
-        public MSTestRunnerFixture(FilePath toolPath = null, bool defaultToolExist = true)
+        public MSTestRunnerFixture()
+            : base("mstest.exe")
         {
-            ToolPath = "/ProgramFilesX86/Microsoft Visual Studio 12.0/Common7/IDE/mstest.exe";
-
-            Process = Substitute.For<IProcess>();
-            Process.GetExitCode().Returns(0);
-
-            ProcessRunner = Substitute.For<IProcessRunner>();
-            ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns(Process);
-
-            Globber = Substitute.For<IGlobber>();
-
-            Environment = Substitute.For<ICakeEnvironment>();
-            Environment.WorkingDirectory = "/Working";
-            Environment.GetSpecialPath(SpecialPath.ProgramFilesX86).Returns("/ProgramFilesX86");
-
-            FileSystem = Substitute.For<IFileSystem>();
-            FileSystem.Exist(Arg.Is<FilePath>(p => p.FullPath.Equals(ToolPath.FullPath))).Returns(defaultToolExist);
-
-            if (toolPath != null)
-            {
-                FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == toolPath.FullPath)).Returns(true);
-            }
+            AssemblyPath = new FilePath("./Test1.dll");
+            Environment.SetSpecialPath(SpecialPath.ProgramFilesX86, "/ProgramFilesX86");
         }
 
-        public MSTestRunner CreateRunner()
+        protected override FilePath GetDefaultToolPath()
         {
-            return new MSTestRunner(FileSystem, Environment, ProcessRunner, Globber);
+            return new FilePath("/ProgramFilesX86/Microsoft Visual Studio 12.0/Common7/IDE/mstest.exe");
+        }
+
+        protected override void RunTool()
+        {
+            var tool = new MSTestRunner(FileSystem, Environment, ProcessRunner, Globber);
+            tool.Run(AssemblyPath, Settings);
         }
     }
 }

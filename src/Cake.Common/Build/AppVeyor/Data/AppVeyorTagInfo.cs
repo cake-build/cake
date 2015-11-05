@@ -33,7 +33,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// Initializes a new instance of the <see cref="AppVeyorTagInfo"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        public AppVeyorTagInfo(ICakeEnvironment environment) 
+        public AppVeyorTagInfo(ICakeEnvironment environment)
             : base(environment)
         {
         }

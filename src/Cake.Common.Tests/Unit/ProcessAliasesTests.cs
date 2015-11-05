@@ -127,7 +127,7 @@ namespace Cake.Common.Tests.Unit
 
                     // When
                     var result = Record.Exception(() =>
-                        context.StartProcess(fileName, null));
+                        context.StartProcess(fileName, (ProcessSettings)null));
 
                     // Then
                     Assert.IsArgumentNullException(result, "settings");
@@ -146,8 +146,8 @@ namespace Cake.Common.Tests.Unit
 
                     // Then
                     fixture.ProcessRunner.Received(1).Start(
-                        Arg.Any<FilePath>(), 
-                        Arg.Is<ProcessSettings>(info => 
+                        Arg.Any<FilePath>(),
+                        Arg.Is<ProcessSettings>(info =>
                             info.WorkingDirectory.FullPath == "/Working"));
                 }
 
@@ -165,7 +165,7 @@ namespace Cake.Common.Tests.Unit
 
                     // Then
                     fixture.ProcessRunner.Received(1).Start(
-                        Arg.Any<FilePath>(), 
+                        Arg.Any<FilePath>(),
                         Arg.Is<ProcessSettings>(info =>
                             info.WorkingDirectory.FullPath == "/OtherWorking"));
                 }
@@ -184,7 +184,7 @@ namespace Cake.Common.Tests.Unit
 
                     // Then
                     fixture.ProcessRunner.Received(1).Start(
-                        Arg.Any<FilePath>(), 
+                        Arg.Any<FilePath>(),
                         Arg.Is<ProcessSettings>(info =>
                             info.WorkingDirectory.FullPath == "/Working/OtherWorking"));
                 }
@@ -198,7 +198,7 @@ namespace Cake.Common.Tests.Unit
                     var settings = new ProcessSettings();
 
                     fixture.ProcessRunner.Start(
-                        Arg.Any<FilePath>(), 
+                        Arg.Any<FilePath>(),
                         Arg.Any<ProcessSettings>()).Returns((IProcess)null);
 
                     // When
@@ -224,6 +224,43 @@ namespace Cake.Common.Tests.Unit
 
                     // Then
                     Assert.Equal(12, result);
+                }
+            }
+
+            public sealed class WithStringArguments
+            {
+                [Fact]
+                public void Should_Use_Provided_Arguments_In_Process_Settings_If_Set()
+                {
+                    // Given
+                    const string fileName = "git";
+                    var fixture = new ProcessFixture();
+
+                    // When
+                    fixture.Start(fileName, "pull");
+
+                    // Then
+                    fixture.ProcessRunner.Received(1).Start(
+                        Arg.Any<FilePath>(),
+                        Arg.Is<ProcessSettings>(info =>
+                            info.Arguments.Render() == "pull"));
+                }
+
+                [Fact]
+                public void Should_Not_Use_Arguments_If_Not_Set()
+                {
+                    // Given
+                    const string fileName = "git";
+                    var fixture = new ProcessFixture();
+
+                    // When
+                    fixture.Start(fileName, string.Empty);
+
+                    // Then
+                    fixture.ProcessRunner.Received(1).Start(
+                        Arg.Any<FilePath>(),
+                        Arg.Is<ProcessSettings>(info =>
+                            string.IsNullOrEmpty(info.Arguments.Render())));
                 }
             }
         }
@@ -297,7 +334,7 @@ namespace Cake.Common.Tests.Unit
                     // Given
                     var fixture = new ProcessFixture();
                     const string fileName = "hello.exe";
-                    
+
                     var expected = fixture.Process;
                     fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns(p => expected);
 

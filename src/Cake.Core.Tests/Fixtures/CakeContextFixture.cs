@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Cake.Core.Diagnostics;
+﻿using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using NSubstitute;
 
@@ -28,7 +27,7 @@ namespace Cake.Core.Tests.Fixtures
 
         public CakeContext CreateContext()
         {
-            return new CakeContext(FileSystem, Environment, Globber, 
+            return new CakeContext(FileSystem, Environment, Globber,
                 Log, Arguments, ProcessRunner, Registry);
         }
     }

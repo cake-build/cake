@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.ILMerge;
 using Cake.Core;
@@ -60,7 +59,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
             {
                 // Given
                 var fixture = new ILMergeRunnerFixture();
-                fixture.Globber.Match("./tools/**/ILMerge.exe").Returns(Enumerable.Empty<Path>());
+                fixture.GivenDefaultToolDoNotExist();
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
@@ -76,16 +75,15 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
             public void Should_Use_ILMerge_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new ILMergeRunnerFixture(expected);
+                var fixture = new ILMergeRunnerFixture();
                 fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -95,12 +93,10 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 var fixture = new ILMergeRunnerFixture();
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/ILMerge.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/tools/ILMerge.exe", result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -112,14 +108,12 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 fixture.AssemblyPaths.Add("D.dll");
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() ==
-                        "/out:\"/Working/output.exe\" \"/Working/input.exe\" \"/Working/C.dll\" \"/Working/D.dll\""));
+                Assert.Equal("/out:\"/Working/output.exe\" " +
+                             "\"/Working/input.exe\" \"/Working/C.dll\" " +
+                             "\"/Working/D.dll\"", result.Args);
             }
 
             [Fact]
@@ -129,13 +123,10 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 var fixture = new ILMergeRunnerFixture();
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.WorkingDirectory.FullPath == "/Working"));
+                Assert.Equal("/Working", result.Process.WorkingDirectory.FullPath);
             }
 
             [Fact]
@@ -143,7 +134,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
             {
                 // Given
                 var fixture = new ILMergeRunnerFixture();
-                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess) null);
+                fixture.GivenProcessCannotStart();
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
@@ -158,7 +149,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
             {
                 // Given
                 var fixture = new ILMergeRunnerFixture();
-                fixture.Process.GetExitCode().Returns(1);
+                fixture.GivenProcessExitsWithCode(1);
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
@@ -176,13 +167,11 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 fixture.Settings.Internalize = true;
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "/out:\"/Working/output.exe\" /internalize \"/Working/input.exe\""));
+                Assert.Equal("/out:\"/Working/output.exe\" " +
+                             "/internalize \"/Working/input.exe\"", result.Args);
             }
 
             [Theory]
@@ -197,35 +186,28 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 fixture.Settings.TargetKind = kind;
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]
             public void Should_Set_Target_Platform_If_Enabled_In_Settings()
             {
                 // Given
-                const string PATH =
-                    @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1";
-                var directoryPath = new DirectoryPath(PATH);
+                const string path = @"/NetFramework";
+                var directoryPath = new DirectoryPath(path);
                 var fixture = new ILMergeRunnerFixture();
                 fixture.Settings.TargetPlatform = new TargetPlatform(TargetPlatformVersion.v4, directoryPath);
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() ==
-                        "/out:\"/Working/output.exe\" /targetPlatform:v4,\"" + directoryPath.FullPath +
-                        "\" \"/Working/input.exe\""));
+                Assert.Equal("/out:\"/Working/output.exe\" " +
+                             "/targetPlatform:v4,\"/NetFramework\" " +
+                             "\"/Working/input.exe\"", result.Args);
             }
 
             [Fact]
@@ -236,14 +218,11 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 fixture.Settings.TargetPlatform = new TargetPlatform(TargetPlatformVersion.v4);
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() ==
-                        "/out:\"/Working/output.exe\" /targetPlatform:v4 \"/Working/input.exe\""));
+                Assert.Equal("/out:\"/Working/output.exe\" " +
+                             "/targetPlatform:v4 \"/Working/input.exe\"", result.Args);
             }
 
             [Fact]
@@ -253,13 +232,11 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 var fixture = new ILMergeRunnerFixture();
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "/out:\"/Working/output.exe\" \"/Working/input.exe\""));
+                Assert.Equal("/out:\"/Working/output.exe\" " +
+                             "\"/Working/input.exe\"", result.Args);
             }
         }
     }

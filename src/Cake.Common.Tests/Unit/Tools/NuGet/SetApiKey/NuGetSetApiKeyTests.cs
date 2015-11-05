@@ -1,12 +1,5 @@
-﻿using System.Collections.Generic;
-using Cake.Common.Tests.Fixtures;
-using Cake.Common.Tests.Fixtures.Tools;
-using Cake.Common.Tests.Fixtures.Tools.NuGet;
+﻿using Cake.Common.Tests.Fixtures.Tools.NuGet.SetApiKey;
 using Cake.Common.Tools.NuGet;
-using Cake.Common.Tools.NuGet.SetApiKey;
-using Cake.Core;
-using Cake.Core.IO;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
@@ -23,7 +16,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
                 fixture.ApiKey = null;
 
                 // When
-                var result = Record.Exception(() => fixture.SetApiKey());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "apiKey");
@@ -36,9 +29,8 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
                 var fixture = new NuGetSetApiKeyFixture();
                 fixture.Source = null;
 
-
                 // When
-                var result = Record.Exception(() => fixture.SetApiKey());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "source");
@@ -52,7 +44,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
                 fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => fixture.SetApiKey());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
@@ -66,7 +58,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
                 fixture.GivenUnexpectedOutput();
 
                 // When
-                var result = Record.Exception(() => fixture.SetApiKey());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "SetApiKey returned unexpected response.");
@@ -80,7 +72,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
                 fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => fixture.SetApiKey());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "NuGet: Could not locate executable.");
@@ -94,15 +86,13 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
                 // Given
                 var fixture = new NuGetSetApiKeyFixture();
                 fixture.Settings.ToolPath = toolPath;
-                fixture.GivenCustomToolPathExist(expected);
-                
+                fixture.GivenSettingsToolPathExist();
+
                 // When
-                fixture.SetApiKey();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -113,7 +103,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
                 fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => fixture.SetApiKey());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "NuGet: Process was not started.");
@@ -124,10 +114,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
             {
                 // Given
                 var fixture = new NuGetSetApiKeyFixture();
-                fixture.GivenProcessReturnError();
+                fixture.GivenProcessExitsWithCode(1);
 
                 // When
-                var result = Record.Exception(() => fixture.SetApiKey());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "NuGet: Process returned an error.");
@@ -138,14 +128,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
             {
                 // Given
                 var fixture = new NuGetSetApiKeyFixture();
-                
+
                 // When
-                fixture.SetApiKey();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/NuGet.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/tools/NuGet.exe", result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -155,12 +143,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
                 var fixture = new NuGetSetApiKeyFixture();
 
                 // When
-                fixture.SetApiKey();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "setapikey \"SECRET\" -Source \"http://a.com\" -NonInteractive"));
+                Assert.Equal("setapikey \"SECRET\" -Source \"http://a.com\" -NonInteractive", result.Args);
             }
 
             [Theory]
@@ -174,12 +160,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
                 fixture.Settings.Verbosity = verbosity;
 
                 // When
-                fixture.SetApiKey();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]
@@ -188,15 +172,13 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
                 // Given
                 var fixture = new NuGetSetApiKeyFixture();
                 fixture.Settings.ConfigFile = "./nuget.config";
-                
+
                 // When
-                fixture.SetApiKey();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "setapikey \"SECRET\" -Source \"http://a.com\" -ConfigFile \"/Working/nuget.config\" -NonInteractive"));
-
+                Assert.Equal("setapikey \"SECRET\" -Source \"http://a.com\" " +
+                             "-ConfigFile \"/Working/nuget.config\" -NonInteractive", result.Args);
             }
         }
     }

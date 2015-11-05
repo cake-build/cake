@@ -8,7 +8,7 @@ namespace Cake.Common.Tests.Unit.Security
 {
     public sealed class FileHashCalculatorTests
     {
-        public sealed class TheCalculateMethod 
+        public sealed class TheCalculateMethod
         {
             [Fact]
             public void Should_Throw_If_File_Path_Is_Null()

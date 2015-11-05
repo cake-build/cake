@@ -1,20 +1,13 @@
 ﻿using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.Roundhouse
 {
     /// <summary>
     /// Contains settings used by <see cref="RoundhouseRunner" />.
     /// </summary>
-    public sealed class RoundhouseSettings
+    public sealed class RoundhouseSettings : ToolSettings
     {
-        /// <summary>
-        /// Gets or sets the path to the Roundhouse executable.
-        /// </summary>
-        /// <value>
-        /// The tool path. Defaults to <c>./tools/**/rh.exe</c>.
-        /// </value>
-        public FilePath ToolPath { get; set; }
-
         /// <summary>
         /// Gets or sets the server name.
         /// </summary>
@@ -83,7 +76,7 @@ namespace Cake.Common.Tools.Roundhouse
         /// Gets or sets the version file.
         /// </summary>
         /// <value>
-        /// Path to the file to use for versioning. Either a .XML file, a .DLL or a .TXT file that a version can be resolved from.
+        /// Path to the file to use for applying version number. Either a .XML file, a .DLL or a .TXT file that a version can be resolved from.
         /// </value>
         public string VersionFile { get; set; }
 

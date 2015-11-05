@@ -67,7 +67,7 @@ namespace Cake.Scripting.Roslyn.Stable
             var generator = new RoslynCodeGenerator();
             var code = generator.Generate(script);
 
-            _log.Debug("Compiling build script...");
+            _log.Verbose("Compiling build script...");
             _roslynSession.Execute(code);
         }
     }

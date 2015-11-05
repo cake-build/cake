@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Cake.Common.Tests.Fixtures;
-using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tests.Fixtures.Tools.NuGet;
+using Cake.Common.Tests.Fixtures.Tools.NuGet.Update;
 using Cake.Common.Tools.NuGet;
 using Cake.Core;
 using Cake.Core.IO;
@@ -22,7 +21,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Update
                 fixture.TargetFile = null;
 
                 // When
-                var result = Record.Exception(() => fixture.Update());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "targetFile");
@@ -36,7 +35,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Update
                 fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => fixture.Update());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
@@ -50,7 +49,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Update
                 fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => fixture.Update());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -65,15 +64,13 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Update
                 // Given
                 var fixture = new NuGetUpdateFixture();
                 fixture.Settings.ToolPath = toolPath;
-                fixture.GivenCustomToolPathExist(expected);
+                fixture.GivenSettingsToolPathExist();
 
                 // When
-                fixture.Update();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -84,7 +81,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Update
                 fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
 
                 // When
-                var result = Record.Exception(() => fixture.Update());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -99,7 +96,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Update
                 fixture.Process.GetExitCode().Returns(1);
 
                 // When
-                var result = Record.Exception(() => fixture.Update());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -113,12 +110,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Update
                 var fixture = new NuGetUpdateFixture();
 
                 // When
-                fixture.Update();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/NuGet.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/tools/NuGet.exe", result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -128,12 +123,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Update
                 var fixture = new NuGetUpdateFixture();
 
                 // When
-                fixture.Update();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "update \"/Working/packages.config\" -NonInteractive"));
+                Assert.Equal("update \"/Working/packages.config\" -NonInteractive", result.Args);
             }
 
             [Fact]
@@ -144,12 +137,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Update
                 fixture.Settings.Id = new List<string> { "A", "B" };
 
                 // When
-                fixture.Update();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "update \"/Working/packages.config\" -Id \"A;B\" -NonInteractive"));
+                Assert.Equal("update \"/Working/packages.config\" -Id \"A;B\" " +
+                             "-NonInteractive", result.Args);
             }
 
             [Fact]
@@ -160,12 +152,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Update
                 fixture.Settings.Safe = true;
 
                 // When
-                fixture.Update();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "update \"/Working/packages.config\" -Safe -NonInteractive"));
+                Assert.Equal("update \"/Working/packages.config\" " +
+                             "-Safe -NonInteractive", result.Args);
             }
 
             [Fact]
@@ -176,12 +167,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Update
                 fixture.Settings.Prerelease = true;
 
                 // When
-                fixture.Update();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "update \"/Working/packages.config\" -Prerelease -NonInteractive"));
+                Assert.Equal("update \"/Working/packages.config\" " +
+                             "-Prerelease -NonInteractive", result.Args);
             }
 
             [Theory]
@@ -195,12 +185,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Update
                 fixture.Settings.Verbosity = verbosity;
 
                 // When
-                fixture.Update();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]
@@ -211,12 +199,11 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Update
                 fixture.Settings.Source = new[] { "A", "B", "C" };
 
                 // When
-                fixture.Update();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "update \"/Working/packages.config\" -Source \"A;B;C\" -NonInteractive"));
+                Assert.Equal("update \"/Working/packages.config\" -Source \"A;B;C\" " +
+                             "-NonInteractive", result.Args);
             }
         }
     }

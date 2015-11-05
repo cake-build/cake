@@ -23,13 +23,13 @@ namespace Cake.Common.Tools.OctopusDeploy
         ///         Server = "http://octopus-deploy.example",
         ///         ApiKey = "API-XXXXXXXXXXXXXXXXXXXX"
         ///     });
-        /// 
+        ///
         ///     OctoCreateRelease(projectNameOnServer, new CreateReleaseSettings {
         ///         Server = "http://octopus-deploy.example",
         ///         Username = "DeployUser",
         ///         Password = "a-very-secure-password"
         ///     });
-        /// 
+        ///
         ///     OctoCreateRelease(projectNameOnServer, new CreateReleaseSettings {
         ///         ConfigurationFile = "C:\OctopusDeploy.config"
         ///     });
@@ -42,17 +42,17 @@ namespace Cake.Common.Tools.OctopusDeploy
         ///         EnableServiceMessages = true, // Enables teamcity services messages when logging
         ///         ReleaseNumber = "1.8.2",
         ///         DefaultPackageVersion = "1.0.0.0", // All packages in the release should be 1.0.0.0
-        ///         Packages = new Dictionary&lt;string, string&gt; 
-        ///                     { 
+        ///         Packages = new Dictionary&lt;string, string&gt;
+        ///                     {
         ///                         { "PackageOne", "1.0.2.3" },
         ///                         { "PackageTwo", "5.2.3" }
         ///                     },
         ///         PackagesFolder = "C:\MyOtherNugetFeed",
-        /// 
+        ///
         ///         // One or the other
         ///         ReleaseNotes = "Version 2.0 \n What a milestone we have ...",
         ///         ReleaseNotesFile = "./ReleaseNotes.md",
-        /// 
+        ///
         ///         IgnoreExisting = true // if this release number already exists, ignore it
         ///     });
         /// </code>

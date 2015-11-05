@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Cake.Common.Tools.ILMerge;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.ILRepack
 {
     /// <summary>
     /// Contains settings used by <see cref="ILRepackRunner"/>.
     /// </summary>
-    public sealed class ILRepackSettings
+    public sealed class ILRepackSettings : ToolSettings
     {
         /*
         Syntax: ILRepack.exe [options] /out:<path> <path_to_primary> [<other_assemblies> ...]
@@ -42,12 +45,6 @@ namespace Cake.Common.Tools.ILRepack
         */
 
         /// <summary>
-        /// Gets or sets the tool path.
-        /// </summary>
-        /// <value>The tool path.</value>
-        public FilePath ToolPath { get; set; }
-
-        /// <summary>
         /// Gets or sets a keyfile to sign the output assembly
         /// </summary>
         /// <value>The keyfile.</value>
@@ -63,7 +60,7 @@ namespace Cake.Common.Tools.ILRepack
         /// Gets or sets the target assembly version.
         /// </summary>
         /// <value>The version.</value>
-        public System.Version Version { get; set; }
+        public Version Version { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to merge types with identical names into one
@@ -99,13 +96,13 @@ namespace Cake.Common.Tools.ILRepack
         /// Gets or sets the specify target assembly kind (library, exe, winexe supported, default is same as first assembly)
         /// </summary>
         /// <value>The kind of the target assembly to create.</value>
-        public ILMerge.TargetKind TargetKind { get; set; }
+        public TargetKind TargetKind { get; set; }
 
         /// <summary>
         /// Gets or sets the target platform (v1, v1.1, v2, v4 supported)
         /// </summary>
         /// <value>The target platform.</value>
-        public ILMerge.TargetPlatformVersion? TargetPlatform { get; set; }
+        public TargetPlatformVersion? TargetPlatform { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to merge XML documentation as well
@@ -123,7 +120,7 @@ namespace Cake.Common.Tools.ILRepack
         /// Gets or sets a value indicating whether to set all types but the ones from the first assembly 'internal'
         /// </summary>
         /// <value>
-        /// <c>true</c> if types in assemblies other than the primary assembly should 
+        /// <c>true</c> if types in assemblies other than the primary assembly should
         /// have their visibility modified to internal; otherwise, <c>false</c>.
         /// </value>
         public bool Internalize { get; set; }
@@ -175,12 +172,5 @@ namespace Cake.Common.Tools.ILRepack
         /// </summary>
         /// <value><c>true</c> if more logs should be output during execution; otherwise, <c>false</c>.</value>
         public bool Verbose { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ILRepackSettings"/> class.
-        /// </summary>
-        public ILRepackSettings()
-        {
-        }
     }
 }

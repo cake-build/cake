@@ -84,5 +84,11 @@ namespace Cake.Common.Solution.Project.Properties
         /// </summary>
         /// <value>The name(s) of the assembly(s).</value>
         public IEnumerable<string> InternalsVisibleTo { get; set; }
+
+        /// <summary>
+        /// Gets or sets the configuration of the assembly.
+        /// </summary>
+        /// <value>The configuration.</value>
+        public string Configuration { get; set; }
     }
 }

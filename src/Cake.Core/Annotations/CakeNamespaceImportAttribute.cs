@@ -3,8 +3,8 @@
 namespace Cake.Core.Annotations
 {
     /// <summary>
-    /// An attribute used to hint Cake about additional namespaces that need 
-    /// to be imported for an alias to work. This attribute can mark an 
+    /// An attribute used to hint Cake about additional namespaces that need
+    /// to be imported for an alias to work. This attribute can mark an
     /// extension method or the extension method class.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = false)]

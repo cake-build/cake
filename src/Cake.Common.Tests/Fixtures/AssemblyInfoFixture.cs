@@ -2,7 +2,7 @@
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Testing.Fakes;
+using Cake.Testing;
 using NSubstitute;
 using Xunit;
 using System.IO;

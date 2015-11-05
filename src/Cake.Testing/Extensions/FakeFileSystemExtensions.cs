@@ -1,7 +1,7 @@
 ﻿using Cake.Core.IO;
 
 // ReSharper disable once CheckNamespace
-namespace Cake.Testing.Fakes
+namespace Cake.Testing
 {
     /// <summary>
     /// Contains extensions for <see cref="FakeFileSystem"/>.

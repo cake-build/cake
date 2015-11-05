@@ -1,23 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.Fixie
 {
     /// <summary>
     /// Contains settings used by <see cref="FixieRunner" />.
     /// </summary>
-    public sealed class FixieSettings
+    public sealed class FixieSettings : ToolSettings
     {
         private readonly IDictionary<string, IList<string>> _options = new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
-
-        /// <summary>
-        /// Gets or sets the tool path.
-        /// </summary>
-        /// <value>
-        /// The tool path. Defaults to <c>./tools/**/Fixie.Console.exe</c>.
-        /// </value>
-        public FilePath ToolPath { get; set; }
 
         /// <summary>
         /// Gets or sets the file to be used to output NUnit style of XML results.

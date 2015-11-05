@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.Annotations;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.WiX
@@ -27,7 +29,13 @@ namespace Cake.Common.Tools.WiX
                 throw new ArgumentNullException("context");
             }
 
-            var files = context.Globber.GetFiles(pattern);
+            var files = context.Globber.GetFiles(pattern).ToArray();
+            if (files.Length == 0)
+            {
+                context.Log.Verbose("The provided pattern did not match any files.");
+                return;
+            }
+
             WiXCandle(context, files, settings ?? new CandleSettings());
         }
 
@@ -65,7 +73,13 @@ namespace Cake.Common.Tools.WiX
                 throw new ArgumentNullException("context");
             }
 
-            var files = context.Globber.GetFiles(pattern);
+            var files = context.Globber.GetFiles(pattern).ToArray();
+            if (files.Length == 0)
+            {
+                context.Log.Verbose("The provided pattern did not match any files.");
+                return;
+            }
+
             WiXLight(context, files, settings ?? new LightSettings());
         }
 

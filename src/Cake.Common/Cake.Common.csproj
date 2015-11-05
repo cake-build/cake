@@ -44,6 +44,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -65,6 +66,9 @@
     <Compile Include="Build\AppVeyor\IAppVeyorProvider.cs" />
     <Compile Include="Build\BuildSystem.cs" />
     <Compile Include="Build\BuildSystemAliases.cs" />
+    <Compile Include="Build\MyGet\IMyGetProvider.cs" />
+    <Compile Include="Build\MyGet\MyGetProvider.cs" />
+    <Compile Include="Build\MyGet\MyGetBuildStatus.cs" />
     <Compile Include="Build\TeamCity\ITeamCityProvider.cs" />
     <Compile Include="Build\TeamCity\TeamCityDisposableExtensions.cs" />
     <Compile Include="Build\TeamCity\TeamCityProvider.cs" />
@@ -110,6 +114,31 @@
     <Compile Include="Tools\Cake\CakeAliases.cs" />
     <Compile Include="Tools\Cake\CakeRunner.cs" />
     <Compile Include="Tools\Cake\CakeSettings.cs" />
+    <Compile Include="Tools\Chocolatey\ApiKey\ChocolateyApiKeySetter.cs" />
+    <Compile Include="Tools\Chocolatey\ApiKey\ChocolateyApiKeySettings.cs" />
+    <Compile Include="Tools\Chocolatey\ChocolateyAliases.cs" />
+    <Compile Include="Tools\Chocolatey\ChocolateyToolResolver.cs" />
+    <Compile Include="Tools\Chocolatey\ChocolateyTool.cs" />
+    <Compile Include="Tools\Chocolatey\Config\ChocolateyConfigSetter.cs" />
+    <Compile Include="Tools\Chocolatey\Config\ChocolateyConfigSettings.cs" />
+    <Compile Include="Tools\Chocolatey\Features\ChocolateyFeatureSettings.cs" />
+    <Compile Include="Tools\Chocolatey\Features\ChocolateyFeatureToggler.cs" />
+    <Compile Include="Tools\Chocolatey\IChocolateyToolResolver.cs" />
+    <Compile Include="Tools\Chocolatey\Install\ChocolateyInstaller.cs" />
+    <Compile Include="Tools\Chocolatey\Install\ChocolateyInstallSettings.cs" />
+    <Compile Include="Tools\Chocolatey\Pack\ChocolateyNuSpecContent.cs" />
+    <Compile Include="Tools\Chocolatey\Pack\ChocolateyNuSpecProcessor.cs" />
+    <Compile Include="Tools\Chocolatey\Pack\ChocolateyNuSpecTransformer.cs" />
+    <Compile Include="Tools\Chocolatey\Pack\ChocolateyPacker.cs" />
+    <Compile Include="Tools\Chocolatey\Pack\ChocolateyPackSettings.cs" />
+    <Compile Include="Tools\Chocolatey\Pin\ChocolateyPinner.cs" />
+    <Compile Include="Tools\Chocolatey\Pin\ChocolateyPinSettings.cs" />
+    <Compile Include="Tools\Chocolatey\Push\ChocolateyPusher.cs" />
+    <Compile Include="Tools\Chocolatey\Push\ChocolateyPushSettings.cs" />
+    <Compile Include="Tools\Chocolatey\Sources\ChocolateySources.cs" />
+    <Compile Include="Tools\Chocolatey\Sources\ChocolateySourcesSettings.cs" />
+    <Compile Include="Tools\Chocolatey\Upgrade\ChocolateyUpgrader.cs" />
+    <Compile Include="Tools\Chocolatey\Upgrade\ChocolateyUpgradeSettings.cs" />
     <Compile Include="Tools\DupFinder\DupFinderAliases.cs" />
     <Compile Include="Tools\DupFinder\DupFinderRunner.cs" />
     <Compile Include="Tools\DupFinder\DupFinderSettings.cs" />
@@ -117,6 +146,29 @@
     <Compile Include="Tools\Fixie\FixieRunner.cs" />
     <Compile Include="Tools\Fixie\FixieSettings.cs" />
     <Compile Include="Tools\Fixie\FixieSettingsExtensions.cs" />
+    <Compile Include="Tools\GitVersion\GitVersion.cs" />
+    <Compile Include="Tools\GitVersion\GitVersionAliases.cs" />
+    <Compile Include="Tools\GitVersion\GitVersionOutput.cs" />
+    <Compile Include="Tools\GitVersion\GitVersionRunner.cs" />
+    <Compile Include="Tools\GitVersion\GitVersionSettings.cs" />
+    <Compile Include="Tools\GitReleaseManager\AddAssets\GitReleaseManagerAddAssetsSettings.cs" />
+    <Compile Include="Tools\GitReleaseManager\AddAssets\GitReleaseManagerAssetsAdder.cs" />
+    <Compile Include="Tools\GitReleaseManager\Close\GitReleaseManagerCloseMilestoneSettings.cs" />
+    <Compile Include="Tools\GitReleaseManager\Close\GitReleaseManagerMilestoneCloser.cs" />
+    <Compile Include="Tools\GitReleaseManager\Create\GitReleaseManagerCreateSettings.cs" />
+    <Compile Include="Tools\GitReleaseManager\Create\GitReleaseManagerCreator.cs" />
+    <Compile Include="Tools\GitReleaseManager\Export\GitReleaseManagerExporter.cs" />
+    <Compile Include="Tools\GitReleaseManager\Export\GitReleaseManagerExportSettings.cs" />
+    <Compile Include="Tools\GitReleaseManager\GitReleaseManagerAliases.cs" />
+    <Compile Include="Tools\GitReleaseManager\GitReleaseManagerTool.cs" />
+    <Compile Include="Tools\GitReleaseManager\GitReleaseManagerToolResolver.cs" />
+    <Compile Include="Tools\GitReleaseManager\IGitReleaseManagerToolResolver.cs" />
+    <Compile Include="Tools\GitReleaseManager\Publish\GitReleaseManagerPublisher.cs" />
+    <Compile Include="Tools\GitReleaseManager\Publish\GitReleaseManagerPublishSettings.cs" />
+    <Compile Include="Tools\GitReleaseNotes\GitReleaseNotesAliases.cs" />
+    <Compile Include="Tools\GitReleaseNotes\GitReleaseNotesRunner.cs" />
+    <Compile Include="Tools\GitReleaseNotes\GitReleaseNotesSettings.cs" />
+    <Compile Include="Tools\GitReleaseNotes\GitReleaseNotesIssueTracker.cs" />
     <Compile Include="Tools\ILMerge\ILMergeAliases.cs" />
     <Compile Include="Tools\ILMerge\ILMergeRunner.cs" />
     <Compile Include="Tools\ILMerge\ILMergeSettings.cs" />
@@ -182,6 +234,20 @@
     <Compile Include="Tools\OctopusDeploy\CreateReleaseSettings.cs" />
     <Compile Include="Tools\OctopusDeploy\OctopusDeployReleaseCreator.cs" />
     <Compile Include="Tools\OctopusDeploy\OctopusDeploySettings.cs" />
+    <Compile Include="Tools\OpenCover\OpenCoverAliases.cs" />
+    <Compile Include="Tools\OpenCover\OpenCoverContext.cs" />
+    <Compile Include="Tools\OpenCover\OpenCoverRunner.cs" />
+    <Compile Include="Tools\OpenCover\OpenCoverSettings.cs" />
+    <Compile Include="Tools\OpenCover\OpenCoverProcessRunner.cs" />
+    <Compile Include="Tools\OpenCover\OpenCoverSettingsExtensions.cs" />
+    <Compile Include="Tools\ReportUnit\ReportUnitAliases.cs" />
+    <Compile Include="Tools\ReportUnit\ReportUnitRunner.cs" />
+    <Compile Include="Tools\ReportUnit\ReportUnitSettings.cs" />
+    <Compile Include="Tools\ReportGenerator\ReportGeneratorAliases.cs" />
+    <Compile Include="Tools\ReportGenerator\ReportGeneratorRunner.cs" />
+    <Compile Include="Tools\ReportGenerator\ReportGeneratorSettings.cs" />
+    <Compile Include="Tools\ReportGenerator\ReportGeneratorReportType.cs" />
+    <Compile Include="Tools\ReportGenerator\ReportGeneratorVerbosity.cs" />
     <Compile Include="Tools\Roundhouse\RecoveryMode.cs" />
     <Compile Include="Tools\Roundhouse\RoundhouseAliases.cs" />
     <Compile Include="Tools\Roundhouse\RoundhouseRunner.cs" />
@@ -198,7 +264,9 @@
     <Compile Include="Tools\WiX\LightSettings.cs" />
     <Compile Include="Tools\WiX\WiXAliases.cs" />
     <Compile Include="Tools\XBuild\XBuildSettingsExtensions.cs" />
+    <Compile Include="Tools\XUnit\ParallelismOption.cs" />
     <Compile Include="Tools\XUnit\XUnit2Aliases.cs" />
+    <Compile Include="Tools\XUnit\XUnit2SettingsExtensions.cs" />
     <Compile Include="Tools\XUnit\XUnitAliases.cs" />
     <Compile Include="Tools\XUnit\XUnitSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -235,6 +303,8 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\StyleCop.MSBuild.4.7.49.1\build\StyleCop.MSBuild.Targets" Condition="Exists('..\packages\StyleCop.MSBuild.4.7.49.1\build\StyleCop.MSBuild.Targets') and $(Configuration)=='Release'" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

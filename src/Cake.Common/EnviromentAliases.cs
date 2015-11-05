@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.Annotations;
 
@@ -34,6 +35,42 @@ namespace Cake.Common
                 throw new ArgumentNullException("variable");
             }
             return context.Environment.GetEnvironmentVariable(variable);
+        }
+
+        /// <summary>
+        /// Retrieves all environment variables
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var envVars = EnvironmentVariables();
+        ///
+        /// string path;
+        /// if (envVars.TryGetValue("PATH", out path))
+        /// {
+        ///     Information("Path: {0}", path);
+        /// }
+        ///
+        /// foreach(var envVar in envVars)
+        /// {
+        ///     Information(
+        ///         "Key: {0}\tValue: \"{1}\"",
+        ///         envVar.Key,
+        ///         envVar.Value
+        ///         );
+        /// }
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <returns>The environment variables</returns>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Environment Variables")]
+        public static IDictionary<string, string> EnvironmentVariables(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            return context.Environment.GetEnvironmentVariables();
         }
 
         /// <summary>

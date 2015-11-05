@@ -33,7 +33,7 @@ namespace Cake.Diagnostics.Formatting
 
         private static FormatToken ParseProperty(TextReader reader)
         {
-            reader.Read(); // Consume          
+            reader.Read(); // Consume
             if (reader.Peek() == -1)
             {
                 return new LiteralToken("{");
@@ -117,8 +117,8 @@ namespace Cake.Diagnostics.Formatting
             {
                 if (!char.IsDigit(character))
                 {
-                    return false;   
-                }                    
+                    return false;
+                }
             }
             return true;
         }

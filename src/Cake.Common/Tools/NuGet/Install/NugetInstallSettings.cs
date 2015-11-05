@@ -1,20 +1,16 @@
 using System.Collections.Generic;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.NuGet.Install
 {
     /// <summary>
     /// Contains settings used by <see cref="NuGetInstaller"/>.
     /// </summary>
-    public sealed class NuGetInstallSettings
+    public sealed class NuGetInstallSettings : ToolSettings
     {
         /// <summary>
-        /// Gets or sets the path to <c>nuget.exe</c>.
-        /// </summary>
-        public FilePath ToolPath { get; set; }
-
-        /// <summary>
-        /// Gets or sets the directory in which packages will be installed. 
+        /// Gets or sets the directory in which packages will be installed.
         /// If none is specified, the current directory will be used.
         /// </summary>
         public DirectoryPath OutputDirectory { get; set; }

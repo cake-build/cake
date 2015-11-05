@@ -87,7 +87,7 @@ namespace Cake.Common.IO
                     {
                         // Get the relative filename to the rootPath.
                         var relativeFilePath = GetRelativeFilePath(rootPath, absoluteInputPath);
-                        _log.Verbose("Adding file: {0}", relativeFilePath);
+                        _log.Verbose("Compressing file {0}", absoluteInputPath);
 
                         // Create the zip archive entry.
                         var entry = archive.CreateEntry(relativeFilePath.FullPath);
@@ -122,9 +122,8 @@ namespace Cake.Common.IO
             zipPath = zipPath.MakeAbsolute(_environment);
             outputPath = outputPath.MakeAbsolute(_environment);
 
-            _log.Verbose("Unzipping file: {0}", zipPath.FullPath);
+            _log.Verbose("Unzipping file {0} to {1}", zipPath.FullPath, outputPath.FullPath);
             ZipFile.ExtractToDirectory(zipPath.FullPath, outputPath.FullPath);
-            _log.Verbose("Unzipped to: {0}", outputPath.FullPath);
         }
 
         private FilePath GetRelativeFilePath(DirectoryPath root, FilePath file)

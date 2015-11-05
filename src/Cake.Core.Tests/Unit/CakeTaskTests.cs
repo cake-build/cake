@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit
@@ -225,6 +226,25 @@ namespace Cake.Core.Tests.Unit
                 Assert.IsType<CakeException>(result);
                 Assert.Equal("There can only be one error reporter per task.", result.Message);
             }
+        }
+
+        [Fact]
+        public void Should_Implement_ICakeTaskInfo()
+        {
+            // Given
+            var task = new ActionTask("task");
+            task.AddDependency("dependency1");
+            task.AddDependency("dependency2");
+            task.Description = "my description";
+
+            // When
+            ICakeTaskInfo result = task;
+
+            // Then
+            Assert.IsAssignableFrom<ICakeTaskInfo>(task);
+            Assert.Equal("task", result.Name);
+            Assert.Equal("my description", result.Description);
+            Assert.Equal(new[] { "dependency1", "dependency2" }, result.Dependencies.ToArray());
         }
     }
 }

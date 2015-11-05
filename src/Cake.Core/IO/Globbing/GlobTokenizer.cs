@@ -46,9 +46,18 @@ namespace Cake.Core.IO.Globbing
 
         private GlobTokenKind ScanToken()
         {
-            if (IsAlphaNumberic(_currentCharacter))
+            if (IsAlphaNumeric(_currentCharacter))
             {
-                while (IsAlphaNumberic(_currentCharacter))
+                if (_currentCharacter == '.')
+                {
+                    TakeCharacter();
+                    if (_currentCharacter == '.')
+                    {
+                        TakeCharacter();
+                        return GlobTokenKind.Parent;
+                    }
+                }
+                while (IsAlphaNumeric(_currentCharacter))
                 {
                     TakeCharacter();
                 }
@@ -88,7 +97,7 @@ namespace Cake.Core.IO.Globbing
             throw new NotSupportedException("Unknown token");
         }
 
-        private bool IsAlphaNumberic(char character)
+        private bool IsAlphaNumeric(char character)
         {
             return _identifierRegex.IsMatch(character.ToString(CultureInfo.InvariantCulture))
                    || character == '+'; // TODO: Fix this

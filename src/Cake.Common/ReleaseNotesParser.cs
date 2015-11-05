@@ -126,7 +126,7 @@ namespace Cake.Common
                     lineIndex++;
                     continue;
                 }
-                
+
                 // Parse header.
                 var versionResult = _versionRegex.Match(line);
                 if (!versionResult.Success)

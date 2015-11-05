@@ -27,7 +27,6 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRuleSet>..\Cake.ruleset</CodeAnalysisRuleSet>
-    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -83,9 +82,11 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="ICakeArguments.cs" />
+    <Compile Include="ICakeTaskInfo.cs" />
     <Compile Include="IExecutionStrategy.cs" />
     <Compile Include="ICakeReportPrinter.cs" />
     <Compile Include="IConsole.cs" />
+    <Compile Include="IO\Arguments\SwitchArgument.cs" />
     <Compile Include="IO\DirectoryPathCollection.cs" />
     <Compile Include="IO\FilePathCollection.cs" />
     <Compile Include="IO\FileExtensions.cs" />
@@ -102,10 +103,12 @@
     <Compile Include="IO\File.cs" />
     <Compile Include="IO\FileSystem.cs" />
     <Compile Include="IO\Globber.cs" />
+    <Compile Include="IO\Globbing\GlobNodeValidator.cs" />
     <Compile Include="IO\Globbing\Nodes\MatchableNode.cs" />
     <Compile Include="IO\Globbing\GlobNode.cs" />
     <Compile Include="IO\Globbing\GlobNodeRewriter.cs" />
     <Compile Include="IO\Globbing\GlobParserContext.cs" />
+    <Compile Include="IO\Globbing\Nodes\ParentSegment.cs" />
     <Compile Include="IO\Globbing\Nodes\RecursiveWildcardSegment.cs" />
     <Compile Include="IO\Globbing\Nodes\RelativeRoot.cs" />
     <Compile Include="IO\Globbing\Nodes\UnixRoot.cs" />
@@ -128,7 +131,10 @@
     <Compile Include="IO\IRegistry.cs" />
     <Compile Include="IO\IRegistryKey.cs" />
     <Compile Include="IO\Machine.cs" />
+    <Compile Include="IO\NuGet\INuGetPackageInstaller.cs" />
     <Compile Include="IO\NuGet\INuGetToolResolver.cs" />
+    <Compile Include="IO\NuGet\NuGetPackage.cs" />
+    <Compile Include="IO\NuGet\NuGetPackageInstaller.cs" />
     <Compile Include="IO\NuGet\NuGetToolResolver.cs" />
     <Compile Include="IO\Path.cs" />
     <Compile Include="IO\DirectoryPath.cs" />
@@ -145,6 +151,8 @@
     <Compile Include="IO\Arguments\TextArgument.cs" />
     <Compile Include="IO\WindowsRegistry.cs" />
     <Compile Include="IO\WindowsRegistryKey.cs" />
+    <Compile Include="ITaskSetupContext.cs" />
+    <Compile Include="ITaskTeardownContext.cs" />
     <Compile Include="Properties\Namespaces.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
@@ -152,14 +160,21 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="Scripting\Analysis\IScriptAnalyzer.cs" />
+    <Compile Include="Scripting\Analysis\IScriptAnalyzerContext.cs" />
+    <Compile Include="Scripting\Analysis\IScriptInformation.cs" />
+    <Compile Include="Scripting\Analysis\ScriptAnalyzer.cs" />
+    <Compile Include="Scripting\Analysis\ScriptAnalyzerResult.cs" />
+    <Compile Include="Scripting\Analysis\ScriptInformation.cs" />
+    <Compile Include="Scripting\Analysis\ScriptAnalyzerContext.cs" />
     <Compile Include="Scripting\IScriptAliasFinder.cs" />
+    <Compile Include="Scripting\IScriptConventions.cs" />
     <Compile Include="Scripting\IScriptEngine.cs" />
     <Compile Include="Scripting\IScriptHost.cs" />
     <Compile Include="Scripting\IScriptProcessor.cs" />
     <Compile Include="Scripting\IScriptRunner.cs" />
     <Compile Include="Scripting\IScriptSession.cs" />
-    <Compile Include="Scripting\LineProcessor.cs" />
-    <Compile Include="Scripting\Processors\Parsers\AddInDirectiveParser.cs" />
+    <Compile Include="Scripting\Processors\LineProcessor.cs" />
     <Compile Include="Scripting\Processors\ShebangProcessor.cs" />
     <Compile Include="Scripting\Processors\ToolDirectiveProcessor.cs" />
     <Compile Include="Scripting\Processors\AddInDirectiveProcessor.cs" />
@@ -172,17 +187,22 @@
     <Compile Include="Scripting\ScriptAlias.cs" />
     <Compile Include="Scripting\ScriptAliasFinder.cs" />
     <Compile Include="Scripting\ScriptAliasType.cs" />
+    <Compile Include="Scripting\ScriptConventions.cs" />
     <Compile Include="Scripting\ScriptHost.cs" />
     <Compile Include="Scripting\ScriptProcessor.cs" />
-    <Compile Include="Scripting\ScriptProcessorContext.cs" />
     <Compile Include="Scripting\ScriptRunner.cs" />
+    <Compile Include="TaskSetupContext.cs" />
+    <Compile Include="TaskTeardownContext.cs" />
     <Compile Include="Text\ITextTransformationTemplate.cs" />
     <Compile Include="Text\TextTransformationTemplate.cs" />
+    <Compile Include="Tooling\Tool.cs" />
+    <Compile Include="Tooling\ToolSettings.cs" />
     <Compile Include="Utilities\Tool.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\StyleCop.MSBuild.4.7.49.1\build\StyleCop.MSBuild.Targets" Condition="Exists('..\packages\StyleCop.MSBuild.4.7.49.1\build\StyleCop.MSBuild.Targets') and $(Configuration)=='Release'" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -191,7 +211,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\StyleCop.MSBuild.4.7.49.1\build\StyleCop.MSBuild.Targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\StyleCop.MSBuild.4.7.49.1\build\StyleCop.MSBuild.Targets'))" />
   </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

@@ -41,6 +41,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,30 +61,75 @@
     <Compile Include="Fixtures\Build\AppVeyorInfoFixture.cs" />
     <Compile Include="Fixtures\AssemblyInfoFixture.cs" />
     <Compile Include="Fixtures\AssemblyInfoParserFixture.cs" />
+    <Compile Include="Fixtures\ToolFixture.cs" />
+    <Compile Include="Fixtures\ToolFixtureResult.cs" />
     <Compile Include="Fixtures\Tools\CakeRunnerFixture.cs" />
     <Compile Include="Fixtures\IO\FileCopyFixture.cs" />
     <Compile Include="Fixtures\IO\FileDeleteFixture.cs" />
     <Compile Include="Fixtures\IO\FileSystemFixture.cs" />
-    <Compile Include="Fixtures\Tools\DupFinderRunnerFixture.cs" />
+    <Compile Include="Fixtures\Tools\CandleFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\ApiKey\ChocolateyApiKeySetterFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\ChocolateyFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\Features\ChocolateyDisableFeatureFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\Features\ChocolateyEnableFeatureFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\Installer\ChocolateyInstallerFromConfigFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\Config\ChocolateyConfigSetterFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\Features\ChocolateyFeatureTogglerFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\Installer\ChocolateyInstallerFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\Packer\ChocolateyPackerFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\Pin\ChocolateyPinnerFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\Push\ChocolateyPusherFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\Sources\ChocolateyAddSourceFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\Sources\ChocolateyDisableSourceFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\Sources\ChocolateyEnableSourceFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\Sources\ChocolateyRemoveSourceFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\Sources\ChocolateySourcesFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\Upgrade\ChocolateyUpgraderFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\Packer\ChocolateyPackerFixtureResult.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\Packer\ChocolateyPackerWithNuSpecFixture.cs" />
+    <Compile Include="Fixtures\Tools\Chocolatey\Packer\ChocolateyPackerWithoutNuSpecFixture.cs" />
+    <Compile Include="Fixtures\Tools\DupFinder\DupFinderRunnerConfigFixture.cs" />
+    <Compile Include="Fixtures\Tools\DupFinder\DupFinderRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\FixieRunnerFixture.cs" />
+    <Compile Include="Fixtures\Tools\GitVersionRunnerFixture.cs" />
+    <Compile Include="Fixtures\Tools\GitReleaseManagerFixture.cs" />
+    <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerAssetsAdderFixture.cs" />
+    <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerCreatorFixture.cs" />
+    <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerExporterFixture.cs" />
+    <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerMilestoneCloserFixture.cs" />
+    <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerPublisherFixture.cs" />
+    <Compile Include="Fixtures\Tools\GitReleaseNotesRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\ILMergeRunnerFixture.cs" />
     <Compile Include="Fixtures\Diagnostics\LogActionFixture.cs" />
-    <Compile Include="Fixtures\Tools\InspectCodeRunnerFixture.cs" />
+    <Compile Include="Fixtures\Tools\InspectCode\InspectCodeFixture.cs" />
+    <Compile Include="Fixtures\Tools\InspectCode\InspectCodeRunFixture.cs" />
+    <Compile Include="Fixtures\Tools\InspectCode\InspectCodeRunFromConfigFixture.cs" />
     <Compile Include="Fixtures\Tools\MSBuildRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\NSISFixture.cs" />
-    <Compile Include="Fixtures\Tools\NuGetFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\NuGetFixture.cs" />
     <Compile Include="Fixtures\Tools\MSTestRunnerFixture.cs" />
-    <Compile Include="Fixtures\Tools\NuGet\NuGetInstallerFixture.cs" />
-    <Compile Include="Fixtures\Tools\NuGet\NuGetPackerFixture.cs" />
-    <Compile Include="Fixtures\Tools\NuGet\NuGetPusherFixture.cs" />
-    <Compile Include="Fixtures\Tools\NuGet\NuGetRestorerFixture.cs" />
-    <Compile Include="Fixtures\Tools\NuGet\NuGetSetApiKeyFixture.cs" />
-    <Compile Include="Fixtures\Tools\NuGet\NuGetSetProxyFixture.cs" />
-    <Compile Include="Fixtures\Tools\NuGet\NuGetSourcesFixture.cs" />
-    <Compile Include="Fixtures\Tools\NuGet\NuGetUpdateFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\Installer\NuGetInstallerFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\Installer\NuGetInstallerFromConfigFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\Packer\NugetPackerFixtureResult.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\Packer\NuGetPackerWithNuSpecFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\Packer\NuGetPackerWithoutNuSpecFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\Packer\NuGetPackerFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\Pusher\NuGetPusherFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\Restorer\NuGetRestorerFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\SetApiKey\NuGetSetApiKeyFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\SetProxy\NuGetSetProxyFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\Sources\NuGetAddSourceFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\Sources\NuGetHasSourceFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\Sources\NuGetRemoveSourceFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\Sources\NuGetSourcesFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\Update\NuGetUpdateFixture.cs" />
     <Compile Include="Fixtures\Tools\NUnitRunnerFixture.cs" />
     <Compile Include="Fixtures\ProcessFixture.cs" />
     <Compile Include="Fixtures\Tools\OctopusDeployReleaseCreatorFixture.cs" />
+    <Compile Include="Fixtures\Tools\OpenCoverFixture.cs" />
+    <Compile Include="Fixtures\Tools\ReportUnit\ReportUnitDirectoryFixture.cs" />
+    <Compile Include="Fixtures\Tools\ReportUnit\ReportUnitFileFixture.cs" />
+    <Compile Include="Fixtures\Tools\ReportGeneratorRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\RoundhouseRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\SignToolResolverFixture.cs" />
     <Compile Include="Fixtures\Tools\SignToolSignRunnerFixture.cs" />
@@ -126,8 +172,26 @@
     <Compile Include="Unit\Text\TextTransformationExtensionsTests.cs" />
     <Compile Include="Unit\Text\TextTransformationTests.cs" />
     <Compile Include="Unit\Tools\Cake\CakeRunnerTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\ApiKey\ChocolateyApiKeySetterTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Config\ChocolateyConfigSetterTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Features\ChocolateyFeatureTogglerTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Install\ChocolateyInstallerSettingsTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Install\ChocolateyInstallerTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Pack\ChocolateyPackerTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Pin\ChocolateyPinnerTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Push\ChocolateyPusherTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Sources\ChocolateySourcesTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Upgrade\ChocolateyUpgraderTests.cs" />
+    <Compile Include="Unit\Tools\Chocolatey\Upgrade\ChocolateyUpgradeSettingsTests.cs" />
     <Compile Include="Unit\Tools\DupFinder\DupFinderRunnerTests.cs" />
     <Compile Include="Unit\Tools\Fixie\FixieRunnerTests.cs" />
+    <Compile Include="Unit\Tools\GitVersion\GitVersionRunnerTests.cs" />
+    <Compile Include="Unit\Tools\GitReleaseManager\AddAssets\GitReleaseManagerAssetsAdderTests.cs" />
+    <Compile Include="Unit\Tools\GitReleaseManager\Close\GitReleaseManagerMilestoneCloserTests.cs" />
+    <Compile Include="Unit\Tools\GitReleaseManager\Create\GitReleaseManagerCreatorTests.cs" />
+    <Compile Include="Unit\Tools\GitReleaseManager\Export\GitReleaseManagerExporterTests.cs" />
+    <Compile Include="Unit\Tools\GitReleaseManager\Publish\GitReleaseManagerPublisherTests.cs" />
+    <Compile Include="Unit\Tools\GitReleaseNotes\GitReleaseNotesRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeRunnerTests.cs" />
     <Compile Include="Unit\Tools\ILMerge\ILMergeSettingsTests.cs" />
     <Compile Include="Unit\IO\ZipperTests.cs" />
@@ -156,6 +220,9 @@
     <Compile Include="Unit\Tools\NUnit\NUnitRunnerTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitSettingsTests.cs" />
     <Compile Include="Unit\Tools\OctopusDeploy\OctoCreateReleaseTests.cs" />
+    <Compile Include="Unit\Tools\OpenCover\OpenCoverTests.cs" />
+    <Compile Include="Unit\Tools\ReportUnit\ReportUnitRunnerTests.cs" />
+    <Compile Include="Unit\Tools\ReportGenerator\ReportGeneratorRunnerTests.cs" />
     <Compile Include="Unit\Tools\Roundhouse\RoundhouseRunnerTests.cs" />
     <Compile Include="Unit\Tools\SignTool\SignToolResolverTests.cs" />
     <Compile Include="Unit\Tools\SignTool\SignToolSignRunnerTests.cs" />
@@ -183,6 +250,10 @@
       <Project>{8074b833-11b8-459f-bb98-bfba2bc5c698}</Project>
       <Name>Cake.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Cake.Testing.Xunit\Cake.Testing.Xunit.csproj">
+      <Project>{5af751d1-bb54-4268-9e42-3a898b034b06}</Project>
+      <Name>Cake.Testing.Xunit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Cake.Testing\Cake.Testing.csproj">
       <Project>{5572610d-d857-450a-9cc9-f3e08b0e1449}</Project>
       <Name>Cake.Testing</Name>
@@ -203,6 +274,8 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

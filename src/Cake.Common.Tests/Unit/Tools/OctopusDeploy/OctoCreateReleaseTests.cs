@@ -19,7 +19,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 fixture.ProjectName = null;
 
                 // When
-                var result = Record.Exception(() => fixture.CreateRelease());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "projectName");
@@ -33,10 +33,10 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 fixture.Settings.Server = null;
 
                 // When
-                var result = Record.Exception(() => fixture.CreateRelease());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "server");
+                Assert.IsArgumentException(result, "settings", "No server specified.");
             }
 
             [Fact]
@@ -47,10 +47,10 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 fixture.Settings.ApiKey = null;
 
                 // When
-                var result = Record.Exception(() => fixture.CreateRelease());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "apiKey");
+                Assert.IsArgumentException(result, "settings", "No API key specified.");
             }
 
             [Fact]
@@ -61,7 +61,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => fixture.CreateRelease());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
@@ -71,10 +71,11 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Throw_If_Octo_Executable_Was_Not_Found()
             {
                 // Given
-                var fixture = new OctopusDeployReleaseCreatorFixture(defaultToolExist: false);
+                var fixture = new OctopusDeployReleaseCreatorFixture();
+                fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => fixture.CreateRelease());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Octo: Could not locate executable.");
@@ -86,16 +87,15 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             public void Should_Use_Octo_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new OctopusDeployReleaseCreatorFixture(expected);
+                var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
 
                 // When
-                fixture.CreateRelease();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -105,12 +105,10 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 var fixture = new OctopusDeployReleaseCreatorFixture();
 
                 // When
-                fixture.CreateRelease();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/Octo.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/tools/Octo.exe", result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -121,7 +119,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => fixture.CreateRelease());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Octo: Process was not started.");
@@ -132,10 +130,10 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             {
                 // Given
                 var fixture = new OctopusDeployReleaseCreatorFixture();
-                fixture.GivenProcessReturnError();
+                fixture.GivenProcessExitsWithCode(1);
 
                 // When
-                var result = Record.Exception(() => fixture.CreateRelease());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Octo: Process returned an error.");
@@ -147,20 +145,16 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 // Given
                 var fixture = new OctopusDeployReleaseCreatorFixture();
                 fixture.ProjectName = "myProject";
-                fixture.Settings = new CreateReleaseSettings
-                    {
-                        Server = "http://myoctopusserver/",
-                        ApiKey = "API-ABCDEF123456"
-                    };
+                fixture.Settings.Server = "http://myoctopusserver/";
+                fixture.Settings.ApiKey = "API-ABCDEF123456";
 
                 // When
-                fixture.CreateRelease();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "create-release --project \"myProject\" --server http://myoctopusserver/ --apiKey API-ABCDEF123456"));
+                Assert.Equal("create-release --project \"myProject\" " +
+                             "--server http://myoctopusserver/ " +
+                             "--apiKey API-ABCDEF123456", result.Args);
             }
 
             [Fact]
@@ -171,14 +165,12 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 fixture.Settings.Username = "mike123";
 
                 // When
-                fixture.CreateRelease();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() ==
-                            fixture.GetDefaultArguments() + " --username \"mike123\""));
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--username \"mike123\"", result.Args);
             }
 
             [Fact]
@@ -189,37 +181,12 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 fixture.Settings.Password = "secret";
 
                 // When
-                fixture.CreateRelease();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() ==
-                            fixture.GetDefaultArguments() + " --password \"secret\""));
-            }
-
-            [Fact]
-            public void Should_Redact_Api_Key_And_Password_Arguments()
-            {
-                // Given
-                var fixture = new OctopusDeployReleaseCreatorFixture();
-                fixture.ProjectName = "myProject";
-                fixture.Settings = new CreateReleaseSettings
-                    {
-                        Server = "http://myoctopusserver/",
-                        ApiKey = "API-ABCDEF123456",
-                        Password = "abc123"
-                    };
-
-                // When
-                fixture.CreateRelease();
-                // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.RenderSafe() ==
-                            "create-release --project \"myProject\" --server http://myoctopusserver/ --apiKey [REDACTED] --password \"[REDACTED]\""));
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--password \"secret\"", result.Args);
             }
 
             [Fact]
@@ -230,14 +197,12 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 fixture.Settings.ConfigurationFile = "configFile.txt";
 
                 // When
-                fixture.CreateRelease();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() ==
-                            fixture.GetDefaultArguments() + " --configFile \"/Working/configFile.txt\""));
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--configFile \"/Working/configFile.txt\"", result.Args);
             }
 
             [Fact]
@@ -248,14 +213,12 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 fixture.Settings.EnableDebugLogging = true;
 
                 // When
-                fixture.CreateRelease();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() ==
-                            fixture.GetDefaultArguments() + " --debug"));
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--debug", result.Args);
             }
 
             [Fact]
@@ -266,14 +229,12 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 fixture.Settings.IgnoreSslErrors = true;
 
                 // When
-                fixture.CreateRelease();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() ==
-                            fixture.GetDefaultArguments() + " --ignoreSslErrors"));
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--ignoreSslErrors", result.Args);
             }
 
             [Fact]
@@ -284,14 +245,12 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 fixture.Settings.EnableServiceMessages = true;
 
                 // When
-                fixture.CreateRelease();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() ==
-                            fixture.GetDefaultArguments() + " --enableServiceMessages"));
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--enableServiceMessages", result.Args);
             }
 
             [Fact]
@@ -302,14 +261,12 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 fixture.Settings.ReleaseNumber = "3.0.0";
 
                 // When
-                fixture.CreateRelease();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() ==
-                            fixture.GetDefaultArguments() + " --releaseNumber \"3.0.0\""));
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--releaseNumber \"3.0.0\"", result.Args);
             }
 
             [Fact]
@@ -320,14 +277,12 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 fixture.Settings.DefaultPackageVersion = "1.5.2-beta";
 
                 // When
-                fixture.CreateRelease();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() ==
-                            fixture.GetDefaultArguments() + " --defaultpackageversion \"1.5.2-beta\""));
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--defaultpackageversion \"1.5.2-beta\"", result.Args);
             }
 
             [Fact]
@@ -341,14 +296,12 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 };
 
                 // When
-                fixture.CreateRelease();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() ==
-                            fixture.GetDefaultArguments() + " --package \"StepA:1.0.1\""));
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--package \"StepA:1.0.1\"", result.Args);
             }
 
             [Fact]
@@ -363,14 +316,13 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 };
 
                 // When
-                fixture.CreateRelease();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() ==
-                            fixture.GetDefaultArguments() + " --package \"StepA:1.0.1\" --package \"StepB:1.0.2\""));
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--package \"StepA:1.0.1\" " +
+                             "--package \"StepB:1.0.2\"", result.Args);
             }
 
             [Fact]
@@ -381,14 +333,12 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 fixture.Settings.PackagesFolder = @"some\folder";
 
                 // When
-                fixture.CreateRelease();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() ==
-                            fixture.GetDefaultArguments() + " --packagesFolder \"/Working/some/folder\""));
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--packagesFolder \"/Working/some/folder\"", result.Args);
             }
 
             [Fact]
@@ -396,17 +346,15 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             {
                 // Given
                 var fixture = new OctopusDeployReleaseCreatorFixture();
-                fixture.Settings.ReleaseNotes = @"No significant changes in this version...";
+                fixture.Settings.ReleaseNotes = @"LOL";
 
                 // When
-                fixture.CreateRelease();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() ==
-                            fixture.GetDefaultArguments() + " --releasenotes \"No significant changes in this version...\""));
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--releasenotes \"LOL\"", result.Args);
             }
 
             [Fact]
@@ -417,14 +365,12 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 fixture.Settings.ReleaseNotesFile = @"some\folder\releaseNotes.txt";
 
                 // When
-                fixture.CreateRelease();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() ==
-                            fixture.GetDefaultArguments() + " --releasenotesfile \"/Working/some/folder/releaseNotes.txt\""));
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--releasenotesfile \"/Working/some/folder/releaseNotes.txt\"", result.Args);
             }
 
             [Fact]
@@ -435,14 +381,12 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 fixture.Settings.IgnoreExisting = true;
 
                 // When
-                fixture.CreateRelease();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() ==
-                            fixture.GetDefaultArguments() + " --ignoreexisting"));
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--ignoreexisting", result.Args);
             }
         }
     }

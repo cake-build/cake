@@ -33,7 +33,7 @@ namespace Cake.Core.IO.Globbing
         }
 
         public GlobVisitorContext(
-            IFileSystem fileSystem, 
+            IFileSystem fileSystem,
             ICakeEnvironment environment,
             Func<IDirectory, bool> predicate)
         {
@@ -55,10 +55,12 @@ namespace Cake.Core.IO.Globbing
             _path = GenerateFullPath();
         }
 
-        public void Pop()
+        public string Pop()
         {
+            var last = _pathParts.Last;
             _pathParts.RemoveLast();
             _path = GenerateFullPath();
+            return last.Value;
         }
 
         private DirectoryPath GenerateFullPath()

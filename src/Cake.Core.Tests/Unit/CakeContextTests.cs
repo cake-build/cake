@@ -1,6 +1,4 @@
-﻿using Cake.Core.IO;
-using Cake.Core.Tests.Fixtures;
-using NSubstitute;
+﻿using Cake.Core.Tests.Fixtures;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit

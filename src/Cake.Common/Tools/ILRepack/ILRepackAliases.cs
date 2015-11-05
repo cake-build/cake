@@ -27,8 +27,8 @@ namespace Cake.Common.Tools.ILRepack
         /// </example>
         [CakeMethodAlias]
         public static void ILRepack(
-            this ICakeContext context, 
-            FilePath outputFile, 
+            this ICakeContext context,
+            FilePath outputFile,
             FilePath primaryAssembly,
             IEnumerable<FilePath> assemblyPaths)
         {
@@ -61,10 +61,10 @@ namespace Cake.Common.Tools.ILRepack
         /// </example>
         [CakeMethodAlias]
         public static void ILRepack(
-            this ICakeContext context, 
-            FilePath outputFile, 
+            this ICakeContext context,
+            FilePath outputFile,
             FilePath primaryAssembly,
-            IEnumerable<FilePath> assemblyPaths, 
+            IEnumerable<FilePath> assemblyPaths,
             ILRepackSettings settings)
         {
             if (context == null)

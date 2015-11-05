@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.OctopusDeploy
 {
@@ -14,7 +13,7 @@ namespace Cake.Common.Tools.OctopusDeploy
     {
         private readonly ICakeEnvironment _environment;
 
-        /// <summary> 
+        /// <summary>
         /// Initializes a new instance of the <see cref="OctopusDeployReleaseCreator"/> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
@@ -22,7 +21,7 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// <param name="globber">The globber.</param>
         /// <param name="processRunner">The process runner.</param>
         public OctopusDeployReleaseCreator(IFileSystem fileSystem, ICakeEnvironment environment,
-            IGlobber globber, IProcessRunner processRunner) 
+            IGlobber globber, IProcessRunner processRunner)
             : base(fileSystem, environment, processRunner, globber)
         {
             _environment = environment;
@@ -45,15 +44,15 @@ namespace Cake.Common.Tools.OctopusDeploy
             }
             if (string.IsNullOrEmpty(settings.Server))
             {
-                throw new ArgumentNullException("server");
+                throw new ArgumentException("No server specified.", "settings");
             }
             if (string.IsNullOrEmpty(settings.ApiKey))
             {
-                throw new ArgumentNullException("apiKey");
+                throw new ArgumentException("No API key specified.", "settings");
             }
 
             var argumentBuilder = new CreateReleaseArgumentBuilder(projectName, settings, _environment);
-            Run(settings, argumentBuilder.Get(), settings.ToolPath);
+            Run(settings, argumentBuilder.Get());
         }
 
         /// <summary>

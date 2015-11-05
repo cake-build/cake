@@ -54,8 +54,8 @@ namespace Cake.Scripting.Mono.CodeGen.Parsing
             // Some character.
             var tokenType = GetCharacterTokenType();
             return new ScriptToken(
-                tokenType, 
-                ((char)_buffer.CurrentToken).ToString(), 
+                tokenType,
+                ((char)_buffer.CurrentToken).ToString(),
                 _buffer.Position, 1);
         }
 
@@ -89,7 +89,7 @@ namespace Cake.Scripting.Mono.CodeGen.Parsing
             return new ScriptToken(
                 ScriptTokenType.String,
                 accumulator.ToString(),
-                start, 
+                start,
                 accumulator.Length);
         }
 
@@ -134,7 +134,7 @@ namespace Cake.Scripting.Mono.CodeGen.Parsing
             return new ScriptToken(
                 type,
                 accumulator.ToString(),
-                start, 
+                start,
                 accumulator.Length);
         }
 
@@ -142,7 +142,7 @@ namespace Cake.Scripting.Mono.CodeGen.Parsing
         {
             while (true)
             {
-                if ((_buffer.CurrentToken == '\r' && _buffer.NextToken == '\n') || 
+                if ((_buffer.CurrentToken == '\r' && _buffer.NextToken == '\n') ||
                     _buffer.CurrentToken == '\n')
                 {
                     break;

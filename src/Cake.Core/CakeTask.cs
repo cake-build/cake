@@ -8,7 +8,7 @@ namespace Cake.Core
     /// <summary>
     /// A <see cref="CakeTask"/> represents a unit of work.
     /// </summary>
-    public abstract class CakeTask
+    public abstract class CakeTask : ICakeTaskInfo
     {
         private readonly string _name;
         private readonly List<string> _dependencies;

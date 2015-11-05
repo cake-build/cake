@@ -1,5 +1,5 @@
 ﻿using Cake.Common.Tests.Fixtures;
-using Cake.Testing.Fakes;
+using Cake.Testing;
 using NSubstitute;
 using Xunit;
 

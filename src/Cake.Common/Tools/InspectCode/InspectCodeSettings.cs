@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.InspectCode
 {
     /// <summary>
     /// Contains settings used by <see cref="InspectCodeRunner" />.
     /// </summary>
-    public sealed class InspectCodeSettings
+    public sealed class InspectCodeSettings : ToolSettings
     {
         /*
         Not (yet) supported options:

@@ -31,7 +31,7 @@ namespace Cake.Common.Diagnostics
             }
             context.Log.Error(format, args);
         }
-        
+
         /// <summary>
         /// Writes an error message to the log using the specified log message action.
         /// Evaluation message only if verbosity same or more verbose.

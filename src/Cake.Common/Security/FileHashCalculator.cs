@@ -63,7 +63,7 @@ namespace Cake.Common.Security
             {
                 case HashAlgorithm.MD5:
                     return new MD5CryptoServiceProvider();
-                    
+
                 case HashAlgorithm.SHA256:
                     return new SHA256Managed();
 

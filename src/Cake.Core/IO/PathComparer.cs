@@ -37,6 +37,19 @@ namespace Cake.Core.IO
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="PathComparer"/> class.
+        /// </summary>
+        /// <param name="environment">The environment.</param>
+        public PathComparer(ICakeEnvironment environment)
+        {
+            if (environment == null)
+            {
+                throw new ArgumentNullException("environment");
+            }
+            _isCaseSensitive = environment.IsUnix();
+        }
+
+        /// <summary>
         /// Determines whether the specified <see cref="Path"/> instances are equal.
         /// </summary>
         /// <param name="x">The first <see cref="Path"/> to compare.</param>
@@ -67,7 +80,7 @@ namespace Cake.Core.IO
         /// </summary>
         /// <param name="obj">The path.</param>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         public int GetHashCode(Path obj)
         {

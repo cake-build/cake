@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using Cake.Core.IO;
-using Cake.Testing.Fakes;
+﻿using Cake.Core.IO;
+using Cake.Testing;
 using NSubstitute;
 
 namespace Cake.Core.Tests.Fixtures

@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using Cake.Common.IO;
 using Cake.Common.IO.Paths;
-using Cake.Common.Tests.Fixtures;
+using Cake.Common.Tests.Fixtures.IO;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Testing.Fakes;
+using Cake.Testing;
 using NSubstitute;
 using Xunit;
 
@@ -267,8 +267,8 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new DirectoryPath[] { 
-                        "/Temp/Hello", "/Temp/Goodbye" 
+                    var paths = new DirectoryPath[] {
+                        "/Temp/Hello", "/Temp/Goodbye"
                     };
 
                     // When
@@ -287,8 +287,8 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new DirectoryPath[] { 
-                        "/Temp/Hello", "/Temp/Goodbye" 
+                    var paths = new DirectoryPath[] {
+                        "/Temp/Hello", "/Temp/Goodbye"
                     };
 
                     // When
@@ -307,7 +307,7 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new DirectoryPath[] { 
+                    var paths = new DirectoryPath[] {
                         "/Temp/Hello", "/NonExisting"
                     };
 
@@ -357,8 +357,8 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new[] { 
-                        "/Temp/Hello", "/Temp/Goodbye" 
+                    var paths = new[] {
+                        "/Temp/Hello", "/Temp/Goodbye"
                     };
 
                     // When
@@ -377,8 +377,8 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new[] { 
-                        "/Temp/Hello", "/Temp/Goodbye" 
+                    var paths = new[] {
+                        "/Temp/Hello", "/Temp/Goodbye"
                     };
 
                     // When
@@ -397,8 +397,8 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new[] { 
-                        "/Temp/Hello", "/NonExisting" 
+                    var paths = new[] {
+                        "/Temp/Hello", "/NonExisting"
                     };
 
                     // When
@@ -593,7 +593,7 @@ namespace Cake.Common.Tests.Unit.IO
             }
 
             [Fact]
-            public void Should_Delete_Directory_With_Content_If_Recurive()
+            public void Should_Delete_Directory_With_Content_If_Recursive()
             {
                 // Given
                 var fixture = new FileSystemFixture();
@@ -716,7 +716,7 @@ namespace Cake.Common.Tests.Unit.IO
                 }
 
                 [Fact]
-                public void Should_Delete_Directory_With_Content_If_Recurive()
+                public void Should_Delete_Directory_With_Content_If_Recursive()
                 {
                     // Given
                     var fixture = new FileSystemFixture();
@@ -840,7 +840,7 @@ namespace Cake.Common.Tests.Unit.IO
                 }
 
                 [Fact]
-                public void Should_Delete_Directory_With_Content_If_Recurive()
+                public void Should_Delete_Directory_With_Content_If_Recursive()
                 {
                     // Given
                     var fixture = new FileSystemFixture();

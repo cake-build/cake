@@ -103,6 +103,10 @@
       <Project>{8074b833-11b8-459f-bb98-bfba2bc5c698}</Project>
       <Name>Cake.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Cake.Testing.Xunit\Cake.Testing.Xunit.csproj">
+      <Project>{5af751d1-bb54-4268-9e42-3a898b034b06}</Project>
+      <Name>Cake.Testing.Xunit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Cake.Testing\Cake.Testing.csproj">
       <Project>{5572610d-d857-450a-9cc9-f3e08b0e1449}</Project>
       <Name>Cake.Testing</Name>

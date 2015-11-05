@@ -1,7 +1,7 @@
 ﻿using System;
 using Cake.Core.IO;
-using Cake.Core.IO.Arguments;
 
+// ReSharper disable once CheckNamespace
 namespace Cake.Core
 {
     /// <summary>
@@ -23,7 +23,7 @@ namespace Cake.Core
             }
             if (arguments == null)
             {
-                throw new ArgumentNullException("build");
+                throw new ArgumentNullException("arguments");
             }
 
             if (settings.Arguments == null)

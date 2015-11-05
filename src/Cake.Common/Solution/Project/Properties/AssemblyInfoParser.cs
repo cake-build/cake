@@ -12,7 +12,9 @@ namespace Cake.Common.Solution.Project.Properties
     /// </summary>
     public sealed class AssemblyInfoParser
     {
-        private const string Pattern = @"{0}\(""([.]*(\d*|\*?)[.]*(\d*|\*?)[.]*(\d*|\*?)[.]*(\d*|\*?))""\)";
+        private const string VersionPattern = @"{0}\(""([.]*(\d*|\*?)[.]*(\d*|\*?)[.]*(\d*|\*?)[.]*(\d*|\*?))""\)";
+        private const string GeneralNonQuotedAttributePattern = @"{0}\((?<attributeValue>.*)\)";
+        private const string GeneralQuotedAttributePattern = @"{0}\(""(?<attributeValue>.*)""\)";
         private const string DefaultVersion = "1.0.0.0";
 
         private readonly IFileSystem _fileSystem;
@@ -58,7 +60,7 @@ namespace Cake.Common.Solution.Project.Properties
             var file = _fileSystem.GetFile(assemblyInfoPath);
             if (!file.Exists)
             {
-                const string format = "Assembly info file '{0}' do not exist.";
+                const string format = "Assembly info file '{0}' does not exist.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, assemblyInfoPath.FullPath);
                 throw new CakeException(message);
             }
@@ -67,15 +69,26 @@ namespace Cake.Common.Solution.Project.Properties
             {
                 var content = reader.ReadToEnd();
                 return new AssemblyInfoParseResult(
-                    ParseVersion("AssemblyVersion", content),
+                    ParseGeneralNonQuotedAttribute("CLSCompliant", content),
+                    ParseGeneralQuotedAttribute("AssemblyCompany", content),
+                    ParseGeneralNonQuotedAttribute("ComVisible", content),
+                    ParseGeneralQuotedAttribute("AssemblyConfiguration", content),
+                    ParseGeneralQuotedAttribute("AssemblyCopyright", content),
+                    ParseGeneralQuotedAttribute("AssemblyDescription", content),
                     ParseVersion("AssemblyFileVersion", content),
-                    ParseVersion("AssemblyInformationalVersion", content));
+                    ParseGeneralQuotedAttribute("Guid", content),
+                    ParseVersion("AssemblyInformationalVersion", content),
+                    ParseGeneralQuotedAttribute("InternalsVisibleTo", content),
+                    ParseGeneralQuotedAttribute("AssemblyProduct", content),
+                    ParseGeneralQuotedAttribute("AssemblyTitle", content),
+                    ParseGeneralQuotedAttribute("AssemblyTrademark", content),
+                    ParseVersion("AssemblyVersion", content));
             }
         }
 
         private static string ParseVersion(string attributeName, string content)
         {
-            var regex = new Regex(string.Format(CultureInfo.InvariantCulture, Pattern, attributeName));
+            var regex = new Regex(string.Format(CultureInfo.InvariantCulture, VersionPattern, attributeName));
             var match = regex.Match(content);
             if (match.Groups.Count > 0)
             {
@@ -83,9 +96,39 @@ namespace Cake.Common.Solution.Project.Properties
                 if (!string.IsNullOrWhiteSpace(value))
                 {
                     return value;
-                }   
+                }
             }
             return DefaultVersion;
+        }
+
+        private static string ParseGeneralQuotedAttribute(string attributeName, string content)
+        {
+            var regex = new Regex(string.Format(CultureInfo.InvariantCulture, GeneralQuotedAttributePattern, attributeName));
+            var match = regex.Match(content);
+            if (match.Groups.Count > 0)
+            {
+                var value = match.Groups["attributeValue"].Value;
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    return value;
+                }
+            }
+            return string.Empty;
+        }
+
+        private static string ParseGeneralNonQuotedAttribute(string attributeName, string content)
+        {
+            var regex = new Regex(string.Format(CultureInfo.InvariantCulture, GeneralNonQuotedAttributePattern, attributeName));
+            var match = regex.Match(content);
+            if (match.Groups.Count > 0)
+            {
+                var value = match.Groups["attributeValue"].Value;
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    return value;
+                }
+            }
+            return string.Empty;
         }
     }
 }

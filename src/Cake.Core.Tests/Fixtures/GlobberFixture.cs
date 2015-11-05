@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Cake.Core.IO;
-using Cake.Testing.Fakes;
+using Cake.Testing;
 
 namespace Cake.Core.Tests.Fixtures
 {
@@ -37,6 +37,9 @@ namespace Cake.Core.Tests.Fixtures
             // Files
             FileSystem.CreateFile("C:/Working/Foo/Bar/Qux.c");
             FileSystem.CreateFile("C:/Program Files (x86)/Foo.c");
+            FileSystem.CreateFile("C:/Working/Project.A.Test.dll");
+            FileSystem.CreateFile("C:/Working/Project.B.Test.dll");
+            FileSystem.CreateFile("C:/Working/Project.IntegrationTest.dll");
         }
 
         private void PrepareUnixFixture()

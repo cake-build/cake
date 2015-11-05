@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using Cake.Common.Solution.Project.XmlDoc;
 using Cake.Common.Tests.Properties;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Testing.Fakes;
+using Cake.Testing;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures
@@ -11,6 +12,7 @@ namespace Cake.Common.Tests.Fixtures
     {
         public IFileSystem FileSystem { get; set; }
         public IGlobber Globber { get; set; }
+        public ICakeLog Log { get; set; }
         public FilePath XmlFilePath { get; set; }
         public string Pattern { get; set; }
 
@@ -27,17 +29,19 @@ namespace Cake.Common.Tests.Fixtures
 
             Globber = Substitute.For<IGlobber>();
             Globber.GetFiles(Pattern).Returns(new FilePath[] { "/Working/Cake.Common.xml", "/Working/Cake.UnCommon.xml"});
+
+            Log = Substitute.For<ICakeLog>();
         }
 
         public IEnumerable<XmlDocExampleCode> Parse()
         {
-            var parser = new XmlDocExampleCodeParser(FileSystem, Globber);
+            var parser = new XmlDocExampleCodeParser(FileSystem, Globber, Log);
             return parser.Parse(XmlFilePath);
         }
 
         public IEnumerable<XmlDocExampleCode> ParseFiles()
         {
-            var parser = new XmlDocExampleCodeParser(FileSystem, Globber);
+            var parser = new XmlDocExampleCodeParser(FileSystem, Globber, Log);
             return parser.ParseFiles(Pattern);
         }
     }

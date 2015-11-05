@@ -15,8 +15,12 @@ namespace Cake.Common.Build.TeamCity
     {
         private const string MessagePrefix = "##teamcity[";
         private const string MessagePostfix = "]";
-        private static readonly Dictionary<string, string> SanitizationTokens =
-            new Dictionary<string, string>
+        private static readonly Dictionary<string, string> _sanitizationTokens;
+        private readonly ICakeEnvironment _environment;
+
+        static TeamCityProvider()
+        {
+            _sanitizationTokens = new Dictionary<string, string>
             {
                 { "|", "||" },
                 { "\'", "|\'" },
@@ -25,8 +29,7 @@ namespace Cake.Common.Build.TeamCity
                 { "[", "|['" },
                 { "]", "|]" }
             };
-
-        private readonly ICakeEnvironment _environment;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TeamCityProvider"/> class.
@@ -184,6 +187,15 @@ namespace Cake.Common.Build.TeamCity
             WriteServiceMessage("publishArtifacts", " ", path);
         }
 
+        /// <summary>
+        /// Tells TeamCity to change the current build number.
+        /// </summary>
+        /// <param name="buildNumber">The required build number.</param>
+        public void SetBuildNumber(string buildNumber)
+        {
+            WriteServiceMessage("buildNumber", buildNumber);
+        }
+
         private static void WriteServiceMessage(string messageName, string attributeValue)
         {
             WriteServiceMessage(messageName, new Dictionary<string, string> { { " ", attributeValue } });
@@ -214,7 +226,7 @@ namespace Cake.Common.Build.TeamCity
 
         private static string Sanitize(string source)
         {
-            foreach (var charPair in SanitizationTokens)
+            foreach (var charPair in _sanitizationTokens)
             {
                 source = source.Replace(charPair.Key, charPair.Value);
             }

@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Common.IO.Paths;
+﻿using Cake.Common.IO.Paths;
 using Cake.Core.IO;
 using Xunit;
 
@@ -104,7 +103,7 @@ namespace Cake.Common.Tests.Unit.IO.Paths
             {
                 // Given
                 var path = new ConvertableFilePath("./foo/bar.baz");
-                
+
                 // When
                 var result = path.ToString();
 

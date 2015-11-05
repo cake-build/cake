@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cake.Core.Diagnostics;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.XBuild
 {
     /// <summary>
     /// Contains settings used by <see cref="XBuildRunner"/>.
     /// </summary>
-    public sealed class XBuildSettings
+    public sealed class XBuildSettings : ToolSettings
     {
         private readonly HashSet<string> _targets;
         private readonly Dictionary<string, IList<string>> _properties;
@@ -43,7 +44,7 @@ namespace Cake.Common.Tools.XBuild
         public string Configuration { get; set; }
 
         /// <summary>
-        /// Gets or sets the amount of information to display in the build log. 
+        /// Gets or sets the amount of information to display in the build log.
         /// Each logger displays events based on the verbosity level that you set for that logger.
         /// </summary>
         /// <value>The build log verbosity.</value>

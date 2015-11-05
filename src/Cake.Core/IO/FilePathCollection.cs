@@ -110,7 +110,7 @@ namespace Cake.Core.IO
         /// <summary>Adds a path to the collection.</summary>
         /// <param name="collection">The collection.</param>
         /// <param name="path">The path to add.</param>
-        /// <returns>A new <see cref="FilePathCollection"/> that contains the provided path as 
+        /// <returns>A new <see cref="FilePathCollection"/> that contains the provided path as
         /// well as the paths in the original collection.</returns>
         public static FilePathCollection operator +(FilePathCollection collection, FilePath path)
         {

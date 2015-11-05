@@ -21,10 +21,10 @@ namespace Cake.Common.Tools.NuGet.SetApiKey
         /// <param name="globber">The globber.</param>
         /// <param name="resolver">The NuGet tool resolver.</param>
         public NuGetSetApiKey(
-            IFileSystem fileSystem, 
-            ICakeEnvironment environment, 
-            IProcessRunner processRunner, 
-            IGlobber globber, 
+            IFileSystem fileSystem,
+            ICakeEnvironment environment,
+            IProcessRunner processRunner,
+            IGlobber globber,
             INuGetToolResolver resolver)
             : base(fileSystem, environment, processRunner, globber, resolver)
         {
@@ -43,7 +43,7 @@ namespace Cake.Common.Tools.NuGet.SetApiKey
             {
                 throw new ArgumentNullException("apiKey");
             }
-            
+
             if (string.IsNullOrWhiteSpace(source))
             {
                 throw new ArgumentNullException("source");
@@ -59,7 +59,7 @@ namespace Cake.Common.Tools.NuGet.SetApiKey
                 Arguments = GetArguments(apiKey, source, settings),
                 RedirectStandardOutput = true
             };
-            Run(settings, null, settings.ToolPath, processSettings, process => output = string.Join("\r\n", process.GetStandardOutput()));
+            Run(settings, null, processSettings, process => output = string.Join("\r\n", process.GetStandardOutput()));
 
             if (string.IsNullOrWhiteSpace(output) ||
                 !output.Contains(string.Concat("The API Key '", apiKey, "' was saved for '", source, "'.")))

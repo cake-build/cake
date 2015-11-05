@@ -1,100 +1,65 @@
 ﻿using System.Collections.Generic;
 using Cake.Common.Tools.MSBuild;
-using Cake.Core;
 using Cake.Core.IO;
-using Cake.Testing.Fakes;
-using NSubstitute;
+using Cake.Testing;
 
 namespace Cake.Common.Tests.Fixtures.Tools
 {
-    internal sealed class MSBuildRunnerFixture
+    internal sealed class MSBuildRunnerFixture : ToolFixture<MSBuildSettings>
     {
-        public IFileSystem FileSystem { get; set; }
-        public ICakeEnvironment Environment { get; set; }
-        public IProcess Process { get; set; }
-        public IProcessRunner ProcessRunner { get; private set; }
-        public IGlobber Globber { get; set; }
-
+        public HashSet<FilePath> KnownMSBuildPaths { get; private set; }
         public FilePath Solution { get; set; }
-        public MSBuildSettings Settings { get; set; }
 
-        public MSBuildRunnerFixture(IEnumerable<DirectoryPath> existingMSBuildPaths)
-            : this(false, false, existingMSBuildPaths)
+        public MSBuildRunnerFixture(bool is64BitOperativeSystem)
+            : base("MSBuild.exe")
         {
-        }
+            // Create the list of all known MSBuild paths.
+            KnownMSBuildPaths = new HashSet<FilePath>(new PathComparer(false));
+            KnownMSBuildPaths.Add("/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe");
+            KnownMSBuildPaths.Add("/Windows/Microsoft.NET/Framework64/v2.0.50727/MSBuild.exe");
+            KnownMSBuildPaths.Add("/Windows/Microsoft.NET/Framework/v3.5/MSBuild.exe");
+            KnownMSBuildPaths.Add("/Windows/Microsoft.NET/Framework64/v3.5/MSBuild.exe");
+            KnownMSBuildPaths.Add("/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe");
+            KnownMSBuildPaths.Add("/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe");
+            KnownMSBuildPaths.Add("/Program86/MSBuild/12.0/Bin/MSBuild.exe");
+            KnownMSBuildPaths.Add("/Program86/MSBuild/12.0/Bin/amd64/MSBuild.exe");
+            KnownMSBuildPaths.Add("/Program86/MSBuild/14.0/Bin/MSBuild.exe");
+            KnownMSBuildPaths.Add("/Program86/MSBuild/14.0/Bin/amd64/MSBuild.exe");
 
-        public MSBuildRunnerFixture(bool is64BitOperativeSystem, bool msBuildFileExist)
-            : this(is64BitOperativeSystem, msBuildFileExist, null)
-        {
-        }
-
-        private MSBuildRunnerFixture(bool is64BitOperativeSystem, bool msBuildFileExist, IEnumerable<DirectoryPath> existingMSBuildPaths)
-        {
-            Process = Substitute.For<IProcess>();
-
-            ProcessRunner = Substitute.For<IProcessRunner>();
-            ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns(Process);
-
-            Globber = Substitute.For<IGlobber>();
-
-            Environment = Substitute.For<ICakeEnvironment>();
-            Environment.Is64BitOperativeSystem().Returns(is64BitOperativeSystem);
-            Environment.GetSpecialPath(SpecialPath.ProgramFilesX86).Returns("/Program86");
-            Environment.GetSpecialPath(SpecialPath.Windows).Returns("/Windows");
-            Environment.IsUnix().Returns(true);
-            Environment.WorkingDirectory.Returns("/Working");
-
-            Solution = new FilePath("./src/Solution.sln");
-            Settings = new MSBuildSettings();
-            Settings.ToolVersion = MSBuildToolVersion.VS2013;
-
-            if (existingMSBuildPaths != null)
+            // Install all known MSBuild versions.
+            foreach (var msBuildPath in KnownMSBuildPaths)
             {
-                // Add all existing MSBuild tool paths.
-                var fileSystem = new FakeFileSystem(Environment);
-                FileSystem = fileSystem;
-                foreach (var existingPath in existingMSBuildPaths)
+                FileSystem.CreateFile(msBuildPath);
+            }
+
+            // Prepare the environment.
+            Environment.SetSpecialPath(SpecialPath.ProgramFilesX86, "/Program86");
+            Environment.SetSpecialPath(SpecialPath.Windows, "/Windows");
+            Environment.ChangeOperativeSystemBitness(is64BitOperativeSystem);
+
+            // Prepare the tool parameters.
+            Solution = new FilePath("./src/Solution.sln");
+            Settings.ToolVersion = MSBuildToolVersion.VS2013;
+        }
+
+        public void GivenMSBuildIsNotInstalled()
+        {
+            foreach (var msBuildPath in KnownMSBuildPaths)
+            {
+                var msBuildFile = FileSystem.GetFile(msBuildPath);
+                if (msBuildFile.Exists)
                 {
-                    fileSystem.CreateDirectory(existingPath);
-                    fileSystem.CreateFile(existingPath.GetFilePath("MSBuild.exe"));
+                    msBuildFile.Delete();
                 }
             }
-            else
-            {
-                FileSystem = Substitute.For<IFileSystem>();
-                FileSystem.GetFile(
-                    Arg.Is<FilePath>(p => p.FullPath.EndsWith("MSBuild.exe", System.StringComparison.Ordinal)))
-                    .Returns(c =>
-                    {
-                        // All requested files exist.
-                        var file = Substitute.For<IFile>();
-                        file.Exists.Returns(msBuildFileExist);
-                        file.Path.Returns(c.Arg<FilePath>());
-                        return file;
-                    });                
-            }
+            FileSystem.GetDirectory("/Windows").Delete(true);
+            FileSystem.GetDirectory("/Program86").Delete(true);
         }
 
-        public void Run()
+        protected override void RunTool()
         {
             var runner = new MSBuildRunner(FileSystem, Environment, ProcessRunner, Globber);
             runner.Run(Solution, Settings);
-        }
-
-        public void AssertReceivedFilePath(FilePath path)
-        {
-            ProcessRunner.Received(1).Start(
-                Arg.Is<FilePath>(p => p.FullPath == path.FullPath),
-                Arg.Any<ProcessSettings>());   
-        }
-
-        public void AssertReceivedArguments(string format, params object[] args)
-        {
-            var arguments = string.Format(format, args);
-            ProcessRunner.Received(1).Start(
-                Arg.Any<FilePath>(),
-                Arg.Is<ProcessSettings>(p =>
-                    p.Arguments.Render() == arguments));   
         }
     }
 }

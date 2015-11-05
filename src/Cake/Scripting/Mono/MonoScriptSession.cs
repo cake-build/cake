@@ -15,7 +15,7 @@ namespace Cake.Scripting.Mono
         private readonly Evaluator _evaluator;
         private readonly ICakeLog _log;
 
-        private readonly string[] _skipAssemblies = 
+        private readonly string[] _skipAssemblies =
         {
             "mscorlib",
             "System",
@@ -45,7 +45,7 @@ namespace Cake.Scripting.Mono
             MonoScriptHostProxy.ScriptHost = host;
 
             // This will be our 'base' type from which the evaluator grants access
-            // to static members to the script being run 
+            // to static members to the script being run
             _evaluator.InteractiveBaseClass = typeof(MonoScriptHostProxy);
         }
 
@@ -56,7 +56,7 @@ namespace Cake.Scripting.Mono
                 throw new ArgumentNullException("path");
             }
             _log.Debug("Adding reference to {0}...", path.FullPath);
-            _evaluator.ReferenceAssembly(Assembly.LoadFile(path.FullPath));
+            _evaluator.ReferenceAssembly(Assembly.LoadFrom(path.FullPath));
         }
 
         public void AddReference(Assembly assembly)
@@ -86,6 +86,11 @@ namespace Cake.Scripting.Mono
 
         public void Execute(Script script)
         {
+            if (script == null)
+            {
+                throw new ArgumentNullException("script");
+            }
+
             if (script.UsingAliasDirectives.Count > 0)
             {
                 throw new CakeException("The Mono scripting engine do not support using alias directives.");
@@ -96,7 +101,7 @@ namespace Cake.Scripting.Mono
             try
             {
                 // Build the class we generated.
-                _log.Debug("Compiling build script...");
+                _log.Verbose("Compiling build script...");
                 _evaluator.Run(code);
 
                 // Actually execute it.

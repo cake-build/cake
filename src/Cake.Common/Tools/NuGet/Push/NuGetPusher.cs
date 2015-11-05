@@ -44,7 +44,7 @@ namespace Cake.Common.Tools.NuGet.Push
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetArguments(packageFilePath, settings), settings.ToolPath);
+            Run(settings, GetArguments(packageFilePath, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(FilePath packageFilePath, NuGetPushSettings settings)

@@ -64,7 +64,7 @@ namespace Cake.Common.Solution.Project.Properties
 
             // Create internals visible to
             var internalsVisibleTo = GetInternalsVisibleTo(settings);
-            EnsureInternalVisiblesToNamespace(settings, registration);
+            EnsureInternalsVisibleToNamespace(settings, registration);
 
             // Get the absolute output path.
             var absoluteOutputPath = outputPath.MakeAbsolute(_environment);
@@ -103,7 +103,7 @@ namespace Cake.Common.Solution.Project.Properties
 
                     writer.WriteLine();
                 }
-                
+
                 if (internalsVisibleTo != null && internalsVisibleTo.Any())
                 {
                     // Write Internals visible true
@@ -126,13 +126,14 @@ namespace Cake.Common.Solution.Project.Properties
             registration.AddString("AssemblyInformationalVersion", "System.Reflection", settings.InformationalVersion);
             registration.AddString("AssemblyCopyright", "System.Reflection", settings.Copyright);
             registration.AddString("AssemblyTrademark", "System.Reflection", settings.Trademark);
+            registration.AddString("AssemblyConfiguration", "System.Reflection", settings.Configuration);
             registration.AddString("Guid", "System.Runtime.InteropServices", settings.Guid);
             registration.AddBoolean("ComVisible", "System.Runtime.InteropServices", settings.ComVisible);
             registration.AddBoolean("CLSCompliant", "System", settings.CLSCompliant);
             return registration;
         }
 
-        private static void EnsureInternalVisiblesToNamespace(AssemblyInfoSettings settings,
+        private static void EnsureInternalsVisibleToNamespace(AssemblyInfoSettings settings,
             AssemblyInfoRegistration registration)
         {
             if (!SettingsIncludeInternalsVisibleTo(settings))

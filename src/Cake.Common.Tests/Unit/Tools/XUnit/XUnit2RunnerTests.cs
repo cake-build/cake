@@ -1,5 +1,4 @@
-﻿using Cake.Common.Tests.Fixtures;
-using Cake.Common.Tests.Fixtures.Tools;
+﻿using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.XUnit;
 using Cake.Core;
 using Cake.Core.IO;
@@ -17,10 +16,10 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             {
                 // Given
                 var fixture = new XUnit2RunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.AssemblyPath = null;
 
                 // When
-                var result = Record.Exception(() => runner.Run(null, new XUnit2Settings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "assemblyPath");
@@ -30,36 +29,32 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             public void Should_Throw_If_XUnit_Runner_Was_Not_Found()
             {
                 // Given
-                var fixture = new XUnit2RunnerFixture(defaultToolExist: false);
-                var runner = fixture.CreateRunner();
+                var fixture = new XUnit2RunnerFixture();
+                fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test1.dll", new XUnit2Settings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
                 Assert.Equal("xUnit.net (v2): Could not locate executable.", result.Message);
             }
 
-            [Theory]            
+            [Theory]
             [InlineData("C:/xUnit/xunit.exe", "C:/xUnit/xunit.exe")]
             [InlineData("./tools/xUnit/xunit.exe", "/Working/tools/xUnit/xunit.exe")]
             public void Should_Use_XUnit_Runner_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new XUnit2RunnerFixture(expected);
-                var runner = fixture.CreateRunner();
+                var fixture = new XUnit2RunnerFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
 
                 // When
-                runner.Run("./Test1.dll", new XUnit2Settings
-                {
-                    ToolPath = toolPath
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -67,31 +62,25 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             {
                 // Given
                 var fixture = new XUnit2RunnerFixture();
-                var runner = fixture.CreateRunner();
 
                 // When
-                runner.Run("./Test1.dll", new XUnit2Settings());
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/xunit.console.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/tools/xunit.console.exe", result.ToolPath.FullPath);
             }
 
             [Fact]
             public void Should_Use_Provided_Assembly_Paths_In_Process_Arguments()
             {
                 // Given
-                var fixture = new XUnit2RunnerFixture();                                
-                var runner = fixture.CreateRunner();
+                var fixture = new XUnit2RunnerFixture();
 
                 // When
-                runner.Run("./Test1.dll", new XUnit2Settings());
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => p.Arguments.Render() == "\"/Working/Test1.dll\""));
+                Assert.Equal("\"/Working/Test1.dll\"", result.Args);
             }
 
             [Fact]
@@ -99,15 +88,12 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             {
                 // Given
                 var fixture = new XUnit2RunnerFixture();
-                var runner = fixture.CreateRunner();
 
                 // When
-                runner.Run("./Test1.dll", new XUnit2Settings());
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => p.WorkingDirectory.FullPath == "/Working"));                
+                Assert.Equal("/Working", result.Process.WorkingDirectory.FullPath);
             }
 
             [Fact]
@@ -116,14 +102,13 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 // Given
                 var fixture = new XUnit2RunnerFixture();
                 fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns((IProcess)null);
-                var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test1.dll", new XUnit2Settings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("xUnit.net (v2): Process was not started.", result.Message);     
+                Assert.Equal("xUnit.net (v2): Process was not started.", result.Message);
             }
 
             [Fact]
@@ -132,10 +117,9 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 // Given
                 var fixture = new XUnit2RunnerFixture();
                 fixture.Process.GetExitCode().Returns(1);
-                var runner = fixture.CreateRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test1.dll", new XUnit2Settings()));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -147,17 +131,14 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             {
                 // Given
                 var fixture = new XUnit2RunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.HtmlReport = true;
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test1.dll", new XUnit2Settings
-                {
-                    HtmlReport = true
-                }));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Cannot generate HTML report when no output directory has been set.", result.Message); 
+                Assert.Equal("Cannot generate HTML report when no output directory has been set.", result.Message);
             }
 
             [Fact]
@@ -165,20 +146,14 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             {
                 // Given
                 var fixture = new XUnit2RunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.OutputDirectory = "/Output";
+                fixture.Settings.HtmlReport = true;
 
                 // When
-                runner.Run("./Test1.dll", new XUnit2Settings
-                {
-                    OutputDirectory = "/Output",
-                    HtmlReport = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "\"/Working/Test1.dll\" -html \"/Output/Test1.dll.html\""));
+                Assert.Equal("\"/Working/Test1.dll\" -html \"/Output/Test1.dll.html\"", result.Args);
             }
 
             [Fact]
@@ -186,13 +161,10 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             {
                 // Given
                 var fixture = new XUnit2RunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.XmlReport = true;
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test1.dll", new XUnit2Settings
-                {
-                    XmlReport = true
-                }));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -204,20 +176,14 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             {
                 // Given
                 var fixture = new XUnit2RunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.OutputDirectory = "/Output";
+                fixture.Settings.XmlReport = true;
 
                 // When
-                runner.Run("./Test1.dll", new XUnit2Settings
-                {
-                    OutputDirectory = "/Output",
-                    XmlReport = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "\"/Working/Test1.dll\" -xml \"/Output/Test1.dll.xml\""));
+                Assert.Equal("\"/Working/Test1.dll\" -xml \"/Output/Test1.dll.xml\"", result.Args);
             }
 
 
@@ -226,13 +192,10 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             {
                 // Given
                 var fixture = new XUnit2RunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.XmlReportV1 = true;
 
                 // When
-                var result = Record.Exception(() => runner.Run("./Test1.dll", new XUnit2Settings
-                {
-                    XmlReportV1 = true
-                }));
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -244,20 +207,14 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             {
                 // Given
                 var fixture = new XUnit2RunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.OutputDirectory = "/Output";
+                fixture.Settings.XmlReportV1 = true;
 
                 // When
-                runner.Run("./Test1.dll", new XUnit2Settings
-                {
-                    OutputDirectory = "/Output",
-                    XmlReportV1 = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "\"/Working/Test1.dll\" -xmlv1 \"/Output/Test1.dll.xml\""));
+                Assert.Equal("\"/Working/Test1.dll\" -xmlv1 \"/Output/Test1.dll.xml\"", result.Args);
             }
 
             [Fact]
@@ -265,19 +222,13 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             {
                 // Given
                 var fixture = new XUnit2RunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.ShadowCopy = false;
 
                 // When
-                runner.Run("./Test1.dll", new XUnit2Settings
-                {
-                    ShadowCopy = false
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), 
-                    Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "\"/Working/Test1.dll\" -noshadow"));
+                Assert.Equal("\"/Working/Test1.dll\" -noshadow", result.Args);
             }
 
             [Fact]
@@ -285,18 +236,78 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             {
                 // Given
                 var fixture = new XUnit2RunnerFixture();
-                var runner = fixture.CreateRunner();
+                fixture.Settings.NoAppDomain = true;
 
                 // When
-                runner.Run("./Test1.dll", new XUnit2Settings {
-                    NoAppDomain = true
-                });
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "\"/Working/Test1.dll\" -noappdomain"));
+                Assert.Equal("\"/Working/Test1.dll\" -noappdomain", result.Args);
+            }
+
+            [Theory]
+            [InlineData(ParallelismOption.All, "\"/Working/Test1.dll\" -parallel all")]
+            [InlineData(ParallelismOption.Assemblies, "\"/Working/Test1.dll\" -parallel assemblies")]
+            [InlineData(ParallelismOption.Collections, "\"/Working/Test1.dll\" -parallel collections")]
+            [InlineData(ParallelismOption.None, "\"/Working/Test1.dll\"")]
+            public void Should_Use_Parallel_Switch_If_Settings_Value_Is_Not_None(ParallelismOption option, string expected)
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.Settings.Parallelism = option;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(null, "\"/Working/Test1.dll\"")]
+            [InlineData(0, "\"/Working/Test1.dll\" -maxthreads unlimited")]
+            [InlineData(3, "\"/Working/Test1.dll\" -maxthreads 3")]
+            public void Should_Use_MaxThreads_Switch_If_Settings_Value_Is_Not_Null(int? option, string expected)
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.Settings.MaxThreads = option;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Fact]
+            public void Should_Set_Switches_For_TraitsToInclude_Defined_In_Settings()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.Settings.IncludeTrait("Trait1", "value1A", "value1B");
+                fixture.Settings.IncludeTrait("Trait2", "value2");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" -trait \"Trait1=value1A\" -trait \"Trait1=value1B\" -trait \"Trait2=value2\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Set_Switches_For_TraitsToExclude_Defined_In_Settings()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.Settings.ExcludeTrait("Trait1", "value1A", "value1B");
+                fixture.Settings.ExcludeTrait("Trait2", "value2");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" -notrait \"Trait1=value1A\" -notrait \"Trait1=value1B\" -notrait \"Trait2=value2\"", result.Args);
             }
         }
     }

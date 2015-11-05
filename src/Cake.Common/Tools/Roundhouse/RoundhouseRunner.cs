@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.Roundhouse
 {
@@ -36,7 +37,7 @@ namespace Cake.Common.Tools.Roundhouse
             }
 
             settings.Drop |= drop;
-            Run(settings, GetArguments(settings), settings.ToolPath);
+            Run(settings, GetArguments(settings));
         }
 
         private ProcessArgumentBuilder GetArguments(RoundhouseSettings settings)
@@ -107,7 +108,7 @@ namespace Cake.Common.Tools.Roundhouse
         {
             if (value)
             {
-                builder.Append(string.Format("--{0}", key));
+                builder.Append("--{0}", key);
             }
         }
 
@@ -115,7 +116,7 @@ namespace Cake.Common.Tools.Roundhouse
         {
             if (value != null)
             {
-                builder.AppendQuoted(string.Format("--{0}={1}", key, value));
+                builder.AppendQuoted("--{0}={1}", key, value);
             }
         }
 
@@ -123,7 +124,7 @@ namespace Cake.Common.Tools.Roundhouse
         {
             if (value != null)
             {
-                builder.AppendQuotedSecret(string.Format("--{0}={1}", key, value));
+                builder.AppendQuotedSecret("--{0}={1}", key, value);
             }
         }
 

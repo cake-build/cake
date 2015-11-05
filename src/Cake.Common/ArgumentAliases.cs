@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Globalization;
 using Cake.Core;
 using Cake.Core.Annotations;
 
@@ -30,7 +31,7 @@ namespace Cake.Common
         /// else
         /// {
         ///     Warning("{0} not specified", argumentName);
-        /// } 
+        /// }
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -74,7 +75,9 @@ namespace Cake.Common
             var value = context.Arguments.GetArgument(name);
             if (value == null)
             {
-                throw new CakeException(string.Format("Argument '{0}' was not set.", name));
+                const string format = "Argument '{0}' was not set.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, name);
+                throw new CakeException(message);
             }
             return Convert<T>(value);
         }

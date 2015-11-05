@@ -21,10 +21,10 @@ namespace Cake.Common.Tools.NuGet.Sources
         /// <param name="globber">The globber.</param>
         /// <param name="resolver">The NuGet tool resolver.</param>
         public NuGetSources(
-            IFileSystem fileSystem, 
-            ICakeEnvironment environment, 
-            IProcessRunner processRunner, 
-            IGlobber globber, 
+            IFileSystem fileSystem,
+            ICakeEnvironment environment,
+            IProcessRunner processRunner,
+            IGlobber globber,
             INuGetToolResolver resolver)
             : base(fileSystem, environment, processRunner, globber, resolver)
         {
@@ -65,7 +65,7 @@ namespace Cake.Common.Tools.NuGet.Sources
                 throw new InvalidOperationException(message);
             }
 
-            Run(settings, GetAddArguments(name, source, settings), settings.ToolPath);
+            Run(settings, GetAddArguments(name, source, settings));
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace Cake.Common.Tools.NuGet.Sources
                 throw new InvalidOperationException(message);
             }
 
-            Run(settings, GetRemoveArguments(name, source, settings), settings.ToolPath);
+            Run(settings, GetRemoveArguments(name, source, settings));
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Cake.Common.Tools.NuGet.Sources
             };
 
             var result = false;
-            Run(settings, null, settings.ToolPath, processSettings,
+            Run(settings, null,  processSettings, 
                 process => result = process.GetStandardOutput().Any(line => line.TrimStart() == source));
 
             // Return whether or not the source exist.
@@ -182,7 +182,7 @@ namespace Cake.Common.Tools.NuGet.Sources
             builder.Append("-Name");
             builder.AppendQuoted(name);
 
-            builder.Append("-Source");           
+            builder.Append("-Source");
             if (settings.IsSensitiveSource)
             {
                 // Sensitive information in source.

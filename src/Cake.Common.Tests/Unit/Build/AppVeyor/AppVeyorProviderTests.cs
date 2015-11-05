@@ -1,5 +1,5 @@
 ﻿using Cake.Common.Build.AppVeyor;
-using Cake.Common.Tests.Fixtures;
+using Cake.Common.Tests.Fixtures.Build;
 using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;

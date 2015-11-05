@@ -41,7 +41,7 @@ namespace Cake.Common.IO
                 throw new IOException(string.Format(CultureInfo.InvariantCulture, format, path.FullPath));
             }
 
-            context.Log.Verbose("Deleting {0}", path);
+            context.Log.Verbose("Deleting directory {0}", path);
             directory.Delete(recursive);
         }
     }

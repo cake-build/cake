@@ -1,12 +1,5 @@
-﻿using System.Collections.Generic;
-using Cake.Common.Tests.Fixtures;
-using Cake.Common.Tests.Fixtures.Tools;
-using Cake.Common.Tests.Fixtures.Tools.NuGet;
+﻿using Cake.Common.Tests.Fixtures.Tools.NuGet.SetProxy;
 using Cake.Common.Tools.NuGet;
-using Cake.Common.Tools.NuGet.SetApiKey;
-using Cake.Core;
-using Cake.Core.IO;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.NuGet.SetProxy
@@ -23,7 +16,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetProxy
                 fixture.Url = null;
 
                 // When
-                var result = Record.Exception(() => fixture.SetProxy());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "url");
@@ -37,7 +30,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetProxy
                 fixture.Settings = null;
 
                 // When
-                var result = Record.Exception(() => fixture.SetProxy());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsArgumentNullException(result, "settings");
@@ -51,7 +44,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetProxy
                 fixture.GivenUnexpectedOutput();
 
                 // When
-                var result = Record.Exception(() => fixture.SetProxy());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "Set command returned unexpected response.");
@@ -65,7 +58,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetProxy
                 fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => fixture.SetProxy());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "NuGet: Could not locate executable.");
@@ -79,15 +72,13 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetProxy
                 // Given
                 var fixture = new NuGetSetProxyFixture();
                 fixture.Settings.ToolPath = toolPath;
-                fixture.GivenCustomToolPathExist(expected);
-                
+                fixture.GivenSettingsToolPathExist();
+
                 // When
-                fixture.SetProxy();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -98,7 +89,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetProxy
                 fixture.GivenProcessCannotStart();
 
                 // When
-                var result = Record.Exception(() => fixture.SetProxy());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "NuGet: Process was not started.");
@@ -109,10 +100,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetProxy
             {
                 // Given
                 var fixture = new NuGetSetProxyFixture();
-                fixture.GivenProcessReturnError();
+                fixture.GivenProcessExitsWithCode(1);
 
                 // When
-                var result = Record.Exception(() => fixture.SetProxy());
+                var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsCakeException(result, "NuGet: Process returned an error.");
@@ -123,14 +114,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetProxy
             {
                 // Given
                 var fixture = new NuGetSetProxyFixture();
-                
+
                 // When
-                fixture.SetProxy();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/NuGet.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal("/Working/tools/NuGet.exe", result.ToolPath.FullPath);
             }
 
             [Theory]
@@ -145,12 +134,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetProxy
                 fixture.Settings.Verbosity = verbosity;
 
                 // When
-                fixture.SetProxy();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == expected));
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]
@@ -162,13 +149,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetProxy
                 fixture.Password = "Pass1";
 
                 // When
-                fixture.SetProxy();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "config -Set http_proxy=http://a.com -Set http_proxy.user=Admin -Set http_proxy.password=Pass1 -NonInteractive"));
-
+                Assert.Equal("config -Set http_proxy=http://a.com " +
+                             "-Set http_proxy.user=Admin -Set http_proxy.password=Pass1 " +
+                             "-NonInteractive", result.Args);
             }
 
             [Fact]
@@ -179,13 +165,12 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetProxy
                 fixture.Settings.ConfigFile = "./nuget.config";
 
                 // When
-                fixture.SetProxy();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "config -Set http_proxy=http://a.com -ConfigFile \"/Working/nuget.config\" -NonInteractive"));
-
+                Assert.Equal("config -Set http_proxy=http://a.com " +
+                             "-ConfigFile \"/Working/nuget.config\" " +
+                             "-NonInteractive", result.Args);
             }
 
             [Fact]
@@ -195,12 +180,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetProxy
                 var fixture = new NuGetSetProxyFixture();
 
                 // When
-                fixture.SetProxy();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "config -Set http_proxy=http://a.com -NonInteractive"));
+                Assert.Equal("config -Set http_proxy=http://a.com -NonInteractive", result.Args);
             }
         }
     }

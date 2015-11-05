@@ -62,7 +62,7 @@ namespace Cake.Common.Text
             path = path.IsRelative ? path.MakeAbsolute(_environment) : path;
 
             // Render the content to the file.
-            var file = _fileSystem.GetFile(path); 
+            var file = _fileSystem.GetFile(path);
             using (var stream = file.OpenWrite())
             using (var writer = new StreamWriter(stream, Encoding.UTF8, 1024, true))
             {

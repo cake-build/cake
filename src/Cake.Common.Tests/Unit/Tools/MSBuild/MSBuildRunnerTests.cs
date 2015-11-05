@@ -1,10 +1,7 @@
-﻿using Cake.Common.Tests.Fixtures;
-using Cake.Common.Tests.Fixtures.Tools;
+﻿using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.MSBuild;
-using Cake.Core;
 using Cake.Core.Diagnostics;
-using Cake.Core.IO;
-using NSubstitute;
+using Cake.Testing;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.MSBuild
@@ -17,20 +14,20 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Return_The_Highest_MSBuild_Version_If_Tool_Version_Is_Set_To_Default()
             {
                 // Given
-                var existingToolPaths = new DirectoryPath[] {
-                    "/Windows/Microsoft.NET/Framework64/v4.0.30319",
-                    "/Windows/Microsoft.NET/Framework64/v2.0.50727"
-                };
-
-                var fixture = new MSBuildRunnerFixture(existingToolPaths);
+                var fixture = new MSBuildRunnerFixture(true);
                 fixture.Settings.PlatformTarget = PlatformTarget.x64;
                 fixture.Settings.ToolVersion = MSBuildToolVersion.Default;
 
+                fixture.GivenDefaultToolDoNotExist();
+                fixture.GivenMSBuildIsNotInstalled();
+                fixture.FileSystem.CreateFile("/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe");
+                fixture.FileSystem.CreateFile("/Windows/Microsoft.NET/Framework64/v2.0.50727/MSBuild.exe");
+
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.AssertReceivedFilePath("/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe");
+                Assert.Equal("/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe", result.ToolPath.FullPath);
             }
 
             [Theory]
@@ -55,15 +52,15 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Get_Correct_Path_To_MSBuild_Version_2(MSBuildToolVersion version, PlatformTarget target, bool is64BitOperativeSystem, string expected)
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, true);
+                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem);
                 fixture.Settings.ToolVersion = version;
                 fixture.Settings.PlatformTarget = target;
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.AssertReceivedFilePath(expected);
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Theory]
@@ -82,15 +79,15 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Get_Correct_Path_To_MSBuild_Version_35(MSBuildToolVersion version, PlatformTarget target, bool is64BitOperativeSystem, string expected)
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, true);
+                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem);
                 fixture.Settings.ToolVersion = version;
                 fixture.Settings.PlatformTarget = target;
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.AssertReceivedFilePath(expected);
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Theory]
@@ -127,15 +124,15 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Get_Correct_Path_To_MSBuild_Version_4(MSBuildToolVersion version, PlatformTarget target, bool is64BitOperativeSystem, string expected)
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, true);
+                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem);
                 fixture.Settings.ToolVersion = version;
                 fixture.Settings.PlatformTarget = target;
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.AssertReceivedFilePath(expected);
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Theory]
@@ -160,15 +157,15 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Get_Correct_Path_To_MSBuild_Version_12(MSBuildToolVersion version, PlatformTarget target, bool is64BitOperativeSystem, string expected)
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, true);
+                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem);
                 fixture.Settings.ToolVersion = version;
                 fixture.Settings.PlatformTarget = target;
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.AssertReceivedFilePath(expected);
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Theory]
@@ -187,24 +184,27 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Get_Correct_Path_To_MSBuild_Version_14(MSBuildToolVersion version, PlatformTarget target, bool is64BitOperativeSystem, string expected)
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, true);
+                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem);
                 fixture.Settings.ToolVersion = version;
                 fixture.Settings.PlatformTarget = target;
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.AssertReceivedFilePath(expected);
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Fact]
             public void Should_Throw_If_MSBuild_Executable_Did_Not_Exist()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(false, false);
+                var fixture = new MSBuildRunnerFixture(true);
                 fixture.Settings.PlatformTarget = PlatformTarget.x86;
                 fixture.Settings.ToolVersion = MSBuildToolVersion.NET20;
+
+                fixture.GivenMSBuildIsNotInstalled();
+                fixture.GivenDefaultToolDoNotExist();
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
@@ -217,178 +217,174 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Use_As_Many_Processors_As_Possible_If_MaxCpuCount_Is_Zero()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(false, true);
+                var fixture = new MSBuildRunnerFixture(false);
                 fixture.Settings.MaxCpuCount = 0;
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.AssertReceivedArguments(
-                    "/m /v:normal /target:Build \"/Working/src/Solution.sln\"");
+                Assert.Equal("/m /v:normal /target:Build " +
+                             "\"/Working/src/Solution.sln\"", result.Args);
             }
 
             [Fact]
             public void Should_Use_Specified_Number_Of_Max_Processors()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(false, true);
+                var fixture = new MSBuildRunnerFixture(false);
                 fixture.Settings.MaxCpuCount = 4;
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.AssertReceivedArguments(
-                    "/m:4 /v:normal /target:Build \"/Working/src/Solution.sln\"");
+                Assert.Equal("/m:4 /v:normal /target:Build " +
+                             "\"/Working/src/Solution.sln\"", result.Args);
             }
 
             [Fact]
             public void Should_Use_Correct_Default_Target_In_Process_Arguments()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(false, true);
+                var fixture = new MSBuildRunnerFixture(false);
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.AssertReceivedArguments(
-                    "/m /v:normal /target:Build \"/Working/src/Solution.sln\"");
+                Assert.Equal("/m /v:normal /target:Build " +
+                             "\"/Working/src/Solution.sln\"", result.Args);
             }
 
             [Fact]
             public void Should_Use_Node_Reuse_If_Specified()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(false, true);
+                var fixture = new MSBuildRunnerFixture(false);
                 fixture.Settings.NodeReuse = true;
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.AssertReceivedArguments(
-                    "/m /v:normal /nr:true /target:Build \"/Working/src/Solution.sln\"");
+                Assert.Equal("/m /v:normal /nr:true /target:Build " +
+                             "\"/Working/src/Solution.sln\"", result.Args);
             }
 
             [Fact]
             public void Should_Append_Targets_To_Process_Arguments()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(false, true);
+                var fixture = new MSBuildRunnerFixture(false);
                 fixture.Settings.WithTarget("A");
                 fixture.Settings.WithTarget("B");
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.AssertReceivedArguments(
-                    "/m /v:normal /target:A;B \"/Working/src/Solution.sln\"");
+                Assert.Equal("/m /v:normal /target:A;B " +
+                             "\"/Working/src/Solution.sln\"", result.Args);
             }
 
             [Fact]
             public void Should_Append_Property_To_Process_Arguments()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(false, true);
+                var fixture = new MSBuildRunnerFixture(false);
                 fixture.Settings.WithProperty("A", "B");
                 fixture.Settings.WithProperty("C", "D");
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.AssertReceivedArguments(
-                    "/m /v:normal /p:\"A\"=\"B\" /p:\"C\"=\"D\" /target:Build \"/Working/src/Solution.sln\"");
+                Assert.Equal("/m /v:normal /p:A=B /p:C=D /target:Build " +
+                             "\"/Working/src/Solution.sln\"", result.Args);
             }
 
             [Fact]
             public void Should_Append_Property_With_Multiple_Values_To_Process_Arguments()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(false, true);
+                var fixture = new MSBuildRunnerFixture(false);
                 fixture.Settings.WithProperty("A", "B", "E");
                 fixture.Settings.WithProperty("C", "D");
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.AssertReceivedArguments(
-                    "/m /v:normal /p:\"A\"=\"B\" /p:\"A\"=\"E\" /p:\"C\"=\"D\" /target:Build \"/Working/src/Solution.sln\"");
+                Assert.Equal("/m /v:normal /p:A=B /p:A=E /p:C=D /target:Build " +
+                             "\"/Working/src/Solution.sln\"", result.Args);
             }
 
             [Fact]
             public void Should_Append_Configuration_As_Property_To_Process_Arguments()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(false, true);
+                var fixture = new MSBuildRunnerFixture(false);
                 fixture.Settings.SetConfiguration("Release");
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.AssertReceivedArguments(
-                    "/m /v:normal /p:\"Configuration\"=\"Release\" /target:Build \"/Working/src/Solution.sln\"");
+                Assert.Equal("/m /v:normal /p:Configuration=Release /target:Build " +
+                             "\"/Working/src/Solution.sln\"", result.Args);
             }
 
             [Theory]
-            [InlineData(PlatformTarget.MSIL, "/m /v:normal /p:\"Platform\"=\"Any CPU\" /target:Build \"/Working/src/Solution.sln\"")]
-            [InlineData(PlatformTarget.x86, "/m /v:normal /p:\"Platform\"=\"x86\" /target:Build \"/Working/src/Solution.sln\"")]
-            [InlineData(PlatformTarget.x64, "/m /v:normal /p:\"Platform\"=\"x64\" /target:Build \"/Working/src/Solution.sln\"")]
-            public void Should_Append_Platform_As_Property_To_Process_Arguments(PlatformTarget? platform, string argumentsString)
+            [InlineData(PlatformTarget.MSIL, "/m /v:normal /p:Platform=\"Any CPU\" /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(PlatformTarget.x86, "/m /v:normal /p:Platform=x86 /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(PlatformTarget.x64, "/m /v:normal /p:Platform=x64 /target:Build \"/Working/src/Solution.sln\"")]
+            public void Should_Append_Platform_As_Property_To_Process_Arguments(PlatformTarget platform, string expected)
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(false, true);
-                fixture.Settings.SetPlatformTarget(platform.Value);
+                var fixture = new MSBuildRunnerFixture(false);
+                fixture.Settings.SetPlatformTarget(platform);
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.AssertReceivedArguments(argumentsString);
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]
             public void Should_Omit_Platform_Property_In_Process_Arguments_If_It_Is_Null()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(false, true);
+                var fixture = new MSBuildRunnerFixture(false);
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.AssertReceivedArguments("/m /v:normal /target:Build \"/Working/src/Solution.sln\"");
+                Assert.Equal("/m /v:normal /target:Build " +
+                             "\"/Working/src/Solution.sln\"", result.Args);
             }
 
             [Fact]
             public void Should_Set_Working_Directory()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(false, true);
+                var fixture = new MSBuildRunnerFixture(false);
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p =>
-                        p.WorkingDirectory.FullPath == "/Working"));
+                Assert.Equal("/Working", result.Process.WorkingDirectory.FullPath);
             }
 
             [Fact]
             public void Should_Throw_If_Process_Was_Not_Started()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(false, true);
-                fixture.ProcessRunner
-                    .Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>())
-                    .Returns((IProcess)null);
+                var fixture = new MSBuildRunnerFixture(false);
+                fixture.GivenProcessCannotStart();
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
@@ -401,8 +397,8 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(false, true);
-                fixture.Process.GetExitCode().Returns(1);
+                var fixture = new MSBuildRunnerFixture(false);
+                fixture.GivenProcessExitsWithCode(1);
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
@@ -412,30 +408,29 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Theory]
-            [InlineData(Verbosity.Quiet, "quiet")]
-            [InlineData(Verbosity.Minimal, "minimal")]
-            [InlineData(Verbosity.Normal, "normal")]
-            [InlineData(Verbosity.Verbose, "detailed")]
-            [InlineData(Verbosity.Diagnostic, "diagnostic")]
+            [InlineData(Verbosity.Quiet, "/m /v:quiet /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(Verbosity.Minimal, "/m /v:minimal /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(Verbosity.Normal, "/m /v:normal /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(Verbosity.Verbose, "/m /v:detailed /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(Verbosity.Diagnostic, "/m /v:diagnostic /target:Build \"/Working/src/Solution.sln\"")]
             public void Should_Append_Correct_Verbosity(Verbosity verbosity, string expected)
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(false, true);
+                var fixture = new MSBuildRunnerFixture(false);
                 fixture.Settings.Verbosity = verbosity;
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.AssertReceivedArguments(
-                    "/m /v:{0} /target:Build \"/Working/src/Solution.sln\"", expected);
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]
             public void Should_Throw_If_Verbosity_Is_Unknown()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(false, true);
+                var fixture = new MSBuildRunnerFixture(false);
                 fixture.Settings.Verbosity = (Verbosity)int.MaxValue;
 
                 // When

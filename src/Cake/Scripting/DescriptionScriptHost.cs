@@ -7,7 +7,7 @@ using Cake.Core.Scripting;
 namespace Cake.Scripting
 {
     /// <summary>
-    /// The script host used for showing task descriptions. 
+    /// The script host used for showing task descriptions.
     /// </summary>
     public sealed class DescriptionScriptHost : ScriptHost
     {

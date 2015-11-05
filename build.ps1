@@ -11,9 +11,11 @@ Param(
     [switch]$SkipToolPackageRestore
 )
 
+$PSScriptRoot = split-path -parent $MyInvocation.MyCommand.Definition;
 $TOOLS_DIR = Join-Path $PSScriptRoot "tools"
 $NUGET_EXE = Join-Path $TOOLS_DIR "nuget.exe"
 $CAKE_EXE = Join-Path $TOOLS_DIR "Cake/Cake.exe"
+$NUGET_URL = "https://nuget.org/nuget.exe"
 
 # Should we use experimental build of Roslyn?
 $UseExperimental = "";
@@ -35,7 +37,7 @@ if($Mono.IsPresent) {
 
 # Try download NuGet.exe if do not exist.
 if (!(Test-Path $NUGET_EXE)) {
-    Invoke-WebRequest -Uri http://nuget.org/nuget.exe -OutFile $NUGET_EXE
+    (New-Object System.Net.WebClient).DownloadFile($NUGET_URL, $NUGET_EXE)
 }
 
 # Make sure NuGet exists where we expect it.

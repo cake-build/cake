@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Xml;
 using Cake.Core;
@@ -22,7 +23,7 @@ namespace Cake.Common.Xml
         /// <param name="value">The value to set too. Leave blank to remove the selected nodes.</param>
         /// <example>
         ///   <para>
-        ///   Change the <c>server</c> setting in the configuration from <c>testhost.somecompany.com</c> 
+        ///   Change the <c>server</c> setting in the configuration from <c>testhost.somecompany.com</c>
         ///   to <c>productionhost.somecompany.com</c>.
         ///   </para>
         ///   <para>XML file:</para>
@@ -74,7 +75,7 @@ namespace Cake.Common.Xml
         ///     });
         /// });
         ///     ]]>
-        ///   </code>        
+        ///   </code>
         /// <example>
         ///   <para>
         ///   Remove an app setting from a config file.
@@ -124,7 +125,7 @@ namespace Cake.Common.Xml
         /// <param name="settings">Additional settings to tweak Xml Poke behavior.</param>
         /// <example>
         ///   <para>
-        ///   Change the <c>server</c> setting in the configuration from <c>testhost.somecompany.com</c> 
+        ///   Change the <c>server</c> setting in the configuration from <c>testhost.somecompany.com</c>
         ///   to <c>productionhost.somecompany.com</c>.
         ///   </para>
         ///   <para>XML file:</para>
@@ -176,7 +177,7 @@ namespace Cake.Common.Xml
         ///     });
         /// });
         ///     ]]>
-        ///   </code>        
+        ///   </code>
         /// <example>
         ///   <para>
         ///   Remove an app setting from a config file.
@@ -210,6 +211,7 @@ namespace Cake.Common.Xml
         /// http://nant.sourceforge.net/release/latest/help/tasks/xmlpoke.html
         /// </para>
         /// </example>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         [CakeMethodAlias]
         public static void XmlPoke(this ICakeContext context, FilePath filePath, string xpath, string value, XmlPokeSettings settings)
         {
@@ -256,7 +258,7 @@ namespace Cake.Common.Xml
         /// <returns>Resulting XML.</returns>
         /// <example>
         ///   <para>
-        ///   Change the <c>server</c> setting in the configuration from <c>testhost.somecompany.com</c> 
+        ///   Change the <c>server</c> setting in the configuration from <c>testhost.somecompany.com</c>
         ///   to <c>productionhost.somecompany.com</c>.
         ///   </para>
         ///   <para>XML string:</para>
@@ -306,7 +308,7 @@ namespace Cake.Common.Xml
         ///     });
         /// });
         ///     ]]>
-        ///   </code>        
+        ///   </code>
         /// <example>
         ///   <para>
         ///   Remove an app setting from a config file.
@@ -356,7 +358,7 @@ namespace Cake.Common.Xml
         /// <returns>Resulting XML.</returns>
         /// <example>
         ///   <para>
-        ///   Change the <c>server</c> setting in the configuration from <c>testhost.somecompany.com</c> 
+        ///   Change the <c>server</c> setting in the configuration from <c>testhost.somecompany.com</c>
         ///   to <c>productionhost.somecompany.com</c>.
         ///   </para>
         ///   <para>XML string:</para>
@@ -406,7 +408,7 @@ namespace Cake.Common.Xml
         ///     });
         /// });
         ///     ]]>
-        ///   </code>        
+        ///   </code>
         /// <example>
         ///   <para>
         ///   Remove an app setting from a config file.
@@ -440,6 +442,7 @@ namespace Cake.Common.Xml
         /// </para>
         /// </example>
         [CakeMethodAlias]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public static string XmlPoke(this ICakeContext context, string sourceXml, string xpath, string value, XmlPokeSettings settings)
         {
             if (context == null)
@@ -504,10 +507,11 @@ namespace Cake.Common.Xml
             }
 
             var nodes = document.SelectNodes(xpath, namespaceManager);
-
             if (nodes == null || nodes.Count == 0)
             {
-                throw new CakeException(string.Format("Failed to find nodes matching the XPath '{0}'", xpath));
+                const string format = "Failed to find nodes matching the XPath '{0}'";
+                var message = string.Format(CultureInfo.InvariantCulture, format, xpath);
+                throw new CakeException(message);
             }
 
             if (value == null)

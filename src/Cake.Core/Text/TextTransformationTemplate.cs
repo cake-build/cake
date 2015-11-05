@@ -13,7 +13,6 @@ namespace Cake.Core.Text
     {
         private readonly Dictionary<string, object> _tokens;
         private readonly string _template;
-        private readonly Tuple<string, string> _placeholder;
         private readonly string _keyExpression;
 
         /// <summary>
@@ -37,9 +36,8 @@ namespace Cake.Core.Text
                 throw new ArgumentNullException("template");
             }
             _template = template;
-            _placeholder = placeholder ?? new Tuple<string, string>("<%", "%>");
             _tokens = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-            _keyExpression = string.Concat(_placeholder.Item1, @"(?<key>[^", _placeholder.Item2[0], "]+)", _placeholder.Item2);
+            _keyExpression = CreateKeyExpression(placeholder);
         }
 
         /// <summary>
@@ -73,6 +71,17 @@ namespace Cake.Core.Text
         public string Render()
         {
             return Regex.Replace(_template, _keyExpression, Replace);
+        }
+
+        private static string CreateKeyExpression(Tuple<string, string> placeholder)
+        {
+            placeholder = placeholder ?? new Tuple<string, string>("<%", "%>");
+            return string.Concat(
+                placeholder.Item1,
+                @"(?<key>[^",
+                placeholder.Item2[0],
+                "]+)",
+                placeholder.Item2);
         }
 
         private string Replace(Match match)

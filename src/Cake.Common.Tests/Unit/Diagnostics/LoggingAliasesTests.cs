@@ -1,5 +1,5 @@
 ﻿using Cake.Common.Diagnostics;
-using Cake.Common.Tests.Fixtures;
+using Cake.Common.Tests.Fixtures.Diagnostics;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using NSubstitute;

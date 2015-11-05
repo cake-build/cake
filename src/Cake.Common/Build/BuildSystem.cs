@@ -1,7 +1,7 @@
 ﻿using System;
 using Cake.Common.Build.AppVeyor;
+using Cake.Common.Build.MyGet;
 using Cake.Common.Build.TeamCity;
-using Cake.Core;
 
 namespace Cake.Common.Build
 {
@@ -13,13 +13,15 @@ namespace Cake.Common.Build
     {
         private readonly IAppVeyorProvider _appVeyorProvider;
         private readonly ITeamCityProvider _teamCityProvider;
+        private readonly IMyGetProvider _myGetProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BuildSystem"/> class.
         /// </summary>
         /// <param name="appVeyorProvider">The AppVeyor Provider.</param>
         /// <param name="teamCityProvider">The TeamCity Provider.</param>
-        public BuildSystem(IAppVeyorProvider appVeyorProvider, ITeamCityProvider teamCityProvider)
+        /// <param name="myGetProvider">The MyGet Provider.</param>
+        public BuildSystem(IAppVeyorProvider appVeyorProvider, ITeamCityProvider teamCityProvider, IMyGetProvider myGetProvider)
         {
             if (appVeyorProvider == null)
             {
@@ -29,8 +31,13 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("teamCityProvider");
             }
+            if (myGetProvider == null)
+            {
+                throw new ArgumentNullException("myGetProvider");
+            }
             _appVeyorProvider = appVeyorProvider;
             _teamCityProvider = teamCityProvider;
+            _myGetProvider = myGetProvider;
         }
 
         /// <summary>
@@ -91,20 +98,57 @@ namespace Cake.Common.Build
         }
 
         /// <summary>
-        /// Gets the AppVeyor Provider.
+        /// Gets the TeamCity Provider.
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnAppVeyor)
+        /// if(BuildSystem.IsRunningOnTeamCiy)
         /// {
-        ///     // Upload artifact to AppVeyor.
-        ///     BuildSystem.AppVeyor.UploadArtifact("./build/release_x86.zip");
+        ///     // Set the build number.
+        ///     BuildSystem.TeamCity.SetBuildNumber("1.2.3.4");
         /// }
         /// </code>
         /// </example>
         public ITeamCityProvider TeamCity
         {
             get { return _teamCityProvider; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the current build is running on MyGet.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnMyGet)
+        /// {
+        ///     MyGet.BuildProblem("Something went wrong...");
+        ///     // Do action...
+        /// }
+        /// </code>
+        /// </example>
+        /// <value>
+        /// <c>true</c> if the build currently is running on MyGet; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsRunningOnMyGet
+        {
+            get { return _myGetProvider.IsRunningOnMyGet; }
+        }
+
+        /// <summary>
+        /// Gets the MyGet Provider.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnMyGet)
+        /// {
+        ///     // Set the build number.
+        ///     BuildSystem.MyGet.SetBuildNumber("1.2.3.4");
+        /// }
+        /// </code>
+        /// </example>
+        public IMyGetProvider MyGet
+        {
+            get { return _myGetProvider; }
         }
 
         /// <summary>
@@ -128,7 +172,7 @@ namespace Cake.Common.Build
         /// </value>
         public bool IsLocalBuild
         {
-            get { return !(IsRunningOnAppVeyor || IsRunningOnTeamCity); }
+            get { return !(IsRunningOnAppVeyor || IsRunningOnTeamCity || IsRunningOnMyGet); }
         }
     }
 }

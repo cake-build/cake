@@ -13,6 +13,6 @@ namespace Cake.Core.Scripting
         /// </summary>
         /// <param name="assemblies">The assemblies to find script aliases in.</param>
         /// <returns>The script aliases that were found.</returns>
-        ScriptAlias[] FindAliases(IEnumerable<Assembly> assemblies);
+        IReadOnlyList<ScriptAlias> FindAliases(IEnumerable<Assembly> assemblies);
     }
 }

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cake.Core.Diagnostics;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.MSBuild
 {
     /// <summary>
     /// Contains settings used by <see cref="MSBuildRunner"/>.
     /// </summary>
-    public sealed class MSBuildSettings
+    public sealed class MSBuildSettings : ToolSettings
     {
         private readonly HashSet<string> _targets;
         private readonly Dictionary<string, IList<string>> _properties;
@@ -56,13 +57,13 @@ namespace Cake.Common.Tools.MSBuild
 
         /// <summary>
         /// Gets or sets whether or not node reuse is used.
-        /// When you’re doing multiple builds in a row, this helps reduce your total build time, 
+        /// When you’re doing multiple builds in a row, this helps reduce your total build time,
         /// by avoiding the start up costs of each MSBuild child node.
         /// </summary>
         public bool? NodeReuse { get; set; }
 
         /// <summary>
-        /// Gets or sets the amount of information to display in the build log. 
+        /// Gets or sets the amount of information to display in the build log.
         /// Each logger displays events based on the verbosity level that you set for that logger.
         /// </summary>
         /// <value>The build log verbosity.</value>

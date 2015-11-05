@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.WiX
 {
@@ -59,7 +59,7 @@ namespace Cake.Common.Tools.WiX
                 throw new ArgumentException("No object files provided.", "objectFiles");
             }
 
-            Run(settings, GetArguments(objectFilesArray, settings), settings.ToolPath);
+            Run(settings, GetArguments(objectFilesArray, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(IEnumerable<FilePath> objectFiles, LightSettings settings)
@@ -73,7 +73,7 @@ namespace Cake.Common.Tools.WiX
                 foreach (var define in defines)
                 {
                     builder.Append(define);
-                }       
+                }
             }
 
             // Add extensions

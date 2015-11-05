@@ -5,7 +5,7 @@ using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.XBuild
 {
@@ -95,7 +95,7 @@ namespace Cake.Common.Tools.XBuild
                 return "normal";
             case Verbosity.Verbose:
                 return "detailed";
-            case Verbosity.Diagnostic: 
+            case Verbosity.Diagnostic:
                 return "diagnostic";
             }
             throw new CakeException("Encountered unknown XBuild build log verbosity.");

@@ -1,18 +1,14 @@
 using System.Collections.Generic;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.NuGet.Restore
 {
     /// <summary>
     /// Contains settings used by <see cref="NuGetRestorer"/>.
     /// </summary>
-    public sealed class NuGetRestoreSettings
+    public sealed class NuGetRestoreSettings : ToolSettings
     {
-        /// <summary>
-        /// Gets or sets the path to <c>nuget.exe</c>.
-        /// </summary>
-        public FilePath ToolPath { get; set; }
-
         /// <summary>
         /// Gets or sets a value indicating whether package restore consent is granted before installing a package.
         /// </summary>
@@ -53,7 +49,7 @@ namespace Cake.Common.Tools.NuGet.Restore
         public NuGetVerbosity? Verbosity { get; set; }
 
         /// <summary>
-        /// Gets or sets the NuGet configuration file. 
+        /// Gets or sets the NuGet configuration file.
         /// If not specified, the file <c>%AppData%\NuGet\NuGet.config</c> is used as the configuration file.
         /// </summary>
         public FilePath ConfigFile { get; set; }

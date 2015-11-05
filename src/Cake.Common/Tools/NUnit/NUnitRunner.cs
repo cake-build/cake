@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.NUnit
 {
@@ -28,25 +28,6 @@ namespace Cake.Common.Tools.NUnit
         }
 
         /// <summary>
-        /// Runs the tests in the specified assembly, using the specified settings.
-        /// </summary>
-        /// <param name="assemblyPath">The assembly path.</param>
-        /// <param name="settings">The settings.</param>
-        public void Run(FilePath assemblyPath, NUnitSettings settings)
-        {
-            if (assemblyPath == null)
-            {
-                throw new ArgumentNullException("assemblyPath");
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException("settings");
-            }
-
-            Run(settings, GetArguments(new[] { assemblyPath }, settings), settings.ToolPath);
-        }
-
-        /// <summary>
         /// Runs the tests in the specified assemblies, using the specified settings.
         /// </summary>
         /// <param name="assemblyPaths">The assembly paths.</param>
@@ -62,7 +43,7 @@ namespace Cake.Common.Tools.NUnit
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetArguments(assemblyPaths, settings), settings.ToolPath);
+            Run(settings, GetArguments(assemblyPaths, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(IEnumerable<FilePath> assemblyPaths, NUnitSettings settings)

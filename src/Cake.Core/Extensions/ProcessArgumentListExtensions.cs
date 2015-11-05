@@ -177,5 +177,208 @@ namespace Cake.Core
             }
             return builder;
         }
+
+        /// <summary>
+        /// Appends the specified switch to the argument builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="text">The text to be appended.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder AppendSwitch(this ProcessArgumentBuilder builder, string @switch, string text)
+        {
+            return ProcessArgumentListExtensions.AppendSwitch(builder, @switch, " ", text);
+        }
+
+        /// <summary>
+        /// Appends the specified switch to the argument builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
+        /// <param name="text">The text to be appended.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder AppendSwitch(this ProcessArgumentBuilder builder, string @switch, string separator, string text)
+        {
+            if (builder != null)
+            {
+                builder.Append(new SwitchArgument(@switch, new TextArgument(text), separator));
+            }
+            return builder;
+        }
+
+        /// <summary>
+        /// Quotes and appends the specified text to the argument builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="text">The text to be quoted and appended.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder AppendSwitchQuoted(this ProcessArgumentBuilder builder, string @switch, string text)
+        {
+            return ProcessArgumentListExtensions.AppendSwitchQuoted(builder, @switch, " ", text);
+        }
+
+        /// <summary>
+        /// Quotes and appends the specified text to the argument builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
+        /// <param name="text">The text to be quoted and appended.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder AppendSwitchQuoted(this ProcessArgumentBuilder builder, string @switch, string separator, string text)
+        {
+            if (builder != null)
+            {
+                builder.Append(new SwitchArgument(@switch, new QuotedArgument(new TextArgument(text)), separator));
+            }
+            return builder;
+        }
+
+        /// <summary>
+        /// Quotes and appends the specified argument to the argument builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="argument">The argument to be quoted and appended.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder AppendSwitchQuoted(this ProcessArgumentBuilder builder, string @switch, IProcessArgument argument)
+        {
+            return ProcessArgumentListExtensions.AppendSwitchQuoted(builder, @switch, " ", argument);
+        }
+
+        /// <summary>
+        /// Quotes and appends the specified argument to the argument builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
+        /// <param name="argument">The argument to be quoted and appended.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder AppendSwitchQuoted(this ProcessArgumentBuilder builder, string @switch, string separator, IProcessArgument argument)
+        {
+            if (builder != null)
+            {
+                builder.Append(new SwitchArgument(@switch, new QuotedArgument(argument), separator));
+            }
+            return builder;
+        }
+
+        /// <summary>
+        /// Appends the specified secret text to the argument builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="text">The secret text to be appended.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder AppendSwitchSecret(this ProcessArgumentBuilder builder, string @switch, string text)
+        {
+            return ProcessArgumentListExtensions.AppendSwitchSecret(builder, @switch, " ", text);
+        }
+
+        /// <summary>
+        /// Appends the specified secret text to the argument builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="separator">The separator between the switch and argument</param>
+        /// <param name="text">The secret text to be appended.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder AppendSwitchSecret(this ProcessArgumentBuilder builder, string @switch, string separator, string text)
+        {
+            if (builder != null)
+            {
+                builder.Append(new SwitchArgument(@switch, new SecretArgument(new TextArgument(text)), separator));
+            }
+            return builder;
+        }
+
+        /// <summary>
+        /// Appends the specified secret text to the argument builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="argument">The secret argument to be appended.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder AppendSwitchSecret(this ProcessArgumentBuilder builder, string @switch, IProcessArgument argument)
+        {
+            return ProcessArgumentListExtensions.AppendSwitchSecret(builder, @switch, " ", argument);
+        }
+
+        /// <summary>
+        /// Appends the specified secret text to the argument builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="separator">The separator between the switch and argument</param>
+        /// <param name="argument">The secret argument to be appended.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder AppendSwitchSecret(this ProcessArgumentBuilder builder, string @switch, string separator, IProcessArgument argument)
+        {
+            if (builder != null)
+            {
+                builder.Append(new SwitchArgument(@switch, new SecretArgument(argument), separator));
+            }
+            return builder;
+        }
+
+        /// <summary>
+        /// Quotes and appends the specified secret text to the argument builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="text">The secret text to be quoted and appended.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder AppendSwitchQuotedSecret(this ProcessArgumentBuilder builder, string @switch, string text)
+        {
+            return ProcessArgumentListExtensions.AppendSwitchQuotedSecret(builder, @switch, " ", text);
+        }
+
+        /// <summary>
+        /// Quotes and appends the specified secret text to the argument builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
+        /// <param name="text">The secret text to be quoted and appended.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder AppendSwitchQuotedSecret(this ProcessArgumentBuilder builder, string @switch, string separator, string text)
+        {
+            if (builder != null)
+            {
+                builder.AppendSwitchQuoted(@switch, separator, new SecretArgument(new TextArgument(text)));
+            }
+            return builder;
+        }
+
+        /// <summary>
+        /// Quotes and appends the specified secret text to the argument builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="argument">The secret argument to be appended.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder AppendQuotedSecret(this ProcessArgumentBuilder builder, string @switch, IProcessArgument argument)
+        {
+            return ProcessArgumentListExtensions.AppendQuotedSecret(builder, @switch, " ", argument);
+        }
+
+        /// <summary>
+        /// Quotes and appends the specified secret text to the argument builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="separator">The separator between the switch and argument</param>
+        /// <param name="argument">The secret argument to be appended.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder AppendQuotedSecret(this ProcessArgumentBuilder builder, string @switch, string separator, IProcessArgument argument)
+        {
+            if (builder != null)
+            {
+                builder.AppendSwitchQuoted(@switch, separator, new SecretArgument(argument));
+            }
+            return builder;
+        }
     }
 }

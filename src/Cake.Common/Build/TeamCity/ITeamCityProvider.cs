@@ -1,4 +1,6 @@
-﻿namespace Cake.Common.Build.TeamCity
+﻿using Cake.Core.IO;
+
+namespace Cake.Common.Build.TeamCity
 {
     /// <summary>
     /// Represents a TeamCity provider.
@@ -17,7 +19,7 @@
         /// </summary>
         /// <param name="type">Date type.</param>
         /// <param name="path">Data file path.</param>
-        void ImportData(string type, Cake.Core.IO.FilePath path);
+        void ImportData(string type, FilePath path);
 
         /// <summary>
         /// Gets a value indicating whether the current build is running on TeamCity.
@@ -32,6 +34,12 @@
         /// </summary>
         /// <param name="path">Path to artifacts.</param>
         void PublishArtifacts(string path);
+
+        /// <summary>
+        /// Tells TeamCity to change the current build number.
+        /// </summary>
+        /// <param name="buildNumber">The required build number.</param>
+        void SetBuildNumber(string buildNumber);
 
         /// <summary>
         /// Write the end of a message block to the TeamCity build log.

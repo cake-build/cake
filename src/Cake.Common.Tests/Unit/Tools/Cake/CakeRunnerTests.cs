@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.Cake;
 using Cake.Core;
@@ -51,7 +50,7 @@ namespace Cake.Common.Tests.Unit.Tools.Cake
             {
                 // Given
                 var fixture = new CakeRunnerFixture();
-                fixture.Globber.Match("./tools/**/Cake.exe").Returns(Enumerable.Empty<Path>());
+                fixture.GivenDefaultToolDoNotExist();
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
@@ -67,16 +66,15 @@ namespace Cake.Common.Tests.Unit.Tools.Cake
             public void Should_Use_Cake_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
-                var fixture = new CakeRunnerFixture(expected);
-                fixture.Settings.ToolPath = toolPath;               
+                var fixture = new CakeRunnerFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.ToolPath.FullPath);
             }
 
             [Fact]
@@ -86,13 +84,10 @@ namespace Cake.Common.Tests.Unit.Tools.Cake
                 var fixture = new CakeRunnerFixture();
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "\"/Working/build.cake\""));
+                Assert.Equal("\"/Working/build.cake\"", result.Args);
             }
 
             [Fact]
@@ -100,16 +95,13 @@ namespace Cake.Common.Tests.Unit.Tools.Cake
             {
                 // Given
                 var fixture = new CakeRunnerFixture();
-                fixture.Settings = new CakeSettings{ Verbosity = Verbosity.Diagnostic };
+                fixture.Settings.Verbosity = Verbosity.Diagnostic;
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "\"/Working/build.cake\" -verbosity=Diagnostic"));
+                Assert.Equal("\"/Working/build.cake\" -verbosity=Diagnostic", result.Args);
             }
 
             [Fact]
@@ -117,23 +109,17 @@ namespace Cake.Common.Tests.Unit.Tools.Cake
             {
                 // Given
                 var fixture = new CakeRunnerFixture();
-                fixture.Settings = new CakeSettings
-                {
-                    Arguments = new Dictionary<string, string>
-                    {
-                        { "target", "Build" },
-                        { "configuration", "Debug" }
-                    }
-                };
+                fixture.Settings.Arguments = new Dictionary<string, string>();
+                fixture.Settings.Arguments.Add("target", "Build");
+                fixture.Settings.Arguments.Add("configuration", "Debug");
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(),
-                    Arg.Is<ProcessSettings>(p => 
-                        p.Arguments.Render() == "\"/Working/build.cake\" -target=\"Build\" -configuration=\"Debug\""));
+                Assert.Equal("\"/Working/build.cake\" " +
+                             "-target=\"Build\" " +
+                             "-configuration=\"Debug\"", result.Args);
             }
         }
     }

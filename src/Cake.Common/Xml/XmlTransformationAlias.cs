@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;

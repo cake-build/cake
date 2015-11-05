@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Core.Utilities;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.DupFinder
 {
@@ -31,21 +31,21 @@ namespace Cake.Common.Tools.DupFinder
         /// <summary>
         /// Analyses the specified files using the specified settings.
         /// </summary>
-        /// <param name="files">The files.</param>
+        /// <param name="filePaths">The file paths.</param>
         /// <param name="settings">The settings.</param>
-        public void Run(IEnumerable<FilePath> files, DupFinderSettings settings)
+        public void Run(IEnumerable<FilePath> filePaths, DupFinderSettings settings)
         {
             if (settings == null)
             {
                 throw new ArgumentNullException("settings");
             }
 
-            if (files == null)
+            if (filePaths == null)
             {
-                throw new ArgumentNullException("files");
+                throw new ArgumentNullException("filePaths");
             }
 
-            Run(settings, GetArgument(settings, files));
+            Run(settings, GetArgument(settings, filePaths));
         }
 
         /// <summary>

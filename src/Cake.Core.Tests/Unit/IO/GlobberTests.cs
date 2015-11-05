@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Cake.Core.IO;
 using Cake.Core.Tests.Fixtures;
 using NSubstitute;
@@ -105,7 +104,7 @@ namespace Cake.Core.Tests.Unit.IO
                 {
                     // Given
                     var fixture = new GlobberFixture();
-                    var predicate = new Func<IFileSystemInfo, bool>(i => 
+                    var predicate = new Func<IFileSystemInfo, bool>(i =>
                         i.Path.FullPath != "/Working/Bar");
 
                     // When
@@ -170,11 +169,11 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = fixture.Match(string.Empty);
 
                 // Then
-                Assert.Equal(0, result.Count());
+                Assert.Equal(0, result.Length);
             }
 
             [Fact]
-            public void Can_Traverse_Recursivly()
+            public void Can_Traverse_Recursively()
             {
                 // Given
                 var fixture = new GlobberFixture();
@@ -203,6 +202,36 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.Equal(1, result.Length);
                 Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+            }
+
+            [Fact]
+            public void Should_Be_Able_To_Visit_Parent_Using_Double_Dots()
+            {
+                // Given
+                var fixture = new GlobberFixture();
+
+                // When
+                var result = fixture.Match("/Working/Foo/../Foo/Bar/Qux.c");
+
+                // Then
+                Assert.Equal(1, result.Length);
+                Assert.IsType<FilePath>(result[0]);
+                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Visiting_Parent_That_Is_Recursive_Wildcard()
+            {
+                // Given
+                var fixture = new GlobberFixture();
+
+                // When
+                var result = Record.Exception(() => fixture.Match("/Working/Foo/**/../Foo/Bar/Qux.c"));
+
+                // Then
+                Assert.NotNull(result);
+                Assert.IsType<NotSupportedException>(result);
+                Assert.Equal("Visiting a parent that is a recursive wildcard is not supported.", result.Message);
             }
 
             [Fact]
@@ -332,6 +361,21 @@ namespace Cake.Core.Tests.Unit.IO
                 Assert.Equal(2, result.Length);
                 Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
                 Assert.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
+            }
+
+            [Fact]
+            public void Should_Return_Files_For_Pattern_Ending_With_Character_Wildcard_And_Dot()
+            {
+                // Given
+                var fixture = new GlobberFixture(true);
+
+                // When
+                var result = fixture.Match("C:/Working/*.Test.dll");
+
+                // Then
+                Assert.Equal(2, result.Length);
+                Assert.ContainsFilePath(result, "C:/Working/Project.A.Test.dll");
+                Assert.ContainsFilePath(result, "C:/Working/Project.B.Test.dll");
             }
 
             [Fact]

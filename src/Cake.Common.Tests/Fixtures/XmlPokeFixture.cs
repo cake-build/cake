@@ -1,18 +1,15 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Xml;
-
 using Cake.Common.Tests.Properties;
 using Cake.Common.Xml;
+using Cake.Core;
 using Cake.Core.IO;
-using Cake.Testing.Fakes;
+using Cake.Testing;
+using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures
 {
-    using Cake.Core;
-
-    using NSubstitute;
-
     internal sealed class XmlPokeFixture
     {
        public IFileSystem FileSystem { get; set; }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Cake.Core.IO;
 using Cake.Core.Scripting;
+using Cake.Core.Scripting.Analysis;
 using Cake.Core.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
@@ -14,7 +15,21 @@ namespace Cake.Core.Tests.Unit.Scripting
         public sealed class TheConstructor
         {
             [Fact]
-            public void Should_Throw_If_Session_Factory_Is_Null()
+            public void Should_Throw_If_Environment_Is_Null()
+            {
+                // Given
+                var fixture = new ScriptRunnerFixture();
+                fixture.Environment = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateScriptRunner());
+
+                // Then
+                Assert.IsArgumentNullException(result, "environment");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Script_Engine_Is_Null()
             {
                 // Given
                 var fixture = new ScriptRunnerFixture();
@@ -39,6 +54,34 @@ namespace Cake.Core.Tests.Unit.Scripting
 
                 // Then
                 Assert.IsArgumentNullException(result, "aliasFinder");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Script_Analyzer_Is_Null()
+            {
+                // Given
+                var fixture = new ScriptRunnerFixture();
+                fixture.ScriptAnalyzer = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateScriptRunner());
+
+                // Then
+                Assert.IsArgumentNullException(result, "analyzer");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Script_Conventions_Is_Null()
+            {
+                // Given
+                var fixture = new ScriptRunnerFixture();
+                fixture.ScriptConventions = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateScriptRunner());
+
+                // Then
+                Assert.IsArgumentNullException(result, "conventions");
             }
         }
 
@@ -127,8 +170,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
 
                 // Then
-                fixture.Environment.Received(1).WorkingDirectory
-                    = Arg.Is<DirectoryPath>(p => p.FullPath == "/build");
+                Assert.Equal("/build", fixture.Environment.WorkingDirectory.FullPath);
             }
 
             [Theory]
@@ -138,7 +180,6 @@ namespace Cake.Core.Tests.Unit.Scripting
             [InlineData("System.Data")]
             [InlineData("System.Xml")]
             [InlineData("System.Xml.Linq")]
-            [InlineData("Cake.Core")]
             public void Should_Add_References_To_Session(string @assemblyName)
             {
                 // Given
@@ -161,7 +202,7 @@ namespace Cake.Core.Tests.Unit.Scripting
             [InlineData("System.Threading.Tasks")]
             [InlineData("System.IO")]
             [InlineData("Cake.Core")]
-            [InlineData("Cake.Core.IO")]            
+            [InlineData("Cake.Core.IO")]
             [InlineData("Cake.Core.Scripting")]
             [InlineData("Cake.Core.Diagnostics")]
             public void Should_Add_Namespaces_To_Session(string @namespace)
@@ -214,16 +255,17 @@ namespace Cake.Core.Tests.Unit.Scripting
             {
                 // Given
                 var fixture = new ScriptRunnerFixture(path);
-                fixture.ScriptProcessor = Substitute.For<IScriptProcessor>();
+                fixture.ScriptAnalyzer = Substitute.For<IScriptAnalyzer>();
+                fixture.ScriptAnalyzer.Analyze(Arg.Any<FilePath>())
+                    .Returns(new ScriptAnalyzerResult(new ScriptInformation(path), new List<string>()));
                 var runner = fixture.CreateScriptRunner();
 
                 // When
                 runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
 
                 // Then
-                fixture.ScriptProcessor.Received(1).Process(
-                    Arg.Is<FilePath>(p => p.FullPath == "build.cake"), 
-                    Arg.Any<ScriptProcessorContext>());
+                fixture.ScriptAnalyzer.Received(1).Analyze(
+                    Arg.Is<FilePath>(f => f.FullPath == "build.cake"));
             }
         }
     }

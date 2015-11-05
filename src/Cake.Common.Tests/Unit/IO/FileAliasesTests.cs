@@ -3,10 +3,10 @@ using System.IO;
 using System.Linq;
 using Cake.Common.IO;
 using Cake.Common.IO.Paths;
-using Cake.Common.Tests.Fixtures;
+using Cake.Common.Tests.Fixtures.IO;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Testing.Fakes;
+using Cake.Testing;
 using NSubstitute;
 using Xunit;
 
@@ -430,7 +430,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileAliases.CopyFiles(fixture.Context, "", null));
+                        FileAliases.CopyFiles(fixture.Context, "*", null));
 
                     // Then
                     Assert.IsArgumentNullException(result, "targetDirectoryPath");
@@ -840,7 +840,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(() =>
-                        FileAliases.MoveFiles(fixture.Context, "", null));
+                        FileAliases.MoveFiles(fixture.Context, "*", null));
 
                     // Then
                     Assert.IsArgumentNullException(result, "targetDirectoryPath");
