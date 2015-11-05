@@ -75,7 +75,7 @@ Task("Patch-Assembly-Info")
         Version = version,
         FileVersion = version,
         InformationalVersion = semVersion,
-        Copyright = "Copyright (c) Patrik Svensson, Mattias Karlsson and contributors"
+        Copyright = "Copyright (c) Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors"
     });
 });
 
