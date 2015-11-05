@@ -6,7 +6,7 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.GitReleaseNotes
 {
     /// <summary>
-    ///  Contains functionality related to ReSharper's duplication finder
+    ///  Contains functionality related to GitReleaseNotes
     /// </summary>
     [CakeAliasCategory("GitReleaseNotes")]
     public static class GitReleaseNotesAliases
