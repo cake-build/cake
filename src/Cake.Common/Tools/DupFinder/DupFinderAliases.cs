@@ -70,7 +70,7 @@ namespace Cake.Common.Tools.DupFinder
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new DupFinderRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var runner = new DupFinderRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.Log);
             runner.Run(files, settings);
         }
 
@@ -114,7 +114,7 @@ namespace Cake.Common.Tools.DupFinder
                 return;
             }
 
-            var runner = new DupFinderRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var runner = new DupFinderRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.Log);
             runner.Run(sourceFiles, settings);
         }
 
@@ -132,7 +132,7 @@ namespace Cake.Common.Tools.DupFinder
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new DupFinderRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var runner = new DupFinderRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.Log);
             runner.RunFromConfig(configFile);
         }
     }

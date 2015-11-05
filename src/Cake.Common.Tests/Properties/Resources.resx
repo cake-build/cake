@@ -210,6 +210,41 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
   &lt;/files&gt;
 &lt;/package&gt;</value>
   </data>
+  <data name="DupFinderReportNoDuplicates" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;DuplicatesReport ToolsVersion="103.0"&gt;
+  &lt;Statistics&gt;
+    &lt;CodebaseCost&gt;190358&lt;/CodebaseCost&gt;
+    &lt;TotalDuplicatesCost&gt;0&lt;/TotalDuplicatesCost&gt;
+    &lt;TotalFragmentsCost&gt;0&lt;/TotalFragmentsCost&gt;
+  &lt;/Statistics&gt;
+  &lt;Duplicates&gt;&lt;/Duplicates&gt;
+&lt;/DuplicatesReport&gt;</value>
+  </data>
+  <data name="DupFinderReportWithDuplicates" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;DuplicatesReport ToolsVersion="103.0"&gt;
+  &lt;Statistics&gt;
+    &lt;CodebaseCost&gt;190358&lt;/CodebaseCost&gt;
+    &lt;TotalDuplicatesCost&gt;0&lt;/TotalDuplicatesCost&gt;
+    &lt;TotalFragmentsCost&gt;0&lt;/TotalFragmentsCost&gt;
+  &lt;/Statistics&gt;
+  &lt;Duplicates&gt;
+    &lt;Duplicate&gt;
+      &lt;Fragment&gt;
+        &lt;FileName&gt;LangFeatures\CLexer.cs&lt;/FileName&gt;
+        &lt;OffsetRange Start="4638" End="4988" /&gt;
+        &lt;LineRange Start="158" End="168" /&gt;
+      &lt;/Fragment&gt;
+      &lt;Fragment&gt;
+        &lt;FileName&gt;LangFeatures\Lexer.cs&lt;/FileName&gt;
+        &lt;OffsetRange Start="7340" End="7690" /&gt;
+        &lt;LineRange Start="238" End="248" /&gt;
+      &lt;/Fragment&gt;
+    &lt;/Duplicate&gt;
+  &lt;/Duplicates&gt;
+&lt;/DuplicatesReport&gt;</value>
+  </data>
   <data name="Nuspec_Metadata" xml:space="preserve">
     <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;

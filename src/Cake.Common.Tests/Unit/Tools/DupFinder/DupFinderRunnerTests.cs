@@ -102,6 +102,21 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
             }
 
             [Fact]
+            public void Should_Throw_If_OutputFile_Contains_Duplicates_And_Set_To_Throw()
+            {
+                // Given
+                var fixture = new DupFinderRunnerFixture();
+                fixture.Settings.OutputFile = new FilePath("build/duplicates.xml");
+                fixture.Settings.ThrowExceptionOnFindingDuplicates = true;
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                Assert.IsCakeException(result, "Duplicates found in code base.");
+            }
+
+            [Fact]
             public void Should_Set_Debug_Switch()
             {
                 // Given
