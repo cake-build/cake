@@ -119,9 +119,10 @@ namespace Cake.Common.IO
             }
 
             // Copy the file.
-            context.Log.Verbose("Copying file {0} to {1}", absoluteFilePath.GetFilename(), absoluteFilePath);
+            var absoluteTargetPath = targetFilePath.MakeAbsolute(context.Environment);
+            context.Log.Verbose("Copying file {0} to {1}", absoluteFilePath.GetFilename(), absoluteTargetPath);
             var file = context.FileSystem.GetFile(absoluteFilePath);
-            file.Copy(targetFilePath.MakeAbsolute(context.Environment), true);
+            file.Copy(absoluteTargetPath, true);
         }
     }
 }

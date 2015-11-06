@@ -9,6 +9,8 @@ using Cake.Core.IO;
 using Cake.Testing;
 using NSubstitute;
 using Xunit;
+using LogLevel = Cake.Core.Diagnostics.LogLevel;
+using Verbosity = Cake.Core.Diagnostics.Verbosity;
 
 namespace Cake.Common.Tests.Unit.IO
 {
@@ -199,6 +201,22 @@ namespace Cake.Common.Tests.Unit.IO
                 // Then
                 fixture.TargetFiles[0].Received(1).Copy(
                     Arg.Is<FilePath>(p => p.FullPath == "/Working/target/file1.txt"), true);
+            }
+
+            [Fact]
+            public void Should_Log_Verbose_Message_With_Correct_Target()
+            {
+                // Given
+                var fixture = new FileCopyFixture();
+
+                // When
+                FileAliases.CopyFile(fixture.Context, "./file1.txt", "./target/file1.txt");
+
+                // Then
+                Assert.Contains(fixture.Log.Entries,
+                    entry =>
+                        entry.Level == LogLevel.Verbose && entry.Verbosity == Verbosity.Verbose &&
+                        entry.Message == "Copying file file1.txt to /Working/target/file1.txt");
             }
         }
 
