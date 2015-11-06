@@ -95,6 +95,34 @@ namespace Cake.Core.Tests.Unit.IO
                     Assert.Equal(1, result.Length);
                     Assert.ContainsFilePath(result, "C:/Program Files (x86)/Foo.c");
                 }
+
+                [Fact]
+                public void Should_Parse_Glob_Expressions_With_Ampersand_In_Them()
+                {
+                  // Given
+                  var fixture = new GlobberFixture(windows: true);
+
+                  // When
+                  var result = fixture.Match("C:/Tools & Services/*.dll");
+
+                  // Then
+                  Assert.Equal(1, result.Length);
+                  Assert.ContainsFilePath(result, "C:/Tools & Services/MyTool.dll");
+                }
+
+                [Fact]
+                public void Should_Parse_Glob_Expressions_With_Plus_In_Them()
+                {
+                  // Given
+                  var fixture = new GlobberFixture(windows: true);
+
+                  // When
+                  var result = fixture.Match("C:/Tools + Services/*.dll");
+
+                  // Then
+                  Assert.Equal(1, result.Length);
+                  Assert.ContainsFilePath(result, "C:/Tools + Services/MyTool.dll");
+                }
             }
 
             public sealed class WithPredicate

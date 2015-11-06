@@ -40,6 +40,8 @@ namespace Cake.Core.Tests.Fixtures
             FileSystem.CreateFile("C:/Working/Project.A.Test.dll");
             FileSystem.CreateFile("C:/Working/Project.B.Test.dll");
             FileSystem.CreateFile("C:/Working/Project.IntegrationTest.dll");
+            FileSystem.CreateFile("C:/Tools & Services/MyTool.dll");
+            FileSystem.CreateFile("C:/Tools + Services/MyTool.dll");
         }
 
         private void PrepareUnixFixture()

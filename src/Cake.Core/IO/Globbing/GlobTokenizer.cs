@@ -24,7 +24,7 @@ namespace Cake.Core.IO.Globbing
             _sourceIndex = 0;
             _currentContent = string.Empty;
             _currentCharacter = _pattern[_sourceIndex];
-            _identifierRegex = new Regex("^[0-9a-zA-Z(). _-]$", RegexOptions.Compiled);
+            _identifierRegex = new Regex("^[0-9a-zA-Z\\+(). _-]$", RegexOptions.Compiled);
         }
 
         public GlobToken Scan()
@@ -99,8 +99,7 @@ namespace Cake.Core.IO.Globbing
 
         private bool IsAlphaNumeric(char character)
         {
-            return _identifierRegex.IsMatch(character.ToString(CultureInfo.InvariantCulture))
-                   || character == '+'; // TODO: Fix this
+            return _identifierRegex.IsMatch(character.ToString(CultureInfo.InvariantCulture));
         }
 
         private void TakeCharacter()
