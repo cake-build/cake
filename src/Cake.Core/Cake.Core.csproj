@@ -167,6 +167,8 @@
     <Compile Include="Scripting\Analysis\ScriptAnalyzerResult.cs" />
     <Compile Include="Scripting\Analysis\ScriptInformation.cs" />
     <Compile Include="Scripting\Analysis\ScriptAnalyzerContext.cs" />
+    <Compile Include="Scripting\CodeGen\MethodAliasGenerator.cs" />
+    <Compile Include="Scripting\CodeGen\PropertyAliasGenerator.cs" />
     <Compile Include="Scripting\IScriptAliasFinder.cs" />
     <Compile Include="Scripting\IScriptConventions.cs" />
     <Compile Include="Scripting\IScriptEngine.cs" />

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using Cake.Core.Scripting;
+using Cake.Core.Scripting.CodeGen;
 using Cake.Scripting.Mono.CodeGen.Parsing;
 
 namespace Cake.Scripting.Mono.CodeGen
@@ -59,8 +60,8 @@ namespace Cake.Scripting.Mono.CodeGen
             foreach (var alias in context.Aliases)
             {
                 result.Add(alias.Type == ScriptAliasType.Method
-                    ? MonoMethodAliasGenerator.Generate(alias.Method)
-                    : MonoPropertyAliasGenerator.Generate(alias.Method));
+                    ? MethodAliasGenerator.Generate(alias.Method)
+                    : PropertyAliasGenerator.Generate(alias.Method));
             }
             return string.Join("\r\n", result);
         }

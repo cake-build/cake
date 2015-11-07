@@ -4,15 +4,14 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
-using Cake.Core;
 using Cake.Core.Annotations;
 
-namespace Cake.Scripting.Roslyn
+namespace Cake.Core.Scripting.CodeGen
 {
     /// <summary>
     /// Responsible for generating script property aliases.
     /// </summary>
-    public static class RoslynPropertyAliasGenerator
+    public static class PropertyAliasGenerator
     {
         /// <summary>
         /// Generates a script property alias from the specified method.
@@ -38,7 +37,7 @@ namespace Cake.Scripting.Roslyn
             // Generate code.
             return attribute.Cache
                 ? GenerateCachedCode(method)
-                : GenerateCode(method);
+                    : GenerateCode(method);
         }
 
         private static void ValidateMethod(MethodInfo method)
@@ -103,11 +102,46 @@ namespace Cake.Scripting.Roslyn
             builder.Append(GetReturnType(method));
             builder.Append(" ");
             builder.Append(method.Name);
+            builder.AppendLine();
             builder.Append("{");
-            builder.Append("get{return ");
+            builder.AppendLine();
+            builder.Append("    get");
+            builder.AppendLine();
+            builder.AppendLine("    {");
+
+            // Property is obsolete?
+            var obsolete = method.GetCustomAttribute<ObsoleteAttribute>();
+            if (obsolete != null)
+            {
+                var message = GetObsoleteMessage(method, obsolete);
+
+                if (obsolete.IsError)
+                {
+                    builder.Append("        throw new Cake.Core.CakeException(\"");
+                    builder.Append(message);
+                    builder.Append("\");");
+                    builder.AppendLine();
+                    builder.AppendLine("    }");
+                    builder.AppendLine("}");
+                    builder.AppendLine();
+                    builder.AppendLine();
+
+                    return builder.ToString();
+                }
+
+                builder.AppendLine(string.Format(
+                    CultureInfo.InvariantCulture,
+                    "        Context.Log.Warning(\"Warning: {0}\");", message));
+            }
+
+            builder.Append("        return ");
             builder.Append(method.GetFullName());
             builder.Append("(Context);");
-            builder.Append("}}");
+            builder.AppendLine();
+            builder.AppendLine("    }");
+            builder.AppendLine("}");
+            builder.AppendLine();
+            builder.AppendLine();
 
             return builder.ToString();
         }
@@ -115,6 +149,16 @@ namespace Cake.Scripting.Roslyn
         private static string GenerateCachedCode(MethodInfo method)
         {
             var builder = new StringBuilder();
+
+            // Property is obsolete?
+            var obsolete = method.GetCustomAttribute<ObsoleteAttribute>();
+            if (obsolete != null)
+            {
+                if (obsolete.IsError)
+                {
+                    return GenerateCode(method);
+                }
+            }
 
             // Backing field.
             builder.Append("private ");
@@ -126,29 +170,53 @@ namespace Cake.Scripting.Roslyn
             builder.Append(" _");
             builder.Append(method.Name);
             builder.Append(";");
-            builder.Append("\n");
+            builder.AppendLine();
 
             // Property
             builder.Append("public ");
             builder.Append(GetReturnType(method));
             builder.Append(" ");
             builder.Append(method.Name);
+            builder.AppendLine();
             builder.Append("{");
-            builder.Append("get{");
-            builder.AppendFormat("if(_{0}==null)", method.Name);
-            builder.Append("{");
-            builder.AppendFormat("_{0}=", method.Name);
+            builder.AppendLine();
+            builder.AppendLine("    get");
+            builder.Append("    {");
+            builder.AppendLine();
+
+            // Property is obsolete?
+            if (obsolete != null)
+            {
+                var message = GetObsoleteMessage(method, obsolete);
+                builder.AppendLine(string.Format(
+                    CultureInfo.InvariantCulture,
+                    "        Context.Log.Warning(\"Warning: {0}\");", message));
+            }
+
+            builder.AppendLine(string.Format(
+                CultureInfo.InvariantCulture,
+                "        if (_{0}==null)", method.Name));
+
+            builder.Append("        {");
+            builder.AppendLine();
+            builder.AppendFormat("            _{0} = ", method.Name);
             builder.Append(method.GetFullName());
             builder.Append("(Context);");
-            builder.Append("}");
-            builder.AppendFormat("return _{0}", method.Name);
+            builder.AppendLine();
+            builder.Append("        }");
+            builder.AppendLine();
+            builder.AppendFormat("        return _{0}", method.Name);
             if (method.ReturnType.IsValueType)
             {
                 builder.Append(".Value");
             }
             builder.Append(";");
+            builder.AppendLine();
+            builder.Append("    }");
+            builder.AppendLine();
             builder.Append("}");
-            builder.Append("}");
+            builder.AppendLine();
+            builder.AppendLine();
 
             return builder.ToString();
         }
@@ -156,6 +224,15 @@ namespace Cake.Scripting.Roslyn
         private static string GetReturnType(MethodInfo method)
         {
             return method.ReturnType.GetFullName();
+        }
+
+        private static string GetObsoleteMessage(MethodInfo method, ObsoleteAttribute attribute)
+        {
+            const string format = "The alias {0} has been made obsolete. {1}";
+            var message = string.Format(
+                CultureInfo.InvariantCulture,
+                format, method.Name, attribute.Message);
+            return message.Trim();
         }
     }
 }

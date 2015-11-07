@@ -1,0 +1,5 @@
+﻿public void Obsolete_ImplicitWarning_NoMessage()
+{
+    Context.Log.Warning("Warning: The alias Obsolete_ImplicitWarning_NoMessage has been made obsolete.");
+    Cake.Core.Tests.Data.MethodAliasGeneratorData.Obsolete_ImplicitWarning_NoMessage(Context);
+}

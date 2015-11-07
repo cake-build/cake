@@ -1,0 +1,5 @@
+﻿public void Obsolete_ImplicitWarning_WithMessage()
+{
+    Context.Log.Warning("Warning: The alias Obsolete_ImplicitWarning_WithMessage has been made obsolete. Please use Foo.Bar instead.");
+    Cake.Core.Tests.Data.MethodAliasGeneratorData.Obsolete_ImplicitWarning_WithMessage(Context);
+}

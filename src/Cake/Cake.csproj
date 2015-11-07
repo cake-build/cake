@@ -167,16 +167,12 @@
     <Compile Include="Scripting\Roslyn\Nightly\RoslynNightlyScriptSession.cs" />
     <Compile Include="Scripting\Roslyn\Nightly\RoslynNightlyScriptSessionFactory.cs" />
     <Compile Include="Scripting\Roslyn\RoslynCodeGenerator.cs" />
-    <Compile Include="Scripting\Roslyn\RoslynMethodAliasGenerator.cs" />
-    <Compile Include="Scripting\Roslyn\RoslynPropertyAliasGenerator.cs" />
     <Compile Include="Scripting\Roslyn\Stable\RoslynScriptSession.cs" />
     <Compile Include="Scripting\Roslyn\RoslynScriptEngine.cs" />
     <Compile Include="Scripting\Roslyn\Stable\RoslynScriptSessionFactory.cs" />
     <Compile Include="Scripting\Mono\MonoScriptSession.cs" />
     <Compile Include="Scripting\Mono\MonoScriptEngine.cs" />
     <Compile Include="Scripting\Mono\CodeGen\MonoCodeGenerator.cs" />
-    <Compile Include="Scripting\Mono\CodeGen\MonoPropertyAliasGenerator.cs" />
-    <Compile Include="Scripting\Mono\CodeGen\MonoMethodAliasGenerator.cs" />
     <Compile Include="Scripting\Mono\MonoScriptHostProxy.cs" />
   </ItemGroup>
   <ItemGroup>

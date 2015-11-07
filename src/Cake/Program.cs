@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Autofac;
-using Autofac.Builder;
 using Cake.Arguments;
 using Cake.Commands;
 using Cake.Core;

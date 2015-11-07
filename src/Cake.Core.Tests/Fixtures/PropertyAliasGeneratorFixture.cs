@@ -1,54 +1,36 @@
-﻿using Cake.Core.Annotations;
+﻿using System.IO;
+using System.Linq;
+using System.Reflection;
+using Cake.Core.Scripting.CodeGen;
+using Cake.Core.Tests.Data;
 
 namespace Cake.Core.Tests.Fixtures
 {
-    internal static class PropertyAliasGeneratorFixture
+    public sealed class PropertyAliasGeneratorFixture
     {
-        public static void NotAnExtensionMethod()
+        private readonly Assembly _assembly;
+        private readonly MethodInfo[] _methods;
+
+        public PropertyAliasGeneratorFixture()
         {
+            _assembly = typeof (PropertyAliasGeneratorFixture).Assembly;
+            _methods = typeof (PropertyAliasGeneratorData).GetMethods();
         }
 
-        public static void NotAScriptMethod(this ICakeContext context)
+        public string GetExpectedData(string name)
         {
+            var resource = string.Concat("Cake.Core.Tests.Unit.Scripting.CodeGen.Expected.Properties.", name);
+            using (var stream = _assembly.GetManifestResourceStream(resource))
+            using (var reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd().NormalizeGeneratedCode();
+            }
         }
 
-        [CakePropertyAlias]
-        // ReSharper disable once UnusedTypeParameter
-        public static void GenericScriptMethod<T>(this ICakeContext context)
+        public string Generate(string name)
         {
-        }
-
-        [CakePropertyAlias]
-        public static void PropertyAliasWithMoreThanOneMethod(this ICakeContext context, int number)
-        {
-        }
-
-        [CakePropertyAlias]
-        public static void PropertyAliasWithoutContext(this int number)
-        {
-        }
-
-        [CakePropertyAlias]
-        public static void PropertyAliasReturningVoid(this ICakeContext context)
-        {
-        }
-
-        [CakePropertyAlias]
-        public static int PropertyAliasReturningInteger(this ICakeContext context)
-        {
-            return 42;
-        }
-
-        [CakePropertyAlias(Cache = true)]
-        public static string PropertyAliasReturningCachedString(this ICakeContext context)
-        {
-            return "Hello World";
-        }
-
-        [CakePropertyAlias(Cache = true)]
-        public static bool PropertyAliasReturningCachedBoolean(this ICakeContext context)
-        {
-            return true;
+            var method = _methods.SingleOrDefault(x => x.Name == name);
+            return PropertyAliasGenerator.Generate(method).NormalizeGeneratedCode();
         }
     }
 }

@@ -1,68 +1,36 @@
-﻿using System;
-using System.Diagnostics;
-using Cake.Core.Annotations;
+﻿using System.IO;
+using System.Linq;
+using System.Reflection;
+using Cake.Core.Scripting.CodeGen;
+using Cake.Core.Tests.Data;
 
 namespace Cake.Core.Tests.Fixtures
 {
-    internal static class MethodAliasGeneratorFixture
+    public sealed class MethodAliasGeneratorFixture
     {
-        public static void NotAnExtensionMethod()
+        private readonly Assembly _assembly;
+        private readonly MethodInfo[] _methods;
+
+        public MethodAliasGeneratorFixture()
         {
-            throw new NotImplementedException();
+            _assembly = typeof (MethodAliasGeneratorFixture).Assembly;
+            _methods = typeof (MethodAliasGeneratorData).GetMethods();
         }
 
-        public static void NotAScriptMethod(this ICakeContext context)
+        public string GetExpectedCode(string name)
         {
-            throw new NotImplementedException();
+            var resource = string.Concat("Cake.Core.Tests.Unit.Scripting.CodeGen.Expected.Methods.", name);
+            using (var stream = _assembly.GetManifestResourceStream(resource))
+            using (var reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd().NormalizeGeneratedCode();
+            }
         }
 
-        [CakeMethodAlias]
-        public static void NonGeneric_ExtensionMethodWithNoParameters(this ICakeContext context)
+        public string Generate(string name)
         {
-            throw new NotImplementedException();
-        }
-
-        [CakeMethodAlias]
-        public static string NonGeneric_ExtensionMethodWithReturnValue(this ICakeContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        [CakeMethodAlias]
-        public static void NonGeneric_ExtensionMethodWithParameter(this ICakeContext context, int value)
-        {
-            throw new NotImplementedException();
-        }
-
-        [CakeMethodAlias]
-        public static void NonGeneric_ExtensionMethodWithGenericParameter(this ICakeContext context, Action<int> value)
-        {
-            throw new NotImplementedException();
-        }
-
-        [CakeMethodAlias]
-        public static void Generic_ExtensionMethod<TTest>(this ICakeContext context)
-        {
-            Debug.Assert(typeof(TTest) != null); // Resharper
-            throw new NotImplementedException();
-        }
-
-        [CakeMethodAlias]
-        public static void Generic_ExtensionMethodWithParameter<TTest>(this ICakeContext context, TTest value)
-        {
-            throw new NotImplementedException();
-        }
-
-        [CakeMethodAlias]
-        public static TTest Generic_ExtensionMethodWithGenericReturnValue<TTest>(this ICakeContext context, TTest value)
-        {
-            throw new NotImplementedException();
-        }
-
-        [CakeMethodAlias]
-        public static void NonGeneric_ExtensionMethodWithParameterArray(this ICakeContext context, params int[] values)
-        {
-            throw new NotImplementedException();
+            var method = _methods.SingleOrDefault(x => x.Name == name);
+            return MethodAliasGenerator.Generate(method).NormalizeGeneratedCode();
         }
     }
 }
