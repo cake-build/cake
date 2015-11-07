@@ -180,7 +180,7 @@
         {
             _clsCompliant = !string.IsNullOrWhiteSpace(clsCompliant) && bool.Parse(clsCompliant);
             _company = company;
-            _comVisible = !string.IsNullOrWhiteSpace(clsCompliant) && bool.Parse(comVisible);
+            _comVisible = !string.IsNullOrWhiteSpace(comVisible) && bool.Parse(comVisible);
             _configuration = configuration;
             _copyright = copyright;
             _description = description;
