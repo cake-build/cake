@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cake.Common.Tests.Fixtures.Tools.InspectCode;
 using Cake.Common.Tools.InspectCode;
 using Cake.Core;
+using Cake.Core.IO;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.InspectCode
@@ -94,6 +95,21 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
                 // Then
                 Assert.Equal("\"/output:/Working/build/inspect_code.xml\" " +
                              "\"/Working/Test.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Throw_If_OutputFile_Contains_Violations_And_Set_To_Throw()
+            {
+                // Given
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.OutputFile = new FilePath("build/violations.xml");
+                fixture.Settings.ThrowExceptionOnFindingViolations = true;
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                Assert.IsCakeException(result, "Code Inspection Violations found in code base.");
             }
 
             [Fact]

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
@@ -13,7 +16,9 @@ namespace Cake.Common.Tools.InspectCode
     /// </summary>
     public sealed class InspectCodeRunner : Tool<InspectCodeSettings>
     {
+        private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
+        private readonly ICakeLog _log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InspectCodeRunner"/> class.
@@ -22,10 +27,13 @@ namespace Cake.Common.Tools.InspectCode
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="globber">The globber.</param>
-        public InspectCodeRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IGlobber globber)
+        /// <param name="log">The logger.</param>
+        public InspectCodeRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IGlobber globber, ICakeLog log)
             : base(fileSystem, environment, processRunner, globber)
         {
+            _fileSystem = fileSystem;
             _environment = environment;
+            _log = log;
         }
 
         /// <summary>
@@ -45,6 +53,11 @@ namespace Cake.Common.Tools.InspectCode
             }
 
             Run(settings, GetArguments(settings, solution));
+
+            if (settings.OutputFile != null)
+            {
+                AnalyseResultsFile(settings.OutputFile, settings.ThrowExceptionOnFindingViolations);
+            }
         }
 
         /// <summary>
@@ -59,6 +72,32 @@ namespace Cake.Common.Tools.InspectCode
             }
 
             Run(new InspectCodeSettings(), GetConfigArgument(configFile));
+        }
+
+        private void AnalyseResultsFile(FilePath resultsFilePath, bool throwOnViolations)
+        {
+            var anyFailures = false;
+            var resultsFile = _fileSystem.GetFile(resultsFilePath);
+            var xmlDoc = XDocument.Load(resultsFile.Open(FileMode.Open));
+            var violations = xmlDoc.Descendants("IssueType").Where(i => i.Attribute("Severity") != null && i.Attribute("Severity").Value == "ERROR");
+
+            foreach (var violation in violations)
+            {
+                _log.Warning("Code Inspection Error(s) Located. Description: {0}", violation.Attribute("Description"));
+
+                var issueLookups = xmlDoc.Descendants("Issue").Where(i => i.Attribute("TypeId") != null && i.Attribute("TypeId").Value == violation.Attribute("Id").Value);
+                foreach (var issueLookup in issueLookups)
+                {
+                    _log.Warning("File Name: {0} Line Numbers: {1} Message: {2}", issueLookup.Attribute("File").Value, issueLookup.Attribute("Line").Value, issueLookup.Attribute("Message").Value);
+                }
+
+                anyFailures = true;
+            }
+
+            if (anyFailures && throwOnViolations)
+            {
+                throw new CakeException("Code Inspection Violations found in code base.");
+            }
         }
 
         private ProcessArgumentBuilder GetConfigArgument(FilePath configFile)

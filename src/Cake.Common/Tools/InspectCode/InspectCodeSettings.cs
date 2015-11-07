@@ -89,5 +89,10 @@ namespace Cake.Common.Tools.InspectCode
         /// Gets or sets the path to the file to use custom settings from.
         /// </summary>
         public FilePath Profile { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to throw an exception on finding violations
+        /// </summary>
+        public bool ThrowExceptionOnFindingViolations { get; set; }
     }
 }
