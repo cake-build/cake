@@ -153,6 +153,31 @@ Task("Zip-Files")
     Zip(binDir, packagePath, files);
 });
 
+Task("Create-Chocolatey-Packages")
+    .IsDependentOn("Copy-Files")
+    .WithCriteria(() => isRunningOnWindows)
+    .Does(() =>
+{
+  // Create Cake package.
+  ChocolateyPack("./nuspec/Cake.Portable.nuspec", new ChocolateyPackSettings {
+      Version = semVersion,
+	  ReleaseNotes = releaseNotes.Notes.ToArray(),
+      Files = new [] {
+        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.exe")},
+        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Core.dll")},
+        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Core.xml")},
+        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Common.dll")},
+        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Common.xml")},
+        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/NuGet.Core.dll")},
+        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Mono.CSharp.dll")},
+        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Autofac.dll")},
+        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/LICENSE")}
+    }
+  });
+
+  MoveFileToDirectory(string.Concat("cake.portable.", semVersion, ".nupkg"), nugetRoot);
+});
+
 Task("Create-NuGet-Packages")
     .IsDependentOn("Copy-Files")
     .WithCriteria(() => isRunningOnWindows)
@@ -227,7 +252,7 @@ Task("Publish-MyGet")
         throw new InvalidOperationException("Could not resolve MyGet API key.");
     }
 
-    foreach(var package in new[] { "Cake", "Cake.Core", "Cake.Common", "Cake.Testing" })
+    foreach(var package in new[] { "Cake", "Cake.Core", "Cake.Common", "Cake.Testing", "cake.portable" })
     {
         // Get the path to the package.
         var packagePath = nugetRoot + File(string.Concat(package, ".", semVersion, ".nupkg"));
@@ -263,19 +288,44 @@ Task("Publish-NuGet")
     }
 });
 
+Task("Publish-Chocolatey")
+  .IsDependentOn("Create-Chocolatey-Packages")
+  .WithCriteria(() => local)
+  .Does(() =>
+{
+    // Resolve the API key.
+    var apiKey = EnvironmentVariable("CHOCOLATEY_API_KEY");
+    if(string.IsNullOrEmpty(apiKey)) {
+        throw new InvalidOperationException("Could not resolve Chocolatey API key.");
+    }
+
+    foreach(var package in new[] { "cake.portable" })
+    {
+        // Get the path to the package.
+        var packagePath = nugetRoot + File(string.Concat(package, ".", semVersion, ".nupkg"));
+
+        // Push the package.
+        ChocolateyPush(packagePath, new ChocolateyPushSettings {
+          ApiKey = apiKey
+        });
+    }
+});
+
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
 Task("Package")
   .IsDependentOn("Zip-Files")
-  .IsDependentOn("Create-NuGet-Packages");
+  .IsDependentOn("Create-NuGet-Packages")
+  .IsDependentOn("Create-Chocolatey-Packages");
 
 Task("Default")
   .IsDependentOn("Package");
 
 Task("Publish")
-  .IsDependentOn("Publish-NuGet");
+  .IsDependentOn("Publish-NuGet")
+  .IsDependentOn("Publish-Chocolatey");
 
 Task("AppVeyor")
   .IsDependentOn("Update-AppVeyor-Build-Number")
