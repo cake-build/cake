@@ -12,9 +12,9 @@ namespace Cake.Common.Solution.Project.Properties
     /// </summary>
     public sealed class AssemblyInfoParser
     {
-        private const string VersionPattern = @"{0}\(""([.]*(\d*|\*?)[.]*(\d*|\*?)[.]*(\d*|\*?)[.]*(\d*|\*?))""\)";
-        private const string GeneralNonQuotedAttributePattern = @"{0}\((?<attributeValue>.*)\)";
-        private const string GeneralQuotedAttributePattern = @"{0}\(""(?<attributeValue>.*)""\)";
+        private const string VersionPattern = @"^\s*\[assembly: {0}\(""([.]*(\d*|\*?)[.]*(\d*|\*?)[.]*(\d*|\*?)[.]*(\d*|\*?))""\)";
+        private const string GeneralNonQuotedAttributePattern = @"^\s*\[assembly: {0}\((?<attributeValue>.*)\)";
+        private const string GeneralQuotedAttributePattern = @"^\s*\[assembly: {0}\(""(?<attributeValue>.*)""\)";
         private const string DefaultVersion = "1.0.0.0";
 
         private readonly IFileSystem _fileSystem;
@@ -88,7 +88,7 @@ namespace Cake.Common.Solution.Project.Properties
 
         private static string ParseVersion(string attributeName, string content)
         {
-            var regex = new Regex(string.Format(CultureInfo.InvariantCulture, VersionPattern, attributeName));
+            var regex = new Regex(string.Format(CultureInfo.InvariantCulture, VersionPattern, attributeName), RegexOptions.Multiline);
             var match = regex.Match(content);
             if (match.Groups.Count > 0)
             {
@@ -103,7 +103,7 @@ namespace Cake.Common.Solution.Project.Properties
 
         private static string ParseGeneralQuotedAttribute(string attributeName, string content)
         {
-            var regex = new Regex(string.Format(CultureInfo.InvariantCulture, GeneralQuotedAttributePattern, attributeName));
+            var regex = new Regex(string.Format(CultureInfo.InvariantCulture, GeneralQuotedAttributePattern, attributeName), RegexOptions.Multiline);
             var match = regex.Match(content);
             if (match.Groups.Count > 0)
             {
@@ -118,7 +118,7 @@ namespace Cake.Common.Solution.Project.Properties
 
         private static string ParseGeneralNonQuotedAttribute(string attributeName, string content)
         {
-            var regex = new Regex(string.Format(CultureInfo.InvariantCulture, GeneralNonQuotedAttributePattern, attributeName));
+            var regex = new Regex(string.Format(CultureInfo.InvariantCulture, GeneralNonQuotedAttributePattern, attributeName), RegexOptions.Multiline);
             var match = regex.Match(content);
             if (match.Groups.Count > 0)
             {
