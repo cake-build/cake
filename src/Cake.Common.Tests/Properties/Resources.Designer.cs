@@ -147,6 +147,47 @@ namespace Cake.Common.Tests.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;DuplicatesReport ToolsVersion=&quot;103.0&quot;&gt;
+        ///  &lt;Statistics&gt;
+        ///    &lt;CodebaseCost&gt;190358&lt;/CodebaseCost&gt;
+        ///    &lt;TotalDuplicatesCost&gt;0&lt;/TotalDuplicatesCost&gt;
+        ///    &lt;TotalFragmentsCost&gt;0&lt;/TotalFragmentsCost&gt;
+        ///  &lt;/Statistics&gt;
+        ///  &lt;Duplicates&gt;&lt;/Duplicates&gt;
+        ///&lt;/DuplicatesReport&gt;.
+        /// </summary>
+        internal static string DupFinderReportNoDuplicates {
+            get {
+                return ResourceManager.GetString("DupFinderReportNoDuplicates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;DuplicatesReport ToolsVersion=&quot;103.0&quot;&gt;
+        ///  &lt;Statistics&gt;
+        ///    &lt;CodebaseCost&gt;190358&lt;/CodebaseCost&gt;
+        ///    &lt;TotalDuplicatesCost&gt;0&lt;/TotalDuplicatesCost&gt;
+        ///    &lt;TotalFragmentsCost&gt;0&lt;/TotalFragmentsCost&gt;
+        ///  &lt;/Statistics&gt;
+        ///  &lt;Duplicates&gt;
+        ///    &lt;Duplicate&gt;
+        ///      &lt;Fragment&gt;
+        ///        &lt;FileName&gt;LangFeatures\CLexer.cs&lt;/FileName&gt;
+        ///        &lt;OffsetRange Start=&quot;4638&quot; End=&quot;4988&quot; /&gt;
+        ///        &lt;LineRange Start=&quot;158&quot; End=&quot;168&quot; /&gt;
+        ///      &lt;/Fragment&gt;
+        ///      &lt;Fragment&gt;
+        ///        &lt;FileName&gt;LangFe [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DupFinderReportWithDuplicates {
+            get {
+                return ResourceManager.GetString("DupFinderReportWithDuplicates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
         ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
         ///    &lt;id&gt;The ID&lt;/id&gt;

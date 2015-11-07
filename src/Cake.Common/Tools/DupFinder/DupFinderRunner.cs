@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
@@ -13,7 +16,9 @@ namespace Cake.Common.Tools.DupFinder
     /// </summary>
     public sealed class DupFinderRunner : Tool<DupFinderSettings>
     {
+        private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
+        private readonly ICakeLog _log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DupFinderRunner"/> class.
@@ -21,11 +26,14 @@ namespace Cake.Common.Tools.DupFinder
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="globber">The globber</param>
-        public DupFinderRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IGlobber globber)
+        /// <param name="globber">The globber.</param>
+        /// <param name="log">The logger.</param>
+        public DupFinderRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IGlobber globber, ICakeLog log)
             : base(fileSystem, environment, processRunner, globber)
         {
+            _fileSystem = fileSystem;
             _environment = environment;
+            _log = log;
         }
 
         /// <summary>
@@ -46,6 +54,11 @@ namespace Cake.Common.Tools.DupFinder
             }
 
             Run(settings, GetArgument(settings, filePaths));
+
+            if (settings.OutputFile != null)
+            {
+                AnalyzeResultsFile(settings.OutputFile, settings.ThrowExceptionOnFindingDuplicates);
+            }
         }
 
         /// <summary>
@@ -171,6 +184,37 @@ namespace Cake.Common.Tools.DupFinder
             }
 
             return builder;
+        }
+
+        private void AnalyzeResultsFile(FilePath resultsFilePath, bool throwOnDuplicates)
+        {
+            var anyFailures = false;
+            var resultsFile = _fileSystem.GetFile(resultsFilePath);
+            var xmlDoc = XDocument.Load(resultsFile.Open(FileMode.Open));
+            var duplicates = xmlDoc.Descendants("Duplicate");
+
+            foreach (var duplicate in duplicates)
+            {
+                _log.Warning("Duplicate Located with a cost of {0}, across {1} Fragments", duplicate.Attribute("Cost"), duplicate.Descendants("Fragment").Count());
+
+                foreach (var fragment in duplicate.Descendants("Fragment"))
+                {
+                    var fileNameNode = fragment.Descendants("FileName").FirstOrDefault();
+                    var lineRangeNode = fragment.Descendants("LineRange").FirstOrDefault();
+
+                    if (fileNameNode != null && lineRangeNode != null)
+                    {
+                        _log.Warning("File Name: {0} Line Numbers: {1} - {2}", fileNameNode.Value, lineRangeNode.Attribute("Start"), lineRangeNode.Attribute("End"));
+                    }
+                }
+
+                anyFailures = true;
+            }
+
+            if (anyFailures && throwOnDuplicates)
+            {
+                throw new CakeException("Duplicates found in code base.");
+            }
         }
 
         /// <summary>

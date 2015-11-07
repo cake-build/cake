@@ -91,5 +91,10 @@ namespace Cake.Common.Tools.DupFinder
         /// Gets or sets a value indicating whether to show duplicates text in the report.
         /// </summary>
         public bool ShowText { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to throw an exception on finding duplicates
+        /// </summary>
+        public bool ThrowExceptionOnFindingDuplicates { get; set; }
     }
 }
