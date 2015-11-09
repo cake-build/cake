@@ -131,7 +131,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             }
 
             [Theory]
-            [InlineData("Copyright (c) Patrik Svensson, Mattias Karlsson and contributors", "Copyright (c) Patrik Svensson, Mattias Karlsson and contributors")]
+            [InlineData("Copyright (c) Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors", "Copyright (c) Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors")]
             [InlineData(null, "")]
             public void Should_Read_Copyright(string value, string expected)
             {
