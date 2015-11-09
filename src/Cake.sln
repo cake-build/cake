@@ -33,6 +33,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuspec", "nuspec", "{B38B35
 		..\nuspec\Cake.Common.nuspec = ..\nuspec\Cake.Common.nuspec
 		..\nuspec\Cake.Core.nuspec = ..\nuspec\Cake.Core.nuspec
 		..\nuspec\Cake.nuspec = ..\nuspec\Cake.nuspec
+		..\nuspec\Cake.Portable.nuspec = ..\nuspec\Cake.Portable.nuspec
 		..\nuspec\Cake.Testing.nuspec = ..\nuspec\Cake.Testing.nuspec
 	EndProjectSection
 EndProject
