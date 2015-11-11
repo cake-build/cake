@@ -218,7 +218,7 @@ namespace Cake.Core
             }
             catch (Exception exception)
             {
-                _log.Error("An error occured when executing task.", task.Name);
+                _log.Error("An error occured when executing task '{0}'.", task.Name);
 
                 exceptionWasThrown = true;
 
