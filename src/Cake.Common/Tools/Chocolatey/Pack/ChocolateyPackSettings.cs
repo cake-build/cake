@@ -187,5 +187,10 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         /// </summary>
         /// <value>The allow unofficial flag</value>
         public bool AllowUnofficial { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating the Working Directory that should be used while running choco.exe.
+        /// </summary>
+        public DirectoryPath OutputDirectory { get; set; }
     }
 }
