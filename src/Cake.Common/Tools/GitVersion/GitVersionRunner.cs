@@ -98,15 +98,14 @@ namespace Cake.Common.Tools.GitVersion
                 builder.AppendQuotedSecret(settings.Password);
             }
 
-            if (settings.UpdateAssemblyInfoFilePath != null)
-            {
-                builder.Append("/updateassemblyinfofilename");
-                builder.AppendQuoted(settings.UpdateAssemblyInfoFilePath.FullPath);
-            }
-
             if (settings.UpdateAssemblyInfo)
             {
                 builder.Append("/updateassemblyinfo");
+
+                if (settings.UpdateAssemblyInfoFilePath != null)
+                {
+                    builder.AppendQuoted(settings.UpdateAssemblyInfoFilePath.FullPath);
+                }
             }
 
             if (settings.RepositoryPath != null)

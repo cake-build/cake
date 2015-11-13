@@ -140,13 +140,14 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
             {
                 // Given
                 var fixture = new GitVersionRunnerFixture();
+                fixture.Settings.UpdateAssemblyInfo = true;
                 fixture.Settings.UpdateAssemblyInfoFilePath = "c:/temp/assemblyinfo.cs";
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/updateassemblyinfofilename \"c:/temp/assemblyinfo.cs\"", result.Args);
+                Assert.Equal("/updateassemblyinfo \"c:/temp/assemblyinfo.cs\"", result.Args);
             }
 
             [Fact]
