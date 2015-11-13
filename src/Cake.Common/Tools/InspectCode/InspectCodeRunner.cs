@@ -83,12 +83,16 @@ namespace Cake.Common.Tools.InspectCode
 
             foreach (var violation in violations)
             {
-                _log.Warning("Code Inspection Error(s) Located. Description: {0}", violation.Attribute("Description"));
+                _log.Warning("Code Inspection Error(s) Located. Description: {0}", violation.Attribute("Description").Value);
 
                 var issueLookups = xmlDoc.Descendants("Issue").Where(i => i.Attribute("TypeId") != null && i.Attribute("TypeId").Value == violation.Attribute("Id").Value);
                 foreach (var issueLookup in issueLookups)
                 {
-                    _log.Warning("File Name: {0} Line Numbers: {1} Message: {2}", issueLookup.Attribute("File").Value, issueLookup.Attribute("Line").Value, issueLookup.Attribute("Message").Value);
+                    var file = issueLookup.Attribute("File") == null ? string.Empty : issueLookup.Attribute("File").Value;
+                    var line = issueLookup.Attribute("Line") == null ? string.Empty : issueLookup.Attribute("Line").Value;
+                    var message = issueLookup.Attribute("Message") == null ? string.Empty : issueLookup.Attribute("Message").Value;
+
+                    _log.Warning("File Name: {0} Line Number: {1} Message: {2}", file, line, message);
                 }
 
                 anyFailures = true;
