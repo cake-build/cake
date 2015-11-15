@@ -195,6 +195,7 @@
     <Compile Include="Tools\MSBuild\MSBuildSettingsExtensions.cs" />
     <Compile Include="Tools\MSBuild\MSBuildToolVersion.cs" />
     <Compile Include="Tools\MSBuild\MSBuildVersion.cs" />
+    <Compile Include="Tools\MSBuild\MSBuildPlatform.cs" />
     <Compile Include="Tools\MSBuild\PlatformTarget.cs" />
     <Compile Include="Tools\MSTest\MSTestAliases.cs" />
     <Compile Include="Tools\MSTest\MSTestRunner.cs" />

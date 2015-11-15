@@ -20,6 +20,12 @@
         /// PlatformTarget: <c>x64</c>
         /// </summary>
         // ReSharper disable once InconsistentNaming
-        x64 = 2
+        x64 = 2,
+
+        /// <summary>
+        /// PlatformTarget: <c>ARM</c>
+        /// </summary>
+        // ReSharper disable once InconsistentNaming
+        ARM = 3,
     }
 }
