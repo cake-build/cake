@@ -1,0 +1,13 @@
+﻿private System.Int32? _Cached_Obsolete_ExplicitWarning_WithMessage;
+public System.Int32 Cached_Obsolete_ExplicitWarning_WithMessage
+{
+    get
+    {
+        Context.Log.Warning("Warning: The alias Cached_Obsolete_ExplicitWarning_WithMessage has been made obsolete. Please use Foo.Bar instead.");
+        if (_Cached_Obsolete_ExplicitWarning_WithMessage==null)
+        {
+            _Cached_Obsolete_ExplicitWarning_WithMessage = Cake.Core.Tests.Data.PropertyAliasGeneratorData.Cached_Obsolete_ExplicitWarning_WithMessage(Context);
+        }
+        return _Cached_Obsolete_ExplicitWarning_WithMessage.Value;
+    }
+}

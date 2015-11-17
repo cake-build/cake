@@ -55,10 +55,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Fixtures\CakeContextFixture.cs" />
-    <Compile Include="Fixtures\ScriptAnalyzerFixture.cs" />
-    <Compile Include="Fixtures\MethodAliasGeneratorFixture.cs" />
     <Compile Include="Fixtures\PropertyAliasGeneratorFixture.cs" />
+    <Compile Include="Fixtures\MethodAliasGeneratorFixture.cs" />
+    <Compile Include="Fixtures\ScriptAnalyzerFixture.cs" />
+    <Compile Include="Data\MethodAliasGeneratorData.cs" />
+    <Compile Include="Data\PropertyAliasGeneratorData.cs" />
     <Compile Include="Fixtures\ScriptHostFixture.cs" />
     <Compile Include="Fixtures\ScriptProcessorFixture.cs" />
     <Compile Include="Fixtures\ScriptRunnerFixture.cs" />
@@ -101,6 +104,8 @@
     <Compile Include="Unit\IO\ProcessSettingsTests.cs" />
     <Compile Include="Unit\Scripting\Analysis\ScriptAnalyzerResultTests.cs" />
     <Compile Include="Unit\Scripting\Analysis\ScriptAnalyzerTests.cs" />
+    <Compile Include="Unit\Scripting\CodeGen\MethodAliasGeneratorTests.cs" />
+    <Compile Include="Unit\Scripting\CodeGen\PropertyAliasGeneratorTests.cs" />
     <Compile Include="Unit\Scripting\ScriptAliasTests.cs" />
     <Compile Include="Unit\Scripting\ScriptHostTests.cs" />
     <Compile Include="Unit\Scripting\ScriptProcessorTests.cs" />
@@ -114,6 +119,26 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Properties\Cached_Value_Type" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Properties\NonCached_Obsolete_ImplicitWarning_NoMessage" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Properties\NonCached_Obsolete_ImplicitWarning_WithMessage" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Properties\NonCached_Obsolete_ExplicitWarning_WithMessage" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Properties\NonCached_Obsolete_ExplicitError_WithMessage" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Methods\NonGeneric_ExtensionMethodWithParameter" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Methods\NonGeneric_ExtensionMethodWithGenericParameter" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Methods\NonGeneric_ExtensionMethodWithReturnValue" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Methods\Generic_ExtensionMethod" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Methods\Generic_ExtensionMethodWithParameter" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Methods\Generic_ExtensionMethodWithGenericReturnValue" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Methods\NonGeneric_ExtensionMethodWithParameterArray" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Methods\Obsolete_ImplicitWarning_NoMessage" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Methods\Obsolete_ImplicitWarning_WithMessage" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Methods\Obsolete_ExplicitWarning_WithMessage" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Methods\Obsolete_ExplicitError_WithMessage" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Properties\Cached_Obsolete_ImplicitWarning_WithMessage" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Properties\Cached_Obsolete_ImplicitWarning_NoMessage" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Properties\Cached_Obsolete_ExplicitWarning_WithMessage" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Properties\Cached_Obsolete_ExplicitError_WithMessage" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
@@ -131,6 +156,15 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Properties\NonCached_Value_Type" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Properties\Cached_Reference_Type" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Methods\NonGeneric_ExtensionMethodWithNoParameters" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

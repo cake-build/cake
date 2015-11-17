@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
-using Cake.Core;
 using Cake.Core.Annotations;
 
-namespace Cake.Tests.Fixtures
+namespace Cake.Core.Tests.Data
 {
-    internal static class RoslynMethodAliasGeneratorFixture
+    internal static class MethodAliasGeneratorData
     {
         public static void NotAnExtensionMethod()
         {
@@ -62,6 +61,34 @@ namespace Cake.Tests.Fixtures
 
         [CakeMethodAlias]
         public static void NonGeneric_ExtensionMethodWithParameterArray(this ICakeContext context, params int[] values)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+        [Obsolete]
+        public static void Obsolete_ImplicitWarning_NoMessage(this ICakeContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+        [Obsolete("Please use Foo.Bar instead.")]
+        public static void Obsolete_ImplicitWarning_WithMessage(this ICakeContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+        [Obsolete("Please use Foo.Bar instead.", false)]
+        public static void Obsolete_ExplicitWarning_WithMessage(this ICakeContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+        [Obsolete("Please use Foo.Bar instead.", true)]
+        public static void Obsolete_ExplicitError_WithMessage(this ICakeContext context)
         {
             throw new NotImplementedException();
         }
