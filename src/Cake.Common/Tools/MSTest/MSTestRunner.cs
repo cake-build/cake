@@ -60,6 +60,19 @@ namespace Cake.Common.Tools.MSTest
                 builder.AppendQuoted("/noisolation");
             }
 
+            // Got a specific test settings file?
+            if (!string.IsNullOrWhiteSpace(settings.TestSettingsFile))
+            {
+                // Add the file as a property.
+                var testSettingsFile = settings.TestSettingsFile.Trim();
+                if (testSettingsFile.Contains(" "))
+                {
+                    testSettingsFile = testSettingsFile.Quote();
+                }
+
+                builder.Append(string.Concat("/testsettings:", testSettingsFile));
+            }
+
             return builder;
         }
 

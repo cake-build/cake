@@ -158,5 +158,19 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             // Then
             Assert.Equal("\"/testcontainer:/Working/Test1.dll\"", result.Args);
         }
+
+        [Fact]
+        public void Should_Use_Test_Settings_File_If_Set()
+        {
+            // Given
+            var fixture = new MSTestRunnerFixture();
+            fixture.Settings.TestSettingsFile = "my.testsettings";
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("\"/testcontainer:/Working/Test1.dll\" \"/noisolation\" /testsettings:my.testsettings", result.Args);
+        }
     }
 }
