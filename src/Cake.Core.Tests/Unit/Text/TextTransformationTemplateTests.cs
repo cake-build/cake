@@ -235,6 +235,45 @@ namespace Cake.Core.Tests.Unit.Text
                 // Then
                 Assert.Equal("Hello a700936f-8e15-4bb7-82ce-312547b66440!", result);
             }
+
+            [Fact]
+            public void Should_Escape_Regex_Characters_In_Text()
+            {
+                // Given
+                var transformation = new TextTransformationTemplate(".$^{[(|)*+?\\");
+
+                // When
+                var result = transformation.Render();
+
+                // Then
+                Assert.Equal(".$^{[(|)*+?\\", result);
+            }
+
+            [Theory]
+            [InlineData(".")]
+            [InlineData("$")]
+            [InlineData("^")]
+            [InlineData("{")]
+            [InlineData("[")]
+            [InlineData("(")]
+            [InlineData("|")]
+            [InlineData(")")]
+            [InlineData("*")]
+            [InlineData("+")]
+            [InlineData("?")]
+            public void Should_Escape_Regex_Characters_In_Placeholder(string placeholder)
+            {
+                // Given
+                var template = string.Concat("Hello ", placeholder, "subject", placeholder, "!");
+                var transformation = new TextTransformationTemplate(template, Tuple.Create(placeholder, placeholder));
+                transformation.Register("subject", "world");
+
+                // When
+                var result = transformation.Render();
+
+                // Then
+                Assert.Equal("Hello world!", result);
+            }
         }
     }
 }
