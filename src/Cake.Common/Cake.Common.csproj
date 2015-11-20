@@ -225,6 +225,12 @@
     <Compile Include="Tools\NuGet\Pack\NuspecTransformer.cs" />
     <Compile Include="Tools\NuGet\Update\NuGetUpdater.cs" />
     <Compile Include="Tools\NuGet\Update\NuGetUpdateSettings.cs" />
+    <Compile Include="Tools\NUnit\NUnit3Aliases.cs" />
+    <Compile Include="Tools\NUnit\NUnit3AppDomainUsage.cs" />
+    <Compile Include="Tools\NUnit\NUnit3Labels.cs" />
+    <Compile Include="Tools\NUnit\NUnit3ProcessOption.cs" />
+    <Compile Include="Tools\NUnit\NUnit3Runner.cs" />
+    <Compile Include="Tools\NUnit\NUnit3Settings.cs" />
     <Compile Include="Tools\NUnit\NUnitAliases.cs" />
     <Compile Include="Tools\NUnit\NUnitAppDomainUsage.cs" />
     <Compile Include="Tools\NUnit\NUnitProcessOption.cs" />
