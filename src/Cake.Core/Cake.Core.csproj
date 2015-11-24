@@ -131,11 +131,21 @@
     <Compile Include="IO\IRegistry.cs" />
     <Compile Include="IO\IRegistryKey.cs" />
     <Compile Include="IO\Machine.cs" />
+    <Compile Include="IO\NuGet\Parsing\AssemblyFilePathFrameworkNameParser.cs" />
+    <Compile Include="IO\NuGet\Parsing\IAssemblyFilePathFrameworkNameParser.cs" />
+    <Compile Include="IO\NuGet\Parsing\IFrameworkNameParser.cs" />
+    <Compile Include="IO\NuGet\IFrameworkTargetable.cs" />
+    <Compile Include="IO\NuGet\INuGetAssemblyCompatibilityFilter.cs" />
     <Compile Include="IO\NuGet\INuGetPackageInstaller.cs" />
     <Compile Include="IO\NuGet\INuGetToolResolver.cs" />
+    <Compile Include="IO\NuGet\INuGetFrameworkCompatibilityFilter.cs" />
+    <Compile Include="IO\NuGet\IPackageReferenceBundler.cs" />
+    <Compile Include="IO\NuGet\NuGetAssemblyCompatibilityFilter.cs" />
     <Compile Include="IO\NuGet\NuGetPackage.cs" />
     <Compile Include="IO\NuGet\NuGetPackageInstaller.cs" />
     <Compile Include="IO\NuGet\NuGetToolResolver.cs" />
+    <Compile Include="IO\NuGet\PackageReferenceSet.cs" />
+    <Compile Include="IO\NuGet\PackageReferenceBundler.cs" />
     <Compile Include="IO\Path.cs" />
     <Compile Include="IO\DirectoryPath.cs" />
     <Compile Include="IO\FilePath.cs" />
@@ -160,6 +170,8 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="IO\NuGet\NuGetPackageAssembliesLocator.cs" />
+    <Compile Include="IO\NuGet\INuGetPackageAssembliesLocator.cs" />
     <Compile Include="Scripting\Analysis\IScriptAnalyzer.cs" />
     <Compile Include="Scripting\Analysis\IScriptAnalyzerContext.cs" />
     <Compile Include="Scripting\Analysis\IScriptInformation.cs" />

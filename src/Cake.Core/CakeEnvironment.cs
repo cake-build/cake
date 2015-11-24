@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Versioning;
 using Cake.Core.IO;
 
 namespace Cake.Core
@@ -118,6 +119,15 @@ namespace Cake.Core
                 key => (string)key.Key,
                 value => value.Value as string,
                 StringComparer.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Gets the target .Net framework version that the current AppDomain is targeting.
+        /// </summary>
+        /// <returns>The target framework.</returns>
+        public FrameworkName GetTargetFramework()
+        {
+            return new FrameworkName(AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName);
         }
 
         private static void SetWorkingDirectory(DirectoryPath path)

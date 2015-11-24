@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Versioning;
 using Cake.Core.IO;
 
 namespace Cake.Core
@@ -51,5 +52,11 @@ namespace Cake.Core
         /// </summary>
         /// <returns>The environment variables as IDictionary&lt;string, string&gt; </returns>
         IDictionary<string, string> GetEnvironmentVariables();
+
+        /// <summary>
+        /// Gets the target .Net framework version that the current AppDomain is targeting.
+        /// </summary>
+        /// <returns>The target framework.</returns>
+        FrameworkName GetTargetFramework();
     }
 }

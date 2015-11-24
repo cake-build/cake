@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
+using System.Runtime.Versioning;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -17,6 +17,7 @@ namespace Cake.Testing
         private readonly Dictionary<SpecialPath, DirectoryPath> _specialPaths;
         private DirectoryPath _applicationRoot;
         private bool _is64Bit;
+        private FrameworkName _targetFramework;
 
         /// <summary>
         /// Gets or sets the working directory.
@@ -165,6 +166,24 @@ namespace Cake.Testing
         public IDictionary<string, string> GetEnvironmentVariables()
         {
             return new Dictionary<string, string>(_environmentVariables, StringComparer.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Gets the target .Net framework version that the current AppDomain is targeting.
+        /// </summary>
+        /// <returns>The target framework.</returns>
+        public FrameworkName GetTargetFramework()
+        {
+            return _targetFramework;
+        }
+
+        /// <summary>
+        /// Sets the target framework.
+        /// </summary>
+        /// <param name="targetFramework">The target framework.</param>
+        public void SetTargetFramework(FrameworkName targetFramework)
+        {
+            _targetFramework = targetFramework;
         }
     }
 }

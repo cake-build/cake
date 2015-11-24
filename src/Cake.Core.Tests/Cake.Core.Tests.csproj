@@ -89,7 +89,12 @@
     <Compile Include="Unit\IO\FilePathCollectionTests.cs" />
     <Compile Include="Unit\IO\FileSystemExtensionsTest.cs" />
     <Compile Include="Unit\IO\GlobberTests.cs" />
+    <Compile Include="Unit\IO\NuGet\Parsing\AssemblyFilePathFrameworkNameParserTests.cs" />
+    <Compile Include="Unit\IO\NuGet\NuGetAssemblyCompatibilityFilterTests.cs" />
+    <Compile Include="Unit\IO\NuGet\NuGetPackageAssembliesLocatorTests.cs" />
     <Compile Include="Unit\IO\NuGet\NuGetToolResolverTests.cs" />
+    <Compile Include="Unit\IO\NuGet\PackageReferenceBundlerTests.cs" />
+    <Compile Include="Unit\IO\NuGet\PackageReferenceSetTests.cs" />
     <Compile Include="Unit\IO\PathComparerTests.cs" />
     <Compile Include="Unit\IO\DirectoryPathTests.cs" />
     <Compile Include="Unit\IO\FilePathTests.cs" />

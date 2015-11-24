@@ -7,9 +7,11 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
+using Cake.Core.IO.NuGet.Parsing;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.Analysis;
 using Cake.Diagnostics;
+using Cake.NuGet;
 using Cake.Scripting;
 using Cake.Scripting.Roslyn;
 using Cake.Scripting.Roslyn.Nightly;
@@ -74,6 +76,13 @@ namespace Cake
             builder.RegisterType<NuGetPackageInstaller>().As<INuGetPackageInstaller>().SingleInstance();
             builder.RegisterType<WindowsRegistry>().As<IRegistry>().SingleInstance();
             builder.RegisterType<CakeContext>().As<ICakeContext>().SingleInstance();
+
+            // NuGet addins support
+            builder.RegisterType<NuGetVersionUtilityAdapter>().As<INuGetFrameworkCompatibilityFilter>().As<IFrameworkNameParser>().SingleInstance();
+            builder.RegisterType<NuGetPackageAssembliesLocator>().As<INuGetPackageAssembliesLocator>().SingleInstance();
+            builder.RegisterType<PackageReferenceBundler>().As<IPackageReferenceBundler>().SingleInstance();
+            builder.RegisterType<NuGetAssemblyCompatibilityFilter>().As<INuGetAssemblyCompatibilityFilter>().SingleInstance();
+            builder.RegisterType<AssemblyFilePathFrameworkNameParser>().As<IAssemblyFilePathFrameworkNameParser>().SingleInstance();
 
             if (mono)
             {
