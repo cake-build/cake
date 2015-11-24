@@ -65,7 +65,7 @@ namespace Cake.Common.Tools.MSBuild
                 builder.Append(string.Concat("/p:Configuration=", configuration));
             }
 
-            // Buid for a specific platform?
+            // Build for a specific platform?
             if (settings.PlatformTarget.HasValue)
             {
                 var platform = settings.PlatformTarget.Value;
@@ -109,6 +109,8 @@ namespace Cake.Common.Tools.MSBuild
                     return "x86";
                 case PlatformTarget.x64:
                     return "x64";
+                case PlatformTarget.ARM:
+                    return "arm";
                 default:
                     throw new InvalidEnumArgumentException("platform", (int)platform, typeof(PlatformTarget));
             }
@@ -173,7 +175,23 @@ namespace Cake.Common.Tools.MSBuild
                 throw new ArgumentNullException("settings");
             }
 
-            var path = MSBuildResolver.GetMSBuildPath(_fileSystem, _environment, settings.ToolVersion, settings.PlatformTarget ?? PlatformTarget.MSIL);
+            MSBuildPlatform buildPlatform = settings.MSBuildPlatform;
+
+            // If we haven't explicitly set an MSBuild target then use the Platform Target
+            if (buildPlatform == MSBuildPlatform.Automatic)
+            {
+                switch (settings.PlatformTarget)
+                {
+                    case PlatformTarget.x86:
+                        buildPlatform = MSBuildPlatform.x86;
+                        break;
+                    case PlatformTarget.x64:
+                        buildPlatform = MSBuildPlatform.x64;
+                        break;
+                }
+            }
+
+            var path = MSBuildResolver.GetMSBuildPath(_fileSystem, _environment, settings.ToolVersion, buildPlatform);
             if (path != null)
             {
                 return new[] { path };

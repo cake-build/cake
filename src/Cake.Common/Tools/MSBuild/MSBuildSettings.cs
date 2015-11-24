@@ -38,6 +38,12 @@ namespace Cake.Common.Tools.MSBuild
         public PlatformTarget? PlatformTarget { get; set; }
 
         /// <summary>
+        /// Gets or sets the MSBuild platform.
+        /// </summary>
+        /// <value>The MSBuild platform.</value>
+        public MSBuildPlatform MSBuildPlatform { get; set; }
+
+        /// <summary>
         /// Gets or sets the tool version.
         /// </summary>
         /// <value>The tool version.</value>
@@ -80,6 +86,7 @@ namespace Cake.Common.Tools.MSBuild
             ToolVersion = MSBuildToolVersion.Default;
             Configuration = string.Empty;
             Verbosity = Verbosity.Normal;
+            MSBuildPlatform = MSBuildPlatform.Automatic;
         }
     }
 }
