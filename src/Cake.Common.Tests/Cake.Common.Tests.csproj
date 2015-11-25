@@ -123,6 +123,7 @@
     <Compile Include="Fixtures\Tools\NuGet\Sources\NuGetRemoveSourceFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGet\Sources\NuGetSourcesFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGet\Update\NuGetUpdateFixture.cs" />
+    <Compile Include="Fixtures\Tools\NUnit3RunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\NUnitRunnerFixture.cs" />
     <Compile Include="Fixtures\ProcessFixture.cs" />
     <Compile Include="Fixtures\Tools\OctopusDeployReleaseCreatorFixture.cs" />
@@ -217,6 +218,8 @@
     <Compile Include="Unit\Tools\NuGet\Sources\NuGetSourcesTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Update\NuGetUpdaterTests.cs" />
     <Compile Include="Unit\Tools\NuGet\Update\NuGetUpdateSettingsTests.cs" />
+    <Compile Include="Unit\Tools\NUnit\NUnit3RunnerTests.cs" />
+    <Compile Include="Unit\Tools\NUnit\NUnit3SettingsTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitRunnerTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitSettingsTests.cs" />
     <Compile Include="Unit\Tools\OctopusDeploy\OctoCreateReleaseTests.cs" />
