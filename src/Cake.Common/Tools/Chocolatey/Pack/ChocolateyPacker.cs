@@ -96,7 +96,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
                 processedNuspecFilePath = process();
 
                 // Start the process.
-                Run(settings, GetArguments(processedNuspecFilePath, settings));
+                Run(settings, GetArguments(processedNuspecFilePath, settings), new ProcessSettings { WorkingDirectory = settings.OutputDirectory }, null);
             }
             finally
             {
