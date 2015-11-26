@@ -15,6 +15,11 @@ namespace Cake.Core.Text
         private readonly string _template;
         private readonly string _keyExpression;
 
+        private static readonly string[] _regexTokens =
+        {
+            ".", "$", "^", "{", "[", "(", "|", ")", "*", "+", "?"
+        };
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TextTransformationTemplate"/> class.
         /// </summary>
@@ -77,11 +82,11 @@ namespace Cake.Core.Text
         {
             placeholder = placeholder ?? new Tuple<string, string>("<%", "%>");
             return string.Concat(
-                placeholder.Item1,
+                EscapeRegexCharacters(placeholder.Item1),
                 @"(?<key>[^",
                 placeholder.Item2[0],
                 "]+)",
-                placeholder.Item2);
+                EscapeRegexCharacters(placeholder.Item2));
         }
 
         private string Replace(Match match)
@@ -115,6 +120,15 @@ namespace Cake.Core.Text
 
             // Return what we received.
             return match.Value;
+        }
+
+        private static string EscapeRegexCharacters(string text)
+        {
+            foreach (var token in _regexTokens)
+            {
+                text = text.Replace(token, string.Concat("\\", token));
+            }
+            return text;
         }
     }
 }
