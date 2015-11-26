@@ -139,6 +139,15 @@
     <Compile Include="Tools\Chocolatey\Sources\ChocolateySourcesSettings.cs" />
     <Compile Include="Tools\Chocolatey\Upgrade\ChocolateyUpgrader.cs" />
     <Compile Include="Tools\Chocolatey\Upgrade\ChocolateyUpgradeSettings.cs" />
+    <Compile Include="Tools\DNU\Build\DNUBuilder.cs" />
+    <Compile Include="Tools\DNU\Build\DNUBuildSettings.cs" />
+    <Compile Include="Tools\DNU\DNUAliases.cs" />
+    <Compile Include="Tools\DNU\DNUTool.cs" />
+    <Compile Include="Tools\DNU\Pack\DNUPacker.cs" />
+    <Compile Include="Tools\DNU\Pack\DNUPackSettings.cs" />
+    <Compile Include="Tools\DNU\Restore\DNULocked.cs" />
+    <Compile Include="Tools\DNU\Restore\DNURestorer.cs" />
+    <Compile Include="Tools\DNU\Restore\DNURestoreSettings.cs" />
     <Compile Include="Tools\DupFinder\DupFinderAliases.cs" />
     <Compile Include="Tools\DupFinder\DupFinderRunner.cs" />
     <Compile Include="Tools\DupFinder\DupFinderSettings.cs" />

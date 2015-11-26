@@ -88,6 +88,10 @@
     <Compile Include="Fixtures\Tools\Chocolatey\Packer\ChocolateyPackerFixtureResult.cs" />
     <Compile Include="Fixtures\Tools\Chocolatey\Packer\ChocolateyPackerWithNuSpecFixture.cs" />
     <Compile Include="Fixtures\Tools\Chocolatey\Packer\ChocolateyPackerWithoutNuSpecFixture.cs" />
+    <Compile Include="Fixtures\Tools\DNU\Build\DNUBuilderFixture.cs" />
+    <Compile Include="Fixtures\Tools\DNU\DNUFixture.cs" />
+    <Compile Include="Fixtures\Tools\DNU\Pack\DNUPackerFixture.cs" />
+    <Compile Include="Fixtures\Tools\DNU\Restorer\DNURestorerFixture.cs" />
     <Compile Include="Fixtures\Tools\DupFinder\DupFinderRunnerConfigFixture.cs" />
     <Compile Include="Fixtures\Tools\DupFinder\DupFinderRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\FixieRunnerFixture.cs" />
@@ -183,6 +187,9 @@
     <Compile Include="Unit\Tools\Chocolatey\Sources\ChocolateySourcesTests.cs" />
     <Compile Include="Unit\Tools\Chocolatey\Upgrade\ChocolateyUpgraderTests.cs" />
     <Compile Include="Unit\Tools\Chocolatey\Upgrade\ChocolateyUpgradeSettingsTests.cs" />
+    <Compile Include="Unit\Tools\DNU\Build\DNUBuilderTests.cs" />
+    <Compile Include="Unit\Tools\DNU\Pack\DNUPackerTests.cs" />
+    <Compile Include="Unit\Tools\DNU\Restore\DNURestorerTests.cs" />
     <Compile Include="Unit\Tools\DupFinder\DupFinderRunnerTests.cs" />
     <Compile Include="Unit\Tools\Fixie\FixieRunnerTests.cs" />
     <Compile Include="Unit\Tools\GitVersion\GitVersionRunnerTests.cs" />
