@@ -162,6 +162,7 @@ Task("Create-Chocolatey-Packages")
   ChocolateyPack("./nuspec/Cake.Portable.nuspec", new ChocolateyPackSettings {
       Version = semVersion,
 	  ReleaseNotes = releaseNotes.Notes.ToArray(),
+      OutputDirectory = nugetRoot,
       Files = new [] {
         new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.exe")},
         new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Core.dll")},
@@ -174,8 +175,6 @@ Task("Create-Chocolatey-Packages")
         new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/LICENSE")}
     }
   });
-
-  MoveFileToDirectory(string.Concat("cake.portable.", semVersion, ".nupkg"), nugetRoot);
 });
 
 Task("Create-NuGet-Packages")
