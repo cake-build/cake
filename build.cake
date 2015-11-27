@@ -311,6 +311,21 @@ Task("Publish-Chocolatey")
     }
 });
 
+Task("Create-Release-Notes")
+  .Does(() =>
+{
+    var userName = EnvironmentVariable("CAKE_GITHUB_USERNAME");
+    var password = EnvironmentVariable("CAKE_GITHUB_PASSWORD");
+    var milestone = string.Concat("v", version);
+
+    GitReleaseManagerCreate(userName, password, "cake-build", "cake", new GitReleaseManagerCreateSettings {
+        Milestone         = milestone,
+        Name              = milestone,
+        Prerelease        = true,
+        TargetCommitish   = "main"
+    });
+});
+
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
@@ -334,6 +349,9 @@ Task("AppVeyor")
 
 Task("Travis")
   .IsDependentOn("Build");
+
+Task("ReleaseNotes")
+  .IsDependentOn("Create-Release-Notes");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
