@@ -220,7 +220,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
 
                 // Then
                 Assert.Equal("create -u \"bob\" -p \"password\" " +
-                             "-o \"repoOwner\" -r \"repo\" -pre", result.Args);
+                             "-o \"repoOwner\" -r \"repo\" -e", result.Args);
             }
 
             [Fact]

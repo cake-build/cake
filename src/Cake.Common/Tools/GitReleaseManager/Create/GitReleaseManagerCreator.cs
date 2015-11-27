@@ -106,7 +106,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Create
             // Prerelease?
             if (settings.Prerelease)
             {
-                builder.Append("-pre");
+                builder.Append("-e");
             }
 
             // Assets
