@@ -35,6 +35,17 @@ namespace Cake.Common.Build.AppVeyor.Data
         }
 
         /// <summary>
+        /// Gets the AppVeyor Job Name.
+        /// </summary>
+        /// <value>
+        ///   The AppVeyor Job Name.
+        /// </value>
+        public string JobName
+        {
+            get { return GetEnvironmentString("APPVEYOR_JOB_NAME"); }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether the build runs by scheduler.
         /// </summary>
         /// <value>
