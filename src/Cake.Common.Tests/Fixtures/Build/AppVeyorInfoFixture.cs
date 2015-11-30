@@ -27,6 +27,7 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("APPVEYOR_PULL_REQUEST_TITLE").Returns("Changes stuff.");
 
             Environment.GetEnvironmentVariable("APPVEYOR_JOB_ID").Returns("d6qpdshbol69ucbq");
+            Environment.GetEnvironmentVariable("APPVEYOR_JOB_NAME").Returns("Job1");
 
             Environment.GetEnvironmentVariable("APPVEYOR_REPO_PROVIDER").Returns("github");
             Environment.GetEnvironmentVariable("APPVEYOR_REPO_SCM").Returns("git");

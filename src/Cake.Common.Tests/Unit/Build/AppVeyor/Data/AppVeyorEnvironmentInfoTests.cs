@@ -54,6 +54,22 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor.Data
             }
         }
 
+        public sealed class TheJobNameProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
+
+                // When
+                var result = info.JobName;
+
+                // Then
+                Assert.Equal("Job1", result);
+            }
+        }
+
         public sealed class ThePlatformProperty
         {
             [Fact]
