@@ -155,6 +155,7 @@ Task("Zip-Files")
 
 Task("Create-Chocolatey-Packages")
     .IsDependentOn("Copy-Files")
+    .IsDependentOn("Package")
     .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
 {
@@ -230,7 +231,7 @@ Task("Update-AppVeyor-Build-Number")
 });
 
 Task("Upload-AppVeyor-Artifacts")
-    .IsDependentOn("Package")
+    .IsDependentOn("Create-Chocolatey-Packages")
     .WithCriteria(() => isRunningOnAppVeyor)
     .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
@@ -332,8 +333,7 @@ Task("Create-Release-Notes")
 
 Task("Package")
   .IsDependentOn("Zip-Files")
-  .IsDependentOn("Create-NuGet-Packages")
-  .IsDependentOn("Create-Chocolatey-Packages");
+  .IsDependentOn("Create-NuGet-Packages");
 
 Task("Default")
   .IsDependentOn("Package");
@@ -344,7 +344,7 @@ Task("Publish")
 
 Task("AppVeyor")
   .IsDependentOn("Update-AppVeyor-Build-Number")
-  .IsDependentOn("Upload-AppVeyor-Artifacts")
+  .IsDependentOn("Upload-AppVeyor-Artifacts") 
   .IsDependentOn("Publish-MyGet");
 
 Task("Travis")
