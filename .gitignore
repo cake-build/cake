@@ -13,6 +13,7 @@ tools/Cake/
 tools/xunit.runners/
 tools/xunit.runner.console/
 tools/nuget.exe
+tools/gitreleasemanager/
 
 # mstest test results
 TestResults
