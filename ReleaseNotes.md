@@ -1,4 +1,24 @@
-### New in 0.6.1 (Work in progress)
+### New in 0.6.1 (Released 2015/12/02)
+* Addded NUnit 3 support.
+* Added MSBuild support for ARM processor.
+* Added support to deprecate aliases.
+* Added new AppVeyor environment variable (job name).
+* Added support for MSBuild platform architecture.
+* Added output directory for ChocolateyPack.
+* Corrected parameter passed to Create method of GitReleaseManager.
+* Fixed misconfiguration in GitVersion Runner.
+* Fixed null reference exception being thrown when analyzing ReSharper CLI reports.
+* ComVisible Attribute was not being parsed correctly by AssemblyInfoParseResult.
+* Fixed globber exception when path has ampersand.
+* CopyFile logged incorrect target file path.
+* ParseAssemblyInfo ignored commented information.
+* Got support for .cake files in GitHub.
+* Created a Visual Studio Code extension for Cake.
+* Created a VSTS extension for Cake.
+* Fixed issue with external nugets used directly via #addin directive.
+* DupFinder: Added ability to fail the build on detected issues.
+* InspectCode: Added ability to fail the build on detected issues.
+* TextTransform now handles Regex special characters.
 
 ### New in 0.6.0 (Released 2015/11/04)
 * Added Chocolatey support.
