@@ -32,7 +32,7 @@ namespace Cake.Core.IO.NuGet
             {
                 throw new ArgumentNullException("packageAssemblyFiles");
             }
-            
+
             // create PackageReferenceSets from the given assemblies
             var pathFrameworks = packageAssemblyFiles
                 .Select(

@@ -116,9 +116,9 @@ namespace Cake.Core
             return Environment.GetEnvironmentVariables()
                 .Cast<System.Collections.DictionaryEntry>()
                 .ToDictionary(
-                key => (string)key.Key,
-                value => value.Value as string,
-                StringComparer.OrdinalIgnoreCase);
+                    key => (string)key.Key,
+                    value => value.Value as string,
+                    StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -127,7 +127,11 @@ namespace Cake.Core
         /// <returns>The target framework.</returns>
         public FrameworkName GetTargetFramework()
         {
-            return new FrameworkName(AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName);
+            // Try to get the current framework name from the current application domain,
+            // but if that is null, we default to .NET 4.5. The reason for doing this is
+            // that this actually is what happens on Mono.
+            var frameworkName = AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName;
+            return new FrameworkName(frameworkName ?? ".NETFramework,Version=v4.5");
         }
 
         private static void SetWorkingDirectory(DirectoryPath path)

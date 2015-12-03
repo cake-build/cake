@@ -14,7 +14,6 @@ namespace Cake.Core.IO.NuGet
         /// <param name="targetFramework">The target framework.</param>
         /// <param name="assemblyPaths">The assembly file paths, relative to their package folder.</param>
         /// <returns>a subset of the provided assemblyFiles that match the provided targetFramework.</returns>
-        IEnumerable<FilePath> FilterCompatibleAssemblies(FrameworkName targetFramework,
-            IEnumerable<FilePath> assemblyPaths);
+        IEnumerable<FilePath> FilterCompatibleAssemblies(FrameworkName targetFramework, IEnumerable<FilePath> assemblyPaths);
     }
 }
