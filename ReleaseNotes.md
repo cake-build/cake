@@ -1,3 +1,6 @@
+### New in 0.6.2 (Released 2015/12/03)
+* Added fix for getting current framework name on Mono.
+
 ### New in 0.6.1 (Released 2015/12/02)
 * Addded NUnit 3 support.
 * Added MSBuild support for ARM processor.
