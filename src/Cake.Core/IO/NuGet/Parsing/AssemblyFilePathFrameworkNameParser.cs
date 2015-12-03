@@ -33,7 +33,7 @@ namespace Cake.Core.IO.NuGet.Parsing
                 throw new ArgumentNullException("path");
             }
 
-            // The path for a reference might look like this for assembly foo.dll:            
+            // The path for a reference might look like this for assembly foo.dll:
             // foo.dll
             // sub\foo.dll
             // {FrameworkName}{Version}\foo.dll

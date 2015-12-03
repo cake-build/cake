@@ -4,7 +4,7 @@ using System.Runtime.Versioning;
 namespace Cake.Core.IO.NuGet
 {
     /// <summary>
-    /// Wrapper interface for NuGet's Target Framework compatibility functionality. 
+    /// Wrapper interface for NuGet's Target Framework compatibility functionality.
     /// </summary>
     public interface INuGetFrameworkCompatibilityFilter
     {
@@ -20,7 +20,6 @@ namespace Cake.Core.IO.NuGet
         /// or
         /// items
         /// </exception>
-        IEnumerable<T> GetCompatibleItems<T>(FrameworkName projectFramework, IEnumerable<T> items)
-            where T : IFrameworkTargetable;
+        IEnumerable<T> GetCompatibleItems<T>(FrameworkName projectFramework, IEnumerable<T> items) where T : IFrameworkTargetable;
     }
 }
