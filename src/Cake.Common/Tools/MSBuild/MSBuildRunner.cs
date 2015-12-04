@@ -61,8 +61,7 @@ namespace Cake.Common.Tools.MSBuild
             if (!string.IsNullOrWhiteSpace(settings.Configuration))
             {
                 // Add the configuration as a property.
-                var configuration = settings.Configuration;
-                builder.Append(string.Concat("/p:Configuration=", configuration));
+                builder.AppendSwitchQuoted("/p:Configuration", "=", settings.Configuration);
             }
 
             // Build for a specific platform?
