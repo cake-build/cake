@@ -587,19 +587,20 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                              "\"/Working/src/Solution.sln\"", result.Args);
             }
 
-            [Fact]
-            public void Should_Append_Configuration_As_Property_To_Process_Arguments()
+            [Theory]
+            [InlineData("Release", "/m /v:normal /p:Configuration=\"Release\" /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData("Custom Spaced", "/m /v:normal /p:Configuration=\"Custom Spaced\" /target:Build \"/Working/src/Solution.sln\"")]
+            public void Should_Append_Configuration_As_Property_To_Process_Arguments(string configuration, string expected)
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(false);
-                fixture.Settings.SetConfiguration("Release");
+                fixture.Settings.SetConfiguration(configuration);
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/m /v:normal /p:Configuration=Release /target:Build " +
-                             "\"/Working/src/Solution.sln\"", result.Args);
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
