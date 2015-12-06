@@ -63,7 +63,7 @@ namespace Cake.Core.IO
             settings.WorkingDirectory = workingDirectory.MakeAbsolute(_environment);
 
             // Create the process start info.
-            var info = new ProcessStartInfo(filePath.FullPath)
+            var info = new ProcessStartInfo(filePath.FullPath.Quote())
             {
                 Arguments = arguments.Render(),
                 WorkingDirectory = workingDirectory.FullPath,
