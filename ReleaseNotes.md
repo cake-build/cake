@@ -1,3 +1,8 @@
+### New in 0.6.3 (Released 2015/12/07)
+* ProcessStartInfo filename not always Quoted
+* Support spaces in MSBuild configuration
+* Add support for DNU
+
 ### New in 0.6.2 (Released 2015/12/03)
 * Added fix for getting current framework name on Mono.
 
