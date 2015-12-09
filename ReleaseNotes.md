@@ -1,3 +1,6 @@
+### New in 0.6.4 (Released 2015/12/09)
+* Quoted process fails on unix
+
 ### New in 0.6.3 (Released 2015/12/07)
 * ProcessStartInfo filename not always Quoted
 * Support spaces in MSBuild configuration
