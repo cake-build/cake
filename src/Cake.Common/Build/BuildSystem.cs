@@ -1,5 +1,6 @@
 ﻿using System;
 using Cake.Common.Build.AppVeyor;
+using Cake.Common.Build.Bamboo;
 using Cake.Common.Build.MyGet;
 using Cake.Common.Build.TeamCity;
 
@@ -14,6 +15,7 @@ namespace Cake.Common.Build
         private readonly IAppVeyorProvider _appVeyorProvider;
         private readonly ITeamCityProvider _teamCityProvider;
         private readonly IMyGetProvider _myGetProvider;
+        private readonly IBambooProvider _bambooProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BuildSystem"/> class.
@@ -21,7 +23,8 @@ namespace Cake.Common.Build
         /// <param name="appVeyorProvider">The AppVeyor Provider.</param>
         /// <param name="teamCityProvider">The TeamCity Provider.</param>
         /// <param name="myGetProvider">The MyGet Provider.</param>
-        public BuildSystem(IAppVeyorProvider appVeyorProvider, ITeamCityProvider teamCityProvider, IMyGetProvider myGetProvider)
+        /// <param name="bambooProvider">The Bamboo Provider.</param>
+        public BuildSystem(IAppVeyorProvider appVeyorProvider, ITeamCityProvider teamCityProvider, IMyGetProvider myGetProvider, IBambooProvider bambooProvider)
         {
             if (appVeyorProvider == null)
             {
@@ -35,9 +38,15 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("myGetProvider");
             }
+            if (bambooProvider == null)
+            {
+                throw new ArgumentNullException("bambooProvider");
+            }
+
             _appVeyorProvider = appVeyorProvider;
             _teamCityProvider = teamCityProvider;
             _myGetProvider = myGetProvider;
+            _bambooProvider = bambooProvider;
         }
 
         /// <summary>
@@ -152,6 +161,45 @@ namespace Cake.Common.Build
         }
 
         /// <summary>
+        /// Gets a value indicating whether the current build is running on Bamboo.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnBamboo)
+        /// {
+        ///     // Get the build number.
+        ///     var buildNumber = BuildSystem.Bamboo.Number;
+        ///
+        /// }
+        /// </code>
+        /// </example>
+        /// <value>
+        /// <c>true</c> if the build currently is running on Bamboo; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsRunningOnBamboo
+        {
+            get { return _bambooProvider.IsRunningOnBamboo; }
+        }
+
+        /// <summary>
+        /// Gets the Bamboo Provider.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnBamboo)
+        /// {
+        ///     //Get the Bamboo Plan Name
+        ///     var planName = BuildSystem.Bamboo.Project.PlanName
+        ///
+        /// }
+        /// </code>
+        /// </example>
+        public IBambooProvider Bamboo
+        {
+            get { return _bambooProvider; }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether the current build is local build.
         /// </summary>
         /// <example>
@@ -172,7 +220,7 @@ namespace Cake.Common.Build
         /// </value>
         public bool IsLocalBuild
         {
-            get { return !(IsRunningOnAppVeyor || IsRunningOnTeamCity || IsRunningOnMyGet); }
+            get { return !(IsRunningOnAppVeyor || IsRunningOnTeamCity || IsRunningOnMyGet || IsRunningOnBamboo); }
         }
     }
 }

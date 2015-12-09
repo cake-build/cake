@@ -58,6 +58,8 @@
   <ItemGroup>
     <Compile Include="Fixtures\Build\AppVeyorFixture.cs" />
     <Compile Include="Fixtures\Build\AppVeyorInfoFixture.cs" />
+    <Compile Include="Fixtures\Build\BambooFixture.cs" />
+    <Compile Include="Fixtures\Build\BambooInfoFixture.cs" />
     <Compile Include="Fixtures\AssemblyInfoFixture.cs" />
     <Compile Include="Fixtures\AssemblyInfoParserFixture.cs" />
     <Compile Include="Fixtures\Tools\CakeRunnerFixture.cs" />
@@ -158,6 +160,10 @@
     <Compile Include="Unit\Build\BuildSystemAliasesTests.cs" />
     <Compile Include="Unit\Build\BuildSystemTests.cs" />
     <Compile Include="Unit\Build\TeamCity\TeamCityProviderTests.cs" />
+    <Compile Include="Unit\Build\Bamboo\BambooProviderTests.cs" />
+    <Compile Include="Unit\Build\Bamboo\Data\BambooBuildInfoTests.cs" />
+    <Compile Include="Unit\Build\Bamboo\Data\BambooCommitInfoTests.cs" />
+    <Compile Include="Unit\Build\Bamboo\Data\BambooRepositoryInfoTests.cs" />
     <Compile Include="Unit\IO\Paths\ConvertableDirectoryPathTests.cs" />
     <Compile Include="Unit\IO\Paths\ConvertableFilePathTests.cs" />
     <Compile Include="Unit\Security\FileHashCalculatorTests.cs" />
@@ -247,6 +253,7 @@
     </Compile>
     <Compile Include="Unit\XML\XmlPokeTests.cs" />
     <Compile Include="Unit\XML\XmlTransformationTests.cs" />
+    <Compile Include="Unit\Build\Bamboo\Data\BambooPlanInfoTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Common\Cake.Common.csproj">
