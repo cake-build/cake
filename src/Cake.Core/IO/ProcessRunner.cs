@@ -48,13 +48,16 @@ namespace Cake.Core.IO
                 throw new ArgumentNullException("settings");
             }
 
+            // Get the fileName
+            var fileName = _environment.IsUnix() ? filePath.FullPath : filePath.FullPath.Quote();
+
             // Get the arguments.
             var arguments = settings.Arguments ?? new ProcessArgumentBuilder();
 
             if (!settings.Silent)
             {
                 // Log the filename and arguments.
-                var message = string.Concat(filePath, " ", arguments.RenderSafe().TrimEnd());
+                var message = string.Concat(fileName, " ", arguments.RenderSafe().TrimEnd());
                 _log.Verbose(Verbosity.Diagnostic, "Executing: {0}", message);
             }
 
@@ -63,7 +66,7 @@ namespace Cake.Core.IO
             settings.WorkingDirectory = workingDirectory.MakeAbsolute(_environment);
 
             // Create the process start info.
-            var info = new ProcessStartInfo(filePath.FullPath.Quote())
+            var info = new ProcessStartInfo(fileName)
             {
                 Arguments = arguments.Render(),
                 WorkingDirectory = workingDirectory.FullPath,
