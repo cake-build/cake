@@ -1,11 +1,8 @@
-﻿using System.ComponentModel;
-
-namespace Cake.Core.Diagnostics
+﻿namespace Cake.Core.Diagnostics
 {
     /// <summary>
     /// Represents verbosity.
     /// </summary>
-    [TypeConverter(typeof(VerbosityTypeConverter))]
     public enum Verbosity
     {
         /// <summary>

@@ -2,6 +2,7 @@
 using Cake.Common.Tests.Fixtures.Tools.NuGet.Sources;
 using Cake.Common.Tools.NuGet;
 using Cake.Core;
+using Cake.Testing.Xunit;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
@@ -116,9 +117,25 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             }
 
             [Theory]
-            [InlineData("C:/nuget/nuget.exe", "C:/nuget/nuget.exe")]
+            [InlineData("/bin/tools/nuget/nuget.exe", "/bin/tools/nuget/nuget.exe")]
             [InlineData("./tools/nuget/nuget.exe", "/Working/tools/nuget/nuget.exe")]
             public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
+            {
+                // Given
+                var fixture = new NuGetAddSourceFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.ToolPath.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData("C:/nuget/nuget.exe", "C:/nuget/nuget.exe")]
+            public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided_On_Windows(string toolPath, string expected)
             {
                 // Given
                 var fixture = new NuGetAddSourceFixture();
@@ -343,9 +360,26 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             }
 
             [Theory]
-            [InlineData("C:/nuget/nuget.exe", "C:/nuget/nuget.exe")]
+            [InlineData("/bin/tools/nuget/nuget.exe", "/bin/tools/nuget/nuget.exe")]
             [InlineData("./tools/nuget/nuget.exe", "/Working/tools/nuget/nuget.exe")]
             public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
+            {
+                // Given
+                var fixture = new NuGetRemoveSourceFixture();
+                fixture.GivenExistingSource();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.ToolPath.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData("C:/nuget/nuget.exe", "C:/nuget/nuget.exe")]
+            public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided_On_Windows(string toolPath, string expected)
             {
                 // Given
                 var fixture = new NuGetRemoveSourceFixture();

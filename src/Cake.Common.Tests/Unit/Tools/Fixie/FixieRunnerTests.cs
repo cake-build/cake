@@ -3,6 +3,7 @@ using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.Fixie;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
 
@@ -42,9 +43,25 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
             }
 
             [Theory]
-            [InlineData("C:/Fixie/Fixie.Console.exe", "C:/Fixie/Fixie.Console.exe")]
+            [InlineData("/bin/tools/Fixie/Fixie.Console.exe", "/bin/tools/Fixie/Fixie.Console.exe")]
             [InlineData("./tools/Fixie/Fixie.Console.exe", "/Working/tools/Fixie/Fixie.Console.exe")]
             public void Should_Use_Fixie_Runner_From_Tool_Path_If_Provided(string toolPath, string expected)
+            {
+                // Given
+                var fixture = new FixieRunnerFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.ToolPath.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData("C:/Fixie/Fixie.Console.exe", "C:/Fixie/Fixie.Console.exe")]
+            public void Should_Use_Fixie_Runner_From_Tool_Path_If_Provided_On_Windows(string toolPath, string expected)
             {
                 // Given
                 var fixture = new FixieRunnerFixture();

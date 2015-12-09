@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -12,11 +11,13 @@ namespace Cake.Arguments
     {
         private readonly ICakeLog _log;
         private readonly IFileSystem _fileSystem;
+        private readonly VerbosityParser _verbosityParser;
 
         public ArgumentParser(ICakeLog log, IFileSystem fileSystem)
         {
             _log = log;
             _fileSystem = fileSystem;
+            _verbosityParser = new VerbosityParser();
         }
 
         public CakeOptions Parse(IEnumerable<string> args)
@@ -129,12 +130,7 @@ namespace Cake.Arguments
                 || name.Equals("v", StringComparison.OrdinalIgnoreCase))
             {
                 // Parse verbosity.
-                var converter = TypeDescriptor.GetConverter(typeof(Verbosity));
-                var verbosity = converter.ConvertFromInvariantString(value);
-                if (verbosity != null)
-                {
-                    options.Verbosity = (Verbosity)verbosity;
-                }
+                options.Verbosity = _verbosityParser.Parse(value);
             }
 
             if (name.Equals("showdescription", StringComparison.OrdinalIgnoreCase) ||

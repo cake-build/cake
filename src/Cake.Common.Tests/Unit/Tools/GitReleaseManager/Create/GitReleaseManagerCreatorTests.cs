@@ -1,4 +1,5 @@
 ﻿using Cake.Common.Tests.Fixtures.Tools.GitReleaseManager;
+using Cake.Testing.Xunit;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
@@ -92,9 +93,25 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
             }
 
             [Theory]
-            [InlineData("C:/GitReleaseManager/GitReleaseManager.exe", "C:/GitReleaseManager/GitReleaseManager.exe")]
+            [InlineData("/bin/tools/GitReleaseManager/GitReleaseManager.exe", "/bin/tools/GitReleaseManager/GitReleaseManager.exe")]
             [InlineData("./tools/GitReleaseManager/GitReleaseManager.exe", "/Working/tools/GitReleaseManager/GitReleaseManager.exe")]
             public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
+            {
+                // Given
+                var fixture = new GitReleaseManagerCreatorFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.ToolPath.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData("C:/GitReleaseManager/GitReleaseManager.exe", "C:/GitReleaseManager/GitReleaseManager.exe")]
+            public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided_On_Windows(string toolPath, string expected)
             {
                 // Given
                 var fixture = new GitReleaseManagerCreatorFixture();
@@ -198,14 +215,14 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
             {
                 // Given
                 var fixture = new GitReleaseManagerCreatorFixture();
-                fixture.Settings.InputFilePath = @"c:/temp";
+                fixture.Settings.InputFilePath = @"/temp";
 
                 // When
                 var result = fixture.Run();
 
                 // Then
                 Assert.Equal("create -u \"bob\" -p \"password\" " +
-                             "-o \"repoOwner\" -r \"repo\" -i \"c:/temp\"", result.Args);
+                             "-o \"repoOwner\" -r \"repo\" -i \"/temp\"", result.Args);
             }
 
             [Fact]
@@ -259,14 +276,14 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
             {
                 // Given
                 var fixture = new GitReleaseManagerCreatorFixture();
-                fixture.Settings.TargetDirectory = @"c:/temp";
+                fixture.Settings.TargetDirectory = @"/temp";
 
                 // When
                 var result = fixture.Run();
 
                 // Then
                 Assert.Equal("create -u \"bob\" -p \"password\" " +
-                             "-o \"repoOwner\" -r \"repo\" -d \"c:/temp\"", result.Args);
+                             "-o \"repoOwner\" -r \"repo\" -d \"/temp\"", result.Args);
             }
 
             [Fact]
@@ -274,7 +291,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
             {
                 // Given
                 var fixture = new GitReleaseManagerCreatorFixture();
-                fixture.Settings.LogFilePath = @"c:/temp/log.txt";
+                fixture.Settings.LogFilePath = @"/temp/log.txt";
 
                 // When
                 var result = fixture.Run();
@@ -282,7 +299,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
                 // Then
                 Assert.Equal("create -u \"bob\" -p \"password\" " +
                              "-o \"repoOwner\" -r \"repo\" " +
-                             "-l \"c:/temp/log.txt\"", result.Args);
+                             "-l \"/temp/log.txt\"", result.Args);
             }
         }
     }

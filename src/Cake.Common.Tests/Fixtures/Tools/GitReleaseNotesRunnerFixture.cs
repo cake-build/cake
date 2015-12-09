@@ -10,7 +10,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         public GitReleaseNotesRunnerFixture()
             : base("GitReleaseNotes.exe")
         {
-            this.OutputFile = "c:/temp/releasenotes.md";
+            OutputFile = "/temp/releasenotes.md";
         }
 
         protected override void RunTool()

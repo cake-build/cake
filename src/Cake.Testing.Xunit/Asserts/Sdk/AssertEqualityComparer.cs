@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
@@ -10,7 +11,7 @@ namespace Xunit.Sdk
     /// Default implementation of <see cref="IEqualityComparer{T}"/> used by the xUnit.net equality assertions.
     /// </summary>
     /// <typeparam name="T">The type that is being compared.</typeparam>
-    internal class AssertEqualityComparer<T> : IEqualityComparer<T>
+    class AssertEqualityComparer<T> : IEqualityComparer<T>
     {
         static readonly IEqualityComparer DefaultInnerComparer = new AssertEqualityComparerAdapter<object>(new AssertEqualityComparer<object>());
         static readonly TypeInfo NullableTypeInfo = typeof(Nullable<>).GetTypeInfo();
@@ -79,7 +80,7 @@ namespace Xunit.Sdk
             return Object.Equals(x, y);
         }
 
-        private bool? CheckIfEnumerablesAreEqual(T x, T y)
+        bool? CheckIfEnumerablesAreEqual(T x, T y)
         {
             var enumerableX = x as IEnumerable;
             var enumerableY = y as IEnumerable;
@@ -87,24 +88,37 @@ namespace Xunit.Sdk
             if (enumerableX == null || enumerableY == null)
                 return null;
 
-            var enumeratorX = enumerableX.GetEnumerator();
-            var enumeratorY = enumerableY.GetEnumerator();
-            var equalityComparer = innerComparerFactory();
-
-            while (true)
+            IEnumerator enumeratorX = null, enumeratorY = null;
+            try
             {
-                var hasNextX = enumeratorX.MoveNext();
-                var hasNextY = enumeratorY.MoveNext();
+                enumeratorX = enumerableX.GetEnumerator();
+                enumeratorY = enumerableY.GetEnumerator();
+                var equalityComparer = innerComparerFactory();
 
-                if (!hasNextX || !hasNextY)
-                    return hasNextX == hasNextY;
+                while (true)
+                {
+                    var hasNextX = enumeratorX.MoveNext();
+                    var hasNextY = enumeratorY.MoveNext();
 
-                if (!equalityComparer.Equals(enumeratorX.Current, enumeratorY.Current))
-                    return false;
+                    if (!hasNextX || !hasNextY)
+                        return hasNextX == hasNextY;
+
+                    if (!equalityComparer.Equals(enumeratorX.Current, enumeratorY.Current))
+                        return false;
+                }
+            }
+            finally
+            {
+                var asDisposable = enumeratorX as IDisposable;
+                if (asDisposable != null)
+                    asDisposable.Dispose();
+                asDisposable = enumeratorY as IDisposable;
+                if (asDisposable != null)
+                    asDisposable.Dispose();
             }
         }
 
-        private bool? CheckIfDictionariesAreEqual(T x, T y)
+        bool? CheckIfDictionariesAreEqual(T x, T y)
         {
             var dictionaryX = x as IDictionary;
             var dictionaryY = y as IDictionary;
@@ -136,6 +150,7 @@ namespace Xunit.Sdk
         }
 
         /// <inheritdoc/>
+        [SuppressMessage("Code Notifications", "RECS0083:Shows NotImplementedException throws in the quick task bar", Justification = "This class is not intended to be used in a hased container")]
         public int GetHashCode(T obj)
         {
             throw new NotImplementedException();

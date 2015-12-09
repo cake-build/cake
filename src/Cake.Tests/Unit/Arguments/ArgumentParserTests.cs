@@ -123,6 +123,26 @@ namespace Cake.Tests.Unit.Arguments
             }
 
             [Theory]
+            [InlineData("-verbosity=lol", "The value 'lol' is not a valid verbosity.")]
+            [InlineData("-verbosity=", "The value '' is not a valid verbosity.")]
+            [InlineData("-v=lol", "The value 'lol' is not a valid verbosity.")]
+            [InlineData("-v=", "The value '' is not a valid verbosity.")]
+            public void Should_Throw_If_Parsing_Invalid_Verbosity(string verbosity, string expected)
+            {
+                // Given
+                var fixture = new ArgumentParserFixture();
+                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                // When
+                var result = Record.Exception(() => {
+                    parser.Parse(new[] { "build.csx", verbosity });
+                });
+
+                // Then
+                Assert.IsExceptionWithMessage<InvalidOperationException>(result, expected);
+            }
+
+            [Theory]
             [InlineData("build.csx")]
             [InlineData("build.csx -verbosity=quiet")]
             public void Can_Parse_Script(string input)

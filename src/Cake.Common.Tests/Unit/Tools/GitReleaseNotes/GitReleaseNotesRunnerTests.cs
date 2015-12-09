@@ -93,7 +93,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/OutputFile \"c:/temp/releasenotes.md\"", result.Args);
+                Assert.Equal("/OutputFile \"/temp/releasenotes.md\"", result.Args);
             }
 
             [Fact]
@@ -101,13 +101,13 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
             {
                 // Given
                 var fixture = new GitReleaseNotesRunnerFixture();
-                fixture.Settings.WorkingDirectory = "c:/temp";
+                fixture.Settings.WorkingDirectory = "/temp";
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("\"c:/temp\" /OutputFile \"c:/temp/releasenotes.md\"", result.Args);
+                Assert.Equal("\"/temp\" /OutputFile \"/temp/releasenotes.md\"", result.Args);
             }
 
             [Fact]
@@ -121,14 +121,14 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/OutputFile \"c:/temp/releasenotes.md\" /Verbose", result.Args);
+                Assert.Equal("/OutputFile \"/temp/releasenotes.md\" /Verbose", result.Args);
             }
 
             [Theory]
-            [InlineData(GitReleaseNotesIssueTracker.BitBucket, "/OutputFile \"c:/temp/releasenotes.md\" /IssueTracker BitBucket")]
-            [InlineData(GitReleaseNotesIssueTracker.GitHub, "/OutputFile \"c:/temp/releasenotes.md\" /IssueTracker GitHub")]
-            [InlineData(GitReleaseNotesIssueTracker.Jira, "/OutputFile \"c:/temp/releasenotes.md\" /IssueTracker Jira")]
-            [InlineData(GitReleaseNotesIssueTracker.YouTrack, "/OutputFile \"c:/temp/releasenotes.md\" /IssueTracker YouTrack")]
+            [InlineData(GitReleaseNotesIssueTracker.BitBucket, "/OutputFile \"/temp/releasenotes.md\" /IssueTracker BitBucket")]
+            [InlineData(GitReleaseNotesIssueTracker.GitHub, "/OutputFile \"/temp/releasenotes.md\" /IssueTracker GitHub")]
+            [InlineData(GitReleaseNotesIssueTracker.Jira, "/OutputFile \"/temp/releasenotes.md\" /IssueTracker Jira")]
+            [InlineData(GitReleaseNotesIssueTracker.YouTrack, "/OutputFile \"/temp/releasenotes.md\" /IssueTracker YouTrack")]
             public void Should_Add_IssueTracker_To_Arguments_If_Set(GitReleaseNotesIssueTracker issueTracker, string expected)
             {
                 // Given
@@ -153,7 +153,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/OutputFile \"c:/temp/releasenotes.md\" /AllTags", result.Args);
+                Assert.Equal("/OutputFile \"/temp/releasenotes.md\" /AllTags", result.Args);
             }
 
             [Fact]
@@ -167,7 +167,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/OutputFile \"c:/temp/releasenotes.md\" /RepoUsername \"bob\"", result.Args);
+                Assert.Equal("/OutputFile \"/temp/releasenotes.md\" /RepoUsername \"bob\"", result.Args);
             }
 
             [Fact]
@@ -181,7 +181,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/OutputFile \"c:/temp/releasenotes.md\" /RepoPassword \"password\"", result.Args);
+                Assert.Equal("/OutputFile \"/temp/releasenotes.md\" /RepoPassword \"password\"", result.Args);
             }
 
             [Fact]
@@ -195,7 +195,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/OutputFile \"c:/temp/releasenotes.md\" /RepoToken \"token123\"", result.Args);
+                Assert.Equal("/OutputFile \"/temp/releasenotes.md\" /RepoToken \"token123\"", result.Args);
             }
 
             [Fact]
@@ -209,7 +209,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/OutputFile \"c:/temp/releasenotes.md\" /RepoUrl \"http://myrepo.co.uk\"", result.Args);
+                Assert.Equal("/OutputFile \"/temp/releasenotes.md\" /RepoUrl \"http://myrepo.co.uk\"", result.Args);
             }
 
             [Fact]
@@ -223,7 +223,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/OutputFile \"c:/temp/releasenotes.md\" /RepoBranch \"master\"", result.Args);
+                Assert.Equal("/OutputFile \"/temp/releasenotes.md\" /RepoBranch \"master\"", result.Args);
             }
 
             [Fact]
@@ -237,7 +237,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/OutputFile \"c:/temp/releasenotes.md\" /IssueTrackerUrl \"http://myissuetracker.co.uk\"", result.Args);
+                Assert.Equal("/OutputFile \"/temp/releasenotes.md\" /IssueTrackerUrl \"http://myissuetracker.co.uk\"", result.Args);
             }
 
             [Fact]
@@ -251,7 +251,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/OutputFile \"c:/temp/releasenotes.md\" /IssueTrackerUsername \"bob\"", result.Args);
+                Assert.Equal("/OutputFile \"/temp/releasenotes.md\" /IssueTrackerUsername \"bob\"", result.Args);
             }
 
             [Fact]
@@ -265,7 +265,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/OutputFile \"c:/temp/releasenotes.md\" /IssueTrackerPassword \"password\"", result.Args);
+                Assert.Equal("/OutputFile \"/temp/releasenotes.md\" /IssueTrackerPassword \"password\"", result.Args);
             }
 
             [Fact]
@@ -279,7 +279,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/OutputFile \"c:/temp/releasenotes.md\" /IssueTrackerToken \"token123\"", result.Args);
+                Assert.Equal("/OutputFile \"/temp/releasenotes.md\" /IssueTrackerToken \"token123\"", result.Args);
             }
 
             [Fact]
@@ -293,7 +293,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/OutputFile \"c:/temp/releasenotes.md\" /IssueTrackerProjectId \"ProjectId123\"", result.Args);
+                Assert.Equal("/OutputFile \"/temp/releasenotes.md\" /IssueTrackerProjectId \"ProjectId123\"", result.Args);
             }
 
             [Fact]
@@ -307,7 +307,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/OutputFile \"c:/temp/releasenotes.md\" /IssueTrackerFilter \"filter\"", result.Args);
+                Assert.Equal("/OutputFile \"/temp/releasenotes.md\" /IssueTrackerFilter \"filter\"", result.Args);
             }
 
             [Fact]
@@ -321,7 +321,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/OutputFile \"c:/temp/releasenotes.md\" /Categories \"Category1\"", result.Args);
+                Assert.Equal("/OutputFile \"/temp/releasenotes.md\" /Categories \"Category1\"", result.Args);
             }
 
             [Fact]
@@ -335,7 +335,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/OutputFile \"c:/temp/releasenotes.md\" /Version \"1.2.3.4\"", result.Args);
+                Assert.Equal("/OutputFile \"/temp/releasenotes.md\" /Version \"1.2.3.4\"", result.Args);
             }
 
             [Fact]
@@ -349,7 +349,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/OutputFile \"c:/temp/releasenotes.md\" /AllLabels", result.Args);
+                Assert.Equal("/OutputFile \"/temp/releasenotes.md\" /AllLabels", result.Args);
             }
         }
     }

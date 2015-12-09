@@ -1,6 +1,7 @@
 ﻿using Cake.Common.Tests.Fixtures.Tools.Chocolatey.ApiKey;
 using Cake.Core.IO;
 using Cake.Testing;
+using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
 
@@ -39,8 +40,25 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.ApiKey
             }
 
             [Theory]
-            [InlineData("C:/ProgramData/chocolatey/choco.exe", "C:/ProgramData/chocolatey/choco.exe")]
+            [InlineData("/bin/chocolatey/choco.exe", "/bin/chocolatey/choco.exe")]
+            [InlineData("./chocolatey/choco.exe", "/Working/chocolatey/choco.exe")]
             public void Should_Use_Chocolatey_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyApiKeySetterFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.ToolPath.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData("C:/ProgramData/chocolatey/choco.exe", "C:/ProgramData/chocolatey/choco.exe")]
+            public void Should_Use_Chocolatey_Executable_From_Tool_Path_If_Provided_On_Windows(string toolPath, string expected)
             {
                 // Given
                 var fixture = new ChocolateyApiKeySetterFixture();

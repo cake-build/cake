@@ -915,8 +915,8 @@ namespace Cake.Common.Tests.Unit.IO
                 var context = Substitute.For<ICakeContext>();
                 var environment = FakeEnvironment.CreateUnixEnvironment();
                 context.FileSystem.Returns(new FakeFileSystem(environment));
-                var sourcePath = new DirectoryPath("C:/Temp");
-                var destinationPath = new DirectoryPath("C:/Temp2");
+                var sourcePath = new DirectoryPath("/Temp");
+                var destinationPath = new DirectoryPath("/Temp2");
 
                 // When
                 var result = Record.Exception(() =>
@@ -924,6 +924,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 Assert.IsType<DirectoryNotFoundException>(result);
+                Assert.Equal("Source directory does not exist or could not be found: /Temp", result.Message);
             }
 
             [Fact]
@@ -935,8 +936,8 @@ namespace Cake.Common.Tests.Unit.IO
                 var fileSystem = new FakeFileSystem(environment);
                 CreateFileStructure(fileSystem);
                 context.FileSystem.Returns(fileSystem);
-                var sourcePath = new DirectoryPath("C:/Temp");
-                var destinationPath = new DirectoryPath("C:/Temp2");
+                var sourcePath = new DirectoryPath("/Temp");
+                var destinationPath = new DirectoryPath("/Temp2");
 
                 // When
                 DirectoryAliases.CopyDirectory(context, sourcePath, destinationPath);
@@ -954,15 +955,15 @@ namespace Cake.Common.Tests.Unit.IO
                 var fileSystem = new FakeFileSystem(environment);
                 CreateFileStructure(fileSystem);
                 context.FileSystem.Returns(fileSystem);
-                var sourcePath = new DirectoryPath("C:/Temp");
-                var destinationPath = new DirectoryPath("C:/Temp2");
+                var sourcePath = new DirectoryPath("/Temp");
+                var destinationPath = new DirectoryPath("/Temp2");
 
                 // When
                 DirectoryAliases.CopyDirectory(context, sourcePath, destinationPath);
 
                 // Then
-                Assert.True(fileSystem.GetFile("C:/Temp/file1.txt").Exists);
-                Assert.True(fileSystem.GetFile("C:/Temp/file2.txt").Exists);
+                Assert.True(fileSystem.GetFile("/Temp/file1.txt").Exists);
+                Assert.True(fileSystem.GetFile("/Temp/file2.txt").Exists);
             }
 
             [Fact]
@@ -974,21 +975,21 @@ namespace Cake.Common.Tests.Unit.IO
                 var fileSystem = new FakeFileSystem(environment);
                 CreateFileStructure(fileSystem);
                 context.FileSystem.Returns(fileSystem);
-                var sourcePath = new DirectoryPath("C:/Temp");
-                var destinationPath = new DirectoryPath("C:/Temp2");
+                var sourcePath = new DirectoryPath("/Temp");
+                var destinationPath = new DirectoryPath("/Temp2");
 
                 // When
                 DirectoryAliases.CopyDirectory(context, sourcePath, destinationPath);
 
                 // Then
                 // Directories should exist
-                Assert.True(fileSystem.GetDirectory("C:/Temp2/Stuff").Exists);
-                Assert.True(fileSystem.GetDirectory("C:/Temp2/Things").Exists);
+                Assert.True(fileSystem.GetDirectory("/Temp2/Stuff").Exists);
+                Assert.True(fileSystem.GetDirectory("/Temp2/Things").Exists);
 
                 // Files should exist
-                Assert.True(fileSystem.GetFile("C:/Temp2/Stuff/file1.txt").Exists);
-                Assert.True(fileSystem.GetFile("C:/Temp2/Stuff/file2.txt").Exists);
-                Assert.True(fileSystem.GetFile("C:/Temp2/Things/file1.txt").Exists);
+                Assert.True(fileSystem.GetFile("/Temp2/Stuff/file1.txt").Exists);
+                Assert.True(fileSystem.GetFile("/Temp2/Stuff/file2.txt").Exists);
+                Assert.True(fileSystem.GetFile("/Temp2/Things/file1.txt").Exists);
             }
 
             private static void CreateFileStructure(FakeFileSystem ffs)
@@ -996,18 +997,18 @@ namespace Cake.Common.Tests.Unit.IO
                 Action<string> dir = path => ffs.CreateDirectory(path);
                 Action<string> file = path => ffs.CreateFile(path);
 
-                dir("C:/Temp");
+                dir("/Temp");
                 {
-                    file("C:/Temp/file1.txt");
-                    file("C:/Temp/file2.txt");
-                    dir("C:/Temp/Stuff");
+                    file("/Temp/file1.txt");
+                    file("/Temp/file2.txt");
+                    dir("/Temp/Stuff");
                     {
-                        file("C:/Temp/Stuff/file1.txt");
-                        file("C:/Temp/Stuff/file2.txt");
+                        file("/Temp/Stuff/file1.txt");
+                        file("/Temp/Stuff/file2.txt");
                     }
-                    dir("C:/Temp/Things");
+                    dir("/Temp/Things");
                     {
-                        file("C:/Temp/Things/file1.txt");
+                        file("/Temp/Things/file1.txt");
                     }
                 }
             }

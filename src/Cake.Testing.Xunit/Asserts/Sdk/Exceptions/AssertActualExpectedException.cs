@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -11,7 +9,6 @@ namespace Xunit.Sdk
     /// <summary>
     /// Base class for exceptions that have actual and expected values
     /// </summary>
-    [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors")]
     public class AssertActualExpectedException : XunitException
     {
         /// <summary>
@@ -35,8 +32,8 @@ namespace Xunit.Sdk
                 Actual == Expected &&
                 actual.GetType() != expected.GetType())
             {
-                Actual += String.Format(CultureInfo.CurrentCulture, " ({0})", actual.GetType().FullName);
-                Expected += String.Format(CultureInfo.CurrentCulture, " ({0})", expected.GetType().FullName);
+                Actual += string.Format(CultureInfo.CurrentCulture, " ({0})", actual.GetType().FullName);
+                Expected += string.Format(CultureInfo.CurrentCulture, " ({0})", expected.GetType().FullName);
             }
         }
 
@@ -73,7 +70,7 @@ namespace Xunit.Sdk
                 var formattedExpectedTitle = (ExpectedTitle + ":").PadRight(titleLength);
                 var formattedActualTitle = (ActualTitle + ":").PadRight(titleLength);
 
-                return String.Format(CultureInfo.CurrentCulture,
+                return string.Format(CultureInfo.CurrentCulture,
                                      "{0}{5}{1}{2}{5}{3}{4}",
                                      base.Message,
                                      formattedExpectedTitle,
@@ -94,7 +91,7 @@ namespace Xunit.Sdk
             if (backTickIdx < 0)
                 backTickIdx = typeInfo.Name.Length;  // F# doesn't use backticks for generic type names
 
-            return String.Format("{0}<{1}>", typeInfo.Name.Substring(0, backTickIdx), String.Join(", ", simpleNames));
+            return string.Format("{0}<{1}>", typeInfo.Name.Substring(0, backTickIdx), string.Join(", ", simpleNames));
         }
 
         static string ConvertToString(object value)
@@ -105,7 +102,7 @@ namespace Xunit.Sdk
 
             var formattedValue = ArgumentFormatter.Format(value);
             if (value is IEnumerable)
-                formattedValue = String.Format("{0} {1}", ConvertToSimpleTypeName(value.GetType().GetTypeInfo()), formattedValue);
+                formattedValue = string.Format("{0} {1}", ConvertToSimpleTypeName(value.GetType().GetTypeInfo()), formattedValue);
 
             return formattedValue;
         }
