@@ -17,7 +17,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.GitReleaseManager
             Password = "password";
             Owner = "repoOwner";
             Repository = "repo";
-            FileOutputPath = "c:/temp";
+            FileOutputPath = "/temp";
         }
 
         protected override void RunTool()

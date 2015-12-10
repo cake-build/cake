@@ -1,5 +1,4 @@
-﻿using Cake.Core.IO;
-using Cake.Core.Tooling;
+﻿using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.Chocolatey.Features
 {

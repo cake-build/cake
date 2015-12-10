@@ -11,8 +11,8 @@ namespace Cake.Common.Tests.Fixtures.Tools.ReportUnit
         public ReportUnitDirectoryFixture()
             : base("ReportUnit.exe")
         {
-            this.InputFolder = "c:/temp/input";
-            this.OutputFolder = "c:/temp/output";
+            this.InputFolder = "/temp/input";
+            this.OutputFolder = "/temp/output";
         }
 
         protected override void RunTool()

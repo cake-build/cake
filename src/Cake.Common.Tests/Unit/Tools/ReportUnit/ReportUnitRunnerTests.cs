@@ -89,7 +89,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportUnit
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("\"c:/temp/input\" \"c:/temp/output\"", result.Args);
+                Assert.Equal("\"/temp/input\" \"/temp/output\"", result.Args);
             }
         }
 
@@ -190,7 +190,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportUnit
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("\"c:/temp/input.xml\" \"c:/temp/output.html\"", result.Args);
+                Assert.Equal("\"/temp/input.xml\" \"/temp/output.html\"", result.Args);
             }
         }
     }

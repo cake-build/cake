@@ -2,6 +2,7 @@
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.OctopusDeploy;
 using Cake.Core.IO;
+using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
 
@@ -82,9 +83,25 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             }
 
             [Theory]
-            [InlineData("C:/octopusDeploy/octo.exe", "C:/octopusDeploy/octo.exe")]
+            [InlineData("/bin/tools/octopus/octo.exe", "/bin/tools/octopus/octo.exe")]
             [InlineData("./tools/octopus/octo.exe", "/Working/tools/octopus/octo.exe")]
             public void Should_Use_Octo_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
+            {
+                // Given
+                var fixture = new OctopusDeployReleaseCreatorFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.ToolPath.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData("C:/octopusDeploy/octo.exe", "C:/octopusDeploy/octo.exe")]
+            public void Should_Use_Octo_Executable_From_Tool_Path_If_Provided_On_Windows(string toolPath, string expected)
             {
                 // Given
                 var fixture = new OctopusDeployReleaseCreatorFixture();

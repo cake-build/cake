@@ -18,7 +18,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.GitReleaseManager
             Owner = "repoOwner";
             Repository = "repo";
             TagName = "0.1.0";
-            Assets = @"c:/temp/asset1.txt";
+            Assets = @"/temp/asset1.txt";
         }
 
         protected override void RunTool()

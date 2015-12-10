@@ -1,5 +1,6 @@
 ﻿using System;
 using Cake.Core.IO;
+using Cake.Testing.Xunit;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit.IO
@@ -149,17 +150,25 @@ namespace Cake.Core.Tests.Unit.IO
         public sealed class TheIsRelativeProperty
         {
             [Theory]
-#if !UNIX
-            [InlineData("c:/assets/shaders", false)]
-            [InlineData("c:/assets/shaders/basic.frag", false)]
-            [InlineData("c:/", false)]
-            [InlineData("c:", false)]
-#endif
             [InlineData("assets/shaders", true)]
             [InlineData("assets/shaders/basic.frag", true)]
             [InlineData("/assets/shaders", false)]
             [InlineData("/assets/shaders/basic.frag", false)]
             public void Should_Return_Whether_Or_Not_A_Path_Is_Relative(string fullPath, bool expected)
+            {
+                // Given, When
+                var path = new TestingPath(fullPath);
+
+                // Then
+                Assert.Equal(expected, path.IsRelative);
+            }
+
+            [WindowsTheory]
+            [InlineData("c:/assets/shaders", false)]
+            [InlineData("c:/assets/shaders/basic.frag", false)]
+            [InlineData("c:/", false)]
+            [InlineData("c:", false)]
+            public void Should_Return_Whether_Or_Not_A_Path_Is_Relative_On_Windows(string fullPath, bool expected)
             {
                 // Given, When
                 var path = new TestingPath(fullPath);

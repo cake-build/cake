@@ -65,6 +65,9 @@ namespace Cake.Core.Tests.Fixtures
             FileSystem.CreateFile("/Working/Foo/Bar/Baz/Qux.c");
             FileSystem.CreateFile("/Working/Bar/Qux.c");
             FileSystem.CreateFile("/Working/Bar/Qux.h");
+            FileSystem.CreateFile("/Working/Foo.Bar.Test.dll");
+            FileSystem.CreateFile("/Working/Bar.Qux.Test.dll");
+            FileSystem.CreateFile("/Working/Quz.FooTest.dll");
             FileSystem.CreateFile("/Foo/Bar.baz");
             FileSystem.CreateFile("/Foo (Bar)/Baz.c");
         }

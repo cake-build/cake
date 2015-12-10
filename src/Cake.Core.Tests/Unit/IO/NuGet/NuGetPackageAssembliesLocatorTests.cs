@@ -34,14 +34,14 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
             public void Should_Return_Empty_If_Package_Directory_Does_Not_Exist()
             {
                 // Given
-                var environment = FakeEnvironment.CreateWindowsEnvironment();
+                var environment = FakeEnvironment.CreateUnixEnvironment();
                 var fileSystem = new FakeFileSystem(environment);
                 var log = Substitute.For<ICakeLog>();
                 var assemblyCompatibilityFilter = Substitute.For<INuGetAssemblyCompatibilityFilter>();
 
                 var locator = new NuGetPackageAssembliesLocator(fileSystem, log, assemblyCompatibilityFilter, environment);
 
-                var addinDirectory = DirectoryPath.FromString("c:/NonExistentDir");
+                var addinDirectory = DirectoryPath.FromString("/NonExistentDir");
 
                 // When
                 var result = locator.FindAssemblies(addinDirectory);
@@ -54,7 +54,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
             public void Should_Throw_If_Package_Directory_Is_Not_Absolute()
             {
                 // Given
-                var environment = FakeEnvironment.CreateWindowsEnvironment();
+                var environment = FakeEnvironment.CreateUnixEnvironment();
                 var fileSystem = new FakeFileSystem(environment);
                 var log = Substitute.For<ICakeLog>();
                 var assemblyCompatibilityFilter = Substitute.For<INuGetAssemblyCompatibilityFilter>();
@@ -65,7 +65,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                 Assert.True(addinDirectory.IsRelative);
 
                 // When
-                var result = Record.Exception(() => locator.FindAssemblies(addinDirectory)); 
+                var result = Record.Exception(() => locator.FindAssemblies(addinDirectory));
 
                 // Then
                 Assert.IsCakeException(result, "Package directory (RelativeDirPath) must be an absolute path.");
@@ -76,14 +76,14 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
             {
                 // Given
                 var targetFramework = new FrameworkName(".NETFramework,Version=v4.5");
-                var environment = FakeEnvironment.CreateWindowsEnvironment();
+                var environment = FakeEnvironment.CreateUnixEnvironment();
                 environment.SetTargetFramework(targetFramework);
 
                 var log = Substitute.For<ICakeLog>();
 
                 var fileSystem = new FakeFileSystem(environment);
 
-                var packageDirectory = fileSystem.CreateDirectory("c:/Working/addins/MyPackage");
+                var packageDirectory = fileSystem.CreateDirectory("/Working/addins/MyPackage");
 
                 fileSystem.CreateFile(packageDirectory.Path.CombineWithFilePath("lib/net40/myassembly1.dll"));
                 fileSystem.CreateFile(packageDirectory.Path.CombineWithFilePath("lib/net40/myassembly2.dll"));
@@ -110,14 +110,14 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
             {
                 // Given
                 var targetFramework = new FrameworkName(".NETFramework,Version=v4.5");
-                var environment = FakeEnvironment.CreateWindowsEnvironment();
+                var environment = FakeEnvironment.CreateUnixEnvironment();
                 environment.SetTargetFramework(targetFramework);
 
                 var log = Substitute.For<ICakeLog>();
 
                 var fileSystem = new FakeFileSystem(environment);
 
-                var packageDirectory = fileSystem.CreateDirectory("c:/Working/addins/MyPackage");
+                var packageDirectory = fileSystem.CreateDirectory("/Working/addins/MyPackage");
 
                 var assemblyCompatibilityFilter = Substitute.For<INuGetAssemblyCompatibilityFilter>();
                 assemblyCompatibilityFilter.FilterCompatibleAssemblies(targetFramework, Arg.Any<IEnumerable<FilePath>>())

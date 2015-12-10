@@ -1,5 +1,6 @@
 ﻿using Cake.Common.Tests.Fixtures.Tools.GitReleaseManager;
 using Cake.Core.IO;
+using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
 
@@ -108,9 +109,27 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
             }
 
             [Theory]
-            [InlineData("C:/GitReleaseManager/GitReleaseManager.exe", "C:/GitReleaseManager/GitReleaseManager.exe")]
+            [InlineData("/bin/tools/GitReleaseManager/GitReleaseManager.exe", "/bin/tools/GitReleaseManager/GitReleaseManager.exe")]
             [InlineData("./tools/GitReleaseManager/GitReleaseManager.exe", "/Working/tools/GitReleaseManager/GitReleaseManager.exe")]
             public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
+            {
+                // Given
+                var fixture = new GitReleaseManagerPublisherFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
+
+                // When
+                fixture.Run();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == expected),
+                    Arg.Any<ProcessSettings>());
+            }
+
+            [WindowsTheory]
+            [InlineData("C:/GitReleaseManager/GitReleaseManager.exe", "C:/GitReleaseManager/GitReleaseManager.exe")]
+            public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided_On_Windows(string toolPath, string expected)
             {
                 // Given
                 var fixture = new GitReleaseManagerPublisherFixture();
@@ -189,7 +208,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
             {
                 // Given
                 var fixture = new GitReleaseManagerPublisherFixture();
-                fixture.Settings.TargetDirectory = @"c:/temp";
+                fixture.Settings.TargetDirectory = @"/temp";
 
                 // When
                 fixture.Run();
@@ -197,7 +216,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "publish -u \"bob\" -p \"password\" -o \"repoOwner\" -r \"repo\" -t \"0.1.0\" -d \"c:/temp\""));
+                        p.Arguments.Render() == "publish -u \"bob\" -p \"password\" -o \"repoOwner\" -r \"repo\" -t \"0.1.0\" -d \"/temp\""));
             }
 
             [Fact]
@@ -205,7 +224,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
             {
                 // Given
                 var fixture = new GitReleaseManagerPublisherFixture();
-                fixture.Settings.LogFilePath = @"c:/temp/log.txt";
+                fixture.Settings.LogFilePath = @"/temp/log.txt";
 
                 // When
                 fixture.Run();
@@ -213,7 +232,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "publish -u \"bob\" -p \"password\" -o \"repoOwner\" -r \"repo\" -t \"0.1.0\" -l \"c:/temp/log.txt\""));
+                        p.Arguments.Render() == "publish -u \"bob\" -p \"password\" -o \"repoOwner\" -r \"repo\" -t \"0.1.0\" -l \"/temp/log.txt\""));
             }
         }
     }

@@ -5,6 +5,7 @@ using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.WiX;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
 
@@ -73,9 +74,25 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
             }
 
             [Theory]
-            [InlineData("C:/WiX/light.exe", "C:/WiX/light.exe")]
+            [InlineData("/bin/tools/WiX/light.exe", "/bin/tools/WiX/light.exe")]
             [InlineData("./tools/WiX/light.exe", "/Working/tools/WiX/light.exe")]
             public void Should_Use_Light_Runner_From_Tool_Path_If_Provided(string toolPath, string expected)
+            {
+                // Given
+                var fixture = new LightFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.ToolPath.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData("C:/WiX/light.exe", "C:/WiX/light.exe")]
+            public void Should_Use_Light_Runner_From_Tool_Path_If_Provided_On_Windows(string toolPath, string expected)
             {
                 // Given
                 var fixture = new LightFixture();

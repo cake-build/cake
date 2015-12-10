@@ -5,6 +5,7 @@ using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.WiX;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
 
@@ -104,9 +105,25 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
             }
 
             [Theory]
-            [InlineData("C:/WiX/candle.exe", "C:/WiX/candle.exe")]
+            [InlineData("/bin/tools/WiX/candle.exe", "/bin/tools/WiX/candle.exe")]
             [InlineData("./tools/WiX/candle.exe", "/Working/tools/WiX/candle.exe")]
             public void Should_Use_Candle_Runner_From_Tool_Path_If_Provided(string toolPath, string expected)
+            {
+                // Given
+                var fixture = new CandleFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.ToolPath.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData("C:/WiX/candle.exe", "C:/WiX/candle.exe")]
+            public void Should_Use_Candle_Runner_From_Tool_Path_If_Provided_On_Windows(string toolPath, string expected)
             {
                 // Given
                 var fixture = new CandleFixture();

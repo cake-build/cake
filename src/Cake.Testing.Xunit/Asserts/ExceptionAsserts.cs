@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Threading.Tasks;
 using Xunit.Sdk;
@@ -38,6 +39,7 @@ namespace Xunit
         /// <summary/>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("You must call Assert.ThrowsAsync<T> (and await the result) when testing async code.", true)]
+        [SuppressMessage("Code Notifications", "RECS0083:Shows NotImplementedException throws in the quick task bar", Justification = "This is a purposeful use of NotImplementedException")]
         public static T Throws<T>(Func<Task> testCode) where T : Exception { throw new NotImplementedException(); }
 
         /// <summary>
@@ -81,7 +83,7 @@ namespace Xunit
         }
 
         /// <summary>
-        /// Verifies that the exact exception is thrown (and not a derived exception type).
+        /// Verifies that the exact exception or a derived exception type is thrown.
         /// </summary>
         /// <typeparam name="T">The type of the exception expected to be thrown</typeparam>
         /// <param name="testCode">A delegate to the task to be tested</param>
@@ -130,7 +132,7 @@ namespace Xunit
             return Throws(exceptionType, await RecordExceptionAsync(testCode));
         }
 
-        private static Exception Throws(Type exceptionType, Exception exception)
+        static Exception Throws(Type exceptionType, Exception exception)
         {
             Assert.GuardArgumentNotNull("exceptionType", exceptionType);
 
@@ -143,7 +145,7 @@ namespace Xunit
             return exception;
         }
 
-        private static Exception ThrowsAny(Type exceptionType, Exception exception)
+        static Exception ThrowsAny(Type exceptionType, Exception exception)
         {
             Assert.GuardArgumentNotNull("exceptionType", exceptionType);
 
@@ -191,6 +193,7 @@ namespace Xunit
         /// <summary/>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("You must call Assert.ThrowsAsync<T> (and await the result) when testing async code.", true)]
+        [SuppressMessage("Code Notifications", "RECS0083:Shows NotImplementedException throws in the quick task bar", Justification = "This is a purposeful use of NotImplementedException")]
         public static T Throws<T>(string paramName, Func<Task> testCode) where T : ArgumentException { throw new NotImplementedException(); }
 
         /// <summary>
