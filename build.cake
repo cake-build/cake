@@ -307,6 +307,18 @@ Task("Publish-Chocolatey")
     }
 });
 
+Task("Publish-HomeBrew")
+    .IsDependentOn("Zip-Files")
+	.Does(() =>
+{
+    var packageFile = File("Cake-bin-v" + semVersion + ".zip");	
+    var packagePath = buildResultDir + packageFile;
+	
+    var hash = CalculateFileHash(packagePath).ToHex();
+	
+    Information("Hash for creating HomeBrew PullRequest: {0}", hash);
+});
+
 Task("Create-Release-Notes")
   .Does(() =>
 {
@@ -335,7 +347,8 @@ Task("Default")
 
 Task("Publish")
   .IsDependentOn("Publish-NuGet")
-  .IsDependentOn("Publish-Chocolatey");
+  .IsDependentOn("Publish-Chocolatey")
+  .IsDependentOn("Publish-HomeBrew");
 
 Task("AppVeyor")
   .IsDependentOn("Update-AppVeyor-Build-Number")
