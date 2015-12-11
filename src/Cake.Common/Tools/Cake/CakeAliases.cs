@@ -8,6 +8,7 @@ namespace Cake.Common.Tools.Cake
     /// <summary>
     /// Contains functionality related to running Cake scripts out of process.
     /// </summary>
+    [CakeAliasCategory("Cake")]
     public static class CakeAliases
     {
         /// <summary>
