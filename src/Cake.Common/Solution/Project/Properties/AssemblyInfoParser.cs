@@ -77,7 +77,7 @@ namespace Cake.Common.Solution.Project.Properties
                     ParseGeneralQuotedAttribute("AssemblyDescription", content),
                     ParseVersion("AssemblyFileVersion", content),
                     ParseGeneralQuotedAttribute("Guid", content),
-                    ParseVersion("AssemblyInformationalVersion", content),
+                    ParseGeneralQuotedAttribute("AssemblyInformationalVersion", content, DefaultVersion),
                     ParseGeneralQuotedAttribute("InternalsVisibleTo", content),
                     ParseGeneralQuotedAttribute("AssemblyProduct", content),
                     ParseGeneralQuotedAttribute("AssemblyTitle", content),
@@ -103,6 +103,11 @@ namespace Cake.Common.Solution.Project.Properties
 
         private static string ParseGeneralQuotedAttribute(string attributeName, string content)
         {
+            return ParseGeneralQuotedAttribute(attributeName, content, string.Empty);
+        }
+
+        private static string ParseGeneralQuotedAttribute(string attributeName, string content, string defaultValue)
+        {
             var regex = new Regex(string.Format(CultureInfo.InvariantCulture, GeneralQuotedAttributePattern, attributeName), RegexOptions.Multiline);
             var match = regex.Match(content);
             if (match.Groups.Count > 0)
@@ -113,7 +118,7 @@ namespace Cake.Common.Solution.Project.Properties
                     return value;
                 }
             }
-            return string.Empty;
+            return defaultValue;
         }
 
         private static string ParseGeneralNonQuotedAttribute(string attributeName, string content)
