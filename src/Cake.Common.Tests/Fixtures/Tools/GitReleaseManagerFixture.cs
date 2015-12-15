@@ -1,6 +1,7 @@
 ﻿using Cake.Common.Tools.GitReleaseManager;
 using Cake.Core.Diagnostics;
 using Cake.Core.Tooling;
+using Cake.Testing.Shared;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Tools

@@ -3,6 +3,7 @@ using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
+using Cake.Testing.Shared;
 
 namespace Cake.Common.Tests.Fixtures.Tools.NuGet.Packer
 {

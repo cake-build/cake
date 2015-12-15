@@ -121,13 +121,19 @@ namespace Cake.Core.Tooling
         /// <param name="processSettings">The process settings</param>
         /// <returns>The process that the tool is running under.</returns>
         protected IProcess RunProcess(
-            TSettings settings, 
+            TSettings settings,
             ProcessArgumentBuilder arguments,
             ProcessSettings processSettings)
         {
             if (arguments == null && (processSettings == null || processSettings.Arguments == null))
             {
                 throw new ArgumentNullException("arguments");
+            }
+
+            // Should we customize the arguments?
+            if (settings.ArgumentCustomization != null)
+            {
+                arguments = settings.ArgumentCustomization(arguments);
             }
 
             // Get the tool name.

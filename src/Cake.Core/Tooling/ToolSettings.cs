@@ -1,3 +1,4 @@
+using System;
 using Cake.Core.IO;
 
 namespace Cake.Core.Tooling
@@ -12,5 +13,11 @@ namespace Cake.Core.Tooling
         /// </summary>
         /// <value>The tool path.</value>
         public FilePath ToolPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the argument customization.
+        /// </summary>
+        /// <value>The arguments.</value>
+        public Func<ProcessArgumentBuilder, ProcessArgumentBuilder> ArgumentCustomization { get; set; }
     }
 }

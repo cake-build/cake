@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Fixtures\CakeContextFixture.cs" />
+    <Compile Include="Fixtures\DummyToolFixture.cs" />
     <Compile Include="Fixtures\PropertyAliasGeneratorFixture.cs" />
     <Compile Include="Fixtures\MethodAliasGeneratorFixture.cs" />
     <Compile Include="Fixtures\ScriptAnalyzerFixture.cs" />
@@ -64,6 +65,8 @@
     <Compile Include="Fixtures\ScriptHostFixture.cs" />
     <Compile Include="Fixtures\ScriptProcessorFixture.cs" />
     <Compile Include="Fixtures\ScriptRunnerFixture.cs" />
+    <Compile Include="Stubs\DummySettings.cs" />
+    <Compile Include="Stubs\DummyTool.cs" />
     <Compile Include="Unit\ActionTaskTests.cs" />
     <Compile Include="Unit\Annotations\CakeAliasCategoryAttributeTests.cs" />
     <Compile Include="Unit\Annotations\CakeNamespaceImportAttributeTests.cs" />
@@ -117,6 +120,7 @@
     <Compile Include="Unit\TaskSetupContextTests.cs" />
     <Compile Include="Unit\TaskTeardownContextTests.cs" />
     <Compile Include="Unit\Text\TextTransformationTemplateTests.cs" />
+    <Compile Include="Unit\Tooling\ToolTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
@@ -147,6 +151,10 @@
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
       <Project>{8074B833-11B8-459F-BB98-BFBA2BC5C698}</Project>
       <Name>Cake.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cake.Testing.Shared\Cake.Testing.Shared.csproj">
+      <Project>{8e5a518a-eb84-4a1b-a091-d9d66c8ff979}</Project>
+      <Name>Cake.Testing.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\Cake.Testing.Xunit\Cake.Testing.Xunit.csproj">
       <Project>{5AF751D1-BB54-4268-9E42-3A898B034B06}</Project>

@@ -60,8 +60,6 @@
     <Compile Include="Fixtures\Build\AppVeyorInfoFixture.cs" />
     <Compile Include="Fixtures\AssemblyInfoFixture.cs" />
     <Compile Include="Fixtures\AssemblyInfoParserFixture.cs" />
-    <Compile Include="Fixtures\ToolFixture.cs" />
-    <Compile Include="Fixtures\ToolFixtureResult.cs" />
     <Compile Include="Fixtures\Tools\CakeRunnerFixture.cs" />
     <Compile Include="Fixtures\IO\FileCopyFixture.cs" />
     <Compile Include="Fixtures\IO\FileDeleteFixture.cs" />
@@ -258,6 +256,10 @@
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
       <Project>{8074B833-11B8-459F-BB98-BFBA2BC5C698}</Project>
       <Name>Cake.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cake.Testing.Shared\Cake.Testing.Shared.csproj">
+      <Project>{8e5a518a-eb84-4a1b-a091-d9d66c8ff979}</Project>
+      <Name>Cake.Testing.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\Cake.Testing.Xunit\Cake.Testing.Xunit.csproj">
       <Project>{5AF751D1-BB54-4268-9E42-3A898B034B06}</Project>

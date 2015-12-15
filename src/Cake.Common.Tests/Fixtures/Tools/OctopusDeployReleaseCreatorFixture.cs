@@ -1,4 +1,5 @@
 ﻿using Cake.Common.Tools.OctopusDeploy;
+using Cake.Testing.Shared;
 
 namespace Cake.Common.Tests.Fixtures.Tools
 {

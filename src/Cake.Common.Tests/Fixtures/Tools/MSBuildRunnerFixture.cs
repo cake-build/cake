@@ -2,6 +2,7 @@
 using Cake.Common.Tools.MSBuild;
 using Cake.Core.IO;
 using Cake.Testing;
+using Cake.Testing.Shared;
 
 namespace Cake.Common.Tests.Fixtures.Tools
 {
