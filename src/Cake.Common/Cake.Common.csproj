@@ -148,6 +148,14 @@
     <Compile Include="Tools\DNU\Restore\DNULocked.cs" />
     <Compile Include="Tools\DNU\Restore\DNURestorer.cs" />
     <Compile Include="Tools\DNU\Restore\DNURestoreSettings.cs" />
+    <Compile Include="Tools\DNVM\DNVMAliases.cs" />
+    <Compile Include="Tools\DNVM\DNVMTool.cs" />
+    <Compile Include="Tools\DNVM\Use\DNVMSettings.cs" />
+    <Compile Include="Tools\DNVM\Use\DNVMUser.cs" />
+    <Compile Include="Tools\DNX\DNXAliases.cs" />
+    <Compile Include="Tools\DNX\DNXTool.cs" />
+    <Compile Include="Tools\DNX\Run\DNXRunner.cs" />
+    <Compile Include="Tools\DNX\Run\DNXRunSettings.cs" />
     <Compile Include="Tools\DupFinder\DupFinderAliases.cs" />
     <Compile Include="Tools\DupFinder\DupFinderRunner.cs" />
     <Compile Include="Tools\DupFinder\DupFinderSettings.cs" />

@@ -89,6 +89,10 @@
     <Compile Include="Fixtures\Tools\DNU\DNUFixture.cs" />
     <Compile Include="Fixtures\Tools\DNU\Pack\DNUPackerFixture.cs" />
     <Compile Include="Fixtures\Tools\DNU\Restorer\DNURestorerFixture.cs" />
+    <Compile Include="Fixtures\Tools\DNVM\DNVMFixture.cs" />
+    <Compile Include="Fixtures\Tools\DNVM\Use\DNVMUserFixture.cs" />
+    <Compile Include="Fixtures\Tools\DNX\DNXFixture.cs" />
+    <Compile Include="Fixtures\Tools\DNX\Run\DNXRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\DupFinder\DupFinderRunnerConfigFixture.cs" />
     <Compile Include="Fixtures\Tools\DupFinder\DupFinderRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\FixieRunnerFixture.cs" />
@@ -188,6 +192,8 @@
     <Compile Include="Unit\Tools\DNU\Build\DNUBuilderTests.cs" />
     <Compile Include="Unit\Tools\DNU\Pack\DNUPackerTests.cs" />
     <Compile Include="Unit\Tools\DNU\Restore\DNURestorerTests.cs" />
+    <Compile Include="Unit\Tools\DNVM\Use\DNVMUserTests.cs" />
+    <Compile Include="Unit\Tools\DNX\Run\DNXRunnerTests.cs" />
     <Compile Include="Unit\Tools\DupFinder\DupFinderRunnerTests.cs" />
     <Compile Include="Unit\Tools\Fixie\FixieRunnerTests.cs" />
     <Compile Include="Unit\Tools\GitVersion\GitVersionRunnerTests.cs" />
