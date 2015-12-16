@@ -33,11 +33,20 @@ namespace Cake.Diagnostics
                 try
                 {
                     var palette = _palettes[level];
-                    var tokens = FormatParser.Parse(format);
-                    foreach (var token in tokens)
+                    if (args.Length > 0)
                     {
-                        SetPalette(token, palette);
-                        _console.Write("{0}", token.Render(args));
+                        var tokens = FormatParser.Parse(format);
+                        foreach (var token in tokens)
+                        {
+                            SetPalette(token, palette);
+                            _console.Write("{0}", token.Render(args));
+                        }
+                    }
+                    else
+                    {
+                        _console.BackgroundColor = palette.Background;
+                        _console.ForegroundColor = palette.Foreground;
+                        _console.Write(format);
                     }
                 }
                 finally

@@ -41,7 +41,7 @@ namespace Cake.Diagnostics.Formatting
             if ((char)reader.Peek() == '{')
             {
                 reader.Read();
-                return new LiteralToken("{{");
+                return new LiteralToken("{");
             }
             var builder = new StringBuilder();
             while (true)
