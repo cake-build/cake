@@ -16,6 +16,12 @@ namespace Cake.Testing
         public List<string> Messages { get; set; }
 
         /// <summary>
+        /// Gets or sets the error messages.
+        /// </summary>
+        /// <value>The messages.</value>
+        public List<string> ErrorMessages { get; set; }
+
+        /// <summary>
         /// Gets or sets the foreground color.
         /// </summary>
         /// <value>The foreground color</value>
@@ -33,6 +39,7 @@ namespace Cake.Testing
         public FakeConsole()
         {
             Messages = new List<string>();
+            ErrorMessages = new List<string>();
             ForegroundColor = ConsoleColor.Gray;
             BackgroundColor = ConsoleColor.Black;
         }
@@ -60,6 +67,35 @@ namespace Cake.Testing
             if (!string.IsNullOrWhiteSpace(format))
             {
                 Messages.Add(string.Format(format, arg));
+            }
+        }
+
+        /// <summary>
+        /// Writes the text representation of the specified array of objects to the
+        /// console error output using the specified format information.
+        /// </summary>
+        /// <param name="format">A composite format string</param>
+        /// <param name="arg">An array of objects to write using format.</param>
+        public void WriteError(string format, params object[] arg)
+        {
+            if (!string.IsNullOrWhiteSpace(format))
+            {
+                ErrorMessages.Add(string.Format(format, arg));
+            }
+        }
+
+        /// <summary>
+        /// Writes the text representation of the specified array of objects, followed
+        /// by the current line terminator, to the console error output using the
+        /// specified format information.
+        /// </summary>
+        /// <param name="format">A composite format string</param>
+        /// <param name="arg">An array of objects to write using format.</param>
+        public void WriteErrorLine(string format, params object[] arg)
+        {
+            if (!string.IsNullOrWhiteSpace(format))
+            {
+                ErrorMessages.Add(string.Format(format, arg));
             }
         }
 

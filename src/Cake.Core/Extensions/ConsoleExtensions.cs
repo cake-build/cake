@@ -17,5 +17,17 @@ namespace Cake.Core
                 console.WriteLine(string.Empty);
             }
         }
+
+        /// <summary>
+        /// Writes an empty line to the console error output.
+        /// </summary>
+        /// <param name="console">The console to write to.</param>
+        public static void WriteErrorLine(this IConsole console)
+        {
+            if (console != null)
+            {
+                console.WriteErrorLine(string.Empty);
+            }
+        }
     }
 }
