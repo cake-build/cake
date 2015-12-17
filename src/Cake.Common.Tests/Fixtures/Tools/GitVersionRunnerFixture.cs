@@ -4,6 +4,7 @@ using Cake.Common.Tools.GitVersion;
 using Cake.Core.Diagnostics;
 using NSubstitute;
 using System.Runtime.Serialization.Json;
+using Cake.Testing.Shared;
 
 namespace Cake.Common.Tests.Fixtures.Tools
 {

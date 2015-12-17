@@ -1,5 +1,6 @@
 ﻿using Cake.Common.Tools.MSTest;
 using Cake.Core.IO;
+using Cake.Testing.Shared;
 
 namespace Cake.Common.Tests.Fixtures.Tools
 {

@@ -1,24 +1,9 @@
-﻿using Cake.Core.IO;
+using Cake.Core.IO;
 using Cake.Core.Tooling;
-using Cake.Testing;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures
+namespace Cake.Testing.Shared
 {
-    public abstract class ToolFixture<TToolSettings> : ToolFixture<TToolSettings, ToolFixtureResult>
-        where TToolSettings : ToolSettings, new()
-    {
-        protected ToolFixture(string toolFilename)
-            : base(toolFilename)
-        {
-        }
-
-        protected sealed override ToolFixtureResult CreateResult(FilePath toolPath, ProcessSettings process)
-        {
-            return new ToolFixtureResult(toolPath, process);
-        }
-    }
-
     public abstract class ToolFixture<TToolSettings, TFixtureResult>
         where TToolSettings : ToolSettings, new()
         where TFixtureResult : ToolFixtureResult
