@@ -44,6 +44,40 @@ namespace Cake.Tests.Unit.Diagnostics
                 // Then
                 Assert.Equal(1, console.Messages.Count);
             }
+
+            [Theory]
+            [InlineData(LogLevel.Warning)]
+            [InlineData(LogLevel.Information)]
+            [InlineData(LogLevel.Verbose)]
+            [InlineData(LogLevel.Debug)]
+            public void Should_Write_Standard_Log_Messages_Written_With_A_Higher_Log_Level_Than_Error(LogLevel logLevel)
+            {
+                // Given
+                var console = new FakeConsole();
+                var log = new CakeBuildLog(console, Verbosity.Diagnostic);
+
+                // When
+                log.Write(Verbosity.Diagnostic, logLevel, "Hello World");
+
+                // Then
+                Assert.Equal(1, console.Messages.Count);
+            }
+
+            [Theory]
+            [InlineData(LogLevel.Fatal)]
+            [InlineData(LogLevel.Error)]
+            public void Should_Write_Error_Log_Messages_Written_With_A_Lower_Log_Level_Than_Warning(LogLevel logLevel)
+            {
+                // Given
+                var console = new FakeConsole();
+                var log = new CakeBuildLog(console, Verbosity.Diagnostic);
+
+                // When
+                log.Write(Verbosity.Diagnostic, logLevel, "Hello World");
+
+                // Then
+                Assert.Equal(1, console.ErrorMessages.Count);
+            }
         }
     }
 }

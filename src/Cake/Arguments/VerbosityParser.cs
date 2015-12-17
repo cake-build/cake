@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Cake.Core.Diagnostics;
 
 namespace Cake.Arguments
@@ -44,7 +45,7 @@ namespace Cake.Arguments
                 return verbosity;
             }
             const string format = "The value '{0}' is not a valid verbosity.";
-            var message = string.Format(format, value ?? string.Empty);
+            var message = string.Format(CultureInfo.InvariantCulture, format, value);
             throw new InvalidOperationException(message);
         }
     }
