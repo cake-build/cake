@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Threading;
 using Cake.Core.Diagnostics;
 
 namespace Cake.Core.IO
@@ -76,7 +78,31 @@ namespace Cake.Core.IO
 
             // Start and return the process.
             var process = Process.Start(info);
-            return process == null ? null : new ProcessWrapper(process, _log, arguments.FilterUnsafe);
+
+            if (process == null)
+            {
+                return null;
+            }
+
+            var consoleOutputQueue = settings.RedirectStandardOutput
+                ? SubscribeStandardConsoleOutputQueue(process)
+                : null;
+
+            return new ProcessWrapper(process, _log, arguments.FilterUnsafe, consoleOutputQueue);
+        }
+
+        private static ConcurrentQueue<string> SubscribeStandardConsoleOutputQueue(Process process)
+        {
+            var consoleOutputQueue = new ConcurrentQueue<string>();
+            process.OutputDataReceived += (s, e) =>
+            {
+                if (e.Data != null)
+                {
+                    consoleOutputQueue.Enqueue(e.Data);
+                }
+            };
+            process.BeginOutputReadLine();
+            return consoleOutputQueue;
         }
     }
 }
