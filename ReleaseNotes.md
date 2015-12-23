@@ -1,3 +1,16 @@
+### New in 0.7.0 (Released 2015/12/23)
+
+* CakeBuildLog ConsolePalette missing LogLevel.Fatal map
+* StartProcess hangs sometimes with large input
+* Log errors to console standard error
+* Support arbitrary text when parsing AssemblyInformationalVersion.
+* Run unit tests on Travis
+* Use OutputDirectory property in Choco Pack for Cake
+* Workarounds for incomplete tool settings
+* Adding support for Atlasssian Bamboo Build Server 
+* Added missing CakeAliasCategory attribute
+* Add code of conduct
+
 ### New in 0.6.4 (Released 2015/12/09)
 * Quoted process fails on unix
 
