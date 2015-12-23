@@ -21,6 +21,14 @@ namespace Cake.Core.IO
         }
 
         /// <summary>
+        /// Clears all arguments from the builder.
+        /// </summary>
+        public void Clear()
+        {
+            _tokens.Clear();
+        }
+
+        /// <summary>
         /// Appends an argument.
         /// </summary>
         /// <param name="argument">The argument.</param>

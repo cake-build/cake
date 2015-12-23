@@ -46,7 +46,6 @@ Setup(() =>
 //////////////////////////////////////////////////////////////////////
 
 Task("Clean")
-    .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
 {
     CleanDirectories(new DirectoryPath[] {
@@ -86,8 +85,9 @@ Task("Build")
     if(isRunningOnUnix)
     {
         XBuild("./src/Cake.sln", new XBuildSettings()
-            .SetConfiguration("Debug")
-            .WithProperty("TreatWarningsAsErrors", "true")
+            .SetConfiguration(configuration)
+            .WithProperty("POSIX", "True")
+            .WithProperty("TreatWarningsAsErrors", "True")
             .SetVerbosity(Verbosity.Minimal)
         );
     }
@@ -95,7 +95,8 @@ Task("Build")
     {
         MSBuild("./src/Cake.sln", new MSBuildSettings()
             .SetConfiguration(configuration)
-            .WithProperty("TreatWarningsAsErrors", "true")
+            .WithProperty("Windows", "True")
+            .WithProperty("TreatWarningsAsErrors", "True")
             .UseToolVersion(MSBuildToolVersion.NET45)
             .SetVerbosity(Verbosity.Minimal)
             .SetNodeReuse(false));
@@ -104,19 +105,18 @@ Task("Build")
 
 Task("Run-Unit-Tests")
     .IsDependentOn("Build")
-    .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
 {
     XUnit2("./src/**/bin/" + configuration + "/*.Tests.dll", new XUnit2Settings {
         OutputDirectory = testResultsDir,
-        XmlReportV1 = true
+        XmlReportV1 = true,
+        NoAppDomain = true
     });
 });
 
 
 Task("Copy-Files")
     .IsDependentOn("Run-Unit-Tests")
-    .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
 {
     CopyFileToDirectory(buildDir + File("Cake.exe"), binDir);
@@ -141,7 +141,6 @@ Task("Copy-Files")
 
 Task("Zip-Files")
     .IsDependentOn("Copy-Files")
-    .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
 {
     var packageFile = File("Cake-bin-v" + semVersion + ".zip");
@@ -159,29 +158,27 @@ Task("Create-Chocolatey-Packages")
     .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
 {
-  // Create Cake package.
-  ChocolateyPack("./nuspec/Cake.Portable.nuspec", new ChocolateyPackSettings {
-      Version = semVersion,
-	  ReleaseNotes = releaseNotes.Notes.ToArray(),
-      Files = new [] {
-        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.exe")},
-        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Core.dll")},
-        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Core.xml")},
-        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Common.dll")},
-        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Common.xml")},
-        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/NuGet.Core.dll")},
-        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Mono.CSharp.dll")},
-        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Autofac.dll")},
-        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/LICENSE")}
-    }
-  });
-
-  MoveFileToDirectory(string.Concat("cake.portable.", semVersion, ".nupkg"), nugetRoot);
+    // Create Cake package.
+    ChocolateyPack("./nuspec/Cake.Portable.nuspec", new ChocolateyPackSettings {
+        Version = semVersion,
+        ReleaseNotes = releaseNotes.Notes.ToArray(),
+        OutputDirectory = nugetRoot,
+        Files = new [] {
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.exe")},
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Core.dll")},
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Core.xml")},
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Common.dll")},
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Common.xml")},
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/NuGet.Core.dll")},
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Mono.CSharp.dll")},
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Autofac.dll")},
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/LICENSE")}
+        }
+    });
 });
 
 Task("Create-NuGet-Packages")
     .IsDependentOn("Copy-Files")
-    .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
 {
     // Create Cake package.
@@ -224,7 +221,6 @@ Task("Create-NuGet-Packages")
 
 Task("Update-AppVeyor-Build-Number")
     .WithCriteria(() => isRunningOnAppVeyor)
-    .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
 {
     AppVeyor.UpdateBuildVersion(semVersion);
@@ -233,7 +229,6 @@ Task("Update-AppVeyor-Build-Number")
 Task("Upload-AppVeyor-Artifacts")
     .IsDependentOn("Create-Chocolatey-Packages")
     .WithCriteria(() => isRunningOnAppVeyor)
-    .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
 {
     var artifact = buildResultDir + File("Cake-bin-v" + semVersion + ".zip");
@@ -243,7 +238,6 @@ Task("Upload-AppVeyor-Artifacts")
 Task("Publish-MyGet")
     .WithCriteria(() => !local)
     .WithCriteria(() => !isPullRequest)
-    .WithCriteria(() => isRunningOnWindows)
     .WithCriteria(() => isMainCakeRepo)
     .Does(() =>
 {
@@ -312,6 +306,18 @@ Task("Publish-Chocolatey")
     }
 });
 
+Task("Publish-HomeBrew")
+    .IsDependentOn("Zip-Files")
+	.Does(() =>
+{
+    var packageFile = File("Cake-bin-v" + semVersion + ".zip");	
+    var packagePath = buildResultDir + packageFile;
+	
+    var hash = CalculateFileHash(packagePath).ToHex();
+	
+    Information("Hash for creating HomeBrew PullRequest: {0}", hash);
+});
+
 Task("Create-Release-Notes")
   .Does(() =>
 {
@@ -340,15 +346,16 @@ Task("Default")
 
 Task("Publish")
   .IsDependentOn("Publish-NuGet")
-  .IsDependentOn("Publish-Chocolatey");
+  .IsDependentOn("Publish-Chocolatey")
+  .IsDependentOn("Publish-HomeBrew");
 
 Task("AppVeyor")
   .IsDependentOn("Update-AppVeyor-Build-Number")
-  .IsDependentOn("Upload-AppVeyor-Artifacts") 
+  .IsDependentOn("Upload-AppVeyor-Artifacts")
   .IsDependentOn("Publish-MyGet");
 
 Task("Travis")
-  .IsDependentOn("Build");
+  .IsDependentOn("Run-Unit-Tests");
 
 Task("ReleaseNotes")
   .IsDependentOn("Create-Release-Notes");

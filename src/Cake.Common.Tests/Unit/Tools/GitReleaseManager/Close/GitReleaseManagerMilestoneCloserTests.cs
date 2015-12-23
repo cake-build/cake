@@ -1,5 +1,6 @@
 ﻿using Cake.Common.Tests.Fixtures.Tools.GitReleaseManager;
 using Cake.Core.IO;
+using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
 
@@ -108,9 +109,25 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Close
             }
 
             [Theory]
-            [InlineData("C:/GitReleaseManager/GitReleaseManager.exe", "C:/GitReleaseManager/GitReleaseManager.exe")]
+            [InlineData("/bin/tools/GitReleaseManager/GitReleaseManager.exe", "/bin/tools/GitReleaseManager/GitReleaseManager.exe")]
             [InlineData("./tools/GitReleaseManager/GitReleaseManager.exe", "/Working/tools/GitReleaseManager/GitReleaseManager.exe")]
             public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
+            {
+                // Given
+                var fixture = new GitReleaseManagerMilestoneCloserFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.ToolPath.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData("C:/GitReleaseManager/GitReleaseManager.exe", "C:/GitReleaseManager/GitReleaseManager.exe")]
+            public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided_On_Windows(string toolPath, string expected)
             {
                 // Given
                 var fixture = new GitReleaseManagerMilestoneCloserFixture();
@@ -184,7 +201,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Close
             {
                 // Given
                 var fixture = new GitReleaseManagerMilestoneCloserFixture();
-                fixture.Settings.TargetDirectory = @"c:/temp";
+                fixture.Settings.TargetDirectory = @"/temp";
 
                 // When
                 var result = fixture.Run();
@@ -192,7 +209,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Close
                 // Then
                 Assert.Equal("close -u \"bob\" -p \"password\" " +
                              "-o \"repoOwner\" -r \"repo\" -m \"0.1.0\" " +
-                             "-d \"c:/temp\"", result.Args);
+                             "-d \"/temp\"", result.Args);
             }
 
             [Fact]
@@ -200,7 +217,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Close
             {
                 // Given
                 var fixture = new GitReleaseManagerMilestoneCloserFixture();
-                fixture.Settings.LogFilePath = @"c:/temp/log.txt";
+                fixture.Settings.LogFilePath = @"/temp/log.txt";
 
                 // When
                 var result = fixture.Run();
@@ -208,7 +225,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Close
                 // Then
                 Assert.Equal("close -u \"bob\" -p \"password\" " +
                              "-o \"repoOwner\" -r \"repo\" -m \"0.1.0\" " +
-                             "-l \"c:/temp/log.txt\"", result.Args);
+                             "-l \"/temp/log.txt\"", result.Args);
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Cake.Common.Tools.ReportUnit;
 using Cake.Core.IO;
+using Cake.Testing.Shared;
 
 namespace Cake.Common.Tests.Fixtures.Tools.ReportUnit
 {
@@ -11,14 +12,14 @@ namespace Cake.Common.Tests.Fixtures.Tools.ReportUnit
         public ReportUnitFileFixture()
             : base("ReportUnit.exe")
         {
-            this.InputFile = "c:/temp/input.xml";
-            this.OutputFile = "c:/temp/output.html";
+            InputFile = "/temp/input.xml";
+            OutputFile = "/temp/output.html";
         }
 
         protected override void RunTool()
         {
-            var tool = new ReportUnitRunner(this.FileSystem, this.Environment, this.ProcessRunner, this.Globber);
-            tool.Run(this.InputFile, this.OutputFile, this.Settings);
+            var tool = new ReportUnitRunner(FileSystem, Environment, ProcessRunner, Globber);
+            tool.Run(InputFile, OutputFile, Settings);
         }
     }
 }

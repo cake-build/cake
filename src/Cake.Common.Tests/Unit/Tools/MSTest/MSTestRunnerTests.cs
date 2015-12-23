@@ -3,6 +3,7 @@ using Cake.Common.Tools.MSTest;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
+using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
 
@@ -54,9 +55,25 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         }
 
         [Theory]
-        [InlineData("C:/xUnit/xunit.exe", "C:/xUnit/xunit.exe")]
+        [InlineData("/bin/xUnit/xunit.exe", "/bin/xUnit/xunit.exe")]
         [InlineData("./tools/xUnit/xunit.exe", "/Working/tools/xUnit/xunit.exe")]
         public void Should_Use_MSTest_From_Tool_Path_If_Provided(string toolPath, string expected)
+        {
+            // Given
+            var fixture = new MSTestRunnerFixture();
+            fixture.Settings.ToolPath = toolPath;
+            fixture.GivenSettingsToolPathExist();
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal(expected, result.ToolPath.FullPath);
+        }
+
+        [WindowsTheory]
+        [InlineData("C:/xUnit/xunit.exe", "C:/xUnit/xunit.exe")]
+        public void Should_Use_MSTest_From_Tool_Path_If_Provided_On_Windows(string toolPath, string expected)
         {
             // Given
             var fixture = new MSTestRunnerFixture();

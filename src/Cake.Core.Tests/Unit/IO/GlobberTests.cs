@@ -1,6 +1,7 @@
 ﻿using System;
 using Cake.Core.IO;
 using Cake.Core.Tests.Fixtures;
+using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
 
@@ -39,7 +40,7 @@ namespace Cake.Core.Tests.Unit.IO
         {
             public sealed class WindowsSpecific
             {
-                [Fact]
+                [WindowsFact]
                 public void Will_Fix_Root_If_Drive_Is_Missing_By_Using_The_Drive_From_The_Working_Directory()
                 {
                     // Given
@@ -53,7 +54,7 @@ namespace Cake.Core.Tests.Unit.IO
                     Assert.ContainsFilePath(result, "C:/Working/Foo/Bar/Qux.c");
                 }
 
-                [Fact]
+                [WindowsFact]
                 public void Should_Throw_If_Unc_Root_Was_Encountered()
                 {
                     // Given
@@ -67,7 +68,7 @@ namespace Cake.Core.Tests.Unit.IO
                     Assert.Equal("UNC paths are not supported.", result.Message);
                 }
 
-                [Fact]
+                [WindowsFact]
                 public void Should_Ignore_Case_Sensitivity_On_Case_Insensitive_Operative_System()
                 {
                     // Given
@@ -82,7 +83,7 @@ namespace Cake.Core.Tests.Unit.IO
                     Assert.ContainsFilePath(result, "C:/Working/Foo/Bar/Qux.c");
                 }
 
-                [Fact]
+                [WindowsFact]
                 public void Should_Parse_Glob_Expressions_With_Parenthesis_In_Them()
                 {
                     // Given
@@ -96,7 +97,7 @@ namespace Cake.Core.Tests.Unit.IO
                     Assert.ContainsFilePath(result, "C:/Program Files (x86)/Foo.c");
                 }
 
-                [Fact]
+                [WindowsFact]
                 public void Should_Parse_Glob_Expressions_With_Ampersand_In_Them()
                 {
                   // Given
@@ -110,7 +111,7 @@ namespace Cake.Core.Tests.Unit.IO
                   Assert.ContainsFilePath(result, "C:/Tools & Services/MyTool.dll");
                 }
 
-                [Fact]
+                [WindowsFact]
                 public void Should_Parse_Glob_Expressions_With_Plus_In_Them()
                 {
                   // Given
@@ -331,7 +332,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = fixture.Match("/Working/**/*");
 
                 // Then
-                Assert.Equal(12, result.Length);
+                Assert.Equal(15, result.Length);
                 Assert.ContainsDirectoryPath(result, "/Working/Foo");
                 Assert.ContainsDirectoryPath(result, "/Working/Foo/Bar");
                 Assert.ContainsDirectoryPath(result, "/Working/Foo/Baz");
@@ -342,6 +343,9 @@ namespace Cake.Core.Tests.Unit.IO
                 Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.h");
                 Assert.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
                 Assert.ContainsFilePath(result, "/Working/Foo/Bar/Baz/Qux.c");
+                Assert.ContainsFilePath(result, "/Working/Foo.Bar.Test.dll");
+                Assert.ContainsFilePath(result, "/Working/Bar.Qux.Test.dll");
+                Assert.ContainsFilePath(result, "/Working/Quz.FooTest.dll");
                 Assert.ContainsFilePath(result, "/Working/Bar/Qux.c");
                 Assert.ContainsFilePath(result, "/Working/Bar/Qux.h");
             }
@@ -395,6 +399,21 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Return_Files_For_Pattern_Ending_With_Character_Wildcard_And_Dot()
             {
                 // Given
+                var fixture = new GlobberFixture();
+
+                // When
+                var result = fixture.Match("/Working/*.Test.dll");
+
+                // Then
+                Assert.Equal(2, result.Length);
+                Assert.ContainsFilePath(result, "/Working/Foo.Bar.Test.dll");
+                Assert.ContainsFilePath(result, "/Working/Bar.Qux.Test.dll");
+            }
+
+            [WindowsFact]
+            public void Should_Return_Files_For_Pattern_Ending_With_Character_Wildcard_And_Dot_On_Windows()
+            {
+                // Given
                 var fixture = new GlobberFixture(true);
 
                 // When
@@ -405,6 +424,7 @@ namespace Cake.Core.Tests.Unit.IO
                 Assert.ContainsFilePath(result, "C:/Working/Project.A.Test.dll");
                 Assert.ContainsFilePath(result, "C:/Working/Project.B.Test.dll");
             }
+
 
             [Fact]
             public void Should_Return_File_For_Recursive_Wildcard_Pattern_Ending_With_Wildcard_Regex()

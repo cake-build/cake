@@ -75,13 +75,13 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                 var compatibilityFilter = Substitute.For<INuGetFrameworkCompatibilityFilter>();
                 var referenceSetFactory = Substitute.For<IPackageReferenceBundler>();
 
-                var assemblyFiles = new FilePath[] { "c:/dir/dummy.dll", "dummy2.dll" };
+                var assemblyFiles = new FilePath[] { "/dir/dummy.dll", "dummy2.dll" };
                 var filter = new NuGetAssemblyCompatibilityFilter(compatibilityFilter,
                     referenceSetFactory);
 
                 // When
                 var result = Record.Exception(() => filter.FilterCompatibleAssemblies(_dummyFrameworkName, assemblyFiles));
-                
+
                 // Then
                 Assert.IsCakeException(result, "All assemblyPaths must be relative to the package directory.");
             }
@@ -101,7 +101,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                     { "lib/net452/incompatible1.dll", "lib/net452/incompatible2.dll" }).ToArray();
 
                 var compatibilityFilter = Substitute.For<INuGetFrameworkCompatibilityFilter>();
-                
+
                 compatibilityFilter.GetCompatibleItems(targetFramework, Arg.Any<IEnumerable<PackageReferenceSet>>())
                     .Returns(args => new[]
                     {

@@ -1,6 +1,6 @@
 using Cake.Core.IO;
 
-namespace Cake.Common.Tests.Fixtures
+namespace Cake.Testing.Shared
 {
     public class ToolFixtureResult
     {

@@ -4,6 +4,7 @@ using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.NUnit;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
 
@@ -43,9 +44,25 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
             }
 
             [Theory]
-            [InlineData("C:/NUnit/nunit.exe", "C:/NUnit/nunit.exe")]
+            [InlineData("/bin/tools/NUnit/nunit.exe", "/bin/tools/NUnit/nunit.exe")]
             [InlineData("./tools/NUnit/nunit.exe", "/Working/tools/NUnit/nunit.exe")]
             public void Should_Use_NUnit_Runner_From_Tool_Path_If_Provided(string toolPath, string expected)
+            {
+                // Given
+                var fixture = new NUnitRunnerFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.ToolPath.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData("C:/NUnit/nunit.exe", "C:/NUnit/nunit.exe")]
+            public void Should_Use_NUnit_Runner_From_Tool_Path_If_Provided_On_Windows(string toolPath, string expected)
             {
                 // Given
                 var fixture = new NUnitRunnerFixture();

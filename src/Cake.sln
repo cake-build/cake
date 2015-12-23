@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.Testing.Xunit", "Cake.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{DD6045D3-D869-48FE-9BB1-9F61EF73F192}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.Testing.Shared", "Cake.Testing.Shared\Cake.Testing.Shared.csproj", "{8E5A518A-EB84-4A1B-A091-D9D66C8FF979}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{5AF751D1-BB54-4268-9E42-3A898B034B06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5AF751D1-BB54-4268-9E42-3A898B034B06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5AF751D1-BB54-4268-9E42-3A898B034B06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E5A518A-EB84-4A1B-A091-D9D66C8FF979}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E5A518A-EB84-4A1B-A091-D9D66C8FF979}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E5A518A-EB84-4A1B-A091-D9D66C8FF979}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E5A518A-EB84-4A1B-A091-D9D66C8FF979}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,5 +100,6 @@ Global
 		{B38B35F5-812A-4E4C-B267-71254A7EEF17} = {A01118B7-C6FC-4B0B-8B5C-F580F31FE57D}
 		{5572610D-D857-450A-9CC9-F3E08B0E1449} = {DD6045D3-D869-48FE-9BB1-9F61EF73F192}
 		{5AF751D1-BB54-4268-9E42-3A898B034B06} = {DD6045D3-D869-48FE-9BB1-9F61EF73F192}
+		{8E5A518A-EB84-4A1B-A091-D9D66C8FF979} = {DD6045D3-D869-48FE-9BB1-9F61EF73F192}
 	EndGlobalSection
 EndGlobal

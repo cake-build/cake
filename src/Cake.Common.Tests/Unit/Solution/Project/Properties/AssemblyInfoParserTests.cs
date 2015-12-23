@@ -194,6 +194,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             [Theory]
             [InlineData("1.2.3.4", "1.2.3.4")]
             [InlineData("1.2.*.*", "1.2.*.*")]
+            [InlineData("1.2.3-rc1", "1.2.3-rc1")]
             [InlineData(null, "1.0.0.0")]
             public void Should_Read_AssemblyInformationalVersion(string value, string expected)
             {

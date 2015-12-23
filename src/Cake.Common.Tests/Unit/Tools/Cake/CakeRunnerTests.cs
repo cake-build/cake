@@ -6,6 +6,7 @@ using Cake.Common.Tools.Cake;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
 using Path = Cake.Core.IO.Path;
@@ -61,7 +62,7 @@ namespace Cake.Common.Tests.Unit.Tools.Cake
             }
 
             [Theory]
-            [InlineData("C:/Cake/Cake.exe", "C:/Cake/Cake.exe")]
+            [InlineData("/bin/Cake/Cake.exe", "/bin/Cake/Cake.exe")]
             [InlineData("./tools/Cake/Cake.exe", "/Working/tools/Cake/Cake.exe")]
             public void Should_Use_Cake_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
@@ -76,6 +77,22 @@ namespace Cake.Common.Tests.Unit.Tools.Cake
                 // Then
                 Assert.Equal(expected, result.ToolPath.FullPath);
             }
+
+			[WindowsTheory]
+			[InlineData("C:/Cake/Cake.exe", "C:/Cake/Cake.exe")]
+			public void Should_Use_Cake_Executable_From_Tool_Path_If_Provided_On_Windows(string toolPath, string expected)
+			{
+				// Given
+				var fixture = new CakeRunnerFixture();
+				fixture.Settings.ToolPath = toolPath;
+				fixture.GivenSettingsToolPathExist();
+
+				// When
+				var result = fixture.Run();
+
+				// Then
+				Assert.Equal(expected, result.ToolPath.FullPath);
+			}
 
             [Fact]
             public void Should_Add_Provided_Script_To_Process_Arguments()

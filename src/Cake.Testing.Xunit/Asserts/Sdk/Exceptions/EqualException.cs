@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
@@ -9,7 +8,6 @@ namespace Xunit.Sdk
     /// <summary>
     /// Exception thrown when two values are unexpectedly not equal.
     /// </summary>
-    [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors")]
     public class EqualException : AssertActualExpectedException
     {
         static readonly Dictionary<char, string> Encodings = new Dictionary<char, string>
@@ -80,7 +78,7 @@ namespace Xunit.Sdk
             Tuple<string, string> printedExpected = ShortenAndEncode(Expected, ExpectedIndex, '↓');
             Tuple<string, string> printedActual = ShortenAndEncode(Actual, ActualIndex, '↑');
 
-            return String.Format(
+            return string.Format(
                 CultureInfo.CurrentCulture,
                 "{1}{0}          {2}{0}Expected: {3}{0}Actual:   {4}{0}          {5}",
                 Environment.NewLine,
@@ -96,8 +94,8 @@ namespace Xunit.Sdk
         {
             int start = Math.Max(position - 20, 0);
             int end = Math.Min(position + 41, value.Length);
-            StringBuilder printedValue = new StringBuilder(100);
-            StringBuilder printedPointer = new StringBuilder(100);
+            var printedValue = new StringBuilder(100);
+            var printedPointer = new StringBuilder(100);
 
             if (start > 0)
             {

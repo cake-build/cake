@@ -1,5 +1,6 @@
 ﻿using Cake.Common.Tools.GitReleaseNotes;
 using Cake.Core.IO;
+using Cake.Testing.Shared;
 
 namespace Cake.Common.Tests.Fixtures.Tools
 {
@@ -10,7 +11,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         public GitReleaseNotesRunnerFixture()
             : base("GitReleaseNotes.exe")
         {
-            this.OutputFile = "c:/temp/releasenotes.md";
+            OutputFile = "/temp/releasenotes.md";
         }
 
         protected override void RunTool()

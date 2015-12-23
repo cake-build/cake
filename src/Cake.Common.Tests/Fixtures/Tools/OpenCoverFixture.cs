@@ -3,6 +3,7 @@ using Cake.Common.Tools.OpenCover;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Testing.Shared;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Tools

@@ -2,6 +2,7 @@
 using Cake.Common.Tools.Roundhouse;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
 
@@ -27,9 +28,25 @@ namespace Cake.Common.Tests.Unit.Tools.Roundhouse
             }
 
             [Theory]
-            [InlineData("C:/rh/rh.exe", "C:/rh/rh.exe")]
+            [InlineData("/bin/tools/rh/rh.exe", "/bin/tools/rh/rh.exe")]
             [InlineData("./tools/rh/rh.exe", "/Working/tools/rh/rh.exe")]
             public void Should_Use_Roundhouse_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
+            {
+                // Given
+                var fixture = new RoundhouseRunnerFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.ToolPath.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData("C:/rh/rh.exe", "C:/rh/rh.exe")]
+            public void Should_Use_Roundhouse_Executable_From_Tool_Path_If_Provided_On_Windows(string toolPath, string expected)
             {
                 // Given
                 var fixture = new RoundhouseRunnerFixture();

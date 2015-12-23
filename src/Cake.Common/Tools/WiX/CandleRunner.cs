@@ -105,8 +105,7 @@ namespace Cake.Common.Tools.WiX
             if (settings.OutputDirectory != null && !string.IsNullOrEmpty(settings.OutputDirectory.FullPath))
             {
                 // Candle want the path to end with \\, double separator chars.
-                var separatorChar = System.IO.Path.DirectorySeparatorChar;
-                var fullPath = string.Concat(settings.OutputDirectory.MakeAbsolute(_environment).FullPath, separatorChar, separatorChar);
+                var fullPath = string.Concat(settings.OutputDirectory.MakeAbsolute(_environment).FullPath, '\\', '\\');
 
                 builder.Append("-o");
                 builder.AppendQuoted(fullPath);

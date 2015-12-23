@@ -37,13 +37,27 @@ namespace Cake.Diagnostics
                     foreach (var token in tokens)
                     {
                         SetPalette(token, palette);
-                        _console.Write("{0}", token.Render(args));
+                        if (level > LogLevel.Error)
+                        {
+                            _console.Write("{0}", token.Render(args));
+                        }
+                        else
+                        {
+                            _console.WriteError("{0}", token.Render(args));
+                        }
                     }
                 }
                 finally
                 {
                     _console.ResetColor();
-                    _console.WriteLine();
+                    if (level > LogLevel.Error)
+                    {
+                        _console.WriteLine();
+                    }
+                    else
+                    {
+                        _console.WriteErrorLine();
+                    }
                 }
             }
         }
@@ -73,6 +87,7 @@ namespace Cake.Diagnostics
             var background = _console.BackgroundColor;
             var palette = new Dictionary<LogLevel, ConsolePalette>
             {
+                { LogLevel.Fatal, new ConsolePalette(ConsoleColor.Magenta, ConsoleColor.White, ConsoleColor.DarkMagenta, ConsoleColor.White) },
                 { LogLevel.Error, new ConsolePalette(ConsoleColor.DarkRed, ConsoleColor.White, ConsoleColor.Red, ConsoleColor.White) },
                 { LogLevel.Warning, new ConsolePalette(background, ConsoleColor.Yellow, background, ConsoleColor.Yellow) },
                 { LogLevel.Information, new ConsolePalette(background, ConsoleColor.White, ConsoleColor.DarkBlue, ConsoleColor.White) },

@@ -1,5 +1,3 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace Xunit.Sdk
@@ -7,7 +5,6 @@ namespace Xunit.Sdk
     /// <summary>
     /// Exception thrown when a value is unexpectedly not in the given range.
     /// </summary>
-    [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors")]
     public class InRangeException : XunitException
     {
         readonly string actual;
@@ -60,7 +57,7 @@ namespace Xunit.Sdk
         {
             get
             {
-                return String.Format(CultureInfo.CurrentCulture,
+                return string.Format(CultureInfo.CurrentCulture,
                                      "{0}\r\nRange:  ({1} - {2})\r\nActual: {3}",
                                      base.Message, Low, High, Actual ?? "(null)");
             }
