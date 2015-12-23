@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Cake.Core.Diagnostics;
@@ -10,12 +11,14 @@ namespace Cake.Core.IO
         private readonly Process _process;
         private readonly ICakeLog _log;
         private readonly Func<string, string> _filterOutput;
+        private readonly ConcurrentQueue<string> _consoleOutputQueue;
 
-        public ProcessWrapper(Process process, ICakeLog log, Func<string, string> filterOutput)
+        public ProcessWrapper(Process process, ICakeLog log, Func<string, string> filterOutput, ConcurrentQueue<string> consoleOutputQueue)
         {
             _process = process;
             _log = log;
             _filterOutput = filterOutput ?? (source => "[REDACTED]");
+            _consoleOutputQueue = consoleOutputQueue;
         }
 
         public void WaitForExit()
@@ -44,10 +47,18 @@ namespace Cake.Core.IO
 
         public IEnumerable<string> GetStandardOutput()
         {
-            string line;
-            while ((line = _process.StandardOutput.ReadLine()) != null)
+            if (_consoleOutputQueue == null)
             {
-                _log.Debug("{0}", _filterOutput(line));
+                yield break;
+            }
+            while (!_consoleOutputQueue.IsEmpty || !_process.HasExited)
+            {
+                string line;
+                if (!_consoleOutputQueue.TryDequeue(out line))
+                {
+                    continue;
+                }
+                _log.Debug(log => log("{0}", _filterOutput(line)));
                 yield return line;
             }
         }
