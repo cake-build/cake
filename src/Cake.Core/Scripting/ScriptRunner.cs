@@ -5,6 +5,10 @@ using System.Reflection;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting.Analysis;
+using Cake.Core.Utilities;
+#if DOTNET5_4
+using System.Runtime.Loader;
+#endif
 
 namespace Cake.Core.Scripting
 {
@@ -130,10 +134,11 @@ namespace Cake.Core.Scripting
             assemblies.AddRange(_conventions.GetDefaultAssemblies(applicationRoot));
             foreach (var reference in result.References)
             {
-                if (host.Context.FileSystem.Exist((FilePath)reference))
+                var referencePath = new FilePath(reference);
+
+                if (host.Context.FileSystem.Exist(referencePath))
                 {
-                    var assembly = Assembly.LoadFrom(reference);
-                    assemblies.Add(assembly);
+                    assemblies.Add(AssemblyLoader.Load(referencePath.FullPath));
                 }
                 else
                 {

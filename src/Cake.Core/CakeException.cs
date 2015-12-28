@@ -1,12 +1,16 @@
 ﻿using System;
+#if NET45
 using System.Runtime.Serialization;
+#endif
 
 namespace Cake.Core
 {
     /// <summary>
     /// Represent errors that occur during script execution.
     /// </summary>
+#if NET45
     [Serializable]
+#endif
     public sealed class CakeException : Exception
     {
         /// <summary>
@@ -35,6 +39,7 @@ namespace Cake.Core
         {
         }
 
+#if NET45
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeException"/> class.
         /// </summary>
@@ -44,5 +49,6 @@ namespace Cake.Core
             : base(info, context)
         {
         }
+#endif
     }
 }

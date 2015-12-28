@@ -1,8 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+#if NET45
 using System.Linq;
+#endif
 using System.Reflection;
+#if DOTNET5_4
+using System.Runtime.Loader;
+#endif
 using Cake.Core.IO;
+using Cake.Core.Utilities;
 
 namespace Cake.Core.Scripting
 {
@@ -46,24 +52,27 @@ namespace Cake.Core.Scripting
             // Prepare the default assemblies.
             var defaultAssemblies = new List<Assembly>
             {
-                typeof(Action).Assembly, // mscorlib
-                typeof(Uri).Assembly, // System
-                typeof(IQueryable).Assembly, // System.Core
-                typeof(System.Data.DataTable).Assembly, // System.Data
-                typeof(System.Xml.XmlReader).Assembly, // System.Xml
-                typeof(System.Xml.Linq.XDocument).Assembly, // System.Xml.Linq
+                typeof(Action).GetTypeInfo().Assembly, // mscorlib
+                typeof(Uri).GetTypeInfo().Assembly, // System
+#if NET45
+                typeof(IQueryable).GetTypeInfo().Assembly, // System.Core
+                typeof(System.Data.DataTable).GetTypeInfo().Assembly, // System.Data
+                typeof(System.Xml.XmlReader).GetTypeInfo().Assembly, // System.Xml
+                typeof(System.Xml.Linq.XDocument).GetTypeInfo().Assembly, // System.Xml.Linq
+#endif
             };
 
             // Load other Cake-related assemblies that we need.
             var assemblyDirectory = _fileSystem.GetDirectory(root);
             var patterns = new[] { "Cake.Core.dll", "Cake.Common.dll", "Cake.exe" };
+
             foreach (var pattern in patterns)
             {
                 var cakeAssemblies = assemblyDirectory.GetFiles(pattern, SearchScope.Current);
+
                 foreach (var cakeAssembly in cakeAssemblies)
                 {
-                    var assembly = Assembly.LoadFrom(cakeAssembly.Path.FullPath);
-                    defaultAssemblies.Add(assembly);
+                    defaultAssemblies.Add(AssemblyLoader.Load(cakeAssembly.Path.FullPath));
                 }
             }
 

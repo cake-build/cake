@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 // ReSharper disable once CheckNamespace
@@ -13,15 +14,16 @@ namespace Cake.Core
         /// <summary>
         /// Determines whether the specified <see cref="Type"/> is static.
         /// </summary>
-        /// <param name="type">The type.</param>
+        /// <param name="typeInfo">The type info.</param>
         /// <returns>Whether or not the specified type is static</returns>
-        public static bool IsStatic(this Type type)
+        public static bool IsStatic(this TypeInfo typeInfo)
         {
-            if (type == null)
+            if (typeInfo == null)
             {
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException("typeInfo");
             }
-            return type.IsAbstract && type.IsSealed;
+
+            return typeInfo.IsAbstract && typeInfo.IsSealed;
         }
 
         /// <summary>
@@ -66,13 +68,13 @@ namespace Cake.Core
             genericType = type.IsByRef
                 ? (type.GetElementType() ?? type)
                 : type;
-            return genericType.IsGenericType;
+            return genericType.GetTypeInfo().IsGenericType;
         }
 
         private static string GetGenericTypeArguments(this Type type, bool includeNamespace)
         {
             var genericArguments = new List<string>();
-            foreach (var argument in type.GetGenericArguments())
+            foreach (var argument in type.GenericTypeArguments)
             {
                 genericArguments.Add(GetFullName(argument, includeNamespace));
             }

@@ -19,7 +19,7 @@ namespace Cake.Core
         /// <value>The working directory.</value>
         public DirectoryPath WorkingDirectory
         {
-            get { return Environment.CurrentDirectory; }
+            get { return System.IO.Directory.GetCurrentDirectory(); }
             set { SetWorkingDirectory(value); }
         }
 
@@ -28,7 +28,7 @@ namespace Cake.Core
         /// </summary>
         public CakeEnvironment()
         {
-            WorkingDirectory = new DirectoryPath(Environment.CurrentDirectory);
+            WorkingDirectory = new DirectoryPath(System.IO.Directory.GetCurrentDirectory());
         }
 
         /// <summary>
@@ -62,6 +62,7 @@ namespace Cake.Core
         /// </returns>
         public DirectoryPath GetSpecialPath(SpecialPath path)
         {
+#if NET45
             switch (path)
             {
                 case SpecialPath.ApplicationData:
@@ -79,6 +80,8 @@ namespace Cake.Core
                 case SpecialPath.LocalTemp:
                     return new DirectoryPath(System.IO.Path.GetTempPath());
             }
+#endif
+            // TODO: Find a way to implement this method on dotnet5.4.
             const string format = "The special path '{0}' is not supported.";
             throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, format, path));
         }
@@ -91,8 +94,11 @@ namespace Cake.Core
         /// </returns>
         public DirectoryPath GetApplicationRoot()
         {
-            var path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            return new DirectoryPath(path);
+#if DOTNET5_4
+            return new DirectoryPath(AppContext.BaseDirectory);
+#else
+            return new DirectoryPath(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+#endif
         }
 
         /// <summary>
@@ -127,20 +133,26 @@ namespace Cake.Core
         /// <returns>The target framework.</returns>
         public FrameworkName GetTargetFramework()
         {
+#if DOTNET5_4
+            // TODO: Return RuntimeInformation.FrameworkDescription when the API lands.
+            return new FrameworkName(".NET Core");
+#else
             // Try to get the current framework name from the current application domain,
             // but if that is null, we default to .NET 4.5. The reason for doing this is
             // that this actually is what happens on Mono.
             var frameworkName = AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName;
             return new FrameworkName(frameworkName ?? ".NETFramework,Version=v4.5");
+#endif
         }
 
-        private static void SetWorkingDirectory(DirectoryPath path)
+        private static void SetWorkingDirectory(Path path)
         {
             if (path.IsRelative)
             {
                 throw new CakeException("Working directory can not be set to a relative path.");
             }
-            Environment.CurrentDirectory = path.FullPath;
+
+            System.IO.Directory.SetCurrentDirectory(path.FullPath);
         }
     }
 }
