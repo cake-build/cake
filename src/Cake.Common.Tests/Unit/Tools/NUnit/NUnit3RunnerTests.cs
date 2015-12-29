@@ -4,6 +4,7 @@ using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.NUnit;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Testing;
 using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
@@ -57,7 +58,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(expected, result.ToolPath.FullPath);
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [WindowsTheory]
@@ -73,7 +74,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(expected, result.ToolPath.FullPath);
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [Fact]
@@ -86,7 +87,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/Working/tools/nunit3-console.exe", result.ToolPath.FullPath);
+                Assert.Equal("/Working/tools/nunit3-console.exe", result.Path.FullPath);
             }
 
             [Fact]

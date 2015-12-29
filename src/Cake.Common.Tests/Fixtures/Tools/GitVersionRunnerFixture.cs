@@ -4,7 +4,7 @@ using Cake.Common.Tools.GitVersion;
 using Cake.Core.Diagnostics;
 using NSubstitute;
 using System.Runtime.Serialization.Json;
-using Cake.Testing.Shared;
+using Cake.Testing.Fixtures;
 
 namespace Cake.Common.Tests.Fixtures.Tools
 {
@@ -34,7 +34,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
                     output.Add(reader.ReadLine());
                 }
 
-                Process.GetStandardOutput().Returns(output);
+                ProcessRunner.Process.SetStandardOutput(output);
             }
 
             Log = Substitute.For<ICakeLog>();

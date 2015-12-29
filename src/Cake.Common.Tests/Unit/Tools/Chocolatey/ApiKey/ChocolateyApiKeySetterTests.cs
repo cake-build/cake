@@ -53,7 +53,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.ApiKey
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(expected, result.ToolPath.FullPath);
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [WindowsTheory]
@@ -69,7 +69,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.ApiKey
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(expected, result.ToolPath.FullPath);
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [Fact]
@@ -110,7 +110,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.ApiKey
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/Working/tools/choco.exe", result.ToolPath.FullPath);
+                Assert.Equal("/Working/tools/choco.exe", result.Path.FullPath);
             }
 
             [Fact]
@@ -126,7 +126,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.ApiKey
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/Resolved/choco.exe", result.ToolPath.FullPath);
+                Assert.Equal("/Resolved/choco.exe", result.Path.FullPath);
             }
 
             [Fact]

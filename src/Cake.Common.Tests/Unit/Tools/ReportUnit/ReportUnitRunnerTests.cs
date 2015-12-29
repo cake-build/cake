@@ -1,5 +1,6 @@
 ﻿using Cake.Common.Tests.Fixtures.Tools.ReportUnit;
 using Cake.Core;
+using Cake.Testing;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.ReportUnit
@@ -46,7 +47,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportUnit
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/Working/tools/ReportUnit.exe", result.ToolPath.FullPath);
+                Assert.Equal("/Working/tools/ReportUnit.exe", result.Path.FullPath);
             }
 
             [Fact]
@@ -147,7 +148,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportUnit
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/Working/tools/ReportUnit.exe", result.ToolPath.FullPath);
+                Assert.Equal("/Working/tools/ReportUnit.exe", result.Path.FullPath);
             }
 
             [Fact]

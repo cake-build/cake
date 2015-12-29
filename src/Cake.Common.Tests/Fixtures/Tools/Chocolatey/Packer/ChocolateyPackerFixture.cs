@@ -16,9 +16,9 @@ namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Packer
             FileSystem.CreateFile("/Working/existing.temp.nuspec");
         }
 
-        protected override ChocolateyPackerFixtureResult CreateResult(FilePath toolPath, ProcessSettings process)
+        protected override ChocolateyPackerFixtureResult CreateResult(FilePath path, ProcessSettings process)
         {
-            return new ChocolateyPackerFixtureResult(FileSystem, toolPath, process);
+            return new ChocolateyPackerFixtureResult(FileSystem, path, process);
         }
     }
 }

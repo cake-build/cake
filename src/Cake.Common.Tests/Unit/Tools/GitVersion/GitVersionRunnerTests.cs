@@ -1,6 +1,7 @@
 ﻿using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.GitVersion;
 using Cake.Core;
+using Cake.Testing;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.GitVersion
@@ -33,7 +34,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/Working/tools/GitVersion.exe", result.ToolPath.FullPath);
+                Assert.Equal("/Working/tools/GitVersion.exe", result.Path.FullPath);
             }
 
             [Fact]

@@ -16,9 +16,9 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet.Packer
             FileSystem.CreateFile("/Working/existing.temp.nuspec");
         }
 
-        protected override NuGetPackerFixtureResult CreateResult(FilePath toolPath, ProcessSettings process)
+        protected override NuGetPackerFixtureResult CreateResult(FilePath path, ProcessSettings process)
         {
-            return new NuGetPackerFixtureResult(FileSystem, toolPath, process);
+            return new NuGetPackerFixtureResult(FileSystem, path, process);
         }
     }
 }

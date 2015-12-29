@@ -27,7 +27,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe", result.ToolPath.FullPath);
+                Assert.Equal("/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe", result.Path.FullPath);
             }
 
             [Theory]
@@ -66,7 +66,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(expected, result.ToolPath.FullPath);
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [Theory]
@@ -97,7 +97,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(expected, result.ToolPath.FullPath);
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [Theory]
@@ -152,7 +152,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(expected, result.ToolPath.FullPath);
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [Theory]
@@ -191,7 +191,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(expected, result.ToolPath.FullPath);
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [Theory]
@@ -222,7 +222,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(expected, result.ToolPath.FullPath);
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [Theory]
@@ -262,7 +262,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(expected, result.ToolPath.FullPath);
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [Theory]
@@ -294,7 +294,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(expected, result.ToolPath.FullPath);
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [Theory]
@@ -327,7 +327,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(expected, result.ToolPath.FullPath);
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [Theory]
@@ -354,7 +354,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(expected, result.ToolPath.FullPath);
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [Theory]
@@ -399,7 +399,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(expected, result.ToolPath.FullPath);
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [Theory]
@@ -432,7 +432,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(expected, result.ToolPath.FullPath);
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [Theory]
@@ -459,7 +459,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(expected, result.ToolPath.FullPath);
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [Fact]
@@ -635,7 +635,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Then
                 Assert.Equal("/m /v:normal /p:Platform=arm /target:Build " +
                              "\"/Working/src/Solution.sln\"", result.Args);
-                Assert.Equal("/Program86/MSBuild/12.0/Bin/MSBuild.exe", result.ToolPath.FullPath);
+                Assert.Equal("/Program86/MSBuild/12.0/Bin/MSBuild.exe", result.Path.FullPath);
             }
 
             [Fact]

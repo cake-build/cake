@@ -1,5 +1,5 @@
 ﻿using Cake.Core.Tests.Stubs;
-using Cake.Testing.Shared;
+using Cake.Testing.Fixtures;
 
 namespace Cake.Core.Tests.Fixtures
 {
@@ -16,5 +16,4 @@ namespace Cake.Core.Tests.Fixtures
             tool.Run(Settings);
         }
     }
-
 }

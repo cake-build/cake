@@ -1,5 +1,5 @@
 ﻿using Cake.Common.Tools.Roundhouse;
-using Cake.Testing.Shared;
+using Cake.Testing.Fixtures;
 
 namespace Cake.Common.Tests.Fixtures.Tools
 {
