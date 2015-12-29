@@ -55,6 +55,12 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             [InlineData(MSBuildToolVersion.NET20, PlatformTarget.ARM, false, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.NET30, PlatformTarget.ARM, true, "/Windows/Microsoft.NET/Framework64/v2.0.50727/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.NET30, PlatformTarget.ARM, false, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2005, PlatformTarget.Win32, true, "/Windows/Microsoft.NET/Framework64/v2.0.50727/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2005, PlatformTarget.Win32, false, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET20, PlatformTarget.Win32, true, "/Windows/Microsoft.NET/Framework64/v2.0.50727/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET20, PlatformTarget.Win32, false, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET30, PlatformTarget.Win32, true, "/Windows/Microsoft.NET/Framework64/v2.0.50727/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET30, PlatformTarget.Win32, false, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
             public void Should_Get_Correct_Path_To_MSBuild_Version_2(MSBuildToolVersion version, PlatformTarget target, bool is64BitOperativeSystem, string expected)
             {
                 // Given
@@ -86,6 +92,10 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             [InlineData(MSBuildToolVersion.VS2008, PlatformTarget.ARM, false, "/Windows/Microsoft.NET/Framework/v3.5/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.NET35, PlatformTarget.ARM, true, "/Windows/Microsoft.NET/Framework64/v3.5/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.NET35, PlatformTarget.ARM, false, "/Windows/Microsoft.NET/Framework/v3.5/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2008, PlatformTarget.Win32, true, "/Windows/Microsoft.NET/Framework64/v3.5/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2008, PlatformTarget.Win32, false, "/Windows/Microsoft.NET/Framework/v3.5/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET35, PlatformTarget.Win32, true, "/Windows/Microsoft.NET/Framework64/v3.5/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET35, PlatformTarget.Win32, false, "/Windows/Microsoft.NET/Framework/v3.5/MSBuild.exe")]
             public void Should_Get_Correct_Path_To_MSBuild_Version_35(MSBuildToolVersion version, PlatformTarget target, bool is64BitOperativeSystem, string expected)
             {
                 // Given
@@ -131,7 +141,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             [InlineData(MSBuildToolVersion.VS2011, PlatformTarget.x64, false, "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2012, PlatformTarget.x64, true, "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2012, PlatformTarget.x64, false, "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe")]
-            [InlineData(MSBuildToolVersion.NET40, PlatformTarget.MSIL, true, "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET40, PlatformTarget.ARM, true, "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.NET40, PlatformTarget.ARM, false, "/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.NET45, PlatformTarget.ARM, true, "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.NET45, PlatformTarget.ARM, false, "/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe")]
@@ -141,6 +151,16 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             [InlineData(MSBuildToolVersion.VS2011, PlatformTarget.ARM, false, "/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2012, PlatformTarget.ARM, true, "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2012, PlatformTarget.ARM, false, "/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET40, PlatformTarget.Win32, true, "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET40, PlatformTarget.Win32, false, "/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET45, PlatformTarget.Win32, true, "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET45, PlatformTarget.Win32, false, "/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2010, PlatformTarget.Win32, true, "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2010, PlatformTarget.Win32, false, "/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2011, PlatformTarget.Win32, true, "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2011, PlatformTarget.Win32, false, "/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2012, PlatformTarget.Win32, true, "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2012, PlatformTarget.Win32, false, "/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe")]
             public void Should_Get_Correct_Path_To_MSBuild_Version_4(MSBuildToolVersion version, PlatformTarget target, bool is64BitOperativeSystem, string expected)
             {
                 // Given
@@ -180,6 +200,12 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             [InlineData(MSBuildToolVersion.NET452, PlatformTarget.ARM, true, "/Program86/MSBuild/12.0/Bin/amd64/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2013, PlatformTarget.ARM, false, "/Program86/MSBuild/12.0/Bin/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2013, PlatformTarget.ARM, true, "/Program86/MSBuild/12.0/Bin/amd64/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET451, PlatformTarget.Win32, false, "/Program86/MSBuild/12.0/Bin/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET451, PlatformTarget.Win32, true, "/Program86/MSBuild/12.0/Bin/amd64/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET452, PlatformTarget.Win32, false, "/Program86/MSBuild/12.0/Bin/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET452, PlatformTarget.Win32, true, "/Program86/MSBuild/12.0/Bin/amd64/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2013, PlatformTarget.Win32, false, "/Program86/MSBuild/12.0/Bin/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2013, PlatformTarget.Win32, true, "/Program86/MSBuild/12.0/Bin/amd64/MSBuild.exe")]
             public void Should_Get_Correct_Path_To_MSBuild_Version_12(MSBuildToolVersion version, PlatformTarget target, bool is64BitOperativeSystem, string expected)
             {
                 // Given
@@ -211,6 +237,10 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             [InlineData(MSBuildToolVersion.NET46, PlatformTarget.ARM, true, "/Program86/MSBuild/14.0/Bin/amd64/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2015, PlatformTarget.ARM, false, "/Program86/MSBuild/14.0/Bin/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2015, PlatformTarget.ARM, true, "/Program86/MSBuild/14.0/Bin/amd64/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET46, PlatformTarget.Win32, false, "/Program86/MSBuild/14.0/Bin/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET46, PlatformTarget.Win32, true, "/Program86/MSBuild/14.0/Bin/amd64/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2015, PlatformTarget.Win32, false, "/Program86/MSBuild/14.0/Bin/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2015, PlatformTarget.Win32, true, "/Program86/MSBuild/14.0/Bin/amd64/MSBuild.exe")]
             public void Should_Get_Correct_Path_To_MSBuild_Version_14(MSBuildToolVersion version, PlatformTarget target, bool is64BitOperativeSystem, string expected)
             {
                 // Given
@@ -250,6 +280,12 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             [InlineData(MSBuildToolVersion.NET20, MSBuildPlatform.Automatic, PlatformTarget.ARM, false, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.NET30, MSBuildPlatform.Automatic, PlatformTarget.ARM, true, "/Windows/Microsoft.NET/Framework64/v2.0.50727/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.NET30, MSBuildPlatform.Automatic, PlatformTarget.ARM, false, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.Automatic, PlatformTarget.Win32, true, "/Windows/Microsoft.NET/Framework64/v2.0.50727/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.Automatic, PlatformTarget.Win32, false, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET20, MSBuildPlatform.Automatic, PlatformTarget.Win32, true, "/Windows/Microsoft.NET/Framework64/v2.0.50727/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET20, MSBuildPlatform.Automatic, PlatformTarget.Win32, false, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET30, MSBuildPlatform.Automatic, PlatformTarget.Win32, true, "/Windows/Microsoft.NET/Framework64/v2.0.50727/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.NET30, MSBuildPlatform.Automatic, PlatformTarget.Win32, false, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
             public void Should_Get_Correct_Path_To_MSBuild_Version_2_When_Build_Platform_Set_To_Automatic(MSBuildToolVersion version, MSBuildPlatform buildPlatform, PlatformTarget platformTarget, bool is64BitOperativeSystem, string expected)
             {
                 // Given
@@ -270,18 +306,22 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.x64, PlatformTarget.x64, true, "/Windows/Microsoft.NET/Framework64/v2.0.50727/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.x64, PlatformTarget.MSIL, true, "/Windows/Microsoft.NET/Framework64/v2.0.50727/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.x64, PlatformTarget.ARM, true, "/Windows/Microsoft.NET/Framework64/v2.0.50727/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.x64, PlatformTarget.Win32, true, "/Windows/Microsoft.NET/Framework64/v2.0.50727/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.x64, PlatformTarget.x86, false, "/Windows/Microsoft.NET/Framework64/v2.0.50727/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.x64, PlatformTarget.x64, false, "/Windows/Microsoft.NET/Framework64/v2.0.50727/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.x64, PlatformTarget.MSIL, false, "/Windows/Microsoft.NET/Framework64/v2.0.50727/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.x64, PlatformTarget.ARM, false, "/Windows/Microsoft.NET/Framework64/v2.0.50727/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.x64, PlatformTarget.Win32, false, "/Windows/Microsoft.NET/Framework64/v2.0.50727/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.x86, PlatformTarget.x86, true, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.x86, PlatformTarget.x64, true, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.x86, PlatformTarget.MSIL, true, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.x86, PlatformTarget.ARM, true, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.x86, PlatformTarget.Win32, true, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.x86, PlatformTarget.x86, false, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.x86, PlatformTarget.x64, false, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.x86, PlatformTarget.MSIL, false, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.x86, PlatformTarget.ARM, false, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2005, MSBuildPlatform.x86, PlatformTarget.Win32, false, "/Windows/Microsoft.NET/Framework/v2.0.50727/MSBuild.exe")]
             public void Should_Get_Correct_Path_To_MSBuild_Version_2_When_Build_Platform_Explicitly_Set(MSBuildToolVersion version, MSBuildPlatform buildPlatform, PlatformTarget platformTarget, bool is64BitOperativeSystem, string expected)
             {
                 // Given
@@ -608,6 +648,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             [InlineData(PlatformTarget.x86, "/m /v:normal /p:Platform=x86 /target:Build \"/Working/src/Solution.sln\"")]
             [InlineData(PlatformTarget.x64, "/m /v:normal /p:Platform=x64 /target:Build \"/Working/src/Solution.sln\"")]
             [InlineData(PlatformTarget.ARM, "/m /v:normal /p:Platform=arm /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(PlatformTarget.Win32, "/m /v:normal /p:Platform=Win32 /target:Build \"/Working/src/Solution.sln\"")]
             public void Should_Append_Platform_As_Property_To_Process_Arguments(PlatformTarget platform, string expected)
             {
                 // Given
@@ -628,7 +669,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var fixture = new MSBuildRunnerFixture(true);
                 fixture.Settings.PlatformTarget = PlatformTarget.ARM;
                 fixture.Settings.MSBuildPlatform = MSBuildPlatform.x86;
-       
+
                 // When
                 var result = fixture.Run();
 
