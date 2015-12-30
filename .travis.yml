@@ -6,5 +6,5 @@ os:
   - osx
 cache:
   directories:
-    - src/packages
+    - packages
     - tools

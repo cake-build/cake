@@ -1,0 +1,41 @@
+﻿{
+    "version": "0.8.0-*",
+    "description": "Provides aliases (extension methods on Cake context) that support CI, build, unit tests, zip, signing, etc. for Cake.",
+    "summary": "Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.",
+    "copyright": "Copyright (c) Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors",
+    "authors": [ "Patrik Svensson" ],
+    "tags": [ "Cake", "Script", "Build" ],
+    "projectUrl": "https://github.com/cake-build/cake",
+    "licenseUrl": "https://github.com/cake-build/cake/blob/develop/LICENSE",
+    "iconUrl": "https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png",
+
+    "dependencies": {
+        "Cake.Core": { "target": "project" }
+    },
+
+    "frameworks": {
+        "net45": {
+            "frameworkAssemblies": {
+                "System.IO.Compression": "4.0.0.0",
+                "System.IO.Compression.FileSystem": "4.0.0.0",
+                "System.Net.Http": "4.0.0.0",
+                "System.Runtime.Serialization": "4.0.0.0",
+                "System.Runtime.Serialization.Json": "4.0.0.0"
+            }
+        },
+        "dotnet5.4": {
+            "dependencies": {
+                "System.ComponentModel.TypeConverter": "4.0.1-beta-23516",
+                "System.IO.Compression.ZipFile": "4.0.1-beta-23516",
+                "System.Net.Http": "4.0.1-beta-23516",
+                "System.Runtime": "4.0.21-beta-23516",
+                "System.Runtime.Serialization.Json": "4.0.1-beta-23516",
+                "System.Security.Cryptography.Cng": "4.0.0-beta-23516",
+                "System.Xml.XDocument": "4.0.11-beta-23516",
+                "System.Xml.XmlDocument": "4.0.1-beta-23516",
+                "System.Xml.XPath": "4.0.1-beta-23516",
+                "System.Xml.XPath.XmlDocument": "4.0.1-beta-23516"
+            }
+        }
+    }
+}

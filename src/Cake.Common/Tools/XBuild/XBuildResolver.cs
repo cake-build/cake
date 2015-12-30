@@ -95,6 +95,7 @@ namespace Cake.Common.Tools.XBuild
 
         private static DirectoryPath GetMonoPathWindows()
         {
+#if NET45
             DirectoryPath programFiles;
 
             if (_environment.Is64BitOperativeSystem())
@@ -105,6 +106,9 @@ namespace Cake.Common.Tools.XBuild
             {
                 programFiles = new DirectoryPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles));
             }
+#else
+            var programFiles = new DirectoryPath(Environment.GetEnvironmentVariable("PROGRAMFILES"));
+#endif
 
             var monoPath = programFiles.Combine("Mono").Combine("bin");
 

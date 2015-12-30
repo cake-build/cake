@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if NET45
+using System;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -87,3 +88,4 @@ namespace Cake.Common.Xml
         }
     }
 }
+#endif

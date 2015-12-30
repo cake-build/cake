@@ -44,7 +44,7 @@ namespace Cake.Core.Scripting.CodeGen
         {
             Debug.Assert(method.DeclaringType != null, "method.DeclaringType != null"); // Resharper
 
-            if (!method.DeclaringType.IsStatic())
+            if (!method.DeclaringType.GetTypeInfo().IsStatic())
             {
                 const string format = "The type '{0}' is not static.";
                 throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, method.DeclaringType.FullName));
@@ -163,7 +163,7 @@ namespace Cake.Core.Scripting.CodeGen
             // Backing field.
             builder.Append("private ");
             builder.Append(GetReturnType(method));
-            if (method.ReturnType.IsValueType)
+            if (method.ReturnType.GetTypeInfo().IsValueType)
             {
                 builder.Append("?");
             }
@@ -206,7 +206,7 @@ namespace Cake.Core.Scripting.CodeGen
             builder.Append("        }");
             builder.AppendLine();
             builder.AppendFormat("        return _{0}", method.Name);
-            if (method.ReturnType.IsValueType)
+            if (method.ReturnType.GetTypeInfo().IsValueType)
             {
                 builder.Append(".Value");
             }

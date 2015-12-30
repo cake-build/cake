@@ -56,7 +56,7 @@ Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-    NuGetRestore("./src/Cake.sln", new NuGetRestoreSettings {
+    NuGetRestore("./Cake.sln", new NuGetRestoreSettings {
         Source = new List<string> {
             "https://www.nuget.org/api/v2/",
             "https://www.myget.org/F/roslyn-nightly/"
@@ -68,7 +68,7 @@ Task("Patch-Assembly-Info")
     .IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
 {
-    var file = "./src/SolutionInfo.cs";
+    var file = "./SolutionInfo.cs";
     CreateAssemblyInfo(file, new AssemblyInfoSettings {
         Product = "Cake",
         Version = version,
@@ -84,7 +84,7 @@ Task("Build")
 {
     if(isRunningOnUnix)
     {
-        XBuild("./src/Cake.sln", new XBuildSettings()
+        XBuild("./Cake.sln", new XBuildSettings()
             .SetConfiguration(configuration)
             .WithProperty("POSIX", "True")
             .WithProperty("TreatWarningsAsErrors", "True")
@@ -93,7 +93,7 @@ Task("Build")
     }
     else
     {
-        MSBuild("./src/Cake.sln", new MSBuildSettings()
+        MSBuild("./Cake.sln", new MSBuildSettings()
             .SetConfiguration(configuration)
             .WithProperty("Windows", "True")
             .WithProperty("TreatWarningsAsErrors", "True")
@@ -107,7 +107,7 @@ Task("Run-Unit-Tests")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    XUnit2("./src/**/bin/" + configuration + "/*.Tests.dll", new XUnit2Settings {
+    XUnit2("./test/**/bin/" + configuration + "/*.Tests.dll", new XUnit2Settings {
         OutputDirectory = testResultsDir,
         XmlReportV1 = true,
         NoAppDomain = true
@@ -310,11 +310,11 @@ Task("Publish-HomeBrew")
     .IsDependentOn("Zip-Files")
 	.Does(() =>
 {
-    var packageFile = File("Cake-bin-v" + semVersion + ".zip");	
+    var packageFile = File("Cake-bin-v" + semVersion + ".zip");
     var packagePath = buildResultDir + packageFile;
-	
+
     var hash = CalculateFileHash(packagePath).ToHex();
-	
+
     Information("Hash for creating HomeBrew PullRequest: {0}", hash);
 });
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#if NET45
+using System.Collections.Generic;
 using System.Text;
 
 namespace Cake.Common.Xml
@@ -34,3 +35,4 @@ namespace Cake.Common.Xml
         }
     }
 }
+#endif

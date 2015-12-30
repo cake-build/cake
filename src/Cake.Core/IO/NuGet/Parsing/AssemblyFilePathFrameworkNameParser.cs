@@ -9,7 +9,7 @@ namespace Cake.Core.IO.NuGet.Parsing
     /// </summary>
     public class AssemblyFilePathFrameworkNameParser : IAssemblyFilePathFrameworkNameParser
     {
-        private static readonly FrameworkName _unsupportedFrameworkName = new FrameworkName("Unsupported", new Version());
+        private static readonly FrameworkName _unsupportedFrameworkName = new FrameworkName("Unsupported", new Version(0, 0));
         private readonly IFrameworkNameParser _frameworkNameParser;
 
         /// <summary>

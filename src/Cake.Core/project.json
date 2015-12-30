@@ -1,0 +1,44 @@
+﻿{
+    "version": "0.8.0-*",
+    "description": "The Cake core library.",
+    "summary": "Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.",
+    "copyright": "Copyright (c) Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors",
+    "authors": [ "Patrik Svensson" ],
+    "tags": [ "Cake", "Script", "Build" ],
+    "projectUrl": "https://github.com/cake-build/cake",
+    "licenseUrl": "https://github.com/cake-build/cake/blob/develop/LICENSE",
+    "iconUrl": "https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png",
+
+    "frameworks": {
+        "net45": {
+            "frameworkAssemblies": {
+                "System.Data": "4.0.0.0",
+                "System.Xml": "4.0.0.0",
+                "System.Xml.Linq": "4.0.0.0"
+            }
+        },
+        "dotnet5.4": {
+            "dependencies": {
+                "Microsoft.Win32.Registry": "4.0.0-beta-23516",
+                "System.AppContext": "4.0.1-beta-23516",
+                "System.Collections": "4.0.11-beta-23516",
+                "System.Collections.Concurrent": "4.0.11-beta-23516",
+                "System.Console": "4.0.0-beta-23516",
+                "System.Diagnostics.Debug": "4.0.11-beta-23516",
+                "System.Diagnostics.Process": "4.1.0-beta-23516",
+                "System.Diagnostics.Tools": "4.0.1-beta-23516",
+                "System.Globalization": "4.0.11-beta-23516",
+                "System.IO": "4.0.11-beta-23516",
+                "System.IO.FileSystem": "4.0.1-beta-23516",
+                "System.Linq": "4.0.1-beta-23516",
+                "System.Reflection": "4.1.0-beta-23516",
+                "System.Reflection.Extensions": "4.0.1-beta-23516",
+                "System.Runtime": "4.0.21-beta-23516",
+                "System.Runtime.Extensions": "4.0.11-beta-23516",
+                "System.Runtime.InteropServices.RuntimeInformation": "4.0.0-beta-23516",
+                "System.Runtime.Loader": "4.0.0-beta-23516",
+                "System.Text.RegularExpressions": "4.0.11-beta-23516"
+            }
+        }
+    }
+}
