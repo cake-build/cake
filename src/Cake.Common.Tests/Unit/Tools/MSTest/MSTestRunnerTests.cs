@@ -68,7 +68,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             var result = fixture.Run();
 
             // Then
-            Assert.Equal(expected, result.ToolPath.FullPath);
+            Assert.Equal(expected, result.Path.FullPath);
         }
 
         [WindowsTheory]
@@ -84,7 +84,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             var result = fixture.Run();
 
             // Then
-            Assert.Equal(expected, result.ToolPath.FullPath);
+            Assert.Equal(expected, result.Path.FullPath);
         }
 
         [Theory]
@@ -103,7 +103,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             var result = fixture.Run();
 
             // Then
-            Assert.Equal(existingToolPath, result.ToolPath.FullPath);
+            Assert.Equal(existingToolPath, result.Path.FullPath);
         }
 
         [Fact]

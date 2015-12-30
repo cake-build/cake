@@ -4,6 +4,7 @@ using Cake.Common.Tests.Fixtures.Tools.InspectCode;
 using Cake.Common.Tools.InspectCode;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Testing;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.InspectCode
@@ -36,7 +37,7 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/Working/tools/inspectcode.exe", result.ToolPath.FullPath);
+                Assert.Equal("/Working/tools/inspectcode.exe", result.Path.FullPath);
             }
 
             [Fact]

@@ -3,7 +3,7 @@ using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
-using Cake.Testing.Shared;
+using Cake.Testing.Fixtures;
 
 namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Packer
 {
@@ -16,8 +16,8 @@ namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Packer
             get { return _nuspecContent; }
         }
 
-        public ChocolateyPackerFixtureResult(FakeFileSystem fileSystem, FilePath toolPath, ProcessSettings process)
-            : base(toolPath, process)
+        public ChocolateyPackerFixtureResult(FakeFileSystem fileSystem, FilePath path, ProcessSettings process)
+            : base(path, process)
         {
             _nuspecContent = GetNuSpecContent(fileSystem, process);
         }

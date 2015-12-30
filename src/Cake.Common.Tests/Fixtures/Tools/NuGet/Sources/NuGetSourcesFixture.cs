@@ -16,18 +16,16 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet
 
         public void GivenExistingSource()
         {
-            Process.GetStandardOutput()
-                .Returns(new[] {
-                        "  1.  https://www.nuget.org/api/v2/ [Enabled]",
-                        "      https://www.nuget.org/api/v2/",
-                        string.Format("  2.  {0} [Enabled]", Name),
-                        string.Format("      {0}", Source)
-                    });
+            ProcessRunner.Process.SetStandardOutput(new[] {
+                "  1.  https://www.nuget.org/api/v2/ [Enabled]",
+                "      https://www.nuget.org/api/v2/",
+                string.Format("  2.  {0} [Enabled]", Name),
+                string.Format("      {0}", Source)});
         }
 
         public void GivenSourceAlreadyHasBeenAdded()
         {
-            Process.GetStandardOutput().Returns(new[] { Source });
+            ProcessRunner.Process.SetStandardOutput(new[] { Source });
         }
     }
 }

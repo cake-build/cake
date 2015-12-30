@@ -1,6 +1,7 @@
 ﻿using System;
 using Cake.Common.Tests.Fixtures.Tools.Chocolatey.Push;
 using Cake.Core.IO;
+using Cake.Testing;
 using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
@@ -50,12 +51,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Push
                 fixture.GivenSettingsToolPathExist();
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [WindowsTheory]
@@ -68,12 +67,10 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Push
                 fixture.GivenSettingsToolPathExist();
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [Fact]
@@ -114,7 +111,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Push
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/Working/tools/choco.exe", result.ToolPath.FullPath);
+                Assert.Equal("/Working/tools/choco.exe", result.Path.FullPath);
             }
 
             [Fact]
