@@ -1,5 +1,6 @@
 ﻿using Cake.Common.Tests.Fixtures.Tools.NuGet.SetApiKey;
 using Cake.Common.Tools.NuGet;
+using Cake.Testing;
 using Cake.Testing.Xunit;
 using Xunit;
 
@@ -93,7 +94,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(expected, result.ToolPath.FullPath);
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [WindowsTheory]
@@ -109,7 +110,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(expected, result.ToolPath.FullPath);
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [Fact]
@@ -150,7 +151,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/Working/tools/NuGet.exe", result.ToolPath.FullPath);
+                Assert.Equal("/Working/tools/NuGet.exe", result.Path.FullPath);
             }
 
             [Fact]

@@ -1,6 +1,6 @@
 ﻿using Cake.Common.Tools.MSTest;
 using Cake.Core.IO;
-using Cake.Testing.Shared;
+using Cake.Testing.Fixtures;
 
 namespace Cake.Common.Tests.Fixtures.Tools
 {
@@ -15,7 +15,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
             Environment.SetSpecialPath(SpecialPath.ProgramFilesX86, "/ProgramFilesX86");
         }
 
-        protected override FilePath GetDefaultToolPath()
+        protected override FilePath GetDefaultToolPath(string toolFilename)
         {
             return new FilePath("/ProgramFilesX86/Microsoft Visual Studio 12.0/Common7/IDE/mstest.exe");
         }

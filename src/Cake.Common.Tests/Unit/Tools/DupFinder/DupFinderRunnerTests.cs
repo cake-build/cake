@@ -4,6 +4,7 @@ using Cake.Common.Tests.Fixtures.Tools.DupFinder;
 using Cake.Common.Tools.DupFinder;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Testing;
 using NSubstitute;
 using Xunit;
 
@@ -37,7 +38,7 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/Working/tools/dupfinder.exe", result.ToolPath.FullPath);
+                Assert.Equal("/Working/tools/dupfinder.exe", result.Path.FullPath);
             }
 
             [Fact]

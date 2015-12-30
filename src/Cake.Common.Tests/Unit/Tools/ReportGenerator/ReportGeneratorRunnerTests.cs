@@ -2,6 +2,7 @@
 using Cake.Common.Tools.ReportGenerator;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Testing;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.ReportGenerator
@@ -76,7 +77,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportGenerator
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/Working/tools/ReportGenerator.exe", result.ToolPath.FullPath);
+                Assert.Equal("/Working/tools/ReportGenerator.exe", result.Path.FullPath);
             }
 
             [Fact]
@@ -91,7 +92,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportGenerator
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/some/where/else/ReportGenerator.exe", result.ToolPath.FullPath);
+                Assert.Equal("/some/where/else/ReportGenerator.exe", result.Path.FullPath);
             }
 
             [Fact]

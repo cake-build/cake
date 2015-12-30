@@ -16,7 +16,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet.SetProxy
 
         public void GivenUnexpectedOutput()
         {
-            Process.GetStandardOutput().Returns(new[] { "Unknown Command" });
+            ProcessRunner.Process.SetStandardOutput(new[] { "Unknown Command" });
         }
 
         protected override void RunTool()

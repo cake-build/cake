@@ -1,5 +1,6 @@
 ﻿using Cake.Common.Tests.Fixtures.Tools.DNU.Pack;
 using Cake.Common.Tools.DNU.Pack;
+using Cake.Testing;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.DNU.Pack

@@ -1,5 +1,6 @@
 ﻿using Cake.Common.Tests.Fixtures.Tools.GitReleaseManager;
 using Cake.Core.IO;
+using Cake.Testing;
 using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
@@ -119,12 +120,10 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 fixture.GivenSettingsToolPathExist();
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [WindowsTheory]
@@ -137,12 +136,10 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 fixture.GivenSettingsToolPathExist();
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == expected),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
             [Fact]
@@ -180,12 +177,12 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 var fixture = new GitReleaseManagerPublisherFixture();
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Is<FilePath>(p => p.FullPath == "/Working/tools/GitReleaseManager.exe"),
-                    Arg.Any<ProcessSettings>());
+                Assert.Equal(
+                    "/Working/tools/GitReleaseManager.exe",
+                    result.Path.FullPath);
             }
 
             [Fact]
@@ -195,12 +192,12 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 var fixture = new GitReleaseManagerPublisherFixture();
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "publish -u \"bob\" -p \"password\" -o \"repoOwner\" -r \"repo\" -t \"0.1.0\""));
+                Assert.Equal("publish -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\" -t \"0.1.0\"",
+                             result.Args);
             }
 
             [Fact]
@@ -211,12 +208,12 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 fixture.Settings.TargetDirectory = @"/temp";
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "publish -u \"bob\" -p \"password\" -o \"repoOwner\" -r \"repo\" -t \"0.1.0\" -d \"/temp\""));
+                Assert.Equal("publish -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\" -t \"0.1.0\" " +
+                             "-d \"/temp\"", result.Args);
             }
 
             [Fact]
@@ -227,12 +224,12 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 fixture.Settings.LogFilePath = @"/temp/log.txt";
 
                 // When
-                fixture.Run();
+                var result = fixture.Run();
 
                 // Then
-                fixture.ProcessRunner.Received(1).Start(
-                    Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(p =>
-                        p.Arguments.Render() == "publish -u \"bob\" -p \"password\" -o \"repoOwner\" -r \"repo\" -t \"0.1.0\" -l \"/temp/log.txt\""));
+                Assert.Equal("publish -u \"bob\" -p \"password\" -o " +
+                             "\"repoOwner\" -r \"repo\" -t \"0.1.0\" " +
+                             "-l \"/temp/log.txt\"", result.Args);
             }
         }
     }

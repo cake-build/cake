@@ -65,6 +65,12 @@
     <Compile Include="FakeFileSystemTree.cs" />
     <Compile Include="FakeLog.cs" />
     <Compile Include="FakeLogMessage.cs" />
+    <Compile Include="Extensions\ToolFixtureExtensions.cs" />
+    <Compile Include="FakeProcess.cs" />
+    <Compile Include="Fixtures\ToolFixtureProcessRunner.cs" />
+    <Compile Include="Fixtures\ToolFixtureResult.cs" />
+    <Compile Include="Fixtures\ToolFixture`1.cs" />
+    <Compile Include="Fixtures\ToolFixture`2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
