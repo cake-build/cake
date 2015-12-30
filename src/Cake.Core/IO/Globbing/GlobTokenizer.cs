@@ -99,7 +99,7 @@ namespace Cake.Core.IO.Globbing
 
         private bool IsAlphaNumeric(char character)
         {
-            return _identifierRegex.IsMatch(character.ToString(CultureInfo.InvariantCulture));
+            return _identifierRegex.IsMatch(character.ToString());
         }
 
         private void TakeCharacter()

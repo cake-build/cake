@@ -163,7 +163,7 @@ namespace Cake.Core.Scripting.CodeGen
             // Backing field.
             builder.Append("private ");
             builder.Append(GetReturnType(method));
-            if (method.ReturnType.IsValueType)
+            if (method.ReturnType.GetTypeInfo().IsValueType)
             {
                 builder.Append("?");
             }
@@ -206,7 +206,7 @@ namespace Cake.Core.Scripting.CodeGen
             builder.Append("        }");
             builder.AppendLine();
             builder.AppendFormat("        return _{0}", method.Name);
-            if (method.ReturnType.IsValueType)
+            if (method.ReturnType.GetTypeInfo().IsValueType)
             {
                 builder.Append(".Value");
             }
