@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 // ReSharper disable once CheckNamespace
@@ -21,7 +22,10 @@ namespace Cake.Core
             {
                 throw new ArgumentNullException("type");
             }
-            return type.IsAbstract && type.IsSealed;
+
+            var typeInfo = type.GetTypeInfo();
+
+            return typeInfo.IsAbstract && typeInfo.IsSealed;
         }
 
         /// <summary>
@@ -66,13 +70,13 @@ namespace Cake.Core
             genericType = type.IsByRef
                 ? (type.GetElementType() ?? type)
                 : type;
-            return genericType.IsGenericType;
+            return genericType.GetTypeInfo().IsGenericType;
         }
 
         private static string GetGenericTypeArguments(this Type type, bool includeNamespace)
         {
             var genericArguments = new List<string>();
-            foreach (var argument in type.GetGenericArguments())
+            foreach (var argument in type.GenericTypeArguments)
             {
                 genericArguments.Add(GetFullName(argument, includeNamespace));
             }

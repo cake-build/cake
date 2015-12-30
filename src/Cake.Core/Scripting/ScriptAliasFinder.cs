@@ -38,7 +38,7 @@ namespace Cake.Core.Scripting
                 {
                     try
                     {
-                        foreach (var type in reference.GetTypes())
+                        foreach (var type in reference.DefinedTypes)
                         {
                             if (type.IsStatic())
                             {
@@ -107,7 +107,7 @@ namespace Cake.Core.Scripting
                 }
 
                 // Find out if the class contains any more namespaces.
-                namespaceAttributes = method.DeclaringType.GetCustomAttributes<CakeNamespaceImportAttribute>();
+                namespaceAttributes = method.DeclaringType.GetTypeInfo().GetCustomAttributes<CakeNamespaceImportAttribute>();
                 foreach (var namespaceAttribute in namespaceAttributes)
                 {
                     namespaces.Add(namespaceAttribute.Namespace);
@@ -128,7 +128,7 @@ namespace Cake.Core.Scripting
 
         private static IEnumerable<Tuple<MethodInfo, ScriptAliasType>> GetAliasMethods(Type type)
         {
-            var methods = type.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Static);
+            var methods = type.GetTypeInfo().DeclaredMethods;
             foreach (var method in methods)
             {
                 if (!method.IsDefined(typeof(ExtensionAttribute)))
