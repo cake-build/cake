@@ -59,6 +59,7 @@ namespace Cake.Common.Security
 
         private System.Security.Cryptography.HashAlgorithm GetHashAlgorithm(HashAlgorithm hashAlgorithm)
         {
+#if NET45
             switch (hashAlgorithm)
             {
                 case HashAlgorithm.MD5:
@@ -70,6 +71,19 @@ namespace Cake.Common.Security
                 case HashAlgorithm.SHA512:
                     return new SHA512Managed();
             }
+#else
+            switch (hashAlgorithm)
+            {
+                case HashAlgorithm.MD5:
+                    return MD5.Create();
+
+                case HashAlgorithm.SHA256:
+                    return SHA256.Create();
+
+                case HashAlgorithm.SHA512:
+                    return SHA512.Create();
+            }
+#endif
 
             throw new NotSupportedException(hashAlgorithm.ToString());
         }

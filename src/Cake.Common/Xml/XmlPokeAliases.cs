@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if NET45
+using System;
 using System.Globalization;
 using System.IO;
 using System.Xml;
@@ -535,3 +536,4 @@ namespace Cake.Common.Xml
         }
     }
 }
+#endif
