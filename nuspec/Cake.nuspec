@@ -18,6 +18,8 @@
     <file src="Cake.exe" />
     <file src="Cake.Core.dll" />
     <file src="Cake.Core.xml" />
+    <file src="Cake.NuGet.dll" />
+    <file src="Cake.NuGet.xml" />
     <file src="Cake.Common.dll" />
     <file src="Cake.Common.xml" />
     <file src="NuGet.Core.dll" />

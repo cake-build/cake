@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Core.IO.NuGet;
+using Cake.Core.Packaging;
 using Cake.Core.Scripting.Analysis;
 
 namespace Cake.Core.Scripting
@@ -14,11 +14,9 @@ namespace Cake.Core.Scripting
     /// </summary>
     public sealed class ScriptProcessor : IScriptProcessor
     {
-        private readonly INuGetPackageAssembliesLocator _assembliesLocator;
         private readonly ICakeEnvironment _environment;
-        private readonly IFileSystem _fileSystem;
-        private readonly INuGetPackageInstaller _installer;
         private readonly ICakeLog _log;
+        private readonly List<IPackageInstaller> _installers;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptProcessor"/> class.
@@ -26,14 +24,12 @@ namespace Cake.Core.Scripting
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="log">The log.</param>
-        /// <param name="installer">The NuGet package installer.</param>
-        /// <param name="assembliesLocator">the nuget assemblies locator.</param>
+        /// <param name="installers">The available package installers.</param>
         public ScriptProcessor(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             ICakeLog log,
-            INuGetPackageInstaller installer,
-            INuGetPackageAssembliesLocator assembliesLocator)
+            IEnumerable<IPackageInstaller> installers)
         {
             if (fileSystem == null)
             {
@@ -47,149 +43,128 @@ namespace Cake.Core.Scripting
             {
                 throw new ArgumentNullException("log");
             }
-            if (installer == null)
+            if (installers == null)
             {
-                throw new ArgumentNullException("installer");
-            }
-            if (assembliesLocator == null)
-            {
-                throw new ArgumentNullException("assembliesLocator");
+                throw new ArgumentNullException("installers");
             }
 
-            _fileSystem = fileSystem;
             _environment = environment;
             _log = log;
-            _installer = installer;
-            _assembliesLocator = assembliesLocator;
+            _installers = new List<IPackageInstaller>(installers);
         }
 
         /// <summary>
         /// Installs the addins.
         /// </summary>
         /// <param name="analyzerResult">The analyzer result.</param>
-        /// <param name="installationRoot">The installation root path.</param>
+        /// <param name="installPath">The install path.</param>
         /// <returns>A list containing file paths to installed addin assemblies.</returns>
         public IReadOnlyList<FilePath> InstallAddins(
             ScriptAnalyzerResult analyzerResult,
-            DirectoryPath installationRoot)
+            DirectoryPath installPath)
         {
             if (analyzerResult == null)
             {
                 throw new ArgumentNullException("analyzerResult");
             }
-            if (installationRoot == null)
+            if (installPath == null)
             {
-                throw new ArgumentNullException("installationRoot");
+                throw new ArgumentNullException("installPath");
             }
 
             // Make the installation root absolute.
-            installationRoot = installationRoot.MakeAbsolute(_environment);
+            installPath = installPath.MakeAbsolute(_environment);
 
-            var result = new List<FilePath>();
+            var result = new HashSet<FilePath>(PathComparer.Default);
             if (analyzerResult.Addins.Count > 0)
             {
                 _log.Verbose("Installing addins...");
                 foreach (var addin in analyzerResult.Addins)
                 {
-                    var addInAssemblies = InstallPackage(addin, installationRoot, GetAddInAssemblies);
-                    if (addInAssemblies.Length == 0)
+                    // Get the installer.
+                    var installer = GetInstaller(addin, PackageType.Addin);
+                    if (installer == null)
+                    {
+                        const string format = "Could not find an installer for the '{0}' scheme.";
+                        var message = string.Format(CultureInfo.InvariantCulture, format, addin.Scheme);
+                        throw new CakeException(message);
+                    }
+
+                    var assemblies = installer.Install(addin, PackageType.Addin, installPath);
+                    if (assemblies.Count == 0)
                     {
                         const string format = "Failed to install addin '{0}'.";
-                        var message = string.Format(CultureInfo.InvariantCulture, format, addin.PackageId);
+                        var message = string.Format(CultureInfo.InvariantCulture, format, addin.Package);
                         throw new CakeException(message);
                     }
 
                     // Reference found assemblies.
-                    foreach (var assemblyPath in addInAssemblies)
+                    foreach (var assembly in assemblies)
                     {
-                        _log.Debug("The addin {0} will reference {1}.", addin.PackageId, assemblyPath.Path.GetFilename());
-                        result.Add(assemblyPath.Path);
+                        _log.Debug("The addin {0} will reference {1}.", addin.Package, assembly.Path.GetFilename());
+                        result.Add(assembly.Path);
                     }
                 }
             }
-            return result;
+            return result.ToArray();
         }
 
         /// <summary>
         /// Installs the tools specified in the build scripts.
         /// </summary>
         /// <param name="analyzerResult">The analyzer result.</param>
-        /// <param name="installationRoot">The installation root path.</param>
+        /// <param name="installPath">The install path.</param>
         public void InstallTools(
             ScriptAnalyzerResult analyzerResult,
-            DirectoryPath installationRoot)
+            DirectoryPath installPath)
         {
             if (analyzerResult == null)
             {
                 throw new ArgumentNullException("analyzerResult");
             }
-            if (installationRoot == null)
+            if (installPath == null)
             {
-                throw new ArgumentNullException("installationRoot");
+                throw new ArgumentNullException("installPath");
             }
 
             // Make the installation root absolute.
-            installationRoot = installationRoot.MakeAbsolute(_environment);
+            installPath = installPath.MakeAbsolute(_environment);
 
             if (analyzerResult.Tools.Count > 0)
             {
                 _log.Verbose("Installing tools...");
-                foreach (var addin in analyzerResult.Tools)
+                foreach (var tool in analyzerResult.Tools)
                 {
-                    var toolExecutables = InstallPackage(addin, installationRoot, GetToolExecutables);
-                    if (toolExecutables.Length == 0)
+                    // Get the installer.
+                    var installer = GetInstaller(tool, PackageType.Tool);
+                    if (installer == null)
+                    {
+                        const string format = "Could not find an installer for the '{0}' scheme.";
+                        var message = string.Format(CultureInfo.InvariantCulture, format, tool.Scheme);
+                        throw new CakeException(message);
+                    }
+
+                    var result = installer.Install(tool, PackageType.Tool, installPath);
+                    if (result.Count == 0)
                     {
                         const string format = "Failed to install tool '{0}'.";
-                        var message = string.Format(CultureInfo.InvariantCulture, format, addin.PackageId);
+                        var message = string.Format(CultureInfo.InvariantCulture, format, tool.Package);
                         throw new CakeException(message);
                     }
                 }
             }
         }
 
-        private IFile[] InstallPackage(
-            NuGetPackage package,
-            DirectoryPath installationRoot,
-            Func<DirectoryPath, IFile[]> fetcher)
+        private IPackageInstaller GetInstaller(PackageReference package, PackageType type)
         {
-            var root = _fileSystem.GetDirectory(installationRoot);
-            var packagePath = installationRoot.Combine(package.PackageId);
-
-            // Create the addin directory if it doesn't exist.
-            if (!root.Exists)
+            foreach (var installer in _installers)
             {
-                _log.Debug("Creating addin directory {0}", installationRoot);
-                root.Create();
+                if (installer.CanInstall(package, type))
+                {
+                    return installer;
+                }
             }
-
-            // Fetch available content from disc.
-            var content = fetcher(packagePath);
-            if (content.Any())
-            {
-                _log.Debug("Package {0} has already been installed.", package.PackageId);
-                return content;
-            }
-
-            // Install the package.
-            _log.Debug("Installing package {0}...", package.PackageId);
-            _installer.InstallPackage(package, installationRoot);
-
-            // Return the files.
-            return fetcher(packagePath);
-        }
-
-        private IFile[] GetAddInAssemblies(DirectoryPath addinDirectory)
-        {
-            return _assembliesLocator.FindAssemblies(addinDirectory).ToArray();
-        }
-
-        private IFile[] GetToolExecutables(DirectoryPath toolDirectoryPath)
-        {
-            var toolDirectory = _fileSystem.GetDirectory(toolDirectoryPath);
-            return toolDirectory.Exists
-                ? toolDirectory.GetFiles("*.exe", SearchScope.Recursive)
-                    .ToArray()
-                : new IFile[0];
+            return null;
         }
     }
 }

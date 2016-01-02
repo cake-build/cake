@@ -123,6 +123,9 @@ Task("Copy-Files")
     CopyFileToDirectory(buildDir + File("Cake.Core.dll"), binDir);
     CopyFileToDirectory(buildDir + File("Cake.Core.pdb"), binDir);
     CopyFileToDirectory(buildDir + File("Cake.Core.xml"), binDir);
+    CopyFileToDirectory(buildDir + File("Cake.NuGet.dll"), binDir);
+    CopyFileToDirectory(buildDir + File("Cake.NuGet.pdb"), binDir);
+    CopyFileToDirectory(buildDir + File("Cake.NuGet.xml"), binDir);
     CopyFileToDirectory(buildDir + File("Cake.Common.dll"), binDir);
     CopyFileToDirectory(buildDir + File("Cake.Common.pdb"), binDir);
     CopyFileToDirectory(buildDir + File("Cake.Common.xml"), binDir);
@@ -167,6 +170,8 @@ Task("Create-Chocolatey-Packages")
             new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.exe")},
             new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Core.dll")},
             new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Core.xml")},
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.NuGet.dll")},
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.NuGet.xml")},
             new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Common.dll")},
             new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Common.xml")},
             new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/NuGet.Core.dll")},
@@ -310,11 +315,11 @@ Task("Publish-HomeBrew")
     .IsDependentOn("Zip-Files")
 	.Does(() =>
 {
-    var packageFile = File("Cake-bin-v" + semVersion + ".zip");	
+    var packageFile = File("Cake-bin-v" + semVersion + ".zip");
     var packagePath = buildResultDir + packageFile;
-	
+
     var hash = CalculateFileHash(packagePath).ToHex();
-	
+
     Information("Hash for creating HomeBrew PullRequest: {0}", hash);
 });
 

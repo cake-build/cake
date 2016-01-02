@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Cake.Core.IO;
-using Cake.Core.IO.NuGet;
+using Cake.Core.Packaging;
 
 namespace Cake.Core.Scripting.Analysis
 {
@@ -43,12 +43,12 @@ namespace Cake.Core.Scripting.Analysis
         /// Gets the tools.
         /// </summary>
         /// <value>The tools.</value>
-        IList<NuGetPackage> Tools { get; }
+        IList<PackageReference> Tools { get; }
 
         /// <summary>
         /// Gets the addins.
         /// </summary>
         /// <value>The addins.</value>
-        IList<NuGetPackage> Addins { get; }
+        IList<PackageReference> Addins { get; }
     }
 }
