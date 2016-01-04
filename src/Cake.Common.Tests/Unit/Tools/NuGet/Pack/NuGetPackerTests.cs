@@ -5,6 +5,7 @@ using Cake.Common.Tools.NuGet;
 using Cake.Common.Tools.NuGet.Pack;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Testing;
 using Cake.Testing.Xunit;
 using Xunit;
 
@@ -72,7 +73,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     var result = fixture.Run();
 
                     // Then
-                    Assert.Equal(expected, result.ToolPath.FullPath);
+                    Assert.Equal(expected, result.Path.FullPath);
                 }
 
                 [WindowsTheory]
@@ -88,7 +89,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     var result = fixture.Run();
 
                     // Then
-                    Assert.Equal(expected, result.ToolPath.FullPath);
+                    Assert.Equal(expected, result.Path.FullPath);
                 }
 
                 [Fact]
@@ -101,7 +102,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     var result = fixture.Run();
 
                     // Then
-                    Assert.Equal("/Working/tools/NuGet.exe", result.ToolPath.FullPath);
+                    Assert.Equal("/Working/tools/NuGet.exe", result.Path.FullPath);
                 }
 
                 [Fact]

@@ -160,7 +160,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
 
         private static string ToString(bool value)
         {
-            return value.ToString(CultureInfo.InvariantCulture).ToLowerInvariant();
+            return value.ToString().ToLowerInvariant();
         }
 
         private static string ToCommaSeparatedString(IEnumerable<string> values)

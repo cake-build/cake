@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.Diagnostics;
@@ -86,20 +87,20 @@ namespace Cake.Common.Net
             // We track the last posted value since the event seems to fire many times for the same value.
             var percentComplete = 0;
 
-            using (var http = new System.Net.WebClient())
+            using (var http = new HttpClient())
             {
-                http.DownloadProgressChanged += (sender, e) =>
+                var progress = new Progress<int>(progressPercentage =>
                 {
                     // Only write to log if the value changed and only ever 5%.
-                    if (percentComplete != e.ProgressPercentage && e.ProgressPercentage % 5 == 0)
+                    if (percentComplete != progressPercentage && progressPercentage % 5 == 0)
                     {
-                        percentComplete = e.ProgressPercentage;
-                        context.Log.Verbose("Downloading file: {0}%", e.ProgressPercentage);
+                        percentComplete = progressPercentage;
+                        context.Log.Verbose("Downloading file: {0}%", progressPercentage);
                     }
-                };
+                });
 
                 // Download file async so we get the progress events, but block for it to complete anyway.
-                http.DownloadFileTaskAsync(address, outputPath.FullPath).Wait();
+                http.DownloadFileAsync(address, outputPath.FullPath, progress).Wait();
             }
 
             context.Log.Verbose("Download complete, saved to: {0}", outputPath.FullPath);
