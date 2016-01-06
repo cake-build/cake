@@ -13,9 +13,6 @@ namespace Cake.Common.Tools.DNVM.Use
     /// </summary>
     public class DNVMUser : DNVMTool<DNVMSettings>
     {
-        private IFileSystem _fileSystem;
-        private ICakeEnvironment _environment;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DNVMUser" /> class.
         /// </summary>
@@ -30,8 +27,6 @@ namespace Cake.Common.Tools.DNVM.Use
             IGlobber globber)
             : base(fileSystem, environment, processRunner, globber)
         {
-            _fileSystem = fileSystem;
-            _environment = environment;
         }
 
         /// <summary>

@@ -17,8 +17,6 @@ namespace Cake.Common.Tools
     public abstract class DNToolBase<TSettings> : Tool<TSettings>
         where TSettings : DNSettingsBase
     {
-        private ICakeEnvironment _environment;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DNToolBase{TSettings}" /> class.
         /// </summary>
@@ -33,7 +31,6 @@ namespace Cake.Common.Tools
             IGlobber globber)
             : base(fileSystem, environment, processRunner, globber)
         {
-            _environment = environment;
         }
 
         /// <summary>
