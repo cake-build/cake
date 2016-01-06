@@ -6,6 +6,7 @@ using Cake.Common.Tools.Cake;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Testing;
 using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
@@ -75,7 +76,7 @@ namespace Cake.Common.Tests.Unit.Tools.Cake
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(expected, result.ToolPath.FullPath);
+                Assert.Equal(expected, result.Path.FullPath);
             }
 
 			[WindowsTheory]
@@ -91,7 +92,7 @@ namespace Cake.Common.Tests.Unit.Tools.Cake
 				var result = fixture.Run();
 
 				// Then
-				Assert.Equal(expected, result.ToolPath.FullPath);
+				Assert.Equal(expected, result.Path.FullPath);
 			}
 
             [Fact]

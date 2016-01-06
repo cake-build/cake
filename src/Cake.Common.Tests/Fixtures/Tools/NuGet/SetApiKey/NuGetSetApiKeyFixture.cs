@@ -14,13 +14,14 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet.SetApiKey
             Source = "http://a.com";
 
             // Set the standard output.
-            Process.GetStandardOutput()
-                .Returns(new[] { string.Concat("The API Key '", ApiKey, "' was saved for '", Source, "'.") });
+            ProcessRunner.Process.SetStandardOutput(new[] {
+                string.Concat("The API Key '", ApiKey,
+                    "' was saved for '", Source, "'.")});
         }
 
         public void GivenUnexpectedOutput()
         {
-            Process.GetStandardOutput().Returns(new string[] { });
+            ProcessRunner.Process.SetStandardOutput(new string[] { });
         }
 
         protected override void RunTool()

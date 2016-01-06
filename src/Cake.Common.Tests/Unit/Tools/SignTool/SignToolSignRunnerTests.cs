@@ -2,6 +2,7 @@
 using Cake.Common.Tools.SignTool;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Testing;
 using NSubstitute;
 using Xunit;
 
@@ -169,7 +170,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/Working/tools/signtool.exe", result.ToolPath.FullPath);
+                Assert.Equal("/Working/tools/signtool.exe", result.Path.FullPath);
             }
 
             [Fact]
@@ -184,7 +185,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/Working/other/signtool.exe", result.ToolPath.FullPath);
+                Assert.Equal("/Working/other/signtool.exe", result.Path.FullPath);
             }
 
             [Fact]

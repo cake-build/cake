@@ -1,7 +1,7 @@
 using Cake.Common.Tools.DupFinder;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Testing.Shared;
+using Cake.Testing.Fixtures;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Tools.DupFinder

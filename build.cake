@@ -158,24 +158,23 @@ Task("Create-Chocolatey-Packages")
     .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
 {
-  // Create Cake package.
-  ChocolateyPack("./nuspec/Cake.Portable.nuspec", new ChocolateyPackSettings {
-      Version = semVersion,
-	  ReleaseNotes = releaseNotes.Notes.ToArray(),
-      Files = new [] {
-        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.exe")},
-        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Core.dll")},
-        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Core.xml")},
-        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Common.dll")},
-        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Common.xml")},
-        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/NuGet.Core.dll")},
-        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Mono.CSharp.dll")},
-        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Autofac.dll")},
-        new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/LICENSE")}
-    }
-  });
-
-  MoveFileToDirectory(string.Concat("cake.portable.", semVersion, ".nupkg"), nugetRoot);
+    // Create Cake package.
+    ChocolateyPack("./nuspec/Cake.Portable.nuspec", new ChocolateyPackSettings {
+        Version = semVersion,
+        ReleaseNotes = releaseNotes.Notes.ToArray(),
+        OutputDirectory = nugetRoot,
+        Files = new [] {
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.exe")},
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Core.dll")},
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Core.xml")},
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Common.dll")},
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Common.xml")},
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/NuGet.Core.dll")},
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Mono.CSharp.dll")},
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Autofac.dll")},
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/LICENSE")}
+        }
+    });
 });
 
 Task("Create-NuGet-Packages")
@@ -307,6 +306,18 @@ Task("Publish-Chocolatey")
     }
 });
 
+Task("Publish-HomeBrew")
+    .IsDependentOn("Zip-Files")
+	.Does(() =>
+{
+    var packageFile = File("Cake-bin-v" + semVersion + ".zip");	
+    var packagePath = buildResultDir + packageFile;
+	
+    var hash = CalculateFileHash(packagePath).ToHex();
+	
+    Information("Hash for creating HomeBrew PullRequest: {0}", hash);
+});
+
 Task("Create-Release-Notes")
   .Does(() =>
 {
@@ -335,7 +346,8 @@ Task("Default")
 
 Task("Publish")
   .IsDependentOn("Publish-NuGet")
-  .IsDependentOn("Publish-Chocolatey");
+  .IsDependentOn("Publish-Chocolatey")
+  .IsDependentOn("Publish-HomeBrew");
 
 Task("AppVeyor")
   .IsDependentOn("Update-AppVeyor-Build-Number")

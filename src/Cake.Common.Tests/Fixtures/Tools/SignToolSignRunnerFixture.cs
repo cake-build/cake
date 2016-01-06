@@ -2,7 +2,7 @@
 using Cake.Common.Tools.SignTool;
 using Cake.Core.IO;
 using Cake.Testing;
-using Cake.Testing.Shared;
+using Cake.Testing.Fixtures;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Tools

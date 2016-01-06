@@ -1,5 +1,6 @@
 ﻿using System;
 using Cake.Common.Build.AppVeyor;
+using Cake.Common.Build.Bamboo;
 using Cake.Common.Build.MyGet;
 using Cake.Common.Build.TeamCity;
 using Cake.Core;
@@ -34,7 +35,8 @@ namespace Cake.Common.Build
             var appVeyorProvider = new AppVeyorProvider(context.Environment, context.ProcessRunner);
             var teamCityProvider = new TeamCityProvider(context.Environment);
             var myGetProvider = new MyGetProvider(context.Environment);
-            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider);
+            var bambooProvider = new BambooProvider(context.Environment);
+            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider);
         }
 
         /// <summary>
@@ -101,6 +103,28 @@ namespace Cake.Common.Build
             }
             var buildSystem = context.BuildSystem();
             return buildSystem.MyGet;
+        }
+
+         /// <summary>
+        /// Gets a <see cref="Cake.Common.Build.Bamboo.BambooProvider"/> instance that can
+        /// be used to manipulate the Bamboo environment.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var isBambooBuild = Bamboo.IsRunningBamboo;
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <returns>A <see cref="Cake.Common.Build.Bamboo"/> instance.</returns>
+        [CakePropertyAlias(Cache = true)]
+        public static IBambooProvider Bamboo(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            var buildSystem = context.BuildSystem();
+            return buildSystem.Bamboo;
         }
     }
 }
