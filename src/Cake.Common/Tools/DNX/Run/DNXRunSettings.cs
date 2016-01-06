@@ -1,5 +1,5 @@
-﻿using Cake.Core.IO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DNX.Run
 {
