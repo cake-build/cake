@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 using NSubstitute;
-using Cake.Testing.Shared;
+using Cake.Testing.Fixtures;
 
 namespace Cake.Common.Tests.Fixtures.Tools.DNX
 {
@@ -24,9 +24,9 @@ namespace Cake.Common.Tests.Fixtures.Tools.DNX
         where TFixtureResult : ToolFixtureResult
     {
         protected DNXFixture()
-            : base("dnx.exe")
+            : base("dnvm.cmd")
         {
-            Process.GetStandardOutput().Returns(new string[] { });
+            ProcessRunner.Process.SetStandardOutput(new string[] { });
         }
     }
 }

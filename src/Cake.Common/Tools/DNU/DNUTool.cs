@@ -9,9 +9,11 @@ namespace Cake.Common.Tools.DNU
     /// Base class for all DNU related tools
     /// </summary>
     /// <typeparam name="TSettings">The settings type</typeparam>
-    public abstract class DNUTool<TSettings> : Tool<TSettings>
-        where TSettings : ToolSettings
+    public abstract class DNUTool<TSettings> : DNToolBase<TSettings>
+        where TSettings : DNSettingsBase
     {
+        private ICakeEnvironment _environment;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DNUTool{TSettings}" /> class.
         /// </summary>
@@ -26,6 +28,7 @@ namespace Cake.Common.Tools.DNU
             IGlobber globber)
             : base(fileSystem, environment, processRunner, globber)
         {
+            _environment = environment;
         }
 
         /// <summary>
@@ -38,12 +41,23 @@ namespace Cake.Common.Tools.DNU
         }
 
         /// <summary>
-        /// Gets the possible names of the tool executable.
+        /// Gets the DNVM arguments to execute run or exec command to work with dnu tool
         /// </summary>
-        /// <returns>The tool executable name.</returns>
-        protected override IEnumerable<string> GetToolExecutableNames()
+        /// <param name="builder">The argument builder to be used</param>
+        /// <param name="settings">The settings to be used</param>
+        /// <param name="command">The dnvm command to be called</param>
+        protected override void GetDNVMArguments(ProcessArgumentBuilder builder, TSettings settings, string command)
         {
-            return new[] { "dnu", "dnu.cmd" };
+            base.GetDNVMArguments(builder, settings, command);
+
+            if (_environment.IsUnix())
+            {
+                builder.Append("dnu");
+            }
+            else
+            {
+                builder.Append("dnu.cmd");
+            }
         }
     }
 }

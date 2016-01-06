@@ -10,16 +10,7 @@ namespace Cake.Common.Tools.DNVM.Use
     /// <summary>
     /// Settings for the dnvm command
     /// </summary>
-    public class DNVMSettings : ToolSettings
+    public class DNVMSettings : DNSettingsBase
     {
-        /// <summary>
-        /// Gets or sets the runtime to be used
-        /// </summary>
-        public string Runtime { get; set; }
-
-        /// <summary>
-        /// Gets or sets the arch to be used
-        /// </summary>
-        public string Arch { get; set; }
     }
 }

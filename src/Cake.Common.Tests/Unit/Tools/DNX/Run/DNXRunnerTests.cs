@@ -1,5 +1,7 @@
 ﻿using Cake.Common.Tests.Fixtures.Tools.DNX.Run;
 using Cake.Common.Tools.DNX.Run;
+using Cake.Core.IO;
+using Cake.Testing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +36,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNX.Run
             {
                 // Given
                 var fixture = new DNXRunnerFixture();
-                fixture.Settings = new DNXRunSettings();
+                fixture.Settings = new DNXRunSettings() { Version = "default" };
                 fixture.Command = "";
                 fixture.DirectoryPath = "./src/MyProject/";
                 fixture.GivenDefaultToolDoNotExist();
@@ -51,7 +53,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNX.Run
             {
                 // Given
                 var fixture = new DNXRunnerFixture();
-                fixture.Settings = new DNXRunSettings();
+                fixture.Settings = new DNXRunSettings() { Version = "default" };
                 fixture.Command = "test";
                 fixture.DirectoryPath = null;
                 fixture.GivenDefaultToolDoNotExist();
@@ -69,7 +71,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNX.Run
                 // Given
                 var fixture = new DNXRunnerFixture();
                 fixture.Command = "test";
-                fixture.Settings = new DNXRunSettings();
+                fixture.Settings = new DNXRunSettings() { Version = "default" };
                 fixture.DirectoryPath = "./src/MyProject/";
                 fixture.GivenDefaultToolDoNotExist();
 
@@ -87,7 +89,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNX.Run
                 var fixture = new DNXRunnerFixture();
                 fixture.Command = "test";
                 fixture.DirectoryPath = "./src/MyProject/";
-                fixture.Settings = new DNXRunSettings();
+                fixture.Settings = new DNXRunSettings() { Version = "default" };
                 fixture.GivenProcessCannotStart();
 
                 // When
@@ -104,7 +106,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNX.Run
                 var fixture = new DNXRunnerFixture();
                 fixture.Command = "test";
                 fixture.DirectoryPath = "./src/MyProject/";
-                fixture.Settings = new DNXRunSettings();
+                fixture.Settings = new DNXRunSettings() { Version = "default" };
                 fixture.GivenProcessExitsWithCode(1);
 
                 // When
@@ -121,13 +123,13 @@ namespace Cake.Common.Tests.Unit.Tools.DNX.Run
                 var fixture = new DNXRunnerFixture();
                 fixture.DirectoryPath = "./src/MyProject";
                 fixture.Command = "test";
-                fixture.Settings = new DNXRunSettings();
+                fixture.Settings = new DNXRunSettings() { Version = "default" };
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("test", result.Args);
+                Assert.Equal("run default test", result.Args);
                 Assert.Equal("/Working/src/MyProject", result.Process.WorkingDirectory.FullPath);
             }
 
@@ -138,13 +140,13 @@ namespace Cake.Common.Tests.Unit.Tools.DNX.Run
                 var fixture = new DNXRunnerFixture();
                 fixture.DirectoryPath = "./src/MyProject/";
                 fixture.Command = "test";
-                fixture.Settings = new DNXRunSettings() { Project = "./tests/MyTest/" };
+                fixture.Settings = new DNXRunSettings() { Project = new DirectoryPath("./tests/MyTest/"), Version = "default" };
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("--project \"./tests/MyTest/\" test", result.Args);
+                Assert.Equal("run default --project \"tests/MyTest\" test", result.Args);
             }
 
             [Fact]
@@ -154,13 +156,13 @@ namespace Cake.Common.Tests.Unit.Tools.DNX.Run
                 var fixture = new DNXRunnerFixture();
                 fixture.DirectoryPath = "./src/MyProject/";
                 fixture.Command = "test";
-                fixture.Settings = new DNXRunSettings() { Framework = "dnxcore50" };
+                fixture.Settings = new DNXRunSettings() { Framework = "dnxcore50", Version = "default" };
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("--framework \"dnxcore50\" test", result.Args);
+                Assert.Equal("run default --framework \"dnxcore50\" test", result.Args);
             }
 
             [Fact]
@@ -170,13 +172,13 @@ namespace Cake.Common.Tests.Unit.Tools.DNX.Run
                 var fixture = new DNXRunnerFixture();
                 fixture.DirectoryPath = "./src/MyProject/";
                 fixture.Command = "test";
-                fixture.Settings = new DNXRunSettings() { Configuration = "Debug" };
+                fixture.Settings = new DNXRunSettings() { Configuration = "Debug", Version = "default" };
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("--configuration \"Debug\" test", result.Args);
+                Assert.Equal("run default --configuration \"Debug\" test", result.Args);
             }
 
             [Fact]
@@ -186,13 +188,13 @@ namespace Cake.Common.Tests.Unit.Tools.DNX.Run
                 var fixture = new DNXRunnerFixture();
                 fixture.DirectoryPath = "./src/MyProject/";
                 fixture.Command = "test";
-                fixture.Settings = new DNXRunSettings() { AppBase = "./tests/MyTest/" };
+                fixture.Settings = new DNXRunSettings() { AppBase = "./tests/MyTest/", Version = "default" };
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("--appbase \"./tests/MyTest/\" test", result.Args);
+                Assert.Equal("run default --appbase \"tests/MyTest\" test", result.Args);
             }
 
             [Fact]
@@ -202,13 +204,14 @@ namespace Cake.Common.Tests.Unit.Tools.DNX.Run
                 var fixture = new DNXRunnerFixture();
                 fixture.DirectoryPath = "./src/MyProject/";
                 fixture.Command = "test";
-                fixture.Settings = new DNXRunSettings() { Lib = "./tests/MyTest/" };
+                fixture.Settings = new DNXRunSettings() { Version = "default" };
+                fixture.Settings.Lib.Add(new DirectoryPath("./tests/MyTest/"));
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("--lib \"./tests/MyTest/\" test", result.Args);
+                Assert.Equal("run default --lib \"tests/MyTest\" test", result.Args);
             }
         }
     }

@@ -9,8 +9,8 @@ namespace Cake.Common.Tools.DNX
     /// Base class for all DNU related tools
     /// </summary>
     /// <typeparam name="TSettings">The settings type</typeparam>
-    public abstract class DNXTool<TSettings> : Tool<TSettings>
-        where TSettings : ToolSettings
+    public abstract class DNXTool<TSettings> : DNToolBase<TSettings>
+        where TSettings : DNSettingsBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DNXTool{TSettings}" /> class.
@@ -35,15 +35,6 @@ namespace Cake.Common.Tools.DNX
         protected override string GetToolName()
         {
             return "DNX";
-        }
-
-        /// <summary>
-        /// Gets the possible names of the tool executable.
-        /// </summary>
-        /// <returns>The tool executable name.</returns>
-        protected override IEnumerable<string> GetToolExecutableNames()
-        {
-            return new[] { "dnx", "dnx.exe" };
         }
     }
 }

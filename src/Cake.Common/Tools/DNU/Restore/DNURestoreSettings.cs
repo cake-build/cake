@@ -7,7 +7,7 @@ namespace Cake.Common.Tools.DNU.Restore
     /// <summary>
     /// Contains settings used by <see cref="DNURestorer" />.
     /// </summary>
-    public class DNURestoreSettings : ToolSettings
+    public class DNURestoreSettings : DNSettingsBase
     {
         /// <summary>
         /// Gets or sets a list of packages sources to use for this command.

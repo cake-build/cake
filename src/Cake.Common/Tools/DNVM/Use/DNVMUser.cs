@@ -13,6 +13,9 @@ namespace Cake.Common.Tools.DNVM.Use
     /// </summary>
     public class DNVMUser : DNVMTool<DNVMSettings>
     {
+        private IFileSystem _fileSystem;
+        private ICakeEnvironment _environment;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DNVMUser" /> class.
         /// </summary>
@@ -27,6 +30,8 @@ namespace Cake.Common.Tools.DNVM.Use
             IGlobber globber)
             : base(fileSystem, environment, processRunner, globber)
         {
+            _fileSystem = fileSystem;
+            _environment = environment;
         }
 
         /// <summary>
@@ -56,16 +61,16 @@ namespace Cake.Common.Tools.DNVM.Use
 
             arguments.Append(version);
 
-            if (!string.IsNullOrEmpty(settings.Arch))
+            if (settings.Architecture != null)
             {
                 arguments.Append("-a");
-                arguments.Append(settings.Arch);
+                arguments.Append(settings.Architecture.Value.ToString());
             }
 
-            if (!string.IsNullOrEmpty(settings.Runtime))
+            if (settings.Runtime != null)
             {
                 arguments.Append("-r");
-                arguments.Append(settings.Runtime);
+                arguments.Append(settings.Runtime.Value.ToString());
             }
 
             return arguments;

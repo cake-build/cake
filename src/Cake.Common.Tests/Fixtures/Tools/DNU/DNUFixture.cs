@@ -19,7 +19,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.DNU
         where TFixtureResult : ToolFixtureResult
     {
         protected DNUFixture()
-            : base("dnu.cmd")
+            : base("dnvm.cmd")
         {
             ProcessRunner.Process.SetStandardOutput(new string[] { });
         }

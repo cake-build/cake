@@ -52,6 +52,8 @@ namespace Cake.Common.Tools.DNU.Pack
         {
             var builder = new ProcessArgumentBuilder();
 
+            GetDNVMArgumentsForExec(builder, settings);
+
             builder.Append("pack");
 
             // Specific path?

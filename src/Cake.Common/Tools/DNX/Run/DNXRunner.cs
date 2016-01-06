@@ -63,22 +63,24 @@ namespace Cake.Common.Tools.DNX.Run
         {
             var arguments = new ProcessArgumentBuilder();
 
-            if (!string.IsNullOrEmpty(settings.Project))
+            GetDNVMArgumentsForRun(arguments, settings);
+
+            if (settings.Project != null)
             {
                 arguments.Append("--project");
-                arguments.AppendQuoted(settings.Project);
+                arguments.AppendQuoted(settings.Project.FullPath);
             }
 
-            if (!string.IsNullOrEmpty(settings.AppBase))
+            if (settings.AppBase != null)
             {
                 arguments.Append("--appbase");
-                arguments.AppendQuoted(settings.AppBase);
+                arguments.AppendQuoted(settings.AppBase.FullPath);
             }
 
-            if (!string.IsNullOrEmpty(settings.Lib))
+            if (settings.Lib != null && settings.Lib.Count != 0)
             {
                 arguments.Append("--lib");
-                arguments.AppendQuoted(settings.Lib);
+                arguments.AppendQuoted(string.Join(";", settings.Lib.Select(p => p.FullPath)));
             }
 
             if (!string.IsNullOrEmpty(settings.Framework))
@@ -91,6 +93,12 @@ namespace Cake.Common.Tools.DNX.Run
             {
                 arguments.Append("--configuration");
                 arguments.AppendQuoted(settings.Configuration);
+            }
+
+            if (settings.Packages != null)
+            {
+                arguments.Append("--packages");
+                arguments.AppendQuoted(settings.Packages.FullPath);
             }
 
             arguments.Append(command);

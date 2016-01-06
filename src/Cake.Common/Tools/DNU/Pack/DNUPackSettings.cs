@@ -7,7 +7,7 @@ namespace Cake.Common.Tools.DNU.Pack
     /// <summary>
     /// Contains settings used by <see cref="DNUPacker" />.
     /// </summary>
-    public class DNUPackSettings : ToolSettings
+    public class DNUPackSettings : DNSettingsBase
     {
         /// <summary>
         /// Gets or sets a list of frameworks to use.

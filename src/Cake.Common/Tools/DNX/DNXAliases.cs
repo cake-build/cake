@@ -64,7 +64,8 @@ namespace Cake.Common.Tools.DNX
         ///         Framework = "dnxcore50",
         ///         Configuration = "Release",
         ///         AppBase = "",
-        ///         Lib = ""
+        ///         Lib = "",
+        ///         Pacakges = "",
         ///     };
         ///
         ///     var testProjects = GetFiles("./test/**/project.json");

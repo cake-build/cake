@@ -1,5 +1,6 @@
 ﻿using Cake.Common.Tests.Fixtures.Tools.DNVM.Use;
 using Cake.Common.Tools.DNVM.Use;
+using Cake.Testing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -98,13 +99,13 @@ namespace Cake.Common.Tests.Unit.Tools.DNVM.Use
                 // Given
                 var fixture = new DNVMUserFixture();
                 fixture.Version = "default";
-                fixture.Settings = new DNVMSettings() { Arch = "x64" };
+                fixture.Settings = new DNVMSettings() { Architecture = Common.Tools.DNArchitecture.X64 };
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("use default -a x64", result.Args);
+                Assert.Equal("use default -a X64", result.Args);
             }
 
             [Fact]
@@ -113,13 +114,13 @@ namespace Cake.Common.Tests.Unit.Tools.DNVM.Use
                 // Given
                 var fixture = new DNVMUserFixture();
                 fixture.Version = "default";
-                fixture.Settings = new DNVMSettings() { Runtime = "coreclr" };
+                fixture.Settings = new DNVMSettings() { Runtime = Common.Tools.DNRuntime.CoreClr };
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("use default -r coreclr", result.Args);
+                Assert.Equal("use default -r CoreClr", result.Args);
             }
 
             [Fact]

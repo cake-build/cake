@@ -30,7 +30,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Pack
             {
                 // Given
                 var fixture = new DNUPackerFixture();
-                fixture.Settings = new DNUPackSettings();
+                fixture.Settings = new DNUPackSettings() { Version = "default" };
                 fixture.GivenDefaultToolDoNotExist();
 
                 // When
@@ -45,6 +45,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Pack
             {
                 // Given
                 var fixture = new DNUPackerFixture();
+                fixture.Settings = new DNUPackSettings() { Version = "default" };
                 fixture.Path = "./src/*";
                 fixture.GivenDefaultToolDoNotExist();
 
@@ -60,6 +61,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Pack
             {
                 // Given
                 var fixture = new DNUPackerFixture();
+                fixture.Settings = new DNUPackSettings() { Version = "default" };
                 fixture.Path = "./src/*";
                 fixture.GivenProcessCannotStart();
 
@@ -75,6 +77,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Pack
             {
                 // Given
                 var fixture = new DNUPackerFixture();
+                fixture.Settings = new DNUPackSettings() { Version = "default" };
                 fixture.Path = "./src/*";
                 fixture.GivenProcessExitsWithCode(1);
 
@@ -90,13 +93,14 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Pack
             {
                 // Given
                 var fixture = new DNUPackerFixture();
+                fixture.Settings = new DNUPackSettings() { Version = "default" };
                 fixture.Path = "./src/*";
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("pack \"./src/*\"", result.Args);
+                Assert.Equal("exec default dnu pack \"./src/*\"", result.Args);
             }
 
             [Fact]
@@ -107,6 +111,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Pack
                 fixture.Path = "./src/*";
                 fixture.Settings = new DNUPackSettings
                 {
+                    Version = "default",
                     Frameworks = new[] { "dnx451", "dnxcore50" }
                 };
 
@@ -114,7 +119,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Pack
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("pack \"./src/*\" --framework \"dnx451;dnxcore50\"", result.Args);
+                Assert.Equal("exec default dnu pack \"./src/*\" --framework \"dnx451;dnxcore50\"", result.Args);
             }
 
             [Fact]
@@ -125,6 +130,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Pack
                 fixture.Path = "./src/*";
                 fixture.Settings = new DNUPackSettings
                 {
+                    Version = "default",
                     Configurations = new[] { "Debug", "Release" }
                 };
 
@@ -132,7 +138,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Pack
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("pack \"./src/*\" --configuration \"Debug;Release\"", result.Args);
+                Assert.Equal("exec default dnu pack \"./src/*\" --configuration \"Debug;Release\"", result.Args);
             }
 
             [Fact]
@@ -143,6 +149,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Pack
                 fixture.Path = "./src/*";
                 fixture.Settings = new DNUPackSettings
                 {
+                    Version = "default",
                     OutputDirectory = "./artifacts/"
                 };
 
@@ -150,7 +157,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Pack
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("pack \"./src/*\" --out \"/Working/artifacts\"", result.Args);
+                Assert.Equal("exec default dnu pack \"./src/*\" --out \"/Working/artifacts\"", result.Args);
             }
 
             [Fact]
@@ -161,6 +168,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Pack
                 fixture.Path = "./src/*";
                 fixture.Settings = new DNUPackSettings
                 {
+                    Version = "default",
                     Quiet = true
                 };
 
@@ -168,7 +176,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Pack
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("pack \"./src/*\" --quiet", result.Args);
+                Assert.Equal("exec default dnu pack \"./src/*\" --quiet", result.Args);
             }
 
             [Fact]
@@ -179,6 +187,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Pack
                 fixture.Path = "./src/*";
                 fixture.Settings = new DNUPackSettings
                 {
+                    Version = "default",
                     Frameworks = new[] { "dnx451", "dnxcore50" },
                     Configurations = new[] { "Debug", "Release" },
                     OutputDirectory = "./artifacts/",
@@ -189,7 +198,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Pack
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("pack \"./src/*\"" +
+                Assert.Equal("exec default dnu pack \"./src/*\"" +
                              " --framework \"dnx451;dnxcore50\"" +
                              " --configuration \"Debug;Release\"" +
                              " --out \"/Working/artifacts\"" +

@@ -1,21 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cake.Core.Tooling;
+﻿using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DNX.Run
 {
     /// <summary>
     /// Contains settings used by <see cref="DNXRunner"/>
     /// </summary>
-    public class DNXRunSettings : ToolSettings
+    public class DNXRunSettings : DNSettingsBase
     {
         /// <summary>
-        /// Gets or sets the project dir to be used (see dnx --project option)
+        /// Initializes a new instance of the <see cref="DNXRunSettings"/> class
         /// </summary>
-        public string Project { get; set; }
+        public DNXRunSettings()
+        {
+            this.Lib = new DirectoryPathCollection(PathComparer.Default);
+        }
+
+        /// <summary>
+        /// Gets or sets the project dir or the project.json file to be used (see dnx --project option)
+        /// </summary>
+        public Path Project { get; set; }
 
         /// <summary>
         /// Gets or sets the framework to be used when running dnx
@@ -30,11 +33,16 @@ namespace Cake.Common.Tools.DNX.Run
         /// <summary>
         /// Gets or sets the app base dir to be used by dnx (see dnx --appbase option)
         /// </summary>
-        public string AppBase { get; set; }
+        public DirectoryPath AppBase { get; set; }
 
         /// <summary>
         /// Gets or sets the lib dir to be used by dnx (see dnx --lib option)
         /// </summary>
-        public string Lib { get; set; }
+        public DirectoryPathCollection Lib { get; set; }
+
+        /// <summary>
+        /// Gets or sets the packages directory to be ysed by dnx (see dnx --packages option)
+        /// </summary>
+        public DirectoryPath Packages { get; set; }
     }
 }

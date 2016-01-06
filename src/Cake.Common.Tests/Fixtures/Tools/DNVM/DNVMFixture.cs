@@ -1,6 +1,6 @@
 ﻿using Cake.Core.IO;
 using Cake.Core.Tooling;
-using Cake.Testing.Shared;
+using Cake.Testing.Fixtures;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.DNVM
         protected DNVMFixture()
             : base("dnvm.cmd")
         {
-            Process.GetStandardOutput().Returns(new string[] { });
+            ProcessRunner.Process.SetStandardOutput(new string[] { });
         }
     }
 }
