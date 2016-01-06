@@ -1,4 +1,5 @@
 ﻿using Cake.Core.IO;
+using System.Collections.Generic;
 
 namespace Cake.Common.Tools.DNX.Run
 {
@@ -12,7 +13,7 @@ namespace Cake.Common.Tools.DNX.Run
         /// </summary>
         public DNXRunSettings()
         {
-            this.Lib = new DirectoryPathCollection(PathComparer.Default);
+            this.Lib = new HashSet<DirectoryPath>(PathComparer.Default);
         }
 
         /// <summary>
@@ -38,7 +39,7 @@ namespace Cake.Common.Tools.DNX.Run
         /// <summary>
         /// Gets or sets the lib dir to be used by dnx (see dnx --lib option)
         /// </summary>
-        public DirectoryPathCollection Lib { get; set; }
+        public ICollection<DirectoryPath> Lib { get; set; }
 
         /// <summary>
         /// Gets or sets the packages directory to be ysed by dnx (see dnx --packages option)
