@@ -163,6 +163,9 @@
     <Compile Include="Tools\Fixie\FixieRunner.cs" />
     <Compile Include="Tools\Fixie\FixieSettings.cs" />
     <Compile Include="Tools\Fixie\FixieSettingsExtensions.cs" />
+    <Compile Include="Tools\GitLink\GitLinkAliases.cs" />
+    <Compile Include="Tools\GitLink\GitLinkRunner.cs" />
+    <Compile Include="Tools\GitLink\GitLinkSettings.cs" />
     <Compile Include="Tools\GitVersion\GitVersion.cs" />
     <Compile Include="Tools\GitVersion\GitVersionAliases.cs" />
     <Compile Include="Tools\GitVersion\GitVersionOutput.cs" />
