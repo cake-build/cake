@@ -16,6 +16,8 @@ namespace Cake.Common.Tools.DNVM
     public abstract class DNVMTool<TSettings> : Tool<TSettings>
         where TSettings : ToolSettings
     {
+        private readonly ICakeEnvironment _environment;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DNVMTool{TSettings}" /> class.
         /// </summary>
@@ -30,6 +32,7 @@ namespace Cake.Common.Tools.DNVM
             IGlobber globber)
             : base(fileSystem, environment, processRunner, globber)
         {
+            this._environment = environment;
         }
 
         /// <summary>
@@ -47,7 +50,14 @@ namespace Cake.Common.Tools.DNVM
         /// <returns>The tool executable name.</returns>
         protected override IEnumerable<string> GetToolExecutableNames()
         {
-            return new[] { "dnvm", "dnvm.cmd" };
+            if (this._environment.IsUnix())
+            {
+                return new[] { "dnvmwrapper.sh" };
+            }
+            else
+            {
+                return new[] { "dnvm", "dnvm.cmd" };
+            }
         }
     }
 }

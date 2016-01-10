@@ -24,7 +24,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.DNVM
         where TFixtureResult : ToolFixtureResult
     {
         protected DNVMFixture()
-            : base("dnvm.cmd")
+            : base("dnvmwrapper.sh")
         {
             ProcessRunner.Process.SetStandardOutput(new string[] { });
         }
