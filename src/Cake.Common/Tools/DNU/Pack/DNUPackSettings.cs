@@ -22,7 +22,7 @@ namespace Cake.Common.Tools.DNU.Pack
         /// <summary>
         /// Gets or sets the output directory.
         /// </summary>
-        public FilePath OutputDirectory { get; set; }
+        public DirectoryPath OutputDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to not show output such as dependencies in use.
