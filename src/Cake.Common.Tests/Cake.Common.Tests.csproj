@@ -58,7 +58,9 @@
   <ItemGroup>
     <Compile Include="Fixtures\Build\AppVeyorFixture.cs" />
     <Compile Include="Fixtures\Build\AppVeyorInfoFixture.cs" />
+    <Compile Include="Fixtures\Build\ContinuaCIFixture.cs" />
     <Compile Include="Fixtures\Build\BambooFixture.cs" />
+    <Compile Include="Fixtures\Build\ContinuaCIInfoFixture.cs" />
     <Compile Include="Fixtures\Build\BambooInfoFixture.cs" />
     <Compile Include="Fixtures\AssemblyInfoFixture.cs" />
     <Compile Include="Fixtures\AssemblyInfoParserFixture.cs" />
@@ -160,6 +162,12 @@
     <Compile Include="Unit\Build\AppVeyor\Data\AppVeyorRepositoryInfoTests.cs" />
     <Compile Include="Unit\Build\BuildSystemAliasesTests.cs" />
     <Compile Include="Unit\Build\BuildSystemTests.cs" />
+    <Compile Include="Unit\Build\ContinuaCI\ContinuaCIProviderTests.cs" />
+    <Compile Include="Unit\Build\ContinuaCI\Data\ContinuaCIBuildInfoTests.cs" />
+    <Compile Include="Unit\Build\ContinuaCI\Data\ContinuaCIEnvironmentInfoTests.cs" />
+    <Compile Include="Unit\Build\ContinuaCI\Data\ContinuaCIConfigurationInfoTests.cs" />
+    <Compile Include="Unit\Build\ContinuaCI\Data\ContinuaCIProjectInfoTests.cs" />
+    <Compile Include="Unit\Build\ContinuaCI\Data\ContinuaCIChangesetInfoTests.cs" />
     <Compile Include="Unit\Build\TeamCity\TeamCityProviderTests.cs" />
     <Compile Include="Unit\Build\Bamboo\BambooProviderTests.cs" />
     <Compile Include="Unit\Build\Bamboo\Data\BambooBuildInfoTests.cs" />

@@ -5,6 +5,7 @@ using Cake.Common.Build.TeamCity;
 using Cake.Common.Build.Bamboo;
 using NSubstitute;
 using Xunit;
+using Cake.Common.Build.ContinuaCI;
 
 namespace Cake.Common.Tests.Unit.Build
 {
@@ -19,9 +20,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var teamCityProvider = Substitute.For<ITeamCityProvider>();
                 var myGetProvider = Substitute.For<IMyGetProvider>();
                 var bambooProvider = Substitute.For<IBambooProvider>();
+                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(null, teamCityProvider, myGetProvider, bambooProvider));
+                var result = Record.Exception(() => new BuildSystem(null, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider));
 
                 // Then
                 Assert.IsArgumentNullException(result, "appVeyorProvider");
@@ -34,9 +36,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
                 var myGetProvider = Substitute.For<IMyGetProvider>();
                 var bambooProvider = Substitute.For<IBambooProvider>();
+                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, null, myGetProvider, bambooProvider));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, null, myGetProvider, bambooProvider, continuaCIProvider));
 
                 // Then
                 Assert.IsArgumentNullException(result, "teamCityProvider");
@@ -49,9 +52,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
                 var teamCityProvider = Substitute.For<ITeamCityProvider>();
                 var bambooProvider = Substitute.For<IBambooProvider>();
+                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, null, bambooProvider));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, null, bambooProvider, continuaCIProvider));
 
                 // Then
                 Assert.IsArgumentNullException(result, "myGetProvider");
@@ -64,12 +68,30 @@ namespace Cake.Common.Tests.Unit.Build
                 var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
                 var teamCityProvider = Substitute.For<ITeamCityProvider>();
                 var myGetProvider = Substitute.For<IMyGetProvider>();
+                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, null));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, null, continuaCIProvider));
 
                 // Then
                 Assert.IsArgumentNullException(result, "bambooProvider");
+
+            }
+
+            [Fact]
+            public void Should_Throw_If_ContinuaCI_Is_Null()
+            {
+                // Given
+                var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
+                var teamCityProvider = Substitute.For<ITeamCityProvider>();
+                var myGetProvider = Substitute.For<IMyGetProvider>();
+                var bambooProvider = Substitute.For<IBambooProvider>();
+
+                // When
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "continuaCIProvider");
 
             }
         }
@@ -84,8 +106,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var teamCityProvider = Substitute.For<ITeamCityProvider>();
                 var myGetProvider = Substitute.For<IMyGetProvider>();
                 var bambooProvider = Substitute.For<IBambooProvider>();
+                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
+
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(true);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider);
 
                 // When
                 var result = buildSystem.IsRunningOnAppVeyor;
@@ -104,8 +128,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var teamCityProvider = Substitute.For<ITeamCityProvider>();
                 var myGetProvider = Substitute.For<IMyGetProvider>();
                 var bambooProvider = Substitute.For<IBambooProvider>();
+                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
+
                 teamCityProvider.IsRunningOnTeamCity.Returns(true);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider);
 
                 // When
                 var result = buildSystem.IsRunningOnTeamCity;
@@ -125,8 +151,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var teamCityProvider = Substitute.For<ITeamCityProvider>();
                 var myGetProvider = Substitute.For<IMyGetProvider>();
                 var bambooProvider = Substitute.For<IBambooProvider>();
+                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
+
                 myGetProvider.IsRunningOnMyGet.Returns(true);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider);
 
                 // When
                 var result = buildSystem.IsRunningOnMyGet;
@@ -146,12 +174,36 @@ namespace Cake.Common.Tests.Unit.Build
                 var teamCityProvider = Substitute.For<ITeamCityProvider>();
                 var myGetProvider = Substitute.For<IMyGetProvider>();
                 var bambooProvider = Substitute.For<IBambooProvider>();
+                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
 
                 bambooProvider.IsRunningOnBamboo.Returns(true);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider);
 
                 // When
                 var result = buildSystem.IsRunningOnBamboo;
+
+                // Then
+                Assert.True(result);
+            }
+        }
+
+        public sealed class TheIsRunningOnContinuaCIProperty
+        {
+            [Fact]
+            public void Should_Return_True_If_Running_On_ContinuaCI()
+            {
+                // Given
+                var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
+                var teamCityProvider = Substitute.For<ITeamCityProvider>();
+                var myGetProvider = Substitute.For<IMyGetProvider>();
+                var bambooProvider = Substitute.For<IBambooProvider>();
+                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
+
+                continuaCIProvider.IsRunningOnContinuaCI.Returns(true);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider);
+
+                // When
+                var result = buildSystem.IsRunningOnContinuaCI;
 
                 // Then
                 Assert.True(result);
@@ -168,11 +220,14 @@ namespace Cake.Common.Tests.Unit.Build
                 var teamCityProvider = Substitute.For<ITeamCityProvider>();
                 var myGetProvider = Substitute.For<IMyGetProvider>();
                 var bambooProvider = Substitute.For<IBambooProvider>();
+                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
+
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(true);
                 teamCityProvider.IsRunningOnTeamCity.Returns(false);
                 myGetProvider.IsRunningOnMyGet.Returns(false);
                 bambooProvider.IsRunningOnBamboo.Returns(false);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider);
+                continuaCIProvider.IsRunningOnContinuaCI.Returns(false);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider);
 
                 // When
                 var result = buildSystem.IsLocalBuild;
@@ -189,11 +244,14 @@ namespace Cake.Common.Tests.Unit.Build
                 var teamCityProvider = Substitute.For<ITeamCityProvider>();
                 var myGetProvider = Substitute.For<IMyGetProvider>();
                 var bambooProvider = Substitute.For<IBambooProvider>();
+                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
+
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(false);
                 teamCityProvider.IsRunningOnTeamCity.Returns(true);
                 myGetProvider.IsRunningOnMyGet.Returns(false);
                 bambooProvider.IsRunningOnBamboo.Returns(false);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider);
+                continuaCIProvider.IsRunningOnContinuaCI.Returns(false);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider);
 
                 // When
                 var result = buildSystem.IsLocalBuild;
@@ -210,11 +268,14 @@ namespace Cake.Common.Tests.Unit.Build
                 var teamCityProvider = Substitute.For<ITeamCityProvider>();
                 var myGetProvider = Substitute.For<IMyGetProvider>();
                 var bambooProvider = Substitute.For<IBambooProvider>();
+                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
+
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(false);
                 teamCityProvider.IsRunningOnTeamCity.Returns(false);
                 myGetProvider.IsRunningOnMyGet.Returns(true);
                 bambooProvider.IsRunningOnBamboo.Returns(false);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider);
+                continuaCIProvider.IsRunningOnContinuaCI.Returns(false);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider);
 
                 // When
                 var result = buildSystem.IsLocalBuild;
@@ -230,11 +291,14 @@ namespace Cake.Common.Tests.Unit.Build
                 var teamCityProvider = Substitute.For<ITeamCityProvider>();
                 var myGetProvider = Substitute.For<IMyGetProvider>();
                 var bambooProvider = Substitute.For<IBambooProvider>();
+                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
+
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(false);
                 teamCityProvider.IsRunningOnTeamCity.Returns(false);
                 myGetProvider.IsRunningOnMyGet.Returns(false);
                 bambooProvider.IsRunningOnBamboo.Returns(true);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider);
+                continuaCIProvider.IsRunningOnContinuaCI.Returns(false);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider);
 
                 // When
                 var result = buildSystem.IsLocalBuild;
@@ -244,6 +308,31 @@ namespace Cake.Common.Tests.Unit.Build
             }
 
             [Fact]
+            public void Should_Return_False_If_Running_On_ContinuaCI()
+            {
+                // Given
+                var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
+                var teamCityProvider = Substitute.For<ITeamCityProvider>();
+                var myGetProvider = Substitute.For<IMyGetProvider>();
+                var bambooProvider = Substitute.For<IBambooProvider>();
+                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
+
+                appVeyorProvider.IsRunningOnAppVeyor.Returns(false);
+                teamCityProvider.IsRunningOnTeamCity.Returns(false);
+                myGetProvider.IsRunningOnMyGet.Returns(false);
+                bambooProvider.IsRunningOnBamboo.Returns(false);
+                continuaCIProvider.IsRunningOnContinuaCI.Returns(true);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider);
+
+                // When
+                var result = buildSystem.IsLocalBuild;
+
+                // Then
+                Assert.False(result);
+            }
+
+
+            [Fact]
             public void Should_Return_True_If_Not_Running_On_Any()
             {
                 // Given
@@ -251,11 +340,14 @@ namespace Cake.Common.Tests.Unit.Build
                 var teamCityProvider = Substitute.For<ITeamCityProvider>();
                 var myGetProvider = Substitute.For<IMyGetProvider>();
                 var bambooProvider = Substitute.For<IBambooProvider>();
+                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
+
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(false);
                 teamCityProvider.IsRunningOnTeamCity.Returns(false);
                 myGetProvider.IsRunningOnMyGet.Returns(false);
                 bambooProvider.IsRunningOnBamboo.Returns(false);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider);
+                continuaCIProvider.IsRunningOnContinuaCI.Returns(false);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider);
 
                 // When
                 var result = buildSystem.IsLocalBuild;
