@@ -247,11 +247,10 @@ namespace Cake.Core.Tooling
                 // Look in every PATH directory for the file.
                 foreach (var pathDir in pathDirs)
                 {
-                    var file = new DirectoryPath(pathDir).CombineWithFilePath(toolExeName);
-
-                    if (_fileSystem.Exist(file))
+                    toolPath = _globber.GetFiles(pathDir + "**/" + toolExeName).FirstOrDefault();
+                    if (toolPath != null)
                     {
-                        return file.MakeAbsolute(_environment);
+                        return toolPath.MakeAbsolute(_environment);
                     }
                 }
             }

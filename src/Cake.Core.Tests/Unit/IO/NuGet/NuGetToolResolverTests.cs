@@ -63,7 +63,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                 environment.WorkingDirectory.Returns("/Working");
                 environment.IsUnix().Returns(false);
                 environment.GetEnvironmentVariable("NUGET_EXE").Returns(c => null);
-                environment.GetEnvironmentVariable("path").Returns(c => null);
+                environment.GetEnvironmentVariable("PATH").Returns(c => null);
                 var fileSystem = new FakeFileSystem(environment);
                 var globber = Substitute.For<IGlobber>();
                 globber.GetFiles("./tools/**/NuGet.exe").Returns(new FilePath[] { });
@@ -84,7 +84,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                 environment.WorkingDirectory.Returns("/Working");
                 environment.IsUnix().Returns(false);
                 environment.GetEnvironmentVariable("NUGET_EXE").Returns(c => null);
-                environment.GetEnvironmentVariable("path").Returns(c => null);
+                environment.GetEnvironmentVariable("PATH").Returns(c => null);
                 var fileSystem = new FakeFileSystem(environment);
                 var globber = Substitute.For<IGlobber>();
                 globber.GetFiles("./tools/**/NuGet.exe").Returns(new FilePath[] { });
@@ -101,7 +101,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                     // 2. Look for the environment variable NUGET_EXE.
                     environment.GetEnvironmentVariable("NUGET_EXE");
                     // 3. Panic and look in the path variable.
-                    environment.GetEnvironmentVariable("path");
+                    environment.GetEnvironmentVariable("PATH");
                 });
             }
 
@@ -151,7 +151,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                 var environment = Substitute.For<ICakeEnvironment>();
                 environment.WorkingDirectory.Returns("/Working");
                 environment.IsUnix().Returns(false);
-                environment.GetEnvironmentVariable("path").Returns("/temp;stuff/programs;/programs");
+                environment.GetEnvironmentVariable("PATH").Returns("/temp;stuff/programs;/programs");
                 var fileSystem = new FakeFileSystem(environment);
                 fileSystem.CreateDirectory("stuff/programs");
                 fileSystem.CreateFile("stuff/programs/nuget.exe");

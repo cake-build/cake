@@ -59,7 +59,7 @@ namespace Cake.Common.Tools.Chocolatey
             }
 
             // Last resort try path
-            var envPath = _environment.GetEnvironmentVariable("path");
+            var envPath = _environment.GetEnvironmentVariable("PATH");
             if (!string.IsNullOrWhiteSpace(envPath))
             {
                 var pathFile = envPath
