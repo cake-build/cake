@@ -13,15 +13,15 @@ namespace Cake.Core.Scripting
         /// Installs the addins.
         /// </summary>
         /// <param name="analyzerResult">The analyzer result.</param>
-        /// <param name="installationRoot">The installation root path.</param>
+        /// <param name="installPath">The install path.</param>
         /// <returns>A list containing file paths to installed addin assemblies.</returns>
-        IReadOnlyList<FilePath> InstallAddins(ScriptAnalyzerResult analyzerResult, DirectoryPath installationRoot);
+        IReadOnlyList<FilePath> InstallAddins(ScriptAnalyzerResult analyzerResult, DirectoryPath installPath);
 
         /// <summary>
         /// Installs the tools specified in the build scripts.
         /// </summary>
         /// <param name="analyzerResult">The analyzer result.</param>
-        /// <param name="installationRoot">The installation root path.</param>
-        void InstallTools(ScriptAnalyzerResult analyzerResult, DirectoryPath installationRoot);
+        /// <param name="installPath">The install path.</param>
+        void InstallTools(ScriptAnalyzerResult analyzerResult, DirectoryPath installPath);
     }
 }

@@ -168,7 +168,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 Assert.Equal("/Working/utils.cake", result.Script.Includes[0].Path.FullPath);
                 Assert.Equal("/Working/other.cake", result.Script.Includes[1].Path.FullPath);
             }
-            
+
             [Fact]
             public void Should_Process_Using_Directives()
             {
@@ -247,8 +247,22 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
 
                 // Then
                 Assert.Equal(1, result.Script.Addins.Count);
-                Assert.Equal("Hello.World", result.Script.Addins.ElementAt(0).PackageId);
-                Assert.Equal(null, result.Script.Addins.ElementAt(0).Source);
+                Assert.Equal("nuget:?package=Hello.World", result.Script.Addins.ElementAt(0).OriginalString);
+            }
+
+            [Fact]
+            public void Should_Process_Addin_Directive_Using_Uri()
+            {
+                // Given
+                var fixture = new ScriptAnalyzerFixture();
+                fixture.GivenScriptExist("/Working/script.cake", "#addin \"npm:?package=node\"");
+
+                // When
+                var result = fixture.Analyze("/Working/script.cake");
+
+                // Then
+                Assert.Equal(1, result.Script.Addins.Count);
+                Assert.Equal("npm:?package=node", result.Script.Addins.ElementAt(0).OriginalString);
             }
 
             [Fact]
@@ -263,12 +277,11 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
 
                 // Then
                 Assert.Equal(1, result.Script.Addins.Count);
-                Assert.Equal("Hello.World", result.Script.Addins.ElementAt(0).PackageId);
-                Assert.Equal("http://source", result.Script.Addins.ElementAt(0).Source);
+                Assert.Equal("nuget:http://source/?package=Hello.World", result.Script.Addins.ElementAt(0).OriginalString);
             }
 
             [Fact]
-            public void Should_Process_Tools_Directive_Without_Source()
+            public void Should_Process_Tool_Directive_Without_Source()
             {
                 // Given
                 var fixture = new ScriptAnalyzerFixture();
@@ -279,12 +292,11 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
 
                 // Then
                 Assert.Equal(1, result.Script.Tools.Count);
-                Assert.Equal("Hello.World", result.Script.Tools.ElementAt(0).PackageId);
-                Assert.Equal(null, result.Script.Tools.ElementAt(0).Source);
+                Assert.Equal("nuget:?package=Hello.World", result.Script.Tools.ElementAt(0).OriginalString);
             }
 
             [Fact]
-            public void Should_Process_Tools_Directive_With_Source()
+            public void Should_Process_Tool_Directive_With_Source()
             {
                 // Given
                 var fixture = new ScriptAnalyzerFixture();
@@ -295,8 +307,22 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
 
                 // Then
                 Assert.Equal(1, result.Script.Tools.Count);
-                Assert.Equal("Hello.World", result.Script.Tools.ElementAt(0).PackageId);
-                Assert.Equal("http://source", result.Script.Tools.ElementAt(0).Source);
+                Assert.Equal("nuget:http://source/?package=Hello.World", result.Script.Tools.ElementAt(0).OriginalString);
+            }
+
+            [Fact]
+            public void Should_Process_Tool_Directive_Using_Uri()
+            {
+                // Given
+                var fixture = new ScriptAnalyzerFixture();
+                fixture.GivenScriptExist("/Working/script.cake", "#tool \"npm:?package=node\"");
+
+                // When
+                var result = fixture.Analyze("/Working/script.cake");
+
+                // Then
+                Assert.Equal(1, result.Script.Tools.Count);
+                Assert.Equal("npm:?package=node", result.Script.Tools.ElementAt(0).OriginalString);
             }
         }
     }

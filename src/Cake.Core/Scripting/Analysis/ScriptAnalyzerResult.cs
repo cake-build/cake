@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Cake.Core.IO.NuGet;
+using Cake.Core.Packaging;
 
 namespace Cake.Core.Scripting.Analysis
 {
@@ -14,8 +14,8 @@ namespace Cake.Core.Scripting.Analysis
         private readonly HashSet<string> _references;
         private readonly HashSet<string> _namespaces;
         private readonly HashSet<string> _usingAliases;
-        private readonly HashSet<NuGetPackage> _addins;
-        private readonly HashSet<NuGetPackage> _tools;
+        private readonly HashSet<PackageReference> _addins;
+        private readonly HashSet<PackageReference> _tools;
 
         /// <summary>
         /// Gets the analyzed script.
@@ -66,7 +66,7 @@ namespace Cake.Core.Scripting.Analysis
         /// Gets the addins.
         /// </summary>
         /// <value>The addins.</value>
-        public HashSet<NuGetPackage> Addins
+        public HashSet<PackageReference> Addins
         {
             get { return _addins; }
         }
@@ -75,7 +75,7 @@ namespace Cake.Core.Scripting.Analysis
         /// Gets the tools.
         /// </summary>
         /// <value>The tools.</value>
-        public HashSet<NuGetPackage> Tools
+        public HashSet<PackageReference> Tools
         {
             get { return _tools; }
         }
@@ -92,8 +92,8 @@ namespace Cake.Core.Scripting.Analysis
             _references = new HashSet<string>(Collect(script, i => i.References));
             _namespaces = new HashSet<string>(Collect(script, i => i.Namespaces));
             _usingAliases = new HashSet<string>(Collect(script, i => i.UsingAliases));
-            _tools = new HashSet<NuGetPackage>(Collect(script, i => i.Tools));
-            _addins = new HashSet<NuGetPackage>(Collect(script, i => i.Addins));
+            _tools = new HashSet<PackageReference>(Collect(script, i => i.Tools));
+            _addins = new HashSet<PackageReference>(Collect(script, i => i.Addins));
         }
 
         private IEnumerable<T> Collect<T>(IScriptInformation script, Func<IScriptInformation, IEnumerable<T>> collector)

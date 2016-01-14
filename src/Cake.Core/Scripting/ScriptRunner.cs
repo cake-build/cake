@@ -34,7 +34,7 @@ namespace Cake.Core.Scripting
         public ScriptRunner(
             ICakeEnvironment environment,
             ICakeLog log,
-            IScriptEngine engine, 
+            IScriptEngine engine,
             IScriptAliasFinder aliasFinder,
             IScriptAnalyzer analyzer,
             IScriptProcessor processor,
