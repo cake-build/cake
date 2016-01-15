@@ -318,6 +318,8 @@
     <Compile Include="Tools\ILRepack\ILRepackRunner.cs" />
     <Compile Include="Tools\ILRepack\ILRepackAliases.cs" />
     <Compile Include="Build\Bamboo\Data\BambooPlanInfo.cs" />
+    <Compile Include="Xml\XmlPeekAliases.cs" />
+    <Compile Include="Xml\XmlPeekSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">

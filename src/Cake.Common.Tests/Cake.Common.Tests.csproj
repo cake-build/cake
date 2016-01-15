@@ -254,6 +254,8 @@
     <Compile Include="Unit\XML\XmlPokeTests.cs" />
     <Compile Include="Unit\XML\XmlTransformationTests.cs" />
     <Compile Include="Unit\Build\Bamboo\Data\BambooPlanInfoTests.cs" />
+    <Compile Include="Unit\XML\XmlPeekAliasesTests.cs" />
+    <Compile Include="Fixtures\XmlPeekAliasesFixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Common\Cake.Common.csproj">
