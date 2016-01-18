@@ -1,5 +1,6 @@
 ﻿using Cake.Common.Tests.Fixtures.Tools.DNU.Restorer;
 using Cake.Common.Tools.DNU.Restore;
+using Cake.Testing;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.DNU.Restore

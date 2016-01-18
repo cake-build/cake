@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Cake.Common.Tools.WiX;
 using Cake.Core.IO;
-using Cake.Testing.Shared;
+using Cake.Testing.Fixtures;
 
 namespace Cake.Common.Tests.Fixtures.Tools
 {

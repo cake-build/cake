@@ -62,13 +62,13 @@ namespace Cake.Common.Security
             switch (hashAlgorithm)
             {
                 case HashAlgorithm.MD5:
-                    return new MD5CryptoServiceProvider();
+                    return MD5.Create();
 
                 case HashAlgorithm.SHA256:
-                    return new SHA256Managed();
+                    return SHA256.Create();
 
                 case HashAlgorithm.SHA512:
-                    return new SHA512Managed();
+                    return SHA512.Create();
             }
 
             throw new NotSupportedException(hashAlgorithm.ToString());

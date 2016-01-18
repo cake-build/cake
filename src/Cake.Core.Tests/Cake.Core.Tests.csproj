@@ -90,12 +90,7 @@
     <Compile Include="Unit\IO\FilePathCollectionTests.cs" />
     <Compile Include="Unit\IO\FileSystemExtensionsTest.cs" />
     <Compile Include="Unit\IO\GlobberTests.cs" />
-    <Compile Include="Unit\IO\NuGet\Parsing\AssemblyFilePathFrameworkNameParserTests.cs" />
-    <Compile Include="Unit\IO\NuGet\NuGetAssemblyCompatibilityFilterTests.cs" />
-    <Compile Include="Unit\IO\NuGet\NuGetPackageAssembliesLocatorTests.cs" />
     <Compile Include="Unit\IO\NuGet\NuGetToolResolverTests.cs" />
-    <Compile Include="Unit\IO\NuGet\PackageReferenceBundlerTests.cs" />
-    <Compile Include="Unit\IO\NuGet\PackageReferenceSetTests.cs" />
     <Compile Include="Unit\IO\PathComparerTests.cs" />
     <Compile Include="Unit\IO\DirectoryPathTests.cs" />
     <Compile Include="Unit\IO\FilePathTests.cs" />
@@ -112,6 +107,7 @@
     <Compile Include="Unit\Scripting\Analysis\ScriptAnalyzerTests.cs" />
     <Compile Include="Unit\Scripting\CodeGen\MethodAliasGeneratorTests.cs" />
     <Compile Include="Unit\Scripting\CodeGen\PropertyAliasGeneratorTests.cs" />
+    <Compile Include="Unit\Packaging\PackageReferenceTests.cs" />
     <Compile Include="Unit\Scripting\ScriptAliasTests.cs" />
     <Compile Include="Unit\Scripting\ScriptHostTests.cs" />
     <Compile Include="Unit\Scripting\ScriptProcessorTests.cs" />
@@ -152,10 +148,6 @@
       <Project>{8074B833-11B8-459F-BB98-BFBA2BC5C698}</Project>
       <Name>Cake.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Cake.Testing.Shared\Cake.Testing.Shared.csproj">
-      <Project>{8e5a518a-eb84-4a1b-a091-d9d66c8ff979}</Project>
-      <Name>Cake.Testing.Shared</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Cake.Testing.Xunit\Cake.Testing.Xunit.csproj">
       <Project>{5AF751D1-BB54-4268-9E42-3A898B034B06}</Project>
       <Name>Cake.Testing.Xunit</Name>
@@ -177,6 +169,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Methods\NonGeneric_ExtensionMethodWithNoParameters" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\xunit.core.2.1.0\build\portable-net45+win8+wp8+wpa81\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.1.0\build\portable-net45+win8+wp8+wpa81\xunit.core.props')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

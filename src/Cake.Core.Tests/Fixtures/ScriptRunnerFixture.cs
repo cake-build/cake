@@ -28,7 +28,6 @@ namespace Cake.Core.Tests.Fixtures
         public IDictionary<string, string> ArgumentDictionary { get; set; }
         public string Source { get; private set; }
         public IGlobber Globber{ get; set; }
-        public INuGetPackageInstaller PackageInstaller { get; set; }
 
         public ScriptRunnerFixture(string fileName = "/Working/build.cake")
         {
@@ -67,7 +66,7 @@ namespace Cake.Core.Tests.Fixtures
 
         public ScriptRunner CreateScriptRunner()
         {
-            return new ScriptRunner(Environment, Log, Engine, 
+            return new ScriptRunner(Environment, Log, Engine,
                 AliasFinder, ScriptAnalyzer, ScriptProcessor, ScriptConventions);
         }
 

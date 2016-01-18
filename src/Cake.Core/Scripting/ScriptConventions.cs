@@ -46,12 +46,12 @@ namespace Cake.Core.Scripting
             // Prepare the default assemblies.
             var defaultAssemblies = new List<Assembly>
             {
-                typeof(Action).Assembly, // mscorlib
-                typeof(Uri).Assembly, // System
-                typeof(IQueryable).Assembly, // System.Core
-                typeof(System.Data.DataTable).Assembly, // System.Data
-                typeof(System.Xml.XmlReader).Assembly, // System.Xml
-                typeof(System.Xml.Linq.XDocument).Assembly, // System.Xml.Linq
+                typeof(Action).GetTypeInfo().Assembly, // mscorlib
+                typeof(Uri).GetTypeInfo().Assembly, // System
+                typeof(IQueryable).GetTypeInfo().Assembly, // System.Core
+                typeof(System.Data.DataTable).GetTypeInfo().Assembly, // System.Data
+                typeof(System.Xml.XmlReader).GetTypeInfo().Assembly, // System.Xml
+                typeof(System.Xml.Linq.XDocument).GetTypeInfo().Assembly, // System.Xml.Linq
             };
 
             // Load other Cake-related assemblies that we need.

@@ -2,7 +2,7 @@
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
-using Cake.Testing.Shared;
+using Cake.Testing.Fixtures;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey
@@ -10,9 +10,9 @@ namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey
     internal abstract class ChocolateyFixture<TSettings> : ChocolateyFixture<TSettings, ToolFixtureResult>
         where TSettings : ToolSettings, new()
     {
-        protected override ToolFixtureResult CreateResult(FilePath toolPath, ProcessSettings process)
+        protected override ToolFixtureResult CreateResult(FilePath path, ProcessSettings process)
         {
-            return new ToolFixtureResult(toolPath, process);
+            return new ToolFixtureResult(path, process);
         }
     }
 

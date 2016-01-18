@@ -148,7 +148,6 @@
     <Compile Include="Diagnostics\Formatting\LiteralToken.cs" />
     <Compile Include="Diagnostics\Formatting\PropertyToken.cs" />
     <Compile Include="Diagnostics\IVerbosityAware.cs" />
-    <Compile Include="NuGet\NuGetVersionUtilityAdapter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
@@ -190,6 +189,10 @@
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
       <Project>{8074b833-11b8-459f-bb98-bfba2bc5c698}</Project>
       <Name>Cake.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cake.NuGet\Cake.NuGet.csproj">
+      <Project>{74ccfb64-db98-4bf7-990f-4c312d20ac28}</Project>
+      <Name>Cake.NuGet</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

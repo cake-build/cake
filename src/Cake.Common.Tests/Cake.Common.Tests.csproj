@@ -94,6 +94,7 @@
     <Compile Include="Fixtures\Tools\DupFinder\DupFinderRunnerConfigFixture.cs" />
     <Compile Include="Fixtures\Tools\DupFinder\DupFinderRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\FixieRunnerFixture.cs" />
+    <Compile Include="Fixtures\Tools\GitLinkFixture.cs" />
     <Compile Include="Fixtures\Tools\GitVersionRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\GitReleaseManagerFixture.cs" />
     <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerAssetsAdderFixture.cs" />
@@ -196,6 +197,7 @@
     <Compile Include="Unit\Tools\DNU\Restore\DNURestorerTests.cs" />
     <Compile Include="Unit\Tools\DupFinder\DupFinderRunnerTests.cs" />
     <Compile Include="Unit\Tools\Fixie\FixieRunnerTests.cs" />
+    <Compile Include="Unit\Tools\GitLink\GitlinkRunnerTests.cs" />
     <Compile Include="Unit\Tools\GitVersion\GitVersionRunnerTests.cs" />
     <Compile Include="Unit\Tools\GitReleaseManager\AddAssets\GitReleaseManagerAssetsAdderTests.cs" />
     <Compile Include="Unit\Tools\GitReleaseManager\Close\GitReleaseManagerMilestoneCloserTests.cs" />
@@ -254,6 +256,8 @@
     <Compile Include="Unit\XML\XmlPokeTests.cs" />
     <Compile Include="Unit\XML\XmlTransformationTests.cs" />
     <Compile Include="Unit\Build\Bamboo\Data\BambooPlanInfoTests.cs" />
+    <Compile Include="Unit\XML\XmlPeekAliasesTests.cs" />
+    <Compile Include="Fixtures\XmlPeekAliasesFixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Common\Cake.Common.csproj">
@@ -263,10 +267,6 @@
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
       <Project>{8074B833-11B8-459F-BB98-BFBA2BC5C698}</Project>
       <Name>Cake.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Cake.Testing.Shared\Cake.Testing.Shared.csproj">
-      <Project>{8e5a518a-eb84-4a1b-a091-d9d66c8ff979}</Project>
-      <Name>Cake.Testing.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\Cake.Testing.Xunit\Cake.Testing.Xunit.csproj">
       <Project>{5AF751D1-BB54-4268-9E42-3A898B034B06}</Project>

@@ -110,8 +110,10 @@ namespace Cake.Common.Tools.MSBuild
                     return "x64";
                 case PlatformTarget.ARM:
                     return "arm";
+                case PlatformTarget.Win32:
+                    return "Win32";
                 default:
-                    throw new InvalidEnumArgumentException("platform", (int)platform, typeof(PlatformTarget));
+                    throw new ArgumentOutOfRangeException("platform", platform, "Invalid platform");
             }
         }
 
