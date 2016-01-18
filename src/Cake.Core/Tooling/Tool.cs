@@ -230,6 +230,17 @@ namespace Cake.Core.Tooling
                     return toolPath.MakeAbsolute(_environment);
                 }
 
+                // Look in the tools enviroment variable
+                var toolsEnv = _environment.GetEnvironmentVariable("CAKE_TOOLS");
+                if (!string.IsNullOrEmpty(toolsEnv))
+                {
+                    toolPath = _globber.GetFiles(toolsEnv + "**/" + toolExeName).FirstOrDefault();
+                    if (toolPath != null)
+                    {
+                        return toolPath.MakeAbsolute(_environment);
+                    }
+                }
+
                 // Cache the PATH directory list if we didn't already.
                 if (pathDirs == null)
                 {
