@@ -360,6 +360,21 @@ namespace Cake.Common.Tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;configuration&gt;
+        ///    &lt;appSettings&gt;
+        ///        &lt;add key=&quot;server&quot; value=&quot;testhost.somecompany.com&quot; /&gt;
+        ///        &lt;add key=&quot;test&quot; value=&quot;true&quot; /&gt;
+        ///    &lt;/appSettings&gt;
+        ///&lt;/configuration&gt;.
+        /// </summary>
+        internal static string XmlPeek_Xml {
+            get {
+                return ResourceManager.GetString("XmlPeek_Xml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;html&gt;&lt;body style=&quot;font-family:Arial;font-size:12pt;background-color:#EEEEEE&quot;&gt;&lt;div style=&quot;background-color:teal;color:white;padding:4px&quot;&gt;&lt;span style=&quot;font-weight:bold&quot;&gt;Belgian Waffles
         ///                    -
         ///                &lt;/span&gt;$5.95&lt;/div&gt;&lt;div style=&quot;margin-left:20px;margin-bottom:1em;font-size:10pt&quot;&gt;&lt;p&gt;Two of our famous Belgian Waffles with plenty of real maple syrup&lt;span style=&quot;font-style:italic&quot;&gt;
