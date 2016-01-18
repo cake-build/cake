@@ -220,7 +220,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
             }
 
             [Fact]
-            public void Should_Remove_Shebang()
+            public void Should_Comment_Out_Shebang()
             {
                 // Given
                 var fixture = new ScriptAnalyzerFixture();
@@ -230,9 +230,10 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 var result = fixture.Analyze("/Working/script.cake");
 
                 // Then
-                Assert.Equal(2, result.Lines.Count);
+                Assert.Equal(3, result.Lines.Count);
                 Assert.Equal(result.Lines[0], "#line 1 \"/Working/script.cake\"");
-                Assert.Equal(result.Lines[1], "Console.WriteLine();");
+                Assert.Equal(result.Lines[1], "// #!/usr/bin/cake");
+                Assert.Equal(result.Lines[2], "Console.WriteLine();");
             }
 
             [Fact]
@@ -323,6 +324,35 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 // Then
                 Assert.Equal(1, result.Script.Tools.Count);
                 Assert.Equal("npm:?package=node", result.Script.Tools.ElementAt(0).OriginalString);
+            }
+
+            [Fact]
+            public void Should_Insert_Line_Directives_When_Processing_Load_Directives()
+            {
+                // Given
+                var fixture = new ScriptAnalyzerFixture();
+                fixture.GivenScriptExist("/Working/a.cake", "int x=0;\n#l b.cake\nint y=2;");
+                fixture.GivenScriptExist("/Working/b.cake", "int z=1;\n#l c.cake\nint p=4;");
+                fixture.GivenScriptExist("/Working/c.cake", "int o=3;\n#r d.dll");
+
+                // When
+                var result = fixture.Analyze("/Working/a.cake");
+
+                // Then
+                Assert.Equal(13, result.Lines.Count);
+                Assert.Equal(result.Lines[0], "#line 1 \"/Working/a.cake\"");
+                Assert.Equal(result.Lines[1], "int x=0;");
+                Assert.Equal(result.Lines[2], "#line 1 \"/Working/b.cake\"");
+                Assert.Equal(result.Lines[3], "int z=1;");
+                Assert.Equal(result.Lines[4], "#line 1 \"/Working/c.cake\"");
+                Assert.Equal(result.Lines[5], "int o=3;");
+                Assert.Equal(result.Lines[6], "// #r d.dll");
+                Assert.Equal(result.Lines[7], "#line 2 \"/Working/b.cake\"");
+                Assert.Equal(result.Lines[8], "// #l c.cake");
+                Assert.Equal(result.Lines[9], "int p=4;");
+                Assert.Equal(result.Lines[10], "#line 2 \"/Working/a.cake\"");
+                Assert.Equal(result.Lines[11], "// #l b.cake");
+                Assert.Equal(result.Lines[12], "int y=2;");
             }
         }
     }

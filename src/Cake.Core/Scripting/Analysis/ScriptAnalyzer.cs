@@ -100,20 +100,16 @@ namespace Cake.Core.Scripting.Analysis
             var lines = ReadLines(path);
 
             // Iterate all lines in the script.
-            var firstLine = true;
             foreach (var line in lines)
             {
                 if (!_lineProcessors.Any(p => p.Process(context, line)))
                 {
-                    if (firstLine)
-                    {
-                        // Append the line directive for the script.
-                        var scriptFullPath = path.MakeAbsolute(_environment);
-                        context.AddScriptLine(string.Format(CultureInfo.InvariantCulture, "#line 1 \"{0}\"", scriptFullPath.FullPath));
-                        firstLine = false;
-                    }
-
                     context.AddScriptLine(line);
+                }
+                else
+                {
+                    // Comment out processed lines to keep line data.
+                    context.AddScriptLine(string.Concat("// ", line));
                 }
             }
         }

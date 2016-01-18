@@ -16,7 +16,7 @@ namespace Cake.Core.Scripting.Analysis
         private readonly List<string> _lines;
         private readonly HashSet<FilePath> _processedScripts;
         private ScriptInformation _root;
-        private ScriptInformation _current; 
+        private ScriptInformation _current;
 
         public IScriptInformation Script
         {
@@ -99,6 +99,8 @@ namespace Cake.Core.Scripting.Analysis
 
             _current = script;
             _stack.Push(_current);
+
+            InsertLineDirective();
         }
 
         public void Pop()
@@ -107,6 +109,18 @@ namespace Cake.Core.Scripting.Analysis
             if (_stack.Count > 0)
             {
                 _current = _stack.Peek();
+
+                InsertLineDirective();
+            }
+        }
+
+        private void InsertLineDirective()
+        {
+            if (_current != null)
+            {
+                var position = Math.Max(1, _current.Lines.Count + 1);
+                _lines.Add(string.Format(CultureInfo.InvariantCulture, 
+                    "#line {0} \"{1}\"", position, _current.Path.FullPath));
             }
         }
     }
