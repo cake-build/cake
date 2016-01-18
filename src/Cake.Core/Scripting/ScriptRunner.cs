@@ -110,13 +110,35 @@ namespace Cake.Core.Scripting
 
             // Install tools.
             _log.Verbose("Processing build script...");
-            var toolsPath = scriptPath.GetDirectory().Combine("tools");
+            var toolsEnv = _environment.GetEnvironmentVariable("CAKE_TOOLS");
+
+            DirectoryPath toolsPath;
+            if (!string.IsNullOrEmpty(toolsEnv))
+            {
+                toolsPath = new DirectoryPath(toolsEnv).MakeAbsolute(_environment);
+            }
+            else
+            {
+                toolsPath = scriptPath.GetDirectory().Combine("tools");
+            }
+
             _processor.InstallTools(result, toolsPath);
 
             // Install addins.
             var applicationRoot = _environment.GetApplicationRoot();
-            var addinRoot = applicationRoot.Combine("../Addins").Collapse();
-            var addinReferences = _processor.InstallAddins(result, addinRoot);
+            var addinsEnv = _environment.GetEnvironmentVariable("CAKE_ADDINS");
+
+            DirectoryPath addinPath;
+            if (!string.IsNullOrEmpty(addinsEnv))
+            {
+                addinPath = new DirectoryPath(addinsEnv).MakeAbsolute(_environment);
+            }
+            else
+            {
+                addinPath = applicationRoot.Combine("../Addins").Collapse();
+            }
+
+            var addinReferences = _processor.InstallAddins(result, addinPath);
             foreach (var addinReference in addinReferences)
             {
                 result.References.Add(addinReference.FullPath);
