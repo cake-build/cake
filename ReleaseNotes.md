@@ -1,3 +1,14 @@
+### New in 0.8.0 (Released 2015/01/18)
+
+DNUPackSettings OutputDirectory should be a DirectoryPath
+Add GitLink Alias
+Make #tool and #addin package manager agnostic
+XmlPeek alias
+Move from WebClient to HttpClient
+PlatformTarget is missing Win32
+Move ToolFixture to Cake.Testing
+Line number in error messages is incorrect when using directives
+
 ### New in 0.7.0 (Released 2015/12/23)
 
 * CakeBuildLog ConsolePalette missing LogLevel.Fatal map
@@ -7,7 +18,7 @@
 * Run unit tests on Travis
 * Use OutputDirectory property in Choco Pack for Cake
 * Workarounds for incomplete tool settings
-* Adding support for Atlasssian Bamboo Build Server 
+* Adding support for Atlasssian Bamboo Build Server
 * Added missing CakeAliasCategory attribute
 * Add code of conduct
 
