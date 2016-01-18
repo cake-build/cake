@@ -94,6 +94,7 @@
     <Compile Include="Fixtures\Tools\DupFinder\DupFinderRunnerConfigFixture.cs" />
     <Compile Include="Fixtures\Tools\DupFinder\DupFinderRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\FixieRunnerFixture.cs" />
+    <Compile Include="Fixtures\Tools\GitLinkFixture.cs" />
     <Compile Include="Fixtures\Tools\GitVersionRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\GitReleaseManagerFixture.cs" />
     <Compile Include="Fixtures\Tools\GitReleaseManager\GitReleaseManagerAssetsAdderFixture.cs" />
@@ -196,6 +197,7 @@
     <Compile Include="Unit\Tools\DNU\Restore\DNURestorerTests.cs" />
     <Compile Include="Unit\Tools\DupFinder\DupFinderRunnerTests.cs" />
     <Compile Include="Unit\Tools\Fixie\FixieRunnerTests.cs" />
+    <Compile Include="Unit\Tools\GitLink\GitlinkRunnerTests.cs" />
     <Compile Include="Unit\Tools\GitVersion\GitVersionRunnerTests.cs" />
     <Compile Include="Unit\Tools\GitReleaseManager\AddAssets\GitReleaseManagerAssetsAdderTests.cs" />
     <Compile Include="Unit\Tools\GitReleaseManager\Close\GitReleaseManagerMilestoneCloserTests.cs" />
