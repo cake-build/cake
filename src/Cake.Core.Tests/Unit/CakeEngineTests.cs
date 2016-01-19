@@ -882,6 +882,62 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.True(fixture.Log.Entries.Any(x => x.Message.StartsWith("Task Teardown error (A):")));
             }
+
+            [Fact]
+            public void Should_Return_Report_That_Contains_Executed_Tasks_In_Order()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A");
+                engine.RegisterTask("B").IsDependentOn("A");
+                engine.RegisterTask("C").IsDependentOn("B");
+
+                // When
+                var report = engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "C");
+
+                // Then
+                Assert.Equal(3, report.Count());
+                Assert.Equal("A", report.ElementAt(0).TaskName);
+                Assert.Equal("B", report.ElementAt(1).TaskName);
+                Assert.Equal("C", report.ElementAt(2).TaskName);
+            }
+
+            [Fact]
+            public void Should_Return_Report_That_Marks_Executed_Tasks_As_Non_Skipped()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A").IsDependentOn("B");
+                engine.RegisterTask("B").IsDependentOn("C");
+                engine.RegisterTask("C").WithCriteria(() => false);
+
+                // When
+                var report = engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
+
+                // Then
+                Assert.False(report.First(e => e.TaskName == "A").Skipped);
+                Assert.False(report.First(e => e.TaskName == "B").Skipped);
+            }
+
+            [Fact]
+            public void Should_Return_Report_That_Marks_Skipped_Tasks_As_Skipped()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A").IsDependentOn("B");
+                engine.RegisterTask("B").IsDependentOn("C").WithCriteria(() => false);
+                engine.RegisterTask("C").WithCriteria(() => false);
+
+                // When
+                var report = engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
+
+                // Then
+                Assert.True(report.First(e => e.TaskName == "B").Skipped);
+                Assert.True(report.First(e => e.TaskName == "C").Skipped);
+            }
         }
     }
 }
