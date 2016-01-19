@@ -137,7 +137,7 @@ namespace Cake.Core
                     }
                     else
                     {
-                        SkipTask(context, strategy, task);
+                        SkipTask(context, strategy, task, report);
                     }
                 }
 
@@ -294,11 +294,14 @@ namespace Cake.Core
             }
         }
 
-        private void SkipTask(ICakeContext context, IExecutionStrategy strategy, CakeTask task)
+        private void SkipTask(ICakeContext context, IExecutionStrategy strategy, CakeTask task, CakeReport report)
         {
             PerformTaskSetup(context, strategy, task, true);
             strategy.Skip(task);
             PerformTaskTeardown(context, strategy, task, TimeSpan.Zero, true, false);
+
+            // Add the skipped task to the report.
+            report.AddSkipped(task.Name);
         }
 
         private static void ReportErrors(IExecutionStrategy strategy, Action<Exception> errorReporter, Exception taskException)

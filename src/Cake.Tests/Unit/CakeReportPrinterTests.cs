@@ -65,6 +65,29 @@ namespace Cake.Tests.Unit
                 string expected = String.Format("{0,-45}{1,-20}", taskName, duration);
                 Assert.Contains(console.Messages, s => s == expected);
             }
+
+            [Fact]
+            public void Should_Print_No_Duration_For_Skipped_Tasks()
+            {
+                // Given
+                var console = new FakeConsole();
+                var report = new CakeReport();
+                string taskName = "TaskName";
+                string taskNameThatWasSkipped = "TaskName-That-Was-Skipped";
+                TimeSpan duration = TimeSpan.FromSeconds(10);
+
+                report.Add(taskName, duration);
+                report.AddSkipped(taskNameThatWasSkipped);
+
+                var printer = new CakeReportPrinter(console);
+
+                // When
+                printer.Write(report);
+
+                // Then
+                string expected = String.Format("{0,-30}{1,-20}", taskNameThatWasSkipped, "Skipped");
+                Assert.Contains(console.Messages, s => s == expected);
+            }
         }
     }
 }
