@@ -300,8 +300,8 @@ namespace Cake.Common.IO
             {
                 throw new ArgumentNullException("filePath");
             }
-
-            return context.FileSystem.GetFile(filePath).Exists;
+            
+            return context.FileSystem.GetFile(filePath.MakeAbsolute(context.Environment)).Exists;
         }
 
         /// <summary>
