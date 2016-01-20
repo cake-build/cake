@@ -1042,6 +1042,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var environment = FakeEnvironment.CreateUnixEnvironment();
                 var fileSystem = new FakeFileSystem(environment);
                 context.FileSystem.Returns(fileSystem);
+                context.Environment.Returns(environment);
 
                 // When
                 var result = FileAliases.FileExists(context, "non-existent-file.txt");
@@ -1051,17 +1052,38 @@ namespace Cake.Common.Tests.Unit.IO
             }
 
             [Fact]
-            public void Should_Return_True_If_Directory_Exist()
+            public void Should_Return_True_If_Relative_Path_Exist()
             {
                 // Given
                 var context = Substitute.For<ICakeContext>();
                 var environment = FakeEnvironment.CreateUnixEnvironment();
+                environment.WorkingDirectory = "/Working";
                 var fileSystem = new FakeFileSystem(environment);
-                fileSystem.CreateFile("some file.txt");
+                fileSystem.CreateFile("/Working/some file.txt");
                 context.FileSystem.Returns(fileSystem);
+                context.Environment.Returns(environment);
 
                 // When
                 var result = FileAliases.FileExists(context, "some file.txt");
+
+                // Then
+                Assert.True(result);
+            }
+
+            [Fact]
+            public void Should_Return_True_If_Absolute_Path_Exist()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                environment.WorkingDirectory = "/Working/target";
+                var fileSystem = new FakeFileSystem(environment);
+                fileSystem.CreateFile("/Working/target/some file.txt");
+                context.FileSystem.Returns(fileSystem);
+                context.Environment.Returns(environment);
+
+                // When
+                var result = FileAliases.FileExists(context, "/Working/target/some file.txt");
 
                 // Then
                 Assert.True(result);
