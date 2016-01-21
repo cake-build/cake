@@ -159,7 +159,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("NUnit3: Process returned an error.", result.Message);
+                Assert.Equal("NUnit3: Process returned an error (exit code 1).", result.Message);
             }
 
             [Fact]

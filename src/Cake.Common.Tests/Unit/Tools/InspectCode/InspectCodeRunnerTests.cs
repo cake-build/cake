@@ -80,7 +80,7 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("InspectCode: Process returned an error.", result.Message);
+                Assert.Equal("InspectCode: Process returned an error (exit code 1).", result.Message);
             }
 
             [Fact]

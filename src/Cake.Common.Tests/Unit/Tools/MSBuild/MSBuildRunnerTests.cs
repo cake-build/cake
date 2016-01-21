@@ -731,7 +731,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "MSBuild: Process returned an error.");
+                Assert.IsCakeException(result, "MSBuild: Process returned an error (exit code 1).");
             }
 
             [Theory]

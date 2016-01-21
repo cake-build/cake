@@ -88,8 +88,8 @@ namespace Cake.Core.Tooling
                 // Did an error occur?
                 if (process.GetExitCode() != 0)
                 {
-                    const string message = "{0}: Process returned an error.";
-                    throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, GetToolName()));
+                    const string message = "{0}: Process returned an error (exit code {1}).";
+                    throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, GetToolName(), process.GetExitCode()));
                 }
             }
             finally
