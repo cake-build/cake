@@ -174,7 +174,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("ILMerge: Process returned an error.", result.Message);
+                Assert.Equal("ILMerge: Process returned an error (exit code 1).", result.Message);
             }
 
             [Fact]

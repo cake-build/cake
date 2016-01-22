@@ -145,7 +145,7 @@ namespace Cake.Common.Tests.Unit.Tools.NSIS
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("MakeNSIS: Process returned an error.", result.Message);
+                Assert.Equal("MakeNSIS: Process returned an error (exit code 1).", result.Message);
             }
 
             [Fact]

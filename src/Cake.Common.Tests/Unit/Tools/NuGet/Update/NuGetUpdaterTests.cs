@@ -118,7 +118,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Update
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Process returned an error.", result.Message);
+                Assert.Equal("NuGet: Process returned an error (exit code 1).", result.Message);
             }
 
             [Fact]

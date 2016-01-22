@@ -111,7 +111,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "NuGet: Process returned an error.");
+                Assert.IsCakeException(result, "NuGet: Process returned an error (exit code 1).");
             }
 
             [Fact]

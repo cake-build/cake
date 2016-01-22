@@ -141,7 +141,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("xUnit.net (v2): Process returned an error.", result.Message);
+                Assert.Equal("xUnit.net (v2): Process returned an error (exit code 1).", result.Message);
             }
 
             [Fact]

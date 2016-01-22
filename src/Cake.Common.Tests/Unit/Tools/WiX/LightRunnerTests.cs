@@ -178,7 +178,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 // Then
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Light: Process returned an error.", result.Message);
+                Assert.Equal("Light: Process returned an error (exit code 1).", result.Message);
             }
 
             [Fact]
