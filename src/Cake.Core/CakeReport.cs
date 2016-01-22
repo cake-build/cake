@@ -41,6 +41,15 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Adds a skipped task result to the report.
+        /// </summary>
+        /// <param name="task">The task.</param>
+        public void AddSkipped(string task)
+        {
+            _report.Add(new CakeReportEntry(task, TimeSpan.Zero, true));
+        }
+
+        /// <summary>
         /// Returns an enumerator that iterates through the collection.
         /// </summary>
         /// <returns>

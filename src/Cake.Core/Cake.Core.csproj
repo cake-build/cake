@@ -142,6 +142,7 @@
     <Compile Include="IO\ProcessSettings.cs" />
     <Compile Include="IO\ProcessWrapper.cs" />
     <Compile Include="IO\Arguments\QuotedArgument.cs" />
+    <Compile Include="IO\RelativePathResolver.cs" />
     <Compile Include="IO\SearchScope.cs" />
     <Compile Include="IO\Arguments\SecretArgument.cs" />
     <Compile Include="IO\SpecialPath.cs" />

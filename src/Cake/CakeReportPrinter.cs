@@ -45,10 +45,12 @@ namespace Cake
                 // Write task status.
                 foreach (var item in report)
                 {
-                    _console.WriteLine(lineFormat, item.TaskName, FormatTime(item.Duration));
+                    _console.ForegroundColor = GetItemForegroundColor(item);
+                    _console.WriteLine(lineFormat, item.TaskName, FormatDuration(item));
                 }
 
                 // Write footer.
+                _console.ForegroundColor = ConsoleColor.Green;
                 _console.WriteLine(new string('-', 20 + maxTaskNameLength));
                 _console.WriteLine(lineFormat, "Total:", FormatTime(GetTotalTime(report)));
             }
@@ -56,6 +58,16 @@ namespace Cake
             {
                 _console.ResetColor();
             }
+        }
+
+        private static string FormatDuration(CakeReportEntry item)
+        {
+            return item.Skipped ? "Skipped" : FormatTime(item.Duration);
+        }
+
+        private static ConsoleColor GetItemForegroundColor(CakeReportEntry item)
+        {
+            return item.Skipped ? ConsoleColor.Gray : ConsoleColor.Green;
         }
 
         private static string FormatTime(TimeSpan time)
