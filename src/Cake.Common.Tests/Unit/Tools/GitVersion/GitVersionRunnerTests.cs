@@ -64,7 +64,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("GitVersion: Process returned an error.", result.Message);
+                Assert.Equal("GitVersion: Process returned an error (exit code 1).", result.Message);
             }
 
             [Fact]

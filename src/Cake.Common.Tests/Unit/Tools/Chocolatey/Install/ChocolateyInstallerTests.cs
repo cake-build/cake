@@ -109,7 +109,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "Chocolatey: Process returned an error.");
+                Assert.IsCakeException(result, "Chocolatey: Process returned an error (exit code 1).");
             }
 
             [Fact]
@@ -637,7 +637,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "Chocolatey: Process returned an error.");
+                Assert.IsCakeException(result, "Chocolatey: Process returned an error (exit code 1).");
             }
 
             [Fact]

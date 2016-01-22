@@ -114,7 +114,7 @@ namespace Cake.Common.Tests.Unit.Tools.Roundhouse
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Roundhouse: Process returned an error.", result.Message);
+                Assert.Equal("Roundhouse: Process returned an error (exit code 1).", result.Message);
             }
 
             [Fact]
