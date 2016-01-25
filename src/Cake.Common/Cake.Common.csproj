@@ -217,6 +217,7 @@
     <Compile Include="Tools\InspectCode\InspectCodeRunner.cs" />
     <Compile Include="Tools\InspectCode\InspectCodeSettings.cs" />
     <Compile Include="Tools\InspectCode\SettingsLayer.cs" />
+    <Compile Include="Tools\DotNetBuildSettingsExtensions.cs" />
     <Compile Include="Tools\MSBuild\MSBuildAliases.cs" />
     <Compile Include="Tools\MSBuild\MSBuildResolver.cs" />
     <Compile Include="Tools\MSBuild\MSBuildRunner.cs" />
