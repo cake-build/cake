@@ -211,6 +211,8 @@
     <Compile Include="Unit\IO\DirectoryAliasesTests.cs" />
     <Compile Include="Unit\IO\FileAliasesTests.cs" />
     <Compile Include="Unit\Tools\InspectCode\InspectCodeRunnerTests.cs" />
+    <Compile Include="Unit\Tools\DotNetBuildSettingsExtensionsTests.cs" />
+    <Compile Include="Unit\Tools\DotNetBuildSettingsTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildRunnerTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsExtensionsTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsTests.cs" />
