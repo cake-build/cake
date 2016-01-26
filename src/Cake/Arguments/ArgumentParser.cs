@@ -94,22 +94,23 @@ namespace Cake.Arguments
             {
                 return false;
             }
-            return arg[0] == '-';
+            return arg.StartsWith("--") || arg.StartsWith("-");
         }
 
         private bool ParseOption(string arg, CakeOptions options)
         {
             string name, value;
 
+            var nameIndex = arg.StartsWith("--") ? 2 : 1;
             var separatorIndex = arg.IndexOfAny(new[] { '=' });
             if (separatorIndex < 0)
             {
-                name = arg.Substring(1);
+                name = arg.Substring(nameIndex);
                 value = string.Empty;
             }
             else
             {
-                name = arg.Substring(1, separatorIndex - 1);
+                name = arg.Substring(nameIndex, separatorIndex - nameIndex);
                 value = arg.Substring(separatorIndex + 1);
             }
 
