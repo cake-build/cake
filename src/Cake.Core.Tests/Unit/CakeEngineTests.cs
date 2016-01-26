@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cake.Core.Tests.Fixtures;
 using Xunit;
+using NSubstitute;
 
 namespace Cake.Core.Tests.Unit
 {
@@ -158,7 +159,7 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
-            public void Should_Skip_Tasks_Where_Criterias_Are_Not_Fulfilled()
+            public void Should_Skip_Tasks_Where_Boolean_Criterias_Are_Not_Fulfilled()
             {
                 // Given
                 var result = new List<string>();
@@ -178,7 +179,7 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
-            public void Should_Not_Skip_Tasks_Where_Criterias_Are_Fulfilled()
+            public void Should_Not_Skip_Tasks_Where_Boolean_Criterias_Are_Fulfilled()
             {
                 // Given
                 var result = new List<string>();
@@ -186,6 +187,51 @@ namespace Cake.Core.Tests.Unit
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A").Does(() => result.Add("A"));
                 engine.RegisterTask("B").IsDependentOn("A").WithCriteria(() => true).Does(() => result.Add("B"));
+                engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
+
+                // When
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "C");
+
+                // Then
+                Assert.Equal(3, result.Count);
+                Assert.Equal("A", result[0]);
+                Assert.Equal("B", result[1]);
+                Assert.Equal("C", result[2]);
+            }
+
+            [Fact]
+            public void Should_Skip_Tasks_Where_CakeContext_Criterias_Are_Not_Fulfilled()
+            {
+                // Given
+                var result = new List<string>();
+                var fixture = new CakeEngineFixture();
+                fixture.Context.Environment.IsUnix().Returns(false);
+
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A").Does(() => result.Add("A"));
+                engine.RegisterTask("B").IsDependentOn("A").WithCriteria(context => context.Environment.IsUnix()).Does(() => result.Add("B"));
+                engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
+
+                // When
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "C");
+
+                // Then
+                Assert.Equal(2, result.Count);
+                Assert.Equal("A", result[0]);
+                Assert.Equal("C", result[1]);
+            }
+
+            [Fact]
+            public void Should_Not_Skip_Tasks_Where_CakeContext_Criterias_Are_Fulfilled()
+            {
+                // Given
+                var result = new List<string>();
+                var fixture = new CakeEngineFixture();
+                fixture.Context.Environment.IsUnix().Returns(true);
+
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A").Does(() => result.Add("A"));
+                engine.RegisterTask("B").IsDependentOn("A").WithCriteria(context => context.Environment.IsUnix()).Does(() => result.Add("B"));
                 engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When

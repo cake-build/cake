@@ -41,7 +41,7 @@ namespace Cake.Core
                 throw new ArgumentNullException("builder");
             }
 
-            builder.Task.AddCriteria(() => criteria);
+            builder.Task.AddCriteria(_ => criteria);
             return builder;
         }
 
@@ -54,6 +54,26 @@ namespace Cake.Core
         /// <param name="criteria">The criteria.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{T}"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder<T> WithCriteria<T>(this CakeTaskBuilder<T> builder, Func<bool> criteria)
+            where T : CakeTask
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException("builder");
+            }
+
+            builder.Task.AddCriteria(criteria);
+            return builder;
+        }
+
+        /// <summary>
+        /// Adds a criteria that has to be fulfilled for the task to run.
+        /// The criteria is evaluated when traversal of the graph occurs.
+        /// </summary>
+        /// <typeparam name="T">The task type.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{T}"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder<T> WithCriteria<T>(this CakeTaskBuilder<T> builder, Func<ICakeContext, bool> criteria)
             where T : CakeTask
         {
             if (builder == null)
