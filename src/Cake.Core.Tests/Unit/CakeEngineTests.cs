@@ -904,39 +904,57 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
-            public void Should_Return_Report_That_Marks_Executed_Tasks_As_Non_Skipped()
+            public void Should_Return_Report_That_Marks_Executed_Tasks_As_Executed()
             {
                 // Given
+                var result = new List<string>();
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
-                engine.RegisterTask("A").IsDependentOn("B");
+                engine.RegisterTask("A").IsDependentOn("B").Does(() => result.Add("A"));
                 engine.RegisterTask("B").IsDependentOn("C");
-                engine.RegisterTask("C").WithCriteria(() => false);
+                engine.RegisterTask("C").WithCriteria(() => false).Does(() => result.Add("C"));
 
                 // When
                 var report = engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
 
                 // Then
-                Assert.False(report.First(e => e.TaskName == "A").Skipped);
-                Assert.False(report.First(e => e.TaskName == "B").Skipped);
+                Assert.Equal(CakeTaskExecutionStatus.Executed, report.First(e => e.TaskName == "A").ExecutionStatus);
             }
 
             [Fact]
             public void Should_Return_Report_That_Marks_Skipped_Tasks_As_Skipped()
             {
                 // Given
+                var result = new List<string>();
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
-                engine.RegisterTask("A").IsDependentOn("B");
-                engine.RegisterTask("B").IsDependentOn("C").WithCriteria(() => false);
-                engine.RegisterTask("C").WithCriteria(() => false);
+                engine.RegisterTask("A").IsDependentOn("B").Does(() => result.Add("A"));
+                engine.RegisterTask("B").IsDependentOn("C");
+                engine.RegisterTask("C").WithCriteria(() => false).Does(() => result.Add("C"));
 
                 // When
                 var report = engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
 
                 // Then
-                Assert.True(report.First(e => e.TaskName == "B").Skipped);
-                Assert.True(report.First(e => e.TaskName == "C").Skipped);
+                Assert.Equal(CakeTaskExecutionStatus.Skipped, report.First(e => e.TaskName == "C").ExecutionStatus);
+            }
+
+            [Fact]
+            public void Should_Return_Report_That_Marks_Delegated_Tasks_As_Delegated()
+            {
+                // Given
+                var result = new List<string>();
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A").IsDependentOn("B").Does(() => result.Add("A"));
+                engine.RegisterTask("B").IsDependentOn("C");
+                engine.RegisterTask("C").WithCriteria(() => false).Does(() => result.Add("C"));
+
+                // When
+                var report = engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
+
+                // Then
+                Assert.Equal(CakeTaskExecutionStatus.Delegated, report.First(e => e.TaskName == "B").ExecutionStatus);
             }
         }
     }

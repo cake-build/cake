@@ -250,8 +250,15 @@ namespace Cake.Core
                 PerformTaskTeardown(context, strategy, task, stopWatch.Elapsed, false, exceptionWasThrown);
             }
 
-            // Add the task results to the report.
-            report.Add(task.Name, stopWatch.Elapsed);
+            // Add the task results to the report
+            if (IsDelegatedTask(task))
+            {
+                report.AddDelegated(task.Name, stopWatch.Elapsed);
+            }
+            else
+            {
+                report.Add(task.Name, stopWatch.Elapsed);
+            }
         }
 
         private void PerformTaskSetup(ICakeContext context, IExecutionStrategy strategy, ICakeTaskInfo task, bool skipped)
@@ -302,6 +309,13 @@ namespace Cake.Core
 
             // Add the skipped task to the report.
             report.AddSkipped(task.Name);
+        }
+
+        private static bool IsDelegatedTask(CakeTask task)
+        {
+            var actionTask = task as ActionTask;
+
+            return actionTask != null && !actionTask.Actions.Any();
         }
 
         private static void ReportErrors(IExecutionStrategy strategy, Action<Exception> errorReporter, Exception taskException)

@@ -37,7 +37,7 @@ namespace Cake.Core
         /// <param name="span">The span.</param>
         public void Add(string task, TimeSpan span)
         {
-            _report.Add(new CakeReportEntry(task, span));
+            Add(task, span, CakeTaskExecutionStatus.Executed);
         }
 
         /// <summary>
@@ -46,7 +46,28 @@ namespace Cake.Core
         /// <param name="task">The task.</param>
         public void AddSkipped(string task)
         {
-            _report.Add(new CakeReportEntry(task, TimeSpan.Zero, true));
+            Add(task, TimeSpan.Zero, CakeTaskExecutionStatus.Skipped);
+        }
+
+        /// <summary>
+        /// Adds a delegated task result to the report.
+        /// </summary>
+        /// <param name="task">The task.</param>
+        /// <param name="span">The span.</param>
+        public void AddDelegated(string task, TimeSpan span)
+        {
+            Add(task, span, CakeTaskExecutionStatus.Delegated);
+        }
+
+        /// <summary>
+        /// Adds a task result to the report.
+        /// </summary>
+        /// <param name="task">The task.</param>
+        /// <param name="span">The span.</param>
+        /// <param name="executionStatus">The execution status.</param>
+        public void Add(string task, TimeSpan span, CakeTaskExecutionStatus executionStatus)
+        {
+            _report.Add(new CakeReportEntry(task, span, executionStatus));
         }
 
         /// <summary>
