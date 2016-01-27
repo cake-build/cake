@@ -324,6 +324,23 @@ namespace Cake.Common.Tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;Project ToolsVersion=&quot;4.0&quot; DefaultTargets=&quot;Build&quot; xmlns=&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&gt;
+        ///  &lt;PropertyGroup&gt;
+        ///    &lt;Configuration Condition=&quot; &apos;$(Configuration)&apos; == &apos;&apos; &quot;&gt;Debug&lt;/Configuration&gt;
+        ///    &lt;Platform Condition=&quot; &apos;$(Platform)&apos; == &apos;&apos; &quot;&gt;AnyCPU&lt;/Platform&gt;
+        ///    &lt;ProductVersion&gt;8.0.30703&lt;/ProductVersion&gt;
+        ///    &lt;SchemaVersion&gt;2.0&lt;/SchemaVersion&gt;
+        ///    &lt;ProjectGuid&gt;{AE8E29D0-6FF2-42D0-94EC-E725276A864D}&lt;/ProjectGuid&gt;
+        ///    &lt;OutputType&gt;Library&lt;/OutputTy [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Nuspec_ProjectFile {
+            get {
+                return ResourceManager.GetString("Nuspec_ProjectFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot;?&gt;
         ///&lt;doc&gt;
         ///    &lt;assembly&gt;
@@ -351,11 +368,13 @@ namespace Cake.Common.Tests.Properties {
         ///        &lt;add key=&quot;server&quot; value=&quot;testhost.somecompany.com&quot; /&gt;
         ///        &lt;add key=&quot;test&quot; value=&quot;true&quot; /&gt;
         ///    &lt;/appSettings&gt;
-        ///&lt;/configuration&gt;.
+        ///    &lt;test&gt;test value&lt;/test&gt;
+        ///&lt;/configuration&gt;
+        ///.
         /// </summary>
-        internal static string XmlPoke_Xml {
+        internal static string XmlPeek_Xml {
             get {
-                return ResourceManager.GetString("XmlPoke_Xml", resourceCulture);
+                return ResourceManager.GetString("XmlPeek_Xml", resourceCulture);
             }
         }
         
@@ -368,9 +387,9 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;/appSettings&gt;
         ///&lt;/configuration&gt;.
         /// </summary>
-        internal static string XmlPeek_Xml {
+        internal static string XmlPoke_Xml {
             get {
-                return ResourceManager.GetString("XmlPeek_Xml", resourceCulture);
+                return ResourceManager.GetString("XmlPoke_Xml", resourceCulture);
             }
         }
         

@@ -22,10 +22,10 @@ namespace Cake.Common.Tools.NuGet
     public static class NuGetAliases
     {
         /// <summary>
-        /// Creates a NuGet package using the specified Nuspec file.
+        /// Creates a NuGet package using the specified Nuspec or project file.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="nuspecFilePath">The nuspec file path.</param>
+        /// <param name="filePath">The nuspec or project file path.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
@@ -59,7 +59,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeMethodAlias]
         [CakeAliasCategory("Pack")]
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Pack")]
-        public static void NuGetPack(this ICakeContext context, FilePath nuspecFilePath, NuGetPackSettings settings)
+        public static void NuGetPack(this ICakeContext context, FilePath filePath, NuGetPackSettings settings)
         {
             if (context == null)
             {
@@ -68,14 +68,14 @@ namespace Cake.Common.Tools.NuGet
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Globber);
             var packer = new NuGetPacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Log, context.Globber, resolver);
-            packer.Pack(nuspecFilePath, settings);
+            packer.Pack(filePath, settings);
         }
 
         /// <summary>
-        /// Creates NuGet packages using the specified Nuspec files.
+        /// Creates NuGet packages using the specified Nuspec or project files.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="nuspecFilePaths">The nuspec file paths.</param>
+        /// <param name="filePaths">The nuspec or project file paths.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
@@ -110,16 +110,16 @@ namespace Cake.Common.Tools.NuGet
         [CakeMethodAlias]
         [CakeAliasCategory("Pack")]
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Pack")]
-        public static void NuGetPack(this ICakeContext context, IEnumerable<FilePath> nuspecFilePaths, NuGetPackSettings settings)
+        public static void NuGetPack(this ICakeContext context, IEnumerable<FilePath> filePaths, NuGetPackSettings settings)
         {
-            if (nuspecFilePaths == null)
+            if (filePaths == null)
             {
-                throw new ArgumentNullException("nuspecFilePaths");
+                throw new ArgumentNullException("filePaths");
             }
 
-            foreach (var nuspecFilePath in nuspecFilePaths)
+            foreach (var filePath in filePaths)
             {
-                NuGetPack(context, nuspecFilePath, settings);
+                NuGetPack(context, filePath, settings);
             }
         }
 
