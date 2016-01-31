@@ -25,7 +25,7 @@ namespace Cake.Core.Tests.Unit
                 Assert.NotNull(firstTask);
                 Assert.Equal(taskName, firstTask.TaskName);
                 Assert.Equal(duration, firstTask.Duration);
-                Assert.False(firstTask.Skipped);
+                Assert.Equal(CakeTaskExecutionStatus.Executed, firstTask.ExecutionStatus);
             }
 
             [Fact]
@@ -47,7 +47,7 @@ namespace Cake.Core.Tests.Unit
                 Assert.NotNull(lastTask);
                 Assert.Equal(taskName, lastTask.TaskName);
                 Assert.Equal(duration, lastTask.Duration);
-                Assert.False(lastTask.Skipped);
+                Assert.Equal(CakeTaskExecutionStatus.Executed, lastTask.ExecutionStatus);
             }
         }
 
@@ -69,7 +69,7 @@ namespace Cake.Core.Tests.Unit
                 Assert.NotNull(firstTask);
                 Assert.Equal(taskName, firstTask.TaskName);
                 Assert.Equal(TimeSpan.Zero, firstTask.Duration);
-                Assert.True(firstTask.Skipped);
+                Assert.Equal(CakeTaskExecutionStatus.Skipped, firstTask.ExecutionStatus);
             }
 
             [Fact]
@@ -90,7 +90,52 @@ namespace Cake.Core.Tests.Unit
                 Assert.NotNull(lastTask);
                 Assert.Equal(taskName, lastTask.TaskName);
                 Assert.Equal(TimeSpan.Zero, lastTask.Duration);
-                Assert.True(lastTask.Skipped);
+                Assert.Equal(CakeTaskExecutionStatus.Skipped, lastTask.ExecutionStatus);
+            }
+        }
+
+        public sealed class TheAddDelegatedMethod
+        {
+            [Fact]
+            public void Should_Add_A_New_Task()
+            {
+                // Given
+                var report = new CakeReport();
+                var taskName = "task";
+                var duration = TimeSpan.FromMilliseconds(100);
+
+                // When
+                report.AddDelegated(taskName, duration);
+
+                // Then
+                var firstTask = report.FirstOrDefault();
+
+                Assert.NotNull(firstTask);
+                Assert.Equal(taskName, firstTask.TaskName);
+                Assert.Equal(duration, firstTask.Duration);
+                Assert.Equal(CakeTaskExecutionStatus.Delegated, firstTask.ExecutionStatus);
+            }
+
+            [Fact]
+            public void Should_Add_To_End_Of_Sequence()
+            {
+                // Given
+                var report = new CakeReport();
+                report.AddSkipped("task 1");
+
+                var taskName = "task 2";
+                var duration = TimeSpan.FromMilliseconds(100);
+
+                // When
+                report.AddDelegated(taskName, duration);
+
+                // Then
+                var lastTask = report.LastOrDefault();
+
+                Assert.NotNull(lastTask);
+                Assert.Equal(taskName, lastTask.TaskName);
+                Assert.Equal(duration, lastTask.Duration);
+                Assert.Equal(CakeTaskExecutionStatus.Delegated, lastTask.ExecutionStatus);
             }
         }
     }
