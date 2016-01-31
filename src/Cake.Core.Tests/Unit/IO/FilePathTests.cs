@@ -24,7 +24,7 @@ namespace Cake.Core.Tests.Unit.IO
             }
         }
 
-        public sealed class TheGetExtensionProperty
+        public sealed class TheGetExtensionMethod
         {
             [Theory]
             [InlineData("assets/shaders/basic.frag", ".frag")]
