@@ -65,6 +65,15 @@
     <Compile Include="Build\AppVeyor\IAppVeyorProvider.cs" />
     <Compile Include="Build\BuildSystem.cs" />
     <Compile Include="Build\BuildSystemAliases.cs" />
+    <Compile Include="Build\ContinuaCI\ContinuaCIInfo.cs" />
+    <Compile Include="Build\ContinuaCI\Data\ContinuaCIBuildInfo.cs" />
+    <Compile Include="Build\ContinuaCI\Data\ContinuaCIChangesetInfo.cs" />
+    <Compile Include="Build\ContinuaCI\Data\ContinuaCIEnvironmentInfo.cs" />
+    <Compile Include="Build\ContinuaCI\Data\ContinuaCIProjectInfo.cs" />
+    <Compile Include="Build\ContinuaCI\Data\ContinuaCIConfigurationInfo.cs" />
+    <Compile Include="Build\ContinuaCI\IContinuaCIProvider.cs" />
+    <Compile Include="Build\ContinuaCI\ContinuaCIMessageType.cs" />
+    <Compile Include="Build\ContinuaCI\ContinuaCIProvider.cs" />
     <Compile Include="Build\MyGet\IMyGetProvider.cs" />
     <Compile Include="Build\MyGet\MyGetProvider.cs" />
     <Compile Include="Build\MyGet\MyGetBuildStatus.cs" />

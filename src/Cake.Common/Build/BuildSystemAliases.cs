@@ -1,6 +1,7 @@
 ﻿using System;
 using Cake.Common.Build.AppVeyor;
 using Cake.Common.Build.Bamboo;
+using Cake.Common.Build.ContinuaCI;
 using Cake.Common.Build.MyGet;
 using Cake.Common.Build.TeamCity;
 using Cake.Core;
@@ -36,7 +37,9 @@ namespace Cake.Common.Build
             var teamCityProvider = new TeamCityProvider(context.Environment);
             var myGetProvider = new MyGetProvider(context.Environment);
             var bambooProvider = new BambooProvider(context.Environment);
-            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider);
+            var continuaCIProvider = new ContinuaCIProvider(context.Environment);  
+
+            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider);
         }
 
         /// <summary>
@@ -105,7 +108,7 @@ namespace Cake.Common.Build
             return buildSystem.MyGet;
         }
 
-         /// <summary>
+        /// <summary>
         /// Gets a <see cref="Cake.Common.Build.Bamboo.BambooProvider"/> instance that can
         /// be used to manipulate the Bamboo environment.
         /// </summary>
@@ -125,6 +128,30 @@ namespace Cake.Common.Build
             }
             var buildSystem = context.BuildSystem();
             return buildSystem.Bamboo;
+        }
+
+        /// <summary>
+        /// Gets a <see cref="Cake.Common.Build.ContinuaCI.ContinuaCIProvider"/> instance that can
+        /// be used to manipulate the Continua CI environment.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var isContinuaCIBuild = ContinuaCI.IsRunningContinuaCI;
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <returns>A <see cref="Cake.Common.Build.ContinuaCI"/> instance.</returns>
+        [CakePropertyAlias(Cache = true)]
+        [CakeNamespaceImport("Cake.Common.Build.ContinuaCI")]
+        [CakeNamespaceImport("Cake.Common.Build.ContinuaCI.Data")]
+        public static IContinuaCIProvider ContinuaCI(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            var buildSystem = context.BuildSystem();
+            return buildSystem.ContinuaCI;
         }
     }
 }
