@@ -9,14 +9,14 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
 
 ## Table of contents
 
-1. [Documentation](https://github.com/cake-build/cake#documentation)
-2. [Example](https://github.com/cake-build/cake#example)
-    - [Install the Cake bootstrapper](https://github.com/cake-build/cake#1-install-the-cake-bootstrapper)
-    - [Create a Cake script](https://github.com/cake-build/cake#2-create-a-cake-script)
-    - [Run it!](https://github.com/cake-build/cake#3-run-it)
-3. [Contributing](https://github.com/cake-build/cake#contributing)
-4. [Get in touch](https://github.com/cake-build/cake#get-in-touch)
-5. [License](https://github.com/cake-build/cake#license)
+1. [Documentation](#documentation)
+2. [Example](#example)
+    - [Install the Cake bootstrapper](#1-install-the-cake-bootstrapper)
+    - [Create a Cake script](#2-create-a-cake-script)
+    - [Run it!](#3-run-it)
+3. [Contributing](#contributing)
+4. [Get in touch](#get-in-touch)
+5. [License](#license)
 
 ## Documentation
 
@@ -84,11 +84,7 @@ RunTarget(target);
 ##### Linux / OS X
 
 ```console
-# Adjust the permissions for the bootstrapper script.
-chmod +x build.sh
-
-# Execute the bootstrapper script.
-./build.sh
+bash build.sh
 ```
 
 ## Contributing
@@ -111,7 +107,7 @@ Make sure you've read the [contribution guidelines](http://cakebuild.net/contrib
 ## License
 
 Copyright © 2014 - 2015, Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors.
-Cake is provided as-is under the MIT license. For more information see [LICENSE](https://github.com/cake-build/cake/blob/develop/LICENSE).
+Cake is provided as-is under the MIT license. For more information see [LICENSE](LICENSE).
 
 * For Roslyn, see https://github.com/dotnet/roslyn/blob/master/License.txt
 * For Mono.CSharp, see https://github.com/mono/mono/blob/master/mcs/LICENSE
