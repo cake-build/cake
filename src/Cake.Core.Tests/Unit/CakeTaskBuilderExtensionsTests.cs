@@ -41,7 +41,7 @@ namespace Cake.Core.Tests.Unit
                 }
             }
 
-            public sealed class ThatAcceptsLambda
+            public sealed class ThatAcceptsBooleanLambda
             {
                 [Fact]
                 public void Should_Add_Criteria_To_Task()
@@ -52,6 +52,23 @@ namespace Cake.Core.Tests.Unit
 
                     // When
                     builder.WithCriteria(() => true);
+
+                    // Then
+                    Assert.Equal(1, task.Criterias.Count);
+                }
+            }
+
+            public sealed class ThatAcceptsCakeContextToBooleanLambda
+            {
+                [Fact]
+                public void Should_Add_Criteria_To_Task()
+                {
+                    // Given
+                    var task = new ActionTask("task");
+                    var builder = new CakeTaskBuilder<ActionTask>(task);
+
+                    // When
+                    builder.WithCriteria(context => true);
 
                     // Then
                     Assert.Equal(1, task.Criterias.Count);

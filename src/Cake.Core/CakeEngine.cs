@@ -131,7 +131,7 @@ namespace Cake.Core
                     var isTarget = task.Name.Equals(target, StringComparison.OrdinalIgnoreCase);
 
                     // Should we execute the task?
-                    if (ShouldTaskExecute(task, isTarget))
+                    if (ShouldTaskExecute(context, task, isTarget))
                     {
                         ExecuteTask(context, strategy, stopWatch, task, report);
                     }
@@ -182,11 +182,11 @@ namespace Cake.Core
             }
         }
 
-        private static bool ShouldTaskExecute(CakeTask task, bool isTarget)
+        private static bool ShouldTaskExecute(ICakeContext context, CakeTask task, bool isTarget)
         {
             foreach (var criteria in task.Criterias)
             {
-                if (!criteria())
+                if (!criteria(context))
                 {
                     if (isTarget)
                     {

@@ -12,7 +12,7 @@ namespace Cake.Core
     {
         private readonly string _name;
         private readonly List<string> _dependencies;
-        private readonly List<Func<bool>> _criterias;
+        private readonly List<Func<ICakeContext, bool>> _criterias;
 
         /// <summary>
         /// Gets the name of the task.
@@ -42,7 +42,7 @@ namespace Cake.Core
         /// Gets the task's criterias.
         /// </summary>
         /// <value>The task's criterias.</value>
-        public IReadOnlyList<Func<bool>> Criterias
+        public IReadOnlyList<Func<ICakeContext, bool>> Criterias
         {
             get { return _criterias; }
         }
@@ -79,7 +79,7 @@ namespace Cake.Core
             }
             _name = name;
             _dependencies = new List<string>();
-            _criterias = new List<Func<bool>>();
+            _criterias = new List<Func<ICakeContext, bool>>();
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Cake.Core
         /// Adds a criteria to the task that is invoked when the task is invoked.
         /// </summary>
         /// <param name="criteria">The criteria.</param>
-        public void AddCriteria(Func<bool> criteria)
+        public void AddCriteria(Func<ICakeContext, bool> criteria)
         {
             if (criteria == null)
             {
