@@ -73,22 +73,33 @@ namespace Cake.Common.Tools.NuGet.Pack
         }
 
         /// <summary>
-        /// Creates a NuGet package from the specified Nuspec file.
+        /// Creates a NuGet package from the specified Nuspec or project file.
         /// </summary>
-        /// <param name="nuspecFilePath">The nuspec file path.</param>
+        /// <param name="filePath">The nuspec or project file path.</param>
         /// <param name="settings">The settings.</param>
-        public void Pack(FilePath nuspecFilePath, NuGetPackSettings settings)
+        public void Pack(FilePath filePath, NuGetPackSettings settings)
         {
-            if (nuspecFilePath == null)
+            if (filePath == null)
             {
-                throw new ArgumentNullException("nuspecFilePath");
+                throw new ArgumentNullException("filePath");
             }
             if (settings == null)
             {
                 throw new ArgumentNullException("settings");
             }
 
-            Pack(settings, () => _processor.Process(nuspecFilePath, settings));
+            string extension = filePath.GetExtension();
+            if (extension == ".csproj"
+                || extension == ".vbproj"
+                || extension == ".fsproj")
+            {
+                // This is a project file, just run the pack process (no nuspec processing needed)
+                Run(settings, GetArguments(filePath, settings));
+            }
+            else
+            {
+                Pack(settings, () => _processor.Process(filePath, settings));
+            }
         }
 
         private void Pack(NuGetPackSettings settings, Func<FilePath> process)
@@ -116,7 +127,7 @@ namespace Cake.Common.Tools.NuGet.Pack
             }
         }
 
-        private ProcessArgumentBuilder GetArguments(FilePath nuspecFilePath, NuGetPackSettings settings)
+        private ProcessArgumentBuilder GetArguments(FilePath filePath, NuGetPackSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
             builder.Append("pack");
@@ -143,7 +154,7 @@ namespace Cake.Common.Tools.NuGet.Pack
             }
 
             // Nuspec file
-            builder.AppendQuoted(nuspecFilePath.MakeAbsolute(_environment).FullPath);
+            builder.AppendQuoted(filePath.MakeAbsolute(_environment).FullPath);
 
             // No package analysis?
             if (settings.NoPackageAnalysis)

@@ -120,6 +120,7 @@
     <Compile Include="Fixtures\Tools\NuGet\Packer\NuGetPackerWithNuSpecFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGet\Packer\NuGetPackerWithoutNuSpecFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGet\Packer\NuGetPackerFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\Packer\NuGetPackerWithProjectFileFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGet\Pusher\NuGetPusherFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGet\Restorer\NuGetRestorerFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGet\SetApiKey\NuGetSetApiKeyFixture.cs" />
