@@ -10,6 +10,7 @@ namespace Cake.Common.Tools.XUnit
 {
     /// <summary>
     /// Contains functionality related to running xUnit.net tests.
+    /// Requires the xunit.runner.console package.
     /// </summary>
     [CakeAliasCategory("xUnit v2")]
     public static class XUnit2Aliases
