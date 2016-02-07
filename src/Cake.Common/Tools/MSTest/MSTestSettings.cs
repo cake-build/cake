@@ -18,6 +18,12 @@ namespace Cake.Common.Tools.MSTest
         public bool NoIsolation { get; set; }
 
         /// <summary>
+        /// Gets or sets the test settings file. If set, it is be passed to MSBuild e.g. /testsettings:local.Testsettings
+        /// </summary>
+        /// <value>The test settings file.</value>
+        public string TestSettingsFile { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MSTestSettings"/> class.
         /// </summary>
         public MSTestSettings()
