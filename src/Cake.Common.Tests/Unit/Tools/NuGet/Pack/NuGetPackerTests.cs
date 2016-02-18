@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cake.Common.Tests.Fixtures.Tools.NuGet.Packer;
 using Cake.Common.Tests.Properties;
 using Cake.Common.Tools.NuGet;
@@ -650,6 +651,83 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
 
                     // Then
                     Assert.Equal(expected, result.Args);
+                }
+
+                [Fact]
+                public void Should_Add_Properties_To_Arguments_If_Set()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.Settings.Properties = new Dictionary<string, string>
+                    {
+                        { "Configuration", "Release" }
+                    };
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal("pack \"/Working/existing.csproj\" -Properties Configuration=Release", result.Args);
+                }
+
+                [Fact]
+                public void Should_Separate_Properties_With_Semicolon()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.Settings.Properties = new Dictionary<string, string>
+                    {
+                        { "Configuration", "Release" },
+                        { "Foo", "Bar" }
+                    };
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal("pack \"/Working/existing.csproj\" -Properties Configuration=Release;Foo=Bar", result.Args);
+                }
+
+                [Theory]
+                [InlineData("")]
+                [InlineData(" ")]
+                // We don't need to check for a null key because the dictionary won't allow it in the first place
+                public void Should_Throw_For_Invalid_Properties_Keys(string key)
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.Settings.Properties = new Dictionary<string, string>
+                    {
+                        { "Configuration", "Release" },
+                        { key, "Bar" }
+                    };
+
+                    // When
+                    var result = Record.Exception(() => fixture.Run());
+
+                    // Then
+                    Assert.IsCakeException(result, "Properties keys can not be null or empty.");
+                }
+
+                [Theory]
+                [InlineData(null)]
+                [InlineData("")]
+                [InlineData(" ")]
+                public void Should_Throw_For_Invalid_Properties_Values(string value)
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.Settings.Properties = new Dictionary<string, string>
+                    {
+                        { "Configuration", "Release" },
+                        { "Foo", value }
+                    };
+
+                    // When
+                    var result = Record.Exception(() => fixture.Run());
+
+                    // Then
+                    Assert.IsCakeException(result, "Properties values can not be null or empty.");
                 }
             }
 

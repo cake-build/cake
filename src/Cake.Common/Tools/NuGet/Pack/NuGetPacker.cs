@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -173,6 +174,23 @@ namespace Cake.Common.Tools.NuGet.Pack
             {
                 builder.Append("-Verbosity");
                 builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
+            }
+
+            // Properties
+            if (settings.Properties != null && settings.Properties.Count > 0)
+            {
+                if (settings.Properties.Values.Any(string.IsNullOrWhiteSpace))
+                {
+                    throw new CakeException("Properties values can not be null or empty.");
+                }
+
+                if (settings.Properties.Keys.Any(string.IsNullOrWhiteSpace))
+                {
+                    throw new CakeException("Properties keys can not be null or empty.");
+                }
+                builder.Append("-Properties");
+                builder.Append(string.Join(";",
+                    settings.Properties.Select(property => string.Concat(property.Key, "=", property.Value))));
             }
 
             return builder;

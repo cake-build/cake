@@ -137,5 +137,13 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// </summary>
         /// <value>The verbosity.</value>
         public NuGetVerbosity? Verbosity { get; set; }
+
+        /// <summary>
+        /// Gets or sets the properties.
+        /// </summary>
+        /// <value>
+        /// The properties.
+        /// </value>
+        public IDictionary<string, string> Properties { get; set; } 
     }
 }
