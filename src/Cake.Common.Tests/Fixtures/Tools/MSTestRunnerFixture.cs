@@ -1,17 +1,18 @@
 ﻿using Cake.Common.Tools.MSTest;
 using Cake.Core.IO;
 using Cake.Testing.Fixtures;
+using System.Collections.Generic;
 
 namespace Cake.Common.Tests.Fixtures.Tools
 {
     internal sealed class MSTestRunnerFixture : ToolFixture<MSTestSettings>
     {
-        public FilePath AssemblyPath { get; set; }
+        public IEnumerable<FilePath> AssemblyPaths { get; set; }
 
         public MSTestRunnerFixture()
             : base("mstest.exe")
         {
-            AssemblyPath = new FilePath("./Test1.dll");
+            AssemblyPaths = new FilePath[] { new FilePath("./Test1.dll") };
             Environment.SetSpecialPath(SpecialPath.ProgramFilesX86, "/ProgramFilesX86");
         }
 
@@ -23,7 +24,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         protected override void RunTool()
         {
             var tool = new MSTestRunner(FileSystem, Environment, ProcessRunner, Globber);
-            tool.Run(AssemblyPath, Settings);
+            tool.Run(AssemblyPaths, Settings);
         }
     }
 }

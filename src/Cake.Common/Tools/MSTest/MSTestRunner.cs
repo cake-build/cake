@@ -32,11 +32,11 @@ namespace Cake.Common.Tools.MSTest
         /// <summary>
         /// Runs the tests in the specified assembly.
         /// </summary>
-        /// <param name="assemblyPath">The assembly path.</param>
+        /// <param name="assemblyPaths">The assembly path.</param>
         /// <param name="settings">The settings.</param>
-        public void Run(FilePath assemblyPath, MSTestSettings settings)
+        public void Run(IEnumerable<FilePath> assemblyPaths, MSTestSettings settings)
         {
-            if (assemblyPath == null)
+            if (assemblyPaths == null)
             {
                 throw new ArgumentNullException("assemblyPath");
             }
@@ -45,15 +45,18 @@ namespace Cake.Common.Tools.MSTest
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetArguments(assemblyPath, settings));
+            Run(settings, GetArguments(assemblyPaths, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, MSTestSettings settings)
+        private ProcessArgumentBuilder GetArguments(IEnumerable<FilePath> assemblyPaths, MSTestSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
 
             // Add the assembly to build.
-            builder.Append(string.Concat("/testcontainer:", assemblyPath.MakeAbsolute(_environment).FullPath).Quote());
+            foreach (var assemblyPath in assemblyPaths)
+            {
+                builder.Append(string.Concat("/testcontainer:", assemblyPath.MakeAbsolute(_environment).FullPath).Quote());
+            }
 
             if (settings.NoIsolation)
             {
