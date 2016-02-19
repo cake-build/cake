@@ -85,7 +85,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Pack
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "DNU: Process returned an error.");
+                Assert.IsCakeException(result, "DNU: Process returned an error (exit code 1).");
             }
 
             [Fact]

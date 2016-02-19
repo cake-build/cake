@@ -17,6 +17,32 @@ namespace Cake.Common.Tools.GitReleaseManager
     public static class GitReleaseManagerAliases
     {
         /// <summary>
+        /// Creates a Package Release.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="userName">The user name.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="owner">The owner.</param>
+        /// <param name="repository">The repository.</param>
+        /// <example>
+        /// <code>
+        /// GitReleaseManagerCreate("user", "password", "owner", "repo");
+        /// </code>
+        /// </example>
+        /// <example>
+        /// <code>
+        /// GitReleaseManagerCreate("user", "password", "owner", "repo");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Create")]
+        [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Create")]
+        public static void GitReleaseManagerCreate(this ICakeContext context, string userName, string password, string owner, string repository)
+        {
+            GitReleaseManagerCreate(context, userName, password, owner, repository, new GitReleaseManagerCreateSettings());
+        }
+
+        /// <summary>
         /// Creates a Package Release using the specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -66,6 +92,29 @@ namespace Cake.Common.Tools.GitReleaseManager
         }
 
         /// <summary>
+        /// Add Assets to an existing release.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="userName">The user name.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="owner">The owner.</param>
+        /// <param name="repository">The repository.</param>
+        /// <param name="tagName">The tag name.</param>
+        /// <param name="assets">The assets.</param>
+        /// <example>
+        /// <code>
+        /// GitReleaseManagerAddAssets("user", "password", "owner", "repo", "0.1.0", "c:/temp/asset1.txt,c:/temp/asset2.txt");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("AddAssets")]
+        [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.AddAssets")]
+        public static void GitReleaseManagerAddAssets(this ICakeContext context, string userName, string password, string owner, string repository, string tagName, string assets)
+        {
+            GitReleaseManagerAddAssets(context, userName, password, owner, repository, tagName, assets, new GitReleaseManagerAddAssetsSettings());
+        }
+
+        /// <summary>
         /// Add Assets to an existing release using the specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -97,6 +146,28 @@ namespace Cake.Common.Tools.GitReleaseManager
             var resolver = new GitReleaseManagerToolResolver(context.FileSystem, context.Environment, context.Globber);
             var assetsAdder = new GitReleaseManagerAssetsAdder(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             assetsAdder.AddAssets(userName, password, owner, repository, tagName, assets, settings);
+        }
+
+        /// <summary>
+        /// Closes the milestone associated with a release.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="userName">The user name.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="owner">The owner.</param>
+        /// <param name="repository">The repository.</param>
+        /// <param name="milestone">The milestone.</param>
+        /// <example>
+        /// <code>
+        /// GitReleaseManagerClose("user", "password", "owner", "repo", "0.1.0");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Close")]
+        [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Close")]
+        public static void GitReleaseManagerClose(this ICakeContext context, string userName, string password, string owner, string repository, string milestone)
+        {
+            GitReleaseManagerClose(context, userName, password, owner, repository, milestone, new GitReleaseManagerCloseMilestoneSettings());
         }
 
         /// <summary>
@@ -133,6 +204,28 @@ namespace Cake.Common.Tools.GitReleaseManager
         }
 
         /// <summary>
+        /// Publishes the release.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="userName">The user name.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="owner">The owner.</param>
+        /// <param name="repository">The repository.</param>
+        /// <param name="tagName">The tag name.</param>
+        /// <example>
+        /// <code>
+        /// GitReleaseManagerPublish("user", "password", "owner", "repo", "0.1.0");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Publish")]
+        [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Publish")]
+        public static void GitReleaseManagerPublish(this ICakeContext context, string userName, string password, string owner, string repository, string tagName)
+        {
+            GitReleaseManagerPublish(context, userName, password, owner, repository, tagName, new GitReleaseManagerPublishSettings());
+        }
+
+        /// <summary>
         /// Publishes the release using the specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -163,6 +256,29 @@ namespace Cake.Common.Tools.GitReleaseManager
             var resolver = new GitReleaseManagerToolResolver(context.FileSystem, context.Environment, context.Globber);
             var publisher = new GitReleaseManagerPublisher(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             publisher.Publish(userName, password, owner, repository, tagName, settings);
+        }
+
+        /// <summary>
+        /// Exports the release notes.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="userName">The user name.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="owner">The owner.</param>
+        /// <param name="repository">The repository.</param>
+        /// <param name="fileOutputPath">The output file path.</param>
+        /// <example>
+        /// <code>
+        /// GitReleaseManagerExport("user", "password", "owner", "repo", "c:/temp/releasenotes.md")
+        /// });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Export")]
+        [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Export")]
+        public static void GitReleaseManagerExport(this ICakeContext context, string userName, string password, string owner, string repository, FilePath fileOutputPath)
+        {
+            GitReleaseManagerExport(context, userName, password, owner, repository, fileOutputPath, new GitReleaseManagerExportSettings());
         }
 
         /// <summary>

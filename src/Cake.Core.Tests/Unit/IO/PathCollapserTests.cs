@@ -1,4 +1,5 @@
 ﻿using Cake.Core.IO;
+using Cake.Testing.Xunit;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit.IO
@@ -36,9 +37,8 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.Equal("hello/world", path);
             }
-
-#if !UNIX
-            [Fact]
+            
+            [WindowsFact]
             public void Should_Collapse_Path_With_Windows_Root()
             {
                 // Given, When
@@ -47,7 +47,6 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.Equal("c:/hello/world", path);
             }
-#endif
 
             [Fact]
             public void Should_Collapse_Path_With_Non_Windows_Root()
@@ -58,9 +57,8 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.Equal("/hello/world", path);
             }
-
-#if !UNIX
-            [Fact]
+            
+            [WindowsFact]
             public void Should_Stop_Collapsing_When_Windows_Root_Is_Reached()
             {
                 // Given, When
@@ -69,7 +67,6 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.Equal("c:/temp", path);
             }
-#endif
 
             [Fact]
             public void Should_Stop_Collapsing_When_Root_Is_Reached()

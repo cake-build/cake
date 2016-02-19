@@ -81,6 +81,10 @@ namespace Cake.Core.Scripting
                             _log.Warning("Could not load {0} (missing {1})", reference.Location, file);
                         }
                     }
+                    catch (FileNotFoundException ex)
+                    {
+                        _log.Warning("Could not load {0} (missing {1}))", reference.Location, ex.FileName);
+                    }
                 }
             }
             return result;

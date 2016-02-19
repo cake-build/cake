@@ -24,6 +24,7 @@ var releaseNotes = ParseReleaseNotes("./ReleaseNotes.md");
 var buildNumber = AppVeyor.Environment.Build.Number;
 var version = releaseNotes.Version.ToString();
 var semVersion = local ? version : (version + string.Concat("-build-", buildNumber));
+var milestone = string.Concat("v", version);
 
 // Define directories.
 var buildDir = Directory("./src/Cake/bin") + Directory(configuration);
@@ -31,6 +32,8 @@ var buildResultDir = Directory("./build") + Directory("v" + semVersion);
 var testResultsDir = buildResultDir + Directory("test-results");
 var nugetRoot = buildResultDir + Directory("nuget");
 var binDir = buildResultDir + Directory("bin");
+var userName = EnvironmentVariable("CAKE_GITHUB_USERNAME");
+var password = EnvironmentVariable("CAKE_GITHUB_PASSWORD");
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -123,6 +126,9 @@ Task("Copy-Files")
     CopyFileToDirectory(buildDir + File("Cake.Core.dll"), binDir);
     CopyFileToDirectory(buildDir + File("Cake.Core.pdb"), binDir);
     CopyFileToDirectory(buildDir + File("Cake.Core.xml"), binDir);
+    CopyFileToDirectory(buildDir + File("Cake.NuGet.dll"), binDir);
+    CopyFileToDirectory(buildDir + File("Cake.NuGet.pdb"), binDir);
+    CopyFileToDirectory(buildDir + File("Cake.NuGet.xml"), binDir);
     CopyFileToDirectory(buildDir + File("Cake.Common.dll"), binDir);
     CopyFileToDirectory(buildDir + File("Cake.Common.pdb"), binDir);
     CopyFileToDirectory(buildDir + File("Cake.Common.xml"), binDir);
@@ -167,6 +173,8 @@ Task("Create-Chocolatey-Packages")
             new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.exe")},
             new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Core.dll")},
             new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Core.xml")},
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.NuGet.dll")},
+            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.NuGet.xml")},
             new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Common.dll")},
             new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Common.xml")},
             new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/NuGet.Core.dll")},
@@ -310,21 +318,30 @@ Task("Publish-HomeBrew")
     .IsDependentOn("Zip-Files")
 	.Does(() =>
 {
-    var packageFile = File("Cake-bin-v" + semVersion + ".zip");	
+    var packageFile = File("Cake-bin-v" + semVersion + ".zip");
     var packagePath = buildResultDir + packageFile;
-	
+
     var hash = CalculateFileHash(packagePath).ToHex();
-	
+
     Information("Hash for creating HomeBrew PullRequest: {0}", hash);
+});
+
+Task("Publish-GitHub-Release")
+    .Does(() =>
+{
+    var packageFile = File("Cake-bin-v" + semVersion + ".zip");
+    var packagePath = buildResultDir + packageFile;
+
+    GitReleaseManagerAddAssets(userName, password, "cake-build", "cake", milestone, packagePath.ToString());
+
+    GitReleaseManagerPublish(userName, password, "cake-build", "cake", milestone);
+
+    GitReleaseManagerClose(userName, password, "cake-build", "cake", milestone);
 });
 
 Task("Create-Release-Notes")
   .Does(() =>
 {
-    var userName = EnvironmentVariable("CAKE_GITHUB_USERNAME");
-    var password = EnvironmentVariable("CAKE_GITHUB_PASSWORD");
-    var milestone = string.Concat("v", version);
-
     GitReleaseManagerCreate(userName, password, "cake-build", "cake", new GitReleaseManagerCreateSettings {
         Milestone         = milestone,
         Name              = milestone,
@@ -347,7 +364,8 @@ Task("Default")
 Task("Publish")
   .IsDependentOn("Publish-NuGet")
   .IsDependentOn("Publish-Chocolatey")
-  .IsDependentOn("Publish-HomeBrew");
+  .IsDependentOn("Publish-HomeBrew")
+  .IsDependentOn("Publish-GitHub-Release");
 
 Task("AppVeyor")
   .IsDependentOn("Update-AppVeyor-Build-Number")

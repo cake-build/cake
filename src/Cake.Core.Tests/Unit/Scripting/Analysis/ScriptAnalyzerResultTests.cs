@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Cake.Core.IO.NuGet;
+using Cake.Core.Packaging;
 using Cake.Core.Scripting.Analysis;
 using Xunit;
 
@@ -71,9 +71,9 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
             {
                 // Given
                 var script = new ScriptInformation("./build.cake");
-                script.Addins.Add(new NuGetPackage("First.Package"));
+                script.Addins.Add(new PackageReference("nuget:?package=First.Package"));
                 var other = new ScriptInformation("./other.cake");
-                other.Addins.Add(new NuGetPackage("Second.Package"));
+                other.Addins.Add(new PackageReference("nuget:?package=Second.Package"));
                 script.Includes.Add(other);
 
                 // When
@@ -81,8 +81,8 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
 
                 // Then
                 Assert.Equal(2, result.Addins.Count);
-                Assert.Contains(result.Addins, package => package.PackageId == "First.Package");
-                Assert.Contains(result.Addins, package => package.PackageId == "Second.Package");
+                Assert.Contains(result.Addins, package => package.OriginalString == "nuget:?package=First.Package");
+                Assert.Contains(result.Addins, package => package.OriginalString == "nuget:?package=Second.Package");
             }
 
             [Fact]
@@ -90,9 +90,9 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
             {
                 // Given
                 var script = new ScriptInformation("./build.cake");
-                script.Tools.Add(new NuGetPackage("First.Package"));
+                script.Tools.Add(new PackageReference("nuget:?package=First.Package"));
                 var other = new ScriptInformation("./other.cake");
-                other.Tools.Add(new NuGetPackage("Second.Package"));
+                other.Tools.Add(new PackageReference("nuget:?package=Second.Package"));
                 script.Includes.Add(other);
 
                 // When
@@ -100,8 +100,8 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
 
                 // Then
                 Assert.Equal(2, result.Tools.Count);
-                Assert.Contains(result.Tools, package => package.PackageId == "First.Package");
-                Assert.Contains(result.Tools, package => package.PackageId == "Second.Package");
+                Assert.Contains(result.Tools, package => package.OriginalString == "nuget:?package=First.Package");
+                Assert.Contains(result.Tools, package => package.OriginalString == "nuget:?package=Second.Package");
             }
         }
     }

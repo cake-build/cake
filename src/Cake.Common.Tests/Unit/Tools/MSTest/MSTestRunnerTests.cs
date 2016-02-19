@@ -146,7 +146,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
 
             // Then
             Assert.IsType<CakeException>(result);
-            Assert.Equal("MSTest: Process returned an error.", result.Message);
+            Assert.Equal("MSTest: Process returned an error (exit code 1).", result.Message);
         }
 
         [Fact]

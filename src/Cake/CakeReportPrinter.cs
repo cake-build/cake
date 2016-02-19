@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 
 namespace Cake
 {
     internal sealed class CakeReportPrinter : ICakeReportPrinter
     {
         private readonly IConsole _console;
+        private readonly ICakeContext _context;
 
-        public CakeReportPrinter(IConsole console)
+        public CakeReportPrinter(IConsole console, ICakeContext context)
         {
+            _context = context;
             _console = console;
         }
 
@@ -21,7 +24,7 @@ namespace Cake
             {
                 throw new ArgumentNullException("report");
             }
-
+            
             try
             {
                 var maxTaskNameLength = 29;
@@ -45,10 +48,15 @@ namespace Cake
                 // Write task status.
                 foreach (var item in report)
                 {
-                    _console.WriteLine(lineFormat, item.TaskName, FormatTime(item.Duration));
+                    if (ShouldWriteTask(item))
+                    {
+                        _console.ForegroundColor = GetItemForegroundColor(item);
+                        _console.WriteLine(lineFormat, item.TaskName, FormatDuration(item));
+                    }
                 }
 
                 // Write footer.
+                _console.ForegroundColor = ConsoleColor.Green;
                 _console.WriteLine(new string('-', 20 + maxTaskNameLength));
                 _console.WriteLine(lineFormat, "Total:", FormatTime(GetTotalTime(report)));
             }
@@ -56,6 +64,31 @@ namespace Cake
             {
                 _console.ResetColor();
             }
+        }
+
+        private bool ShouldWriteTask(CakeReportEntry item)
+        {
+            if (item.ExecutionStatus == CakeTaskExecutionStatus.Delegated)
+            {
+                return _context.Log.Verbosity >= Verbosity.Verbose;
+            }
+
+            return true;
+        }
+
+        private static string FormatDuration(CakeReportEntry item)
+        {
+            if (item.ExecutionStatus == CakeTaskExecutionStatus.Skipped)
+            { 
+                return "Skipped";
+            }
+            
+            return FormatTime(item.Duration);
+        }
+
+        private static ConsoleColor GetItemForegroundColor(CakeReportEntry item)
+        {
+            return item.ExecutionStatus == CakeTaskExecutionStatus.Executed ? ConsoleColor.Green : ConsoleColor.Gray;
         }
 
         private static string FormatTime(TimeSpan time)

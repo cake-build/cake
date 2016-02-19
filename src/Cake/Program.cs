@@ -7,7 +7,7 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
-using Cake.Core.IO.NuGet.Parsing;
+using Cake.Core.Packaging;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.Analysis;
 using Cake.Diagnostics;
@@ -73,16 +73,19 @@ namespace Cake
             builder.RegisterType<ScriptProcessor>().As<IScriptProcessor>().SingleInstance();
             builder.RegisterType<ScriptConventions>().As<IScriptConventions>().SingleInstance();
             builder.RegisterType<NuGetToolResolver>().As<INuGetToolResolver>().SingleInstance();
-            builder.RegisterType<NuGetPackageInstaller>().As<INuGetPackageInstaller>().SingleInstance();
             builder.RegisterType<WindowsRegistry>().As<IRegistry>().SingleInstance();
             builder.RegisterType<CakeContext>().As<ICakeContext>().SingleInstance();
 
             // NuGet addins support
             builder.RegisterType<NuGetVersionUtilityAdapter>().As<INuGetFrameworkCompatibilityFilter>().As<IFrameworkNameParser>().SingleInstance();
             builder.RegisterType<NuGetPackageAssembliesLocator>().As<INuGetPackageAssembliesLocator>().SingleInstance();
-            builder.RegisterType<PackageReferenceBundler>().As<IPackageReferenceBundler>().SingleInstance();
+            builder.RegisterType<NuGetPackageReferenceBundler>().As<INuGetPackageReferenceBundler>().SingleInstance();
             builder.RegisterType<NuGetAssemblyCompatibilityFilter>().As<INuGetAssemblyCompatibilityFilter>().SingleInstance();
-            builder.RegisterType<AssemblyFilePathFrameworkNameParser>().As<IAssemblyFilePathFrameworkNameParser>().SingleInstance();
+            builder.RegisterType<AssemblyFrameworkNameParser>().As<IAssemblyFrameworkNameParser>().SingleInstance();
+
+            // URI resource support.
+            builder.RegisterType<NuGetPackageInstaller>().As<IPackageInstaller>().SingleInstance();
+            builder.RegisterType<NuGetPackageContentResolver>().As<INuGetPackageContentResolver>().SingleInstance();
 
             if (mono)
             {
