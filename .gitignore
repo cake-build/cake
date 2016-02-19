@@ -15,6 +15,9 @@ tools/xunit.runner.console/
 tools/nuget.exe
 tools/gitreleasemanager/
 
+# Integration tests
+integration/tools
+
 # mstest test results
 TestResults
 
