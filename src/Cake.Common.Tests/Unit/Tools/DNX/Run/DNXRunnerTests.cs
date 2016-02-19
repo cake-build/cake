@@ -113,7 +113,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNX.Run
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "DNX: Process returned an error.");
+                Assert.IsCakeException(result, "DNX: Process returned an error (exit code 1).");
             }
 
             [Fact]

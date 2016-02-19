@@ -75,7 +75,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNVM.Use
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "DNVM: Process returned an error.");
+                Assert.IsCakeException(result, "DNVM: Process returned an error (exit code 1).");
             }
 
             [Fact]
