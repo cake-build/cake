@@ -111,10 +111,7 @@ namespace Cake.Common.Tools.XUnit
             }
 
             var runner = new XUnitRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
-            foreach (var assembly in assemblies)
-            {
-                runner.Run(assembly, settings);
-            }
+            runner.Run(assemblies, settings);
         }
     }
 }
