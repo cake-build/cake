@@ -165,6 +165,14 @@
     <Compile Include="Tools\DNU\Restore\DNULocked.cs" />
     <Compile Include="Tools\DNU\Restore\DNURestorer.cs" />
     <Compile Include="Tools\DNU\Restore\DNURestoreSettings.cs" />
+    <Compile Include="Tools\DotCover\Analyse\DotCoverAnalyseSettings.cs" />
+    <Compile Include="Tools\DotCover\Analyse\DotCoverAnalyseSettingsExtensions.cs" />
+    <Compile Include="Tools\DotCover\Analyse\DotCoverAnalyser.cs" />
+    <Compile Include="Tools\DotCover\DotCoverReportType.cs" />
+    <Compile Include="Tools\DotCover\DotCoverContext.cs" />
+    <Compile Include="Tools\DotCover\DotCoverProcessRunner.cs" />
+    <Compile Include="Tools\DotCover\DotCoverAliases.cs" />
+    <Compile Include="Tools\DotCover\DotCoverTool.cs" />
     <Compile Include="Tools\DupFinder\DupFinderAliases.cs" />
     <Compile Include="Tools\DupFinder\DupFinderRunner.cs" />
     <Compile Include="Tools\DupFinder\DupFinderSettings.cs" />
