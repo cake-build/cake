@@ -134,7 +134,7 @@ Task("Copy-Files")
     CopyFileToDirectory(buildDir + File("Cake.Common.xml"), binDir);
     CopyFileToDirectory(buildDir + File("Mono.CSharp.dll"), binDir);
     CopyFileToDirectory(buildDir + File("Autofac.dll"), binDir);
-    CopyFileToDirectory(buildDir + File("Nuget.Core.dll"), binDir);
+    CopyFileToDirectory(buildDir + File("NuGet.Core.dll"), binDir);
 
     // Copy testing assemblies.
     var testingDir = Directory("./src/Cake.Testing/bin") + Directory(configuration);
