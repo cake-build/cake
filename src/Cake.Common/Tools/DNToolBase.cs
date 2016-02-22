@@ -96,8 +96,8 @@ namespace Cake.Common.Tools
                 builder.Append("-ExecutionPolicy");
                 builder.Append("unrestricted");
 
-                builder.Append("-Command \"");
-                builder.Append(dnvmScript.FullPath);
+                builder.Append("-File");
+                builder.AppendQuoted(dnvmScript.FullPath);
             }
 
             // Add dnvm arguments to 
@@ -115,20 +115,6 @@ namespace Cake.Common.Tools
                 builder.Append("-r");
                 builder.Append(settings.Runtime.Value.ToString());
             }
-        }
-
-        /// <summary>
-        /// Gets the end dnvm arguments to be injected in the command line
-        /// </summary>
-        /// <param name="builder">The builder to be used</param>
-        protected virtual void GetEndDNVMArguments(ProcessArgumentBuilder builder)
-        {
-            if (_environment.IsUnix())
-            {
-                return;
-            }
-
-            builder.Append("\"");
         }
     }
 }

@@ -89,7 +89,6 @@ namespace Cake.Common.Tools.DNU.Pack
                 builder.Append("--quiet");
             }
 
-            GetEndDNVMArguments(builder);
             return builder;
         }
     }
