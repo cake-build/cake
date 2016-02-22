@@ -389,7 +389,8 @@ Task("Publish-GitHub-Release")
 });
 
 Task("Create-Release-Notes")
-  .Does(() =>
+    .IsDependentOn("Run-GitVersion")
+    .Does(() =>
 {
     GitReleaseManagerCreate(userName, password, "cake-build", "cake", new GitReleaseManagerCreateSettings {
         Milestone         = milestone,
