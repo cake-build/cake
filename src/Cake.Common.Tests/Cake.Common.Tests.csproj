@@ -109,6 +109,7 @@
     <Compile Include="Fixtures\Tools\GitReleaseNotesRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\ILMergeRunnerFixture.cs" />
     <Compile Include="Fixtures\Diagnostics\LogActionFixture.cs" />
+    <Compile Include="Fixtures\Tools\ILRepackRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\InspectCode\InspectCodeFixture.cs" />
     <Compile Include="Fixtures\Tools\InspectCode\InspectCodeRunFixture.cs" />
     <Compile Include="Fixtures\Tools\InspectCode\InspectCodeRunFromConfigFixture.cs" />
@@ -223,6 +224,8 @@
     <Compile Include="Unit\IO\ZipperTests.cs" />
     <Compile Include="Unit\IO\DirectoryAliasesTests.cs" />
     <Compile Include="Unit\IO\FileAliasesTests.cs" />
+    <Compile Include="Unit\Tools\ILRepack\ILRepackRunnerTests.cs" />
+    <Compile Include="Unit\Tools\ILRepack\ILRepackSettingsTests.cs" />
     <Compile Include="Unit\Tools\InspectCode\InspectCodeRunnerTests.cs" />
     <Compile Include="Unit\Tools\DotNetBuildSettingsExtensionsTests.cs" />
     <Compile Include="Unit\Tools\DotNetBuildSettingsTests.cs" />
