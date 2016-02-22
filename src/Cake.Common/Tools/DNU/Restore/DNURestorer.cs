@@ -129,6 +129,7 @@ namespace Cake.Common.Tools.DNU.Restore
                 builder.AppendQuoted(string.Join(";", settings.Runtimes));
             }
 
+            GetEndDNVMArguments(builder);
             return builder;
         }
     }

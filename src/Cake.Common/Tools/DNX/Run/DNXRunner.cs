@@ -102,6 +102,8 @@ namespace Cake.Common.Tools.DNX.Run
             }
 
             arguments.Append(command);
+
+            GetEndDNVMArguments(arguments);
             return arguments;
         }
     }

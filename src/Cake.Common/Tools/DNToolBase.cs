@@ -48,7 +48,7 @@ namespace Cake.Common.Tools
             }
             else
             {
-                return new[] { "dnvm.cmd" };
+                return new[] { "powershell.exe" };
             }
         }
 
@@ -85,6 +85,21 @@ namespace Cake.Common.Tools
                 throw new CakeException("The settings \"Version\" must be set");
             }
 
+            if (!_environment.IsUnix())
+            {
+                // Locate the dnvm.ps1 script
+                var dnvmScript = this.GetToolPath(null, Enumerable.Empty<FilePath>(), new string[] { "dnvm.ps1" });
+
+                // Wrap the command to a powershell
+                builder.Append("-NoProfile");
+                builder.Append("-NoLogo");
+                builder.Append("-ExecutionPolicy");
+                builder.Append("unrestricted");
+
+                builder.Append("-Command \"");
+                builder.Append(dnvmScript.FullPath);
+            }
+
             // Add dnvm arguments to 
             builder.Append(command);
             builder.Append(settings.Version);
@@ -100,6 +115,20 @@ namespace Cake.Common.Tools
                 builder.Append("-r");
                 builder.Append(settings.Runtime.Value.ToString());
             }
+        }
+
+        /// <summary>
+        /// Gets the end dnvm arguments to be injected in the command line
+        /// </summary>
+        /// <param name="builder">The builder to be used</param>
+        protected virtual void GetEndDNVMArguments(ProcessArgumentBuilder builder)
+        {
+            if (_environment.IsUnix())
+            {
+                return;
+            }
+
+            builder.Append("\"");
         }
     }
 }

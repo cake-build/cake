@@ -209,15 +209,33 @@ namespace Cake.Core.Tooling
             return Enumerable.Empty<FilePath>();
         }
 
-        private FilePath GetToolPath(TSettings settings)
+        /// <summary>
+        /// Gets the tool path
+        /// </summary>
+        /// <param name="settings">The settings</param>
+        /// <returns>The full path to the tool</returns>
+        protected virtual FilePath GetToolPath(TSettings settings)
         {
-            var toolPath = settings.ToolPath;
+            var alternativePaths = GetAlternativeToolPaths(settings) ?? Enumerable.Empty<FilePath>();
+            var toolExeNames = GetToolExecutableNames();
+
+            return this.GetToolPath(settings.ToolPath, alternativePaths, toolExeNames);
+        }
+
+        /// <summary>
+        /// Gets the tool path
+        /// </summary>
+        /// <param name="toolPath">The tool path to be used</param>
+        /// <param name="alternativePaths">The alternatives paths to be used to look for the tools</param>
+        /// <param name="toolExeNames">The exe names to be looked for</param>
+        /// <returns>The full path to the tool</returns>
+        protected virtual FilePath GetToolPath(FilePath toolPath, IEnumerable<FilePath> alternativePaths, IEnumerable<string> toolExeNames)
+        {
             if (toolPath != null)
             {
                 return toolPath.MakeAbsolute(_environment);
             }
 
-            var toolExeNames = GetToolExecutableNames();
             IEnumerable<string> pathDirs = null;
 
             // Look for each possible executable name in various places.
@@ -257,7 +275,6 @@ namespace Cake.Core.Tooling
             }
 
             // Look through all the alternative directories for the tool.
-            var alternativePaths = GetAlternativeToolPaths(settings) ?? Enumerable.Empty<FilePath>();
             foreach (var altPath in alternativePaths)
             {
                 if (_fileSystem.Exist(altPath))
