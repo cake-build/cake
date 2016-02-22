@@ -43,7 +43,7 @@ namespace Cake.Common.Tools.DNU
         /// <returns>The tool executable name.</returns>
         protected override IEnumerable<string> GetToolExecutableNames()
         {
-            return new[] { "dnu.cmd" };
+            return new[] { "dnu.cmd", "dnu" };
         }
     }
 }
