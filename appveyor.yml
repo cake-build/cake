@@ -15,8 +15,8 @@ branches:
   only:
     - develop
     - main
-    - r/.*
-    - release/.*
+    - /r/.*/
+    - /release/.*/
 
 # Build cache
 cache:
