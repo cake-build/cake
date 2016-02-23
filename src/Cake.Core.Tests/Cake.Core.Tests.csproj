@@ -73,8 +73,10 @@
     <Compile Include="Unit\Annotations\CakePropertyAliasAttributeTests.cs" />
     <Compile Include="Unit\CakeContextTests.cs" />
     <Compile Include="Unit\CakeEngineTests.cs" />
+    <Compile Include="Unit\CakeReportTests.cs" />
     <Compile Include="Unit\CakeTaskBuilderExtensionsTests.cs" />
     <Compile Include="Unit\CakeTaskBuilderTests.cs" />
+    <Compile Include="Unit\CakeTaskExtensionsTests.cs" />
     <Compile Include="Unit\CakeTaskTests.cs" />
     <Compile Include="Unit\Diagnostics\LogExtensionsTests.cs" />
     <Compile Include="Fixtures\CakeEngineFixture.cs" />

@@ -22,8 +22,10 @@ var releaseNotes = ParseReleaseNotes("./ReleaseNotes.md");
 
 // Get version.
 var buildNumber = AppVeyor.Environment.Build.Number;
+GitVersion assertedVersions        = null;
 var version = releaseNotes.Version.ToString();
 var semVersion = local ? version : (version + string.Concat("-build-", buildNumber));
+var milestone = string.Concat("v", version);
 
 // Define directories.
 var buildDir = Directory("./src/Cake/bin") + Directory(configuration);
@@ -31,6 +33,8 @@ var buildResultDir = Directory("./build") + Directory("v" + semVersion);
 var testResultsDir = buildResultDir + Directory("test-results");
 var nugetRoot = buildResultDir + Directory("nuget");
 var binDir = buildResultDir + Directory("bin");
+var userName = EnvironmentVariable("CAKE_GITHUB_USERNAME");
+var password = EnvironmentVariable("CAKE_GITHUB_PASSWORD");
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -76,6 +80,53 @@ Task("Patch-Assembly-Info")
         InformationalVersion = semVersion,
         Copyright = "Copyright (c) Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors"
     });
+});
+
+
+Task("Run-GitVersion-AppVeyor")
+    .WithCriteria(AppVeyor.IsRunningOnAppVeyor)
+    .Does(() =>
+{
+    GitVersion(new GitVersionSettings {
+        UpdateAssemblyInfoFilePath = "./src/SolutionInfo.cs",
+        UpdateAssemblyInfo = true,
+        OutputType = GitVersionOutput.BuildServer
+    });
+
+    version = EnvironmentVariable("GitVersion_MajorMinorPatch");
+    semVersion = EnvironmentVariable("GitVersion_LegacySemVerPadded");
+    milestone = string.Concat("v", version);
+
+    // Due to the way that GitVersion is executed on AppVeyor, the Environment Variables although populated
+    // are not accessible yet, so have to run GitVersion again, using OutputType of JSON
+    if(string.IsNullOrEmpty(semVersion))
+    {
+        assertedVersions = GitVersion(new GitVersionSettings {
+            OutputType = GitVersionOutput.Json,
+        });
+
+        version = assertedVersions.MajorMinorPatch;
+        semVersion = assertedVersions.LegacySemVerPadded;
+        milestone = string.Concat("v", version);
+    }
+
+    Information("Calculated Semantic Version: {0}", semVersion);
+});
+
+Task("Run-GitVersion-Local")
+    .WithCriteria(!AppVeyor.IsRunningOnAppVeyor)
+    .WithCriteria(isRunningOnWindows)
+    .Does(() =>
+{
+    assertedVersions = GitVersion(new GitVersionSettings {
+        OutputType = GitVersionOutput.Json,
+    });
+
+    version = assertedVersions.MajorMinorPatch;
+    semVersion = assertedVersions.LegacySemVerPadded;
+    milestone = string.Concat("v", version);
+
+    Information("Calculated Semantic Version: {0}", semVersion);
 });
 
 Task("Build")
@@ -131,7 +182,7 @@ Task("Copy-Files")
     CopyFileToDirectory(buildDir + File("Cake.Common.xml"), binDir);
     CopyFileToDirectory(buildDir + File("Mono.CSharp.dll"), binDir);
     CopyFileToDirectory(buildDir + File("Autofac.dll"), binDir);
-    CopyFileToDirectory(buildDir + File("Nuget.Core.dll"), binDir);
+    CopyFileToDirectory(buildDir + File("NuGet.Core.dll"), binDir);
 
     // Copy testing assemblies.
     var testingDir = Directory("./src/Cake.Testing/bin") + Directory(configuration);
@@ -266,9 +317,9 @@ Task("Publish-MyGet")
 });
 
 Task("Publish-NuGet")
-  .IsDependentOn("Create-NuGet-Packages")
-  .WithCriteria(() => local)
-  .Does(() =>
+    .IsDependentOn("Create-NuGet-Packages")
+    .WithCriteria(() => local)
+    .Does(() =>
 {
     // Resolve the API key.
     var apiKey = EnvironmentVariable("NUGET_API_KEY");
@@ -289,9 +340,9 @@ Task("Publish-NuGet")
 });
 
 Task("Publish-Chocolatey")
-  .IsDependentOn("Create-Chocolatey-Packages")
-  .WithCriteria(() => local)
-  .Does(() =>
+    .IsDependentOn("Create-Chocolatey-Packages")
+    .WithCriteria(() => local)
+    .Does(() =>
 {
     // Resolve the API key.
     var apiKey = EnvironmentVariable("CHOCOLATEY_API_KEY");
@@ -323,13 +374,22 @@ Task("Publish-HomeBrew")
     Information("Hash for creating HomeBrew PullRequest: {0}", hash);
 });
 
-Task("Create-Release-Notes")
-  .Does(() =>
+Task("Publish-GitHub-Release")
+    .Does(() =>
 {
-    var userName = EnvironmentVariable("CAKE_GITHUB_USERNAME");
-    var password = EnvironmentVariable("CAKE_GITHUB_PASSWORD");
-    var milestone = string.Concat("v", version);
+    var packageFile = File("Cake-bin-v" + semVersion + ".zip");
+    var packagePath = buildResultDir + packageFile;
 
+    GitReleaseManagerAddAssets(userName, password, "cake-build", "cake", milestone, packagePath.ToString());
+
+    GitReleaseManagerPublish(userName, password, "cake-build", "cake", milestone);
+
+    GitReleaseManagerClose(userName, password, "cake-build", "cake", milestone);
+});
+
+Task("Create-Release-Notes")
+    .Does(() =>
+{
     GitReleaseManagerCreate(userName, password, "cake-build", "cake", new GitReleaseManagerCreateSettings {
         Milestone         = milestone,
         Name              = milestone,
@@ -352,7 +412,8 @@ Task("Default")
 Task("Publish")
   .IsDependentOn("Publish-NuGet")
   .IsDependentOn("Publish-Chocolatey")
-  .IsDependentOn("Publish-HomeBrew");
+  .IsDependentOn("Publish-HomeBrew")
+  .IsDependentOn("Publish-GitHub-Release");
 
 Task("AppVeyor")
   .IsDependentOn("Update-AppVeyor-Build-Number")

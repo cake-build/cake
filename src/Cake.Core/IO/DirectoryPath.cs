@@ -151,5 +151,30 @@ namespace Cake.Core.IO
         {
             return new DirectoryPath(path);
         }
+
+        /// <summary>
+        /// Get the relative path to another directory.
+        /// </summary>
+        /// <param name="to">The target directory path.</param>
+        /// <returns>A <see cref="DirectoryPath"/>.</returns>
+        public DirectoryPath GetRelativePath(DirectoryPath to)
+        {
+            return RelativePathResolver.Resolve(this, to);
+        }
+
+        /// <summary>
+        /// Get the relative path to another file.
+        /// </summary>
+        /// <param name="to">The target file path.</param>
+        /// <returns>A <see cref="FilePath"/>.</returns>
+        public FilePath GetRelativePath(FilePath to)
+        {
+            if (to == null)
+            {
+                throw new ArgumentNullException("to");
+            }
+
+            return GetRelativePath(to.GetDirectory()).GetFilePath(to.GetFilename());
+        }
     }
 }

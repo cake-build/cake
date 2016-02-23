@@ -1,6 +1,7 @@
 ﻿using System;
 using Cake.Common.Build.AppVeyor;
 using Cake.Common.Build.Bamboo;
+using Cake.Common.Build.ContinuaCI;
 using Cake.Common.Build.MyGet;
 using Cake.Common.Build.TeamCity;
 
@@ -16,6 +17,7 @@ namespace Cake.Common.Build
         private readonly ITeamCityProvider _teamCityProvider;
         private readonly IMyGetProvider _myGetProvider;
         private readonly IBambooProvider _bambooProvider;
+        private readonly IContinuaCIProvider _continuaCIProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BuildSystem"/> class.
@@ -24,7 +26,8 @@ namespace Cake.Common.Build
         /// <param name="teamCityProvider">The TeamCity Provider.</param>
         /// <param name="myGetProvider">The MyGet Provider.</param>
         /// <param name="bambooProvider">The Bamboo Provider.</param>
-        public BuildSystem(IAppVeyorProvider appVeyorProvider, ITeamCityProvider teamCityProvider, IMyGetProvider myGetProvider, IBambooProvider bambooProvider)
+        /// <param name="continuaCIProvider">The Continua CI Provider.</param>
+        public BuildSystem(IAppVeyorProvider appVeyorProvider, ITeamCityProvider teamCityProvider, IMyGetProvider myGetProvider, IBambooProvider bambooProvider, IContinuaCIProvider continuaCIProvider)
         {
             if (appVeyorProvider == null)
             {
@@ -42,11 +45,16 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("bambooProvider");
             }
+            if (continuaCIProvider == null)
+            {
+                throw new ArgumentNullException("continuaCIProvider");
+            }
 
             _appVeyorProvider = appVeyorProvider;
             _teamCityProvider = teamCityProvider;
             _myGetProvider = myGetProvider;
             _bambooProvider = bambooProvider;
+            _continuaCIProvider = continuaCIProvider;
         }
 
         /// <summary>
@@ -200,6 +208,45 @@ namespace Cake.Common.Build
         }
 
         /// <summary>
+        /// Gets a value indicating whether the current build is running on Continua CI.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnContinuaCI)
+        /// {
+        ///     // Get the build version.
+        ///     var buildVersion = BuildSystem.ContinuaCI.Environment.Build.Version;
+        ///
+        /// }
+        /// </code>
+        /// </example>
+        /// <value>
+        /// <c>true</c> if the build currently is running on Continua CI; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsRunningOnContinuaCI
+        {
+            get { return _continuaCIProvider.IsRunningOnContinuaCI; }
+        }
+
+        /// <summary>
+        /// Gets the Continua CI Provider.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnContinuaCI)
+        /// {
+        ///     //Get the Continua CI Project Name
+        ///     var projectName = BuildSystem.ContinuaCI.Environment.Project.Name
+        ///
+        /// }
+        /// </code>
+        /// </example>
+        public IContinuaCIProvider ContinuaCI
+        {
+            get { return _continuaCIProvider; }
+        }
+        
+        /// <summary>
         /// Gets a value indicating whether the current build is local build.
         /// </summary>
         /// <example>
@@ -220,7 +267,7 @@ namespace Cake.Common.Build
         /// </value>
         public bool IsLocalBuild
         {
-            get { return !(IsRunningOnAppVeyor || IsRunningOnTeamCity || IsRunningOnMyGet || IsRunningOnBamboo); }
+            get { return !(IsRunningOnAppVeyor || IsRunningOnTeamCity || IsRunningOnMyGet || IsRunningOnBamboo || IsRunningOnContinuaCI); }
         }
     }
 }

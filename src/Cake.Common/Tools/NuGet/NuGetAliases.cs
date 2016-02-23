@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cake.Common.Tools.NuGet.Install;
 using Cake.Common.Tools.NuGet.Pack;
 using Cake.Common.Tools.NuGet.Push;
@@ -21,10 +22,10 @@ namespace Cake.Common.Tools.NuGet
     public static class NuGetAliases
     {
         /// <summary>
-        /// Creates a NuGet package using the specified Nuspec file.
+        /// Creates a NuGet package using the specified Nuspec or project file.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="nuspecFilePath">The nuspec file path.</param>
+        /// <param name="filePath">The nuspec or project file path.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
@@ -58,7 +59,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeMethodAlias]
         [CakeAliasCategory("Pack")]
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Pack")]
-        public static void NuGetPack(this ICakeContext context, FilePath nuspecFilePath, NuGetPackSettings settings)
+        public static void NuGetPack(this ICakeContext context, FilePath filePath, NuGetPackSettings settings)
         {
             if (context == null)
             {
@@ -67,7 +68,59 @@ namespace Cake.Common.Tools.NuGet
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Globber);
             var packer = new NuGetPacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Log, context.Globber, resolver);
-            packer.Pack(nuspecFilePath, settings);
+            packer.Pack(filePath, settings);
+        }
+
+        /// <summary>
+        /// Creates NuGet packages using the specified Nuspec or project files.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="filePaths">The nuspec or project file paths.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        ///     var nuGetPackSettings   = new NuGetPackSettings {
+        ///                                     Id                      = "TestNuget",
+        ///                                     Version                 = "0.0.0.1",
+        ///                                     Title                   = "The tile of the package",
+        ///                                     Authors                 = new[] {"John Doe"},
+        ///                                     Owners                  = new[] {"Contoso"},
+        ///                                     Description             = "The description of the package",
+        ///                                     Summary                 = "Excellent summary of what the package does",
+        ///                                     ProjectUrl              = new Uri("https://github.com/SomeUser/TestNuget/"),
+        ///                                     IconUrl                 = new Uri("http://cdn.rawgit.com/SomeUser/TestNuget/master/icons/testnuget.png"),
+        ///                                     LicenseUrl              = new Uri("https://github.com/SomeUser/TestNuget/blob/master/LICENSE.md"),
+        ///                                     Copyright               = "Some company 2015",
+        ///                                     ReleaseNotes            = new [] {"Bug fixes", "Issue fixes", "Typos"},
+        ///                                     Tags                    = new [] {"Cake", "Script", "Build"},
+        ///                                     RequireLicenseAcceptance= false,
+        ///                                     Symbols                 = false,
+        ///                                     NoPackageAnalysis       = true,
+        ///                                     Files                   = new [] {
+        ///                                                                          new NuSpecContent {Source = "bin/TestNuget.dll", Target = "bin"},
+        ///                                                                       },
+        ///                                     BasePath                = "./src/TestNuget/bin/release",
+        ///                                     OutputDirectory         = "./nuget"
+        ///                                 };
+        ///
+        ///     var nuspecFiles = GetFiles("./**/*.nuspec");
+        ///     NuGetPack(nuspecFiles, nuGetPackSettings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Pack")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Pack")]
+        public static void NuGetPack(this ICakeContext context, IEnumerable<FilePath> filePaths, NuGetPackSettings settings)
+        {
+            if (filePaths == null)
+            {
+                throw new ArgumentNullException("filePaths");
+            }
+
+            foreach (var filePath in filePaths)
+            {
+                NuGetPack(context, filePath, settings);
+            }
         }
 
         /// <summary>
@@ -145,6 +198,26 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
+        /// Restores NuGet packages for the specified targets.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="targetFilePaths">The targets to restore.</param>
+        /// <example>
+        /// <code>
+        ///     var solutions = GetFiles("./**/*.sln");
+        ///     NuGetRestore(solutions);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Restore")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Restore")]
+        public static void NuGetRestore(this ICakeContext context, IEnumerable<FilePath> targetFilePaths)
+        {
+            var settings = new NuGetRestoreSettings();
+            NuGetRestore(context, targetFilePaths, settings);
+        }
+
+        /// <summary>
         /// Restores NuGet packages using the specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -174,6 +247,34 @@ namespace Cake.Common.Tools.NuGet
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Globber);
             var runner = new NuGetRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             runner.Restore(targetFilePath, settings);
+        }
+
+        /// <summary>
+        /// Restores NuGet packages using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="targetFilePaths">The targets to restore.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        ///     var solutions = GetFiles("./**/*.sln");
+        ///     NuGetRestore(solutions, new NuGetRestoreSettings { NoCache = true });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Restore")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Restore")]
+        public static void NuGetRestore(this ICakeContext context, IEnumerable<FilePath> targetFilePaths, NuGetRestoreSettings settings)
+        {
+            if (targetFilePaths == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            foreach (var targetFilePath in targetFilePaths)
+            {
+                NuGetRestore(context, targetFilePath, settings);
+            }
         }
 
         /// <summary>
@@ -207,6 +308,40 @@ namespace Cake.Common.Tools.NuGet
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Globber);
             var packer = new NuGetPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             packer.Push(packageFilePath, settings);
+        }
+
+        /// <summary>
+        /// Pushes NuGet packages to a NuGet server and publishes them.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageFilePaths">The <c>.nupkg</c> file paths.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// // Get the paths to the packages.
+        /// var packages = GetFiles("./**/*.nupkg");
+        ///
+        /// // Push the package.
+        /// NuGetPush(packages, new NuGetPushSettings {
+        ///     Source = "http://example.com/nugetfeed",
+        ///     ApiKey = "4003d786-cc37-4004-bfdf-c4f3e8ef9b3a"
+        /// });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Push")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Push")]
+        public static void NuGetPush(this ICakeContext context, IEnumerable<FilePath> packageFilePaths, NuGetPushSettings settings)
+        {
+            if (packageFilePaths == null)
+            {
+                throw new ArgumentNullException("packageFilePaths");
+            }
+
+            foreach (var packageFilePath in packageFilePaths)
+            {
+                NuGetPush(context, packageFilePath, settings);
+            }
         }
 
         /// <summary>
@@ -365,18 +500,16 @@ namespace Cake.Common.Tools.NuGet
         ///   <code>
         /// var feed = new
         /// {
-        /// Name = EnvironmentVariable("PRIVATE_FEED_NAME"),
-        /// Source = EnvironmentVariable("PRIVATE_FEED_SOURCE")
+        ///     Name = EnvironmentVariable("PRIVATE_FEED_NAME"),
+        ///     Source = EnvironmentVariable("PRIVATE_FEED_SOURCE")
         /// };
-        /// if (!NuGetHasSource(
-        /// source:feed.Source
-        /// ))
+        /// if (!NuGetHasSource(source:feed.Source))
         /// {
-        /// Information("Source missing");
+        ///     Information("Source missing");
         /// }
         /// else
         /// {
-        /// Information("Source already exists");
+        ///     Information("Source already exists");
         /// }
         /// </code>
         /// </example>
@@ -399,26 +532,25 @@ namespace Cake.Common.Tools.NuGet
         ///   <code>
         /// var nugetSourceSettings = new NuGetSourcesSettings
         /// {
-        /// UserName = EnvironmentVariable("PRIVATE_FEED_USERNAME"),
-        /// Password = EnvironmentVariable("PRIVATE_FEED_PASSWORD"),
-        /// IsSensitiveSource = true,
-        /// Verbosity = NuGetVerbosity.Detailed
+        ///     UserName = EnvironmentVariable("PRIVATE_FEED_USERNAME"),
+        ///     Password = EnvironmentVariable("PRIVATE_FEED_PASSWORD"),
+        ///     IsSensitiveSource = true,
+        ///     Verbosity = NuGetVerbosity.Detailed
         /// };
         /// var feed = new
         /// {
-        /// Name = EnvironmentVariable("PRIVATE_FEED_NAME"),
-        /// Source = EnvironmentVariable("PRIVATE_FEED_SOURCE")
+        ///     Name = EnvironmentVariable("PRIVATE_FEED_NAME"),
+        ///     Source = EnvironmentVariable("PRIVATE_FEED_SOURCE")
         /// };
         /// if (!NuGetHasSource(
-        /// source:feed.Source,
-        /// settings:nugetSourceSettings
-        /// ))
+        ///     source:feed.Source,
+        ///     settings:nugetSourceSettings))
         /// {
-        /// Information("Source missing");
+        ///     Information("Source missing");
         /// }
         /// else
         /// {
-        /// Information("Source already exists");
+        ///     Information("Source already exists");
         /// }
         /// </code>
         /// </example>
@@ -457,6 +589,25 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
+        /// Installs NuGet packages.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageIds">The id's of the package to install.</param>
+        /// <example>
+        /// <code>
+        /// NuGetInstall(new[] { "MyNugetPackage", "OtherNugetPackage" });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Install")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Install")]
+        public static void NuGetInstall(this ICakeContext context, IEnumerable<string> packageIds)
+        {
+            var settings = new NuGetInstallSettings();
+            NuGetInstall(context, packageIds, settings);
+        }
+
+        /// <summary>
         /// Installs a NuGet package using the specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -486,6 +637,36 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
+        /// Installs NuGet packages using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageIds">The id's of the package to install.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// NuGetInstall(new[] { "MyNugetPackage", "OtherNugetPackage" }, new NuGetInstallSettings {
+        ///     ExcludeVersion  = true,
+        ///     OutputDirectory = "./tools"
+        ///     });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Install")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Install")]
+        public static void NuGetInstall(this ICakeContext context, IEnumerable<string> packageIds, NuGetInstallSettings settings)
+        {
+            if (packageIds == null)
+            {
+                throw new ArgumentNullException("packageIds");
+            }
+
+            foreach (var packageId in packageIds)
+            {
+                NuGetInstall(context, packageId, settings);
+            }
+        }
+
+        /// <summary>
         /// Installs NuGet packages using the specified package configuration.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -502,6 +683,27 @@ namespace Cake.Common.Tools.NuGet
         {
             var settings = new NuGetInstallSettings();
             NuGetInstallFromConfig(context, packageConfigPath, settings);
+        }
+
+        /// <summary>
+        /// Installs NuGet packages using the specified package configurations.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageConfigPaths">The package configurations to install.</param>
+        /// <example>
+        /// <code>
+        /// var packageConfigs = GetFiles("./**/packages.config");
+        /// 
+        /// NuGetInstallFromConfig(packageConfigs);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Install")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Install")]
+        public static void NuGetInstallFromConfig(this ICakeContext context, IEnumerable<FilePath> packageConfigPaths)
+        {
+            var settings = new NuGetInstallSettings();
+            NuGetInstallFromConfig(context, packageConfigPaths, settings);
         }
 
         /// <summary>
@@ -531,6 +733,38 @@ namespace Cake.Common.Tools.NuGet
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Globber);
             var runner = new NuGetInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             runner.InstallFromConfig(packageConfigPath, settings);
+        }
+
+        /// <summary>
+        /// Installs NuGet packages using the specified package configurations and settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageConfigPaths">The package configurations to install.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var packageConfigs = GetFiles("./**/packages.config");
+        /// 
+        /// NuGetInstallFromConfig(packageConfigs, new NuGetInstallSettings {
+        ///     ExcludeVersion  = true,
+        ///     OutputDirectory = "./tools"
+        ///     });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Install")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Install")]
+        public static void NuGetInstallFromConfig(this ICakeContext context, IEnumerable<FilePath> packageConfigPaths, NuGetInstallSettings settings)
+        {
+            if (packageConfigPaths == null)
+            {
+                throw new ArgumentNullException("packageConfigPaths");
+            }
+
+            foreach (var packageConfigPath in packageConfigPaths)
+            {
+                NuGetInstallFromConfig(context, packageConfigPath, settings);
+            }
         }
 
         /// <summary>
@@ -622,14 +856,29 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Update")]
         public static void NuGetUpdate(this ICakeContext context, FilePath targetFile)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
+            var settings = new NuGetUpdateSettings();
+            NuGetUpdate(context, targetFile, settings);
+        }
 
-            var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Globber);
-            var runner = new NuGetUpdater(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
-            runner.Update(targetFile, new NuGetUpdateSettings());
+        /// <summary>
+        /// Updates NuGet packages.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="targetFiles">The targets to update.</param>
+        /// <example>
+        /// <code>
+        /// var targets = GetFiles("./**/packages.config");
+        /// 
+        /// NuGetUpdate(targets);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Update")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Update")]
+        public static void NuGetUpdate(this ICakeContext context, IEnumerable<FilePath> targetFiles)
+        {
+            var settings = new NuGetUpdateSettings();
+            NuGetUpdate(context, targetFiles, settings);
         }
 
         /// <summary>
@@ -658,6 +907,37 @@ namespace Cake.Common.Tools.NuGet
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Globber);
             var runner = new NuGetUpdater(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
             runner.Update(targetFile, settings);
+        }
+
+        /// <summary>
+        /// Updates NuGet packages using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="targetFiles">The targets to update.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var targets = GetFiles("./**/packages.config");
+        /// 
+        /// NuGetUpdate(targets, new NuGetUpdateSettings {
+        ///     Prerelease = true,
+        /// });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Update")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Update")]
+        public static void NuGetUpdate(this ICakeContext context, IEnumerable<FilePath> targetFiles, NuGetUpdateSettings settings)
+        {
+            if (targetFiles == null)
+            {
+                throw new ArgumentNullException("targetFiles");
+            }
+
+            foreach (var targetFile in targetFiles)
+            {
+                NuGetUpdate(context, targetFile, settings);
+            }
         }
     }
 }

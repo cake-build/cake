@@ -158,7 +158,7 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Fixie: Process returned an error.", result.Message);
+                Assert.Equal("Fixie: Process returned an error (exit code 1).", result.Message);
             }
 
             [Fact]

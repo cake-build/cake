@@ -65,6 +65,15 @@
     <Compile Include="Build\AppVeyor\IAppVeyorProvider.cs" />
     <Compile Include="Build\BuildSystem.cs" />
     <Compile Include="Build\BuildSystemAliases.cs" />
+    <Compile Include="Build\ContinuaCI\ContinuaCIInfo.cs" />
+    <Compile Include="Build\ContinuaCI\Data\ContinuaCIBuildInfo.cs" />
+    <Compile Include="Build\ContinuaCI\Data\ContinuaCIChangesetInfo.cs" />
+    <Compile Include="Build\ContinuaCI\Data\ContinuaCIEnvironmentInfo.cs" />
+    <Compile Include="Build\ContinuaCI\Data\ContinuaCIProjectInfo.cs" />
+    <Compile Include="Build\ContinuaCI\Data\ContinuaCIConfigurationInfo.cs" />
+    <Compile Include="Build\ContinuaCI\IContinuaCIProvider.cs" />
+    <Compile Include="Build\ContinuaCI\ContinuaCIMessageType.cs" />
+    <Compile Include="Build\ContinuaCI\ContinuaCIProvider.cs" />
     <Compile Include="Build\MyGet\IMyGetProvider.cs" />
     <Compile Include="Build\MyGet\MyGetProvider.cs" />
     <Compile Include="Build\MyGet\MyGetBuildStatus.cs" />
@@ -156,6 +165,14 @@
     <Compile Include="Tools\DNU\Restore\DNULocked.cs" />
     <Compile Include="Tools\DNU\Restore\DNURestorer.cs" />
     <Compile Include="Tools\DNU\Restore\DNURestoreSettings.cs" />
+    <Compile Include="Tools\DotCover\Analyse\DotCoverAnalyseSettings.cs" />
+    <Compile Include="Tools\DotCover\Analyse\DotCoverAnalyseSettingsExtensions.cs" />
+    <Compile Include="Tools\DotCover\Analyse\DotCoverAnalyser.cs" />
+    <Compile Include="Tools\DotCover\DotCoverReportType.cs" />
+    <Compile Include="Tools\DotCover\DotCoverContext.cs" />
+    <Compile Include="Tools\DotCover\DotCoverProcessRunner.cs" />
+    <Compile Include="Tools\DotCover\DotCoverAliases.cs" />
+    <Compile Include="Tools\DotCover\DotCoverTool.cs" />
     <Compile Include="Tools\DupFinder\DupFinderAliases.cs" />
     <Compile Include="Tools\DupFinder\DupFinderRunner.cs" />
     <Compile Include="Tools\DupFinder\DupFinderSettings.cs" />
@@ -208,6 +225,7 @@
     <Compile Include="Tools\InspectCode\InspectCodeRunner.cs" />
     <Compile Include="Tools\InspectCode\InspectCodeSettings.cs" />
     <Compile Include="Tools\InspectCode\SettingsLayer.cs" />
+    <Compile Include="Tools\DotNetBuildSettingsExtensions.cs" />
     <Compile Include="Tools\MSBuild\MSBuildAliases.cs" />
     <Compile Include="Tools\MSBuild\MSBuildResolver.cs" />
     <Compile Include="Tools\MSBuild\MSBuildRunner.cs" />
@@ -295,6 +313,7 @@
     <Compile Include="Tools\XUnit\XUnit2Aliases.cs" />
     <Compile Include="Tools\XUnit\XUnit2SettingsExtensions.cs" />
     <Compile Include="Tools\XUnit\XUnitAliases.cs" />
+    <Compile Include="Tools\XUnit\XUnitRunnerUtilities.cs" />
     <Compile Include="Tools\XUnit\XUnitSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">

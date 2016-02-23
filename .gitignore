@@ -14,6 +14,7 @@ tools/xunit.runners/
 tools/xunit.runner.console/
 tools/nuget.exe
 tools/gitreleasemanager/
+tools/GitVersion.CommandLine/
 
 # mstest test results
 TestResults

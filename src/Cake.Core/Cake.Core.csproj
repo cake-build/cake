@@ -64,6 +64,8 @@
     <Compile Include="CakeTask.cs" />
     <Compile Include="CakeTaskBuilder.cs" />
     <Compile Include="CakeTaskBuilderExtensions.cs" />
+    <Compile Include="CakeTaskExecutionStatus.cs" />
+    <Compile Include="CakeTaskExtensions.cs" />
     <Compile Include="DefaultExecutionStrategy.cs" />
     <Compile Include="Diagnostics\ICakeLog.cs" />
     <Compile Include="Diagnostics\LogAction.cs" />
@@ -142,6 +144,7 @@
     <Compile Include="IO\ProcessSettings.cs" />
     <Compile Include="IO\ProcessWrapper.cs" />
     <Compile Include="IO\Arguments\QuotedArgument.cs" />
+    <Compile Include="IO\RelativePathResolver.cs" />
     <Compile Include="IO\SearchScope.cs" />
     <Compile Include="IO\Arguments\SecretArgument.cs" />
     <Compile Include="IO\SpecialPath.cs" />

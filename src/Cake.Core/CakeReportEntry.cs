@@ -9,6 +9,7 @@ namespace Cake.Core
     {
         private readonly string _taskName;
         private readonly TimeSpan _duration;
+        private readonly CakeTaskExecutionStatus _executionStatus;
 
         /// <summary>
         /// Gets the task name.
@@ -29,14 +30,35 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Gets the task execution status.
+        /// </summary>
+        /// <value>The execution status.</value>
+        public CakeTaskExecutionStatus ExecutionStatus
+        {
+            get { return _executionStatus; }
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CakeReportEntry"/> class.
         /// </summary>
         /// <param name="taskName">The name of the task.</param>
         /// <param name="duration">The duration.</param>
-        public CakeReportEntry(string taskName, TimeSpan duration)
+        public CakeReportEntry(string taskName, TimeSpan duration) 
+            : this(taskName, duration, CakeTaskExecutionStatus.Executed)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CakeReportEntry"/> class.
+        /// </summary>
+        /// <param name="taskName">The name of the task.</param>
+        /// <param name="duration">The duration.</param>
+        /// <param name="executionStatus">The execution status.</param>
+        public CakeReportEntry(string taskName, TimeSpan duration, CakeTaskExecutionStatus executionStatus)
         {
             _taskName = taskName;
             _duration = duration;
+            _executionStatus = executionStatus;
         }
     }
 }

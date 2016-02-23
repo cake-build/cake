@@ -1,5 +1,6 @@
 ﻿using System;
 using Cake.Core.IO;
+using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
 
@@ -23,7 +24,7 @@ namespace Cake.Core.Tests.Unit.IO
             }
         }
 
-        public sealed class TheGetExtensionProperty
+        public sealed class TheGetExtensionMethod
         {
             [Theory]
             [InlineData("assets/shaders/basic.frag", ".frag")]
@@ -158,7 +159,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var path = new FilePath("temp/hello.txt");
 
                     // When
-                    var result = Record.Exception(() => path.MakeAbsolute((ICakeEnvironment)null));
+                    var result = Record.Exception(() => path.MakeAbsolute((ICakeEnvironment) null));
 
                     // Then
                     Assert.IsArgumentNullException(result, "environment");
@@ -204,7 +205,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var path = new FilePath("./test.txt");
 
                     // When
-                    var result = Record.Exception(() => path.MakeAbsolute((DirectoryPath)null));
+                    var result = Record.Exception(() => path.MakeAbsolute((DirectoryPath) null));
 
                     // Then
                     Assert.IsArgumentNullException(result, "path");
@@ -251,6 +252,337 @@ namespace Cake.Core.Tests.Unit.IO
 
                     // Then
                     Assert.Equal("/test.txt", result.FullPath);
+                }
+            }
+        }
+
+        public sealed class TheGetRelativePathMethod
+        {
+            public sealed class WithDirectoryPath
+            {
+                public sealed class InWindowsFormat
+                {
+                    [WindowsTheory]
+                    [InlineData("C:/A/B/C/hello.txt", "C:/A/B/C", ".")]
+                    [InlineData("C:/hello.txt", "C:/", ".")]
+                    [InlineData("C:/A/B/C/hello.txt", "C:/A/D/E", "../../D/E")]
+                    [InlineData("C:/A/B/C/hello.txt", "C:/", "../../..")]
+                    [InlineData("C:/A/B/C/D/E/F/hello.txt", "C:/A/B/C", "../../..")]
+                    [InlineData("C:/A/B/C/hello.txt", "C:/A/B/C/D/E/F", "D/E/F")]
+                    public void Should_Returns_Relative_Path_Between_Paths(string from, string to, string expected)
+                    {
+                        // Given
+                        var path = new FilePath(from);
+
+                        // When
+                        var relativePath = path.GetRelativePath(new DirectoryPath(to));
+
+                        // Then
+                        Assert.Equal(expected, relativePath.FullPath);
+                    }
+
+                    [WindowsTheory]
+                    [InlineData("C:/A/B/C/hello.txt", "D:/A/B/C")]
+                    [InlineData("C:/A/B/hello.txt", "D:/E/")]
+                    [InlineData("C:/hello.txt", "B:/")]
+                    public void Should_Throw_If_No_Relative_Path_Can_Be_Found(string from, string to)
+                    {
+                        // Given
+                        var path = new FilePath(from);
+
+                        // When
+                        var result = Record.Exception(() => path.GetRelativePath(new DirectoryPath(to)));
+
+                        // Then
+                        Assert.IsType<InvalidOperationException>(result);
+                        Assert.Equal("Paths must share a common prefix.", result.Message);
+                    }
+
+                    [WindowsFact]
+                    public void Should_Throw_If_Target_DirectoryPath_Is_Null()
+                    {
+                        // Given
+                        var path = new FilePath("C:/A/B/C/hello.txt");
+
+                        // When
+                        var result = Record.Exception(() => path.GetRelativePath((DirectoryPath)null));
+
+                        // Then
+                        Assert.IsArgumentNullException(result, "to");
+                    }
+
+                    [WindowsFact]
+                    public void Should_Throw_If_Source_DirectoryPath_Is_Relative()
+                    {
+                        // Given
+                        var path = new FilePath("A/hello.txt");
+
+                        // When
+                        var result = Record.Exception(() => path.GetRelativePath(new DirectoryPath("C:/D/E/F")));
+
+                        // Then
+                        Assert.IsType<InvalidOperationException>(result);
+                        Assert.Equal("Source path must be an absolute path.", result.Message);
+                    }
+
+                    [WindowsFact]
+                    public void Should_Throw_If_Target_DirectoryPath_Is_Relative()
+                    {
+                        // Given
+                        var path = new FilePath("C:/A/B/C/hello.txt");
+
+                        // When
+                        var result = Record.Exception(() => path.GetRelativePath(new DirectoryPath("D")));
+
+                        // Then
+                        Assert.IsType<InvalidOperationException>(result);
+                        Assert.Equal("Target path must be an absolute path.", result.Message);
+                    }
+                }
+
+                public sealed class InUnixFormat
+                {
+                    [Theory]
+                    [InlineData("/C/A/B/C/hello.txt", "/C/A/B/C", ".")]
+                    [InlineData("/C/hello.txt", "/C/", ".")]
+                    [InlineData("/C/A/B/C/hello.txt", "/C/A/D/E", "../../D/E")]
+                    [InlineData("/C/A/B/C/hello.txt", "/C/", "../../..")]
+                    [InlineData("/C/A/B/C/D/E/F/hello.txt", "/C/A/B/C", "../../..")]
+                    [InlineData("/C/A/B/C/hello.txt", "/C/A/B/C/D/E/F", "D/E/F")]
+                    public void Should_Returns_Relative_Path_Between_Paths(string from, string to, string expected)
+                    {
+                        // Given
+                        var path = new FilePath(from);
+
+                        // When
+                        var relativePath = path.GetRelativePath(new DirectoryPath(to));
+
+                        // Then
+                        Assert.Equal(expected, relativePath.FullPath);
+                    }
+
+                    [Theory]
+                    [InlineData("/C/A/B/C/hello.txt", "/D/A/B/C")]
+                    [InlineData("/C/A/B/hello.txt", "/D/E/")]
+                    [InlineData("/C/hello.txt", "/B/")]
+                    public void Should_Throw_If_No_Relative_Path_Can_Be_Found(string from, string to)
+                    {
+                        // Given
+                        var path = new FilePath(from);
+
+                        // When
+                        var result = Record.Exception(() => path.GetRelativePath(new DirectoryPath(to)));
+
+                        // Then
+                        Assert.IsType<InvalidOperationException>(result);
+                        Assert.Equal("Paths must share a common prefix.", result.Message);
+                    }
+
+                    [Fact]
+                    public void Should_Throw_If_Target_DirectoryPath_Is_Null()
+                    {
+                        // Given
+                        var path = new FilePath("/C/A/B/C/hello.txt");
+
+                        // When
+                        var result = Record.Exception(() => path.GetRelativePath((DirectoryPath)null));
+
+                        // Then
+                        Assert.IsArgumentNullException(result, "to");
+                    }
+
+                    [Fact]
+                    public void Should_Throw_If_Source_DirectoryPath_Is_Relative()
+                    {
+                        // Given
+                        var path = new FilePath("A/hello.txt");
+
+                        // When
+                        var result = Record.Exception(() => path.GetRelativePath(new DirectoryPath("/C/D/E/F")));
+
+                        // Then
+                        Assert.IsType<InvalidOperationException>(result);
+                        Assert.Equal("Source path must be an absolute path.", result.Message);
+                    }
+
+                    [Fact]
+                    public void Should_Throw_If_Target_DirectoryPath_Is_Relative()
+                    {
+                        // Given
+                        var path = new FilePath("/C/A/B/C/hello.txt");
+
+                        // When
+                        var result = Record.Exception(() => path.GetRelativePath(new DirectoryPath("D")));
+
+                        // Then
+                        Assert.IsType<InvalidOperationException>(result);
+                        Assert.Equal("Target path must be an absolute path.", result.Message);
+                    }
+                }
+            }
+
+            public sealed class WithFilePath
+            {
+                public sealed class InWindowsFormat
+                {
+                    [WindowsTheory]
+                    [InlineData("C:/A/B/C/hello.txt", "C:/A/B/C/hello.txt", "hello.txt")]
+                    [InlineData("C:/hello.txt", "C:/hello.txt", "hello.txt")]
+                    [InlineData("C:/hello.txt", "C:/world.txt", "world.txt")]
+                    [InlineData("C:/A/B/C/hello.txt", "C:/A/D/E/hello.txt", "../../D/E/hello.txt")]
+                    [InlineData("C:/A/B/C/hello.txt", "C:/hello.txt", "../../../hello.txt")]
+                    [InlineData("C:/A/B/C/D/E/F/hello.txt", "C:/A/B/C/hello.txt", "../../../hello.txt")]
+                    [InlineData("C:/A/B/C/hello.txt", "C:/A/B/C/D/E/F/hello.txt", "D/E/F/hello.txt")]
+                    public void Should_Returns_Relative_Path_Between_Paths(string from, string to, string expected)
+                    {
+                        // Given
+                        var path = new FilePath(from);
+
+                        // When
+                        var relativePath = path.GetRelativePath(new FilePath(to));
+
+                        // Then
+                        Assert.Equal(expected, relativePath.FullPath);
+                    }
+
+                    [WindowsTheory]
+                    [InlineData("C:/A/B/C/hello.txt", "D:/A/B/C/hello.txt")]
+                    [InlineData("C:/A/B/hello.txt", "D:/E/hello.txt")]
+                    [InlineData("C:/hello.txt", "B:/hello.txt")]
+                    public void Should_Throw_If_No_Relative_Path_Can_Be_Found(string from, string to)
+                    {
+                        // Given
+                        var path = new FilePath(from);
+
+                        // When
+                        var result = Record.Exception(() => path.GetRelativePath(new FilePath(to)));
+
+                        // Then
+                        Assert.IsType<InvalidOperationException>(result);
+                        Assert.Equal("Paths must share a common prefix.", result.Message);
+                    }
+
+                    [WindowsFact]
+                    public void Should_Throw_If_Target_FilePath_Is_Null()
+                    {
+                        // Given
+                        var path = new FilePath("C:/A/B/C/hello.txt");
+
+                        // When
+                        var result = Record.Exception(() => path.GetRelativePath((FilePath)null));
+
+                        // Then
+                        Assert.IsArgumentNullException(result, "to");
+                    }
+
+                    [WindowsFact]
+                    public void Should_Throw_If_Source_DirectoryPath_Is_Relative()
+                    {
+                        // Given
+                        var path = new FilePath("A/hello.txt");
+
+                        // When
+                        var result = Record.Exception(() => path.GetRelativePath(new FilePath("C:/D/E/F/hello.txt")));
+
+                        // Then
+                        Assert.IsType<InvalidOperationException>(result);
+                        Assert.Equal("Source path must be an absolute path.", result.Message);
+                    }
+
+                    [WindowsFact]
+                    public void Should_Throw_If_Target_FilePath_Is_Relative()
+                    {
+                        // Given
+                        var path = new FilePath("C:/A/B/C/hello.txt");
+
+                        // When
+                        var result = Record.Exception(() => path.GetRelativePath(new FilePath("D/hello.txt")));
+
+                        // Then
+                        Assert.IsType<InvalidOperationException>(result);
+                        Assert.Equal("Target path must be an absolute path.", result.Message);
+                    }
+                }
+
+                public sealed class InUnixFormat
+                {
+                    [Theory]
+                    [InlineData("/C/A/B/C/hello.txt", "/C/A/B/C/hello.txt", "hello.txt")]
+                    [InlineData("/C/hello.txt", "/C/hello.txt", "hello.txt")]
+                    [InlineData("/C/hello.txt", "/C/world.txt", "world.txt")]
+                    [InlineData("/C/A/B/C/hello.txt", "/C/A/D/E/hello.txt", "../../D/E/hello.txt")]
+                    [InlineData("/C/A/B/C/hello.txt", "/C/hello.txt", "../../../hello.txt")]
+                    [InlineData("/C/A/B/C/D/E/F/hello.txt", "/C/A/B/C/hello.txt", "../../../hello.txt")]
+                    [InlineData("/C/A/B/C/hello.txt", "/C/A/B/C/D/E/F/hello.txt", "D/E/F/hello.txt")]
+                    public void Should_Returns_Relative_Path_Between_Paths(string from, string to, string expected)
+                    {
+                        // Given
+                        var path = new FilePath(from);
+
+                        // When
+                        var relativePath = path.GetRelativePath(new FilePath(to));
+
+                        // Then
+                        Assert.Equal(expected, relativePath.FullPath);
+                    }
+
+                    [Theory]
+                    [InlineData("/C/A/B/C/hello.txt", "/D/A/B/C/hello.txt")]
+                    [InlineData("/C/A/B/hello.txt", "/D/E/hello.txt")]
+                    [InlineData("/C/hello.txt", "/B/hello.txt")]
+                    public void Should_Throw_If_No_Relative_Path_Can_Be_Found(string from, string to)
+                    {
+                        // Given
+                        var path = new FilePath(from);
+
+                        // When
+                        var result = Record.Exception(() => path.GetRelativePath(new FilePath(to)));
+
+                        // Then
+                        Assert.IsType<InvalidOperationException>(result);
+                        Assert.Equal("Paths must share a common prefix.", result.Message);
+                    }
+
+                    [Fact]
+                    public void Should_Throw_If_Target_FilePath_Is_Null()
+                    {
+                        // Given
+                        var path = new FilePath("/C/A/B/C/hello.txt");
+
+                        // When
+                        var result = Record.Exception(() => path.GetRelativePath((FilePath)null));
+
+                        // Then
+                        Assert.IsArgumentNullException(result, "to");
+                    }
+
+                    [Fact]
+                    public void Should_Throw_If_Source_DirectoryPath_Is_Relative()
+                    {
+                        // Given
+                        var path = new FilePath("A/hello.txt");
+
+                        // When
+                        var result = Record.Exception(() => path.GetRelativePath(new FilePath("/C/D/E/F/hello.txt")));
+
+                        // Then
+                        Assert.IsType<InvalidOperationException>(result);
+                        Assert.Equal("Source path must be an absolute path.", result.Message);
+                    }
+
+                    [Fact]
+                    public void Should_Throw_If_Target_FilePath_Is_Relative()
+                    {
+                        // Given
+                        var path = new FilePath("/C/A/B/C/hello.txt");
+
+                        // When
+                        var result = Record.Exception(() => path.GetRelativePath(new FilePath("D/hello.txt")));
+
+                        // Then
+                        Assert.IsType<InvalidOperationException>(result);
+                        Assert.Equal("Target path must be an absolute path.", result.Message);
+                    }
                 }
             }
         }

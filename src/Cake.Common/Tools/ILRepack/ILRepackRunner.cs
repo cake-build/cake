@@ -127,7 +127,7 @@ namespace Cake.Common.Tools.ILRepack
 
             if (settings.TargetPlatform.HasValue)
             {
-                builder.Append(GetTargetPlatformString(settings.TargetPlatform.Value));
+                builder.AppendSwitch("/targetplatform", ":", GetTargetPlatformString(settings.TargetPlatform.Value));
             }
 
             if (settings.XmlDocs)

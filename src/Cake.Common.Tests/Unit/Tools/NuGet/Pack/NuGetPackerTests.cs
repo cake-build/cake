@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cake.Common.Tests.Fixtures.Tools.NuGet.Packer;
 using Cake.Common.Tests.Properties;
 using Cake.Common.Tools.NuGet;
@@ -28,7 +29,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     var result = Record.Exception(() => fixture.Run());
 
                     // Then
-                    Assert.IsArgumentNullException(result, "nuspecFilePath");
+                    Assert.IsArgumentNullException(result, "filePath");
                 }
 
                 [Fact]
@@ -130,7 +131,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     var result = Record.Exception(() => fixture.Run());
 
                     // Then
-                    Assert.IsCakeException(result, "NuGet: Process returned an error.");
+                    Assert.IsCakeException(result, "NuGet: Process returned an error (exit code 1).");
                 }
 
                 [Fact]
@@ -429,6 +430,304 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     Assert.Equal(
                         Resources.Nuspec_Metadata_WithoutNamespaces.NormalizeLineEndings(),
                         result.NuspecContent.NormalizeLineEndings());
+                }
+            }
+
+            public sealed class WithProjectFile
+            {
+                [Fact]
+                public void Should_Throw_If_Nuspec_File_Path_Is_Null()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.ProjectFilePath = null;
+
+                    // When
+                    var result = Record.Exception(() => fixture.Run());
+
+                    // Then
+                    Assert.IsArgumentNullException(result, "filePath");
+                }
+
+                [Fact]
+                public void Should_Throw_If_Settings_Is_Null()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.Settings = null;
+
+                    // When
+                    var result = Record.Exception(() => fixture.Run());
+
+                    // Then
+                    Assert.IsArgumentNullException(result, "settings");
+                }
+
+                [Fact]
+                public void Should_Throw_If_NuGet_Executable_Was_Not_Found()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.GivenDefaultToolDoNotExist();
+
+                    // When
+                    var result = Record.Exception(() => fixture.Run());
+
+                    // Then
+                    Assert.IsCakeException(result, "NuGet: Could not locate executable.");
+                }
+
+                [Theory]
+                [InlineData("/bin/nuget/nuget.exe", "/bin/nuget/nuget.exe")]
+                [InlineData("./tools/nuget/nuget.exe", "/Working/tools/nuget/nuget.exe")]
+                public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.Settings.ToolPath = toolPath;
+                    fixture.GivenSettingsToolPathExist();
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal(expected, result.Path.FullPath);
+                }
+
+                [WindowsTheory]
+                [InlineData("C:/nuget/nuget.exe", "C:/nuget/nuget.exe")]
+                public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided_On_Windows(string toolPath, string expected)
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.Settings.ToolPath = toolPath;
+                    fixture.GivenSettingsToolPathExist();
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal(expected, result.Path.FullPath);
+                }
+
+                [Fact]
+                public void Should_Find_NuGet_Executable_If_Tool_Path_Not_Provided()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal("/Working/tools/NuGet.exe", result.Path.FullPath);
+                }
+
+                [Fact]
+                public void Should_Throw_If_Process_Was_Not_Started()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.GivenProcessCannotStart();
+
+                    // When
+                    var result = Record.Exception(() => fixture.Run());
+
+                    // Then
+                    Assert.IsCakeException(result, "NuGet: Process was not started.");
+                }
+
+                [Fact]
+                public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.GivenProcessExitsWithCode(1);
+
+                    // When
+                    var result = Record.Exception(() => fixture.Run());
+
+                    // Then
+                    Assert.IsCakeException(result, "NuGet: Process returned an error (exit code 1).");
+                }
+
+                [Fact]
+                public void Should_Not_Create_Transformed_Nuspec()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+
+                    // When
+                    fixture.Run();
+
+                    // Then
+                    Assert.False(fixture.FileSystem.Exist((FilePath)"/Working/existing.temp.nuspec"));
+                }
+
+                [Fact]
+                public void Should_Add_Version_To_Arguments_If_Not_Null()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.Settings.Version = "1.0.0";
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal("pack -Version \"1.0.0\" \"/Working/existing.csproj\"", result.Args);
+                }
+
+                [Fact]
+                public void Should_Add_Base_Path_To_Arguments_If_Not_Null()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.Settings.BasePath = "./build";
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal("pack -BasePath \"/Working/build\" " +
+                                 "\"/Working/existing.csproj\"", result.Args);
+                }
+
+                [Fact]
+                public void Should_Add_Output_Directory_To_Arguments_If_Not_Null()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.Settings.OutputDirectory = "./build/output";
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal("pack -OutputDirectory \"/Working/build/output\" " +
+                                 "\"/Working/existing.csproj\"", result.Args);
+                }
+
+                [Fact]
+                public void Should_Add_No_Package_Analysis_Flag_To_Arguments_If_Set()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.Settings.NoPackageAnalysis = true;
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal("pack \"/Working/existing.csproj\" -NoPackageAnalysis", result.Args);
+                }
+
+                [Fact]
+                public void Should_Add_Symbols_Flag_To_Arguments_If_Set()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.Settings.Symbols = true;
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal("pack \"/Working/existing.csproj\" -Symbols", result.Args);
+                }
+
+                [Theory]
+                [InlineData(NuGetVerbosity.Detailed, "pack \"/Working/existing.csproj\" -Verbosity detailed")]
+                [InlineData(NuGetVerbosity.Normal, "pack \"/Working/existing.csproj\" -Verbosity normal")]
+                [InlineData(NuGetVerbosity.Quiet, "pack \"/Working/existing.csproj\" -Verbosity quiet")]
+                public void Should_Add_Verbosity_To_Arguments_If_Set(NuGetVerbosity verbosity, string expected)
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.Settings.Verbosity = verbosity;
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal(expected, result.Args);
+                }
+
+                [Fact]
+                public void Should_Add_Properties_To_Arguments_If_Set()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.Settings.Properties = new Dictionary<string, string>
+                    {
+                        { "Configuration", "Release" }
+                    };
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal("pack \"/Working/existing.csproj\" -Properties Configuration=Release", result.Args);
+                }
+
+                [Fact]
+                public void Should_Separate_Properties_With_Semicolon()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.Settings.Properties = new Dictionary<string, string>
+                    {
+                        { "Configuration", "Release" },
+                        { "Foo", "Bar" }
+                    };
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal("pack \"/Working/existing.csproj\" -Properties Configuration=Release;Foo=Bar", result.Args);
+                }
+
+                [Theory]
+                [InlineData("")]
+                [InlineData(" ")]
+                // We don't need to check for a null key because the dictionary won't allow it in the first place
+                public void Should_Throw_For_Invalid_Properties_Keys(string key)
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.Settings.Properties = new Dictionary<string, string>
+                    {
+                        { "Configuration", "Release" },
+                        { key, "Bar" }
+                    };
+
+                    // When
+                    var result = Record.Exception(() => fixture.Run());
+
+                    // Then
+                    Assert.IsCakeException(result, "Properties keys can not be null or empty.");
+                }
+
+                [Theory]
+                [InlineData(null)]
+                [InlineData("")]
+                [InlineData(" ")]
+                public void Should_Throw_For_Invalid_Properties_Values(string value)
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.Settings.Properties = new Dictionary<string, string>
+                    {
+                        { "Configuration", "Release" },
+                        { "Foo", value }
+                    };
+
+                    // When
+                    var result = Record.Exception(() => fixture.Run());
+
+                    // Then
+                    Assert.IsCakeException(result, "Properties values can not be null or empty.");
                 }
             }
 

@@ -89,7 +89,7 @@ namespace Cake.Core.Tests.Unit
                 var task = new ActionTask("task");
 
                 // When
-                task.AddCriteria(() => true);
+                task.AddCriteria(context => true);
 
                 // Then
                 Assert.Equal(1, task.Criterias.Count);

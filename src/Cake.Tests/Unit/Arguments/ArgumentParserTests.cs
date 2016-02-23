@@ -43,124 +43,6 @@ namespace Cake.Tests.Unit.Arguments
             }
 
             [Fact]
-            public void Should_Add_Unknown_Arguments_To_Argument_List()
-            {
-                // Given
-                var fixture = new ArgumentParserFixture();
-                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
-
-                // When
-                var result = parser.Parse(new[] { "build.csx", "-unknown" });
-
-                // Then
-                Assert.True(result.Arguments.ContainsKey("unknown"));
-            }
-
-            [Fact]
-            public void Should_Add_Unknown_Arguments_To_Argument_List_Without_Script()
-            {
-                // Given
-                var environment = FakeEnvironment.CreateUnixEnvironment();
-                var fakeFileSystem = new FakeFileSystem(environment);
-                fakeFileSystem.CreateFile(new FilePath("build.cake"));
-                var fixture = new ArgumentParserFixture { FileSystem = fakeFileSystem };
-                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
-
-                // When
-                var result = parser.Parse(new[] { "-unknown" });
-
-                // Then
-                Assert.True(result.Arguments.ContainsKey("unknown"));
-            }
-
-            [Fact]
-            public void Should_Return_Error_If_Multiple_Arguments_With_The_Same_Name_Exist()
-            {
-                // Given
-                var fixture = new ArgumentParserFixture {Log = new FakeLog()};
-                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
-
-                // When
-                var result = parser.Parse(new[] { "build.csx", "-unknown", "-unknown" });
-
-                // Then
-                Assert.Null(result);
-                Assert.True(fixture.Log.Entries.Any(x => x.Message == "Multiple arguments with the same name (unknown)."));
-            }
-
-            [Theory]
-            [InlineData("-verbosity=quiet", Verbosity.Quiet)]
-            [InlineData("-verbosity=minimal", Verbosity.Minimal)]
-            [InlineData("-verbosity=normal", Verbosity.Normal)]
-            [InlineData("-verbosity=verbose", Verbosity.Verbose)]
-            [InlineData("-verbosity=diagnostic", Verbosity.Diagnostic)]
-            [InlineData("-verbosity=q", Verbosity.Quiet)]
-            [InlineData("-verbosity=m", Verbosity.Minimal)]
-            [InlineData("-verbosity=n", Verbosity.Normal)]
-            [InlineData("-verbosity=v", Verbosity.Verbose)]
-            [InlineData("-verbosity=d", Verbosity.Diagnostic)]
-            [InlineData("-v=quiet", Verbosity.Quiet)]
-            [InlineData("-v=minimal", Verbosity.Minimal)]
-            [InlineData("-v=normal", Verbosity.Normal)]
-            [InlineData("-v=verbose", Verbosity.Verbose)]
-            [InlineData("-v=diagnostic", Verbosity.Diagnostic)]
-            [InlineData("-v=q", Verbosity.Quiet)]
-            [InlineData("-v=m", Verbosity.Minimal)]
-            [InlineData("-v=n", Verbosity.Normal)]
-            [InlineData("-v=v", Verbosity.Verbose)]
-            [InlineData("-v=d", Verbosity.Diagnostic)]
-            public void Can_Parse_Verbosity(string input, Verbosity value)
-            {
-                // Given
-                var fixture = new ArgumentParserFixture();
-                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
-
-                // When
-                var result = parser.Parse(new[] { "build.csx", input });
-
-                // Then
-                Assert.Equal(value, result.Verbosity);
-            }
-
-            [Theory]
-            [InlineData("-verbosity=lol", "The value 'lol' is not a valid verbosity.")]
-            [InlineData("-verbosity=", "The value '' is not a valid verbosity.")]
-            [InlineData("-v=lol", "The value 'lol' is not a valid verbosity.")]
-            [InlineData("-v=", "The value '' is not a valid verbosity.")]
-            public void Should_Throw_If_Parsing_Invalid_Verbosity(string verbosity, string expected)
-            {
-                // Given
-                var fixture = new ArgumentParserFixture();
-                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
-
-                // When
-                var result = Record.Exception(() => {
-                    parser.Parse(new[] { "build.csx", verbosity });
-                });
-
-                // Then
-                Assert.IsExceptionWithMessage<InvalidOperationException>(result, expected);
-            }
-
-            [Theory]
-            [InlineData("build.csx")]
-            [InlineData("build.csx -verbosity=quiet")]
-            public void Can_Parse_Script(string input)
-            {
-                // Given
-                var fixture = new ArgumentParserFixture();
-                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
-                var arguments = input.Split(new[] { ' ' }, StringSplitOptions.None);
-
-                // When
-                var result = parser.Parse(arguments);
-
-                // Then
-                Assert.NotNull(result.Script);
-                Assert.Equal("build.csx", result.Script.FullPath);
-            }
-
-            [Fact]
             public void Should_Throw_If_Multiple_Build_Configurations_Are_Provided()
             {
                 // Given
@@ -195,71 +77,6 @@ namespace Cake.Tests.Unit.Arguments
             }
 
             [Theory]
-            [InlineData("-showdescription")]
-            [InlineData("-s")]
-            public void Can_Parse_ShowDescription(string input)
-            {
-                // Given
-                var fixture = new ArgumentParserFixture();
-                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
-
-                // When
-                var result = parser.Parse(new[] { "build.csx", input });
-
-                // Then
-                Assert.Equal(true, result.ShowDescription);
-            }
-
-            [Theory]
-            [InlineData("-dryrun")]
-            [InlineData("-noop")]
-            [InlineData("-whatif")]
-            public void Can_Parse_DryRun(string input)
-            {
-                // Given
-                var fixture = new ArgumentParserFixture();
-                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
-
-                // When
-                var result = parser.Parse(new[] { "build.csx", input });
-
-                // Then
-                Assert.Equal(true, result.PerformDryRun);
-            }
-
-            [Theory]
-            [InlineData("-help")]
-            [InlineData("-?")]
-            public void Can_Parse_Help(string input)
-            {
-                // Given
-                var fixture = new ArgumentParserFixture();
-                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
-
-                // When
-                var result = parser.Parse(new[] { "build.csx", input });
-
-                // Then
-                Assert.Equal(true, result.ShowHelp);
-            }
-
-            [Theory]
-            [InlineData("-version")]
-            [InlineData("-ver")]
-            public void Can_Parse_Version(string input)
-            {
-                // Given
-                var fixture = new ArgumentParserFixture();
-                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
-
-                // When
-                var result = parser.Parse(new[] { "build.csx", input });
-
-                // Then
-                Assert.Equal(true, result.ShowVersion);
-            }
-
-            [Theory]
             [InlineData(".cakefile")]
             [InlineData("build.cake")]
             public void Can_Find_Default_Scripts(string scriptName)
@@ -274,10 +91,382 @@ namespace Cake.Tests.Unit.Arguments
                     .Returns(file);
 
                 // When
-                var result = parser.Parse(new string [] {});
+                var result = parser.Parse(new string[] { });
 
                 // Then
                 Assert.NotNull(result.Script);
+            }
+
+            public sealed class WithSingleDashLongArguments
+            {
+                [Fact]
+                public void Should_Add_Unknown_Arguments_To_Argument_List()
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.csx", "-unknown" });
+
+                    // Then
+                    Assert.True(result.Arguments.ContainsKey("unknown"));
+                }
+
+                [Fact]
+                public void Should_Add_Unknown_Arguments_To_Argument_List_Without_Script()
+                {
+                    // Given
+                    var environment = FakeEnvironment.CreateUnixEnvironment();
+                    var fakeFileSystem = new FakeFileSystem(environment);
+                    fakeFileSystem.CreateFile(new FilePath("build.cake"));
+                    var fixture = new ArgumentParserFixture { FileSystem = fakeFileSystem };
+                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                    // When
+                    var result = parser.Parse(new[] { "-unknown" });
+
+                    // Then
+                    Assert.True(result.Arguments.ContainsKey("unknown"));
+                }
+
+                [Fact]
+                public void Should_Return_Error_If_Multiple_Arguments_With_The_Same_Name_Exist()
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture { Log = new FakeLog() };
+                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.csx", "-unknown", "-unknown" });
+
+                    // Then
+                    Assert.Null(result);
+                    Assert.True(fixture.Log.Entries.Any(x => x.Message == "Multiple arguments with the same name (unknown)."));
+                }
+
+                [Theory]
+                [InlineData("-verbosity=quiet", Verbosity.Quiet)]
+                [InlineData("-verbosity=minimal", Verbosity.Minimal)]
+                [InlineData("-verbosity=normal", Verbosity.Normal)]
+                [InlineData("-verbosity=verbose", Verbosity.Verbose)]
+                [InlineData("-verbosity=diagnostic", Verbosity.Diagnostic)]
+                [InlineData("-verbosity=q", Verbosity.Quiet)]
+                [InlineData("-verbosity=m", Verbosity.Minimal)]
+                [InlineData("-verbosity=n", Verbosity.Normal)]
+                [InlineData("-verbosity=v", Verbosity.Verbose)]
+                [InlineData("-verbosity=d", Verbosity.Diagnostic)]
+                [InlineData("-v=quiet", Verbosity.Quiet)]
+                [InlineData("-v=minimal", Verbosity.Minimal)]
+                [InlineData("-v=normal", Verbosity.Normal)]
+                [InlineData("-v=verbose", Verbosity.Verbose)]
+                [InlineData("-v=diagnostic", Verbosity.Diagnostic)]
+                [InlineData("-v=q", Verbosity.Quiet)]
+                [InlineData("-v=m", Verbosity.Minimal)]
+                [InlineData("-v=n", Verbosity.Normal)]
+                [InlineData("-v=v", Verbosity.Verbose)]
+                [InlineData("-v=d", Verbosity.Diagnostic)]
+                public void Can_Parse_Verbosity(string input, Verbosity value)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.csx", input });
+
+                    // Then
+                    Assert.Equal(value, result.Verbosity);
+                }
+
+                [Theory]
+                [InlineData("-verbosity=lol", "The value 'lol' is not a valid verbosity.")]
+                [InlineData("-verbosity=", "The value '' is not a valid verbosity.")]
+                [InlineData("-v=lol", "The value 'lol' is not a valid verbosity.")]
+                [InlineData("-v=", "The value '' is not a valid verbosity.")]
+                public void Should_Throw_If_Parsing_Invalid_Verbosity(string verbosity, string expected)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                    // When
+                    var result = Record.Exception(() => {
+                        parser.Parse(new[] { "build.csx", verbosity });
+                    });
+
+                    // Then
+                    Assert.IsExceptionWithMessage<InvalidOperationException>(result, expected);
+                }
+
+                [Theory]
+                [InlineData("build.csx")]
+                [InlineData("build.csx -verbosity=quiet")]
+                public void Can_Parse_Script(string input)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var arguments = input.Split(new[] { ' ' }, StringSplitOptions.None);
+
+                    // When
+                    var result = parser.Parse(arguments);
+
+                    // Then
+                    Assert.NotNull(result.Script);
+                    Assert.Equal("build.csx", result.Script.FullPath);
+                }
+
+                [Theory]
+                [InlineData("-showdescription")]
+                [InlineData("-s")]
+                public void Can_Parse_ShowDescription(string input)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.csx", input });
+
+                    // Then
+                    Assert.Equal(true, result.ShowDescription);
+                }
+
+                [Theory]
+                [InlineData("-dryrun")]
+                [InlineData("-noop")]
+                [InlineData("-whatif")]
+                public void Can_Parse_DryRun(string input)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.csx", input });
+
+                    // Then
+                    Assert.Equal(true, result.PerformDryRun);
+                }
+
+                [Theory]
+                [InlineData("-help")]
+                [InlineData("-?")]
+                public void Can_Parse_Help(string input)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.csx", input });
+
+                    // Then
+                    Assert.Equal(true, result.ShowHelp);
+                }
+
+                [Theory]
+                [InlineData("-version")]
+                [InlineData("-ver")]
+                public void Can_Parse_Version(string input)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.csx", input });
+
+                    // Then
+                    Assert.Equal(true, result.ShowVersion);
+                }
+            }
+
+            public sealed class WithTwoDashLongArguments
+            {
+                [Fact]
+                public void Should_Add_Unknown_Arguments_To_Argument_List()
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.csx", "--unknown" });
+
+                    // Then
+                    Assert.True(result.Arguments.ContainsKey("unknown"));
+                }
+
+                [Fact]
+                public void Should_Add_Unknown_Arguments_To_Argument_List_Without_Script()
+                {
+                    // Given
+                    var environment = FakeEnvironment.CreateUnixEnvironment();
+                    var fakeFileSystem = new FakeFileSystem(environment);
+                    fakeFileSystem.CreateFile(new FilePath("build.cake"));
+                    var fixture = new ArgumentParserFixture { FileSystem = fakeFileSystem };
+                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                    // When
+                    var result = parser.Parse(new[] { "--unknown" });
+
+                    // Then
+                    Assert.True(result.Arguments.ContainsKey("unknown"));
+                }
+
+                [Fact]
+                public void Should_Return_Error_If_Multiple_Arguments_With_The_Same_Name_Exist()
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture { Log = new FakeLog() };
+                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.csx", "--unknown", "--unknown" });
+
+                    // Then
+                    Assert.Null(result);
+                    Assert.True(fixture.Log.Entries.Any(x => x.Message == "Multiple arguments with the same name (unknown)."));
+                }
+
+                [Theory]
+                [InlineData("--verbosity=quiet", Verbosity.Quiet)]
+                [InlineData("--verbosity=minimal", Verbosity.Minimal)]
+                [InlineData("--verbosity=normal", Verbosity.Normal)]
+                [InlineData("--verbosity=verbose", Verbosity.Verbose)]
+                [InlineData("--verbosity=diagnostic", Verbosity.Diagnostic)]
+                [InlineData("--verbosity=q", Verbosity.Quiet)]
+                [InlineData("--verbosity=m", Verbosity.Minimal)]
+                [InlineData("--verbosity=n", Verbosity.Normal)]
+                [InlineData("--verbosity=v", Verbosity.Verbose)]
+                [InlineData("--verbosity=d", Verbosity.Diagnostic)]
+                [InlineData("--v=quiet", Verbosity.Quiet)]
+                [InlineData("--v=minimal", Verbosity.Minimal)]
+                [InlineData("--v=normal", Verbosity.Normal)]
+                [InlineData("--v=verbose", Verbosity.Verbose)]
+                [InlineData("--v=diagnostic", Verbosity.Diagnostic)]
+                [InlineData("-v=q", Verbosity.Quiet)]
+                [InlineData("-v=m", Verbosity.Minimal)]
+                [InlineData("-v=n", Verbosity.Normal)]
+                [InlineData("-v=v", Verbosity.Verbose)]
+                [InlineData("-v=d", Verbosity.Diagnostic)]
+                public void Can_Parse_Verbosity(string input, Verbosity value)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.csx", input });
+
+                    // Then
+                    Assert.Equal(value, result.Verbosity);
+                }
+
+                [Theory]
+                [InlineData("--verbosity=lol", "The value 'lol' is not a valid verbosity.")]
+                [InlineData("--verbosity=", "The value '' is not a valid verbosity.")]
+                [InlineData("-v=lol", "The value 'lol' is not a valid verbosity.")]
+                [InlineData("-v=", "The value '' is not a valid verbosity.")]
+                public void Should_Throw_If_Parsing_Invalid_Verbosity(string verbosity, string expected)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                    // When
+                    var result = Record.Exception(() => {
+                        parser.Parse(new[] { "build.csx", verbosity });
+                    });
+
+                    // Then
+                    Assert.IsExceptionWithMessage<InvalidOperationException>(result, expected);
+                }
+
+                [Theory]
+                [InlineData("build.csx")]
+                [InlineData("build.csx --verbosity=quiet")]
+                public void Can_Parse_Script(string input)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var arguments = input.Split(new[] { ' ' }, StringSplitOptions.None);
+
+                    // When
+                    var result = parser.Parse(arguments);
+
+                    // Then
+                    Assert.NotNull(result.Script);
+                    Assert.Equal("build.csx", result.Script.FullPath);
+                }
+
+                [Theory]
+                [InlineData("--showdescription")]
+                [InlineData("-s")]
+                public void Can_Parse_ShowDescription(string input)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.csx", input });
+
+                    // Then
+                    Assert.Equal(true, result.ShowDescription);
+                }
+
+                [Theory]
+                [InlineData("--dryrun")]
+                [InlineData("--noop")]
+                [InlineData("--whatif")]
+                public void Can_Parse_DryRun(string input)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.csx", input });
+
+                    // Then
+                    Assert.Equal(true, result.PerformDryRun);
+                }
+
+                [Theory]
+                [InlineData("--help")]
+                [InlineData("-?")]
+                public void Can_Parse_Help(string input)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.csx", input });
+
+                    // Then
+                    Assert.Equal(true, result.ShowHelp);
+                }
+
+                [Theory]
+                [InlineData("--version")]
+                [InlineData("--ver")]
+                public void Can_Parse_Version(string input)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.csx", input });
+
+                    // Then
+                    Assert.Equal(true, result.ShowVersion);
+                }
             }
         }
     }

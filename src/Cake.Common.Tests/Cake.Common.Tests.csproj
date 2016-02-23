@@ -58,7 +58,9 @@
   <ItemGroup>
     <Compile Include="Fixtures\Build\AppVeyorFixture.cs" />
     <Compile Include="Fixtures\Build\AppVeyorInfoFixture.cs" />
+    <Compile Include="Fixtures\Build\ContinuaCIFixture.cs" />
     <Compile Include="Fixtures\Build\BambooFixture.cs" />
+    <Compile Include="Fixtures\Build\ContinuaCIInfoFixture.cs" />
     <Compile Include="Fixtures\Build\BambooInfoFixture.cs" />
     <Compile Include="Fixtures\AssemblyInfoFixture.cs" />
     <Compile Include="Fixtures\AssemblyInfoParserFixture.cs" />
@@ -91,6 +93,8 @@
     <Compile Include="Fixtures\Tools\DNU\DNUFixture.cs" />
     <Compile Include="Fixtures\Tools\DNU\Pack\DNUPackerFixture.cs" />
     <Compile Include="Fixtures\Tools\DNU\Restorer\DNURestorerFixture.cs" />
+    <Compile Include="Fixtures\Tools\DotCover\Analyse\DotCoverAnalyserFixture.cs" />
+    <Compile Include="Fixtures\Tools\DotCover\DotCoverFixture.cs" />
     <Compile Include="Fixtures\Tools\DupFinder\DupFinderRunnerConfigFixture.cs" />
     <Compile Include="Fixtures\Tools\DupFinder\DupFinderRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\FixieRunnerFixture.cs" />
@@ -105,6 +109,7 @@
     <Compile Include="Fixtures\Tools\GitReleaseNotesRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\ILMergeRunnerFixture.cs" />
     <Compile Include="Fixtures\Diagnostics\LogActionFixture.cs" />
+    <Compile Include="Fixtures\Tools\ILRepackRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\InspectCode\InspectCodeFixture.cs" />
     <Compile Include="Fixtures\Tools\InspectCode\InspectCodeRunFixture.cs" />
     <Compile Include="Fixtures\Tools\InspectCode\InspectCodeRunFromConfigFixture.cs" />
@@ -118,6 +123,7 @@
     <Compile Include="Fixtures\Tools\NuGet\Packer\NuGetPackerWithNuSpecFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGet\Packer\NuGetPackerWithoutNuSpecFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGet\Packer\NuGetPackerFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\Packer\NuGetPackerWithProjectFileFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGet\Pusher\NuGetPusherFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGet\Restorer\NuGetRestorerFixture.cs" />
     <Compile Include="Fixtures\Tools\NuGet\SetApiKey\NuGetSetApiKeyFixture.cs" />
@@ -160,6 +166,12 @@
     <Compile Include="Unit\Build\AppVeyor\Data\AppVeyorRepositoryInfoTests.cs" />
     <Compile Include="Unit\Build\BuildSystemAliasesTests.cs" />
     <Compile Include="Unit\Build\BuildSystemTests.cs" />
+    <Compile Include="Unit\Build\ContinuaCI\ContinuaCIProviderTests.cs" />
+    <Compile Include="Unit\Build\ContinuaCI\Data\ContinuaCIBuildInfoTests.cs" />
+    <Compile Include="Unit\Build\ContinuaCI\Data\ContinuaCIEnvironmentInfoTests.cs" />
+    <Compile Include="Unit\Build\ContinuaCI\Data\ContinuaCIConfigurationInfoTests.cs" />
+    <Compile Include="Unit\Build\ContinuaCI\Data\ContinuaCIProjectInfoTests.cs" />
+    <Compile Include="Unit\Build\ContinuaCI\Data\ContinuaCIChangesetInfoTests.cs" />
     <Compile Include="Unit\Build\TeamCity\TeamCityProviderTests.cs" />
     <Compile Include="Unit\Build\Bamboo\BambooProviderTests.cs" />
     <Compile Include="Unit\Build\Bamboo\Data\BambooBuildInfoTests.cs" />
@@ -195,6 +207,8 @@
     <Compile Include="Unit\Tools\DNU\Build\DNUBuilderTests.cs" />
     <Compile Include="Unit\Tools\DNU\Pack\DNUPackerTests.cs" />
     <Compile Include="Unit\Tools\DNU\Restore\DNURestorerTests.cs" />
+    <Compile Include="Unit\Tools\DotCover\Analyse\DotCoverAnalyserTests.cs" />
+    <Compile Include="Unit\Tools\DotCover\Analyse\DotCoverAnalyseSettingsTests.cs" />
     <Compile Include="Unit\Tools\DupFinder\DupFinderRunnerTests.cs" />
     <Compile Include="Unit\Tools\Fixie\FixieRunnerTests.cs" />
     <Compile Include="Unit\Tools\GitLink\GitlinkRunnerTests.cs" />
@@ -210,7 +224,11 @@
     <Compile Include="Unit\IO\ZipperTests.cs" />
     <Compile Include="Unit\IO\DirectoryAliasesTests.cs" />
     <Compile Include="Unit\IO\FileAliasesTests.cs" />
+    <Compile Include="Unit\Tools\ILRepack\ILRepackRunnerTests.cs" />
+    <Compile Include="Unit\Tools\ILRepack\ILRepackSettingsTests.cs" />
     <Compile Include="Unit\Tools\InspectCode\InspectCodeRunnerTests.cs" />
+    <Compile Include="Unit\Tools\DotNetBuildSettingsExtensionsTests.cs" />
+    <Compile Include="Unit\Tools\DotNetBuildSettingsTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildRunnerTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsExtensionsTests.cs" />
     <Compile Include="Unit\Tools\MSBuild\MSBuildSettingsTests.cs" />

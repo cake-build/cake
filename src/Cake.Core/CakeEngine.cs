@@ -131,13 +131,13 @@ namespace Cake.Core
                     var isTarget = task.Name.Equals(target, StringComparison.OrdinalIgnoreCase);
 
                     // Should we execute the task?
-                    if (ShouldTaskExecute(task, isTarget))
+                    if (ShouldTaskExecute(context, task, isTarget))
                     {
                         ExecuteTask(context, strategy, stopWatch, task, report);
                     }
                     else
                     {
-                        SkipTask(context, strategy, task);
+                        SkipTask(context, strategy, task, report);
                     }
                 }
 
@@ -182,11 +182,11 @@ namespace Cake.Core
             }
         }
 
-        private static bool ShouldTaskExecute(CakeTask task, bool isTarget)
+        private static bool ShouldTaskExecute(ICakeContext context, CakeTask task, bool isTarget)
         {
             foreach (var criteria in task.Criterias)
             {
-                if (!criteria())
+                if (!criteria(context))
                 {
                     if (isTarget)
                     {
@@ -250,8 +250,15 @@ namespace Cake.Core
                 PerformTaskTeardown(context, strategy, task, stopWatch.Elapsed, false, exceptionWasThrown);
             }
 
-            // Add the task results to the report.
-            report.Add(task.Name, stopWatch.Elapsed);
+            // Add the task results to the report
+            if (IsDelegatedTask(task))
+            {
+                report.AddDelegated(task.Name, stopWatch.Elapsed);
+            }
+            else
+            {
+                report.Add(task.Name, stopWatch.Elapsed);
+            }
         }
 
         private void PerformTaskSetup(ICakeContext context, IExecutionStrategy strategy, ICakeTaskInfo task, bool skipped)
@@ -294,11 +301,21 @@ namespace Cake.Core
             }
         }
 
-        private void SkipTask(ICakeContext context, IExecutionStrategy strategy, CakeTask task)
+        private void SkipTask(ICakeContext context, IExecutionStrategy strategy, CakeTask task, CakeReport report)
         {
             PerformTaskSetup(context, strategy, task, true);
             strategy.Skip(task);
             PerformTaskTeardown(context, strategy, task, TimeSpan.Zero, true, false);
+
+            // Add the skipped task to the report.
+            report.AddSkipped(task.Name);
+        }
+
+        private static bool IsDelegatedTask(CakeTask task)
+        {
+            var actionTask = task as ActionTask;
+
+            return actionTask != null && !actionTask.Actions.Any();
         }
 
         private static void ReportErrors(IExecutionStrategy strategy, Action<Exception> errorReporter, Exception taskException)
