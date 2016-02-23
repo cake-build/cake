@@ -76,7 +76,7 @@ RunTarget(target);
 
 ##### Windows
 
-```powershell 
+```powershell
 # Execute the bootstrapper script.
 ./build.ps1
 ```
@@ -93,7 +93,7 @@ chmod +x build.sh
 
 ## Contributing
 
-So you’re thinking about contributing to Cake? Great! It’s **really** appreciated.   
+So you’re thinking about contributing to Cake? Great! It’s **really** appreciated.
 
 Make sure you've read the [contribution guidelines](http://cakebuild.net/contribute/contribution-guidelines/) before sending that epic pull request.
 
@@ -110,7 +110,7 @@ Make sure you've read the [contribution guidelines](http://cakebuild.net/contrib
 
 ## License
 
-Copyright © 2014 - 2015, Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors.
+Copyright © Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors.
 Cake is provided as-is under the MIT license. For more information see [LICENSE](https://github.com/cake-build/cake/blob/develop/LICENSE).
 
 * For Roslyn, see https://github.com/dotnet/roslyn/blob/master/License.txt
