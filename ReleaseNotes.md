@@ -1,41 +1,41 @@
 ### New in 0.9.0 (Released 2016/02/22)
 
-Add missing command line switch for ILRepack's targetplatform
-DNU tools only work on windows
-Change Nuget.Core.dll to NuGet.Core.dll in build script
-ScriptAliasFinder fails on Mono when assembly isn't loaded in FindAliases
-FileExists alias in should make the provided path absolute
-Add support for dotCover
-Add Continua CI build system support
-Build release branches on AppVeyor
-Add Unit Tests for ILRepackRunner
-OpenCover tool only intercepts the last test assembly
-Update license to remove year, as this is not required
-Support for Properties argument in nuget pack
-Extend NuGet aliases
-Corrected Class Name Associated with Unit Test
-Add DotNetBuild settings extension methods and tests
-Replace #if !UNIX with [WindowsFact]
-Don't show delegating tasks in summary
-Task Summary should include skipped tasks
-Support for nuget packing of project files
-Add method to get relative paths (for paths)
-Full Build/Publish Automation for Cake
-Add GitVersion into build.cake
-Tool: Write exit code to log
-Allow use of ICakeContext in WithCriteria
-Command line parameters should follow conventions
+* Add missing command line switch for ILRepack's targetplatform
+* DNU tools only work on windows
+* Change Nuget.Core.dll to NuGet.Core.dll in build script
+* ScriptAliasFinder fails on Mono when assembly isn't loaded in FindAliases
+* FileExists alias in should make the provided path absolute
+* Add support for dotCover
+* Add Continua CI build system support
+* Build release branches on AppVeyor
+* Add Unit Tests for ILRepackRunner
+* OpenCover tool only intercepts the last test assembly
+* Update license to remove year, as this is not required
+* Support for Properties argument in nuget pack
+* Extend NuGet aliases
+* Corrected Class Name Associated with Unit Test
+* Add DotNetBuild settings extension methods and tests
+* Replace #if !UNIX with [WindowsFact]
+* Don't show delegating tasks in summary
+* Task Summary should include skipped tasks
+* Support for nuget packing of project files
+* Add method to get relative paths (for paths)
+* Full Build/Publish Automation for Cake
+* Add GitVersion into build.cake
+* Tool: Write exit code to log
+* Allow use of ICakeContext in WithCriteria
+* Command line parameters should follow conventions
 
 ### New in 0.8.0 (Released 2015/01/18)
 
-DNUPackSettings OutputDirectory should be a DirectoryPath
-Add GitLink Alias
-Make #tool and #addin package manager agnostic
-XmlPeek alias
-Move from WebClient to HttpClient
-PlatformTarget is missing Win32
-Move ToolFixture to Cake.Testing
-Line number in error messages is incorrect when using directives
+* DNUPackSettings OutputDirectory should be a DirectoryPath
+* Add GitLink Alias
+* Make #tool and #addin package manager agnostic
+* XmlPeek alias
+* Move from WebClient to HttpClient
+* PlatformTarget is missing Win32
+* Move ToolFixture to Cake.Testing
+* Line number in error messages is incorrect when using directives
 
 ### New in 0.7.0 (Released 2015/12/23)
 
