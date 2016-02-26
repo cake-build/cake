@@ -22,6 +22,13 @@ namespace Cake.Common.Build.TeamCity
         void ImportData(string type, FilePath path);
 
         /// <summary>
+        /// Tell TeamCity to import coverage from dotCover snapshot file.
+        /// </summary>
+        /// <param name="snapshotFile">Snapshot file path.</param>
+        /// <param name="dotCoverHome">The full path to the dotCover home folder to override the bundled dotCover.</param>
+        void ImportDotCoverCoverage(FilePath snapshotFile, DirectoryPath dotCoverHome = null);
+
+        /// <summary>
         /// Gets a value indicating whether the current build is running on TeamCity.
         /// </summary>
         /// <value>

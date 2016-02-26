@@ -62,6 +62,7 @@
     <Compile Include="Fixtures\Build\BambooFixture.cs" />
     <Compile Include="Fixtures\Build\ContinuaCIInfoFixture.cs" />
     <Compile Include="Fixtures\Build\BambooInfoFixture.cs" />
+    <Compile Include="Fixtures\Build\TeamCityFixture.cs" />
     <Compile Include="Fixtures\AssemblyInfoFixture.cs" />
     <Compile Include="Fixtures\AssemblyInfoParserFixture.cs" />
     <Compile Include="Fixtures\Build\JenkinsFixture.cs" />
