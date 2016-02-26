@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Cake.Common.Tools.DotCover.Analyse;
+using Cake.Common.Tools.DotCover.Cover;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotCover.Analyse
+namespace Cake.Common.Tests.Fixtures.Tools.DotCover.Cover
 {
-    internal sealed class DotCoverAnalyserFixture : DotCoverFixture<DotCoverAnalyseSettings>
+    internal sealed class DotCoverCovererFixture : DotCoverFixture<DotCoverCoverSettings>
     {
         public ICakeContext Context { get; set; }
         public Action<ICakeContext> Action { get; set; }
         public FilePath OutputPath { get; set; }
 
-        public DotCoverAnalyserFixture()
+        public DotCoverCovererFixture()
         {
             // Set the output file.
-            OutputPath = new FilePath("./result.xml");
+            OutputPath = new FilePath("./result.dcvr");
 
             // Setup the Cake Context.
             Context = Substitute.For<ICakeContext>();
@@ -46,8 +46,8 @@ namespace Cake.Common.Tests.Fixtures.Tools.DotCover.Analyse
 
         protected override void RunTool()
         {
-            var tool = new DotCoverAnalyser(FileSystem, Environment, ProcessRunner, Globber);
-            tool.Analyse(Context, Action, OutputPath, Settings);
+            var tool = new DotCoverCoverer(FileSystem, Environment, ProcessRunner, Globber);
+            tool.Cover(Context, Action, OutputPath, Settings);
         }
     }
 }
