@@ -23,9 +23,9 @@ var releaseNotes = ParseReleaseNotes("./ReleaseNotes.md");
 // Get version.
 var buildNumber = AppVeyor.Environment.Build.Number;
 GitVersion assertedVersions        = null;
-var version = releaseNotes.Version.ToString();
-var semVersion = local ? version : (version + string.Concat("-build-", buildNumber));
-var milestone = string.Concat("v", version);
+var version = string.Empty;
+var semVersion = string.Empty;
+var milestone = string.Empty;
 
 // Define directories.
 var buildDir = Directory("./src/Cake/bin") + Directory(configuration);
@@ -68,20 +68,10 @@ Task("Restore-NuGet-Packages")
     });
 });
 
-Task("Patch-Assembly-Info")
+Task("Run-GitVersion")
     .IsDependentOn("Restore-NuGet-Packages")
-    .Does(() =>
-{
-    var file = "./src/SolutionInfo.cs";
-    CreateAssemblyInfo(file, new AssemblyInfoSettings {
-        Product = "Cake",
-        Version = version,
-        FileVersion = version,
-        InformationalVersion = semVersion,
-        Copyright = "Copyright (c) Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors"
-    });
-});
-
+    .IsDependentOn("Run-GitVersion-AppVeyor")
+    .IsDependentOn("Run-GitVersion-Local");
 
 Task("Run-GitVersion-AppVeyor")
     .WithCriteria(AppVeyor.IsRunningOnAppVeyor)
@@ -130,7 +120,7 @@ Task("Run-GitVersion-Local")
 });
 
 Task("Build")
-    .IsDependentOn("Patch-Assembly-Info")
+    .IsDependentOn("Run-GitVersion")
     .Does(() =>
 {
     if(isRunningOnUnix)
@@ -195,6 +185,7 @@ Task("Copy-Files")
 
 Task("Zip-Files")
     .IsDependentOn("Copy-Files")
+    .IsDependentOn("Run-GitVersion")
     .Does(() =>
 {
     var packageFile = File("Cake-bin-v" + semVersion + ".zip");
@@ -208,6 +199,7 @@ Task("Zip-Files")
 
 Task("Create-Chocolatey-Packages")
     .IsDependentOn("Copy-Files")
+    .IsDependentOn("Run-GitVersion")
     .IsDependentOn("Package")
     .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
@@ -235,6 +227,7 @@ Task("Create-Chocolatey-Packages")
 
 Task("Create-NuGet-Packages")
     .IsDependentOn("Copy-Files")
+    .IsDependentOn("Run-GitVersion")
     .Does(() =>
 {
     // Create Cake package.
@@ -277,6 +270,7 @@ Task("Create-NuGet-Packages")
 
 Task("Update-AppVeyor-Build-Number")
     .WithCriteria(() => isRunningOnAppVeyor)
+    .IsDependentOn("Run-GitVersion")
     .Does(() =>
 {
     AppVeyor.UpdateBuildVersion(semVersion);
@@ -284,6 +278,7 @@ Task("Update-AppVeyor-Build-Number")
 
 Task("Upload-AppVeyor-Artifacts")
     .IsDependentOn("Create-Chocolatey-Packages")
+    .IsDependentOn("Run-GitVersion")
     .WithCriteria(() => isRunningOnAppVeyor)
     .Does(() =>
 {
@@ -292,6 +287,7 @@ Task("Upload-AppVeyor-Artifacts")
 });
 
 Task("Publish-MyGet")
+    .IsDependentOn("Run-GitVersion")
     .WithCriteria(() => !local)
     .WithCriteria(() => !isPullRequest)
     .WithCriteria(() => isMainCakeRepo)
@@ -317,6 +313,7 @@ Task("Publish-MyGet")
 });
 
 Task("Publish-NuGet")
+    .IsDependentOn("Run-GitVersion")
     .IsDependentOn("Create-NuGet-Packages")
     .WithCriteria(() => local)
     .Does(() =>
@@ -340,6 +337,7 @@ Task("Publish-NuGet")
 });
 
 Task("Publish-Chocolatey")
+    .IsDependentOn("Run-GitVersion")
     .IsDependentOn("Create-Chocolatey-Packages")
     .WithCriteria(() => local)
     .Does(() =>
@@ -363,6 +361,7 @@ Task("Publish-Chocolatey")
 });
 
 Task("Publish-HomeBrew")
+    .IsDependentOn("Run-GitVersion")
     .IsDependentOn("Zip-Files")
 	.Does(() =>
 {
@@ -375,6 +374,7 @@ Task("Publish-HomeBrew")
 });
 
 Task("Publish-GitHub-Release")
+    .IsDependentOn("Run-GitVersion")
     .Does(() =>
 {
     var packageFile = File("Cake-bin-v" + semVersion + ".zip");
@@ -388,6 +388,7 @@ Task("Publish-GitHub-Release")
 });
 
 Task("Create-Release-Notes")
+    .IsDependentOn("Run-GitVersion")
     .Does(() =>
 {
     GitReleaseManagerCreate(userName, password, "cake-build", "cake", new GitReleaseManagerCreateSettings {
