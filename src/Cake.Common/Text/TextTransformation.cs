@@ -64,7 +64,7 @@ namespace Cake.Common.Text
             // Render the content to the file.
             var file = _fileSystem.GetFile(path);
             using (var stream = file.OpenWrite())
-            using (var writer = new StreamWriter(stream, Encoding.UTF8, 1024, true))
+            using (var writer = new StreamWriter(stream, new UTF8Encoding(false), 1024, true))
             {
                 writer.Write(_template.Render());
             }
