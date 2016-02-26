@@ -106,6 +106,23 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             Assert.Equal(existingToolPath, result.Path.FullPath);
         }
 
+        [Theory]
+        [InlineData("U:/ProgramFilesX86/Microsoft Visual Studio 14.0/Common7/IDE/mstest.exe")]
+        [InlineData("K:/Programs/Microsoft Visual Studio 12.0/Common7/IDE/mstest.exe")]
+        public void Should_Use_UserDefined_Tool_Path_If_Provided(string userDefinedPath)
+        {
+            //Given
+            var fixture = new MSTestRunnerFixture();
+            fixture.Settings.UserDefinedToolPath = userDefinedPath;
+            fixture.FileSystem.CreateFile(userDefinedPath);
+
+            //When
+            var result = fixture.Run();
+            
+            //Then
+            Assert.Equal(userDefinedPath, result.Path.FullPath);
+        }
+
         [Fact]
         public void Should_Set_Working_Directory()
         {
