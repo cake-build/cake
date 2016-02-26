@@ -1,4 +1,5 @@
-﻿using Cake.Core.Tooling;
+﻿using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.MSTest
 {
@@ -16,6 +17,10 @@ namespace Cake.Common.Tools.MSTest
         ///   <c>true</c> if running without isolation; otherwise, <c>false</c>.
         /// </value>
         public bool NoIsolation { get; set; }
+        /// <summary>
+        /// Get or sets a value indicating the full path to MSBuild.exe
+        /// </summary>
+        public string UserDefinedToolPath { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MSTestSettings"/> class.
@@ -23,6 +28,16 @@ namespace Cake.Common.Tools.MSTest
         public MSTestSettings()
         {
             NoIsolation = true;
+        }
+
+        /// <summary>
+        ///  Initializes a new isntance of the <see cref="MSTestSettings"/> class
+        ///  with a user defined path to MSBuild.exe
+        /// </summary>
+        /// <param name="userDefinedToolPath"></param>
+        public MSTestSettings(string userDefinedToolPath) : this()
+        {
+            UserDefinedToolPath = userDefinedToolPath;
         }
     }
 }

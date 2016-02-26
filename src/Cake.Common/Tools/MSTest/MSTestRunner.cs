@@ -91,6 +91,12 @@ namespace Cake.Common.Tools.MSTest
         /// <returns>The default tool path.</returns>
         protected override IEnumerable<FilePath> GetAlternativeToolPaths(MSTestSettings settings)
         {
+            if (settings.UserDefinedToolPath != null)
+            {
+                yield return FilePath.FromString(settings.UserDefinedToolPath);
+                yield break;
+            }
+
             foreach (var version in new[] { "14.0", "12.0", "11.0", "10.0" })
             {
                 var path = GetToolPath(version);
