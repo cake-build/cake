@@ -2,6 +2,7 @@
 using Cake.Common.Build.AppVeyor;
 using Cake.Common.Build.Bamboo;
 using Cake.Common.Build.ContinuaCI;
+using Cake.Common.Build.Jenkins;
 using Cake.Common.Build.MyGet;
 using Cake.Common.Build.TeamCity;
 
@@ -18,16 +19,18 @@ namespace Cake.Common.Build
         private readonly IMyGetProvider _myGetProvider;
         private readonly IBambooProvider _bambooProvider;
         private readonly IContinuaCIProvider _continuaCIProvider;
+        private readonly IJenkinsProvider _jenkinsProvider;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BuildSystem"/> class.
+        /// Initializes a new instance of the <see cref="BuildSystem" /> class.
         /// </summary>
         /// <param name="appVeyorProvider">The AppVeyor Provider.</param>
         /// <param name="teamCityProvider">The TeamCity Provider.</param>
         /// <param name="myGetProvider">The MyGet Provider.</param>
         /// <param name="bambooProvider">The Bamboo Provider.</param>
         /// <param name="continuaCIProvider">The Continua CI Provider.</param>
-        public BuildSystem(IAppVeyorProvider appVeyorProvider, ITeamCityProvider teamCityProvider, IMyGetProvider myGetProvider, IBambooProvider bambooProvider, IContinuaCIProvider continuaCIProvider)
+        /// <param name="jenkinsProvider">The jenkins provider.</param>
+        public BuildSystem(IAppVeyorProvider appVeyorProvider, ITeamCityProvider teamCityProvider, IMyGetProvider myGetProvider, IBambooProvider bambooProvider, IContinuaCIProvider continuaCIProvider, IJenkinsProvider jenkinsProvider)
         {
             if (appVeyorProvider == null)
             {
@@ -49,12 +52,17 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("continuaCIProvider");
             }
+            if (jenkinsProvider == null)
+            {
+                throw new ArgumentNullException("jenkinsProvider");
+            }
 
             _appVeyorProvider = appVeyorProvider;
             _teamCityProvider = teamCityProvider;
             _myGetProvider = myGetProvider;
             _bambooProvider = bambooProvider;
             _continuaCIProvider = continuaCIProvider;
+            _jenkinsProvider = jenkinsProvider;
         }
 
         /// <summary>
@@ -177,7 +185,6 @@ namespace Cake.Common.Build
         /// {
         ///     // Get the build number.
         ///     var buildNumber = BuildSystem.Bamboo.Number;
-        ///
         /// }
         /// </code>
         /// </example>
@@ -198,7 +205,6 @@ namespace Cake.Common.Build
         /// {
         ///     //Get the Bamboo Plan Name
         ///     var planName = BuildSystem.Bamboo.Project.PlanName
-        ///
         /// }
         /// </code>
         /// </example>
@@ -216,7 +222,6 @@ namespace Cake.Common.Build
         /// {
         ///     // Get the build version.
         ///     var buildVersion = BuildSystem.ContinuaCI.Environment.Build.Version;
-        ///
         /// }
         /// </code>
         /// </example>
@@ -236,8 +241,7 @@ namespace Cake.Common.Build
         /// if(BuildSystem.IsRunningOnContinuaCI)
         /// {
         ///     //Get the Continua CI Project Name
-        ///     var projectName = BuildSystem.ContinuaCI.Environment.Project.Name
-        ///
+        ///     var projectName = BuildSystem.ContinuaCI.Environment.Project.Name;
         /// }
         /// </code>
         /// </example>
@@ -245,7 +249,47 @@ namespace Cake.Common.Build
         {
             get { return _continuaCIProvider; }
         }
-        
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is running on Jenkins.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnJenkins)
+        /// {
+        ///     // Get the build number.
+        ///     var buildNumber = BuildSystem.Jenkins.Environment.Build.BuildNumber;
+        /// }
+        /// </code>
+        /// </example>
+        /// <value>
+        /// <c>true</c> if this instance is running on jenkins; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsRunningOnJenkins
+        {
+            get { return _jenkinsProvider.IsRunningOnJenkins; }
+        }
+
+        /// <summary>
+        /// Gets the Jenkins Provider.
+        /// </summary>
+        /// <value>
+        /// The jenkins.
+        /// </value>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnJenkins)
+        /// {
+        ///     // Get the job name.
+        ///     var jobName = BuildSystem.Jenkins.Environment.Build.JobName;
+        /// }
+        /// </code>
+        /// </example>
+        public IJenkinsProvider Jenkins
+        {
+            get { return _jenkinsProvider; }
+        }
+
         /// <summary>
         /// Gets a value indicating whether the current build is local build.
         /// </summary>
@@ -267,7 +311,7 @@ namespace Cake.Common.Build
         /// </value>
         public bool IsLocalBuild
         {
-            get { return !(IsRunningOnAppVeyor || IsRunningOnTeamCity || IsRunningOnMyGet || IsRunningOnBamboo || IsRunningOnContinuaCI); }
+            get { return !(IsRunningOnAppVeyor || IsRunningOnTeamCity || IsRunningOnMyGet || IsRunningOnBamboo || IsRunningOnContinuaCI || IsRunningOnJenkins); }
         }
     }
 }
