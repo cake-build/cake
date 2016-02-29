@@ -157,7 +157,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             var result = fixture.Run();
 
             // Then
-            Assert.Equal("\"/testcontainer:/Working/Test1.dll\" \"/noisolation\"", result.Args);
+            Assert.Equal("\"/testcontainer:/Working/Test1.dll\" /noisolation", result.Args);
         }
 
         [Fact]
@@ -175,6 +175,31 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         }
 
         [Fact]
+        public void Should_Use_TestCategoryFilter_If_Provided()
+        {
+            //Given
+            var fixture = new MSTestRunnerFixture();
+            fixture.Settings.Category = "!Network";
+
+            //When
+            var result = fixture.Run();
+
+            Assert.Equal("\"/testcontainer:/Working/Test1.dll\" /category:\"!Network\" /noisolation", result.Args);
+        }
+
+        [Fact]
+        public void Should_Not_Use_TestCategoryFilter_If_Not_Provided()
+        {
+            //Given
+            var fixture = new MSTestRunnerFixture();
+
+            //When
+            var result = fixture.Run();
+
+            Assert.Equal("\"/testcontainer:/Working/Test1.dll\" /noisolation", result.Args);
+        }
+
+        [Fact]
         public void Should_Add_Testcontainer_For_Each_Assembly()
         {
             // Given
@@ -185,7 +210,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             var result = fixture.Run();
 
             // Then
-            Assert.Equal("\"/testcontainer:/Working/Test1.dll\" \"/testcontainer:/Working/Test2.dll\" \"/noisolation\"", result.Args);
+            Assert.Equal("\"/testcontainer:/Working/Test1.dll\" \"/testcontainer:/Working/Test2.dll\" /noisolation", result.Args);
         }
     }
 }

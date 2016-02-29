@@ -58,9 +58,14 @@ namespace Cake.Common.Tools.MSTest
                 builder.Append(string.Concat("/testcontainer:", assemblyPath.MakeAbsolute(_environment).FullPath).Quote());
             }
 
+            if (!string.IsNullOrEmpty(settings.Category))
+            {
+                builder.Append(string.Concat("/category:", settings.Category.Quote()));
+            }
+
             if (settings.NoIsolation)
             {
-                builder.AppendQuoted("/noisolation");
+                builder.Append("/noisolation");
             }
 
             return builder;
