@@ -306,6 +306,16 @@
     <Compile Include="Tools\SignTool\SignToolSignAliases.cs" />
     <Compile Include="Tools\SignTool\SignToolSignRunner.cs" />
     <Compile Include="Tools\SignTool\SignToolSignSettings.cs" />
+    <Compile Include="Tools\SpecFlow\SpecFlowContext.cs" />
+    <Compile Include="Tools\SpecFlow\SpecFlowContextExtensions.cs" />
+    <Compile Include="Tools\SpecFlow\SpecFlowProcessRunner.cs" />
+    <Compile Include="Tools\SpecFlow\TestExecutionReport\SpecFlowTestExecutionReporter.cs" />
+    <Compile Include="Tools\SpecFlow\TestExecutionReport\SpecFlowTestExecutionReportSettings.cs" />
+    <Compile Include="Tools\SpecFlow\StepDefinitionReport\SpecFlowStepDefinitionReporter.cs" />
+    <Compile Include="Tools\SpecFlow\StepDefinitionReport\SpecFlowStepDefinitionReportSettings.cs" />
+    <Compile Include="Tools\SpecFlow\SpecFlowAliases.cs" />
+    <Compile Include="Tools\SpecFlow\SpecFlowSettings.cs" />
+    <Compile Include="Tools\SpecFlow\SpecFlowTool.cs" />
     <Compile Include="Tools\WiX\Architecture.cs" />
     <Compile Include="Tools\WiX\CandleRunner.cs" />
     <Compile Include="Tools\WiX\CandleSettings.cs" />
