@@ -66,5 +66,18 @@ namespace Cake.Common.Tests.Unit.Build
                 Assert.IsArgumentNullException(result, "context");
             }
         }
+
+        public sealed class TheBitriseMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                //Given, When
+                var result = Record.Exception(() => BuildSystemAliases.Bitrise(null));
+
+                //Then
+                Assert.IsArgumentNullException(result, "context");
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Cake.Common.Build.AppVeyor;
 using Cake.Common.Build.Bamboo;
+using Cake.Common.Build.Bitrise;
 using Cake.Common.Build.ContinuaCI;
 using Cake.Common.Build.Jenkins;
 using Cake.Common.Build.MyGet;
@@ -20,6 +21,7 @@ namespace Cake.Common.Build
         private readonly IBambooProvider _bambooProvider;
         private readonly IContinuaCIProvider _continuaCIProvider;
         private readonly IJenkinsProvider _jenkinsProvider;
+        private readonly IBitriseProvider _bitriseProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BuildSystem" /> class.
@@ -29,8 +31,9 @@ namespace Cake.Common.Build
         /// <param name="myGetProvider">The MyGet Provider.</param>
         /// <param name="bambooProvider">The Bamboo Provider.</param>
         /// <param name="continuaCIProvider">The Continua CI Provider.</param>
-        /// <param name="jenkinsProvider">The jenkins provider.</param>
-        public BuildSystem(IAppVeyorProvider appVeyorProvider, ITeamCityProvider teamCityProvider, IMyGetProvider myGetProvider, IBambooProvider bambooProvider, IContinuaCIProvider continuaCIProvider, IJenkinsProvider jenkinsProvider)
+        /// <param name="jenkinsProvider">The Jenkins Provider.</param>
+        /// <param name="bitriseProvider">The Bitrise Provider.</param>
+        public BuildSystem(IAppVeyorProvider appVeyorProvider, ITeamCityProvider teamCityProvider, IMyGetProvider myGetProvider, IBambooProvider bambooProvider, IContinuaCIProvider continuaCIProvider, IJenkinsProvider jenkinsProvider, IBitriseProvider bitriseProvider)
         {
             if (appVeyorProvider == null)
             {
@@ -56,6 +59,10 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("jenkinsProvider");
             }
+            if (bitriseProvider == null)
+            {
+                throw new ArgumentNullException("bitriseProvider");
+            }
 
             _appVeyorProvider = appVeyorProvider;
             _teamCityProvider = teamCityProvider;
@@ -63,6 +70,7 @@ namespace Cake.Common.Build
             _bambooProvider = bambooProvider;
             _continuaCIProvider = continuaCIProvider;
             _jenkinsProvider = jenkinsProvider;
+            _bitriseProvider = bitriseProvider;
         }
 
         /// <summary>
@@ -291,6 +299,43 @@ namespace Cake.Common.Build
         }
 
         /// <summary>
+        /// Gets a value indicating whether this instance is running on Bitrise.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnBitrise)
+        /// {
+        ///     // Get the build number.
+        ///     var buildNumber = BuildSystem.Bitrise.Environment.Build.BuildNumber;
+        /// }
+        /// </code>
+        /// </example>
+        /// <value>
+        /// <c>true</c> if this instance is running on bitrise; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsRunningOnBitrise
+        {
+            get { return _bitriseProvider.IsRunningOnBitrise; }
+        }
+
+        /// <summary>
+        /// Gets the Bitrise Provider.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnBitrise)
+        /// {
+        ///     // Get the provision profile url.
+        ///     var buildNumber = BuildSystem.Bitrise.Environment.Provisioning.ProvisionUrl;
+        /// }
+        /// </code>
+        /// </example>
+        public IBitriseProvider Bitrise
+        {
+            get { return _bitriseProvider; }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether the current build is local build.
         /// </summary>
         /// <example>
@@ -311,7 +356,7 @@ namespace Cake.Common.Build
         /// </value>
         public bool IsLocalBuild
         {
-            get { return !(IsRunningOnAppVeyor || IsRunningOnTeamCity || IsRunningOnMyGet || IsRunningOnBamboo || IsRunningOnContinuaCI || IsRunningOnJenkins); }
+            get { return !(IsRunningOnAppVeyor || IsRunningOnTeamCity || IsRunningOnMyGet || IsRunningOnBamboo || IsRunningOnContinuaCI || IsRunningOnJenkins || IsRunningOnBitrise); }
         }
     }
 }
