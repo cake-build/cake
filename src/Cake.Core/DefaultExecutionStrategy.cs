@@ -142,15 +142,9 @@ namespace Cake.Core
             {
                 throw new ArgumentNullException("setupContext");
             }
-
             if (action != null)
             {
-                _log.Information(string.Empty);
-                _log.Information("----------------------------------------");
-                _log.Information("Task Setup ({0})", setupContext.Task.Name);
-                _log.Information("----------------------------------------");
-                _log.Verbose("Executing custom task setup action ({0})...", setupContext.Task.Name);
-
+                _log.Debug("Executing custom task setup action ({0})...", setupContext.Task.Name);
                 action(context, setupContext);
             }
         }
@@ -167,15 +161,9 @@ namespace Cake.Core
             {
                 throw new ArgumentNullException("teardownContext");
             }
-
             if (action != null)
             {
-                _log.Information(string.Empty);
-                _log.Information("----------------------------------------");
-                _log.Information("Task Teardown ({0})", teardownContext.Task.Name);
-                _log.Information("----------------------------------------");
-                _log.Verbose("Executing custom task teardown action ({0})...", teardownContext.Task.Name);
-
+                _log.Debug("Executing custom task teardown action ({0})...", teardownContext.Task.Name);
                 action(context, teardownContext);
             }
         }
