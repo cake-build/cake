@@ -16,6 +16,10 @@ namespace Cake.Core.IO
             var segments = path.FullPath.Split('/', '\\');
             foreach (var segment in segments)
             {
+                if (segment == ".")
+                {
+                    continue;
+                }
                 if (segment == "..")
                 {
                     if (stack.Count > 1)
@@ -26,7 +30,8 @@ namespace Cake.Core.IO
                 }
                 stack.Push(segment);
             }
-            return string.Join("/", stack.Reverse());
+            string collapsed = string.Join("/", stack.Reverse());
+            return collapsed == string.Empty ? "." : collapsed;
         }
     }
 }
