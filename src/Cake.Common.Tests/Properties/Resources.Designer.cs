@@ -250,6 +250,25 @@ namespace Cake.Common.Tests.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
+        ///    &lt;id&gt;The ID&lt;/id&gt;
+        ///    &lt;version&gt;The version&lt;/version&gt;
+        ///    &lt;title&gt;The title&lt;/title&gt;
+        ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+        ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+        ///    &lt;description&gt;The description&lt;/description&gt;
+        ///    &lt;summary&gt;The summary&lt;/summary&gt;
+        ///    &lt;licenseUrl&gt;https://lic [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Nuspec_Metadata_WithDependencies {
+            get {
+                return ResourceManager.GetString("Nuspec_Metadata_WithDependencies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package&gt;
         ///  &lt;metadata&gt;
         ///    &lt;id&gt;The ID&lt;/id&gt;
@@ -267,6 +286,28 @@ namespace Cake.Common.Tests.Properties {
         internal static string Nuspec_Metadata_WithoutNamespaces {
             get {
                 return ResourceManager.GetString("Nuspec_Metadata_WithoutNamespaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;package&gt;
+        ///  &lt;metadata&gt;
+        ///    &lt;id&gt;The ID&lt;/id&gt;
+        ///    &lt;version&gt;The version&lt;/version&gt;
+        ///    &lt;title&gt;The title&lt;/title&gt;
+        ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+        ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+        ///    &lt;description&gt;The description&lt;/description&gt;
+        ///    &lt;summary&gt;The summary&lt;/summary&gt;
+        ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+        ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+        ///    &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
+        ///    &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseA [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Nuspec_Metadata_WithoutNamespaces_WithDependencies {
+            get {
+                return ResourceManager.GetString("Nuspec_Metadata_WithoutNamespaces_WithDependencies", resourceCulture);
             }
         }
         
