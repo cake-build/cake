@@ -85,6 +85,20 @@ namespace Cake.Common.Tools.NuGet.Pack
                     fileElement.AddAttributeIfSpecified(file.Target, "target");
                 }
             }
+            
+            if (settings.Dependencies != null && settings.Dependencies.Count > 0)
+            {
+                var dependenciesElement = FindOrCreateElement(document, namespaceManager, "dependencies");
+                
+                // Add the files
+                dependenciesElement.RemoveAll();
+                foreach (var dependency in settings.Dependencies)
+                {
+                    var fileElement = document.CreateAndAppendElement(dependenciesElement, "dependency");
+                    fileElement.AddAttributeIfSpecified(dependency.Id, "id");
+                    fileElement.AddAttributeIfSpecified(dependency.Version, "version");
+                }
+            }
         }
 
         private static XmlNode GetPackageElement(XmlDocument document)
