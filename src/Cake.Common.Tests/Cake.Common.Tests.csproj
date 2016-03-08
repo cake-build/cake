@@ -93,6 +93,9 @@
     <Compile Include="Fixtures\Tools\DNU\DNUFixture.cs" />
     <Compile Include="Fixtures\Tools\DNU\Pack\DNUPackerFixture.cs" />
     <Compile Include="Fixtures\Tools\DNU\Restorer\DNURestorerFixture.cs" />
+    <Compile Include="Fixtures\Tools\SpecFlow\StepDefinitionReport\SpecFlowStepDefinitionReporterFixture.cs" />
+    <Compile Include="Fixtures\Tools\SpecFlow\TestExecutionReport\SpecFlowTestExecutionReporterFixture.cs" />
+    <Compile Include="Fixtures\Tools\SpecFlow\SpecFlowFixture.cs" />
     <Compile Include="Fixtures\Tools\DotCover\Analyse\DotCoverAnalyserFixture.cs" />
     <Compile Include="Fixtures\Tools\DotCover\Cover\DotCoverCovererFixture.cs" />
     <Compile Include="Fixtures\Tools\DotCover\DotCoverFixture.cs" />
@@ -261,6 +264,8 @@
     <Compile Include="Unit\Tools\Roundhouse\RoundhouseRunnerTests.cs" />
     <Compile Include="Unit\Tools\SignTool\SignToolResolverTests.cs" />
     <Compile Include="Unit\Tools\SignTool\SignToolSignRunnerTests.cs" />
+    <Compile Include="Unit\Tools\SpecFlow\StepDefinitionReport\SpecFlowStepDefinitionReporterTests.cs" />
+    <Compile Include="Unit\Tools\SpecFlow\TestExecutionReport\SpecFlowTestExecutionReporterTests.cs" />
     <Compile Include="Unit\Tools\WiX\LightRunnerTests.cs" />
     <Compile Include="Unit\Tools\WiX\CandleRunnerTests.cs" />
     <Compile Include="Unit\Tools\XBuild\XBuildSettingsExtensionsTests.cs" />
