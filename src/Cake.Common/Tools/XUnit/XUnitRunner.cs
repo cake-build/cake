@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -30,13 +29,13 @@ namespace Cake.Common.Tools.XUnit
         /// <summary>
         /// Runs the tests in the specified assembly.
         /// </summary>
-        /// <param name="assemblyPaths">The assembly paths.</param>
+        /// <param name="assemblyPath">The assembly path.</param>
         /// <param name="settings">The settings.</param>
-        public void Run(IEnumerable<FilePath> assemblyPaths, XUnitSettings settings)
+        public void Run(FilePath assemblyPath, XUnitSettings settings)
         {
-            if (assemblyPaths == null)
+            if (assemblyPath == null)
             {
-                throw new ArgumentNullException("assemblyPaths");
+                throw new ArgumentNullException("assemblyPath");
             }
             if (settings == null)
             {
@@ -56,19 +55,18 @@ namespace Cake.Common.Tools.XUnit
                 }
             }
 
-            var assemblies = assemblyPaths as FilePath[] ?? assemblyPaths.ToArray();
-            Run(settings, GetArguments(assemblies, settings));
+            Run(settings, GetArguments(assemblyPath, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(IReadOnlyList<FilePath> assemblyPaths, XUnitSettings settings)
+        private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, XUnitSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
 
-            // Add the assemblies to test.
-            foreach (var assembly in assemblyPaths)
-            {
-                builder.AppendQuoted(assembly.MakeAbsolute(_environment).FullPath);
-            }
+            // Get the absolute path to the assembly.
+            assemblyPath = assemblyPath.MakeAbsolute(_environment);
+
+            // Add the assembly to build.
+            builder.AppendQuoted(assemblyPath.FullPath);
 
             // No shadow copy?
             if (!settings.ShadowCopy)
@@ -79,8 +77,7 @@ namespace Cake.Common.Tools.XUnit
             // Generate HTML report?
             if (settings.HtmlReport)
             {
-                var reportFileName = XUnitRunnerUtilities.GetReportFileName(assemblyPaths);
-                var assemblyFilename = reportFileName.AppendExtension(".html");
+                var assemblyFilename = assemblyPath.GetFilename().AppendExtension(".html");
                 var outputPath = settings.OutputDirectory.MakeAbsolute(_environment).GetFilePath(assemblyFilename);
 
                 builder.AppendQuoted("/html");
@@ -90,8 +87,7 @@ namespace Cake.Common.Tools.XUnit
             // Generate XML report?
             if (settings.XmlReport)
             {
-                var reportFileName = XUnitRunnerUtilities.GetReportFileName(assemblyPaths);
-                var assemblyFilename = reportFileName.AppendExtension(".xml");
+                var assemblyFilename = assemblyPath.GetFilename().AppendExtension(".xml");
                 var outputPath = settings.OutputDirectory.MakeAbsolute(_environment).GetFilePath(assemblyFilename);
 
                 builder.AppendQuoted("/xml");
