@@ -28,7 +28,7 @@ namespace Cake.Common.Tools.SpecFlow
             }
             else
             {
-                throw new CakeException(string.Format("Unsupported tool {0}.", executable));
+                throw new CakeException(string.Concat("Unsupported tool ", executable, "."));
             }
 
             return builder;
