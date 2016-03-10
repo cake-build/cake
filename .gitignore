@@ -16,6 +16,9 @@ tools/nuget.exe
 tools/gitreleasemanager/
 tools/GitVersion.CommandLine/
 
+# Integration tests
+integration/tools
+
 # mstest test results
 TestResults
 

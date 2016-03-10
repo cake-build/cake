@@ -8,7 +8,8 @@ Param(
     [switch]$Experimental,
     [switch]$WhatIf,
     [switch]$Mono,
-    [switch]$SkipToolPackageRestore
+    [switch]$SkipToolPackageRestore,
+    [string]$Output = $null
 )
 
 $PSScriptRoot = split-path -parent $MyInvocation.MyCommand.Definition;
@@ -33,6 +34,13 @@ if($WhatIf.IsPresent) {
 $UseMono = "";
 if($Mono.IsPresent) {
     $UseMono = "-mono"
+}
+
+# Should we place output somewhere else?
+$UseOutput = "";
+if($Output -ne $null)
+{
+  $UseOutput = "-output=$Output"
 }
 
 # Try download NuGet.exe if do not exist.
@@ -63,5 +71,5 @@ if (!(Test-Path $CAKE_EXE)) {
 }
 
 # Start Cake
-Invoke-Expression "$CAKE_EXE `"$Script`" -target=`"$Target`" -configuration=`"$Configuration`" -verbosity=`"$Verbosity`" $UseMono $UseDryRun $UseExperimental"
+Invoke-Expression "$CAKE_EXE `"$Script`" -target=`"$Target`" -configuration=`"$Configuration`" -verbosity=`"$Verbosity`" $UseMono $UseDryRun $UseExperimental $UseOutput"
 exit $LASTEXITCODE

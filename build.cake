@@ -4,6 +4,7 @@
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
+var output = Argument("output", string.Empty);
 
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
@@ -20,6 +21,10 @@ var isMainCakeRepo = StringComparer.OrdinalIgnoreCase.Equals("cake-build/cake", 
 // Parse release notes.
 var releaseNotes = ParseReleaseNotes("./ReleaseNotes.md");
 
+// Credentials
+var userName = EnvironmentVariable("CAKE_GITHUB_USERNAME");
+var password = EnvironmentVariable("CAKE_GITHUB_PASSWORD");
+
 // Get version.
 var buildNumber = AppVeyor.Environment.Build.Number;
 GitVersion assertedVersions        = null;
@@ -30,11 +35,14 @@ var milestone = string.Empty;
 // Define directories.
 var buildDir = Directory("./src/Cake/bin") + Directory(configuration);
 var buildResultDir = Directory("./build") + Directory("v" + semVersion);
+
+if(!string.IsNullOrWhiteSpace(output)) {
+  buildResultDir = Directory(output);
+}
+
 var testResultsDir = buildResultDir + Directory("test-results");
 var nugetRoot = buildResultDir + Directory("nuget");
 var binDir = buildResultDir + Directory("bin");
-var userName = EnvironmentVariable("CAKE_GITHUB_USERNAME");
-var password = EnvironmentVariable("CAKE_GITHUB_PASSWORD");
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -144,20 +152,8 @@ Task("Build")
     }
 });
 
-Task("Run-Unit-Tests")
-    .IsDependentOn("Build")
-    .Does(() =>
-{
-    XUnit2("./src/**/bin/" + configuration + "/*.Tests.dll", new XUnit2Settings {
-        OutputDirectory = testResultsDir,
-        XmlReportV1 = true,
-        NoAppDomain = true
-    });
-});
-
-
 Task("Copy-Files")
-    .IsDependentOn("Run-Unit-Tests")
+    .IsDependentOn("Build")
     .Does(() =>
 {
     CopyFileToDirectory(buildDir + File("Cake.exe"), binDir);
@@ -182,6 +178,18 @@ Task("Copy-Files")
 
     CopyFiles(new FilePath[] { "LICENSE", "README.md", "ReleaseNotes.md" }, binDir);
 });
+
+Task("Run-Unit-Tests")
+    .IsDependentOn("Build")
+    .Does(() =>
+{
+    XUnit2("./src/**/bin/" + configuration + "/*.Tests.dll", new XUnit2Settings {
+        OutputDirectory = testResultsDir,
+        XmlReportV1 = true,
+        NoAppDomain = true
+    });
+});
+
 
 Task("Zip-Files")
     .IsDependentOn("Copy-Files")
@@ -408,15 +416,18 @@ Task("Package")
   .IsDependentOn("Create-NuGet-Packages");
 
 Task("Default")
+  .IsDependentOn("Run-Unit-Tests")
   .IsDependentOn("Package");
 
 Task("Publish")
+  .IsDependentOn("Run-Unit-Tests")
   .IsDependentOn("Publish-NuGet")
   .IsDependentOn("Publish-Chocolatey")
   .IsDependentOn("Publish-HomeBrew")
   .IsDependentOn("Publish-GitHub-Release");
 
 Task("AppVeyor")
+  .IsDependentOn("Run-Unit-Tests")
   .IsDependentOn("Update-AppVeyor-Build-Number")
   .IsDependentOn("Upload-AppVeyor-Artifacts")
   .IsDependentOn("Publish-MyGet");
