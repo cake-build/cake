@@ -74,6 +74,14 @@
     <Compile Include="Build\ContinuaCI\IContinuaCIProvider.cs" />
     <Compile Include="Build\ContinuaCI\ContinuaCIMessageType.cs" />
     <Compile Include="Build\ContinuaCI\ContinuaCIProvider.cs" />
+    <Compile Include="Build\Jenkins\Data\JenkinsBuildInfo.cs" />
+    <Compile Include="Build\Jenkins\Data\JenkinsEnvironmentInfo.cs" />
+    <Compile Include="Build\Jenkins\Data\JenkinsNodeInfo.cs" />
+    <Compile Include="Build\Jenkins\Data\JenkinsRepositoryInfo.cs" />
+    <Compile Include="Build\Jenkins\Data\JenkinsJobInfo.cs" />
+    <Compile Include="Build\Jenkins\IJenkinsProvider.cs" />
+    <Compile Include="Build\Jenkins\JenkinsInfo.cs" />
+    <Compile Include="Build\Jenkins\JenkinsProvider.cs" />
     <Compile Include="Build\MyGet\IMyGetProvider.cs" />
     <Compile Include="Build\MyGet\MyGetProvider.cs" />
     <Compile Include="Build\MyGet\MyGetBuildStatus.cs" />

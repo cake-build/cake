@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Net.Mime;
 using Cake.Common.Build.AppVeyor;
 using Cake.Common.Build.Bamboo;
 using Cake.Common.Build.ContinuaCI;
+using Cake.Common.Build.Jenkins;
 using Cake.Common.Build.MyGet;
 using Cake.Common.Build.TeamCity;
 using Cake.Core;
@@ -37,9 +39,10 @@ namespace Cake.Common.Build
             var teamCityProvider = new TeamCityProvider(context.Environment);
             var myGetProvider = new MyGetProvider(context.Environment);
             var bambooProvider = new BambooProvider(context.Environment);
-            var continuaCIProvider = new ContinuaCIProvider(context.Environment);  
+            var continuaCIProvider = new ContinuaCIProvider(context.Environment);
+            var jenkinsProvider = new JenkinsProvider(context.Environment);
 
-            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider);
+            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider);
         }
 
         /// <summary>
@@ -152,6 +155,31 @@ namespace Cake.Common.Build
             }
             var buildSystem = context.BuildSystem();
             return buildSystem.ContinuaCI;
+        }
+
+        /// <summary>
+        /// Get a <see cref="JenkinsProvider"/> instance that can be user to
+        /// obtain information from the Jenkins environment.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var isJenkinsBuild = Jenkins.IsRunningOnJenkins;
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <returns>A <see cref="Cake.Common.Build.Jenkins"/> instance.</returns>
+        [CakePropertyAlias(Cache = true)]
+        [CakeNamespaceImport("Cake.Common.Build.Jenkins")]
+        [CakeNamespaceImport("Cake.Common.Build.Jenkins.Data")]
+        public static IJenkinsProvider Jenkins(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var buildSystem = context.BuildSystem();
+            return buildSystem.Jenkins;
         }
     }
 }
