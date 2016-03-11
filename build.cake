@@ -22,9 +22,10 @@ var releaseNotes = ParseReleaseNotes("./ReleaseNotes.md");
 
 // Get version.
 var buildNumber = AppVeyor.Environment.Build.Number;
-var version = releaseNotes.Version.ToString();
-var semVersion = local ? version : (version + string.Concat("-build-", buildNumber));
-var milestone = string.Concat("v", version);
+GitVersion assertedVersions        = null;
+var version = string.Empty;
+var semVersion = string.Empty;
+var milestone = string.Empty;
 
 // Define directories.
 var buildDir = Directory("./src/Cake/bin") + Directory(configuration);
@@ -67,22 +68,59 @@ Task("Restore-NuGet-Packages")
     });
 });
 
-Task("Patch-Assembly-Info")
+Task("Run-GitVersion")
     .IsDependentOn("Restore-NuGet-Packages")
+    .IsDependentOn("Run-GitVersion-AppVeyor")
+    .IsDependentOn("Run-GitVersion-Local");
+
+Task("Run-GitVersion-AppVeyor")
+    .WithCriteria(AppVeyor.IsRunningOnAppVeyor)
     .Does(() =>
 {
-    var file = "./src/SolutionInfo.cs";
-    CreateAssemblyInfo(file, new AssemblyInfoSettings {
-        Product = "Cake",
-        Version = version,
-        FileVersion = version,
-        InformationalVersion = semVersion,
-        Copyright = "Copyright (c) Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors"
+    GitVersion(new GitVersionSettings {
+        UpdateAssemblyInfoFilePath = "./src/SolutionInfo.cs",
+        UpdateAssemblyInfo = true,
+        OutputType = GitVersionOutput.BuildServer
     });
+
+    version = EnvironmentVariable("GitVersion_MajorMinorPatch");
+    semVersion = EnvironmentVariable("GitVersion_LegacySemVerPadded");
+    milestone = string.Concat("v", version);
+
+    // Due to the way that GitVersion is executed on AppVeyor, the Environment Variables although populated
+    // are not accessible yet, so have to run GitVersion again, using OutputType of JSON
+    if(string.IsNullOrEmpty(semVersion))
+    {
+        assertedVersions = GitVersion(new GitVersionSettings {
+            OutputType = GitVersionOutput.Json,
+        });
+
+        version = assertedVersions.MajorMinorPatch;
+        semVersion = assertedVersions.LegacySemVerPadded;
+        milestone = string.Concat("v", version);
+    }
+
+    Information("Calculated Semantic Version: {0}", semVersion);
+});
+
+Task("Run-GitVersion-Local")
+    .WithCriteria(!AppVeyor.IsRunningOnAppVeyor)
+    .WithCriteria(isRunningOnWindows)
+    .Does(() =>
+{
+    assertedVersions = GitVersion(new GitVersionSettings {
+        OutputType = GitVersionOutput.Json,
+    });
+
+    version = assertedVersions.MajorMinorPatch;
+    semVersion = assertedVersions.LegacySemVerPadded;
+    milestone = string.Concat("v", version);
+
+    Information("Calculated Semantic Version: {0}", semVersion);
 });
 
 Task("Build")
-    .IsDependentOn("Patch-Assembly-Info")
+    .IsDependentOn("Run-GitVersion")
     .Does(() =>
 {
     if(isRunningOnUnix)
@@ -134,7 +172,7 @@ Task("Copy-Files")
     CopyFileToDirectory(buildDir + File("Cake.Common.xml"), binDir);
     CopyFileToDirectory(buildDir + File("Mono.CSharp.dll"), binDir);
     CopyFileToDirectory(buildDir + File("Autofac.dll"), binDir);
-    CopyFileToDirectory(buildDir + File("Nuget.Core.dll"), binDir);
+    CopyFileToDirectory(buildDir + File("NuGet.Core.dll"), binDir);
 
     // Copy testing assemblies.
     var testingDir = Directory("./src/Cake.Testing/bin") + Directory(configuration);
@@ -147,6 +185,7 @@ Task("Copy-Files")
 
 Task("Zip-Files")
     .IsDependentOn("Copy-Files")
+    .IsDependentOn("Run-GitVersion")
     .Does(() =>
 {
     var packageFile = File("Cake-bin-v" + semVersion + ".zip");
@@ -160,6 +199,7 @@ Task("Zip-Files")
 
 Task("Create-Chocolatey-Packages")
     .IsDependentOn("Copy-Files")
+    .IsDependentOn("Run-GitVersion")
     .IsDependentOn("Package")
     .WithCriteria(() => isRunningOnWindows)
     .Does(() =>
@@ -187,6 +227,7 @@ Task("Create-Chocolatey-Packages")
 
 Task("Create-NuGet-Packages")
     .IsDependentOn("Copy-Files")
+    .IsDependentOn("Run-GitVersion")
     .Does(() =>
 {
     // Create Cake package.
@@ -229,6 +270,7 @@ Task("Create-NuGet-Packages")
 
 Task("Update-AppVeyor-Build-Number")
     .WithCriteria(() => isRunningOnAppVeyor)
+    .IsDependentOn("Run-GitVersion")
     .Does(() =>
 {
     AppVeyor.UpdateBuildVersion(semVersion);
@@ -236,6 +278,7 @@ Task("Update-AppVeyor-Build-Number")
 
 Task("Upload-AppVeyor-Artifacts")
     .IsDependentOn("Create-Chocolatey-Packages")
+    .IsDependentOn("Run-GitVersion")
     .WithCriteria(() => isRunningOnAppVeyor)
     .Does(() =>
 {
@@ -244,6 +287,7 @@ Task("Upload-AppVeyor-Artifacts")
 });
 
 Task("Publish-MyGet")
+    .IsDependentOn("Run-GitVersion")
     .WithCriteria(() => !local)
     .WithCriteria(() => !isPullRequest)
     .WithCriteria(() => isMainCakeRepo)
@@ -269,9 +313,10 @@ Task("Publish-MyGet")
 });
 
 Task("Publish-NuGet")
-  .IsDependentOn("Create-NuGet-Packages")
-  .WithCriteria(() => local)
-  .Does(() =>
+    .IsDependentOn("Run-GitVersion")
+    .IsDependentOn("Create-NuGet-Packages")
+    .WithCriteria(() => local)
+    .Does(() =>
 {
     // Resolve the API key.
     var apiKey = EnvironmentVariable("NUGET_API_KEY");
@@ -292,9 +337,10 @@ Task("Publish-NuGet")
 });
 
 Task("Publish-Chocolatey")
-  .IsDependentOn("Create-Chocolatey-Packages")
-  .WithCriteria(() => local)
-  .Does(() =>
+    .IsDependentOn("Run-GitVersion")
+    .IsDependentOn("Create-Chocolatey-Packages")
+    .WithCriteria(() => local)
+    .Does(() =>
 {
     // Resolve the API key.
     var apiKey = EnvironmentVariable("CHOCOLATEY_API_KEY");
@@ -315,6 +361,7 @@ Task("Publish-Chocolatey")
 });
 
 Task("Publish-HomeBrew")
+    .IsDependentOn("Run-GitVersion")
     .IsDependentOn("Zip-Files")
 	.Does(() =>
 {
@@ -327,6 +374,7 @@ Task("Publish-HomeBrew")
 });
 
 Task("Publish-GitHub-Release")
+    .IsDependentOn("Run-GitVersion")
     .Does(() =>
 {
     var packageFile = File("Cake-bin-v" + semVersion + ".zip");
@@ -340,7 +388,8 @@ Task("Publish-GitHub-Release")
 });
 
 Task("Create-Release-Notes")
-  .Does(() =>
+    .IsDependentOn("Run-GitVersion")
+    .Does(() =>
 {
     GitReleaseManagerCreate(userName, password, "cake-build", "cake", new GitReleaseManagerCreateSettings {
         Milestone         = milestone,

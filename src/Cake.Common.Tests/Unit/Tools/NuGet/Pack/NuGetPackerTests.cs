@@ -384,13 +384,18 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                         new NuSpecContent { Source = "Cake.Core.pdb", Target = "lib/net45" },
                         new NuSpecContent { Source = "LICENSE" }
                     };
+                    fixture.Settings.Dependencies = new[]
+                    {
+                        new NuSpecDependency { Id = "Test1", Version = "1.0.0" },
+                        new NuSpecDependency { Id = "Test2", Version = "[1.0.0]" }
+                    };
 
                     // When
                     var result = fixture.Run();
 
                     // Then
                     Assert.Equal(
-                        Resources.Nuspec_Metadata.NormalizeLineEndings(),
+                        Resources.Nuspec_Metadata_WithDependencies.NormalizeLineEndings(),
                         result.NuspecContent.NormalizeLineEndings());
                 }
 
@@ -422,13 +427,18 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                         new NuSpecContent { Source = "Cake.Core.pdb", Target = "lib/net45" },
                         new NuSpecContent { Source = "LICENSE" }
                     };
+                    fixture.Settings.Dependencies = new[]
+                    {
+                        new NuSpecDependency { Id = "Test1", Version = "1.0.0" },
+                        new NuSpecDependency { Id = "Test2", Version = "[1.0.0]" }
+                    };
 
                     // When
                     var result = fixture.Run();
 
                     // Then
                     Assert.Equal(
-                        Resources.Nuspec_Metadata_WithoutNamespaces.NormalizeLineEndings(),
+                        Resources.Nuspec_Metadata_WithoutNamespaces_WithDependencies.NormalizeLineEndings(),
                         result.NuspecContent.NormalizeLineEndings());
                 }
             }

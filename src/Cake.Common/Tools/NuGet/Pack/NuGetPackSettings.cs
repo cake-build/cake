@@ -133,6 +133,12 @@ namespace Cake.Common.Tools.NuGet.Pack
         public ICollection<NuSpecContent> Files { get; set; }
 
         /// <summary>
+        /// Gets or sets the package dependencies.
+        /// </summary>
+        /// <value>The package files.</value>
+        public ICollection<NuSpecDependency> Dependencies { get; set; }
+
+        /// <summary>
         /// Gets or sets the verbosity.
         /// </summary>
         /// <value>The verbosity.</value>

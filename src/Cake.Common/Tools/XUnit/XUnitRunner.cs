@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -115,7 +116,7 @@ namespace Cake.Common.Tools.XUnit
         /// Gets the possible names of the tool executable.
         /// </summary>
         /// <returns>The tool executable name.</returns>
-        protected override System.Collections.Generic.IEnumerable<string> GetToolExecutableNames()
+        protected override IEnumerable<string> GetToolExecutableNames()
         {
             return new[] { "xunit.console.clr4.exe" };
         }

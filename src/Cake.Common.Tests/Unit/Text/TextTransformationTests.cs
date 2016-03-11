@@ -44,15 +44,18 @@ namespace Cake.Common.Tests.Unit.Text
             public void Should_Render_Content_To_File()
             {
                 // Given
+                var expectedContent = "Hello World";
                 var fixture = new TextTransformationFixture();
-                fixture.TransformationTemplate.Render().Returns("Hello World");
+                fixture.TransformationTemplate.Render().Returns(expectedContent);
                 var transformation = fixture.CreateTextTransformation();
 
                 // When
                 transformation.Save("./output.txt");
 
                 // Then
-                Assert.Equal("Hello World", fixture.FileSystem.GetFile("/Working/output.txt").GetTextContent());
+                var outputFile = fixture.FileSystem.GetFile("/Working/output.txt");
+                Assert.Equal(expectedContent, outputFile.GetTextContent());
+                Assert.Equal(expectedContent.Length, outputFile.Length);
             }
         }
 

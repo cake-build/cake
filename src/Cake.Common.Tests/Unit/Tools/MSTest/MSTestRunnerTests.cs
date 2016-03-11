@@ -16,7 +16,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         {
             // Given
             var fixture = new MSTestRunnerFixture();
-            fixture.AssemblyPath = null;
+            fixture.AssemblyPaths = null;
 
             // When
             var result = Record.Exception(() => fixture.Run());
@@ -174,6 +174,20 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
 
             // Then
             Assert.Equal("\"/testcontainer:/Working/Test1.dll\"", result.Args);
+        }
+
+        [Fact]
+        public void Should_Add_Testcontainer_For_Each_Assembly()
+        {
+            // Given
+            var fixture = new MSTestRunnerFixture();
+            fixture.AssemblyPaths = new FilePath[] { new FilePath("./Test1.dll"), new FilePath("./Test2.dll") };
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("\"/testcontainer:/Working/Test1.dll\" \"/testcontainer:/Working/Test2.dll\" \"/noisolation\"", result.Args);
         }
     }
 }
