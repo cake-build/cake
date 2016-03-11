@@ -44,6 +44,16 @@ namespace Cake.Common.Tools.OpenCover
         }
 
         /// <summary>
+        /// Gets or sets the register option
+        /// </summary>
+        public string Register { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Return target code offset to be used
+        /// </summary>
+        public int? ReturnTargetCodeOffset { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="OpenCoverSettings"/> class.
         /// </summary>
         public OpenCoverSettings()
@@ -51,6 +61,7 @@ namespace Cake.Common.Tools.OpenCover
             _filters = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _excludedAttributeFilters = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _excludedFileFilters = new HashSet<string>(StringComparer.Ordinal);
+            this.Register = "user";
         }
     }
 }

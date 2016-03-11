@@ -121,8 +121,12 @@ namespace Cake.Common.Tools.OpenCover
                 builder.AppendSwitch("-excludebyfile", ":", filters.Quote());
             }
 
-            // Use per-user registration of code coverage profiler.
-            builder.AppendSwitch("-register", ":", "user");
+            builder.AppendSwitch("-register", ":", settings.Register);
+
+            if (settings.ReturnTargetCodeOffset != null)
+            {
+                builder.AppendSwitch("-returntargetcode", ":", settings.ReturnTargetCodeOffset.Value.ToString());
+            }
 
             // Set the output file.
             outputPath = outputPath.MakeAbsolute(_environment);
