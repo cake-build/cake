@@ -1,4 +1,4 @@
-#Cake [![NuGet](https://img.shields.io/nuget/v/Cake.svg)](https://www.nuget.org/packages/Cake) [![MyGet](https://img.shields.io/myget/cake/v/Cake.svg)](https://www.myget.org/gallery/cake)
+#Cake [![NuGet](https://img.shields.io/nuget/v/Cake.svg)](https://www.nuget.org/packages/Cake) [![MyGet](https://img.shields.io/myget/cake/v/Cake.svg)](https://www.myget.org/gallery/cake) [![Rager Releases](http://rager.io/badge.svg?url=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FCake%2F)](http://rager.io/projects/search?badge=1&query=nuget.org/packages/Cake/)
 
 Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.
 
