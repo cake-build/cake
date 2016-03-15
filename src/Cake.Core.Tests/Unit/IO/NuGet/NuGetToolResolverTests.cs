@@ -66,7 +66,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                 environment.GetEnvironmentVariable("path").Returns(c => null);
                 var fileSystem = new FakeFileSystem(environment);
                 var globber = Substitute.For<IGlobber>();
-                globber.GetFiles("./tools/**/NuGet.exe").Returns(new FilePath[] { });
+                globber.GetFiles("./tools/**/nuget.exe").Returns(new FilePath[] { });
                 var resolver = new NuGetToolResolver(fileSystem, environment, globber);
 
                 // When
@@ -87,7 +87,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                 environment.GetEnvironmentVariable("path").Returns(c => null);
                 var fileSystem = new FakeFileSystem(environment);
                 var globber = Substitute.For<IGlobber>();
-                globber.GetFiles("./tools/**/NuGet.exe").Returns(new FilePath[] { });
+                globber.GetFiles("./tools/**/nuget.exe").Returns(new FilePath[] { });
                 var resolver = new NuGetToolResolver(fileSystem, environment, globber);
 
                 // When
@@ -97,7 +97,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                 Received.InOrder(() =>
                 {
                     // 1. Look in the tools directory.
-                    globber.GetFiles("./tools/**/NuGet.exe");
+                    globber.GetFiles("./tools/**/nuget.exe");
                     // 2. Look for the environment variable NUGET_EXE.
                     environment.GetEnvironmentVariable("NUGET_EXE");
                     // 3. Panic and look in the path variable.
@@ -112,7 +112,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                 var environment = FakeEnvironment.CreateUnixEnvironment();
                 var fileSystem = new FakeFileSystem(environment);
                 var globber = Substitute.For<IGlobber>();
-                globber.Match("./tools/**/NuGet.exe").Returns(p => new FilePath[] { "/root/tools/nuget.exe" });
+                globber.Match("./tools/**/nuget.exe").Returns(p => new FilePath[] { "/root/tools/nuget.exe" });
                 fileSystem.CreateFile("/root/tools/nuget.exe");
                 var resolver = new NuGetToolResolver(fileSystem, environment, globber);
 
