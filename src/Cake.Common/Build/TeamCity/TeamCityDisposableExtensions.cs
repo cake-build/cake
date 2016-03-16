@@ -13,7 +13,7 @@ namespace Cake.Common.Build.TeamCity
         /// <param name="teamCityProvider">TeamCity provider.</param>
         /// <param name="blockName">The name of the report block.</param>
         /// <returns>A disposable wrapper the writes the report block end.</returns>
-        public static TeamCityActionDisposable Block(this TeamCityProvider teamCityProvider, string blockName)
+        public static IDisposable Block(this ITeamCityProvider teamCityProvider, string blockName)
         {
             if (teamCityProvider == null)
             {
@@ -29,7 +29,7 @@ namespace Cake.Common.Build.TeamCity
         /// <param name="teamCityProvider">TeamCity provider.</param>
         /// <param name="compilerName">The name of the build block.</param>
         /// <returns>A disposable wrapper the writes the build block end.</returns>
-        public static TeamCityActionDisposable BuildBlock(this TeamCityProvider teamCityProvider, string compilerName)
+        public static IDisposable BuildBlock(this ITeamCityProvider teamCityProvider, string compilerName)
         {
             if (teamCityProvider == null)
             {
@@ -42,7 +42,7 @@ namespace Cake.Common.Build.TeamCity
         /// <summary>
         /// Disposable helper for writing TeamCity message blocks.
         /// </summary>
-        public sealed class TeamCityActionDisposable : IDisposable
+        internal sealed class TeamCityActionDisposable : IDisposable
         {
             private readonly ITeamCityProvider _teamCityProvider;
             private readonly Action<ITeamCityProvider> _disposeAction;
