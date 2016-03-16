@@ -1,19 +1,20 @@
 using System;
 
-namespace Cake.Common.Tools.DotCover.Analyse
+namespace Cake.Common.Tools.DotCover
 {
     /// <summary>
-    /// Contains extensions for <see cref="DotCoverAnalyseSettings"/>.
+    /// Contains extensions for <see cref="DotCoverSettings"/>.
     /// </summary>
-    public static class DotCoverAnalyseSettingsExtensions
+    public static class DotCoverSettingsExtensions
     {
         /// <summary>
         /// Adds the scope.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="scope">The scope.</param>
-        /// <returns>The same <see cref="DotCoverAnalyseSettings"/> instance so that multiple calls can be chained.</returns>
-        public static DotCoverAnalyseSettings WithScope(this DotCoverAnalyseSettings settings, string scope)
+        /// <typeparam name="T">The settings type, derived from <see cref="DotCoverSettings"/></typeparam>
+        /// <returns>The same <see cref="DotCoverSettings"/> instance so that multiple calls can be chained.</returns>
+        public static T WithScope<T>(this T settings, string scope) where T : DotCoverSettings
         {
             if (settings == null)
             {
@@ -28,8 +29,9 @@ namespace Cake.Common.Tools.DotCover.Analyse
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="filter">The filter.</param>
-        /// <returns>The same <see cref="DotCoverAnalyseSettings"/> instance so that multiple calls can be chained.</returns>
-        public static DotCoverAnalyseSettings WithFilter(this DotCoverAnalyseSettings settings, string filter)
+        /// <typeparam name="T">The settings type, derived from <see cref="DotCoverSettings"/></typeparam>
+        /// <returns>The same <see cref="DotCoverSettings"/> instance so that multiple calls can be chained.</returns>
+        public static T WithFilter<T>(this T settings, string filter) where T : DotCoverSettings
         {
             if (settings == null)
             {
@@ -44,8 +46,9 @@ namespace Cake.Common.Tools.DotCover.Analyse
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="attributeFilter">The filter.</param>
-        /// <returns>The same <see cref="DotCoverAnalyseSettings"/> instance so that multiple calls can be chained.</returns>
-        public static DotCoverAnalyseSettings WithAttributeFilter(this DotCoverAnalyseSettings settings, string attributeFilter)
+        /// <typeparam name="T">The settings type, derived from <see cref="DotCoverSettings"/></typeparam>
+        /// <returns>The same <see cref="DotCoverSettings"/> instance so that multiple calls can be chained.</returns>
+        public static T WithAttributeFilter<T>(this T settings, string attributeFilter) where T : DotCoverSettings
         {
             if (settings == null)
             {

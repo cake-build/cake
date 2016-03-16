@@ -26,7 +26,7 @@ namespace Cake.Common.Build.TeamCity
                 { "\'", "|\'" },
                 { "\n", "|n" },
                 { "\r", "|r" },
-                { "[", "|['" },
+                { "[", "|[" },
                 { "]", "|]" }
             };
         }
@@ -161,6 +161,35 @@ namespace Cake.Common.Build.TeamCity
             {
                 { "type", type },
                 { "path", path.FullPath }
+            });
+        }
+
+        /// <summary>
+        /// Tell TeamCity to import coverage from dotCover snapshot file.
+        /// </summary>
+        /// <param name="snapshotFile">Snapshot file path.</param>
+        /// <param name="dotCoverHome">The full path to the dotCover home folder to override the bundled dotCover.</param>
+        public void ImportDotCoverCoverage(FilePath snapshotFile, DirectoryPath dotCoverHome = null)
+        {
+            if (snapshotFile == null)
+            {
+                throw new ArgumentNullException("snapshotFile");
+            }
+
+            var args = dotCoverHome == null ?
+                new Dictionary<string, string>() :
+                new Dictionary<string, string>
+                {
+                    { "dotcover_home", dotCoverHome.FullPath }
+                };
+
+            WriteServiceMessage("dotNetCoverage", args);
+
+            WriteServiceMessage("importData", new Dictionary<string, string>
+            {
+                { "type", "dotNetCoverage" },
+                { "tool", "dotcover" },
+                { "path", snapshotFile.FullPath }
             });
         }
 

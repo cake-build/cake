@@ -118,17 +118,29 @@ namespace Cake.Core.Tests.Unit.IO
         {
             [Theory]
             [InlineData("Hello/World")]
-            [InlineData("/Hello/World")]
-            [InlineData("/Hello/World/")]
             [InlineData("./Hello/World/")]
             public void Should_Return_Segments_Of_Path(string pathName)
             {
                 // Given
-                var path = new TestingPath("Hello/World");
+                var path = new TestingPath(pathName);
 
                 // When, Then
                 Assert.Equal(2, path.Segments.Length);
                 Assert.Equal("Hello", path.Segments[0]);
+                Assert.Equal("World", path.Segments[1]);
+            }
+
+            [Theory]
+            [InlineData("/Hello/World")]
+            [InlineData("/Hello/World/")]
+            public void Should_Return_Segments_Of_Path_And_Leave_Absolute_Directory_Separator_Intact(string pathName)
+            {
+                // Given
+                var path = new TestingPath(pathName);
+
+                // When, Then
+                Assert.Equal(2, path.Segments.Length);
+                Assert.Equal("/Hello", path.Segments[0]);
                 Assert.Equal("World", path.Segments[1]);
             }
         }

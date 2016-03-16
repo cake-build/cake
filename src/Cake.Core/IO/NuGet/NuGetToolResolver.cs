@@ -62,7 +62,7 @@ namespace Cake.Core.IO.NuGet
             }
 
             // Check if tool exists in tool folder
-            const string expression = "./tools/**/NuGet.exe";
+            const string expression = "./tools/**/nuget.exe";
             var toolsExe = _globber.GetFiles(expression).FirstOrDefault();
             if (toolsExe != null)
             {

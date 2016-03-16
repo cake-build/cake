@@ -77,6 +77,45 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.Equal("/temp", path);
             }
+
+            [Theory]
+            [InlineData(".")]
+            [InlineData("./")]
+            [InlineData("/.")]
+            public void Should_Collapse_Single_Dot_To_Single_Dot(string uncollapsedPath)
+            {
+                // Given, When
+                var path = PathCollapser.Collapse(new DirectoryPath(uncollapsedPath));
+
+                // Then
+                Assert.Equal(".", path);
+            }
+
+            [Fact]
+            public void Should_Collapse_Single_Dot_With_Ellipsis()
+            {
+                // Given, When
+                var path = PathCollapser.Collapse(new DirectoryPath("./.."));
+
+                // Then
+                Assert.Equal(".", path);
+            }
+
+            [Theory]
+            [InlineData("./a", "a")]
+            [InlineData("a/./b", "a/b")]
+            [InlineData("/a/./b", "/a/b")]
+            [InlineData("a/b/.", "a/b")]
+            [InlineData("/a/b/.", "/a/b")]
+            [InlineData("/./a/b", "/a/b")]
+            public void Should_Collapse_Single_Dot(string uncollapsedPath, string collapsedPath)
+            {
+                // Given, When
+                var path = PathCollapser.Collapse(new DirectoryPath(uncollapsedPath));
+
+                // Then
+                Assert.Equal(collapsedPath, path);
+            }
         }
     }
 }

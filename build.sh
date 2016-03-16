@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 ###############################################################
 # This is the Cake bootstrapper script that is responsible for
 # downloading Cake and all specified tools from NuGet.
@@ -15,8 +15,9 @@ SCRIPT="build.cake"
 TARGET="Travis"
 CONFIGURATION="Release"
 VERBOSITY="verbose"
-DRYRUN=false
+DRYRUN=
 SHOW_VERSION=false
+SCRIPT_ARGUMENTS=()
 
 # Parse arguments.
 for i in "$@"; do
@@ -25,8 +26,10 @@ for i in "$@"; do
         -t|--target) TARGET="$2"; shift ;;
         -c|--configuration) CONFIGURATION="$2"; shift ;;
         -v|--verbosity) VERBOSITY="$2"; shift ;;
-        -d|--dryrun) DRYRUN=true ;;
+        -d|--dryrun) DRYRUN="-dryrun" ;;
         --version) SHOW_VERSION=true ;;
+        --) shift; SCRIPT_ARGUMENTS+=("$@"); break ;;
+        *) SCRIPT_ARGUMENTS+=("$1") ;;
     esac
     shift
 done
@@ -49,7 +52,7 @@ fi
 # Download NuGet if it does not exist.
 if [ ! -f $NUGET_EXE ]; then
     echo "Downloading NuGet..."
-    curl -Lsfo $NUGET_EXE https://www.nuget.org/nuget.exe
+    curl -Lsfo $NUGET_EXE https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
     if [ $? -ne 0 ]; then
         echo "An error occured while downloading nuget.exe."
         exit 1
@@ -73,11 +76,7 @@ fi
 
 # Start Cake
 if $SHOW_VERSION; then
-    mono $CAKE_EXE -version
-elif $DRYRUN; then
-    mono $CAKE_EXE $SCRIPT -verbosity=$VERBOSITY -configuration=$CONFIGURATION -target=$TARGET -dryrun
+    exec mono $CAKE_EXE -version
 else
-    mono $CAKE_EXE $SCRIPT -verbosity=$VERBOSITY -configuration=$CONFIGURATION -target=$TARGET
+    exec mono $CAKE_EXE $SCRIPT -verbosity=$VERBOSITY -configuration=$CONFIGURATION -target=$TARGET $DRYRUN "${SCRIPT_ARGUMENTS[@]}"
 fi
-
-exit $?
