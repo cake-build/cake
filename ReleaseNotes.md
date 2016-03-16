@@ -1,3 +1,19 @@
+### New in 0.10.0 (Released 2016/02/163
+
+* XUnit command line bug
+* Cake does not find it's own nuget.exe on Linux
+* Sanitization in TeamCity Provider places extra apostrophe if '[' is used.
+* Path segment bug (or test bug, choose your own adventure!)
+* Add support for importing coverage to TeamCity
+* Add DotCover Cover support
+* Add SpecFlow support
+* Add Jenkins CI build system support
+* Use V3 Nuget in bootstrapper
+* Remove logging from task setup/teardown.
+* Update ReleaseNotes.md
+* Removed year from © in readme
+* Add GitVersion into build.cake
+
 ### New in 0.9.0 (Released 2016/02/22)
 
 * Add missing command line switch for ILRepack's targetplatform
