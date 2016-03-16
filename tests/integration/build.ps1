@@ -1,23 +1,24 @@
 [CmdletBinding()]
 Param(
+    [string]$Target = "Run-All-Tests",
     [switch]$SkipBuildingCake
 )
 
 $PSScriptRoot = split-path -parent $MyInvocation.MyCommand.Definition;
+$ToolsPath = Join-Path $PSScriptRoot "tools";
+$NuGetPath = Join-Path $ToolsPath "nuget.exe";
+$NuGetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe";
 
 # Load utilities.
 . (Join-Path $PSScriptRoot "utilities.ps1");
 
 # Make sure the tools directory exist.
-$ToolsPath = Join-Path $PSScriptRoot "tools";
 if(!(Test-Path $ToolsPath)) {
     Write-Verbose "Creating tools directory...";
     New-Item -Path $ToolsPath -Type directory | out-null;
 }
 
 # Make sure NuGet exist.
-$NuGetPath = Join-Path $ToolsPath "nuget.exe";
-$NuGetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe";
 if (!(Test-Path $NuGetPath)) {
     Write-Verbose "Downloading NuGet..."
     (New-Object System.Net.WebClient).DownloadFile($NuGetUrl, $NuGetPath);
@@ -47,3 +48,5 @@ Copy-Item "$BuiltCakePath/*.*" $CakePath -Recurse
 Write-Output "Running integration tests using new Cake...";
 $CakeExePath = Join-Path $CakePath "Cake.exe";
 &$CakeExePath "--version"
+&$CakeExePath "build.cake" "--target=$Target" "--verbosity=normal" "--customarg=hello"
+Write-Output "";
