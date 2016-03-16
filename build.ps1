@@ -8,7 +8,9 @@ Param(
     [switch]$Experimental,
     [switch]$WhatIf,
     [switch]$Mono,
-    [switch]$SkipToolPackageRestore
+    [switch]$SkipToolPackageRestore,
+    [Parameter(ValueFromRemainingArguments = $true)]
+    [string[]]$ScriptArgs
 )
 
 $PSScriptRoot = split-path -parent $MyInvocation.MyCommand.Definition;
@@ -63,5 +65,5 @@ if (!(Test-Path $CAKE_EXE)) {
 }
 
 # Start Cake
-Invoke-Expression "$CAKE_EXE `"$Script`" -target=`"$Target`" -configuration=`"$Configuration`" -verbosity=`"$Verbosity`" $UseMono $UseDryRun $UseExperimental"
+Invoke-Expression "$CAKE_EXE `"$Script`" -target=`"$Target`" -configuration=`"$Configuration`" -verbosity=`"$Verbosity`" $UseMono $UseDryRun $UseExperimental $ScriptArgs"
 exit $LASTEXITCODE
