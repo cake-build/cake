@@ -39,14 +39,18 @@ if([string]::IsNullOrWhiteSpace($BuiltCakePath)) {
     Throw "Could not resolve built Cake path."
 }
 
-# Clean the local Cake path.
+# Get the path to the local Cake.
 $CakePath = (Join-Path $ToolsPath "Cake");
-CleanDirectory($CakePath);
-Copy-Item "$BuiltCakePath/*.*" $CakePath -Recurse
+
+# Clean the local Cake path.
+if(!$SkipBuildingCake.IsPresent) {
+  CleanDirectory($CakePath);
+  Copy-Item "$BuiltCakePath/*.*" $CakePath -Recurse
+}
 
 # Run tests using new Cake.
 Write-Output "Running integration tests using new Cake...";
 $CakeExePath = Join-Path $CakePath "Cake.exe";
 &$CakeExePath "--version"
-&$CakeExePath "build.cake" "--target=$Target" "--verbosity=normal" "--customarg=hello"
+&$CakeExePath "build.cake" "--target=$Target" "--verbosity=quiet" "--customarg=hello"
 Write-Output "";

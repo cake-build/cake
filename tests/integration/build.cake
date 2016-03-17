@@ -1,4 +1,5 @@
 // Utilities
+#load "./scripts/directory.cake"
 #load "./scripts/paths.cake"
 #load "./scripts/xunit.cake"
 
@@ -33,5 +34,5 @@ Task("Run-All-Tests")
     .IsDependentOn("Cake.Common");
 
 //////////////////////////////////////////////////
-    
+
 RunTarget(target);
