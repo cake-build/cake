@@ -1,4 +1,4 @@
-### New in 0.10.0 (Released 2016/02/163
+### New in 0.10.0 (Released 2016/03/16)
 
 * XUnit command line bug
 * Cake does not find it's own nuget.exe on Linux
@@ -13,6 +13,7 @@
 * Update ReleaseNotes.md
 * Removed year from © in readme
 * Add GitVersion into build.cake
+* TextTransformation.Save creates BOM on new file
 
 ### New in 0.9.0 (Released 2016/02/22)
 
