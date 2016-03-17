@@ -36,7 +36,7 @@ namespace Cake.Common.Build
                 throw new ArgumentNullException("context");
             }
             var appVeyorProvider = new AppVeyorProvider(context.Environment, context.ProcessRunner);
-            var teamCityProvider = new TeamCityProvider(context.Environment);
+            var teamCityProvider = new TeamCityProvider(context.Environment, context.Log);
             var myGetProvider = new MyGetProvider(context.Environment);
             var bambooProvider = new BambooProvider(context.Environment);
             var continuaCIProvider = new ContinuaCIProvider(context.Environment);
