@@ -55,6 +55,7 @@
     <Compile Include="Extensions\FakeDirectoryExtensions.cs" />
     <Compile Include="Extensions\FakeFileExtensions.cs" />
     <Compile Include="Extensions\FakeFileSystemExtensions.cs" />
+    <Compile Include="Extensions\FakeLogExtensions.cs" />
     <Compile Include="FakeConsole.cs" />
     <Compile Include="FakeDirectory.cs" />
     <Compile Include="FakeDirectoryContent.cs" />
