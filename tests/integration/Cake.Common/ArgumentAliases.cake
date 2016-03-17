@@ -2,12 +2,12 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-Task("Cake.Common.HasArgument")
+Task("Cake.Common.ArgumentAliases.HasArgument")
     .Does(() =>
 {
     // Given, When
     var arg = Argument<string>("customarg");
-    
+
     // Then
     Assert.Equal("hello", arg);
 });
@@ -15,4 +15,4 @@ Task("Cake.Common.HasArgument")
 //////////////////////////////////////////////////////////////////////////////
 
 Task("Cake.Common.ArgumentAliases")
-    .IsDependentOn("Cake.Common.HasArgument");
+    .IsDependentOn("Cake.Common.ArgumentAliases.HasArgument");
