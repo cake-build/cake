@@ -40,7 +40,8 @@ if([string]::IsNullOrWhiteSpace($BuiltCakePath)) {
 }
 
 # Get the path to the local Cake.
-$CakePath = (Join-Path $ToolsPath "Cake");
+$CakePath = Join-Path $ToolsPath "Cake";
+$CakeExePath = Join-Path $CakePath "Cake.exe";
 
 # Clean the local Cake path.
 if(!$SkipBuildingCake.IsPresent) {
@@ -48,9 +49,13 @@ if(!$SkipBuildingCake.IsPresent) {
   Copy-Item "$BuiltCakePath/*.*" $CakePath -Recurse
 }
 
+# Ensure that Cake can be found where we expect it to.
+if(!(Test-Path $CakeExePath)) {
+  Throw "Could not locate Cake at $CakeExePath.";
+}
+
 # Run tests using new Cake.
 Write-Output "Running integration tests using new Cake...";
-$CakeExePath = Join-Path $CakePath "Cake.exe";
 &$CakeExePath "--version"
 &$CakeExePath "build.cake" "--target=$Target" "--verbosity=quiet" "--customarg=hello"
 Write-Output "";
