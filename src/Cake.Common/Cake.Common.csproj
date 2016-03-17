@@ -63,6 +63,16 @@
     <Compile Include="Build\AppVeyor\Data\AppVeyorRepositoryInfo.cs" />
     <Compile Include="Build\AppVeyor\Data\AppVeyorTagInfo.cs" />
     <Compile Include="Build\AppVeyor\IAppVeyorProvider.cs" />
+    <Compile Include="Build\Bitrise\BitriseInfo.cs" />
+    <Compile Include="Build\Bitrise\BitriseProvider.cs" />
+    <Compile Include="Build\Bitrise\Data\BitriseApplicationInfo.cs" />
+    <Compile Include="Build\Bitrise\Data\BitriseBuildInfo.cs" />
+    <Compile Include="Build\Bitrise\Data\BitriseDirectoryInfo.cs" />
+    <Compile Include="Build\Bitrise\Data\BitriseEnvironmentInfo.cs" />
+    <Compile Include="Build\Bitrise\Data\BitriseProvisioningInfo.cs" />
+    <Compile Include="Build\Bitrise\Data\BitriseRepositoryInfo.cs" />
+    <Compile Include="Build\Bitrise\Data\BitriseWorkflowInfo.cs" />
+    <Compile Include="Build\Bitrise\IBitriseProvider.cs" />
     <Compile Include="Build\BuildSystem.cs" />
     <Compile Include="Build\BuildSystemAliases.cs" />
     <Compile Include="Build\ContinuaCI\ContinuaCIInfo.cs" />
