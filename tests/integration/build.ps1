@@ -55,7 +55,7 @@ if(!(Test-Path $CakeExePath)) {
 }
 
 # Run tests using new Cake.
-Write-Output "Running integration tests using new Cake...";
 &$CakeExePath "--version"
+Write-Output "Running integration tests...";
 &$CakeExePath "build.cake" "--target=$Target" "--verbosity=quiet" "--customarg=hello"
 Write-Output "";
