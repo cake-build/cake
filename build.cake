@@ -1,40 +1,10 @@
-//////////////////////////////////////////////////////////////////////
-// ARGUMENTS
-//////////////////////////////////////////////////////////////////////
-
-var target = Argument("target", "Default");
-var configuration = Argument("configuration", "Release");
+#load "./build/parameters.cake"
 
 //////////////////////////////////////////////////////////////////////
-// PREPARATION
+// PARAMETERS
 //////////////////////////////////////////////////////////////////////
 
-// Get whether or not this is a local build.
-var local = BuildSystem.IsLocalBuild;
-var isRunningOnUnix = IsRunningOnUnix();
-var isRunningOnWindows = IsRunningOnWindows();
-var isRunningOnAppVeyor = AppVeyor.IsRunningOnAppVeyor;
-var isPullRequest = AppVeyor.Environment.PullRequest.IsPullRequest;
-var isMainCakeRepo = StringComparer.OrdinalIgnoreCase.Equals("cake-build/cake", AppVeyor.Environment.Repository.Name);
-
-// Parse release notes.
-var releaseNotes = ParseReleaseNotes("./ReleaseNotes.md");
-
-// Get version.
-var buildNumber = AppVeyor.Environment.Build.Number;
-GitVersion assertedVersions        = null;
-var version = string.Empty;
-var semVersion = string.Empty;
-var milestone = string.Empty;
-
-// Define directories.
-var buildDir = Directory("./src/Cake/bin") + Directory(configuration);
-var buildResultDir = Directory("./build") + Directory("v" + semVersion);
-var testResultsDir = buildResultDir + Directory("test-results");
-var nugetRoot = buildResultDir + Directory("nuget");
-var binDir = buildResultDir + Directory("bin");
-var userName = EnvironmentVariable("CAKE_GITHUB_USERNAME");
-var password = EnvironmentVariable("CAKE_GITHUB_PASSWORD");
+BuildParameters parameters = BuildParameters.GetParameters(Context, BuildSystem);
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -42,7 +12,37 @@ var password = EnvironmentVariable("CAKE_GITHUB_PASSWORD");
 
 Setup(() =>
 {
-    Information("Building version {0} of Cake.", semVersion);
+    parameters.SetBuildVersion(
+        BuildVersion.CalculatingSemanticVersion(
+            context: Context,
+            isLocalBuild: parameters.IsLocalBuild,
+            isPublishBuild: parameters.IsPublishBuild,
+            isReleaseBuild: parameters.IsReleaseBuild
+        )
+    );
+
+    parameters.SetBuildPaths(
+        BuildPaths.GetPaths(
+            context: Context,
+            configuration: parameters.Configuration,
+            semVersion: parameters.Version.SemVersion
+        )
+    );
+
+    parameters.SetBuildPackages(
+        BuildPackages.GetPackages(
+        nugetRooPath: parameters.Paths.Directories.NugetRoot,
+        semVersion: parameters.Version.SemVersion,
+        packageIds: new [] { "Cake", "Cake.Core", "Cake.Common", "Cake.Testing", "Cake.NuGet" },
+        chocolateyPackageIds: new [] { "cake.portable" }
+        )
+    );
+
+    Information("Building version {0} of Cake ({1}, {2}) using version {3} of Cake.",
+        parameters.Version.SemVersion,
+        parameters.Configuration,
+        parameters.Target,
+        parameters.Version.CakeVersion);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -50,11 +50,7 @@ Setup(() =>
 //////////////////////////////////////////////////////////////////////
 
 Task("Clean")
-    .Does(() =>
-{
-    CleanDirectories(new DirectoryPath[] {
-        buildResultDir, binDir, testResultsDir, nugetRoot});
-});
+    .Does(() => CleanDirectories(parameters.Paths.Directories.ToClean));
 
 Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean")
@@ -62,71 +58,20 @@ Task("Restore-NuGet-Packages")
 {
     NuGetRestore("./src/Cake.sln", new NuGetRestoreSettings {
         Source = new List<string> {
-            "https://www.nuget.org/api/v2/",
-            "https://www.myget.org/F/roslyn-nightly/"
+            "https://api.nuget.org/v3/index.json",
+            "https://www.myget.org/F/roslyn-nightly/api/v3/index.json"
         }
     });
 });
 
-Task("Run-GitVersion")
-    .IsDependentOn("Restore-NuGet-Packages")
-    .IsDependentOn("Run-GitVersion-AppVeyor")
-    .IsDependentOn("Run-GitVersion-Local");
-
-Task("Run-GitVersion-AppVeyor")
-    .WithCriteria(AppVeyor.IsRunningOnAppVeyor)
-    .Does(() =>
-{
-    GitVersion(new GitVersionSettings {
-        UpdateAssemblyInfoFilePath = "./src/SolutionInfo.cs",
-        UpdateAssemblyInfo = true,
-        OutputType = GitVersionOutput.BuildServer
-    });
-
-    version = EnvironmentVariable("GitVersion_MajorMinorPatch");
-    semVersion = EnvironmentVariable("GitVersion_LegacySemVerPadded");
-    milestone = string.Concat("v", version);
-
-    // Due to the way that GitVersion is executed on AppVeyor, the Environment Variables although populated
-    // are not accessible yet, so have to run GitVersion again, using OutputType of JSON
-    if(string.IsNullOrEmpty(semVersion))
-    {
-        assertedVersions = GitVersion(new GitVersionSettings {
-            OutputType = GitVersionOutput.Json,
-        });
-
-        version = assertedVersions.MajorMinorPatch;
-        semVersion = assertedVersions.LegacySemVerPadded;
-        milestone = string.Concat("v", version);
-    }
-
-    Information("Calculated Semantic Version: {0}", semVersion);
-});
-
-Task("Run-GitVersion-Local")
-    .WithCriteria(!AppVeyor.IsRunningOnAppVeyor)
-    .WithCriteria(isRunningOnWindows)
-    .Does(() =>
-{
-    assertedVersions = GitVersion(new GitVersionSettings {
-        OutputType = GitVersionOutput.Json,
-    });
-
-    version = assertedVersions.MajorMinorPatch;
-    semVersion = assertedVersions.LegacySemVerPadded;
-    milestone = string.Concat("v", version);
-
-    Information("Calculated Semantic Version: {0}", semVersion);
-});
-
 Task("Build")
-    .IsDependentOn("Run-GitVersion")
+    .IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
 {
-    if(isRunningOnUnix)
+    if(parameters.IsRunningOnUnix)
     {
         XBuild("./src/Cake.sln", new XBuildSettings()
-            .SetConfiguration(configuration)
+            .SetConfiguration(parameters.Configuration)
             .WithProperty("POSIX", "True")
             .WithProperty("TreatWarningsAsErrors", "True")
             .SetVerbosity(Verbosity.Minimal)
@@ -135,7 +80,7 @@ Task("Build")
     else
     {
         MSBuild("./src/Cake.sln", new MSBuildSettings()
-            .SetConfiguration(configuration)
+            .SetConfiguration(parameters.Configuration)
             .WithProperty("Windows", "True")
             .WithProperty("TreatWarningsAsErrors", "True")
             .UseToolVersion(MSBuildToolVersion.NET45)
@@ -148,8 +93,8 @@ Task("Run-Unit-Tests")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    XUnit2("./src/**/bin/" + configuration + "/*.Tests.dll", new XUnit2Settings {
-        OutputDirectory = testResultsDir,
+    XUnit2("./src/**/bin/" + parameters.Configuration + "/*.Tests.dll", new XUnit2Settings {
+        OutputDirectory = parameters.Paths.Directories.TestResults,
         XmlReportV1 = true,
         NoAppDomain = true
     });
@@ -160,137 +105,78 @@ Task("Copy-Files")
     .IsDependentOn("Run-Unit-Tests")
     .Does(() =>
 {
-    CopyFileToDirectory(buildDir + File("Cake.exe"), binDir);
-    CopyFileToDirectory(buildDir + File("Cake.Core.dll"), binDir);
-    CopyFileToDirectory(buildDir + File("Cake.Core.pdb"), binDir);
-    CopyFileToDirectory(buildDir + File("Cake.Core.xml"), binDir);
-    CopyFileToDirectory(buildDir + File("Cake.NuGet.dll"), binDir);
-    CopyFileToDirectory(buildDir + File("Cake.NuGet.pdb"), binDir);
-    CopyFileToDirectory(buildDir + File("Cake.NuGet.xml"), binDir);
-    CopyFileToDirectory(buildDir + File("Cake.Common.dll"), binDir);
-    CopyFileToDirectory(buildDir + File("Cake.Common.pdb"), binDir);
-    CopyFileToDirectory(buildDir + File("Cake.Common.xml"), binDir);
-    CopyFileToDirectory(buildDir + File("Mono.CSharp.dll"), binDir);
-    CopyFileToDirectory(buildDir + File("Autofac.dll"), binDir);
-    CopyFileToDirectory(buildDir + File("NuGet.Core.dll"), binDir);
-
-    // Copy testing assemblies.
-    var testingDir = Directory("./src/Cake.Testing/bin") + Directory(configuration);
-    CopyFileToDirectory(testingDir + File("Cake.Testing.dll"), binDir);
-    CopyFileToDirectory(testingDir + File("Cake.Testing.pdb"), binDir);
-    CopyFileToDirectory(testingDir + File("Cake.Testing.xml"), binDir);
-
-    CopyFiles(new FilePath[] { "LICENSE", "README.md", "ReleaseNotes.md" }, binDir);
+    CopyFiles(
+        parameters.Paths.Files.ArtifactsSourcePaths,
+        parameters.Paths.Directories.ArtifactsBin
+    );
 });
 
 Task("Zip-Files")
     .IsDependentOn("Copy-Files")
-    .IsDependentOn("Run-GitVersion")
     .Does(() =>
 {
-    var packageFile = File("Cake-bin-v" + semVersion + ".zip");
-    var packagePath = buildResultDir + packageFile;
+    var files = GetFiles( parameters.Paths.Directories.ArtifactsBin.FullPath + "/*")
+      - GetFiles(parameters.Paths.Directories.ArtifactsBin.FullPath + "/*.Testing.*");
 
-    var files = GetFiles(binDir.Path.FullPath + "/*")
-      - GetFiles(binDir.Path.FullPath + "/*.Testing.*");
-
-    Zip(binDir, packagePath, files);
+    Zip(parameters.Paths.Directories.ArtifactsBin, parameters.Paths.Files.ZipArtifactPath, files);
 });
 
 Task("Create-Chocolatey-Packages")
     .IsDependentOn("Copy-Files")
-    .IsDependentOn("Run-GitVersion")
     .IsDependentOn("Package")
-    .WithCriteria(() => isRunningOnWindows)
+    .WithCriteria(() => parameters.IsRunningOnWindows)
     .Does(() =>
 {
-    // Create Cake package.
-    ChocolateyPack("./nuspec/Cake.Portable.nuspec", new ChocolateyPackSettings {
-        Version = semVersion,
-        ReleaseNotes = releaseNotes.Notes.ToArray(),
-        OutputDirectory = nugetRoot,
-        Files = new [] {
-            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.exe")},
-            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Core.dll")},
-            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Core.xml")},
-            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.NuGet.dll")},
-            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.NuGet.xml")},
-            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Common.dll")},
-            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Cake.Common.xml")},
-            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/NuGet.Core.dll")},
-            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Mono.CSharp.dll")},
-            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/Autofac.dll")},
-            new ChocolateyNuSpecContent {Source = string.Concat("./../", binDir.Path.FullPath, "/LICENSE")}
-        }
-    });
+    foreach(var package in parameters.Packages.Chocolatey)
+    {
+        // Create package.
+        ChocolateyPack(package.NuspecPath, new ChocolateyPackSettings {
+            Version = parameters.Version.SemVersion,
+            ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
+            OutputDirectory = parameters.Paths.Directories.NugetRoot,
+            Files = parameters.Paths.ChocolateyFiles
+        });
+    }
 });
 
 Task("Create-NuGet-Packages")
     .IsDependentOn("Copy-Files")
-    .IsDependentOn("Run-GitVersion")
     .Does(() =>
 {
-    // Create Cake package.
-    NuGetPack("./nuspec/Cake.nuspec", new NuGetPackSettings {
-        Version = semVersion,
-        ReleaseNotes = releaseNotes.Notes.ToArray(),
-        BasePath = binDir,
-        OutputDirectory = nugetRoot,
-        Symbols = false,
-        NoPackageAnalysis = true
-    });
-
-    // Create Core package.
-    NuGetPack("./nuspec/Cake.Core.nuspec", new NuGetPackSettings {
-        Version = semVersion,
-        ReleaseNotes = releaseNotes.Notes.ToArray(),
-        BasePath = binDir,
-        OutputDirectory = nugetRoot,
-        Symbols = false
-    });
-
-    // Create Common package.
-    NuGetPack("./nuspec/Cake.Common.nuspec", new NuGetPackSettings {
-        Version = semVersion,
-        ReleaseNotes = releaseNotes.Notes.ToArray(),
-        BasePath = binDir,
-        OutputDirectory = nugetRoot,
-        Symbols = false
-    });
-
-    // Create Testing package.
-    NuGetPack("./nuspec/Cake.Testing.nuspec", new NuGetPackSettings {
-        Version = semVersion,
-        ReleaseNotes = releaseNotes.Notes.ToArray(),
-        BasePath = binDir,
-        OutputDirectory = nugetRoot,
-        Symbols = false
-    });
+    foreach(var package in parameters.Packages.Nuget)
+    {
+        // Create package.
+        NuGetPack(package.NuspecPath, new NuGetPackSettings {
+            Version = parameters.Version.SemVersion,
+            ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
+            BasePath = parameters.Paths.Directories.ArtifactsBin,
+            OutputDirectory = parameters.Paths.Directories.NugetRoot,
+            Symbols = false,
+            NoPackageAnalysis = true
+        });
+    }
 });
 
 Task("Update-AppVeyor-Build-Number")
-    .WithCriteria(() => isRunningOnAppVeyor)
-    .IsDependentOn("Run-GitVersion")
+    .WithCriteria(() => parameters.IsRunningOnAppVeyor)
     .Does(() =>
 {
-    AppVeyor.UpdateBuildVersion(semVersion);
+    AppVeyor.UpdateBuildVersion(parameters.Version.SemVersion);
 });
 
 Task("Upload-AppVeyor-Artifacts")
     .IsDependentOn("Create-Chocolatey-Packages")
-    .IsDependentOn("Run-GitVersion")
-    .WithCriteria(() => isRunningOnAppVeyor)
+    .WithCriteria(() => parameters.IsRunningOnAppVeyor)
     .Does(() =>
 {
-    var artifact = buildResultDir + File("Cake-bin-v" + semVersion + ".zip");
-    AppVeyor.UploadArtifact(artifact);
+    AppVeyor.UploadArtifact(parameters.Paths.Files.ZipArtifactPath);
 });
 
 Task("Publish-MyGet")
-    .IsDependentOn("Run-GitVersion")
-    .WithCriteria(() => !local)
-    .WithCriteria(() => !isPullRequest)
-    .WithCriteria(() => isMainCakeRepo)
+    .IsDependentOn("Package")
+    .WithCriteria(() => !parameters.IsLocalBuild)
+    .WithCriteria(() => !parameters.IsPullRequest)
+    .WithCriteria(() => parameters.IsMainCakeRepo)
     .Does(() =>
 {
     // Resolve the API key.
@@ -299,13 +185,10 @@ Task("Publish-MyGet")
         throw new InvalidOperationException("Could not resolve MyGet API key.");
     }
 
-    foreach(var package in new[] { "Cake", "Cake.Core", "Cake.Common", "Cake.Testing", "cake.portable" })
+    foreach(var package in parameters.Packages.All)
     {
-        // Get the path to the package.
-        var packagePath = nugetRoot + File(string.Concat(package, ".", semVersion, ".nupkg"));
-
         // Push the package.
-        NuGetPush(packagePath, new NuGetPushSettings {
+        NuGetPush(package.PackagePath, new NuGetPushSettings {
             Source = "https://www.myget.org/F/cake/api/v2/package",
             ApiKey = apiKey
         });
@@ -313,9 +196,8 @@ Task("Publish-MyGet")
 });
 
 Task("Publish-NuGet")
-    .IsDependentOn("Run-GitVersion")
     .IsDependentOn("Create-NuGet-Packages")
-    .WithCriteria(() => local)
+    .WithCriteria(() => parameters.IsLocalBuild)
     .Does(() =>
 {
     // Resolve the API key.
@@ -324,22 +206,18 @@ Task("Publish-NuGet")
         throw new InvalidOperationException("Could not resolve NuGet API key.");
     }
 
-    foreach(var package in new[] { "Cake", "Cake.Core", "Cake.Common", "Cake.Testing" })
+    foreach(var package in parameters.Packages.Nuget)
     {
-        // Get the path to the package.
-        var packagePath = nugetRoot + File(string.Concat(package, ".", semVersion, ".nupkg"));
-
         // Push the package.
-        NuGetPush(packagePath, new NuGetPushSettings {
+        NuGetPush(package.PackagePath, new NuGetPushSettings {
           ApiKey = apiKey
         });
     }
 });
 
 Task("Publish-Chocolatey")
-    .IsDependentOn("Run-GitVersion")
     .IsDependentOn("Create-Chocolatey-Packages")
-    .WithCriteria(() => local)
+    .WithCriteria(() => parameters.IsLocalBuild)
     .Does(() =>
 {
     // Resolve the API key.
@@ -348,52 +226,40 @@ Task("Publish-Chocolatey")
         throw new InvalidOperationException("Could not resolve Chocolatey API key.");
     }
 
-    foreach(var package in new[] { "cake.portable" })
+    foreach(var package in parameters.Packages.Chocolatey)
     {
-        // Get the path to the package.
-        var packagePath = nugetRoot + File(string.Concat(package, ".", semVersion, ".nupkg"));
-
         // Push the package.
-        ChocolateyPush(packagePath, new ChocolateyPushSettings {
+        ChocolateyPush(package.PackagePath, new ChocolateyPushSettings {
           ApiKey = apiKey
         });
     }
 });
 
 Task("Publish-HomeBrew")
-    .IsDependentOn("Run-GitVersion")
     .IsDependentOn("Zip-Files")
 	.Does(() =>
 {
-    var packageFile = File("Cake-bin-v" + semVersion + ".zip");
-    var packagePath = buildResultDir + packageFile;
-
-    var hash = CalculateFileHash(packagePath).ToHex();
+    var hash = CalculateFileHash(parameters.Paths.Files.ZipArtifactPath).ToHex();
 
     Information("Hash for creating HomeBrew PullRequest: {0}", hash);
 });
 
 Task("Publish-GitHub-Release")
-    .IsDependentOn("Run-GitVersion")
     .Does(() =>
 {
-    var packageFile = File("Cake-bin-v" + semVersion + ".zip");
-    var packagePath = buildResultDir + packageFile;
+    GitReleaseManagerAddAssets(parameters.GitHub.UserName, parameters.GitHub.Password, "cake-build", "cake", parameters.Version.Milestone, parameters.Paths.Files.ZipArtifactPath.ToString());
 
-    GitReleaseManagerAddAssets(userName, password, "cake-build", "cake", milestone, packagePath.ToString());
+    GitReleaseManagerPublish(parameters.GitHub.UserName, parameters.GitHub.Password, "cake-build", "cake", parameters.Version.Milestone);
 
-    GitReleaseManagerPublish(userName, password, "cake-build", "cake", milestone);
-
-    GitReleaseManagerClose(userName, password, "cake-build", "cake", milestone);
+    GitReleaseManagerClose(parameters.GitHub.UserName, parameters.GitHub.Password, "cake-build", "cake", parameters.Version.Milestone);
 });
 
 Task("Create-Release-Notes")
-    .IsDependentOn("Run-GitVersion")
     .Does(() =>
 {
-    GitReleaseManagerCreate(userName, password, "cake-build", "cake", new GitReleaseManagerCreateSettings {
-        Milestone         = milestone,
-        Name              = milestone,
+    GitReleaseManagerCreate(parameters.GitHub.UserName, parameters.GitHub.Password, "cake-build", "cake", new GitReleaseManagerCreateSettings {
+        Milestone         = parameters.Version.Milestone,
+        Name              = parameters.Version.Milestone,
         Prerelease        = true,
         TargetCommitish   = "main"
     });
@@ -431,4 +297,4 @@ Task("ReleaseNotes")
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
 
-RunTarget(target);
+RunTarget(parameters.Target);
