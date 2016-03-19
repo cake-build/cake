@@ -106,6 +106,14 @@
     <Compile Include="Build\Bamboo\Data\BambooCommitInfo.cs" />
     <Compile Include="Build\Bamboo\Data\BambooRepositoryInfo.cs" />
     <Compile Include="Build\Bamboo\Data\BambooCustomBuildInfo.cs" />
+    <Compile Include="Build\TravisCI\Data\TravisCIBuildInfo.cs" />
+    <Compile Include="Build\TravisCI\Data\TravisCIJobInfo.cs" />
+    <Compile Include="Build\TravisCI\Data\TravisCIEnvironmentInfo.cs" />
+    <Compile Include="Build\TravisCI\Data\TravisCIRepositoryInfo.cs" />
+    <Compile Include="Build\TravisCI\ITravisCIProvider.cs" />
+    <Compile Include="Build\TravisCI\TravisCIDisposableExtensions.cs" />
+    <Compile Include="Build\TravisCI\TravisCIInfo.cs" />
+    <Compile Include="Build\TravisCI\TravisCIProvider.cs" />
     <Compile Include="IO\Paths\ConvertableDirectoryPath.cs" />
     <Compile Include="IO\Paths\ConvertableFilePath.cs" />
     <Compile Include="Net\HttpClientExtensions.cs" />

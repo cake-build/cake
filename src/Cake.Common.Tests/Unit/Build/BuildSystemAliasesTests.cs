@@ -46,10 +46,10 @@ namespace Cake.Common.Tests.Unit.Build
             [Fact]
             public void Should_Throw_If_Context_Is_Null()
             {
-                //Given, When
+                // Given, When
                 var result = Record.Exception(() => BuildSystemAliases.Bamboo(null));
 
-                //Then
+                // Then
                 Assert.IsArgumentNullException(result, "context");
             }
         }
@@ -59,10 +59,10 @@ namespace Cake.Common.Tests.Unit.Build
             [Fact]
             public void Should_Throw_If_Context_Is_Null()
             {
-                //Given, When
+                // Given, When
                 var result = Record.Exception(() => BuildSystemAliases.Jenkins(null));
 
-                //Then
+                // Then
                 Assert.IsArgumentNullException(result, "context");
             }
         }
@@ -72,10 +72,23 @@ namespace Cake.Common.Tests.Unit.Build
             [Fact]
             public void Should_Throw_If_Context_Is_Null()
             {
-                //Given, When
+                // Given, When
                 var result = Record.Exception(() => BuildSystemAliases.Bitrise(null));
 
-                //Then
+                // Then
+                Assert.IsArgumentNullException(result, "context");
+            }
+        }
+        
+        public sealed class TheTravisCIMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => BuildSystemAliases.TravisCI(null));
+
+                // Then
                 Assert.IsArgumentNullException(result, "context");
             }
         }
