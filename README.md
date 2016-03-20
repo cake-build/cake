@@ -8,6 +8,7 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
 | Travis                      | Linux / OS X | [![Travis build status](https://travis-ci.org/cake-build/cake.svg?branch=develop)](https://travis-ci.org/cake-build/cake) |
 | TeamCity                    | Windows      | [![TeamCity Build Status](http://img.shields.io/teamcity/codebetter/Cake_CakeMaster.svg)](http://teamcity.codebetter.com/viewType.html?buildTypeId=Cake_CakeMaster) |
 | Bitrise                     | OS X         | ![Bitrise Build Status](https://www.bitrise.io/app/7a9d707b00881436.svg?token=m8zsF3tNONLaF03eHU-Ftg&branch=develop)      |
+| Bitrise                     | Linux        | ![Bitrise Build Status](https://www.bitrise.io/app/b811c91a26b1ea80.svg?token=zdwab0niOTRF4p3HcFYaxQ&branch=develop)      |
 | Jenkins                     | Windows      | [![Jenkins](https://img.shields.io/jenkins/s/https/cake-jenkins.azurewebsites.net/Cake.svg)](http://cake-jenkins.azurewebsites.net/job/Cake/lastStableBuild/) |
 | Bamboo                      | Windows      | [![Bamboo Build Status](https://bambooshield.azurewebsites.net/planstatus/Flat/CAKE-CAKE.svg)](https://cakebuild.atlassian.net/builds/browse/CAKE-CAKE) |
 | Visual Studio Team Services | Windows      | ![VSTS Build Status](https://img.shields.io/vso/build/cake-build/af63183c-ac1f-4dbb-93bc-4fa862ea5809/1.svg)              |
