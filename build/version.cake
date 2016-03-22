@@ -7,9 +7,7 @@ public class BuildVersion
 
     public static BuildVersion CalculatingSemanticVersion(
         ICakeContext context,
-        bool isLocalBuild,
-        bool isPublishBuild,
-        bool isReleaseBuild
+        BuildParameters parameters
         )
     {
         if (context == null)
@@ -21,10 +19,10 @@ public class BuildVersion
         string semVersion = null;
         string milestone = null;
 
-        if (context.IsRunningOnWindows())
+        if (context.IsRunningOnWindows() && !parameters.SkipGitVersion)
         {
             context.Information("Calculating Semantic Version");
-            if (!isLocalBuild || isPublishBuild || isReleaseBuild)
+            if (!parameters.IsLocalBuild || parameters.IsPublishBuild || parameters.IsReleaseBuild)
             {
                 context.GitVersion(new GitVersionSettings{
                     UpdateAssemblyInfoFilePath = "./src/SolutionInfo.cs",
