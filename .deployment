@@ -1,0 +1,2 @@
+[config]
+command = powershell -ExecutionPolicy RemoteSigned -NoProfile -NoLogo -NonInteractive -File .\build\kudu.ps1
