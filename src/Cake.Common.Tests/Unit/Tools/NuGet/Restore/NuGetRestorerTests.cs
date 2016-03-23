@@ -245,6 +245,41 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 // Then
                 Assert.Equal("restore \"/Working/project.sln\" -ConfigFile \"/Working/nuget.config\" -NonInteractive", result.Args);
             }
+
+
+
+            [Fact]
+            public void Should_Add_FallbackSources_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new NuGetRestorerFixture();
+                fixture.Settings.Source = new[] { "A;B;C" };
+                fixture.Settings.FallbackSource = new[] { "D;E;F" };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("restore \"/Working/project.sln\" -Source \"A;B;C\" -FallbackSource \"D;E;F\" -NonInteractive", result.Args);
+            }
+
+            [Theory]
+            [InlineData(NuGetMSBuildVersion.MSBuild4, "restore \"/Working/project.sln\" -MSBuildVersion 4 -NonInteractive")]
+            [InlineData(NuGetMSBuildVersion.MSBuild12, "restore \"/Working/project.sln\" -MSBuildVersion 12 -NonInteractive")]
+            [InlineData(NuGetMSBuildVersion.MSBuild14, "restore \"/Working/project.sln\" -MSBuildVersion 14 -NonInteractive")]
+            public void Should_Add_MSBuildVersion_To_Arguments_If_Set(NuGetMSBuildVersion msBuildVersion, string expected)
+            {
+
+                // Given
+                var fixture = new NuGetRestorerFixture();
+                fixture.Settings.MSBuildVersion = msBuildVersion;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
         }
     }
 }

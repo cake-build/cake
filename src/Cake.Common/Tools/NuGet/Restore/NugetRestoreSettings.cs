@@ -53,5 +53,20 @@ namespace Cake.Common.Tools.NuGet.Restore
         /// If not specified, the file <c>%AppData%\NuGet\NuGet.config</c> is used as the configuration file.
         /// </summary>
         public FilePath ConfigFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets a list of packages sources to use as fallbacks for this command.
+        /// This setting requires NuGet V3 or later.
+        /// </summary>
+        /// <value>The list of packages sources to use as fallbacks for this command.</value>
+        public ICollection<string> FallbackSource { get; set; }
+
+        /// <summary>
+        /// Gets or sets the version of MSBuild to be used with this command.
+        /// By default the MSBuild in your path is picked, otherwise it defaults to the highest installed version of MSBuild.
+        /// This setting requires NuGet V3 or later.
+        /// </summary>
+        /// <value>The version of MSBuild to be used with this command.</value>
+        public NuGetMSBuildVersion? MSBuildVersion { get; set; }
     }
 }

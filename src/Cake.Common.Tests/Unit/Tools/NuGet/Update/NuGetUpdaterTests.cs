@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
-using Cake.Common.Tests.Fixtures.Tools.NuGet;
 using Cake.Common.Tests.Fixtures.Tools.NuGet.Update;
 using Cake.Common.Tools.NuGet;
 using Cake.Core;
-using Cake.Core.IO;
 using Cake.Testing;
 using Cake.Testing.Xunit;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.NuGet.Update
@@ -222,6 +219,23 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Update
                 // Then
                 Assert.Equal("update \"/Working/packages.config\" -Source \"A;B;C\" " +
                              "-NonInteractive", result.Args);
+            }
+
+            [Theory]
+            [InlineData(NuGetMSBuildVersion.MSBuild4, "update \"/Working/packages.config\" -MSBuildVersion 4 -NonInteractive")]
+            [InlineData(NuGetMSBuildVersion.MSBuild12, "update \"/Working/packages.config\" -MSBuildVersion 12 -NonInteractive")]
+            [InlineData(NuGetMSBuildVersion.MSBuild14, "update \"/Working/packages.config\" -MSBuildVersion 14 -NonInteractive")]
+            public void Should_Add_MSBuildVersion_To_Arguments_If_Set(NuGetMSBuildVersion msBuildVersion, string expected)
+            {
+                // Given
+                var fixture = new NuGetUpdateFixture();
+                fixture.Settings.MSBuildVersion = msBuildVersion;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
             }
         }
     }

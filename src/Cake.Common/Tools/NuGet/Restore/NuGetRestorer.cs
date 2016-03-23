@@ -59,18 +59,25 @@ namespace Cake.Common.Tools.NuGet.Restore
                 builder.Append("-RequireConsent");
             }
 
-            // Packages Directory
+            // Packages Directory.
             if (settings.PackagesDirectory != null)
             {
                 builder.Append("-PackagesDirectory");
                 builder.AppendQuoted(settings.PackagesDirectory.MakeAbsolute(_environment).FullPath);
             }
 
-            // List of package sources
+            // List of package sources.
             if (settings.Source != null && settings.Source.Count > 0)
             {
                 builder.Append("-Source");
                 builder.AppendQuoted(string.Join(";", settings.Source));
+            }
+
+            // List of package fallback sources.
+            if (settings.FallbackSource != null && settings.FallbackSource.Count > 0)
+            {
+                builder.Append("-FallbackSource");
+                builder.AppendQuoted(string.Join(";", settings.FallbackSource));
             }
 
             // No Cache?
@@ -92,11 +99,18 @@ namespace Cake.Common.Tools.NuGet.Restore
                 builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
             }
 
-            // Configuration file
+            // Configuration file.
             if (settings.ConfigFile != null)
             {
                 builder.Append("-ConfigFile");
                 builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
+            }
+
+            // MSBuildVersion?
+            if (settings.MSBuildVersion.HasValue)
+            {
+                builder.Append("-MSBuildVersion");
+                builder.Append(settings.MSBuildVersion.Value.ToString("D"));
             }
 
             builder.Append("-NonInteractive");
