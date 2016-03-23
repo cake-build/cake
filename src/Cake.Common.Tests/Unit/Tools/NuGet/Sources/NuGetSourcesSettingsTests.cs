@@ -15,6 +15,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
 
                 // Then
                 Assert.False(settings.IsSensitiveSource);
+                Assert.False(settings.StorePasswordInClearText);
             }
         }
     }
