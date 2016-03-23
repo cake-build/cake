@@ -16,8 +16,18 @@ namespace Cake.Core.Tooling
 
         /// <summary>
         /// Gets or sets the argument customization.
+        /// Argument customization is a way that lets you add, replace or reuse arguments passed to a tool.
+        /// This allows you to support new tool arguments, customize arguments or address potential argument issues.
         /// </summary>
-        /// <value>The arguments.</value>
+        /// <example>
+        /// <code>
+        /// NuGetAddSource("Cake", "https://www.myget.org/F/cake/api/v3/index.json",
+        ///     new NuGetSourcesSettings { UserName = "user", Password = "incorrect",
+        ///     ArgumentCustomization = args=&gt;args.Append("-StorePasswordInClearText")
+        /// });
+        /// </code>
+        /// </example>
+        /// <value>The delegate used to customize the <see cref="Cake.Core.IO.ProcessArgumentBuilder" />.</value>
         public Func<ProcessArgumentBuilder, ProcessArgumentBuilder> ArgumentCustomization { get; set; }
     }
 }
