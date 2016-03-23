@@ -16,6 +16,11 @@ namespace Cake.Common.Tools.MSBuild
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="solution">The solution.</param>
+        /// <example>
+        /// <code>
+        /// MSBuild("./src/Cake.sln");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void MSBuild(this ICakeContext context, FilePath solution)
         {
@@ -28,6 +33,16 @@ namespace Cake.Common.Tools.MSBuild
         /// <param name="context">The context.</param>
         /// <param name="solution">The solution to build.</param>
         /// <param name="configurator">The settings configurator.</param>
+        /// <example>
+        /// <code>
+        /// MSBuild("./src/Cake.sln", configurator =>
+        ///     configurator.SetConfiguration("Debug")
+        ///         .SetVerbosity(Verbosity.Minimal)
+        ///         .UseToolVersion(MSBuildToolVersion.VS2015)
+        ///         .SetMSBuildPlatform(MSBuildPlatform.x86)
+        ///         .SetPlatformTarget(PlatformTarget.MSIL));
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void MSBuild(this ICakeContext context, FilePath solution, Action<MSBuildSettings> configurator)
         {
@@ -53,6 +68,16 @@ namespace Cake.Common.Tools.MSBuild
         /// <param name="context">The context.</param>
         /// <param name="solution">The solution to build.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// MSBuild("./src/Cake.sln", new MSBuildSettings {
+        ///     Verbosity = Verbosity.Minimal,
+        ///     ToolVersion = MSBuildToolVersion.VS2015,
+        ///     Configuration = "Release",
+        ///     PlatformTarget = PlatformTarget.MSIL
+        ///     });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void MSBuild(this ICakeContext context, FilePath solution, MSBuildSettings settings)
         {
