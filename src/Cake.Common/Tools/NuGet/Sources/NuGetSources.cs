@@ -163,6 +163,12 @@ namespace Cake.Common.Tools.NuGet.Sources
                 builder.AppendQuotedSecret(settings.Password);
             }
 
+            // Store password in plain text?
+            if (settings.StorePasswordInClearText)
+            {
+                builder.Append("-StorePasswordInClearText");
+            }
+
             return builder;
         }
 

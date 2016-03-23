@@ -252,6 +252,21 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 // Then
                 Assert.Equal("sources Add -Name \"name\" -Source \"source\" -NonInteractive", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_StorePasswordInClearText_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new NuGetAddSourceFixture();
+                fixture.Settings.StorePasswordInClearText = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("sources Add -Name \"name\" -Source \"source\" " +
+                             "-NonInteractive -StorePasswordInClearText", result.Args);
+            }
         }
 
         public sealed class TheRemoveSourceMethod
