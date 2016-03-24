@@ -88,6 +88,13 @@ namespace Cake.Common.Tools.NuGet.Update
                 builder.Append("-Prerelease");
             }
 
+            // MSBuildVersion?
+            if (settings.MSBuildVersion.HasValue)
+            {
+                builder.Append("-MSBuildVersion");
+                builder.Append(settings.MSBuildVersion.Value.ToString("D"));
+            }
+
             builder.Append("-NonInteractive");
 
             return builder;

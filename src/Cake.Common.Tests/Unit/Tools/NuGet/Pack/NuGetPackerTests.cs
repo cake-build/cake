@@ -441,6 +441,23 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                         Resources.Nuspec_Metadata_WithoutNamespaces_WithDependencies.NormalizeLineEndings(),
                         result.NuspecContent.NormalizeLineEndings());
                 }
+
+                [Theory]
+                [InlineData(NuGetMSBuildVersion.MSBuild4, "pack \"/Working/existing.temp.nuspec\" -MSBuildVersion 4")]
+                [InlineData(NuGetMSBuildVersion.MSBuild12, "pack \"/Working/existing.temp.nuspec\" -MSBuildVersion 12")]
+                [InlineData(NuGetMSBuildVersion.MSBuild14, "pack \"/Working/existing.temp.nuspec\" -MSBuildVersion 14")]
+                public void Should_Add_MSBuildVersion_To_Arguments_If_Set(NuGetMSBuildVersion msBuildVersion, string expected)
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithNuSpecFixture();
+                    fixture.Settings.MSBuildVersion = msBuildVersion;
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal(expected, result.Args);
+                }
             }
 
             public sealed class WithProjectFile
@@ -738,6 +755,24 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
 
                     // Then
                     Assert.IsCakeException(result, "Properties values can not be null or empty.");
+                }
+
+                [Theory]
+                [InlineData(NuGetMSBuildVersion.MSBuild4, "pack \"/Working/existing.csproj\" -MSBuildVersion 4")]
+                [InlineData(NuGetMSBuildVersion.MSBuild12, "pack \"/Working/existing.csproj\" -MSBuildVersion 12")]
+                [InlineData(NuGetMSBuildVersion.MSBuild14, "pack \"/Working/existing.csproj\" -MSBuildVersion 14")]
+                public void Should_Add_MSBuildVersion_To_Arguments_If_Set(NuGetMSBuildVersion msBuildVersion, string expected)
+                {
+
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.Settings.MSBuildVersion = msBuildVersion;
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal(expected, result.Args);
                 }
             }
 

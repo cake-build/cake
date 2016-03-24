@@ -176,6 +176,13 @@ namespace Cake.Common.Tools.NuGet.Pack
                 builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
             }
 
+            // MSBuildVersion?
+            if (settings.MSBuildVersion.HasValue)
+            {
+                builder.Append("-MSBuildVersion");
+                builder.Append(settings.MSBuildVersion.Value.ToString("D"));
+            }
+
             // Properties
             if (settings.Properties != null && settings.Properties.Count > 0)
             {
