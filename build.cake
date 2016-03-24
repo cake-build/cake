@@ -15,9 +15,7 @@ Setup(() =>
     parameters.SetBuildVersion(
         BuildVersion.CalculatingSemanticVersion(
             context: Context,
-            isLocalBuild: parameters.IsLocalBuild,
-            isPublishBuild: parameters.IsPublishBuild,
-            isReleaseBuild: parameters.IsReleaseBuild
+            parameters: parameters
         )
     );
 

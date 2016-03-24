@@ -14,6 +14,7 @@ public class BuildParameters
     public bool IsMainCakeRepo { get; private set; }
     public bool IsPublishBuild { get; private set; }
     public bool IsReleaseBuild { get; private set; }
+    public bool SkipGitVersion { get; private set; }
     public BuildCredentials GitHub { get; private set; }
     public ReleaseNotes ReleaseNotes { get; private set; }
     public BuildVersion Version { get; private set; }
@@ -75,7 +76,8 @@ public class BuildParameters
                 "Publish-GitHub-Release"
             }.Any(
                 publishTarget => StringComparer.OrdinalIgnoreCase.Equals(publishTarget, target)
-            )
+            ),
+            SkipGitVersion = StringComparer.OrdinalIgnoreCase.Equals("True", context.EnvironmentVariable("CAKE_SKIP_GITVERSION"))
         };
     }
 }
