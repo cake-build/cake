@@ -1,0 +1,6 @@
+# Misc folders
+tools/
+temp/
+
+# Windows
+Thumbs.db
