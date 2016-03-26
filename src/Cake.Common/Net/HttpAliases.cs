@@ -19,6 +19,15 @@ namespace Cake.Common.Net
         /// <param name="context">The context.</param>
         /// <param name="address">The URL of the resource to download.</param>
         /// <returns>The path to the downloaded file.</returns>
+        /// <example>
+        /// <code>
+        /// var file = DownloadFile("http://cakebuild.net/bootstrapper/windows");
+        /// if (FileExists(file))
+        /// {
+        ///         Information("{0}", file);
+        /// }
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Download")]
         public static FilePath DownloadFile(this ICakeContext context, string address)
@@ -32,6 +41,16 @@ namespace Cake.Common.Net
         /// <param name="context">The context.</param>
         /// <param name="address">The URL of file to download.</param>
         /// <returns>The path to the downloaded file.</returns>
+        /// <example>
+        /// <code>
+        /// var uri = new Uri("http://cakebuild.net/bootstrapper/windows");
+        /// var file = DownloadFile(uri);
+        /// if (FileExists(file))
+        /// {
+        ///     Information("{0}", file);
+        /// }
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Download")]
         public static FilePath DownloadFile(this ICakeContext context, Uri address)
@@ -52,6 +71,11 @@ namespace Cake.Common.Net
         /// <param name="context">The context.</param>
         /// <param name="address">The URL of the resource to download.</param>
         /// <param name="outputPath">The output path.</param>
+        /// <example>
+        /// <code>
+        /// DownloadFile("http://cakebuild.net/bootstrapper/windows", "./bootstrapper.ps1");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Download")]
         public static void DownloadFile(this ICakeContext context, string address, FilePath outputPath)
@@ -65,6 +89,12 @@ namespace Cake.Common.Net
         /// <param name="context">The context.</param>
         /// <param name="address">The URL of the resource to download.</param>
         /// <param name="outputPath">The output path.</param>
+        /// <example>
+        /// <code>
+        /// var uri = new Uri("http://cakebuild.net/bootstrapper/windows");
+        /// DownloadFile(uri, "./bootstrapper.ps1");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Download")]
         public static void DownloadFile(this ICakeContext context, Uri address, FilePath outputPath)
