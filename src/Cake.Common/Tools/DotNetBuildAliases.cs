@@ -16,6 +16,11 @@ namespace Cake.Common.Tools
         /// <summary>
         /// Builds the specified solution using MSBuild or XBuild.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// DotNetBuild("./project/project.sln");
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="solution">The solution.</param>
         [CakeMethodAlias]
@@ -27,6 +32,15 @@ namespace Cake.Common.Tools
         /// <summary>
         /// Builds the specified solution using MSBuild or XBuild.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// DotNetBuild("./project/project.sln", settings => 
+        ///     settings.SetConfiguration("Debug")
+        ///         .SetVerbosity(Core.Diagnostics.Verbosity.Minimal)
+        ///         .WithTarget("Build")
+        ///         .WithProperty("TreatWarningsAsErrors","true")
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="solution">The solution.</param>
         /// <param name="configurator">The configurator.</param>
