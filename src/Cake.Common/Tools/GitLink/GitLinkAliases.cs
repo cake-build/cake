@@ -39,7 +39,7 @@ namespace Cake.Common.Tools.GitLink
         /// <example>
         /// <code>
         /// GitLink("C:/temp/solution", new GitLinkSettings {
-        ///     RepositoryUrl = new Uri("http://mydomain.com"),
+        ///     RepositoryUrl = "http://mydomain.com",
         ///     Branch        = "master",
         ///     ShaHash       = "abcdef",
         /// });
