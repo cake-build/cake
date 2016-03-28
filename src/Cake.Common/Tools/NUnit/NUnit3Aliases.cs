@@ -19,11 +19,6 @@ namespace Cake.Common.Tools.NUnit
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
-        /// <example>
-        /// <code>
-        /// NUnit3("./src/**/bin/Release/*.Tests.dll");
-        /// </code>
-        /// </example>
         [CakeMethodAlias]
         public static void NUnit3(this ICakeContext context, string pattern)
         {
@@ -49,13 +44,6 @@ namespace Cake.Common.Tools.NUnit
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
         /// <param name="settings">The settings.</param>
-        /// <example>
-        /// <code>
-        /// NUnit3("./src/**/bin/Release/*.Tests.dll", new NUnit3Settings {
-        ///     NoResults = true
-        ///     });
-        /// </code>
-        /// </example>
         [CakeMethodAlias]
         public static void NUnit3(this ICakeContext context, string pattern, NUnit3Settings settings)
         {
@@ -79,11 +67,6 @@ namespace Cake.Common.Tools.NUnit
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
-        /// <example>
-        /// <code>
-        /// NUnit3(new [] { "./src/Example.Tests/bin/Release/Example.Tests.dll" });
-        /// </code>
-        /// </example>
         [CakeMethodAlias]
         public static void NUnit3(this ICakeContext context, IEnumerable<string> assemblies)
         {
@@ -100,12 +83,6 @@ namespace Cake.Common.Tools.NUnit
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
-        /// <example>
-        /// <code>
-        /// var testAssemblies = GetFiles("./src/**/bin/Release/*.Tests.dll");
-        /// NUnit3(testAssemblies);
-        /// </code>
-        /// </example>
         [CakeMethodAlias]
         public static void NUnit3(this ICakeContext context, IEnumerable<FilePath> assemblies)
         {
@@ -119,13 +96,6 @@ namespace Cake.Common.Tools.NUnit
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
         /// <param name="settings">The settings.</param>
-        /// <example>
-        /// <code>
-        /// NUnit3(new [] { "./src/Example.Tests/bin/Release/Example.Tests.dll" }, new NUnit3Settings {
-        ///     NoResults = true
-        ///     });
-        /// </code>
-        /// </example>
         [CakeMethodAlias]
         public static void NUnit3(this ICakeContext context, IEnumerable<string> assemblies, NUnit3Settings settings)
         {
@@ -144,14 +114,6 @@ namespace Cake.Common.Tools.NUnit
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
         /// <param name="settings">The settings.</param>
-        /// <example>
-        /// <code>
-        /// var testAssemblies = GetFiles("./src/**/bin/Release/*.Tests.dll");
-        /// NUnit3(testAssemblies, new NUnit3Settings {
-        ///     NoResults = true
-        ///     });
-        /// </code>
-        /// </example>
         [CakeMethodAlias]
         public static void NUnit3(this ICakeContext context, IEnumerable<FilePath> assemblies, NUnit3Settings settings)
         {
