@@ -48,15 +48,15 @@ namespace Cake.Common.Tools.DupFinder
         /// DupFinder("./src/MySolution.sln", new DupFinderSettings {
         ///     ShowStats = true,
         ///     ShowText = true,
-        ///     ExcludePattern = new String[] 
-        ///     { 
-        ///         rootDirectoryPath + "/**/*Designer.cs", 
+        ///     ExcludePattern = new String[]
+        ///     {
+        ///         rootDirectoryPath + "/**/*Designer.cs",
         ///     },
         ///     OutputFile = resharperReportsDirectory + File("dupfinder-output.xml"),
         ///     ThrowExceptionOnFindingDuplicates = true
         /// });
         /// </code>
-        /// </example>        
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("DupFinder")]
         public static void DupFinder(this ICakeContext context, FilePath file, DupFinderSettings settings)
@@ -100,15 +100,15 @@ namespace Cake.Common.Tools.DupFinder
         /// DupFinder(projects, new DupFinderSettings {
         ///     ShowStats = true,
         ///     ShowText = true,
-        ///     ExcludePattern = new String[] 
-        ///     { 
-        ///         rootDirectoryPath + "/**/*Designer.cs", 
+        ///     ExcludePattern = new String[]
+        ///     {
+        ///         rootDirectoryPath + "/**/*Designer.cs",
         ///     },
         ///     OutputFile = resharperReportsDirectory + File("dupfinder-output.xml"),
         ///     ThrowExceptionOnFindingDuplicates = true
         /// });
         /// </code>
-        /// </example>         
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("DupFinder")]
         public static void DupFinder(this ICakeContext context, IEnumerable<FilePath> files, DupFinderSettings settings)
@@ -155,7 +155,7 @@ namespace Cake.Common.Tools.DupFinder
         ///     OutputFile = resharperReportsDirectory + File("dupfinder-output.xml"),
         /// });
         /// </code>
-        /// </example> 
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("DupFinder")]
         public static void DupFinder(this ICakeContext context, string pattern, DupFinderSettings settings)
