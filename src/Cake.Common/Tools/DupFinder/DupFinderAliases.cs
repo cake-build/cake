@@ -188,7 +188,7 @@ namespace Cake.Common.Tools.DupFinder
         /// <param name="configFile">The config file.</param>
         /// <example>
         /// <code>
-        /// DupFinder("./src/dupfinder.config");
+        /// DupFinderFromConfig("./src/dupfinder.config");
         /// </code>
         /// </example>
         [CakeMethodAlias]
