@@ -17,6 +17,11 @@ namespace Cake.Common.Tools.NUnit
         /// <summary>
         /// Runs all NUnit unit tests in the assemblies matching the specified pattern.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// NUnit("./src/UnitTests/*.dll");
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
         [CakeMethodAlias]
@@ -41,6 +46,14 @@ namespace Cake.Common.Tools.NUnit
         /// Runs all NUnit unit tests in the assemblies matching the specified pattern,
         /// using the specified settings.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// NUnit("./src/UnitTests/*.dll", new NUnitSettings {
+        ///     Timeout = 4000, 
+        ///     StopOnError = true
+        ///     });
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
         /// <param name="settings">The settings.</param>
@@ -65,6 +78,15 @@ namespace Cake.Common.Tools.NUnit
         /// <summary>
         /// Runs all NUnit unit tests in the specified assemblies.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var assemblies = new [] {
+        ///     "UnitTests1.dll",
+        ///     "UnitTests2.dll"
+        /// };
+        /// NUnit(assemblies);
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
         [CakeMethodAlias]
@@ -81,6 +103,12 @@ namespace Cake.Common.Tools.NUnit
         /// <summary>
         /// Runs all NUnit unit tests in the specified assemblies.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var assemblies = GetFiles("./src/UnitTests/*.dll");
+        /// NUnit(assemblies);
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
         [CakeMethodAlias]
@@ -93,6 +121,18 @@ namespace Cake.Common.Tools.NUnit
         /// Runs all NUnit unit tests in the specified assemblies,
         /// using the specified settings.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var assemblies = new [] {
+        ///     "UnitTests1.dll",
+        ///     "UnitTests2.dll"
+        /// };
+        /// NUnit(assemblies, new NUnitSettings {
+        ///     Timeout = 4000,
+        ///     StopOnError = true
+        ///     });
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
         /// <param name="settings">The settings.</param>
@@ -111,6 +151,15 @@ namespace Cake.Common.Tools.NUnit
         /// Runs all NUnit unit tests in the specified assemblies,
         /// using the specified settings.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var assemblies = GetFiles(""./src/UnitTests/*.dll"");
+        /// NUnit(assemblies, new NUnitSettings {
+        ///     Timeout = 4000,
+        ///     StopOnError = true
+        ///     });
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
         /// <param name="settings">The settings.</param>
