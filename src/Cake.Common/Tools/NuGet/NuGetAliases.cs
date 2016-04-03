@@ -770,6 +770,14 @@ namespace Cake.Common.Tools.NuGet
         /// <summary>
         /// Installs NuGet packages using the specified API key, source and settings.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var setting = new NuGetSetApiKeySettings {
+        ///     Verbosity = NuGetVerbosity.Detailed
+        ///     };
+        /// NuGetSetApiKey("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", "https://nuget.org/api/v2/", setting);
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="apiKey">The API key.</param>
         /// <param name="source">Server URL where the API key is valid.</param>
@@ -792,6 +800,11 @@ namespace Cake.Common.Tools.NuGet
         /// <summary>
         /// Installs NuGet packages using the specified API key and source.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// NuGetSetApiKey("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", "https://nuget.org/api/v2/");
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="apiKey">The API key.</param>
         /// <param name="source">Server URL where the API key is valid.</param>
@@ -806,6 +819,14 @@ namespace Cake.Common.Tools.NuGet
         /// <summary>
         /// Set the proxy settings to be used while connecting to your NuGet feed, including settings.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var setting = new NuGetSetProxySettings {
+        ///     Verbosity = NuGetVerbosity.Detailed
+        ///     };
+        /// NuGetSetProxy("127.0.0.1:8080", "proxyuser","Pa$$w0rd1", setting);
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="proxy">The url of the proxy.</param>
         /// <param name="username">The username used to access the proxy.</param>
@@ -829,6 +850,11 @@ namespace Cake.Common.Tools.NuGet
         /// <summary>
         /// Set the proxy settings to be used while connecting to your NuGet feed.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// NuGetSetProxy("127.0.0.1:8080", "proxyuser","Pa$$w0rd1");
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="proxy">The url of the proxy.</param>
         /// <param name="username">The username used to access the proxy.</param>
