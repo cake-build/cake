@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Cake.Core;
@@ -78,24 +77,29 @@ namespace Cake.Common.Tools.InspectCode
         {
             var anyFailures = false;
             var resultsFile = _fileSystem.GetFile(resultsFilePath);
-            var xmlDoc = XDocument.Load(resultsFile.Open(FileMode.Open));
-            var violations = xmlDoc.Descendants("IssueType").Where(i => i.Attribute("Severity") != null && i.Attribute("Severity").Value == "ERROR");
 
-            foreach (var violation in violations)
+            using (var stream = resultsFile.OpenRead())
             {
-                _log.Warning("Code Inspection Error(s) Located. Description: {0}", violation.Attribute("Description").Value);
+                var xmlDoc = XDocument.Load(stream);
+                var violations = xmlDoc.Descendants("IssueType").Where(i => i.Attribute("Severity") != null && i.Attribute("Severity").Value == "ERROR");
 
-                var issueLookups = xmlDoc.Descendants("Issue").Where(i => i.Attribute("TypeId") != null && i.Attribute("TypeId").Value == violation.Attribute("Id").Value);
-                foreach (var issueLookup in issueLookups)
+                foreach (var violation in violations)
                 {
-                    var file = issueLookup.Attribute("File") == null ? string.Empty : issueLookup.Attribute("File").Value;
-                    var line = issueLookup.Attribute("Line") == null ? string.Empty : issueLookup.Attribute("Line").Value;
-                    var message = issueLookup.Attribute("Message") == null ? string.Empty : issueLookup.Attribute("Message").Value;
+                    _log.Warning("Code Inspection Error(s) Located. Description: {0}", violation.Attribute("Description").Value);
 
-                    _log.Warning("File Name: {0} Line Number: {1} Message: {2}", file, line, message);
+                    var issueLookups = xmlDoc.Descendants("Issue").Where(i => i.Attribute("TypeId") != null && i.Attribute("TypeId").Value == violation.Attribute("Id").Value);
+
+                    foreach (var issueLookup in issueLookups)
+                    {
+                        var file = issueLookup.Attribute("File") == null ? string.Empty : issueLookup.Attribute("File").Value;
+                        var line = issueLookup.Attribute("Line") == null ? string.Empty : issueLookup.Attribute("Line").Value;
+                        var message = issueLookup.Attribute("Message") == null ? string.Empty : issueLookup.Attribute("Message").Value;
+
+                        _log.Warning("File Name: {0} Line Number: {1} Message: {2}", file, line, message);
+                    }
+
+                    anyFailures = true;
                 }
-
-                anyFailures = true;
             }
 
             if (anyFailures && throwOnViolations)
