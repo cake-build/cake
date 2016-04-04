@@ -124,3 +124,7 @@ Cake is provided as-is under the MIT license. For more information see [LICENSE]
 * For Mono.CSharp, see https://github.com/mono/mono/blob/master/mcs/LICENSE
 * For Autofac, see https://github.com/autofac/Autofac/blob/master/LICENSE
 * For NuGet.Core, see https://nuget.codeplex.com/license
+
+## Thanks
+
+A big thank you has to go to [JetBrains](https://www.jetbrains.com) who provide each of the Cake Developers with an [Open Source License](https://www.jetbrains.com/support/community/#section=open-source) for [ReSharper](https://www.jetbrains.com/resharper/) that helps with the development of Cake.
