@@ -12,6 +12,8 @@ public class BuildParameters
     public bool IsRunningOnAppVeyor { get; private set; }
     public bool IsPullRequest { get; private set; }
     public bool IsMainCakeRepo { get; private set; }
+    public bool IsMainCakeBranch { get; private set; }
+    public bool IsTagged { get; private set; }
     public bool IsPublishBuild { get; private set; }
     public bool IsReleaseBuild { get; private set; }
     public bool SkipGitVersion { get; private set; }
@@ -56,7 +58,12 @@ public class BuildParameters
             IsRunningOnWindows = context.IsRunningOnWindows(),
             IsRunningOnAppVeyor = context.IsRunningOnWindows(),
             IsPullRequest = buildSystem.AppVeyor.Environment.PullRequest.IsPullRequest,
-            IsMainCakeRepo =  StringComparer.OrdinalIgnoreCase.Equals("cake-build/cake", buildSystem.AppVeyor.Environment.Repository.Name),
+            IsMainCakeRepo = StringComparer.OrdinalIgnoreCase.Equals("cake-build/cake", buildSystem.AppVeyor.Environment.Repository.Name),
+            IsMainCakeBranch = StringComparer.OrdinalIgnoreCase.Equals("main", buildSystem.AppVeyor.Environment.Repository.Branch),
+            IsTagged = (
+                buildSystem.AppVeyor.Environment.Repository.Tag.IsTag &&
+                !string.IsNullOrWhiteSpace(buildSystem.AppVeyor.Environment.Repository.Tag.Name)
+            ),
             GitHub = new BuildCredentials (
                 userName: context.EnvironmentVariable("CAKE_GITHUB_USERNAME"),
                 password: context.EnvironmentVariable("CAKE_GITHUB_PASSWORD")

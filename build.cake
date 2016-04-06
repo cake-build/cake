@@ -36,11 +36,12 @@ Setup(() =>
         )
     );
 
-    Information("Building version {0} of Cake ({1}, {2}) using version {3} of Cake.",
+    Information("Building version {0} of Cake ({1}, {2}) using version {3} of Cake. (IsTagged: {4})",
         parameters.Version.SemVersion,
         parameters.Configuration,
         parameters.Target,
-        parameters.Version.CakeVersion);
+        parameters.Version.CakeVersion,
+        parameters.IsTagged);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -175,6 +176,7 @@ Task("Publish-MyGet")
     .WithCriteria(() => !parameters.IsLocalBuild)
     .WithCriteria(() => !parameters.IsPullRequest)
     .WithCriteria(() => parameters.IsMainCakeRepo)
+    .WithCriteria(() => parameters.IsTagged || !parameters.IsMainCakeBranch)
     .Does(() =>
 {
     // Resolve the API key.
@@ -183,11 +185,17 @@ Task("Publish-MyGet")
         throw new InvalidOperationException("Could not resolve MyGet API key.");
     }
 
+    // Resolve the API url.
+    var apiUrl = EnvironmentVariable("MYGET_API_URL");
+    if(string.IsNullOrEmpty(apiUrl)) {
+        throw new InvalidOperationException("Could not resolve MyGet API url.");
+    }
+
     foreach(var package in parameters.Packages.All)
     {
         // Push the package.
         NuGetPush(package.PackagePath, new NuGetPushSettings {
-            Source = "https://www.myget.org/F/cake/api/v2/package",
+            Source = apiUrl,
             ApiKey = apiKey
         });
     }
@@ -195,7 +203,11 @@ Task("Publish-MyGet")
 
 Task("Publish-NuGet")
     .IsDependentOn("Create-NuGet-Packages")
-    .WithCriteria(() => parameters.IsLocalBuild)
+    .WithCriteria(() => !parameters.IsLocalBuild)
+    .WithCriteria(() => !parameters.IsPullRequest)
+    .WithCriteria(() => parameters.IsMainCakeRepo)
+    .WithCriteria(() => parameters.IsMainCakeBranch)
+    .WithCriteria(() => parameters.IsTagged)
     .Does(() =>
 {
     // Resolve the API key.
@@ -204,18 +216,29 @@ Task("Publish-NuGet")
         throw new InvalidOperationException("Could not resolve NuGet API key.");
     }
 
+    // Resolve the API url.
+    var apiUrl = EnvironmentVariable("NUGET_API_URL");
+    if(string.IsNullOrEmpty(apiUrl)) {
+        throw new InvalidOperationException("Could not resolve NuGet API url.");
+    }
+
     foreach(var package in parameters.Packages.Nuget)
     {
         // Push the package.
         NuGetPush(package.PackagePath, new NuGetPushSettings {
-          ApiKey = apiKey
+          ApiKey = apiKey,
+          Source = apiUrl
         });
     }
 });
 
 Task("Publish-Chocolatey")
     .IsDependentOn("Create-Chocolatey-Packages")
-    .WithCriteria(() => parameters.IsLocalBuild)
+    .WithCriteria(() => !parameters.IsLocalBuild)
+    .WithCriteria(() => !parameters.IsPullRequest)
+    .WithCriteria(() => parameters.IsMainCakeRepo)
+    .WithCriteria(() => parameters.IsMainCakeBranch)
+    .WithCriteria(() => parameters.IsTagged)
     .Does(() =>
 {
     // Resolve the API key.
@@ -224,11 +247,18 @@ Task("Publish-Chocolatey")
         throw new InvalidOperationException("Could not resolve Chocolatey API key.");
     }
 
+    // Resolve the API url.
+    var apiUrl = EnvironmentVariable("CHOCOLATEY_API_URL");
+    if(string.IsNullOrEmpty(apiUrl)) {
+        throw new InvalidOperationException("Could not resolve Chocolatey API url.");
+    }
+
     foreach(var package in parameters.Packages.Chocolatey)
     {
         // Push the package.
         ChocolateyPush(package.PackagePath, new ChocolateyPushSettings {
-          ApiKey = apiKey
+          ApiKey = apiKey,
+          Source = apiUrl
         });
     }
 });
@@ -283,7 +313,9 @@ Task("Publish")
 Task("AppVeyor")
   .IsDependentOn("Update-AppVeyor-Build-Number")
   .IsDependentOn("Upload-AppVeyor-Artifacts")
-  .IsDependentOn("Publish-MyGet");
+  .IsDependentOn("Publish-MyGet")
+  .IsDependentOn("Publish-NuGet")
+  .IsDependentOn("Publish-Chocolatey");
 
 Task("Travis")
   .IsDependentOn("Run-Unit-Tests");
