@@ -1,3 +1,9 @@
+### New on 0.10.1 (Released 2016/04/07)
+
+* Exception running InspectCode and then directly after TeamCity.ImportData
+* Ensure Cake Assemblies are stamped with current version number
+* Clean up build script for Cake
+
 ### New in 0.10.0 (Released 2016/03/16)
 
 * XUnit command line bug

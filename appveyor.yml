@@ -17,6 +17,7 @@ branches:
     - main
     - /r/.*/
     - /release/.*/
+    - /hotfix/.*/
 
 # Build cache
 cache:
