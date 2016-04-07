@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Cake.Core;
@@ -190,30 +189,34 @@ namespace Cake.Common.Tools.DupFinder
         {
             var anyFailures = false;
             var resultsFile = _fileSystem.GetFile(resultsFilePath);
-            var xmlDoc = XDocument.Load(resultsFile.Open(FileMode.Open));
-            var duplicates = xmlDoc.Descendants("Duplicate");
 
-            foreach (var duplicate in duplicates)
+            using (var stream = resultsFile.OpenRead())
             {
-                var cost = duplicate.Attribute("Cost") == null ? string.Empty : duplicate.Attribute("Cost").Value;
+                var xmlDoc = XDocument.Load(stream);
+                var duplicates = xmlDoc.Descendants("Duplicate");
 
-                _log.Warning("Duplicate Located with a cost of {0}, across {1} Fragments", cost, duplicate.Descendants("Fragment").Count());
-
-                foreach (var fragment in duplicate.Descendants("Fragment"))
+                foreach (var duplicate in duplicates)
                 {
-                    var fileNameNode = fragment.Descendants("FileName").FirstOrDefault();
-                    var lineRangeNode = fragment.Descendants("LineRange").FirstOrDefault();
+                    var cost = duplicate.Attribute("Cost") == null ? string.Empty : duplicate.Attribute("Cost").Value;
 
-                    if (fileNameNode != null && lineRangeNode != null)
+                    _log.Warning("Duplicate Located with a cost of {0}, across {1} Fragments", cost, duplicate.Descendants("Fragment").Count());
+
+                    foreach (var fragment in duplicate.Descendants("Fragment"))
                     {
-                        var start = lineRangeNode.Attribute("Start") == null ? string.Empty : lineRangeNode.Attribute("Start").Value;
-                        var end = lineRangeNode.Attribute("End") == null ? string.Empty : lineRangeNode.Attribute("End").Value;
+                        var fileNameNode = fragment.Descendants("FileName").FirstOrDefault();
+                        var lineRangeNode = fragment.Descendants("LineRange").FirstOrDefault();
 
-                        _log.Warning("File Name: {0} Line Numbers: {1} - {2}", fileNameNode.Value, start, end);
+                        if (fileNameNode != null && lineRangeNode != null)
+                        {
+                            var start = lineRangeNode.Attribute("Start") == null ? string.Empty : lineRangeNode.Attribute("Start").Value;
+                            var end = lineRangeNode.Attribute("End") == null ? string.Empty : lineRangeNode.Attribute("End").Value;
+
+                            _log.Warning("File Name: {0} Line Numbers: {1} - {2}", fileNameNode.Value, start, end);
+                        }
                     }
-                }
 
-                anyFailures = true;
+                    anyFailures = true;
+                }
             }
 
             if (anyFailures && throwOnDuplicates)
