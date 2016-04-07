@@ -156,13 +156,6 @@ Task("Create-NuGet-Packages")
     }
 });
 
-Task("Update-AppVeyor-Build-Number")
-    .WithCriteria(() => parameters.IsRunningOnAppVeyor)
-    .Does(() =>
-{
-    AppVeyor.UpdateBuildVersion(parameters.Version.SemVersion);
-});
-
 Task("Upload-AppVeyor-Artifacts")
     .IsDependentOn("Create-Chocolatey-Packages")
     .WithCriteria(() => parameters.IsRunningOnAppVeyor)
@@ -264,6 +257,11 @@ Task("Publish-Chocolatey")
 });
 
 Task("Publish-HomeBrew")
+    .WithCriteria(() => !parameters.IsLocalBuild)
+    .WithCriteria(() => !parameters.IsPullRequest)
+    .WithCriteria(() => parameters.IsMainCakeRepo)
+    .WithCriteria(() => parameters.IsMainCakeBranch)
+    .WithCriteria(() => parameters.IsTagged)
     .IsDependentOn("Zip-Files")
 	.Does(() =>
 {
@@ -273,6 +271,11 @@ Task("Publish-HomeBrew")
 });
 
 Task("Publish-GitHub-Release")
+    .WithCriteria(() => !parameters.IsLocalBuild)
+    .WithCriteria(() => !parameters.IsPullRequest)
+    .WithCriteria(() => parameters.IsMainCakeRepo)
+    .WithCriteria(() => parameters.IsMainCakeBranch)
+    .WithCriteria(() => parameters.IsTagged)
     .Does(() =>
 {
     GitReleaseManagerAddAssets(parameters.GitHub.UserName, parameters.GitHub.Password, "cake-build", "cake", parameters.Version.Milestone, parameters.Paths.Files.ZipArtifactPath.ToString());
@@ -304,18 +307,13 @@ Task("Package")
 Task("Default")
   .IsDependentOn("Package");
 
-Task("Publish")
+Task("AppVeyor")
+  .IsDependentOn("Upload-AppVeyor-Artifacts")
+  .IsDependentOn("Publish-MyGet")
   .IsDependentOn("Publish-NuGet")
   .IsDependentOn("Publish-Chocolatey")
   .IsDependentOn("Publish-HomeBrew")
   .IsDependentOn("Publish-GitHub-Release");
-
-Task("AppVeyor")
-  .IsDependentOn("Update-AppVeyor-Build-Number")
-  .IsDependentOn("Upload-AppVeyor-Artifacts")
-  .IsDependentOn("Publish-MyGet")
-  .IsDependentOn("Publish-NuGet")
-  .IsDependentOn("Publish-Chocolatey");
 
 Task("Travis")
   .IsDependentOn("Run-Unit-Tests");
