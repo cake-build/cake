@@ -140,6 +140,13 @@ namespace Cake.Common.Tools.SignTool
             builder.Append("/p");
             builder.AppendSecret(settings.Password);
 
+            // Signed content description.
+            if (!string.IsNullOrEmpty(settings.Description))
+            {
+                builder.Append("/d");
+                builder.AppendQuoted(settings.Description);
+            }
+
             // Target Assembly to sign.
             builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
 

@@ -197,6 +197,20 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 // Then
                 Assert.Equal("SIGN /t \"https://t.com/\" /f \"/Working/cert.pfx\" /p secret \"/Working/a.dll\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Call_Sign_Tool_With_Correct_Parameters_With_Description()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.Description = "DescriptionTest";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("SIGN /t \"https://t.com/\" /f \"/Working/cert.pfx\" /p secret /d \"DescriptionTest\" \"/Working/a.dll\"", result.Args);
+            }
         }
     }
 }
