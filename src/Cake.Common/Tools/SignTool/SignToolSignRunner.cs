@@ -97,32 +97,6 @@ namespace Cake.Common.Tools.SignTool
                 throw new CakeException(message);
             }
 
-            if (settings.CertPath == null)
-            {
-                const string format = "{0}: Certificate path is required but not specified.";
-                var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
-                throw new CakeException(message);
-            }
-
-            // Make certificate path absolute.
-            settings.CertPath = settings.CertPath.IsRelative
-                ? settings.CertPath.MakeAbsolute(_environment)
-                : settings.CertPath;
-
-            if (!_fileSystem.Exist(settings.CertPath))
-            {
-                const string format = "{0}: The certificate '{1}' do not exist.";
-                var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName(), settings.CertPath.FullPath);
-                throw new CakeException(message);
-            }
-
-            if (string.IsNullOrEmpty(settings.Password))
-            {
-                const string format = "{0}: Password is required but not specified.";
-                var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
-                throw new CakeException(message);
-            }
-
             var builder = new ProcessArgumentBuilder();
 
             // SIGN Command.
@@ -132,13 +106,63 @@ namespace Cake.Common.Tools.SignTool
             builder.Append("/t");
             builder.AppendQuoted(settings.TimeStampUri.AbsoluteUri);
 
-            // Path to PFX Certificate.
-            builder.Append("/f");
-            builder.AppendQuoted(settings.CertPath.MakeAbsolute(_environment).FullPath);
+            if (settings.CertPath == null && string.IsNullOrEmpty(settings.CertThumbprint))
+            {
+                const string format = "{0}: One of Certificate path or Certificate thumbprint is required but neither are specified.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
+                throw new CakeException(message);
+            }
 
-            // PFX Password.
-            builder.Append("/p");
-            builder.AppendSecret(settings.Password);
+            if (settings.CertPath != null && !string.IsNullOrEmpty(settings.CertThumbprint))
+            {
+                const string format = "{0}: Certificate path and Certificate thumbprint cannot be specified together.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
+                throw new CakeException(message);
+            }
+
+            if (settings.CertPath != null && string.IsNullOrEmpty(settings.Password))
+            {
+                const string format = "{0}: Password is required with Certificate path but not specified.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
+                throw new CakeException(message);
+            }
+
+            if (!string.IsNullOrEmpty(settings.CertThumbprint) && !string.IsNullOrEmpty(settings.Password))
+            {
+                const string format = "{0}: Certificate thumbprint and Password cannot be specified together.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
+                throw new CakeException(message);
+            }
+
+            if (settings.CertPath != null)
+            {
+                // Make certificate path absolute.
+                settings.CertPath = settings.CertPath.IsRelative
+                    ? settings.CertPath.MakeAbsolute(_environment)
+                    : settings.CertPath;
+
+                if (!_fileSystem.Exist(settings.CertPath))
+                {
+                    const string format = "{0}: The certificate '{1}' do not exist.";
+                    var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName(), settings.CertPath.FullPath);
+                    throw new CakeException(message);
+                }
+
+                // Path to PFX Certificate.
+                builder.Append("/f");
+                builder.AppendQuoted(settings.CertPath.MakeAbsolute(_environment).FullPath);
+
+                // PFX Password.
+                builder.Append("/p");
+                builder.AppendSecret(settings.Password);
+            }
+
+            // Certificate thumbprint.
+            if (!string.IsNullOrEmpty(settings.CertThumbprint))
+            {
+                builder.Append("/sha1");
+                builder.AppendQuoted(settings.CertThumbprint);
+            }
 
             // Signed content description.
             if (!string.IsNullOrEmpty(settings.Description))
