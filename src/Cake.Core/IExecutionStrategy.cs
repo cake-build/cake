@@ -11,13 +11,15 @@ namespace Cake.Core
         /// Performs the setup.
         /// </summary>
         /// <param name="action">The action.</param>
-        void PerformSetup(Action action);
+        /// <param name="context">The context.</param>
+        void PerformSetup(Action<ICakeContext> action, ICakeContext context);
 
         /// <summary>
         /// Performs the teardown.
         /// </summary>
         /// <param name="action">The action.</param>
-        void PerformTeardown(Action action);
+        /// <param name="context">The context.</param>
+        void PerformTeardown(Action<ICakeContext> action, ICakeContext context);
 
         /// <summary>
         /// Executes the specified task.

@@ -26,14 +26,14 @@ namespace Cake.Core
         /// If setup fails, no tasks will be executed but teardown will be performed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        void RegisterSetupAction(Action action);
+        void RegisterSetupAction(Action<ICakeContext> action);
 
         /// <summary>
         /// Allows registration of an action that's executed after all other tasks have been run.
         /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        void RegisterTeardownAction(Action action);
+        void RegisterTeardownAction(Action<ICakeContext> action);
 
         /// <summary>
         /// Runs the specified target using the specified <see cref="IExecutionStrategy"/>.
