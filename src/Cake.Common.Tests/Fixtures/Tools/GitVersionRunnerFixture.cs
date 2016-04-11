@@ -10,7 +10,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 {
     internal sealed class GitVersionRunnerFixture : ToolFixture<GitVersionSettings>
     {
-        private readonly ICakeLog Log;
+        public ICakeLog Log { get; set; }
 
         public GitVersionRunnerFixture()
              : base("GitVersion.exe")

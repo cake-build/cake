@@ -10,7 +10,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
     internal static class ChocolateyNuSpecTransformer
     {
         private static readonly Dictionary<string, Func<ChocolateyPackSettings, string>> _mappings;
-        private static readonly List<string> cdataElements;
+        private static readonly List<string> _cdataElements;
         private const string ChocolateyNuSpecXsd = "http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd";
 
         static ChocolateyNuSpecTransformer()
@@ -38,7 +38,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
                 { "releaseNotes", settings => ToMultiLineString(settings.ReleaseNotes) }
             };
 
-            cdataElements = new List<string>
+            _cdataElements = new List<string>
                                 {
                                     "releaseNotes"
                                 };
@@ -58,7 +58,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
                     // Replace the node content.
                     var node = FindOrCreateElement(document, namespaceManager, elementName);
 
-                    if (cdataElements.Contains(elementName))
+                    if (_cdataElements.Contains(elementName))
                     {
                         node.AppendChild(document.CreateCDataSection(content));
                     }

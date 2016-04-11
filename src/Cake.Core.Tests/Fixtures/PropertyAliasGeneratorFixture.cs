@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Cake.Core.Scripting.CodeGen;
@@ -21,9 +22,15 @@ namespace Cake.Core.Tests.Fixtures
         {
             var resource = string.Concat("Cake.Core.Tests.Unit.Scripting.CodeGen.Expected.Properties.", name);
             using (var stream = _assembly.GetManifestResourceStream(resource))
-            using (var reader = new StreamReader(stream))
             {
-                return reader.ReadToEnd().NormalizeGeneratedCode();
+                if (stream == null)
+                {
+                    throw new InvalidOperationException("Could not load manifest resource stream.");
+                }
+                using (var reader = new StreamReader(stream))
+                {
+                    return reader.ReadToEnd().NormalizeGeneratedCode();
+                }
             }
         }
 

@@ -1,5 +1,4 @@
 using Cake.Common.Build.Bamboo.Data;
-using Cake.Core.IO;
 
 namespace Cake.Common.Build.Bamboo
 {

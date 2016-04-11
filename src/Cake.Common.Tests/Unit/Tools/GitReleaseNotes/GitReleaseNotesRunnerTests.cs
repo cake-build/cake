@@ -1,10 +1,7 @@
-﻿using System.Linq;
-using Cake.Common.Tests.Fixtures.Tools;
+﻿using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.GitReleaseNotes;
 using Cake.Core;
-using Cake.Core.IO;
 using Cake.Testing;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes

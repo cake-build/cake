@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Runtime.Versioning;
+using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.NuGet;
 using Cake.Testing;
 using NSubstitute;
 using Xunit;
 
-namespace Cake.Core.Tests.Unit.Packaging.NuGet
+namespace Cake.NuGet.Tests.Unit
 {
     public sealed class NuGetPackageAssembliesLocatorTests
     {

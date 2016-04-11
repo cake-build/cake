@@ -9,7 +9,7 @@ namespace Cake.Core
     /// <summary>
     /// Contains extension methods for <see cref="ProcessArgumentBuilder" />.
     /// </summary>
-    public static class ProcessArgumentListExtensions
+    public static class ProcessArgumentBuilderExtensions
     {
         /// <summary>
         /// Appends the specified text to the argument builder.
@@ -187,7 +187,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendSwitch(this ProcessArgumentBuilder builder, string @switch, string text)
         {
-            return ProcessArgumentListExtensions.AppendSwitch(builder, @switch, " ", text);
+            return AppendSwitch(builder, @switch, " ", text);
         }
 
         /// <summary>
@@ -216,7 +216,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendSwitchQuoted(this ProcessArgumentBuilder builder, string @switch, string text)
         {
-            return ProcessArgumentListExtensions.AppendSwitchQuoted(builder, @switch, " ", text);
+            return AppendSwitchQuoted(builder, @switch, " ", text);
         }
 
         /// <summary>
@@ -245,7 +245,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendSwitchQuoted(this ProcessArgumentBuilder builder, string @switch, IProcessArgument argument)
         {
-            return ProcessArgumentListExtensions.AppendSwitchQuoted(builder, @switch, " ", argument);
+            return AppendSwitchQuoted(builder, @switch, " ", argument);
         }
 
         /// <summary>
@@ -274,7 +274,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendSwitchSecret(this ProcessArgumentBuilder builder, string @switch, string text)
         {
-            return ProcessArgumentListExtensions.AppendSwitchSecret(builder, @switch, " ", text);
+            return AppendSwitchSecret(builder, @switch, " ", text);
         }
 
         /// <summary>
@@ -303,7 +303,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendSwitchSecret(this ProcessArgumentBuilder builder, string @switch, IProcessArgument argument)
         {
-            return ProcessArgumentListExtensions.AppendSwitchSecret(builder, @switch, " ", argument);
+            return AppendSwitchSecret(builder, @switch, " ", argument);
         }
 
         /// <summary>
@@ -332,7 +332,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendSwitchQuotedSecret(this ProcessArgumentBuilder builder, string @switch, string text)
         {
-            return ProcessArgumentListExtensions.AppendSwitchQuotedSecret(builder, @switch, " ", text);
+            return AppendSwitchQuotedSecret(builder, @switch, " ", text);
         }
 
         /// <summary>
@@ -361,7 +361,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendQuotedSecret(this ProcessArgumentBuilder builder, string @switch, IProcessArgument argument)
         {
-            return ProcessArgumentListExtensions.AppendQuotedSecret(builder, @switch, " ", argument);
+            return AppendQuotedSecret(builder, @switch, " ", argument);
         }
 
         /// <summary>

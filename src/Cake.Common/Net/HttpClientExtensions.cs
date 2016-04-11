@@ -25,7 +25,7 @@ namespace Cake.Common.Net
             using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
             using (var fileStream = File.Create(path, DefaultBufferSize))
             {
-                var bytesRead = 0;
+                int bytesRead;
                 var totalBytesRead = 0L;
                 var buffer = new byte[DefaultBufferSize];
 

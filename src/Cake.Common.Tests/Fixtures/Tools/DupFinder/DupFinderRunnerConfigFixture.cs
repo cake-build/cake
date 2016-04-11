@@ -8,8 +8,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.DupFinder
 {
     internal sealed class DupFinderRunnerConfigFixture : ToolFixture<DupFinderSettings>
     {
-        private readonly ICakeLog Log;
-
+        public ICakeLog Log { get; set; }
         public FilePath ConfigPath { get; set; }
 
         public DupFinderRunnerConfigFixture()

@@ -1,11 +1,8 @@
 ﻿using System;
-using Cake.Common.Tests.Fixtures.Tools.NuGet;
 using Cake.Common.Tests.Fixtures.Tools.NuGet.Pusher;
 using Cake.Common.Tools.NuGet;
-using Cake.Core.IO;
 using Cake.Testing;
 using Cake.Testing.Xunit;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.NuGet.Push

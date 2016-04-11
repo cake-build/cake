@@ -1,8 +1,5 @@
 using Cake.Common.Build.Bamboo;
 using Cake.Common.Tests.Fixtures.Build;
-using Cake.Core;
-using Cake.Core.IO;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build.Bamboo
@@ -30,10 +27,10 @@ namespace Cake.Common.Tests.Unit.Build.Bamboo
                 // Given
                 var fixture = new BambooFixture();
                 fixture.IsRunningOnBamboo();
-                var Bamboo = fixture.CreateBambooService();
+                var bamboo = fixture.CreateBambooService();
 
                 // When
-                var result = Bamboo.IsRunningOnBamboo;
+                var result = bamboo.IsRunningOnBamboo;
 
                 // Then
                 Assert.True(result);
@@ -44,10 +41,10 @@ namespace Cake.Common.Tests.Unit.Build.Bamboo
             {
                 // Given
                 var fixture = new BambooFixture();
-                var Bamboo = fixture.CreateBambooService();
+                var bamboo = fixture.CreateBambooService();
 
                 // When
-                var result = Bamboo.IsRunningOnBamboo;
+                var result = bamboo.IsRunningOnBamboo;
 
                 // Then
                 Assert.False(result);
@@ -61,10 +58,10 @@ namespace Cake.Common.Tests.Unit.Build.Bamboo
             {
                 // Given
                 var fixture = new BambooFixture();
-                var Bamboo = fixture.CreateBambooService();
+                var bamboo = fixture.CreateBambooService();
 
                 // When
-                var result = Bamboo.Environment;
+                var result = bamboo.Environment;
 
                 // Then
                 Assert.NotNull(result);

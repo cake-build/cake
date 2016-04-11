@@ -38,7 +38,7 @@ namespace Cake.Common.Tools.MSTest
         {
             if (assemblyPaths == null)
             {
-                throw new ArgumentNullException("assemblyPath");
+                throw new ArgumentNullException("assemblyPaths");
             }
             if (settings == null)
             {

@@ -1,10 +1,8 @@
 ﻿using Cake.Common.Tests.Fixtures.Tools;
-using Cake.Common.Tools.MSTest;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
 using Cake.Testing.Xunit;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.MSTest
@@ -22,7 +20,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsArgumentNullException(result, "assemblyPath");
+            Assert.IsArgumentNullException(result, "assemblyPaths");
         }
 
         [Fact]
@@ -181,7 +179,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         {
             // Given
             var fixture = new MSTestRunnerFixture();
-            fixture.AssemblyPaths = new FilePath[] { new FilePath("./Test1.dll"), new FilePath("./Test2.dll") };
+            fixture.AssemblyPaths = new[] { new FilePath("./Test1.dll"), new FilePath("./Test2.dll") };
 
             // When
             var result = fixture.Run();

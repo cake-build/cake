@@ -157,13 +157,10 @@ namespace Cake.Common.Tools.Cake
             }
 
             var files = _globber.GetFiles(homebrewCakePath + "**/Cake.exe");
-
-            if (!files.Any())
-            {
-                return Enumerable.Empty<FilePath>();
-            }
-
-            return files.OrderByDescending(f => f.FullPath);
+            var filePaths = files as FilePath[] ?? files.ToArray();
+            return filePaths.Length == 0 
+                ? Enumerable.Empty<FilePath>() 
+                : filePaths.OrderByDescending(f => f.FullPath);
         }
     }
 }
