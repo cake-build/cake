@@ -343,6 +343,9 @@
     <Compile Include="Tools\SpecFlow\SpecFlowAliases.cs" />
     <Compile Include="Tools\SpecFlow\SpecFlowSettings.cs" />
     <Compile Include="Tools\SpecFlow\SpecFlowTool.cs" />
+    <Compile Include="Tools\TextTransform\TextTransformAliases.cs" />
+    <Compile Include="Tools\TextTransform\TextTransformRunner.cs" />
+    <Compile Include="Tools\TextTransform\TextTransformSettings.cs" />
     <Compile Include="Tools\WiX\Architecture.cs" />
     <Compile Include="Tools\WiX\CandleRunner.cs" />
     <Compile Include="Tools\WiX\CandleSettings.cs" />
