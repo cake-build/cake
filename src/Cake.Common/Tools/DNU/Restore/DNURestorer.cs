@@ -46,6 +46,7 @@ namespace Cake.Common.Tools.DNU.Restore
         private ProcessArgumentBuilder GetArguments(FilePath path, DNURestoreSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
+            GetDNVMArgumentsForExec(builder, settings);
 
             builder.Append("restore");
 

@@ -174,6 +174,10 @@
     <Compile Include="Tools\Chocolatey\Sources\ChocolateySourcesSettings.cs" />
     <Compile Include="Tools\Chocolatey\Upgrade\ChocolateyUpgrader.cs" />
     <Compile Include="Tools\Chocolatey\Upgrade\ChocolateyUpgradeSettings.cs" />
+    <Compile Include="Tools\DNArchitecture.cs" />
+    <Compile Include="Tools\DNRuntime.cs" />
+    <Compile Include="Tools\DNSettingsBase.cs" />
+    <Compile Include="Tools\DNToolBase.cs" />
     <Compile Include="Tools\DNU\Build\DNUBuilder.cs" />
     <Compile Include="Tools\DNU\Build\DNUBuildSettings.cs" />
     <Compile Include="Tools\DNU\DNUAliases.cs" />
@@ -194,6 +198,14 @@
     <Compile Include="Tools\DotCover\DotCoverSettings.cs" />
     <Compile Include="Tools\DotCover\DotCoverSettingsExtensions.cs" />
     <Compile Include="Tools\DotCover\DotCoverTool.cs" />
+    <Compile Include="Tools\DNVM\DNVMAliases.cs" />
+    <Compile Include="Tools\DNVM\DNVMTool.cs" />
+    <Compile Include="Tools\DNVM\Use\DNVMSettings.cs" />
+    <Compile Include="Tools\DNVM\Use\DNVMUser.cs" />
+    <Compile Include="Tools\DNX\DNXAliases.cs" />
+    <Compile Include="Tools\DNX\DNXTool.cs" />
+    <Compile Include="Tools\DNX\Run\DNXRunner.cs" />
+    <Compile Include="Tools\DNX\Run\DNXRunSettings.cs" />
     <Compile Include="Tools\DupFinder\DupFinderAliases.cs" />
     <Compile Include="Tools\DupFinder\DupFinderRunner.cs" />
     <Compile Include="Tools\DupFinder\DupFinderSettings.cs" />

@@ -7,7 +7,7 @@ namespace Cake.Common.Tools.DNU.Build
     /// <summary>
     /// Contains settings used by <see cref="DNUBuilder" />.
     /// </summary>
-    public class DNUBuildSettings : ToolSettings
+    public class DNUBuildSettings : DNSettingsBase
     {
         /// <summary>
         /// Gets or sets a list of frameworks to use.

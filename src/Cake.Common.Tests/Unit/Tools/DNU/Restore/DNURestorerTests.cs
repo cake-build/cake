@@ -29,6 +29,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
             {
                 // Given
                 var fixture = new DNURestorerFixture();
+                fixture.Settings = new DNURestoreSettings() { Version = "default" };
                 fixture.GivenDefaultToolDoNotExist();
 
                 // When
@@ -43,6 +44,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
             {
                 // Given
                 var fixture = new DNURestorerFixture();
+                fixture.Settings = new DNURestoreSettings() { Version = "default" };
                 fixture.GivenProcessCannotStart();
 
                 // When
@@ -57,6 +59,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
             {
                 // Given
                 var fixture = new DNURestorerFixture();
+                fixture.Settings = new DNURestoreSettings() { Version = "default" };
                 fixture.GivenProcessExitsWithCode(1);
 
                 // When
@@ -71,12 +74,13 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
             {
                 // Given
                 var fixture = new DNURestorerFixture();
+                fixture.Settings = new DNURestoreSettings() { Version = "default" };
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore", result.Args);
+                Assert.Equal("exec default dnu restore", result.Args);
             }
 
             [Fact]
@@ -84,13 +88,14 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
             {
                 // Given
                 var fixture = new DNURestorerFixture();
+                fixture.Settings = new DNURestoreSettings() { Version = "default" };
                 fixture.FilePath = "./project.json";
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore \"/Working/project.json\"", result.Args);
+                Assert.Equal("exec default dnu restore \"/Working/project.json\"", result.Args);
             }
 
             [Fact]
@@ -100,6 +105,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var fixture = new DNURestorerFixture();
                 fixture.Settings = new DNURestoreSettings
                 {
+                    Version = "default",
                     Sources = new[] { "https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2" }
                 };
 
@@ -107,7 +113,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore --source \"https://www.example.com/nugetfeed;https://www.example.com/nugetfeed2\"", result.Args);
+                Assert.Equal("exec default dnu restore --source \"https://www.example.com/nugetfeed;https://www.example.com/nugetfeed2\"", result.Args);
             }
 
             [Fact]
@@ -117,6 +123,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var fixture = new DNURestorerFixture();
                 fixture.Settings = new DNURestoreSettings
                 {
+                    Version = "default",
                     FallbackSources = new[] { "https://www.example.com/fallbacknugetfeed" }
                 };
 
@@ -124,7 +131,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore --fallbacksource \"https://www.example.com/fallbacknugetfeed\"", result.Args);
+                Assert.Equal("exec default dnu restore --fallbacksource \"https://www.example.com/fallbacknugetfeed\"", result.Args);
             }
 
             [Fact]
@@ -134,6 +141,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var fixture = new DNURestorerFixture();
                 fixture.Settings = new DNURestoreSettings
                 {
+                    Version = "default",
                     Proxy = "exampleproxy"
                 };
 
@@ -141,7 +149,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore --proxy \"exampleproxy\"", result.Args);
+                Assert.Equal("exec default dnu restore --proxy \"exampleproxy\"", result.Args);
             }
 
             [Fact]
@@ -151,6 +159,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var fixture = new DNURestorerFixture();
                 fixture.Settings = new DNURestoreSettings
                 {
+                    Version = "default",
                     NoCache = true
                 };
 
@@ -158,7 +167,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore --no-cache", result.Args);
+                Assert.Equal("exec default dnu restore --no-cache", result.Args);
             }
 
             [Fact]
@@ -168,6 +177,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var fixture = new DNURestorerFixture();
                 fixture.Settings = new DNURestoreSettings
                 {
+                    Version = "default",
                     Packages = "./packages"
                 };
 
@@ -175,7 +185,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore --packages \"/Working/packages\"", result.Args);
+                Assert.Equal("exec default dnu restore --packages \"/Working/packages\"", result.Args);
             }
 
             [Fact]
@@ -185,6 +195,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var fixture = new DNURestorerFixture();
                 fixture.Settings = new DNURestoreSettings
                 {
+                    Version = "default",
                     IgnoreFailedSources = true
                 };
 
@@ -192,7 +203,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore --ignore-failed-sources", result.Args);
+                Assert.Equal("exec default dnu restore --ignore-failed-sources", result.Args);
             }
 
             [Fact]
@@ -202,6 +213,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var fixture = new DNURestorerFixture();
                 fixture.Settings = new DNURestoreSettings
                 {
+                    Version = "default",
                     Quiet = true
                 };
 
@@ -209,7 +221,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore --quiet", result.Args);
+                Assert.Equal("exec default dnu restore --quiet", result.Args);
             }
 
             [Fact]
@@ -219,6 +231,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var fixture = new DNURestorerFixture();
                 fixture.Settings = new DNURestoreSettings
                 {
+                    Version = "default",
                     Parallel = true
                 };
 
@@ -226,7 +239,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore --parallel", result.Args);
+                Assert.Equal("exec default dnu restore --parallel", result.Args);
             }
 
             [Theory]
@@ -238,6 +251,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var fixture = new DNURestorerFixture();
                 fixture.Settings = new DNURestoreSettings
                 {
+                    Version = "default",
                     Locked = locked
                 };
 
@@ -245,7 +259,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore " + arg, result.Args);
+                Assert.Equal("exec default dnu restore " + arg, result.Args);
             }
 
             [Fact]
@@ -255,6 +269,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var fixture = new DNURestorerFixture();
                 fixture.Settings = new DNURestoreSettings
                 {
+                    Version = "default",
                     Runtimes = new[] { "runtime1", "runtime2" }
                 };
 
@@ -262,7 +277,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore --runtime \"runtime1;runtime2\"", result.Args);
+                Assert.Equal("exec default dnu restore --runtime \"runtime1;runtime2\"", result.Args);
             }
 
             [Fact]
@@ -273,6 +288,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 fixture.FilePath = "./project.json";
                 fixture.Settings = new DNURestoreSettings
                 {
+                    Version = "default",
                     Sources = new[] { "https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2" },
                     FallbackSources = new[] { "https://www.example.com/fallbacknugetfeed" },
                     Proxy = "exampleproxy",
@@ -289,7 +305,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore \"/Working/project.json\"" +
+                Assert.Equal("exec default dnu restore \"/Working/project.json\"" +
                              " --source \"https://www.example.com/nugetfeed;https://www.example.com/nugetfeed2\"" +
                              " --fallbacksource \"https://www.example.com/fallbacknugetfeed\"" +
                              " --proxy \"exampleproxy\"" +

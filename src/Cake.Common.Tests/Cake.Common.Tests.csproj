@@ -104,6 +104,10 @@
     <Compile Include="Fixtures\Tools\DotCover\Analyse\DotCoverAnalyserFixture.cs" />
     <Compile Include="Fixtures\Tools\DotCover\Cover\DotCoverCovererFixture.cs" />
     <Compile Include="Fixtures\Tools\DotCover\DotCoverFixture.cs" />
+    <Compile Include="Fixtures\Tools\DNVM\DNVMFixture.cs" />
+    <Compile Include="Fixtures\Tools\DNVM\Use\DNVMUserFixture.cs" />
+    <Compile Include="Fixtures\Tools\DNX\DNXFixture.cs" />
+    <Compile Include="Fixtures\Tools\DNX\Run\DNXRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\DupFinder\DupFinderRunnerConfigFixture.cs" />
     <Compile Include="Fixtures\Tools\DupFinder\DupFinderRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\FixieRunnerFixture.cs" />
@@ -231,6 +235,8 @@
     <Compile Include="Unit\Tools\DotCover\Analyse\DotCoverAnalyserTests.cs" />
     <Compile Include="Unit\Tools\DotCover\Analyse\DotCoverAnalyseSettingsTests.cs" />
     <Compile Include="Unit\Tools\DotCover\Cover\DotCoverCovererTests.cs" />
+    <Compile Include="Unit\Tools\DNVM\Use\DNVMUserTests.cs" />
+    <Compile Include="Unit\Tools\DNX\Run\DNXRunnerTests.cs" />
     <Compile Include="Unit\Tools\DupFinder\DupFinderRunnerTests.cs" />
     <Compile Include="Unit\Tools\Fixie\FixieRunnerTests.cs" />
     <Compile Include="Unit\Tools\GitLink\GitlinkRunnerTests.cs" />
