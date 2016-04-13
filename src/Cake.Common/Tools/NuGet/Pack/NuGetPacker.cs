@@ -163,6 +163,12 @@ namespace Cake.Common.Tools.NuGet.Pack
                 builder.Append("-NoPackageAnalysis");
             }
 
+            // IncludeReferencedProjects?
+            if (settings.IncludeReferencedProjects)
+            {
+                builder.Append("-IncludeReferencedProjects");
+            }
+
             // Symbols?
             if (settings.Symbols)
             {
