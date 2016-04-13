@@ -235,6 +235,20 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 }
 
                 [Fact]
+                public void Should_Add_IncludeReferencedProjects_Flag_To_Arguments_If_Set()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithNuSpecFixture();
+                    fixture.Settings.IncludeReferencedProjects = true;
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal("pack \"/Working/existing.temp.nuspec\" -IncludeReferencedProjects", result.Args);
+                }
+
+                [Fact]
                 public void Should_Add_Symbols_Flag_To_Arguments_If_Set()
                 {
                     // Given
@@ -647,6 +661,20 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
 
                     // Then
                     Assert.Equal("pack \"/Working/existing.csproj\" -NoPackageAnalysis", result.Args);
+                }
+
+                [Fact]
+                public void Should_Add_IncludeReferencedProjects_Flag_To_Arguments_If_Set()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.Settings.IncludeReferencedProjects = true;
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal("pack \"/Working/existing.csproj\" -IncludeReferencedProjects", result.Args);
                 }
 
                 [Fact]

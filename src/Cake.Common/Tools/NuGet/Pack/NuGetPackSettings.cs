@@ -32,6 +32,15 @@ namespace Cake.Common.Tools.NuGet.Pack
         public bool NoPackageAnalysis { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether referenced projects should be included.
+        /// Defaults to <c>false</c>.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if referenced projects should be included; otherwise, <c>false</c>.
+        /// </value>
+        public bool IncludeReferencedProjects { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether a symbol package should be created.
         /// Defaults to <c>false</c>.
         /// </summary>
