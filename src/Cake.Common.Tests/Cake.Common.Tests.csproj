@@ -69,6 +69,8 @@
     <Compile Include="Fixtures\AssemblyInfoParserFixture.cs" />
     <Compile Include="Fixtures\Build\JenkinsFixture.cs" />
     <Compile Include="Fixtures\Build\JenkinsInfoFixture.cs" />
+    <Compile Include="Fixtures\Build\TravisCIFixture.cs" />
+    <Compile Include="Fixtures\Build\TravisCIInfoFixture.cs" />
     <Compile Include="Fixtures\Tools\CakeRunnerFixture.cs" />
     <Compile Include="Fixtures\IO\FileCopyFixture.cs" />
     <Compile Include="Fixtures\IO\FileDeleteFixture.cs" />
@@ -198,6 +200,11 @@
     <Compile Include="Unit\Build\Bamboo\Data\BambooBuildInfoTests.cs" />
     <Compile Include="Unit\Build\Bamboo\Data\BambooCommitInfoTests.cs" />
     <Compile Include="Unit\Build\Bamboo\Data\BambooRepositoryInfoTests.cs" />
+    <Compile Include="Unit\Build\TravicCI\Data\TravisBuildInfoTests.cs" />
+    <Compile Include="Unit\Build\TravicCI\Data\TravisJobInfoTests.cs" />
+    <Compile Include="Unit\Build\TravicCI\Data\TravisRepositoryInfoTests.cs" />
+    <Compile Include="Unit\Build\TravicCI\TravisCIEnvironmentInfoTests.cs" />
+    <Compile Include="Unit\Build\TravicCI\TravisCIProviderTests.cs" />
     <Compile Include="Unit\IO\Paths\ConvertableDirectoryPathTests.cs" />
     <Compile Include="Unit\IO\Paths\ConvertableFilePathTests.cs" />
     <Compile Include="Unit\Security\FileHashCalculatorTests.cs" />
