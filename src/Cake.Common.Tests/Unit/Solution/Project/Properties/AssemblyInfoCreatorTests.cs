@@ -308,7 +308,9 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
 
                 // Then
                 Assert.True(result.Contains("using System.Runtime.CompilerServices;"));
-                Assert.True(result.Contains("[assembly: InternalsVisibleTo(\"Assembly1.Tests\"), InternalsVisibleTo(\"Assembly2.Tests\"), InternalsVisibleTo(\"Assembly3.Tests\")]"));
+                Assert.True(result.Contains("[assembly: InternalsVisibleTo(\"Assembly1.Tests\")]"));
+                Assert.True(result.Contains("[assembly: InternalsVisibleTo(\"Assembly2.Tests\")]"));
+                Assert.True(result.Contains("[assembly: InternalsVisibleTo(\"Assembly3.Tests\")]"));
             }
 
             [Fact]
