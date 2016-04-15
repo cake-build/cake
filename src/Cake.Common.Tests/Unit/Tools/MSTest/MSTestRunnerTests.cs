@@ -212,5 +212,26 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             // Then
             Assert.Equal("\"/testcontainer:/Working/Test1.dll\" \"/testcontainer:/Working/Test2.dll\" /noisolation", result.Args);
         }
+
+        [Theory]
+        [InlineData("/NonStandardPath/Microsoft Visual Studio 14.0/Common7/IDE/mstest.exe", "VS140COMNTOOLS", "/NonStandardPath/Microsoft Visual Studio 14.0/Common7/Tools/")]
+        [InlineData("/NonStandardPath/Microsoft Visual Studio 13.0/Common7/IDE/mstest.exe", "VS130COMNTOOLS", "/NonStandardPath/Microsoft Visual Studio 13.0/Common7/Tools/")]
+        [InlineData("/NonStandardPath/Microsoft Visual Studio 12.0/Common7/IDE/mstest.exe", "VS120COMNTOOLS", "/NonStandardPath/Microsoft Visual Studio 12.0/Common7/Tools/")]
+        [InlineData("/NonStandardPath/Microsoft Visual Studio 11.0/Common7/IDE/mstest.exe", "VS110COMNTOOLS", "/NonStandardPath/Microsoft Visual Studio 11.0/Common7/Tools/")]
+        [InlineData("/NonStandardPath/Microsoft Visual Studio 10.0/Common7/IDE/mstest.exe", "VS100COMNTOOLS", "/NonStandardPath/Microsoft Visual Studio 10.0/Common7/Tools/")]
+        public void Should_Use_Available_Environment_Tool_Path(string existingToolPath, string environmentName, string environmentValue)
+        {
+            // Given
+            var fixture = new MSTestRunnerFixture();
+            fixture.GivenDefaultToolDoNotExist();
+            fixture.FileSystem.CreateFile(existingToolPath);
+            fixture.Environment.SetEnvironmentVariable(environmentName, environmentValue);
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal(existingToolPath, result.Path.FullPath);
+        }
     }
 }
