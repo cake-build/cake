@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cake.Core.Diagnostics;
 
 namespace Cake.Core.Scripting
 {
@@ -72,7 +73,29 @@ namespace Cake.Core.Scripting
         /// If setup fails, no tasks will be executed but teardown will be performed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
+        [Obsolete("Please use Setup(Action<ICakeContext>) instead.", false)]
         public void Setup(Action action)
+        {
+            if (Context != null && Context.Log != null)
+            {
+                Context.Log.Warning("Please use Setup(Action<ICakeContext>) instead.");
+            }
+            Setup(context => action());
+        }
+
+        /// <summary>
+        /// Allows registration of an action that's executed before any tasks are run.
+        /// If setup fails, no tasks will be executed but teardown will be performed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        /// <example>
+        /// <code>
+        /// Setup(context => {
+        ///   context.Log.Information("Hello World!");
+        /// });
+        /// </code>
+        /// </example>
+        public void Setup(Action<ICakeContext> action)
         {
             _engine.RegisterSetupAction(action);
         }
@@ -82,7 +105,29 @@ namespace Cake.Core.Scripting
         /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
+        [Obsolete("Please use Teardown(Action<ICakeContext>) instead.", false)]
         public void Teardown(Action action)
+        {
+            if (Context != null && Context.Log != null)
+            {
+                Context.Log.Warning("Please use Teardown(Action<ICakeContext>) instead.");
+            }
+            Teardown(context => action());
+        }
+
+        /// <summary>
+        /// Allows registration of an action that's executed after all other tasks have been run.
+        /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        /// <example>
+        /// <code>
+        /// Teardown(context => {
+        ///   context.Log.Information("Goodbye World!");
+        /// });
+        /// </code>
+        /// </example>
+        public void Teardown(Action<ICakeContext> action)
         {
             _engine.RegisterTeardownAction(action);
         }

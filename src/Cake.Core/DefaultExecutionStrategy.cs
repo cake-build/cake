@@ -23,7 +23,8 @@ namespace Cake.Core
         /// Performs the setup.
         /// </summary>
         /// <param name="action">The action.</param>
-        public void PerformSetup(Action action)
+        /// <param name="context">The context.</param>
+        public void PerformSetup(Action<ICakeContext> action, ICakeContext context)
         {
             if (action != null)
             {
@@ -33,7 +34,7 @@ namespace Cake.Core
                 _log.Information("----------------------------------------");
                 _log.Verbose("Executing custom setup action...");
 
-                action();
+                action(context);
             }
         }
 
@@ -41,7 +42,8 @@ namespace Cake.Core
         /// Performs the teardown.
         /// </summary>
         /// <param name="action">The action.</param>
-        public void PerformTeardown(Action action)
+        /// <param name="context">The context.</param>
+        public void PerformTeardown(Action<ICakeContext> action, ICakeContext context)
         {
             if (action != null)
             {
@@ -51,7 +53,7 @@ namespace Cake.Core
                 _log.Information("----------------------------------------");
                 _log.Verbose("Executing custom teardown action...");
 
-                action();
+                action(context);
             }
         }
 

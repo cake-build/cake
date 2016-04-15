@@ -32,14 +32,30 @@ namespace Cake.Core.Scripting
         /// If setup fails, no tasks will be executed but teardown will be performed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
+        [Obsolete("Please use Setup(Action<ICakeContext>) instead.", false)]
         void Setup(Action action);
+
+        /// <summary>
+        /// Allows registration of an action that's executed before any tasks are run.
+        /// If setup fails, no tasks will be executed but teardown will be performed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        void Setup(Action<ICakeContext> action);
 
         /// <summary>
         /// Allows registration of an action that's executed after all other tasks have been run.
         /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
+        [Obsolete("Please use Teardown(Action<ICakeContext>) instead.", false)]
         void Teardown(Action action);
+
+        /// <summary>
+        /// Allows registration of an action that's executed after all other tasks have been run.
+        /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        void Teardown(Action<ICakeContext> action);
 
         /// <summary>
         /// Allows registration of an action that's executed before each task is run.
