@@ -185,6 +185,7 @@ namespace Cake.Common.Tools.DupFinder
             return builder;
         }
 
+        // ReSharper disable once UnusedParameter.Local
         private void AnalyzeResultsFile(FilePath resultsFilePath, bool throwOnDuplicates)
         {
             var anyFailures = false;

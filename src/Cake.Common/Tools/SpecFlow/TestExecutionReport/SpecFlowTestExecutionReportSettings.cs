@@ -1,6 +1,3 @@
-using Cake.Common.Tools.SpecFlow;
-using Cake.Core.IO;
-
 namespace Cake.Common.Tools.SpecFlow.TestExecutionReport
 {
     /// <summary>

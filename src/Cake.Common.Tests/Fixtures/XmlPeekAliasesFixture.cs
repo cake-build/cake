@@ -1,7 +1,4 @@
-﻿using System.IO;
-using System.Linq;
-using System.Xml;
-using Cake.Common.Tests.Properties;
+﻿using Cake.Common.Tests.Properties;
 using Cake.Common.Xml;
 using Cake.Core;
 using Cake.Core.IO;

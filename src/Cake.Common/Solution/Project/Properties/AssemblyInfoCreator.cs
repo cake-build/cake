@@ -89,7 +89,6 @@ namespace Cake.Common.Solution.Project.Properties
                     {
                         writer.WriteLine(@namespace);
                     }
-
                     writer.WriteLine();
                 }
 
@@ -100,15 +99,13 @@ namespace Cake.Common.Solution.Project.Properties
                     {
                         writer.WriteLine(string.Concat("[assembly: ", attribute.Key, "(", attribute.Value, ")]"));
                     }
-
                     writer.WriteLine();
                 }
 
-                if (internalsVisibleTo != null && internalsVisibleTo.Any())
+                if (internalsVisibleTo != null && internalsVisibleTo.Count > 0)
                 {
                     // Write Internals visible true
                     writer.WriteLine(string.Concat("[assembly: ", string.Join(", ", internalsVisibleTo), "]"));
-
                     writer.WriteLine();
                 }
             }
@@ -154,7 +151,7 @@ namespace Cake.Common.Solution.Project.Properties
             registration.Namespaces.Add("System.Runtime.CompilerServices");
         }
 
-        private static IEnumerable<string> GetInternalsVisibleTo(AssemblyInfoSettings settings)
+        private static List<string> GetInternalsVisibleTo(AssemblyInfoSettings settings)
         {
             if (!SettingsIncludeInternalsVisibleTo(settings))
             {
@@ -162,7 +159,6 @@ namespace Cake.Common.Solution.Project.Properties
             }
 
             var nonEmptyInternalsVisibleTo = settings.InternalsVisibleTo.Where(x => x != null).ToList();
-
             return nonEmptyInternalsVisibleTo
                 .Select(x => string.Concat("InternalsVisibleTo(\"", x.UnQuote(), "\")"))
                 .ToList();

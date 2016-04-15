@@ -2,11 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Versioning;
 using Cake.Core.IO;
-using Cake.NuGet;
 using NSubstitute;
 using Xunit;
 
-namespace Cake.Core.Tests.Unit.Packaging.NuGet
+namespace Cake.NuGet.Tests.Unit
 {
     public class NuGetAssemblyCompatibilityFilterTests
     {

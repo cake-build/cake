@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cake.Common.Tests.Fixtures.Tools.DotCover;
-using Cake.Common.Tests.Fixtures.Tools.DotCover.Analyse;
+﻿using Cake.Common.Tests.Fixtures.Tools.DotCover.Analyse;
 using Cake.Common.Tools.DotCover;
-using Cake.Common.Tools.DotCover.Analyse;
 using Cake.Common.Tools.NUnit;
 using Cake.Common.Tools.XUnit;
 using Cake.Core.IO;

@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
+using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
 using Cake.Core.Packaging;
-using Cake.Core.Tooling;
-using Cake.NuGet;
 using Cake.Testing;
 using NSubstitute;
-using NuGetPackageInstaller = Cake.NuGet.NuGetPackageInstaller;
 
-namespace Cake.Core.Tests.Fixtures
+namespace Cake.NuGet.Tests.Fixtures
 {
     internal sealed class NuGetPackageInstallerFixture
     {

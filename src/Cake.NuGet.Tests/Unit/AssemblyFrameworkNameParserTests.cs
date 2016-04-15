@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.Versioning;
-using Cake.NuGet;
 using NSubstitute;
 using Xunit;
 
-namespace Cake.Core.Tests.Unit.Packaging.NuGet
+namespace Cake.NuGet.Tests.Unit
 {
     public sealed class AssemblyFrameworkNameParserTests
     {

@@ -73,6 +73,7 @@ namespace Cake.Common.Tools.InspectCode
             Run(new InspectCodeSettings(), GetConfigArgument(configFile));
         }
 
+        // ReSharper disable once UnusedParameter.Local
         private void AnalyseResultsFile(FilePath resultsFilePath, bool throwOnViolations)
         {
             var anyFailures = false;
@@ -87,7 +88,8 @@ namespace Cake.Common.Tools.InspectCode
                 {
                     _log.Warning("Code Inspection Error(s) Located. Description: {0}", violation.Attribute("Description").Value);
 
-                    var issueLookups = xmlDoc.Descendants("Issue").Where(i => i.Attribute("TypeId") != null && i.Attribute("TypeId").Value == violation.Attribute("Id").Value);
+                    var tempViolation = violation; // Copy to temporary variable to avoid side effects.
+                    var issueLookups = xmlDoc.Descendants("Issue").Where(i => i.Attribute("TypeId") != null && i.Attribute("TypeId").Value == tempViolation.Attribute("Id").Value);
 
                     foreach (var issueLookup in issueLookups)
                     {

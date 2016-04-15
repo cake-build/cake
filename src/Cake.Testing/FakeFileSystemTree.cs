@@ -61,16 +61,7 @@ namespace Cake.Testing
 
                 if (!children.Directories.ContainsKey(path))
                 {
-                    if (queue.Count == 0)
-                    {
-                        // Use the provided directory.
-                        current = directory;
-                    }
-                    else
-                    {
-                        current = new FakeDirectory(this, path);
-                    }
-
+                    current = queue.Count == 0 ? directory : new FakeDirectory(this, path);
                     current.Parent = parent ?? _root;
                     current.Hidden = false;
                     children.Add(current);
