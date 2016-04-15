@@ -18,6 +18,12 @@ namespace Cake.Common.Tools.MSTest
         public bool NoIsolation { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating the test category filter string to pass to 
+        /// MSTest.exe flag /testcategory. See: https://msdn.microsoft.com/en-us/library/ms182489.aspx#category
+        /// </summary>
+        public string Category { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MSTestSettings"/> class.
         /// </summary>
         public MSTestSettings()
