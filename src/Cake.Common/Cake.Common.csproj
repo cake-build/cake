@@ -133,7 +133,7 @@
     <Compile Include="Solution\Project\Properties\AssemblyInfoAliases.cs" />
     <Compile Include="Solution\Project\Properties\AssemblyInfoParser.cs" />
     <Compile Include="Solution\Project\Properties\AssemblyInfoParseResult.cs" />
-    <Compile Include="Solution\Project\Properties\AssemblyInfoRegistration.cs" />
+    <Compile Include="Solution\Project\Properties\AssemblyInfoCreatorData.cs" />
     <Compile Include="Solution\Project\Properties\AssemblyInfoSettings.cs" />
     <Compile Include="Diagnostics\LoggingAliases.cs" />
     <Compile Include="EnviromentAliases.cs" />
