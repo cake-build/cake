@@ -23,5 +23,10 @@ namespace Cake.Common.Tools.SignTool
         /// Gets or sets the <c>PFX</c> certificate password.
         /// </summary>
         public string Password { get; set; }
+
+        /// <summary>
+        /// Gets or sets the signed content's description.
+        /// </summary>
+        public string Description { get; set; }
     }
 }
