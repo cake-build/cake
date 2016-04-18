@@ -82,7 +82,18 @@ namespace Cake.Core.Tooling
             var process = RunProcess(settings, arguments, processSettings);
 
             // Wait for the process to exit.
-            process.WaitForExit();
+            if (settings.ToolTimeout.HasValue)
+            {
+                if (!process.WaitForExit((int)settings.ToolTimeout.Value.TotalMilliseconds))
+                {
+                    const string message = "Tool timeout ({0}): {1}";
+                    throw new TimeoutException(string.Format(CultureInfo.InvariantCulture, message, settings.ToolTimeout.Value, GetToolName()));
+                }
+            }
+            else
+            {
+                process.WaitForExit();
+            }
 
             try
             {
