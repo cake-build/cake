@@ -114,7 +114,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Pack
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("pack \"./src/*\" --framework \"dnx451;dnxcore50\"", result.Args);
+                Assert.Equal("pack \"./src/*\" --framework \"dnx451\" --framework \"dnxcore50\"", result.Args);
             }
 
             [Fact]
@@ -132,7 +132,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Pack
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("pack \"./src/*\" --configuration \"Debug;Release\"", result.Args);
+                Assert.Equal("pack \"./src/*\" --configuration \"Debug\" --configuration \"Release\"", result.Args);
             }
 
             [Fact]
@@ -190,8 +190,8 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Pack
 
                 // Then
                 Assert.Equal("pack \"./src/*\"" +
-                             " --framework \"dnx451;dnxcore50\"" +
-                             " --configuration \"Debug;Release\"" +
+                             " --framework \"dnx451\" --framework \"dnxcore50\"" +
+                             " --configuration \"Debug\" --configuration \"Release\"" +
                              " --out \"/Working/artifacts\"" +
                              " --quiet",
                     result.Args);

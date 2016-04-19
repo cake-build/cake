@@ -63,15 +63,21 @@ namespace Cake.Common.Tools.DNU.Build
             // List of frameworks
             if (settings.Frameworks != null && settings.Frameworks.Count > 0)
             {
-                builder.Append("--framework");
-                builder.AppendQuoted(string.Join(";", settings.Frameworks));
+                foreach (var source in settings.Frameworks)
+                {
+                    builder.Append("--framework");
+                    builder.AppendQuoted(source);
+                }
             }
 
             // List of configurations
             if (settings.Configurations != null && settings.Configurations.Count > 0)
             {
-                builder.Append("--configuration");
-                builder.AppendQuoted(string.Join(";", settings.Configurations));
+                foreach (var source in settings.Configurations)
+                {
+                    builder.Append("--configuration");
+                    builder.AppendQuoted(source);
+                }
             }
 
             // Output directory

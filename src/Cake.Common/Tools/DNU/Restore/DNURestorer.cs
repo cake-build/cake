@@ -58,15 +58,21 @@ namespace Cake.Common.Tools.DNU.Restore
             // List of package sources
             if (settings.Sources != null && settings.Sources.Count > 0)
             {
-                builder.Append("--source");
-                builder.AppendQuoted(string.Join(";", settings.Sources));
+                foreach (var source in settings.Sources)
+                {
+                    builder.Append("--source");
+                    builder.AppendQuoted(source);
+                }
             }
 
             // List of fallback package sources
             if (settings.FallbackSources != null && settings.FallbackSources.Count > 0)
             {
-                builder.Append("--fallbacksource");
-                builder.AppendQuoted(string.Join(";", settings.FallbackSources));
+                foreach (var source in settings.FallbackSources)
+                {
+                    builder.Append("--fallbacksource");
+                    builder.AppendQuoted(source);
+                }
             }
 
             // Proxy
@@ -124,8 +130,11 @@ namespace Cake.Common.Tools.DNU.Restore
             // List of runtime identifiers
             if (settings.Runtimes != null && settings.Runtimes.Count > 0)
             {
-                builder.Append("--runtime");
-                builder.AppendQuoted(string.Join(";", settings.Runtimes));
+                foreach (var runtime in settings.Runtimes)
+                {
+                    builder.Append("--runtime");
+                    builder.AppendQuoted(runtime);
+                }
             }
 
             return builder;
