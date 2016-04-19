@@ -18,28 +18,14 @@ namespace Cake
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CakeArguments"/> class.
+        /// Initializes a new instance of the <see cref="CakeArguments" /> class.
         /// </summary>
-        public CakeArguments()
+        /// <param name="options">The options.</param>
+        public CakeArguments(CakeOptions options)
         {
-            _arguments = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        }
-
-        /// <summary>
-        /// Initializes the argument list.
-        /// </summary>
-        /// <param name="arguments">The arguments.</param>
-        public void SetArguments(IDictionary<string, string> arguments)
-        {
-            if (arguments == null)
-            {
-                throw new ArgumentNullException("arguments");
-            }
-            _arguments.Clear();
-            foreach (var argument in arguments)
-            {
-                _arguments.Add(argument.Key, argument.Value);
-            }
+            _arguments = new Dictionary<string, string>(
+                (options ?? new CakeOptions()).Arguments ?? new Dictionary<string, string>(),
+                StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>

@@ -66,6 +66,14 @@ namespace Cake
         public bool ShowVersion { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether an error occured during parsing.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if an error occured during parsing; otherwise, <c>false</c>.
+        /// </value>
+        public bool HasError { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CakeOptions"/> class.
         /// </summary>
         public CakeOptions()

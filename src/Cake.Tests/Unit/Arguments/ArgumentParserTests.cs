@@ -19,7 +19,7 @@ namespace Cake.Tests.Unit.Arguments
             {
                 // Given
                 var fixture = new ArgumentParserFixture();
-                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                 // When
                 var result = Record.Exception(() => parser.Parse(null));
@@ -33,7 +33,7 @@ namespace Cake.Tests.Unit.Arguments
             {
                 // Given
                 var fixture = new ArgumentParserFixture();
-                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                 // When
                 var result = parser.Parse(new string[] { });
@@ -47,7 +47,7 @@ namespace Cake.Tests.Unit.Arguments
             {
                 // Given
                 var fixture = new ArgumentParserFixture { Log = new FakeLog() };
-                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
                 var arguments = new[] { "build1.config", "build2.config" };
 
                 // When
@@ -64,7 +64,7 @@ namespace Cake.Tests.Unit.Arguments
             {
                 // Given
                 var fixture = new ArgumentParserFixture();
-                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
                 var arguments = input.Split(new[] { ' ' }, StringSplitOptions.None);
 
                 // When
@@ -83,7 +83,7 @@ namespace Cake.Tests.Unit.Arguments
             {
                 // Given
                 var fixture = new ArgumentParserFixture();
-                var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
                 var file = Substitute.For<IFile>();
                 file.Exists.Returns(true);
 
@@ -104,7 +104,7 @@ namespace Cake.Tests.Unit.Arguments
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
-                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
                     var result = parser.Parse(new[] { "build.csx", "-unknown" });
@@ -121,7 +121,7 @@ namespace Cake.Tests.Unit.Arguments
                     var fakeFileSystem = new FakeFileSystem(environment);
                     fakeFileSystem.CreateFile(new FilePath("build.cake"));
                     var fixture = new ArgumentParserFixture { FileSystem = fakeFileSystem };
-                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
                     var result = parser.Parse(new[] { "-unknown" });
@@ -135,13 +135,14 @@ namespace Cake.Tests.Unit.Arguments
                 {
                     // Given
                     var fixture = new ArgumentParserFixture { Log = new FakeLog() };
-                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
                     var result = parser.Parse(new[] { "build.csx", "-unknown", "-unknown" });
 
                     // Then
-                    Assert.Null(result);
+                    Assert.NotNull(result);
+                    Assert.True(result.HasError);
                     Assert.True(fixture.Log.Entries.Any(x => x.Message == "Multiple arguments with the same name (unknown)."));
                 }
 
@@ -170,7 +171,7 @@ namespace Cake.Tests.Unit.Arguments
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
-                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
                     var result = parser.Parse(new[] { "build.csx", input });
@@ -188,15 +189,14 @@ namespace Cake.Tests.Unit.Arguments
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
-                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = Record.Exception(() => {
-                        parser.Parse(new[] { "build.csx", verbosity });
-                    });
+                    var result = parser.Parse(new[] { "build.csx", verbosity });
 
                     // Then
-                    Assert.IsExceptionWithMessage<InvalidOperationException>(result, expected);
+                    Assert.True(result.HasError);
+                    Assert.True(fixture.Log.Entries.Any(e => e.Message == expected));
                 }
 
                 [Theory]
@@ -206,7 +206,7 @@ namespace Cake.Tests.Unit.Arguments
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
-                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
                     var arguments = input.Split(new[] { ' ' }, StringSplitOptions.None);
 
                     // When
@@ -224,7 +224,7 @@ namespace Cake.Tests.Unit.Arguments
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
-                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
                     var result = parser.Parse(new[] { "build.csx", input });
@@ -241,7 +241,7 @@ namespace Cake.Tests.Unit.Arguments
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
-                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
                     var result = parser.Parse(new[] { "build.csx", input });
@@ -257,7 +257,7 @@ namespace Cake.Tests.Unit.Arguments
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
-                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
                     var result = parser.Parse(new[] { "build.csx", input });
@@ -273,7 +273,7 @@ namespace Cake.Tests.Unit.Arguments
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
-                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
                     var result = parser.Parse(new[] { "build.csx", input });
@@ -290,7 +290,7 @@ namespace Cake.Tests.Unit.Arguments
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
-                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
                     var result = parser.Parse(new[] { "build.csx", "--unknown" });
@@ -307,7 +307,7 @@ namespace Cake.Tests.Unit.Arguments
                     var fakeFileSystem = new FakeFileSystem(environment);
                     fakeFileSystem.CreateFile(new FilePath("build.cake"));
                     var fixture = new ArgumentParserFixture { FileSystem = fakeFileSystem };
-                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
                     var result = parser.Parse(new[] { "--unknown" });
@@ -321,13 +321,14 @@ namespace Cake.Tests.Unit.Arguments
                 {
                     // Given
                     var fixture = new ArgumentParserFixture { Log = new FakeLog() };
-                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
                     var result = parser.Parse(new[] { "build.csx", "--unknown", "--unknown" });
 
                     // Then
-                    Assert.Null(result);
+                    Assert.NotNull(result);
+                    Assert.True(result.HasError);
                     Assert.True(fixture.Log.Entries.Any(x => x.Message == "Multiple arguments with the same name (unknown)."));
                 }
 
@@ -356,7 +357,7 @@ namespace Cake.Tests.Unit.Arguments
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
-                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
                     var result = parser.Parse(new[] { "build.csx", input });
@@ -374,15 +375,14 @@ namespace Cake.Tests.Unit.Arguments
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
-                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = Record.Exception(() => {
-                        parser.Parse(new[] { "build.csx", verbosity });
-                    });
+                    var result = parser.Parse(new[] { "build.csx", verbosity });
 
                     // Then
-                    Assert.IsExceptionWithMessage<InvalidOperationException>(result, expected);
+                    Assert.True(result.HasError);
+                    Assert.True(fixture.Log.Entries.Any(e => e.Message == expected));
                 }
 
                 [Theory]
@@ -392,7 +392,7 @@ namespace Cake.Tests.Unit.Arguments
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
-                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
                     var arguments = input.Split(new[] { ' ' }, StringSplitOptions.None);
 
                     // When
@@ -410,7 +410,7 @@ namespace Cake.Tests.Unit.Arguments
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
-                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
                     var result = parser.Parse(new[] { "build.csx", input });
@@ -427,7 +427,7 @@ namespace Cake.Tests.Unit.Arguments
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
-                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
                     var result = parser.Parse(new[] { "build.csx", input });
@@ -443,7 +443,7 @@ namespace Cake.Tests.Unit.Arguments
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
-                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
                     var result = parser.Parse(new[] { "build.csx", input });
@@ -459,7 +459,7 @@ namespace Cake.Tests.Unit.Arguments
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
-                    var parser = new ArgumentParser(fixture.Log, fixture.FileSystem);
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
                     var result = parser.Parse(new[] { "build.csx", input });

@@ -10,14 +10,12 @@ namespace Cake.Arguments
     internal sealed class ArgumentParser : IArgumentParser
     {
         private readonly ICakeLog _log;
-        private readonly IFileSystem _fileSystem;
         private readonly VerbosityParser _verbosityParser;
 
-        public ArgumentParser(ICakeLog log, IFileSystem fileSystem)
+        public ArgumentParser(ICakeLog log, VerbosityParser parser)
         {
             _log = log;
-            _fileSystem = fileSystem;
-            _verbosityParser = new VerbosityParser();
+            _verbosityParser = parser;
         }
 
         public CakeOptions Parse(IEnumerable<string> args)
@@ -31,11 +29,10 @@ namespace Cake.Arguments
             var isParsingOptions = false;
 
             var arguments = args.ToList();
-
-            // If we don't have any arguments, search for a default script.
             if (arguments.Count == 0)
             {
-                options.Script = GetDefaultScript();
+                // If we don't have any arguments, set a default script.
+                options.Script = "./build.cake";
             }
 
             foreach (var arg in arguments)
@@ -48,13 +45,15 @@ namespace Cake.Arguments
                     {
                         if (!ParseOption(value, options))
                         {
-                            return null;
+                            options.HasError = true;
+                            return options;
                         }
                     }
                     else
                     {
                         _log.Error("More than one build script specified.");
-                        return null;
+                        options.HasError = true;
+                        return options;
                     }
                 }
                 else
@@ -67,10 +66,11 @@ namespace Cake.Arguments
                             // Make sure we parse the option
                             if (!ParseOption(value, options))
                             {
-                                return null;
+                                options.HasError = true;
+                                return options;
                             }
 
-                            options.Script = GetDefaultScript();
+                            options.Script = "./build.cake";
                             continue;
                         }
 
@@ -130,8 +130,13 @@ namespace Cake.Arguments
             if (name.Equals("verbosity", StringComparison.OrdinalIgnoreCase)
                 || name.Equals("v", StringComparison.OrdinalIgnoreCase))
             {
-                // Parse verbosity.
-                options.Verbosity = _verbosityParser.Parse(value);
+                Verbosity verbosity;
+                if (!_verbosityParser.TryParse(value, out verbosity))
+                {
+                    verbosity = Verbosity.Normal;
+                    options.HasError = true;
+                }
+                options.Verbosity = verbosity;
             }
 
             if (name.Equals("showdescription", StringComparison.OrdinalIgnoreCase) ||
@@ -167,32 +172,6 @@ namespace Cake.Arguments
 
             options.Arguments.Add(name, value);
             return true;
-        }
-
-        private readonly string[] _defaultScriptNameConventions =
-        {
-            "build.cake",
-            "default.cake",
-            "bake.cake",
-            ".cakefile"
-        };
-
-        private FilePath GetDefaultScript()
-        {
-            _log.Verbose("Searching for default build script...");
-
-            // Search for default cake scripts in order
-            foreach (var defaultScriptNameConvention in _defaultScriptNameConventions)
-            {
-                var currentFile = new FilePath(defaultScriptNameConvention);
-                var file = _fileSystem.GetFile(currentFile);
-                if (file != null && file.Exists)
-                {
-                    _log.Verbose("Found default build script: {0}", defaultScriptNameConvention);
-                    return currentFile;
-                }
-            }
-            return null;
         }
     }
 }

@@ -130,21 +130,6 @@ namespace Cake.Core.Tests.Unit.Scripting
             }
 
             [Fact]
-            public void Should_Set_Arguments()
-            {
-                // Given
-                var fixture = new ScriptRunnerFixture();
-                fixture.ArgumentDictionary.Add("A", "B");
-                var runner = fixture.CreateScriptRunner();
-
-                // When
-                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
-
-                // Then
-                fixture.Arguments.Received(1).SetArguments(fixture.ArgumentDictionary);
-            }
-
-            [Fact]
             public void Should_Create_Session_Via_Session_Factory()
             {
                 // Given

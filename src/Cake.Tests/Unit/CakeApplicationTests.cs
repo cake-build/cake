@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Commands;
+﻿using Cake.Commands;
 using Cake.Core.Diagnostics;
 using Cake.Tests.Fixtures;
 using NSubstitute;
@@ -38,38 +37,24 @@ namespace Cake.Tests.Unit
                 // Then
                 Assert.IsArgumentNullException(result, "commandFactory");
             }
-
-            [Fact]
-            public void Should_Throw_If_Argument_Parser_Is_Null()
-            {
-                // Given
-                var fixture = new CakeApplicationFixture();
-                fixture.ArgumentParser = null;
-
-                // When
-                var result = Record.Exception(() => fixture.CreateApplication());
-
-                // Then
-                Assert.IsArgumentNullException(result, "argumentParser");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Console_Is_Null()
-            {
-                // Given
-                var fixture = new CakeApplicationFixture();
-                fixture.Console = null;
-
-                // When
-                var result = Record.Exception(() => fixture.CreateApplication());
-
-                // Then
-                Assert.IsArgumentNullException(result, "console");
-            }
         }
 
         public sealed class TheRunMethod
         {
+            [Fact]
+            public void Should_Throw_If_Options_Are_Null()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.Options = null;
+
+                // When
+                var result = Record.Exception(() => fixture.RunApplication());
+
+                // Then
+                Assert.IsArgumentNullException(result, "options");
+            }
+
             [Fact]
             public void Should_Set_Verbosity_If_Options_Are_Not_Null()
             {
@@ -98,22 +83,6 @@ namespace Cake.Tests.Unit
 
                 // Then
                 Assert.Equal(0, result);
-            }
-
-            [Fact]
-            public void Should_Return_Failure_If_An_Exception_Was_Thrown()
-            {
-                // Given
-                var fixture = new CakeApplicationFixture();
-                fixture.Options.ShowHelp = true;
-                fixture.CommandFactory.When(x => x.CreateHelpCommand())
-                    .Do(info => { throw new Exception("Error!"); });
-
-                // When
-                var result = fixture.RunApplication();
-
-                // Then
-                Assert.Equal(1, result);
             }
 
             [Fact]
@@ -160,20 +129,6 @@ namespace Cake.Tests.Unit
             }
 
             [Fact]
-            public void Should_Not_Create_Description_Command_If_Options_Do_Not_Contain_Script()
-            {
-                // Given
-                var fixture = new CakeApplicationFixture();
-                fixture.Options.ShowDescription = true;
-
-                // When
-                fixture.RunApplication();
-
-                // Then
-                fixture.CommandFactory.Received(1).CreateHelpCommand();
-            }
-
-            [Fact]
             public void Should_Create_Build_Command_If_Options_Contain_Script()
             {
                 // Given
@@ -185,34 +140,6 @@ namespace Cake.Tests.Unit
 
                 // Then
                 fixture.CommandFactory.Received(1).CreateBuildCommand();
-            }
-
-            [Fact]
-            public void Should_Create_Help_Command_If_Options_Are_Null()
-            {
-                // Given
-                var fixture = new CakeApplicationFixture();
-                fixture.Options = null;
-
-                // When
-                fixture.RunApplication();
-
-                // Then
-                fixture.CommandFactory.Received(1).CreateHelpCommand();
-            }
-
-            [Fact]
-            public void Should_Return_Error_If_Options_Are_Null()
-            {
-                // Given
-                var fixture = new CakeApplicationFixture();
-                fixture.Options = null;
-
-                // When
-                var result = fixture.RunApplication();
-
-                // Then
-                Assert.Equal(1, result);
             }
 
             [Fact]
@@ -274,20 +201,6 @@ namespace Cake.Tests.Unit
 
                 // Then
                 fixture.CommandFactory.Received(1).CreateDryRunCommand();
-            }
-
-            [Fact]
-            public void Should_Not_Create_Dry_Run_Command_If_Options_Do_Not_Contain_Script()
-            {
-                // Given
-                var fixture = new CakeApplicationFixture();
-                fixture.Options.PerformDryRun = true;
-
-                // When
-                fixture.RunApplication();
-
-                // Then
-                fixture.CommandFactory.Received(1).CreateHelpCommand();
             }
         }
     }
