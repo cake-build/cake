@@ -68,10 +68,10 @@ namespace Cake.Common.Tools.DNU.Restore
             // List of fallback package sources
             if (settings.FallbackSources != null && settings.FallbackSources.Count > 0)
             {
-                foreach (var source in settings.FallbackSources)
+                foreach (var fallbacksource in settings.FallbackSources)
                 {
                     builder.Append("--fallbacksource");
-                    builder.AppendQuoted(source);
+                    builder.AppendQuoted(fallbacksource);
                 }
             }
 
