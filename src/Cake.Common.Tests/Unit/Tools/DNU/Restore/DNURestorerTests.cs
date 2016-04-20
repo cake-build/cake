@@ -107,7 +107,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore --source \"https://www.example.com/nugetfeed;https://www.example.com/nugetfeed2\"", result.Args);
+                Assert.Equal("restore --source \"https://www.example.com/nugetfeed\" --source \"https://www.example.com/nugetfeed2\"", result.Args);
             }
 
             [Fact]
@@ -262,7 +262,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore --runtime \"runtime1;runtime2\"", result.Args);
+                Assert.Equal("restore --runtime \"runtime1\" --runtime \"runtime2\"", result.Args);
             }
 
             [Fact]
@@ -290,7 +290,8 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
 
                 // Then
                 Assert.Equal("restore \"/Working/project.json\"" +
-                             " --source \"https://www.example.com/nugetfeed;https://www.example.com/nugetfeed2\"" +
+                             " --source \"https://www.example.com/nugetfeed\"" +
+                             " --source \"https://www.example.com/nugetfeed2\"" +
                              " --fallbacksource \"https://www.example.com/fallbacknugetfeed\"" +
                              " --proxy \"exampleproxy\"" +
                              " --no-cache" +
@@ -299,7 +300,7 @@ namespace Cake.Common.Tests.Unit.Tools.DNU.Restore
                              " --quiet" +
                              " --parallel" +
                              " --lock" +
-                             " --runtime \"runtime1;runtime2\"",
+                             " --runtime \"runtime1\" --runtime \"runtime2\"",
                     result.Args);
             }
         }
