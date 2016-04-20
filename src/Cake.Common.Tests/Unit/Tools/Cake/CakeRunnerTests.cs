@@ -1,16 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Cake.Common.Tests.Fixtures.Tools;
-using Cake.Common.Tools.Cake;
 using Cake.Core;
 using Cake.Core.Diagnostics;
-using Cake.Core.IO;
 using Cake.Testing;
 using Cake.Testing.Xunit;
-using NSubstitute;
 using Xunit;
-using Path = Cake.Core.IO.Path;
 
 namespace Cake.Common.Tests.Unit.Tools.Cake
 {

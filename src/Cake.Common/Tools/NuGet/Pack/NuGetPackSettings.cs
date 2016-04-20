@@ -32,6 +32,15 @@ namespace Cake.Common.Tools.NuGet.Pack
         public bool NoPackageAnalysis { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether referenced projects should be included.
+        /// Defaults to <c>false</c>.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if referenced projects should be included; otherwise, <c>false</c>.
+        /// </value>
+        public bool IncludeReferencedProjects { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether a symbol package should be created.
         /// Defaults to <c>false</c>.
         /// </summary>
@@ -150,6 +159,14 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <value>
         /// The properties.
         /// </value>
-        public IDictionary<string, string> Properties { get; set; } 
+        public IDictionary<string, string> Properties { get; set; }
+
+        /// <summary>
+        /// Gets or sets the version of MSBuild to be used with this command.
+        /// By default the MSBuild in your path is picked, otherwise it defaults to the highest installed version of MSBuild.
+        /// This setting requires NuGet V3 or later.
+        /// </summary>
+        /// <value>The version of MSBuild to be used with this command.</value>
+        public NuGetMSBuildVersion? MSBuildVersion { get; set; }
     }
 }

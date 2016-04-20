@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace Cake.Common.Tools.DotCover
 {
     /// <summary>
     /// Represents DotCover ReportType
     /// </summary>
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public enum DotCoverReportType
     {
         /// <summary>

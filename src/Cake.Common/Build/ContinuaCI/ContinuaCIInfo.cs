@@ -12,7 +12,7 @@ namespace Cake.Common.Build.ContinuaCI
     public abstract class ContinuaCIInfo
     {
         private readonly ICakeEnvironment _environment;
-        private IDictionary<string, string> _allEnvironmentVariables = null;
+        private IDictionary<string, string> _allEnvironmentVariables;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ContinuaCIInfo"/> class.
@@ -145,14 +145,9 @@ namespace Cake.Common.Build.ContinuaCI
         protected IEnumerable<string> GetEnvironmentStringList(string variable)
         {
             var value = _environment.GetEnvironmentVariable(variable);
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                return Enumerable.Empty<string>();
-            }
-
-            var valueList = value.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-
-            return valueList;
+            return string.IsNullOrWhiteSpace(value) 
+                ? Enumerable.Empty<string>() 
+                : value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         /// <summary>

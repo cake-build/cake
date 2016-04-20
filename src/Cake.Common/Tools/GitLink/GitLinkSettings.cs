@@ -1,5 +1,4 @@
-﻿using System;
-using Cake.Core.IO;
+﻿using Cake.Core.IO;
 using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.GitLink

@@ -1129,5 +1129,66 @@ namespace Cake.Common.Tests.Unit.IO
                 Assert.Equal("/Working/build.txt", result.FullPath);
             }
         }
+
+        public sealed class TheFileSizeMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => FileAliases.FileSize(null, "some file"));
+
+                // Then
+                Assert.IsArgumentNullException(result, "context");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Path_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+
+                // When
+                var result = Record.Exception(() => FileAliases.FileSize(context, null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "filePath");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Directory_Does_Not_Exist()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
+                context.FileSystem.Returns(fileSystem);
+                context.Environment.Returns(environment);
+
+                // When / Then
+                Assert.Throws<FileNotFoundException>(() => FileAliases.FileSize(context, "non-existent-file.txt"));
+            }
+
+            [Theory]
+            [InlineData("/Working", "/Working/some file.txt")]
+            [InlineData("/Working/target", "/Working/target/some file.txt")]
+            public void Should_Return_Size_If_Path_Exist(string workingDirectory, string filePath)
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                environment.WorkingDirectory = workingDirectory;
+                var fileSystem = new FakeFileSystem(environment);
+                fileSystem.CreateFile(filePath, new byte[] {1, 2, 3, 4});
+                context.FileSystem.Returns(fileSystem);
+                context.Environment.Returns(environment);
+
+                // When
+                var result = FileAliases.FileSize(context, filePath);
+
+                // Then
+                Assert.Equal(result, 4);
+            }
+        }
     }
 }

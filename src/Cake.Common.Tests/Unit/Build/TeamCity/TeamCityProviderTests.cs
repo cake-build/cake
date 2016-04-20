@@ -1,8 +1,8 @@
 ﻿using System;
-using System.IO;
 using Cake.Common.Build.TeamCity;
 using Cake.Common.Tests.Fixtures.Build;
 using Cake.Core.IO;
+using Cake.Testing.Extensions;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build.TeamCity
@@ -15,10 +15,23 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity
             public void Should_Throw_If_Environment_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => new TeamCityProvider(null));
+                var result = Record.Exception(() => new TeamCityProvider(null, null));
 
                 // Then
                 Assert.IsArgumentNullException(result, "environment");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Log_Is_Null()
+            {
+                // Given
+                var fixture = new TeamCityFixture();
+
+                // When
+                var result = Record.Exception(() => new TeamCityProvider(fixture.Environment, null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "log");
             }
         }
 
@@ -54,22 +67,8 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity
             }
         }
 
-        public sealed class TheImportDotCoverCoverageMethod : IDisposable
+        public sealed class TheImportDotCoverCoverageMethod
         {
-            private StringWriter _console;
-
-            public TheImportDotCoverCoverageMethod()
-            {
-                _console = new StringWriter();
-                Console.SetOut(_console);
-            }
-
-            public void Dispose()
-            {
-                Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
-                _console.Dispose();
-            }
-
             [Fact]
             public void Should_Use_Bundled_DotCover_If_ToolPath_Is_Null()
             {
@@ -85,7 +84,7 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity
                 // Then
                 Assert.Equal("##teamcity[dotNetCoverage ]" + Environment.NewLine +
                     "##teamcity[importData type='dotNetCoverage' tool='dotcover' path='/path/to/result.dcvr']" + Environment.NewLine,
-                    _console.ToString());
+                    fixture.Log.AggregateLogMessages());
             }
 
             [Fact]
@@ -104,7 +103,7 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity
                 // Then
                 Assert.Equal("##teamcity[dotNetCoverage dotcover_home='/path/to/dotcover_home']" + Environment.NewLine +
                     "##teamcity[importData type='dotNetCoverage' tool='dotcover' path='/path/to/result.dcvr']" + Environment.NewLine,
-                    _console.ToString());
+                    fixture.Log.AggregateLogMessages());
             }
         }
     }

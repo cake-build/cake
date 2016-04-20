@@ -1,4 +1,6 @@
-﻿using Cake.Common.Solution.Project.Properties;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Cake.Common.Solution.Project.Properties;
 using Cake.Common.Tests.Fixtures;
 using Cake.Core;
 using Cake.Core.IO;
@@ -45,9 +47,10 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             {
                 // Given
                 var fixture = new AssemblyInfoParserFixture();
+                fixture.Path = null;
 
                 // When
-                var result = Record.Exception(() => fixture.Parse(null));
+                var result = Record.Exception(() => fixture.Parse());
 
                 // Then
                 Assert.IsArgumentNullException(result, "assemblyInfoPath");
@@ -57,7 +60,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             public void Should_Throw_If_AssemblyInfo_File_Do_Not_Exist()
             {
                 // Given
-                var fixture = new AssemblyInfoParserFixture(createAssemblyInfo: false);
+                var fixture = new AssemblyInfoParserFixture();
+                fixture.CreateAssemblyInfo = false;
 
                 // When
                 var result = Record.Exception(() => fixture.Parse());
@@ -74,7 +78,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             public void Should_Read_ClsCompliance(bool value, bool expected)
             {
                 // Given
-                var fixture = new AssemblyInfoParserFixture(clsCompliant: value);
+                var fixture = new AssemblyInfoParserFixture();
+                fixture.ClsCompliant = value;
 
                 // When
                 var result = fixture.Parse();
@@ -89,7 +94,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             public void Should_Read_Company(string value, string expected)
             {
                 // Given
-                var fixture = new AssemblyInfoParserFixture(company: value);
+                var fixture = new AssemblyInfoParserFixture();
+                fixture.Company = value;
 
                 // When
                 var result = fixture.Parse();
@@ -105,7 +111,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             public void Should_Read_ComVisible(bool value, bool expected)
             {
                 // Given
-                var fixture = new AssemblyInfoParserFixture(comVisible: value);
+                var fixture = new AssemblyInfoParserFixture();
+                fixture.ComVisible = value;
 
                 // When
                 var result = fixture.Parse();
@@ -121,7 +128,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             public void Should_Read_Configuration(string value, string expected)
             {
                 // Given
-                var fixture = new AssemblyInfoParserFixture(configuration: value);
+                var fixture = new AssemblyInfoParserFixture();
+                fixture.Configuration = value;
 
                 // When
                 var result = fixture.Parse();
@@ -136,7 +144,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             public void Should_Read_Copyright(string value, string expected)
             {
                 // Given
-                var fixture = new AssemblyInfoParserFixture(copyright: value);
+                var fixture = new AssemblyInfoParserFixture();
+                fixture.Copyright = value;
 
                 // When
                 var result = fixture.Parse();
@@ -151,7 +160,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             public void Should_Read_Description(string value, string expected)
             {
                 // Given
-                var fixture = new AssemblyInfoParserFixture(description: value);
+                var fixture = new AssemblyInfoParserFixture();
+                fixture.Description = value;
 
                 // When
                 var result = fixture.Parse();
@@ -167,7 +177,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             public void Should_Read_AssemblyFileVersion(string value, string expected)
             {
                 // Given
-                var fixture = new AssemblyInfoParserFixture(fileVersion: value);
+                var fixture = new AssemblyInfoParserFixture();
+                fixture.FileVersion = value;
 
                 // When
                 var result = fixture.Parse();
@@ -182,7 +193,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             public void Should_Read_Guid(string value, string expected)
             {
                 // Given
-                var fixture = new AssemblyInfoParserFixture(guid: value);
+                var fixture = new AssemblyInfoParserFixture();
+                fixture.Guid = value;
 
                 // When
                 var result = fixture.Parse();
@@ -199,7 +211,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             public void Should_Read_AssemblyInformationalVersion(string value, string expected)
             {
                 // Given
-                var fixture = new AssemblyInfoParserFixture(informationalVersion: value);
+                var fixture = new AssemblyInfoParserFixture();
+                fixture.InformationalVersion = value;
 
                 // When
                 var result = fixture.Parse();
@@ -208,19 +221,24 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 Assert.Equal(expected, result.AssemblyInformationalVersion);
             }
 
-            [Theory]
-            [InlineData("Cake.Common.Tests", "Cake.Common.Tests")]
-            [InlineData(null, "")]
-            public void Should_Read_InternalsVisibleTo(string value, string expected)
+            [Fact]
+            public void Should_Read_InternalsVisibleTo()
             {
                 // Given
-                var fixture = new AssemblyInfoParserFixture(internalsVisibleTo: value);
+                var fixture = new AssemblyInfoParserFixture();
+                fixture.InternalsVisibleTo = new List<string>
+                {
+                    "Cake.Core.Tests",
+                    "Cake.Common.Tests"
+                };
 
                 // When
                 var result = fixture.Parse();
 
                 // Then
-                Assert.Equal(expected, result.InternalsVisibleTo);
+                Assert.Equal(2, result.InternalsVisibleTo.Count);
+                Assert.Equal("Cake.Core.Tests", result.InternalsVisibleTo.ElementAt(0));
+                Assert.Equal("Cake.Common.Tests", result.InternalsVisibleTo.ElementAt(1));
             }
 
             [Theory]
@@ -229,7 +247,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             public void Should_Read_Product(string value, string expected)
             {
                 // Given
-                var fixture = new AssemblyInfoParserFixture(product: value);
+                var fixture = new AssemblyInfoParserFixture();
+                fixture.Product = value;
 
                 // When
                 var result = fixture.Parse();
@@ -244,7 +263,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             public void Should_Read_Title(string value, string expected)
             {
                 // Given
-                var fixture = new AssemblyInfoParserFixture(title: value);
+                var fixture = new AssemblyInfoParserFixture();
+                fixture.Title = value;
 
                 // When
                 var result = fixture.Parse();
@@ -259,7 +279,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             public void Should_Read_Trademark(string value, string expected)
             {
                 // Given
-                var fixture = new AssemblyInfoParserFixture(trademark: value);
+                var fixture = new AssemblyInfoParserFixture();
+                fixture.Trademark = value;
 
                 // When
                 var result = fixture.Parse();
@@ -275,7 +296,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             public void Should_Read_AssemblyVersion(string value, string expected)
             {
                 // Given
-                var fixture = new AssemblyInfoParserFixture(version: value);
+                var fixture = new AssemblyInfoParserFixture();
+                fixture.Version = value;
 
                 // When
                 var result = fixture.Parse();

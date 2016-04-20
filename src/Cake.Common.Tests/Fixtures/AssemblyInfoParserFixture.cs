@@ -13,101 +13,103 @@ namespace Cake.Common.Tests.Fixtures
         public FakeFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
 
-        public AssemblyInfoParserFixture(bool clsCompliant = false,
-            string company = "Company",
-            bool comVisible = false,
-            string configuration = "Debug",
-            string copyright = "Copyright 2015",
-            string description = "Description",
-            string fileVersion = "4.3.2.1",
-            string guid = "ABCEDF",
-            string informationalVersion = "4.2.3.1",
-            string internalsVisibleTo = "Cake.Common.Test",
-            string product = "Cake",
-            string title = "Cake",
-            string trademark = "Trademark",
-            string version = "1.2.3.4",
-            bool createAssemblyInfo = true)
+        public bool? ClsCompliant { get; set; }
+        public bool? ComVisible { get; set; }
+        public string Company { get; set; }
+        public string Configuration { get; set; }
+        public string Copyright { get; set; }
+        public string Description { get; set; }
+        public string FileVersion { get; set; }
+        public string Guid { get; set; }
+        public string InformationalVersion { get; set; }
+        public List<string> InternalsVisibleTo { get; set; }
+        public string Product { get; set; }
+        public string Title { get; set; }
+        public string Trademark { get; set; }
+        public string Version { get; set; }
+
+        public FilePath Path { get; set; }
+        public bool CreateAssemblyInfo { get; set; }
+
+        public AssemblyInfoParserFixture()
         {
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory.Returns("/Working");
-
             FileSystem = new FakeFileSystem(Environment);
             FileSystem.CreateDirectory(Environment.WorkingDirectory);
 
-            if (createAssemblyInfo)
-            {
-                // Set the versions.
-                var settings = new AssemblyInfoSettings();
-                settings.CLSCompliant = clsCompliant;
-
-                if (company != null)
-                {
-                    settings.Company = company;
-                }
-
-                settings.ComVisible = comVisible;
-
-                if (configuration != null)
-                {
-                    settings.Configuration = configuration;
-                }
-                if (copyright != null)
-                {
-                    settings.Copyright = copyright;
-                }
-                if (description != null)
-                {
-                    settings.Description = description;
-                }
-                if (fileVersion != null)
-                {
-                    settings.FileVersion = fileVersion;
-                }
-                if (guid != null)
-                {
-                    settings.Guid = guid;
-                }
-                if (informationalVersion != null)
-                {
-                    settings.InformationalVersion = informationalVersion;
-                }
-                if (internalsVisibleTo != null)
-                {
-                    settings.InternalsVisibleTo = new List<string>() { internalsVisibleTo };
-                }
-                if (product != null)
-                {
-                    settings.Product = product;
-                }
-                if (title != null)
-                {
-                    settings.Title = title;
-                }
-                if (trademark != null)
-                {
-                    settings.Trademark = trademark;
-                }
-                if (version != null)
-                {
-                    settings.Version = version;
-                }
-
-                // Create the assembly info.
-                var creator = new AssemblyInfoCreator(FileSystem, Environment, Substitute.For<ICakeLog>());
-                creator.Create("./output.cs", settings);
-            }
+            // Set fixture values.
+            Path = new FilePath("./output.cs");
+            CreateAssemblyInfo = true;
         }
 
         public AssemblyInfoParseResult Parse()
         {
-            return Parse("./output.cs");
+            if (CreateAssemblyInfo && Path != null)
+            {
+                CreateAssemblyInfoOnDisk(Path);
+            }
+            var parser = new AssemblyInfoParser(FileSystem, Environment);
+            return parser.Parse(Path);
         }
 
-        public AssemblyInfoParseResult Parse(FilePath filePath)
+        private void CreateAssemblyInfoOnDisk(FilePath path)
         {
-            var parser = new AssemblyInfoParser(FileSystem, Environment);
-            return parser.Parse(filePath);
+            var settings = new AssemblyInfoSettings();
+            settings.CLSCompliant = ClsCompliant;
+            settings.ComVisible = ComVisible;
+
+            if (Company != null)
+            {
+                settings.Company = Company;
+            }
+            if (Configuration != null)
+            {
+                settings.Configuration = Configuration;
+            }
+            if (Copyright != null)
+            {
+                settings.Copyright = Copyright;
+            }
+            if (Description != null)
+            {
+                settings.Description = Description;
+            }
+            if (FileVersion != null)
+            {
+                settings.FileVersion = FileVersion;
+            }
+            if (Guid != null)
+            {
+                settings.Guid = Guid;
+            }
+            if (InformationalVersion != null)
+            {
+                settings.InformationalVersion = InformationalVersion;
+            }
+            if (InternalsVisibleTo != null)
+            {
+                settings.InternalsVisibleTo = InternalsVisibleTo;
+            }
+            if (Product != null)
+            {
+                settings.Product = Product;
+            }
+            if (Title != null)
+            {
+                settings.Title = Title;
+            }
+            if (Trademark != null)
+            {
+                settings.Trademark = Trademark;
+            }
+            if (Version != null)
+            {
+                settings.Version = Version;
+            }
+
+            var creator = new AssemblyInfoCreator(FileSystem, Environment, Substitute.For<ICakeLog>());
+            creator.Create(path, settings);
         }
     }
 }

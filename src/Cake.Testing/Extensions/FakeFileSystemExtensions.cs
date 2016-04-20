@@ -1,4 +1,5 @@
-﻿using Cake.Core.IO;
+﻿using System.IO;
+using Cake.Core.IO;
 
 // ReSharper disable once CheckNamespace
 namespace Cake.Testing
@@ -36,6 +37,32 @@ namespace Cake.Testing
             if (!file.Exists)
             {
                 file.OpenWrite().Close();
+            }
+
+            return file;
+        }
+
+        /// <summary>
+        /// Creates a file at the specified path.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="path">The path.</param>
+        /// <param name="contentsBytes">The file contents.</param>
+        /// <returns>The same <see cref="FakeFile"/> instance so that multiple calls can be chained.</returns>
+        public static FakeFile CreateFile(this FakeFileSystem fileSystem, FilePath path, byte[] contentsBytes)
+        {
+            CreateDirectory(fileSystem, path.GetDirectory());
+
+            var file = fileSystem.GetFile(path);
+            if (!file.Exists)
+            {
+                using (var stream = file.OpenWrite())
+                {
+                    using (var ms = new MemoryStream(contentsBytes))
+                    {
+                        ms.CopyTo(stream);
+                    }
+                }
             }
 
             return file;

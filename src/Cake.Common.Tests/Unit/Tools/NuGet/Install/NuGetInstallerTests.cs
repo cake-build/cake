@@ -1,10 +1,7 @@
-﻿using Cake.Common.Tests.Fixtures.Tools.NuGet;
-using Cake.Common.Tests.Fixtures.Tools.NuGet.Installer;
+﻿using Cake.Common.Tests.Fixtures.Tools.NuGet.Installer;
 using Cake.Common.Tools.NuGet;
-using Cake.Core.IO;
 using Cake.Testing;
 using Cake.Testing.Xunit;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
@@ -244,6 +241,21 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
                 // Then
                 Assert.Equal("install \"Cake\" -ConfigFile \"/Working/nuget.config\" " +
                              "-NonInteractive", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_FallbackSources_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new NuGetInstallerFixture();
+                fixture.Settings.Source = new[] { "A;B;C" };
+                fixture.Settings.FallbackSource = new[] { "D;E;F" };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("install \"Cake\" -Source \"A;B;C\" -FallbackSource \"D;E;F\" -NonInteractive", result.Args);
             }
         }
 
@@ -485,6 +497,22 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
                 // Then
                 Assert.Equal("install \"/Working/packages.config\" " +
                              "-ConfigFile \"/Working/nuget.config\" " +
+                             "-NonInteractive", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_FallbackSources_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new NuGetInstallerFromConfigFixture();
+                fixture.Settings.Source = new[] { "A;B;C" };
+                fixture.Settings.FallbackSource = new[] { "D;E;F" };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("install \"/Working/packages.config\" -Source \"A;B;C\" -FallbackSource \"D;E;F\" " +
                              "-NonInteractive", result.Args);
             }
         }

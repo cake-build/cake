@@ -15,8 +15,8 @@ namespace Cake.Core
     {
         private readonly ICakeLog _log;
         private readonly List<CakeTask> _tasks;
-        private Action _setupAction;
-        private Action _teardownAction;
+        private Action<ICakeContext> _setupAction;
+        private Action<ICakeContext> _teardownAction;
         private Action<ICakeContext, ITaskSetupContext> _taskSetupAction;
         private Action<ICakeContext, ITaskTeardownContext> _taskTeardownAction;
 
@@ -67,7 +67,7 @@ namespace Cake.Core
         /// If setup fails, no tasks will be executed but teardown will be performed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        public void RegisterSetupAction(Action action)
+        public void RegisterSetupAction(Action<ICakeContext> action)
         {
             _setupAction = action;
         }
@@ -77,7 +77,7 @@ namespace Cake.Core
         /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        public void RegisterTeardownAction(Action action)
+        public void RegisterTeardownAction(Action<ICakeContext> action)
         {
             _teardownAction = action;
         }
@@ -116,7 +116,7 @@ namespace Cake.Core
 
             try
             {
-                PerformSetup(strategy);
+                PerformSetup(strategy, context);
 
                 var stopWatch = new Stopwatch();
                 var report = new CakeReport();
@@ -150,7 +150,7 @@ namespace Cake.Core
             }
             finally
             {
-                PerformTeardown(strategy, exceptionWasThrown);
+                PerformTeardown(strategy, context, exceptionWasThrown);
             }
         }
 
@@ -174,11 +174,11 @@ namespace Cake.Core
             _taskTeardownAction = action;
         }
 
-        private void PerformSetup(IExecutionStrategy strategy)
+        private void PerformSetup(IExecutionStrategy strategy, ICakeContext context)
         {
             if (_setupAction != null)
             {
-                strategy.PerformSetup(_setupAction);
+                strategy.PerformSetup(_setupAction, context);
             }
         }
 
@@ -347,13 +347,13 @@ namespace Cake.Core
             }
         }
 
-        private void PerformTeardown(IExecutionStrategy strategy, bool exceptionWasThrown)
+        private void PerformTeardown(IExecutionStrategy strategy, ICakeContext context, bool exceptionWasThrown)
         {
             if (_teardownAction != null)
             {
                 try
                 {
-                    strategy.PerformTeardown(_teardownAction);
+                    strategy.PerformTeardown(_teardownAction, context);
                 }
                 catch (Exception ex)
                 {

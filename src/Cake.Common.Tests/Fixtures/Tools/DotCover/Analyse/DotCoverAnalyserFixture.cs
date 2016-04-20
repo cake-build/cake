@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Cake.Common.Tools.DotCover.Analyse;
 using Cake.Core;
 using Cake.Core.Diagnostics;

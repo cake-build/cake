@@ -39,7 +39,7 @@ namespace Cake.Common.Tools.GitLink
         /// <example>
         /// <code>
         /// GitLink("C:/temp/solution", new GitLinkSettings {
-        ///     RepositoryUrl = new Uri("http://mydomain.com"),
+        ///     RepositoryUrl = "http://mydomain.com",
         ///     Branch        = "master",
         ///     ShaHash       = "abcdef",
         /// });
@@ -54,7 +54,7 @@ namespace Cake.Common.Tools.GitLink
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new GitLinkRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.Log);
+            var runner = new GitLinkRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
             runner.Run(repositoryRootPath, settings);
         }
     }

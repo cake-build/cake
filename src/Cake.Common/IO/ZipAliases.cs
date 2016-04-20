@@ -118,6 +118,11 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="zipFile">Zip file to unzip.</param>
         /// <param name="outputPath">Output path to unzip into.</param>
+        /// <example>
+        /// <code>
+        /// Unzip("Cake.zip", "./cake");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void Unzip(this ICakeContext context, FilePath zipFile, DirectoryPath outputPath)
         {

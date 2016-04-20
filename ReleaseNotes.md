@@ -19,6 +19,7 @@
 * Update ReleaseNotes.md
 * Removed year from © in readme
 * Add GitVersion into build.cake
+* TextTransformation.Save creates BOM on new file
 
 ### New in 0.9.0 (Released 2016/02/22)
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Threading;
 using Cake.Core.Diagnostics;
 
 namespace Cake.Core.IO

@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace Cake.Core.IO.Arguments
+﻿namespace Cake.Core.IO.Arguments
 {
     /// <summary>
     /// Represents a argument preceded by a switch.

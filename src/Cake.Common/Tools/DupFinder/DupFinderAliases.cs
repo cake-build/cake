@@ -20,6 +20,11 @@ namespace Cake.Common.Tools.DupFinder
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="file">The file to analyze.</param>
+        /// <example>
+        /// <code>
+        /// DupFinder("./src/MySolution.sln");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("DupFinder")]
         public static void DupFinder(this ICakeContext context, FilePath file)
@@ -34,6 +39,24 @@ namespace Cake.Common.Tools.DupFinder
         /// <param name="context">The context.</param>
         /// <param name="file">The file to analyze.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var buildOutputDirectory = Directory("./.build");
+        /// var resharperReportsDirectory = buildOutputDirectory + Directory("_ReSharperReports");
+        /// var rootDirectoryPath = MakeAbsolute(Context.Environment.WorkingDirectory);
+        ///
+        /// DupFinder("./src/MySolution.sln", new DupFinderSettings {
+        ///     ShowStats = true,
+        ///     ShowText = true,
+        ///     ExcludePattern = new String[]
+        ///     {
+        ///         rootDirectoryPath + "/**/*Designer.cs",
+        ///     },
+        ///     OutputFile = resharperReportsDirectory + File("dupfinder-output.xml"),
+        ///     ThrowExceptionOnFindingDuplicates = true
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("DupFinder")]
         public static void DupFinder(this ICakeContext context, FilePath file, DupFinderSettings settings)
@@ -47,6 +70,12 @@ namespace Cake.Common.Tools.DupFinder
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="files">The files to analyze.</param>
+        /// <example>
+        /// <code>
+        /// var projects = GetFiles("./src/**/*.csproj");
+        /// DupFinder(projects);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("DupFinder")]
         public static void DupFinder(this ICakeContext context, IEnumerable<FilePath> files)
@@ -61,6 +90,25 @@ namespace Cake.Common.Tools.DupFinder
         /// <param name="context">The context.</param>
         /// <param name="files">The files to analyze.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var buildOutputDirectory = Directory("./.build");
+        /// var resharperReportsDirectory = buildOutputDirectory + Directory("_ReSharperReports");
+        /// var rootDirectoryPath = MakeAbsolute(Context.Environment.WorkingDirectory);
+        ///
+        /// var projects = GetFiles("./src/**/*.csproj");
+        /// DupFinder(projects, new DupFinderSettings {
+        ///     ShowStats = true,
+        ///     ShowText = true,
+        ///     ExcludePattern = new String[]
+        ///     {
+        ///         rootDirectoryPath + "/**/*Designer.cs",
+        ///     },
+        ///     OutputFile = resharperReportsDirectory + File("dupfinder-output.xml"),
+        ///     ThrowExceptionOnFindingDuplicates = true
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("DupFinder")]
         public static void DupFinder(this ICakeContext context, IEnumerable<FilePath> files, DupFinderSettings settings)
@@ -79,6 +127,11 @@ namespace Cake.Common.Tools.DupFinder
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
+        /// <example>
+        /// <code>
+        /// DupFinder("*.cs");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("DupFinder")]
         public static void DupFinder(this ICakeContext context, string pattern)
@@ -93,6 +146,16 @@ namespace Cake.Common.Tools.DupFinder
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var buildOutputDirectory = Directory("./.build");
+        /// var resharperReportsDirectory = buildOutputDirectory + Directory("_ReSharperReports");
+        ///
+        /// DupFinder("*.cs", new DupFinderSettings {
+        ///     OutputFile = resharperReportsDirectory + File("dupfinder-output.xml"),
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("DupFinder")]
         public static void DupFinder(this ICakeContext context, string pattern, DupFinderSettings settings)
@@ -123,6 +186,11 @@ namespace Cake.Common.Tools.DupFinder
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="configFile">The config file.</param>
+        /// <example>
+        /// <code>
+        /// DupFinderFromConfig("./src/dupfinder.config");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("DupFinder")]
         public static void DupFinderFromConfig(this ICakeContext context, FilePath configFile)

@@ -19,11 +19,11 @@ namespace Cake.Scripting
             _counter = 1;
         }
 
-        public void PerformSetup(Action action)
+        public void PerformSetup(Action<ICakeContext> action, ICakeContext context)
         {
         }
 
-        public void PerformTeardown(Action action)
+        public void PerformTeardown(Action<ICakeContext> action, ICakeContext context)
         {
         }
 

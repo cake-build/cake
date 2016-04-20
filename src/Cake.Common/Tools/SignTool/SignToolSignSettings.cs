@@ -15,6 +15,11 @@ namespace Cake.Common.Tools.SignTool
         public Uri TimeStampUri { get; set; }
 
         /// <summary>
+        /// Gets or sets the thumbprint for locating a certificate in the store.
+        /// </summary>
+        public string CertThumbprint { get; set; }
+
+        /// <summary>
         /// Gets or sets the <c>PFX</c> certificate path.
         /// </summary>
         public FilePath CertPath { get; set; }
@@ -23,5 +28,10 @@ namespace Cake.Common.Tools.SignTool
         /// Gets or sets the <c>PFX</c> certificate password.
         /// </summary>
         public string Password { get; set; }
+
+        /// <summary>
+        /// Gets or sets the signed content's description.
+        /// </summary>
+        public string Description { get; set; }
     }
 }

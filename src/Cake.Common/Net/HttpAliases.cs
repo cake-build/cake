@@ -16,6 +16,11 @@ namespace Cake.Common.Net
         /// <summary>
         /// Downloads the specified resource over HTTP to a temporary file.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var resource = DownloadFile("http://www.example.org/index.html");
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="address">The URL of the resource to download.</param>
         /// <returns>The path to the downloaded file.</returns>
@@ -29,6 +34,12 @@ namespace Cake.Common.Net
         /// <summary>
         /// Downloads the specified resource over HTTP to a temporary file.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var address = new Uri("http://www.example.org/index.html");
+        /// var resource = DownloadFile(address);
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="address">The URL of file to download.</param>
         /// <returns>The path to the downloaded file.</returns>
@@ -49,6 +60,11 @@ namespace Cake.Common.Net
         /// <summary>
         /// Downloads the specified resource over HTTP to the specified output path.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// DownloadFile("http://www.example.org/index.html", "./outputdir");
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="address">The URL of the resource to download.</param>
         /// <param name="outputPath">The output path.</param>
@@ -62,6 +78,12 @@ namespace Cake.Common.Net
         /// <summary>
         /// Downloads the specified resource over HTTP to the specified output path.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var address = new Uri("http://www.example.org/index.html");
+        /// DownloadFile(address, "./outputdir");
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="address">The URL of the resource to download.</param>
         /// <param name="outputPath">The output path.</param>

@@ -1,5 +1,4 @@
 ﻿using Cake.Common.Tools.NuGet.SetApiKey;
-using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Tools.NuGet.SetApiKey
 {

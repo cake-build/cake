@@ -208,12 +208,12 @@ namespace Cake.Common.Tests.Unit.Build.ContinuaCI.Data
                 var info = new ContinuaCIInfoFixture().CreateBuildInfo();
 
                 // When
-                var result = info.Repositories;
+                var result = info.Repositories.ToArray();
 
                 // Then
-                Assert.Equal(result.Count(), 3);
-                Assert.Equal(result.First(), "Repo1");
-                Assert.Equal(result.Last(), "Repo3");
+                Assert.Equal(result.Length, 3);
+                Assert.Equal(result[0], "Repo1");
+                Assert.Equal(result[2], "Repo3");
             }
         }
 
@@ -226,12 +226,12 @@ namespace Cake.Common.Tests.Unit.Build.ContinuaCI.Data
                 var info = new ContinuaCIInfoFixture().CreateBuildInfo();
 
                 // When
-                var result = info.RepositoryBranches;
+                var result = info.RepositoryBranches.ToArray();
 
                 // Then
-                Assert.Equal(result.Count(), 3);
-                Assert.Equal(result.First(), "Branch1");
-                Assert.Equal(result.Last(), "Branch3");
+                Assert.Equal(result.Length, 3);
+                Assert.Equal(result[0], "Branch1");
+                Assert.Equal(result[2], "Branch3");
             }
         }
 
@@ -260,12 +260,12 @@ namespace Cake.Common.Tests.Unit.Build.ContinuaCI.Data
                 var info = new ContinuaCIInfoFixture().CreateBuildInfo();
 
                 // When
-                var result = info.ChangesetRevisions;
+                var result = info.ChangesetRevisions.ToArray();
 
                 // Then
-                Assert.Equal(result.Count(), 3);
-                Assert.Equal(result.First(), "6");
-                Assert.Equal(result.Last(), "65");
+                Assert.Equal(result.Length, 3);
+                Assert.Equal(result[0], "6");
+                Assert.Equal(result[2], "65");
             }
         }
 
@@ -278,12 +278,12 @@ namespace Cake.Common.Tests.Unit.Build.ContinuaCI.Data
                 var info = new ContinuaCIInfoFixture().CreateBuildInfo();
 
                 // When
-                var result = info.ChangesetUserNames;
+                var result = info.ChangesetUserNames.ToArray();
 
                 // Then
-                Assert.Equal(result.Count(), 2);
-                Assert.Equal(result.First(), "george");
-                Assert.Equal(result.Last(), "bill");
+                Assert.Equal(result.Length, 2);
+                Assert.Equal(result[0], "george");
+                Assert.Equal(result[1], "bill");
             }
         }
 
@@ -296,12 +296,12 @@ namespace Cake.Common.Tests.Unit.Build.ContinuaCI.Data
                 var info = new ContinuaCIInfoFixture().CreateBuildInfo();
 
                 // When
-                var result = info.ChangesetTagNames;
+                var result = info.ChangesetTagNames.ToArray();
 
                 // Then
-                Assert.Equal(result.Count(), 3);
-                Assert.Equal(result.First(), "tag1");
-                Assert.Equal(result.Last(), "tag 3");
+                Assert.Equal(result.Length, 3);
+                Assert.Equal(result[0], "tag1");
+                Assert.Equal(result[2], "tag 3");
             }
         }
     }

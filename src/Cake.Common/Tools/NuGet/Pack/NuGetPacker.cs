@@ -163,6 +163,12 @@ namespace Cake.Common.Tools.NuGet.Pack
                 builder.Append("-NoPackageAnalysis");
             }
 
+            // IncludeReferencedProjects?
+            if (settings.IncludeReferencedProjects)
+            {
+                builder.Append("-IncludeReferencedProjects");
+            }
+
             // Symbols?
             if (settings.Symbols)
             {
@@ -174,6 +180,13 @@ namespace Cake.Common.Tools.NuGet.Pack
             {
                 builder.Append("-Verbosity");
                 builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
+            }
+
+            // MSBuildVersion?
+            if (settings.MSBuildVersion.HasValue)
+            {
+                builder.Append("-MSBuildVersion");
+                builder.Append(settings.MSBuildVersion.Value.ToString("D"));
             }
 
             // Properties

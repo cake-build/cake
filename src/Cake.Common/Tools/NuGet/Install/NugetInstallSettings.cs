@@ -90,5 +90,12 @@ namespace Cake.Common.Tools.NuGet.Install
         /// </summary>
         /// <value>The NuGet configuration file.</value>
         public FilePath ConfigFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets a list of packages sources to use as fallbacks for this command.
+        /// This setting requires NuGet V3 or later.
+        /// </summary>
+        /// <value>The list of packages sources to use as fallbacks for this command.</value>
+        public ICollection<string> FallbackSource { get; set; }
     }
 }

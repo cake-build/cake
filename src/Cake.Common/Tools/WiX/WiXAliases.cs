@@ -17,6 +17,15 @@ namespace Cake.Common.Tools.WiX
         /// <summary>
         /// Compiles all <c>.wxs</c> sources matching the specified pattern.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// CandleSettings settings = new CandleSettings {
+        ///     Architecture = Architecture.X64,
+        ///     Verbose = true
+        ///     };
+        /// WiXCandle("./src/*.wxs", settings); 
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The globbing pattern.</param>
         /// <param name="settings">The settings.</param>
@@ -42,6 +51,16 @@ namespace Cake.Common.Tools.WiX
         /// <summary>
         /// Compiles all <c>.wxs</c> sources in the provided source files.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var files = GetFiles("./src/*.wxs");
+        /// CandleSettings settings = new CandleSettings {
+        ///     Architecture = Architecture.X64,
+        ///     Verbose = true
+        ///     };
+        /// WiXCandle(files, settings); 
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="sourceFiles">The source files.</param>
         /// <param name="settings">The settings.</param>
@@ -61,6 +80,14 @@ namespace Cake.Common.Tools.WiX
         /// <summary>
         /// Links all <c>.wixobj</c> files matching the specified pattern.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// LightSettings settings = new LightSettings {
+        ///     RawArguments = "-O1 -pedantic -v"
+        ///     };
+        /// WiXLight("./src/*.wixobj", settings); 
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The globbing pattern.</param>
         /// <param name="settings">The settings.</param>
@@ -86,6 +113,15 @@ namespace Cake.Common.Tools.WiX
         /// <summary>
         /// Links all <c>.wixobj</c> files in the provided object files.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var files = GetFiles("./src/*.wxs");
+        /// LightSettings settings = new LightSettings {
+        ///     RawArguments = "-O1 -pedantic -v"
+        ///     };
+        /// WiXLight(files, settings); 
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="objectFiles">The object files.</param>
         /// <param name="settings">The settings.</param>

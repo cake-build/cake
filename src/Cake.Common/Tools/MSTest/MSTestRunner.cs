@@ -38,7 +38,7 @@ namespace Cake.Common.Tools.MSTest
         {
             if (assemblyPaths == null)
             {
-                throw new ArgumentNullException("assemblyPath");
+                throw new ArgumentNullException("assemblyPaths");
             }
             if (settings == null)
             {
@@ -58,9 +58,14 @@ namespace Cake.Common.Tools.MSTest
                 builder.Append(string.Concat("/testcontainer:", assemblyPath.MakeAbsolute(_environment).FullPath).Quote());
             }
 
+            if (!string.IsNullOrEmpty(settings.Category))
+            {
+                builder.Append(string.Concat("/category:", settings.Category.Quote()));
+            }
+
             if (settings.NoIsolation)
             {
-                builder.AppendQuoted("/noisolation");
+                builder.Append("/noisolation");
             }
 
             return builder;
@@ -99,12 +104,34 @@ namespace Cake.Common.Tools.MSTest
                     yield return path;
                 }
             }
+
+            foreach (var environmentVariable in new[] { "VS140COMNTOOLS", "VS130COMNTOOLS", "VS120COMNTOOLS", "VS110COMNTOOLS", "VS100COMNTOOLS" })
+            {
+                var path = GetCommonToolPath(environmentVariable);
+                if (path != null && _fileSystem.Exist(path))
+                {
+                    yield return path;
+                }
+            }
         }
 
         private FilePath GetToolPath(string version)
         {
             var programFiles = _environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
             var root = programFiles.Combine(string.Concat("Microsoft Visual Studio ", version, "/Common7/IDE"));
+            return root.CombineWithFilePath("mstest.exe");
+        }
+
+        private FilePath GetCommonToolPath(string environmentVariable)
+        {
+            var visualStudioCommonToolsPath = _environment.GetEnvironmentVariable(environmentVariable);
+
+            if (string.IsNullOrWhiteSpace(visualStudioCommonToolsPath))
+            {
+                return null;
+            }
+
+            var root = new DirectoryPath(visualStudioCommonToolsPath).Combine("../IDE").Collapse();
             return root.CombineWithFilePath("mstest.exe");
         }
     }
