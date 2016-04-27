@@ -9,7 +9,7 @@ namespace Cake.Core
     /// <summary>
     /// Contains extension methods for <see cref="ProcessArgumentBuilder" />.
     /// </summary>
-    public static class ProcessArgumentBuilderExtensions
+    public static class ProcessArgumentListExtensions
     {
         /// <summary>
         /// Appends the specified text to the argument builder.

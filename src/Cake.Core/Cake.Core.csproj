@@ -86,7 +86,7 @@
     <Compile Include="Extensions\DirectoryExtensions.cs" />
     <Compile Include="Extensions\HashSetExtensions.cs" />
     <Compile Include="Extensions\MethodInfoExtensions.cs" />
-    <Compile Include="Extensions\ProcessArgumentBuilderExtensions.cs" />
+    <Compile Include="Extensions\ProcessArgumentListExtensions.cs" />
     <Compile Include="Extensions\ProcessRunnerExtensions.cs" />
     <Compile Include="Extensions\ProcessSettingsExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
