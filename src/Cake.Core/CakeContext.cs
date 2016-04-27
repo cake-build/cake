@@ -1,6 +1,7 @@
 ﻿using System;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Core
 {
@@ -16,6 +17,7 @@ namespace Cake.Core
         private readonly ICakeArguments _arguments;
         private readonly IProcessRunner _processRunner;
         private readonly IRegistry _registry;
+        private readonly IToolLocator _tools;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeContext"/> class.
@@ -27,6 +29,7 @@ namespace Cake.Core
         /// <param name="arguments">The arguments.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="registry">The registry.</param>
+        /// <param name="tools">The tool locator.</param>
         public CakeContext(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
@@ -34,7 +37,8 @@ namespace Cake.Core
             ICakeLog log,
             ICakeArguments arguments,
             IProcessRunner processRunner,
-            IRegistry registry)
+            IRegistry registry,
+            IToolLocator tools)
         {
             if (fileSystem == null)
             {
@@ -60,6 +64,10 @@ namespace Cake.Core
             {
                 throw new ArgumentNullException("processRunner");
             }
+            if (tools == null)
+            {
+                throw new ArgumentNullException("tools");
+            }
 
             _fileSystem = fileSystem;
             _environment = environment;
@@ -67,8 +75,8 @@ namespace Cake.Core
             _log = log;
             _arguments = arguments;
             _processRunner = processRunner;
-
             _registry = registry;
+            _tools = tools;
         }
 
         /// <summary>
@@ -146,6 +154,17 @@ namespace Cake.Core
         public IRegistry Registry
         {
             get { return _registry; }
+        }
+
+        /// <summary>
+        /// Gets the tool locator.
+        /// </summary>
+        /// <value>
+        /// The tool locator.
+        /// </value>
+        public IToolLocator Tools
+        {
+            get { return _tools; }
         }
     }
 }

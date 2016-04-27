@@ -112,7 +112,7 @@ namespace Cake.Common.Tools.MSTest
                 throw new ArgumentNullException("assemblyPaths");
             }
 
-            var runner = new MSTestRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var runner = new MSTestRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(assemblyPaths, settings);
         }
     }

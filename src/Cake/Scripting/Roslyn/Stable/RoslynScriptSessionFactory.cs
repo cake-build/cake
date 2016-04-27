@@ -90,7 +90,7 @@ namespace Cake.Scripting.Roslyn.Stable
             var installRoot = root.Combine(Guid.NewGuid().ToString().Replace("-", string.Empty));
 
             // Install package.
-            var nugetSource = _configuration.GetValue("Roslyn_NuGetSource") ?? "https://packages.nuget.org/api/v2";
+            var nugetSource = _configuration.GetValue(Constants.Roslyn.NuGetSource) ?? "https://packages.nuget.org/api/v2";
             var repository = PackageRepositoryFactory.Default.CreateRepository(nugetSource);
             var packageManager = new PackageManager(repository, installRoot.FullPath);
             _log.Verbose("Installing packages (using {0})...", nugetSource);

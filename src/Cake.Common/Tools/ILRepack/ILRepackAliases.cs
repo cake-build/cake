@@ -43,7 +43,7 @@ namespace Cake.Common.Tools.ILRepack
                 throw new ArgumentNullException("context");
             }
 
-            var merger = new ILRepackRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            var merger = new ILRepackRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             merger.Merge(outputFile, primaryAssembly, assemblyPaths);
         }
 
@@ -78,7 +78,7 @@ namespace Cake.Common.Tools.ILRepack
                 throw new ArgumentNullException("context");
             }
 
-            var merger = new ILRepackRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            var merger = new ILRepackRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             merger.Merge(outputFile, primaryAssembly, assemblyPaths, settings);
         }
     }

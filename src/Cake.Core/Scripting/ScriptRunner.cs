@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting.Analysis;
@@ -15,6 +16,7 @@ namespace Cake.Core.Scripting
     {
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
+        private readonly ICakeConfiguration _configuration;
         private readonly IScriptEngine _engine;
         private readonly IScriptAliasFinder _aliasFinder;
         private readonly IScriptAnalyzer _analyzer;
@@ -26,6 +28,7 @@ namespace Cake.Core.Scripting
         /// </summary>
         /// <param name="environment">The environment.</param>
         /// <param name="log">The log.</param>
+        /// <param name="configuration">The configuration.</param>
         /// <param name="engine">The session factory.</param>
         /// <param name="aliasFinder">The alias finder.</param>
         /// <param name="analyzer">The script analyzer.</param>
@@ -34,6 +37,7 @@ namespace Cake.Core.Scripting
         public ScriptRunner(
             ICakeEnvironment environment,
             ICakeLog log,
+            ICakeConfiguration configuration,
             IScriptEngine engine,
             IScriptAliasFinder aliasFinder,
             IScriptAnalyzer analyzer,
@@ -47,6 +51,10 @@ namespace Cake.Core.Scripting
             if (log == null)
             {
                 throw new ArgumentNullException("log");
+            }
+            if (configuration == null)
+            {
+                throw new ArgumentNullException("configuration");
             }
             if (engine == null)
             {
@@ -71,6 +79,7 @@ namespace Cake.Core.Scripting
 
             _environment = environment;
             _log = log;
+            _configuration = configuration;
             _engine = engine;
             _aliasFinder = aliasFinder;
             _analyzer = analyzer;
@@ -111,12 +120,12 @@ namespace Cake.Core.Scripting
 
             // Install tools.
             _log.Verbose("Processing build script...");
-            var toolsPath = scriptPath.GetDirectory().Combine("tools");
+            var toolsPath = GetToolPath(scriptPath.GetDirectory());
             _processor.InstallTools(result, toolsPath);
 
             // Install addins.
             var applicationRoot = _environment.GetApplicationRoot();
-            var addinRoot = applicationRoot.Combine("../Addins").Collapse();
+            var addinRoot = GetAddinPath(applicationRoot);
             var addinReferences = _processor.InstallAddins(result, addinRoot);
             foreach (var addinReference in addinReferences)
             {
@@ -174,6 +183,28 @@ namespace Cake.Core.Scripting
             // Execute the script.
             var script = new Script(result.Namespaces, result.Lines, aliases, result.UsingAliases);
             session.Execute(script);
+        }
+
+        private DirectoryPath GetToolPath(DirectoryPath root)
+        {
+            var toolPath = _configuration.GetValue(Constants.Paths.Tools);
+            if (!string.IsNullOrWhiteSpace(toolPath))
+            {
+                return new DirectoryPath(toolPath).MakeAbsolute(_environment);
+            }
+
+            return root.Combine("tools");
+        }
+
+        private DirectoryPath GetAddinPath(DirectoryPath applicationRoot)
+        {
+            var addinPath = _configuration.GetValue(Constants.Paths.Addins);
+            if (!string.IsNullOrWhiteSpace(addinPath))
+            {
+                return new DirectoryPath(addinPath).MakeAbsolute(_environment);
+            }
+
+            return applicationRoot.Combine("../Addins").Collapse();
         }
     }
 }

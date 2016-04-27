@@ -27,20 +27,6 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 // Then
                 Assert.IsArgumentNullException(result, "environment");
             }
-
-            [Fact]
-            public void Should_Throw_If_Globber_Is_Null()
-            {
-                // Given
-                var fixture = new CandleFixture();
-                fixture.Globber = null;
-
-                // When
-                var result = Record.Exception(() => fixture.Run());
-
-                // Then
-                Assert.IsArgumentNullException(result, "globber");
-            }
         }
 
         public sealed class TheRunMethod

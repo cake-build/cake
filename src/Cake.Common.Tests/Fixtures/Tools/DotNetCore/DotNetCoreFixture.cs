@@ -1,6 +1,5 @@
 ﻿using Cake.Common.Tools.DotNetCore;
 using Cake.Core.IO;
-using Cake.Core.Tooling;
 using Cake.Testing.Fixtures;
 
 namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore

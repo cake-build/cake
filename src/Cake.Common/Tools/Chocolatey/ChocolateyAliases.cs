@@ -75,7 +75,7 @@ namespace Cake.Common.Tools.Chocolatey
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
-            var packer = new ChocolateyPacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Log, context.Globber, resolver);
+            var packer = new ChocolateyPacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Log, context.Tools, resolver);
             packer.Pack(nuspecFilePath, settings);
         }
 
@@ -133,7 +133,7 @@ namespace Cake.Common.Tools.Chocolatey
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
-            var packer = new ChocolateyPacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Log, context.Globber, resolver);
+            var packer = new ChocolateyPacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Log, context.Tools, resolver);
             packer.Pack(settings);
         }
 
@@ -203,7 +203,7 @@ namespace Cake.Common.Tools.Chocolatey
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
-            var runner = new ChocolateyInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            var runner = new ChocolateyInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             runner.Install(packageId, settings);
         }
 
@@ -273,7 +273,7 @@ namespace Cake.Common.Tools.Chocolatey
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
-            var runner = new ChocolateyInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            var runner = new ChocolateyInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             runner.InstallFromConfig(packageConfigPath, settings);
         }
 
@@ -309,7 +309,7 @@ namespace Cake.Common.Tools.Chocolatey
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
-            var packer = new ChocolateyPinner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            var packer = new ChocolateyPinner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             packer.Pin(name, settings);
         }
 
@@ -345,7 +345,7 @@ namespace Cake.Common.Tools.Chocolatey
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
-            var packer = new ChocolateyApiKeySetter(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            var packer = new ChocolateyApiKeySetter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             packer.Set(apiKey, source, settings);
         }
 
@@ -381,7 +381,7 @@ namespace Cake.Common.Tools.Chocolatey
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
-            var packer = new ChocolateyConfigSetter(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            var packer = new ChocolateyConfigSetter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             packer.Set(name, value, settings);
         }
 
@@ -434,7 +434,7 @@ namespace Cake.Common.Tools.Chocolatey
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
-            var runner = new ChocolateyFeatureToggler(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            var runner = new ChocolateyFeatureToggler(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             runner.EnableFeature(name, settings);
         }
 
@@ -487,7 +487,7 @@ namespace Cake.Common.Tools.Chocolatey
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
-            var runner = new ChocolateyFeatureToggler(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            var runner = new ChocolateyFeatureToggler(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             runner.DisableFeature(name, settings);
         }
 
@@ -545,7 +545,7 @@ namespace Cake.Common.Tools.Chocolatey
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
-            var runner = new ChocolateySources(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            var runner = new ChocolateySources(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             runner.AddSource(name, source, settings);
         }
 
@@ -598,7 +598,7 @@ namespace Cake.Common.Tools.Chocolatey
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
-            var runner = new ChocolateySources(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            var runner = new ChocolateySources(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             runner.RemoveSource(name, settings);
         }
 
@@ -651,7 +651,7 @@ namespace Cake.Common.Tools.Chocolatey
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
-            var runner = new ChocolateySources(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            var runner = new ChocolateySources(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             runner.EnableSource(name, settings);
         }
 
@@ -704,7 +704,7 @@ namespace Cake.Common.Tools.Chocolatey
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
-            var runner = new ChocolateySources(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            var runner = new ChocolateySources(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             runner.DisableSource(name, settings);
         }
 
@@ -746,7 +746,7 @@ namespace Cake.Common.Tools.Chocolatey
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
-            var packer = new ChocolateyPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            var packer = new ChocolateyPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             packer.Push(packageFilePath, settings);
         }
 
@@ -771,7 +771,7 @@ namespace Cake.Common.Tools.Chocolatey
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
-            var runner = new ChocolateyUpgrader(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            var runner = new ChocolateyUpgrader(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             runner.Upgrade(packageId, new ChocolateyUpgradeSettings());
         }
 
@@ -823,7 +823,7 @@ namespace Cake.Common.Tools.Chocolatey
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
-            var runner = new ChocolateyUpgrader(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            var runner = new ChocolateyUpgrader(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             runner.Upgrade(packageId, settings);
         }
     }

@@ -8,7 +8,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.DNU.Build
 
         protected override void RunTool()
         {
-            var tool = new DNUBuilder(FileSystem, Environment, ProcessRunner, Globber);
+            var tool = new DNUBuilder(FileSystem, Environment, ProcessRunner, Tools);
             tool.Build(Path, Settings);
         }
     }

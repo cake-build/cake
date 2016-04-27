@@ -15,7 +15,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Config
 
         protected override void RunTool()
         {
-            var tool = new ChocolateyConfigSetter(FileSystem, Environment, ProcessRunner, Globber, Resolver);
+            var tool = new ChocolateyConfigSetter(FileSystem, Environment, ProcessRunner, Tools, Resolver);
             tool.Set(Name, Value, Settings);
         }
     }

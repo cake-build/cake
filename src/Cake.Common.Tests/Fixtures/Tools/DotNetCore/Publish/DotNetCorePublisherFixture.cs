@@ -8,7 +8,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Publish
 
         protected override void RunTool()
         {
-            var tool = new DotNetCorePublisher(FileSystem, Environment, ProcessRunner, Globber);
+            var tool = new DotNetCorePublisher(FileSystem, Environment, ProcessRunner, Tools);
             tool.Publish(Project, Settings);
         }
     }

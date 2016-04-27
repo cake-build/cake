@@ -62,7 +62,7 @@ namespace Cake.Common.Tools.InspectCode
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new InspectCodeRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.Log);
+            var runner = new InspectCodeRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);
             runner.Run(solution, settings);
         }
 
@@ -85,7 +85,7 @@ namespace Cake.Common.Tools.InspectCode
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new InspectCodeRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.Log);
+            var runner = new InspectCodeRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);
             runner.RunFromConfig(configFile);
         }
     }

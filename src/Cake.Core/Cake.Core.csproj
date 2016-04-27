@@ -75,6 +75,7 @@
     <Compile Include="Configuration\Parser\ConfigurationToken.cs" />
     <Compile Include="Configuration\Parser\ConfigurationTokenizer.cs" />
     <Compile Include="Configuration\Parser\ConfigurationTokenKind.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="DefaultExecutionStrategy.cs" />
     <Compile Include="Diagnostics\ICakeLog.cs" />
     <Compile Include="Diagnostics\LogAction.cs" />
@@ -211,7 +212,13 @@
     <Compile Include="TaskTeardownContext.cs" />
     <Compile Include="Text\ITextTransformationTemplate.cs" />
     <Compile Include="Text\TextTransformationTemplate.cs" />
+    <Compile Include="Tooling\IToolRepository.cs" />
+    <Compile Include="Tooling\IToolResolutionStrategy.cs" />
+    <Compile Include="Tooling\IToolLocator.cs" />
     <Compile Include="Tooling\Tool.cs" />
+    <Compile Include="Tooling\ToolRepository.cs" />
+    <Compile Include="Tooling\ToolResolutionStrategy.cs" />
+    <Compile Include="Tooling\ToolLocator.cs" />
     <Compile Include="Tooling\ToolSettings.cs" />
     <Compile Include="Utilities\Tool.cs" />
   </ItemGroup>

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -13,25 +12,19 @@ namespace Cake.Common.Tools.GitReleaseManager
     public abstract class GitReleaseManagerTool<TSettings> : Tool<TSettings>
         where TSettings : ToolSettings
     {
-        private readonly IGitReleaseManagerToolResolver _resolver;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="GitReleaseManagerTool{TSettings}"/> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="globber">The globber.</param>
-        /// <param name="resolver">The GitReleaseManager tool resolver.</param>
+        /// <param name="tools">The tool locator.</param>
         protected GitReleaseManagerTool(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             IProcessRunner processRunner,
-            IGlobber globber,
-            IGitReleaseManagerToolResolver resolver)
-            : base(fileSystem, environment, processRunner, globber)
+            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
         {
-            _resolver = resolver;
         }
 
         /// <summary>
@@ -50,22 +43,6 @@ namespace Cake.Common.Tools.GitReleaseManager
         protected sealed override IEnumerable<string> GetToolExecutableNames()
         {
             return new[] { "GitReleaseManager.exe", "gitreleasemanager.exe", "grm.exe" };
-        }
-
-        /// <summary>
-        /// Gets alternative file paths which the tool may exist in
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The default tool path.</returns>
-        protected sealed override IEnumerable<FilePath> GetAlternativeToolPaths(TSettings settings)
-        {
-            var path = _resolver.ResolvePath();
-            if (path != null)
-            {
-                return new[] { path };
-            }
-
-            return Enumerable.Empty<FilePath>();
         }
     }
 }

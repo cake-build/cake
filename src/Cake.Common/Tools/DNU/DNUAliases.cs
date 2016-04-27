@@ -129,7 +129,7 @@ namespace Cake.Common.Tools.DNU
                 settings = new DNURestoreSettings();
             }
 
-            var restorer = new DNURestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var restorer = new DNURestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             restorer.Restore(filePath, settings);
         }
 
@@ -185,7 +185,7 @@ namespace Cake.Common.Tools.DNU
                 settings = new DNUBuildSettings();
             }
 
-            var restorer = new DNUBuilder(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var restorer = new DNUBuilder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             restorer.Build(path, settings);
         }
 
@@ -241,7 +241,7 @@ namespace Cake.Common.Tools.DNU
                 settings = new DNUPackSettings();
             }
 
-            var restorer = new DNUPacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var restorer = new DNUPacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             restorer.Pack(path, settings);
         }
     }

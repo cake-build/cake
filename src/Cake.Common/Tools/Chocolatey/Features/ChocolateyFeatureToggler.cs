@@ -2,6 +2,7 @@
 using System.Globalization;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.Chocolatey.Features
 {
@@ -16,11 +17,14 @@ namespace Cake.Common.Tools.Chocolatey.Features
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="globber">The globber.</param>
+        /// <param name="tools">The tool locator.</param>
         /// <param name="resolver">The Chocolatey tool resolver.</param>
-        public ChocolateyFeatureToggler(IFileSystem fileSystem, ICakeEnvironment environment,
-            IProcessRunner processRunner, IGlobber globber, IChocolateyToolResolver resolver)
-            : base(fileSystem, environment, processRunner, globber, resolver)
+        public ChocolateyFeatureToggler(
+            IFileSystem fileSystem, 
+            ICakeEnvironment environment,
+            IProcessRunner processRunner, 
+            IToolLocator tools, 
+            IChocolateyToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
         {
         }
 

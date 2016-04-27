@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -8,9 +6,9 @@ using Cake.Core.Tooling;
 namespace Cake.Common.Tools.DotNetCore
 {
     /// <summary>
-    /// Base class for all .NET Core related tools
+    /// Base class for all .NET Core related tools.
     /// </summary>
-    /// <typeparam name="TSettings">The settings type</typeparam>
+    /// <typeparam name="TSettings">The settings type.</typeparam>
     public abstract class DotNetCoreTool<TSettings> : Tool<TSettings>
         where TSettings : DotNetCoreSettings
     {
@@ -20,13 +18,13 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="globber">The globber.</param>
+        /// <param name="tools">The tool locator.</param>
         protected DotNetCoreTool(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             IProcessRunner processRunner,
-            IGlobber globber)
-            : base(fileSystem, environment, processRunner, globber)
+            IToolLocator tools)
+            : base(fileSystem, environment, processRunner, tools)
         {
         }
 
@@ -36,7 +34,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <returns>The name of the tool.</returns>
         protected override string GetToolName()
         {
-            return "DotNetCore";
+            return ".NET Core CLI";
         }
 
         /// <summary>

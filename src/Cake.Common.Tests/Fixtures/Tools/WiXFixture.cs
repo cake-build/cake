@@ -18,7 +18,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         protected override void RunTool()
         {
-            var tool = new LightRunner(FileSystem, Environment, Globber, ProcessRunner);
+            var tool = new LightRunner(FileSystem, Environment, ProcessRunner, Tools);
             tool.Run(ObjectFiles, Settings);
         }
     }

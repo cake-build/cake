@@ -15,7 +15,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.ApiKey
 
         protected override void RunTool()
         {
-            var tool = new ChocolateyApiKeySetter(FileSystem, Environment, ProcessRunner, Globber, Resolver);
+            var tool = new ChocolateyApiKeySetter(FileSystem, Environment, ProcessRunner, Tools, Resolver);
             tool.Set(ApiKey, Source, Settings);
         }
     }

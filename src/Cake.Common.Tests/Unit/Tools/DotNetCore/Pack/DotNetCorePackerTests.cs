@@ -1,5 +1,4 @@
 ﻿using Cake.Common.Tests.Fixtures.Tools.DotNetCore.Pack;
-using Cake.Common.Tools.DotNetCore.Pack;
 using Cake.Testing;
 using Xunit;
 
@@ -35,7 +34,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Pack
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "DotNetCore: Process was not started.");
+                Assert.IsCakeException(result, ".NET Core CLI: Process was not started.");
             }
 
             [Fact]
@@ -49,7 +48,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Pack
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "DotNetCore: Process returned an error (exit code 1).");
+                Assert.IsCakeException(result, ".NET Core CLI: Process returned an error (exit code 1).");
             }
 
             [Fact]

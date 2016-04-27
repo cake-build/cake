@@ -46,7 +46,7 @@ namespace Cake.Common.Tools.NSIS
                 throw new ArgumentNullException("scriptFile");
             }
 
-            var runner = new MakeNSISRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            var runner = new MakeNSISRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(scriptFile, settings ?? new MakeNSISSettings());
         }
     }

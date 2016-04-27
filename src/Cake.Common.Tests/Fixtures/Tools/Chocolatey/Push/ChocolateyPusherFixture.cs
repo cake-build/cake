@@ -14,7 +14,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Push
 
         protected override void RunTool()
         {
-            var tool = new ChocolateyPusher(FileSystem, Environment, ProcessRunner, Globber, Resolver);
+            var tool = new ChocolateyPusher(FileSystem, Environment, ProcessRunner, Tools, Resolver);
             tool.Push(PackageFilePath, Settings);
         }
     }

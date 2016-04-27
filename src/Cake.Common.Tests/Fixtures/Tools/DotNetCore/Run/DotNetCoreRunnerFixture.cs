@@ -10,7 +10,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Run
 
         protected override void RunTool()
         {
-            var tool = new DotNetCoreRunner(FileSystem, Environment, ProcessRunner, Globber);
+            var tool = new DotNetCoreRunner(FileSystem, Environment, ProcessRunner, Tools);
             tool.Run(Project, Arguments, Settings);
         }
     }

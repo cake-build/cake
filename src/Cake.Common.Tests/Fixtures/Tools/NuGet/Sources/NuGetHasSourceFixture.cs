@@ -6,7 +6,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet.Sources
     {
         protected override void RunTool()
         {
-            var tool = new NuGetSources(FileSystem, Environment, ProcessRunner, Globber, Resolver);
+            var tool = new NuGetSources(FileSystem, Environment, ProcessRunner, Tools, Resolver);
             tool.HasSource(Source, Settings);
         }
     }

@@ -16,7 +16,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         protected override void RunTool()
         {
-            var tool = new GitLinkRunner(FileSystem, Environment, ProcessRunner, Globber);
+            var tool = new GitLinkRunner(FileSystem, Environment, ProcessRunner, Tools);
             tool.Run(RepositoryRootPath, Settings);
         }
     }

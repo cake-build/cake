@@ -18,7 +18,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         protected override void RunTool()
         {
-            var tool = new FixieRunner(FileSystem, Environment, ProcessRunner, Globber);
+            var tool = new FixieRunner(FileSystem, Environment, ProcessRunner, Tools);
             tool.Run(AssemblyPaths, Settings);
         }
     }

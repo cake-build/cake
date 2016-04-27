@@ -54,7 +54,7 @@ namespace Cake.Common.Tools.GitLink
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new GitLinkRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var runner = new GitLinkRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(repositoryRootPath, settings);
         }
     }

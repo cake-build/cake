@@ -59,7 +59,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         protected override void RunTool()
         {
-            var runner = new MSBuildRunner(FileSystem, Environment, ProcessRunner, Globber);
+            var runner = new MSBuildRunner(FileSystem, Environment, ProcessRunner, Tools);
             runner.Run(Solution, Settings);
         }
     }

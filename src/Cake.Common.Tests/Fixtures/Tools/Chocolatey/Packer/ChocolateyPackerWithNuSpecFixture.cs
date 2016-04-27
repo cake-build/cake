@@ -17,7 +17,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Packer
 
         protected override void RunTool()
         {
-            var tool = new ChocolateyPacker(FileSystem, Environment, ProcessRunner, Log, Globber, Resolver);
+            var tool = new ChocolateyPacker(FileSystem, Environment, ProcessRunner, Log, Tools, Resolver);
             tool.Pack(NuSpecFilePath, Settings);
         }
     }

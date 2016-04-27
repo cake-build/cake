@@ -72,7 +72,7 @@ namespace Cake.Common.Tools.ReportUnit
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new ReportUnitRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var runner = new ReportUnitRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(inputFolder, outputFolder, settings);
         }
 
@@ -97,7 +97,7 @@ namespace Cake.Common.Tools.ReportUnit
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new ReportUnitRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var runner = new ReportUnitRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(inputFile, outputFile, new ReportUnitSettings());
         }
 
@@ -125,7 +125,7 @@ namespace Cake.Common.Tools.ReportUnit
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new ReportUnitRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var runner = new ReportUnitRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(inputFile, outputFile, settings);
         }
     }

@@ -25,7 +25,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet.SetApiKey
 
         protected override void RunTool()
         {
-            var tool = new NuGetSetApiKey(FileSystem, Environment, ProcessRunner, Globber, Resolver);
+            var tool = new NuGetSetApiKey(FileSystem, Environment, ProcessRunner, Tools, Resolver);
             tool.SetApiKey(ApiKey, Source, Settings);
         }
     }

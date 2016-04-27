@@ -51,7 +51,7 @@ namespace Cake.Common.Tools.SpecFlow
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new SpecFlowStepDefinitionReporter(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var runner = new SpecFlowStepDefinitionReporter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(projectFile, settings ?? new SpecFlowStepDefinitionReportSettings());
         }
 
@@ -110,7 +110,7 @@ namespace Cake.Common.Tools.SpecFlow
             // Create the DotCover analyser.
             var runner = new SpecFlowTestExecutionReporter(
                 context.FileSystem, context.Environment,
-                context.ProcessRunner, context.Globber);
+                context.ProcessRunner, context.Tools);
 
             // Run DotCover analyse.
             runner.Run(context, action, projectFile, settings);

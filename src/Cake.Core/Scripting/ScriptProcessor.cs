@@ -6,6 +6,7 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
 using Cake.Core.Scripting.Analysis;
+using Cake.Core.Tooling;
 
 namespace Cake.Core.Scripting
 {
@@ -16,6 +17,7 @@ namespace Cake.Core.Scripting
     {
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
+        private readonly IToolLocator _tools;
         private readonly List<IPackageInstaller> _installers;
 
         /// <summary>
@@ -24,11 +26,13 @@ namespace Cake.Core.Scripting
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="log">The log.</param>
+        /// <param name="tools">The tool locator.</param>
         /// <param name="installers">The available package installers.</param>
         public ScriptProcessor(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             ICakeLog log,
+            IToolLocator tools,
             IEnumerable<IPackageInstaller> installers)
         {
             if (fileSystem == null)
@@ -50,6 +54,7 @@ namespace Cake.Core.Scripting
 
             _environment = environment;
             _log = log;
+            _tools = tools;
             _installers = new List<IPackageInstaller>(installers);
         }
 
@@ -144,12 +149,19 @@ namespace Cake.Core.Scripting
                         throw new CakeException(message);
                     }
 
+                    // Install the tool.
                     var result = installer.Install(tool, PackageType.Tool, installPath);
                     if (result.Count == 0)
                     {
                         const string format = "Failed to install tool '{0}'.";
                         var message = string.Format(CultureInfo.InvariantCulture, format, tool.Package);
                         throw new CakeException(message);
+                    }
+
+                    // Register the tools.
+                    foreach (var item in result)
+                    {
+                        _tools.RegisterFile(item.Path);
                     }
                 }
             }

@@ -2,6 +2,7 @@
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.NuGet.Update
 {
@@ -18,14 +19,13 @@ namespace Cake.Common.Tools.NuGet.Update
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="globber">The globber.</param>
+        /// <param name="tools">The tool locator.</param>
         /// <param name="resolver">The nuget tool resolver.</param>
         public NuGetUpdater(IFileSystem fileSystem,
             ICakeEnvironment environment,
             IProcessRunner processRunner,
-            IGlobber globber,
-            INuGetToolResolver resolver)
-            : base(fileSystem, environment, processRunner, globber, resolver)
+            IToolLocator tools,
+            INuGetToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
         {
             _environment = environment;
         }

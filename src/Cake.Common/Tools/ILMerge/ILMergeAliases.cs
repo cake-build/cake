@@ -40,7 +40,7 @@ namespace Cake.Common.Tools.ILMerge
                 throw new ArgumentNullException("context");
             }
 
-            var merger = new ILMergeRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            var merger = new ILMergeRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             merger.Merge(outputFile, primaryAssembly, assemblyPaths);
         }
 
@@ -71,7 +71,7 @@ namespace Cake.Common.Tools.ILMerge
                 throw new ArgumentNullException("context");
             }
 
-            var merger = new ILMergeRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            var merger = new ILMergeRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             merger.Merge(outputFile, primaryAssembly, assemblyPaths, settings);
         }
     }

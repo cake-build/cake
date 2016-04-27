@@ -18,11 +18,13 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
-        /// <param name="globber">The globber.</param>
         /// <param name="processRunner">The process runner.</param>
-        public OctopusDeployReleaseCreator(IFileSystem fileSystem, ICakeEnvironment environment,
-            IGlobber globber, IProcessRunner processRunner)
-            : base(fileSystem, environment, processRunner, globber)
+        /// <param name="tools">The tool locator.</param>
+        public OctopusDeployReleaseCreator(
+            IFileSystem fileSystem,
+            ICakeEnvironment environment,
+            IProcessRunner processRunner,
+            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
         {
             _environment = environment;
         }

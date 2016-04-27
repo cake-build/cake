@@ -47,7 +47,7 @@ namespace Cake.Common.Tools.GitReleaseNotes
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new GitReleaseNotesRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var runner = new GitReleaseNotesRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(outputFile, settings);
         }
     }

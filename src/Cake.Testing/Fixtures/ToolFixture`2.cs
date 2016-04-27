@@ -40,6 +40,18 @@ namespace Cake.Testing.Fixtures
         public IGlobber Globber { get; set; }
 
         /// <summary>
+        /// Gets or sets the configuration.
+        /// </summary>
+        /// <value>The configuration.</value>
+        public FakeConfiguration Configuration { get; set; }
+
+        /// <summary>
+        /// Gets or sets the tool locator.
+        /// </summary>
+        /// <value>The tool locator.</value>
+        public IToolLocator Tools { get; set; }
+
+        /// <summary>
         /// Gets or sets the tool settings.
         /// </summary>
         /// <value>The tool settings.</value>
@@ -65,6 +77,8 @@ namespace Cake.Testing.Fixtures
             Environment = FakeEnvironment.CreateUnixEnvironment();
             FileSystem = new FakeFileSystem(Environment);
             Globber = new Globber(FileSystem, Environment);
+            Configuration = new FakeConfiguration();
+            Tools = new ToolLocator(Environment, new ToolRepository(Environment), new ToolResolutionStrategy(FileSystem, Environment, Globber, Configuration));
 
             // ReSharper disable once VirtualMemberCallInContructor
             _defaultToolPath = GetDefaultToolPath(toolFilename);

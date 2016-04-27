@@ -1,6 +1,7 @@
 ﻿using System;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.DotNetCore.Execute
 {
@@ -17,13 +18,12 @@ namespace Cake.Common.Tools.DotNetCore.Execute
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="globber">The globber.</param>
+        /// <param name="tools">The tool locator.</param>
         public DotNetCoreExecutor(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             IProcessRunner processRunner,
-            IGlobber globber)
-            : base(fileSystem, environment, processRunner, globber)
+            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
         {
             _environment = environment;
         }
@@ -40,7 +40,6 @@ namespace Cake.Common.Tools.DotNetCore.Execute
             {
                 throw new ArgumentNullException("assemblyPath");
             }
-
             if (settings == null)
             {
                 throw new ArgumentNullException("settings");

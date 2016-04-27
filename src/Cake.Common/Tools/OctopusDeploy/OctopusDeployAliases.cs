@@ -65,8 +65,7 @@ namespace Cake.Common.Tools.OctopusDeploy
                 throw new ArgumentNullException("context");
             }
 
-            var packer = new OctopusDeployReleaseCreator(context.FileSystem, context.Environment, context.Globber,
-                context.ProcessRunner);
+            var packer = new OctopusDeployReleaseCreator(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             packer.CreateRelease(projectName, settings);
         }
     }

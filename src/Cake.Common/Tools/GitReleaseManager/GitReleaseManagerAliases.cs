@@ -86,8 +86,7 @@ namespace Cake.Common.Tools.GitReleaseManager
                 throw new ArgumentNullException("context");
             }
 
-            var resolver = new GitReleaseManagerToolResolver(context.FileSystem, context.Environment, context.Globber);
-            var creator = new GitReleaseManagerCreator(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            var creator = new GitReleaseManagerCreator(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             creator.Create(userName, password, owner, repository, settings);
         }
 
@@ -143,8 +142,7 @@ namespace Cake.Common.Tools.GitReleaseManager
                 throw new ArgumentNullException("context");
             }
 
-            var resolver = new GitReleaseManagerToolResolver(context.FileSystem, context.Environment, context.Globber);
-            var assetsAdder = new GitReleaseManagerAssetsAdder(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            var assetsAdder = new GitReleaseManagerAssetsAdder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             assetsAdder.AddAssets(userName, password, owner, repository, tagName, assets, settings);
         }
 
@@ -198,8 +196,7 @@ namespace Cake.Common.Tools.GitReleaseManager
                 throw new ArgumentNullException("context");
             }
 
-            var resolver = new GitReleaseManagerToolResolver(context.FileSystem, context.Environment, context.Globber);
-            var milestoneCloser = new GitReleaseManagerMilestoneCloser(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            var milestoneCloser = new GitReleaseManagerMilestoneCloser(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             milestoneCloser.Close(userName, password, owner, repository, milestone, settings);
         }
 
@@ -252,9 +249,8 @@ namespace Cake.Common.Tools.GitReleaseManager
             {
                 throw new ArgumentNullException("context");
             }
-
-            var resolver = new GitReleaseManagerToolResolver(context.FileSystem, context.Environment, context.Globber);
-            var publisher = new GitReleaseManagerPublisher(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            
+            var publisher = new GitReleaseManagerPublisher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             publisher.Publish(userName, password, owner, repository, tagName, settings);
         }
 
@@ -309,9 +305,8 @@ namespace Cake.Common.Tools.GitReleaseManager
             {
                 throw new ArgumentNullException("context");
             }
-
-            var resolver = new GitReleaseManagerToolResolver(context.FileSystem, context.Environment, context.Globber);
-            var publisher = new GitReleaseManagerExporter(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, resolver);
+            
+            var publisher = new GitReleaseManagerExporter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             publisher.Export(userName, password, owner, repository, fileOutputPath, settings);
         }
     }

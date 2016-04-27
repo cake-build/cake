@@ -201,6 +201,21 @@ namespace Cake.Core.Tests.Unit.Scripting
                     Arg.Is<PackageType>(type => type == PackageType.Tool),
                     Arg.Is<DirectoryPath>(path => path.FullPath == "/Working/Bin"));
             }
+
+            [Fact]
+            public void Should_Register_Installed_Tools_With_The_Tool_Service()
+            {
+                // Given
+                var fixture = new ScriptProcessorFixture();
+                fixture.GivenFilesWillBeInstalled();
+
+                // When
+                fixture.InstallTools();
+
+                // Then
+                fixture.Tools.Received(1).RegisterFile(
+                    Arg.Is<FilePath>(path => path.FullPath == "/Working/Bin/Temp.dll"));
+            }
         }
     }
 }

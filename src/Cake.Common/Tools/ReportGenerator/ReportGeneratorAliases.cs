@@ -135,7 +135,7 @@ namespace Cake.Common.Tools.ReportGenerator
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new ReportGeneratorRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var runner = new ReportGeneratorRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(reports, targetDir, settings);
         }
     }

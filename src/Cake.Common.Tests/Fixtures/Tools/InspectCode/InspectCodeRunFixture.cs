@@ -25,7 +25,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.InspectCode
 
         protected override void RunTool()
         {
-            var tool = new InspectCodeRunner(FileSystem, Environment, ProcessRunner, Globber, Log);
+            var tool = new InspectCodeRunner(FileSystem, Environment, ProcessRunner, Tools, Log);
             tool.Run(Solution, Settings);
         }
     }

@@ -13,7 +13,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Pin
 
         protected override void RunTool()
         {
-            var tool = new ChocolateyPinner(FileSystem, Environment, ProcessRunner, Globber, Resolver);
+            var tool = new ChocolateyPinner(FileSystem, Environment, ProcessRunner, Tools, Resolver);
             tool.Pin(Name, Settings);
         }
     }

@@ -108,7 +108,7 @@ namespace Cake.Common.Tools.GitVersion
                 throw new ArgumentNullException("context");
             }
 
-            var gitVersionRunner = new GitVersionRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber, context.Log);
+            var gitVersionRunner = new GitVersionRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);
             return gitVersionRunner.Run(settings);
         }
     }

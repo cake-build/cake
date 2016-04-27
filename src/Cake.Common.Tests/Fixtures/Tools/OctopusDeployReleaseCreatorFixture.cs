@@ -25,7 +25,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         protected override void RunTool()
         {
-            var tool = new OctopusDeployReleaseCreator(FileSystem, Environment, Globber, ProcessRunner);
+            var tool = new OctopusDeployReleaseCreator(FileSystem, Environment, ProcessRunner, Tools);
             tool.CreateRelease(ProjectName, Settings);
         }
     }
