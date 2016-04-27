@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Fixtures\CakeContextFixture.cs" />
+    <Compile Include="Fixtures\CakeConfigurationProviderFixture.cs" />
     <Compile Include="Fixtures\DummyToolFixture.cs" />
     <Compile Include="Fixtures\PropertyAliasGeneratorFixture.cs" />
     <Compile Include="Fixtures\MethodAliasGeneratorFixture.cs" />
@@ -65,6 +66,11 @@
     <Compile Include="Fixtures\ScriptHostFixture.cs" />
     <Compile Include="Fixtures\ScriptProcessorFixture.cs" />
     <Compile Include="Fixtures\ScriptRunnerFixture.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Stubs\DummySettings.cs" />
     <Compile Include="Stubs\DummyTool.cs" />
     <Compile Include="Unit\ActionTaskTests.cs" />
@@ -78,6 +84,9 @@
     <Compile Include="Unit\CakeTaskBuilderTests.cs" />
     <Compile Include="Unit\CakeTaskExtensionsTests.cs" />
     <Compile Include="Unit\CakeTaskTests.cs" />
+    <Compile Include="Unit\Configuration\CakeConfigurationProviderTests.cs" />
+    <Compile Include="Unit\Configuration\Parser\ConfigurationParserTests.cs" />
+    <Compile Include="Unit\Configuration\Parser\ConfigurationTokenizerTests.cs" />
     <Compile Include="Unit\Diagnostics\LogExtensionsTests.cs" />
     <Compile Include="Fixtures\CakeEngineFixture.cs" />
     <Compile Include="Fixtures\GlobberFixture.cs" />
@@ -124,6 +133,11 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Properties\Cached_Value_Type" />
     <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Properties\NonCached_Obsolete_ImplicitWarning_NoMessage" />
     <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Properties\NonCached_Obsolete_ImplicitWarning_WithMessage" />

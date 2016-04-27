@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Cake.Core;
+using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.Scripting;
 using NuGet;
@@ -16,6 +17,7 @@ namespace Cake.Scripting.Roslyn.Nightly
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
+        private readonly ICakeConfiguration _configuration;
         private readonly IGlobber _globber;
         private readonly ICakeLog _log;
         private readonly FilePath[] _paths;
@@ -23,11 +25,13 @@ namespace Cake.Scripting.Roslyn.Nightly
         public RoslynNightlyScriptSessionFactory(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
+            ICakeConfiguration configuration,
             IGlobber globber,
             ICakeLog log)
         {
             _fileSystem = fileSystem;
             _environment = environment;
+            _configuration = configuration;
             _globber = globber;
             _log = log;
 
@@ -93,8 +97,10 @@ namespace Cake.Scripting.Roslyn.Nightly
             };
 
             // Install package.
-            _log.Verbose("Installing packages...");
-            var packageManager = CreatePackageManager(installRoot);
+            var nugetSource = _configuration.GetValue("Roslyn_NuGetSource") ?? "https://packages.nuget.org/api/v2";
+            var repo = PackageRepositoryFactory.Default.CreateRepository(nugetSource);
+            var packageManager = new PackageManager(repo, installRoot.FullPath);
+            _log.Verbose("Installing packages (using {0})...", nugetSource);
             foreach (var package in packages)
             {
                 _log.Information("Downloading package {0} ({1})...", package.Key, package.Value);
@@ -129,16 +135,6 @@ namespace Cake.Scripting.Roslyn.Nightly
             // Delete the install directory.
             _log.Verbose("Deleting installation directory...");
             _fileSystem.GetDirectory(installRoot).Delete(true);
-        }
-
-        private static IPackageManager CreatePackageManager(DirectoryPath path)
-        {
-            var sources = new[]
-            {
-                new PackageSource("https://packages.nuget.org/api/v2"),
-            };
-            var repo = AggregateRepository.Create(PackageRepositoryFactory.Default, sources, false);
-            return new PackageManager(repo, path.FullPath);
         }
     }
 }

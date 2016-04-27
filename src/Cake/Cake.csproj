@@ -123,6 +123,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Arguments\VerbosityParser.cs" />
+    <Compile Include="Autofac\ArgumentsModule.cs" />
+    <Compile Include="Autofac\CakeModule.cs" />
+    <Compile Include="Autofac\ConfigurationModule.cs" />
     <Compile Include="CakeApplication.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -175,6 +178,7 @@
     <Compile Include="Scripting\Mono\MonoScriptEngine.cs" />
     <Compile Include="Scripting\Mono\CodeGen\MonoCodeGenerator.cs" />
     <Compile Include="Scripting\Mono\MonoScriptHostProxy.cs" />
+    <Compile Include="Autofac\ScriptingModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -213,8 +217,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\StyleCop.MSBuild.4.7.49.1\build\StyleCop.MSBuild.Targets" 
-          Condition="Exists('..\packages\StyleCop.MSBuild.4.7.49.1\build\StyleCop.MSBuild.Targets') and $(Configuration)=='Release' and ($(Windows)=='True' or $(BuildingInsideVisualStudio)=='True')" />
+  <Import Project="..\packages\StyleCop.MSBuild.4.7.49.1\build\StyleCop.MSBuild.Targets" Condition="Exists('..\packages\StyleCop.MSBuild.4.7.49.1\build\StyleCop.MSBuild.Targets') and $(Configuration)=='Release' and ($(Windows)=='True' or $(BuildingInsideVisualStudio)=='True')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>

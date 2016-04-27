@@ -2,20 +2,9 @@
 using System.Linq;
 using Autofac;
 using Cake.Arguments;
-using Cake.Commands;
-using Cake.Core;
+using Cake.Autofac;
 using Cake.Core.Diagnostics;
-using Cake.Core.IO;
-using Cake.Core.IO.NuGet;
-using Cake.Core.Packaging;
-using Cake.Core.Scripting;
-using Cake.Core.Scripting.Analysis;
 using Cake.Diagnostics;
-using Cake.NuGet;
-using Cake.Scripting;
-using Cake.Scripting.Roslyn;
-using Cake.Scripting.Roslyn.Nightly;
-using Cake.Scripting.Roslyn.Stable;
 
 namespace Cake
 {
@@ -30,96 +19,54 @@ namespace Cake
         /// <returns>The application exit code.</returns>
         public static int Main()
         {
-            // Parse arguments.
-            var args = ArgumentTokenizer
-                .Tokenize(Environment.CommandLine)
-                .Skip(1) // Skip executable.
-                .ToArray();
+            ICakeLog log = null;
 
-            // Are we running on Mono?
-            var mono = Type.GetType("Mono.Runtime") != null;
-            if (!mono)
+            try
             {
-                // Not using the mono compiler, but do we want to?
-                if (args.Contains("-mono"))
+                // Parse arguments.
+                var args = ArgumentTokenizer
+                    .Tokenize(Environment.CommandLine)
+                    .Skip(1) // Skip executable.
+                    .ToArray();
+
+                var builder = new ContainerBuilder();
+                builder.RegisterModule<CakeModule>();
+
+                // Build the container.
+                using (var container = builder.Build())
                 {
-                    mono = true;
+                    // Resolve the log.
+                    log = container.Resolve<ICakeLog>();
+
+                    // Parse the options.
+                    var parser = container.Resolve<IArgumentParser>();
+                    var options = parser.Parse(args);
+
+                    // Rebuild the container.
+                    builder = new ContainerBuilder();
+                    builder.RegisterModule(new ArgumentsModule(options));
+                    builder.RegisterModule(new ConfigurationModule(container, options));
+                    builder.RegisterModule(new ScriptingModule(options));
+                    builder.Update(container);
+
+                    // Resolve and run the application.
+                    var application = container.Resolve<CakeApplication>();
+                    return application.Run(options);
                 }
             }
-
-            using (var container = CreateContainer(mono))
+            catch (Exception ex)
             {
-                // Resolve and run the application.
-                var application = container.Resolve<CakeApplication>();
-                return application.Run(args);
+                log = log ?? new CakeBuildLog(new CakeConsole());
+                if (log.Verbosity == Verbosity.Diagnostic)
+                {
+                    log.Error("Error: {0}", ex);
+                }
+                else
+                {
+                    log.Error("Error: {0}", ex.Message);
+                }
+                return 1;
             }
-        }
-
-        private static IContainer CreateContainer(bool mono)
-        {
-            var builder = new ContainerBuilder();
-
-            // Core services.
-            builder.RegisterType<CakeEngine>().As<ICakeEngine>().SingleInstance();
-            builder.RegisterType<FileSystem>().As<IFileSystem>().SingleInstance();
-            builder.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().SingleInstance();
-            builder.RegisterType<CakeArguments>().As<ICakeArguments>().SingleInstance();
-            builder.RegisterType<Globber>().As<IGlobber>().SingleInstance();
-            builder.RegisterType<ProcessRunner>().As<IProcessRunner>().SingleInstance();
-            builder.RegisterType<ScriptAliasFinder>().As<IScriptAliasFinder>().SingleInstance();
-            builder.RegisterType<CakeReportPrinter>().As<ICakeReportPrinter>().SingleInstance();
-            builder.RegisterType<CakeConsole>().As<IConsole>().SingleInstance();
-            builder.RegisterType<ScriptAnalyzer>().As<IScriptAnalyzer>().SingleInstance();
-            builder.RegisterType<ScriptProcessor>().As<IScriptProcessor>().SingleInstance();
-            builder.RegisterType<ScriptConventions>().As<IScriptConventions>().SingleInstance();
-            builder.RegisterType<NuGetToolResolver>().As<INuGetToolResolver>().SingleInstance();
-            builder.RegisterType<WindowsRegistry>().As<IRegistry>().SingleInstance();
-            builder.RegisterType<CakeContext>().As<ICakeContext>().SingleInstance();
-
-            // NuGet addins support
-            builder.RegisterType<NuGetVersionUtilityAdapter>().As<INuGetFrameworkCompatibilityFilter>().As<IFrameworkNameParser>().SingleInstance();
-            builder.RegisterType<NuGetPackageAssembliesLocator>().As<INuGetPackageAssembliesLocator>().SingleInstance();
-            builder.RegisterType<NuGetPackageReferenceBundler>().As<INuGetPackageReferenceBundler>().SingleInstance();
-            builder.RegisterType<NuGetAssemblyCompatibilityFilter>().As<INuGetAssemblyCompatibilityFilter>().SingleInstance();
-            builder.RegisterType<AssemblyFrameworkNameParser>().As<IAssemblyFrameworkNameParser>().SingleInstance();
-
-            // URI resource support.
-            builder.RegisterType<NuGetPackageInstaller>().As<IPackageInstaller>().SingleInstance();
-            builder.RegisterType<NuGetPackageContentResolver>().As<INuGetPackageContentResolver>().SingleInstance();
-
-            if (mono)
-            {
-                // Mono scripting.
-                builder.RegisterType<Scripting.Mono.MonoScriptEngine>().As<IScriptEngine>().SingleInstance();
-            }
-            else
-            {
-                // Roslyn related services.
-                builder.RegisterType<RoslynScriptEngine>().As<IScriptEngine>().SingleInstance();
-                builder.RegisterType<RoslynScriptSessionFactory>().SingleInstance();
-                builder.RegisterType<RoslynNightlyScriptSessionFactory>().SingleInstance();
-            }
-
-            // Cake services.
-            builder.RegisterType<ArgumentParser>().As<IArgumentParser>().SingleInstance();
-            builder.RegisterType<CommandFactory>().As<ICommandFactory>().SingleInstance();
-            builder.RegisterType<CakeApplication>().SingleInstance();
-            builder.RegisterType<ScriptRunner>().As<IScriptRunner>().SingleInstance();
-            builder.RegisterType<CakeBuildLog>().As<ICakeLog>().As<IVerbosityAwareLog>().SingleInstance();
-
-            // Register script hosts.
-            builder.RegisterType<BuildScriptHost>().SingleInstance();
-            builder.RegisterType<DescriptionScriptHost>().SingleInstance();
-            builder.RegisterType<DryRunScriptHost>().SingleInstance();
-
-            // Register commands.
-            builder.RegisterType<BuildCommand>().AsSelf().InstancePerDependency();
-            builder.RegisterType<DescriptionCommand>().AsSelf().InstancePerDependency();
-            builder.RegisterType<DryRunCommand>().AsSelf().InstancePerDependency();
-            builder.RegisterType<HelpCommand>().AsSelf().InstancePerDependency();
-            builder.RegisterType<VersionCommand>().AsSelf().InstancePerDependency();
-
-            return builder.Build();
         }
     }
 }
