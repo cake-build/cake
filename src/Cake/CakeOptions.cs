@@ -50,6 +50,14 @@ namespace Cake
         public bool PerformDryRun { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to debug script.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if a debug session should be started; otherwise, <c>false</c>.
+        /// </value>
+        public bool PerformDebug { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to show help.
         /// </summary>
         /// <value>

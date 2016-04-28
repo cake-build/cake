@@ -3,6 +3,7 @@
     internal sealed class CommandFactory : ICommandFactory
     {
         private readonly BuildCommand.Factory _buildCommandFactory;
+        private readonly DebugCommand.Factory _debugCommandFactory;
         private readonly DescriptionCommand.Factory _descriptionCommandFactory;
         private readonly DryRunCommand.Factory _dryRunCommandFactory;
         private readonly HelpCommand.Factory _helpCommandFactory;
@@ -10,12 +11,14 @@
 
         public CommandFactory(
             BuildCommand.Factory buildCommandFactory,
+            DebugCommand.Factory debugCommandFactory,
             DescriptionCommand.Factory descriptionCommandFactory,
             DryRunCommand.Factory dryRunCommandFactory,
             HelpCommand.Factory helpCommandFactory,
             VersionCommand.Factory versionCommandFactory)
         {
             _buildCommandFactory = buildCommandFactory;
+            _debugCommandFactory = debugCommandFactory;
             _descriptionCommandFactory = descriptionCommandFactory;
             _dryRunCommandFactory = dryRunCommandFactory;
             _helpCommandFactory = helpCommandFactory;
@@ -25,6 +28,11 @@
         public ICommand CreateBuildCommand()
         {
             return _buildCommandFactory();
+        }
+
+        public ICommand CreateDebugCommand()
+        {
+            return _debugCommandFactory();
         }
 
         public ICommand CreateDescriptionCommand()

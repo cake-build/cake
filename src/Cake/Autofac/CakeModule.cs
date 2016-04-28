@@ -56,6 +56,7 @@ namespace Cake.Autofac
             builder.RegisterType<ScriptRunner>().As<IScriptRunner>().SingleInstance();
             builder.RegisterType<CakeBuildLog>().As<ICakeLog>().As<IVerbosityAwareLog>().SingleInstance();
             builder.RegisterType<VerbosityParser>().SingleInstance();
+            builder.RegisterType<CakeDebugger>().As<IDebugger>().SingleInstance();
 
             // Register script hosts.
             builder.RegisterType<BuildScriptHost>().SingleInstance();
@@ -64,6 +65,7 @@ namespace Cake.Autofac
 
             // Register commands.
             builder.RegisterType<BuildCommand>().AsSelf().InstancePerDependency();
+            builder.RegisterType<DebugCommand>().AsSelf().InstancePerDependency();
             builder.RegisterType<DescriptionCommand>().AsSelf().InstancePerDependency();
             builder.RegisterType<DryRunCommand>().AsSelf().InstancePerDependency();
             builder.RegisterType<HelpCommand>().AsSelf().InstancePerDependency();

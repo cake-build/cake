@@ -13,7 +13,7 @@ namespace Cake.Scripting.Roslyn.Nightly
 {
     using Core.IO;
 
-    internal sealed class RoslynNightlyScriptSessionFactory
+    internal abstract class RoslynNightlyScriptSessionFactory
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
@@ -22,7 +22,7 @@ namespace Cake.Scripting.Roslyn.Nightly
         private readonly ICakeLog _log;
         private readonly FilePath[] _paths;
 
-        public RoslynNightlyScriptSessionFactory(
+        protected RoslynNightlyScriptSessionFactory(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             ICakeConfiguration configuration,
@@ -67,8 +67,10 @@ namespace Cake.Scripting.Roslyn.Nightly
             }
 
             // Create the session.
-            return new RoslynNightlyScriptSession(host, _log);
+            return CreateSession(host, _log);
         }
+
+        protected abstract IScriptSession CreateSession(IScriptHost host, ICakeLog log);
 
         private bool IsInstalled()
         {
