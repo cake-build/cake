@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>cake.portable</id>
-    <title>Cake.Portable (Install)</title>
+    <title>Cake.Portable</title>
     <version>0.0.0</version>
     <authors>Patrik Svensson</authors>
     <owners>Patrik Svensson</owners>

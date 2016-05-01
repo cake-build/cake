@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Cake.Common.Tools.DotCover;
-using Cake.Core.IO;
-using Cake.Core.Tooling;
-
-namespace Cake.Common.Tools.DotCover.Analyse
+﻿namespace Cake.Common.Tools.DotCover.Analyse
 {
     /// <summary>
     /// Contains settings used by <see cref="DotCoverAnalyser" />.
@@ -17,12 +11,5 @@ namespace Cake.Common.Tools.DotCover.Analyse
         /// The Default value is <see cref="DotCoverReportType.XML"/>.
         /// </summary>
         public DotCoverReportType ReportType { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DotCoverAnalyseSettings"/> class.
-        /// </summary>
-        public DotCoverAnalyseSettings() : base()
-        {
-        }
     }
 }

@@ -9,7 +9,8 @@ namespace Cake.Common.Build.ContinuaCI.Data
     /// </summary>
     public sealed class ContinuaCIEnvironmentInfo : ContinuaCIInfo
     {
-        private const string _prefix = "ContinuaCI";
+        private const string Prefix = "ContinuaCI";
+
         private readonly ContinuaCIProjectInfo _projectInfo;
         private readonly ContinuaCIConfigurationInfo _configurationInfo;
         private readonly ContinuaCIBuildInfo _buildInfo;
@@ -21,9 +22,9 @@ namespace Cake.Common.Build.ContinuaCI.Data
         public ContinuaCIEnvironmentInfo(ICakeEnvironment environment)
             : base(environment)
         {
-            _projectInfo = new ContinuaCIProjectInfo(environment, string.Format(CultureInfo.InvariantCulture, "{0}.Project", _prefix));
-            _buildInfo = new ContinuaCIBuildInfo(environment, string.Format(CultureInfo.InvariantCulture, "{0}.Build", _prefix));
-            _configurationInfo = new ContinuaCIConfigurationInfo(environment, string.Format(CultureInfo.InvariantCulture, "{0}.Configuration", _prefix));
+            _projectInfo = new ContinuaCIProjectInfo(environment, string.Format(CultureInfo.InvariantCulture, "{0}.Project", Prefix));
+            _buildInfo = new ContinuaCIBuildInfo(environment, string.Format(CultureInfo.InvariantCulture, "{0}.Build", Prefix));
+            _configurationInfo = new ContinuaCIConfigurationInfo(environment, string.Format(CultureInfo.InvariantCulture, "{0}.Configuration", Prefix));
         }
 
         /// <summary>
@@ -69,7 +70,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         {
             get
             {
-                var key = string.Format(CultureInfo.InvariantCulture, "{0}.Variable", _prefix);
+                var key = string.Format(CultureInfo.InvariantCulture, "{0}.Variable", Prefix);
                 return GetEnvironmentStringDictionary(key);
             }
         }
@@ -84,7 +85,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         {
             get
             {
-                var key = string.Format(CultureInfo.InvariantCulture, "{0}.AgentProperty", _prefix);
+                var key = string.Format(CultureInfo.InvariantCulture, "{0}.AgentProperty", Prefix);
                 return GetEnvironmentStringDictionary(key);
             }
         }
@@ -99,7 +100,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         {
             get
             {
-                var key = string.Format(CultureInfo.InvariantCulture, "{0}.Version", _prefix);
+                var key = string.Format(CultureInfo.InvariantCulture, "{0}.Version", Prefix);
                 return GetEnvironmentString(key);
             }
         }

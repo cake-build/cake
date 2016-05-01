@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Cake.Arguments;
-using Cake.Commands;
-using Cake.Core;
+﻿using Cake.Commands;
 using Cake.Core.Diagnostics;
 using Cake.Diagnostics;
 using NSubstitute;
@@ -13,8 +9,6 @@ namespace Cake.Tests.Fixtures
     {
         public IVerbosityAwareLog Log { get; set; }
         public ICommandFactory CommandFactory { get; set; }
-        public IArgumentParser ArgumentParser { get; set; }
-        public IConsole Console { get; set; }
 
         public CakeOptions Options { get; set; }
 
@@ -25,21 +19,16 @@ namespace Cake.Tests.Fixtures
 
             Log = Substitute.For<IVerbosityAwareLog>();
             CommandFactory = Substitute.For<ICommandFactory>();
-
-            ArgumentParser = Substitute.For<IArgumentParser>();
-            ArgumentParser.Parse(Arg.Any<IEnumerable<string>>()).Returns(c => Options);
-
-            Console = Substitute.For<IConsole>();
         }
 
         public CakeApplication CreateApplication()
         {
-            return new CakeApplication(Log, CommandFactory, ArgumentParser, Console);
+            return new CakeApplication(Log, CommandFactory);
         }
 
         public int RunApplication()
         {
-            return CreateApplication().Run(Enumerable.Empty<string>());
+            return CreateApplication().Run(Options);
         }
     }
 }

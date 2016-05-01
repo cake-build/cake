@@ -1,6 +1,5 @@
 using Cake.Common.Build.Bamboo;
 using Cake.Core;
-using Cake.Core.IO;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Build

@@ -16,6 +16,11 @@ namespace Cake.Common.Tools.InspectCode
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="solution">The solution.</param>
+        /// <example>
+        /// <code>
+        /// InspectCode("./src/MySolution.sln");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("InspectCode")]
         public static void InspectCode(this ICakeContext context, FilePath solution)
@@ -30,6 +35,24 @@ namespace Cake.Common.Tools.InspectCode
         /// <param name="context">The context.</param>
         /// <param name="solution">The solution.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var buildOutputDirectory = Directory("./.build");
+        /// var resharperReportsDirectory = buildOutputDirectory + Directory("_ReSharperReports");
+        ///
+        /// var msBuildProperties = new Dictionary&lt;string, string&gt;();
+        /// msBuildProperties.Add("configuration", configuration);
+        /// msBuildProperties.Add("platform", "AnyCPU");
+        ///
+        /// InspectCode("./MySolution.sln", new InspectCodeSettings {
+        ///     SolutionWideAnalysis = true;
+        ///     Profile = "./MySolution.sln.DotSettings";
+        ///     MsBuildProperties = msBuildProperties;
+        ///     OutputFile = resharperReportsDirectory + File("inspectcode-output.xml");
+        ///     ThrowExceptionOnFindingViolations = true;
+        /// });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("InspectCode")]
         public static void InspectCode(this ICakeContext context, FilePath solution, InspectCodeSettings settings)
@@ -48,6 +71,11 @@ namespace Cake.Common.Tools.InspectCode
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="configFile">The config file.</param>
+        /// <example>
+        /// <code>
+        /// InspectCodeFromConfig("./src/inspectcode.config");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("InspectCode")]
         public static void InspectCodeFromConfig(this ICakeContext context, FilePath configFile)

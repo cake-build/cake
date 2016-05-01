@@ -7,8 +7,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.InspectCode
 {
     internal sealed class InspectCodeRunFromConfigFixture : InspectCodeFixture
     {
-        private readonly ICakeLog Log;
-
+        public ICakeLog Log { get; set; }
         public FilePath Config { get; set; }
 
         public InspectCodeRunFromConfigFixture()

@@ -9,13 +9,6 @@ namespace Cake.Common.Tools.NUnit
     public sealed class NUnit3Settings : ToolSettings
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="NUnit3Settings" /> class.
-        /// </summary>
-        public NUnit3Settings()
-        {
-        }
-
-        /// <summary>
         /// Gets or sets the list of tests to run or explore.
         /// </summary>
         /// <value>

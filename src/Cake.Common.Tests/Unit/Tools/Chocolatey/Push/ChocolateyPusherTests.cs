@@ -1,9 +1,7 @@
 ﻿using System;
 using Cake.Common.Tests.Fixtures.Tools.Chocolatey.Push;
-using Cake.Core.IO;
 using Cake.Testing;
 using Cake.Testing.Xunit;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Push

@@ -1,10 +1,4 @@
 ﻿using Cake.Common.Tests.Fixtures.Tools.SpecFlow.StepDefinitionReport;
-using Cake.Common.Tools.NUnit;
-using Cake.Common.Tools.XUnit;
-using Cake.Common.Tools.MSTest;
-using Cake.Core;
-using Cake.Core.IO;
-using Cake.Testing;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.SpecFlow.StepDefinitionReport

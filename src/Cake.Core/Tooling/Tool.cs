@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using Cake.Core.IO;
@@ -81,7 +82,18 @@ namespace Cake.Core.Tooling
             var process = RunProcess(settings, arguments, processSettings);
 
             // Wait for the process to exit.
-            process.WaitForExit();
+            if (settings.ToolTimeout.HasValue)
+            {
+                if (!process.WaitForExit((int)settings.ToolTimeout.Value.TotalMilliseconds))
+                {
+                    const string message = "Tool timeout ({0}): {1}";
+                    throw new TimeoutException(string.Format(CultureInfo.InvariantCulture, message, settings.ToolTimeout.Value, GetToolName()));
+                }
+            }
+            else
+            {
+                process.WaitForExit();
+            }
 
             try
             {
@@ -209,6 +221,7 @@ namespace Cake.Core.Tooling
             return Enumerable.Empty<FilePath>();
         }
 
+        [SuppressMessage("ReSharper", "ConvertIfStatementToConditionalTernaryExpression")]
         private FilePath GetToolPath(TSettings settings)
         {
             var toolPath = settings.ToolPath;
@@ -218,7 +231,7 @@ namespace Cake.Core.Tooling
             }
 
             var toolExeNames = GetToolExecutableNames();
-            IEnumerable<string> pathDirs = null;
+            string[] pathDirs = null;
 
             // Look for each possible executable name in various places.
             foreach (var toolExeName in toolExeNames)
@@ -236,11 +249,11 @@ namespace Cake.Core.Tooling
                     var pathEnv = _environment.GetEnvironmentVariable("PATH");
                     if (!string.IsNullOrEmpty(pathEnv))
                     {
-                        pathDirs = pathEnv.Split(new char[] { _environment.IsUnix() ? ':' : ';' }, StringSplitOptions.RemoveEmptyEntries);
+                        pathDirs = pathEnv.Split(new[] { _environment.IsUnix() ? ':' : ';' }, StringSplitOptions.RemoveEmptyEntries);
                     }
                     else
                     {
-                        pathDirs = Enumerable.Empty<string>();
+                        pathDirs = new string[] { };
                     }
                 }
 
@@ -248,7 +261,6 @@ namespace Cake.Core.Tooling
                 foreach (var pathDir in pathDirs)
                 {
                     var file = new DirectoryPath(pathDir).CombineWithFilePath(toolExeName);
-
                     if (_fileSystem.Exist(file))
                     {
                         return file.MakeAbsolute(_environment);

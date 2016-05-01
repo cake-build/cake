@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
-using Cake.Core.Tests.Fixtures;
+using Cake.NuGet.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
 using LogLevel = Cake.Core.Diagnostics.LogLevel;
 using Verbosity = Cake.Core.Diagnostics.Verbosity;
 
-namespace Cake.Core.Tests.Unit.Packaging.NuGet
+namespace Cake.NuGet.Tests.Unit
 {
     public sealed class NuGetPackageInstallerTests
     {

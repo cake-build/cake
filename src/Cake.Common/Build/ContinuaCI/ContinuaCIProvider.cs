@@ -79,15 +79,17 @@ namespace Cake.Common.Build.ContinuaCI
         /// <param name="status">Build status.</param>
         public void WriteMessage(string message, ContinuaCIMessageType status)
         {
-            var statusToWrite = Enum.GetName(typeof(ContinuaCIMessageType), status).ToLower();
-
-            var attrs = new Dictionary<string, string>
+            var name = Enum.GetName(typeof(ContinuaCIMessageType), status);
+            if (name != null)
             {
-                { "text", message },
-                { "status", statusToWrite }
-            };
-
-            WriteServiceMessage("message", attrs);
+                var statusToWrite = name.ToLower();
+                var attrs = new Dictionary<string, string>
+                {
+                    { "text", message },
+                    { "status", statusToWrite }
+                };
+                WriteServiceMessage("message", attrs);
+            }
         }
 
         /// <summary>

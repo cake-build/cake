@@ -11,7 +11,7 @@ namespace Cake.Core.Tests
         public static string NormalizeGeneratedCode(this string text)
         {
             return text.NormalizeLineEndings()
-                .TrimEnd(new[] { '\r', '\n' });
+                .TrimEnd('\r', '\n');
         }
     }
 }

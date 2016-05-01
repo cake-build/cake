@@ -1,10 +1,8 @@
 ﻿using Cake.Common.Tests.Fixtures.Tools;
-using Cake.Common.Tools.MSTest;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
 using Cake.Testing.Xunit;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.MSTest
@@ -22,7 +20,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsArgumentNullException(result, "assemblyPath");
+            Assert.IsArgumentNullException(result, "assemblyPaths");
         }
 
         [Fact]
@@ -159,7 +157,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             var result = fixture.Run();
 
             // Then
-            Assert.Equal("\"/testcontainer:/Working/Test1.dll\" \"/noisolation\"", result.Args);
+            Assert.Equal("\"/testcontainer:/Working/Test1.dll\" /noisolation", result.Args);
         }
 
         [Fact]
@@ -177,17 +175,63 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         }
 
         [Fact]
+        public void Should_Use_TestCategoryFilter_If_Provided()
+        {
+            //Given
+            var fixture = new MSTestRunnerFixture();
+            fixture.Settings.Category = "!Network";
+
+            //When
+            var result = fixture.Run();
+
+            Assert.Equal("\"/testcontainer:/Working/Test1.dll\" /category:\"!Network\" /noisolation", result.Args);
+        }
+
+        [Fact]
+        public void Should_Not_Use_TestCategoryFilter_If_Not_Provided()
+        {
+            //Given
+            var fixture = new MSTestRunnerFixture();
+
+            //When
+            var result = fixture.Run();
+
+            Assert.Equal("\"/testcontainer:/Working/Test1.dll\" /noisolation", result.Args);
+        }
+
+        [Fact]
         public void Should_Add_Testcontainer_For_Each_Assembly()
         {
             // Given
             var fixture = new MSTestRunnerFixture();
-            fixture.AssemblyPaths = new FilePath[] { new FilePath("./Test1.dll"), new FilePath("./Test2.dll") };
+            fixture.AssemblyPaths = new[] { new FilePath("./Test1.dll"), new FilePath("./Test2.dll") };
 
             // When
             var result = fixture.Run();
 
             // Then
-            Assert.Equal("\"/testcontainer:/Working/Test1.dll\" \"/testcontainer:/Working/Test2.dll\" \"/noisolation\"", result.Args);
+            Assert.Equal("\"/testcontainer:/Working/Test1.dll\" \"/testcontainer:/Working/Test2.dll\" /noisolation", result.Args);
+        }
+
+        [Theory]
+        [InlineData("/NonStandardPath/Microsoft Visual Studio 14.0/Common7/IDE/mstest.exe", "VS140COMNTOOLS", "/NonStandardPath/Microsoft Visual Studio 14.0/Common7/Tools/")]
+        [InlineData("/NonStandardPath/Microsoft Visual Studio 13.0/Common7/IDE/mstest.exe", "VS130COMNTOOLS", "/NonStandardPath/Microsoft Visual Studio 13.0/Common7/Tools/")]
+        [InlineData("/NonStandardPath/Microsoft Visual Studio 12.0/Common7/IDE/mstest.exe", "VS120COMNTOOLS", "/NonStandardPath/Microsoft Visual Studio 12.0/Common7/Tools/")]
+        [InlineData("/NonStandardPath/Microsoft Visual Studio 11.0/Common7/IDE/mstest.exe", "VS110COMNTOOLS", "/NonStandardPath/Microsoft Visual Studio 11.0/Common7/Tools/")]
+        [InlineData("/NonStandardPath/Microsoft Visual Studio 10.0/Common7/IDE/mstest.exe", "VS100COMNTOOLS", "/NonStandardPath/Microsoft Visual Studio 10.0/Common7/Tools/")]
+        public void Should_Use_Available_Environment_Tool_Path(string existingToolPath, string environmentName, string environmentValue)
+        {
+            // Given
+            var fixture = new MSTestRunnerFixture();
+            fixture.GivenDefaultToolDoNotExist();
+            fixture.FileSystem.CreateFile(existingToolPath);
+            fixture.Environment.SetEnvironmentVariable(environmentName, environmentValue);
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal(existingToolPath, result.Path.FullPath);
         }
     }
 }

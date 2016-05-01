@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Cake.Common.IO.Paths;
 using Cake.Core;
@@ -330,6 +331,41 @@ namespace Cake.Common.IO
             }
 
             return path.MakeAbsolute(context.Environment);
+        }
+
+        /// <summary>
+        /// Gets the size of a file in bytes.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="filePath">The path.</param>
+        /// <returns>Size of file in bytes or -1 if file doesn't exist.</returns>
+        /// <example>
+        /// <code>
+        /// Information("File size: {0}", FileSize("./build.cake"));
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Exists")]
+        public static long FileSize(this ICakeContext context, FilePath filePath)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            if (filePath == null)
+            {
+                throw new ArgumentNullException("filePath");
+            }
+
+            var file = context.FileSystem.GetFile(filePath.MakeAbsolute(context.Environment));
+
+            if (!file.Exists)
+            {
+                throw new FileNotFoundException("Unable to find the specified file.", filePath.FullPath);
+            }
+
+            return file.Length;
         }
     }
 }

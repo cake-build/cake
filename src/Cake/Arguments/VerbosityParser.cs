@@ -10,13 +10,16 @@ namespace Cake.Arguments
     /// </summary>
     internal sealed class VerbosityParser
     {
+        private readonly ICakeLog _log;
         private readonly Dictionary<string, Verbosity> _lookup;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VerbosityParser"/> class.
         /// </summary>
-        public VerbosityParser()
+        /// <param name="log">The log.</param>
+        public VerbosityParser(ICakeLog log)
         {
+            _log = log;
             _lookup = new Dictionary<string, Verbosity>(StringComparer.OrdinalIgnoreCase)
             {
                 { "q", Verbosity.Quiet },
@@ -36,17 +39,18 @@ namespace Cake.Arguments
         /// Parses the provided string to a <see cref="Verbosity"/>.
         /// </summary>
         /// <param name="value">The string to parse.</param>
-        /// <returns>The verbosity.</returns>
-        public Verbosity Parse(string value)
+        /// <param name="verbosity">The verbosity.</param>
+        /// <returns><c>true</c> if parsing succeeded; otherwise <c>false</c>.</returns>
+        public bool TryParse(string value, out Verbosity verbosity)
         {
-            Verbosity verbosity;
-            if (_lookup.TryGetValue(value, out verbosity))
+            var result = _lookup.TryGetValue(value, out verbosity);
+            if (!result)
             {
-                return verbosity;
+                const string format = "The value '{0}' is not a valid verbosity.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, value);
+                _log.Error(message);
             }
-            const string format = "The value '{0}' is not a valid verbosity.";
-            var message = string.Format(CultureInfo.InvariantCulture, format, value);
-            throw new InvalidOperationException(message);
+            return result;
         }
     }
 }

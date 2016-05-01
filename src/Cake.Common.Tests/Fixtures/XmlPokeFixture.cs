@@ -65,7 +65,7 @@ namespace Cake.Common.Tests.Fixtures
                 }
 
                 var nodes = document.SelectNodes(xpath, namespaceManager);
-                return nodes.Cast<XmlNode>().All(node => node.Value == value);
+                return nodes != null && nodes.Cast<XmlNode>().All(node => node.Value == value);
             }
         }
 
@@ -91,7 +91,7 @@ namespace Cake.Common.Tests.Fixtures
                 }
 
                 var nodes = document.SelectNodes(xpath, namespaceManager);
-                return nodes.Count == 0;
+                return nodes != null && nodes.Count == 0;
             }
         }
     }

@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Net.Mime;
 using Cake.Common.Build.AppVeyor;
 using Cake.Common.Build.Bamboo;
+using Cake.Common.Build.Bitrise;
 using Cake.Common.Build.ContinuaCI;
 using Cake.Common.Build.Jenkins;
 using Cake.Common.Build.MyGet;
 using Cake.Common.Build.TeamCity;
+using Cake.Common.Build.TravisCI;
 using Cake.Core;
 using Cake.Core.Annotations;
 
@@ -36,13 +37,15 @@ namespace Cake.Common.Build
                 throw new ArgumentNullException("context");
             }
             var appVeyorProvider = new AppVeyorProvider(context.Environment, context.ProcessRunner);
-            var teamCityProvider = new TeamCityProvider(context.Environment);
+            var teamCityProvider = new TeamCityProvider(context.Environment, context.Log);
             var myGetProvider = new MyGetProvider(context.Environment);
             var bambooProvider = new BambooProvider(context.Environment);
             var continuaCIProvider = new ContinuaCIProvider(context.Environment);
             var jenkinsProvider = new JenkinsProvider(context.Environment);
+            var bitriseProvider = new BitriseProvider(context.Environment);
+            var travisCIProvider = new TravisCIProvider(context.Environment, context.Log);
 
-            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider);
+            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider);
         }
 
         /// <summary>
@@ -177,9 +180,56 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("context");
             }
-
             var buildSystem = context.BuildSystem();
             return buildSystem.Jenkins;
+        }
+
+        /// <summary>
+        /// Get a <see cref="BitriseProvider"/> instance that can be user to
+        /// obtain information from the Bitrise environment.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var isBitriseBuild = Bitrise.IsRunningOnBitrise;
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <returns>A <see cref="Cake.Common.Build.Bitrise"/> instance.</returns>
+        [CakePropertyAlias(Cache = true)]
+        [CakeNamespaceImport("Cake.Common.Build.Bitrise")]
+        [CakeNamespaceImport("Cake.Common.Build.Bitrise.Data")]
+        public static IBitriseProvider Bitrise(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            var buildSystem = context.BuildSystem();
+            return buildSystem.Bitrise;
+        }
+
+        /// <summary>
+        /// Get a <see cref="TravisCIProvider"/> instance that can be user to
+        /// obtain information from the Travis CI environment.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var isTravisCIBuild = TravisCI.IsRunningOnTravisCI;
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <returns>A <see cref="Cake.Common.Build.TravisCI"/> instance.</returns>
+        [CakePropertyAlias(Cache = true)]
+        [CakeNamespaceImport("Cake.Common.Build.TravisCI")]
+        [CakeNamespaceImport("Cake.Common.Build.TravisCI.Data")]
+        public static ITravisCIProvider TravisCI(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            var buildSystem = context.BuildSystem();
+            return buildSystem.TravisCI;
         }
     }
 }

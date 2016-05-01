@@ -41,5 +41,13 @@ namespace Cake.Common.Tools.NuGet.Update
         /// Gets or sets the amount of output details.
         /// </summary>
         public NuGetVerbosity? Verbosity { get; set; }
+
+        /// <summary>
+        /// Gets or sets the version of MSBuild to be used with this command.
+        /// By default the MSBuild in your path is picked, otherwise it defaults to the highest installed version of MSBuild.
+        /// This setting requires NuGet V3 or later.
+        /// </summary>
+        /// <value>The version of MSBuild to be used with this command.</value>
+        public NuGetMSBuildVersion? MSBuildVersion { get; set; }
     }
 }

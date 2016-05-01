@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.IO;
 using System.Xml;
 using Cake.Core;
@@ -22,12 +21,17 @@ namespace Cake.Common.Xml
         /// <param name="context">The context.</param>
         /// <param name="filePath">The target file.</param>
         /// <param name="xpath">The xpath of the node to get.</param>
+        /// <example>
+        /// <code>
+        /// string autoFacVersion = XmlPeek("./src/Cake/packages.config", "/packages/package[@id='Autofac']/@version");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static string XmlPeek(this ICakeContext context, FilePath filePath, string xpath)
         {
             return context.XmlPeek(filePath, xpath, new XmlPeekSettings());
         }
-        
+
         /// <summary>
         /// Get the value of a target node.
         /// </summary>
@@ -36,7 +40,26 @@ namespace Cake.Common.Xml
         /// <param name="filePath">The target file.</param>
         /// <param name="xpath">The xpath of the nodes to set.</param>
         /// <param name="settings">Additional settings to tweak Xml Peek behavior.</param>
+        /// <example>
+        /// <code>
+        /// <para>XML document:</para>
+        /// <![CDATA[
+        /// <?xml version="1.0" encoding="UTF-8"?>
+        /// <pastery xmlns = "http://cakebuild.net/pastery" >
+        ///     < cake price="1.62" />
+        /// </pastery>
+        /// ]]>
+        /// </code>
+        /// <para>XmlPeek usage:</para>
+        /// <code>
+        /// string version = XmlPeek("./pastery.xml", "/pastery:pastery/pastery:cake/@price",
+        ///     new XmlPeekSettings {
+        ///         Namespaces = new Dictionary&lt;string, string&gt; {{ "pastery", "http://cakebuild.net/pastery" }}
+        ///     });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public static string XmlPeek(this ICakeContext context, FilePath filePath, string xpath, XmlPeekSettings settings)
         {
             if (context == null)
@@ -55,19 +78,15 @@ namespace Cake.Common.Xml
                 throw new FileNotFoundException("Source File not found.", file.Path.FullPath);
             }
             
-            using (var memoryStream = new MemoryStream())
+            using (var fileStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None))
+            using (var xmlReader = XmlReader.Create(fileStream))
             {
-                using (var fileStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None))
-                using (var xmlReader = XmlReader.Create(fileStream))
-                using (var xmlWriter = XmlWriter.Create(memoryStream))
+                var xmlValue = XmlPeek(xmlReader, xpath, settings);
+                if (xmlValue == null)
                 {
-                    var xmlValue = XmlPeek(xmlReader, xpath, settings);
-                    if (xmlValue == null)
-                    {
-                        context.Log.Warning("Warning: Failed to find node matching the XPath '{0}'", xpath);
-                    }
-                    return xmlValue;
+                    context.Log.Warning("Warning: Failed to find node matching the XPath '{0}'", xpath);
                 }
+                return xmlValue;
             }
         }
         

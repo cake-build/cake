@@ -1,7 +1,6 @@
 ﻿using Cake.Common.Tools.NuGet.Sources;
-using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures.Tools.NuGet
+namespace Cake.Common.Tests.Fixtures.Tools.NuGet.Sources
 {
     internal abstract class NuGetSourcesFixture : NuGetFixture<NuGetSourcesSettings>
     {

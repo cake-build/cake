@@ -17,6 +17,11 @@ namespace Cake.Common.Tools.MSTest
         /// <summary>
         /// Runs all MSTest unit tests in the assemblies matching the specified pattern.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// MSTest("./Tests/*.UnitTests.dll");
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
         [CakeMethodAlias]
@@ -40,6 +45,11 @@ namespace Cake.Common.Tools.MSTest
         /// <summary>
         /// Runs all MSTest unit tests in the assemblies matching the specified pattern.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// MSTest("./Tests/*.UnitTests.dll", new MSTestSettings() { NoIsolation = false });
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
         /// <param name="settings">The settings.</param>
@@ -64,6 +74,12 @@ namespace Cake.Common.Tools.MSTest
         /// <summary>
         /// Runs all MSTest unit tests in the specified assemblies.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var paths = new List&lt;FilePath&gt;() { "./assemblydir1", "./assemblydir2" };
+        /// MSTest(paths);
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="assemblyPaths">The assembly paths.</param>
         [CakeMethodAlias]
@@ -75,6 +91,12 @@ namespace Cake.Common.Tools.MSTest
         /// <summary>
         /// Runs all MSTest unit tests in the specified assemblies.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var paths = new List&lt;FilePath&gt;() { "./assemblydir1", "./assemblydir2" };
+        /// MSTest(paths, new MSTestSettings() { NoIsolation = false });
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="assemblyPaths">The assembly paths.</param>
         /// <param name="settings">The settings.</param>

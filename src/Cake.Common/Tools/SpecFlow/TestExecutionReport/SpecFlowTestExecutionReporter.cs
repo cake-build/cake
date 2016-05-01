@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-using System.Text.RegularExpressions;
 using Cake.Common.Diagnostics;
 using Cake.Core;
 using Cake.Core.IO;

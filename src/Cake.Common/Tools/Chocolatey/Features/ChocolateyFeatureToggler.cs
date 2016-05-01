@@ -70,14 +70,7 @@ namespace Cake.Common.Tools.Chocolatey.Features
 
             builder.Append("feature");
 
-            if (enableDisableToggle)
-            {
-                builder.Append("enable");
-            }
-            else
-            {
-                builder.Append("disable");
-            }
+            builder.Append(enableDisableToggle ? "enable" : "disable");
 
             builder.Append("-n");
             builder.AppendQuoted(name);
