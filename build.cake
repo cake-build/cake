@@ -168,6 +168,11 @@ Task("Upload-AppVeyor-Artifacts")
     .Does(() =>
 {
     AppVeyor.UploadArtifact(parameters.Paths.Files.ZipArtifactPath);
+
+    foreach(var package in GetFiles(parameters.Paths.Directories.NugetRoot + "/*"))
+    {
+        AppVeyor.UploadArtifact(package);
+    }
 });
 
 Task("Publish-MyGet")
