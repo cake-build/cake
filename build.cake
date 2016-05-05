@@ -11,6 +11,7 @@
 //////////////////////////////////////////////////////////////////////
 
 BuildParameters parameters = BuildParameters.GetParameters(Context, BuildSystem);
+bool publishingError = false;
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -203,6 +204,11 @@ Task("Publish-MyGet")
             ApiKey = apiKey
         });
     }
+})
+.OnError(exception =>
+{
+    Information("Publish-MyGet Task failed, but continuing with next Task...");
+    publishingError = true;
 });
 
 Task("Publish-NuGet")
@@ -234,6 +240,11 @@ Task("Publish-NuGet")
           Source = apiUrl
         });
     }
+})
+.OnError(exception =>
+{
+    Information("Publish-NuGet Task failed, but continuing with next Task...");
+    publishingError = true;
 });
 
 Task("Publish-Chocolatey")
@@ -265,6 +276,11 @@ Task("Publish-Chocolatey")
           Source = apiUrl
         });
     }
+})
+.OnError(exception =>
+{
+    Information("Publish-Chocolatey Task failed, but continuing with next Task...");
+    publishingError = true;
 });
 
 Task("Publish-HomeBrew")
@@ -279,6 +295,11 @@ Task("Publish-HomeBrew")
     var hash = CalculateFileHash(parameters.Paths.Files.ZipArtifactPath).ToHex();
 
     Information("Hash for creating HomeBrew PullRequest: {0}", hash);
+})
+.OnError(exception =>
+{
+    Information("Publish-HomeBrew Task failed, but continuing with next Task...");
+    publishingError = true;
 });
 
 Task("Publish-GitHub-Release")
@@ -292,6 +313,11 @@ Task("Publish-GitHub-Release")
     GitReleaseManagerAddAssets(parameters.GitHub.UserName, parameters.GitHub.Password, "cake-build", "cake", parameters.Version.Milestone, parameters.Paths.Files.ZipArtifactPath.ToString());
 
     GitReleaseManagerClose(parameters.GitHub.UserName, parameters.GitHub.Password, "cake-build", "cake", parameters.Version.Milestone);
+})
+.OnError(exception =>
+{
+    Information("Publish-GitHub-Release Task failed, but continuing with next Task...");
+    publishingError = true;
 });
 
 Task("Create-Release-Notes")
@@ -322,7 +348,14 @@ Task("AppVeyor")
   .IsDependentOn("Publish-NuGet")
   .IsDependentOn("Publish-Chocolatey")
   .IsDependentOn("Publish-HomeBrew")
-  .IsDependentOn("Publish-GitHub-Release");
+  .IsDependentOn("Publish-GitHub-Release")
+  .Finally(() =>
+{
+    if(publishingError)
+    {
+        throw new Exception("An error occurred during the publishing of Cake.  All publishing tasks have been attempted.");
+    }
+});
 
 Task("Travis")
   .IsDependentOn("Run-Unit-Tests");
