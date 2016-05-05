@@ -10,7 +10,7 @@ using Cake.Core.Tooling;
 namespace Cake.Common.Tools.XBuild
 {
     /// <summary>
-    /// The MSBuild runner.
+    /// The XBuild runner.
     /// </summary>
     public sealed class XBuildRunner : Tool<XBuildSettings>
     {
@@ -32,7 +32,7 @@ namespace Cake.Common.Tools.XBuild
         }
 
         /// <summary>
-        /// Runs MSBuild with the specified settings.
+        /// Runs XBuild with the specified settings.
         /// </summary>
         /// <param name="solution">The solution to build.</param>
         /// <param name="settings">The settings.</param>
