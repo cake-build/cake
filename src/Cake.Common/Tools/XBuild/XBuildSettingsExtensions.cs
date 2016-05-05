@@ -6,7 +6,7 @@ using Cake.Core.Diagnostics;
 namespace Cake.Common.Tools.XBuild
 {
     /// <summary>
-    /// Contains functionality related to MSBuild settings.
+    /// Contains functionality related to XBuild settings.
     /// </summary>
     public static class XBuildSettingsExtensions
     {
