@@ -99,8 +99,11 @@ namespace Cake.Core.Scripting
                 throw new ArgumentNullException("arguments");
             }
 
+            // Make the script path absolute.
+            scriptPath = scriptPath.MakeAbsolute(_environment);
+
             // Prepare the environment.
-            _environment.WorkingDirectory = scriptPath.MakeAbsolute(_environment).GetDirectory();
+            _environment.WorkingDirectory = scriptPath.GetDirectory();
 
             // Analyze the script file.
             _log.Verbose("Analyzing build script...");
