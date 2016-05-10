@@ -42,7 +42,7 @@ fi
 # Make sure that packages.config exist.
 if [ ! -f $TOOLS_DIR/packages.config ]; then
     echo "Downloading packages.config..."
-    curl -Lsfo $TOOLS_DIR/packages.config http://cakebuild.net/bootstrapper/packages
+    curl -Lsfo $TOOLS_DIR/packages.config http://cakebuild.net/download/bootstrapper/packages
     if [ $? -ne 0 ]; then
         echo "An error occured while downloading packages.config."
         exit 1
