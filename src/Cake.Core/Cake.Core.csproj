@@ -190,6 +190,7 @@
     <Compile Include="Scripting\IScriptRunner.cs" />
     <Compile Include="Scripting\IScriptSession.cs" />
     <Compile Include="Scripting\Processors\LineProcessor.cs" />
+    <Compile Include="Scripting\Processors\Parsers\AddInDirectiveParser.cs" />
     <Compile Include="Scripting\Processors\ShebangProcessor.cs" />
     <Compile Include="Scripting\Processors\ToolDirectiveProcessor.cs" />
     <Compile Include="Scripting\Processors\AddInDirectiveProcessor.cs" />
