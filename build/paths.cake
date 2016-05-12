@@ -34,6 +34,7 @@ public class BuildPaths
 
         var cakeAssemblyPaths = new FilePath[] {
             buildDir + context.File("Cake.exe"),
+            buildDir + context.File("Cake.pdb"),
             buildDir + context.File("Cake.Core.dll"),
             buildDir + context.File("Cake.Core.pdb"),
             buildDir + context.File("Cake.Core.xml"),
@@ -117,12 +118,12 @@ public class BuildFiles
         ArtifactsSourcePaths = Filter(context, artifactsSourcePaths);
         ZipArtifactPath = zipArtifactPath;
     }
-    
+
     private static FilePath[] Filter(ICakeContext context, FilePath[] files)
     {
         // Not a perfect solution, but we need to filter PDB files
         // when building on an OS that's not Windows (since they don't exist there).
-        
+
         if(!context.IsRunningOnWindows())
         {
             return files.Where(f => !f.FullPath.EndsWith("pdb")).ToArray();
