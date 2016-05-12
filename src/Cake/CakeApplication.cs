@@ -78,6 +78,10 @@ namespace Cake
                 {
                     return _commandFactory.CreateDescriptionCommand();
                 }
+                if (options.PerformDebug)
+                {
+                    return _commandFactory.CreateDebugCommand();
+                }
 
                 return _commandFactory.CreateBuildCommand();
             }

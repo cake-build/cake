@@ -35,6 +35,7 @@ namespace Cake.Commands
             _console.WriteLine("    -verbosity=value    Specifies the amount of information to be displayed.");
             _console.WriteLine("                        ({0})",
                 string.Join(", ", Enum.GetNames(typeof(Verbosity))));
+            _console.WriteLine("    -debug              Performs a debug.");
             _console.WriteLine("    -showdescription    Shows description about tasks.");
             _console.WriteLine("    -dryrun             Performs a dry run.");
             _console.WriteLine("    -version            Displays version information.");

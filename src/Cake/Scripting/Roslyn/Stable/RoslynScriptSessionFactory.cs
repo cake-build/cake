@@ -10,7 +10,7 @@ namespace Cake.Scripting.Roslyn.Stable
 {
     using Core.IO;
 
-    internal sealed class RoslynScriptSessionFactory
+    internal abstract class RoslynScriptSessionFactory
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
@@ -18,7 +18,7 @@ namespace Cake.Scripting.Roslyn.Stable
         private readonly ICakeLog _log;
         private readonly FilePath[] _paths;
 
-        public RoslynScriptSessionFactory(
+        protected RoslynScriptSessionFactory(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             ICakeConfiguration configuration,
@@ -57,8 +57,10 @@ namespace Cake.Scripting.Roslyn.Stable
             }
 
             // Create a new session.
-            return new RoslynScriptSession(host, _log);
+            return CreateSession(host, _log);
         }
+
+        protected abstract IScriptSession CreateSession(IScriptHost host, ICakeLog log);
 
         private bool IsInstalled(DirectoryPath root)
         {

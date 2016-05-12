@@ -281,6 +281,22 @@ namespace Cake.Tests.Unit.Arguments
                     // Then
                     Assert.Equal(true, result.ShowVersion);
                 }
+
+                [Theory]
+                [InlineData("-debug")]
+                [InlineData("-d")]
+                public void Can_Parse_Debug(string input)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.csx", input });
+
+                    // Then
+                    Assert.Equal(true, result.PerformDebug);
+                }
             }
 
             public sealed class WithTwoDashLongArguments
@@ -466,6 +482,22 @@ namespace Cake.Tests.Unit.Arguments
 
                     // Then
                     Assert.Equal(true, result.ShowVersion);
+                }
+
+                [Theory]
+                [InlineData("--debug")]
+                [InlineData("-d")]
+                public void Can_Parse_Debug(string input)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.csx", input });
+
+                    // Then
+                    Assert.Equal(true, result.PerformDebug);
                 }
             }
         }

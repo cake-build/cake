@@ -39,8 +39,19 @@ namespace Cake.Autofac
             {
                 // Roslyn
                 builder.RegisterType<RoslynScriptEngine>().As<IScriptEngine>().SingleInstance();
-                builder.RegisterType<RoslynScriptSessionFactory>().SingleInstance();
-                builder.RegisterType<RoslynNightlyScriptSessionFactory>().SingleInstance();
+
+                if (_options.Arguments.ContainsKey("debug"))
+                {
+                    // Debug
+                    builder.RegisterType<DebugRoslynScriptSessionFactory>().As<RoslynScriptSessionFactory>().SingleInstance();
+                    builder.RegisterType<DebugRoslynNightlyScriptSessionFactory>().As<RoslynNightlyScriptSessionFactory>().SingleInstance();
+                }
+                else
+                {
+                    // Default
+                    builder.RegisterType<DefaultRoslynScriptSessionFactory>().As<RoslynScriptSessionFactory>().SingleInstance();
+                    builder.RegisterType<DefaultRoslynNightlyScriptSessionFactory>().As<RoslynNightlyScriptSessionFactory>().SingleInstance();
+                }
             }
         }
     }
