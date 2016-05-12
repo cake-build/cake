@@ -43,151 +43,154 @@ namespace Cake.Common.Tests.Unit.Solution.Project
             }
         }
 
-        [Fact]
-        public void Should_Return_Parser_Result()
+        public sealed class TheParseMethod
         {
-            // Given
-            var fixture = new ProjectParserFixture();
 
-            // When
-            var result = fixture.Parse();
+            [Fact]
+            public void Should_Return_Parser_Result()
+            {
+                // Given
+                var fixture = new ProjectParserFixture();
 
-            // Then
-            Assert.NotNull(result);
-        }
+                // When
+                var result = fixture.Parse();
 
-        [Fact]
-        public void Should_Parse_Framework_Version()
-        {
-            // Given
-            var fixture = new ProjectParserFixture();
+                // Then
+                Assert.NotNull(result);
+            }
 
-            // When
-            var result = fixture.Parse();
+            [Fact]
+            public void Should_Parse_Framework_Version()
+            {
+                // Given
+                var fixture = new ProjectParserFixture();
 
-            // Then
-            Assert.Equal(result.TargetFrameworkVersion, "v4.5");
-        }
+                // When
+                var result = fixture.Parse();
 
-        [Fact]
-        public void Should_Parse_Framework_Profile()
-        {
-            // Given
-            var fixture = new ProjectParserFixture();
+                // Then
+                Assert.Equal(result.TargetFrameworkVersion, "v4.5");
+            }
 
-            // When
-            var result = fixture.Parse();
+            [Fact]
+            public void Should_Parse_Framework_Profile()
+            {
+                // Given
+                var fixture = new ProjectParserFixture();
 
-            // Then
-            Assert.Equal("Profile111", result.TargetFrameworkProfile);
-        }
+                // When
+                var result = fixture.Parse();
 
-        [Fact]
-        public void Should_Return_Null_When_Profile_Not_Defined()
-        {
-            // Given
-            var fixture = new ProjectParserFixture();
+                // Then
+                Assert.Equal("Profile111", result.TargetFrameworkProfile);
+            }
 
-            // When
-            var result = fixture.ParseIncomplete();
+            [Fact]
+            public void Should_Return_Null_When_Profile_Not_Defined()
+            {
+                // Given
+                var fixture = new ProjectParserFixture();
 
-            // Then
-            Assert.NotNull(result);
-            Assert.Null(result.TargetFrameworkProfile);
-        }
+                // When
+                var result = fixture.ParseIncomplete();
 
-        [Fact]
-        public void Should_Parse_Assembly_Name()
-        {
-            // Given
-            var fixture = new ProjectParserFixture();
+                // Then
+                Assert.NotNull(result);
+                Assert.Null(result.TargetFrameworkProfile);
+            }
 
-            // When
-            var result = fixture.Parse();
+            [Fact]
+            public void Should_Parse_Assembly_Name()
+            {
+                // Given
+                var fixture = new ProjectParserFixture();
 
-            // Then
-            Assert.Equal(result.AssemblyName, "Cake.Common");
-        }
+                // When
+                var result = fixture.Parse();
 
-        [Fact]
-        public void Should_Parse_Namespace()
-        {
-            // Given
-            var fixture = new ProjectParserFixture();
+                // Then
+                Assert.Equal(result.AssemblyName, "Cake.Common");
+            }
 
-            // When
-            var result = fixture.Parse();
+            [Fact]
+            public void Should_Parse_Namespace()
+            {
+                // Given
+                var fixture = new ProjectParserFixture();
 
-            // Then
-            Assert.Equal(result.RootNameSpace, "Cake.Common");
-        }
+                // When
+                var result = fixture.Parse();
 
-        [Fact]
-        public void Should_Parse_Output_Type()
-        {
-            // Given
-            var fixture = new ProjectParserFixture();
+                // Then
+                Assert.Equal(result.RootNameSpace, "Cake.Common");
+            }
 
-            // When
-            var result = fixture.Parse();
+            [Fact]
+            public void Should_Parse_Output_Type()
+            {
+                // Given
+                var fixture = new ProjectParserFixture();
 
-            // Then
-            Assert.Equal(result.OutputType, "Library");
-        }
+                // When
+                var result = fixture.Parse();
 
-        [Fact]
-        public void Should_Parse_Configuration()
-        {
-            // Given
-            var fixture = new ProjectParserFixture();
+                // Then
+                Assert.Equal(result.OutputType, "Library");
+            }
 
-            // When
-            var result = fixture.Parse();
+            [Fact]
+            public void Should_Parse_Configuration()
+            {
+                // Given
+                var fixture = new ProjectParserFixture();
 
-            // Then
-            Assert.Equal(result.Configuration, "Debug");
-        }
+                // When
+                var result = fixture.Parse();
 
-        [Fact]
-        public void Should_Parse_Platform()
-        {
-            // Given
-            var fixture = new ProjectParserFixture();
+                // Then
+                Assert.Equal(result.Configuration, "Debug");
+            }
 
-            // When
-            var result = fixture.Parse();
+            [Fact]
+            public void Should_Parse_Platform()
+            {
+                // Given
+                var fixture = new ProjectParserFixture();
 
-            // Then
-            Assert.Equal(result.Platform, "AnyCPU");
-        }
+                // When
+                var result = fixture.Parse();
 
-        [Fact]
-        public void Should_Return_Correct_File_Count()
-        {
-            // Given
-            var fixture = new ProjectParserFixture();
+                // Then
+                Assert.Equal(result.Platform, "AnyCPU");
+            }
 
-            // When
-            var result = fixture.Parse();
+            [Fact]
+            public void Should_Return_Correct_File_Count()
+            {
+                // Given
+                var fixture = new ProjectParserFixture();
 
-            // Then
-            Assert.Equal(2, result.Files.Count);
-        }
+                // When
+                var result = fixture.Parse();
 
-        [Fact]
-        public void Should_Return_Valid_Guid()
-        {
-            // Given
-            var fixture = new ProjectParserFixture();
+                // Then
+                Assert.Equal(2, result.Files.Count);
+            }
 
-            // When
-            var result = fixture.Parse();
+            [Fact]
+            public void Should_Return_Valid_Guid()
+            {
+                // Given
+                var fixture = new ProjectParserFixture();
 
-            // Then
-            var g = new Guid();
-            var parseResult = Guid.TryParseExact(result.ProjectGuid, "B", out g);
-            Assert.True(parseResult);
-            Assert.NotNull(g);
+                // When
+                var result = fixture.Parse();
+
+                // Then
+                Guid projectGuid;
+                var parseResult = Guid.TryParseExact(result.ProjectGuid, "B", out projectGuid);
+                Assert.True(parseResult);
+            }
         }
     }
 }
