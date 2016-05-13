@@ -1,3 +1,6 @@
+// Install addins.
+#addin "nuget:?package=Polly&version=4.2.0"
+
 // Install tools.
 #tool "nuget:?package=xunit.runner.console&version=2.1.0"
 #tool "nuget:?package=gitreleasemanager&version=0.4.0"
@@ -5,6 +8,9 @@
 
 // Load other scripts.
 #load "./build/parameters.cake"
+
+// Using statements
+using Polly;
 
 //////////////////////////////////////////////////////////////////////
 // PARAMETERS
@@ -62,12 +68,29 @@ Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-    NuGetRestore("./src/Cake.sln", new NuGetRestoreSettings {
-        Source = new List<string> {
-            "https://api.nuget.org/v3/index.json",
-            "https://www.myget.org/F/roslyn-nightly/api/v3/index.json"
-        }
-    });
+    var maxRetryCount = 5;
+    var toolTimeout = 1d;
+    Policy
+        .Handle<Exception>()
+        .Retry(maxRetryCount, (exception, retryCount, context) => {
+            if (retryCount == maxRetryCount)
+            {
+                throw exception;
+            }
+            else
+            {
+                Verbose("{0}", exception);
+                toolTimeout+=0.5;
+            }})
+        .Execute(()=> {
+            NuGetRestore("./src/Cake.sln", new NuGetRestoreSettings {
+                Source = new List<string> {
+                    "https://api.nuget.org/v3/index.json",
+                    "https://www.myget.org/F/roslyn-nightly/api/v3/index.json"
+                },
+                ToolTimeout = TimeSpan.FromMinutes(toolTimeout)
+            });
+        });
 });
 
 Task("Build")
