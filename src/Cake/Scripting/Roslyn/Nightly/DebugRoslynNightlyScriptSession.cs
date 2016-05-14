@@ -5,6 +5,9 @@ using System.Reflection;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.Scripting;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
+using Script = Cake.Core.Scripting.Script;
 
 namespace Cake.Scripting.Roslyn.Nightly
 {
@@ -38,16 +41,14 @@ namespace Cake.Scripting.Roslyn.Nightly
             var code = generator.Generate(script);
 
             // Create the script options dynamically.
-            var options = Microsoft.CodeAnalysis.Scripting.ScriptOptions.Default
-                .AddNamespaces(Namespaces)
+            var options = ScriptOptions.Default
+                .AddImports(Namespaces)
                 .AddReferences(References)
                 .AddReferences(ReferencePaths.Select(r => r.FullPath));
 
             _log.Verbose("Compiling build script for debugging...");
 
-            var roslynScript = Microsoft.CodeAnalysis.Scripting.CSharp.CSharpScript.Create(code, options)
-                .WithGlobalsType(_host.GetType());
-
+            var roslynScript = CSharpScript.Create(code, options, _host.GetType());
             var compilation = roslynScript.GetCompilation();
             compilation = compilation.WithOptions(compilation.Options
                 .WithOptimizationLevel(Microsoft.CodeAnalysis.OptimizationLevel.Debug)
@@ -70,7 +71,7 @@ namespace Cake.Scripting.Roslyn.Nightly
                     var submissionStates = new object[2];
                     submissionStates[0] = _host;
 
-                    method.Invoke(null, new[] { submissionStates });
+                    method.Invoke(null, new object[] { submissionStates });
                 }
                 else
                 {

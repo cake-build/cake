@@ -37,7 +37,7 @@ namespace Cake.Scripting.Roslyn
             if (arguments.ContainsKey("experimental"))
             {
                 // Use the nightly build.
-                _log.Debug("Using prerelease build of Roslyn.");
+                _log.Debug(Verbosity.Quiet, "Using Roslyn 1.2.1.");
                 return _nightlyFactory.CreateSession(host);
             }
 

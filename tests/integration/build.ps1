@@ -26,7 +26,7 @@ Function BuildCake([string]$ScriptRoot)
     try  {
         Push-Location;
         Set-Location $RootDirectory;
-        Invoke-Expression "./build.ps1 -Target Copy-Files" | Out-Null;
+        Invoke-Expression "./build.ps1 -Target Zip-Files" | Out-Null;
         if($LASTEXITCODE -ne 0) {
             Throw "An error occured while building Cake.";
         }        
@@ -118,5 +118,5 @@ $Env:MyEnvironmentVariable = "Hello World";
 # Run tests using new Cake.
 &$CakeExePath "--version"
 Write-Output "Running integration tests...";
-&$CakeExePath "$Script" "--target=$Target" "--verbosity=quiet" "--platform=windows" "--customarg=hello"
+&$CakeExePath "$Script" "--experimental" "--target=$Target" "--verbosity=quiet" "--platform=windows" "--customarg=hello"
 Write-Output "";
