@@ -45,6 +45,16 @@ public class BuildPaths
             buildDir + context.File("Cake.Common.pdb"),
             buildDir + context.File("Cake.Common.xml"),
             buildDir + context.File("Mono.CSharp.dll"),
+            buildDir + context.File("Microsoft.CodeAnalysis.dll"),
+            buildDir + context.File("Microsoft.CodeAnalysis.CSharp.dll"),
+            buildDir + context.File("Microsoft.CodeAnalysis.CSharp.Scripting.dll"),
+            buildDir + context.File("Microsoft.CodeAnalysis.Scripting.dll"),
+            buildDir + context.File("System.AppContext.dll"),
+            buildDir + context.File("System.Collections.Immutable.dll"),
+            buildDir + context.File("System.Diagnostics.StackTrace.dll"),
+            buildDir + context.File("System.IO.FileSystem.dll"),
+            buildDir + context.File("System.IO.FileSystem.Primitives.dll"),
+            buildDir + context.File("System.Reflection.Metadata.dll"),
             buildDir + context.File("Autofac.dll"),
             buildDir + context.File("NuGet.Core.dll")
         };

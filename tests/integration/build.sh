@@ -62,7 +62,7 @@ if [ ${SKIP_BUILDING_CAKE} -eq 0 ]; then
     $(cleanDirectory $ARTIFACTS_DIR)
     pushd $ROOT_DIR >/dev/null
     echo "Building Cake..."
-    ./build.sh --target Copy-Files >/dev/null
+    ./build.sh --target Zip-Files >/dev/null
     popd >/dev/null
 fi
 

@@ -2,6 +2,7 @@
 using System.Linq;
 using Cake.Core.Diagnostics;
 using Cake.Core.Scripting;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
 
 namespace Cake.Scripting.Roslyn.Nightly
 {
@@ -33,12 +34,12 @@ namespace Cake.Scripting.Roslyn.Nightly
 
             // Create the script options dynamically.
             var options = Microsoft.CodeAnalysis.Scripting.ScriptOptions.Default
-                .AddNamespaces(Namespaces)
+                .AddImports(Namespaces)
                 .AddReferences(References)
                 .AddReferences(ReferencePaths.Select(r => r.FullPath));
 
             _log.Verbose("Compiling build script...");
-            Microsoft.CodeAnalysis.Scripting.CSharp.CSharpScript.Eval(code, options, _host);
+            CSharpScript.EvaluateAsync(code, options, _host).Wait();
         }
     }
 }
