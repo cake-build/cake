@@ -162,6 +162,7 @@
     <Compile Include="IO\WindowsRegistryKey.cs" />
     <Compile Include="ITaskSetupContext.cs" />
     <Compile Include="ITaskTeardownContext.cs" />
+    <Compile Include="Scripting\Processors\BreakDirectiveProcessor.cs" />
     <Compile Include="Scripting\Processors\UriDirectiveProcessor.cs" />
     <Compile Include="Packaging\IPackageInstaller.cs" />
     <Compile Include="Packaging\PackageReference.cs" />

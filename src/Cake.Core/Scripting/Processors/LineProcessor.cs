@@ -25,9 +25,10 @@ namespace Cake.Core.Scripting.Processors
         /// </summary>
         /// <param name="analyzer">The analyzer.</param>
         /// <param name="line">The line.</param>
-        /// <returns><c>true</c> if the line was processed 
+        /// <param name="replacement">The replacement for line, null if no replacement</param>
+        /// <returns><c>true</c> if the line was processed
         /// by this processor; otherwise <c>false</c>.</returns>
-        public abstract bool Process(IScriptAnalyzerContext analyzer, string line);
+        public abstract bool Process(IScriptAnalyzerContext analyzer, string line, out string replacement);
 
         /// <summary>
         /// Splits the specified line into tokens.
