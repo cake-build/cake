@@ -60,7 +60,7 @@ namespace Cake.Scripting.Roslyn.Stable
                     _log.Verbose("Compilation failed");
 
                     var errors = string.Join(Environment.NewLine, result.Diagnostics.Select(x => x.ToString()));
-                    var message = string.Format("Error occurred when compiling: {0}", errors);
+                    var message = string.Format(System.Globalization.CultureInfo.InvariantCulture, "Error occurred when compiling: {0}", errors);
 
                     throw new CakeException(message);
                 }
