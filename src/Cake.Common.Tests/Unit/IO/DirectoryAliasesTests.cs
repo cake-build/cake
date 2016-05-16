@@ -564,7 +564,7 @@ namespace Cake.Common.Tests.Unit.IO
                 DirectoryAliases.EnsureDirectoryExists (context, "/Temp");
 
                 // Then
-                directory.Received (1).Create ();
+                directory.Received (0).Create ();
             }
 
             [Fact]
