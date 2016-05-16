@@ -1,6 +1,5 @@
 using Cake.Common.Build.TeamCity;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 using Cake.Testing;
 using NSubstitute;
 

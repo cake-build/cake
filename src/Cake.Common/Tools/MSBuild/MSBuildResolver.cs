@@ -8,7 +8,7 @@ namespace Cake.Common.Tools.MSBuild
     {
         public static FilePath GetMSBuildPath(IFileSystem fileSystem, ICakeEnvironment environment, MSBuildToolVersion version, MSBuildPlatform buildPlatform)
         {
-            var binPath = (version == MSBuildToolVersion.Default)
+            var binPath = version == MSBuildToolVersion.Default
                 ? GetHighestAvailableMSBuildVersion(fileSystem, environment, buildPlatform)
                 : GetMSBuildPath(environment, (MSBuildVersion)version, buildPlatform);
 

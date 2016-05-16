@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Cake.Core;
+using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.Scripting;
 using NuGet;
@@ -9,20 +10,23 @@ namespace Cake.Scripting.Roslyn.Stable
 {
     using Core.IO;
 
-    internal sealed class RoslynScriptSessionFactory
+    internal abstract class RoslynScriptSessionFactory
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
+        private readonly ICakeConfiguration _configuration;
         private readonly ICakeLog _log;
         private readonly FilePath[] _paths;
 
-        public RoslynScriptSessionFactory(
+        protected RoslynScriptSessionFactory(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
+            ICakeConfiguration configuration,
             ICakeLog log)
         {
             _fileSystem = fileSystem;
             _environment = environment;
+            _configuration = configuration;
             _log = log;
 
             _paths = new FilePath[]
@@ -53,8 +57,10 @@ namespace Cake.Scripting.Roslyn.Stable
             }
 
             // Create a new session.
-            return new RoslynScriptSession(host, _log);
+            return CreateSession(host, _log);
         }
+
+        protected abstract IScriptSession CreateSession(IScriptHost host, ICakeLog log);
 
         private bool IsInstalled(DirectoryPath root)
         {
@@ -84,9 +90,10 @@ namespace Cake.Scripting.Roslyn.Stable
             var installRoot = root.Combine(Guid.NewGuid().ToString().Replace("-", string.Empty));
 
             // Install package.
-            _log.Verbose("Installing package...");
-            var repository = PackageRepositoryFactory.Default.CreateRepository("https://packages.nuget.org/api/v2");
+            var nugetSource = _configuration.GetValue("Roslyn_NuGetSource") ?? "https://packages.nuget.org/api/v2";
+            var repository = PackageRepositoryFactory.Default.CreateRepository(nugetSource);
             var packageManager = new PackageManager(repository, installRoot.FullPath);
+            _log.Verbose("Installing packages (using {0})...", nugetSource);
             packageManager.InstallPackage("Roslyn.Compilers.CSharp", new SemanticVersion(new Version(1, 2, 20906, 2)), false, true);
 
             // Copy files

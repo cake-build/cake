@@ -10,8 +10,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.InspectCode
 {
     internal sealed class InspectCodeRunFixture : InspectCodeFixture
     {
-        private readonly ICakeLog Log;
-
+        public ICakeLog Log { get; set; }
         public FilePath Solution { get; set; }
 
         public InspectCodeRunFixture()

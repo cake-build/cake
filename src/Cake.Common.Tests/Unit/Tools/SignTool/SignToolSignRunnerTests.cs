@@ -1,9 +1,6 @@
 ﻿using Cake.Common.Tests.Fixtures.Tools;
-using Cake.Common.Tools.SignTool;
 using Cake.Core;
-using Cake.Core.IO;
 using Cake.Testing;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.SignTool
@@ -116,18 +113,51 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
             }
 
             [Fact]
-            public void Should_Throw_If_Certificate_Path_Is_Null()
+            public void Should_Throw_If_Certificate_Path_And_Thumbprint_Are_Null()
             {
                 // Given
                 var fixture = new SignToolSignRunnerFixture();
                 fixture.Settings.CertPath = null;
+                fixture.Settings.CertThumbprint = null;
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("SignTool SIGN: Certificate path is required but not specified.", result.Message);
+                Assert.Equal("SignTool SIGN: One of Certificate path or Certificate thumbprint is required but neither are specified.", result.Message);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Certificate_Path_And_Thumbprint_Are_Both_Specified()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.CertThumbprint = "123";
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("SignTool SIGN: Certificate path and Certificate thumbprint cannot be specified together.", result.Message);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Certificate_Thumbprint_And_Password_Are_Both_Specified()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.CertPath = null;
+                fixture.Settings.Password = "123";
+                fixture.Settings.CertThumbprint = "123";
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("SignTool SIGN: Certificate thumbprint and Password cannot be specified together.", result.Message);
             }
 
             [Fact]
@@ -157,7 +187,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("SignTool SIGN: Password is required but not specified.", result.Message);
+                Assert.Equal("SignTool SIGN: Password is required with Certificate path but not specified.", result.Message);
             }
 
             [Fact]
@@ -199,6 +229,36 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
 
                 // Then
                 Assert.Equal("SIGN /t \"https://t.com/\" /f \"/Working/cert.pfx\" /p secret \"/Working/a.dll\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Call_Sign_Tool_With_Correct_Parameters_With_Description()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.Description = "DescriptionTest";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("SIGN /t \"https://t.com/\" /f \"/Working/cert.pfx\" /p secret /d \"DescriptionTest\" \"/Working/a.dll\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Call_Sign_Tool_With_Correct_Parameters_With_Thumbprint()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.CertPath = null;
+                fixture.Settings.Password = null;
+                fixture.Settings.CertThumbprint = "ThumbprintTest";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("SIGN /t \"https://t.com/\" /sha1 \"ThumbprintTest\" \"/Working/a.dll\"", result.Args);
             }
         }
     }

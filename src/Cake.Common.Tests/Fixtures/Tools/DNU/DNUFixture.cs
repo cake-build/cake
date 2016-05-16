@@ -1,7 +1,6 @@
 ﻿using Cake.Core.IO;
 using Cake.Core.Tooling;
 using Cake.Testing.Fixtures;
-using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Tools.DNU
 {

@@ -50,6 +50,14 @@ namespace Cake
         public bool PerformDryRun { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to debug script.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if a debug session should be started; otherwise, <c>false</c>.
+        /// </value>
+        public bool PerformDebug { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to show help.
         /// </summary>
         /// <value>
@@ -64,6 +72,14 @@ namespace Cake
         ///   <c>true</c> to show version information; otherwise, <c>false</c>.
         /// </value>
         public bool ShowVersion { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether an error occured during parsing.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if an error occured during parsing; otherwise, <c>false</c>.
+        /// </value>
+        public bool HasError { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeOptions"/> class.

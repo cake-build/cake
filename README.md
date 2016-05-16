@@ -1,4 +1,7 @@
-#Cake [![NuGet](https://img.shields.io/nuget/v/Cake.svg)](https://www.nuget.org/packages/Cake) [![MyGet](https://img.shields.io/myget/cake/v/Cake.svg)](https://www.myget.org/gallery/cake) [![Chocolatey](https://img.shields.io/chocolatey/v/Cake.portable.svg)](https://chocolatey.org/packages/cake.portable)
+#Cake
+
+[![NuGet](https://img.shields.io/nuget/v/Cake.svg)](https://www.nuget.org/packages/Cake) [![MyGet](https://img.shields.io/myget/cake/v/Cake.svg?label=myget)](https://www.myget.org/gallery/cake) [![Chocolatey](https://img.shields.io/chocolatey/v/Cake.portable.svg)](https://chocolatey.org/packages/cake.portable)
+[![homebrew](https://img.shields.io/homebrew/v/cake.svg)](http://braumeister.org/formula/cake)
 
 Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.
 
@@ -47,19 +50,19 @@ build script.
 ##### Windows
 
 ```powershell
-Invoke-WebRequest http://cakebuild.net/bootstrapper/windows -OutFile build.ps1
+Invoke-WebRequest http://cakebuild.net/download/bootstrapper/windows -OutFile build.ps1
 ```
 
 ##### Linux
 
 ```console
-curl -Lsfo build.sh http://cakebuild.net/bootstrapper/linux
+curl -Lsfo build.sh http://cakebuild.net/download/bootstrapper/linux
 ```
 
 ##### OS X
 
 ```console
-curl -Lsfo build.sh http://cakebuild.net/bootstrapper/osx
+curl -Lsfo build.sh http://cakebuild.net/download/bootstrapper/osx
 ```
 
 ### 2. Create a Cake script

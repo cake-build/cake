@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Linq;
 using Cake.Core.IO;
 
 // ReSharper disable once CheckNamespace

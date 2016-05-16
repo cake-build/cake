@@ -129,11 +129,7 @@ namespace Cake.Common.Tools.NUnit
                 {
                     results.AppendFormat(";transform={0}", settings.ResultTransform.MakeAbsolute(_environment).FullPath);
                 }
-
-                builder.AppendQuoted(
-                    string.Format(
-                        CultureInfo.InvariantCulture,
-                        "--result={0}", results.ToString()));
+                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "--result={0}", results));
             }
             else if (settings.NoResults)
             {

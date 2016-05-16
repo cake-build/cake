@@ -59,6 +59,7 @@ namespace Cake.Common.Xml
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public static string XmlPeek(this ICakeContext context, FilePath filePath, string xpath, XmlPeekSettings settings)
         {
             if (context == null)

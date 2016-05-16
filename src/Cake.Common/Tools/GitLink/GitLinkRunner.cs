@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
@@ -21,8 +20,7 @@ namespace Cake.Common.Tools.GitLink
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="globber">The globber.</param>
-        /// <param name="log">The logger.</param>
-        public GitLinkRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IGlobber globber, ICakeLog log)
+        public GitLinkRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IGlobber globber)
             : base(fileSystem, environment, processRunner, globber)
         {
             _environment = environment;

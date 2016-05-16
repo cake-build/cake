@@ -128,12 +128,12 @@ namespace Cake.Common.Tests.Unit.Build.ContinuaCI.Data
                 var info = new ContinuaCIInfoFixture().CreateChangesetInfo();
 
                 // When
-                var result = info.TagNames;
+                var result = info.TagNames.ToArray();
 
                 // Then
-                Assert.Equal(2, result.Count());
-                Assert.Equal("the tag", result.First());
-                Assert.Equal("the other tag", result.Last());
+                Assert.Equal(2, result.Length);
+                Assert.Equal("the tag", result[0]);
+                Assert.Equal("the other tag", result[1]);
             }
         }
 
@@ -146,12 +146,12 @@ namespace Cake.Common.Tests.Unit.Build.ContinuaCI.Data
                 var info = new ContinuaCIInfoFixture().CreateChangesetInfo();
 
                 // When
-                var result = info.IssueNames;
+                var result = info.IssueNames.ToArray();
 
                 // Then
-                Assert.Equal(3, result.Count());
-                Assert.Equal("an important issue", result.First());
-                Assert.Equal("a not so important issue", result.Last());
+                Assert.Equal(3, result.Length);
+                Assert.Equal("an important issue", result[0]);
+                Assert.Equal("a not so important issue", result[2]);
             }
         }
     }

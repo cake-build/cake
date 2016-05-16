@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -67,6 +66,7 @@ namespace Cake.Testing.Fixtures
             FileSystem = new FakeFileSystem(Environment);
             Globber = new Globber(FileSystem, Environment);
 
+            // ReSharper disable once VirtualMemberCallInContructor
             _defaultToolPath = GetDefaultToolPath(toolFilename);
             FileSystem.CreateFile(_defaultToolPath);
         }

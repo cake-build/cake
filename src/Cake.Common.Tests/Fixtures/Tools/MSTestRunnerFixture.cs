@@ -12,7 +12,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         public MSTestRunnerFixture()
             : base("mstest.exe")
         {
-            AssemblyPaths = new FilePath[] { new FilePath("./Test1.dll") };
+            AssemblyPaths = new[] { new FilePath("./Test1.dll") };
             Environment.SetSpecialPath(SpecialPath.ProgramFilesX86, "/ProgramFilesX86");
         }
 

@@ -1,4 +1,5 @@
-﻿using Cake.Common.IO.Paths;
+﻿using System.Diagnostics.CodeAnalysis;
+using Cake.Common.IO.Paths;
 using Cake.Core.IO;
 using Xunit;
 
@@ -260,6 +261,7 @@ namespace Cake.Common.Tests.Unit.IO.Paths
                 }
 
                 [Fact]
+                [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
                 public void Should_Return_Null_If_Convertable_Directory_Path_Is_Null()
                 {
                     // Given
@@ -289,6 +291,7 @@ namespace Cake.Common.Tests.Unit.IO.Paths
                 }
 
                 [Fact]
+                [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
                 public void Should_Return_Null_If_Convertable_Directory_Path_Is_Null()
                 {
                     // Given

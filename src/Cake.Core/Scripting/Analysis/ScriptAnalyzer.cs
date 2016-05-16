@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -86,6 +87,7 @@ namespace Cake.Core.Scripting.Analysis
                 context.Lines);
         }
 
+        [SuppressMessage("ReSharper", "ConvertIfStatementToConditionalTernaryExpression")]
         private void AnalyzeCallback(IScriptAnalyzerContext context)
         {
             if (context == null)
@@ -114,7 +116,7 @@ namespace Cake.Core.Scripting.Analysis
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
+        [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         private IEnumerable<string> ReadLines(FilePath path)
         {
             path = path.MakeAbsolute(_environment);

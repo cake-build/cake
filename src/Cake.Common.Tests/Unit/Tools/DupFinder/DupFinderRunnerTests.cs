@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
-using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tests.Fixtures.Tools.DupFinder;
-using Cake.Common.Tools.DupFinder;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.DupFinder

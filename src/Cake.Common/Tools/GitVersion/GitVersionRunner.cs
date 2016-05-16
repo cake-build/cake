@@ -15,7 +15,7 @@ namespace Cake.Common.Tools.GitVersion
     /// </summary>
     public sealed class GitVersionRunner : Tool<GitVersionSettings>
     {
-        private ICakeLog _log;
+        private readonly ICakeLog _log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GitVersionRunner"/> class.

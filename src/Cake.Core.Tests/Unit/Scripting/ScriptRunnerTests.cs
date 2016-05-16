@@ -130,21 +130,6 @@ namespace Cake.Core.Tests.Unit.Scripting
             }
 
             [Fact]
-            public void Should_Set_Arguments()
-            {
-                // Given
-                var fixture = new ScriptRunnerFixture();
-                fixture.ArgumentDictionary.Add("A", "B");
-                var runner = fixture.CreateScriptRunner();
-
-                // When
-                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
-
-                // Then
-                fixture.Arguments.Received(1).SetArguments(fixture.ArgumentDictionary);
-            }
-
-            [Fact]
             public void Should_Create_Session_Via_Session_Factory()
             {
                 // Given
@@ -266,6 +251,22 @@ namespace Cake.Core.Tests.Unit.Scripting
                 // Then
                 fixture.ScriptAnalyzer.Received(1).Analyze(
                     Arg.Is<FilePath>(f => f.FullPath == "build.cake"));
+            }
+
+            [Fact]
+            public void Should_Send_Absolute_Install_Path_To_Script_Processor_When_Installing_Tools()
+            {
+                // Given
+                var fixture = new ScriptRunnerFixture("/Working/foo/build.cake");
+                var runner = fixture.CreateScriptRunner();
+
+                // When
+                runner.Run(fixture.Host, "./foo/build.cake", fixture.ArgumentDictionary);
+
+                // Then
+                fixture.ScriptProcessor.Received(1).InstallTools(
+                    Arg.Any<ScriptAnalyzerResult>(),
+                    Arg.Is<DirectoryPath>(p => p.FullPath == "/Working/foo/tools"));
             }
         }
     }

@@ -39,30 +39,29 @@ namespace Cake.Common.Tools.ReportGenerator
             {
                 throw new ArgumentNullException("settings");
             }
-
             if (reports == null)
             {
                 throw new ArgumentNullException("reports");
             }
-
-            if (!reports.Any())
-            {
-                throw new ArgumentException("reports must not be empty", "reports");
-            }
-
             if (targetDir == null)
             {
                 throw new ArgumentNullException("targetDir");
             }
 
-            Run(settings, GetArgument(settings, reports, targetDir));
+            var reportPaths = reports as FilePath[] ?? reports.ToArray();
+            if (!reportPaths.Any())
+            {
+                throw new ArgumentException("reports must not be empty", "reports");
+            }
+
+            Run(settings, GetArgument(settings, reportPaths, targetDir));
         }
 
         private ProcessArgumentBuilder GetArgument(ReportGeneratorSettings settings, IEnumerable<FilePath> reports, DirectoryPath targetDir)
         {
             var builder = new ProcessArgumentBuilder();
 
-            var joinedReports = string.Join(";", reports.Select((r) => r.MakeAbsolute(_environment).FullPath));
+            var joinedReports = string.Join(";", reports.Select(r => r.MakeAbsolute(_environment).FullPath));
             AppendQuoted(builder, "reports", joinedReports);
 
             AppendQuoted(builder, "targetdir", targetDir.MakeAbsolute(_environment).FullPath);
@@ -75,7 +74,7 @@ namespace Cake.Common.Tools.ReportGenerator
 
             if (settings.SourceDirectories != null && settings.SourceDirectories.Any())
             {
-                var joined = string.Join(";", settings.SourceDirectories.Select((d) => d.MakeAbsolute(_environment).FullPath));
+                var joined = string.Join(";", settings.SourceDirectories.Select(d => d.MakeAbsolute(_environment).FullPath));
                 AppendQuoted(builder, "sourcedirs", joined);
             }
 

@@ -95,25 +95,14 @@ namespace Cake.Common.Tools.XBuild
 
         private static DirectoryPath GetMonoPathWindows()
         {
-            DirectoryPath programFiles;
+            var programFiles = _environment.Is64BitOperativeSystem()
+                ? Environment.SpecialFolder.ProgramFilesX86
+                : Environment.SpecialFolder.ProgramFiles;
 
-            if (_environment.Is64BitOperativeSystem())
-            {
-                programFiles = new DirectoryPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86));
-            }
-            else
-            {
-                programFiles = new DirectoryPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles));
-            }
+            var programFilesPath = new DirectoryPath(Environment.GetFolderPath(programFiles));
+            var monoPath = programFilesPath.Combine("Mono").Combine("bin");
 
-            var monoPath = programFiles.Combine("Mono").Combine("bin");
-
-            if (_fileSystem.GetDirectory(monoPath).Exists)
-            {
-                return monoPath;
-            }
-
-            return null;
+            return _fileSystem.GetDirectory(monoPath).Exists ? monoPath : null;
         }
     }
 }

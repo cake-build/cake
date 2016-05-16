@@ -1,6 +1,5 @@
 ﻿using Cake.Common.Build.ContinuaCI;
 using Cake.Common.Tests.Fixtures.Build;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build.ContinuaCI

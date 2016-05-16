@@ -83,7 +83,7 @@ namespace Cake.Common.Solution.Project.Properties
         /// Gets or sets the name(s) of the assembly(s) that internals should be visible to.
         /// </summary>
         /// <value>The name(s) of the assembly(s).</value>
-        public IEnumerable<string> InternalsVisibleTo { get; set; }
+        public ICollection<string> InternalsVisibleTo { get; set; }
 
         /// <summary>
         /// Gets or sets the configuration of the assembly.

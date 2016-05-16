@@ -1,40 +1,9 @@
-﻿using System.Collections.Generic;
-using Xunit;
+﻿using Xunit;
 
 namespace Cake.Tests.Unit
 {
     public sealed class CakeArgumentsTests
     {
-        public sealed class TheSetArgumentsMethod
-        {
-            [Fact]
-            public void Should_Set_Arguments()
-            {
-                // Given
-                var arguments = new CakeArguments();
-
-                // When
-                arguments.SetArguments(new Dictionary<string, string> { { "A", "B" } });
-
-                // Then
-                Assert.Equal(1, arguments.Arguments.Count);
-            }
-
-            [Fact]
-            public void Should_Replace_Arguments_If_New_Ones_Are_Set()
-            {
-                // Given
-                var arguments = new CakeArguments();
-                arguments.SetArguments(new Dictionary<string, string> { { "A", "B" } });
-
-                // When
-                arguments.SetArguments(new Dictionary<string, string> { { "C", "D" }, { "D", "E" } });
-
-                // Then
-                Assert.Equal(2, arguments.Arguments.Count);
-            }
-        }
-
         public sealed class HasArguments
         {
             [Theory]
@@ -43,8 +12,9 @@ namespace Cake.Tests.Unit
             public void Should_Return_Whether_Or_Not_An_Argument_Exist(string key, bool expected)
             {
                 // Given
-                var arguments = new CakeArguments();
-                arguments.SetArguments(new Dictionary<string, string> { { "A", "B" } });
+                var options = new CakeOptions();
+                options.Arguments.Add("A", "B");
+                var arguments = new CakeArguments(options);
 
                 // When
                 var result = arguments.HasArgument(key);
@@ -59,8 +29,9 @@ namespace Cake.Tests.Unit
             public void Should_Be_Case_Insensitive(string key, bool expected)
             {
                 // Given
-                var arguments = new CakeArguments();
-                arguments.SetArguments(new Dictionary<string, string> { { "A", "B" } });
+                var options = new CakeOptions();
+                options.Arguments.Add("A", "B");
+                var arguments = new CakeArguments(options);
 
                 // When
                 var result = arguments.HasArgument(key);
@@ -78,8 +49,9 @@ namespace Cake.Tests.Unit
             public void Should_Return_Argument_Exist(string key, string expected)
             {
                 // Given
-                var arguments = new CakeArguments();
-                arguments.SetArguments(new Dictionary<string, string> { { "A", "B" } });
+                var options = new CakeOptions();
+                options.Arguments.Add("A", "B");
+                var arguments = new CakeArguments(options);
 
                 // When
                 var result = arguments.GetArgument(key);
@@ -94,8 +66,9 @@ namespace Cake.Tests.Unit
             public void Should_Be_Case_Insensitive(string key, string expected)
             {
                 // Given
-                var arguments = new CakeArguments();
-                arguments.SetArguments(new Dictionary<string, string> { { "A", "B" } });
+                var options = new CakeOptions();
+                options.Arguments.Add("A", "B");
+                var arguments = new CakeArguments(options);
 
                 // When
                 var result = arguments.GetArgument(key);

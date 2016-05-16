@@ -10,13 +10,15 @@ namespace Cake.Commands
     internal sealed class HelpCommand : ICommand
     {
         private readonly IConsole _console;
+        private readonly ICakeEnvironment _environment;
 
         // Delegate factory used by Autofac.
         public delegate HelpCommand Factory();
 
-        public HelpCommand(IConsole console)
+        public HelpCommand(IConsole console, ICakeEnvironment environment)
         {
             _console = console;
+            _environment = environment;
         }
 
         public bool Execute(CakeOptions options)
@@ -33,10 +35,17 @@ namespace Cake.Commands
             _console.WriteLine("    -verbosity=value    Specifies the amount of information to be displayed.");
             _console.WriteLine("                        ({0})",
                 string.Join(", ", Enum.GetNames(typeof(Verbosity))));
+            _console.WriteLine("    -debug              Performs a debug.");
             _console.WriteLine("    -showdescription    Shows description about tasks.");
             _console.WriteLine("    -dryrun             Performs a dry run.");
             _console.WriteLine("    -version            Displays version information.");
             _console.WriteLine("    -help               Displays usage information.");
+
+            if (!_environment.IsUnix())
+            {
+                _console.WriteLine("    -mono               Uses the Mono Compiler, rather than Roslyn script engine.");
+            }
+
             _console.WriteLine("    -experimental       Uses the nightly builds of Roslyn script engine.");
             _console.WriteLine();
 

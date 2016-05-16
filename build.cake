@@ -1,10 +1,23 @@
+// Install addins.
+#addin "nuget:?package=Polly&version=4.2.0"
+
+// Install tools.
+#tool "nuget:?package=xunit.runner.console&version=2.1.0"
+#tool "nuget:?package=gitreleasemanager&version=0.4.0"
+#tool "nuget:?package=GitVersion.CommandLine&version=3.4.1"
+
+// Load other scripts.
 #load "./build/parameters.cake"
+
+// Using statements
+using Polly;
 
 //////////////////////////////////////////////////////////////////////
 // PARAMETERS
 //////////////////////////////////////////////////////////////////////
 
 BuildParameters parameters = BuildParameters.GetParameters(Context, BuildSystem);
+bool publishingError = false;
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -55,12 +68,29 @@ Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-    NuGetRestore("./src/Cake.sln", new NuGetRestoreSettings {
-        Source = new List<string> {
-            "https://api.nuget.org/v3/index.json",
-            "https://www.myget.org/F/roslyn-nightly/api/v3/index.json"
-        }
-    });
+    var maxRetryCount = 5;
+    var toolTimeout = 1d;
+    Policy
+        .Handle<Exception>()
+        .Retry(maxRetryCount, (exception, retryCount, context) => {
+            if (retryCount == maxRetryCount)
+            {
+                throw exception;
+            }
+            else
+            {
+                Verbose("{0}", exception);
+                toolTimeout+=0.5;
+            }})
+        .Execute(()=> {
+            NuGetRestore("./src/Cake.sln", new NuGetRestoreSettings {
+                Source = new List<string> {
+                    "https://api.nuget.org/v3/index.json",
+                    "https://www.myget.org/F/roslyn-nightly/api/v3/index.json"
+                },
+                ToolTimeout = TimeSpan.FromMinutes(toolTimeout)
+            });
+        });
 });
 
 Task("Build")
@@ -162,6 +192,11 @@ Task("Upload-AppVeyor-Artifacts")
     .Does(() =>
 {
     AppVeyor.UploadArtifact(parameters.Paths.Files.ZipArtifactPath);
+
+    foreach(var package in GetFiles(parameters.Paths.Directories.NugetRoot + "/*"))
+    {
+        AppVeyor.UploadArtifact(package);
+    }
 });
 
 Task("Publish-MyGet")
@@ -192,6 +227,11 @@ Task("Publish-MyGet")
             ApiKey = apiKey
         });
     }
+})
+.OnError(exception =>
+{
+    Information("Publish-MyGet Task failed, but continuing with next Task...");
+    publishingError = true;
 });
 
 Task("Publish-NuGet")
@@ -223,6 +263,11 @@ Task("Publish-NuGet")
           Source = apiUrl
         });
     }
+})
+.OnError(exception =>
+{
+    Information("Publish-NuGet Task failed, but continuing with next Task...");
+    publishingError = true;
 });
 
 Task("Publish-Chocolatey")
@@ -254,6 +299,11 @@ Task("Publish-Chocolatey")
           Source = apiUrl
         });
     }
+})
+.OnError(exception =>
+{
+    Information("Publish-Chocolatey Task failed, but continuing with next Task...");
+    publishingError = true;
 });
 
 Task("Publish-HomeBrew")
@@ -268,6 +318,11 @@ Task("Publish-HomeBrew")
     var hash = CalculateFileHash(parameters.Paths.Files.ZipArtifactPath).ToHex();
 
     Information("Hash for creating HomeBrew PullRequest: {0}", hash);
+})
+.OnError(exception =>
+{
+    Information("Publish-HomeBrew Task failed, but continuing with next Task...");
+    publishingError = true;
 });
 
 Task("Publish-GitHub-Release")
@@ -281,6 +336,11 @@ Task("Publish-GitHub-Release")
     GitReleaseManagerAddAssets(parameters.GitHub.UserName, parameters.GitHub.Password, "cake-build", "cake", parameters.Version.Milestone, parameters.Paths.Files.ZipArtifactPath.ToString());
 
     GitReleaseManagerClose(parameters.GitHub.UserName, parameters.GitHub.Password, "cake-build", "cake", parameters.Version.Milestone);
+})
+.OnError(exception =>
+{
+    Information("Publish-GitHub-Release Task failed, but continuing with next Task...");
+    publishingError = true;
 });
 
 Task("Create-Release-Notes")
@@ -311,7 +371,14 @@ Task("AppVeyor")
   .IsDependentOn("Publish-NuGet")
   .IsDependentOn("Publish-Chocolatey")
   .IsDependentOn("Publish-HomeBrew")
-  .IsDependentOn("Publish-GitHub-Release");
+  .IsDependentOn("Publish-GitHub-Release")
+  .Finally(() =>
+{
+    if(publishingError)
+    {
+        throw new Exception("An error occurred during the publishing of Cake.  All publishing tasks have been attempted.");
+    }
+});
 
 Task("Travis")
   .IsDependentOn("Run-Unit-Tests");

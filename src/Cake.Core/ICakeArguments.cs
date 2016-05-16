@@ -1,18 +1,10 @@
-﻿using System.Collections.Generic;
-
-namespace Cake.Core
+﻿namespace Cake.Core
 {
     /// <summary>
     /// Represents arguments passed to script.
     /// </summary>
     public interface ICakeArguments
     {
-        /// <summary>
-        /// Initializes the argument list.
-        /// </summary>
-        /// <param name="arguments">The arguments.</param>
-        void SetArguments(IDictionary<string, string> arguments);
-
         /// <summary>
         /// Determines whether or not the specified argument exist.
         /// </summary>
