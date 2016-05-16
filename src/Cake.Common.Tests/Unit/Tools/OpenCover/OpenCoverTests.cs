@@ -219,6 +219,40 @@ namespace Cake.Common.Tests.Unit.Tools.OpenCover
                              "-targetargs:\"\\\"/Working/Test.dll\\\" -noshadow\" " +
                              "-register:user -output:\"/Working/result.xml\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Use_Specified_Register()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+                fixture.Settings.Register = "Path32";                
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"-argument\" " +
+                             "-register:Path32 -output:\"/Working/result.xml\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_ReturnTargetCode_If_ReturnTargetCodeOffset_Is_Set()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+                fixture.Settings.ReturnTargetCodeOffset = 100;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"-argument\" " +
+                             "-register:user " +
+                             "-returntargetcode:100 " +
+                             "-output:\"/Working/result.xml\"", result.Args);
+            }
         }
     }
 }
