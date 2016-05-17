@@ -285,6 +285,26 @@ namespace Cake.Common.IO
         {
             DirectoryCreator.Create(context, path);
         }
+        
+        /// <summary>
+        /// Creates the specified directory if it does not exist.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// EnsureDirectoryExists("publish");
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="path">The directory path.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Exists")]
+        public static void EnsureDirectoryExists(this ICakeContext context, DirectoryPath path)
+        {
+            if (!DirectoryExists(context, path))
+            {
+                CreateDirectory(context, path);
+            }
+        }
 
         /// <summary>
         /// Copies the contents of a directory to the specified location.
