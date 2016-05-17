@@ -285,7 +285,7 @@ namespace Cake.Common.IO
         {
             DirectoryCreator.Create(context, path);
         }
-        
+
         /// <summary>
         /// Creates the specified directory if it does not exist.
         /// </summary>

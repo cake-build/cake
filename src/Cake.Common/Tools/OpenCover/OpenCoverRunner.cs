@@ -125,7 +125,7 @@ namespace Cake.Common.Tools.OpenCover
 
             if (settings.ReturnTargetCodeOffset != null)
             {
-                builder.AppendSwitch("-returntargetcode", ":", settings.ReturnTargetCodeOffset.Value.ToString());
+                builder.AppendSwitch("-returntargetcode", ":", settings.ReturnTargetCodeOffset.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
             }
 
             // Set the output file.
