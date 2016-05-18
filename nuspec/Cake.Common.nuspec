@@ -13,6 +13,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <copyright>Copyright (c) Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors</copyright>
     <tags>Cake Script Build</tags>
+    <developmentDependency>true</developmentDependency>
     <dependencies>
       <dependency id="Cake.Core" version="$version$" />
     </dependencies>
