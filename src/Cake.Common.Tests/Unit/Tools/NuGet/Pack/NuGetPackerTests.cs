@@ -296,6 +296,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.LicenseUrl = new Uri("https://license.com");
                     fixture.Settings.ProjectUrl = new Uri("https://project.com");
                     fixture.Settings.IconUrl = new Uri("https://icon.com");
+                    fixture.Settings.DevelopmentDependency = true;
                     fixture.Settings.RequireLicenseAcceptance = true;
                     fixture.Settings.Copyright = "The copyright";
                     fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
@@ -326,6 +327,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.LicenseUrl = new Uri("https://license.com");
                     fixture.Settings.ProjectUrl = new Uri("https://project.com");
                     fixture.Settings.IconUrl = new Uri("https://icon.com");
+                    fixture.Settings.DevelopmentDependency = true;
                     fixture.Settings.RequireLicenseAcceptance = true;
                     fixture.Settings.Copyright = "The copyright";
                     fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
@@ -357,6 +359,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.LicenseUrl = new Uri("https://license.com");
                     fixture.Settings.ProjectUrl = new Uri("https://project.com");
                     fixture.Settings.IconUrl = new Uri("https://icon.com");
+                    fixture.Settings.DevelopmentDependency = true;
                     fixture.Settings.RequireLicenseAcceptance = true;
                     fixture.Settings.Copyright = "The copyright";
                     fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
@@ -387,6 +390,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.LicenseUrl = new Uri("https://license.com");
                     fixture.Settings.ProjectUrl = new Uri("https://project.com");
                     fixture.Settings.IconUrl = new Uri("https://icon.com");
+                    fixture.Settings.DevelopmentDependency = true;
                     fixture.Settings.RequireLicenseAcceptance = true;
                     fixture.Settings.Copyright = "The copyright";
                     fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
@@ -430,6 +434,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.LicenseUrl = new Uri("https://license.com");
                     fixture.Settings.ProjectUrl = new Uri("https://project.com");
                     fixture.Settings.IconUrl = new Uri("https://icon.com");
+                    fixture.Settings.DevelopmentDependency = true;
                     fixture.Settings.RequireLicenseAcceptance = true;
                     fixture.Settings.Copyright = "The copyright";
                     fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
