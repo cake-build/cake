@@ -666,6 +666,21 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Fact]
+            public void Should_Append_MSIL_Platform_As_AnyCPU_For_Project()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false);
+                fixture.Settings.SetPlatformTarget(PlatformTarget.MSIL);
+                fixture.Solution = "/Working/src/Project.csproj";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/m /v:normal /p:Platform=AnyCPU /target:Build \"/Working/src/Project.csproj\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Build_Arm_With_x86_When_Specified()
             {
                 // Given
