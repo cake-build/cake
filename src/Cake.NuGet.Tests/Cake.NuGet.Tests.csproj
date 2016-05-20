@@ -69,7 +69,9 @@
     <Compile Include="Unit\NuGetPackageReferenceSetTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
       <Project>{8074b833-11b8-459f-bb98-bfba2bc5c698}</Project>
