@@ -27,7 +27,7 @@ namespace Cake.Core.Scripting.Analysis
         /// <param name="environment">The environment.</param>
         /// <param name="log">The log.</param>
         public ScriptAnalyzer(
-            IFileSystem fileSystem, 
+            IFileSystem fileSystem,
             ICakeEnvironment environment,
             ICakeLog log)
         {
@@ -56,6 +56,7 @@ namespace Cake.Core.Scripting.Analysis
                 new AddInDirectiveProcessor(_environment),
                 new ToolDirectiveProcessor(_environment),
                 new ShebangProcessor(_environment),
+                new BreakDirectiveProcessor(_environment)
             };
         }
 
@@ -104,14 +105,16 @@ namespace Cake.Core.Scripting.Analysis
             // Iterate all lines in the script.
             foreach (var line in lines)
             {
-                if (!_lineProcessors.Any(p => p.Process(context, line)))
+                string replacement = null;
+
+                if (!_lineProcessors.Any(p => p.Process(context, line, out replacement)))
                 {
                     context.AddScriptLine(line);
                 }
                 else
                 {
-                    // Comment out processed lines to keep line data.
-                    context.AddScriptLine(string.Concat("// ", line));
+                    // Add replacement or comment out processed lines to keep line data.
+                    context.AddScriptLine(replacement ?? string.Concat("// ", line));
                 }
             }
         }

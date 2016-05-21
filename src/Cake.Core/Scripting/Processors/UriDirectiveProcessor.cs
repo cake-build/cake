@@ -16,12 +16,14 @@ namespace Cake.Core.Scripting.Processors
 
         protected abstract void AddToContext(IScriptAnalyzerContext context, Uri uri);
 
-        public sealed override bool Process(IScriptAnalyzerContext context, string line)
+        public sealed override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
         {
             if (context == null)
             {
                 throw new ArgumentNullException("context");
             }
+
+            replacement = null;
 
             var tokens = Split(line);
             var directive = tokens.FirstOrDefault();
