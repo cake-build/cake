@@ -94,5 +94,20 @@
         /// Gets or sets the nuget version.
         /// </summary>
         public string NuGetVersion { get; set; }
+
+        /// <summary>
+        /// Gets or sets the commits since version source
+        /// </summary>
+        public string CommitsSinceVersionSource { get; set; }
+
+        /// <summary>
+        /// Gets or sets the commits since version source padded
+        /// </summary>
+        public string CommitsSinceVersionSourcePadded { get; set; }
+
+        /// <summary>
+        /// Gets or sets the commit date
+        /// </summary>
+        public string CommitDate { get; set; }
     }
 }
