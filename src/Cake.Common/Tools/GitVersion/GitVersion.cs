@@ -31,9 +31,24 @@
         public string PreReleaseTagWithDash { get; set; }
 
         /// <summary>
+        /// Gets or sets the pre-release label.
+        /// </summary>
+        public string PreReleaseLabel { get; set; }
+
+        /// <summary>
+        /// Gets or sets the pre-release number.
+        /// </summary>
+        public string PreReleaseNumber { get; set; }
+
+        /// <summary>
         /// Gets or sets the build metadata.
         /// </summary>
         public string BuildMetaData { get; set; }
+
+        /// <summary>
+        /// Gets or sets the build metadata padded.
+        /// </summary>
+        public string BuildMetaDataPadded { get; set; }
 
         /// <summary>
         /// Gets or sets the major version.
