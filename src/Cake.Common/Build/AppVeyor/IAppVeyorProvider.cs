@@ -31,6 +31,13 @@ namespace Cake.Common.Build.AppVeyor
         void UploadArtifact(FilePath path);
 
         /// <summary>
+        /// Uploads test results XML file to AppVeyor. Results type can be one of the following: mstest, xunit, nunit, nunit3, junit.
+        /// </summary>
+        /// <param name="path">The file path of the test results XML to upload.</param>
+        /// <param name="resultsType">The results type. Can be mstest, xunit, nunit, nunit3 or junit.</param>
+        void UploadTestResults(FilePath path, AppVeyorTestResultsType resultsType);
+
+        /// <summary>
         /// Updates the build version.
         /// </summary>
         /// <param name="version">The new build version.</param>
