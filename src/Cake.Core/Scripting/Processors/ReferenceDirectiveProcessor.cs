@@ -14,12 +14,14 @@ namespace Cake.Core.Scripting.Processors
             _fileSystem = fileSystem;
         }
 
-        public override bool Process(IScriptAnalyzerContext context, string line)
+        public override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
         {
             if (context == null)
             {
                 throw new ArgumentNullException("context");
             }
+
+            replacement = null;
 
             var tokens = Split(line);
             if (tokens.Length <= 0)

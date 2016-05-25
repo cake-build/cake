@@ -354,6 +354,22 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 Assert.Equal(result.Lines[11], "// #l b.cake");
                 Assert.Equal(result.Lines[12], "int y=2;");
             }
+
+            [Fact]
+            public void Should_Process_Break_Directive()
+            {
+                // Given
+                var fixture = new ScriptAnalyzerFixture();
+                fixture.GivenScriptExist("/Working/script.cake", "#break");
+
+                // When
+                var result = fixture.Analyze("/Working/script.cake");
+
+                // Then
+                Assert.Equal(2, result.Lines.Count);
+                Assert.Equal(result.Lines[0], "#line 1 \"/Working/script.cake\"");
+                Assert.Equal(result.Lines[1], @"if (System.Diagnostics.Debugger.IsAttached) { System.Diagnostics.Debugger.Break(); }");
+            }
         }
     }
 }

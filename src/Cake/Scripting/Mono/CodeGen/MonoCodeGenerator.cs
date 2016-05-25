@@ -6,7 +6,7 @@ using Cake.Scripting.Mono.CodeGen.Parsing;
 
 namespace Cake.Scripting.Mono.CodeGen
 {
-    internal sealed class MonoCodeGenerator
+    internal static class MonoCodeGenerator
     {
         public static string Generate(Script script)
         {
@@ -25,16 +25,11 @@ namespace Cake.Scripting.Mono.CodeGen
                 code.AppendLine();
             }
 
-            code.AppendLine("public class CakeBuildScriptImpl");
+            code.AppendLine("public class CakeBuildScriptImpl : Cake.Scripting.Mono.CodeGen.CakeBuildScriptImplBase");
             code.AppendLine("{");
-            code.AppendLine("    public CakeBuildScriptImpl (IScriptHost scriptHost)");
-            code.AppendLine("    {");
-            code.AppendLine("        ScriptHost = scriptHost;");
-            code.AppendLine("    }");
+            code.AppendLine("    public CakeBuildScriptImpl (IScriptHost scriptHost):base(scriptHost) { }");
             code.AppendLine();
             code.AppendLine(GetAliasCode(script));
-            code.AppendLine();
-            code.AppendLine(GetScriptHostProxy());
             code.AppendLine();
 
             foreach (var block in blocks)
@@ -64,23 +59,6 @@ namespace Cake.Scripting.Mono.CodeGen
                     : PropertyAliasGenerator.Generate(alias.Method));
             }
             return string.Join("\r\n", result);
-        }
-
-        private static string GetScriptHostProxy()
-        {
-            // TODO: Generate this from interface.
-            var rules = new[]
-            {
-                "IScriptHost ScriptHost { get; set; }",
-                "ICakeContext Context { get { return ScriptHost.Context; } }",
-                "IReadOnlyList<CakeTask> Tasks { get { return ScriptHost.Tasks; } }",
-                "CakeTaskBuilder<ActionTask> Task(string name) { return ScriptHost.Task (name); }",
-                "void Setup (Action action) { ScriptHost.Setup (action); }",
-                "void Teardown(Action action) { ScriptHost.Teardown (action); }",
-                "CakeReport RunTarget(string target) { return ScriptHost.RunTarget (target); }"
-            };
-
-            return "    " + string.Join("\r\n    ", rules);
         }
     }
 }

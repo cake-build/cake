@@ -12,7 +12,7 @@ namespace Cake.Core.Tests.Fixtures
 
         protected override void RunTool()
         {
-            var tool = new DummyTool(FileSystem, Environment, ProcessRunner, Globber);
+            var tool = new DummyTool(FileSystem, Environment, ProcessRunner, Tools);
             tool.Run(Settings);
         }
     }

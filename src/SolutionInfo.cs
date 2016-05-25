@@ -6,8 +6,8 @@
 using System.Reflection;
 
 [assembly: AssemblyProduct("Cake")]
-[assembly: AssemblyVersion("0.11.0.0")]
-[assembly: AssemblyFileVersion("0.11.0.0")]
-[assembly: AssemblyInformationalVersion("0.11.0-beta.1+0.Branch.release/0.11.0.Sha.810d81f37e54c376fc72db441bb51d02d256b215")]
+[assembly: AssemblyVersion("0.12.0.0")]
+[assembly: AssemblyFileVersion("0.12.0.0")]
+[assembly: AssemblyInformationalVersion("0.12.0-beta.1+0.Branch.release/0.12.0.Sha.db292d321378109991d7dbb9c78aec6dd7b7ebf5")]
 [assembly: AssemblyCopyright("Copyright (c) Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors")]
 

@@ -18,7 +18,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.ReportUnit
 
         protected override void RunTool()
         {
-            var tool = new ReportUnitRunner(FileSystem, Environment, ProcessRunner, Globber);
+            var tool = new ReportUnitRunner(FileSystem, Environment, ProcessRunner, Tools);
             tool.Run(InputFolder, OutputFolder, Settings);
         }
     }

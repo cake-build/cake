@@ -7,13 +7,13 @@ using Cake.Core.Scripting;
 
 namespace Cake.Scripting.Roslyn.Stable
 {
-    internal sealed class RoslynScriptSession : IScriptSession
+    internal abstract class RoslynScriptSession : IScriptSession
     {
         private readonly global::Roslyn.Scripting.Session _roslynSession;
         private readonly ICakeLog _log;
         private readonly HashSet<string> _importedNamespaces;
 
-        public RoslynScriptSession(IScriptHost host, ICakeLog log)
+        protected RoslynScriptSession(IScriptHost host, ICakeLog log)
         {
             if (host == null)
             {
@@ -29,6 +29,14 @@ namespace Cake.Scripting.Roslyn.Stable
 
             _log = log;
             _importedNamespaces = new HashSet<string>();
+        }
+
+        protected global::Roslyn.Scripting.Session RoslynSession
+        {
+            get
+            {
+                return _roslynSession;
+            }
         }
 
         public void AddReference(FilePath path)
@@ -61,14 +69,6 @@ namespace Cake.Scripting.Roslyn.Stable
             }
         }
 
-        public void Execute(Script script)
-        {
-            // Generate the script code.
-            var generator = new RoslynCodeGenerator();
-            var code = generator.Generate(script);
-
-            _log.Verbose("Compiling build script...");
-            _roslynSession.Execute(code);
-        }
+        public abstract void Execute(Script script);
     }
 }

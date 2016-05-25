@@ -14,7 +14,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet.Pusher
 
         protected override void RunTool()
         {
-            var tool = new NuGetPusher(FileSystem, Environment, ProcessRunner, Globber, Resolver);
+            var tool = new NuGetPusher(FileSystem, Environment, ProcessRunner, Tools, Resolver);
             tool.Push(PackageFilePath, Settings);
         }
     }

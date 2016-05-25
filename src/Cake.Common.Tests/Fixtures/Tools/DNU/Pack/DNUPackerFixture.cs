@@ -8,7 +8,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.DNU.Pack
 
         protected override void RunTool()
         {
-            var tool = new DNUPacker(FileSystem, Environment, ProcessRunner, Globber);
+            var tool = new DNUPacker(FileSystem, Environment, ProcessRunner, Tools);
             tool.Pack(Path, Settings);
         }
     }

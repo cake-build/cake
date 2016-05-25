@@ -32,7 +32,7 @@ namespace Cake.Common.Tools.TextTransform
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new TextTransformRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var runner = new TextTransformRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(sourceFile, new TextTransformSettings());
         }
 
@@ -58,7 +58,7 @@ namespace Cake.Common.Tools.TextTransform
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new TextTransformRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var runner = new TextTransformRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(sourceFile, settings ?? new TextTransformSettings());
         }
     }

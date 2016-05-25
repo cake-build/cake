@@ -252,6 +252,88 @@ namespace Cake.Core.Tests.Unit.Scripting
                 fixture.ScriptAnalyzer.Received(1).Analyze(
                     Arg.Is<FilePath>(f => f.FullPath == "build.cake"));
             }
+
+            [Fact]
+            public void Should_Install_Tools_At_Default_Location_If_No_Configuration_Is_Present()
+            {
+                // Given
+                var fixture = new ScriptRunnerFixture();
+                var runner = fixture.CreateScriptRunner();
+
+                // When
+                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
+
+                // Then
+                fixture.ScriptProcessor.Received(1).InstallTools(
+                    Arg.Any<ScriptAnalyzerResult>(),
+                    Arg.Is<DirectoryPath>(path => path.FullPath == "/Working/tools"));
+            }
+
+            [Fact]
+            public void Should_Install_Tools_At_Location_In_Configuration()
+            {
+                // Given
+                var fixture = new ScriptRunnerFixture();
+                fixture.Configuration.GetValue(Constants.Paths.Tools).Returns("./stuff");
+                var runner = fixture.CreateScriptRunner();
+
+                // When
+                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
+
+                // Then
+                fixture.ScriptProcessor.Received(1).InstallTools(
+                    Arg.Any<ScriptAnalyzerResult>(),
+                    Arg.Is<DirectoryPath>(path => path.FullPath == "/Working/stuff"));
+            }
+
+            [Fact]
+            public void Should_Install_Addins_At_Default_Location_If_No_Configuration_Is_Present()
+            {
+                // Given
+                var fixture = new ScriptRunnerFixture();
+                var runner = fixture.CreateScriptRunner();
+
+                // When
+                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
+
+                // Then
+                fixture.ScriptProcessor.Received(1).InstallAddins(
+                    Arg.Any<ScriptAnalyzerResult>(),
+                    Arg.Is<DirectoryPath>(path => path.FullPath == "/Working/Addins"));
+            }
+
+            [Fact]
+            public void Should_Install_Addins_At_Location_In_Configuration()
+            {
+                // Given
+                var fixture = new ScriptRunnerFixture();
+                fixture.Configuration.GetValue(Constants.Paths.Addins).Returns("./stuff");
+                var runner = fixture.CreateScriptRunner();
+
+                // When
+                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
+
+                // Then
+                fixture.ScriptProcessor.Received(1).InstallAddins(
+                    Arg.Any<ScriptAnalyzerResult>(),
+                    Arg.Is<DirectoryPath>(path => path.FullPath == "/Working/stuff"));
+            }
+
+            [Fact]
+            public void Should_Send_Absolute_Install_Path_To_Script_Processor_When_Installing_Tools()
+            {
+                // Given
+                var fixture = new ScriptRunnerFixture("/Working/foo/build.cake");
+                var runner = fixture.CreateScriptRunner();
+
+                // When
+                runner.Run(fixture.Host, "./foo/build.cake", fixture.ArgumentDictionary);
+
+                // Then
+                fixture.ScriptProcessor.Received(1).InstallTools(
+                    Arg.Any<ScriptAnalyzerResult>(),
+                    Arg.Is<DirectoryPath>(p => p.FullPath == "/Working/foo/tools"));
+            }
         }
     }
 }

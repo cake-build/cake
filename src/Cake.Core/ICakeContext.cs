@@ -1,5 +1,6 @@
 ﻿using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Core
 {
@@ -49,5 +50,11 @@ namespace Cake.Core
         /// </summary>
         /// <value>The registry.</value>
         IRegistry Registry { get; }
+
+        /// <summary>
+        /// Gets the tool locator.
+        /// </summary>
+        /// <value>The tool locator.</value>
+        IToolLocator Tools { get; }
     }
 }

@@ -6,13 +6,13 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.XBuild
 {
     /// <summary>
-    /// Contains functionality related to MSBuild.
+    /// Contains functionality related to XBuild.
     /// </summary>
     [CakeAliasCategory("XBuild")]
     public static class XBuildAliases
     {
         /// <summary>
-        /// Builds the specified solution using MSBuild.
+        /// Builds the specified solution using XBuild.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="solution">The solution to build.</param>
@@ -23,7 +23,7 @@ namespace Cake.Common.Tools.XBuild
         }
 
         /// <summary>
-        /// Builds the specified solution using MSBuild.
+        /// Builds the specified solution using XBuild.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="solution">The solution to build.</param>
@@ -48,7 +48,7 @@ namespace Cake.Common.Tools.XBuild
         }
 
         /// <summary>
-        /// Builds the specified solution using MSBuild.
+        /// Builds the specified solution using XBuild.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="solution">The solution to build.</param>
@@ -65,7 +65,7 @@ namespace Cake.Common.Tools.XBuild
                 throw new ArgumentNullException("settings");
             }
 
-            var runner = new XBuildRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var runner = new XBuildRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(solution, settings);
         }
     }

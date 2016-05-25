@@ -15,7 +15,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.SpecFlow.StepDefinitionReport
 
         protected override void RunTool()
         {
-            var tool = new SpecFlowStepDefinitionReporter(FileSystem, Environment, ProcessRunner, Globber);
+            var tool = new SpecFlowStepDefinitionReporter(FileSystem, Environment, ProcessRunner, Tools);
             tool.Run(ProjectFile, Settings);
         }
     }

@@ -17,7 +17,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         protected override void RunTool()
         {
-            var tool = new MakeNSISRunner(FileSystem, Environment, Globber, ProcessRunner);
+            var tool = new MakeNSISRunner(FileSystem, Environment, ProcessRunner, Tools);
             tool.Run(ScriptPath, Settings);
         }
     }

@@ -21,7 +21,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         protected override void RunTool()
         {
-            var runner = new ILRepackRunner(FileSystem, Environment, Globber, ProcessRunner);
+            var runner = new ILRepackRunner(FileSystem, Environment, ProcessRunner, Tools);
             runner.Merge(OutputAssemblyPath, PrimaryAssemblyPath, AssemblyPaths, Settings);
         }
     }

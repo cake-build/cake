@@ -7,7 +7,13 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.ILRepack
 {
     /// <summary>
-    /// Contains functionality related to ILRepack.
+    /// <para>Contains functionality related to ILRepack.</para>
+    /// <para>
+    /// In order to use the commands for this alias, include the following in your build.cake file to download and install from NuGet.org, or specify the ToolPath within the ILRepackSettings class:
+    /// <code>
+    /// #tool "nuget:?package=ILRepack"
+    /// </code>
+    /// </para>
     /// </summary>
     [CakeAliasCategory("ILRepack")]
     public static class ILRepackAliases
@@ -37,7 +43,7 @@ namespace Cake.Common.Tools.ILRepack
                 throw new ArgumentNullException("context");
             }
 
-            var merger = new ILRepackRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            var merger = new ILRepackRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             merger.Merge(outputFile, primaryAssembly, assemblyPaths);
         }
 
@@ -72,7 +78,7 @@ namespace Cake.Common.Tools.ILRepack
                 throw new ArgumentNullException("context");
             }
 
-            var merger = new ILRepackRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            var merger = new ILRepackRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             merger.Merge(outputFile, primaryAssembly, assemblyPaths, settings);
         }
     }

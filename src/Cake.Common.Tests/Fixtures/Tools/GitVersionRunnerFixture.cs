@@ -42,7 +42,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         protected override void RunTool()
         {
-            var tool = new GitVersionRunner(FileSystem, Environment, ProcessRunner, Globber, Log);
+            var tool = new GitVersionRunner(FileSystem, Environment, ProcessRunner, Tools, Log);
             tool.Run(Settings);
         }
     }

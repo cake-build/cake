@@ -10,7 +10,7 @@ using Cake.Core.Tooling;
 namespace Cake.Common.Tools.XBuild
 {
     /// <summary>
-    /// The MSBuild runner.
+    /// The XBuild runner.
     /// </summary>
     public sealed class XBuildRunner : Tool<XBuildSettings>
     {
@@ -23,16 +23,16 @@ namespace Cake.Common.Tools.XBuild
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="runner">The runner.</param>
-        /// <param name="globber">The globber.</param>
-        public XBuildRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner runner, IGlobber globber)
-            : base(fileSystem, environment, runner, globber)
+        /// <param name="tools">The tool locator.</param>
+        public XBuildRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner runner, IToolLocator tools)
+            : base(fileSystem, environment, runner, tools)
         {
             _fileSystem = fileSystem;
             _environment = environment;
         }
 
         /// <summary>
-        /// Runs MSBuild with the specified settings.
+        /// Runs XBuild with the specified settings.
         /// </summary>
         /// <param name="solution">The solution to build.</param>
         /// <param name="settings">The settings.</param>

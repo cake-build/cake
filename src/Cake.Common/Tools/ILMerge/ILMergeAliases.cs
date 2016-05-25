@@ -7,7 +7,13 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.ILMerge
 {
     /// <summary>
-    /// Contains functionality related to ILMerge.
+    /// <para>Contains functionality related to ILMerge.</para>
+    /// <para>
+    /// In order to use the commands for this alias, include the following in your build.cake file to download and install from NuGet.org, or specify the ToolPath within the ILMergeSettings class:
+    /// <code>
+    /// #tool "nuget:?package=ILRepack"
+    /// </code>
+    /// </para>
     /// </summary>
     [CakeAliasCategory("ILMerge")]
     public static class ILMergeAliases
@@ -34,7 +40,7 @@ namespace Cake.Common.Tools.ILMerge
                 throw new ArgumentNullException("context");
             }
 
-            var merger = new ILMergeRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            var merger = new ILMergeRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             merger.Merge(outputFile, primaryAssembly, assemblyPaths);
         }
 
@@ -65,7 +71,7 @@ namespace Cake.Common.Tools.ILMerge
                 throw new ArgumentNullException("context");
             }
 
-            var merger = new ILMergeRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            var merger = new ILMergeRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             merger.Merge(outputFile, primaryAssembly, assemblyPaths, settings);
         }
     }

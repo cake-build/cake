@@ -57,7 +57,7 @@ namespace Cake.Common.Tools.DotCover
             // Create the DotCover analyser.
             var analyser = new DotCoverAnalyser(
                 context.FileSystem, context.Environment,
-                context.ProcessRunner, context.Globber);
+                context.ProcessRunner, context.Tools);
 
             // Run DotCover analyse.
             analyser.Analyse(context, action, outputFile, settings);
@@ -107,7 +107,7 @@ namespace Cake.Common.Tools.DotCover
             // Create the DotCover coverer.
             var coverer = new DotCoverCoverer(
                 context.FileSystem, context.Environment,
-                context.ProcessRunner, context.Globber);
+                context.ProcessRunner, context.Tools);
 
             // Run DotCover cover.
             coverer.Cover(context, action, outputFile, settings);

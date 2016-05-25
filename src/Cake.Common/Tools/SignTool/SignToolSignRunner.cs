@@ -23,14 +23,13 @@ namespace Cake.Common.Tools.SignTool
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="globber">The globber.</param>
+        /// <param name="tools">The tool locator.</param>
         /// <param name="registry">The registry.</param>
         public SignToolSignRunner(IFileSystem fileSystem,
             ICakeEnvironment environment,
             IProcessRunner processRunner,
-            IGlobber globber,
-            IRegistry registry)
-            : this(fileSystem, environment, processRunner, globber, registry, null)
+            IToolLocator tools,
+            IRegistry registry) : this(fileSystem, environment, processRunner, tools, registry, null)
         {
         }
 
@@ -40,17 +39,16 @@ namespace Cake.Common.Tools.SignTool
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="globber">The globber.</param>
+        /// <param name="tools">The tool locator.</param>
         /// <param name="registry">The registry.</param>
         /// <param name="resolver">The resolver.</param>
         internal SignToolSignRunner(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             IProcessRunner processRunner,
-            IGlobber globber,
+            IToolLocator tools,
             IRegistry registry,
-            ISignToolResolver resolver)
-            : base(fileSystem, environment, processRunner, globber)
+            ISignToolResolver resolver) : base(fileSystem, environment, processRunner, tools)
         {
             _fileSystem = fileSystem;
             _environment = environment;

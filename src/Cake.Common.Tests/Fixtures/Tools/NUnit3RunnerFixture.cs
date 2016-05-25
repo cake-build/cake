@@ -18,7 +18,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         protected override void RunTool()
         {
-            var tool = new NUnit3Runner(FileSystem, Environment, Globber, ProcessRunner);
+            var tool = new NUnit3Runner(FileSystem, Environment, ProcessRunner, Tools);
             tool.Run(Assemblies, Settings);
         }
     }

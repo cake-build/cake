@@ -13,7 +13,7 @@ namespace Cake.Scripting.Roslyn.Nightly
 {
     using Core.IO;
 
-    internal sealed class RoslynNightlyScriptSessionFactory
+    internal abstract class RoslynNightlyScriptSessionFactory
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
@@ -22,7 +22,7 @@ namespace Cake.Scripting.Roslyn.Nightly
         private readonly ICakeLog _log;
         private readonly FilePath[] _paths;
 
-        public RoslynNightlyScriptSessionFactory(
+        protected RoslynNightlyScriptSessionFactory(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             ICakeConfiguration configuration,
@@ -67,8 +67,10 @@ namespace Cake.Scripting.Roslyn.Nightly
             }
 
             // Create the session.
-            return new RoslynNightlyScriptSession(host, _log);
+            return CreateSession(host, _log);
         }
+
+        protected abstract IScriptSession CreateSession(IScriptHost host, ICakeLog log);
 
         private bool IsInstalled()
         {
@@ -97,7 +99,7 @@ namespace Cake.Scripting.Roslyn.Nightly
             };
 
             // Install package.
-            var nugetSource = _configuration.GetValue("Roslyn_NuGetSource") ?? "https://packages.nuget.org/api/v2";
+            var nugetSource = _configuration.GetValue(Constants.Roslyn.NuGetSource) ?? "https://packages.nuget.org/api/v2";
             var repo = PackageRepositoryFactory.Default.CreateRepository(nugetSource);
             var packageManager = new PackageManager(repo, installRoot.FullPath);
             _log.Verbose("Installing packages (using {0})...", nugetSource);
@@ -116,7 +118,7 @@ namespace Cake.Scripting.Roslyn.Nightly
                 var foundFile = _globber.Match(exp).FirstOrDefault();
                 if (foundFile == null)
                 {
-                    var format = "Could not find file {0}.";
+                    const string format = "Could not find file {0}.";
                     var message = string.Format(CultureInfo.InvariantCulture, format, path);
                     throw new CakeException(message);
                 }

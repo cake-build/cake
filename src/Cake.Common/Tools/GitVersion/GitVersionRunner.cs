@@ -23,11 +23,14 @@ namespace Cake.Common.Tools.GitVersion
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="globber">The globber.</param>
+        /// <param name="tools">The tool locator.</param>
         /// <param name="log">The log.</param>
-        public GitVersionRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner,
-            IGlobber globber, ICakeLog log)
-            : base(fileSystem, environment, processRunner, globber)
+        public GitVersionRunner(
+            IFileSystem fileSystem,
+            ICakeEnvironment environment,
+            IProcessRunner processRunner,
+            IToolLocator tools,
+            ICakeLog log) : base(fileSystem, environment, processRunner, tools)
         {
             _log = log;
         }

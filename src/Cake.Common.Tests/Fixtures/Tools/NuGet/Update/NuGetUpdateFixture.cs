@@ -14,7 +14,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet.Update
 
         protected override void RunTool()
         {
-            var tool = new NuGetUpdater(FileSystem, Environment, ProcessRunner, Globber, Resolver);
+            var tool = new NuGetUpdater(FileSystem, Environment, ProcessRunner, Tools, Resolver);
             tool.Update(TargetFile, Settings);
         }
     }

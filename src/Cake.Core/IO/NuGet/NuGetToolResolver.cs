@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using Cake.Core.Tooling;
 
 namespace Cake.Core.IO.NuGet
 {
@@ -10,7 +10,7 @@ namespace Cake.Core.IO.NuGet
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
-        private readonly IGlobber _globber;
+        private readonly IToolLocator _tools;
         private IFile _cachedPath;
 
         private static readonly FilePath[] _unixSystemPaths;
@@ -29,8 +29,8 @@ namespace Cake.Core.IO.NuGet
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
-        /// <param name="globber">The globber.</param>
-        public NuGetToolResolver(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber)
+        /// <param name="tools">The tool locator.</param>
+        public NuGetToolResolver(IFileSystem fileSystem, ICakeEnvironment environment, IToolLocator tools)
         {
             if (fileSystem == null)
             {
@@ -40,13 +40,13 @@ namespace Cake.Core.IO.NuGet
             {
                 throw new ArgumentNullException("environment");
             }
-            if (globber == null)
+            if (tools == null)
             {
-                throw new ArgumentNullException("globber");
+                throw new ArgumentNullException("tools");
             }
             _fileSystem = fileSystem;
             _environment = environment;
-            _globber = globber;
+            _tools = tools;
         }
 
         /// <summary>
@@ -61,9 +61,8 @@ namespace Cake.Core.IO.NuGet
                 return _cachedPath.Path;
             }
 
-            // Check if tool exists in tool folder
-            const string expression = "./tools/**/nuget.exe";
-            var toolsExe = _globber.GetFiles(expression).FirstOrDefault();
+            // Try to resolve it with the regular tool resolver.
+            var toolsExe = _tools.Resolve("nuget.exe");
             if (toolsExe != null)
             {
                 var toolsFile = _fileSystem.GetFile(toolsExe);
@@ -96,25 +95,6 @@ namespace Cake.Core.IO.NuGet
                         _cachedPath = _fileSystem.GetFile(systemPath);
                         return _cachedPath.Path;
                     }
-                }
-            }
-
-            // Last resort try path
-            var envPath = _environment.GetEnvironmentVariable("path");
-            if (!string.IsNullOrWhiteSpace(envPath))
-            {
-                var pathFile = envPath
-                    .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(path => _fileSystem.GetDirectory(path))
-                    .Where(path => path.Exists)
-                    .Select(path => path.Path.CombineWithFilePath("nuget.exe"))
-                    .Select(_fileSystem.GetFile)
-                    .FirstOrDefault(file => file.Exists);
-
-                if (pathFile != null)
-                {
-                    _cachedPath = pathFile;
-                    return _cachedPath.Path;
                 }
             }
 

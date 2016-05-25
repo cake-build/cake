@@ -1,29 +1,58 @@
+### New on 0.12.0 (Released 2016/05/25)
+
+* Fix globalization & white space issue
+* New Setup(Action<ICakeContext>)  fails on mono
+* Cake.pdb is missing in artifacts
+* Tool path is wrong when calling cake file in sub directory
+* Add support for .NET Core CLI
+* Add pre-processor directive which injects Debugger.Break()
+* Add an EnsureDirectoryExists Alias to CreateDirectory and not fail if it exists
+* Debugging support
+* Added additional missing variables for GitVersion
+* Add missing GitVersion return values
+* Add missing GitVersion return values
+* Consider adding developmentDependency to nuspec for Cake.Common
+* Specify culture for Roslyn debug string formats
+* Add cake-build build.cake NuGet restore retry handling
+* During the publishing cycle, continue with each step, and error at end if there is a problem
+* Add all artifacts to AppVeyor during publishing cycle
+* Add register and ReturnTargetCodeOffset option in opencover
+* Unified tool resolution
+* Drop DNU/DNX support in favor of dotnet CLI
+* Corrected resource download urls
+* Docs: Typos in XBuild docs
+* -Mono parameter is not documented in Program.cs output
+* How to get ILRepack executable?
+
+
 ### New on 0.11.0 (Released 2016/05/01)
-Regression: ProcessArgumentListExtensions was renamed
-DNU usage of multi arguments changed
-MSTest tool resolution fail if Visual Studio isn't in default location
-Fix issue with final build step
-Actual type of RepositoryUrl is String not Uri
-Add configuration file for Cake.
-Add Text Transform support
-Add FileSize alias
-Add integration tests
-Remove tools and addins from packages.config.
-Setup Issue and Pull Request Templates
-Obsolete XmlPoke string alias and add new method/alias for string
-Signtool: Add support for certificates from the certificate store based on thumbprint
-Add generic optional tool timeout
-Add NuGetPacker support for IncludeReferencedProjects
-Parse multiple InternalsVisibleTo attributes from AssemblyInfo
-Add StorePasswordInClearText to NuGetSoiurceAdd NuGetSourcesSettings
-TeamCity ImportDotCoverCoverage tests fail when running on TeamCity
-Have TeamCityDisposableExtensions extend ITeamCityProvider
-Remove (Install) from Chocolatey Package
-Setup/Teardown should provide ICakeContext
-Signtool: Add support for description (/d)
-Support NuGet 3 new parameters
-Added note about ReSharper License
-Added Chocolatey Package Badge
+
+* Regression: ProcessArgumentListExtensions was renamed
+* DNU usage of multi arguments changed
+* MSTest tool resolution fail if Visual Studio isn't in default location
+* Fix issue with final build step
+* Actual type of RepositoryUrl is String not Uri
+* Add configuration file for Cake.
+* Add Text Transform support
+* Add FileSize alias
+* Add TravisCI buildsystem
+* Add integration tests
+* Remove tools and addins from packages.config.
+* Setup Issue and Pull Request Templates
+* Obsolete XmlPoke string alias and add new method/alias for string
+* Signtool: Add support for certificates from the certificate store based on thumbprint
+* Add generic optional tool timeout
+* Add NuGetPacker support for IncludeReferencedProjects
+* Parse multiple InternalsVisibleTo attributes from AssemblyInfo
+* Add StorePasswordInClearText to NuGetSoiurceAdd NuGetSourcesSettings
+* TeamCity ImportDotCoverCoverage tests fail when running on TeamCity
+* Have TeamCityDisposableExtensions extend ITeamCityProvider
+* Remove (Install) from Chocolatey Package
+* Setup/Teardown should provide ICakeContext
+* Signtool: Add support for description (/d)
+* Support NuGet 3 new parameters
+* Added note about ReSharper License
+* Added Chocolatey Package Badge
 
 
 ### New on 0.10.1 (Released 2016/04/07)

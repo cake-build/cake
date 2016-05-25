@@ -14,7 +14,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet.Restorer
 
         protected override void RunTool()
         {
-            var tool = new NuGetRestorer(FileSystem, Environment, ProcessRunner, Globber, Resolver);
+            var tool = new NuGetRestorer(FileSystem, Environment, ProcessRunner, Tools, Resolver);
             tool.Restore(TargetFilePath, Settings);
         }
     }

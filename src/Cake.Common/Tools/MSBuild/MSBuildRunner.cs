@@ -23,9 +23,12 @@ namespace Cake.Common.Tools.MSBuild
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="runner">The runner.</param>
-        /// <param name="globber">The globber.</param>
-        public MSBuildRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner runner, IGlobber globber)
-            : base(fileSystem, environment, runner, globber)
+        /// <param name="tools">The tool locator.</param>
+        public MSBuildRunner(
+            IFileSystem fileSystem,
+            ICakeEnvironment environment,
+            IProcessRunner runner,
+            IToolLocator tools) : base(fileSystem, environment, runner, tools)
         {
             _fileSystem = fileSystem;
             _environment = environment;

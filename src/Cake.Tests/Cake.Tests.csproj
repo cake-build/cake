@@ -63,6 +63,7 @@
     <Compile Include="Extensions\StreamReaderExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Fixtures\ArgumentParserFixture.cs" />
+    <Compile Include="Fixtures\DebugCommandFixture.cs" />
     <Compile Include="Fixtures\CakeApplicationFixture.cs" />
     <Compile Include="Fixtures\MonoScriptProcessorFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Unit\CakeReportPrinterTests.cs" />
     <Compile Include="Unit\Diagnostics\CakeBuildLogTests.cs" />
     <Compile Include="Unit\Diagnostics\FormatParserTests.cs" />
+    <Compile Include="Unit\Commands\DebugCommandTests.cs" />
     <Compile Include="Unit\Scripting\BuildScriptHostTests.cs">
       <SubType>Code</SubType>
     </Compile>

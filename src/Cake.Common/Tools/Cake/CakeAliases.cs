@@ -46,7 +46,7 @@ namespace Cake.Common.Tools.Cake
                 throw new ArgumentNullException("context");
             }
 
-            var cakeRunner = new CakeRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            var cakeRunner = new CakeRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner, context.Tools);
             cakeRunner.ExecuteScript(cakeScriptPath, settings);
         }
 
@@ -90,7 +90,7 @@ namespace Cake.Common.Tools.Cake
                 throw new ArgumentNullException("context");
             }
 
-            var cakeRunner = new CakeRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            var cakeRunner = new CakeRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner, context.Tools);
             cakeRunner.ExecuteExpression(cakeExpression, settings);
         }
     }

@@ -58,6 +58,7 @@
     <Compile Include="Fixtures\CakeContextFixture.cs" />
     <Compile Include="Fixtures\CakeConfigurationProviderFixture.cs" />
     <Compile Include="Fixtures\DummyToolFixture.cs" />
+    <Compile Include="Fixtures\NuGetToolResolverFixture.cs" />
     <Compile Include="Fixtures\PropertyAliasGeneratorFixture.cs" />
     <Compile Include="Fixtures\MethodAliasGeneratorFixture.cs" />
     <Compile Include="Fixtures\ScriptAnalyzerFixture.cs" />
@@ -71,6 +72,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Fixtures\ToolResolutionStrategyFixture.cs" />
     <Compile Include="Stubs\DummySettings.cs" />
     <Compile Include="Stubs\DummyTool.cs" />
     <Compile Include="Unit\ActionTaskTests.cs" />
@@ -127,6 +129,8 @@
     <Compile Include="Unit\TaskSetupContextTests.cs" />
     <Compile Include="Unit\TaskTeardownContextTests.cs" />
     <Compile Include="Unit\Text\TextTransformationTemplateTests.cs" />
+    <Compile Include="Unit\Tooling\ToolLocatorTests.cs" />
+    <Compile Include="Unit\Tooling\ToolResolutionStrategyTests.cs" />
     <Compile Include="Unit\Tooling\ToolTests.cs" />
   </ItemGroup>
   <ItemGroup>

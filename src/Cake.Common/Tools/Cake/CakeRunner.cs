@@ -27,9 +27,9 @@ namespace Cake.Common.Tools.Cake
         /// <param name="environment">The environment.</param>
         /// <param name="globber">The globber.</param>
         /// <param name="processRunner">The process runner.</param>
-        public CakeRunner(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber,
-            IProcessRunner processRunner)
-            : base(fileSystem, environment, processRunner, globber)
+        /// <param name="tools">The tool locator.</param>
+        public CakeRunner(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner, IToolLocator tools)
+            : base(fileSystem, environment, processRunner, tools)
         {
             _environment = environment;
             _fileSystem = fileSystem;

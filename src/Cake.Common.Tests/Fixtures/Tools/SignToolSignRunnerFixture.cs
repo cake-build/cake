@@ -31,7 +31,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         protected override void RunTool()
         {
-            var tool = new SignToolSignRunner(FileSystem, Environment, ProcessRunner, Globber, null, Resolver);
+            var tool = new SignToolSignRunner(FileSystem, Environment, ProcessRunner, Tools, null, Resolver);
             tool.Run(AssemblyPath, Settings);
         }
     }

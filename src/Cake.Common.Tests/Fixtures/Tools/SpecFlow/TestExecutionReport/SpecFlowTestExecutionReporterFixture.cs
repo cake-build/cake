@@ -27,6 +27,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.SpecFlow.TestExecutionReport
             Context.Log.Returns(Substitute.For<ICakeLog>());
             Context.Registry.Returns(Substitute.For<IRegistry>());
             Context.ProcessRunner.Returns(Substitute.For<IProcessRunner>());
+            Context.Tools.Returns(Tools);
 
             // Set up the default action that intercepts.
             Action = context =>
@@ -42,7 +43,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.SpecFlow.TestExecutionReport
 
         protected override void RunTool()
         {
-            var tool = new SpecFlowTestExecutionReporter(FileSystem, Environment, ProcessRunner, Globber);
+            var tool = new SpecFlowTestExecutionReporter(FileSystem, Environment, ProcessRunner, Tools);
             tool.Run(Context, Action, ProjectFile, Settings);
         }
     }

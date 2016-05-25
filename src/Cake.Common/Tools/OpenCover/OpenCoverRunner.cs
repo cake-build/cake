@@ -19,9 +19,12 @@ namespace Cake.Common.Tools.OpenCover
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="globber">The globber.</param>
-        public OpenCoverRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IGlobber globber)
-            : base(fileSystem, environment, processRunner, globber)
+        /// <param name="tools">The tool locator.</param>
+        public OpenCoverRunner(
+            IFileSystem fileSystem,
+            ICakeEnvironment environment,
+            IProcessRunner processRunner,
+            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
         {
             _environment = environment;
         }
@@ -121,8 +124,12 @@ namespace Cake.Common.Tools.OpenCover
                 builder.AppendSwitch("-excludebyfile", ":", filters.Quote());
             }
 
-            // Use per-user registration of code coverage profiler.
-            builder.AppendSwitch("-register", ":", "user");
+            builder.AppendSwitch("-register", ":", settings.Register);
+
+            if (settings.ReturnTargetCodeOffset != null)
+            {
+                builder.AppendSwitch("-returntargetcode", ":", settings.ReturnTargetCodeOffset.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            }
 
             // Set the output file.
             outputPath = outputPath.MakeAbsolute(_environment);

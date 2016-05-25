@@ -12,6 +12,12 @@
         ICommand CreateBuildCommand();
 
         /// <summary>
+        /// Creates the debug command.
+        /// </summary>
+        /// <returns>The debug command.</returns>
+        ICommand CreateDebugCommand();
+
+        /// <summary>
         /// Creates the description command.
         /// </summary>
         /// <returns>The description command.</returns>

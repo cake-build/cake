@@ -73,7 +73,7 @@ namespace Cake.Common.Tools.WiX
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new CandleRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            var runner = new CandleRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(sourceFiles, settings ?? new CandleSettings());
         }
 
@@ -134,7 +134,7 @@ namespace Cake.Common.Tools.WiX
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new LightRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            var runner = new LightRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(objectFiles, settings ?? new LightSettings());
         }
     }

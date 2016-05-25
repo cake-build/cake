@@ -20,7 +20,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet.SetProxy
 
         protected override void RunTool()
         {
-            var tool = new NuGetSetProxy(FileSystem, Environment, ProcessRunner, Globber, Resolver);
+            var tool = new NuGetSetProxy(FileSystem, Environment, ProcessRunner, Tools, Resolver);
             tool.SetProxy(Url, Username, Password, Settings);
         }
     }

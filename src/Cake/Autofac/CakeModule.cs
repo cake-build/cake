@@ -9,6 +9,7 @@ using Cake.Core.IO.NuGet;
 using Cake.Core.Packaging;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.Analysis;
+using Cake.Core.Tooling;
 using Cake.Diagnostics;
 using Cake.NuGet;
 using Cake.Scripting;
@@ -35,6 +36,11 @@ namespace Cake.Autofac
             builder.RegisterType<WindowsRegistry>().As<IRegistry>().SingleInstance();
             builder.RegisterType<CakeContext>().As<ICakeContext>().SingleInstance();
 
+            // Tooling
+            builder.RegisterType<ToolRepository>().As<IToolRepository>().SingleInstance();
+            builder.RegisterType<ToolResolutionStrategy>().As<IToolResolutionStrategy>().SingleInstance();
+            builder.RegisterType<ToolLocator>().As<IToolLocator>().SingleInstance();
+
             // Configuration
             builder.RegisterType<CakeConfigurationProvider>().SingleInstance();
 
@@ -56,6 +62,7 @@ namespace Cake.Autofac
             builder.RegisterType<ScriptRunner>().As<IScriptRunner>().SingleInstance();
             builder.RegisterType<CakeBuildLog>().As<ICakeLog>().As<IVerbosityAwareLog>().SingleInstance();
             builder.RegisterType<VerbosityParser>().SingleInstance();
+            builder.RegisterType<CakeDebugger>().As<IDebugger>().SingleInstance();
 
             // Register script hosts.
             builder.RegisterType<BuildScriptHost>().SingleInstance();
@@ -64,6 +71,7 @@ namespace Cake.Autofac
 
             // Register commands.
             builder.RegisterType<BuildCommand>().AsSelf().InstancePerDependency();
+            builder.RegisterType<DebugCommand>().AsSelf().InstancePerDependency();
             builder.RegisterType<DescriptionCommand>().AsSelf().InstancePerDependency();
             builder.RegisterType<DryRunCommand>().AsSelf().InstancePerDependency();
             builder.RegisterType<HelpCommand>().AsSelf().InstancePerDependency();

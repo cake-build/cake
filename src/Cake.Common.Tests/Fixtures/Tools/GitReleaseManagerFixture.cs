@@ -1,5 +1,4 @@
-﻿using Cake.Common.Tools.GitReleaseManager;
-using Cake.Core.Diagnostics;
+﻿using Cake.Core.Diagnostics;
 using Cake.Core.Tooling;
 using Cake.Testing.Fixtures;
 using NSubstitute;
@@ -10,13 +9,11 @@ namespace Cake.Common.Tests.Fixtures.Tools
         where TSettings : ToolSettings, new()
     {
         public ICakeLog Log { get; set; }
-        public IGitReleaseManagerToolResolver Resolver { get; set; }
 
         protected GitReleaseManagerFixture()
             : base("GitReleaseManager.exe")
         {
             Log = Substitute.For<ICakeLog>();
-            Resolver = Substitute.For<IGitReleaseManagerToolResolver>();
         }
     }
 }
