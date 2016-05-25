@@ -92,7 +92,7 @@ namespace Cake.Common.Tools.DotNetCore
                 settings = new DotNetCoreExecuteSettings();
             }
 
-            var executor = new DotNetCoreExecutor(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var executor = new DotNetCoreExecutor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             executor.Execute(assemblyPath, arguments, settings);
         }
 
@@ -195,7 +195,7 @@ namespace Cake.Common.Tools.DotNetCore
                 settings = new DotNetCoreRestoreSettings();
             }
 
-            var restorer = new DotNetCoreRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var restorer = new DotNetCoreRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             restorer.Restore(root, settings);
         }
 
@@ -250,7 +250,7 @@ namespace Cake.Common.Tools.DotNetCore
                 settings = new DotNetCoreBuildSettings();
             }
 
-            var builder = new DotNetCoreBuilder(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var builder = new DotNetCoreBuilder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             builder.Build(project, settings);
         }
 
@@ -305,7 +305,7 @@ namespace Cake.Common.Tools.DotNetCore
                 settings = new DotNetCorePackSettings();
             }
 
-            var packer = new DotNetCorePacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var packer = new DotNetCorePacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             packer.Pack(project, settings);
         }
 
@@ -396,7 +396,7 @@ namespace Cake.Common.Tools.DotNetCore
                 settings = new DotNetCoreRunSettings();
             }
 
-            var runner = new DotNetCoreRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var runner = new DotNetCoreRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(project, arguments, settings);
         }
 
@@ -451,7 +451,7 @@ namespace Cake.Common.Tools.DotNetCore
                 settings = new DotNetCorePublishSettings();
             }
 
-            var publisher = new DotNetCorePublisher(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var publisher = new DotNetCorePublisher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             publisher.Publish(project, settings);
         }
 
@@ -521,7 +521,7 @@ namespace Cake.Common.Tools.DotNetCore
                 settings = new DotNetCoreTestSettings();
             }
 
-            var tester = new DotNetCoreTester(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var tester = new DotNetCoreTester(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             tester.Test(project, settings);
         }
     }

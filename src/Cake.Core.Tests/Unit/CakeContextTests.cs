@@ -90,6 +90,20 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.IsArgumentNullException(result, "processRunner");
             }
+
+            [Fact]
+            public void Should_Throw_If_Tools_Are_Null()
+            {
+                // Given
+                var fixture = new CakeContextFixture();
+                fixture.Tools = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateContext());
+
+                // Then
+                Assert.IsArgumentNullException(result, "tools");
+            }
         }
 
         public sealed class TheFileSystemProperty

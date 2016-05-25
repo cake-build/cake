@@ -21,15 +21,14 @@ namespace Cake.Common.Tools.Chocolatey
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="globber">The globber.</param>
+        /// <param name="tools">The tool locator.</param>
         /// <param name="resolver">The Chocolatey tool resolver.</param>
         protected ChocolateyTool(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             IProcessRunner processRunner,
-            IGlobber globber,
-            IChocolateyToolResolver resolver)
-            : base(fileSystem, environment, processRunner, globber)
+            IToolLocator tools,
+            IChocolateyToolResolver resolver) : base(fileSystem, environment, processRunner, tools)
         {
             _resolver = resolver;
         }
@@ -64,7 +63,6 @@ namespace Cake.Common.Tools.Chocolatey
             {
                 return new[] { path };
             }
-
             return Enumerable.Empty<FilePath>();
         }
     }

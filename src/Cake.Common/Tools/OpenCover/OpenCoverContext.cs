@@ -1,6 +1,7 @@
 ﻿using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.OpenCover
 {
@@ -43,6 +44,11 @@ namespace Cake.Common.Tools.OpenCover
         public IRegistry Registry
         {
             get { return _context.Registry; }
+        }
+
+        public IToolLocator Tools
+        {
+            get { return _context.Tools; }
         }
 
         public FilePath FilePath

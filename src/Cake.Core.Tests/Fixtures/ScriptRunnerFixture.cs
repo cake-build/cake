@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting;
@@ -13,7 +14,7 @@ namespace Cake.Core.Tests.Fixtures
     {
         public FakeFileSystem FileSystem { get; set; }
         public FakeEnvironment Environment { get; set; }
-        public ICakeArguments Arguments { get; set; }
+        public ICakeConfiguration Configuration { get; set; }        
         public IScriptEngine Engine { get; set; }
         public IScriptSession Session { get; set; }
         public IScriptAnalyzer ScriptAnalyzer { get; set; }
@@ -33,45 +34,35 @@ namespace Cake.Core.Tests.Fixtures
             Script = fileName;
             Source = "Hello World";
 
-            ArgumentDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
             Environment = FakeEnvironment.CreateUnixEnvironment();
-
             FileSystem = new FakeFileSystem(Environment);
             FileSystem.CreateFile(Script.MakeAbsolute(Environment)).SetContent(Source);
-
             Globber = Substitute.For<IGlobber>();
 
-            Session = Substitute.For<IScriptSession>();
-            Engine = Substitute.For<IScriptEngine>();
-            Engine.CreateSession(Arg.Any<IScriptHost>(), ArgumentDictionary).Returns(Session);
-
-            Arguments = Substitute.For<ICakeArguments>();
+            Configuration = Substitute.For<ICakeConfiguration>();
             AliasFinder = Substitute.For<IScriptAliasFinder>();
             Log = Substitute.For<ICakeLog>();
+
+            Session = Substitute.For<IScriptSession>();
+            ArgumentDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            Engine = Substitute.For<IScriptEngine>();
+            Engine.CreateSession(Arg.Any<IScriptHost>(), ArgumentDictionary).Returns(Session);
 
             ScriptAnalyzer = new ScriptAnalyzer(FileSystem, Environment, Log);
             ScriptProcessor = Substitute.For<IScriptProcessor>();
             ScriptConventions = new ScriptConventions(FileSystem);
 
             var context = Substitute.For<ICakeContext>();
-            context.Arguments.Returns(c => Arguments);
             context.Environment.Returns(c => Environment);
             context.FileSystem.Returns(c => FileSystem);
-
             Host = Substitute.For<IScriptHost>();
             Host.Context.Returns(context);
         }
 
         public ScriptRunner CreateScriptRunner()
         {
-            return new ScriptRunner(Environment, Log, Engine,
+            return new ScriptRunner(Environment, Log, Configuration, Engine,
                 AliasFinder, ScriptAnalyzer, ScriptProcessor, ScriptConventions);
-        }
-
-        public string GetExpectedSource()
-        {
-            return string.Concat("#line 1 \"build.cake\"", "\r\n", Source);
         }
     }
 }

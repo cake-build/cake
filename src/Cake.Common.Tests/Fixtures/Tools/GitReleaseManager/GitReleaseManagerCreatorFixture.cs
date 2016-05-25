@@ -19,7 +19,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.GitReleaseManager
 
         protected override void RunTool()
         {
-            var tool = new GitReleaseManagerCreator(FileSystem, Environment, ProcessRunner, Globber, Resolver);
+            var tool = new GitReleaseManagerCreator(FileSystem, Environment, ProcessRunner, Tools);
             tool.Create(UserName, Password, Owner, Repository, Settings);
         }
     }

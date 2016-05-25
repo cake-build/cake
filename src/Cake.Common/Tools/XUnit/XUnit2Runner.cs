@@ -19,10 +19,13 @@ namespace Cake.Common.Tools.XUnit
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
-        /// <param name="globber">The globber.</param>
         /// <param name="runner">The runner.</param>
-        public XUnit2Runner(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, IProcessRunner runner)
-            : base(fileSystem, environment, runner, globber)
+        /// <param name="tools">The tool locator.</param>
+        public XUnit2Runner(
+            IFileSystem fileSystem,
+            ICakeEnvironment environment,
+            IProcessRunner runner,
+            IToolLocator tools) : base(fileSystem, environment, runner, tools)
         {
             _environment = environment;
         }

@@ -175,7 +175,7 @@ namespace Cake.Common.Tools.NUnit
                 throw new ArgumentNullException("assemblies");
             }
 
-            var runner = new NUnitRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            var runner = new NUnitRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(assemblies, settings);
         }
     }

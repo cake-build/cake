@@ -14,7 +14,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet.Installer
 
         protected override void RunTool()
         {
-            var tool = new NuGetInstaller(FileSystem, Environment, ProcessRunner, Globber, Resolver);
+            var tool = new NuGetInstaller(FileSystem, Environment, ProcessRunner, Tools, Resolver);
             tool.InstallFromConfig(PackageConfigPath, Settings);
         }
     }

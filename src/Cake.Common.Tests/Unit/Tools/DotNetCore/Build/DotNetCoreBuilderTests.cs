@@ -26,7 +26,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Build
             }
 
             [Fact]
-            public void Should_Throw_If_Path_Is_Null()
+            public void Should_Throw_If_Project_Is_Null()
             {
                 // Given
                 var fixture = new DotNetCoreBuilderFixture();
@@ -37,7 +37,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Build
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                Assert.IsArgumentNullException(result, "project");
             }
 
             [Fact]
@@ -52,7 +52,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Build
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "DotNetCore: Process was not started.");
+                Assert.IsCakeException(result, ".NET Core CLI: Process was not started.");
             }
 
             [Fact]
@@ -67,7 +67,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Build
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "DotNetCore: Process returned an error (exit code 1).");
+                Assert.IsCakeException(result, ".NET Core CLI: Process returned an error (exit code 1).");
             }
 
             [Fact]

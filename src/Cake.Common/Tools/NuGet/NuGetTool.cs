@@ -22,15 +22,14 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="globber">The globber.</param>
+        /// <param name="tools">The tool locator.</param>
         /// <param name="resolver">The NuGet tool resolver.</param>
         protected NuGetTool(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             IProcessRunner processRunner,
-            IGlobber globber,
-            INuGetToolResolver resolver)
-            : base(fileSystem, environment, processRunner, globber)
+            IToolLocator tools,
+            INuGetToolResolver resolver) : base(fileSystem, environment, processRunner, tools)
         {
             _resolver = resolver;
         }

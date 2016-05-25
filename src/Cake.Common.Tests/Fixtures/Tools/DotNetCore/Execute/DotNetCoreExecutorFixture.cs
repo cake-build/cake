@@ -1,5 +1,4 @@
-﻿using Cake.Common.Tools.DotNetCore;
-using Cake.Common.Tools.DotNetCore.Execute;
+﻿using Cake.Common.Tools.DotNetCore.Execute;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Execute
@@ -12,7 +11,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Execute
 
         protected override void RunTool()
         {
-            var tool = new DotNetCoreExecutor(FileSystem, Environment, ProcessRunner, Globber);
+            var tool = new DotNetCoreExecutor(FileSystem, Environment, ProcessRunner, Tools);
             tool.Execute(AssemblyPath, Arguments, Settings);
         }
     }

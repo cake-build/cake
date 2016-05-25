@@ -18,7 +18,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         protected override void RunTool()
         {
-            var tool = new ReportGeneratorRunner(FileSystem, Environment, ProcessRunner, Globber);
+            var tool = new ReportGeneratorRunner(FileSystem, Environment, ProcessRunner, Tools);
             tool.Run(Reports, TargetDir, Settings);
         }
     }

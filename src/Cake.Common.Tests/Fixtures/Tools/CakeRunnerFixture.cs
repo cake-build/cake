@@ -27,7 +27,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         protected override void RunTool()
         {
-            var runner = new CakeRunner(FileSystem, Environment, Globber, ProcessRunner);
+            var runner = new CakeRunner(FileSystem, Environment, Globber, ProcessRunner, Tools);
             runner.ExecuteScript(ScriptPath, Settings);
         }
     }

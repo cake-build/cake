@@ -6,7 +6,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Sources
     {
         protected override void RunTool()
         {
-            var tool = new ChocolateySources(FileSystem, Environment, ProcessRunner, Globber, Resolver);
+            var tool = new ChocolateySources(FileSystem, Environment, ProcessRunner, Tools, Resolver);
             tool.EnableSource(Name, Settings);
         }
     }

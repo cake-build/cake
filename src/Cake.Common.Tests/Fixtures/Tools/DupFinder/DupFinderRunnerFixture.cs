@@ -29,7 +29,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.DupFinder
 
         protected override void RunTool()
         {
-            var tool = new DupFinderRunner(FileSystem, Environment, ProcessRunner, Globber, Log);
+            var tool = new DupFinderRunner(FileSystem, Environment, ProcessRunner, Tools, Log);
             tool.Run(FilePaths, Settings);
         }
     }

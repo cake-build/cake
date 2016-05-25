@@ -6,8 +6,11 @@ namespace Cake.Core.Tests.Stubs
 {
     public sealed class DummyTool : Tool<DummySettings>
     {
-        public DummyTool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IGlobber globber)
-            : base(fileSystem, environment, processRunner, globber)
+        public DummyTool(
+            IFileSystem fileSystem,
+            ICakeEnvironment environment,
+            IProcessRunner processRunner,
+            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
         {
         }
 

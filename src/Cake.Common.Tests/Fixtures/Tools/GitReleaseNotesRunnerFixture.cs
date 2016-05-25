@@ -16,7 +16,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         protected override void RunTool()
         {
-            var tool = new GitReleaseNotesRunner(FileSystem, Environment, ProcessRunner, Globber);
+            var tool = new GitReleaseNotesRunner(FileSystem, Environment, ProcessRunner, Tools);
             tool.Run(OutputFile, Settings);
         }
     }

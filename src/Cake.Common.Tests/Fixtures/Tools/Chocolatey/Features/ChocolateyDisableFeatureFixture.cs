@@ -6,7 +6,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Features
     {
         protected override void RunTool()
         {
-            var tool = new ChocolateyFeatureToggler(FileSystem, Environment, ProcessRunner, Globber, Resolver);
+            var tool = new ChocolateyFeatureToggler(FileSystem, Environment, ProcessRunner, Tools, Resolver);
             tool.DisableFeature(Name, Settings);
         }
     }

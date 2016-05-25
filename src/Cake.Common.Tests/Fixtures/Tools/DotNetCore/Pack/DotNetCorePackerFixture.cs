@@ -8,7 +8,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Pack
 
         protected override void RunTool()
         {
-            var tool = new DotNetCorePacker(FileSystem, Environment, ProcessRunner, Globber);
+            var tool = new DotNetCorePacker(FileSystem, Environment, ProcessRunner, Tools);
             tool.Pack(Project, Settings);
         }
     }

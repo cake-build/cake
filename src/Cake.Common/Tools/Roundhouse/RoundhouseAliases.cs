@@ -23,7 +23,7 @@ namespace Cake.Common.Tools.Roundhouse
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new RoundhouseRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var runner = new RoundhouseRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(settings);
         }
 
@@ -40,7 +40,7 @@ namespace Cake.Common.Tools.Roundhouse
                 throw new ArgumentNullException("context");
             }
 
-            var runner = new RoundhouseRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var runner = new RoundhouseRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(settings, true);
         }
     }

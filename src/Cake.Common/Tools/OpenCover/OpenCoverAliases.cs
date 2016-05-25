@@ -48,7 +48,7 @@ namespace Cake.Common.Tools.OpenCover
             // Create the OpenCover runner.
             var runner = new OpenCoverRunner(
                 context.FileSystem, context.Environment,
-                context.ProcessRunner, context.Globber);
+                context.ProcessRunner, context.Tools);
 
             // Run OpenCover.
             runner.Run(context, action, outputFile, settings);

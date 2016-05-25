@@ -16,6 +16,7 @@ namespace Cake.Core.Tooling
         private readonly ICakeEnvironment _environment;
         private readonly IFileSystem _fileSystem;
         private readonly IGlobber _globber;
+        private readonly IToolLocator _tools;
         private readonly IProcessRunner _processRunner;
 
         /// <summary>
@@ -25,8 +26,26 @@ namespace Cake.Core.Tooling
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="globber">The globber.</param>
-        protected Tool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner,
-            IGlobber globber)
+        [Obsolete("Please use Tool(IFileSystem, ICakeEnvironment, IProcessRunner, IToolService) instead.")]
+        protected Tool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IGlobber globber)
+            : this(fileSystem, environment, processRunner, (IToolLocator)null)
+        {
+            if (globber == null)
+            {
+                throw new ArgumentNullException("globber");
+            }
+
+            _globber = globber;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Tool{TSettings}"/> class.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="environment">The environment.</param>
+        /// <param name="processRunner">The process runner.</param>
+        /// <param name="tools">The tool locator.</param>
+        protected Tool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IToolLocator tools)
         {
             if (fileSystem == null)
             {
@@ -40,15 +59,11 @@ namespace Cake.Core.Tooling
             {
                 throw new ArgumentNullException("processRunner");
             }
-            if (globber == null)
-            {
-                throw new ArgumentNullException("globber");
-            }
 
             _fileSystem = fileSystem;
             _environment = environment;
             _processRunner = processRunner;
-            _globber = globber;
+            _tools = tools;
         }
 
         /// <summary>
@@ -221,8 +236,50 @@ namespace Cake.Core.Tooling
             return Enumerable.Empty<FilePath>();
         }
 
-        [SuppressMessage("ReSharper", "ConvertIfStatementToConditionalTernaryExpression")]
         private FilePath GetToolPath(TSettings settings)
+        {
+            if (_tools != null)
+            {
+                return GetToolPathUsingToolService(settings);
+            }
+
+            return GetToolPathObsolete(settings);
+        }
+
+        private FilePath GetToolPathUsingToolService(TSettings settings)
+        {
+            var toolPath = settings.ToolPath;
+            if (toolPath != null)
+            {
+                return toolPath.MakeAbsolute(_environment);
+            }
+
+            // Look for each possible executable name in various places.
+            var toolExeNames = GetToolExecutableNames();
+            foreach (var toolExeName in toolExeNames)
+            {
+                var result = _tools.Resolve(toolExeName);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+
+            // Look through all the alternative directories for the tool.
+            var alternativePaths = GetAlternativeToolPaths(settings) ?? Enumerable.Empty<FilePath>();
+            foreach (var alternativePath in alternativePaths)
+            {
+                if (_fileSystem.Exist(alternativePath))
+                {
+                    return alternativePath.MakeAbsolute(_environment);
+                }
+            }
+
+            return null;
+        }
+
+        [SuppressMessage("ReSharper", "ConvertIfStatementToConditionalTernaryExpression")]
+        private FilePath GetToolPathObsolete(TSettings settings)
         {
             var toolPath = settings.ToolPath;
             if (toolPath != null)

@@ -15,7 +15,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.TextTransform
 
         protected override void RunTool()
         {
-            var tool = new TextTransformRunner(FileSystem, Environment, ProcessRunner, Globber);
+            var tool = new TextTransformRunner(FileSystem, Environment, ProcessRunner, Tools);
             tool.Run(SourceFile, Settings);
         }
     }

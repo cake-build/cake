@@ -4,6 +4,7 @@ using Cake.Core.IO;
 using Cake.Core.Packaging;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.Analysis;
+using Cake.Core.Tooling;
 using Cake.Testing;
 using NSubstitute;
 
@@ -14,6 +15,7 @@ namespace Cake.Core.Tests.Fixtures
         public FakeFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
         public ICakeLog Log { get; set; }
+        public IToolLocator Tools { get; set; }
         public IPackageInstaller Installer { get; set; }
 
         public ScriptAnalyzerResult Result { get; set; }
@@ -24,6 +26,8 @@ namespace Cake.Core.Tests.Fixtures
             Environment = FakeEnvironment.CreateUnixEnvironment();
             FileSystem = new FakeFileSystem(Environment);
             Log = Substitute.For<ICakeLog>();
+            Tools = Substitute.For<IToolLocator>();
+
             Installer = Substitute.For<IPackageInstaller>();
             Installer.CanInstall(Arg.Any<PackageReference>(), Arg.Any<PackageType>()).Returns(true);
             InstallPath = new DirectoryPath("/Working/Bin");
@@ -54,7 +58,7 @@ namespace Cake.Core.Tests.Fixtures
             {
                 installers.Add(Installer);
             }
-            return new ScriptProcessor(FileSystem, Environment, Log, installers);
+            return new ScriptProcessor(FileSystem, Environment, Log, Tools, installers);
         }
 
         public void InstallAddins()

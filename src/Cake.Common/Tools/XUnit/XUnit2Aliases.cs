@@ -183,7 +183,7 @@ namespace Cake.Common.Tools.XUnit
                 throw new ArgumentNullException("assemblies");
             }
 
-            var runner = new XUnit2Runner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner);
+            var runner = new XUnit2Runner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(assemblies, settings);
         }
     }

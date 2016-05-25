@@ -99,7 +99,7 @@ namespace Cake.Scripting.Roslyn.Nightly
             };
 
             // Install package.
-            var nugetSource = _configuration.GetValue("Roslyn_NuGetSource") ?? "https://packages.nuget.org/api/v2";
+            var nugetSource = _configuration.GetValue(Constants.Roslyn.NuGetSource) ?? "https://packages.nuget.org/api/v2";
             var repo = PackageRepositoryFactory.Default.CreateRepository(nugetSource);
             var packageManager = new PackageManager(repo, installRoot.FullPath);
             _log.Verbose("Installing packages (using {0})...", nugetSource);
@@ -118,7 +118,7 @@ namespace Cake.Scripting.Roslyn.Nightly
                 var foundFile = _globber.Match(exp).FirstOrDefault();
                 if (foundFile == null)
                 {
-                    var format = "Could not find file {0}.";
+                    const string format = "Could not find file {0}.";
                     var message = string.Format(CultureInfo.InvariantCulture, format, path);
                     throw new CakeException(message);
                 }

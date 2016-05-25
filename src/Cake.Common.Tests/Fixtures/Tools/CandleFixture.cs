@@ -18,7 +18,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         protected override void RunTool()
         {
-            var tool = new CandleRunner(FileSystem, Environment, Globber, ProcessRunner);
+            var tool = new CandleRunner(FileSystem, Environment, ProcessRunner, Tools);
             tool.Run(SourceFiles, Settings);
         }
     }

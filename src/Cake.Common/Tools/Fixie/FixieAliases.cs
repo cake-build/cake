@@ -126,7 +126,7 @@ namespace Cake.Common.Tools.Fixie
                 throw new ArgumentNullException("assemblies");
             }
 
-            var runner = new FixieRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var runner = new FixieRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(assemblies, settings);
         }
     }

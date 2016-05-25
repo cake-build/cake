@@ -3,6 +3,7 @@ using System.Globalization;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.Chocolatey.Pack
 {
@@ -22,12 +23,15 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="log">The log.</param>
-        /// <param name="globber">The globber.</param>
+        /// <param name="tools">The tool locator.</param>
         /// <param name="resolver">The Chocolatey tool resolver</param>
-        public ChocolateyPacker(IFileSystem fileSystem, ICakeEnvironment environment,
-            IProcessRunner processRunner, ICakeLog log, IGlobber globber,
-            IChocolateyToolResolver resolver)
-            : base(fileSystem, environment, processRunner, globber, resolver)
+        public ChocolateyPacker(
+            IFileSystem fileSystem, 
+            ICakeEnvironment environment, 
+            IProcessRunner processRunner, 
+            ICakeLog log, 
+            IToolLocator tools, 
+            IChocolateyToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
         {
             _fileSystem = fileSystem;
             _environment = environment;

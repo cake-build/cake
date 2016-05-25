@@ -9,7 +9,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.DNU.Restorer
 
         protected override void RunTool()
         {
-            var tool = new DNURestorer(FileSystem, Environment, ProcessRunner, Globber);
+            var tool = new DNURestorer(FileSystem, Environment, ProcessRunner, Tools);
             tool.Restore(FilePath, Settings);
         }
     }

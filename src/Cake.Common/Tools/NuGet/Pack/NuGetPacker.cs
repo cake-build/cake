@@ -4,6 +4,7 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.NuGet.Pack
 {
@@ -23,12 +24,15 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="log">The log.</param>
-        /// <param name="globber">The globber.</param>
+        /// <param name="tools">The tool locator.</param>
         /// <param name="resolver">The NuGet tool resolver</param>
-        public NuGetPacker(IFileSystem fileSystem, ICakeEnvironment environment,
-            IProcessRunner processRunner, ICakeLog log, IGlobber globber,
-            INuGetToolResolver resolver)
-            : base(fileSystem, environment, processRunner, globber, resolver)
+        public NuGetPacker(
+            IFileSystem fileSystem,
+            ICakeEnvironment environment,
+            IProcessRunner processRunner,
+            ICakeLog log,
+            IToolLocator tools,
+            INuGetToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
         {
             _fileSystem = fileSystem;
             _environment = environment;

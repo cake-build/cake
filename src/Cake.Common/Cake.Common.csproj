@@ -245,8 +245,6 @@
     <Compile Include="Tools\GitReleaseManager\Export\GitReleaseManagerExportSettings.cs" />
     <Compile Include="Tools\GitReleaseManager\GitReleaseManagerAliases.cs" />
     <Compile Include="Tools\GitReleaseManager\GitReleaseManagerTool.cs" />
-    <Compile Include="Tools\GitReleaseManager\GitReleaseManagerToolResolver.cs" />
-    <Compile Include="Tools\GitReleaseManager\IGitReleaseManagerToolResolver.cs" />
     <Compile Include="Tools\GitReleaseManager\Publish\GitReleaseManagerPublisher.cs" />
     <Compile Include="Tools\GitReleaseManager\Publish\GitReleaseManagerPublishSettings.cs" />
     <Compile Include="Tools\GitReleaseNotes\GitReleaseNotesAliases.cs" />

@@ -65,7 +65,7 @@ namespace Cake.Common.Tools.XBuild
                 throw new ArgumentNullException("settings");
             }
 
-            var runner = new XBuildRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var runner = new XBuildRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(solution, settings);
         }
     }

@@ -27,6 +27,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.DotCover.Analyse
             Context.Log.Returns(Substitute.For<ICakeLog>());
             Context.Registry.Returns(Substitute.For<IRegistry>());
             Context.ProcessRunner.Returns((IProcessRunner)null);
+            Context.Tools.Returns(Tools);
 
             // Set up the default action that intercepts.
             Action = context =>
@@ -42,7 +43,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.DotCover.Analyse
 
         protected override void RunTool()
         {
-            var tool = new DotCoverAnalyser(FileSystem, Environment, ProcessRunner, Globber);
+            var tool = new DotCoverAnalyser(FileSystem, Environment, ProcessRunner, Tools);
             tool.Analyse(Context, Action, OutputPath, Settings);
         }
     }

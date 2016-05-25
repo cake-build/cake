@@ -17,7 +17,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         protected override void RunTool()
         {
-            var runner = new XUnit2Runner(FileSystem, Environment, Globber, ProcessRunner);
+            var runner = new XUnit2Runner(FileSystem, Environment, ProcessRunner, Tools);
             runner.Run(AssemblyPaths, Settings);
         }
     }

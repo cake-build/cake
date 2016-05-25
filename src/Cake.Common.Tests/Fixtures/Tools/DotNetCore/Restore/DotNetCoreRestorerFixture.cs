@@ -8,7 +8,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Restore
 
         protected override void RunTool()
         {
-            var tool = new DotNetCoreRestorer(FileSystem, Environment, ProcessRunner, Globber);
+            var tool = new DotNetCoreRestorer(FileSystem, Environment, ProcessRunner, Tools);
             tool.Restore(Root, Settings);
         }
     }

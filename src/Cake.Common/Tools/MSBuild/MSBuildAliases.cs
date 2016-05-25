@@ -90,7 +90,7 @@ namespace Cake.Common.Tools.MSBuild
                 throw new ArgumentNullException("settings");
             }
 
-            var runner = new MSBuildRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Globber);
+            var runner = new MSBuildRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(solution, settings);
         }
     }
