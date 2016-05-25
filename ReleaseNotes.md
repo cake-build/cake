@@ -1,3 +1,30 @@
+### New on 0.12.0 (Released 2016/05/25)
+
+* Fix globalization & white space issue
+* New Setup(Action<ICakeContext>)  fails on mono
+* Cake.pdb is missing in artifacts
+* Tool path is wrong when calling cake file in sub directory
+* Add support for .NET Core CLI
+* Add pre-processor directive which injects Debugger.Break()
+* Add an EnsureDirectoryExists Alias to CreateDirectory and not fail if it exists
+* Debugging support
+* Added additional missing variables for GitVersion
+* Add missing GitVersion return values
+* Add missing GitVersion return values
+* Consider adding developmentDependency to nuspec for Cake.Common
+* Specify culture for Roslyn debug string formats
+* Add cake-build build.cake NuGet restore retry handling
+* During the publishing cycle, continue with each step, and error at end if there is a problem
+* Add all artifacts to AppVeyor during publishing cycle
+* Add register and ReturnTargetCodeOffset option in opencover
+* Unified tool resolution
+* Drop DNU/DNX support in favor of dotnet CLI
+* Corrected resource download urls
+* Docs: Typos in XBuild docs
+* -Mono parameter is not documented in Program.cs output
+* How to get ILRepack executable?
+
+
 ### New on 0.11.0 (Released 2016/05/01)
 
 * Regression: ProcessArgumentListExtensions was renamed
