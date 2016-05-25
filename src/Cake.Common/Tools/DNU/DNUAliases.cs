@@ -26,6 +26,7 @@ namespace Cake.Common.Tools.DNU
         [CakeMethodAlias]
         [CakeAliasCategory("Restore")]
         [CakeNamespaceImport("Cake.Common.Tools.DNU.Restore")]
+        [Obsolete("Please use DotNetCoreRestore() instead.", false)]
         public static void DNURestore(this ICakeContext context)
         {
             context.DNURestore(null, null);
@@ -48,6 +49,7 @@ namespace Cake.Common.Tools.DNU
         [CakeMethodAlias]
         [CakeAliasCategory("Restore")]
         [CakeNamespaceImport("Cake.Common.Tools.DNU.Restore")]
+        [Obsolete("Please use DotNetCoreRestore(string) instead.", false)]
         public static void DNURestore(this ICakeContext context, FilePath filePath)
         {
             context.DNURestore(filePath, null);
@@ -80,6 +82,7 @@ namespace Cake.Common.Tools.DNU
         [CakeMethodAlias]
         [CakeAliasCategory("Restore")]
         [CakeNamespaceImport("Cake.Common.Tools.DNU.Restore")]
+        [Obsolete("Please use DotNetCoreRestore(DotNetCoreRestoreSettings) instead.", false)]
         public static void DNURestore(this ICakeContext context, DNURestoreSettings settings)
         {
             context.DNURestore(null, settings);
@@ -117,6 +120,7 @@ namespace Cake.Common.Tools.DNU
         [CakeMethodAlias]
         [CakeAliasCategory("Restore")]
         [CakeNamespaceImport("Cake.Common.Tools.DNU.Restore")]
+        [Obsolete("Please use DotNetCoreRestore(string, DotNetCoreRestoreSettings) instead.", false)]
         public static void DNURestore(this ICakeContext context, FilePath filePath, DNURestoreSettings settings)
         {
             if (context == null)
@@ -146,6 +150,7 @@ namespace Cake.Common.Tools.DNU
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
         [CakeNamespaceImport("Cake.Common.Tools.DNU.Build")]
+        [Obsolete("Please use DotNetCoreBuild(string) instead.", false)]
         public static void DNUBuild(this ICakeContext context, string path)
         {
             context.DNUBuild(path, null);
@@ -173,6 +178,7 @@ namespace Cake.Common.Tools.DNU
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
         [CakeNamespaceImport("Cake.Common.Tools.DNU.Build")]
+        [Obsolete("Please use DotNetCoreBuild(string, DotNetCoreBuildSettings) instead.", false)]
         public static void DNUBuild(this ICakeContext context, string path, DNUBuildSettings settings)
         {
             if (context == null)
@@ -202,6 +208,7 @@ namespace Cake.Common.Tools.DNU
         [CakeMethodAlias]
         [CakeAliasCategory("Pack")]
         [CakeNamespaceImport("Cake.Common.Tools.DNU.Pack")]
+        [Obsolete("Please use DotNetCorePack(string) instead.", false)]
         public static void DNUPack(this ICakeContext context, string path)
         {
             context.DNUPack(path, null);
@@ -229,6 +236,7 @@ namespace Cake.Common.Tools.DNU
         [CakeMethodAlias]
         [CakeAliasCategory("Pack")]
         [CakeNamespaceImport("Cake.Common.Tools.DNU.Pack")]
+        [Obsolete("Please use DotNetCorePack(string, DotNetCorePackSettings) instead.", false)]
         public static void DNUPack(this ICakeContext context, string path, DNUPackSettings settings)
         {
             if (context == null)
