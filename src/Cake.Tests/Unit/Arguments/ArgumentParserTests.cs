@@ -218,9 +218,13 @@ namespace Cake.Tests.Unit.Arguments
                 }
 
                 [Theory]
-                [InlineData("-showdescription")]
-                [InlineData("-s")]
-                public void Can_Parse_ShowDescription(string input)
+                [InlineData("-showdescription", true)]
+                [InlineData("-showdescription=true", true)]
+                [InlineData("-showdescription=false", false)]
+                [InlineData("-s", true)]
+                [InlineData("-s=true", true)]
+                [InlineData("-s=false", false)]
+                public void Can_Parse_ShowDescription(string input, bool expected)
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
@@ -230,14 +234,20 @@ namespace Cake.Tests.Unit.Arguments
                     var result = parser.Parse(new[] { "build.csx", input });
 
                     // Then
-                    Assert.Equal(true, result.ShowDescription);
+                    Assert.Equal(expected, result.ShowDescription);
                 }
 
                 [Theory]
-                [InlineData("-dryrun")]
-                [InlineData("-noop")]
-                [InlineData("-whatif")]
-                public void Can_Parse_DryRun(string input)
+                [InlineData("-dryrun", true)]
+                [InlineData("-dryrun=true", true)]
+                [InlineData("-dryrun=false", false)]
+                [InlineData("-noop", true)]
+                [InlineData("-noop=true", true)]
+                [InlineData("-noop=false", false)]
+                [InlineData("-whatif", true)]
+                [InlineData("-whatif=true", true)]
+                [InlineData("-whatif=false", false)]
+                public void Can_Parse_DryRun(string input, bool expected)
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
@@ -247,13 +257,15 @@ namespace Cake.Tests.Unit.Arguments
                     var result = parser.Parse(new[] { "build.csx", input });
 
                     // Then
-                    Assert.Equal(true, result.PerformDryRun);
+                    Assert.Equal(expected, result.PerformDryRun);
                 }
 
                 [Theory]
-                [InlineData("-help")]
-                [InlineData("-?")]
-                public void Can_Parse_Help(string input)
+                [InlineData("-help", true)]
+                [InlineData("-help=true", true)]
+                [InlineData("-help=false", false)]
+                [InlineData("-?", true)]
+                public void Can_Parse_Help(string input, bool expected)
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
@@ -263,13 +275,17 @@ namespace Cake.Tests.Unit.Arguments
                     var result = parser.Parse(new[] { "build.csx", input });
 
                     // Then
-                    Assert.Equal(true, result.ShowHelp);
+                    Assert.Equal(expected, result.ShowHelp);
                 }
 
                 [Theory]
-                [InlineData("-version")]
-                [InlineData("-ver")]
-                public void Can_Parse_Version(string input)
+                [InlineData("-version", true)]
+                [InlineData("-version=true", true)]
+                [InlineData("-version=false", false)]
+                [InlineData("-ver", true)]
+                [InlineData("-ver=true", true)]
+                [InlineData("-ver=false", false)]
+                public void Can_Parse_Version(string input, bool expected)
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
@@ -279,13 +295,17 @@ namespace Cake.Tests.Unit.Arguments
                     var result = parser.Parse(new[] { "build.csx", input });
 
                     // Then
-                    Assert.Equal(true, result.ShowVersion);
+                    Assert.Equal(expected, result.ShowVersion);
                 }
 
                 [Theory]
-                [InlineData("-debug")]
-                [InlineData("-d")]
-                public void Can_Parse_Debug(string input)
+                [InlineData("-debug", true)]
+                [InlineData("-debug=true", true)]
+                [InlineData("-debug=false", false)]
+                [InlineData("-d", true)]
+                [InlineData("-d=true", true)]
+                [InlineData("-d=false", false)]
+                public void Can_Parse_Debug(string input, bool expected)
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
@@ -295,7 +315,7 @@ namespace Cake.Tests.Unit.Arguments
                     var result = parser.Parse(new[] { "build.csx", input });
 
                     // Then
-                    Assert.Equal(true, result.PerformDebug);
+                    Assert.Equal(expected, result.PerformDebug);
                 }
             }
 
@@ -364,11 +384,6 @@ namespace Cake.Tests.Unit.Arguments
                 [InlineData("--v=normal", Verbosity.Normal)]
                 [InlineData("--v=verbose", Verbosity.Verbose)]
                 [InlineData("--v=diagnostic", Verbosity.Diagnostic)]
-                [InlineData("-v=q", Verbosity.Quiet)]
-                [InlineData("-v=m", Verbosity.Minimal)]
-                [InlineData("-v=n", Verbosity.Normal)]
-                [InlineData("-v=v", Verbosity.Verbose)]
-                [InlineData("-v=d", Verbosity.Diagnostic)]
                 public void Can_Parse_Verbosity(string input, Verbosity value)
                 {
                     // Given
@@ -385,8 +400,6 @@ namespace Cake.Tests.Unit.Arguments
                 [Theory]
                 [InlineData("--verbosity=lol", "The value 'lol' is not a valid verbosity.")]
                 [InlineData("--verbosity=", "The value '' is not a valid verbosity.")]
-                [InlineData("-v=lol", "The value 'lol' is not a valid verbosity.")]
-                [InlineData("-v=", "The value '' is not a valid verbosity.")]
                 public void Should_Throw_If_Parsing_Invalid_Verbosity(string verbosity, string expected)
                 {
                     // Given
@@ -420,9 +433,10 @@ namespace Cake.Tests.Unit.Arguments
                 }
 
                 [Theory]
-                [InlineData("--showdescription")]
-                [InlineData("-s")]
-                public void Can_Parse_ShowDescription(string input)
+                [InlineData("--showdescription", true)]
+                [InlineData("--showdescription=true", true)]
+                [InlineData("--showdescription=false", false)]
+                public void Can_Parse_ShowDescription(string input, bool expected)
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
@@ -432,14 +446,20 @@ namespace Cake.Tests.Unit.Arguments
                     var result = parser.Parse(new[] { "build.csx", input });
 
                     // Then
-                    Assert.Equal(true, result.ShowDescription);
+                    Assert.Equal(expected, result.ShowDescription);
                 }
 
                 [Theory]
-                [InlineData("--dryrun")]
-                [InlineData("--noop")]
-                [InlineData("--whatif")]
-                public void Can_Parse_DryRun(string input)
+                [InlineData("--dryrun", true)]
+                [InlineData("--dryrun=true", true)]
+                [InlineData("--dryrun=false", false)]
+                [InlineData("--noop", true)]
+                [InlineData("--noop=true", true)]
+                [InlineData("--noop=false", false)]
+                [InlineData("--whatif", true)]
+                [InlineData("--whatif=true", true)]
+                [InlineData("--whatif=false", false)]
+                public void Can_Parse_DryRun(string input, bool expected)
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
@@ -449,13 +469,14 @@ namespace Cake.Tests.Unit.Arguments
                     var result = parser.Parse(new[] { "build.csx", input });
 
                     // Then
-                    Assert.Equal(true, result.PerformDryRun);
+                    Assert.Equal(expected, result.PerformDryRun);
                 }
 
                 [Theory]
-                [InlineData("--help")]
-                [InlineData("-?")]
-                public void Can_Parse_Help(string input)
+                [InlineData("--help", true)]
+                [InlineData("--help=true", true)]
+                [InlineData("--help=false", false)]
+                public void Can_Parse_Help(string input, bool expected)
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
@@ -465,13 +486,17 @@ namespace Cake.Tests.Unit.Arguments
                     var result = parser.Parse(new[] { "build.csx", input });
 
                     // Then
-                    Assert.Equal(true, result.ShowHelp);
+                    Assert.Equal(expected, result.ShowHelp);
                 }
 
                 [Theory]
-                [InlineData("--version")]
-                [InlineData("--ver")]
-                public void Can_Parse_Version(string input)
+                [InlineData("--version", true)]
+                [InlineData("--version=true", true)]
+                [InlineData("--version=false", false)]
+                [InlineData("--ver", true)]
+                [InlineData("--ver=true", true)]
+                [InlineData("--ver=false", false)]
+                public void Can_Parse_Version(string input, bool expected)
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
@@ -481,13 +506,14 @@ namespace Cake.Tests.Unit.Arguments
                     var result = parser.Parse(new[] { "build.csx", input });
 
                     // Then
-                    Assert.Equal(true, result.ShowVersion);
+                    Assert.Equal(expected, result.ShowVersion);
                 }
 
                 [Theory]
-                [InlineData("--debug")]
-                [InlineData("-d")]
-                public void Can_Parse_Debug(string input)
+                [InlineData("--debug", true)]
+                [InlineData("--debug=true", true)]
+                [InlineData("--debug=false", false)]
+                public void Can_Parse_Debug(string input, bool expected)
                 {
                     // Given
                     var fixture = new ArgumentParserFixture();
@@ -497,7 +523,7 @@ namespace Cake.Tests.Unit.Arguments
                     var result = parser.Parse(new[] { "build.csx", input });
 
                     // Then
-                    Assert.Equal(true, result.PerformDebug);
+                    Assert.Equal(expected, result.PerformDebug);
                 }
             }
         }

@@ -114,15 +114,7 @@ namespace Cake.Arguments
                 value = arg.Substring(separatorIndex + 1);
             }
 
-            if (value.Length > 2)
-            {
-                if (value[0] == '\"' && value[value.Length - 1] == '\"')
-                {
-                    value = value.Substring(1, value.Length - 2);
-                }
-            }
-
-            return ParseOption(name, value, options);
+            return ParseOption(name, value.UnQuote(), options);
         }
 
         private bool ParseOption(string name, string value, CakeOptions options)
@@ -142,32 +134,32 @@ namespace Cake.Arguments
             if (name.Equals("showdescription", StringComparison.OrdinalIgnoreCase) ||
                 name.Equals("s", StringComparison.OrdinalIgnoreCase))
             {
-                options.ShowDescription = true;
+                options.ShowDescription = ParseBooleanValue(value);
             }
 
             if (name.Equals("dryrun", StringComparison.OrdinalIgnoreCase) ||
                 name.Equals("noop", StringComparison.OrdinalIgnoreCase) ||
                 name.Equals("whatif", StringComparison.OrdinalIgnoreCase))
             {
-                options.PerformDryRun = true;
+                options.PerformDryRun = ParseBooleanValue(value);
             }
 
             if (name.Equals("help", StringComparison.OrdinalIgnoreCase) ||
                 name.Equals("?", StringComparison.OrdinalIgnoreCase))
             {
-                options.ShowHelp = true;
+                options.ShowHelp = ParseBooleanValue(value);
             }
 
             if (name.Equals("version", StringComparison.OrdinalIgnoreCase) ||
                 name.Equals("ver", StringComparison.OrdinalIgnoreCase))
             {
-                options.ShowVersion = true;
+                options.ShowVersion = ParseBooleanValue(value);
             }
 
             if (name.Equals("debug", StringComparison.OrdinalIgnoreCase) ||
                 name.Equals("d", StringComparison.OrdinalIgnoreCase))
             {
-                options.PerformDebug = true;
+                options.PerformDebug = ParseBooleanValue(value);
             }
 
             if (options.Arguments.ContainsKey(name))
@@ -178,6 +170,24 @@ namespace Cake.Arguments
 
             options.Arguments.Add(name, value);
             return true;
+        }
+
+        private static bool ParseBooleanValue(string value)
+        {
+            value = (value ?? string.Empty).UnQuote();
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return true;
+            }
+            if (value.Equals("true", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+            if (value.Equals("false", StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+            throw new InvalidOperationException("Argument value is not a valid boolean value.");
         }
     }
 }
