@@ -17,6 +17,7 @@ tools/nuget.exe
 tools/gitreleasemanager/
 tools/GitVersion.CommandLine/
 tools/Addins/
+tools/packages.config.md5sum
 
 # mstest test results
 TestResults
