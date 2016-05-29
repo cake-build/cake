@@ -6,7 +6,14 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.GitReleaseNotes
 {
     /// <summary>
-    ///  Contains functionality related to GitReleaseNotes
+    /// <para>Contains functionality related to <see href="https://github.com/gittools/gitreleasenotes">GitReleaseNotes</see>.</para>
+    /// <para>
+    /// In order to use the commands for this alias, include the following in your build.cake file to download and
+    /// install from NuGet.org, or specify the ToolPath within the <see cref="GitReleaseNotesSettings" /> class:
+    /// <code>
+    /// #tool "nuget:?package=GitReleaseNotes"
+    /// </code>
+    /// </para>
     /// </summary>
     [CakeAliasCategory("GitReleaseNotes")]
     public static class GitReleaseNotesAliases

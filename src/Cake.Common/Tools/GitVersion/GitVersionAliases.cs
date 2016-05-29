@@ -5,9 +5,14 @@ using Cake.Core.Annotations;
 namespace Cake.Common.Tools.GitVersion
 {
     /// <summary>
-    /// Contains functionality related to GitVersion.
-    /// <see href="http://gitversion.readthedocs.org/en/latest/">GitVersion Documentation</see>
-    /// <see href="https://www.nuget.org/packages/GitVersion.CommandLine/">GitVersion NuGet Package</see>
+    /// <para>Contains functionality related to <see href="https://github.com/gittools/gitversion">GitVersion</see>.</para>
+    /// <para>
+    /// In order to use the commands for this alias, include the following in your build.cake file to download and
+    /// install from NuGet.org, or specify the ToolPath within the <see cref="GitVersionSettings" /> class:
+    /// <code>
+    /// #tool "nuget:?package=GitVersion.CommandLine"
+    /// </code>
+    /// </para>
     /// </summary>
     [CakeAliasCategory("GitVersion")]
     public static class GitVersionAliases

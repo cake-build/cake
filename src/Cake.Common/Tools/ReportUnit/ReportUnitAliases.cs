@@ -6,7 +6,14 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.ReportUnit
 {
     /// <summary>
-    /// Contains functionality related to ReportUnit.
+    /// <para>Contains functionality related to <see href="http://relevantcodes.com/reportunit-report-generator/">ReportUnit</see>.</para>
+    /// <para>
+    /// In order to use the commands for this alias, include the following in your build.cake file to download and
+    /// install from NuGet.org, or specify the ToolPath within the <see cref="ReportUnitSettings" /> class:
+    /// <code>
+    /// #tool "nuget:?package=ReportUnit"
+    /// </code>
+    /// </para>
     /// </summary>
     [CakeAliasCategory("ReportUnit")]
     public static class ReportUnitAliases

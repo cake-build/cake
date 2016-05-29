@@ -6,7 +6,12 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.NSIS
 {
     /// <summary>
-    /// Contains functionality related to running NSIS.
+    /// <para>Contains functionality related to <see href="http://nsis.sourceforge.net/Main_Page">NSIS</see>.</para>
+    /// <para>
+    /// In order to use the commands for this alias, NSIS will need to be installed on the machine where
+    /// the Cake script is being executed.  See this <see href="http://nsis.sourceforge.net/Download">page</see> for information
+    /// on how to download/install.
+    /// </para>
     /// </summary>
     [CakeAliasCategory("NSIS")]
     // ReSharper disable once InconsistentNaming

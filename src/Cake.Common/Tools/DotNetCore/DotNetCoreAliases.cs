@@ -13,7 +13,12 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.DotNetCore
 {
     /// <summary>
-    /// Contains functionality for working with the .NET Core CLI.
+    /// <para>Contains functionality related to <see href="https://github.com/dotnet/cli">.NET Core CLI</see>.</para>
+    /// <para>
+    /// In order to use the commands for this alias, the .Net Core CLI tools will need to be installed on the machine where
+    /// the Cake script is being executed.  See this <see href="https://www.microsoft.com/net/core">page</see> for information
+    /// on how to install.
+    /// </para>
     /// </summary>
     [CakeAliasCategory("DotNetCore")]
     public static class DotNetCoreAliases

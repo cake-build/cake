@@ -6,7 +6,11 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.XBuild
 {
     /// <summary>
-    /// Contains functionality related to XBuild.
+    /// <para>Contains functionality related to <see href="http://www.mono-project.com/docs/tools+libraries/tools/xbuild/">XBuild</see>.</para>
+    /// <para>
+    /// In order to use the commands for this alias, XBuild (which is part of Mono) will already have to be installed on the machine the
+    /// Cake Script is being executed.
+    /// </para>
     /// </summary>
     [CakeAliasCategory("XBuild")]
     public static class XBuildAliases

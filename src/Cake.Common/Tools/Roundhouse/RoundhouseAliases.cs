@@ -5,7 +5,14 @@ using Cake.Core.Annotations;
 namespace Cake.Common.Tools.Roundhouse
 {
     /// <summary>
-    /// Contains functionality to execute Roundhouse tasks.
+    /// <para>Contains functionality related to <see href="https://github.com/chucknorris/roundhouse">RoundhousE</see>.</para>
+    /// <para>
+    /// In order to use the commands for this alias, include the following in your build.cake file to download and
+    /// install from NuGet.org, or specify the ToolPath within the <see cref="RoundhouseSettings" /> class:
+    /// <code>
+    /// #tool "nuget:?package=roundhouse"
+    /// </code>
+    /// </para>
     /// </summary>
     [CakeAliasCategory("Roundhouse")]
     public static class RoundhouseAliases
