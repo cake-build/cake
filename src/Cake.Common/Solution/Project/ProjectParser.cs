@@ -100,6 +100,10 @@ namespace Cake.Common.Solution.Project
                      TargetFrameworkVersion = propertyGroup
                          .Elements(ProjectXElement.TargetFrameworkVersion)
                          .Select(targetFrameworkVersion => targetFrameworkVersion.Value)
+                         .FirstOrDefault(),
+                     TargetFrameworkProfile = propertyGroup
+                         .Elements(ProjectXElement.TargetFrameworkProfile)
+                         .Select(targetFrameworkProfile => targetFrameworkProfile.Value)
                          .FirstOrDefault()
                  }).FirstOrDefault();
 
@@ -138,6 +142,7 @@ namespace Cake.Common.Solution.Project
                 projectProperties.RootNameSpace,
                 projectProperties.AssemblyName,
                 projectProperties.TargetFrameworkVersion,
+                projectProperties.TargetFrameworkProfile,
                 projectFiles);
         }
     }

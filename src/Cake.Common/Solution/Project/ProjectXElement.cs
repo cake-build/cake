@@ -58,6 +58,11 @@
         internal const string TargetFrameworkVersion = "{" + XmlNamespace + "}TargetFrameworkVersion";
 
         /// <summary>
+        /// Gets the namespace for the target framework version element.
+        /// </summary>
+        internal const string TargetFrameworkProfile = "{" + XmlNamespace + "}TargetFrameworkProfile";
+
+        /// <summary>
         /// Gets the namespace for the configuration element.
         /// </summary>
         internal const string Configuration = "{" + XmlNamespace + "}Configuration";
