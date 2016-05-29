@@ -28,6 +28,7 @@ namespace Cake.Common.Tools.NuGet.Pack
                 { "licenseUrl", settings => ToString(settings.LicenseUrl) },
                 { "projectUrl", settings => ToString(settings.ProjectUrl) },
                 { "iconUrl", settings => ToString(settings.IconUrl) },
+                { "developmentDependency", settings => ToString(settings.DevelopmentDependency) },
                 { "requireLicenseAcceptance", settings => ToString(settings.RequireLicenseAcceptance) },
                 { "copyright", settings => ToString(settings.Copyright) },
                 { "releaseNotes", settings => ToMultiLineString(settings.ReleaseNotes) },

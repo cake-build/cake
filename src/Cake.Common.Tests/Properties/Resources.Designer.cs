@@ -309,7 +309,7 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
         ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
         ///    &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
-        ///    &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseA [rest of string was truncated]&quot;;.
+        ///    &lt;developmentDependency&gt;true&lt;/developmentDepende [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Nuspec_Metadata_WithoutNamespaces {
             get {
@@ -331,7 +331,7 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
         ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
         ///    &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
-        ///    &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseA [rest of string was truncated]&quot;;.
+        ///    &lt;developmentDependency&gt;true&lt;/developmentDepende [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Nuspec_Metadata_WithoutNamespaces_WithDependencies {
             get {

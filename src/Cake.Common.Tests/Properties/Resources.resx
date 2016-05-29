@@ -294,6 +294,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;copyright&gt;The copyright&lt;/copyright&gt;
     &lt;releaseNotes&gt;&lt;![CDATA[Line #1
@@ -323,6 +324,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;copyright&gt;The copyright&lt;/copyright&gt;
     &lt;releaseNotes&gt;&lt;![CDATA[Line #1
@@ -356,6 +358,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;copyright&gt;The copyright&lt;/copyright&gt;
     &lt;releaseNotes&gt;&lt;![CDATA[Line #1
@@ -385,6 +388,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;copyright&gt;The copyright&lt;/copyright&gt;
     &lt;releaseNotes&gt;&lt;![CDATA[Line #1
