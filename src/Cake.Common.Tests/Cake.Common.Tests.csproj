@@ -71,6 +71,7 @@
     <Compile Include="Fixtures\Build\JenkinsInfoFixture.cs" />
     <Compile Include="Fixtures\Build\TravisCIFixture.cs" />
     <Compile Include="Fixtures\Build\TravisCIInfoFixture.cs" />
+    <Compile Include="Fixtures\Solution\SolutionParserFixture.cs" />
     <Compile Include="Fixtures\Tools\CakeRunnerFixture.cs" />
     <Compile Include="Fixtures\IO\FileCopyFixture.cs" />
     <Compile Include="Fixtures\IO\FileDeleteFixture.cs" />
@@ -226,6 +227,8 @@
     <Compile Include="Unit\ReleaseNotesParserTests.cs" />
     <Compile Include="Unit\ReleaseNotesTests.cs" />
     <Compile Include="Unit\Solution\Project\XmlDoc\XmlDocExampleCodeParserTests.cs" />
+    <Compile Include="Unit\Solution\SolutionParserAliasesTests.cs" />
+    <Compile Include="Unit\Solution\SolutionParserTests.cs" />
     <Compile Include="Unit\Text\TextTransformationAliasesTests.cs" />
     <Compile Include="Unit\Text\TextTransformationExtensionsTests.cs" />
     <Compile Include="Unit\Text\TextTransformationTests.cs" />
