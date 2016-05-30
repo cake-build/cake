@@ -153,6 +153,7 @@
     <Compile Include="Solution\SolutionAliases.cs" />
     <Compile Include="Solution\SolutionParser.cs" />
     <Compile Include="Solution\SolutionParserResult.cs" />
+    <Compile Include="Solution\SolutionFolder.cs" />
     <Compile Include="Solution\SolutionProject.cs" />
     <Compile Include="Text\TextTransformationAliases.cs" />
     <Compile Include="Text\TextTransformation.cs" />
