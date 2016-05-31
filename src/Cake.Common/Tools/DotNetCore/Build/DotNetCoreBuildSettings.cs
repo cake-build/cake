@@ -29,9 +29,9 @@ namespace Cake.Common.Tools.DotNetCore.Build
         public string Configuration { get; set; }
 
         /// <summary>
-        /// Gets or sets specific frameworks to compile.
+        /// Gets or sets the specific framework to compile.
         /// </summary>
-        public ICollection<string> Frameworks { get; set; }
+        public string Framework { get; set; }
 
         /// <summary>
         /// Gets or sets the value that defines what `*` should be replaced with in version field in project.json.

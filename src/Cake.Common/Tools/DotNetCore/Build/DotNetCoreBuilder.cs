@@ -80,11 +80,11 @@ namespace Cake.Common.Tools.DotNetCore.Build
                 builder.Append(settings.Runtime);
             }
 
-            // Frameworks
-            if (settings.Frameworks != null && settings.Frameworks.Count > 0)
+            // Framework
+            if (!string.IsNullOrEmpty(settings.Framework))
             {
                 builder.Append("--framework");
-                builder.AppendQuoted(string.Join(";", settings.Frameworks));
+                builder.Append(settings.Framework);
             }
 
             // Configuration
