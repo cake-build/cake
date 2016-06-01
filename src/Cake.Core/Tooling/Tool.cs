@@ -26,7 +26,7 @@ namespace Cake.Core.Tooling
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="globber">The globber.</param>
-        [Obsolete("Please use Tool(IFileSystem, ICakeEnvironment, IProcessRunner, IToolService) instead.")]
+        [Obsolete("Please use Tool(IFileSystem, ICakeEnvironment, IProcessRunner, IToolLocator) instead.")]
         protected Tool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IGlobber globber)
             : this(fileSystem, environment, processRunner, (IToolLocator)null)
         {
