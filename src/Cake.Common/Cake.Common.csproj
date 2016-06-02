@@ -53,6 +53,7 @@
     <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Build\AppVeyor\AppVeyorTestResultsType.cs" />
     <Compile Include="Build\AppVeyor\Data\AppVeyorEnvironmentInfo.cs" />
     <Compile Include="Build\AppVeyor\AppVeyorInfo.cs" />
     <Compile Include="Build\AppVeyor\AppVeyorProvider.cs" />

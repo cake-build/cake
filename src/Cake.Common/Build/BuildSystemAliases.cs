@@ -60,6 +60,8 @@ namespace Cake.Common.Build
         /// <param name="context">The context.</param>
         /// <returns>A <see cref="Cake.Common.Build.AppVeyor"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]
+        [CakeNamespaceImport("Cake.Common.Build.AppVeyor")]
+        [CakeNamespaceImport("Cake.Common.Build.AppVeyor.Data")]
         public static IAppVeyorProvider AppVeyor(this ICakeContext context)
         {
             if (context == null)
