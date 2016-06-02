@@ -474,7 +474,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
         public static void DotNetCoreTest(this ICakeContext context)
         {
-            context.DotNetCoreRun(null, null);
+            context.DotNetCoreTest(null, null);
         }
 
         /// <summary>
