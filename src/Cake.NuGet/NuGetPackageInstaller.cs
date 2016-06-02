@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
+using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
@@ -24,6 +25,8 @@ namespace Cake.NuGet
         private readonly INuGetPackageContentResolver _contentResolver;
         private readonly ICakeLog _log;
 
+        private readonly ICakeConfiguration _config;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetPackageInstaller"/> class.
         /// </summary>
@@ -33,13 +36,15 @@ namespace Cake.NuGet
         /// <param name="toolResolver">The NuGet tool resolver.</param>
         /// <param name="contentResolver">The content resolver.</param>
         /// <param name="log">The log.</param>
+        /// <param name="config">the configuration</param>
         public NuGetPackageInstaller(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             IProcessRunner processRunner,
             INuGetToolResolver toolResolver,
             INuGetPackageContentResolver contentResolver,
-            ICakeLog log)
+            ICakeLog log,
+            ICakeConfiguration config)
         {
             if (fileSystem == null)
             {
@@ -72,6 +77,7 @@ namespace Cake.NuGet
             _toolResolver = toolResolver;
             _contentResolver = contentResolver;
             _log = log;
+            _config = config;
         }
 
         /// <summary>
@@ -135,9 +141,9 @@ namespace Cake.NuGet
             var nugetPath = GetNuGetPath();
             var process = _processRunner.Start(nugetPath, new ProcessSettings
             {
-                Arguments = GetArguments(package, path),
+                Arguments = GetArguments(package, path, _config),
                 RedirectStandardOutput = true,
-                Silent = true
+                Silent = true,
             });
             process.WaitForExit();
 
@@ -157,7 +163,7 @@ namespace Cake.NuGet
 
         private static ProcessArgumentBuilder GetArguments(
             PackageReference definition,
-            DirectoryPath installationRoot)
+            DirectoryPath installationRoot, ICakeConfiguration config)
         {
             var arguments = new ProcessArgumentBuilder();
 
@@ -173,6 +179,15 @@ namespace Cake.NuGet
             {
                 arguments.Append("-Source");
                 arguments.AppendQuoted(definition.Address.AbsoluteUri);
+            }
+            else
+            {
+                var nugetSource = config.GetValue("ROSLYN_NUGETSOURCE");
+                if (!string.IsNullOrWhiteSpace(nugetSource))
+                {
+                    arguments.Append("-Source");
+                    arguments.AppendQuoted(nugetSource);
+                }
             }
 
             // Version
