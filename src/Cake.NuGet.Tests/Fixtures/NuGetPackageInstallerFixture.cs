@@ -25,6 +25,8 @@ namespace Cake.NuGet.Tests.Fixtures
         public PackageType PackageType { get; set; }
         public DirectoryPath InstallPath { get; set; }
 
+        public FakeConfiguration Config { get; set; }
+
         public NuGetPackageInstallerFixture()
         {
             Environment = FakeEnvironment.CreateUnixEnvironment();
@@ -32,6 +34,7 @@ namespace Cake.NuGet.Tests.Fixtures
             ProcessRunner = Substitute.For<IProcessRunner>();
             ContentResolver = Substitute.For<INuGetPackageContentResolver>();
             Log = Substitute.For<ICakeLog>();
+            Config = new FakeConfiguration();
 
             ToolResolver = Substitute.For<INuGetToolResolver>();
             ToolResolver.ResolvePath().Returns(new FilePath("/Working/tools/nuget.exe"));
@@ -40,10 +43,11 @@ namespace Cake.NuGet.Tests.Fixtures
             PackageType = PackageType.Addin;
             InstallPath = new DirectoryPath("./nuget");
         }
+        
 
         public NuGetPackageInstaller CreateInstaller()
         {
-            return new NuGetPackageInstaller(FileSystem, Environment, ProcessRunner, ToolResolver , ContentResolver, Log);
+            return new NuGetPackageInstaller(FileSystem, Environment, ProcessRunner, ToolResolver , ContentResolver, Log, Config);
         }
 
         public IReadOnlyCollection<IFile> Install()
