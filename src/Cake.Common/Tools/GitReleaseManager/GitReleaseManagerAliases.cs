@@ -11,7 +11,14 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.GitReleaseManager
 {
     /// <summary>
-    /// Contains functionality for working with GitReleaseManager.
+    /// <para>Contains functionality related to <see href="https://github.com/gittools/gitreleasemanager">GitReleaseManager</see>.</para>
+    /// <para>
+    /// In order to use the commands for this alias, include the following in your build.cake file to download and
+    /// install from NuGet.org, or specify the ToolPath within the appropriate settings class:
+    /// <code>
+    /// #tool "nuget:?package=gitreleasemanager"
+    /// </code>
+    /// </para>
     /// </summary>
     [CakeAliasCategory("GitReleaseManager")]
     public static class GitReleaseManagerAliases
@@ -249,7 +256,7 @@ namespace Cake.Common.Tools.GitReleaseManager
             {
                 throw new ArgumentNullException("context");
             }
-            
+
             var publisher = new GitReleaseManagerPublisher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             publisher.Publish(userName, password, owner, repository, tagName, settings);
         }
@@ -305,7 +312,7 @@ namespace Cake.Common.Tools.GitReleaseManager
             {
                 throw new ArgumentNullException("context");
             }
-            
+
             var publisher = new GitReleaseManagerExporter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             publisher.Export(userName, password, owner, repository, fileOutputPath, settings);
         }

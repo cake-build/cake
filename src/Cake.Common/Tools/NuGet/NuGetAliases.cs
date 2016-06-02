@@ -16,8 +16,12 @@ using Cake.Core.IO.NuGet;
 namespace Cake.Common.Tools.NuGet
 {
     /// <summary>
-    /// Contains functionality for working with NuGet.
+    /// Contains functionality for working with <see href="https://www.nuget.org/">NuGet</see>.
     /// </summary>
+    /// <para>
+    /// Since Cake requires NuGet to be available very early in the build pipeline, we recommend that NuGet is made
+    /// available via the <see href="https://github.com/cake-build/resources">Cake BootStrapper</see>.
+    /// </para>
     [CakeAliasCategory("NuGet")]
     public static class NuGetAliases
     {
@@ -693,7 +697,7 @@ namespace Cake.Common.Tools.NuGet
         /// <example>
         /// <code>
         /// var packageConfigs = GetFiles("./**/packages.config");
-        /// 
+        ///
         /// NuGetInstallFromConfig(packageConfigs);
         /// </code>
         /// </example>
@@ -744,7 +748,7 @@ namespace Cake.Common.Tools.NuGet
         /// <example>
         /// <code>
         /// var packageConfigs = GetFiles("./**/packages.config");
-        /// 
+        ///
         /// NuGetInstallFromConfig(packageConfigs, new NuGetInstallSettings {
         ///     ExcludeVersion  = true,
         ///     OutputDirectory = "./tools"
@@ -894,7 +898,7 @@ namespace Cake.Common.Tools.NuGet
         /// <example>
         /// <code>
         /// var targets = GetFiles("./**/packages.config");
-        /// 
+        ///
         /// NuGetUpdate(targets);
         /// </code>
         /// </example>
@@ -944,7 +948,7 @@ namespace Cake.Common.Tools.NuGet
         /// <example>
         /// <code>
         /// var targets = GetFiles("./**/packages.config");
-        /// 
+        ///
         /// NuGetUpdate(targets, new NuGetUpdateSettings {
         ///     Prerelease = true,
         /// });

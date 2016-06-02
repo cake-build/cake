@@ -6,7 +6,14 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.GitLink
 {
     /// <summary>
-    /// Contains functionality for working with GitLink.
+    /// <para>Contains functionality related to <see href="https://github.com/gittools/gitlink">GitLink</see>.</para>
+    /// <para>
+    /// In order to use the commands for this alias, include the following in your build.cake file to download and
+    /// install from NuGet.org, or specify the ToolPath within the <see cref="GitLinkSettings" /> class:
+    /// <code>
+    /// #tool "nuget:?package=gitlink"
+    /// </code>
+    /// </para>
     /// </summary>
     [CakeAliasCategory("GitTools")]
     public static class GitLinkAliases
