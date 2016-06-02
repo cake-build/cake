@@ -2,6 +2,7 @@
 using System.Linq;
 using Cake.Common.Solution.Project.Properties;
 using Cake.Common.Tests.Fixtures;
+using Cake.Common.Tests.Properties;
 using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
@@ -304,6 +305,48 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
 
                 // Then
                 Assert.Equal(expected, result.AssemblyVersion);
+            }
+
+            [Fact]
+            public void Should_Correctly_Parse_VisualStudio_AssemblyInfo_File()
+            {
+                // Given
+                var fixture = new AssemblyInfoParserFixture();
+                fixture.CreateAssemblyInfo = false;
+                fixture.WithAssemblyInfoContents(Resources.VisualStudioAssemblyInfo.NormalizeLineEndings());
+
+                // When
+                var result = fixture.Parse();
+
+                // Then
+                Assert.Equal(result.Title, "VisualStudioAssemblyTitle");
+                Assert.Equal(result.Description, "VisualStudioAssemblyDescription");
+                Assert.Equal(result.Configuration, "VisualStudioConfiguration");
+                Assert.Equal(result.Company, "VisualStudioCompany");
+                Assert.Equal(result.Product, "VisualStudioProduct");
+                Assert.Equal(result.Copyright, "VisualStudioCopyright");
+                Assert.Equal(result.Trademark, "VisualStudioTrademark");
+            }
+
+            [Fact]
+            public void Should_Correctly_Parse_MonoDevelop_AssemblyInfo_File()
+            {
+                // Given
+                var fixture = new AssemblyInfoParserFixture();
+                fixture.CreateAssemblyInfo = false;
+                fixture.WithAssemblyInfoContents(Resources.MonoDevelopAssemblyInfo.NormalizeLineEndings());
+
+                // When
+                var result = fixture.Parse();
+
+                // Then
+                Assert.Equal(result.Title, "MonoDevelopAssemblyTitle");
+                Assert.Equal(result.Description, "MonoDevelopAssemblyDescription");
+                Assert.Equal(result.Configuration, "MonoDevelopConfiguration");
+                Assert.Equal(result.Company, "MonoDevelopCompany");
+                Assert.Equal(result.Product, "MonoDevelopProduct");
+                Assert.Equal(result.Copyright, "MonoDevelopCopyright");
+                Assert.Equal(result.Trademark, "MonoDevelopTrademark");
             }
         }
     }

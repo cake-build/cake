@@ -14,8 +14,8 @@ namespace Cake.Common.Solution.Project.Properties
     /// </summary>
     public sealed class AssemblyInfoParser
     {
-        private const string NonQuotedPattern = @"^\s*\[assembly: {0}\((?<attributeValue>.*)\)";
-        private const string QuotedPattern = @"^\s*\[assembly: {0}\(""(?<attributeValue>.*)""\)";
+        private const string NonQuotedPattern = @"^\s*\[assembly: {0} ?\((?<attributeValue>.*)\)";
+        private const string QuotedPattern = @"^\s*\[assembly: {0} ?\(""(?<attributeValue>.*)""\)";
         private const string DefaultVersion = "1.0.0.0";
 
         private readonly IFileSystem _fileSystem;
