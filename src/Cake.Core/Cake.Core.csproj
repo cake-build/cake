@@ -55,6 +55,10 @@
     <Compile Include="Annotations\CakeAliasCategoryAttribute.cs" />
     <Compile Include="Annotations\CakeNamespaceImportAttribute.cs" />
     <Compile Include="Annotations\CakePropertyAliasAttribute.cs" />
+    <Compile Include="Annotations\CakeModuleAttribute.cs" />
+    <Compile Include="Composition\ICakeContainerRegistry.cs" />
+    <Compile Include="Composition\ICakeRegistrationBuilder.cs" />
+    <Compile Include="Composition\ICakeModule.cs" />
     <Compile Include="CakeContext.cs" />
     <Compile Include="CakeEngine.cs" />
     <Compile Include="CakeException.cs" />
@@ -163,6 +167,7 @@
     <Compile Include="IO\WindowsRegistryKey.cs" />
     <Compile Include="ITaskSetupContext.cs" />
     <Compile Include="ITaskTeardownContext.cs" />
+    <Compile Include="Modules\CoreModule.cs" />
     <Compile Include="Scripting\Processors\BreakDirectiveProcessor.cs" />
     <Compile Include="Scripting\Processors\UriDirectiveProcessor.cs" />
     <Compile Include="Packaging\IPackageInstaller.cs" />

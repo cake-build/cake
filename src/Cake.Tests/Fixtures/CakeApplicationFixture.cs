@@ -6,7 +6,6 @@ namespace Cake.Tests.Fixtures
 {
     internal sealed class CakeApplicationFixture
     {
-        public ICakeLog Log { get; set; }
         public ICommandFactory CommandFactory { get; set; }
 
         public CakeOptions Options { get; set; }
@@ -16,13 +15,12 @@ namespace Cake.Tests.Fixtures
             Options = new CakeOptions();
             Options.Verbosity = Verbosity.Diagnostic;
 
-            Log = Substitute.For<ICakeLog>();
             CommandFactory = Substitute.For<ICommandFactory>();
         }
 
         public CakeApplication CreateApplication()
         {
-            return new CakeApplication(Log, CommandFactory);
+            return new CakeApplication(CommandFactory);
         }
 
         public int RunApplication()

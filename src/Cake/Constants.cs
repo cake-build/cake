@@ -6,5 +6,10 @@
         {
             public const string NuGetSource = "Roslyn_NuGetSource";
         }
+
+        public static class Paths
+        {
+            public const string Modules = "Paths_Modules";
+        }
     }
 }

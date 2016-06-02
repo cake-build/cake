@@ -2,9 +2,12 @@
 using System.Linq;
 using Autofac;
 using Cake.Arguments;
-using Cake.Autofac;
+using Cake.Composition;
 using Cake.Core.Diagnostics;
+using Cake.Core.Modules;
 using Cake.Diagnostics;
+using Cake.Modules;
+using Cake.NuGet;
 
 namespace Cake
 {
@@ -29,8 +32,10 @@ namespace Cake
                     .Skip(1) // Skip executable.
                     .ToArray();
 
-                var builder = new ContainerBuilder();
-                builder.RegisterModule<CakeModule>();
+                var builder = new CakeContainerBuilder();
+                builder.Registry.RegisterModule(new CakeModule());
+                builder.Registry.RegisterModule(new CoreModule());
+                builder.Registry.RegisterModule(new NuGetModule());
 
                 // Build the container.
                 using (var container = builder.Build())
@@ -42,12 +47,19 @@ namespace Cake
                     var parser = container.Resolve<IArgumentParser>();
                     var options = parser.Parse(args);
 
+                    // Set verbosity.
+                    log.Verbosity = options.Verbosity;
+
                     // Rebuild the container.
-                    builder = new ContainerBuilder();
-                    builder.RegisterModule(new ArgumentsModule(options));
-                    builder.RegisterModule(new ConfigurationModule(container, options));
-                    builder.RegisterModule(new ScriptingModule(options));
+                    builder = new CakeContainerBuilder();
+                    builder.Registry.RegisterModule(new ArgumentsModule(options));
+                    builder.Registry.RegisterModule(new ConfigurationModule(container, options));
+                    builder.Registry.RegisterModule(new ScriptingModule(options));
                     builder.Update(container);
+
+                    // Load all modules.
+                    var loader = container.Resolve<ModuleLoader>();
+                    loader.LoadModules(container, options);
 
                     // Resolve and run the application.
                     var application = container.Resolve<CakeApplication>();
