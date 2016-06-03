@@ -524,6 +524,17 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;/appSettings&gt;
 &lt;/configuration&gt;</value>
   </data>
+  <data name="XmlPoke_Xml_Dtd" xml:space="preserve">
+    <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+&lt;plist version=&quot;1.0&quot;&gt;
+&lt;dict&gt;
+	&lt;key&gt;CFBundleDisplayName&lt;/key&gt;
+	&lt;string&gt;Cake&lt;/string&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+    </value>
+  </data>
   <data name="XmlPeek_Xml" xml:space="preserve">
     <value>&lt;?xml version="1.0" encoding="utf-8" ?&gt;
 &lt;configuration&gt;
@@ -534,6 +545,17 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;test&gt;test value&lt;/test&gt;
 &lt;/configuration&gt;
 </value>
+  </data>
+  <data name="XmlPeek_Xml_Dtd" xml:space="preserve">
+    <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+&lt;plist version=&quot;1.0&quot;&gt;
+&lt;dict&gt;
+	&lt;key&gt;CFBundleDisplayName&lt;/key&gt;
+	&lt;string&gt;Cake&lt;/string&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+    </value>
   </data>
   <data name="XmlTransformation_Htm" xml:space="preserve">
     <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;&lt;html&gt;&lt;body style="font-family:Arial;font-size:12pt;background-color:#EEEEEE"&gt;&lt;div style="background-color:teal;color:white;padding:4px"&gt;&lt;span style="font-weight:bold"&gt;Belgian Waffles

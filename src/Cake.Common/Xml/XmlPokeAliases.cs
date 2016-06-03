@@ -225,6 +225,11 @@ namespace Cake.Common.Xml
                 throw new ArgumentNullException("filePath");
             }
 
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+
             var file = context.FileSystem.GetFile(filePath);
             if (!file.Exists)
             {
@@ -234,7 +239,7 @@ namespace Cake.Common.Xml
             using (var memoryStream = new MemoryStream())
             {
                 using (var fileStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None))
-                using (var xmlReader = XmlReader.Create(fileStream))
+                using (var xmlReader = XmlReader.Create(fileStream, GetXmlReaderSettings(settings)))
                 using (var xmlWriter = XmlWriter.Create(memoryStream))
                 {
                     XmlPoke(xmlReader, xmlWriter, xpath, value, settings);
@@ -495,7 +500,7 @@ namespace Cake.Common.Xml
 
             using (var resultStream = new MemoryStream())
             using (var fileReader = new StringReader(sourceXml))
-            using (var xmlReader = XmlReader.Create(fileReader))
+            using (var xmlReader = XmlReader.Create(fileReader, GetXmlReaderSettings(settings)))
             using (var xmlWriter = XmlWriter.Create(resultStream))
             {
                 XmlPoke(xmlReader, xmlWriter, xpath, value, settings);
@@ -570,6 +575,19 @@ namespace Cake.Common.Xml
             }
 
             document.Save(destination);
+        }
+
+        /// <summary>
+        /// Gets a XmlReaderSettings from a XmlPokeSettings
+        /// </summary>
+        /// <returns>The xml reader settings.</returns>
+        /// <param name="settings">Additional settings to tweak Xml Poke behavior.</param>
+        private static XmlReaderSettings GetXmlReaderSettings(XmlPokeSettings settings)
+        {
+            var xmlReaderSettings = new XmlReaderSettings();
+            xmlReaderSettings.DtdProcessing = (DtdProcessing)settings.DtdProcessing;
+
+            return xmlReaderSettings;
         }
     }
 }

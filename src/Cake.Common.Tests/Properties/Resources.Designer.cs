@@ -448,6 +448,23 @@ namespace Cake.Common.Tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+        ///&lt;plist version=&quot;1.0&quot;&gt;
+        ///&lt;dict&gt;
+        ///    &lt;key&gt;CFBundleDisplayName&lt;/key&gt;
+        ///    &lt;string&gt;Cake&lt;/string&gt;
+        ///&lt;/dict&gt;
+        ///&lt;/plist&gt;
+        ///.
+        /// </summary>
+        internal static string XmlPeek_Xml_Dtd {
+            get {
+                return ResourceManager.GetString("XmlPeek_Xml_Dtd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
         ///&lt;configuration&gt;
         ///    &lt;appSettings&gt;
@@ -459,6 +476,22 @@ namespace Cake.Common.Tests.Properties {
         internal static string XmlPoke_Xml {
             get {
                 return ResourceManager.GetString("XmlPoke_Xml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+        ///&lt;plist version=&quot;1.0&quot;&gt;
+        ///&lt;dict&gt;
+        ///    &lt;key&gt;CFBundleDisplayName&lt;/key&gt;
+        ///    &lt;string&gt;Cake&lt;/string&gt;
+        ///&lt;/dict&gt;
+        ///&lt;/plist&gt;.
+        /// </summary>
+        internal static string XmlPoke_Xml_Dtd {
+            get {
+                return ResourceManager.GetString("XmlPoke_Xml_Dtd", resourceCulture);
             }
         }
         
