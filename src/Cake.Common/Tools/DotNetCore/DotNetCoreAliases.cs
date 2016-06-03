@@ -55,7 +55,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Execute")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Execute")]
-        public static void DotNetCoreExecute(this ICakeContext context, FilePath assemblyPath, string arguments)
+        public static void DotNetCoreExecute(this ICakeContext context, FilePath assemblyPath, ProcessArgumentBuilder arguments)
         {
             context.DotNetCoreExecute(assemblyPath, arguments, null);
         }
@@ -80,7 +80,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Execute")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Execute")]
-        public static void DotNetCoreExecute(this ICakeContext context, FilePath assemblyPath, string arguments, DotNetCoreSettings settings)
+        public static void DotNetCoreExecute(this ICakeContext context, FilePath assemblyPath, ProcessArgumentBuilder arguments, DotNetCoreSettings settings)
         {
             if (context == null)
             {
@@ -363,7 +363,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Run")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Run")]
-        public static void DotNetCoreRun(this ICakeContext context, string project, string arguments)
+        public static void DotNetCoreRun(this ICakeContext context, string project, ProcessArgumentBuilder arguments)
         {
             context.DotNetCoreRun(project, arguments, null);
         }
@@ -389,7 +389,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Run")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Run")]
-        public static void DotNetCoreRun(this ICakeContext context, string project, string arguments, DotNetCoreRunSettings settings)
+        public static void DotNetCoreRun(this ICakeContext context, string project, ProcessArgumentBuilder arguments, DotNetCoreRunSettings settings)
         {
             if (context == null)
             {
