@@ -24,6 +24,11 @@ namespace Cake.Common.Xml
         public Encoding Encoding { get; set; }
 
         /// <summary>
+        /// Gets or sets a value that determines the processing of DTDs.
+        /// </summary>
+        public XmlDtdProcessing DtdProcessing { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="XmlPokeSettings"/> class.
         /// </summary>
         public XmlPokeSettings()
@@ -31,6 +36,7 @@ namespace Cake.Common.Xml
             PreserveWhitespace = true;
             Namespaces = new Dictionary<string, string>();
             Encoding = Encoding.UTF8;
+            DtdProcessing = XmlDtdProcessing.Prohibit;
         }
     }
 }
