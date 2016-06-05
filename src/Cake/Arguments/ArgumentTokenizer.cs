@@ -55,11 +55,18 @@ namespace Cake.Arguments
             accumulator.Append((char)reader.Read());
             while (reader.Peek() != -1)
             {
-                if ((char)reader.Peek() == ' ')
+                if ((char)reader.Peek() == '\"')
+                {
+                    accumulator.Append(ReadQuote(reader));
+                }
+                else if ((char)reader.Peek() == ' ')
                 {
                     break;
                 }
-                accumulator.Append((char)reader.Read());
+                else
+                {
+                    accumulator.Append((char)reader.Read());
+                }
             }
             return accumulator.ToString();
         }
