@@ -768,4 +768,60 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
   &lt;Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" /&gt;
 &lt;/Project&gt;</value>
   </data>
+  <data name="MonoDevelopAssemblyInfo" xml:space="preserve">
+    <value>using System.Reflection;
+using System.Runtime.CompilerServices;
+
+// Information about this assembly is defined by the following attributes.
+// Change them to the values specific to your project.
+
+[assembly: AssemblyTitle ("MonoDevelopAssemblyTitle")]
+[assembly: AssemblyDescription ("MonoDevelopAssemblyDescription")]
+[assembly: AssemblyConfiguration ("MonoDevelopConfiguration")]
+[assembly: AssemblyCompany ("MonoDevelopCompany")]
+[assembly: AssemblyProduct ("MonoDevelopProduct")]
+[assembly: AssemblyCopyright ("MonoDevelopCopyright")]
+[assembly: AssemblyTrademark ("MonoDevelopTrademark")]
+[assembly: AssemblyCulture ("en-US")]
+
+// The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
+// The form "{Major}.{Minor}.*" will automatically update the build and revision,
+// and "{Major}.{Minor}.{Build}.*" will update just the revision.
+
+[assembly: AssemblyVersion ("1.0.14")]
+
+// The following attributes are used to specify the signing key for the assembly,
+// if desired. See the Mono documentation for more information about signing.
+
+//[assembly: AssemblyDelaySign(false)]
+//[assembly: AssemblyKeyFile("")]</value>
+  </data>
+  <data name="VisualStudioAssemblyInfo" xml:space="preserve">
+    <value>using System.Reflection;
+using System.Runtime.CompilerServices;
+
+// Information about this assembly is defined by the following attributes.
+// Change them to the values specific to your project.
+
+[assembly: AssemblyTitle("VisualStudioAssemblyTitle")]
+[assembly: AssemblyDescription("VisualStudioAssemblyDescription")]
+[assembly: AssemblyConfiguration("VisualStudioConfiguration")]
+[assembly: AssemblyCompany("VisualStudioCompany")]
+[assembly: AssemblyProduct("VisualStudioProduct")]
+[assembly: AssemblyCopyright("VisualStudioCopyright")]
+[assembly: AssemblyTrademark("VisualStudioTrademark")]
+[assembly: AssemblyCulture("en-US")]
+
+// The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
+// The form "{Major}.{Minor}.*" will automatically update the build and revision,
+// and "{Major}.{Minor}.{Build}.*" will update just the revision.
+
+[assembly: AssemblyVersion("1.0.13")]
+
+// The following attributes are used to specify the signing key for the assembly,
+// if desired. See the Mono documentation for more information about signing.
+
+//[assembly: AssemblyDelaySign(false)]
+//[assembly: AssemblyKeyFile("")]</value>
+  </data>
 </root>
