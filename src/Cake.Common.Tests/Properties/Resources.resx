@@ -525,9 +525,9 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
 &lt;/configuration&gt;</value>
   </data>
   <data name="XmlPoke_Xml_Dtd" xml:space="preserve">
-    <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
-&lt;plist version=&quot;1.0&quot;&gt;
+    <value>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
 &lt;dict&gt;
 	&lt;key&gt;CFBundleDisplayName&lt;/key&gt;
 	&lt;string&gt;Cake&lt;/string&gt;
@@ -547,9 +547,9 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
 </value>
   </data>
   <data name="XmlPeek_Xml_Dtd" xml:space="preserve">
-    <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
-&lt;plist version=&quot;1.0&quot;&gt;
+    <value>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
 &lt;dict&gt;
 	&lt;key&gt;CFBundleDisplayName&lt;/key&gt;
 	&lt;string&gt;Cake&lt;/string&gt;
@@ -764,6 +764,18 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
   &lt;ItemGroup&gt;
     &lt;Compile Include="Properties\AssemblyInfo.cs" /&gt;
     &lt;Compile Include="Class1.cs" /&gt;
+  &lt;/ItemGroup&gt;
+  &lt;ItemGroup&gt;
+    &lt;Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"&gt;
+      &lt;HintPath&gt;..\packages\System.Collections.Immutable.1.1.37\lib\dotnet\System.Collections.Immutable.dll&lt;/HintPath&gt;
+      &lt;Private&gt;True&lt;/Private&gt;
+    &lt;/Reference&gt;
+  &lt;/ItemGroup&gt;
+  &lt;ItemGroup&gt;
+    &lt;ProjectReference Include="..\Cake.Common\Cake.Common.csproj"&gt;
+      &lt;Project&gt;{ABC3F1CB-F84E-43ED-A120-0CCFE344D250}&lt;/Project&gt;
+      &lt;Name&gt;Cake.Common&lt;/Name&gt;
+    &lt;/ProjectReference&gt;
   &lt;/ItemGroup&gt;
   &lt;Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" /&gt;
 &lt;/Project&gt;</value>
