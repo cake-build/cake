@@ -6,12 +6,13 @@
     public sealed class NullLog : ICakeLog
     {
         /// <summary>
-        /// Gets the verbosity.
+        /// Gets or sets the verbosity.
         /// </summary>
         /// <value>The verbosity.</value>
         public Verbosity Verbosity
         {
             get { return Verbosity.Quiet; }
+            set { }
         }
 
         /// <summary>
