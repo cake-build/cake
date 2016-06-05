@@ -129,6 +129,8 @@
     <Compile Include="Solution\Project\ProjectFile.cs" />
     <Compile Include="Solution\Project\ProjectParser.cs" />
     <Compile Include="Solution\Project\ProjectParserResult.cs" />
+    <Compile Include="Solution\Project\ProjectReference.cs" />
+    <Compile Include="Solution\Project\ProjectAssemblyReference.cs" />
     <Compile Include="Solution\Project\ProjectXElement.cs" />
     <Compile Include="Solution\Project\Properties\AssemblyInfoCreator.cs" />
     <Compile Include="Solution\Project\Properties\AssemblyInfoAliases.cs" />

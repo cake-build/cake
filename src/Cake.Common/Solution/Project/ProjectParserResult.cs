@@ -20,6 +20,8 @@ namespace Cake.Common.Solution.Project
         private readonly string _targetFrameworkVersion;
         private readonly string _targetFrameworkProfile;
         private readonly ICollection<ProjectFile> _files;
+        private readonly ICollection<ProjectAssemblyReference> _references;
+        private readonly ICollection<ProjectReference> _projectReferences;
 
         /// <summary>
         /// Gets the build configuration.
@@ -103,7 +105,29 @@ namespace Cake.Common.Solution.Project
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProjectParserResult"/> class.
+        /// Gets the references.
+        /// </summary>
+        /// <value>
+        /// The references.
+        /// </value>
+        public ICollection<ProjectAssemblyReference> References
+        {
+            get { return _references; }
+        }
+
+        /// <summary>
+        /// Gets the references to other projects.
+        /// </summary>
+        /// <value>
+        /// The references.
+        /// </value>
+        public ICollection<ProjectReference> ProjectReferences
+        {
+            get { return _projectReferences; }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProjectParserResult" /> class.
         /// </summary>
         /// <param name="configuration">The build configuration.</param>
         /// <param name="platform">The target platform.</param>
@@ -114,6 +138,8 @@ namespace Cake.Common.Solution.Project
         /// <param name="targetFrameworkVersion">The compiler framework version.</param>
         /// <param name="targetFrameworkProfile">The compiler framework profile.</param>
         /// <param name="files">The project content files.</param>
+        /// <param name="references">The references.</param>
+        /// <param name="projectReferences">The references to other projects.</param>
         public ProjectParserResult(
             string configuration,
             string platform,
@@ -123,7 +149,9 @@ namespace Cake.Common.Solution.Project
             string assemblyName,
             string targetFrameworkVersion,
             string targetFrameworkProfile,
-            IEnumerable<ProjectFile> files)
+            IEnumerable<ProjectFile> files,
+            IEnumerable<ProjectAssemblyReference> references,
+            IEnumerable<ProjectReference> projectReferences)
         {
             _configuration = configuration;
             _platform = platform;
@@ -134,6 +162,8 @@ namespace Cake.Common.Solution.Project
             _targetFrameworkVersion = targetFrameworkVersion;
             _targetFrameworkProfile = targetFrameworkProfile;
             _files = files.ToList().AsReadOnly();
+            _references = references.ToList().AsReadOnly();
+            _projectReferences = projectReferences.ToList().AsReadOnly();
         }
     }
 }

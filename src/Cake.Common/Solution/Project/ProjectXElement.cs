@@ -94,5 +94,40 @@ namespace Cake.Common.Solution.Project
         /// Gets the namespace for the service element.
         /// </summary>
         internal const string Service = "{" + XmlNamespace + "}Service";
+
+        /// <summary>
+        /// Gets the namespace for the hint path element.
+        /// </summary>
+        internal const string HintPath = "{" + XmlNamespace + "}HintPath";
+
+        /// <summary>
+        /// Gets the namespace for the name element.
+        /// </summary>
+        internal const string Name = "{" + XmlNamespace + "}Name";
+
+        /// <summary>
+        /// Gets the namespace for the fusion name element.
+        /// </summary>
+        internal const string FusionName = "{" + XmlNamespace + "}FusionName";
+
+        /// <summary>
+        /// Gets the namespace for the specific version element.
+        /// </summary>
+        internal const string SpecificVersion = "{" + XmlNamespace + "}SpecificVersion";
+
+        /// <summary>
+        /// Gets the namespace for the aliases element.
+        /// </summary>
+        internal const string Aliases = "{" + XmlNamespace + "}Aliases";
+
+        /// <summary>
+        /// Gets the namespace for the private element.
+        /// </summary>
+        internal const string Private = "{" + XmlNamespace + "}Private";
+
+        /// <summary>
+        /// Gets the namespace for the package element.
+        /// </summary>
+        internal const string Package = "{" + XmlNamespace + "}Package";
     }
 }
