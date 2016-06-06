@@ -23,7 +23,7 @@ bool publishingError = false;
 // SETUP / TEARDOWN
 ///////////////////////////////////////////////////////////////////////////////
 
-Setup(() =>
+Setup(context =>
 {
     parameters.SetBuildVersion(
         BuildVersion.CalculatingSemanticVersion(
