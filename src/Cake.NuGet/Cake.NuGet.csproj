@@ -60,6 +60,7 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="AssemblyFrameworkNameParser.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="IAssemblyFrameworkNameParser.cs" />
     <Compile Include="IFrameworkNameParser.cs" />
     <Compile Include="IFrameworkTargetable.cs" />

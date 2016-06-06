@@ -174,7 +174,8 @@ namespace Cake.NuGet
             arguments.Append("-OutputDirectory");
             arguments.AppendQuoted(installationRoot.FullPath);
 
-            // Source
+            // if an absolute uri is specified for source, use this
+            // otherwise check config for customise package source/s
             if (definition.Address != null)
             {
                 arguments.Append("-Source");
@@ -182,7 +183,7 @@ namespace Cake.NuGet
             }
             else
             {
-                var nugetSource = config.GetValue("ROSLYN_NUGETSOURCE");
+                var nugetSource = config.GetValue(Constants.NuGet.Source);
                 if (!string.IsNullOrWhiteSpace(nugetSource))
                 {
                     arguments.Append("-Source");

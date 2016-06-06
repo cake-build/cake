@@ -12,6 +12,8 @@ using NSubstitute;
 
 namespace Cake.NuGet.Tests.Fixtures
 {
+    using Cake.Core.Configuration;
+
     internal sealed class NuGetPackageInstallerFixture
     {
         public ICakeEnvironment Environment { get; set; }
@@ -25,7 +27,7 @@ namespace Cake.NuGet.Tests.Fixtures
         public PackageType PackageType { get; set; }
         public DirectoryPath InstallPath { get; set; }
 
-        public FakeConfiguration Config { get; set; }
+        public ICakeConfiguration Config { get; set; }
 
         public NuGetPackageInstallerFixture()
         {
@@ -34,7 +36,7 @@ namespace Cake.NuGet.Tests.Fixtures
             ProcessRunner = Substitute.For<IProcessRunner>();
             ContentResolver = Substitute.For<INuGetPackageContentResolver>();
             Log = Substitute.For<ICakeLog>();
-            Config = new FakeConfiguration();
+            Config = Substitute.For<ICakeConfiguration>();
 
             ToolResolver = Substitute.For<INuGetToolResolver>();
             ToolResolver.ResolvePath().Returns(new FilePath("/Working/tools/nuget.exe"));
