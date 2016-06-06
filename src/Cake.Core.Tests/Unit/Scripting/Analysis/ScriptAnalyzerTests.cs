@@ -358,11 +358,14 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 Assert.Equal(result.Lines[12], "int y=2;");
             }
 
-            [Fact]
-            public void Should_Process_Break_Directive()
+            [Theory]
+            [InlineData(true, @"if (System.Diagnostics.Debugger.IsAttached) { System.Diagnostics.Debugger.Break(); } else { System.Diagnostics.Debugger.Launch(); }")]
+            [InlineData(false, @"// #break")]
+            public void Should_Process_Break_Directive(bool isDebug, string expected)
             {
                 // Given
                 var fixture = new ScriptAnalyzerFixture();
+                fixture.Environment.IsDebug = isDebug;
                 fixture.GivenScriptExist("/Working/script.cake", "#break");
 
                 // When
@@ -371,7 +374,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 // Then
                 Assert.Equal(2, result.Lines.Count);
                 Assert.Equal(result.Lines[0], "#line 1 \"/Working/script.cake\"");
-                Assert.Equal(result.Lines[1], @"if (System.Diagnostics.Debugger.IsAttached) { System.Diagnostics.Debugger.Break(); }");
+                Assert.Equal(result.Lines[1], expected);
             }
         }
     }

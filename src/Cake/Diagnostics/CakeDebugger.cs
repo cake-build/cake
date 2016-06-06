@@ -21,7 +21,7 @@ namespace Cake.Diagnostics
             {
                 while (!Debugger.IsAttached)
                 {
-                    Thread.Sleep(100);
+                    Thread.Sleep(50);
                 }
             }).Wait(timeout);
         }

@@ -12,9 +12,12 @@ namespace Cake.Core.Scripting.Processors
 {
     internal sealed class BreakDirectiveProcessor : LineProcessor
     {
+        private ICakeEnvironment _environment;
+
         public BreakDirectiveProcessor(ICakeEnvironment environment)
             : base(environment)
         {
+            _environment = environment;
         }
 
         public override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
@@ -31,7 +34,11 @@ namespace Cake.Core.Scripting.Processors
                 return false;
             }
 
-            replacement = @"if (System.Diagnostics.Debugger.IsAttached) { System.Diagnostics.Debugger.Break(); }";
+            if (_environment.IsDebug)
+            {
+                replacement = @"if (System.Diagnostics.Debugger.IsAttached) { System.Diagnostics.Debugger.Break(); } else { System.Diagnostics.Debugger.Launch(); }";
+            }
+
             return true;
         }
     }
