@@ -81,6 +81,22 @@ namespace Cake.Tests.Unit.Arguments
                 Assert.Equal("-verbosity", result[2]);
                 Assert.Equal("\"diagnostic\"", result[3]);
             }
+
+            [Fact]
+            public void Should_Parse_Part_That_Contains_Quotes_With_Space_In_It()
+            {
+                // Given
+                const string input = @"cake.exe build.cake -target=""te st""";
+
+                // When
+                var result = ArgumentTokenizer.Tokenize(input).ToArray();
+
+                // Then
+                Assert.Equal(3, result.Length);
+                Assert.Equal("cake.exe", result[0]);
+                Assert.Equal("build.cake", result[1]);
+                Assert.Equal("-target=\"te st\"", result[2]);
+            }
         }
     }
 }
