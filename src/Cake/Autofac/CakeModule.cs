@@ -60,7 +60,7 @@ namespace Cake.Autofac
             builder.RegisterType<CommandFactory>().As<ICommandFactory>().SingleInstance();
             builder.RegisterType<CakeApplication>().SingleInstance();
             builder.RegisterType<ScriptRunner>().As<IScriptRunner>().SingleInstance();
-            builder.RegisterType<CakeBuildLog>().As<ICakeLog>().As<IVerbosityAwareLog>().SingleInstance();
+            builder.RegisterType<CakeBuildLog>().As<ICakeLog>().SingleInstance();
             builder.RegisterType<VerbosityParser>().SingleInstance();
             builder.RegisterType<CakeDebugger>().As<IDebugger>().SingleInstance();
 

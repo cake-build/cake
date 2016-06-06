@@ -154,7 +154,6 @@
     <Compile Include="Diagnostics\Formatting\LiteralToken.cs" />
     <Compile Include="Diagnostics\Formatting\PropertyToken.cs" />
     <Compile Include="Diagnostics\IDebugger.cs" />
-    <Compile Include="Diagnostics\IVerbosityAware.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">

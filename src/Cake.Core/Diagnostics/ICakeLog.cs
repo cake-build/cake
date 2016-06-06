@@ -6,10 +6,10 @@
     public interface ICakeLog
     {
         /// <summary>
-        /// Gets the verbosity.
+        /// Gets or sets the verbosity.
         /// </summary>
         /// <value>The verbosity.</value>
-        Verbosity Verbosity { get; }
+        Verbosity Verbosity { get; set; }
 
         /// <summary>
         /// Writes the text representation of the specified array of objects to the
