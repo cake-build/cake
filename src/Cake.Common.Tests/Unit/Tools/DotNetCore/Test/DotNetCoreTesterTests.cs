@@ -97,6 +97,22 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
                 // Then
                 Assert.Equal("test --output \"/Working/artifacts\" --build-base-path \"/Working/temp\" --runtime runtime1 --framework dnxcore50 --configuration Release --no-build", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_Additional_Parameters_If_Any()
+            {
+                // Given
+                var fixture = new DotNetCoreTesterFixture();
+                fixture.Settings.Configuration = "Release";
+                fixture.Settings.OutputDirectory = "./artifacts/";
+                fixture.Settings.AdditionalParameters.Add("--testresultfile", "testresult.xml");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("test --output \"/Working/artifacts\" --configuration Release --testresultfile testresult.xml", result.Args);
+            }
         }
     }
 }

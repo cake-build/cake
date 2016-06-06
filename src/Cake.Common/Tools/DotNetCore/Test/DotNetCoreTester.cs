@@ -95,6 +95,15 @@ namespace Cake.Common.Tools.DotNetCore.Test
                 builder.Append("--no-build");
             }
 
+            foreach (var additionalParameter in settings.AdditionalParameters)
+            {
+                builder.Append(additionalParameter.Key);
+                if (!string.IsNullOrEmpty(additionalParameter.Value))
+                {
+                    builder.Append(additionalParameter.Value);
+                }
+            }
+
             return builder;
         }
     }
