@@ -31,7 +31,7 @@ namespace Cake.Common.Tools.DotNetCore.Run
         /// <param name="project">The target project path.</param>
         /// <param name="arguments">The arguments.</param>
         /// <param name="settings">The settings.</param>
-        public void Run(string project, string arguments, DotNetCoreRunSettings settings)
+        public void Run(string project, ProcessArgumentBuilder arguments, DotNetCoreRunSettings settings)
         {
             if (settings == null)
             {
@@ -41,7 +41,7 @@ namespace Cake.Common.Tools.DotNetCore.Run
             Run(settings, GetArguments(project, arguments, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(string project, string arguments, DotNetCoreRunSettings settings)
+        private ProcessArgumentBuilder GetArguments(string project, ProcessArgumentBuilder arguments, DotNetCoreRunSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 
@@ -68,10 +68,11 @@ namespace Cake.Common.Tools.DotNetCore.Run
                 builder.Append(settings.Configuration);
             }
 
-            if (!string.IsNullOrEmpty(arguments))
+            // Arguments
+            if (!arguments.IsNullOrEmpty())
             {
                 builder.Append("--");
-                builder.AppendQuoted(arguments);
+                arguments.CopyTo(builder);
             }
 
             return builder;

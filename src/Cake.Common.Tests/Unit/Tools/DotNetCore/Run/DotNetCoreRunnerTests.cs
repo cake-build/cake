@@ -73,12 +73,12 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Run
                 // Given
                 var fixture = new DotNetCoreRunnerFixture();
                 fixture.Project = "./tools/tool/";
-                fixture.Arguments = "--args";
+                fixture.Arguments = "--args=\"value\"";
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("run --project \"./tools/tool/\" -- \"--args\"", result.Args);
+                Assert.Equal("run --project \"./tools/tool/\" -- --args=\"value\"", result.Args);
             }
 
             [Fact]
