@@ -33,5 +33,10 @@ namespace Cake.Common.Tools.SignTool
         /// Gets or sets the signed content's description.
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the signed content's expanded description URL.
+        /// </summary>
+        public Uri DescriptionUri { get; set; }
     }
 }

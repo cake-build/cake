@@ -72,6 +72,8 @@
     </Compile>
     <Compile Include="Unit\Arguments\ArgumentParserTests.cs" />
     <Compile Include="Unit\Arguments\ArgumentTokenizerTests.cs" />
+    <Compile Include="Unit\Composition\ContainerRegistrationBuilderTests.cs" />
+    <Compile Include="Unit\Composition\ContainerRegistryTests.cs" />
     <Compile Include="Unit\CakeApplicationTests.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -6,7 +6,14 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.TextTransform
 {
     /// <summary>
-    /// Contains functionality related to transforming templates
+    /// <para>Contains functionality related to <see href="https://github.com/mono/monodevelop/tree/master/main/src/addins/TextTemplating/TextTransform">TextTransform</see>.</para>
+    /// <para>
+    /// In order to use the commands for this alias, include the following in your build.cake file to download and
+    /// install from NuGet.org, or specify the ToolPath within the <see cref="TextTransformSettings" /> class:
+    /// <code>
+    /// #tool "nuget:?package=Mono.TextTransform"
+    /// </code>
+    /// </para>
     /// </summary>
     [CakeAliasCategory("Text")]
     public static class TextTransformAliases

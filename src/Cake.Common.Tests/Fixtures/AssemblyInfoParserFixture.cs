@@ -43,6 +43,11 @@ namespace Cake.Common.Tests.Fixtures
             CreateAssemblyInfo = true;
         }
 
+        public void WithAssemblyInfoContents(string assemblyInfoContents)
+        {
+            FileSystem.CreateFile("/Working/output.cs").SetContent(assemblyInfoContents);
+        }
+
         public AssemblyInfoParseResult Parse()
         {
             if (CreateAssemblyInfo && Path != null)

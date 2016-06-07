@@ -89,7 +89,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Build
             {
                 // Given
                 var fixture = new DotNetCoreBuilderFixture();
-                fixture.Settings.Frameworks = new[] { "net451", "dnxcore50" };
+                fixture.Settings.Framework = "net451";
                 fixture.Settings.Runtime = "runtime1";
                 fixture.Settings.Configuration = "Release";
                 fixture.Settings.VersionSuffix = "rc1";
@@ -99,7 +99,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Build
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("build ./src/* --runtime runtime1 --framework \"net451;dnxcore50\" --configuration Release --version-suffix rc1", result.Args);
+                Assert.Equal("build ./src/* --runtime runtime1 --framework net451 --configuration Release --version-suffix rc1", result.Args);
             }
 
             [Fact]

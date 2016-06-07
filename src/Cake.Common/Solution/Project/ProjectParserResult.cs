@@ -15,6 +15,7 @@ namespace Cake.Common.Solution.Project
         private readonly string _rootNameSpace;
         private readonly string _assemblyName;
         private readonly string _targetFrameworkVersion;
+        private readonly string _targetFrameworkProfile;
         private readonly ICollection<ProjectFile> _files;
 
         /// <summary>
@@ -81,6 +82,15 @@ namespace Cake.Common.Solution.Project
         }
 
         /// <summary>
+        /// Gets the compiler target framework profile.
+        /// </summary>
+        /// <value>The target framework profile.</value>
+        public string TargetFrameworkProfile
+        {
+            get { return _targetFrameworkProfile; }
+        }
+
+        /// <summary>
         /// Gets the project content files.
         /// </summary>
         /// <value>The files.</value>
@@ -99,6 +109,7 @@ namespace Cake.Common.Solution.Project
         /// <param name="rootNameSpace">The default root namespace.</param>
         /// <param name="assemblyName">Gets the build target assembly name.</param>
         /// <param name="targetFrameworkVersion">The compiler framework version.</param>
+        /// <param name="targetFrameworkProfile">The compiler framework profile.</param>
         /// <param name="files">The project content files.</param>
         public ProjectParserResult(
             string configuration,
@@ -108,6 +119,7 @@ namespace Cake.Common.Solution.Project
             string rootNameSpace,
             string assemblyName,
             string targetFrameworkVersion,
+            string targetFrameworkProfile,
             IEnumerable<ProjectFile> files)
         {
             _configuration = configuration;
@@ -117,6 +129,7 @@ namespace Cake.Common.Solution.Project
             _rootNameSpace = rootNameSpace;
             _assemblyName = assemblyName;
             _targetFrameworkVersion = targetFrameworkVersion;
+            _targetFrameworkProfile = targetFrameworkProfile;
             _files = files.ToList().AsReadOnly();
         }
     }

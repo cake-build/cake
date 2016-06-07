@@ -71,6 +71,7 @@
     <Compile Include="Fixtures\Build\JenkinsInfoFixture.cs" />
     <Compile Include="Fixtures\Build\TravisCIFixture.cs" />
     <Compile Include="Fixtures\Build\TravisCIInfoFixture.cs" />
+    <Compile Include="Fixtures\Solution\Project\ProjectParserFixture.cs" />
     <Compile Include="Fixtures\Tools\CakeRunnerFixture.cs" />
     <Compile Include="Fixtures\IO\FileCopyFixture.cs" />
     <Compile Include="Fixtures\IO\FileDeleteFixture.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Fixtures\Tools\DNU\DNUFixture.cs" />
     <Compile Include="Fixtures\Tools\DNU\Pack\DNUPackerFixture.cs" />
     <Compile Include="Fixtures\Tools\DNU\Restorer\DNURestorerFixture.cs" />
+    <Compile Include="Fixtures\Tools\VSTestRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\SpecFlow\StepDefinitionReport\SpecFlowStepDefinitionReporterFixture.cs" />
     <Compile Include="Fixtures\Tools\SpecFlow\TestExecutionReport\SpecFlowTestExecutionReporterFixture.cs" />
     <Compile Include="Fixtures\Tools\SpecFlow\SpecFlowFixture.cs" />
@@ -217,6 +219,7 @@
     <Compile Include="Unit\IO\Paths\ConvertableDirectoryPathTests.cs" />
     <Compile Include="Unit\IO\Paths\ConvertableFilePathTests.cs" />
     <Compile Include="Unit\Security\FileHashCalculatorTests.cs" />
+    <Compile Include="Unit\Solution\Project\ProjectParserTests.cs" />
     <Compile Include="Unit\Solution\Project\Properties\AssemblyInfoCreatorTests.cs" />
     <Compile Include="Unit\Solution\Project\Properties\AssemblyInfoParserTests.cs" />
     <Compile Include="Unit\Diagnostics\LoggingAliasesTests.cs" />
@@ -308,6 +311,7 @@
     <Compile Include="Unit\Tools\SpecFlow\TestExecutionReport\SpecFlowTestExecutionReporterTests.cs" />
     <Compile Include="Unit\Tools\TextTransform\TextTemplateAliasTests.cs" />
     <Compile Include="Unit\Tools\TextTransform\TextTransformRunnerTests.cs" />
+    <Compile Include="Unit\Tools\VSTest\VSTestRunnerTests.cs" />
     <Compile Include="Unit\Tools\WiX\LightRunnerTests.cs" />
     <Compile Include="Unit\Tools\WiX\CandleRunnerTests.cs" />
     <Compile Include="Unit\Tools\XBuild\XBuildSettingsExtensionsTests.cs" />

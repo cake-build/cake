@@ -294,6 +294,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;copyright&gt;The copyright&lt;/copyright&gt;
     &lt;releaseNotes&gt;&lt;![CDATA[Line #1
@@ -323,6 +324,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;copyright&gt;The copyright&lt;/copyright&gt;
     &lt;releaseNotes&gt;&lt;![CDATA[Line #1
@@ -356,6 +358,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;copyright&gt;The copyright&lt;/copyright&gt;
     &lt;releaseNotes&gt;&lt;![CDATA[Line #1
@@ -385,6 +388,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;copyright&gt;The copyright&lt;/copyright&gt;
     &lt;releaseNotes&gt;&lt;![CDATA[Line #1
@@ -520,6 +524,17 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;/appSettings&gt;
 &lt;/configuration&gt;</value>
   </data>
+  <data name="XmlPoke_Xml_Dtd" xml:space="preserve">
+    <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+&lt;plist version=&quot;1.0&quot;&gt;
+&lt;dict&gt;
+	&lt;key&gt;CFBundleDisplayName&lt;/key&gt;
+	&lt;string&gt;Cake&lt;/string&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+    </value>
+  </data>
   <data name="XmlPeek_Xml" xml:space="preserve">
     <value>&lt;?xml version="1.0" encoding="utf-8" ?&gt;
 &lt;configuration&gt;
@@ -530,6 +545,17 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;test&gt;test value&lt;/test&gt;
 &lt;/configuration&gt;
 </value>
+  </data>
+  <data name="XmlPeek_Xml_Dtd" xml:space="preserve">
+    <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+&lt;plist version=&quot;1.0&quot;&gt;
+&lt;dict&gt;
+	&lt;key&gt;CFBundleDisplayName&lt;/key&gt;
+	&lt;string&gt;Cake&lt;/string&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+    </value>
   </data>
   <data name="XmlTransformation_Htm" xml:space="preserve">
     <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;&lt;html&gt;&lt;body style="font-family:Arial;font-size:12pt;background-color:#EEEEEE"&gt;&lt;div style="background-color:teal;color:white;padding:4px"&gt;&lt;span style="font-weight:bold"&gt;Belgian Waffles
@@ -658,5 +684,144 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
   &lt;/Target&gt;
   --&gt;
 &lt;/Project&gt;</value>
+  </data>
+  <data name="Csproj_IncompleteFile" xml:space="preserve">
+    <value>&lt;Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003"&gt;
+  &lt;Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" /&gt;
+  &lt;PropertyGroup&gt;
+    &lt;MinimumVisualStudioVersion&gt;11.0&lt;/MinimumVisualStudioVersion&gt;
+    &lt;Configuration Condition=" '$(Configuration)' == '' "&gt;Debug&lt;/Configuration&gt;
+    &lt;Platform Condition=" '$(Platform)' == '' "&gt;AnyCPU&lt;/Platform&gt;
+    &lt;ProjectGuid&gt;{864BC2C5-0E27-47EC-B103-0AC11FE40C5B}&lt;/ProjectGuid&gt;
+    &lt;OutputType&gt;Library&lt;/OutputType&gt;
+    &lt;AppDesignerFolder&gt;Properties&lt;/AppDesignerFolder&gt;
+    &lt;RootNamespace&gt;Cake.Common&lt;/RootNamespace&gt;
+	&lt;AssemblyName&gt;Cake.Common&lt;/AssemblyName&gt;
+    &lt;DefaultLanguage&gt;en-US&lt;/DefaultLanguage&gt;
+    &lt;FileAlignment&gt;512&lt;/FileAlignment&gt;
+    &lt;ProjectTypeGuids&gt;{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}&lt;/ProjectTypeGuids&gt;
+    &lt;TargetFrameworkVersion&gt;v4.5&lt;/TargetFrameworkVersion&gt;
+  &lt;/PropertyGroup&gt;
+  &lt;PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' "&gt;
+    &lt;DebugSymbols&gt;true&lt;/DebugSymbols&gt;
+    &lt;DebugType&gt;full&lt;/DebugType&gt;
+    &lt;Optimize&gt;false&lt;/Optimize&gt;
+    &lt;OutputPath&gt;bin\Debug\&lt;/OutputPath&gt;
+    &lt;DefineConstants&gt;DEBUG;TRACE&lt;/DefineConstants&gt;
+    &lt;ErrorReport&gt;prompt&lt;/ErrorReport&gt;
+    &lt;WarningLevel&gt;4&lt;/WarningLevel&gt;
+  &lt;/PropertyGroup&gt;
+  &lt;PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' "&gt;
+    &lt;DebugType&gt;pdbonly&lt;/DebugType&gt;
+    &lt;Optimize&gt;true&lt;/Optimize&gt;
+    &lt;OutputPath&gt;bin\Release\&lt;/OutputPath&gt;
+    &lt;DefineConstants&gt;TRACE&lt;/DefineConstants&gt;
+    &lt;ErrorReport&gt;prompt&lt;/ErrorReport&gt;
+    &lt;WarningLevel&gt;4&lt;/WarningLevel&gt;
+  &lt;/PropertyGroup&gt;
+  &lt;ItemGroup&gt;
+    &lt;Compile Include="Properties\AssemblyInfo.cs" /&gt;
+    &lt;Compile Include="Class1.cs" /&gt;
+  &lt;/ItemGroup&gt;
+  &lt;Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" /&gt;
+&lt;/Project&gt;</value>
+  </data>
+  <data name="Csproj_ProjectFile" xml:space="preserve">
+    <value>&lt;Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003"&gt;
+  &lt;Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" /&gt;
+  &lt;PropertyGroup&gt;
+    &lt;MinimumVisualStudioVersion&gt;11.0&lt;/MinimumVisualStudioVersion&gt;
+    &lt;Configuration Condition=" '$(Configuration)' == '' "&gt;Debug&lt;/Configuration&gt;
+    &lt;Platform Condition=" '$(Platform)' == '' "&gt;AnyCPU&lt;/Platform&gt;
+    &lt;ProjectGuid&gt;{864BC2C5-0E27-47EC-B103-0AC11FE40C5B}&lt;/ProjectGuid&gt;
+    &lt;OutputType&gt;Library&lt;/OutputType&gt;
+    &lt;AppDesignerFolder&gt;Properties&lt;/AppDesignerFolder&gt;
+    &lt;RootNamespace&gt;Cake.Common&lt;/RootNamespace&gt;
+    &lt;AssemblyName&gt;Cake.Common&lt;/AssemblyName&gt;
+    &lt;DefaultLanguage&gt;en-US&lt;/DefaultLanguage&gt;
+    &lt;FileAlignment&gt;512&lt;/FileAlignment&gt;
+    &lt;ProjectTypeGuids&gt;{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}&lt;/ProjectTypeGuids&gt;
+    &lt;TargetFrameworkProfile&gt;Profile111&lt;/TargetFrameworkProfile&gt;
+    &lt;TargetFrameworkVersion&gt;v4.5&lt;/TargetFrameworkVersion&gt;
+  &lt;/PropertyGroup&gt;
+  &lt;PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' "&gt;
+    &lt;DebugSymbols&gt;true&lt;/DebugSymbols&gt;
+    &lt;DebugType&gt;full&lt;/DebugType&gt;
+    &lt;Optimize&gt;false&lt;/Optimize&gt;
+    &lt;OutputPath&gt;bin\Debug\&lt;/OutputPath&gt;
+    &lt;DefineConstants&gt;DEBUG;TRACE&lt;/DefineConstants&gt;
+    &lt;ErrorReport&gt;prompt&lt;/ErrorReport&gt;
+    &lt;WarningLevel&gt;4&lt;/WarningLevel&gt;
+  &lt;/PropertyGroup&gt;
+  &lt;PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' "&gt;
+    &lt;DebugType&gt;pdbonly&lt;/DebugType&gt;
+    &lt;Optimize&gt;true&lt;/Optimize&gt;
+    &lt;OutputPath&gt;bin\Release\&lt;/OutputPath&gt;
+    &lt;DefineConstants&gt;TRACE&lt;/DefineConstants&gt;
+    &lt;ErrorReport&gt;prompt&lt;/ErrorReport&gt;
+    &lt;WarningLevel&gt;4&lt;/WarningLevel&gt;
+  &lt;/PropertyGroup&gt;
+  &lt;ItemGroup&gt;
+    &lt;Compile Include="Properties\AssemblyInfo.cs" /&gt;
+    &lt;Compile Include="Class1.cs" /&gt;
+  &lt;/ItemGroup&gt;
+  &lt;Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" /&gt;
+&lt;/Project&gt;</value>
+  </data>
+  <data name="MonoDevelopAssemblyInfo" xml:space="preserve">
+    <value>using System.Reflection;
+using System.Runtime.CompilerServices;
+
+// Information about this assembly is defined by the following attributes.
+// Change them to the values specific to your project.
+
+[assembly: AssemblyTitle ("MonoDevelopAssemblyTitle")]
+[assembly: AssemblyDescription ("MonoDevelopAssemblyDescription")]
+[assembly: AssemblyConfiguration ("MonoDevelopConfiguration")]
+[assembly: AssemblyCompany ("MonoDevelopCompany")]
+[assembly: AssemblyProduct ("MonoDevelopProduct")]
+[assembly: AssemblyCopyright ("MonoDevelopCopyright")]
+[assembly: AssemblyTrademark ("MonoDevelopTrademark")]
+[assembly: AssemblyCulture ("en-US")]
+
+// The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
+// The form "{Major}.{Minor}.*" will automatically update the build and revision,
+// and "{Major}.{Minor}.{Build}.*" will update just the revision.
+
+[assembly: AssemblyVersion ("1.0.14")]
+
+// The following attributes are used to specify the signing key for the assembly,
+// if desired. See the Mono documentation for more information about signing.
+
+//[assembly: AssemblyDelaySign(false)]
+//[assembly: AssemblyKeyFile("")]</value>
+  </data>
+  <data name="VisualStudioAssemblyInfo" xml:space="preserve">
+    <value>using System.Reflection;
+using System.Runtime.CompilerServices;
+
+// Information about this assembly is defined by the following attributes.
+// Change them to the values specific to your project.
+
+[assembly: AssemblyTitle("VisualStudioAssemblyTitle")]
+[assembly: AssemblyDescription("VisualStudioAssemblyDescription")]
+[assembly: AssemblyConfiguration("VisualStudioConfiguration")]
+[assembly: AssemblyCompany("VisualStudioCompany")]
+[assembly: AssemblyProduct("VisualStudioProduct")]
+[assembly: AssemblyCopyright("VisualStudioCopyright")]
+[assembly: AssemblyTrademark("VisualStudioTrademark")]
+[assembly: AssemblyCulture("en-US")]
+
+// The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
+// The form "{Major}.{Minor}.*" will automatically update the build and revision,
+// and "{Major}.{Minor}.{Build}.*" will update just the revision.
+
+[assembly: AssemblyVersion("1.0.13")]
+
+// The following attributes are used to specify the signing key for the assembly,
+// if desired. See the Mono documentation for more information about signing.
+
+//[assembly: AssemblyDelaySign(false)]
+//[assembly: AssemblyKeyFile("")]</value>
   </data>
 </root>

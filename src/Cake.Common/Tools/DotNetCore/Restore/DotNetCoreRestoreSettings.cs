@@ -9,9 +9,9 @@ namespace Cake.Common.Tools.DotNetCore.Restore
     public sealed class DotNetCoreRestoreSettings : DotNetCoreSettings
     {
         /// <summary>
-        /// Gets or sets the specified NuGet package source to use during the restore.
+        /// Gets or sets the specified NuGet package sources to use during the restore.
         /// </summary>
-        public string Source { get; set; }
+        public ICollection<string> Sources { get; set; }
 
         /// <summary>
         /// Gets or sets the NuGet configuration file to use.

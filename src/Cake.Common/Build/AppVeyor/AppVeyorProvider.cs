@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Globalization;
+using System.IO;
+using System.Net.Http;
 using Cake.Common.Build.AppVeyor.Data;
 using Cake.Core;
 using Cake.Core.IO;
@@ -85,6 +88,39 @@ namespace Cake.Common.Build.AppVeyor
 
             // Start the process.
             _processRunner.Start("appveyor", new ProcessSettings { Arguments = arguments });
+        }
+
+        /// <summary>
+        /// Uploads test results XML file to AppVeyor. Results type can be one of the following: mstest, xunit, nunit, nunit3, junit.
+        /// </summary>
+        /// <param name="path">The file path of the test results XML to upload.</param>
+        /// <param name="resultsType">The results type. Can be mstest, xunit, nunit, nunit3 or junit.</param>
+        public void UploadTestResults(FilePath path, AppVeyorTestResultsType resultsType)
+        {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+
+            if (!IsRunningOnAppVeyor)
+            {
+                throw new CakeException("The current build is not running on AppVeyor.");
+            }
+
+            var baseUri = _environment.GetEnvironmentVariable("APPVEYOR_URL").TrimEnd('/');
+
+            if (string.IsNullOrWhiteSpace(baseUri))
+            {
+                throw new CakeException("Failed to get AppVeyor API url.");
+            }
+
+            var url = string.Format(CultureInfo.InvariantCulture, "{0}/api/testresults/{1}/{2}", baseUri, resultsType, Environment.JobId);
+
+            using (var stream = File.OpenRead(path.FullPath))
+            using (var client = new HttpClient())
+            {
+                client.PostAsync(url, new StreamContent(stream)).Wait();
+            }
         }
 
         /// <summary>

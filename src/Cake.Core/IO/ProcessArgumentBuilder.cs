@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Cake.Core.IO.Arguments;
@@ -8,9 +10,17 @@ namespace Cake.Core.IO
     /// <summary>
     /// Utility for building process arguments.
     /// </summary>
-    public sealed class ProcessArgumentBuilder
+    public sealed class ProcessArgumentBuilder : IReadOnlyCollection<IProcessArgument>
     {
         private readonly List<IProcessArgument> _tokens;
+
+        /// <summary>
+        /// Gets the number of arguments contained in the <see cref="ProcessArgumentBuilder"/>.
+        /// </summary>
+        public int Count
+        {
+            get { return _tokens.Count; }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessArgumentBuilder"/> class.
@@ -102,6 +112,16 @@ namespace Cake.Core.IO
             var builder = new ProcessArgumentBuilder();
             builder.Append(new TextArgument(value));
             return builder;
+        }
+
+        IEnumerator<IProcessArgument> IEnumerable<IProcessArgument>.GetEnumerator()
+        {
+            return _tokens.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable)_tokens).GetEnumerator();
         }
     }
 }

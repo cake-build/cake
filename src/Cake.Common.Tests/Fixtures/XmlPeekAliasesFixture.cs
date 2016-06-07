@@ -14,7 +14,7 @@ namespace Cake.Common.Tests.Fixtures
        public FilePath XmlPath { get; set; }
        public XmlPeekSettings Settings { get; set; }
 
-       public XmlPeekAliasesFixture(bool xmlExists = true)
+       public XmlPeekAliasesFixture(bool xmlExists = true, bool xmlWithDtd = false)
        {
            Settings = new XmlPeekSettings();
 
@@ -24,7 +24,8 @@ namespace Cake.Common.Tests.Fixtures
 
            if (xmlExists)
            {
-               var xmlFile = fileSystem.CreateFile("/Working/web.config").SetContent(Resources.XmlPeek_Xml);
+               string content = xmlWithDtd ? Resources.XmlPeek_Xml_Dtd : Resources.XmlPeek_Xml;
+               var xmlFile = fileSystem.CreateFile("/Working/web.config").SetContent(content);
                XmlPath = xmlFile.Path;
            }
 

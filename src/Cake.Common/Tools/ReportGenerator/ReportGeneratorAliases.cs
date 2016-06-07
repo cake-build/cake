@@ -7,7 +7,14 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.ReportGenerator
 {
     /// <summary>
-    /// Contains functionality related to <see href="https://github.com/danielpalme/ReportGenerator">ReportGenerator</see>.
+    /// <para>Contains functionality related to <see href="https://github.com/danielpalme/ReportGenerator">ReportGenerator</see>.</para>
+    /// <para>
+    /// In order to use the commands for this alias, include the following in your build.cake file to download and
+    /// install from NuGet.org, or specify the ToolPath within the <see cref="ReportGeneratorSettings" /> class:
+    /// <code>
+    /// #tool "nuget:?package=ReportGenerator"
+    /// </code>
+    /// </para>
     /// </summary>
     [CakeAliasCategory("ReportGenerator")]
     public static class ReportGeneratorAliases

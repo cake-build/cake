@@ -9,6 +9,7 @@ namespace Cake.Testing
     public sealed class FakeLog : ICakeLog
     {
         private readonly List<FakeLogMessage> _entries;
+        private Verbosity _verbosity;
 
         /// <summary>
         /// Gets the messages.
@@ -25,15 +26,17 @@ namespace Cake.Testing
         public FakeLog()
         {
             _entries = new List<FakeLogMessage>();
+            _verbosity = Verbosity.Quiet;
         }
 
         /// <summary>
-        /// Gets the verbosity.
+        /// Gets or sets the verbosity.
         /// </summary>
         /// <value>The verbosity.</value>
         public Verbosity Verbosity
         {
-            get { return Verbosity.Quiet; }
+            get { return _verbosity; }
+            set { _verbosity = value; }
         }
 
         /// <summary>

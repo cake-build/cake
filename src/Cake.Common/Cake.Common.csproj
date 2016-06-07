@@ -53,6 +53,7 @@
     <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Build\AppVeyor\AppVeyorTestResultsType.cs" />
     <Compile Include="Build\AppVeyor\Data\AppVeyorEnvironmentInfo.cs" />
     <Compile Include="Build\AppVeyor\AppVeyorInfo.cs" />
     <Compile Include="Build\AppVeyor\AppVeyorProvider.cs" />
@@ -362,6 +363,12 @@
     <Compile Include="Tools\TextTransform\TextTransformAliases.cs" />
     <Compile Include="Tools\TextTransform\TextTransformRunner.cs" />
     <Compile Include="Tools\TextTransform\TextTransformSettings.cs" />
+    <Compile Include="Tools\VSTest\VSTestAliases.cs" />
+    <Compile Include="Tools\VSTest\VSTestPlatform.cs" />
+    <Compile Include="Tools\VSTest\VSTestFrameworkVersion.cs" />
+    <Compile Include="Tools\VSTest\VSTestLogger.cs" />
+    <Compile Include="Tools\VSTest\VSTestRunner.cs" />
+    <Compile Include="Tools\VSTest\VSTestSettings.cs" />
     <Compile Include="Tools\WiX\Architecture.cs" />
     <Compile Include="Tools\WiX\CandleRunner.cs" />
     <Compile Include="Tools\WiX\CandleSettings.cs" />
@@ -402,6 +409,7 @@
     <Compile Include="Build\Bamboo\Data\BambooPlanInfo.cs" />
     <Compile Include="Xml\XmlPeekAliases.cs" />
     <Compile Include="Xml\XmlPeekSettings.cs" />
+    <Compile Include="Xml\XmlDtdProcessing.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">

@@ -92,8 +92,8 @@ namespace Cake.Common.Tools.NSIS
                 builder.Append("/NOCONFIG");
             }
 
-            // Script file
-            builder.Append(scriptFile.MakeAbsolute(_environment).FullPath);
+            // Quoted Script file
+            builder.AppendQuoted(scriptFile.MakeAbsolute(_environment).FullPath);
 
             return builder;
         }

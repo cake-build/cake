@@ -85,7 +85,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
             {
                 // Given
                 var fixture = new DotNetCoreRestorerFixture();
-                fixture.Settings.Source = "https://www.example.com/source";
+                fixture.Settings.Sources = new[] { "https://www.example.com/source1", "https://www.example.com/source2" };
                 fixture.Settings.FallbackSources = new[] { "https://www.example.com/fallback1", "https://www.example.com/fallback2" };
                 fixture.Settings.Quiet = true;
                 fixture.Settings.NoCache = true;
@@ -101,13 +101,16 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore" +
-                             " --packages \"/Working/packages\"" +
-                             " --source https://www.example.com/source" +
-                             " --fallbacksource \"https://www.example.com/fallback1;https://www.example.com/fallback2\"" +
-                             " --configfile \"/Working/NuGet.config\"" +
-                             " --infer-runtimes \"runtime1;runtime2\"" +
-                             " --quiet --no-cache --disable-parallel --ignore-failed-sources --force-english-output" +
+                Assert.Equal("restore" + 
+                             " --packages \"/Working/packages\"" + 
+                             " --source \"https://www.example.com/source1\"" + 
+                             " --source \"https://www.example.com/source2\"" + 
+                             " --fallbacksource \"https://www.example.com/fallback1\"" + 
+                             " --fallbacksource \"https://www.example.com/fallback2\"" + 
+                             " --configfile \"/Working/NuGet.config\"" + 
+                             " --infer-runtimes \"runtime1\"" +
+                             " --infer-runtimes \"runtime2\"" + 
+                             " --quiet --no-cache --disable-parallel --ignore-failed-sources --force-english-output" + 
                              " --verbosity Information", result.Args);
             }
         }

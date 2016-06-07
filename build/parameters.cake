@@ -56,7 +56,7 @@ public class BuildParameters
             IsLocalBuild = buildSystem.IsLocalBuild,
             IsRunningOnUnix = context.IsRunningOnUnix(),
             IsRunningOnWindows = context.IsRunningOnWindows(),
-            IsRunningOnAppVeyor = context.IsRunningOnWindows(),
+            IsRunningOnAppVeyor = buildSystem.AppVeyor.IsRunningOnAppVeyor,
             IsPullRequest = buildSystem.AppVeyor.Environment.PullRequest.IsPullRequest,
             IsMainCakeRepo = StringComparer.OrdinalIgnoreCase.Equals("cake-build/cake", buildSystem.AppVeyor.Environment.Repository.Name),
             IsMainCakeBranch = StringComparer.OrdinalIgnoreCase.Equals("main", buildSystem.AppVeyor.Environment.Repository.Branch),

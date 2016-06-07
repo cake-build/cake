@@ -380,5 +380,39 @@ namespace Cake.Core
             }
             return builder;
         }
+
+        /// <summary>
+        /// Indicates whether a <see cref="ProcessArgumentBuilder"/> is null or renders empty.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns><c>true</c> if <paramref name="builder"/> refers to a null or empty <see cref="ProcessArgumentBuilder"/>;
+        /// <c>false</c> if the <paramref name="builder"/>refers to non null or empty <see cref="ProcessArgumentBuilder"/></returns>
+        public static bool IsNullOrEmpty(this ProcessArgumentBuilder builder)
+        {
+            return builder == null || builder.Count == 0 || string.IsNullOrEmpty(builder.Render());
+        }
+
+        /// <summary>
+        /// Copies all the arguments of the source <see cref="ProcessArgumentBuilder"/> to target <see cref="ProcessArgumentBuilder"/>.
+        /// </summary>
+        /// <param name="source">The argument builder to copy from..</param>
+        /// <param name="target">The argument builder to copy to.</param>
+        public static void CopyTo(this ProcessArgumentBuilder source, ProcessArgumentBuilder target)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException("source");
+            }
+
+            if (target == null)
+            {
+                throw new ArgumentNullException("target");
+            }
+
+            foreach (var token in source)
+            {
+                target.Append(token);
+            }
+        }
     }
 }

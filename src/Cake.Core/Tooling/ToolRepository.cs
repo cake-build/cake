@@ -31,6 +31,11 @@ namespace Cake.Core.Tooling
         /// <param name="path">The path to register.</param>
         public void Register(FilePath path)
         {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+
             path = path.MakeAbsolute(_environment);
 
             var filename = path.GetFilename();

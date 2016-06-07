@@ -18,12 +18,18 @@ namespace Cake.Common.Xml
         public bool PreserveWhitespace { get; set; }
 
         /// <summary>
+        /// Gets or sets a value that determines the processing of DTDs.
+        /// </summary>
+        public XmlDtdProcessing DtdProcessing { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="XmlPeekSettings"/> class.
         /// </summary>
         public XmlPeekSettings()
         {
             PreserveWhitespace = true;
             Namespaces = new Dictionary<string, string>();
+            DtdProcessing = XmlDtdProcessing.Prohibit;
         }
     }
 }

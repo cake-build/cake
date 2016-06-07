@@ -6,7 +6,11 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.MSBuild
 {
     /// <summary>
-    /// Contains functionality related to MSBuild.
+    /// <para>Contains functionality related to <see href="https://msdn.microsoft.com/en-us/library/dd393574.aspx">MSBuild</see>.</para>
+    /// <para>
+    /// In order to use the commands for this alias, MSBuild will already have to be installed on the machine the Cake Script
+    /// is being executed.
+    /// </para>
     /// </summary>
     [CakeAliasCategory("MSBuild")]
     public static class MSBuildAliases

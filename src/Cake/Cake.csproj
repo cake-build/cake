@@ -123,9 +123,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Arguments\VerbosityParser.cs" />
-    <Compile Include="Autofac\ArgumentsModule.cs" />
-    <Compile Include="Autofac\CakeModule.cs" />
-    <Compile Include="Autofac\ConfigurationModule.cs" />
+    <Compile Include="Composition\ContainerRegistry.cs" />
+    <Compile Include="Composition\ContainerRegistrationBuilder.cs" />
+    <Compile Include="Composition\ContainerRegistration.cs" />
+    <Compile Include="Composition\ModuleLoader.cs" />
+    <Compile Include="Composition\ModuleSearcher.cs" />
+    <Compile Include="Modules\ArgumentsModule.cs" />
+    <Compile Include="Modules\CakeModule.cs" />
+    <Compile Include="Modules\ConfigurationModule.cs" />
+    <Compile Include="CakeContainerBuilder.cs" />
     <Compile Include="CakeApplication.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -154,7 +160,6 @@
     <Compile Include="Diagnostics\Formatting\LiteralToken.cs" />
     <Compile Include="Diagnostics\Formatting\PropertyToken.cs" />
     <Compile Include="Diagnostics\IDebugger.cs" />
-    <Compile Include="Diagnostics\IVerbosityAware.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SolutionInfo.cs">
@@ -191,7 +196,7 @@
     <Compile Include="Scripting\Mono\MonoScriptEngine.cs" />
     <Compile Include="Scripting\Mono\CodeGen\MonoCodeGenerator.cs" />
     <Compile Include="Scripting\Mono\MonoScriptHostProxy.cs" />
-    <Compile Include="Autofac\ScriptingModule.cs" />
+    <Compile Include="Modules\ScriptingModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -229,6 +234,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\StyleCop.MSBuild.4.7.49.1\build\StyleCop.MSBuild.Targets" Condition="Exists('..\packages\StyleCop.MSBuild.4.7.49.1\build\StyleCop.MSBuild.Targets') and $(Configuration)=='Release' and ($(Windows)=='True' or $(BuildingInsideVisualStudio)=='True')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

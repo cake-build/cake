@@ -23,7 +23,7 @@ bool publishingError = false;
 // SETUP / TEARDOWN
 ///////////////////////////////////////////////////////////////////////////////
 
-Setup(() =>
+Setup(context =>
 {
     parameters.SetBuildVersion(
         BuildVersion.CalculatingSemanticVersion(
@@ -44,7 +44,7 @@ Setup(() =>
         BuildPackages.GetPackages(
         nugetRooPath: parameters.Paths.Directories.NugetRoot,
         semVersion: parameters.Version.SemVersion,
-        packageIds: new [] { "Cake", "Cake.Core", "Cake.Common", "Cake.Testing", "Cake.NuGet" },
+        packageIds: new [] { "Cake", "Cake.Core", "Cake.Common", "Cake.Testing" },
         chocolateyPackageIds: new [] { "cake.portable" }
         )
     );
