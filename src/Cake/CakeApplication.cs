@@ -1,6 +1,6 @@
 ﻿using System;
 using Cake.Commands;
-using Cake.Core.Diagnostics;
+using Cake.Diagnostics;
 
 namespace Cake
 {
@@ -9,28 +9,20 @@ namespace Cake
     /// </summary>
     internal sealed class CakeApplication
     {
-        private readonly ICakeLog _log;
         private readonly ICommandFactory _commandFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeApplication"/> class.
         /// </summary>
-        /// <param name="log">The log.</param>
         /// <param name="commandFactory">The command factory.</param>
         public CakeApplication(
-            ICakeLog log,
             ICommandFactory commandFactory)
         {
-            if (log == null)
-            {
-                throw new ArgumentNullException("log");
-            }
             if (commandFactory == null)
             {
                 throw new ArgumentNullException("commandFactory");
             }
 
-            _log = log;
             _commandFactory = commandFactory;
         }
 
@@ -45,9 +37,6 @@ namespace Cake
             {
                 throw new ArgumentNullException("options");
             }
-
-            // Set verbosity.
-            _log.Verbosity = options.Verbosity;
 
             // Create the correct command and execute it.
             var command = CreateCommand(options);

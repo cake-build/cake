@@ -11,20 +11,6 @@ namespace Cake.Tests.Unit
         public sealed class TheConstructor
         {
             [Fact]
-            public void Should_Throw_If_Log_Is_Null()
-            {
-                // Given
-                var fixture = new CakeApplicationFixture();
-                fixture.Log = null;
-
-                // When
-                var result = Record.Exception(() => fixture.CreateApplication());
-
-                // Then
-                Assert.IsArgumentNullException(result, "log");
-            }
-
-            [Fact]
             public void Should_Throw_If_Command_Factory_Is_Null()
             {
                 // Given
@@ -53,19 +39,6 @@ namespace Cake.Tests.Unit
 
                 // Then
                 Assert.IsArgumentNullException(result, "options");
-            }
-
-            [Fact]
-            public void Should_Set_Verbosity_If_Options_Are_Not_Null()
-            {
-                // Given
-                var fixture = new CakeApplicationFixture();
-
-                // When
-                fixture.RunApplication();
-
-                // Then
-                fixture.Log.Received(1).Verbosity = Verbosity.Diagnostic;
             }
 
             [Fact]
