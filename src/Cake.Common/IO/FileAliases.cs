@@ -345,7 +345,7 @@ namespace Cake.Common.IO
         /// </code>
         /// </example>
         [CakeMethodAlias]
-        [CakeAliasCategory("Exists")]
+        [CakeAliasCategory("Size")]
         public static long FileSize(this ICakeContext context, FilePath filePath)
         {
             if (context == null)
@@ -366,6 +366,41 @@ namespace Cake.Common.IO
             }
 
             return file.Length;
+        }
+        
+        /// <summary>
+        /// Gets the date and time the file was last modified.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="filePath">The path.</param>
+        /// <returns>The date and time the file was last modified.</returns>
+        /// <example>
+        /// <code>
+        /// Information("File modified: {0}", FileLastModified("./build.cake"));
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Modified")]
+        public static DateTimeOffset FileLastModified(this ICakeContext context, FilePath filePath)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            if (filePath == null)
+            {
+                throw new ArgumentNullException("filePath");
+            }
+
+            var file = context.FileSystem.GetFile(filePath.MakeAbsolute(context.Environment));
+
+            if (!file.Exists)
+            {
+                throw new FileNotFoundException("Unable to find the specified file.", filePath.FullPath);
+            }
+
+            return file.LastModified;
         }
     }
 }

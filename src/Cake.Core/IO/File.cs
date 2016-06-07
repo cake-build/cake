@@ -33,6 +33,11 @@ namespace Cake.Core.IO
             get { return _file.Length; }
         }
 
+        public DateTimeOffset LastModified
+        {
+            get { return _file.LastWriteTime; }
+        }
+
         public File(FilePath path)
         {
             _path = path;

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace Cake.Core.IO
 {
@@ -18,6 +19,12 @@ namespace Cake.Core.IO
         /// </summary>
         /// <value>The length of the file.</value>
         long Length { get; }
+        
+        /// <summary>
+        /// Gets the date and time the file was last modified.
+        /// </summary>
+        /// <value>The date and time the file was last modified.</value>
+        DateTimeOffset LastModified { get; }
 
         /// <summary>
         /// Copies the file to the specified destination path.
