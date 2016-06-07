@@ -169,6 +169,13 @@ namespace Cake.Common.Tools.SignTool
                 builder.AppendQuoted(settings.Description);
             }
 
+            // Signed content expanded description URL.
+            if (settings.DescriptionUri != null)
+            {
+                builder.Append("/du");
+                builder.AppendQuoted(settings.DescriptionUri.AbsoluteUri);
+            }
+
             // Target Assembly to sign.
             builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
 
