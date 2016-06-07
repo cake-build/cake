@@ -3,3 +3,5 @@ issue-labels-include:
 - Feature
 - Improvement
 - Documentation
+issue-labels-exclude:
+- Build
