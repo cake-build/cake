@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Autofac;
 using Cake.Core.Composition;
 using Cake.Core.Configuration;
@@ -18,6 +19,11 @@ namespace Cake.Modules
 
         public void Register(ICakeContainerRegistry registry)
         {
+            if (registry == null)
+            {
+                throw new ArgumentNullException("registry");
+            }
+
             var configuration = _provider.CreateConfiguration(_options.Arguments);
             Debug.Assert(configuration != null, "Configuration should not be null.");
             registry.RegisterInstance(configuration).As<ICakeConfiguration>();
