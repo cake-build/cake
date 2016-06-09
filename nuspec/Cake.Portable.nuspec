@@ -16,7 +16,7 @@
     <!--<mailingListUrl></mailingListUrl>-->
     <bugTrackerUrl>https://github.com/cake-build/cake/issues</bugTrackerUrl>
     <tags>Cake Script Build</tags>
-    <copyright>Copyright (c) Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors</copyright>
+    <copyright>Copyright (c) .NET Foundation and Contributors</copyright>
     <licenseUrl>https://github.com/cake-build/cake/blob/develop/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</iconUrl>

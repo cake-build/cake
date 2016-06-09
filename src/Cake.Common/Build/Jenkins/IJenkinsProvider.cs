@@ -1,9 +1,12 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
 using Cake.Common.Build.Jenkins.Data;
 
 namespace Cake.Common.Build.Jenkins
 {
     /// <summary>
-    /// Represnts a Jenkins Provider  
+    /// Represnts a Jenkins Provider
     /// </summary>
     public interface IJenkinsProvider
     {

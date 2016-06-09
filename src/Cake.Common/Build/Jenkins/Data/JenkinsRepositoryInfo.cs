@@ -1,4 +1,7 @@
-﻿using Cake.Core;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using Cake.Core;
 
 namespace Cake.Common.Build.Jenkins.Data
 {
@@ -6,7 +9,7 @@ namespace Cake.Common.Build.Jenkins.Data
     /// Provides Jenkins repository information for the current build.
     /// </summary>
     public sealed class JenkinsRepositoryInfo : JenkinsInfo
-    { 
+    {
         /// <summary>
         /// Gets the git commit sha.
         /// </summary>

@@ -1,4 +1,7 @@
-﻿using Cake.Core.IO;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using Cake.Core.IO;
 using Cake.Testing.Xunit;
 using Xunit;
 
@@ -37,7 +40,7 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.Equal("hello/world", path);
             }
-            
+
             [WindowsFact]
             public void Should_Collapse_Path_With_Windows_Root()
             {
@@ -57,7 +60,7 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.Equal("/hello/world", path);
             }
-            
+
             [WindowsFact]
             public void Should_Stop_Collapsing_When_Windows_Root_Is_Reached()
             {

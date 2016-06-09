@@ -1,4 +1,7 @@
-﻿using Cake.Common.Tools;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using Cake.Common.Tools;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Xunit;
@@ -18,7 +21,7 @@ namespace Cake.Common.Tests.Unit.Tools
                 // Then
                 Assert.Equal(Verbosity.Normal, settings.Verbosity);
             }
-            
+
             [Fact]
             public void Should_Throw_If_Solution_Is_Null()
             {

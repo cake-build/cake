@@ -1,3 +1,6 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -145,8 +148,8 @@ namespace Cake.Common.Build.ContinuaCI
         protected IEnumerable<string> GetEnvironmentStringList(string variable)
         {
             var value = _environment.GetEnvironmentVariable(variable);
-            return string.IsNullOrWhiteSpace(value) 
-                ? Enumerable.Empty<string>() 
+            return string.IsNullOrWhiteSpace(value)
+                ? Enumerable.Empty<string>()
                 : value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
@@ -164,7 +167,7 @@ namespace Cake.Common.Build.ContinuaCI
 
             var startsWith = string.Format(CultureInfo.InvariantCulture, "{0}.", variablePrefix);
             var matchingVariables = _allEnvironmentVariables.Where(v => v.Key.StartsWith(startsWith)).ToDictionary(p => p.Key.Substring(startsWith.Length), p => p.Value);
-            
+
             return matchingVariables;
         }
     }

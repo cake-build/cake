@@ -1,3 +1,6 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
 namespace Cake.Core.Tests.Unit
 {
     using System;
@@ -32,7 +35,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var report = new CakeReport();
                 report.Add("task 1", TimeSpan.FromMilliseconds(100));
-                
+
                 var taskName = "task";
                 var duration = TimeSpan.FromMilliseconds(200);
 

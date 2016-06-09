@@ -1,4 +1,7 @@
-﻿using Cake.Common.Tests.Fixtures.Tools.DNU.Restorer;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using Cake.Common.Tests.Fixtures.Tools.DNU.Restorer;
 using Cake.Common.Tools.DNU.Restore;
 using Cake.Testing;
 using Xunit;
