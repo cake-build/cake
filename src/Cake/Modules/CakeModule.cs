@@ -1,4 +1,5 @@
-﻿using Cake.Arguments;
+﻿using System;
+using Cake.Arguments;
 using Cake.Commands;
 using Cake.Composition;
 using Cake.Core;
@@ -14,6 +15,11 @@ namespace Cake.Modules
     {
         public void Register(ICakeContainerRegistry registry)
         {
+            if (registry == null)
+            {
+                throw new ArgumentNullException("registry");
+            }
+
             // Core services.
             registry.RegisterType<CakeReportPrinter>().As<ICakeReportPrinter>().Singleton();
             registry.RegisterType<CakeConsole>().As<IConsole>().Singleton();

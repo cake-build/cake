@@ -1,4 +1,5 @@
-﻿using Cake.Core.Composition;
+﻿using System;
+using Cake.Core.Composition;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
 using Cake.Core.Scripting;
@@ -19,6 +20,11 @@ namespace Cake.Core.Modules
         /// <param name="registry">The container registry.</param>
         public void Register(ICakeContainerRegistry registry)
         {
+            if (registry == null)
+            {
+                throw new ArgumentNullException("registry");
+            }
+
             registry.RegisterType<CakeEngine>().As<ICakeEngine>().Singleton();
             registry.RegisterType<CakeContext>().As<ICakeContext>().Singleton();
 

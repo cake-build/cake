@@ -19,6 +19,11 @@ namespace Cake.Modules
 
         public void Register(ICakeContainerRegistry registry)
         {
+            if (registry == null)
+            {
+                throw new ArgumentNullException("registry");
+            }
+
             // Are we running on Mono?
             var mono = Type.GetType("Mono.Runtime") != null;
             if (!mono)

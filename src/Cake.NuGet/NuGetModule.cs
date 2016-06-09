@@ -1,4 +1,5 @@
-﻿using Cake.Core.Composition;
+﻿using System;
+using Cake.Core.Composition;
 using Cake.Core.Packaging;
 
 namespace Cake.NuGet
@@ -15,6 +16,11 @@ namespace Cake.NuGet
         /// <param name="registry">The container registry.</param>
         public void Register(ICakeContainerRegistry registry)
         {
+            if (registry == null)
+            {
+                throw new ArgumentNullException("registry");
+            }
+
             // NuGet addins support
             registry.RegisterType<NuGetVersionUtilityAdapter>().As<INuGetFrameworkCompatibilityFilter>().As<IFrameworkNameParser>().Singleton();
             registry.RegisterType<NuGetPackageAssembliesLocator>().As<INuGetPackageAssembliesLocator>().Singleton();

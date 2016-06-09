@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cake.Core.Composition;
 
 namespace Cake.Composition
@@ -19,6 +20,11 @@ namespace Cake.Composition
 
         public void RegisterModule(ICakeModule module)
         {
+            if (module == null)
+            {
+                throw new ArgumentNullException("module");
+            }
+
             module.Register(this);
         }
 
