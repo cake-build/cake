@@ -1,4 +1,7 @@
-﻿using Cake.Core;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using Cake.Core;
 
 namespace Cake.Common.Build.TravisCI.Data
 {
@@ -55,7 +58,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// Initializes a new instance of the <see cref="TravisCIJobInfo"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        public TravisCIJobInfo(ICakeEnvironment environment) 
+        public TravisCIJobInfo(ICakeEnvironment environment)
             : base(environment)
         {
         }

@@ -1,4 +1,7 @@
-﻿using Cake.Core.Tooling;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.MSTest
 {
@@ -18,7 +21,7 @@ namespace Cake.Common.Tools.MSTest
         public bool NoIsolation { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating the test category filter string to pass to 
+        /// Gets or sets a value indicating the test category filter string to pass to
         /// MSTest.exe flag /testcategory. See: https://msdn.microsoft.com/en-us/library/ms182489.aspx#category
         /// </summary>
         public string Category { get; set; }

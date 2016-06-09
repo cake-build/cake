@@ -1,4 +1,7 @@
-﻿using Cake.Common.Tests.Fixtures.Tools.DotNetCore.Restore;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using Cake.Common.Tests.Fixtures.Tools.DotNetCore.Restore;
 using Cake.Common.Tools.DotNetCore.Restore;
 using Cake.Testing;
 using Xunit;
@@ -101,16 +104,16 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore" + 
-                             " --packages \"/Working/packages\"" + 
-                             " --source \"https://www.example.com/source1\"" + 
-                             " --source \"https://www.example.com/source2\"" + 
-                             " --fallbacksource \"https://www.example.com/fallback1\"" + 
-                             " --fallbacksource \"https://www.example.com/fallback2\"" + 
-                             " --configfile \"/Working/NuGet.config\"" + 
+                Assert.Equal("restore" +
+                             " --packages \"/Working/packages\"" +
+                             " --source \"https://www.example.com/source1\"" +
+                             " --source \"https://www.example.com/source2\"" +
+                             " --fallbacksource \"https://www.example.com/fallback1\"" +
+                             " --fallbacksource \"https://www.example.com/fallback2\"" +
+                             " --configfile \"/Working/NuGet.config\"" +
                              " --infer-runtimes \"runtime1\"" +
-                             " --infer-runtimes \"runtime2\"" + 
-                             " --quiet --no-cache --disable-parallel --ignore-failed-sources --force-english-output" + 
+                             " --infer-runtimes \"runtime2\"" +
+                             " --quiet --no-cache --disable-parallel --ignore-failed-sources --force-english-output" +
                              " --verbosity Information", result.Args);
             }
         }

@@ -1,4 +1,7 @@
-﻿using Cake.Common.Tests.Fixtures.Tools.TextTransform;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using Cake.Common.Tests.Fixtures.Tools.TextTransform;
 using Cake.Core;
 using Cake.Testing;
 using Xunit;
@@ -161,7 +164,7 @@ namespace Cake.Common.Tests.Unit.Tools.TextTransform
 
                 // When
                 var result = fixture.Run();
-                
+
                 // Then
                 Assert.Equal("-out \"/Working/Test.cs\" \"/Working/Test.tt\"", result.Args);
             }

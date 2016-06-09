@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using System.Collections.Generic;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
@@ -14,7 +17,7 @@ namespace Cake.Core.Tests.Fixtures
     {
         public FakeFileSystem FileSystem { get; set; }
         public FakeEnvironment Environment { get; set; }
-        public ICakeConfiguration Configuration { get; set; }        
+        public ICakeConfiguration Configuration { get; set; }
         public IScriptEngine Engine { get; set; }
         public IScriptSession Session { get; set; }
         public IScriptAnalyzer ScriptAnalyzer { get; set; }

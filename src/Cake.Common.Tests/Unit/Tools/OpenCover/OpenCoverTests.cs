@@ -1,4 +1,7 @@
-﻿using Cake.Common.Tests.Fixtures.Tools;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.NUnit;
 using Cake.Common.Tools.XUnit;
 using Cake.Core.IO;
@@ -225,7 +228,7 @@ namespace Cake.Common.Tests.Unit.Tools.OpenCover
             {
                 // Given
                 var fixture = new OpenCoverFixture();
-                fixture.Settings.Register = "Path32";                
+                fixture.Settings.Register = "Path32";
 
                 // When
                 var result = fixture.Run();

@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using Cake.Common.Tools.MSBuild;
 using Cake.Common.Tools.XBuild;
 using Cake.Core;
@@ -34,7 +37,7 @@ namespace Cake.Common.Tools
         /// </summary>
         /// <example>
         /// <code>
-        /// DotNetBuild("./project/project.sln", settings => 
+        /// DotNetBuild("./project/project.sln", settings =>
         ///     settings.SetConfiguration("Debug")
         ///         .SetVerbosity(Core.Diagnostics.Verbosity.Minimal)
         ///         .WithTarget("Build")

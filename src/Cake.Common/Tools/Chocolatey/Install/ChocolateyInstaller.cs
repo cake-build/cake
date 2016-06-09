@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using System.Globalization;
 using Cake.Core;
 using Cake.Core.IO;
@@ -22,10 +25,10 @@ namespace Cake.Common.Tools.Chocolatey.Install
         /// <param name="tools">The tool locator.</param>
         /// <param name="resolver">The Chocolatey tool resolver.</param>
         public ChocolateyInstaller(
-            IFileSystem fileSystem, 
+            IFileSystem fileSystem,
             ICakeEnvironment environment,
-            IProcessRunner processRunner, 
-            IToolLocator tools, 
+            IProcessRunner processRunner,
+            IToolLocator tools,
             IChocolateyToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
         {
             _environment = environment;
