@@ -264,44 +264,6 @@ namespace Cake.Common.Xml
         /// <param name="xpath">The xpath of the nodes to set.</param>
         /// <param name="value">The value to set too. Leave blank to remove the selected nodes.</param>
         /// <returns>Resulting XML.</returns>
-        /// <remarks>
-        /// The method is now obsolete replaced by <see cref="XmlPokeString(Cake.Core.ICakeContext,string,string,string)"/>
-        /// </remarks>
-        [CakeMethodAlias]
-        [Obsolete("Please use XmlPokeString(string, string, string) instead.", false)]
-        public static string XmlPoke(this ICakeContext context, string sourceXml, string xpath, string value)
-        {
-            return context.XmlPokeString(sourceXml, xpath, value, new XmlPokeSettings());
-        }
-
-        /// <summary>
-        /// Set the value of, or remove, target nodes.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="sourceXml">The source xml to transform.</param>
-        /// <param name="xpath">The xpath of the nodes to set.</param>
-        /// <param name="value">The value to set too. Leave blank to remove the selected nodes.</param>
-        /// <param name="settings">Additional settings to tweak Xml Poke behavior.</param>
-        /// <returns>Resulting XML.</returns>
-        /// <remarks>
-        /// The method is now obsolete replaced by <see cref="XmlPokeString(Cake.Core.ICakeContext,string,string,string,XmlPokeSettings)"/>
-        /// </remarks>
-        [CakeMethodAlias]
-        [Obsolete("Please use XmlPokeString(string, string, string, XmlPokeSettings) instead.", false)]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
-        public static string XmlPoke(this ICakeContext context, string sourceXml, string xpath, string value, XmlPokeSettings settings)
-        {
-            return context.XmlPokeString(sourceXml, xpath, value, settings);
-        }
-
-        /// <summary>
-        /// Set the value of, or remove, target nodes.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="sourceXml">The source xml to transform.</param>
-        /// <param name="xpath">The xpath of the nodes to set.</param>
-        /// <param name="value">The value to set too. Leave blank to remove the selected nodes.</param>
-        /// <returns>Resulting XML.</returns>
         /// <example>
         ///   <para>
         ///   Change the <c>server</c> setting in the configuration from <c>testhost.somecompany.com</c>
