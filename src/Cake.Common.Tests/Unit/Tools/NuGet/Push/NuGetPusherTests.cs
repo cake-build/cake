@@ -4,6 +4,7 @@
 using System;
 using Cake.Common.Tests.Fixtures.Tools.NuGet.Pusher;
 using Cake.Common.Tools.NuGet;
+using Cake.Common.Tools.NuGet.Push;
 using Cake.Testing;
 using Cake.Testing.Xunit;
 using Xunit;
@@ -140,7 +141,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("push \"/Working/existing.nupkg\" -NonInteractive", result.Args);
+                Assert.Equal("push \"/Working/existing.nupkg\" -NonInteractive -Source \"" + NuGetPusher.DefaultPushSource + "\"", result.Args);
             }
 
             [Fact]
@@ -154,7 +155,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("push \"/Working/existing.nupkg\" 1234 -NonInteractive", result.Args);
+                Assert.Equal("push \"/Working/existing.nupkg\" 1234 -NonInteractive -Source \"" + NuGetPusher.DefaultPushSource + "\"", result.Args);
             }
 
             [Fact]
@@ -169,7 +170,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
 
                 // Then
                 Assert.Equal("push \"/Working/existing.nupkg\" -NonInteractive " +
-                             "-ConfigFile \"/Working/NuGet.config\"", result.Args);
+                             "-ConfigFile \"/Working/NuGet.config\" -Source \"" + NuGetPusher.DefaultPushSource + "\"", result.Args);
             }
 
             [Fact]
@@ -198,14 +199,14 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("push \"/Working/existing.nupkg\" -NonInteractive " +
+                Assert.Equal("push \"/Working/existing.nupkg\" -NonInteractive -Source \"" + NuGetPusher.DefaultPushSource + "\" " +
                              "-Timeout 987", result.Args);
             }
 
             [Theory]
-            [InlineData(NuGetVerbosity.Detailed, "push \"/Working/existing.nupkg\" -NonInteractive -Verbosity detailed")]
-            [InlineData(NuGetVerbosity.Normal, "push \"/Working/existing.nupkg\" -NonInteractive -Verbosity normal")]
-            [InlineData(NuGetVerbosity.Quiet, "push \"/Working/existing.nupkg\" -NonInteractive -Verbosity quiet")]
+            [InlineData(NuGetVerbosity.Detailed, "push \"/Working/existing.nupkg\" -NonInteractive -Source \"" + NuGetPusher.DefaultPushSource + "\" -Verbosity detailed")]
+            [InlineData(NuGetVerbosity.Normal, "push \"/Working/existing.nupkg\" -NonInteractive -Source \"" + NuGetPusher.DefaultPushSource + "\" -Verbosity normal")]
+            [InlineData(NuGetVerbosity.Quiet, "push \"/Working/existing.nupkg\" -NonInteractive -Source \"" + NuGetPusher.DefaultPushSource + "\" -Verbosity quiet")]
             public void Should_Add_Verbosity_To_Arguments_If_Not_Null(NuGetVerbosity verbosity, string expected)
             {
                 // Given
