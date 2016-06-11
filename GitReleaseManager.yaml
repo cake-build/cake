@@ -3,5 +3,6 @@ issue-labels-include:
 - Feature
 - Improvement
 - Documentation
+- Breaking change
 issue-labels-exclude:
 - Build
