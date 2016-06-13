@@ -165,6 +165,16 @@ namespace Cake.Arguments
                 options.PerformDebug = ParseBooleanValue(value);
             }
 
+            if (name.Equals("mono", StringComparison.OrdinalIgnoreCase))
+            {
+                options.Mono = ParseBooleanValue(value);
+            }
+
+            if (name.Equals("experimental", StringComparison.OrdinalIgnoreCase))
+            {
+                options.Experimental = ParseBooleanValue(value);
+            }
+
             if (options.Arguments.ContainsKey(name))
             {
                 _log.Error("Multiple arguments with the same name ({0}).", name);

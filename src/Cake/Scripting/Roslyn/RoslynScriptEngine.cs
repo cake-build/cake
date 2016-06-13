@@ -13,14 +13,17 @@ namespace Cake.Scripting.Roslyn
     internal sealed class RoslynScriptEngine : IScriptEngine
     {
         private readonly RoslynScriptSessionFactory _stableFactory;
+        private readonly CakeOptions _options;
         private readonly RoslynNightlyScriptSessionFactory _nightlyFactory;
         private readonly ICakeLog _log;
 
         public RoslynScriptEngine(
+            CakeOptions options,
             RoslynScriptSessionFactory stableFactory,
             RoslynNightlyScriptSessionFactory nightlyFactory,
             ICakeLog log)
         {
+            _options = options;
             _nightlyFactory = nightlyFactory;
             _stableFactory = stableFactory;
             _log = log;
@@ -37,7 +40,7 @@ namespace Cake.Scripting.Roslyn
             _log.Debug("Creating script session...");
 
             // Are we using the experimental bits?
-            if (arguments.ContainsKey("experimental"))
+            if (_options.Experimental)
             {
                 // Use the nightly build.
                 _log.Debug("Using prerelease build of Roslyn.");

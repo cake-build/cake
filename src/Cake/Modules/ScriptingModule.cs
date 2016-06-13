@@ -28,14 +28,10 @@ namespace Cake.Modules
             }
 
             // Are we running on Mono?
-            var mono = Type.GetType("Mono.Runtime") != null;
+            var mono = _options.Mono;
             if (!mono)
             {
-                // Not using the mono compiler, but do we want to?
-                if (_options.Arguments.ContainsKey("mono"))
-                {
-                    mono = true;
-                }
+                mono = Type.GetType("Mono.Runtime") != null;
             }
 
             if (mono)
@@ -48,7 +44,7 @@ namespace Cake.Modules
                 // Roslyn
                 registry.RegisterType<RoslynScriptEngine>().As<IScriptEngine>().Singleton();
 
-                if (_options.Arguments.ContainsKey("debug"))
+                if (_options.PerformDebug)
                 {
                     // Debug
                     registry.RegisterType<DebugRoslynScriptSessionFactory>().As<RoslynScriptSessionFactory>().Singleton();
