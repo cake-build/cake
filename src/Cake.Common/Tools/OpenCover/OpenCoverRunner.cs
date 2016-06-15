@@ -127,6 +127,11 @@ namespace Cake.Common.Tools.OpenCover
                 builder.AppendSwitch("-excludebyfile", ":", filters.Quote());
             }
 
+            if (settings.SkipAutoProps)
+            {
+                builder.Append("-skipautoprops");
+            }
+
             builder.AppendSwitch("-register", ":", settings.Register);
 
             if (settings.ReturnTargetCodeOffset != null)

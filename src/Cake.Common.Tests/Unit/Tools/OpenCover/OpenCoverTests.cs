@@ -256,6 +256,23 @@ namespace Cake.Common.Tests.Unit.Tools.OpenCover
                              "-returntargetcode:100 " +
                              "-output:\"/Working/result.xml\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Append_SkipAutoProps()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+                fixture.Settings.SkipAutoProps = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"-argument\" " +
+                             "-skipautoprops " +
+                             "-register:user -output:\"/Working/result.xml\"", result.Args);
+            }
         }
     }
 }
