@@ -47,6 +47,11 @@ namespace Cake.Common.Tools.OpenCover
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether or not auto-implemented properties should be skipped.
+        /// </summary>
+        public bool SkipAutoProps { get; set; }
+
+        /// <summary>
         /// Gets or sets the register option
         /// </summary>
         public string Register { get; set; }
