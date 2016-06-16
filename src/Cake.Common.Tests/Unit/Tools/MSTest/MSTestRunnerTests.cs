@@ -216,6 +216,20 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             Assert.Equal("\"/testcontainer:/Working/Test1.dll\" \"/testcontainer:/Working/Test2.dll\" /noisolation", result.Args);
         }
 
+        [Fact]
+        public void Should_Use_Test_Settings_File_If_Set()
+        {
+            // Given
+            var fixture = new MSTestRunnerFixture();
+            fixture.Settings.TestSettings = "my.testsettings";
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("\"/testcontainer:/Working/Test1.dll\" /noisolation /testsettings:\"/Working/my.testsettings\"", result.Args);
+        }
+
         [Theory]
         [InlineData("/NonStandardPath/Microsoft Visual Studio 14.0/Common7/IDE/mstest.exe", "VS140COMNTOOLS", "/NonStandardPath/Microsoft Visual Studio 14.0/Common7/Tools/")]
         [InlineData("/NonStandardPath/Microsoft Visual Studio 13.0/Common7/IDE/mstest.exe", "VS130COMNTOOLS", "/NonStandardPath/Microsoft Visual Studio 13.0/Common7/Tools/")]
