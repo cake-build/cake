@@ -74,6 +74,12 @@ namespace Cake.Common.Tools.MSTest
                 builder.Append("/noisolation");
             }
 
+            if (settings.TestSettings != null)
+            {
+                builder.Append(
+                    string.Concat("/testsettings:", settings.TestSettings.MakeAbsolute(_environment).FullPath.Quote()));
+            }
+
             return builder;
         }
 
