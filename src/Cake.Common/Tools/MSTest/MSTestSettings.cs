@@ -24,13 +24,12 @@ namespace Cake.Common.Tools.MSTest
 
         /// <summary>
         /// Gets or sets a value indicating the test category filter string to pass to
-        /// MSTest.exe flag /testcategory. See: https://msdn.microsoft.com/en-us/library/ms182489.aspx#category
+        /// MSTest.exe flag <see href="https://msdn.microsoft.com/en-us/library/ms182489.aspx#category">/testcategory</see>.
         /// </summary>
         public string Category { get; set; }
 
         /// <summary>
-        /// Gets or sets the test settings file to pass to MSTest flag /testsettings. 
-        /// See: https://msdn.microsoft.com/en-us/library/ms182489.aspx#testsettings
+        /// Gets or sets the test settings file to pass to MSTest.exe flag <see href="https://msdn.microsoft.com/en-us/library/ms182489.aspx#testsettings">/testsettings</see>.
         /// </summary>
         public FilePath TestSettings { get; set; }
 
