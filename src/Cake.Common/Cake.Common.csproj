@@ -325,8 +325,12 @@
     <Compile Include="Tools\OctopusDeploy\CreateReleaseArgumentBuilder.cs" />
     <Compile Include="Tools\OctopusDeploy\OctopusDeployAliases.cs" />
     <Compile Include="Tools\OctopusDeploy\CreateReleaseSettings.cs" />
+    <Compile Include="Tools\OctopusDeploy\OctopusDeployArgumentBuilder.cs" />
+    <Compile Include="Tools\OctopusDeploy\OctopusDeployPusher.cs" />
     <Compile Include="Tools\OctopusDeploy\OctopusDeployReleaseCreator.cs" />
     <Compile Include="Tools\OctopusDeploy\OctopusDeploySettings.cs" />
+    <Compile Include="Tools\OctopusDeploy\OctopusPushArgumentBuilder.cs" />
+    <Compile Include="Tools\OctopusDeploy\OctopusPushSettings.cs" />
     <Compile Include="Tools\OpenCover\OpenCoverAliases.cs" />
     <Compile Include="Tools\OpenCover\OpenCoverContext.cs" />
     <Compile Include="Tools\OpenCover\OpenCoverRunner.cs" />
