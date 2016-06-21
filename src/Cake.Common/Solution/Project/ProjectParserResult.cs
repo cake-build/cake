@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 using System.Collections.Generic;
 using System.Linq;
+using Cake.Core.IO;
 
 namespace Cake.Common.Solution.Project
 {
@@ -15,6 +16,7 @@ namespace Cake.Common.Solution.Project
         private readonly string _platform;
         private readonly string _projectGuid;
         private readonly string _outputType;
+        private readonly DirectoryPath _outputPath;
         private readonly string _rootNameSpace;
         private readonly string _assemblyName;
         private readonly string _targetFrameworkVersion;
@@ -55,6 +57,15 @@ namespace Cake.Common.Solution.Project
         public string OutputType
         {
             get { return _outputType; }
+        }
+
+        /// <summary>
+        /// Gets the compiler output path.
+        /// </summary>
+        /// <value>The output path.</value>
+        public DirectoryPath OutputPath
+        {
+            get { return _outputPath; }
         }
 
         /// <summary>
@@ -109,6 +120,7 @@ namespace Cake.Common.Solution.Project
         /// <param name="platform">The target platform.</param>
         /// <param name="projectGuid">The unique project identifier.</param>
         /// <param name="outputType">The compiler output type.</param>
+        /// <param name="outputPath">The compiler output path</param>
         /// <param name="rootNameSpace">The default root namespace.</param>
         /// <param name="assemblyName">Gets the build target assembly name.</param>
         /// <param name="targetFrameworkVersion">The compiler framework version.</param>
@@ -119,6 +131,7 @@ namespace Cake.Common.Solution.Project
             string platform,
             string projectGuid,
             string outputType,
+            DirectoryPath outputPath,
             string rootNameSpace,
             string assemblyName,
             string targetFrameworkVersion,
@@ -129,6 +142,7 @@ namespace Cake.Common.Solution.Project
             _platform = platform;
             _projectGuid = projectGuid;
             _outputType = outputType;
+            _outputPath = outputPath;
             _rootNameSpace = rootNameSpace;
             _assemblyName = assemblyName;
             _targetFrameworkVersion = targetFrameworkVersion;

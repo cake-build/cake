@@ -76,14 +76,18 @@ namespace Cake.Common.Solution.Project
                      .Elements(ProjectXElement.Configuration)
                      .Select(cfg => cfg.Value)
                      .FirstOrDefault()
+                 let platform = propertyGroup
+                     .Elements(ProjectXElement.Platform)
+                     .Select(cfg => cfg.Value)
+                     .FirstOrDefault()
+                 let configPropertyGroups = project.Elements(ProjectXElement.PropertyGroup)
+                                            .Where(x => x.Elements(ProjectXElement.OutputPath) != null && x.Attribute("Condition") != null)
+                                            .Where(x => x.Attribute("Condition").Value.Contains(string.Format("== '{0}|{1}'", configuration, platform)))
                  where !string.IsNullOrWhiteSpace(configuration)
                  select new
                  {
                      Configuration = configuration,
-                     Platform = propertyGroup
-                         .Elements(ProjectXElement.Platform)
-                         .Select(platform => platform.Value)
-                         .FirstOrDefault(),
+                     Platform = platform,
                      ProjectGuid = propertyGroup
                          .Elements(ProjectXElement.ProjectGuid)
                          .Select(projectGuid => projectGuid.Value)
@@ -91,6 +95,10 @@ namespace Cake.Common.Solution.Project
                      OutputType = propertyGroup
                          .Elements(ProjectXElement.OutputType)
                          .Select(outputType => outputType.Value)
+                         .FirstOrDefault(),
+                     OutputPath = configPropertyGroups
+                         .Elements(ProjectXElement.OutputPath)
+                         .Select(outputPath => DirectoryPath.FromString(outputPath.Value))
                          .FirstOrDefault(),
                      RootNameSpace = propertyGroup
                          .Elements(ProjectXElement.RootNamespace)
@@ -142,6 +150,7 @@ namespace Cake.Common.Solution.Project
                 projectProperties.Platform,
                 projectProperties.ProjectGuid,
                 projectProperties.OutputType,
+                projectProperties.OutputPath,
                 projectProperties.RootNameSpace,
                 projectProperties.AssemblyName,
                 projectProperties.TargetFrameworkVersion,

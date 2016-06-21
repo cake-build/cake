@@ -168,6 +168,19 @@ namespace Cake.Common.Tests.Unit.Solution.Project
             }
 
             [Fact]
+            public void Should_Parse_OutputAssembly()
+            {
+                // Given
+                var fixture = new ProjectParserFixture();
+
+                // When
+                var result = fixture.Parse();
+
+                // Then
+                Assert.Equal(@"bin/Debug", result.OutputPath.FullPath);
+            }
+
+            [Fact]
             public void Should_Return_Correct_File_Count()
             {
                 // Given
