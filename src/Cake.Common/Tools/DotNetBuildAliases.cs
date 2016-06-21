@@ -41,7 +41,7 @@ namespace Cake.Common.Tools
         ///     settings.SetConfiguration("Debug")
         ///         .SetVerbosity(Core.Diagnostics.Verbosity.Minimal)
         ///         .WithTarget("Build")
-        ///         .WithProperty("TreatWarningsAsErrors","true")
+        ///         .WithProperty("TreatWarningsAsErrors","true"));
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
