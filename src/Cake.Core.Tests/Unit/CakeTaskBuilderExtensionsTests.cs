@@ -91,6 +91,71 @@ namespace Cake.Core.Tests.Unit
             }
         }
 
+        public sealed class TheIsDependentOnMethodTaskBuilder
+        {
+            [Fact]
+            public void Should_Add_Dependency_To_Task()
+            {
+                // Given
+                var parentTask = new ActionTask("parent");
+                var childTask = new ActionTask("child");
+                var builder = new CakeTaskBuilder<ActionTask>(parentTask);
+                var cakeTaskBuilder = new CakeTaskBuilder<ActionTask>(childTask);
+
+                // When
+                builder.IsDependentOn(cakeTaskBuilder);
+
+                // Then
+                Assert.Equal(1, parentTask.Dependencies.Count);
+            }
+
+            [Fact]
+            public void Should_Add_Dependency_To_Task_With_Correct_Name()
+            {
+                // Given
+                var parentTask = new ActionTask("parent");
+                var childTask = new ActionTask("child");
+                var builder = new CakeTaskBuilder<ActionTask>(parentTask);
+                var childTaskBuilder = new CakeTaskBuilder<ActionTask>(childTask);
+
+                // When
+                builder.IsDependentOn(childTaskBuilder);
+
+                // Then
+                Assert.Equal(parentTask.Dependencies[0], childTaskBuilder.Task.Name);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Builder_Is_Null()
+            {
+                // Given
+                var childTask = new ActionTask("child");
+                CakeTaskBuilder<ActionTask> builder = null;
+                var childTaskBuilder = new CakeTaskBuilder<ActionTask>(childTask);
+
+                // When
+                var result = Record.Exception(() => builder.IsDependentOn(childTaskBuilder));
+
+                // Then
+                Assert.IsArgumentNullException(result, "builder");
+            }
+
+            [Fact]
+            public void Should_Throw_If_OtherBuilder_Is_Null()
+            {
+                // Given
+                var parentTask = new ActionTask("parent");
+                var builder = new CakeTaskBuilder<ActionTask>(parentTask);
+                CakeTaskBuilder<ActionTask> childTaskBuilder = null;
+
+                // When
+                var result = Record.Exception(() => builder.IsDependentOn(childTaskBuilder));
+
+                // Then
+                Assert.IsArgumentNullException(result, "other");
+            }
+        }
+
         public sealed class TheWithCriteriaMethod
         {
             public sealed class ThatAcceptsBoolean
