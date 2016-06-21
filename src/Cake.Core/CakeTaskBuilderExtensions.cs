@@ -31,6 +31,32 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Creates a dependency between two tasks.
+        /// </summary>
+        /// <typeparam name="T">The task type.</typeparam>
+        /// <typeparam name="TOther">The task type that this task depends on.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="other">The name of the dependent task.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{T}"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder<T> IsDependentOn<T, TOther>(this CakeTaskBuilder<T> builder, CakeTaskBuilder<TOther> other)
+            where T : CakeTask
+            where TOther : CakeTask
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException("builder");
+            }
+
+            if (other == null)
+            {
+                throw new ArgumentNullException("other");
+            }
+
+            builder.Task.AddDependency(other.Task.Name);
+            return builder;
+        }
+
+        /// <summary>
         /// Adds a criteria that has to be fulfilled for the task to run.
         /// </summary>
         /// <typeparam name="T">The task type.</typeparam>
