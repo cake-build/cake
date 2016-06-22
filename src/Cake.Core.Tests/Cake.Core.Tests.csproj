@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Fixtures\BuildPipelineFixture.cs" />
     <Compile Include="Fixtures\CakeContextFixture.cs" />
     <Compile Include="Fixtures\CakeConfigurationProviderFixture.cs" />
     <Compile Include="Fixtures\DummyToolFixture.cs" />

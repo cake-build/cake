@@ -81,7 +81,10 @@
     <Compile Include="Configuration\Parser\ConfigurationTokenKind.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DefaultExecutionStrategy.cs" />
+    <Compile Include="Diagnostics\ActionLog.cs" />
+    <Compile Include="Diagnostics\FileLog.cs" />
     <Compile Include="Diagnostics\ICakeLog.cs" />
+    <Compile Include="Diagnostics\ICakeLogPipeline.cs" />
     <Compile Include="Diagnostics\LogAction.cs" />
     <Compile Include="Diagnostics\LogExtensions.cs" />
     <Compile Include="Diagnostics\LogLevel.cs" />

@@ -54,6 +54,11 @@ namespace Cake.Common.Tools.OpenCover
             get { return _context.Tools; }
         }
 
+        /// <summary>
+        ///     Gets the logging pipeline which can be used to instantiate multiple loggers.
+        /// </summary>
+        public ICakeLogPipeline LogPipeline { get { return _context.LogPipeline; } }
+
         public FilePath FilePath
         {
             get { return _runner.FilePath; }

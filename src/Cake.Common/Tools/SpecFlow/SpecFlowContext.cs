@@ -54,6 +54,11 @@ namespace Cake.Common.Tools.SpecFlow
             get { return _context.Tools; }
         }
 
+        /// <summary>
+        ///     Gets the logging pipeline which can be used to instantiate multiple loggers.
+        /// </summary>
+        public ICakeLogPipeline LogPipeline { get; private set; }
+
         public FilePath FilePath
         {
             get { return _runner.FilePath; }

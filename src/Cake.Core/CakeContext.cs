@@ -1,7 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
+
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -9,39 +11,39 @@ using Cake.Core.Tooling;
 namespace Cake.Core
 {
     /// <summary>
-    /// Implementation of <see cref="ICakeContext"/>.
+    ///     Implementation of <see cref="ICakeContext" />.
     /// </summary>
     public sealed class CakeContext : ICakeContext
     {
         private readonly IFileSystem _fileSystem;
+
         private readonly ICakeEnvironment _environment;
+
         private readonly IGlobber _globber;
-        private readonly ICakeLog _log;
+
+        private readonly ICakeLogPipeline _logPipeline;
+
         private readonly ICakeArguments _arguments;
+
         private readonly IProcessRunner _processRunner;
+
         private readonly IRegistry _registry;
+
         private readonly IToolLocator _tools;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CakeContext"/> class.
+        ///     Initializes a new instance of the <see cref="CakeContext" /> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="globber">The globber.</param>
-        /// <param name="log">The log.</param>
+        /// <param name="logPipeline">The logging pipeline for the context.</param>
         /// <param name="arguments">The arguments.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="registry">The registry.</param>
         /// <param name="tools">The tool locator.</param>
-        public CakeContext(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IGlobber globber,
-            ICakeLog log,
-            ICakeArguments arguments,
-            IProcessRunner processRunner,
-            IRegistry registry,
-            IToolLocator tools)
+        public CakeContext(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, ICakeLogPipeline logPipeline, ICakeArguments arguments,
+                           IProcessRunner processRunner, IRegistry registry, IToolLocator tools)
         {
             if (fileSystem == null)
             {
@@ -55,9 +57,9 @@ namespace Cake.Core
             {
                 throw new ArgumentNullException("globber");
             }
-            if (log == null)
+            if (logPipeline == null)
             {
-                throw new ArgumentNullException("log");
+                throw new ArgumentNullException("logPipeline");
             }
             if (arguments == null)
             {
@@ -75,18 +77,19 @@ namespace Cake.Core
             _fileSystem = fileSystem;
             _environment = environment;
             _globber = globber;
-            _log = log;
+            _logPipeline = logPipeline;
             _arguments = arguments;
             _processRunner = processRunner;
             _registry = registry;
             _tools = tools;
         }
 
+
         /// <summary>
-        /// Gets the file system.
+        ///     Gets the file system.
         /// </summary>
         /// <value>
-        /// The file system.
+        ///     The file system.
         /// </value>
         public IFileSystem FileSystem
         {
@@ -94,10 +97,10 @@ namespace Cake.Core
         }
 
         /// <summary>
-        /// Gets the environment.
+        ///     Gets the environment.
         /// </summary>
         /// <value>
-        /// The environment.
+        ///     The environment.
         /// </value>
         public ICakeEnvironment Environment
         {
@@ -105,10 +108,10 @@ namespace Cake.Core
         }
 
         /// <summary>
-        /// Gets the globber.
+        ///     Gets the globber.
         /// </summary>
         /// <value>
-        /// The globber.
+        ///     The globber.
         /// </value>
         public IGlobber Globber
         {
@@ -116,21 +119,21 @@ namespace Cake.Core
         }
 
         /// <summary>
-        /// Gets the log.
+        ///     Gets the log.
         /// </summary>
         /// <value>
-        /// The log.
+        ///     The log.
         /// </value>
         public ICakeLog Log
         {
-            get { return _log; }
+            get { return _logPipeline.CakeLog; }
         }
 
         /// <summary>
-        /// Gets the arguments.
+        ///     Gets the arguments.
         /// </summary>
         /// <value>
-        /// The arguments.
+        ///     The arguments.
         /// </value>
         public ICakeArguments Arguments
         {
@@ -138,10 +141,10 @@ namespace Cake.Core
         }
 
         /// <summary>
-        /// Gets the process runner.
+        ///     Gets the process runner.
         /// </summary>
         /// <value>
-        /// The process runner.
+        ///     The process runner.
         /// </value>
         public IProcessRunner ProcessRunner
         {
@@ -149,10 +152,10 @@ namespace Cake.Core
         }
 
         /// <summary>
-        /// Gets the registry.
+        ///     Gets the registry.
         /// </summary>
         /// <value>
-        /// The registry.
+        ///     The registry.
         /// </value>
         public IRegistry Registry
         {
@@ -160,14 +163,22 @@ namespace Cake.Core
         }
 
         /// <summary>
-        /// Gets the tool locator.
+        ///     Gets the tool locator.
         /// </summary>
         /// <value>
-        /// The tool locator.
+        ///     The tool locator.
         /// </value>
         public IToolLocator Tools
         {
             get { return _tools; }
+        }
+
+        /// <summary>
+        ///     Gets the logging pipeline which can be used to instantiate multiple loggers.
+        /// </summary>
+        public ICakeLogPipeline LogPipeline
+        {
+            get { return _logPipeline; }
         }
     }
 }

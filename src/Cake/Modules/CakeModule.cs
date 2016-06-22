@@ -39,6 +39,7 @@ namespace Cake.Modules
             registry.RegisterType<CommandFactory>().As<ICommandFactory>().Singleton();
             registry.RegisterType<CakeApplication>().Singleton();
             registry.RegisterType<CakeBuildLog>().As<ICakeLog>().Singleton();
+            registry.RegisterType<CakeLogPipeline>().As<ICakeLogPipeline>().Singleton();
             registry.RegisterType<VerbosityParser>().Singleton();
             registry.RegisterType<CakeDebugger>().As<IDebugger>().Singleton();
 
