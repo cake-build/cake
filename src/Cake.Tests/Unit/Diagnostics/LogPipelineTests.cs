@@ -71,50 +71,6 @@ namespace Cake.Tests.Unit.Diagnostics
         }
 
         [Theory]
-        [InlineData(Verbosity.Quiet, Verbosity.Minimal)]
-        [InlineData(Verbosity.Minimal, Verbosity.Normal)]
-        [InlineData(Verbosity.Normal, Verbosity.Verbose)]
-        [InlineData(Verbosity.Verbose, Verbosity.Diagnostic)]
-        public void Should_Drop_Log_Messages_Written_With_A_Lower_Verbosity_Than_Allowed(Verbosity logVerbosity, Verbosity messageVerbosity)
-        {
-            // Given
-            LogPipelineFixture fixture = new LogPipelineFixture();
-            CakeLogPipeline pipeline = fixture.CreateLogPipeline();
-
-            pipeline.CakeLog.Verbosity = logVerbosity;
-
-            string message = Guid.NewGuid().ToString();
-
-            // When
-            pipeline.CakeLog.Write(messageVerbosity, LogLevel.Information, message);
-
-            // Then
-            Assert.Equal(0, fixture.Log.Entries.Count);
-        }
-
-        [Theory]
-        [InlineData(Verbosity.Minimal, Verbosity.Quiet)]
-        [InlineData(Verbosity.Normal, Verbosity.Minimal)]
-        [InlineData(Verbosity.Verbose, Verbosity.Normal)]
-        [InlineData(Verbosity.Diagnostic, Verbosity.Verbose)]
-        public void Should_Write_Log_Messages_Written_With_A_Higher_Verbosity_Than_Allowed(Verbosity logVerbosity, Verbosity messageVerbosity)
-        {
-            // Given
-            LogPipelineFixture fixture = new LogPipelineFixture();
-            CakeLogPipeline pipeline = fixture.CreateLogPipeline();
-
-            pipeline.CakeLog.Verbosity = logVerbosity;
-
-            string message = Guid.NewGuid().ToString();
-
-            // When
-            pipeline.CakeLog.Write(messageVerbosity, LogLevel.Information, message);
-
-            // Then
-            Assert.Equal(1, fixture.Log.Entries.Count);
-        }
-
-        [Theory]
         [InlineData(Verbosity.Quiet)]
         [InlineData(Verbosity.Minimal)]
         [InlineData(Verbosity.Normal)]
@@ -131,6 +87,25 @@ namespace Cake.Tests.Unit.Diagnostics
             Assert.Equal(logVerbosity, pipeline.CakeLog.Verbosity);
         }
 
+        [Theory]
+        [InlineData(Verbosity.Quiet)]
+        [InlineData(Verbosity.Minimal)]
+        [InlineData(Verbosity.Normal)]
+        [InlineData(Verbosity.Verbose)]
+        [InlineData(Verbosity.Diagnostic)]
+        public void Should_Return_Verbosity_From_Default_Log(Verbosity logVerbosity)
+        {
+            // Given
+            LogPipelineFixture fixture = new LogPipelineFixture();
+            fixture.Log.Verbosity = logVerbosity != Verbosity.Normal ? Verbosity.Normal : Verbosity.Diagnostic;
+            CakeLogPipeline pipeline = fixture.CreateLogPipeline();
+
+            // When
+            fixture.Log.Verbosity = logVerbosity;
+
+            // Then
+            Assert.Equal(logVerbosity, pipeline.CakeLog.Verbosity);
+        }
 
         [Fact]
         public void Pipeline_AddLog()

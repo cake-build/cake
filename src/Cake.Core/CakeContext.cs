@@ -84,7 +84,6 @@ namespace Cake.Core
             _tools = tools;
         }
 
-
         /// <summary>
         ///     Gets the file system.
         /// </summary>

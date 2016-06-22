@@ -83,7 +83,7 @@ namespace Cake.Diagnostics
             /// <summary>
             ///     Initializes a new instance of the <see cref="CakeLogPipelineImplementation" /> class.
             /// </summary>
-            /// <param name="verbosity">The verbosity of the implementation</param>
+            /// <param name="defaultLog">The default log for the implementation</param>
             public CakeLogPipelineImplementation(ICakeLog defaultLog)
             {
                 _cakeLogs = new List<ICakeLog> { defaultLog };

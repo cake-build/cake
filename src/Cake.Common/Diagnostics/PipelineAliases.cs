@@ -16,14 +16,20 @@ namespace Cake.Common.Diagnostics
         /// </summary>
         /// <param name="context">The <see cref="ICakeContext" /> context</param>
         /// <param name="log">The logger to add</param>
-        public static void AddLog(this ICakeContext context, ICakeLog log) {}
+        public static void AddLog(this ICakeContext context, ICakeLog log)
+        {
+            context.LogPipeline.AddLog(log);
+        }
 
         /// <summary>
         ///     Removes a <see cref="ICakeLog" /> based logger from the logging pipeline
         /// </summary>
         /// <param name="context">The <see cref="ICakeContext" /> context</param>
         /// <param name="log">The logger to remove</param>
-        public static void RemoveLog(this ICakeContext context, ICakeLog log) {}
+        public static void RemoveLog(this ICakeContext context, ICakeLog log)
+        {
+            context.LogPipeline.RemoveLog(log);
+        }
 
         /// <summary>
         ///     Adds a <see cref="ICakeLog" /> logger to the logging pipeline to send the specified log levels to a file
@@ -46,7 +52,7 @@ namespace Cake.Common.Diagnostics
         ///     Adds a <see cref="FullLogActionEntry" /> delegate that will be called when logging is called
         /// </summary>
         /// <param name="context">The <see cref="ICakeContext" /> context</param>
-        /// <param name="action"></param>
+        /// <param name="action">The delegate to call on log entry</param>
         /// <returns>The added logger, to remove it from the pipeline call <see cref="RemoveLog" /></returns>
         public static ICakeLog LogToAction(this ICakeContext context, FullLogActionEntry action)
         {

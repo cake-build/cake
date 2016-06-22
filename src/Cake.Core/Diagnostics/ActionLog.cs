@@ -12,7 +12,7 @@ namespace Cake.Core.Diagnostics
         private readonly object _lock;
 
         /// <summary>
-        ///     Creates a new instance of the <see cref="ActionLog" /> class.
+        ///     Initializes a new instance of the <see cref="ActionLog" /> class.
         /// </summary>
         /// <param name="logAction">The <see cref="FullLogActionEntry" /> delegate that will be called when a log entry is written</param>
         /// <param name="defaultVerbosity">The <see cref="Verbosity" /> to use when writing the logs</param>

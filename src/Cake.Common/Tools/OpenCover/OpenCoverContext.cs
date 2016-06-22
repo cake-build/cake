@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -11,8 +12,27 @@ namespace Cake.Common.Tools.OpenCover
     internal sealed class OpenCoverContext : ICakeContext
     {
         private readonly ICakeContext _context;
+
         private readonly ICakeLog _log;
+
         private readonly OpenCoverProcessRunner _runner;
+
+        public OpenCoverContext(ICakeContext context)
+        {
+            _context = context;
+            _log = new NullLog();
+            _runner = new OpenCoverProcessRunner();
+        }
+
+        public FilePath FilePath
+        {
+            get { return _runner.FilePath; }
+        }
+
+        public ProcessSettings Settings
+        {
+            get { return _runner.ProcessSettings; }
+        }
 
         public IFileSystem FileSystem
         {
@@ -57,23 +77,9 @@ namespace Cake.Common.Tools.OpenCover
         /// <summary>
         ///     Gets the logging pipeline which can be used to instantiate multiple loggers.
         /// </summary>
-        public ICakeLogPipeline LogPipeline { get { return _context.LogPipeline; } }
-
-        public FilePath FilePath
+        public ICakeLogPipeline LogPipeline
         {
-            get { return _runner.FilePath; }
-        }
-
-        public ProcessSettings Settings
-        {
-            get { return _runner.ProcessSettings; }
-        }
-
-        public OpenCoverContext(ICakeContext context)
-        {
-            _context = context;
-            _log = new NullLog();
-            _runner = new OpenCoverProcessRunner();
+            get { return _context.LogPipeline; }
         }
     }
 }

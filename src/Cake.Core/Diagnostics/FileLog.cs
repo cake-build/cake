@@ -25,16 +25,18 @@ namespace Cake.Core.Diagnostics
         private readonly LogEntryFormatterAction _formatter;
 
         /// <summary>
-        ///     Constructs a new instance of the <see cref="FileLog" /> class that will write to the specified file, with the
+        ///     Initializes a new instance of the <see cref="FileLog" /> class that will write to the specified file, with the
         ///     possibility of filtering out certain <see cref="LogLevel" />
         /// </summary>
         /// <param name="path">The file where log entries will be placed</param>
         /// <param name="levels">The <see cref="LogLevel" /> levels to log, if empty all log levels will be captured.</param>
         public FileLog(FilePath path, params LogLevel[] levels)
-            : this(path, DefaultFormatter, levels) {}
+            : this(path, DefaultFormatter, levels)
+        {
+        }
 
         /// <summary>
-        ///     Constructs a new instance of the <see cref="FileLog" /> class that will write to the specified file, with the
+        ///     Initializes a new instance of the <see cref="FileLog" /> class that will write to the specified file, with the
         ///     possibility of filtering out certain <see cref="LogLevel" /> and with the ability to have a custom format
         /// </summary>
         /// <param name="path">The file where log entries will be placed</param>
@@ -118,7 +120,7 @@ namespace Cake.Core.Diagnostics
                     prefix = "[WARNING] ";
                     break;
                 default:
-                    prefix = "";
+                    prefix = string.Empty;
                     break;
             }
 

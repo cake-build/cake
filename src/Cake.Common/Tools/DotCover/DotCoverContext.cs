@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -11,8 +12,27 @@ namespace Cake.Common.Tools.DotCover
     internal sealed class DotCoverContext : ICakeContext
     {
         private readonly ICakeContext _context;
+
         private readonly ICakeLog _log;
+
         private readonly DotCoverProcessRunner _runner;
+
+        public DotCoverContext(ICakeContext context)
+        {
+            _context = context;
+            _log = new NullLog();
+            _runner = new DotCoverProcessRunner();
+        }
+
+        public FilePath FilePath
+        {
+            get { return _runner.FilePath; }
+        }
+
+        public ProcessSettings Settings
+        {
+            get { return _runner.ProcessSettings; }
+        }
 
         public IFileSystem FileSystem
         {
@@ -54,21 +74,12 @@ namespace Cake.Common.Tools.DotCover
             get { return _context.Tools; }
         }
 
-        public FilePath FilePath
+        /// <summary>
+        ///     Gets the logging pipeline which can be used to instantiate multiple loggers.
+        /// </summary>
+        public ICakeLogPipeline LogPipeline
         {
-            get { return _runner.FilePath; }
-        }
-
-        public ProcessSettings Settings
-        {
-            get { return _runner.ProcessSettings; }
-        }
-
-        public DotCoverContext(ICakeContext context)
-        {
-            _context = context;
-            _log = new NullLog();
-            _runner = new DotCoverProcessRunner();
+            get { return _context.LogPipeline; }
         }
     }
 }
