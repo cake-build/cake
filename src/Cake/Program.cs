@@ -6,6 +6,7 @@ using System.Linq;
 using Autofac;
 using Cake.Arguments;
 using Cake.Composition;
+using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.Modules;
 using Cake.Diagnostics;
@@ -55,8 +56,9 @@ namespace Cake
 
                     // Rebuild the container.
                     builder = new CakeContainerBuilder();
+                    var provider = container.Resolve<CakeConfigurationProvider>();
+                    builder.Registry.RegisterModule(new ConfigurationModule(provider, options));
                     builder.Registry.RegisterModule(new ArgumentsModule(options));
-                    builder.Registry.RegisterModule(new ConfigurationModule(container, options));
                     builder.Registry.RegisterModule(new ScriptingModule(options));
                     builder.Update(container);
 
