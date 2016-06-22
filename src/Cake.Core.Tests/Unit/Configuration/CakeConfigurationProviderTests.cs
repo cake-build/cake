@@ -43,6 +43,20 @@ namespace Cake.Core.Tests.Unit.Configuration
         public sealed class TheCreateMethod
         {
             [Fact]
+            public void Should_Throw_If_Path_Is_Null()
+            {
+                // Given
+                var fixture = new CakeConfigurationProviderFixture();
+                fixture.Path = null;
+
+                // When
+                var result = Record.Exception(() => fixture.Create());
+
+                // Then
+                Assert.IsArgumentNullException(result, "path");
+            }
+
+            [Fact]
             public void Should_Throw_If_Arguments_Are_Null()
             {
                 // Given

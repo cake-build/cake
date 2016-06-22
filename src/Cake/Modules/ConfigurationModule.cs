@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 using System;
-using System.Diagnostics;
-using Autofac;
 using Cake.Core.Composition;
 using Cake.Core.Configuration;
 
@@ -14,9 +12,9 @@ namespace Cake.Modules
         private readonly CakeConfigurationProvider _provider;
         private readonly CakeOptions _options;
 
-        public ConfigurationModule(IContainer container, CakeOptions options)
+        public ConfigurationModule(CakeConfigurationProvider provider, CakeOptions options)
         {
-            _provider = container.Resolve<CakeConfigurationProvider>();
+            _provider = provider;
             _options = options;
         }
 
@@ -27,8 +25,8 @@ namespace Cake.Modules
                 throw new ArgumentNullException("registry");
             }
 
-            var configuration = _provider.CreateConfiguration(_options.Arguments);
-            Debug.Assert(configuration != null, "Configuration should not be null.");
+            var root = _options.Script.GetDirectory();
+            var configuration = _provider.CreateConfiguration(root, _options.Arguments);
             registry.RegisterInstance(configuration).As<ICakeConfiguration>();
         }
     }
