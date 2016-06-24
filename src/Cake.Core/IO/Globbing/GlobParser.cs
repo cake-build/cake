@@ -59,7 +59,7 @@ namespace Cake.Core.IO.Globbing
 
         private GlobNode ParseRoot(GlobParserContext context)
         {
-            if (_environment.IsUnix())
+            if (_environment.Platform.IsUnix())
             {
                 // Starts with a separator?
                 if (context.CurrentToken.Kind == GlobTokenKind.PathSeparator)

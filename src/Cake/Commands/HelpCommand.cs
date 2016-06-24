@@ -43,7 +43,7 @@ namespace Cake.Commands
             _console.WriteLine("    --version            Displays version information.");
             _console.WriteLine("    --help               Displays usage information.");
 
-            if (!_environment.IsUnix())
+            if (!_environment.Platform.IsUnix())
             {
                 _console.WriteLine("    --mono               Uses the Mono Compiler, rather than Roslyn script engine.");
                 _console.WriteLine("    --experimental       Uses the nightly builds of Roslyn script engine.");

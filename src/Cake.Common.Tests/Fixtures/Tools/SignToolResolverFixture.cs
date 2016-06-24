@@ -25,7 +25,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
             Environment = Substitute.For<ICakeEnvironment>();
             Registry = Substitute.For<IRegistry>();
 
-            Environment.Is64BitOperativeSystem().Returns(_is64Bit);
+            Environment.Platform.Is64Bit.Returns(_is64Bit);
             Environment.GetSpecialPath(SpecialPath.ProgramFiles).Returns("/ProgramFiles");
             Environment.GetSpecialPath(SpecialPath.ProgramFilesX86).Returns("/ProgramFilesX86");
         }

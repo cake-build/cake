@@ -28,12 +28,17 @@ namespace Cake.Core.Modules
                 throw new ArgumentNullException("registry");
             }
 
+            // Execution
             registry.RegisterType<CakeEngine>().As<ICakeEngine>().Singleton();
             registry.RegisterType<CakeContext>().As<ICakeContext>().Singleton();
 
+            // Environment
+            registry.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().Singleton();
+            registry.RegisterType<CakeRuntime>().As<ICakeRuntime>().Singleton();
+            registry.RegisterType<CakePlatform>().As<ICakePlatform>().Singleton();
+
             // IO
             registry.RegisterType<FileSystem>().As<IFileSystem>().Singleton();
-            registry.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().Singleton();
             registry.RegisterType<Globber>().As<IGlobber>().Singleton();
             registry.RegisterType<ProcessRunner>().As<IProcessRunner>().Singleton();
             registry.RegisterType<NuGetToolResolver>().As<INuGetToolResolver>().Singleton();

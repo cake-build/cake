@@ -127,7 +127,7 @@ namespace Cake.Core.Scripting
             _processor.InstallTools(result, toolsPath);
 
             // Install addins.
-            var applicationRoot = _environment.GetApplicationRoot();
+            var applicationRoot = _environment.ApplicationRoot;
             var addinRoot = GetAddinPath(applicationRoot);
             var addinReferences = _processor.InstallAddins(result, addinRoot);
             foreach (var addinReference in addinReferences)

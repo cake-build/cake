@@ -64,7 +64,7 @@ namespace Cake.Common.Tools
             configurator(dotNetSettings);
 
             // Running on Mac/Linux/Unix?
-            if (context.Environment.IsUnix())
+            if (context.Environment.Platform.IsUnix())
             {
                 // Use XBuild.
                 XBuildAliases.XBuild(context, solution, settings =>
