@@ -37,7 +37,7 @@ namespace Cake.Core.IO
             _environment = environment;
             _parser = new GlobParser(environment);
             _visitor = new GlobVisitor(fileSystem, environment);
-            _comparer = new PathComparer(environment.IsUnix());
+            _comparer = new PathComparer(environment.Platform.IsUnix());
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Cake.Core.IO
             }
 
             // Parse the pattern into an AST.
-            var root = _parser.Parse(pattern, _environment.IsUnix());
+            var root = _parser.Parse(pattern, _environment.Platform.IsUnix());
 
             // Visit all nodes in the parsed patterns and filter the result.
             return _visitor.Walk(root, predicate)

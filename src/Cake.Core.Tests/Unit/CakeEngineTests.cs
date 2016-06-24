@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Cake.Core.Tests.Fixtures;
 using Xunit;
-using NSubstitute;
 
 namespace Cake.Core.Tests.Unit
 {
@@ -208,11 +207,10 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
-                fixture.Context.Environment.IsUnix().Returns(false);
 
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A").Does(() => result.Add("A"));
-                engine.RegisterTask("B").IsDependentOn("A").WithCriteria(context => context.Environment.IsUnix()).Does(() => result.Add("B"));
+                engine.RegisterTask("B").IsDependentOn("A").WithCriteria(context => false).Does(() => result.Add("B"));
                 engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
@@ -230,11 +228,10 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
-                fixture.Context.Environment.IsUnix().Returns(true);
 
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A").Does(() => result.Add("A"));
-                engine.RegisterTask("B").IsDependentOn("A").WithCriteria(context => context.Environment.IsUnix()).Does(() => result.Add("B"));
+                engine.RegisterTask("B").IsDependentOn("A").WithCriteria(context => true).Does(() => result.Add("B"));
                 engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When

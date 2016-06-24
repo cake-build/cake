@@ -56,6 +56,8 @@
     <Compile Include="Annotations\CakeNamespaceImportAttribute.cs" />
     <Compile Include="Annotations\CakePropertyAliasAttribute.cs" />
     <Compile Include="Annotations\CakeModuleAttribute.cs" />
+    <Compile Include="CakePlatform.cs" />
+    <Compile Include="CakeRuntime.cs" />
     <Compile Include="Composition\ICakeContainerRegistry.cs" />
     <Compile Include="Composition\ICakeRegistrationBuilder.cs" />
     <Compile Include="Composition\ICakeModule.cs" />
@@ -87,6 +89,9 @@
     <Compile Include="Diagnostics\LogLevel.cs" />
     <Compile Include="Diagnostics\NullLog.cs" />
     <Compile Include="Diagnostics\Verbosity.cs" />
+    <Compile Include="Extensions\CakePlatformExtensions.cs" />
+    <Compile Include="ICakeRuntime.cs" />
+    <Compile Include="PlatformFamily.cs" />
     <Compile Include="Extensions\ConsoleExtensions.cs" />
     <Compile Include="Extensions\DirectoryExtensions.cs" />
     <Compile Include="Extensions\HashSetExtensions.cs" />
@@ -165,6 +170,7 @@
     <Compile Include="IO\Arguments\TextArgument.cs" />
     <Compile Include="IO\WindowsRegistry.cs" />
     <Compile Include="IO\WindowsRegistryKey.cs" />
+    <Compile Include="ICakePlatform.cs" />
     <Compile Include="ITaskSetupContext.cs" />
     <Compile Include="ITaskTeardownContext.cs" />
     <Compile Include="Modules\CoreModule.cs" />

@@ -149,7 +149,7 @@ namespace Cake.Common.Tools.Cake
         {
             const string homebrewCakePath = "/usr/local/Cellar/cake/";
 
-            if (!_environment.IsUnix())
+            if (!_environment.Platform.IsUnix())
             {
                 return Enumerable.Empty<FilePath>();
             }

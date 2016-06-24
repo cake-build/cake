@@ -41,7 +41,7 @@ namespace Cake.Scripting.Roslyn.Stable
 
         public IScriptSession CreateSession(IScriptHost host)
         {
-            var root = _environment.GetApplicationRoot();
+            var root = _environment.ApplicationRoot;
 
             // Is Roslyn installed?
             if (!IsInstalled(root))
@@ -53,8 +53,7 @@ namespace Cake.Scripting.Roslyn.Stable
             // Load Roslyn assemblies dynamically.
             foreach (var filePath in _paths)
             {
-                Assembly.LoadFrom(_environment
-                    .GetApplicationRoot()
+                Assembly.LoadFrom(_environment.ApplicationRoot
                     .CombineWithFilePath(filePath.GetFilename())
                     .FullPath);
             }
