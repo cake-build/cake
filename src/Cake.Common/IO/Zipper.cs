@@ -45,7 +45,7 @@ namespace Cake.Common.IO
             _fileSystem = fileSystem;
             _environment = environment;
             _log = log;
-            _comparison = environment.IsUnix() ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+            _comparison = environment.Platform.IsUnix() ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
         }
 
         /// <summary>

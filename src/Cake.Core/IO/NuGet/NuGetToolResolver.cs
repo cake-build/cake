@@ -89,7 +89,7 @@ namespace Cake.Core.IO.NuGet
             }
 
             // On Unix /usr/bin/nuget or /usr/local/bin/nuget are viable options
-            if (_environment.IsUnix())
+            if (_environment.Platform.IsUnix())
             {
                 foreach (var systemPath in _unixSystemPaths)
                 {

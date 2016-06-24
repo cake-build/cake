@@ -49,7 +49,7 @@ namespace Cake.Core.IO
             {
                 throw new ArgumentNullException("environment");
             }
-            _isCaseSensitive = environment.IsUnix();
+            _isCaseSensitive = environment.Platform.IsUnix();
         }
 
         /// <summary>

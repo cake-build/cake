@@ -40,7 +40,7 @@ namespace Cake.Common.IO
             }
 
             return new FilePathCollection(context.Globber.Match(pattern).OfType<FilePath>(),
-                new PathComparer(context.Environment.IsUnix()));
+                new PathComparer(context.Environment.Platform.IsUnix()));
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Cake.Common.IO
             }
 
             return new FilePathCollection(context.Globber.Match(pattern, predicate).OfType<FilePath>(),
-                new PathComparer(context.Environment.IsUnix()));
+                new PathComparer(context.Environment.Platform.IsUnix()));
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Cake.Common.IO
             }
 
             return new DirectoryPathCollection(context.Globber.Match(pattern).OfType<DirectoryPath>(),
-                new PathComparer(context.Environment.IsUnix()));
+                new PathComparer(context.Environment.Platform.IsUnix()));
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Cake.Common.IO
             }
 
             return new DirectoryPathCollection(context.Globber.Match(pattern, predicate).OfType<DirectoryPath>(),
-                new PathComparer(context.Environment.IsUnix()));
+                new PathComparer(context.Environment.Platform.IsUnix()));
         }
     }
 }

@@ -152,7 +152,7 @@ namespace Cake.Common
             {
                 throw new ArgumentNullException("context");
             }
-            return context.Environment.IsUnix();
+            return context.Environment.Platform.IsUnix();
         }
     }
 }

@@ -68,7 +68,9 @@
     <Compile Include="FakeLog.cs" />
     <Compile Include="FakeLogMessage.cs" />
     <Compile Include="Extensions\ToolFixtureExtensions.cs" />
+    <Compile Include="FakePlatform.cs" />
     <Compile Include="FakeProcess.cs" />
+    <Compile Include="FakeRuntime.cs" />
     <Compile Include="Fixtures\ToolFixtureProcessRunner.cs" />
     <Compile Include="Fixtures\ToolFixtureResult.cs" />
     <Compile Include="Fixtures\ToolFixture`1.cs" />
