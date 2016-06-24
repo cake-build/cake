@@ -310,7 +310,7 @@ namespace Cake.Common.IO
         }
 
         /// <summary>
-        /// Copies the contents of a directory to the specified location.
+        /// Copies the contents of a directory, including subdirectories to the specified location.
         /// </summary>
         /// <example>
         /// <code>
