@@ -376,6 +376,12 @@
     <Compile Include="Tools\WiX\Architecture.cs" />
     <Compile Include="Tools\WiX\CandleRunner.cs" />
     <Compile Include="Tools\WiX\CandleSettings.cs" />
+    <Compile Include="Tools\WiX\Heat\WiXGenerateType.cs" />
+    <Compile Include="Tools\WiX\Heat\WiXHarvestType.cs" />
+    <Compile Include="Tools\WiX\Heat\HeatRunner.cs" />
+    <Compile Include="Tools\WiX\Heat\HeatSettings.cs" />
+    <Compile Include="Tools\WiX\Heat\WiXOutputGroupType.cs" />
+    <Compile Include="Tools\WiX\Heat\WiXTemplateType.cs" />
     <Compile Include="Tools\WiX\LightRunner.cs" />
     <Compile Include="Tools\WiX\LightSettings.cs" />
     <Compile Include="Tools\WiX\WiXAliases.cs" />

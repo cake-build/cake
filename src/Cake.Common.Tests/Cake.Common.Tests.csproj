@@ -169,6 +169,7 @@
     <Compile Include="Fixtures\TextTransformationFixture.cs" />
     <Compile Include="Fixtures\Tools\TextTransform\TextTransformFixture.cs" />
     <Compile Include="Fixtures\Tools\WiXFixture.cs" />
+    <Compile Include="Fixtures\Tools\WiX\HeatFixture.cs" />
     <Compile Include="Fixtures\XmlDocExampleCodeParserFixture.cs" />
     <Compile Include="Fixtures\XmlPokeFixture.cs" />
     <Compile Include="Fixtures\XmlTransformationFixture.cs" />
@@ -314,8 +315,10 @@
     <Compile Include="Unit\Tools\TextTransform\TextTemplateAliasTests.cs" />
     <Compile Include="Unit\Tools\TextTransform\TextTransformRunnerTests.cs" />
     <Compile Include="Unit\Tools\VSTest\VSTestRunnerTests.cs" />
+    <Compile Include="Unit\Tools\WiX\HeatRunnerTests.cs" />
     <Compile Include="Unit\Tools\WiX\LightRunnerTests.cs" />
     <Compile Include="Unit\Tools\WiX\CandleRunnerTests.cs" />
+    <Compile Include="Unit\Tools\WiX\WiXAliasTests.cs" />
     <Compile Include="Unit\Tools\XBuild\XBuildSettingsExtensionsTests.cs" />
     <Compile Include="Unit\Tools\XBuild\XBuildSettingsTests.cs" />
     <Compile Include="Unit\Tools\XUnit\XUnit2SettingsTests.cs" />
