@@ -11,7 +11,9 @@ namespace Cake.Common.Tests.Fixtures.Tools
     internal sealed class OctopusDeployPusherFixture : ToolFixture<OctopusPushSettings>
     {
         internal string Server { get; set; }
+
         internal string ApiKey { get; set; }
+
         public List<FilePath> Packages { get; set; }
 
         public OctopusDeployPusherFixture()
