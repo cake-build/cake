@@ -83,7 +83,7 @@ namespace Cake.Common.Tools.WiX.Heat
         public FilePath OutputFile { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to suppress the 
+        /// Gets or sets a value indicating whether to suppress the
         /// generation of fragments for directories and components.
         /// </summary>
         /// <value>
@@ -92,7 +92,7 @@ namespace Cake.Common.Tools.WiX.Heat
         public bool SuppressFragments { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to suppress unique identifiers 
+        /// Gets or sets a value indicating whether to suppress unique identifiers
         /// for files, components, and directories.
         /// </summary>
         /// <value>
@@ -141,7 +141,7 @@ namespace Cake.Common.Tools.WiX.Heat
         public string PreprocessorVariable { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether generate binder variables instead 
+        /// Gets or sets a value indicating whether generate binder variables instead
         /// of preprocessor variables.
         /// </summary>
         /// <value>

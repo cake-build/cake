@@ -34,7 +34,7 @@ namespace Cake.Common.Tools.WiX.Heat
         Perf,
 
         /// <summary>
-        /// Harvest registy information from a reg file.
+        /// Harvest registry information from a reg file.
         /// </summary>
         Reg
     }
