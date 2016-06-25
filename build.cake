@@ -25,6 +25,11 @@ bool publishingError = false;
 
 Setup(context =>
 {
+    if(parameters.IsMainCakeBranch && (context.Log.Verbosity != Verbosity.Diagnostic)) {
+        Information("Increasing verbosity to diagnostic.");
+        context.Log.Verbosity = Verbosity.Diagnostic;
+    }
+
     parameters.SetBuildVersion(
         BuildVersion.CalculatingSemanticVersion(
             context: Context,
