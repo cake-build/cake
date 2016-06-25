@@ -2,8 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.Annotations;
+using Cake.Core.IO;
 
 namespace Cake.Common.Tools.OctopusDeploy
 {
@@ -77,6 +80,35 @@ namespace Cake.Common.Tools.OctopusDeploy
 
             var packer = new OctopusDeployReleaseCreator(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             packer.CreateRelease(projectName, settings);
+        }
+
+        /// <summary>
+        /// Pushes the specified package to the Octopus Deploy repository
+        /// </summary>
+        /// <param name="context">The cake context</param>
+        /// /// <param name="server">The Octopus server URL</param>
+        /// <param name="apiKey">The user's API key</param>
+        /// <param name="packagePath">Path to the package</param>
+        /// <param name="settings">The settings</param>
+        [CakeMethodAlias]
+        public static void OctoPush(this ICakeContext context, string server, string apiKey, FilePath packagePath, OctopusPushSettings settings)
+        {
+            OctoPush(context, server, apiKey, new[] { packagePath }, settings);
+        }
+
+        /// <summary>
+        /// Pushes the specified packages to the Octopus Deploy repository
+        /// </summary>
+        /// <param name="context">The cake context</param>
+        /// <param name="server">The Octopus server URL</param>
+        /// <param name="apiKey">The user's API key</param>
+        /// <param name="packagePaths">Paths to the packages</param>
+        /// <param name="settings">The settings</param>
+        [CakeMethodAlias]
+        public static void OctoPush(this ICakeContext context, string server, string apiKey, IEnumerable<FilePath> packagePaths, OctopusPushSettings settings)
+        {
+            var pusher = new OctopusDeployPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            pusher.PushPackage(server, apiKey, packagePaths.ToArray(), settings);
         }
     }
 }

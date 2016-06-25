@@ -101,6 +101,7 @@
     <Compile Include="Fixtures\Tools\DNU\DNUFixture.cs" />
     <Compile Include="Fixtures\Tools\DNU\Pack\DNUPackerFixture.cs" />
     <Compile Include="Fixtures\Tools\DNU\Restorer\DNURestorerFixture.cs" />
+    <Compile Include="Fixtures\Tools\OctopusDeployPusherFixture.cs" />
     <Compile Include="Fixtures\Tools\VSTestRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\SpecFlow\StepDefinitionReport\SpecFlowStepDefinitionReporterFixture.cs" />
     <Compile Include="Fixtures\Tools\SpecFlow\TestExecutionReport\SpecFlowTestExecutionReporterFixture.cs" />
@@ -301,6 +302,7 @@
     <Compile Include="Unit\Tools\NUnit\NUnitRunnerTests.cs" />
     <Compile Include="Unit\Tools\NUnit\NUnitSettingsTests.cs" />
     <Compile Include="Unit\Tools\OctopusDeploy\OctoCreateReleaseTests.cs" />
+    <Compile Include="Unit\Tools\OctopusDeploy\OctoPushTests.cs" />
     <Compile Include="Unit\Tools\OpenCover\OpenCoverTests.cs" />
     <Compile Include="Unit\Tools\ReportUnit\ReportUnitRunnerTests.cs" />
     <Compile Include="Unit\Tools\ReportGenerator\ReportGeneratorRunnerTests.cs" />
