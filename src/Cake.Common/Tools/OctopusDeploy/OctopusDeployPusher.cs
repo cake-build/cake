@@ -77,6 +77,7 @@ namespace Cake.Common.Tools.OctopusDeploy
             {
                 throw new ArgumentException("No API key specified.", "settings");
             }
+
             var builder = new OctopusPushArgumentBuilder(packagePaths, server, apiKey, _environment, settings);
             Run(settings, builder.Get());
         }
