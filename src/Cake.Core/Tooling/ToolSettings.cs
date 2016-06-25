@@ -23,6 +23,12 @@ namespace Cake.Core.Tooling
         public TimeSpan? ToolTimeout { get; set; }
 
         /// <summary>
+        /// Gets or sets the working directory for the tool process.
+        /// </summary>
+        /// <value>The working directory for the tool process.</value>
+        public DirectoryPath WorkingDirectory { get; set; }
+
+        /// <summary>
         /// Gets or sets the argument customization.
         /// Argument customization is a way that lets you add, replace or reuse arguments passed to a tool.
         /// This allows you to support new tool arguments, customize arguments or address potential argument issues.
