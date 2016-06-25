@@ -226,6 +226,11 @@ namespace Cake.Core.Tooling
         /// <returns>The working directory for the tool.</returns>
         protected virtual DirectoryPath GetWorkingDirectory(TSettings settings)
         {
+            if (settings.WorkingDirectory != null)
+            {
+                return settings.WorkingDirectory;
+            }
+
             return _environment.WorkingDirectory;
         }
 

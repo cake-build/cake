@@ -12,11 +12,6 @@ namespace Cake.Common.Tools.GitReleaseNotes
     public sealed class GitReleaseNotesSettings : ToolSettings
     {
         /// <summary>
-        /// Gets or sets the Working Directory for generating release notes from.
-        /// </summary>
-        public DirectoryPath WorkingDirectory { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether verbose logging is used.
         /// </summary>
         public bool Verbose { get; set; }

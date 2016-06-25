@@ -57,6 +57,20 @@ namespace Cake.Core.Tests.Unit.Tooling
                 // Then
                 Assert.Equal("--bar", result.Args);
             }
+
+            [Fact]
+            public void Should_Set_Working_Directory_If_Provided_In_Tool_Settings()
+            {
+                // Given
+                var fixture = new DummyToolFixture();
+                fixture.Settings.WorkingDirectory = "/Other";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/Other", result.Process.WorkingDirectory.FullPath);
+            }
         }
     }
 }
