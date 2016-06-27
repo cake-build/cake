@@ -63,7 +63,6 @@ namespace Cake.Core.Tests.Unit
             public void Should_Throw_If_Builder_Is_Null()
             {
                 // Given
-                var parentTask = new ActionTask("parent");
                 var childTask = new ActionTask("child");
                 CakeTaskBuilder<ActionTask> builder = null;
                 var childTaskBuilder = new CakeTaskBuilder<ActionTask>(childTask);
