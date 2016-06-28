@@ -1,0 +1,297 @@
+{
+  "locked": false,
+  "version": 2,
+  "targets": {
+    ".NETFramework,Version=v4.5.2": {
+      "xunit.abstractions/2.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net35/xunit.abstractions.dll": {}
+        },
+        "runtime": {
+          "lib/net35/xunit.abstractions.dll": {}
+        }
+      },
+      "xunit.assert.source/2.2.0-beta2-build3300": {
+        "type": "package"
+      },
+      "xunit.core/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "xunit.extensibility.core": "[2.1.0]",
+          "xunit.extensibility.execution": "[2.1.0]"
+        }
+      },
+      "xunit.extensibility.core/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "xunit.abstractions": "[2.0.0]"
+        },
+        "compile": {
+          "lib/dotnet/xunit.core.dll": {}
+        },
+        "runtime": {
+          "lib/dotnet/xunit.core.dll": {}
+        }
+      },
+      "xunit.extensibility.execution/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "xunit.extensibility.core": "[2.1.0]"
+        },
+        "compile": {
+          "lib/net45/xunit.execution.desktop.dll": {}
+        },
+        "runtime": {
+          "lib/net45/xunit.execution.desktop.dll": {}
+        }
+      },
+      "Cake.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.5.2",
+        "frameworkAssemblies": [
+          "System.Data",
+          "System.Xml",
+          "System.Xml.Linq"
+        ],
+        "compile": {
+          "net452/Cake.Core.dll": {}
+        },
+        "runtime": {
+          "net452/Cake.Core.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "xunit.abstractions/2.0.0": {
+      "sha512": "NAdxKQRzuLnCZ0g++x6i87/8rMBpQoRiRlRNLAqfODm2zJPbteHRoSER3DXfxnqrHXyBJT8rFaZ8uveBeQyaMA==",
+      "type": "package",
+      "path": "xunit.abstractions/2.0.0",
+      "files": [
+        "lib/net35/xunit.abstractions.dll",
+        "lib/net35/xunit.abstractions.xml",
+        "lib/portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS/xunit.abstractions.dll",
+        "lib/portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS/xunit.abstractions.xml",
+        "xunit.abstractions.2.0.0.nupkg.sha512",
+        "xunit.abstractions.nuspec"
+      ]
+    },
+    "xunit.assert.source/2.2.0-beta2-build3300": {
+      "sha512": "Dvvp0hzQgOXHLEg2z3smCC2ocuEFfGVLI2ysEK//rpsaxLoueQarZ24VJByKRnLRaBTiKX8agKn6pXUmhKfcew==",
+      "type": "package",
+      "path": "xunit.assert.source/2.2.0-beta2-build3300",
+      "files": [
+        "Content/Asserts/Assert.cs",
+        "Content/Asserts/BooleanAsserts.cs",
+        "Content/Asserts/CollectionAsserts.cs",
+        "Content/Asserts/Comparers.cs",
+        "Content/Asserts/EqualityAsserts.cs",
+        "Content/Asserts/EventAsserts.cs",
+        "Content/Asserts/ExceptionAsserts.cs",
+        "Content/Asserts/Guards.cs",
+        "Content/Asserts/IdentityAsserts.cs",
+        "Content/Asserts/NullAsserts.cs",
+        "Content/Asserts/PropertyAsserts.cs",
+        "Content/Asserts/RangeAsserts.cs",
+        "Content/Asserts/Record.cs",
+        "Content/Asserts/Sdk/ArgumentFormatter.cs",
+        "Content/Asserts/Sdk/AssertComparer.cs",
+        "Content/Asserts/Sdk/AssertEqualityComparer.cs",
+        "Content/Asserts/Sdk/AssertEqualityComparerAdapter.cs",
+        "Content/Asserts/Sdk/Exceptions/AllException.cs",
+        "Content/Asserts/Sdk/Exceptions/AssertActualExpectedException.cs",
+        "Content/Asserts/Sdk/Exceptions/AssertCollectionCountException.cs",
+        "Content/Asserts/Sdk/Exceptions/CollectionException.cs",
+        "Content/Asserts/Sdk/Exceptions/ContainsException.cs",
+        "Content/Asserts/Sdk/Exceptions/DoesNotContainException.cs",
+        "Content/Asserts/Sdk/Exceptions/DoesNotMatchException.cs",
+        "Content/Asserts/Sdk/Exceptions/EmptyException.cs",
+        "Content/Asserts/Sdk/Exceptions/EndsWithException.cs",
+        "Content/Asserts/Sdk/Exceptions/EqualException.cs",
+        "Content/Asserts/Sdk/Exceptions/FalseException.cs",
+        "Content/Asserts/Sdk/Exceptions/InRangeException.cs",
+        "Content/Asserts/Sdk/Exceptions/IsAssignableFromException.cs",
+        "Content/Asserts/Sdk/Exceptions/IsNotTypeException.cs",
+        "Content/Asserts/Sdk/Exceptions/IsTypeException.cs",
+        "Content/Asserts/Sdk/Exceptions/MatchesException.cs",
+        "Content/Asserts/Sdk/Exceptions/NotEmptyException.cs",
+        "Content/Asserts/Sdk/Exceptions/NotEqualException.cs",
+        "Content/Asserts/Sdk/Exceptions/NotInRangeException.cs",
+        "Content/Asserts/Sdk/Exceptions/NotNullException.cs",
+        "Content/Asserts/Sdk/Exceptions/NotSameException.cs",
+        "Content/Asserts/Sdk/Exceptions/NullException.cs",
+        "Content/Asserts/Sdk/Exceptions/ParameterCountMismatchException.cs",
+        "Content/Asserts/Sdk/Exceptions/ProperSubsetException.cs",
+        "Content/Asserts/Sdk/Exceptions/ProperSupersetException.cs",
+        "Content/Asserts/Sdk/Exceptions/PropertyChangedException.cs",
+        "Content/Asserts/Sdk/Exceptions/RaisesException.cs",
+        "Content/Asserts/Sdk/Exceptions/SameException.cs",
+        "Content/Asserts/Sdk/Exceptions/SingleException.cs",
+        "Content/Asserts/Sdk/Exceptions/StartsWithException.cs",
+        "Content/Asserts/Sdk/Exceptions/SubsetException.cs",
+        "Content/Asserts/Sdk/Exceptions/SupersetException.cs",
+        "Content/Asserts/Sdk/Exceptions/ThrowsException.cs",
+        "Content/Asserts/Sdk/Exceptions/TrueException.cs",
+        "Content/Asserts/Sdk/Exceptions/XunitException.cs",
+        "Content/Asserts/SetAsserts.cs",
+        "Content/Asserts/StringAsserts.cs",
+        "Content/Asserts/TypeAsserts.cs",
+        "shared/Assert.cs",
+        "shared/BooleanAsserts.cs",
+        "shared/CollectionAsserts.cs",
+        "shared/Comparers.cs",
+        "shared/EqualityAsserts.cs",
+        "shared/EventAsserts.cs",
+        "shared/ExceptionAsserts.cs",
+        "shared/Guards.cs",
+        "shared/IdentityAsserts.cs",
+        "shared/NullAsserts.cs",
+        "shared/PropertyAsserts.cs",
+        "shared/RangeAsserts.cs",
+        "shared/Record.cs",
+        "shared/Sdk/ArgumentFormatter.cs",
+        "shared/Sdk/AssertComparer.cs",
+        "shared/Sdk/AssertEqualityComparer.cs",
+        "shared/Sdk/AssertEqualityComparerAdapter.cs",
+        "shared/Sdk/Exceptions/AllException.cs",
+        "shared/Sdk/Exceptions/AssertActualExpectedException.cs",
+        "shared/Sdk/Exceptions/AssertCollectionCountException.cs",
+        "shared/Sdk/Exceptions/CollectionException.cs",
+        "shared/Sdk/Exceptions/ContainsException.cs",
+        "shared/Sdk/Exceptions/DoesNotContainException.cs",
+        "shared/Sdk/Exceptions/DoesNotMatchException.cs",
+        "shared/Sdk/Exceptions/EmptyException.cs",
+        "shared/Sdk/Exceptions/EndsWithException.cs",
+        "shared/Sdk/Exceptions/EqualException.cs",
+        "shared/Sdk/Exceptions/FalseException.cs",
+        "shared/Sdk/Exceptions/InRangeException.cs",
+        "shared/Sdk/Exceptions/IsAssignableFromException.cs",
+        "shared/Sdk/Exceptions/IsNotTypeException.cs",
+        "shared/Sdk/Exceptions/IsTypeException.cs",
+        "shared/Sdk/Exceptions/MatchesException.cs",
+        "shared/Sdk/Exceptions/NotEmptyException.cs",
+        "shared/Sdk/Exceptions/NotEqualException.cs",
+        "shared/Sdk/Exceptions/NotInRangeException.cs",
+        "shared/Sdk/Exceptions/NotNullException.cs",
+        "shared/Sdk/Exceptions/NotSameException.cs",
+        "shared/Sdk/Exceptions/NullException.cs",
+        "shared/Sdk/Exceptions/ParameterCountMismatchException.cs",
+        "shared/Sdk/Exceptions/ProperSubsetException.cs",
+        "shared/Sdk/Exceptions/ProperSupersetException.cs",
+        "shared/Sdk/Exceptions/PropertyChangedException.cs",
+        "shared/Sdk/Exceptions/RaisesException.cs",
+        "shared/Sdk/Exceptions/SameException.cs",
+        "shared/Sdk/Exceptions/SingleException.cs",
+        "shared/Sdk/Exceptions/StartsWithException.cs",
+        "shared/Sdk/Exceptions/SubsetException.cs",
+        "shared/Sdk/Exceptions/SupersetException.cs",
+        "shared/Sdk/Exceptions/ThrowsException.cs",
+        "shared/Sdk/Exceptions/TrueException.cs",
+        "shared/Sdk/Exceptions/XunitException.cs",
+        "shared/SetAsserts.cs",
+        "shared/StringAsserts.cs",
+        "shared/TypeAsserts.cs",
+        "xunit.assert.source.2.2.0-beta2-build3300.nupkg.sha512",
+        "xunit.assert.source.nuspec"
+      ]
+    },
+    "xunit.core/2.1.0": {
+      "sha512": "jlbYdPbnkPIRwJllcT/tQZCNsSElVDEymdpJfH79uTUrPARkELVYw9o/zhAjKZXmeikGqGK5C2Yny4gTNoEu0Q==",
+      "type": "package",
+      "path": "xunit.core/2.1.0",
+      "files": [
+        "build/_desktop/xunit.execution.desktop.dll",
+        "build/dnx451/_._",
+        "build/monoandroid/_._",
+        "build/monotouch/_._",
+        "build/net45/_._",
+        "build/portable-net45+win8+wp8+wpa81/xunit.core.props",
+        "build/win8/_._",
+        "build/win81/xunit.core.props",
+        "build/wp8/_._",
+        "build/wpa81/xunit.core.props",
+        "build/xamarinios/_._",
+        "xunit.core.2.1.0.nupkg.sha512",
+        "xunit.core.nuspec"
+      ]
+    },
+    "xunit.extensibility.core/2.1.0": {
+      "sha512": "ANWM3WxeaeHjACLRlmrv+xOc0WAcr3cvIiJE+gqbdzTv1NCH4p1VDyT+8WmmdCc9db0WFiJLaDy4YTYsL1wWXw==",
+      "type": "package",
+      "path": "xunit.extensibility.core/2.1.0",
+      "files": [
+        "lib/dotnet/xunit.core.dll",
+        "lib/dotnet/xunit.core.dll.tdnet",
+        "lib/dotnet/xunit.core.pdb",
+        "lib/dotnet/xunit.core.xml",
+        "lib/dotnet/xunit.runner.tdnet.dll",
+        "lib/dotnet/xunit.runner.utility.desktop.dll",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.core.dll",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.core.dll.tdnet",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.core.pdb",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.core.xml",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.runner.tdnet.dll",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.runner.utility.desktop.dll",
+        "xunit.extensibility.core.2.1.0.nupkg.sha512",
+        "xunit.extensibility.core.nuspec"
+      ]
+    },
+    "xunit.extensibility.execution/2.1.0": {
+      "sha512": "tAoNafoVknKa3sZJPMvtZRnhOSk3gasEGeceSm7w/gyGwsR/OXFxndWJB1xSHeoy33d3Z6jFqn4A3j+pWCF0Ew==",
+      "type": "package",
+      "path": "xunit.extensibility.execution/2.1.0",
+      "files": [
+        "lib/dnx451/xunit.execution.dotnet.dll",
+        "lib/dnx451/xunit.execution.dotnet.pdb",
+        "lib/dnx451/xunit.execution.dotnet.xml",
+        "lib/dotnet/xunit.execution.dotnet.dll",
+        "lib/dotnet/xunit.execution.dotnet.pdb",
+        "lib/dotnet/xunit.execution.dotnet.xml",
+        "lib/monoandroid/xunit.execution.dotnet.dll",
+        "lib/monoandroid/xunit.execution.dotnet.pdb",
+        "lib/monoandroid/xunit.execution.dotnet.xml",
+        "lib/monotouch/xunit.execution.dotnet.dll",
+        "lib/monotouch/xunit.execution.dotnet.pdb",
+        "lib/monotouch/xunit.execution.dotnet.xml",
+        "lib/net45/xunit.execution.desktop.dll",
+        "lib/net45/xunit.execution.desktop.pdb",
+        "lib/net45/xunit.execution.desktop.xml",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.execution.dotnet.dll",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.execution.dotnet.pdb",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.execution.dotnet.xml",
+        "lib/win8/xunit.execution.dotnet.dll",
+        "lib/win8/xunit.execution.dotnet.pdb",
+        "lib/win8/xunit.execution.dotnet.xml",
+        "lib/wp8/xunit.execution.dotnet.dll",
+        "lib/wp8/xunit.execution.dotnet.pdb",
+        "lib/wp8/xunit.execution.dotnet.xml",
+        "lib/wpa81/xunit.execution.dotnet.dll",
+        "lib/wpa81/xunit.execution.dotnet.pdb",
+        "lib/wpa81/xunit.execution.dotnet.xml",
+        "lib/xamarinios/xunit.execution.dotnet.dll",
+        "lib/xamarinios/xunit.execution.dotnet.pdb",
+        "lib/xamarinios/xunit.execution.dotnet.xml",
+        "xunit.extensibility.execution.2.1.0.nupkg.sha512",
+        "xunit.extensibility.execution.nuspec"
+      ]
+    },
+    "Cake.Core/1.0.0": {
+      "type": "project",
+      "path": "../Cake.Core/project.json",
+      "msbuildProject": "../Cake.Core/Cake.Core.xproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "": [
+      "Cake.Core",
+      "xunit.assert.source >= 2.2.0-beta2-build3300",
+      "xunit.core >= 2.1.0"
+    ],
+    ".NETFramework,Version=v4.5.2": [
+      "System.Runtime"
+    ]
+  },
+  "tools": {},
+  "projectFileToolGroups": {}
+}

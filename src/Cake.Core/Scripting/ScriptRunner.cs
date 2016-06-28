@@ -9,6 +9,7 @@ using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting.Analysis;
+using Cake.Core.Polyfill;
 
 namespace Cake.Core.Scripting
 {
@@ -145,7 +146,7 @@ namespace Cake.Core.Scripting
             {
                 if (host.Context.FileSystem.Exist((FilePath)reference))
                 {
-                    var assembly = Assembly.LoadFrom(reference);
+                    var assembly = AssemblyLoader.LoadFromString(reference);
                     assemblies.Add(assembly);
                 }
                 else

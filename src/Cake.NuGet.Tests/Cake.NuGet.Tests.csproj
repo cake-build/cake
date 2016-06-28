@@ -77,10 +77,6 @@
       <Project>{8074b833-11b8-459f-bb98-bfba2bc5c698}</Project>
       <Name>Cake.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Cake.NuGet\Cake.NuGet.csproj">
-      <Project>{74ccfb64-db98-4bf7-990f-4c312d20ac28}</Project>
-      <Name>Cake.NuGet</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Cake.Testing.Xunit\Cake.Testing.Xunit.csproj">
       <Project>{5af751d1-bb54-4268-9e42-3a898b034b06}</Project>
       <Name>Cake.Testing.Xunit</Name>

@@ -65,6 +65,7 @@ namespace Cake.Core
         /// </returns>
         public DirectoryPath GetSpecialPath(SpecialPath path)
         {
+#if NET452
             switch (path)
             {
                 case SpecialPath.ApplicationData:
@@ -84,6 +85,9 @@ namespace Cake.Core
             }
             const string format = "The special path '{0}' is not supported.";
             throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, format, path));
+#else
+            throw new NotSupportedException("Not supported on .NET Core.");
+#endif
         }
 
         /// <summary>
@@ -94,7 +98,12 @@ namespace Cake.Core
         /// </returns>
         public DirectoryPath GetApplicationRoot()
         {
-            var path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+#if NET452
+            var assembly = Assembly.GetExecutingAssembly();
+#else
+            var assembly = Assembly.GetEntryAssembly();
+#endif
+            var path = System.IO.Path.GetDirectoryName(assembly.Location);
             return new DirectoryPath(path);
         }
 
@@ -130,11 +139,15 @@ namespace Cake.Core
         /// <returns>The target framework.</returns>
         public FrameworkName GetTargetFramework()
         {
+#if NET452
             // Try to get the current framework name from the current application domain,
             // but if that is null, we default to .NET 4.5. The reason for doing this is
             // that this actually is what happens on Mono.
             var frameworkName = AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName;
             return new FrameworkName(frameworkName ?? ".NETFramework,Version=v4.5");
+#else
+            throw new NotImplementedException("Not implemented for .NET Core.");
+#endif
         }
 
         private static void SetWorkingDirectory(DirectoryPath path)

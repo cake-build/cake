@@ -114,12 +114,6 @@
     <Compile Include="WindowsFact.cs" />
     <Compile Include="WindowsTheory.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
-      <Project>{8074B833-11B8-459F-BB98-BFBA2BC5C698}</Project>
-      <Name>Cake.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\xunit.core.2.1.0\build\portable-net45+win8+wp8+wpa81\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.1.0\build\portable-net45+win8+wp8+wpa81\xunit.core.props')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

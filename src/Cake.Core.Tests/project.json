@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "Cake.Core": { "target": "project" },
+    "Cake.Testing": { "target": "project" },
+    "Cake.Testing.Xunit": { "target": "project" },
+    "NSubstitute": "1.10.0.0"
+  },
+
+  "buildOptions": {
+    "embed": [
+      "Unit/Scripting/CodeGen/Expected/Methods/*",
+      "Unit/Scripting/CodeGen/Expected/Properties/*"
+    ]
+  },
+
+  "frameworks": {
+    "net452": {
+      "dependencies": {
+      },
+      "frameworkAssemblies": {
+        "System.Runtime": { "type": "build" }
+      }
+    }
+  },
+
+  "testRunner": "xunit"
+}

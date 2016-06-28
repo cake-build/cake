@@ -111,10 +111,6 @@
       <Project>{5572610D-D857-450A-9CC9-F3E08B0E1449}</Project>
       <Name>Cake.Testing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Cake\Cake.csproj">
-      <Project>{1BF8D4F1-86D3-4B7B-BAF6-4CF3D863B819}</Project>
-      <Name>Cake</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\MonoScriptProcessor\Simple\input" />

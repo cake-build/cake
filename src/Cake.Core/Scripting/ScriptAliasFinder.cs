@@ -41,8 +41,9 @@ namespace Cake.Core.Scripting
                 {
                     try
                     {
-                        foreach (var type in reference.DefinedTypes)
+                        foreach (var typeInfo in reference.DefinedTypes)
                         {
+                            var type = typeInfo.GetType();
                             if (type.IsStatic())
                             {
                                 foreach (var method in GetAliasMethods(type))
@@ -69,12 +70,13 @@ namespace Cake.Core.Scripting
                                 {
                                     notFound.Add(fileNotFoundException.FileName);
                                 }
-
+#if NET452
                                 if (!string.IsNullOrEmpty(fileNotFoundException.FusionLog))
                                 {
                                     _log.Debug("Fusion Log:");
                                     _log.Debug(fileNotFoundException.FusionLog);
                                 }
+#endif
                             }
                             _log.Debug(string.Empty);
                         }

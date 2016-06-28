@@ -336,10 +336,6 @@
     <Compile Include="Fixtures\XmlPeekAliasesFixture.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Cake.Common\Cake.Common.csproj">
-      <Project>{ABC3F1CB-F84E-43ED-A120-0CCFE344D250}</Project>
-      <Name>Cake.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
       <Project>{8074B833-11B8-459F-BB98-BFBA2BC5C698}</Project>
       <Name>Cake.Core</Name>
