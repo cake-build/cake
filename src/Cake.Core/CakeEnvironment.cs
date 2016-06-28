@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Versioning;
 using Cake.Core.IO;
+using Cake.Core.Polyfill;
 
 namespace Cake.Core
 {
@@ -98,11 +99,7 @@ namespace Cake.Core
         /// </returns>
         public DirectoryPath GetApplicationRoot()
         {
-#if NET452
-            var assembly = Assembly.GetExecutingAssembly();
-#else
-            var assembly = Assembly.GetEntryAssembly();
-#endif
+            var assembly = AssemblyHelper.GetExecutingAssembly();
             var path = System.IO.Path.GetDirectoryName(assembly.Location);
             return new DirectoryPath(path);
         }
@@ -156,7 +153,6 @@ namespace Cake.Core
             {
                 throw new CakeException("Working directory can not be set to a relative path.");
             }
-
             System.IO.Directory.SetCurrentDirectory(path.FullPath);
         }
     }
