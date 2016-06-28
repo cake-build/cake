@@ -9,24 +9,15 @@ namespace Cake.Common.Solution.Project.XmlDoc
     /// </summary>
     public sealed class XmlDocExampleCode
     {
-        private readonly string _name;
-        private readonly string _code;
-
         /// <summary>
         /// Gets Example code parent name
         /// </summary>
-        public string Name
-        {
-            get { return _name; }
-        }
+        public string Name { get; }
 
         /// <summary>
         /// Gets Example code
         /// </summary>
-        public string Code
-        {
-            get { return _code; }
-        }
+        public string Code { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlDocExampleCode"/> class.
@@ -35,8 +26,8 @@ namespace Cake.Common.Solution.Project.XmlDoc
         /// <param name="code">The example code.</param>
         public XmlDocExampleCode(string name, string code)
         {
-            _name = name;
-            _code = code;
+            Name = name;
+            Code = code;
         }
     }
 }

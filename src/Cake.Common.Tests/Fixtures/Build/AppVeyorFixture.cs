@@ -4,7 +4,6 @@
 
 using Cake.Common.Build.AppVeyor;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Testing;
 using NSubstitute;

@@ -18,15 +18,15 @@ namespace Cake.Common.IO
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (filePath == null)
             {
-                throw new ArgumentNullException("filePath");
+                throw new ArgumentNullException(nameof(filePath));
             }
             if (targetDirectoryPath == null)
             {
-                throw new ArgumentNullException("targetDirectoryPath");
+                throw new ArgumentNullException(nameof(targetDirectoryPath));
             }
             CopyFile(context, filePath, targetDirectoryPath.GetFilePath(filePath));
         }
@@ -35,15 +35,15 @@ namespace Cake.Common.IO
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (filePath == null)
             {
-                throw new ArgumentNullException("filePath");
+                throw new ArgumentNullException(nameof(filePath));
             }
             if (targetFilePath == null)
             {
-                throw new ArgumentNullException("targetFilePath");
+                throw new ArgumentNullException(nameof(targetFilePath));
             }
 
             var targetDirectoryPath = targetFilePath.GetDirectory().MakeAbsolute(context.Environment);
@@ -63,11 +63,11 @@ namespace Cake.Common.IO
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (pattern == null)
             {
-                throw new ArgumentNullException("pattern");
+                throw new ArgumentNullException(nameof(pattern));
             }
             var files = context.GetFiles(pattern);
             if (files.Count == 0)
@@ -82,15 +82,15 @@ namespace Cake.Common.IO
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (filePaths == null)
             {
-                throw new ArgumentNullException("filePaths");
+                throw new ArgumentNullException(nameof(filePaths));
             }
             if (targetDirectoryPath == null)
             {
-                throw new ArgumentNullException("targetDirectoryPath");
+                throw new ArgumentNullException(nameof(targetDirectoryPath));
             }
 
             var absoluteTargetDirectoryPath = targetDirectoryPath.MakeAbsolute(context.Environment);

@@ -41,19 +41,19 @@ namespace Cake.Core.Scripting
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             if (log == null)
             {
-                throw new ArgumentNullException("log");
+                throw new ArgumentNullException(nameof(log));
             }
             if (installers == null)
             {
-                throw new ArgumentNullException("installers");
+                throw new ArgumentNullException(nameof(installers));
             }
 
             _environment = environment;
@@ -74,11 +74,11 @@ namespace Cake.Core.Scripting
         {
             if (analyzerResult == null)
             {
-                throw new ArgumentNullException("analyzerResult");
+                throw new ArgumentNullException(nameof(analyzerResult));
             }
             if (installPath == null)
             {
-                throw new ArgumentNullException("installPath");
+                throw new ArgumentNullException(nameof(installPath));
             }
 
             // Make the installation root absolute.
@@ -129,11 +129,11 @@ namespace Cake.Core.Scripting
         {
             if (analyzerResult == null)
             {
-                throw new ArgumentNullException("analyzerResult");
+                throw new ArgumentNullException(nameof(analyzerResult));
             }
             if (installPath == null)
             {
-                throw new ArgumentNullException("installPath");
+                throw new ArgumentNullException(nameof(installPath));
             }
 
             // Make the installation root absolute.

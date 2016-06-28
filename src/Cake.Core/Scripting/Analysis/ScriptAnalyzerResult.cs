@@ -13,76 +13,51 @@ namespace Cake.Core.Scripting.Analysis
     /// </summary>
     public sealed class ScriptAnalyzerResult
     {
-        private readonly IScriptInformation _script;
-        private readonly IReadOnlyList<string> _lines;
         private readonly HashSet<string> _references;
         private readonly HashSet<string> _namespaces;
         private readonly HashSet<string> _usingAliases;
-        private readonly HashSet<PackageReference> _addins;
-        private readonly HashSet<PackageReference> _tools;
 
         /// <summary>
         /// Gets the analyzed script.
         /// </summary>
         /// <value>The script.</value>
-        public IScriptInformation Script
-        {
-            get { return _script; }
-        }
+        public IScriptInformation Script { get; }
 
         /// <summary>
         /// Gets the merged script lines.
         /// </summary>
         /// <value>The merged script lines.</value>
-        public IReadOnlyList<string> Lines
-        {
-            get { return _lines; }
-        }
+        public IReadOnlyList<string> Lines { get; }
 
         /// <summary>
         /// Gets all references.
         /// </summary>
         /// <value>The references.</value>
-        public ISet<string> References
-        {
-            get { return _references; }
-        }
+        public ISet<string> References => _references;
 
         /// <summary>
         /// Gets all the namespaces.
         /// </summary>
         /// <value>The namespaces.</value>
-        public ISet<string> Namespaces
-        {
-            get { return _namespaces; }
-        }
+        public ISet<string> Namespaces => _namespaces;
 
         /// <summary>
         /// Gets the using aliases.
         /// </summary>
         /// <value>The using aliases.</value>
-        public ISet<string> UsingAliases
-        {
-            get { return _usingAliases; }
-        }
+        public ISet<string> UsingAliases => _usingAliases;
 
         /// <summary>
         /// Gets the addins.
         /// </summary>
         /// <value>The addins.</value>
-        public HashSet<PackageReference> Addins
-        {
-            get { return _addins; }
-        }
+        public HashSet<PackageReference> Addins { get; }
 
         /// <summary>
         /// Gets the tools.
         /// </summary>
         /// <value>The tools.</value>
-        public HashSet<PackageReference> Tools
-        {
-            get { return _tools; }
-        }
+        public HashSet<PackageReference> Tools { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptAnalyzerResult"/> class.
@@ -91,13 +66,13 @@ namespace Cake.Core.Scripting.Analysis
         /// <param name="lines">The merged script lines.</param>
         public ScriptAnalyzerResult(IScriptInformation script, IReadOnlyList<string> lines)
         {
-            _script = script;
-            _lines = lines;
+            Script = script;
+            Lines = lines;
             _references = new HashSet<string>(Collect(script, i => i.References));
             _namespaces = new HashSet<string>(Collect(script, i => i.Namespaces));
             _usingAliases = new HashSet<string>(Collect(script, i => i.UsingAliases));
-            _tools = new HashSet<PackageReference>(Collect(script, i => i.Tools));
-            _addins = new HashSet<PackageReference>(Collect(script, i => i.Addins));
+            Tools = new HashSet<PackageReference>(Collect(script, i => i.Tools));
+            Addins = new HashSet<PackageReference>(Collect(script, i => i.Addins));
         }
 
         private IEnumerable<T> Collect<T>(IScriptInformation script, Func<IScriptInformation, IEnumerable<T>> collector)

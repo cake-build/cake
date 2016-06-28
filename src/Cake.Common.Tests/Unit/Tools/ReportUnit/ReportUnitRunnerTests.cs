@@ -66,7 +66,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("ReportUnit: Process was not started.", result.Message);
+                Assert.Equal("ReportUnit: Process was not started.", result?.Message);
             }
 
             [Fact]
@@ -81,7 +81,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("ReportUnit: Process returned an error (exit code 1).", result.Message);
+                Assert.Equal("ReportUnit: Process returned an error (exit code 1).", result?.Message);
             }
 
             [Fact]
@@ -167,7 +167,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("ReportUnit: Process was not started.", result.Message);
+                Assert.Equal("ReportUnit: Process was not started.", result?.Message);
             }
 
             [Fact]
@@ -182,7 +182,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("ReportUnit: Process returned an error (exit code 1).", result.Message);
+                Assert.Equal("ReportUnit: Process returned an error (exit code 1).", result?.Message);
             }
 
             [Fact]

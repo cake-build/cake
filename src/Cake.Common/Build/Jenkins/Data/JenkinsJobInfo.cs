@@ -17,10 +17,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The name of the job.
         /// </value>
-        public string JobName
-        {
-            get { return GetEnvironmentString("JOB_NAME"); }
-        }
+        public string JobName => GetEnvironmentString("JOB_NAME");
 
         /// <summary>
         /// Gets the name of the job.
@@ -28,10 +25,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The name of the job.
         /// </value>
-        public string JobUrl
-        {
-            get { return GetEnvironmentString("JOB_URL"); }
-        }
+        public string JobUrl => GetEnvironmentString("JOB_URL");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JenkinsJobInfo"/> class.

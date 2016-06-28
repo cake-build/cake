@@ -35,15 +35,12 @@ namespace Cake.Core.IO.Globbing
             foreach (var node in nodes)
             {
                 var segmentNode = node as PathSegment;
-                if (segmentNode != null)
+                if (segmentNode?.Tokens.Count == 1)
                 {
-                    if (segmentNode.Tokens.Count == 1)
+                    if (segmentNode.Tokens[0].Kind == GlobTokenKind.Wildcard)
                     {
-                        if (segmentNode.Tokens[0].Kind == GlobTokenKind.Wildcard)
-                        {
-                            yield return new WildcardSegment();
-                            continue;
-                        }
+                        yield return new WildcardSegment();
+                        continue;
                     }
                 }
                 yield return node;

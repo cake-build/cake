@@ -74,7 +74,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var zipper = new Zipper(fileSystem, environment, log);
 
                 // When
-                var result = Record.Exception(() => zipper.Zip(null, "/file.zip", new FilePath[] {"/Root/file.txt"}));
+                var result = Record.Exception(() => zipper.Zip(null, "/file.zip", new FilePath[] { "/Root/file.txt" }));
 
                 // Then
                 Assert.IsArgumentNullException(result, "rootPath");
@@ -127,7 +127,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("File '/NotRoot/file.txt' is not relative to root path '/Root'.", result.Message);
+                Assert.Equal("File '/NotRoot/file.txt' is not relative to root path '/Root'.", result?.Message);
             }
 
             [Fact]
@@ -141,7 +141,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var zipper = new Zipper(fileSystem, environment, log);
 
                 // When
-                zipper.Zip("/Root", "/file.zip", new FilePath[] {"/Root/file.txt"});
+                zipper.Zip("/Root", "/file.zip", new FilePath[] { "/Root/file.txt" });
 
                 // Then
                 Assert.True(fileSystem.GetFile("/file.zip").Exists);

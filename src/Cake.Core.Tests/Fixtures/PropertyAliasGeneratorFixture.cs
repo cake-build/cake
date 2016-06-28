@@ -18,7 +18,7 @@ namespace Cake.Core.Tests.Fixtures
 
         public PropertyAliasGeneratorFixture()
         {
-            _assembly = typeof(PropertyAliasGeneratorFixture).Assembly;
+            _assembly = typeof(PropertyAliasGeneratorFixture).GetTypeInfo().Assembly;
             _methods = typeof(PropertyAliasGeneratorData).GetMethods();
         }
 

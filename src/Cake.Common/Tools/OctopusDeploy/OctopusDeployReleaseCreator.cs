@@ -42,19 +42,19 @@ namespace Cake.Common.Tools.OctopusDeploy
         {
             if (projectName == null)
             {
-                throw new ArgumentNullException("projectName");
+                throw new ArgumentNullException(nameof(projectName));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             if (string.IsNullOrEmpty(settings.Server))
             {
-                throw new ArgumentException("No server specified.", "settings");
+                throw new ArgumentException("No server specified.", nameof(settings));
             }
             if (string.IsNullOrEmpty(settings.ApiKey))
             {
-                throw new ArgumentException("No API key specified.", "settings");
+                throw new ArgumentException("No API key specified.", nameof(settings));
             }
 
             var argumentBuilder = new CreateReleaseArgumentBuilder(projectName, settings, _environment);

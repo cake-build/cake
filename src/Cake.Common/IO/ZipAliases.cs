@@ -78,7 +78,7 @@ namespace Cake.Common.IO
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var zipper = new Zipper(context.FileSystem, context.Environment, context.Log);
@@ -108,7 +108,7 @@ namespace Cake.Common.IO
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var paths = filePaths.Select(p => new FilePath(p));
@@ -132,7 +132,7 @@ namespace Cake.Common.IO
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var zipper = new Zipper(context.FileSystem, context.Environment, context.Log);

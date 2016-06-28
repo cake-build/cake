@@ -11,8 +11,8 @@ namespace Cake.Common.Tests.Fixtures.Diagnostics
 {
     internal sealed class LogActionFixture
     {
-        public string Format { get; private set; }
-        public object[] Args { get; private set; }
+        public string Format { get; }
+        public object[] Args { get; }
         public ICakeContext Context { get; set; }
         public bool Evaluated { get; private set; }
 

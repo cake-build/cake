@@ -65,15 +65,15 @@ namespace Cake.Common.Text
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (leftPlaceholder == null)
             {
-                throw new ArgumentNullException("leftPlaceholder");
+                throw new ArgumentNullException(nameof(leftPlaceholder));
             }
             if (rightPlaceholder == null)
             {
-                throw new ArgumentNullException("rightPlaceholder");
+                throw new ArgumentNullException(nameof(rightPlaceholder));
             }
 
             // Create the placeholder.
@@ -134,19 +134,19 @@ namespace Cake.Common.Text
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
             if (leftPlaceholder == null)
             {
-                throw new ArgumentNullException("leftPlaceholder");
+                throw new ArgumentNullException(nameof(leftPlaceholder));
             }
             if (rightPlaceholder == null)
             {
-                throw new ArgumentNullException("rightPlaceholder");
+                throw new ArgumentNullException(nameof(rightPlaceholder));
             }
 
             // Make the path absolute if necessary.

@@ -70,7 +70,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("ILMerge: Could not locate executable.", result.Message);
+                Assert.Equal("ILMerge: Could not locate executable.", result?.Message);
             }
 
             [Theory]
@@ -161,7 +161,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("ILMerge: Process was not started.", result.Message);
+                Assert.Equal("ILMerge: Process was not started.", result?.Message);
             }
 
             [Fact]
@@ -176,7 +176,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("ILMerge: Process returned an error (exit code 1).", result.Message);
+                Assert.Equal("ILMerge: Process returned an error (exit code 1).", result?.Message);
             }
 
             [Fact]

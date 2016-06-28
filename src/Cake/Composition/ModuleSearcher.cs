@@ -11,6 +11,7 @@ using Cake.Core.Annotations;
 using Cake.Core.Composition;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Polyfill;
 
 namespace Cake.Composition
 {
@@ -41,65 +42,43 @@ namespace Cake.Composition
             var files = root.GetFiles("Cake.*.Module.dll", SearchScope.Recursive);
             foreach (var file in files)
             {
-                if (ShouldLoadModule(file.Path))
+                var module = LoadModule(file.Path);
+                if (module != null)
                 {
-                    var module = LoadModule(file.Path);
-                    if (module != null)
-                    {
-                        result.Add(module);
-                    }
+                    result.Add(module);
                 }
             }
 
             return result;
         }
 
-        private static bool ShouldLoadModule(FilePath path)
+        private Type LoadModule(FilePath path)
         {
             try
             {
-                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
-                var assembly = Assembly.ReflectionOnlyLoadFrom(path.FullPath);
-                var attributes = CustomAttributeData.GetCustomAttributes(assembly);
-                foreach (var attribute in attributes)
+                // Load the assembly.
+                var assembly = AssemblyHelper.LoadFromPath(path);
+
+                var attribute = assembly.GetCustomAttributes<CakeModuleAttribute>().FirstOrDefault();
+                if (attribute == null)
                 {
-                    if (attribute.AttributeType.FullName == typeof(CakeModuleAttribute).FullName)
-                    {
-                        return true;
-                    }
+                    _log.Warning("The assembly '{0}' does not have module metadata.", path.FullPath);
+                    return null;
                 }
-                return false;
-            }
-            finally
-            {
-                // Unregister reflection-only assembly resolve.
-                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
-            }
-        }
 
-        private static Assembly CurrentDomain_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            return Assembly.ReflectionOnlyLoad(args.Name);
-        }
+                if (!typeof(ICakeModule).IsAssignableFrom(attribute.ModuleType))
+                {
+                    _log.Warning("The module type '{0}' is not an actual module.", attribute.ModuleType.FullName);
+                    return null;
+                }
 
-        private Type LoadModule(FilePath path)
-        {
-            var assembly = Assembly.LoadFrom(path.FullPath);
-
-            var attribute = assembly.GetCustomAttributes<CakeModuleAttribute>().FirstOrDefault();
-            if (attribute == null)
-            {
-                _log.Warning("The assembly '{0}' does not have module metadata.", path.FullPath);
-                return null;
-            }
-
-            if (!typeof(ICakeModule).IsAssignableFrom(attribute.ModuleType))
-            {
-                _log.Warning("The module type '{0}' is not an actual module.", attribute.ModuleType.FullName);
                 return attribute.ModuleType;
             }
-
-            return attribute.ModuleType;
+            catch
+            {
+                _log.Warning("Could not load module '{0}'.", path.FullPath);
+                return null;
+            }
         }
     }
 }

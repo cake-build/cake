@@ -46,12 +46,12 @@ namespace Cake.Common.Tools.NuGet.SetProxy
         {
             if (string.IsNullOrWhiteSpace(url))
             {
-                throw new ArgumentNullException("url");
+                throw new ArgumentNullException(nameof(url));
             }
 
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             string output = null;

@@ -43,15 +43,15 @@ namespace Cake.Common.Tools.ILRepack
         {
             if (outputAssemblyPath == null)
             {
-                throw new ArgumentNullException("outputAssemblyPath");
+                throw new ArgumentNullException(nameof(outputAssemblyPath));
             }
             if (primaryAssemblyPath == null)
             {
-                throw new ArgumentNullException("primaryAssemblyPath");
+                throw new ArgumentNullException(nameof(primaryAssemblyPath));
             }
             if (assemblyPaths == null)
             {
-                throw new ArgumentNullException("assemblyPaths");
+                throw new ArgumentNullException(nameof(assemblyPaths));
             }
 
             settings = settings ?? new ILRepackSettings();

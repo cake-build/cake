@@ -20,7 +20,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 // When
                 var result = info.WorkflowId;
 
-                //Then
+                // Then
                 Assert.Equal("Build & Test Cake on BitRise", result);
             }
         }
@@ -36,7 +36,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 // When
                 var result = info.WorkflowTitle;
 
-                //Then
+                // Then
                 Assert.Equal("Build & Test Cake on BitRise", result);
             }
         }

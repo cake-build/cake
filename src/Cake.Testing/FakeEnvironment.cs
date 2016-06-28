@@ -16,8 +16,6 @@ namespace Cake.Testing
     /// </summary>
     public sealed class FakeEnvironment : ICakeEnvironment
     {
-        private readonly FakePlatform _platform;
-        private readonly FakeRuntime _runtime;
         private readonly Dictionary<string, string> _environmentVariables;
         private readonly Dictionary<SpecialPath, DirectoryPath> _specialPaths;
 
@@ -37,19 +35,25 @@ namespace Cake.Testing
         /// Gets the platform Cake is running on.
         /// </summary>
         /// <value>The platform Cake is running on.</value>
-        public ICakePlatform Platform
-        {
-            get { return _platform; }
-        }
+        ICakePlatform ICakeEnvironment.Platform => Platform;
+
+        /// <summary>
+        /// Gets the platform Cake is running on.
+        /// </summary>
+        /// <value>The platform Cake is running on.</value>
+        public FakePlatform Platform { get; }
 
         /// <summary>
         /// Gets the runtime Cake is running in.
         /// </summary>
         /// <value>The runtime Cake is running in.</value>
-        public ICakeRuntime Runtime
-        {
-            get { return _runtime; }
-        }
+        ICakeRuntime ICakeEnvironment.Runtime => Runtime;
+
+        /// <summary>
+        /// Gets the runtime Cake is running in.
+        /// </summary>
+        /// <value>The runtime Cake is running in.</value>
+        public FakeRuntime Runtime { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FakeEnvironment"/> class.
@@ -58,8 +62,8 @@ namespace Cake.Testing
         /// <param name="is64Bit">if set to <c>true</c>, the platform is 64 bit.</param>
         public FakeEnvironment(PlatformFamily family, bool is64Bit = true)
         {
-            _platform = new FakePlatform(family, is64Bit);
-            _runtime = new FakeRuntime();
+            Platform = new FakePlatform(family, is64Bit);
+            Runtime = new FakeRuntime();
             _environmentVariables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _specialPaths = new Dictionary<SpecialPath, DirectoryPath>();
         }
@@ -138,7 +142,7 @@ namespace Cake.Testing
         /// <param name="is64Bit">if set to <c>true</c>, this is a 64-bit operative system.</param>
         public void ChangeOperativeSystemBitness(bool is64Bit)
         {
-            _platform.Is64Bit = is64Bit;
+            Platform.Is64Bit = is64Bit;
         }
 
         /// <summary>
@@ -167,7 +171,7 @@ namespace Cake.Testing
         /// <param name="targetFramework">The target framework.</param>
         public void SetTargetFramework(FrameworkName targetFramework)
         {
-            _runtime.TargetFramework = targetFramework;
+            Runtime.TargetFramework = targetFramework;
         }
 
         /// <summary>
@@ -209,7 +213,7 @@ namespace Cake.Testing
         [Obsolete("Please use FakeEnvironment.Runtime.TargetFramework instead.")]
         public FrameworkName GetTargetFramework()
         {
-            return _runtime.TargetFramework;
+            return Runtime.TargetFramework;
         }
     }
 }

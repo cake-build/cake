@@ -11,52 +11,30 @@ namespace Cake.Common.Solution
     /// </summary>
     public class SolutionProject
     {
-        private readonly string _id;
-        private readonly string _name;
-        private readonly FilePath _path;
-        private readonly string _type;
-        private SolutionProject _parent;
-
         /// <summary>
         /// Gets the project identity.
         /// </summary>
-        public string Id
-        {
-            get { return _id; }
-        }
+        public string Id { get; }
 
         /// <summary>
         /// Gets the project name.
         /// </summary>
-        public string Name
-        {
-            get { return _name; }
-        }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the project path.
         /// </summary>
-        public FilePath Path
-        {
-            get { return _path; }
-        }
+        public FilePath Path { get; }
 
         /// <summary>
         /// Gets the project type identity.
         /// </summary>
-        public string Type
-        {
-            get { return _type; }
-        }
+        public string Type { get; }
 
         /// <summary>
         /// Gets the parent project if any, otherwise null.
         /// </summary>
-        public SolutionProject Parent
-        {
-            get { return _parent; }
-            internal set { _parent = value;  }
-        }
+        public SolutionProject Parent { get; internal set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SolutionProject"/> class.
@@ -67,10 +45,10 @@ namespace Cake.Common.Solution
         /// <param name="type">The project type identity.</param>
         public SolutionProject(string id, string name, FilePath path, string type)
         {
-            _id = id;
-            _name = name;
-            _path = path;
-            _type = type;
+            Id = id;
+            Name = name;
+            Path = path;
+            Type = type;
         }
     }
 }

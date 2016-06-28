@@ -14,7 +14,6 @@ namespace Cake.Common.Build.Jenkins
     public sealed class JenkinsProvider : IJenkinsProvider
     {
         private readonly ICakeEnvironment _environment;
-        private readonly JenkinsEnvironmentInfo _jenkinsEnvironment;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JenkinsProvider"/> class.
@@ -24,11 +23,11 @@ namespace Cake.Common.Build.Jenkins
         {
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
 
             _environment = environment;
-            _jenkinsEnvironment = new JenkinsEnvironmentInfo(_environment);
+            Environment = new JenkinsEnvironmentInfo(_environment);
         }
 
         /// <summary>
@@ -37,10 +36,7 @@ namespace Cake.Common.Build.Jenkins
         /// <value>
         /// <c>true</c> if this instance is running on jenkins; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnJenkins
-        {
-            get { return !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("JENKINS_URL")); }
-        }
+        public bool IsRunningOnJenkins => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("JENKINS_URL"));
 
         /// <summary>
         /// Gets the Jenkins environment.
@@ -48,9 +44,6 @@ namespace Cake.Common.Build.Jenkins
         /// <value>
         /// The Jenkins environment.
         /// </value>
-        public JenkinsEnvironmentInfo Environment
-        {
-            get { return _jenkinsEnvironment; }
-        }
+        public JenkinsEnvironmentInfo Environment { get; }
     }
 }

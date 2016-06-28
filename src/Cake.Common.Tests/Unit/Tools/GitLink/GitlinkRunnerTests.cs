@@ -54,7 +54,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitLink
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("GitLink: Process was not started.", result.Message);
+                Assert.Equal("GitLink: Process was not started.", result?.Message);
             }
 
             [Fact]
@@ -69,7 +69,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitLink
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("GitLink: Process returned an error (exit code 1).", result.Message);
+                Assert.Equal("GitLink: Process returned an error (exit code 1).", result?.Message);
             }
 
             [Fact]

@@ -28,11 +28,11 @@ namespace Cake.Common.Solution.Project
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             _fileSystem = fileSystem;
             _environment = environment;
@@ -47,7 +47,7 @@ namespace Cake.Common.Solution.Project
         {
             if (projectPath == null)
             {
-                throw new ArgumentNullException("projectPath");
+                throw new ArgumentNullException(nameof(projectPath));
             }
 
             if (projectPath.IsRelative)
@@ -162,12 +162,12 @@ namespace Cake.Common.Solution.Project
                  select new ProjectAssemblyReference
                  {
                      Include = includeValue,
-                     HintPath = hintPathElement == null || string.IsNullOrEmpty(hintPathElement.Value) 
+                     HintPath = string.IsNullOrEmpty(hintPathElement?.Value)
                         ? null : rootPath.CombineWithFilePath(hintPathElement.Value),
-                     Name = nameElement == null ? null : nameElement.Value,
-                     FusionName = fusionNameElement == null ? null : fusionNameElement.Value,
+                     Name = nameElement?.Value,
+                     FusionName = fusionNameElement?.Value,
                      SpecificVersion = specificVersionElement == null ? (bool?)null : bool.Parse(specificVersionElement.Value),
-                     Aliases = aliasesElement == null ? null : aliasesElement.Value,
+                     Aliases = aliasesElement?.Value,
                      Private = privateElement == null ? (bool?)null : bool.Parse(privateElement.Value)
                  }).ToArray();
 
@@ -187,9 +187,9 @@ namespace Cake.Common.Solution.Project
                  {
                      FilePath = filePath,
                      RelativePath = value,
-                     Name = nameElement == null ? null : nameElement.Value,
-                     Project = projectElement == null ? null : projectElement.Value,
-                     Package = packageElement == null || string.IsNullOrEmpty(packageElement.Value) 
+                     Name = nameElement?.Value,
+                     Project = projectElement?.Value,
+                     Package = string.IsNullOrEmpty(packageElement?.Value)
                         ? null : rootPath.CombineWithFilePath(packageElement.Value)
                  }).ToArray();
 

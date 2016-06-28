@@ -11,8 +11,6 @@ namespace Cake.Core
     /// </summary>
     public sealed class TaskSetupContext : CakeContextAdapter, ITaskSetupContext
     {
-        private readonly ICakeTaskInfo _task;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskSetupContext"/> class.
         /// </summary>
@@ -23,10 +21,10 @@ namespace Cake.Core
         {
             if (task == null)
             {
-                throw new ArgumentNullException("task");
+                throw new ArgumentNullException(nameof(task));
             }
 
-            _task = task;
+            Task = task;
         }
 
         /// <summary>
@@ -35,9 +33,6 @@ namespace Cake.Core
         /// <value>
         /// The task.
         /// </value>
-        public ICakeTaskInfo Task
-        {
-            get { return _task; }
-        }
+        public ICakeTaskInfo Task { get; }
     }
 }

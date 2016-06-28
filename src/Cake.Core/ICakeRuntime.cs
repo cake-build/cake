@@ -23,5 +23,13 @@ namespace Cake.Core
         /// </summary>
         /// <returns>The Cake.exe version.</returns>
         Version CakeVersion { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether we're running on CoreClr.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if we're runnning on CoreClr; otherwise, <c>false</c>.
+        /// </value>
+        bool IsCoreClr { get; }
     }
 }

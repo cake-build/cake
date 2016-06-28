@@ -17,8 +17,6 @@ namespace Cake.Testing.Fixtures
         where TToolSettings : ToolSettings, new()
         where TFixtureResult : ToolFixtureResult
     {
-        private readonly FilePath _defaultToolPath;
-
         /// <summary>
         /// Gets or sets the file system.
         /// </summary>
@@ -65,10 +63,7 @@ namespace Cake.Testing.Fixtures
         /// Gets the default tool path.
         /// </summary>
         /// <value>The default tool path.</value>
-        public FilePath DefaultToolPath
-        {
-            get { return _defaultToolPath; }
-        }
+        public FilePath DefaultToolPath { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ToolFixture{TToolSettings, TFixtureResult}"/> class.
@@ -86,8 +81,8 @@ namespace Cake.Testing.Fixtures
             Tools = new ToolLocator(Environment, new ToolRepository(Environment), new ToolResolutionStrategy(FileSystem, Environment, Globber, Configuration));
 
             // ReSharper disable once VirtualMemberCallInContructor
-            _defaultToolPath = GetDefaultToolPath(toolFilename);
-            FileSystem.CreateFile(_defaultToolPath);
+            DefaultToolPath = GetDefaultToolPath(toolFilename);
+            FileSystem.CreateFile(DefaultToolPath);
         }
 
         /// <summary>

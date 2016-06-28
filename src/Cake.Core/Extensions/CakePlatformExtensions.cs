@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using Cake.Core.IO;
+using Cake.Core.Polyfill;
 
 // ReSharper disable once CheckNamespace
 namespace Cake.Core
@@ -22,9 +22,9 @@ namespace Cake.Core
         {
             if (platform == null)
             {
-                throw new ArgumentNullException("platform");
+                throw new ArgumentNullException(nameof(platform));
             }
-            return Machine.IsUnix(platform.Family);
+            return EnvironmentHelper.IsUnix(platform.Family);
         }
     }
 }

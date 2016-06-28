@@ -46,19 +46,19 @@ namespace Cake.Common.Tools.DotCover.Cover
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (action == null)
             {
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             }
             if (outputPath == null)
             {
-                throw new ArgumentNullException("outputPath");
+                throw new ArgumentNullException(nameof(outputPath));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             // Run the tool using the interceptor.
@@ -97,14 +97,11 @@ namespace Cake.Common.Tools.DotCover.Cover
             builder.AppendSwitch("/TargetExecutable", "=", context.FilePath.FullPath.Quote());
 
             // The arguments to the target application.
-            if (context.Settings != null && context.Settings.Arguments != null)
+            var arguments = context.Settings?.Arguments?.Render();
+            if (!string.IsNullOrWhiteSpace(arguments))
             {
-                var arguments = context.Settings.Arguments.Render();
-                if (!string.IsNullOrWhiteSpace(arguments))
-                {
-                    arguments = arguments.Replace("\"", "\\\"");
-                    builder.AppendSwitch("/TargetArguments", "=", arguments.Quote());
-                }
+                arguments = arguments.Replace("\"", "\\\"");
+                builder.AppendSwitch("/TargetArguments", "=", arguments.Quote());
             }
 
             // Set the output file.

@@ -20,7 +20,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 // When
                 var result = info.SourceDirectory;
 
-                //Then
+                // Then
                 Assert.Equal("/Users/vagrant/git", result);
             }
         }
@@ -36,7 +36,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 // When
                 var result = info.DeployDirectory;
 
-                //Then
+                // Then
                 Assert.Equal("/Users/vagrant/deploy", result);
             }
         }

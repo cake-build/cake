@@ -25,18 +25,20 @@ namespace Cake.Testing
         {
             if (file == null)
             {
-                throw new ArgumentNullException("file");
+                throw new ArgumentNullException(nameof(file));
             }
             if (content == null)
             {
-                throw new ArgumentNullException("content");
+                throw new ArgumentNullException(nameof(content));
             }
             using (var stream = file.Open(FileMode.Create, FileAccess.Write, FileShare.None))
             using (var writer = new StreamWriter(stream))
             {
                 writer.Write(content);
+#if !NETCORE
                 writer.Close();
                 stream.Close();
+#endif
                 return file;
             }
         }
@@ -51,7 +53,7 @@ namespace Cake.Testing
         {
             if (file == null)
             {
-                throw new ArgumentNullException("file");
+                throw new ArgumentNullException(nameof(file));
             }
             if (!file.Exists)
             {
@@ -73,7 +75,7 @@ namespace Cake.Testing
         {
             if (file == null)
             {
-                throw new ArgumentNullException("file");
+                throw new ArgumentNullException(nameof(file));
             }
             file.Hidden = true;
             return file;

@@ -39,7 +39,7 @@ namespace Cake.Common.Build
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             var appVeyorProvider = new AppVeyorProvider(context.Environment, context.ProcessRunner, context.Log);
             var teamCityProvider = new TeamCityProvider(context.Environment, context.Log);
@@ -72,7 +72,7 @@ namespace Cake.Common.Build
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var buildSystem = context.BuildSystem();
@@ -95,7 +95,7 @@ namespace Cake.Common.Build
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var buildSystem = context.BuildSystem();
@@ -118,7 +118,7 @@ namespace Cake.Common.Build
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var buildSystem = context.BuildSystem();
@@ -141,7 +141,7 @@ namespace Cake.Common.Build
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var buildSystem = context.BuildSystem();
@@ -166,7 +166,7 @@ namespace Cake.Common.Build
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var buildSystem = context.BuildSystem();
@@ -191,7 +191,7 @@ namespace Cake.Common.Build
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var buildSystem = context.BuildSystem();
@@ -216,7 +216,7 @@ namespace Cake.Common.Build
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var buildSystem = context.BuildSystem();
@@ -241,7 +241,7 @@ namespace Cake.Common.Build
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var buildSystem = context.BuildSystem();
@@ -266,7 +266,7 @@ namespace Cake.Common.Build
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var buildSystem = context.BuildSystem();

@@ -13,16 +13,11 @@ namespace Cake.Core
     public sealed class CakeTaskBuilder<T>
         where T : CakeTask
     {
-        private readonly T _task;
-
         /// <summary>
         /// Gets the task being configured.
         /// </summary>
         /// <value>The task being configured.</value>
-        public T Task
-        {
-            get { return _task; }
-        }
+        public T Task { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeTaskBuilder{T}"/> class.
@@ -32,9 +27,9 @@ namespace Cake.Core
         {
             if (task == null)
             {
-                throw new ArgumentNullException("task");
+                throw new ArgumentNullException(nameof(task));
             }
-            _task = task;
+            Task = task;
         }
     }
 }

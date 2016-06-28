@@ -123,7 +123,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Cannot combine a directory path with an absolute file path.", result.Message);
+                Assert.Equal("Cannot combine a directory path with an absolute file path.", result?.Message);
             }
         }
 
@@ -173,7 +173,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Cannot combine a directory path with an absolute directory path.", result.Message);
+                Assert.Equal("Cannot combine a directory path with an absolute directory path.", result?.Message);
             }
         }
 
@@ -189,7 +189,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                     // When
                     var result = Record.Exception(
-                        () => path.MakeAbsolute((ICakeEnvironment) null));
+                        () => path.MakeAbsolute((ICakeEnvironment)null));
 
                     // Then
                     Assert.IsArgumentNullException(result, "environment");
@@ -252,7 +252,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<CakeException>(result);
-                    Assert.Equal("The provided path cannot be relative.", result.Message);
+                    Assert.Equal("The provided path cannot be relative.", result?.Message);
                 }
 
                 [Fact]
@@ -322,7 +322,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                         // Then
                         Assert.IsType<InvalidOperationException>(result);
-                        Assert.Equal("Paths must share a common prefix.", result.Message);
+                        Assert.Equal("Paths must share a common prefix.", result?.Message);
                     }
 
                     [WindowsFact]
@@ -349,7 +349,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                         // Then
                         Assert.IsType<InvalidOperationException>(result);
-                        Assert.Equal("Source path must be an absolute path.", result.Message);
+                        Assert.Equal("Source path must be an absolute path.", result?.Message);
                     }
 
                     [WindowsFact]
@@ -363,7 +363,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                         // Then
                         Assert.IsType<InvalidOperationException>(result);
-                        Assert.Equal("Target path must be an absolute path.", result.Message);
+                        Assert.Equal("Target path must be an absolute path.", result?.Message);
                     }
                 }
 
@@ -402,7 +402,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                         // Then
                         Assert.IsType<InvalidOperationException>(result);
-                        Assert.Equal("Paths must share a common prefix.", result.Message);
+                        Assert.Equal("Paths must share a common prefix.", result?.Message);
                     }
 
                     [Fact]
@@ -429,7 +429,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                         // Then
                         Assert.IsType<InvalidOperationException>(result);
-                        Assert.Equal("Source path must be an absolute path.", result.Message);
+                        Assert.Equal("Source path must be an absolute path.", result?.Message);
                     }
 
                     [Fact]
@@ -443,7 +443,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                         // Then
                         Assert.IsType<InvalidOperationException>(result);
-                        Assert.Equal("Target path must be an absolute path.", result.Message);
+                        Assert.Equal("Target path must be an absolute path.", result?.Message);
                     }
                 }
             }
@@ -485,7 +485,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                         // Then
                         Assert.IsType<InvalidOperationException>(result);
-                        Assert.Equal("Paths must share a common prefix.", result.Message);
+                        Assert.Equal("Paths must share a common prefix.", result?.Message);
                     }
 
                     [WindowsFact]
@@ -512,7 +512,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                         // Then
                         Assert.IsType<InvalidOperationException>(result);
-                        Assert.Equal("Source path must be an absolute path.", result.Message);
+                        Assert.Equal("Source path must be an absolute path.", result?.Message);
                     }
 
                     [WindowsFact]
@@ -526,7 +526,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                         // Then
                         Assert.IsType<InvalidOperationException>(result);
-                        Assert.Equal("Target path must be an absolute path.", result.Message);
+                        Assert.Equal("Target path must be an absolute path.", result?.Message);
                     }
                 }
 
@@ -565,7 +565,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                         // Then
                         Assert.IsType<InvalidOperationException>(result);
-                        Assert.Equal("Paths must share a common prefix.", result.Message);
+                        Assert.Equal("Paths must share a common prefix.", result?.Message);
                     }
 
                     [Fact]
@@ -592,7 +592,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                         // Then
                         Assert.IsType<InvalidOperationException>(result);
-                        Assert.Equal("Source path must be an absolute path.", result.Message);
+                        Assert.Equal("Source path must be an absolute path.", result?.Message);
                     }
 
                     [Fact]
@@ -606,7 +606,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                         // Then
                         Assert.IsType<InvalidOperationException>(result);
-                        Assert.Equal("Target path must be an absolute path.", result.Message);
+                        Assert.Equal("Target path must be an absolute path.", result?.Message);
                     }
                 }
             }

@@ -14,22 +14,15 @@ namespace Cake.Core.IO.Globbing.Nodes
     {
         private readonly List<GlobToken> _tokens;
         private readonly Regex _regex;
-        private readonly bool _isIdentifier;
 
-        public IReadOnlyList<GlobToken> Tokens
-        {
-            get { return _tokens; }
-        }
+        public IReadOnlyList<GlobToken> Tokens => _tokens;
 
-        public bool IsIdentifier
-        {
-            get { return _isIdentifier; }
-        }
+        public bool IsIdentifier { get; }
 
         public PathSegment(List<GlobToken> tokens, RegexOptions options)
         {
             _tokens = tokens;
-            _isIdentifier = _tokens.Count == 1 && _tokens[0].Kind == GlobTokenKind.Identifier;
+            IsIdentifier = _tokens.Count == 1 && _tokens[0].Kind == GlobTokenKind.Identifier;
             _regex = CreateRegex(tokens, options);
         }
 

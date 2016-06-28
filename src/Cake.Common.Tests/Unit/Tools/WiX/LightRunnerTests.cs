@@ -43,7 +43,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
 
                 // Then
                 Assert.IsType<ArgumentException>(result);
-                Assert.Equal("objectFiles", ((ArgumentException)result).ParamName);
+                Assert.Equal("objectFiles", ((ArgumentException)result)?.ParamName);
             }
 
             [Fact]
@@ -72,7 +72,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Light: Could not locate executable.", result.Message);
+                Assert.Equal("Light: Could not locate executable.", result?.Message);
             }
 
             [Theory]
@@ -163,7 +163,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 // Then
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Light: Process was not started.", result.Message);
+                Assert.Equal("Light: Process was not started.", result?.Message);
             }
 
             [Fact]
@@ -179,7 +179,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 // Then
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Light: Process returned an error (exit code 1).", result.Message);
+                Assert.Equal("Light: Process returned an error (exit code 1).", result?.Message);
             }
 
             [Fact]

@@ -27,7 +27,7 @@ namespace Cake.Common.Tests.Unit.Tools.Roundhouse
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Roundhouse: Could not locate executable.", result.Message);
+                Assert.Equal("Roundhouse: Could not locate executable.", result?.Message);
             }
 
             [Theory]
@@ -101,7 +101,7 @@ namespace Cake.Common.Tests.Unit.Tools.Roundhouse
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Roundhouse: Process was not started.", result.Message);
+                Assert.Equal("Roundhouse: Process was not started.", result?.Message);
             }
 
             [Fact]
@@ -116,7 +116,7 @@ namespace Cake.Common.Tests.Unit.Tools.Roundhouse
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Roundhouse: Process returned an error (exit code 1).", result.Message);
+                Assert.Equal("Roundhouse: Process returned an error (exit code 1).", result?.Message);
             }
 
             [Fact]

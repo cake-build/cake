@@ -271,12 +271,13 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new DirectoryPath[] {
+                    var paths = new DirectoryPath[]
+                    {
                         "/Temp/Hello", "/Temp/Goodbye"
                     };
 
                     // When
-                    Record.Exception(() => DirectoryAliases.CleanDirectories(context, paths));
+                    DirectoryAliases.CleanDirectories(context, paths);
 
                     // Then
                     Assert.Empty(fixture.FileSystem.GetDirectory(paths[0]).GetFiles("*", SearchScope.Recursive));
@@ -291,7 +292,8 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new DirectoryPath[] {
+                    var paths = new DirectoryPath[]
+                    {
                         "/Temp/Hello", "/Temp/Goodbye"
                     };
 
@@ -311,7 +313,8 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new DirectoryPath[] {
+                    var paths = new DirectoryPath[]
+                    {
                         "/Temp/Hello", "/NonExisting"
                     };
 
@@ -361,12 +364,13 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new[] {
+                    var paths = new[]
+                    {
                         "/Temp/Hello", "/Temp/Goodbye"
                     };
 
                     // When
-                    Record.Exception(() => DirectoryAliases.CleanDirectories(context, paths));
+                    DirectoryAliases.CleanDirectories(context, paths);
 
                     // Then
                     Assert.Empty(fixture.FileSystem.GetDirectory(paths[0]).GetFiles("*", SearchScope.Recursive));
@@ -381,7 +385,8 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new[] {
+                    var paths = new[]
+                    {
                         "/Temp/Hello", "/Temp/Goodbye"
                     };
 
@@ -401,7 +406,8 @@ namespace Cake.Common.Tests.Unit.IO
                     var context = Substitute.For<ICakeContext>();
                     context.FileSystem.Returns(fixture.FileSystem);
 
-                    var paths = new[] {
+                    var paths = new[]
+                    {
                         "/Temp/Hello", "/NonExisting"
                     };
 
@@ -628,12 +634,11 @@ namespace Cake.Common.Tests.Unit.IO
                 context.FileSystem.Returns(fixture.FileSystem);
 
                 // When
-                var result = Record.Exception(() =>
-                    context.DeleteDirectory("/Temp/DoNotExist"));
+                var result = Record.Exception(() => context.DeleteDirectory("/Temp/DoNotExist"));
 
                 // Then
                 Assert.IsType<IOException>(result);
-                Assert.Equal("The directory '/Temp/DoNotExist' do not exist.", result.Message);
+                Assert.Equal("The directory '/Temp/DoNotExist' do not exist.", result?.Message);
             }
 
             [Fact]
@@ -645,12 +650,11 @@ namespace Cake.Common.Tests.Unit.IO
                 context.FileSystem.Returns(fixture.FileSystem);
 
                 // When
-                var result = Record.Exception(() =>
-                    context.DeleteDirectory("/Temp/HasDirectories"));
+                var result = Record.Exception(() => context.DeleteDirectory("/Temp/HasDirectories"));
 
                 // Then
                 Assert.IsType<IOException>(result);
-                Assert.Equal("Cannot delete directory '/Temp/HasDirectories' without recursion since it's not empty.", result.Message);
+                Assert.Equal("Cannot delete directory '/Temp/HasDirectories' without recursion since it's not empty.", result?.Message);
             }
 
             [Fact]
@@ -662,12 +666,11 @@ namespace Cake.Common.Tests.Unit.IO
                 context.FileSystem.Returns(fixture.FileSystem);
 
                 // When
-                var result = Record.Exception(() =>
-                    context.DeleteDirectory("/Temp/HasFiles"));
+                var result = Record.Exception(() => context.DeleteDirectory("/Temp/HasFiles"));
 
                 // Then
                 Assert.IsType<IOException>(result);
-                Assert.Equal("Cannot delete directory '/Temp/HasFiles' without recursion since it's not empty.", result.Message);
+                Assert.Equal("Cannot delete directory '/Temp/HasFiles' without recursion since it's not empty.", result?.Message);
             }
 
             [Fact]
@@ -744,12 +747,11 @@ namespace Cake.Common.Tests.Unit.IO
                     var paths = new DirectoryPath[] { "/Temp/DoNotExist" };
 
                     // When
-                    var result = Record.Exception(() =>
-                        context.DeleteDirectories(paths));
+                    var result = Record.Exception(() => context.DeleteDirectories(paths));
 
                     // Then
                     Assert.IsType<IOException>(result);
-                    Assert.Equal("The directory '/Temp/DoNotExist' do not exist.", result.Message);
+                    Assert.Equal("The directory '/Temp/DoNotExist' do not exist.", result?.Message);
                 }
 
                 [Fact]
@@ -768,7 +770,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<IOException>(result);
-                    Assert.Equal("Cannot delete directory '/Temp/HasDirectories' without recursion since it's not empty.", result.Message);
+                    Assert.Equal("Cannot delete directory '/Temp/HasDirectories' without recursion since it's not empty.", result?.Message);
                 }
 
                 [Fact]
@@ -787,7 +789,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<IOException>(result);
-                    Assert.Equal("Cannot delete directory '/Temp/HasFiles' without recursion since it's not empty.", result.Message);
+                    Assert.Equal("Cannot delete directory '/Temp/HasFiles' without recursion since it's not empty.", result?.Message);
                 }
 
                 [Fact]
@@ -873,7 +875,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<IOException>(result);
-                    Assert.Equal("The directory '/Temp/DoNotExist' do not exist.", result.Message);
+                    Assert.Equal("The directory '/Temp/DoNotExist' do not exist.", result?.Message);
                 }
 
                 [Fact]
@@ -892,7 +894,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<IOException>(result);
-                    Assert.Equal("Cannot delete directory '/Temp/HasDirectories' without recursion since it's not empty.", result.Message);
+                    Assert.Equal("Cannot delete directory '/Temp/HasDirectories' without recursion since it's not empty.", result?.Message);
                 }
 
                 [Fact]
@@ -911,7 +913,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<IOException>(result);
-                    Assert.Equal("Cannot delete directory '/Temp/HasFiles' without recursion since it's not empty.", result.Message);
+                    Assert.Equal("Cannot delete directory '/Temp/HasFiles' without recursion since it's not empty.", result?.Message);
                 }
 
                 [Fact]
@@ -967,7 +969,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("context", ((ArgumentNullException)result).ParamName);
+                Assert.Equal("context", ((ArgumentNullException)result)?.ParamName);
             }
 
             [Fact]
@@ -982,7 +984,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("source", ((ArgumentNullException)result).ParamName);
+                Assert.Equal("source", ((ArgumentNullException)result)?.ParamName);
             }
 
             [Fact]
@@ -998,7 +1000,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("destination", ((ArgumentNullException)result).ParamName);
+                Assert.Equal("destination", ((ArgumentNullException)result)?.ParamName);
             }
 
             [Fact]
@@ -1017,7 +1019,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 Assert.IsType<DirectoryNotFoundException>(result);
-                Assert.Equal("Source directory does not exist or could not be found: /Temp", result.Message);
+                Assert.Equal("Source directory does not exist or could not be found: /Temp", result?.Message);
             }
 
             [Fact]

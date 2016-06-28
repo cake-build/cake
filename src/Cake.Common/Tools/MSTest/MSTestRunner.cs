@@ -45,11 +45,11 @@ namespace Cake.Common.Tools.MSTest
         {
             if (assemblyPaths == null)
             {
-                throw new ArgumentNullException("assemblyPaths");
+                throw new ArgumentNullException(nameof(assemblyPaths));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetArguments(assemblyPaths, settings));

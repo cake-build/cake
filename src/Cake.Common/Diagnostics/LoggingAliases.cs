@@ -31,7 +31,7 @@ namespace Cake.Common.Diagnostics
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             context.Log.Error(format, args);
         }
@@ -52,7 +52,7 @@ namespace Cake.Common.Diagnostics
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             context.Log.Error(logAction);
         }
@@ -73,7 +73,7 @@ namespace Cake.Common.Diagnostics
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             context.Log.Warning(format, args);
         }
@@ -94,7 +94,7 @@ namespace Cake.Common.Diagnostics
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             context.Log.Warning(logAction);
         }
@@ -115,7 +115,7 @@ namespace Cake.Common.Diagnostics
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             context.Log.Information(format, args);
         }
@@ -136,7 +136,7 @@ namespace Cake.Common.Diagnostics
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             context.Log.Information(logAction);
         }
@@ -157,7 +157,7 @@ namespace Cake.Common.Diagnostics
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             context.Log.Verbose(format, args);
         }
@@ -178,7 +178,7 @@ namespace Cake.Common.Diagnostics
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             context.Log.Verbose(logAction);
         }
@@ -199,7 +199,7 @@ namespace Cake.Common.Diagnostics
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             context.Log.Debug(format, args);
         }
@@ -220,7 +220,7 @@ namespace Cake.Common.Diagnostics
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             context.Log.Debug(logAction);
         }

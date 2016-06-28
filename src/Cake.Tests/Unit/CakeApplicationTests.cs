@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Commands;
-using Cake.Core.Diagnostics;
 using Cake.Tests.Fixtures;
 using NSubstitute;
 using Xunit;

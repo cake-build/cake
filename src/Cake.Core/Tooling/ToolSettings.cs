@@ -47,7 +47,7 @@ namespace Cake.Core.Tooling
         /// <example>
         /// <para>Setting multiple tool arguments:</para>
         /// <code>
-        /// MSTest(pathPattern, new MSTestSettings() 
+        /// MSTest(pathPattern, new MSTestSettings()
         ///     { ArgumentCustomization = args=&gt;args.Append("/detail:errormessage")
         ///                                            .Append("/resultsfile:TestResults.trx") });
         /// </code>

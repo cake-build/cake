@@ -22,7 +22,7 @@ namespace Cake.Testing.Extensions
         {
             if (fakeLog == null)
             {
-                throw new ArgumentNullException("fakeLog");
+                throw new ArgumentNullException(nameof(fakeLog));
             }
 
             return fakeLog.Entries.Aggregate(

@@ -24,7 +24,7 @@ namespace Cake.Common.Tools.Fixie
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             IList<string> currentValue;

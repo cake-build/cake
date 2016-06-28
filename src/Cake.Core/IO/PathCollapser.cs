@@ -14,7 +14,7 @@ namespace Cake.Core.IO
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
             var stack = new Stack<string>();
             var segments = path.FullPath.Split('/', '\\');

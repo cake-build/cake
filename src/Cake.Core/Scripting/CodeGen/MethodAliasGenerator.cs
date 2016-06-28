@@ -28,7 +28,7 @@ namespace Cake.Core.Scripting.CodeGen
         {
             if (method == null)
             {
-                throw new ArgumentNullException("method");
+                throw new ArgumentNullException(nameof(method));
             }
 
             var isFunction = method.ReturnType != typeof(void);

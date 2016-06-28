@@ -8,7 +8,7 @@ using Cake.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
 
-namespace Cake.Tests.Unit.Scripting
+namespace Cake.Tests.Unit.Commands
 {
     public sealed class DebugCommandTests
     {

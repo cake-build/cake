@@ -9,11 +9,14 @@ namespace Cake.Common.Tools.OctopusDeploy
 {
     internal abstract class OctopusDeployArgumentBuilder<T> where T : OctopusDeploySettings
     {
-        protected readonly ICakeEnvironment Environment;
-        protected readonly ProcessArgumentBuilder Builder;
-        protected readonly T Settings;
         private readonly string _serverUrl;
         private readonly string _apiKey;
+
+        protected ICakeEnvironment Environment { get; }
+
+        protected ProcessArgumentBuilder Builder { get; }
+
+        protected T Settings { get; }
 
         protected OctopusDeployArgumentBuilder(ICakeEnvironment environment, T settings)
             : this(settings.Server, settings.ApiKey, environment, settings)
@@ -22,11 +25,12 @@ namespace Cake.Common.Tools.OctopusDeploy
 
         protected OctopusDeployArgumentBuilder(string server, string apiKey, ICakeEnvironment environment, T settings)
         {
-            Settings = settings;
             _serverUrl = server;
             _apiKey = apiKey;
+
             Environment = environment;
             Builder = new ProcessArgumentBuilder();
+            Settings = settings;
         }
 
         protected void AppendArgumentIfNotNull(string argumentName, string value)

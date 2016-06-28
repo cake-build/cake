@@ -43,7 +43,7 @@ namespace Cake.Core.Scripting.Processors
         {
             if (line == null)
             {
-                throw new ArgumentNullException("line");
+                throw new ArgumentNullException(nameof(line));
             }
             return line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
         }
@@ -57,7 +57,7 @@ namespace Cake.Core.Scripting.Processors
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
 
             // Get the script location.

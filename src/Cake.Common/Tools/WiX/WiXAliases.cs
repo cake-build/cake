@@ -47,7 +47,7 @@ namespace Cake.Common.Tools.WiX
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var files = context.Globber.GetFiles(pattern).ToArray();
@@ -82,7 +82,7 @@ namespace Cake.Common.Tools.WiX
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var runner = new CandleRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
@@ -109,7 +109,7 @@ namespace Cake.Common.Tools.WiX
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var files = context.Globber.GetFiles(pattern).ToArray();
@@ -143,7 +143,7 @@ namespace Cake.Common.Tools.WiX
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var runner = new LightRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
@@ -171,7 +171,7 @@ namespace Cake.Common.Tools.WiX
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var runner = new HeatRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
@@ -201,7 +201,7 @@ namespace Cake.Common.Tools.WiX
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var runner = new HeatRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
@@ -229,7 +229,7 @@ namespace Cake.Common.Tools.WiX
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var runner = new HeatRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
@@ -258,7 +258,7 @@ namespace Cake.Common.Tools.WiX
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var runner = new HeatRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
@@ -285,7 +285,7 @@ namespace Cake.Common.Tools.WiX
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var runner = new HeatRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
@@ -313,7 +313,7 @@ namespace Cake.Common.Tools.WiX
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var runner = new HeatRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);

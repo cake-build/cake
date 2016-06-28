@@ -12,36 +12,23 @@ namespace Cake.Testing.Fixtures
     /// </summary>
     public class ToolFixtureResult
     {
-        private readonly FilePath _path;
-        private readonly ProcessSettings _process;
-        private readonly string _args;
-
         /// <summary>
         /// Gets the tool path.
         /// </summary>
         /// <value>The tool path.</value>
-        public FilePath Path
-        {
-            get { return _path; }
-        }
+        public FilePath Path { get; }
 
         /// <summary>
         /// Gets the process settings.
         /// </summary>
         /// <value>The process settings.</value>
-        public ProcessSettings Process
-        {
-            get { return _process; }
-        }
+        public ProcessSettings Process { get; }
 
         /// <summary>
         /// Gets the arguments.
         /// </summary>
         /// <value>The arguments.</value>
-        public string Args
-        {
-            get { return _args; }
-        }
+        public string Args { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ToolFixtureResult"/> class.
@@ -52,15 +39,15 @@ namespace Cake.Testing.Fixtures
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
             if (process == null)
             {
-                throw new ArgumentNullException("process");
+                throw new ArgumentNullException(nameof(process));
             }
-            _path = path;
-            _args = process.Arguments.Render();
-            _process = process;
+            Path = path;
+            Args = process.Arguments.Render();
+            Process = process;
         }
     }
 }

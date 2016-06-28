@@ -88,12 +88,12 @@ namespace Cake.Common.Tools.DotNetCore
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (assemblyPath == null)
             {
-                throw new ArgumentNullException("assemblyPath");
+                throw new ArgumentNullException(nameof(assemblyPath));
             }
 
             if (settings == null)
@@ -196,7 +196,7 @@ namespace Cake.Common.Tools.DotNetCore
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (settings == null)
@@ -251,7 +251,7 @@ namespace Cake.Common.Tools.DotNetCore
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (settings == null)
@@ -305,7 +305,7 @@ namespace Cake.Common.Tools.DotNetCore
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (settings == null)
@@ -396,7 +396,7 @@ namespace Cake.Common.Tools.DotNetCore
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (settings == null)
@@ -451,7 +451,7 @@ namespace Cake.Common.Tools.DotNetCore
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (settings == null)
@@ -521,7 +521,7 @@ namespace Cake.Common.Tools.DotNetCore
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (settings == null)

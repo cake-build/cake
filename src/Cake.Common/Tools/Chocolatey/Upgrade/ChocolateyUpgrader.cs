@@ -42,11 +42,11 @@ namespace Cake.Common.Tools.Chocolatey.Upgrade
         {
             if (string.IsNullOrWhiteSpace(packageId))
             {
-                throw new ArgumentNullException("packageId");
+                throw new ArgumentNullException(nameof(packageId));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetArguments(packageId, settings));

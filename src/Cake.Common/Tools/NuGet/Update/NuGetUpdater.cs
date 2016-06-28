@@ -43,11 +43,11 @@ namespace Cake.Common.Tools.NuGet.Update
         {
             if (targetFile == null)
             {
-                throw new ArgumentNullException("targetFile");
+                throw new ArgumentNullException(nameof(targetFile));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             Run(settings, GetArguments(targetFile, settings));
         }

@@ -18,10 +18,7 @@ namespace Cake.Common.Build.BitbucketPipelines.Data
         /// <value>
         /// The SCM branch.
         /// </value>
-        public string Branch
-        {
-            get { return GetEnvironmentString("BITBUCKET_BRANCH"); }
-        }
+        public string Branch => GetEnvironmentString("BITBUCKET_BRANCH");
 
         /// <summary>
         /// Gets the tag on which the build was kicked off. This value is only available when tagged.
@@ -30,10 +27,7 @@ namespace Cake.Common.Build.BitbucketPipelines.Data
         /// <value>
         /// The SCM tag.
         /// </value>
-        public string Tag
-        {
-            get { return GetEnvironmentString("BITBUCKET_TAG"); }
-        }
+        public string Tag => GetEnvironmentString("BITBUCKET_TAG");
 
         /// <summary>
         /// Gets the commit hash of a commit that kicked off the build.
@@ -41,10 +35,7 @@ namespace Cake.Common.Build.BitbucketPipelines.Data
         /// <value>
         /// The SCM commit.
         /// </value>
-        public string Commit
-        {
-            get { return GetEnvironmentString("BITBUCKET_COMMIT"); }
-        }
+        public string Commit => GetEnvironmentString("BITBUCKET_COMMIT");
 
         /// <summary>
         /// Gets the name of the account in which the repository lives.
@@ -52,10 +43,7 @@ namespace Cake.Common.Build.BitbucketPipelines.Data
         /// <value>
         /// The repository owner account.
         /// </value>
-        public string RepoOwner
-        {
-            get { return GetEnvironmentString("BITBUCKET_REPO_OWNER"); }
-        }
+        public string RepoOwner => GetEnvironmentString("BITBUCKET_REPO_OWNER");
 
         /// <summary>
         /// Gets the URL-friendly version of a repository name.
@@ -63,10 +51,7 @@ namespace Cake.Common.Build.BitbucketPipelines.Data
         /// <value>
         /// The URL-friendly repository name.
         /// </value>
-        public string RepoSlug
-        {
-            get { return GetEnvironmentString("BITBUCKET_REPO_SLUG"); }
-        }
+        public string RepoSlug => GetEnvironmentString("BITBUCKET_REPO_SLUG");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BitbucketPipelinesRepositoryInfo"/> class.

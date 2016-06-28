@@ -13,10 +13,10 @@ namespace Cake.Common.Tools.NuGet.Pack
 {
     internal static class NuspecTransformer
     {
+        private const string NuSpecXsd = "http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd";
+
         private static readonly Dictionary<string, Func<NuGetPackSettings, string>> _mappings;
         private static readonly List<string> _cdataElements;
-
-        private const string NuSpecXsd = "http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd";
 
         static NuspecTransformer()
         {
@@ -167,7 +167,7 @@ namespace Cake.Common.Tools.NuGet.Pack
 
         private static string ToString(Uri value)
         {
-            return value == null ? null : value.ToString().TrimEnd('/');
+            return value?.ToString().TrimEnd('/');
         }
 
         private static string ToString(bool value)

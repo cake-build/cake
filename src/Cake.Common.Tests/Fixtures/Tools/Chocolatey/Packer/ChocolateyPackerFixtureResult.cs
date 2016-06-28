@@ -13,17 +13,12 @@ namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Packer
 {
     internal sealed class ChocolateyPackerFixtureResult : ToolFixtureResult
     {
-        private readonly string _nuspecContent;
-
-        public string NuspecContent
-        {
-            get { return _nuspecContent; }
-        }
+        public string NuspecContent { get; }
 
         public ChocolateyPackerFixtureResult(FakeFileSystem fileSystem, FilePath path, ProcessSettings process)
             : base(path, process)
         {
-            _nuspecContent = GetNuSpecContent(fileSystem, process);
+            NuspecContent = GetNuSpecContent(fileSystem, process);
         }
 
         private static string GetNuSpecContent(FakeFileSystem fileSystem, ProcessSettings process)

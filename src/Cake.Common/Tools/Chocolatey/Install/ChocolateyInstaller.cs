@@ -44,11 +44,11 @@ namespace Cake.Common.Tools.Chocolatey.Install
         {
             if (packageConfigPath == null)
             {
-                throw new ArgumentNullException("packageConfigPath");
+                throw new ArgumentNullException(nameof(packageConfigPath));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             var packageId = packageConfigPath.MakeAbsolute(_environment).FullPath;
@@ -65,11 +65,11 @@ namespace Cake.Common.Tools.Chocolatey.Install
         {
             if (string.IsNullOrWhiteSpace(packageId))
             {
-                throw new ArgumentNullException("packageId");
+                throw new ArgumentNullException(nameof(packageId));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetArguments(packageId, settings));

@@ -119,12 +119,12 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity
                 // Given
                 var fixture = new TeamCityFixture();
                 var teamCity = fixture.CreateTeamCityService();
-                
+
                 // When
                 teamCity.SetParameter("internal.artifactVersion", "1.2.3.4");
 
                 // Then
-                Assert.Equal("##teamcity[setParameter name='internal.artifactVersion' value='1.2.3.4']" + Environment.NewLine, 
+                Assert.Equal("##teamcity[setParameter name='internal.artifactVersion' value='1.2.3.4']" + Environment.NewLine,
                     fixture.Log.AggregateLogMessages());
             }
         }

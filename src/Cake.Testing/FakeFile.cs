@@ -15,23 +15,18 @@ namespace Cake.Testing
     public sealed class FakeFile : IFile
     {
         private readonly FakeFileSystemTree _tree;
-        private readonly FilePath _path;
-        private readonly object _contentLock = new object();
-        private byte[] _content = new byte[4096];
 
         /// <summary>
         /// Gets the path to the file.
         /// </summary>
         /// <value>The path.</value>
-        public FilePath Path
-        {
-            get { return _path; }
-        }
+        public FilePath Path { get; }
 
-        Path IFileSystemInfo.Path
-        {
-            get { return _path; }
-        }
+        /// <summary>
+        /// Gets the path to the file.
+        /// </summary>
+        /// <value>The path.</value>
+        Path IFileSystemInfo.Path => Path;
 
         /// <summary>
         /// Gets a value indicating whether this <see cref="IFileSystemInfo" /> exists.
@@ -57,10 +52,7 @@ namespace Cake.Testing
         /// </value>
         public long Length { get; private set; }
 
-        internal object ContentLock
-        {
-            get { return _contentLock; }
-        }
+        internal object ContentLock { get; } = new object();
 
         /// <summary>
         /// Gets the length of the content.
@@ -78,16 +70,12 @@ namespace Cake.Testing
         /// Gets the content.
         /// </summary>
         /// <value>The content.</value>
-        public byte[] Content
-        {
-            get { return _content; }
-            internal set { _content = value; }
-        }
+        public byte[] Content { get; internal set; } = new byte[4096];
 
         internal FakeFile(FakeFileSystemTree tree, FilePath path)
         {
             _tree = tree;
-            _path = path;
+            Path = path;
             Exists = false;
             Hidden = false;
         }
@@ -147,13 +135,13 @@ namespace Cake.Testing
             {
                 Length = offset;
             }
-            if (_content.Length >= Length)
+            if (Content.Length >= Length)
             {
                 return;
             }
             var buffer = new byte[Length * 2];
-            Buffer.BlockCopy(_content, 0, buffer, 0, _content.Length);
-            _content = buffer;
+            Buffer.BlockCopy(Content, 0, buffer, 0, Content.Length);
+            Content = buffer;
         }
 
         private long GetPosition(FileMode fileMode, out bool fileWasCreated)

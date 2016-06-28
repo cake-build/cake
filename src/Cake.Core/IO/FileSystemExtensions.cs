@@ -21,7 +21,7 @@ namespace Cake.Core.IO
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
             var file = fileSystem.GetFile(path);
             return file != null && file.Exists;
@@ -37,7 +37,7 @@ namespace Cake.Core.IO
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
             var directory = fileSystem.GetDirectory(path);
             return directory != null && directory.Exists;

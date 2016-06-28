@@ -43,7 +43,7 @@ namespace Cake.Common.Tests.Unit.Tools.Cake
 
                 // Then
                 Assert.IsType<FileNotFoundException>(result);
-                Assert.Equal("Cake script file not found.", result.Message);
+                Assert.Equal("Cake script file not found.", result?.Message);
             }
 
             [Fact]
@@ -58,7 +58,7 @@ namespace Cake.Common.Tests.Unit.Tools.Cake
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Cake: Could not locate executable.", result.Message);
+                Assert.Equal("Cake: Could not locate executable.", result?.Message);
             }
 
             [Theory]
@@ -78,21 +78,21 @@ namespace Cake.Common.Tests.Unit.Tools.Cake
                 Assert.Equal(expected, result.Path.FullPath);
             }
 
-			[WindowsTheory]
-			[InlineData("C:/Cake/Cake.exe", "C:/Cake/Cake.exe")]
-			public void Should_Use_Cake_Executable_From_Tool_Path_If_Provided_On_Windows(string toolPath, string expected)
-			{
-				// Given
-				var fixture = new CakeRunnerFixture();
-				fixture.Settings.ToolPath = toolPath;
-				fixture.GivenSettingsToolPathExist();
+            [WindowsTheory]
+            [InlineData("C:/Cake/Cake.exe", "C:/Cake/Cake.exe")]
+            public void Should_Use_Cake_Executable_From_Tool_Path_If_Provided_On_Windows(string toolPath, string expected)
+            {
+                // Given
+                var fixture = new CakeRunnerFixture();
+                fixture.Settings.ToolPath = toolPath;
+                fixture.GivenSettingsToolPathExist();
 
-				// When
-				var result = fixture.Run();
+                // When
+                var result = fixture.Run();
 
-				// Then
-				Assert.Equal(expected, result.Path.FullPath);
-			}
+                // Then
+                Assert.Equal(expected, result.Path.FullPath);
+            }
 
             [Fact]
             public void Should_Add_Provided_Script_To_Process_Arguments()

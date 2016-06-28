@@ -53,7 +53,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
 
             // Then
             Assert.IsType<CakeException>(result);
-            Assert.Equal("MSTest: Could not locate executable.", result.Message);
+            Assert.Equal("MSTest: Could not locate executable.", result?.Message);
         }
 
         [Theory]
@@ -133,7 +133,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
 
             // Then
             Assert.IsType<CakeException>(result);
-            Assert.Equal("MSTest: Process was not started.", result.Message);
+            Assert.Equal("MSTest: Process was not started.", result?.Message);
         }
 
         [Fact]
@@ -148,7 +148,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
 
             // Then
             Assert.IsType<CakeException>(result);
-            Assert.Equal("MSTest: Process returned an error (exit code 1).", result.Message);
+            Assert.Equal("MSTest: Process returned an error (exit code 1).", result?.Message);
         }
 
         [Fact]
@@ -181,38 +181,41 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         [Fact]
         public void Should_Use_TestCategoryFilter_If_Provided()
         {
-            //Given
+            // Given
             var fixture = new MSTestRunnerFixture();
             fixture.Settings.Category = "!Network";
 
-            //When
+            // When
             var result = fixture.Run();
 
+            // Then
             Assert.Equal("\"/testcontainer:/Working/Test1.dll\" /category:\"!Network\" /noisolation", result.Args);
         }
 
         [Fact]
         public void Should_Use_TestResultsFile_If_Provided()
         {
-            //Given
+            // Given
             var fixture = new MSTestRunnerFixture();
             fixture.Settings.ResultsFile = @"c:\temp\myresults.trx";
 
-            //When
+            // When
             var result = fixture.Run();
 
+            // Then
             Assert.Equal("\"/testcontainer:/Working/Test1.dll\" /resultsfile:\"c:\\temp\\myresults.trx\" /noisolation", result.Args);
         }
 
         [Fact]
         public void Should_Not_Use_TestCategoryFilter_If_Not_Provided()
         {
-            //Given
+            // Given
             var fixture = new MSTestRunnerFixture();
 
-            //When
+            // When
             var result = fixture.Run();
 
+            // Then
             Assert.Equal("\"/testcontainer:/Working/Test1.dll\" /noisolation", result.Args);
         }
 
