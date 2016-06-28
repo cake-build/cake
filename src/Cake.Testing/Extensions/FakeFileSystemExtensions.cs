@@ -23,11 +23,11 @@ namespace Cake.Testing
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
             var file = fileSystem.GetFile(path);
             if (file != null && file.Exists)
@@ -46,17 +46,17 @@ namespace Cake.Testing
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
             CreateDirectory(fileSystem, path.GetDirectory());
             var file = fileSystem.GetFile(path);
             if (!file.Exists)
             {
-                file.OpenWrite().Close();
+                file.OpenWrite().Dispose();
             }
             return file;
         }
@@ -72,15 +72,15 @@ namespace Cake.Testing
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
             if (contentsBytes == null)
             {
-                throw new ArgumentNullException("contentsBytes");
+                throw new ArgumentNullException(nameof(contentsBytes));
             }
             CreateDirectory(fileSystem, path.GetDirectory());
             var file = fileSystem.GetFile(path);
@@ -107,11 +107,11 @@ namespace Cake.Testing
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
             var directory = fileSystem.GetDirectory(path);
             if (!directory.Exists)

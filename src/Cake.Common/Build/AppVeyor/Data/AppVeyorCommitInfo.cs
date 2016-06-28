@@ -17,10 +17,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The commit ID (SHA).
         /// </value>
-        public string Id
-        {
-            get { return GetEnvironmentString("APPVEYOR_REPO_COMMIT"); }
-        }
+        public string Id => GetEnvironmentString("APPVEYOR_REPO_COMMIT");
 
         /// <summary>
         /// Gets the commit author's name.
@@ -28,10 +25,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The commit author's name.
         /// </value>
-        public string Author
-        {
-            get { return GetEnvironmentString("APPVEYOR_REPO_COMMIT_AUTHOR"); }
-        }
+        public string Author => GetEnvironmentString("APPVEYOR_REPO_COMMIT_AUTHOR");
 
         /// <summary>
         /// Gets the commit author's email address.
@@ -39,10 +33,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The commit author's email address.
         /// </value>
-        public string Email
-        {
-            get { return GetEnvironmentString("APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL"); }
-        }
+        public string Email => GetEnvironmentString("APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL");
 
         /// <summary>
         /// Gets the commit date/time.
@@ -50,10 +41,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The commit date/time.
         /// </value>
-        public string Timestamp
-        {
-            get { return GetEnvironmentString("APPVEYOR_REPO_COMMIT_TIMESTAMP"); }
-        }
+        public string Timestamp => GetEnvironmentString("APPVEYOR_REPO_COMMIT_TIMESTAMP");
 
         /// <summary>
         /// Gets the commit message.
@@ -61,10 +49,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The commit message.
         /// </value>
-        public string Message
-        {
-            get { return GetEnvironmentString("APPVEYOR_REPO_COMMIT_MESSAGE"); }
-        }
+        public string Message => GetEnvironmentString("APPVEYOR_REPO_COMMIT_MESSAGE");
 
         /// <summary>
         /// Gets the rest of commit message after line break (if exists).
@@ -72,10 +57,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The rest of commit message after line break (if exists).
         /// </value>
-        public string ExtendedMessage
-        {
-            get { return GetEnvironmentString("APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED"); }
-        }
+        public string ExtendedMessage => GetEnvironmentString("APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppVeyorCommitInfo"/> class.

@@ -81,7 +81,7 @@ namespace Cake.Tests.Unit.Diagnostics
 
                 // Then
                 Assert.IsType<FormatException>(result);
-                Assert.Equal("Input string was not in a correct format.", result.Message);
+                Assert.Equal("Input string was not in a correct format.", result?.Message);
             }
 
             [Fact]
@@ -92,7 +92,7 @@ namespace Cake.Tests.Unit.Diagnostics
 
                 // Then
                 Assert.IsType<FormatException>(result);
-                Assert.Equal("Input string was not in a correct format.", result.Message);
+                Assert.Equal("Input string was not in a correct format.", result?.Message);
             }
 
             [Fact]

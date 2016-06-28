@@ -26,7 +26,7 @@ namespace Cake.Arguments
         {
             if (args == null)
             {
-                throw new ArgumentNullException("args");
+                throw new ArgumentNullException(nameof(args));
             }
 
             var options = new CakeOptions();

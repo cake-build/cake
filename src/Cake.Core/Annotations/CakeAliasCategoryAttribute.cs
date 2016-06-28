@@ -12,16 +12,11 @@ namespace Cake.Core.Annotations
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
     public sealed class CakeAliasCategoryAttribute : Attribute
     {
-        private readonly string _name;
-
         /// <summary>
         /// Gets the category name.
         /// </summary>
         /// <value>The category name.</value>
-        public string Name
-        {
-            get { return _name; }
-        }
+        public string Name { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeAliasCategoryAttribute"/> class.
@@ -31,9 +26,9 @@ namespace Cake.Core.Annotations
         {
             if (name == null)
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
-            _name = name;
+            Name = name;
         }
     }
 }

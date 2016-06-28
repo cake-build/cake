@@ -184,7 +184,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Is<FilePath>(p => p.FullPath == "appveyor"),
                     Arg.Is<ProcessSettings>(p => p.Arguments.Render()
-                        == string.Format("PushArtifact \"/Working/file.zip\" -Type {0}", arg)));
+                        == $"PushArtifact \"/Working/file.zip\" -Type {arg}"));
             }
 
             [Fact]
@@ -219,8 +219,6 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 // Then
                 Assert.IsCakeException(result, "The deployment name can not contain spaces");
             }
-
-
         }
 
         public sealed class TheUpdateBuildVersionMethod
@@ -384,7 +382,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Is<FilePath>(p => p.FullPath == "appveyor"),
-                    Arg.Is<ProcessSettings>(p => p.Arguments.Render() == string.Format("AddMessage {0}", args)));
+                    Arg.Is<ProcessSettings>(p => p.Arguments.Render() == $"AddMessage {args}"));
             }
 
             [Fact]
@@ -402,7 +400,8 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Is<FilePath>(p => p.FullPath == "appveyor"),
-                    Arg.Is<ProcessSettings>(p => p.Arguments.Render() == string.Format("AddMessage \"{0}\" -Category \"Information\"", message)));
+                    Arg.Is<ProcessSettings>(p => p.Arguments.Render() ==
+                                                 $"AddMessage \"{message}\" -Category \"Information\""));
             }
 
             [Fact]
@@ -420,7 +419,8 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Is<FilePath>(p => p.FullPath == "appveyor"),
-                    Arg.Is<ProcessSettings>(p => p.Arguments.Render() == string.Format("AddMessage \"{0}\" -Category \"Warning\"", message)));
+                    Arg.Is<ProcessSettings>(p => p.Arguments.Render() ==
+                                                 $"AddMessage \"{message}\" -Category \"Warning\""));
             }
 
             [Fact]
@@ -438,7 +438,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Is<FilePath>(p => p.FullPath == "appveyor"),
-                    Arg.Is<ProcessSettings>(p => p.Arguments.Render() == string.Format("AddMessage \"{0}\" -Category \"Error\"", message)));
+                    Arg.Is<ProcessSettings>(p => p.Arguments.Render() == $"AddMessage \"{message}\" -Category \"Error\""));
             }
 
             [Fact]
@@ -457,7 +457,8 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Is<FilePath>(p => p.FullPath == "appveyor"),
-                    Arg.Is<ProcessSettings>(p => p.Arguments.Render() == string.Format("AddMessage \"{0}\" -Category \"Error\" -Details \"{1}\"", message, exception.ToString())));
+                    Arg.Is<ProcessSettings>(p => p.Arguments.Render() ==
+                                                 $"AddMessage \"{message}\" -Category \"Error\" -Details \"{exception.ToString()}\""));
             }
         }
     }

@@ -58,7 +58,7 @@ namespace Cake.Common.Tests.Unit.Tools.XBuild
                 var settings = new XBuildSettings();
 
                 // When
-                settings.Properties.Add("THEKEY", new []{"THEVALUE"});
+                settings.Properties.Add("THEKEY", new[] { "THEVALUE" });
 
                 // Then
                 Assert.True(settings.Properties.ContainsKey("thekey"));

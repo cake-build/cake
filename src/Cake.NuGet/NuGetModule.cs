@@ -22,19 +22,19 @@ namespace Cake.NuGet
         {
             if (registry == null)
             {
-                throw new ArgumentNullException("registry");
+                throw new ArgumentNullException(nameof(registry));
             }
 
-            // NuGet addins support
-            registry.RegisterType<NuGetVersionUtilityAdapter>().As<INuGetFrameworkCompatibilityFilter>().As<IFrameworkNameParser>().Singleton();
-            registry.RegisterType<NuGetPackageAssembliesLocator>().As<INuGetPackageAssembliesLocator>().Singleton();
-            registry.RegisterType<NuGetPackageReferenceBundler>().As<INuGetPackageReferenceBundler>().Singleton();
-            registry.RegisterType<NuGetAssemblyCompatibilityFilter>().As<INuGetAssemblyCompatibilityFilter>().Singleton();
-            registry.RegisterType<AssemblyFrameworkNameParser>().As<IAssemblyFrameworkNameParser>().Singleton();
+#if NETCORE
+            // NuGet V3
+            registry.RegisterType<V3.NuGetV3ContentResolver>().As<INuGetContentResolver>().Singleton();
+#else
+            // NuGet V2
+            registry.RegisterType<V2.NuGetV2ContentResolver>().As<INuGetContentResolver>().Singleton();
+#endif
 
             // URI resource support.
             registry.RegisterType<NuGetPackageInstaller>().As<IPackageInstaller>().Singleton();
-            registry.RegisterType<NuGetPackageContentResolver>().As<INuGetPackageContentResolver>().Singleton();
         }
     }
 }

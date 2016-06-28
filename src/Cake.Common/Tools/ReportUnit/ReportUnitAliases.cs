@@ -80,7 +80,7 @@ namespace Cake.Common.Tools.ReportUnit
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var runner = new ReportUnitRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
@@ -105,7 +105,7 @@ namespace Cake.Common.Tools.ReportUnit
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var runner = new ReportUnitRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
@@ -133,7 +133,7 @@ namespace Cake.Common.Tools.ReportUnit
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var runner = new ReportUnitRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);

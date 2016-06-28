@@ -68,17 +68,17 @@ namespace Cake.Common.Xml
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (filePath == null)
             {
-                throw new ArgumentNullException("filePath");
+                throw new ArgumentNullException(nameof(filePath));
             }
 
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             var file = context.FileSystem.GetFile(filePath);
@@ -110,17 +110,17 @@ namespace Cake.Common.Xml
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
 
             if (string.IsNullOrWhiteSpace(xpath))
             {
-                throw new ArgumentNullException("xpath");
+                throw new ArgumentNullException(nameof(xpath));
             }
 
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             var document = new XmlDocument();
@@ -135,7 +135,7 @@ namespace Cake.Common.Xml
 
             var node = document.SelectSingleNode(xpath, namespaceManager);
 
-            return node != null ? node.Value : null;
+            return node?.Value;
         }
 
         /// <summary>

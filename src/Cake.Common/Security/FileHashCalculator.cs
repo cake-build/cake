@@ -25,7 +25,7 @@ namespace Cake.Common.Security
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
 
             _fileSystem = fileSystem;
@@ -41,7 +41,7 @@ namespace Cake.Common.Security
         {
             if (filePath == null)
             {
-                throw new ArgumentNullException("filePath");
+                throw new ArgumentNullException(nameof(filePath));
             }
 
             var file = _fileSystem.GetFile(filePath);

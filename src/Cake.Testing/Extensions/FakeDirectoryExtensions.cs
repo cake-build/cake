@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-// ReSharper disable once CheckNamespace
 using System;
 
+// ReSharper disable once CheckNamespace
 namespace Cake.Testing
 {
     /// <summary>
@@ -21,7 +21,7 @@ namespace Cake.Testing
         {
             if (directory == null)
             {
-                throw new ArgumentNullException("directory");
+                throw new ArgumentNullException(nameof(directory));
             }
 
             directory.Hidden = true;

@@ -41,7 +41,7 @@ namespace Cake.Common.Tools.DotNetCore.Test
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetArguments(project, settings));

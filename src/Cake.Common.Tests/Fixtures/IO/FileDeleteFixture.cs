@@ -11,8 +11,6 @@ namespace Cake.Common.Tests.Fixtures.IO
 {
     internal sealed class FileDeleteFixture
     {
-        private readonly List<IFile> _files;
-        private readonly List<FilePath> _paths;
         private readonly Dictionary<string, IFile> _lookup;
 
         public IFileSystem FileSystem { get; set; }
@@ -20,28 +18,22 @@ namespace Cake.Common.Tests.Fixtures.IO
         public ICakeContext Context { get; set; }
         public IGlobber Globber { get; set; }
 
-        public List<IFile> Files
-        {
-            get { return _files; }
-        }
+        public List<IFile> Files { get; }
 
-        public List<FilePath> Paths
-        {
-            get { return _paths; }
-        }
+        public List<FilePath> Paths { get; }
 
         public FileDeleteFixture()
         {
             // Setup the files in the file system.
-            _paths = new List<FilePath>();
-            _files = new List<IFile>();
+            Paths = new List<FilePath>();
+            Files = new List<IFile>();
             _lookup = new Dictionary<string, IFile>();
             CreatFile("./file1.txt", "/Working/file1.txt");
             CreatFile("./file2.txt", "/Working/file2.txt");
 
             // Setup the globber to return all files for wild card.
             Globber = Substitute.For<IGlobber>();
-            Globber.Match("*").Returns(c => _paths);
+            Globber.Match("*").Returns(c => Paths);
 
             // Setup the file system to return correct files when asked for.
             FileSystem = Substitute.For<IFileSystem>();
@@ -67,8 +59,8 @@ namespace Cake.Common.Tests.Fixtures.IO
             file.Path.Returns(absolutePath);
 
             // Add to collections.
-            _paths.Add(relativePath);
-            _files.Add(file);
+            Paths.Add(relativePath);
+            Files.Add(file);
             _lookup.Add(absolutePath.FullPath, file);
         }
     }

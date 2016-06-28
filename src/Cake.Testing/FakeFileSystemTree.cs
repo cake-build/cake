@@ -14,19 +14,15 @@ namespace Cake.Testing
 {
     internal sealed class FakeFileSystemTree
     {
-        private readonly PathComparer _comparer;
         private readonly FakeDirectory _root;
 
-        public PathComparer Comparer
-        {
-            get { return _comparer; }
-        }
+        public PathComparer Comparer { get; }
 
         public FakeFileSystemTree(ICakeEnvironment environment)
         {
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             if (environment.WorkingDirectory == null)
             {
@@ -36,7 +32,7 @@ namespace Cake.Testing
             {
                 throw new ArgumentException("Working directory cannot be relative.");
             }
-            _comparer = new PathComparer(environment.Platform.IsUnix());
+            Comparer = new PathComparer(environment.Platform.IsUnix());
 
             _root = new FakeDirectory(this, "/");
             _root.Create();

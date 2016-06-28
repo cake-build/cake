@@ -11,9 +11,6 @@ namespace Cake.Common.Build.AppVeyor.Data
     /// </summary>
     public sealed class AppVeyorRepositoryInfo : AppVeyorInfo
     {
-        private readonly AppVeyorTagInfo _tagProvider;
-        private readonly AppVeyorCommitInfo _commitProvider;
-
         /// <summary>
         /// Gets the repository provider.
         /// <list type="bullet">
@@ -31,10 +28,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The repository provider.
         /// </value>
-        public string Provider
-        {
-            get { return GetEnvironmentString("APPVEYOR_REPO_PROVIDER"); }
-        }
+        public string Provider => GetEnvironmentString("APPVEYOR_REPO_PROVIDER");
 
         /// <summary>
         /// Gets the revision control system.
@@ -50,10 +44,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The revision control system.
         /// </value>
-        public string Scm
-        {
-            get { return GetEnvironmentString("APPVEYOR_REPO_SCM"); }
-        }
+        public string Scm => GetEnvironmentString("APPVEYOR_REPO_SCM");
 
         /// <summary>
         /// Gets the repository name in format owner-name/repo-name.
@@ -61,10 +52,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The repository name.
         /// </value>
-        public string Name
-        {
-            get { return GetEnvironmentString("APPVEYOR_REPO_NAME"); }
-        }
+        public string Name => GetEnvironmentString("APPVEYOR_REPO_NAME");
 
         /// <summary>
         /// Gets the build branch. For pull request commits it is base branch PR is merging into.
@@ -72,10 +60,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The build branch.
         /// </value>
-        public string Branch
-        {
-            get { return GetEnvironmentString("APPVEYOR_REPO_BRANCH"); }
-        }
+        public string Branch => GetEnvironmentString("APPVEYOR_REPO_BRANCH");
 
         /// <summary>
         /// Gets the tag information for the build.
@@ -83,10 +68,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The tag information for the build.
         /// </value>
-        public AppVeyorTagInfo Tag
-        {
-            get { return _tagProvider; }
-        }
+        public AppVeyorTagInfo Tag { get; }
 
         /// <summary>
         /// Gets the commit information for the build.
@@ -94,10 +76,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The commit information for the build.
         /// </value>
-        public AppVeyorCommitInfo Commit
-        {
-            get { return _commitProvider; }
-        }
+        public AppVeyorCommitInfo Commit { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppVeyorRepositoryInfo"/> class.
@@ -106,8 +85,8 @@ namespace Cake.Common.Build.AppVeyor.Data
         public AppVeyorRepositoryInfo(ICakeEnvironment environment)
             : base(environment)
         {
-            _tagProvider = new AppVeyorTagInfo(environment);
-            _commitProvider = new AppVeyorCommitInfo(environment);
+            Tag = new AppVeyorTagInfo(environment);
+            Commit = new AppVeyorCommitInfo(environment);
         }
     }
 }

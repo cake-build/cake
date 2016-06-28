@@ -24,7 +24,7 @@ namespace Cake.Core
         {
             if (type == null)
             {
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             }
 
             var typeInfo = type.GetTypeInfo();
@@ -42,7 +42,7 @@ namespace Cake.Core
         {
             if (type == null)
             {
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             }
             if (type.IsGenericParameter)
             {

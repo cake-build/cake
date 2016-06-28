@@ -20,7 +20,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 // When
                 var result = info.BuildNumber;
 
-                //Then
+                // Then
                 Assert.Equal("456", result);
             }
         }
@@ -36,7 +36,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 // When
                 var result = info.BuildUrl;
 
-                //Then
+                // Then
                 Assert.Equal("https://www.bitrise.io/build/e794ed892f3a59dd", result);
             }
         }
@@ -52,7 +52,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 // When
                 var result = info.BuildSlug;
 
-                //Then
+                // Then
                 Assert.Equal("e794ed892f3a59dd", result);
             }
         }
@@ -68,7 +68,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 // When
                 var result = info.BuildTriggerTimestamp;
 
-                //Then
+                // Then
                 Assert.Equal("2016-03-12 23:49:26", result);
             }
         }
@@ -82,7 +82,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
             // When
             var result = info.BuildStatus;
 
-            //Then
+            // Then
             Assert.True(result);
         }
     }

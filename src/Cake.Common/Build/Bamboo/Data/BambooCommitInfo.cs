@@ -17,10 +17,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// <value>
         ///   The commit ID (SHA).
         /// </value>
-        public string RepositoryRevision
-        {
-            get { return GetEnvironmentString("bamboo_planRepository_revision"); }
-        }
+        public string RepositoryRevision => GetEnvironmentString("bamboo_planRepository_revision");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BambooCommitInfo"/> class.

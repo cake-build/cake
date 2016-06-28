@@ -12,9 +12,6 @@ namespace Cake.Core.IO
         /// <summary>
         /// Gets the LocalMachine <see cref="IRegistryKey"/>.
         /// </summary>
-        public IRegistryKey LocalMachine
-        {
-            get { return new WindowsRegistryKey(Microsoft.Win32.Registry.LocalMachine); }
-        }
+        public IRegistryKey LocalMachine => new WindowsRegistryKey(Microsoft.Win32.Registry.LocalMachine);
     }
 }

@@ -17,10 +17,7 @@ namespace Cake.Core.IO
         /// <value>
         /// <c>true</c> if this file path has a file extension; otherwise, <c>false</c>.
         /// </value>
-        public bool HasExtension
-        {
-            get { return System.IO.Path.HasExtension(FullPath); }
-        }
+        public bool HasExtension => System.IO.Path.HasExtension(FullPath);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FilePath"/> class.
@@ -94,7 +91,7 @@ namespace Cake.Core.IO
         {
             if (extension == null)
             {
-                throw new ArgumentNullException("extension");
+                throw new ArgumentNullException(nameof(extension));
             }
             if (!extension.StartsWith(".", StringComparison.OrdinalIgnoreCase))
             {
@@ -112,7 +109,7 @@ namespace Cake.Core.IO
         {
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             return IsRelative
                 ? environment.WorkingDirectory.CombineWithFilePath(this).Collapse()
@@ -128,7 +125,7 @@ namespace Cake.Core.IO
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
             if (path.IsRelative)
             {

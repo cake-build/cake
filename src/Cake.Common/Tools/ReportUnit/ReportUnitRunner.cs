@@ -43,12 +43,12 @@ namespace Cake.Common.Tools.ReportUnit
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             if (inputFolder == null)
             {
-                throw new ArgumentNullException("inputFolder");
+                throw new ArgumentNullException(nameof(inputFolder));
             }
 
             Run(settings, GetArguments(inputFolder, outputFolder));
@@ -64,17 +64,17 @@ namespace Cake.Common.Tools.ReportUnit
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             if (inputFile == null)
             {
-                throw new ArgumentNullException("inputFile");
+                throw new ArgumentNullException(nameof(inputFile));
             }
 
             if (outputFile == null)
             {
-                throw new ArgumentNullException("outputFile");
+                throw new ArgumentNullException(nameof(outputFile));
             }
 
             Run(settings, GetArguments(inputFile, outputFile));

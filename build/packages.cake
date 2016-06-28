@@ -8,13 +8,13 @@ public class BuildPackages
         DirectoryPath nugetRooPath,
         string semVersion,
         string[] packageIds,
-        string[] chocolateyPackageIds
-        )
+        string[] chocolateyPackageIds)
     {
         var toNugetPackage = BuildPackage(nugetRooPath, semVersion);
         var toChocolateyPackage = BuildPackage(nugetRooPath, semVersion, isChocolateyPackage: true);
         var nugetPackages = packageIds.Select(toNugetPackage).ToArray();
         var chocolateyPackages = chocolateyPackageIds.Select(toChocolateyPackage).ToArray();
+        
         return new BuildPackages {
             All = nugetPackages.Union(chocolateyPackages).ToArray(),
             Nuget = nugetPackages,
@@ -22,15 +22,16 @@ public class BuildPackages
         };
     }
 
-    private static Func<string, BuildPackage> BuildPackage(DirectoryPath nugetRooPath, string semVersion,
+    private static Func<string, BuildPackage> BuildPackage(
+        DirectoryPath nugetRooPath, 
+        string semVersion, 
         bool isChocolateyPackage = false)
     {
         return package => new BuildPackage(
             id: package,
             nuspecPath: string.Concat("./nuspec/", package, ".nuspec"),
             packagePath: nugetRooPath.CombineWithFilePath(string.Concat(package, ".", semVersion, ".nupkg")),
-            isChocolateyPackage: isChocolateyPackage
-            );
+            isChocolateyPackage: isChocolateyPackage);
     }
 }
 
@@ -45,8 +46,7 @@ public class BuildPackage
         string id,
         FilePath nuspecPath,
         FilePath packagePath,
-        bool isChocolateyPackage
-        )
+        bool isChocolateyPackage)
     {
         Id = id;
         NuspecPath = nuspecPath;

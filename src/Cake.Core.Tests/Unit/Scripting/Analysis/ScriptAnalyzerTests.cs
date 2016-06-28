@@ -81,7 +81,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Could not find script '/Working/notfound.cake'.", result.Message);
+                Assert.Equal("Could not find script '/Working/notfound.cake'.", result?.Message);
             }
 
             [Fact]

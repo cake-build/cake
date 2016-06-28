@@ -9,38 +9,22 @@ namespace Cake.Composition
 {
     internal sealed class ContainerRegistration
     {
-        private readonly Type _implementationType;
         private readonly List<Type> _registrationTypes;
-        private readonly object _instance;
-        private bool _isSingleton;
 
-        public Type ImplementationType
-        {
-            get { return _implementationType; }
-        }
+        public Type ImplementationType { get; }
 
-        public ICollection<Type> RegistrationTypes
-        {
-            get { return _registrationTypes; }
-        }
+        public ICollection<Type> RegistrationTypes => _registrationTypes;
 
-        public object Instance
-        {
-            get { return _instance; }
-        }
+        public object Instance { get; }
 
-        public bool IsSingleton
-        {
-            get { return _isSingleton; }
-            internal set { _isSingleton = value; }
-        }
+        public bool IsSingleton { get; internal set; }
 
         public ContainerRegistration(Type implementationType, object instance = null)
         {
-            _implementationType = implementationType;
+            ImplementationType = implementationType;
             _registrationTypes = new List<Type>();
-            _instance = instance;
-            _isSingleton = true;
+            Instance = instance;
+            IsSingleton = true;
         }
     }
 }

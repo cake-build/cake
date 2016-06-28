@@ -27,16 +27,11 @@ namespace Cake.Common.IO.Paths
     /// </summary>
     public sealed class ConvertableDirectoryPath
     {
-        private readonly DirectoryPath _path;
-
         /// <summary>
         /// Gets the path.
         /// </summary>
         /// <value>The path.</value>
-        public DirectoryPath Path
-        {
-            get { return _path; }
-        }
+        public DirectoryPath Path { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConvertableDirectoryPath"/> class.
@@ -46,9 +41,9 @@ namespace Cake.Common.IO.Paths
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
-            _path = path;
+            Path = path;
         }
 
         /// <summary>
@@ -62,11 +57,11 @@ namespace Cake.Common.IO.Paths
         {
             if (left == null)
             {
-                throw new ArgumentNullException("left");
+                throw new ArgumentNullException(nameof(left));
             }
             if (right == null)
             {
-                throw new ArgumentNullException("right");
+                throw new ArgumentNullException(nameof(right));
             }
             return new ConvertableDirectoryPath(left.Path.Combine(right.Path));
         }
@@ -82,11 +77,11 @@ namespace Cake.Common.IO.Paths
         {
             if (left == null)
             {
-                throw new ArgumentNullException("left");
+                throw new ArgumentNullException(nameof(left));
             }
             if (right == null)
             {
-                throw new ArgumentNullException("right");
+                throw new ArgumentNullException(nameof(right));
             }
             return new ConvertableDirectoryPath(left.Path.Combine(right));
         }
@@ -102,11 +97,11 @@ namespace Cake.Common.IO.Paths
         {
             if (directory == null)
             {
-                throw new ArgumentNullException("directory");
+                throw new ArgumentNullException(nameof(directory));
             }
             if (file == null)
             {
-                throw new ArgumentNullException("file");
+                throw new ArgumentNullException(nameof(file));
             }
             return new ConvertableFilePath(directory.Path.CombineWithFilePath(file.Path));
         }
@@ -122,11 +117,11 @@ namespace Cake.Common.IO.Paths
         {
             if (directory == null)
             {
-                throw new ArgumentNullException("directory");
+                throw new ArgumentNullException(nameof(directory));
             }
             if (file == null)
             {
-                throw new ArgumentNullException("file");
+                throw new ArgumentNullException(nameof(file));
             }
             return new ConvertableFilePath(directory.Path.CombineWithFilePath(file));
         }
@@ -138,11 +133,7 @@ namespace Cake.Common.IO.Paths
         /// <returns>The result of the conversion.</returns>
         public static implicit operator DirectoryPath(ConvertableDirectoryPath path)
         {
-            if (path == null)
-            {
-                return null;
-            }
-            return path.Path;
+            return path?.Path;
         }
 
         /// <summary>
@@ -152,11 +143,7 @@ namespace Cake.Common.IO.Paths
         /// <returns>The result of the conversion.</returns>
         public static implicit operator string(ConvertableDirectoryPath path)
         {
-            if (path == null)
-            {
-                return null;
-            }
-            return path.Path.FullPath;
+            return path?.Path.FullPath;
         }
 
         /// <summary>
@@ -167,7 +154,7 @@ namespace Cake.Common.IO.Paths
         /// </returns>
         public override string ToString()
         {
-            return _path.FullPath;
+            return Path.FullPath;
         }
     }
 }

@@ -42,7 +42,7 @@ namespace Cake.Common.Build.MyGet
         {
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
 
             _environment = environment;

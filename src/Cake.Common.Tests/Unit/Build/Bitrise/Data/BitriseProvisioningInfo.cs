@@ -20,7 +20,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 // When
                 var result = info.ProvisionUrl;
 
-                //Then
+                // Then
                 Assert.Equal("file://cake-build/cake/cake.provision", result);
             }
         }
@@ -36,7 +36,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 // When
                 var result = info.CertificateUrl;
 
-                //Then
+                // Then
                 Assert.Equal("file://cake-build/cake/Cert.p12", result);
             }
         }
@@ -52,7 +52,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 // When
                 var result = info.CertificatePassphrase;
 
-                //Then
+                // Then
                 Assert.Equal("CAKE", result);
             }
         }

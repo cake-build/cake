@@ -9,7 +9,6 @@ namespace Cake.Common.Tests.Unit.Build.Bamboo.Data
 {
     public sealed class BambooCustomBuildInfoTests
     {
-
         public sealed class TheIsCustomBuildProperty
         {
             [Fact]

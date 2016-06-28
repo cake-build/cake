@@ -17,10 +17,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The commit.
         /// </value>
-        public string Commit
-        {
-            get { return GetEnvironmentString("TRAVIS_COMMIT"); }
-        }
+        public string Commit => GetEnvironmentString("TRAVIS_COMMIT");
 
         /// <summary>
         /// Gets the commit range for the current pull request.
@@ -28,10 +25,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The commit range.
         /// </value>
-        public string CommitRange
-        {
-            get { return GetEnvironmentString("TRAVIS_COMMIT_RANGE"); }
-        }
+        public string CommitRange => GetEnvironmentString("TRAVIS_COMMIT_RANGE");
 
         /// <summary>
         /// Gets the pull request.
@@ -39,10 +33,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The pull request.
         /// </value>
-        public string PullRequest
-        {
-            get { return GetEnvironmentString("TRAVIS_PULL_REQUEST"); }
-        }
+        public string PullRequest => GetEnvironmentString("TRAVIS_PULL_REQUEST");
 
         /// <summary>
         /// Gets the slug of the respository currently being built.
@@ -50,10 +41,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The slug.
         /// </value>
-        public string Slug
-        {
-            get { return GetEnvironmentString("TRAVIS_REPO_SLUG"); }
-        }
+        public string Slug => GetEnvironmentString("TRAVIS_REPO_SLUG");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TravisCIRepositoryInfo"/> class.

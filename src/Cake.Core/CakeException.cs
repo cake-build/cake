@@ -3,14 +3,18 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+#if !NETCORE
 using System.Runtime.Serialization;
+#endif
 
 namespace Cake.Core
 {
     /// <summary>
     /// Represent errors that occur during script execution.
     /// </summary>
+#if !NETCORE
     [Serializable]
+#endif
     public sealed class CakeException : Exception
     {
         /// <summary>
@@ -39,6 +43,7 @@ namespace Cake.Core
         {
         }
 
+#if !NETCORE
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeException"/> class.
         /// </summary>
@@ -48,5 +53,6 @@ namespace Cake.Core
             : base(info, context)
         {
         }
+#endif
     }
 }

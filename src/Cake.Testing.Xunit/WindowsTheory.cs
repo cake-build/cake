@@ -2,18 +2,28 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Core;
+using Cake.Core.Polyfill;
 using Xunit;
 
 namespace Cake.Testing.Xunit
 {
     public sealed class WindowsTheory : TheoryAttribute
     {
+        private static readonly PlatformFamily _family;
+
+        static WindowsTheory()
+        {
+            _family = EnvironmentHelper.GetPlatformFamily();
+        }
+
         // ReSharper disable once UnusedParameter.Local
         public WindowsTheory(string reason = null)
         {
-    #if __MonoCS__
-            Skip = reason ?? "Windows test.";
-    #endif
+            if (_family != PlatformFamily.Windows)
+            {
+                Skip = reason ?? "Windows test.";
+            }
         }
     }
 }

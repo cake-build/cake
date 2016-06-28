@@ -24,7 +24,7 @@ namespace Cake.Core
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             _context = context;
@@ -36,10 +36,7 @@ namespace Cake.Core
         /// <value>
         /// The file system.
         /// </value>
-        public IFileSystem FileSystem
-        {
-            get { return _context.FileSystem; }
-        }
+        public IFileSystem FileSystem => _context.FileSystem;
 
         /// <summary>
         /// Gets the environment.
@@ -47,10 +44,7 @@ namespace Cake.Core
         /// <value>
         /// The environment.
         /// </value>
-        public ICakeEnvironment Environment
-        {
-            get { return _context.Environment; }
-        }
+        public ICakeEnvironment Environment => _context.Environment;
 
         /// <summary>
         /// Gets the globber.
@@ -58,10 +52,7 @@ namespace Cake.Core
         /// <value>
         /// The globber.
         /// </value>
-        public IGlobber Globber
-        {
-            get { return _context.Globber; }
-        }
+        public IGlobber Globber => _context.Globber;
 
         /// <summary>
         /// Gets the log.
@@ -69,10 +60,7 @@ namespace Cake.Core
         /// <value>
         /// The log.
         /// </value>
-        public ICakeLog Log
-        {
-            get { return _context.Log; }
-        }
+        public ICakeLog Log => _context.Log;
 
         /// <summary>
         /// Gets the arguments.
@@ -80,10 +68,7 @@ namespace Cake.Core
         /// <value>
         /// The arguments.
         /// </value>
-        public ICakeArguments Arguments
-        {
-            get { return _context.Arguments; }
-        }
+        public ICakeArguments Arguments => _context.Arguments;
 
         /// <summary>
         /// Gets the process runner.
@@ -91,10 +76,7 @@ namespace Cake.Core
         /// <value>
         /// The process runner.
         /// </value>
-        public IProcessRunner ProcessRunner
-        {
-            get { return _context.ProcessRunner; }
-        }
+        public IProcessRunner ProcessRunner => _context.ProcessRunner;
 
         /// <summary>
         /// Gets the registry.
@@ -102,10 +84,7 @@ namespace Cake.Core
         /// <value>
         /// The registry.
         /// </value>
-        public IRegistry Registry
-        {
-            get { return _context.Registry; }
-        }
+        public IRegistry Registry => _context.Registry;
 
         /// <summary>
         /// Gets the tool locator.
@@ -113,9 +92,6 @@ namespace Cake.Core
         /// <value>
         /// The tool locator.
         /// </value>
-        public IToolLocator Tools
-        {
-            get { return _context.Tools; }
-        }
+        public IToolLocator Tools => _context.Tools;
     }
 }

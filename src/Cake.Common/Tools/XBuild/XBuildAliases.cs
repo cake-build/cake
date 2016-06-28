@@ -54,11 +54,11 @@ namespace Cake.Common.Tools.XBuild
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (configurator == null)
             {
-                throw new ArgumentNullException("configurator");
+                throw new ArgumentNullException(nameof(configurator));
             }
 
             var settings = new XBuildSettings();
@@ -88,11 +88,11 @@ namespace Cake.Common.Tools.XBuild
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             var runner = new XBuildRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);

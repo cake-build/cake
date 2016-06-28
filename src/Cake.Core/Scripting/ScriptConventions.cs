@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Cake.Core.IO;
+using Cake.Core.Polyfill;
 
 namespace Cake.Core.Scripting
 {
@@ -53,7 +54,9 @@ namespace Cake.Core.Scripting
                 typeof(Action).GetTypeInfo().Assembly, // mscorlib
                 typeof(Uri).GetTypeInfo().Assembly, // System
                 typeof(IQueryable).GetTypeInfo().Assembly, // System.Core
+#if !NETCORE
                 typeof(System.Data.DataTable).GetTypeInfo().Assembly, // System.Data
+#endif
                 typeof(System.Xml.XmlReader).GetTypeInfo().Assembly, // System.Xml
                 typeof(System.Xml.Linq.XDocument).GetTypeInfo().Assembly, // System.Xml.Linq
             };
@@ -66,7 +69,7 @@ namespace Cake.Core.Scripting
                 var cakeAssemblies = assemblyDirectory.GetFiles(pattern, SearchScope.Current);
                 foreach (var cakeAssembly in cakeAssemblies)
                 {
-                    var assembly = Assembly.LoadFrom(cakeAssembly.Path.FullPath);
+                    var assembly = AssemblyHelper.LoadFromPath(cakeAssembly.Path);
                     defaultAssemblies.Add(assembly);
                 }
             }

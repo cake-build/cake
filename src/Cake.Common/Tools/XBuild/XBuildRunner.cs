@@ -143,7 +143,7 @@ namespace Cake.Common.Tools.XBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             var path = XBuildResolver.GetXBuildPath(_fileSystem, _environment, settings.ToolVersion);

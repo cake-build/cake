@@ -54,7 +54,7 @@ namespace Cake.Common.Security
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var fileHashCalculator = new FileHashCalculator(context.FileSystem);

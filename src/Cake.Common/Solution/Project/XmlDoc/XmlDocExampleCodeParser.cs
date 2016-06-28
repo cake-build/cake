@@ -33,12 +33,12 @@ namespace Cake.Common.Solution.Project.XmlDoc
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
 
             if (globber == null)
             {
-                throw new ArgumentNullException("globber");
+                throw new ArgumentNullException(nameof(globber));
             }
 
             _fileSystem = fileSystem;
@@ -56,7 +56,7 @@ namespace Cake.Common.Solution.Project.XmlDoc
         {
             if (xmlFilePath == null)
             {
-                throw new ArgumentNullException("xmlFilePath", "Invalid xml file path supplied.");
+                throw new ArgumentNullException(nameof(xmlFilePath), "Invalid xml file path supplied.");
             }
 
             var xmlFile = _fileSystem.GetFile(xmlFilePath);
@@ -94,7 +94,7 @@ namespace Cake.Common.Solution.Project.XmlDoc
         {
             if (string.IsNullOrWhiteSpace(pattern))
             {
-                throw new ArgumentNullException("pattern", "Invalid pattern supplied.");
+                throw new ArgumentNullException(nameof(pattern), "Invalid pattern supplied.");
             }
 
             var files = _globber.GetFiles(pattern).ToArray();

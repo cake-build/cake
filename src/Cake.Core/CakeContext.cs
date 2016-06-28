@@ -14,15 +14,6 @@ namespace Cake.Core
     /// </summary>
     public sealed class CakeContext : ICakeContext
     {
-        private readonly IFileSystem _fileSystem;
-        private readonly ICakeEnvironment _environment;
-        private readonly IGlobber _globber;
-        private readonly ICakeLog _log;
-        private readonly ICakeArguments _arguments;
-        private readonly IProcessRunner _processRunner;
-        private readonly IRegistry _registry;
-        private readonly IToolLocator _tools;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeContext"/> class.
         /// </summary>
@@ -46,41 +37,41 @@ namespace Cake.Core
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             if (globber == null)
             {
-                throw new ArgumentNullException("globber");
+                throw new ArgumentNullException(nameof(globber));
             }
             if (log == null)
             {
-                throw new ArgumentNullException("log");
+                throw new ArgumentNullException(nameof(log));
             }
             if (arguments == null)
             {
-                throw new ArgumentNullException("arguments");
+                throw new ArgumentNullException(nameof(arguments));
             }
             if (processRunner == null)
             {
-                throw new ArgumentNullException("processRunner");
+                throw new ArgumentNullException(nameof(processRunner));
             }
             if (tools == null)
             {
-                throw new ArgumentNullException("tools");
+                throw new ArgumentNullException(nameof(tools));
             }
 
-            _fileSystem = fileSystem;
-            _environment = environment;
-            _globber = globber;
-            _log = log;
-            _arguments = arguments;
-            _processRunner = processRunner;
-            _registry = registry;
-            _tools = tools;
+            FileSystem = fileSystem;
+            Environment = environment;
+            Globber = globber;
+            Log = log;
+            Arguments = arguments;
+            ProcessRunner = processRunner;
+            Registry = registry;
+            Tools = tools;
         }
 
         /// <summary>
@@ -89,10 +80,7 @@ namespace Cake.Core
         /// <value>
         /// The file system.
         /// </value>
-        public IFileSystem FileSystem
-        {
-            get { return _fileSystem; }
-        }
+        public IFileSystem FileSystem { get; }
 
         /// <summary>
         /// Gets the environment.
@@ -100,10 +88,7 @@ namespace Cake.Core
         /// <value>
         /// The environment.
         /// </value>
-        public ICakeEnvironment Environment
-        {
-            get { return _environment; }
-        }
+        public ICakeEnvironment Environment { get; }
 
         /// <summary>
         /// Gets the globber.
@@ -111,10 +96,7 @@ namespace Cake.Core
         /// <value>
         /// The globber.
         /// </value>
-        public IGlobber Globber
-        {
-            get { return _globber; }
-        }
+        public IGlobber Globber { get; }
 
         /// <summary>
         /// Gets the log.
@@ -122,10 +104,7 @@ namespace Cake.Core
         /// <value>
         /// The log.
         /// </value>
-        public ICakeLog Log
-        {
-            get { return _log; }
-        }
+        public ICakeLog Log { get; }
 
         /// <summary>
         /// Gets the arguments.
@@ -133,10 +112,7 @@ namespace Cake.Core
         /// <value>
         /// The arguments.
         /// </value>
-        public ICakeArguments Arguments
-        {
-            get { return _arguments; }
-        }
+        public ICakeArguments Arguments { get; }
 
         /// <summary>
         /// Gets the process runner.
@@ -144,10 +120,7 @@ namespace Cake.Core
         /// <value>
         /// The process runner.
         /// </value>
-        public IProcessRunner ProcessRunner
-        {
-            get { return _processRunner; }
-        }
+        public IProcessRunner ProcessRunner { get; }
 
         /// <summary>
         /// Gets the registry.
@@ -155,10 +128,7 @@ namespace Cake.Core
         /// <value>
         /// The registry.
         /// </value>
-        public IRegistry Registry
-        {
-            get { return _registry; }
-        }
+        public IRegistry Registry { get; }
 
         /// <summary>
         /// Gets the tool locator.
@@ -166,9 +136,6 @@ namespace Cake.Core
         /// <value>
         /// The tool locator.
         /// </value>
-        public IToolLocator Tools
-        {
-            get { return _tools; }
-        }
+        public IToolLocator Tools { get; }
     }
 }

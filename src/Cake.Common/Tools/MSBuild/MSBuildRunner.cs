@@ -124,7 +124,7 @@ namespace Cake.Common.Tools.MSBuild
                 case PlatformTarget.Win32:
                     return "Win32";
                 default:
-                    throw new ArgumentOutOfRangeException("platform", platform, "Invalid platform");
+                    throw new ArgumentOutOfRangeException(nameof(platform), platform, "Invalid platform");
             }
         }
 
@@ -184,7 +184,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             var buildPlatform = settings.MSBuildPlatform;

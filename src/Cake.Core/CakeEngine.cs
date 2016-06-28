@@ -28,10 +28,7 @@ namespace Cake.Core
         /// Gets all registered tasks.
         /// </summary>
         /// <value>The registered tasks.</value>
-        public IReadOnlyList<CakeTask> Tasks
-        {
-            get { return _tasks; }
-        }
+        public IReadOnlyList<CakeTask> Tasks => _tasks;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeEngine"/> class.
@@ -41,7 +38,7 @@ namespace Cake.Core
         {
             if (log == null)
             {
-                throw new ArgumentNullException("log");
+                throw new ArgumentNullException(nameof(log));
             }
             _log = log;
             _tasks = new List<CakeTask>();
@@ -97,11 +94,11 @@ namespace Cake.Core
         {
             if (target == null)
             {
-                throw new ArgumentNullException("target");
+                throw new ArgumentNullException(nameof(target));
             }
             if (strategy == null)
             {
-                throw new ArgumentNullException("strategy");
+                throw new ArgumentNullException(nameof(strategy));
             }
 
             var graph = CakeGraphBuilder.Build(_tasks);

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.IO;
 using Cake.Common.Solution.Project.Properties;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -9,7 +10,6 @@ using Cake.Core.IO;
 using Cake.Testing;
 using NSubstitute;
 using Xunit;
-using System.IO;
 
 namespace Cake.Common.Tests.Fixtures
 {

@@ -33,7 +33,7 @@ namespace Cake.Common.Tools.VSTest
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var assemblies = context.Globber.GetFiles(pattern).ToArray();
@@ -62,7 +62,7 @@ namespace Cake.Common.Tools.VSTest
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var assemblies = context.Globber.GetFiles(pattern).ToArray();
@@ -109,11 +109,11 @@ namespace Cake.Common.Tools.VSTest
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (assemblyPaths == null)
             {
-                throw new ArgumentNullException("assemblyPaths");
+                throw new ArgumentNullException(nameof(assemblyPaths));
             }
 
             var runner = new VSTestRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);

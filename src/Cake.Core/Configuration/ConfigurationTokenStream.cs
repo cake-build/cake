@@ -15,23 +15,11 @@ namespace Cake.Core.Configuration
         private readonly List<ConfigurationToken> _tokens;
         private int _position;
 
-        public ConfigurationToken Current
-        {
-            get
-            {
-                return _position >= Count ? null : _tokens[_position];
-            }
-        }
+        public ConfigurationToken Current => _position >= Count ? null : _tokens[_position];
 
-        public ConfigurationToken this[int index]
-        {
-            get { return _tokens[index]; }
-        }
+        public ConfigurationToken this[int index] => _tokens[index];
 
-        public int Count
-        {
-            get { return _tokens.Count; }
-        }
+        public int Count => _tokens.Count;
 
         public ConfigurationTokenStream(IEnumerable<ConfigurationToken> tokens)
         {

@@ -26,7 +26,7 @@ namespace Cake
         {
             if (report == null)
             {
-                throw new ArgumentNullException("report");
+                throw new ArgumentNullException(nameof(report));
             }
 
             try

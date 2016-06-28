@@ -31,7 +31,7 @@ namespace Cake.Common.Tools.WiX.Heat
         {
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
 
             _environment = environment;
@@ -48,17 +48,17 @@ namespace Cake.Common.Tools.WiX.Heat
         {
             if (directoryPath == null)
             {
-                throw new ArgumentNullException("directoryPath");
+                throw new ArgumentNullException(nameof(directoryPath));
             }
 
             if (outputFile == null)
             {
-                throw new ArgumentNullException("outputFile");
+                throw new ArgumentNullException(nameof(outputFile));
             }
 
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetArguments(directoryPath, outputFile, harvestType, settings));
@@ -75,23 +75,23 @@ namespace Cake.Common.Tools.WiX.Heat
         {
             if (objectFiles == null)
             {
-                throw new ArgumentNullException("objectFiles");
+                throw new ArgumentNullException(nameof(objectFiles));
             }
 
             if (outputFile == null)
             {
-                throw new ArgumentNullException("outputFile");
+                throw new ArgumentNullException(nameof(outputFile));
             }
 
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             var objectFilesArray = objectFiles as FilePath[] ?? objectFiles.ToArray();
             if (!objectFilesArray.Any())
             {
-                throw new ArgumentException("No object files provided.", "objectFiles");
+                throw new ArgumentException("No object files provided.", nameof(objectFiles));
             }
 
             Run(settings, GetArguments(objectFilesArray, outputFile, harvestType, settings));
@@ -108,17 +108,17 @@ namespace Cake.Common.Tools.WiX.Heat
         {
             if (harvestTarget == null)
             {
-                throw new ArgumentNullException("harvestTarget");
+                throw new ArgumentNullException(nameof(harvestTarget));
             }
 
             if (outputFile == null)
             {
-                throw new ArgumentNullException("outputFile");
+                throw new ArgumentNullException(nameof(outputFile));
             }
 
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetArguments(harvestTarget, outputFile, harvestType, settings));
@@ -195,7 +195,7 @@ namespace Cake.Common.Tools.WiX.Heat
             // Suppress specific warnings
             if (settings.SuppressSpecificWarnings != null && settings.SuppressSpecificWarnings.Any())
             {
-                var warnings = settings.SuppressSpecificWarnings.Select(warning => string.Format(CultureInfo.InstalledUICulture, "-sw{0}", warning));
+                var warnings = settings.SuppressSpecificWarnings.Select(warning => string.Format(CultureInfo.InvariantCulture, "-sw{0}", warning));
                 foreach (var warning in warnings)
                 {
                     builder.Append(warning);

@@ -37,7 +37,7 @@ namespace Cake.Common.IO
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             return new FilePathCollection(context.Globber.Match(pattern).OfType<FilePath>(),
@@ -52,7 +52,7 @@ namespace Cake.Common.IO
         /// Func&lt;IFileSystemInfo, bool&gt; exclude_node_modules =
         ///     fileSystemInfo => !fileSystemInfo.Path.FullPath.EndsWith(
         ///         "node_modules", StringComparison.OrdinalIgnoreCase);
-        /// 
+        ///
         /// var files = GetFiles("./**/Cake.*.dll", exclude_node_modules);
         /// foreach(var file in files)
         /// {
@@ -70,7 +70,7 @@ namespace Cake.Common.IO
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             return new FilePathCollection(context.Globber.Match(pattern, predicate).OfType<FilePath>(),
@@ -98,7 +98,7 @@ namespace Cake.Common.IO
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             return new DirectoryPathCollection(context.Globber.Match(pattern).OfType<DirectoryPath>(),
@@ -113,7 +113,7 @@ namespace Cake.Common.IO
         /// Func&lt;IFileSystemInfo, bool&gt; exclude_node_modules =
         ///     fileSystemInfo => !fileSystemInfo.Path.FullPath.EndsWith(
         ///         "node_modules", StringComparison.OrdinalIgnoreCase);
-        /// 
+        ///
         /// var directories = GetDirectories("./src/**/obj/*", exclude_node_modules);
         /// foreach(var directory in directories)
         /// {
@@ -131,7 +131,7 @@ namespace Cake.Common.IO
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             return new DirectoryPathCollection(context.Globber.Match(pattern, predicate).OfType<DirectoryPath>(),

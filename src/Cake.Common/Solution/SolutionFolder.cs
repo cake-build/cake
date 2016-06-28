@@ -20,15 +20,10 @@ namespace Cake.Common.Solution
         /// </remarks>
         public const string TypeIdentifier = "{2150E333-8FDC-42A3-9474-1A3956D46DE8}";
 
-        private readonly List<SolutionProject> _items;
-
         /// <summary>
         /// Gets Child items of this folder
         /// </summary>
-        public List<SolutionProject> Items
-        {
-            get { return _items; }
-        }
+        public List<SolutionProject> Items { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SolutionFolder"/> class.
@@ -38,7 +33,7 @@ namespace Cake.Common.Solution
         /// <param name="path">The folder path.</param>
         public SolutionFolder(string id, string name, FilePath path) : base(id, name, path, TypeIdentifier)
         {
-            _items = new List<SolutionProject>();
+            Items = new List<SolutionProject>();
         }
     }
 }

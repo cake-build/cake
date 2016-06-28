@@ -30,15 +30,15 @@ namespace Cake.Common.Solution.Project.Properties
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             if (log == null)
             {
-                throw new ArgumentNullException("log");
+                throw new ArgumentNullException(nameof(log));
             }
             _fileSystem = fileSystem;
             _environment = environment;
@@ -55,11 +55,11 @@ namespace Cake.Common.Solution.Project.Properties
         {
             if (outputPath == null)
             {
-                throw new ArgumentNullException("outputPath");
+                throw new ArgumentNullException(nameof(outputPath));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             var data = new AssemblyInfoCreatorData(settings);

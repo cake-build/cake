@@ -41,11 +41,11 @@ namespace Cake.Common.IO
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
             return new ConvertableDirectoryPath(new DirectoryPath(path));
         }
@@ -71,7 +71,7 @@ namespace Cake.Common.IO
         {
             if (directories == null)
             {
-                throw new ArgumentNullException("directories");
+                throw new ArgumentNullException(nameof(directories));
             }
 
             foreach (var directory in directories)
@@ -101,7 +101,7 @@ namespace Cake.Common.IO
         {
             if (directories == null)
             {
-                throw new ArgumentNullException("directories");
+                throw new ArgumentNullException(nameof(directories));
             }
 
             var paths = directories.Select(p => new DirectoryPath(p));
@@ -200,7 +200,7 @@ namespace Cake.Common.IO
         {
             if (directories == null)
             {
-                throw new ArgumentNullException("directories");
+                throw new ArgumentNullException(nameof(directories));
             }
             foreach (var directory in directories)
             {
@@ -229,7 +229,7 @@ namespace Cake.Common.IO
         {
             if (directories == null)
             {
-                throw new ArgumentNullException("directories");
+                throw new ArgumentNullException(nameof(directories));
             }
             var paths = directories.Select(p => new DirectoryPath(p));
             foreach (var directory in paths)
@@ -327,17 +327,17 @@ namespace Cake.Common.IO
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
 
             if (destination == null)
             {
-                throw new ArgumentNullException("destination");
+                throw new ArgumentNullException(nameof(destination));
             }
 
             if (source.IsRelative)
@@ -401,12 +401,12 @@ namespace Cake.Common.IO
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
 
             return context.FileSystem.GetDirectory(path).Exists;
@@ -429,12 +429,12 @@ namespace Cake.Common.IO
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
 
             return path.MakeAbsolute(context.Environment);

@@ -15,10 +15,6 @@ namespace Cake.Common.Build.ContinuaCI.Data
     {
         private const string Prefix = "ContinuaCI";
 
-        private readonly ContinuaCIProjectInfo _projectInfo;
-        private readonly ContinuaCIConfigurationInfo _configurationInfo;
-        private readonly ContinuaCIBuildInfo _buildInfo;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ContinuaCIEnvironmentInfo"/> class.
         /// </summary>
@@ -26,9 +22,9 @@ namespace Cake.Common.Build.ContinuaCI.Data
         public ContinuaCIEnvironmentInfo(ICakeEnvironment environment)
             : base(environment)
         {
-            _projectInfo = new ContinuaCIProjectInfo(environment, string.Format(CultureInfo.InvariantCulture, "{0}.Project", Prefix));
-            _buildInfo = new ContinuaCIBuildInfo(environment, string.Format(CultureInfo.InvariantCulture, "{0}.Build", Prefix));
-            _configurationInfo = new ContinuaCIConfigurationInfo(environment, string.Format(CultureInfo.InvariantCulture, "{0}.Configuration", Prefix));
+            Project = new ContinuaCIProjectInfo(environment, string.Format(CultureInfo.InvariantCulture, "{0}.Project", Prefix));
+            Build = new ContinuaCIBuildInfo(environment, string.Format(CultureInfo.InvariantCulture, "{0}.Build", Prefix));
+            Configuration = new ContinuaCIConfigurationInfo(environment, string.Format(CultureInfo.InvariantCulture, "{0}.Configuration", Prefix));
         }
 
         /// <summary>
@@ -37,10 +33,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// <value>
         ///   The Continua CI configuration information.
         /// </value>
-        public ContinuaCIConfigurationInfo Configuration
-        {
-            get { return _configurationInfo; }
-        }
+        public ContinuaCIConfigurationInfo Configuration { get; }
 
         /// <summary>
         /// Gets Continua CI project information.
@@ -48,10 +41,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// <value>
         ///   The Continua CI project information.
         /// </value>
-        public ContinuaCIProjectInfo Project
-        {
-            get { return _projectInfo; }
-        }
+        public ContinuaCIProjectInfo Project { get; }
 
         /// <summary>
         /// Gets Continua CI build information.
@@ -59,10 +49,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// <value>
         ///   The Continua CI build information.
         /// </value>
-        public ContinuaCIBuildInfo Build
-        {
-            get { return _buildInfo; }
-        }
+        public ContinuaCIBuildInfo Build { get; }
 
         /// <summary>
         /// Gets Continua CI build variables.

@@ -42,11 +42,11 @@ namespace Cake.Common.Tools.GitReleaseNotes
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             if (outputFile == null)
             {
-                throw new ArgumentNullException("outputFile");
+                throw new ArgumentNullException(nameof(outputFile));
             }
 
             Run(settings, GetArguments(outputFile, settings));

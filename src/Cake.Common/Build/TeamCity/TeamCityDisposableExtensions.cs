@@ -21,7 +21,7 @@ namespace Cake.Common.Build.TeamCity
         {
             if (teamCityProvider == null)
             {
-                throw new ArgumentNullException("teamCityProvider");
+                throw new ArgumentNullException(nameof(teamCityProvider));
             }
             teamCityProvider.WriteStartBlock(blockName);
             return new TeamCityActionDisposable(teamCityProvider, tc => tc.WriteEndBlock(blockName));
@@ -37,7 +37,7 @@ namespace Cake.Common.Build.TeamCity
         {
             if (teamCityProvider == null)
             {
-                throw new ArgumentNullException("teamCityProvider");
+                throw new ArgumentNullException(nameof(teamCityProvider));
             }
             teamCityProvider.WriteStartBuildBlock(compilerName);
             return new TeamCityActionDisposable(teamCityProvider, tc => tc.WriteEndBuildBlock(compilerName));

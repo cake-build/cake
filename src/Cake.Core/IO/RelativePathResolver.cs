@@ -13,11 +13,11 @@ namespace Cake.Core.IO
         {
             if (from == null)
             {
-                throw new ArgumentNullException("from");
+                throw new ArgumentNullException(nameof(from));
             }
             if (to == null)
             {
-                throw new ArgumentNullException("to");
+                throw new ArgumentNullException(nameof(to));
             }
             if (to.IsRelative)
             {
