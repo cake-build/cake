@@ -74,3 +74,6 @@ packages
 
 # Windows
 Thumbs.db
+
+**/.vs/
+project.lock.json
