@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 using System;
-#if NET452
+#if NET462
 using System.Runtime.Serialization;
 #endif
 
@@ -11,7 +11,7 @@ namespace Cake.Core
     /// <summary>
     /// Represent errors that occur during script execution.
     /// </summary>
-#if NET452
+#if NET462
     [Serializable]
 #endif
     public sealed class CakeException : Exception
@@ -42,7 +42,7 @@ namespace Cake.Core
         {
         }
 
-#if NET452
+#if NET462
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeException"/> class.
         /// </summary>

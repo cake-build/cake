@@ -13,7 +13,7 @@
         "Microsoft.Extensions.DependencyModel": "1.0.0"
       }
     },
-    "net452": {
+    "net462": {
       "frameworkAssemblies": {
         "System.Data": { "type": "build" },
         "System.Xml": { "type": "build" },

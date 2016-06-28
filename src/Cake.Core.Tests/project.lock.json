@@ -2,7 +2,7 @@
   "locked": false,
   "version": 2,
   "targets": {
-    ".NETFramework,Version=v4.5.2": {
+    ".NETFramework,Version=v4.6.2": {
       "dotnet-test-xunit/2.2.0-preview2-build1029": {
         "type": "package",
         "dependencies": {
@@ -291,26 +291,31 @@
         "frameworkAssemblies": [
           "System",
           "System.ComponentModel.Composition",
-          "System.Core"
+          "System.Core",
+          "mscorlib"
         ],
         "compile": {
-          "ref/net45/_._": {}
+          "ref/net462/System.Runtime.dll": {}
         },
         "runtime": {
-          "lib/net45/_._": {}
+          "lib/net462/System.Runtime.dll": {}
         }
       },
       "System.Runtime.InteropServices/4.1.0": {
         "type": "package",
+        "dependencies": {
+          "System.Runtime": "4.1.0"
+        },
         "frameworkAssemblies": [
           "System",
-          "System.Core"
+          "System.Core",
+          "mscorlib"
         ],
         "compile": {
-          "ref/net45/_._": {}
+          "ref/net462/System.Runtime.InteropServices.dll": {}
         },
         "runtime": {
-          "lib/net45/_._": {}
+          "lib/net462/System.Runtime.InteropServices.dll": {}
         }
       },
       "xunit.abstractions/2.0.1-rc2": {
@@ -382,22 +387,22 @@
       },
       "Cake.Core/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.5.2",
+        "framework": ".NETFramework,Version=v4.6.2",
         "frameworkAssemblies": [
           "System.Data",
           "System.Xml",
           "System.Xml.Linq"
         ],
         "compile": {
-          "net452/Cake.Core.dll": {}
+          "net462/Cake.Core.dll": {}
         },
         "runtime": {
-          "net452/Cake.Core.dll": {}
+          "net462/Cake.Core.dll": {}
         }
       },
       "Cake.Testing/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.5.2",
+        "framework": ".NETFramework,Version=v4.6.2",
         "dependencies": {
           "Cake.Core": "1.0.0",
           "xunit.core": "2.2.0-beta2-build3300"
@@ -408,15 +413,15 @@
           "System.Web"
         ],
         "compile": {
-          "net452/Cake.Testing.dll": {}
+          "net462/Cake.Testing.dll": {}
         },
         "runtime": {
-          "net452/Cake.Testing.dll": {}
+          "net462/Cake.Testing.dll": {}
         }
       },
       "Cake.Testing.Xunit/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.5.2",
+        "framework": ".NETFramework,Version=v4.6.2",
         "dependencies": {
           "Cake.Core": "1.0.0",
           "xunit.assert.source": "2.2.0-beta2-build3300",
@@ -426,10 +431,10 @@
           "System.Runtime"
         ],
         "compile": {
-          "net452/Cake.Testing.Xunit.dll": {}
+          "net462/Cake.Testing.Xunit.dll": {}
         },
         "runtime": {
-          "net452/Cake.Testing.Xunit.dll": {}
+          "net462/Cake.Testing.Xunit.dll": {}
         }
       }
     }
@@ -1181,7 +1186,7 @@
       "NSubstitute >= 1.10.0",
       "dotnet-test-xunit >= 2.2.0-preview2-build1029"
     ],
-    ".NETFramework,Version=v4.5.2": [
+    ".NETFramework,Version=v4.6.2": [
       "System.Runtime"
     ]
   },

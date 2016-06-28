@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 using System;
-#if !NET452
+#if !NET462
 using System.Runtime.InteropServices;
 #endif
 
@@ -19,7 +19,7 @@ namespace Cake.Core.IO
         /// <returns>Whether or not the current operative system is 64 bit.</returns>
         public static bool Is64BitOperativeSystem()
         {
-#if NET452
+#if NET462
             return Environment.Is64BitOperatingSystem;
 #else
             return RuntimeInformation.OSArchitecture == Architecture.X64
@@ -33,7 +33,7 @@ namespace Cake.Core.IO
         /// <returns>Whether or not the current machine is running Unix.</returns>
         public static bool IsUnix()
         {
-#if NET452
+#if NET462
             var platform = (int)Environment.OSVersion.Platform;
             return (platform == 4) || (platform == 6) || (platform == 128);
 #else

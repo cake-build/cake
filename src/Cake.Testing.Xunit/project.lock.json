@@ -2,7 +2,7 @@
   "locked": false,
   "version": 2,
   "targets": {
-    ".NETFramework,Version=v4.5.2": {
+    ".NETFramework,Version=v4.6.2": {
       "xunit.abstractions/2.0.0": {
         "type": "package",
         "compile": {
@@ -48,17 +48,17 @@
       },
       "Cake.Core/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.5.2",
+        "framework": ".NETFramework,Version=v4.6.2",
         "frameworkAssemblies": [
           "System.Data",
           "System.Xml",
           "System.Xml.Linq"
         ],
         "compile": {
-          "net452/Cake.Core.dll": {}
+          "net462/Cake.Core.dll": {}
         },
         "runtime": {
-          "net452/Cake.Core.dll": {}
+          "net462/Cake.Core.dll": {}
         }
       }
     }
@@ -288,7 +288,7 @@
       "xunit.assert.source >= 2.2.0-beta2-build3300",
       "xunit.core >= 2.1.0"
     ],
-    ".NETFramework,Version=v4.5.2": [
+    ".NETFramework,Version=v4.6.2": [
       "System.Runtime"
     ]
   },

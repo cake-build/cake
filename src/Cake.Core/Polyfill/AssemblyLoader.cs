@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System;
 
-#if !NET452
+#if !NET462
 using Microsoft.Extensions.DependencyModel;
 using System.Runtime.Loader;
 #endif
@@ -19,7 +19,7 @@ namespace Cake.Core.Polyfill
 
         public static Assembly LoadFromString(string path)
         {
-#if NET452
+#if NET462
             return Assembly.LoadFrom(path);
 #else
             throw new NotImplementedException("Not implemented for .NET Core.");

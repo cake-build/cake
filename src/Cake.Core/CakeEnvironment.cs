@@ -66,7 +66,7 @@ namespace Cake.Core
         /// </returns>
         public DirectoryPath GetSpecialPath(SpecialPath path)
         {
-#if NET452
+#if NET462
             switch (path)
             {
                 case SpecialPath.ApplicationData:
@@ -136,7 +136,7 @@ namespace Cake.Core
         /// <returns>The target framework.</returns>
         public FrameworkName GetTargetFramework()
         {
-#if NET452
+#if NET462
             // Try to get the current framework name from the current application domain,
             // but if that is null, we default to .NET 4.5. The reason for doing this is
             // that this actually is what happens on Mono.

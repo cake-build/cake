@@ -53,7 +53,7 @@ namespace Cake.Core.Scripting
                 typeof(Action).GetTypeInfo().Assembly, // mscorlib
                 typeof(Uri).GetTypeInfo().Assembly, // System
                 typeof(IQueryable).GetTypeInfo().Assembly, // System.Core
-#if NET452
+#if NET462
                 typeof(System.Data.DataTable).GetTypeInfo().Assembly, // System.Data
 #endif
                 typeof(System.Xml.XmlReader).GetTypeInfo().Assembly, // System.Xml

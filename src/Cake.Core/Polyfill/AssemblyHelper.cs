@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 
 namespace Cake.Core.Polyfill
 {
@@ -10,7 +6,7 @@ namespace Cake.Core.Polyfill
     {
         public static Assembly GetExecutingAssembly()
         {
-#if NET452
+#if NET462
             return Assembly.GetExecutingAssembly();
 #else
             return typeof(CakeEnvironment).GetTypeInfo().Assembly;
