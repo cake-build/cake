@@ -40,7 +40,6 @@ namespace Cake.Common.Tests.Unit.Tools.OpenCover
 
                 // Then
                 Assert.IsArgumentNullException(result, "action");
-
             }
 
             [Fact]
@@ -95,7 +94,7 @@ namespace Cake.Common.Tests.Unit.Tools.OpenCover
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("-target:\"/Working/tools/Test.exe\" "+
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
                              "-targetargs:\"-argument\" " +
                              "-register:user -output:\"/Working/result.xml\"", result.Args);
             }

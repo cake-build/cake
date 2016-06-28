@@ -21,6 +21,7 @@ namespace Cake.Core.Tests.Fixtures
             _methods = typeof (MethodAliasGeneratorData).GetMethods();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public string GetExpectedCode(string name)
         {
             var resource = string.Concat("Cake.Core.Tests.Unit.Scripting.CodeGen.Expected.Methods.", name);

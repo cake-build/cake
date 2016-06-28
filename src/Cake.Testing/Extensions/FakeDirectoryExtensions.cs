@@ -2,6 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 // ReSharper disable once CheckNamespace
+
+using System;
+
 namespace Cake.Testing
 {
     /// <summary>
@@ -16,6 +19,11 @@ namespace Cake.Testing
         /// <returns>The same <see cref="FakeDirectory"/> instance so that multiple calls can be chained.</returns>
         public static FakeDirectory Hide(this FakeDirectory directory)
         {
+            if (directory == null)
+            {
+                throw new ArgumentNullException("directory");
+            }
+
             directory.Hidden = true;
             return directory;
         }

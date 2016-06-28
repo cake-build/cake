@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Cake.Core;
@@ -88,7 +89,7 @@ namespace Cake.Testing
             if (directory == null)
             {
                 file.Exists = false;
-                throw new DirectoryNotFoundException(string.Format("Could not find a part of the path '{0}'.", file.Path.FullPath));
+                throw new DirectoryNotFoundException(string.Format(CultureInfo.InvariantCulture, "Could not find a part of the path '{0}'.", file.Path.FullPath));
             }
 
             if (!directory.Content.Files.ContainsKey(file.Path))
@@ -230,7 +231,7 @@ namespace Cake.Testing
                 if (!overwrite)
                 {
                     const string format = "{0} exists and overwrite is false.";
-                    var message = string.Format(format, destination.FullPath);
+                    var message = string.Format(CultureInfo.InvariantCulture, format, destination.FullPath);
                     throw new IOException(message);
                 }
             }
