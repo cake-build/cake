@@ -107,6 +107,16 @@ namespace Cake.Common.Tools.OctopusDeploy
         [CakeMethodAlias]
         public static void OctoPush(this ICakeContext context, string server, string apiKey, IEnumerable<FilePath> packagePaths, OctopusPushSettings settings)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            if (packagePaths == null)
+            {
+                throw new ArgumentNullException("packagePaths");
+            }
+
             var pusher = new OctopusDeployPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             pusher.PushPackage(server, apiKey, packagePaths.ToArray(), settings);
         }
