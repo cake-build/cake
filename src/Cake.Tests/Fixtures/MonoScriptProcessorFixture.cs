@@ -56,6 +56,7 @@ namespace Cake.Tests.Fixtures
             return outputLines.Reassemble();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         private static IEnumerable<string> ReadLinesFromResource(Assembly assembly, string path, bool input)
         {
             Assert.NotNull(assembly);

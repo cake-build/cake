@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
+using System;
 using Cake.Core.Tooling;
 using Cake.Testing.Fixtures;
 
@@ -23,6 +25,10 @@ namespace Cake.Testing
             where TToolSettings : ToolSettings, new()
             where TFixtureResult : ToolFixtureResult
         {
+            if (fixture == null)
+            {
+                throw new ArgumentNullException("fixture");
+            }
             var file = fixture.FileSystem.GetFile(fixture.DefaultToolPath);
             if (file.Exists)
             {
@@ -41,6 +47,10 @@ namespace Cake.Testing
             where TToolSettings : ToolSettings, new()
             where TFixtureResult : ToolFixtureResult
         {
+            if (fixture == null)
+            {
+                throw new ArgumentNullException("fixture");
+            }
             if (fixture.Settings.ToolPath != null)
             {
                 var path = fixture.Settings.ToolPath.MakeAbsolute(fixture.Environment);
@@ -59,6 +69,10 @@ namespace Cake.Testing
             where TToolSettings : ToolSettings, new()
             where TFixtureResult : ToolFixtureResult
         {
+            if (fixture == null)
+            {
+                throw new ArgumentNullException("fixture");
+            }
             fixture.ProcessRunner.Process = null;
         }
 
@@ -74,6 +88,10 @@ namespace Cake.Testing
             where TToolSettings : ToolSettings, new()
             where TFixtureResult : ToolFixtureResult
         {
+            if (fixture == null)
+            {
+                throw new ArgumentNullException("fixture");
+            }
             fixture.ProcessRunner.Process.SetExitCode(exitCode);
         }
     }

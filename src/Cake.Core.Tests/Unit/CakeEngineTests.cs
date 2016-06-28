@@ -684,7 +684,7 @@ namespace Cake.Core.Tests.Unit
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
                 engine.RegisterTaskSetupAction((cc, sc) => result.Add("TASK_SETUP:" + sc.Task.Name));
-                engine.RegisterTask("A").Does(()=>result.Add("Executing A"));
+                engine.RegisterTask("A").Does(() => result.Add("Executing A"));
                 engine.RegisterTask("B").Does(() => result.Add("Executing B")).IsDependentOn("A");
 
                 // When
@@ -836,7 +836,7 @@ namespace Cake.Core.Tests.Unit
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
 
-                engine.RegisterTaskSetupAction((cc,sc) => { throw new InvalidOperationException("Task Setup: " + sc.Task.Name); });
+                engine.RegisterTaskSetupAction((cc, sc) => { throw new InvalidOperationException("Task Setup: " + sc.Task.Name); });
                 engine.RegisterTaskTeardownAction((cc, tc) => { throw new InvalidOperationException("Task Teardown: " + tc.Task.Name); });
                 engine.RegisterTask("A").Does(() => { });
 
