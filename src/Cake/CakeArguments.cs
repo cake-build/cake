@@ -12,10 +12,9 @@ namespace Cake
         private readonly Dictionary<string, string> _arguments;
 
         /// <summary>
-        /// Gets the arguments.
+        /// Gets the arguments provided via the command line and their specified values.
         /// </summary>
-        /// <value>The arguments.</value>
-        public IReadOnlyDictionary<string, string> Arguments
+        public IReadOnlyDictionary<string, string> AsDictionary
         {
             get { return _arguments; }
         }

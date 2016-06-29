@@ -1,6 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
+using System.Collections.Generic;
+
 namespace Cake.Core
 {
     /// <summary>
@@ -8,6 +11,12 @@ namespace Cake.Core
     /// </summary>
     public interface ICakeArguments
     {
+        /// <summary>
+        /// Gets the arguments provided via the command line and their specified values.
+        /// </summary>
+        /// <value>The arguments dictionary.</value>
+        IReadOnlyDictionary<string, string> AsDictionary { get; }
+
         /// <summary>
         /// Determines whether or not the specified argument exist.
         /// </summary>
