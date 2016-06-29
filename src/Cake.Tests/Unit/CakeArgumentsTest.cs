@@ -33,6 +33,58 @@ namespace Cake.Tests.Unit
             }
         }
 
+        public sealed class DefinedArgumentNames
+        {
+            [Theory]
+            [InlineData(new string[] { "A" }, new string[] { "A" } )]
+            [InlineData(new string[] { "A", "B" }, new string[] { "A", "B" })]
+            public void Should_Return_All_Defined_Arguments(string[] defined, string[] expected)
+            {
+                // Given
+                var options = new CakeOptions();
+                options.Arguments.Add("A", "B");
+                options.Arguments.Add("C", "D");
+                var arguments = new CakeArguments(options);
+
+                foreach (var arg in defined)
+                {
+                    arguments.GetArgument(arg);
+                }
+
+                // When
+                var result = arguments.DefinedArgumentNames;
+
+                // Then
+                Assert.Equal(expected, result);
+            }
+        }
+
+        public sealed class UnrecognizedArgumentNames
+        {
+            [Theory]
+            [InlineData(new string[] { "A" }, new string[] { "C" })]
+            [InlineData(new string[] { "A", "B", "C" }, new string[] { })]
+            public void Should_Return_All_Unrecognized_Arguments(string[] defined, string[] expected)
+            {
+                // Given
+                var options = new CakeOptions();
+                options.Arguments.Add("A", "B");
+                options.Arguments.Add("C", "D");
+                var arguments = new CakeArguments(options);
+
+                foreach (var arg in defined)
+                {
+                    arguments.GetArgument(arg);
+                }
+
+                // When
+                var result = arguments.UnrecognizedArgumentNames;
+
+                // Then
+                Assert.Equal(expected, result);
+            }
+        }
+
         public sealed class HasArguments
         {
             [Theory]

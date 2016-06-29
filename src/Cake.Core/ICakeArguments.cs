@@ -18,6 +18,18 @@ namespace Cake.Core
         IReadOnlyDictionary<string, string> AsDictionary { get; }
 
         /// <summary>
+        /// Gets the argument names defined within the executing the Cake script.
+        /// </summary>
+        /// <value>The argument names defined within the executing Cake script.</value>
+        IEnumerable<string> DefinedArgumentNames { get; }
+
+        /// <summary>
+        /// Gets the argument names provided via the command line that have not been defined within the executing Cake script.
+        /// </summary>
+        /// <value>The argument names not defined within the executing Cake script.</value>
+        IEnumerable<string> UnrecognizedArgumentNames { get; }
+
+        /// <summary>
         /// Determines whether or not the specified argument exist.
         /// </summary>
         /// <param name="name">The argument name.</param>
