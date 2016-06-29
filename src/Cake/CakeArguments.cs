@@ -49,7 +49,7 @@ namespace Cake
         /// Gets an argument.
         /// </summary>
         /// <param name="name">The argument name.</param>
-        /// <returns>The argument value.</returns>
+        /// <returns>The argument value if the argument exists, otherwise <c>null</c>.</returns>
         public string GetArgument(string name)
         {
             name = name.Trim();
