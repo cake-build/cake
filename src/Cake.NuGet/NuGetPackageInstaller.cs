@@ -137,9 +137,17 @@ namespace Cake.NuGet
             {
                 Arguments = GetArguments(package, path),
                 RedirectStandardOutput = true,
-                Silent = true
+                Silent = _log.Verbosity < Verbosity.Diagnostic
             });
             process.WaitForExit();
+
+            var exitCode = process.GetExitCode();
+            if (exitCode != 0)
+            {
+                _log.Warning("NuGet exited with {0}", exitCode);
+                var output = string.Join(Environment.NewLine, process.GetStandardOutput());
+                _log.Verbose(Verbosity.Diagnostic, "Output:\r\n{0}", output);
+            }
 
             // Return the files.
             return _contentResolver.GetFiles(packagePath, type);
