@@ -36,7 +36,7 @@ namespace Cake
         /// </summary>
         /// <param name="name">The argument name.</param>
         /// <returns>
-        ///   <c>true</c> if the argument exist; otherwise <c>false</c>.
+        ///   <c>true</c> if the argument exists; otherwise <c>false</c>.
         /// </returns>
         public bool HasArgument(string name)
         {
