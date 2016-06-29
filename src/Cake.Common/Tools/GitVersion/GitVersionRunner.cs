@@ -79,11 +79,11 @@ namespace Cake.Common.Tools.GitVersion
                 switch (settings.OutputType.Value)
                 {
                     case GitVersionOutput.Json:
-                        builder.Append("/output");
+                        builder.Append("-output");
                         builder.Append("json");
                         break;
                     case GitVersionOutput.BuildServer:
-                        builder.Append("/output");
+                        builder.Append("-output");
                         builder.Append("buildserver");
                         break;
                 }
@@ -91,22 +91,22 @@ namespace Cake.Common.Tools.GitVersion
 
             if (!string.IsNullOrWhiteSpace(settings.ShowVariable))
             {
-                builder.Append("/showvariable");
+                builder.Append("-showvariable");
                 builder.Append(settings.ShowVariable);
             }
 
             if (!string.IsNullOrWhiteSpace(settings.UserName))
             {
-                builder.Append("/u");
+                builder.Append("-u");
                 builder.AppendQuoted(settings.UserName);
 
-                builder.Append("/p");
+                builder.Append("-p");
                 builder.AppendQuotedSecret(settings.Password);
             }
 
             if (settings.UpdateAssemblyInfo)
             {
-                builder.Append("/updateassemblyinfo");
+                builder.Append("-updateassemblyinfo");
 
                 if (settings.UpdateAssemblyInfoFilePath != null)
                 {
@@ -116,17 +116,17 @@ namespace Cake.Common.Tools.GitVersion
 
             if (settings.RepositoryPath != null)
             {
-                builder.Append("/targetpath");
+                builder.Append("-targetpath");
                 builder.AppendQuoted(settings.RepositoryPath.FullPath);
             }
             else if (!string.IsNullOrWhiteSpace(settings.Url))
             {
-                builder.Append("/url");
+                builder.Append("-url");
                 builder.AppendQuoted(settings.Url);
 
                 if (!string.IsNullOrWhiteSpace(settings.Branch))
                 {
-                    builder.Append("/b");
+                    builder.Append("-b");
                     builder.Append(settings.Branch);
                 }
                 else
@@ -136,20 +136,20 @@ namespace Cake.Common.Tools.GitVersion
 
                 if (!string.IsNullOrWhiteSpace(settings.Commit))
                 {
-                    builder.Append("/c");
+                    builder.Append("-c");
                     builder.AppendQuoted(settings.Commit);
                 }
 
                 if (settings.DynamicRepositoryPath != null)
                 {
-                    builder.Append("/dynamicRepoLocation");
+                    builder.Append("-dynamicRepoLocation");
                     builder.AppendQuoted(settings.DynamicRepositoryPath.FullPath);
                 }
             }
 
             if (settings.LogFilePath != null)
             {
-                builder.Append("/l");
+                builder.Append("-l");
                 builder.AppendQuoted(settings.LogFilePath.FullPath);
             }
 
