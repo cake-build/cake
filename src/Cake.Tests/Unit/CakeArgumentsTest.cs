@@ -42,6 +42,25 @@ namespace Cake.Tests.Unit
                 // Then
                 Assert.Equal(expected, result);
             }
+
+            [Theory]
+            [InlineData("a", true)]
+            [InlineData("  a  ", true)]
+            [InlineData("b", false)]
+            [InlineData("  b  ", false)]
+            public void Should_Trim_Argument_Name(string key, bool expected)
+            {
+                // Given
+                var options = new CakeOptions();
+                options.Arguments.Add("A", "B");
+                var arguments = new CakeArguments(options);
+
+                // When
+                var result = arguments.HasArgument(key);
+
+                // Then
+                Assert.Equal(expected, result);
+            }
         }
 
         public sealed class GetArguments
@@ -67,6 +86,23 @@ namespace Cake.Tests.Unit
             [InlineData("a", "B")]
             [InlineData("b", null)]
             public void Should_Be_Case_Insensitive(string key, string expected)
+            {
+                // Given
+                var options = new CakeOptions();
+                options.Arguments.Add("A", "B");
+                var arguments = new CakeArguments(options);
+
+                // When
+                var result = arguments.GetArgument(key);
+
+                // Then
+                Assert.Equal(expected, result);
+            }
+
+            [Theory]
+            [InlineData("a", "B")]
+            [InlineData("  a  ", "B")]
+            public void Should_Trim_Argument_Name(string key, string expected)
             {
                 // Given
                 var options = new CakeOptions();

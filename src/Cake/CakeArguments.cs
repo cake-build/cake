@@ -40,6 +40,8 @@ namespace Cake
         /// </returns>
         public bool HasArgument(string name)
         {
+            name = name.Trim();
+
             return _arguments.ContainsKey(name);
         }
 
@@ -50,6 +52,8 @@ namespace Cake
         /// <returns>The argument value.</returns>
         public string GetArgument(string name)
         {
+            name = name.Trim();
+
             return _arguments.ContainsKey(name)
                 ? _arguments[name] : null;
         }
