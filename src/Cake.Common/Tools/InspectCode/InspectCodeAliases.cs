@@ -55,11 +55,11 @@ namespace Cake.Common.Tools.InspectCode
         /// msBuildProperties.Add("platform", "AnyCPU");
         ///
         /// InspectCode("./MySolution.sln", new InspectCodeSettings {
-        ///     SolutionWideAnalysis = true;
-        ///     Profile = "./MySolution.sln.DotSettings";
-        ///     MsBuildProperties = msBuildProperties;
-        ///     OutputFile = resharperReportsDirectory + File("inspectcode-output.xml");
-        ///     ThrowExceptionOnFindingViolations = true;
+        ///     SolutionWideAnalysis = true,
+        ///     Profile = "./MySolution.sln.DotSettings",
+        ///     MsBuildProperties = msBuildProperties,
+        ///     OutputFile = resharperReportsDirectory + File("inspectcode-output.xml"),
+        ///     ThrowExceptionOnFindingViolations = true
         /// });
         /// </code>
         /// </example>
