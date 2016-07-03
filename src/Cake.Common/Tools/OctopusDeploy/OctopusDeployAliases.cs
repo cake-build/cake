@@ -44,7 +44,7 @@ namespace Cake.Common.Tools.OctopusDeploy
         ///     });
         ///
         ///     OctoCreateRelease(projectNameOnServer, new CreateReleaseSettings {
-        ///         ConfigurationFile = "C:\OctopusDeploy.config"
+        ///         ConfigurationFile = @"C:\OctopusDeploy.config"
         ///     });
         ///
         ///     // Additional Options
@@ -60,7 +60,7 @@ namespace Cake.Common.Tools.OctopusDeploy
         ///                         { "PackageOne", "1.0.2.3" },
         ///                         { "PackageTwo", "5.2.3" }
         ///                     },
-        ///         PackagesFolder = "C:\MyOtherNugetFeed",
+        ///         PackagesFolder = @"C:\MyOtherNugetFeed",
         ///
         ///         // One or the other
         ///         ReleaseNotes = "Version 2.0 \n What a milestone we have ...",
