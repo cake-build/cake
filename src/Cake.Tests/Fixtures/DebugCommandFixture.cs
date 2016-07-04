@@ -8,6 +8,8 @@ using Cake.Commands;
 using Cake.Diagnostics;
 using Cake.Scripting;
 using NSubstitute;
+using System;
+using Cake.Testing;
 
 namespace Cake.Tests.Fixtures
 {
@@ -16,6 +18,7 @@ namespace Cake.Tests.Fixtures
         public IScriptRunner ScriptRunner { get; set; }
         public ICakeLog Log { get; set; }
         public IDebugger Debugger { get; set; }
+        public FakeConsole Console { get; private set; }
         public CakeOptions Options { get; set; }
 
         public DebugCommandFixture()
@@ -23,6 +26,9 @@ namespace Cake.Tests.Fixtures
             ScriptRunner = Substitute.For<IScriptRunner>();
             Log = Substitute.For<ICakeLog>();
             Debugger = Substitute.For<IDebugger>();
+            Debugger.WaitForAttach(Arg.Any<TimeSpan>()).Returns(true);
+            Console = new FakeConsole();
+
             Options = new CakeOptions
             {
                 Script = "build.cake"
@@ -39,7 +45,7 @@ namespace Cake.Tests.Fixtures
 
             var host = new BuildScriptHost(engine, context, printer, Log);
 
-            return new DebugCommand(ScriptRunner, Debugger, host);
+            return new DebugCommand(ScriptRunner, Debugger, Console, host);
         }
 
         public bool Execute()

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cake.Core;
 
 namespace Cake.Testing
@@ -17,6 +18,12 @@ namespace Cake.Testing
         /// </summary>
         /// <value>The messages.</value>
         public List<string> Messages { get; set; }
+
+        /// <summary>
+        /// Gets or sets the keys.
+        /// </summary>
+        /// <value>The keys.</value>
+        public Queue<ConsoleKeyInfo> Keys { get; set; }
 
         /// <summary>
         /// Gets or sets the error messages.
@@ -42,6 +49,7 @@ namespace Cake.Testing
         public FakeConsole()
         {
             Messages = new List<string>();
+            Keys = new Queue<ConsoleKeyInfo>();
             ErrorMessages = new List<string>();
             ForegroundColor = ConsoleColor.Gray;
             BackgroundColor = ConsoleColor.Black;
@@ -109,6 +117,31 @@ namespace Cake.Testing
         {
             ForegroundColor = ConsoleColor.Gray;
             BackgroundColor = ConsoleColor.Black;
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether a key press is available in the input stream.
+        /// </summary>
+        /// <returns>true if a key press is available; otherwise, false.</returns>
+        public bool KeyAvailable
+        {
+            get { return Keys.Any(); }
+        }
+
+        /// <summary>
+        /// Obtains the next character or function key pressed by the user.
+        /// The pressed key is optionally displayed in the console window.
+        /// </summary>
+        /// <param name="intercept">Determines whether to display the pressed key in the console window.
+        /// true to not display the pressed key; otherwise, false.</param>
+        /// <returns>A System.ConsoleKeyInfo object that describes the System.ConsoleKey constant
+        /// and Unicode character, if any, that correspond to the pressed console key. The
+        /// System.ConsoleKeyInfo object also describes, in a bitwise combination of System.ConsoleModifiers
+        /// values, whether one or more Shift, Alt, or Ctrl modifier keys was pressed simultaneously
+        /// with the console key.</returns>
+        public ConsoleKeyInfo ReadKey(bool intercept)
+        {
+            return Keys.Dequeue();
         }
     }
 }

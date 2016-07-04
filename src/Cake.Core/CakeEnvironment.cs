@@ -56,6 +56,27 @@ namespace Cake.Core
             return Machine.IsUnix();
         }
 
+        private static readonly string[] _debugArgs =
+        {
+            "-d", "--d", "-d=true", "--d=true",
+            "-debug", "--debug", "-debug=true", "--debug=true"
+        };
+
+        /// <summary>
+        /// Gets a value indicating whether the current execution is running in debug.
+        /// </summary>
+        /// <returns>
+        /// Whether or not the current execution is running in debug.
+        /// </returns>
+        public bool IsDebug
+        {
+            get
+            {
+                var args = Environment.GetCommandLineArgs();
+                return args.Intersect(_debugArgs).Any();
+            }
+        }
+
         /// <summary>
         /// Gets a special path.
         /// </summary>

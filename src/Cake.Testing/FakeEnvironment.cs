@@ -28,6 +28,14 @@ namespace Cake.Testing
         /// <value>The working directory.</value>
         public DirectoryPath WorkingDirectory { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the current execution is running in debug.
+        /// </summary>
+        /// <returns>
+        /// Whether or not the current execution is running in debug.
+        /// </returns>
+        public bool IsDebug { get; set; }
+
         private FakeEnvironment(bool isUnix, bool is64Bit)
         {
             _isUnix = isUnix;

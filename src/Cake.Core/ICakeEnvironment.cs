@@ -31,6 +31,14 @@ namespace Cake.Core
         bool IsUnix();
 
         /// <summary>
+        /// Gets a value indicating whether the current execution is running in debug.
+        /// </summary>
+        /// <returns>
+        /// Whether or not the current execution is running in debug.
+        /// </returns>
+        bool IsDebug { get; }
+
+        /// <summary>
         /// Gets a special path.
         /// </summary>
         /// <param name="path">The path.</param>

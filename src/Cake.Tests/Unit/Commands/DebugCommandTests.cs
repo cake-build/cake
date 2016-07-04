@@ -1,13 +1,15 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
+using System;
 using Cake.Core.Diagnostics;
 using Cake.Scripting;
 using Cake.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
 
-namespace Cake.Tests.Unit.Scripting
+namespace Cake.Tests.Unit.Commands
 {
     public sealed class DebugCommandTests
     {
@@ -58,6 +60,36 @@ namespace Cake.Tests.Unit.Scripting
 
                 // Then
                 log.Received(1).Information(Verbosity.Quiet, Arg.Any<string>(), pid);
+            }
+
+            [Fact]
+            public void Should_Report_If_Waiting_For_Debugger_Is_Cancelled()
+            {
+                // Given
+                var fixture = new DebugCommandFixture();
+                fixture.Console.Keys.Enqueue(new ConsoleKeyInfo((char)27, ConsoleKey.Escape, false, false, false));
+                var log = fixture.Log;
+
+                // When
+                fixture.Execute();
+
+                // Then
+                log.Received(1).Information(Verbosity.Quiet, "Operation cancelled by user");
+            }
+
+            [Fact]
+            public void Should_Report_If_Debugger_Is_Attached()
+            {
+                // Given
+                var fixture = new DebugCommandFixture();
+                fixture.Debugger.WaitForAttach(Arg.Any<TimeSpan>()).Returns(true);
+                var log = fixture.Log;
+
+                // When
+                fixture.Execute();
+
+                // Then
+                log.Received(1).Information(Verbosity.Quiet, "Debugger attached");
             }
         }
     }
