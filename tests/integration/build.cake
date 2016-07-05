@@ -7,6 +7,7 @@
 #load "./Cake.Common/EnvironmentAliases.cake"
 #load "./Cake.Common/IO/DirectoryAliases.cake"
 #load "./Cake.Core/Tooling/ToolLocator.cake"
+#load "./Cake.Common/Tools/GitVersion/GitVersionAliases.cake"
 
 //////////////////////////////////////////////////
 // ARGUMENTS
@@ -35,9 +36,13 @@ Task("Cake.Common")
     .IsDependentOn("Cake.Common.EnvironmentAliases")
     .IsDependentOn("Cake.Common.IO.DirectoryAliases");
 
+Task("Cake.Common.Tools")
+    .IsDependentOn("Cake.Common.Tools.GitVersionAliases");
+
 Task("Run-All-Tests")
     .IsDependentOn("Cake.Core")
-    .IsDependentOn("Cake.Common");
+    .IsDependentOn("Cake.Common")
+    .IsDependentOn("Cake.Common.Tools");
 
 //////////////////////////////////////////////////
 
