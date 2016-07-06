@@ -1,8 +1,11 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
+using System;
 using Cake.Core.IO;
 using Cake.Core.Tests.Fixtures;
+using Cake.Testing;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit.Tooling
@@ -71,6 +74,76 @@ namespace Cake.Core.Tests.Unit.Tooling
                 // Then
                 Assert.Equal("/Other", result.Process.WorkingDirectory.FullPath);
             }
-        }
+
+			[Fact]
+			public void Should_Succeed_On_Zero_ExitCode_Without_Custom_Validation()
+			{
+				// Given
+				var fixture = new DummyToolFixture();
+				fixture.GivenProcessExitsWithCode(0);
+
+				// When
+				var result = fixture.Run();
+
+				// Then
+				Assert.IsNotType<Exception>(result);
+			}
+
+			[Fact]
+			public void Should_Throw_On_NonZero_ExitCode_Without_Custom_Validation()
+			{
+				// Given
+				var fixture = new DummyToolFixture();
+				fixture.GivenProcessExitsWithCode(11);
+
+				// When
+				var result = Record.Exception(() => fixture.Run());
+
+				// Then
+				Assert.IsCakeException(result, "dummy: Process returned an error (exit code 11).");
+			}
+
+			[Fact]
+			public void Should_Succeed_On_NonZero_ExitCode_Validated_By_Custom_Validator()
+			{
+				// Given
+				var fixture = new DummyToolFixture();
+				fixture.ExitCodeValidation = ec =>
+				{
+					if (ec >= 10)
+					{
+						throw new CakeException("UnitTest");
+					}
+				};
+				fixture.GivenProcessExitsWithCode(7);
+
+				// When
+				var result = fixture.Run();
+				
+				// Then
+				Assert.IsNotType<Exception>(result);
+			}
+
+			[Fact]
+			public void Should_Throw_On_Invalid_ExitCode_Validated_By_Custom_Validator()
+			{
+				// Given
+				var fixture = new DummyToolFixture();
+				fixture.ExitCodeValidation = ec =>
+				{
+					if (ec != 1)
+					{
+						throw new CakeException("UnitTest");
+					}
+				};
+				fixture.GivenProcessExitsWithCode(10);
+
+				// When
+				var result = Record.Exception(() => fixture.Run());
+
+				// Then
+				Assert.IsCakeException(result, "UnitTest");
+			}
+		}
     }
 }
