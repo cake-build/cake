@@ -115,12 +115,7 @@ namespace Cake.Core.Tooling
 
             try
             {
-                // Did an error occur?
-                if (process.GetExitCode() != 0)
-                {
-                    const string message = "{0}: Process returned an error (exit code {1}).";
-                    throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, GetToolName(), process.GetExitCode()));
-                }
+                ProcessExitCode(process.GetExitCode());
             }
             finally
             {
@@ -129,6 +124,21 @@ namespace Cake.Core.Tooling
                 {
                     postAction(process);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Customized exit code handling.
+        /// Standard behavior is to fail when non zero.
+        /// </summary>
+        /// <param name="exitCode">The process exit code</param>
+        protected virtual void ProcessExitCode(int exitCode)
+        {
+            // Did an error occur?
+            if (exitCode != 0)
+            {
+                const string message = "{0}: Process returned an error (exit code {1}).";
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, GetToolName(), exitCode));
             }
         }
 
