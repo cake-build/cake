@@ -53,17 +53,17 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
-            public void Should_Throw_If_Log_Is_Null()
+            public void Should_Throw_If_Pipeline_Is_Null()
             {
                 // Given
                 var fixture = new CakeContextFixture();
-                fixture.Log = null;
+                fixture.LogPipeline = null;
 
                 // When
                 var result = Record.Exception(() => fixture.CreateContext());
 
                 // Then
-                Assert.IsArgumentNullException(result, "log");
+                Assert.IsArgumentNullException(result, "logPipeline");
             }
 
             [Fact]

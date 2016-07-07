@@ -115,6 +115,7 @@
     <Compile Include="Build\TravisCI\TravisCIDisposableExtensions.cs" />
     <Compile Include="Build\TravisCI\TravisCIInfo.cs" />
     <Compile Include="Build\TravisCI\TravisCIProvider.cs" />
+    <Compile Include="Diagnostics\PipelineAliases.cs" />
     <Compile Include="IO\Paths\ConvertableDirectoryPath.cs" />
     <Compile Include="IO\Paths\ConvertableFilePath.cs" />
     <Compile Include="Net\HttpClientExtensions.cs" />

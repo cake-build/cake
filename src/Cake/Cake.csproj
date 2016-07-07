@@ -128,6 +128,7 @@
     <Compile Include="Composition\ContainerRegistration.cs" />
     <Compile Include="Composition\ModuleLoader.cs" />
     <Compile Include="Composition\ModuleSearcher.cs" />
+    <Compile Include="Diagnostics\CakeLogPipeline.cs" />
     <Compile Include="Modules\ArgumentsModule.cs" />
     <Compile Include="Modules\CakeModule.cs" />
     <Compile Include="Modules\ConfigurationModule.cs" />

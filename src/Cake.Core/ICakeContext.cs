@@ -59,5 +59,10 @@ namespace Cake.Core
         /// </summary>
         /// <value>The tool locator.</value>
         IToolLocator Tools { get; }
+
+        /// <summary>
+        ///     Gets the logging pipeline which can be used to instantiate multiple loggers.
+        /// </summary>
+        ICakeLogPipeline LogPipeline { get; }
     }
 }

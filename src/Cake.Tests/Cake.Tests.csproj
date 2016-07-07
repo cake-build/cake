@@ -64,6 +64,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Diagnostics\LogPipelineFixture.cs" />
+    <Compile Include="Unit\Diagnostics\LogPipelineTests.cs" />
     <Compile Include="Extensions\StreamReaderExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Fixtures\ArgumentParserFixture.cs" />

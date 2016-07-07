@@ -15,4 +15,23 @@ namespace Cake.Core.Diagnostics
     /// <param name="format">A composite format string.</param>
     /// <param name="args">An array of objects to write using format.</param>
     public delegate void LogActionEntry(string format, params object[] args);
+
+    /// <summary>
+    /// Delegate representing a function that can format log entries
+    /// </summary>
+    /// <param name="verbosity">The verbosity of the log entry</param>
+    /// <param name="level">The log level</param>
+    /// <param name="format">A composite format string.</param>
+    /// <param name="args">An array of objects to write using format.</param>
+    /// <returns>The formatted log entry</returns>
+    public delegate string LogEntryFormatterAction(Verbosity verbosity, LogLevel level, string format, params object[] args);
+
+    /// <summary>
+    /// Delegate representing a function that will take action on a log entry.
+    /// </summary>
+    /// <param name="verbosity">The verbosity of the log entry</param>
+    /// <param name="level">The log level</param>
+    /// <param name="format">A composite format string.</param>
+    /// <param name="args">An array of objects to write using format.</param>
+    public delegate void FullLogActionEntry(Verbosity verbosity, LogLevel level, string format, params object[] args);
 }
