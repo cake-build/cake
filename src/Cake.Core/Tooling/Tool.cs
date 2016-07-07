@@ -314,7 +314,7 @@ namespace Cake.Core.Tooling
                     var pathEnv = _environment.GetEnvironmentVariable("PATH");
                     if (!string.IsNullOrEmpty(pathEnv))
                     {
-                        pathDirs = pathEnv.Split(new[] { _environment.IsUnix() ? ':' : ';' }, StringSplitOptions.RemoveEmptyEntries);
+                        pathDirs = pathEnv.Split(new[] { _environment.Platform.IsUnix() ? ':' : ';' }, StringSplitOptions.RemoveEmptyEntries);
                     }
                     else
                     {

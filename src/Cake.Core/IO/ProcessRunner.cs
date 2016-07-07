@@ -53,7 +53,7 @@ namespace Cake.Core.IO
             }
 
             // Get the fileName
-            var fileName = _environment.IsUnix() ? filePath.FullPath : filePath.FullPath.Quote();
+            var fileName = _environment.Platform.IsUnix() ? filePath.FullPath : filePath.FullPath.Quote();
 
             // Get the arguments.
             var arguments = settings.Arguments ?? new ProcessArgumentBuilder();

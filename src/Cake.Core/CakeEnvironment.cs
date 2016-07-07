@@ -16,6 +16,10 @@ namespace Cake.Core
     /// </summary>
     public sealed class CakeEnvironment : ICakeEnvironment
     {
+        private readonly ICakePlatform _platform;
+        private readonly ICakeRuntime _runtime;
+        private readonly DirectoryPath _applicationRoot;
+
         /// <summary>
         /// Gets or sets the working directory.
         /// </summary>
@@ -27,33 +31,44 @@ namespace Cake.Core
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CakeEnvironment"/> class.
+        /// Gets the application root path.
         /// </summary>
-        public CakeEnvironment()
+        /// <value>The application root path.</value>
+        public DirectoryPath ApplicationRoot
         {
+            get { return _applicationRoot; }
+        }
+
+        /// <summary>
+        /// Gets the platform Cake is running on.
+        /// </summary>
+        /// <value>The platform Cake is running on.</value>
+        public ICakePlatform Platform
+        {
+            get { return _platform; }
+        }
+
+        /// <summary>
+        /// Gets the runtime Cake is running in.
+        /// </summary>
+        /// <value>The runtime Cake is running in.</value>
+        public ICakeRuntime Runtime
+        {
+            get { return _runtime; }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CakeEnvironment" /> class.
+        /// </summary>
+        /// <param name="platform">The platform.</param>
+        /// <param name="runtime">The runtime.</param>
+        public CakeEnvironment(ICakePlatform platform, ICakeRuntime runtime)
+        {
+            _platform = platform;
+            _runtime = runtime;
+            _applicationRoot = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
             WorkingDirectory = new DirectoryPath(System.IO.Directory.GetCurrentDirectory());
-        }
-
-        /// <summary>
-        /// Gets whether or not the current operative system is 64 bit.
-        /// </summary>
-        /// <returns>
-        /// Whether or not the current operative system is 64 bit.
-        /// </returns>
-        public bool Is64BitOperativeSystem()
-        {
-            return Machine.Is64BitOperativeSystem();
-        }
-
-        /// <summary>
-        /// Determines whether the current machine is running Unix.
-        /// </summary>
-        /// <returns>
-        /// Whether or not the current machine is running Unix.
-        /// </returns>
-        public bool IsUnix()
-        {
-            return Machine.IsUnix();
         }
 
         /// <summary>
@@ -87,18 +102,6 @@ namespace Cake.Core
         }
 
         /// <summary>
-        /// Gets the application root path.
-        /// </summary>
-        /// <returns>
-        /// The application root path.
-        /// </returns>
-        public DirectoryPath GetApplicationRoot()
-        {
-            var path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            return new DirectoryPath(path);
-        }
-
-        /// <summary>
         /// Gets an environment variable.
         /// </summary>
         /// <param name="variable">The variable.</param>
@@ -125,16 +128,49 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Gets whether or not the current operative system is 64 bit.
+        /// </summary>
+        /// <returns>
+        /// Whether or not the current operative system is 64 bit.
+        /// </returns>
+        [Obsolete("Please use CakeEnvironment.Platform.Is64Bit instead.")]
+        public bool Is64BitOperativeSystem()
+        {
+            return _platform.Is64Bit;
+        }
+
+        /// <summary>
+        /// Determines whether the current machine is running Unix.
+        /// </summary>
+        /// <returns>
+        /// Whether or not the current machine is running Unix.
+        /// </returns>
+        [Obsolete("Please use CakeEnvironment.Platform.IsUnix instead.")]
+        public bool IsUnix()
+        {
+            return _platform.IsUnix();
+        }
+
+        /// <summary>
+        /// Gets the application root path.
+        /// </summary>
+        /// <returns>
+        /// The application root path.
+        /// </returns>
+        [Obsolete("Please use CakeEnvironment.ApplicationRoot instead.")]
+        public DirectoryPath GetApplicationRoot()
+        {
+            return _applicationRoot;
+        }
+
+        /// <summary>
         /// Gets the target .Net framework version that the current AppDomain is targeting.
         /// </summary>
         /// <returns>The target framework.</returns>
+        [Obsolete("Please use CakeEnvironment.Runtime.TargetFramework instead.")]
         public FrameworkName GetTargetFramework()
         {
-            // Try to get the current framework name from the current application domain,
-            // but if that is null, we default to .NET 4.5. The reason for doing this is
-            // that this actually is what happens on Mono.
-            var frameworkName = AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName;
-            return new FrameworkName(frameworkName ?? ".NETFramework,Version=v4.5");
+            return _runtime.TargetFramework;
         }
 
         private static void SetWorkingDirectory(DirectoryPath path)

@@ -34,7 +34,7 @@ namespace Cake.Testing
             {
                 throw new ArgumentException("Working directory cannot be relative.");
             }
-            _comparer = new PathComparer(environment.IsUnix());
+            _comparer = new PathComparer(environment.Platform.IsUnix());
 
             _root = new FakeDirectory(this, "/");
             _root.Create();
