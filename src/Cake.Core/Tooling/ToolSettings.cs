@@ -39,6 +39,10 @@ namespace Cake.Core.Tooling
         ///     new NuGetSourcesSettings { UserName = "user", Password = "incorrect",
         ///     ArgumentCustomization = args=&gt;args.Append("-StorePasswordInClearText")
         /// });
+        /// // or with multiple arguments:
+        /// MSTest(pathPattern, new MSTestSettings() { ArgumentCustomization = args => { args.Append("/detail:errormessage");
+		///	                                                                             args.Append("/resultsfile:TestResults.trx");
+		///																		         return args; }});
         /// </code>
         /// </example>
         /// <value>The delegate used to customize the <see cref="Cake.Core.IO.ProcessArgumentBuilder" />.</value>
