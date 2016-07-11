@@ -59,7 +59,7 @@ namespace Cake.Common.Tools.DotNetCore.Build
             // Specific path?
             if (project != null)
             {
-                builder.Append(project);
+                builder.AppendQuoted(project);
             }
 
             // Output directory
