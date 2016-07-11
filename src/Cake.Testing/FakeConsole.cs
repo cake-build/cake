@@ -1,5 +1,9 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Cake.Core;
 
 namespace Cake.Testing
@@ -52,7 +56,7 @@ namespace Cake.Testing
         /// <param name="arg">An array of objects to write using format.</param>
         public void Write(string format, params object[] arg)
         {
-            Messages.Add(string.Format(format, arg));
+            Messages.Add(string.Format(CultureInfo.InvariantCulture, format, arg));
         }
 
         /// <summary>
@@ -66,7 +70,7 @@ namespace Cake.Testing
         {
             if (!string.IsNullOrWhiteSpace(format))
             {
-                Messages.Add(string.Format(format, arg));
+                Messages.Add(string.Format(CultureInfo.InvariantCulture, format, arg));
             }
         }
 
@@ -80,7 +84,7 @@ namespace Cake.Testing
         {
             if (!string.IsNullOrWhiteSpace(format))
             {
-                ErrorMessages.Add(string.Format(format, arg));
+                ErrorMessages.Add(string.Format(CultureInfo.InvariantCulture, format, arg));
             }
         }
 
@@ -95,7 +99,7 @@ namespace Cake.Testing
         {
             if (!string.IsNullOrWhiteSpace(format))
             {
-                ErrorMessages.Add(string.Format(format, arg));
+                ErrorMessages.Add(string.Format(CultureInfo.InvariantCulture, format, arg));
             }
         }
 

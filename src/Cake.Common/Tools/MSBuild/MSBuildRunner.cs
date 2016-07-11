@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -70,7 +73,8 @@ namespace Cake.Common.Tools.MSBuild
             if (settings.PlatformTarget.HasValue)
             {
                 var platform = settings.PlatformTarget.Value;
-                builder.Append(string.Concat("/p:Platform=", GetPlatformName(platform)));
+                bool isSolution = string.Equals(solution.GetExtension(), ".sln", StringComparison.OrdinalIgnoreCase);
+                builder.Append(string.Concat("/p:Platform=", GetPlatformName(platform, isSolution)));
             }
 
             // Got any properties?
@@ -100,12 +104,13 @@ namespace Cake.Common.Tools.MSBuild
             return builder;
         }
 
-        private static string GetPlatformName(PlatformTarget platform)
+        private static string GetPlatformName(PlatformTarget platform, bool isSolution)
         {
             switch (platform)
             {
                 case PlatformTarget.MSIL:
-                    return "\"Any CPU\"";
+                    // Solutions expect "Any CPU", but projects expect "AnyCPU"
+                    return isSolution ? "\"Any CPU\"" : "AnyCPU";
                 case PlatformTarget.x86:
                     return "x86";
                 case PlatformTarget.x64:

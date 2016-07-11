@@ -1,3 +1,8 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System;
 using Cake.Core.IO;
 
 namespace Cake.Testing.Fixtures
@@ -45,6 +50,14 @@ namespace Cake.Testing.Fixtures
         /// <param name="process">The process settings.</param>
         public ToolFixtureResult(FilePath path, ProcessSettings process)
         {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+            if (process == null)
+            {
+                throw new ArgumentNullException("process");
+            }
             _path = path;
             _args = process.Arguments.Render();
             _process = process;

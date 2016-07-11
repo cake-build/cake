@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using Cake.Core.Diagnostics;
@@ -50,7 +53,7 @@ namespace Cake.Core.IO
             }
 
             // Get the fileName
-            var fileName = _environment.IsUnix() ? filePath.FullPath : filePath.FullPath.Quote();
+            var fileName = _environment.Platform.IsUnix() ? filePath.FullPath : filePath.FullPath.Quote();
 
             // Get the arguments.
             var arguments = settings.Arguments ?? new ProcessArgumentBuilder();

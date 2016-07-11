@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -52,7 +55,8 @@ namespace Cake.Core.Scripting.CodeGen
 
             // Method is obsolete?
             var obsolete = method.GetCustomAttribute<ObsoleteAttribute>();
-            if (obsolete != null)
+            var isObsolete = obsolete != null;
+            if (isObsolete)
             {
                 var message = GetObsoleteMessage(method, obsolete);
 
@@ -76,6 +80,11 @@ namespace Cake.Core.Scripting.CodeGen
                     "    Context.Log.Warning(\"Warning: {0}\");", message));
             }
 
+            if (isObsolete)
+            {
+                builder.AppendLine("#pragma warning disable 0618");
+            }
+
             builder.Append("    ");
 
             if (isFunction)
@@ -97,6 +106,11 @@ namespace Cake.Core.Scripting.CodeGen
             builder.Append(string.Concat(GetProxyParameters(parameters, false)));
             builder.Append(");");
             builder.AppendLine();
+
+            if (isObsolete)
+            {
+                builder.AppendLine("#pragma warning restore 0618");
+            }
 
             // End method.
             builder.Append("}");

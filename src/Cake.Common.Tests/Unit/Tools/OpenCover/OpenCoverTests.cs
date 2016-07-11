@@ -1,4 +1,7 @@
-﻿using Cake.Common.Tests.Fixtures.Tools;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.NUnit;
 using Cake.Common.Tools.XUnit;
 using Cake.Core.IO;
@@ -37,7 +40,6 @@ namespace Cake.Common.Tests.Unit.Tools.OpenCover
 
                 // Then
                 Assert.IsArgumentNullException(result, "action");
-
             }
 
             [Fact]
@@ -92,7 +94,7 @@ namespace Cake.Common.Tests.Unit.Tools.OpenCover
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("-target:\"/Working/tools/Test.exe\" "+
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
                              "-targetargs:\"-argument\" " +
                              "-register:user -output:\"/Working/result.xml\"", result.Args);
             }
@@ -225,7 +227,7 @@ namespace Cake.Common.Tests.Unit.Tools.OpenCover
             {
                 // Given
                 var fixture = new OpenCoverFixture();
-                fixture.Settings.Register = "Path32";                
+                fixture.Settings.Register = "Path32";
 
                 // When
                 var result = fixture.Run();
@@ -252,6 +254,23 @@ namespace Cake.Common.Tests.Unit.Tools.OpenCover
                              "-register:user " +
                              "-returntargetcode:100 " +
                              "-output:\"/Working/result.xml\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_SkipAutoProps()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+                fixture.Settings.SkipAutoProps = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"-argument\" " +
+                             "-skipautoprops " +
+                             "-register:user -output:\"/Working/result.xml\"", result.Args);
             }
         }
     }

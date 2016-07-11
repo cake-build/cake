@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System.IO;
 using System.Linq;
 using System.Xml;
 using Cake.Common.Tests.Properties;
@@ -55,6 +58,7 @@ namespace Cake.Common.Tests.Fixtures
             return TestIsValue(xmlString, xpath, value);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public bool TestIsValue(string xml, string xpath, string value)
         {
             using (var reader = new StringReader(xml))
@@ -81,6 +85,7 @@ namespace Cake.Common.Tests.Fixtures
             return TestIsRemoved(xmlString, xpath);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public bool TestIsRemoved(string xml, string xpath)
         {
             using (var reader = new StringReader(xml))

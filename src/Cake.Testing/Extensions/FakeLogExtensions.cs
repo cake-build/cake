@@ -1,4 +1,9 @@
-﻿using System.Linq;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System;
+using System.Linq;
 using System.Text;
 
 namespace Cake.Testing.Extensions
@@ -15,6 +20,11 @@ namespace Cake.Testing.Extensions
         /// <returns>Log messages as <see cref="System.String"/></returns>
         public static string AggregateLogMessages(this FakeLog fakeLog)
         {
+            if (fakeLog == null)
+            {
+                throw new ArgumentNullException("fakeLog");
+            }
+
             return fakeLog.Entries.Aggregate(
                 new StringBuilder(),
                 (sb, entry) => sb.AppendLine(entry.Message),

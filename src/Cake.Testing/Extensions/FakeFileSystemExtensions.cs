@@ -1,4 +1,9 @@
-﻿using System.IO;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System;
+using System.IO;
 using Cake.Core.IO;
 
 // ReSharper disable once CheckNamespace
@@ -16,6 +21,14 @@ namespace Cake.Testing
         /// <param name="path">The path.</param>
         public static void EnsureFileDoNotExist(this FakeFileSystem fileSystem, FilePath path)
         {
+            if (fileSystem == null)
+            {
+                throw new ArgumentNullException("fileSystem");
+            }
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
             var file = fileSystem.GetFile(path);
             if (file != null && file.Exists)
             {
@@ -31,14 +44,20 @@ namespace Cake.Testing
         /// <returns>The same <see cref="FakeFile"/> instance so that multiple calls can be chained.</returns>
         public static FakeFile CreateFile(this FakeFileSystem fileSystem, FilePath path)
         {
+            if (fileSystem == null)
+            {
+                throw new ArgumentNullException("fileSystem");
+            }
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
             CreateDirectory(fileSystem, path.GetDirectory());
-
             var file = fileSystem.GetFile(path);
             if (!file.Exists)
             {
                 file.OpenWrite().Close();
             }
-
             return file;
         }
 
@@ -51,8 +70,19 @@ namespace Cake.Testing
         /// <returns>The same <see cref="FakeFile"/> instance so that multiple calls can be chained.</returns>
         public static FakeFile CreateFile(this FakeFileSystem fileSystem, FilePath path, byte[] contentsBytes)
         {
+            if (fileSystem == null)
+            {
+                throw new ArgumentNullException("fileSystem");
+            }
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+            if (contentsBytes == null)
+            {
+                throw new ArgumentNullException("contentsBytes");
+            }
             CreateDirectory(fileSystem, path.GetDirectory());
-
             var file = fileSystem.GetFile(path);
             if (!file.Exists)
             {
@@ -64,7 +94,6 @@ namespace Cake.Testing
                     }
                 }
             }
-
             return file;
         }
 
@@ -76,6 +105,14 @@ namespace Cake.Testing
         /// <returns>The same <see cref="FakeDirectory"/> instance so that multiple calls can be chained.</returns>
         public static FakeDirectory CreateDirectory(this FakeFileSystem fileSystem, DirectoryPath path)
         {
+            if (fileSystem == null)
+            {
+                throw new ArgumentNullException("fileSystem");
+            }
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
             var directory = fileSystem.GetDirectory(path);
             if (!directory.Exists)
             {

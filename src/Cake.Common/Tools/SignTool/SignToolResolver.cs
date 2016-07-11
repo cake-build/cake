@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
@@ -54,13 +57,13 @@ namespace Cake.Common.Tools.SignTool
         private FilePath GetFromDisc()
         {
             // Get the path to program files.
-            var programFilesPath = _environment.Is64BitOperativeSystem()
+            var programFilesPath = _environment.Platform.Is64Bit
                 ? _environment.GetSpecialPath(SpecialPath.ProgramFilesX86)
                 : _environment.GetSpecialPath(SpecialPath.ProgramFiles);
 
             // Get a list of the files we should check.
             var files = new List<FilePath>();
-            if (_environment.Is64BitOperativeSystem())
+            if (_environment.Platform.Is64Bit)
             {
                 // 64-bit specific paths.
                 files.Add(programFilesPath.Combine(@"Windows Kits\8.1\bin\x64").CombineWithFilePath("signtool.exe"));

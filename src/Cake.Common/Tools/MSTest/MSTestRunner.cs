@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
@@ -69,6 +72,12 @@ namespace Cake.Common.Tools.MSTest
             if (settings.NoIsolation)
             {
                 builder.Append("/noisolation");
+            }
+
+            if (settings.TestSettings != null)
+            {
+                builder.Append(
+                    string.Concat("/testsettings:", settings.TestSettings.MakeAbsolute(_environment).FullPath.Quote()));
             }
 
             return builder;

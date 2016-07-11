@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System.IO;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Xml;
 using Xunit;
@@ -61,7 +64,7 @@ namespace Cake.Common.Tests.Unit.XML
                 // Then
                 Assert.IsType<System.Xml.XmlException>(result);
             }
-            
+
             [Fact]
             public void Should_Get_Attribute_Value()
             {

@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using System.Collections.Generic;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -72,6 +75,22 @@ namespace Cake
         ///   <c>true</c> to show version information; otherwise, <c>false</c>.
         /// </value>
         public bool ShowVersion { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to use the Mono compiler or not.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the mono compiler should be used; otherwise, <c>false</c>.
+        /// </value>
+        public bool Mono { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to use the latest roslyn.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if latest roslyn should be used; otherwise, <c>false</c>.
+        /// </value>
+        public bool Experimental { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether an error occured during parsing.

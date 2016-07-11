@@ -1,4 +1,7 @@
-﻿using Cake.Common.Tests.Fixtures.Tools;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
@@ -211,6 +214,20 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
 
             // Then
             Assert.Equal("\"/testcontainer:/Working/Test1.dll\" \"/testcontainer:/Working/Test2.dll\" /noisolation", result.Args);
+        }
+
+        [Fact]
+        public void Should_Use_Test_Settings_File_If_Set()
+        {
+            // Given
+            var fixture = new MSTestRunnerFixture();
+            fixture.Settings.TestSettings = "my.testsettings";
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("\"/testcontainer:/Working/Test1.dll\" /noisolation /testsettings:\"/Working/my.testsettings\"", result.Args);
         }
 
         [Theory]

@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
@@ -134,9 +137,17 @@ namespace Cake.NuGet
             {
                 Arguments = GetArguments(package, path),
                 RedirectStandardOutput = true,
-                Silent = true
+                Silent = _log.Verbosity < Verbosity.Diagnostic
             });
             process.WaitForExit();
+
+            var exitCode = process.GetExitCode();
+            if (exitCode != 0)
+            {
+                _log.Warning("NuGet exited with {0}", exitCode);
+                var output = string.Join(Environment.NewLine, process.GetStandardOutput());
+                _log.Verbose(Verbosity.Diagnostic, "Output:\r\n{0}", output);
+            }
 
             // Return the files.
             return _contentResolver.GetFiles(packagePath, type);

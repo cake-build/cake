@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using System.Globalization;
 using System.Linq;
 using Cake.Core;
@@ -134,7 +137,7 @@ namespace Cake.Common.Tools.NuGet.Sources
             };
 
             var result = false;
-            Run(settings, null,  processSettings, 
+            Run(settings, null,  processSettings,
                 process => result = process.GetStandardOutput().Any(line => line.TrimStart() == source));
 
             // Return whether or not the source exist.

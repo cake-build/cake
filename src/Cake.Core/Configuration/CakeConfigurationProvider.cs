@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using System.Collections.Generic;
 using Cake.Core.Configuration.Parser;
 using Cake.Core.IO;
@@ -35,10 +38,15 @@ namespace Cake.Core.Configuration
         /// <summary>
         /// Creates a configuration from the provided arguments.
         /// </summary>
+        /// <param name="path">The directory to look for the configuration file.</param>
         /// <param name="arguments">The arguments.</param>
         /// <returns>The created configuration.</returns>
-        public ICakeConfiguration CreateConfiguration(IDictionary<string, string> arguments)
+        public ICakeConfiguration CreateConfiguration(DirectoryPath path, IDictionary<string, string> arguments)
         {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
             if (arguments == null)
             {
                 throw new ArgumentNullException("arguments");
@@ -57,11 +65,11 @@ namespace Cake.Core.Configuration
             }
 
             // Parse the configuration file.
-            var path = new FilePath("./cake.config").MakeAbsolute(_environment);
-            if (_fileSystem.Exist(path))
+            var configurationPath = path.CombineWithFilePath("cake.config").MakeAbsolute(_environment);
+            if (_fileSystem.Exist(configurationPath))
             {
                 var parser = new ConfigurationParser(_fileSystem, _environment);
-                var configuration = parser.Read(path);
+                var configuration = parser.Read(configurationPath);
                 foreach (var key in configuration.Keys)
                 {
                     result[KeyNormalizer.Normalize(key)] = configuration[key];

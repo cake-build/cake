@@ -1,4 +1,7 @@
-﻿///////////////////////////////////////////////////////////////////////
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+///////////////////////////////////////////////////////////////////////
 // Portions of this code was ported from glob-js by Kevin Thompson.
 // https://github.com/kthompson/glob-js
 ///////////////////////////////////////////////////////////////////////
@@ -56,7 +59,7 @@ namespace Cake.Core.IO.Globbing
 
         private GlobNode ParseRoot(GlobParserContext context)
         {
-            if (_environment.IsUnix())
+            if (_environment.Platform.IsUnix())
             {
                 // Starts with a separator?
                 if (context.CurrentToken.Kind == GlobTokenKind.PathSeparator)

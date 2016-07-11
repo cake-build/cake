@@ -131,3 +131,13 @@ Cake is provided as-is under the MIT license. For more information see [LICENSE]
 ## Thanks
 
 A big thank you has to go to [JetBrains](https://www.jetbrains.com) who provide each of the Cake Developers with an [Open Source License](https://www.jetbrains.com/support/community/#section=open-source) for [ReSharper](https://www.jetbrains.com/resharper/) that helps with the development of Cake.
+
+## Code of Conduct
+
+This project has adopted the code of conduct defined by the [Contributor Covenant](http://contributor-covenant.org/)
+to clarify expected behavior in our community.
+For more information see the [.NET Foundation Code of Conduct](http://www.dotnetfoundation.org/code-of-conduct).
+
+## .NET Foundation
+
+This project is supported by the [.NET Foundation](http://www.dotnetfoundation.org).

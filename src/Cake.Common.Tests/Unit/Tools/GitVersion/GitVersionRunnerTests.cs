@@ -1,4 +1,7 @@
-﻿using Cake.Common.Tests.Fixtures.Tools;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.GitVersion;
 using Cake.Core;
 using Cake.Testing;
@@ -90,7 +93,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/output json", result.Args);
+                Assert.Equal("-output json", result.Args);
             }
 
             [Fact]
@@ -104,7 +107,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/showvariable FullSemVer", result.Args);
+                Assert.Equal("-showvariable FullSemVer", result.Args);
             }
 
             [Fact]
@@ -119,7 +122,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/u \"bob\" /p \"password\"", result.Args);
+                Assert.Equal("-u \"bob\" -p \"password\"", result.Args);
             }
 
             [Fact]
@@ -133,7 +136,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/updateassemblyinfo", result.Args);
+                Assert.Equal("-updateassemblyinfo", result.Args);
             }
 
             [Fact]
@@ -148,7 +151,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/updateassemblyinfo \"c:/temp/assemblyinfo.cs\"", result.Args);
+                Assert.Equal("-updateassemblyinfo \"c:/temp/assemblyinfo.cs\"", result.Args);
             }
 
             [Fact]
@@ -162,7 +165,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/targetpath \"c:/temp\"", result.Args);
+                Assert.Equal("-targetpath \"c:/temp\"", result.Args);
             }
 
             [Fact]
@@ -179,7 +182,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/url \"http://mygitrepo.co.uk\" /b master /c \"abcdef\" /dynamicRepoLocation \"c:/temp\"", result.Args);
+                Assert.Equal("-url \"http://mygitrepo.co.uk\" -b master -c \"abcdef\" -dynamicRepoLocation \"c:/temp\"", result.Args);
             }
 
             [Fact]
@@ -193,7 +196,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/l \"c:/temp/gitversion.log\"", result.Args);
+                Assert.Equal("-l \"c:/temp/gitversion.log\"", result.Args);
             }
         }
     }

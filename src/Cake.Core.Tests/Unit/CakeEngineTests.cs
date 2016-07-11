@@ -1,9 +1,11 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core.Tests.Fixtures;
 using Xunit;
-using NSubstitute;
 
 namespace Cake.Core.Tests.Unit
 {
@@ -205,11 +207,10 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
-                fixture.Context.Environment.IsUnix().Returns(false);
 
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A").Does(() => result.Add("A"));
-                engine.RegisterTask("B").IsDependentOn("A").WithCriteria(context => context.Environment.IsUnix()).Does(() => result.Add("B"));
+                engine.RegisterTask("B").IsDependentOn("A").WithCriteria(context => false).Does(() => result.Add("B"));
                 engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
@@ -227,11 +228,10 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
-                fixture.Context.Environment.IsUnix().Returns(true);
 
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A").Does(() => result.Add("A"));
-                engine.RegisterTask("B").IsDependentOn("A").WithCriteria(context => context.Environment.IsUnix()).Does(() => result.Add("B"));
+                engine.RegisterTask("B").IsDependentOn("A").WithCriteria(context => true).Does(() => result.Add("B"));
                 engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
@@ -684,7 +684,7 @@ namespace Cake.Core.Tests.Unit
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
                 engine.RegisterTaskSetupAction((cc, sc) => result.Add("TASK_SETUP:" + sc.Task.Name));
-                engine.RegisterTask("A").Does(()=>result.Add("Executing A"));
+                engine.RegisterTask("A").Does(() => result.Add("Executing A"));
                 engine.RegisterTask("B").Does(() => result.Add("Executing B")).IsDependentOn("A");
 
                 // When
@@ -836,7 +836,7 @@ namespace Cake.Core.Tests.Unit
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
 
-                engine.RegisterTaskSetupAction((cc,sc) => { throw new InvalidOperationException("Task Setup: " + sc.Task.Name); });
+                engine.RegisterTaskSetupAction((cc, sc) => { throw new InvalidOperationException("Task Setup: " + sc.Task.Name); });
                 engine.RegisterTaskTeardownAction((cc, tc) => { throw new InvalidOperationException("Task Teardown: " + tc.Task.Name); });
                 engine.RegisterTask("A").Does(() => { });
 

@@ -325,8 +325,12 @@
     <Compile Include="Tools\OctopusDeploy\CreateReleaseArgumentBuilder.cs" />
     <Compile Include="Tools\OctopusDeploy\OctopusDeployAliases.cs" />
     <Compile Include="Tools\OctopusDeploy\CreateReleaseSettings.cs" />
+    <Compile Include="Tools\OctopusDeploy\OctopusDeployArgumentBuilder.cs" />
+    <Compile Include="Tools\OctopusDeploy\OctopusDeployPusher.cs" />
     <Compile Include="Tools\OctopusDeploy\OctopusDeployReleaseCreator.cs" />
     <Compile Include="Tools\OctopusDeploy\OctopusDeploySettings.cs" />
+    <Compile Include="Tools\OctopusDeploy\OctopusPushArgumentBuilder.cs" />
+    <Compile Include="Tools\OctopusDeploy\OctopusPushSettings.cs" />
     <Compile Include="Tools\OpenCover\OpenCoverAliases.cs" />
     <Compile Include="Tools\OpenCover\OpenCoverContext.cs" />
     <Compile Include="Tools\OpenCover\OpenCoverRunner.cs" />
@@ -372,6 +376,12 @@
     <Compile Include="Tools\WiX\Architecture.cs" />
     <Compile Include="Tools\WiX\CandleRunner.cs" />
     <Compile Include="Tools\WiX\CandleSettings.cs" />
+    <Compile Include="Tools\WiX\Heat\WiXGenerateType.cs" />
+    <Compile Include="Tools\WiX\Heat\WiXHarvestType.cs" />
+    <Compile Include="Tools\WiX\Heat\HeatRunner.cs" />
+    <Compile Include="Tools\WiX\Heat\HeatSettings.cs" />
+    <Compile Include="Tools\WiX\Heat\WiXOutputGroupType.cs" />
+    <Compile Include="Tools\WiX\Heat\WiXTemplateType.cs" />
     <Compile Include="Tools\WiX\LightRunner.cs" />
     <Compile Include="Tools\WiX\LightSettings.cs" />
     <Compile Include="Tools\WiX\WiXAliases.cs" />

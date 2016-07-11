@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -24,7 +27,7 @@ namespace Cake
             {
                 throw new ArgumentNullException("report");
             }
-            
+
             try
             {
                 var maxTaskNameLength = 29;
@@ -79,10 +82,10 @@ namespace Cake
         private static string FormatDuration(CakeReportEntry item)
         {
             if (item.ExecutionStatus == CakeTaskExecutionStatus.Skipped)
-            { 
+            {
                 return "Skipped";
             }
-            
+
             return FormatTime(item.Duration);
         }
 

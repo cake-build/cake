@@ -1,3 +1,24 @@
+### New on 0.14.0 (Released 2016/07/11)
+
+* Remove obsoleted XmlPoke Aliases
+* ToolSettings should allow should support of exit codes other than 0
+* Add support for skipautoprops flag OpenCover Alias
+* Support Octopus Deploy Push (octo.exe push)
+* Add WiX heat support
+* Cake looks for configuration file in the wrong place
+* Wrong platform "Any CPU" for project file (expects "AnyCPU")
+* Change parameter names passed by GitVersion Alias
+* Improve logging with NuGet Install Alias
+* Additional null checks for module support
+* Suppress obsolete warnings on Mono
+* Add known parameters to CakeOptions
+* Add working directory to ToolSettings class
+* Refactor ICakeEnvironment
+* Allow setting `/testsettings:` file for MSTest runner
+* Corrected documentation for Directory Alias
+* Corrected documentation for DotNetBuild Alias
+
+
 ### New on 0.13.0 (Released 2016/06/07)
 
 * DotNetCoreTest() alias calls DotNetCoreRun()

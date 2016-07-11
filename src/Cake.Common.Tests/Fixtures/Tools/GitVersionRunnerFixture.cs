@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System.Collections.Generic;
 using System.IO;
 using Cake.Common.Tools.GitVersion;
 using Cake.Core.Diagnostics;
@@ -12,6 +15,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
     {
         public ICakeLog Log { get; set; }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public GitVersionRunnerFixture()
              : base("GitVersion.exe")
         {

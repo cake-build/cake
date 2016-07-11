@@ -1,3 +1,6 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -141,7 +144,7 @@ namespace Cake.Core.Tooling
             var path = _environment.GetEnvironmentVariable("PATH");
             if (!string.IsNullOrEmpty(path))
             {
-                var separator = new[] { _environment.IsUnix() ? ':' : ';' };
+                var separator = new[] { _environment.Platform.IsUnix() ? ':' : ';' };
                 var paths = path.Split(separator, StringSplitOptions.RemoveEmptyEntries);
                 result.AddRange(paths.Select(p => new DirectoryPath(p)));
             }

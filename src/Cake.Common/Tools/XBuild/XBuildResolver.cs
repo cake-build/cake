@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using System.Diagnostics;
 using Cake.Core;
 using Cake.Core.IO;
@@ -15,7 +18,7 @@ namespace Cake.Common.Tools.XBuild
             _environment = environment;
             _fileSystem = fileSystem;
 
-            if (_environment.IsUnix())
+            if (_environment.Platform.IsUnix())
             {
                 return GetWhichXBuild();
             }
@@ -95,7 +98,7 @@ namespace Cake.Common.Tools.XBuild
 
         private static DirectoryPath GetMonoPathWindows()
         {
-            var programFiles = _environment.Is64BitOperativeSystem()
+            var programFiles = _environment.Platform.Is64Bit
                 ? Environment.SpecialFolder.ProgramFilesX86
                 : Environment.SpecialFolder.ProgramFiles;
 

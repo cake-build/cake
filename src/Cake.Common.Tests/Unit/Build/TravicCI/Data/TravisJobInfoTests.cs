@@ -1,4 +1,7 @@
-﻿using Cake.Common.Tests.Fixtures.Build;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using Cake.Common.Tests.Fixtures.Build;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build.TravicCI.Data
@@ -15,7 +18,7 @@ namespace Cake.Common.Tests.Unit.Build.TravicCI.Data
 
                 // When
                 var result = info.JobId;
-                
+
                 // Then
                 Assert.Equal("934", result);
             }

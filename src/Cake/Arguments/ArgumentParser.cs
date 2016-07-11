@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
@@ -160,6 +163,16 @@ namespace Cake.Arguments
                 name.Equals("d", StringComparison.OrdinalIgnoreCase))
             {
                 options.PerformDebug = ParseBooleanValue(value);
+            }
+
+            if (name.Equals("mono", StringComparison.OrdinalIgnoreCase))
+            {
+                options.Mono = ParseBooleanValue(value);
+            }
+
+            if (name.Equals("experimental", StringComparison.OrdinalIgnoreCase))
+            {
+                options.Experimental = ParseBooleanValue(value);
             }
 
             if (options.Arguments.ContainsKey(name))

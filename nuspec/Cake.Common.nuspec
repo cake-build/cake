@@ -11,7 +11,7 @@
     <projectUrl>https://github.com/cake-build/cake</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <copyright>Copyright (c) Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors</copyright>
+    <copyright>Copyright (c) .NET Foundation and Contributors</copyright>
     <tags>Cake Script Build</tags>
     <developmentDependency>true</developmentDependency>
     <dependencies>

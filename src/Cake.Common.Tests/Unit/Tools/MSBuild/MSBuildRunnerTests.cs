@@ -1,4 +1,7 @@
-﻿using Cake.Common.Tests.Fixtures.Tools;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core.Diagnostics;
 using Cake.Testing;
@@ -660,6 +663,21 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 Assert.Equal(expected, result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_MSIL_Platform_As_AnyCPU_For_Project()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false);
+                fixture.Settings.SetPlatformTarget(PlatformTarget.MSIL);
+                fixture.Solution = "/Working/src/Project.csproj";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/m /v:normal /p:Platform=AnyCPU /target:Build \"/Working/src/Project.csproj\"", result.Args);
             }
 
             [Fact]

@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using Cake.Core.Composition;
 using Cake.Core.Scripting;
 using Cake.Scripting.Mono;
@@ -19,15 +22,16 @@ namespace Cake.Modules
 
         public void Register(ICakeContainerRegistry registry)
         {
+            if (registry == null)
+            {
+                throw new ArgumentNullException("registry");
+            }
+
             // Are we running on Mono?
-            var mono = Type.GetType("Mono.Runtime") != null;
+            var mono = _options.Mono;
             if (!mono)
             {
-                // Not using the mono compiler, but do we want to?
-                if (_options.Arguments.ContainsKey("mono"))
-                {
-                    mono = true;
-                }
+                mono = Type.GetType("Mono.Runtime") != null;
             }
 
             if (mono)
@@ -40,7 +44,7 @@ namespace Cake.Modules
                 // Roslyn
                 registry.RegisterType<RoslynScriptEngine>().As<IScriptEngine>().Singleton();
 
-                if (_options.Arguments.ContainsKey("debug"))
+                if (_options.PerformDebug)
                 {
                     // Debug
                     registry.RegisterType<DebugRoslynScriptSessionFactory>().As<RoslynScriptSessionFactory>().Singleton();

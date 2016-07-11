@@ -1,4 +1,8 @@
-﻿using Cake.Core;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using Cake.Core;
+using Cake.Testing;
 using NSubstitute;
 using Xunit;
 
@@ -66,7 +70,7 @@ namespace Cake.Common.Tests.Unit
             }
         }
 
-        public sealed class TheGetEnvironmentVariableMethod
+        public sealed class TheEnvironmentVariableMethod
         {
             [Fact]
             public void Should_Return_Value()
@@ -118,15 +122,14 @@ namespace Cake.Common.Tests.Unit
             }
 
             [Theory]
-            [InlineData(true, false)]
-            [InlineData(false, true)]
-            public void Should_Return_Correct_Value(bool isRunningOnUnix, bool expected)
+            [InlineData(PlatformFamily.Linux, false)]
+            [InlineData(PlatformFamily.OSX, false)]
+            [InlineData(PlatformFamily.Windows, true)]
+            public void Should_Return_Correct_Value(PlatformFamily family, bool expected)
             {
                 // Given
-                var environment = Substitute.For<ICakeEnvironment>();
-                environment.IsUnix().Returns(x => isRunningOnUnix);
                 var context = Substitute.For<ICakeContext>();
-                context.Environment.Returns(c => environment);
+                context.Environment.Returns(new FakeEnvironment(family));
 
                 // When
                 var result = EnvironmentAliases.IsRunningOnWindows(context);
@@ -149,15 +152,14 @@ namespace Cake.Common.Tests.Unit
             }
 
             [Theory]
-            [InlineData(true, true)]
-            [InlineData(false, false)]
-            public void Should_Return_Correct_Value(bool isRunningOnUnix, bool expected)
+            [InlineData(PlatformFamily.Linux, true)]
+            [InlineData(PlatformFamily.OSX, true)]
+            [InlineData(PlatformFamily.Windows, false)]
+            public void Should_Return_Correct_Value(PlatformFamily family, bool expected)
             {
                 // Given
-                var environment = Substitute.For<ICakeEnvironment>();
-                environment.IsUnix().Returns(x => isRunningOnUnix);
                 var context = Substitute.For<ICakeContext>();
-                context.Environment.Returns(c => environment);
+                context.Environment.Returns(new FakeEnvironment(family));
 
                 // When
                 var result = EnvironmentAliases.IsRunningOnUnix(context);

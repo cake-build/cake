@@ -1,4 +1,8 @@
-﻿using Cake.Core.Composition;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
+using Cake.Core.Composition;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
 using Cake.Core.Scripting;
@@ -19,12 +23,22 @@ namespace Cake.Core.Modules
         /// <param name="registry">The container registry.</param>
         public void Register(ICakeContainerRegistry registry)
         {
+            if (registry == null)
+            {
+                throw new ArgumentNullException("registry");
+            }
+
+            // Execution
             registry.RegisterType<CakeEngine>().As<ICakeEngine>().Singleton();
             registry.RegisterType<CakeContext>().As<ICakeContext>().Singleton();
 
+            // Environment
+            registry.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().Singleton();
+            registry.RegisterType<CakeRuntime>().As<ICakeRuntime>().Singleton();
+            registry.RegisterType<CakePlatform>().As<ICakePlatform>().Singleton();
+
             // IO
             registry.RegisterType<FileSystem>().As<IFileSystem>().Singleton();
-            registry.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().Singleton();
             registry.RegisterType<Globber>().As<IGlobber>().Singleton();
             registry.RegisterType<ProcessRunner>().As<IProcessRunner>().Singleton();
             registry.RegisterType<NuGetToolResolver>().As<INuGetToolResolver>().Singleton();

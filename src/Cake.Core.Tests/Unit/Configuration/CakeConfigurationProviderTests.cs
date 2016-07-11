@@ -1,4 +1,7 @@
-﻿using Cake.Core.Tests.Fixtures;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using Cake.Core.Tests.Fixtures;
 using Cake.Testing;
 using Xunit;
 
@@ -39,6 +42,20 @@ namespace Cake.Core.Tests.Unit.Configuration
 
         public sealed class TheCreateMethod
         {
+            [Fact]
+            public void Should_Throw_If_Path_Is_Null()
+            {
+                // Given
+                var fixture = new CakeConfigurationProviderFixture();
+                fixture.Path = null;
+
+                // When
+                var result = Record.Exception(() => fixture.Create());
+
+                // Then
+                Assert.IsArgumentNullException(result, "path");
+            }
+
             [Fact]
             public void Should_Throw_If_Arguments_Are_Null()
             {

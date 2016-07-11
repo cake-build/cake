@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System.IO;
 using System.Linq;
 using System.Text;
 using Cake.Common.Tests.Fixtures;
@@ -116,6 +119,7 @@ namespace Cake.Common.Tests.Unit.XML
                 Assert.IsExceptionWithMessage<CakeException>(result, "Result file found and overwrite set to false.");
             }
 
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
             [Fact]
             public void Should_Transform_Xml_File_And_Xsl_File_To_Result_File()
             {

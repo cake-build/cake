@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.Versioning;
@@ -12,12 +16,10 @@ namespace Cake.Testing
     /// </summary>
     public sealed class FakeEnvironment : ICakeEnvironment
     {
-        private readonly bool _isUnix;
+        private readonly FakePlatform _platform;
+        private readonly FakeRuntime _runtime;
         private readonly Dictionary<string, string> _environmentVariables;
         private readonly Dictionary<SpecialPath, DirectoryPath> _specialPaths;
-        private DirectoryPath _applicationRoot;
-        private bool _is64Bit;
-        private FrameworkName _targetFramework;
 
         /// <summary>
         /// Gets or sets the working directory.
@@ -25,10 +27,39 @@ namespace Cake.Testing
         /// <value>The working directory.</value>
         public DirectoryPath WorkingDirectory { get; set; }
 
-        private FakeEnvironment(bool isUnix, bool is64Bit)
+        /// <summary>
+        /// Gets or sets the application root path.
+        /// </summary>
+        /// <value>The application root path.</value>
+        public DirectoryPath ApplicationRoot { get; set; }
+
+        /// <summary>
+        /// Gets the platform Cake is running on.
+        /// </summary>
+        /// <value>The platform Cake is running on.</value>
+        public ICakePlatform Platform
         {
-            _isUnix = isUnix;
-            _is64Bit = is64Bit;
+            get { return _platform; }
+        }
+
+        /// <summary>
+        /// Gets the runtime Cake is running in.
+        /// </summary>
+        /// <value>The runtime Cake is running in.</value>
+        public ICakeRuntime Runtime
+        {
+            get { return _runtime; }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FakeEnvironment"/> class.
+        /// </summary>
+        /// <param name="family">The platform family.</param>
+        /// <param name="is64Bit">if set to <c>true</c>, the platform is 64 bit.</param>
+        public FakeEnvironment(PlatformFamily family, bool is64Bit = true)
+        {
+            _platform = new FakePlatform(family, is64Bit);
+            _runtime = new FakeRuntime();
             _environmentVariables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _specialPaths = new Dictionary<SpecialPath, DirectoryPath>();
         }
@@ -36,54 +67,27 @@ namespace Cake.Testing
         /// <summary>
         /// Creates a Unix environment.
         /// </summary>
-        /// <param name="is64Bit">if set to <c>true</c> the operating system is 64 bit.</param>
+        /// <param name="is64Bit">if set to <c>true</c> the platform is 64 bit.</param>
         /// <returns>A Unix environment.</returns>
         public static FakeEnvironment CreateUnixEnvironment(bool is64Bit = true)
         {
-            var environment = new FakeEnvironment(true, is64Bit);
+            var environment = new FakeEnvironment(PlatformFamily.Linux, is64Bit);
             environment.WorkingDirectory = new DirectoryPath("/Working");
-            environment.SetApplicationRoot("/Working/bin");
+            environment.ApplicationRoot = "/Working/bin";
             return environment;
         }
 
         /// <summary>
         /// Creates a Windows environment.
         /// </summary>
-        /// <param name="is64Bit">if set to <c>true</c> the operating system is 64 bit.</param>
+        /// <param name="is64Bit">if set to <c>true</c> the platform is 64 bit.</param>
         /// <returns>A Windows environment.</returns>
         public static FakeEnvironment CreateWindowsEnvironment(bool is64Bit = true)
         {
-            var environment = new FakeEnvironment(false, is64Bit);
+            var environment = new FakeEnvironment(PlatformFamily.Windows, is64Bit);
             environment.WorkingDirectory = new DirectoryPath("C:/Working");
-            environment.SetApplicationRoot("C:/Working/bin");
+            environment.ApplicationRoot = "C:/Working/bin";
             return environment;
-        }
-
-        /// <summary>
-        /// Gets whether or not the current operative system is 64 bit.
-        /// </summary>
-        /// <returns>Whether or not the current operative system is 64 bit.</returns>
-        public bool Is64BitOperativeSystem()
-        {
-            return _is64Bit;
-        }
-
-        /// <summary>
-        /// Changes the operative system bitness.
-        /// </summary>
-        /// <param name="is64Bit">if set to <c>true</c>, this is a 64-bit operative system.</param>
-        public void ChangeOperativeSystemBitness(bool is64Bit)
-        {
-            _is64Bit = is64Bit;
-        }
-
-        /// <summary>
-        /// Determines whether the current machine is running Unix.
-        /// </summary>
-        /// <returns>Whether or not the current machine is running Unix.</returns>
-        public bool IsUnix()
-        {
-            return _isUnix;
         }
 
         /// <summary>
@@ -104,36 +108,6 @@ namespace Cake.Testing
         }
 
         /// <summary>
-        /// Sets a special path.
-        /// </summary>
-        /// <param name="kind">The special path kind.</param>
-        /// <param name="path">The path.</param>
-        public void SetSpecialPath(SpecialPath kind, DirectoryPath path)
-        {
-            _specialPaths[kind] = path;
-        }
-
-        /// <summary>
-        /// Gets the application root path.
-        /// </summary>
-        /// <returns>
-        /// The application root path.
-        /// </returns>
-        public DirectoryPath GetApplicationRoot()
-        {
-            return _applicationRoot;
-        }
-
-        /// <summary>
-        /// Sets the application root path.
-        /// </summary>
-        /// <param name="applicationRoot">The application root path.</param>
-        public void SetApplicationRoot(DirectoryPath applicationRoot)
-        {
-            _applicationRoot = applicationRoot;
-        }
-
-        /// <summary>
         /// Gets an environment variable.
         /// </summary>
         /// <param name="variable">The variable.</param>
@@ -150,6 +124,34 @@ namespace Cake.Testing
         }
 
         /// <summary>
+        /// Gets all environment variables.
+        /// </summary>
+        /// <returns>The environment variables as IDictionary&lt;string, string&gt; </returns>
+        public IDictionary<string, string> GetEnvironmentVariables()
+        {
+            return new Dictionary<string, string>(_environmentVariables, StringComparer.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Changes the operative system bitness.
+        /// </summary>
+        /// <param name="is64Bit">if set to <c>true</c>, this is a 64-bit operative system.</param>
+        public void ChangeOperativeSystemBitness(bool is64Bit)
+        {
+            _platform.Is64Bit = is64Bit;
+        }
+
+        /// <summary>
+        /// Sets a special path.
+        /// </summary>
+        /// <param name="kind">The special path kind.</param>
+        /// <param name="path">The path.</param>
+        public void SetSpecialPath(SpecialPath kind, DirectoryPath path)
+        {
+            _specialPaths[kind] = path;
+        }
+
+        /// <summary>
         /// Sets an environment variable.
         /// </summary>
         /// <param name="variable">The variable.</param>
@@ -160,30 +162,54 @@ namespace Cake.Testing
         }
 
         /// <summary>
-        /// Gets all environment variables.
+        /// Sets the target framework.
         /// </summary>
-        /// <returns>The environment variables as IDictionary&lt;string, string&gt; </returns>
-        public IDictionary<string, string> GetEnvironmentVariables()
+        /// <param name="targetFramework">The target framework.</param>
+        public void SetTargetFramework(FrameworkName targetFramework)
         {
-            return new Dictionary<string, string>(_environmentVariables, StringComparer.OrdinalIgnoreCase);
+            _runtime.TargetFramework = targetFramework;
+        }
+
+        /// <summary>
+        /// Gets whether or not the current operative system is 64 bit.
+        /// </summary>
+        /// <returns>Whether or not the current operative system is 64 bit.</returns>
+        [Obsolete("Please use FakeEnvironment.Platform.Is64Bit instead.")]
+        public bool Is64BitOperativeSystem()
+        {
+            return Platform.Is64Bit;
+        }
+
+        /// <summary>
+        /// Determines whether the current machine is running Unix.
+        /// </summary>
+        /// <returns>Whether or not the current machine is running Unix.</returns>
+        [Obsolete("Please use FakeEnvironment.Platform.IsUnix instead.")]
+        public bool IsUnix()
+        {
+            return Platform.IsUnix();
+        }
+
+        /// <summary>
+        /// Gets the application root path.
+        /// </summary>
+        /// <returns>
+        /// The application root path.
+        /// </returns>
+        [Obsolete("Please use FakeEnvironment.ApplicationRoot instead.")]
+        public DirectoryPath GetApplicationRoot()
+        {
+            return ApplicationRoot;
         }
 
         /// <summary>
         /// Gets the target .Net framework version that the current AppDomain is targeting.
         /// </summary>
         /// <returns>The target framework.</returns>
+        [Obsolete("Please use FakeEnvironment.Runtime.TargetFramework instead.")]
         public FrameworkName GetTargetFramework()
         {
-            return _targetFramework;
-        }
-
-        /// <summary>
-        /// Sets the target framework.
-        /// </summary>
-        /// <param name="targetFramework">The target framework.</param>
-        public void SetTargetFramework(FrameworkName targetFramework)
-        {
-            _targetFramework = targetFramework;
+            return _runtime.TargetFramework;
         }
     }
 }

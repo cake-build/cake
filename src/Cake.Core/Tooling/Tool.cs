@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -112,12 +115,7 @@ namespace Cake.Core.Tooling
 
             try
             {
-                // Did an error occur?
-                if (process.GetExitCode() != 0)
-                {
-                    const string message = "{0}: Process returned an error (exit code {1}).";
-                    throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, GetToolName(), process.GetExitCode()));
-                }
+                ProcessExitCode(process.GetExitCode());
             }
             finally
             {
@@ -126,6 +124,21 @@ namespace Cake.Core.Tooling
                 {
                     postAction(process);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Customized exit code handling.
+        /// Standard behavior is to fail when non zero.
+        /// </summary>
+        /// <param name="exitCode">The process exit code</param>
+        protected virtual void ProcessExitCode(int exitCode)
+        {
+            // Did an error occur?
+            if (exitCode != 0)
+            {
+                const string message = "{0}: Process returned an error (exit code {1}).";
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, GetToolName(), exitCode));
             }
         }
 
@@ -223,6 +236,11 @@ namespace Cake.Core.Tooling
         /// <returns>The working directory for the tool.</returns>
         protected virtual DirectoryPath GetWorkingDirectory(TSettings settings)
         {
+            if (settings.WorkingDirectory != null)
+            {
+                return settings.WorkingDirectory;
+            }
+
             return _environment.WorkingDirectory;
         }
 
@@ -306,7 +324,7 @@ namespace Cake.Core.Tooling
                     var pathEnv = _environment.GetEnvironmentVariable("PATH");
                     if (!string.IsNullOrEmpty(pathEnv))
                     {
-                        pathDirs = pathEnv.Split(new[] { _environment.IsUnix() ? ':' : ';' }, StringSplitOptions.RemoveEmptyEntries);
+                        pathDirs = pathEnv.Split(new[] { _environment.Platform.IsUnix() ? ':' : ';' }, StringSplitOptions.RemoveEmptyEntries);
                     }
                     else
                     {

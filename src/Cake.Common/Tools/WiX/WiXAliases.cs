@@ -1,6 +1,10 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cake.Common.Tools.WiX.Heat;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.Diagnostics;
@@ -143,6 +147,116 @@ namespace Cake.Common.Tools.WiX
 
             var runner = new LightRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(objectFiles, settings ?? new LightSettings());
+        }
+
+        /// <summary>
+        /// Harvests files in the provided object files.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var harvestDirectory = Directory("./src");
+        /// var filePath = new FilePath("cake.wxs");
+        /// WiXHeat(harvestDirectory, filePath);
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="directoryPath">The object files.</param>
+        /// <param name="outputFile">The output file.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Heat")]
+        [CakeNamespaceImport("Cake.Common.Tools.WiX.Heat")]
+        public static void WiXHeat(this ICakeContext context, DirectoryPath directoryPath, FilePath outputFile)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var runner = new HeatRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            runner.Run(directoryPath, outputFile, new HeatSettings());
+        }
+
+        /// <summary>
+        /// Harvests files in the provided directory path.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var harvestDirectory = Directory("./src");
+        /// var filePath = new FilePath("cake.wxs");
+        /// WiXHeat(harvestDirectory, filePath, new HeatSettings { HarvestType = WiXHarvestType.Dir });
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="directoryPath">The directory path.</param>
+        /// <param name="outputFile">The output file.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Heat")]
+        [CakeNamespaceImport("Cake.Common.Tools.WiX.Heat")]
+        public static void WiXHeat(this ICakeContext context, DirectoryPath directoryPath, FilePath outputFile, HeatSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var runner = new HeatRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            runner.Run(directoryPath, outputFile, settings ?? new HeatSettings());
+        }
+
+        /// <summary>
+        /// Harvests from the desired files.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var harvestFiles = GetFiles(".src/website/bin/website.dll");
+        /// var filePath = File("cake.wxs");
+        /// WiXHeat(harvestFiles, filePath, new HeatSettings { HarvestType = WiXHarvestType.File });
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="objectFiles">The object files.</param>
+        /// <param name="outputFile">The output file.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Heat")]
+        [CakeNamespaceImport("Cake.Common.Tools.WiX.Heat")]
+        public static void WiXHeat(this ICakeContext context, IEnumerable<FilePath> objectFiles, FilePath outputFile, HeatSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var runner = new HeatRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            runner.Run(objectFiles, outputFile, settings ?? new HeatSettings());
+        }
+
+        /// <summary>
+        /// Harvests files for a website or performance.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var filePath = File("cake.wxs");
+        /// WiXHeat("Default Web Site", filePath, new HeatSettings { HarvestType = WiXHarvestType.Website });
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="harvestTarget">The harvest target.</param>
+        /// <param name="outputFile">The output file.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Heat")]
+        [CakeNamespaceImport("Cake.Common.Tools.WiX.Heat")]
+        public static void WiXHeat(this ICakeContext context, string harvestTarget, FilePath outputFile, HeatSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var runner = new HeatRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            runner.Run(harvestTarget, outputFile, settings ?? new HeatSettings());
         }
     }
 }

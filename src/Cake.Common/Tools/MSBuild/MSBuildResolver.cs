@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+using System;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -69,7 +72,7 @@ namespace Cake.Common.Tools.MSBuild
             var binPath = programFilesPath.Combine(string.Concat("MSBuild/", version, "/Bin"));
             if (buildPlatform == MSBuildPlatform.Automatic)
             {
-                if (environment.Is64BitOperativeSystem())
+                if (environment.Platform.Is64Bit)
                 {
                     binPath = binPath.Combine("amd64");
                 }
@@ -90,7 +93,7 @@ namespace Cake.Common.Tools.MSBuild
             if (buildPlatform == MSBuildPlatform.Automatic)
             {
                 // Get the framework folder.
-                var is64Bit = environment.Is64BitOperativeSystem();
+                var is64Bit = environment.Platform.Is64Bit;
                 var frameWorkFolder = is64Bit ? netFolder.Combine("Framework64") : netFolder.Combine("Framework");
                 return frameWorkFolder.Combine(version);
             }
