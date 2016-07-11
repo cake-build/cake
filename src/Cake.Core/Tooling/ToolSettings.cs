@@ -40,7 +40,7 @@ namespace Cake.Core.Tooling
         ///     ArgumentCustomization = args=&gt;args.Append("-StorePasswordInClearText")
         /// });
         /// // or with multiple arguments:
-        /// MSTest(pathPattern, new MSTestSettings() { ArgumentCustomization = args => { args.Append("/detail:errormessage");
+        /// MSTest(pathPattern, new MSTestSettings() { ArgumentCustomization = args =&gt; { args.Append("/detail:errormessage");
 		///	                                                                             args.Append("/resultsfile:TestResults.trx");
 		///																		         return args; }});
         /// </code>
