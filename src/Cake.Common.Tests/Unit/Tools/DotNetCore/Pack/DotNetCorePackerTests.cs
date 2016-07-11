@@ -78,7 +78,24 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Pack
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("pack ./src/*", result.Args);
+                Assert.Equal("pack \"./src/*\"", result.Args);
+            }
+            
+            [Theory]
+            [InlineData("./src/*", "pack \"./src/*\"")]
+            [InlineData("./src/cake artifacts/", "pack \"./src/cake artifacts/\"")]
+            [InlineData("./src/nuget/cake build", "pack \"./src/nuget/cake build\"")]
+            public void Should_Quote_Project_Path(string text, string expected)
+            {
+                // Given
+                var fixture = new DotNetCorePackFixture();
+                fixture.Project = text;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]
