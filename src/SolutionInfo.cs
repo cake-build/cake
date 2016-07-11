@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 //------------------------------------------------------------------------------
@@ -9,8 +9,8 @@
 using System.Reflection;
 
 [assembly: AssemblyProduct("Cake")]
-[assembly: AssemblyVersion("0.13.0.0")]
-[assembly: AssemblyFileVersion("0.13.0.0")]
-[assembly: AssemblyInformationalVersion("0.13.0-beta.1+0.Branch.release/0.13.0.Sha.cb8b8acaee3dd90cb1a0e21fc079b4e65690750d")]
+[assembly: AssemblyVersion("0.14.0.0")]
+[assembly: AssemblyFileVersion("0.14.0.0")]
+[assembly: AssemblyInformationalVersion("0.14.0-beta.1+0.Branch.release/0.14.0.Sha.bbb9dfd8a7cb2524548f86945791856552995824")]
 [assembly: AssemblyCopyright("Copyright (c) .NET Foundation and Contributors")]
 
