@@ -9,6 +9,7 @@ SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 TOOLS_DIR=$SCRIPT_DIR/tools
 NUGET_EXE=$TOOLS_DIR/nuget.exe
 CAKE_EXE=$TOOLS_DIR/Cake/Cake.exe
+MONO_CMD=mono
 
 # Define default arguments.
 SCRIPT="build.cake"
@@ -19,8 +20,15 @@ DRYRUN=
 SHOW_VERSION=false
 SCRIPT_ARGUMENTS=()
 
+# Run without mono on windows platforms.
+case "$(uname -s)" in
+    CYGWIN*) unset MONO_CMD ;;
+    MINGW32*) unset MONO_CMD ;;
+    MSYS*) unset MONO_CMD ;;
+esac
+
 # Parse arguments.
-for i in "$@"; do
+while [[ $# -gt 0 ]]; do
     case $1 in
         -s|--script) SCRIPT="$2"; shift ;;
         -t|--target) TARGET="$2"; shift ;;
@@ -61,7 +69,7 @@ fi
 
 # Restore tools from NuGet.
 pushd $TOOLS_DIR >/dev/null
-mono $NUGET_EXE install -ExcludeVersion
+$MONO_CMD $NUGET_EXE install -ExcludeVersion
 if [ $? -ne 0 ]; then
     echo "Could not restore NuGet packages."
     exit 1
@@ -76,7 +84,7 @@ fi
 
 # Start Cake
 if $SHOW_VERSION; then
-    exec mono $CAKE_EXE -version
+    exec $MONO_CMD $CAKE_EXE -version
 else
-    exec mono $CAKE_EXE $SCRIPT -verbosity=$VERBOSITY -configuration=$CONFIGURATION -target=$TARGET $DRYRUN "${SCRIPT_ARGUMENTS[@]}"
+    exec $MONO_CMD $CAKE_EXE $SCRIPT -verbosity=$VERBOSITY -configuration=$CONFIGURATION -target=$TARGET $DRYRUN "${SCRIPT_ARGUMENTS[@]}"
 fi
