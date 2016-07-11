@@ -75,12 +75,30 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
             {
                 // Given
                 var fixture = new DotNetCoreTesterFixture();
-                fixture.Project = "./test/Project.Tests/";
+                fixture.Project = "./test/Project.Tests/*";
+
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("test ./test/Project.Tests/", result.Args);
+                Assert.Equal("test \"./test/Project.Tests/*\"", result.Args);
+            }
+            
+            [Theory]
+            [InlineData("./test/*", "test \"./test/*\"")]
+            [InlineData("./test/cake unit tests/", "test \"./test/cake unit tests/\"")]
+            [InlineData("./test/cake unit tests/cake core tests", "test \"./test/cake unit tests/cake core tests\"")]
+            public void Should_Quote_Project_Path(string text, string expected)
+            {
+                // Given
+                var fixture = new DotNetCoreTesterFixture();
+                fixture.Project = text;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]
@@ -94,6 +112,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
                 fixture.Settings.Runtime = "runtime1";
                 fixture.Settings.Configuration = "Release";
                 fixture.Settings.OutputDirectory = "./artifacts/";
+
                 // When
                 var result = fixture.Run();
 
