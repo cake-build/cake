@@ -73,6 +73,7 @@ namespace Cake.Testing.Fixtures
         /// Initializes a new instance of the <see cref="ToolFixture{TToolSettings, TFixtureResult}"/> class.
         /// </summary>
         /// <param name="toolFilename">The tool filename.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         protected ToolFixture(string toolFilename)
         {
             Settings = new TToolSettings();

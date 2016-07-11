@@ -58,6 +58,7 @@ namespace Cake.Common.Tests.Fixtures
             return TestIsValue(xmlString, xpath, value);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public bool TestIsValue(string xml, string xpath, string value)
         {
             using (var reader = new StringReader(xml))
@@ -84,6 +85,7 @@ namespace Cake.Common.Tests.Fixtures
             return TestIsRemoved(xmlString, xpath);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public bool TestIsRemoved(string xml, string xpath)
         {
             using (var reader = new StringReader(xml))

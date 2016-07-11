@@ -119,6 +119,7 @@ namespace Cake.Common.Tests.Unit.XML
                 Assert.IsExceptionWithMessage<CakeException>(result, "Result file found and overwrite set to false.");
             }
 
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
             [Fact]
             public void Should_Transform_Xml_File_And_Xsl_File_To_Result_File()
             {

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 using System.Collections.Generic;
+using System.Globalization;
 using Cake.Core.Diagnostics;
 
 namespace Cake.Testing
@@ -52,7 +53,7 @@ namespace Cake.Testing
         /// <param name="args">An array of objects to write using format.</param>
         public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
         {
-            _entries.Add(new FakeLogMessage(verbosity, level, string.Format(format, args)));
+            _entries.Add(new FakeLogMessage(verbosity, level, string.Format(CultureInfo.InvariantCulture, format, args)));
         }
     }
 }
