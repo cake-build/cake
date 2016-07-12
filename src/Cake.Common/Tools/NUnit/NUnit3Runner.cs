@@ -228,5 +228,46 @@ namespace Cake.Common.Tools.NUnit
         {
             return new[] { "nunit3-console.exe" };
         }
+
+        /// <summary>
+        /// Customized exit code handling.
+        /// Throws <see cref="CakeException"/> on non-zero exit code
+        /// </summary>
+        /// <param name="exitCode">The process exit code</param>
+        protected override void ProcessExitCode(int exitCode)
+        {
+            string error;
+
+            if (exitCode <= 0)
+            {
+                switch (exitCode)
+                {
+                    case 0:
+                        return;
+                    case -1:
+                        error = "Invalid argument";
+                        break;
+                    case -2:
+                        error = "Invalid assembly";
+                        break;
+                    case -4:
+                        error = "Invalid test fixture";
+                        break;
+                    case -100:
+                        error = "Unexpected error";
+                        break;
+                    default:
+                        error = "Unrecognised error";
+                        break;
+                }
+            }
+            else
+            {
+                error = string.Format(CultureInfo.InvariantCulture, "{0} test(s) failed", exitCode);
+            }
+
+            const string message = "{0}: {1} (exit code {2}).";
+            throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, GetToolName(), error, exitCode));
+        }
     }
 }
