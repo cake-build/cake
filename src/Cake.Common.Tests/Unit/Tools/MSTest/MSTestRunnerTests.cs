@@ -191,6 +191,19 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         }
 
         [Fact]
+        public void Should_Use_TestResultsFile_If_Provided()
+        {
+            //Given
+            var fixture = new MSTestRunnerFixture();
+            fixture.Settings.ResultsFile = @"c:\temp\myresults.trx";
+
+            //When
+            var result = fixture.Run();
+
+            Assert.Equal("\"/testcontainer:/Working/Test1.dll\" /resultsfile:\"c:\\temp\\myresults.trx\" /noisolation", result.Args);
+        }
+
+        [Fact]
         public void Should_Not_Use_TestCategoryFilter_If_Not_Provided()
         {
             //Given
