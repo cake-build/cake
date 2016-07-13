@@ -27,7 +27,7 @@ namespace Cake.Core.IO
         public bool RedirectStandardOutput { get; set; }
 
         /// <summary>
-        /// Gets or sets optional timeout for process execution
+        /// Gets or sets optional timeout, in milliseconds, to wait for the associated process to exit. The maximum is the largest possible value of a 32-bit integer, which represents infinity to the operating system.
         /// </summary>
         public int? Timeout { get; set; }
 
