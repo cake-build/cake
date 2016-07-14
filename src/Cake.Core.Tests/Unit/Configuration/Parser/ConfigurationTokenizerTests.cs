@@ -93,4 +93,3 @@ namespace Cake.Core.Tests.Unit.Configuration.Parser
         }
     }
 }
-

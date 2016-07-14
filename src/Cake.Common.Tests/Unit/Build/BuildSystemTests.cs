@@ -93,7 +93,6 @@ namespace Cake.Common.Tests.Unit.Build
 
                 // Then
                 Assert.IsArgumentNullException(result, "bambooProvider");
-
             }
 
             [Fact]
@@ -113,7 +112,6 @@ namespace Cake.Common.Tests.Unit.Build
 
                 // Then
                 Assert.IsArgumentNullException(result, "continuaCIProvider");
-
             }
 
             [Fact]

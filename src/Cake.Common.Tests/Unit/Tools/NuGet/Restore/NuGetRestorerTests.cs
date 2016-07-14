@@ -249,8 +249,6 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 Assert.Equal("restore \"/Working/project.sln\" -ConfigFile \"/Working/nuget.config\" -NonInteractive", result.Args);
             }
 
-
-
             [Fact]
             public void Should_Add_FallbackSources_To_Arguments_If_Set()
             {
@@ -272,7 +270,6 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             [InlineData(NuGetMSBuildVersion.MSBuild14, "restore \"/Working/project.sln\" -MSBuildVersion 14 -NonInteractive")]
             public void Should_Add_MSBuildVersion_To_Arguments_If_Set(NuGetMSBuildVersion msBuildVersion, string expected)
             {
-
                 // Given
                 var fixture = new NuGetRestorerFixture();
                 fixture.Settings.MSBuildVersion = msBuildVersion;

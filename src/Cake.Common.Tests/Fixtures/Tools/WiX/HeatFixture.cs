@@ -1,6 +1,8 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
+using System;
 using System.Collections.Generic;
 using Cake.Common.Tools.WiX.Heat;
 using Cake.Core.IO;
@@ -33,7 +35,8 @@ namespace Cake.Common.Tests.Fixtures.Tools.WiX
         protected override void RunTool()
         {
             var tool = new HeatRunner(FileSystem, Environment, ProcessRunner, Tools);
-            switch(Settings.HarvestType)
+
+            switch (Settings.HarvestType)
             {
                 case WiXHarvestType.Dir:
                     tool.Run(DirectoryPath, OutputFile, Settings);
@@ -47,6 +50,10 @@ namespace Cake.Common.Tests.Fixtures.Tools.WiX
                 case WiXHarvestType.Perf:
                     tool.Run(HarvestType, OutputFile, Settings);
                     break;
+                case null:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }

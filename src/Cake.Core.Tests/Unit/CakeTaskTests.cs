@@ -45,7 +45,6 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var task = new ActionTask("task");
 
-
                 // When
                 task.AddDependency("other");
 

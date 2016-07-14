@@ -428,7 +428,6 @@ namespace Cake.Core.Tests.Unit.IO
                 Assert.ContainsFilePath(result, "C:/Working/Project.B.Test.dll");
             }
 
-
             [Fact]
             public void Should_Return_File_For_Recursive_Wildcard_Pattern_Ending_With_Wildcard_Regex()
             {

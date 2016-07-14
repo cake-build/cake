@@ -10,7 +10,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 {
     internal sealed class CakeRunnerFixture : ToolFixture<CakeSettings>
     {
-        public FilePath ScriptPath { get; set;}
+        public FilePath ScriptPath { get; set; }
 
         public CakeRunnerFixture()
             : base("Cake.exe")

@@ -20,7 +20,6 @@ namespace Cake.NuGet.Tests.Unit
             public void Should_Throw_If_Target_Framework_Is_Null()
             {
                 // Given
-
                 var filter = new NuGetAssemblyCompatibilityFilter(Substitute.For<INuGetFrameworkCompatibilityFilter>(),
                     Substitute.For<INuGetPackageReferenceBundler>());
 

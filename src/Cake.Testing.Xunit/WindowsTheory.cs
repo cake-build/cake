@@ -16,4 +16,3 @@ namespace Cake.Testing.Xunit
         }
     }
 }
-

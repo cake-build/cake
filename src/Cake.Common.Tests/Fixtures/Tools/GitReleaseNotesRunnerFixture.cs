@@ -9,7 +9,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 {
     internal sealed class GitReleaseNotesRunnerFixture : ToolFixture<GitReleaseNotesSettings>
     {
-        public FilePath OutputFile;
+        public FilePath OutputFile { get; set; }
 
         public GitReleaseNotesRunnerFixture()
             : base("GitReleaseNotes.exe")

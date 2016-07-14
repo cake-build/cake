@@ -127,6 +127,5 @@ namespace Cake.Core.Tests.Unit.Packaging
                 Assert.Equal(uri, result);
             }
         }
-
     }
 }
