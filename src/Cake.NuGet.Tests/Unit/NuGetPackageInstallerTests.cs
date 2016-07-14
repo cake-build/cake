@@ -103,6 +103,8 @@ namespace Cake.NuGet.Tests.Unit
 
         public sealed class TheCanInstallMethod
         {
+            private string NUGET_CONFIGKEY = "NuGet_Source";
+
             [Fact]
             public void Should_Throw_If_URI_Is_Null()
             {
@@ -143,6 +145,34 @@ namespace Cake.NuGet.Tests.Unit
 
                 // Then
                 Assert.False(result);
+            }
+
+            [Fact]
+            public void Should_Ignore_Custom_Source_If_AbsoluteUri_Is_Used()
+            {
+                var fixture = new NuGetPackageInstallerFixture();
+                fixture.Package = new PackageReference("nuget:http://absolute/?package=Cake.Core");
+
+                // When
+                var result = Record.Exception(() => fixture.Install());
+
+                // Then
+                Assert.Null(result);
+                fixture.Config.DidNotReceive().GetValue(NUGET_CONFIGKEY);
+            }
+
+            [Fact]
+            public void Should_Use_Custom_Source_If_RelativeUri_Is_Used()
+            {
+                var fixture = new NuGetPackageInstallerFixture();
+                fixture.Package = new PackageReference("nuget:?package=Cake.Core");
+
+                // When
+                var result = Record.Exception(() => fixture.Install());
+
+                // Then
+                Assert.Null(result);
+                fixture.Config.Received().GetValue(NUGET_CONFIGKEY);
             }
         }
 
