@@ -80,7 +80,24 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore ./src/*", result.Args);
+                Assert.Equal("restore \"./src/*\"", result.Args);
+            }
+
+            [Theory]
+            [InlineData("./src/*", "restore \"./src/*\"")]
+            [InlineData("./src/cake build/", "restore \"./src/cake build/\"")]
+            [InlineData("./src/cake build/cake cli", "restore \"./src/cake build/cake cli\"")]
+            public void Should_Quote_Root_Path(string text, string expected)
+            {
+                // Given
+                var fixture = new DotNetCoreRestorerFixture();
+                fixture.Root = text;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]

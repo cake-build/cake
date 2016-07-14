@@ -55,7 +55,7 @@ namespace Cake.Common.Tools.DotNetCore.Restore
             // Specific root?
             if (root != null)
             {
-                builder.Append(root);
+                builder.AppendQuoted(root);
             }
 
             // Output directory
