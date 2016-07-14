@@ -29,6 +29,12 @@ namespace Cake.Common.Tools.MSTest
         public string Category { get; set; }
 
         /// <summary>
+        /// Gets or sets the filepath for a named resulting test file. 
+        /// MSTest.exe flag <see href="https://msdn.microsoft.com/en-us/library/ms182489.aspx#resultsfile">/resultsfile</see>.
+        /// </summary>
+        public string ResultsFile { get; set; }
+
+        /// <summary>
         /// Gets or sets the test settings file to pass to MSTest.exe flag <see href="https://msdn.microsoft.com/en-us/library/ms182489.aspx#testsettings">/testsettings</see>.
         /// </summary>
         public FilePath TestSettings { get; set; }
