@@ -19,6 +19,18 @@ namespace Xunit
         }
 
         /// <summary>
+        /// Verifies that an object reference is not null.
+        /// </summary>
+        /// <param name="object">The object to be validated</param>
+        /// <param name="userMessage">The user message to be displayed</param>
+        /// <exception cref="NotNullException">Thrown when the object is not null</exception>
+        public static void NotNull(object @object, string userMessage)
+        {
+            if (@object == null)
+                throw new NotNullException(userMessage);
+        }
+
+        /// <summary>
         /// Verifies that an object reference is null.
         /// </summary>
         /// <param name="object">The object to be inspected</param>
