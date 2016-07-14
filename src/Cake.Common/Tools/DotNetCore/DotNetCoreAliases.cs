@@ -150,10 +150,10 @@ namespace Cake.Common.Tools.DotNetCore
         ///     {
         ///         Sources = new[] {"https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2"},
         ///         FallbackSources = new[] {"https://www.example.com/fallbacknugetfeed"},
-        ///         Packages = "./packages",
+        ///         PackagesDirectory = "./packages",
         ///         Verbosity = Information,
         ///         DisableParallel = true,
-        ///         Runtimes = new[] {"runtime1", "runtime2"}
+        ///         InferRuntimes = new[] {"runtime1", "runtime2"}
         ///     };
         ///
         ///     DotNetCoreRestore(settings);
@@ -179,10 +179,10 @@ namespace Cake.Common.Tools.DotNetCore
         ///     {
         ///         Sources = new[] {"https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2"},
         ///         FallbackSources = new[] {"https://www.example.com/fallbacknugetfeed"},
-        ///         Packages = "./packages",
+        ///         PackagesDirectory = "./packages",
         ///         Verbosity = Information,
         ///         DisableParallel = true,
-        ///         Runtimes = new[] {"runtime1", "runtime2"}
+        ///         InferRuntimes = new[] {"runtime1", "runtime2"}
         ///     };
         ///
         ///     DotNetCoreRestore("./src/*", settings);
@@ -235,7 +235,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <code>
         ///     var settings = new DotNetCoreBuildSettings
         ///     {
-        ///         Frameworks = new[] { "net451", "dnxcore50" },
+        ///         Framework = "netcoreapp1.0",
         ///         Configuration = "Debug",
         ///         OutputDirectory = "./artifacts/"
         ///     };
@@ -290,8 +290,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <code>
         ///     var settings = new DotNetCorePackSettings
         ///     {
-        ///         Frameworks = new[] { "dnx451", "dnxcore50" },
-        ///         Configurations = new[] { "Debug", "Release" },
+        ///         Configuration = "Release",
         ///         OutputDirectory = "./artifacts/"
         ///     };
         ///
@@ -382,7 +381,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <code>
         ///     var settings = new DotNetCoreRunSettings
         ///     {
-        ///         Framework = "dnxcore50",
+        ///         Framework = "netcoreapp1.0",
         ///         Configuration = "Release"
         ///     };
         ///
@@ -436,7 +435,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <code>
         ///     var settings = new DotNetCorePublishSettings
         ///     {
-        ///         Framework = "dnxcore50",
+        ///         Framework = "netcoreapp1.0",
         ///         Configuration = "Release",
         ///         OutputDirectory = "./artifacts/"
         ///     };
