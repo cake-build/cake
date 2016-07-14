@@ -32,7 +32,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Close
         }
 
         /// <summary>
-        /// Creates a Release using the specified and settings.
+        /// Creates a Release using the specified settings.
         /// </summary>
         /// <param name="userName">The user name.</param>
         /// <param name="password">The password.</param>
