@@ -17,8 +17,8 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet.SetApiKey
 
             // Set the standard output.
             ProcessRunner.Process.SetStandardOutput(new[] {
-                string.Concat("The API Key '", ApiKey,
-                    "' was saved for '", Source, "'.")});
+                string.Concat("The API Key '", ApiKey, "' was saved for '", Source, "'.")
+            });
         }
 
         public void GivenUnexpectedOutput()

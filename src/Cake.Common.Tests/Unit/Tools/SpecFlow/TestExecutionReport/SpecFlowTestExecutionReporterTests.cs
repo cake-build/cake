@@ -42,7 +42,6 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
 
                 // Then
                 Assert.IsArgumentNullException(result, "action");
-
             }
 
             [Fact]
@@ -231,7 +230,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
                 var nUnit3Settings = new NUnit3Settings
                 {
                     ShadowCopy = false,
-                    Results ="/Working/TestResult.xml",
+                    Results = "/Working/TestResult.xml",
                     ResultFormat = "nunit2",
                     Labels = NUnit3Labels.All,
                     OutputFile = "/Working/TestResult.txt"

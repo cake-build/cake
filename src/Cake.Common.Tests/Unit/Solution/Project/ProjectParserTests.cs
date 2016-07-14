@@ -48,7 +48,6 @@ namespace Cake.Common.Tests.Unit.Solution.Project
 
         public sealed class TheParseMethod
         {
-
             [Fact]
             public void Should_Return_Parser_Result()
             {

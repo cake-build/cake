@@ -64,7 +64,6 @@ namespace Cake.Common.Tests.Fixtures
             using (var reader = new StringReader(xml))
             using (var xmlReader = XmlReader.Create(reader, GetXmlReaderSettings(Settings)))
             {
-
                 var document = new XmlDocument();
                 document.Load(xmlReader);
 
@@ -91,7 +90,6 @@ namespace Cake.Common.Tests.Fixtures
             using (var reader = new StringReader(xml))
             using (var xmlReader = XmlReader.Create(reader, GetXmlReaderSettings(Settings)))
             {
-
                 var document = new XmlDocument();
                 document.Load(xmlReader);
 

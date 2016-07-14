@@ -22,7 +22,6 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 //Then
                 Assert.Equal("/Users/vagrant/git", result);
             }
-
         }
 
         public sealed class TheDeployDirectoryProperty
@@ -39,7 +38,6 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 //Then
                 Assert.Equal("/Users/vagrant/deploy", result);
             }
-
         }
     }
 }

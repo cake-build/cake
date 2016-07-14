@@ -103,7 +103,5 @@ namespace Cake.Common.Tests.Unit.Build.Bamboo.Data
                 Assert.Equal("Cake", result);
             }
         }
-
     }
-
 }

@@ -31,7 +31,7 @@ namespace Cake.Common.Tests.Fixtures
             FileSystem = fileSystem;
 
             Globber = Substitute.For<IGlobber>();
-            Globber.GetFiles(Pattern).Returns(new FilePath[] { "/Working/Cake.Common.xml", "/Working/Cake.UnCommon.xml"});
+            Globber.GetFiles(Pattern).Returns(new FilePath[] { "/Working/Cake.Common.xml", "/Working/Cake.UnCommon.xml" });
 
             Log = Substitute.For<ICakeLog>();
         }
