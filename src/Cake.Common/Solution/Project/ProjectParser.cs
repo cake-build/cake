@@ -137,6 +137,53 @@ namespace Cake.Common.Solution.Project
                      Compile = element.Name == ProjectXElement.Compile
                  }).ToArray();
 
+            var references =
+                (from project in document.Elements(ProjectXElement.Project)
+                 from itemGroup in project.Elements(ProjectXElement.ItemGroup)
+                 from element in itemGroup.Elements()
+                 where element.Name == ProjectXElement.Reference
+                 from include in element.Attributes("Include")
+                 let includeValue = include.Value
+                 let hintPathElement = element.Element(ProjectXElement.HintPath)
+                 let nameElement = element.Element(ProjectXElement.Name)
+                 let fusionNameElement = element.Element(ProjectXElement.FusionName)
+                 let specificVersionElement = element.Element(ProjectXElement.SpecificVersion)
+                 let aliasesElement = element.Element(ProjectXElement.Aliases)
+                 let privateElement = element.Element(ProjectXElement.Private)
+                 select new ProjectAssemblyReference
+                 {
+                     Include = includeValue,
+                     HintPath = hintPathElement == null || string.IsNullOrEmpty(hintPathElement.Value) 
+                        ? null : rootPath.CombineWithFilePath(hintPathElement.Value),
+                     Name = nameElement == null ? null : nameElement.Value,
+                     FusionName = fusionNameElement == null ? null : fusionNameElement.Value,
+                     SpecificVersion = specificVersionElement == null ? (bool?)null : bool.Parse(specificVersionElement.Value),
+                     Aliases = aliasesElement == null ? null : aliasesElement.Value,
+                     Private = privateElement == null ? (bool?)null : bool.Parse(privateElement.Value)
+                 }).ToArray();
+
+            var projectReferences =
+                (from project in document.Elements(ProjectXElement.Project)
+                 from itemGroup in project.Elements(ProjectXElement.ItemGroup)
+                 from element in itemGroup.Elements()
+                 where element.Name == ProjectXElement.ProjectReference
+                 from include in element.Attributes("Include")
+                 let value = include.Value
+                 where !string.IsNullOrEmpty(value)
+                 let filePath = rootPath.CombineWithFilePath(value)
+                 let nameElement = element.Element(ProjectXElement.Name)
+                 let projectElement = element.Element(ProjectXElement.Project)
+                 let packageElement = element.Element(ProjectXElement.Package)
+                 select new ProjectReference
+                 {
+                     FilePath = filePath,
+                     RelativePath = value,
+                     Name = nameElement == null ? null : nameElement.Value,
+                     Project = projectElement == null ? null : projectElement.Value,
+                     Package = packageElement == null || string.IsNullOrEmpty(packageElement.Value) 
+                        ? null : rootPath.CombineWithFilePath(packageElement.Value)
+                 }).ToArray();
+
             return new ProjectParserResult(
                 projectProperties.Configuration,
                 projectProperties.Platform,
@@ -146,7 +193,9 @@ namespace Cake.Common.Solution.Project
                 projectProperties.AssemblyName,
                 projectProperties.TargetFrameworkVersion,
                 projectProperties.TargetFrameworkProfile,
-                projectFiles);
+                projectFiles,
+                references,
+                projectReferences);
         }
     }
 }
