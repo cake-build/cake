@@ -34,11 +34,20 @@ namespace Cake.Core.Tooling
         /// This allows you to support new tool arguments, customize arguments or address potential argument issues.
         /// </summary>
         /// <example>
+        /// <para>Combining tool specific settings and tool arguments:</para>
         /// <code>
         /// NuGetAddSource("Cake", "https://www.myget.org/F/cake/api/v3/index.json",
         ///     new NuGetSourcesSettings { UserName = "user", Password = "incorrect",
         ///     ArgumentCustomization = args=&gt;args.Append("-StorePasswordInClearText")
         /// });
+        /// </code>
+        /// </example>
+        /// <example>
+        /// <para>Setting multiple tool arguments:</para>
+        /// <code>
+        /// MSTest(pathPattern, new MSTestSettings() 
+        ///     { ArgumentCustomization = args=&gt;args.Append("/detail:errormessage")
+        ///                                            .Append("/resultsfile:TestResults.trx") });
         /// </code>
         /// </example>
         /// <value>The delegate used to customize the <see cref="Cake.Core.IO.ProcessArgumentBuilder" />.</value>
