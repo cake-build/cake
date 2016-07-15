@@ -8,7 +8,6 @@ namespace Cake.Common.Tests.Unit.Build.Bamboo.Data
 {
     public sealed class BambooRepositoryInfoTests
     {
-
         public sealed class TheScmProperty
         {
             [Fact]

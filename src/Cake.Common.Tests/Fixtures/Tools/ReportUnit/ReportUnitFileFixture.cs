@@ -9,8 +9,8 @@ namespace Cake.Common.Tests.Fixtures.Tools.ReportUnit
 {
     internal sealed class ReportUnitFileFixture : ToolFixture<ReportUnitSettings>
     {
-        public FilePath InputFile;
-        public FilePath OutputFile;
+        public FilePath InputFile { get; set; }
+        public FilePath OutputFile { get; set; }
 
         public ReportUnitFileFixture()
             : base("ReportUnit.exe")

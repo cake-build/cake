@@ -21,7 +21,6 @@ namespace Cake.Common.Tests.Unit.Build.Bamboo.Data
 
                 // Then
                 Assert.Equal("d4a3a4cb304548450e3cab2ff735f778ffe58d03", result);
-
             }
         }
     }

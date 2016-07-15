@@ -53,7 +53,6 @@ namespace Cake.Core.Tests.Unit.IO
                 Assert.False(result);
             }
 
-
             [Theory]
             [InlineData(true)]
             [InlineData(false)]

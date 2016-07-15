@@ -17,8 +17,8 @@ namespace Cake.Core.Tests.Fixtures
 
         public MethodAliasGeneratorFixture()
         {
-            _assembly = typeof (MethodAliasGeneratorFixture).Assembly;
-            _methods = typeof (MethodAliasGeneratorData).GetMethods();
+            _assembly = typeof(MethodAliasGeneratorFixture).Assembly;
+            _methods = typeof(MethodAliasGeneratorData).GetMethods();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]

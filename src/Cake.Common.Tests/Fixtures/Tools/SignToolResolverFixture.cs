@@ -16,7 +16,6 @@ namespace Cake.Common.Tests.Fixtures.Tools
         public ICakeEnvironment Environment { get; set; }
         public IRegistry Registry { get; set; }
 
-
         public SignToolResolverFixture(bool is64Bit = true)
         {
             _is64Bit = is64Bit;

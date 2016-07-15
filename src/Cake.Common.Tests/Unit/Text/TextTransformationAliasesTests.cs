@@ -326,7 +326,6 @@ namespace Cake.Common.Tests.Unit.Text
                     // When
                     var result = transform.ToString();
 
-
                     // Then
                     Assert.Equal("Hello World", result);
                 }

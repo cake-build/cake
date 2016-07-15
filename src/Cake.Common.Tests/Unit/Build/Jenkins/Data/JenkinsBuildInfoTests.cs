@@ -87,6 +87,5 @@ namespace Cake.Common.Tests.Unit.Build.Jenkins.Data
                 Assert.Equal("http://localhost:8080/jenkins/job/cake/456/", result);
             }
         }
-
     }
 }

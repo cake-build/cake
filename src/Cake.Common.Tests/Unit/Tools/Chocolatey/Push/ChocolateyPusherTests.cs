@@ -142,7 +142,6 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Push
                 Assert.Equal("push \"/Working/existing.nupkg\" -k 1234 -y", result.Args);
             }
 
-
             [Fact]
             public void Should_Add_Source_To_Arguments_If_Not_Null()
             {

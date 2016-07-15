@@ -41,7 +41,6 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
 
                 // Then
                 Assert.IsArgumentNullException(result, "action");
-
             }
 
             [Fact]

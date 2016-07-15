@@ -22,7 +22,8 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet.Sources
                 "  1.  https://www.nuget.org/api/v2/ [Enabled]",
                 "      https://www.nuget.org/api/v2/",
                 string.Format("  2.  {0} [Enabled]", Name),
-                string.Format("      {0}", Source)});
+                string.Format("      {0}", Source)
+            });
         }
 
         public void GivenSourceAlreadyHasBeenAdded()
