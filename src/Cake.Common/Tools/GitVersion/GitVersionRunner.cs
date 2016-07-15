@@ -153,6 +153,11 @@ namespace Cake.Common.Tools.GitVersion
                 builder.AppendQuoted(settings.LogFilePath.FullPath);
             }
 
+            if (settings.NoFetch)
+            {
+                builder.Append("-nofetch");
+            }
+
             return builder;
         }
 
