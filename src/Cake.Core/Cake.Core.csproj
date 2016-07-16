@@ -83,12 +83,12 @@
     <Compile Include="Configuration\Parser\ConfigurationTokenKind.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DefaultExecutionStrategy.cs" />
-    <Compile Include="Diagnostics\ICakeLog.cs" />
-    <Compile Include="Diagnostics\LogAction.cs" />
-    <Compile Include="Diagnostics\LogExtensions.cs" />
-    <Compile Include="Diagnostics\LogLevel.cs" />
-    <Compile Include="Diagnostics\NullLog.cs" />
-    <Compile Include="Diagnostics\Verbosity.cs" />
+    <Compile Include="Properties\Diagnostics\ICakeLog.cs" />
+    <Compile Include="Properties\Diagnostics\LogAction.cs" />
+    <Compile Include="Properties\Diagnostics\LogExtensions.cs" />
+    <Compile Include="Properties\Diagnostics\LogLevel.cs" />
+    <Compile Include="Properties\Diagnostics\NullLog.cs" />
+    <Compile Include="Properties\Diagnostics\Verbosity.cs" />
     <Compile Include="Extensions\CakePlatformExtensions.cs" />
     <Compile Include="ICakeRuntime.cs" />
     <Compile Include="PlatformFamily.cs" />
@@ -175,6 +175,7 @@
     <Compile Include="ITaskTeardownContext.cs" />
     <Compile Include="Modules\CoreModule.cs" />
     <Compile Include="Scripting\Processors\BreakDirectiveProcessor.cs" />
+    <Compile Include="Scripting\Processors\NuScriptDirectiveProcessor.cs" />
     <Compile Include="Scripting\Processors\UriDirectiveProcessor.cs" />
     <Compile Include="Packaging\IPackageInstaller.cs" />
     <Compile Include="Packaging\PackageReference.cs" />

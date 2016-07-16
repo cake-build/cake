@@ -8,7 +8,9 @@ using System.Reflection;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.Packaging;
 using Cake.Core.Scripting.Analysis;
+using Cake.Core.Scripting.Processors;
 
 namespace Cake.Core.Scripting
 {
@@ -25,6 +27,7 @@ namespace Cake.Core.Scripting
         private readonly IScriptAnalyzer _analyzer;
         private readonly IScriptProcessor _processor;
         private readonly IScriptConventions _conventions;
+        private List<string> _temp; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptRunner"/> class.
@@ -119,7 +122,32 @@ namespace Cake.Core.Scripting
 
             // Analyze the script file.
             _log.Verbose("Analyzing build script...");
-            var result = _analyzer.Analyze(scriptPath.GetFilename());
+            IScriptAnalyzerContext scriptAnalyzerContext;
+            var result = _analyzer.Analyze(scriptPath.GetFilename(), out scriptAnalyzerContext);
+
+            // Import nuscripts.
+            var nuScriptPath = GetToolPath(scriptPath.GetDirectory());
+            IEnumerable<KeyValuePair<PackageReference, FilePath>> scriptImports = _processor.InstallNuScripts(result.NuScripts, nuScriptPath);
+            RecursiveInstallNuScripts(ref result, scriptImports, scriptAnalyzerContext, nuScriptPath);
+
+            //foreach (var file in scriptImports)
+            //{
+            //    scriptAnalyzerContext.Analyze(file);
+            //    var nuScriptResult = new ScriptAnalyzerResult(scriptAnalyzerContext.Script, scriptAnalyzerContext.Lines);
+
+            //    // add all tools, addins, namespaces etc from nuScriptResult to result.
+            //    result.Tools.AddRange(nuScriptResult.Tools);
+            //    result.Addins.AddRange(nuScriptResult.Addins);
+            //    foreach (var reference in nuScriptResult.References)
+            //    {
+            //        result.References.Add(reference);
+            //    }
+
+            //    foreach (var @namespace in nuScriptResult.Namespaces)
+            //    {
+            //        result.Namespaces.Add(@namespace);
+            //    }
+            //}
 
             // Install tools.
             _log.Verbose("Processing build script...");
@@ -182,10 +210,102 @@ namespace Cake.Core.Scripting
             {
                 session.ImportNamespace(@namespace);
             }
-
+            
             // Execute the script.
             var script = new Script(result.Namespaces, result.Lines, aliases, result.UsingAliases);
             session.Execute(script);
+        }
+
+        private void RecursiveInstallNuScripts(ref ScriptAnalyzerResult result, IEnumerable<KeyValuePair<PackageReference, FilePath>> scriptImports, IScriptAnalyzerContext scriptAnalyzerContext, DirectoryPath nuScriptPath)
+        {
+            foreach (var item in scriptImports)
+            {
+                var file = item.Value;
+                scriptAnalyzerContext.Analyze(file);
+                var nuScriptResult = new ScriptAnalyzerResult(scriptAnalyzerContext.Script, scriptAnalyzerContext.Lines);
+
+                // add all tools, addins, namespaces etc from nuScriptResult to result.
+                result.Tools.AddRange(nuScriptResult.Tools);
+                result.Addins.AddRange(nuScriptResult.Addins);
+                foreach (var reference in nuScriptResult.References)
+                {
+                    result.References.Add(reference);
+                }
+
+                foreach (var @namespace in nuScriptResult.Namespaces)
+                {
+                    result.Namespaces.Add(@namespace);
+                }
+
+                var childScripts = _processor.InstallNuScripts(nuScriptResult.NuScripts, nuScriptPath).ToList();
+                if (childScripts.Any())
+                {
+                    RecursiveInstallNuScripts(ref result, childScripts, scriptAnalyzerContext, nuScriptPath);
+                }
+                
+                // Re Arange the nuscript to its rightfull place
+                var lineCopy = result.Lines.ToList();
+                var lineMarker = result.Lines.FirstOrDefault(x => x.StartsWith("#line") && x.Contains(file.FullPath));
+                if (lineMarker != null)
+                {
+                    // Check if we have stored the orginal list first before we start moving
+                    if (_temp == null)
+                    {
+                        // this is used later to calculate the actual #line number of the moved lines.
+                        _temp = lineCopy.ToList();
+                    }
+
+                    var startIndex = lineCopy.IndexOf(lineMarker);
+                    var prevLineDirective = result.Lines.LastOrDefault(x => x.StartsWith("#line") && !x.Contains(file.FullPath));
+                    
+                    // Read all of the lines belonging to the imported script
+                    var amountToTake = lineCopy.Count - startIndex;
+                    var nuScriptLines = lineCopy.GetRange(startIndex, amountToTake);
+
+                    // Remove the copied lines
+                    lineCopy.RemoveRange(startIndex, amountToTake);
+
+                    // Get the nuscript directive declaration index
+                    var nuscriptMarker = lineCopy.FirstOrDefault(x => x.Contains(NuScriptDirectiveProcessor.DirectiveName) && x.Contains(item.Key.OriginalString));
+                    var nuscriptIndex = lineCopy.IndexOf(nuscriptMarker) + 1;
+
+                    // Performe the actuall move of the imported script
+                    lineCopy.InsertRange(nuscriptIndex, nuScriptLines);
+
+                    // Add the previus #line marker back
+                    var lineDirectiveIndex = nuscriptIndex + nuScriptLines.Count;
+
+                    if (prevLineDirective != null)
+                    {
+                        var prevLine = prevLineDirective.Split(null);
+                        var prevLineDirectiveIndex = lineCopy.IndexOf(prevLineDirective);
+
+                        // Calculate the new line number for the previus #line directive. (note: we need to do -1 becuse of line 270 nuscriptIndex has +1)
+                        var calculateFromBegining = lineCopy.Skip(prevLineDirectiveIndex).TakeWhile(x => !x.Equals(lineMarker)).Count() - 1;
+
+                        // Ensure a minimum number 1
+                        calculateFromBegining = Math.Max(1, calculateFromBegining);
+
+                        // Set the line number
+                        prevLine[1] = calculateFromBegining + string.Empty;
+
+                        var newValue = string.Join(" ", prevLine);
+
+                        // Add a new #line directive with a new line number
+                        lineCopy.Insert(lineDirectiveIndex, newValue);
+
+                        // Check if the line directive is the last line and if so remove (im sure there is much better ways to do this but im tired)
+                        var lastItem = lineCopy.Last();
+                        if (lastItem.Equals(newValue))
+                        {
+                            lineCopy.RemoveAt(lineCopy.Count - 1);
+                        }
+                    }
+
+                    // Persist changes
+                    result = new ScriptAnalyzerResult(result.Script, lineCopy);
+                }
+            }
         }
 
         private DirectoryPath GetToolPath(DirectoryPath root)

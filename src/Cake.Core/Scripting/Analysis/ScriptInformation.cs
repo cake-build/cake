@@ -16,6 +16,7 @@ namespace Cake.Core.Scripting.Analysis
         private readonly List<string> _namespaces;
         private readonly List<PackageReference> _addins;
         private readonly List<PackageReference> _tools;
+        private readonly List<PackageReference> _nuscripts;
         private readonly List<string> _lines;
 
         public FilePath Path
@@ -53,6 +54,11 @@ namespace Cake.Core.Scripting.Analysis
             get { return _tools; }
         }
 
+        public IList<PackageReference> NuScripts
+        {
+            get { return _nuscripts; }
+        }
+
         public IList<string> Lines
         {
             get { return _lines; }
@@ -67,6 +73,7 @@ namespace Cake.Core.Scripting.Analysis
             _usingAliases = new List<string>();
             _addins = new List<PackageReference>();
             _tools = new List<PackageReference>();
+            _nuscripts = new List<PackageReference>();
             _lines = new List<string>();
         }
     }

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 using System.Collections.Generic;
 using Cake.Core.IO;
+using Cake.Core.Packaging;
 using Cake.Core.Scripting.Analysis;
 
 namespace Cake.Core.Scripting
@@ -26,5 +27,13 @@ namespace Cake.Core.Scripting
         /// <param name="analyzerResult">The analyzer result.</param>
         /// <param name="installPath">The install path.</param>
         void InstallTools(ScriptAnalyzerResult analyzerResult, DirectoryPath installPath);
+
+        /// <summary>
+        /// Installs the tools specified in the build scripts.
+        /// </summary>
+        /// <param name="nuScripts">NuScript package references to install</param>
+        /// <param name="installPath">The install path.</param>
+        /// <returns>a list of <see cref="FilePath"/> *.cake files</returns>
+        IEnumerable<KeyValuePair<PackageReference, FilePath>> InstallNuScripts(IEnumerable<PackageReference> nuScripts, DirectoryPath installPath);
     }
 }

@@ -58,6 +58,7 @@ namespace Cake.Core.Scripting.Analysis
                 new UsingStatementProcessor(_environment),
                 new AddInDirectiveProcessor(_environment),
                 new ToolDirectiveProcessor(_environment),
+                new NuScriptDirectiveProcessor(environment),
                 new ShebangProcessor(_environment),
                 new BreakDirectiveProcessor(_environment)
             };
@@ -67,8 +68,9 @@ namespace Cake.Core.Scripting.Analysis
         /// Analyzes the specified script path.
         /// </summary>
         /// <param name="path">The path to the script to analyze.</param>
+        /// <param name="analyzerContext">The <see cref="IScriptAnalyzerContext"/> associated with the script analyzed.</param>
         /// <returns>The script analysis result.</returns>
-        public ScriptAnalyzerResult Analyze(FilePath path)
+        public ScriptAnalyzerResult Analyze(FilePath path, out IScriptAnalyzerContext analyzerContext)
         {
             if (path == null)
             {
@@ -79,8 +81,11 @@ namespace Cake.Core.Scripting.Analysis
             path = path.MakeAbsolute(_environment);
 
             // Create a new context.
-            var context = new ScriptAnalyzerContext(
+            ScriptAnalyzerContext context = new ScriptAnalyzerContext(
                 _fileSystem, _environment, _log, AnalyzeCallback);
+
+            // set the context
+            analyzerContext = context;
 
             // Analyze the script.
             context.Analyze(path);
@@ -89,6 +94,17 @@ namespace Cake.Core.Scripting.Analysis
             return new ScriptAnalyzerResult(
                 context.Script,
                 context.Lines);
+        }
+
+        /// <summary>
+        /// Analyzes the specified script path.
+        /// </summary>
+        /// <param name="path">The path to the script to analyze.</param>
+        /// <returns>The script analysis result.</returns>
+        public ScriptAnalyzerResult Analyze(FilePath path)
+        {
+            IScriptAnalyzerContext context;
+            return Analyze(path, out context);
         }
 
         [SuppressMessage("ReSharper", "ConvertIfStatementToConditionalTernaryExpression")]
@@ -109,7 +125,8 @@ namespace Cake.Core.Scripting.Analysis
             foreach (var line in lines)
             {
                 string replacement = null;
-
+                
+                // Insert the line at the end.
                 if (!_lineProcessors.Any(p => p.Process(context, line, out replacement)))
                 {
                     context.AddScriptLine(line);

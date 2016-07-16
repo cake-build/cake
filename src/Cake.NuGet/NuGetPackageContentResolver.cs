@@ -55,6 +55,17 @@ namespace Cake.NuGet
                 }
                 return result;
             }
+            if (type == PackageType.NuScript)
+            {
+                var result = new List<IFile>();
+                var toolDirectory = _fileSystem.GetDirectory(path);
+                if (toolDirectory.Exists)
+                {
+                    var files = toolDirectory.GetFiles("*.cake", SearchScope.Recursive);
+                    result.AddRange(files);
+                }
+                return result;
+            }
             throw new InvalidOperationException("Unknown resource type.");
         }
     }

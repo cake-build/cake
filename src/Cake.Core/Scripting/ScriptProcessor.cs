@@ -170,6 +170,54 @@ namespace Cake.Core.Scripting
             }
         }
 
+        /// <summary>
+        /// Installs the tools specified in the build scripts.
+        /// </summary>
+        /// <param name="nuScripts">NuScript package references to install</param>
+        /// <param name="installPath">The install path.</param>
+        /// <returns>a list of <see cref="FilePath"/> *.cake files</returns>
+        public IEnumerable<KeyValuePair<PackageReference, FilePath>> InstallNuScripts(IEnumerable<PackageReference> nuScripts, DirectoryPath installPath)
+        {
+            if (installPath == null)
+            {
+                throw new ArgumentNullException("installPath");
+            }
+            
+            // Make the installation root absolute.
+            installPath = installPath.MakeAbsolute(_environment);
+            nuScripts = nuScripts.ToList();
+
+            if (nuScripts.Any())
+            {
+                _log.Verbose("Installing nuscripts...");
+                foreach (var nuscript in nuScripts)
+                {
+                    // Get the installer.
+                    var installer = GetInstaller(nuscript, PackageType.NuScript);
+                    if (installer == null)
+                    {
+                        const string format = "Could not find an installer for the '{0}' scheme.";
+                        var message = string.Format(CultureInfo.InvariantCulture, format, nuscript.Scheme);
+                        throw new CakeException(message);
+                    }
+
+                    // Install the nuscript.
+                    IReadOnlyCollection<IFile> result = installer.Install(nuscript, PackageType.NuScript, installPath);
+                    if (result.Count == 0)
+                    {
+                        const string format = "Failed to install nuscript '{0}'.";
+                        var message = string.Format(CultureInfo.InvariantCulture, format, nuscript.Package);
+                        throw new CakeException(message);
+                    }
+
+                    foreach (var file in result)
+                    {
+                        yield return new KeyValuePair<PackageReference, FilePath>(nuscript, file.Path);
+                    }
+                }
+            }
+        }
+
         private IPackageInstaller GetInstaller(PackageReference package, PackageType type)
         {
             foreach (var installer in _installers)

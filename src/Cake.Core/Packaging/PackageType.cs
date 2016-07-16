@@ -21,6 +21,11 @@ namespace Cake.Core.Packaging
         /// <summary>
         /// Represents a tool.
         /// </summary>
-        Tool = 2
+        Tool = 2,
+
+        /// <summary>
+        /// Represents a nuscript.
+        /// </summary>
+        NuScript = 3
     }
 }

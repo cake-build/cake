@@ -17,5 +17,13 @@ namespace Cake.Core.Scripting.Analysis
         /// <param name="path">The path to the script to analyze.</param>
         /// <returns>The script analysis result.</returns>
         ScriptAnalyzerResult Analyze(FilePath path);
+
+        /// <summary>
+        /// Analyzes the specified script path.
+        /// </summary>
+        /// <param name="path">The path to the script to analyze.</param>
+        /// <param name="analyzerContext">The <see cref="IScriptAnalyzerContext"/> associated with the script analyzed.</param>
+        /// <returns>The script analysis result.</returns>
+        ScriptAnalyzerResult Analyze(FilePath path, out IScriptAnalyzerContext analyzerContext);
     }
 }
