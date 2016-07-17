@@ -27,7 +27,6 @@ namespace Cake.Core.Scripting
         private readonly IScriptAnalyzer _analyzer;
         private readonly IScriptProcessor _processor;
         private readonly IScriptConventions _conventions;
-        private List<string> _temp; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptRunner"/> class.
@@ -248,13 +247,6 @@ namespace Cake.Core.Scripting
                 var lineMarker = result.Lines.FirstOrDefault(x => x.StartsWith("#line") && x.Contains(file.FullPath));
                 if (lineMarker != null)
                 {
-                    // Check if we have stored the orginal list first before we start moving
-                    if (_temp == null)
-                    {
-                        // this is used later to calculate the actual #line number of the moved lines.
-                        _temp = lineCopy.ToList();
-                    }
-
                     var startIndex = lineCopy.IndexOf(lineMarker);
                     var prevLineDirective = result.Lines.LastOrDefault(x => x.StartsWith("#line") && !x.Contains(file.FullPath));
                     
