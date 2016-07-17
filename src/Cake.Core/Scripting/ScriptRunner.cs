@@ -212,8 +212,10 @@ namespace Cake.Core.Scripting
             foreach (var item in scriptImports)
             {
                 var file = item.Value;
+
                 // analyze and add the file lines to the current script
                 scriptAnalyzerContext.Analyze(file);
+
                 // We need to wrap the ScriptAnalyzerResult to not acess the scriptAnalyzerContext directly as that errors out.
                 var copyResult = new ScriptAnalyzerResult(scriptAnalyzerContext.Script, scriptAnalyzerContext.Lines);
 
@@ -259,13 +261,10 @@ namespace Cake.Core.Scripting
         /// Rearrange the nuscript to its rightfull place
         /// this will also move siblings belonging to the item.
         /// </summary>
-        /// <param name="result"></param>
-        /// <param name="item"></param>
+        /// <param name="result">The current result</param>
+        /// <param name="item">The item to process</param>
         /// <param name="nuscriptSet">The nuscript siblings to the item</param>
-        private void RearrangeNuScripts(ref ScriptAnalyzerResult result,
-            KeyValuePair<PackageReference,
-            FilePath> item,
-            IEnumerable<string> nuscriptSet)
+        private void RearrangeNuScripts(ref ScriptAnalyzerResult result, KeyValuePair<PackageReference, FilePath> item, IEnumerable<string> nuscriptSet)
         {
             var file = item.Value;
             var lineCopy = result.Lines.ToList();
@@ -294,7 +293,6 @@ namespace Cake.Core.Scripting
 
                 // Add the previus #line marker back
                 var lineDirectiveIndex = nuscriptIndex + nuScriptLines.Count;
-
                 if (prevLineDirective != null)
                 {
                     var prevLine = prevLineDirective.Split(null);
@@ -308,9 +306,8 @@ namespace Cake.Core.Scripting
                     // Set the line number
                     prevLine[1] = calculateFromBegining + string.Empty;
 
-                    var newValue = string.Join(" ", prevLine);
-
                     // Add a new #line directive with a new line number
+                    var newValue = string.Join(" ", prevLine);
                     lineCopy.Insert(lineDirectiveIndex, newValue);
 
                     // Check if the line directive is the last line and if so remove (im sure there is much better ways to do this but im tired)

@@ -81,7 +81,6 @@ namespace Cake.NuGet
                     if (loadOrder.Any())
                     {
                         // We do a revers as the first item in the list represents the last item in the scripts result.
-                        //loadOrder.Reverse();
                         foreach (var name in loadOrder)
                         {
                             var file = toolDirectory.GetFiles(name, SearchScope.Recursive).First();

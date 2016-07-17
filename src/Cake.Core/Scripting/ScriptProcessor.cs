@@ -173,10 +173,12 @@ namespace Cake.Core.Scripting
         /// <summary>
         /// Installs the tools specified in the build scripts.
         /// </summary>
-        /// <param name="nuScripts">NuScript package references to install</param>
+        /// <param name="scripts">NuScript package references to install</param>
         /// <param name="installPath">The install path.</param>
         /// <returns>a list of <see cref="FilePath"/> *.cake files</returns>
-        public IEnumerable<KeyValuePair<PackageReference, FilePath>> InstallNuScripts(IEnumerable<PackageReference> nuScripts, DirectoryPath installPath)
+        public IEnumerable<KeyValuePair<PackageReference, FilePath>> InstallNuScripts(
+            IEnumerable<PackageReference> scripts,
+            DirectoryPath installPath)
         {
             if (installPath == null)
             {
@@ -185,12 +187,12 @@ namespace Cake.Core.Scripting
             
             // Make the installation root absolute.
             installPath = installPath.MakeAbsolute(_environment);
-            nuScripts = nuScripts.ToList();
+            scripts = scripts.ToList();
 
-            if (nuScripts.Any())
+            if (scripts.Any())
             {
                 _log.Verbose("Installing nuscripts...");
-                foreach (var nuscript in nuScripts)
+                foreach (var nuscript in scripts)
                 {
                     // Get the installer.
                     var installer = GetInstaller(nuscript, PackageType.NuScript);
