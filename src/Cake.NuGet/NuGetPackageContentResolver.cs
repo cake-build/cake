@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
@@ -61,8 +62,38 @@ namespace Cake.NuGet
                 var toolDirectory = _fileSystem.GetDirectory(path);
                 if (toolDirectory.Exists)
                 {
-                    var files = toolDirectory.GetFiles("*.cake", SearchScope.Recursive);
-                    result.AddRange(files);
+                    var loadOrder = new List<string>();
+
+                    // Check if there is a load.text file
+                    var loadFile = toolDirectory.GetFiles("load.txt", SearchScope.Recursive).FirstOrDefault();
+                    if (loadFile != null)
+                    {
+                        using (var loadStream = loadFile.Open(FileMode.Open, FileAccess.Read))
+                        using (var reader = new StreamReader(loadStream))
+                        {
+                            string line;
+                            while ((line = reader.ReadLine()) != null)
+                            {
+                                loadOrder.Add(line);
+                            }
+                        }
+                    }
+                    if (loadOrder.Any())
+                    {
+                        // We do a revers as the first item in the list represents the last item in the scripts result.
+                        //loadOrder.Reverse();
+                        foreach (var name in loadOrder)
+                        {
+                            var file = toolDirectory.GetFiles(name, SearchScope.Recursive).First();
+                            result.Add(file);
+                        }
+                    }
+                    else
+                    {
+                        // add cake Files
+                        var files = toolDirectory.GetFiles("*.cake", SearchScope.Recursive);
+                        result.AddRange(files);
+                    }
                 }
                 return result;
             }
