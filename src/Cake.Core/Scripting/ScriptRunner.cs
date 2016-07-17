@@ -196,6 +196,13 @@ namespace Cake.Core.Scripting
             session.Execute(script);
         }
 
+        /// <summary>
+        /// Install nuscripts recursively.
+        /// </summary>
+        /// <param name="result">The current executing <see cref="ScriptAnalyzerResult"/></param>
+        /// <param name="scriptImports">The nuscript items from <see cref="IScriptProcessor.InstallNuScripts"/></param>
+        /// <param name="scriptAnalyzerContext">The current executing <see cref="IScriptAnalyzerContext"/></param>
+        /// <param name="nuScriptPath">Installation path for nuscripts, this is the path to tools</param>
         private void RecursiveInstallNuScripts(ref ScriptAnalyzerResult result,
             IEnumerable<KeyValuePair<PackageReference, FilePath>> scriptImports,
             IScriptAnalyzerContext scriptAnalyzerContext,
@@ -205,6 +212,7 @@ namespace Cake.Core.Scripting
             foreach (var item in scriptImports)
             {
                 var file = item.Value;
+                // analyze and add the file lines to the current script
                 scriptAnalyzerContext.Analyze(file);
                 // We need to wrap the ScriptAnalyzerResult to not acess the scriptAnalyzerContext directly as that errors out.
                 var copyResult = new ScriptAnalyzerResult(scriptAnalyzerContext.Script, scriptAnalyzerContext.Lines);
@@ -292,8 +300,7 @@ namespace Cake.Core.Scripting
                     var prevLine = prevLineDirective.Split(null);
 
                     // Calculate the new line number for the previus #line directive. (note: we need to do -1 becuse of line 270 nuscriptIndex has +1)
-                    var calculateFromBegining =
-                        lineCopy.Skip(prevLineDirectiveIndex).TakeWhile(x => !x.Equals(lineMarker)).Count() - 1;
+                    var calculateFromBegining = lineCopy.Skip(prevLineDirectiveIndex).TakeWhile(x => !x.Equals(lineMarker)).Count() - 1;
 
                     // Ensure a minimum number 1
                     calculateFromBegining = Math.Max(1, calculateFromBegining);
