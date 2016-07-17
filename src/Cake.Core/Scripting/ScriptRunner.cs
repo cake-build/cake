@@ -124,10 +124,10 @@ namespace Cake.Core.Scripting
             IScriptAnalyzerContext scriptAnalyzerContext;
             var result = _analyzer.Analyze(scriptPath.GetFilename(), out scriptAnalyzerContext);
 
-            // Import nuscripts.
-            var nuScriptPath = GetToolPath(scriptPath.GetDirectory());
-            var scriptImports = _processor.InstallNuScripts(result.NuScripts, nuScriptPath).ToList();
-            RecursiveInstallNuScripts(ref result, scriptImports, scriptAnalyzerContext, nuScriptPath);
+            // Import nuget scripts.
+            var nugetScriptPath = GetToolPath(scriptPath.GetDirectory());
+            var scriptImports = _processor.InstallNugetScripts(result.NugetScripts, nugetScriptPath).ToList();
+            RecursiveInstallNugetScripts(ref result, scriptImports, scriptAnalyzerContext, nugetScriptPath);
 
             // Install tools.
             _log.Verbose("Processing build script...");
@@ -197,16 +197,16 @@ namespace Cake.Core.Scripting
         }
 
         /// <summary>
-        /// Install nuscripts recursively.
+        /// Install nuget scripts recursively.
         /// </summary>
         /// <param name="result">The current executing <see cref="ScriptAnalyzerResult"/></param>
-        /// <param name="scriptImports">The nuscript items from <see cref="IScriptProcessor.InstallNuScripts"/></param>
+        /// <param name="scriptImports">The nuget script items from <see cref="IScriptProcessor.InstallNugetScripts"/></param>
         /// <param name="scriptAnalyzerContext">The current executing <see cref="IScriptAnalyzerContext"/></param>
-        /// <param name="nuScriptPath">Installation path for nuscripts, this is the path to tools</param>
-        private void RecursiveInstallNuScripts(ref ScriptAnalyzerResult result,
+        /// <param name="nugetScriptPath">Installation path for nuget scripts, this is the path to tools</param>
+        private void RecursiveInstallNugetScripts(ref ScriptAnalyzerResult result,
             IEnumerable<KeyValuePair<PackageReference, FilePath>> scriptImports,
             IScriptAnalyzerContext scriptAnalyzerContext,
-            DirectoryPath nuScriptPath)
+            DirectoryPath nugetScriptPath)
         {
             scriptImports = scriptImports.ToList();
             foreach (var item in scriptImports)
@@ -219,7 +219,7 @@ namespace Cake.Core.Scripting
                 // We need to wrap the ScriptAnalyzerResult to not acess the scriptAnalyzerContext directly as that errors out.
                 var copyResult = new ScriptAnalyzerResult(scriptAnalyzerContext.Script, scriptAnalyzerContext.Lines);
 
-                // add all tools, addins, namespaces etc from nuScriptResult to result.
+                // add all tools, addins, namespaces etc from nugetScriptResult to result.
                 result.Tools.AddRange(copyResult.Tools);
                 result.Addins.AddRange(copyResult.Addins);
 
@@ -238,14 +238,14 @@ namespace Cake.Core.Scripting
                     result.Namespaces.Add(@namespace);
                 }
 
-                var childScripts = _processor.InstallNuScripts(copyResult.NuScripts, nuScriptPath).ToList();
+                var childScripts = _processor.InstallNugetScripts(copyResult.NugetScripts, nugetScriptPath).ToList();
                 if (childScripts.Any())
                 {
-                    RecursiveInstallNuScripts(ref result, childScripts, scriptAnalyzerContext, nuScriptPath);
+                    RecursiveInstallNugetScripts(ref result, childScripts, scriptAnalyzerContext, nugetScriptPath);
 
                     // Re-arrange child scripts
                     var siblings = childScripts.Skip(1).Select(x => x.Value.FullPath);
-                    RearrangeNuScripts(ref result, childScripts.First(), siblings);
+                    RearrangeNugetScripts(ref result, childScripts.First(), siblings);
                 }
             }
 
@@ -253,18 +253,18 @@ namespace Cake.Core.Scripting
             {
                 // Re-arrange parent scripts
                 var siblings = scriptImports.Skip(1).Select(x => x.Value.FullPath);
-                RearrangeNuScripts(ref result, scriptImports.First(), siblings);
+                RearrangeNugetScripts(ref result, scriptImports.First(), siblings);
             }
         }
 
         /// <summary>
-        /// Rearrange the nuscript to its rightfull place
+        /// Rearrange the nuget script to its rightfull place
         /// this will also move siblings belonging to the item.
         /// </summary>
         /// <param name="result">The current result</param>
         /// <param name="item">The item to process</param>
-        /// <param name="nuscriptSet">The nuscript siblings to the item</param>
-        private void RearrangeNuScripts(ref ScriptAnalyzerResult result, KeyValuePair<PackageReference, FilePath> item, IEnumerable<string> nuscriptSet)
+        /// <param name="nugetScriptSet">The nuge script siblings to the processed item</param>
+        private void RearrangeNugetScripts(ref ScriptAnalyzerResult result, KeyValuePair<PackageReference, FilePath> item, IEnumerable<string> nugetScriptSet)
         {
             var file = item.Value;
             var lineCopy = result.Lines.ToList();
@@ -272,32 +272,32 @@ namespace Cake.Core.Scripting
             if (lineMarker != null)
             {
                 var startIndex = lineCopy.IndexOf(lineMarker);
-                var prevLineDirective = lineCopy.LastOrDefault(x => x.StartsWith("#line") && !x.Contains(file.FullPath) && nuscriptSet != null && !nuscriptSet.Any(x.Contains));
+                var prevLineDirective = lineCopy.LastOrDefault(x => x.StartsWith("#line") && !x.Contains(file.FullPath) && nugetScriptSet != null && !nugetScriptSet.Any(x.Contains));
                 var prevLineDirectiveIndex = lineCopy.IndexOf(prevLineDirective);
                 
                 // Read all of the lines belonging to the imported script
                 var amountToTake = lineCopy.Count - startIndex;
-                var nuScriptLines = lineCopy.GetRange(startIndex, amountToTake);
+                var nugetScriptLines = lineCopy.GetRange(startIndex, amountToTake);
 
                 // Remove the copied lines
                 lineCopy.RemoveRange(startIndex, amountToTake);
 
-                // Get the nuscript directive declaration index
-                var nuscriptMarker = lineCopy.FirstOrDefault(x =>
-                    x.Contains(NuScriptDirectiveProcessor.DirectiveName) &&
+                // Get the nuget script directive declaration index
+                var nugetScriptMarker = lineCopy.FirstOrDefault(x =>
+                    x.Contains(NugetScriptDirectiveProcessor.DirectiveName) &&
                     x.Contains(item.Key.OriginalString));
-                var nuscriptIndex = lineCopy.IndexOf(nuscriptMarker) + 1;
+                var nugetScriptIndex = lineCopy.IndexOf(nugetScriptMarker) + 1;
 
                 // Performe the actuall move of the imported script
-                lineCopy.InsertRange(nuscriptIndex, nuScriptLines);
+                lineCopy.InsertRange(nugetScriptIndex, nugetScriptLines);
 
                 // Add the previus #line marker back
-                var lineDirectiveIndex = nuscriptIndex + nuScriptLines.Count;
+                var lineDirectiveIndex = nugetScriptIndex + nugetScriptLines.Count;
                 if (prevLineDirective != null)
                 {
                     var prevLine = prevLineDirective.Split(null);
 
-                    // Calculate the new line number for the previus #line directive. (note: we need to do -1 becuse of line 270 nuscriptIndex has +1)
+                    // Calculate the new line number for the previus #line directive. (note: we need to do -1 becuse of line 270 nugetScriptIndex has +1)
                     var calculateFromBegining = lineCopy.Skip(prevLineDirectiveIndex).TakeWhile(x => !x.Equals(lineMarker)).Count() - 1;
 
                     // Ensure a minimum number 1

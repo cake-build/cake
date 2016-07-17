@@ -56,7 +56,7 @@ namespace Cake.NuGet
                 }
                 return result;
             }
-            if (type == PackageType.NuScript)
+            if (type == PackageType.NugetScript)
             {
                 var result = new List<IFile>();
                 var toolDirectory = _fileSystem.GetDirectory(path);
@@ -68,8 +68,7 @@ namespace Cake.NuGet
                     var loadFile = toolDirectory.GetFiles("load.txt", SearchScope.Recursive).FirstOrDefault();
                     if (loadFile != null)
                     {
-                        using (var loadStream = loadFile.Open(FileMode.Open, FileAccess.Read))
-                        using (var reader = new StreamReader(loadStream))
+                        using (var reader = new StreamReader(loadFile.Open(FileMode.Open, FileAccess.Read)))
                         {
                             string line;
                             while ((line = reader.ReadLine()) != null)

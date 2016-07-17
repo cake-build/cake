@@ -31,9 +31,9 @@ namespace Cake.Core.Scripting
         /// <summary>
         /// Installs the tools specified in the build scripts.
         /// </summary>
-        /// <param name="scripts">NuScript package references to install</param>
+        /// <param name="scripts">Nuget script package references to install</param>
         /// <param name="installPath">The install path.</param>
         /// <returns>a list of <see cref="FilePath"/> *.cake files</returns>
-        IEnumerable<KeyValuePair<PackageReference, FilePath>> InstallNuScripts(IEnumerable<PackageReference> scripts, DirectoryPath installPath);
+        IEnumerable<KeyValuePair<PackageReference, FilePath>> InstallNugetScripts(IEnumerable<PackageReference> scripts, DirectoryPath installPath);
     }
 }

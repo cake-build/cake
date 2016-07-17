@@ -19,7 +19,7 @@ namespace Cake.Core.Scripting.Analysis
         private readonly HashSet<string> _usingAliases;
         private readonly HashSet<PackageReference> _addins;
         private readonly HashSet<PackageReference> _tools;
-        private readonly HashSet<PackageReference> _nuScripts;
+        private readonly HashSet<PackageReference> _nugetScripts;
 
         /// <summary>
         /// Gets the analyzed script.
@@ -88,9 +88,9 @@ namespace Cake.Core.Scripting.Analysis
         /// Gets the scripts.
         /// </summary>
         /// <value>The scripts.</value>
-        public HashSet<PackageReference> NuScripts
+        public HashSet<PackageReference> NugetScripts
         {
-            get { return _nuScripts; }
+            get { return _nugetScripts; }
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Cake.Core.Scripting.Analysis
             _usingAliases = new HashSet<string>(Collect(script, i => i.UsingAliases));
             _tools = new HashSet<PackageReference>(Collect(script, i => i.Tools));
             _addins = new HashSet<PackageReference>(Collect(script, i => i.Addins));
-            _nuScripts = new HashSet<PackageReference>(Collect(script, i => i.NuScripts));
+            _nugetScripts = new HashSet<PackageReference>(Collect(script, i => i.NugetScripts));
         }
 
         private IEnumerable<T> Collect<T>(IScriptInformation script, Func<IScriptInformation, IEnumerable<T>> collector)

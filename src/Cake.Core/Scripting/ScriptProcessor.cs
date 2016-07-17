@@ -173,10 +173,10 @@ namespace Cake.Core.Scripting
         /// <summary>
         /// Installs the tools specified in the build scripts.
         /// </summary>
-        /// <param name="scripts">NuScript package references to install</param>
+        /// <param name="scripts">Nuget script package references to install</param>
         /// <param name="installPath">The install path.</param>
         /// <returns>a list of <see cref="FilePath"/> *.cake files</returns>
-        public IEnumerable<KeyValuePair<PackageReference, FilePath>> InstallNuScripts(
+        public IEnumerable<KeyValuePair<PackageReference, FilePath>> InstallNugetScripts(
             IEnumerable<PackageReference> scripts,
             DirectoryPath installPath)
         {
@@ -191,30 +191,30 @@ namespace Cake.Core.Scripting
 
             if (scripts.Any())
             {
-                _log.Verbose("Installing nuscripts...");
-                foreach (var nuscript in scripts)
+                _log.Verbose("Installing nuget scripts...");
+                foreach (var script in scripts)
                 {
                     // Get the installer.
-                    var installer = GetInstaller(nuscript, PackageType.NuScript);
+                    var installer = GetInstaller(script, PackageType.NugetScript);
                     if (installer == null)
                     {
                         const string format = "Could not find an installer for the '{0}' scheme.";
-                        var message = string.Format(CultureInfo.InvariantCulture, format, nuscript.Scheme);
+                        var message = string.Format(CultureInfo.InvariantCulture, format, script.Scheme);
                         throw new CakeException(message);
                     }
 
-                    // Install the nuscript.
-                    IReadOnlyCollection<IFile> result = installer.Install(nuscript, PackageType.NuScript, installPath);
+                    // Install the nuget script.
+                    IReadOnlyCollection<IFile> result = installer.Install(script, PackageType.NugetScript, installPath);
                     if (result.Count == 0)
                     {
-                        const string format = "Failed to install nuscript '{0}'.";
-                        var message = string.Format(CultureInfo.InvariantCulture, format, nuscript.Package);
+                        const string format = "Failed to install nuget script '{0}'.";
+                        var message = string.Format(CultureInfo.InvariantCulture, format, script.Package);
                         throw new CakeException(message);
                     }
 
                     foreach (var file in result)
                     {
-                        yield return new KeyValuePair<PackageReference, FilePath>(nuscript, file.Path);
+                        yield return new KeyValuePair<PackageReference, FilePath>(script, file.Path);
                     }
                 }
             }
