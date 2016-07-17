@@ -58,7 +58,7 @@ namespace Cake.Core.Scripting.Analysis
                 new UsingStatementProcessor(_environment),
                 new AddInDirectiveProcessor(_environment),
                 new ToolDirectiveProcessor(_environment),
-                new NuScriptDirectiveProcessor(environment),
+                //new NuScriptDirectiveProcessor(environment),
                 new ShebangProcessor(_environment),
                 new BreakDirectiveProcessor(_environment)
             };
