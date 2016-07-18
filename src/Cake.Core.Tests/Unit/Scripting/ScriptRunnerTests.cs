@@ -244,7 +244,8 @@ namespace Cake.Core.Tests.Unit.Scripting
                 // Given
                 var fixture = new ScriptRunnerFixture(path);
                 fixture.ScriptAnalyzer = Substitute.For<IScriptAnalyzer>();
-                fixture.ScriptAnalyzer.Analyze(Arg.Any<FilePath>())
+                IScriptAnalyzerContext context;
+                fixture.ScriptAnalyzer.Analyze(Arg.Any<FilePath>(), out context)
                     .Returns(new ScriptAnalyzerResult(new ScriptInformation(path), new List<string>()));
                 var runner = fixture.CreateScriptRunner();
 

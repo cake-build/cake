@@ -123,12 +123,12 @@ namespace Cake.Core.Scripting
             _log.Verbose("Analyzing build script...");
             IScriptAnalyzerContext scriptAnalyzerContext;
             var result = _analyzer.Analyze(scriptPath.GetFilename(), out scriptAnalyzerContext);
-
+            
             // Import nuget scripts.
             var nugetScriptPath = GetToolPath(scriptPath.GetDirectory());
             var scriptImports = _processor.InstallNugetScripts(result.NugetScripts, nugetScriptPath).ToList();
             RecursiveInstallNugetScripts(ref result, scriptImports, scriptAnalyzerContext, nugetScriptPath);
-
+            
             // Install tools.
             _log.Verbose("Processing build script...");
             var toolsPath = GetToolPath(scriptPath.GetDirectory());

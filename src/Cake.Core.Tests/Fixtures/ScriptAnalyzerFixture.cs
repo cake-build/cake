@@ -29,7 +29,8 @@ namespace Cake.Core.Tests.Fixtures
 
         public ScriptAnalyzerResult Analyze(FilePath script)
         {
-            return CreateAnalyzer().Analyze(script);
+            IScriptAnalyzerContext context;
+            return CreateAnalyzer().Analyze(script, out context);
         }
 
         public void GivenScriptExist(FilePath path, string content)
