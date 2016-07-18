@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
+using Cake.Core.Scripting.Processors;
 
 namespace Cake.Core.Scripting.Analysis
 {
@@ -59,5 +60,10 @@ namespace Cake.Core.Scripting.Analysis
         /// </summary>
         /// <value>The scripts.</value>
         IList<PackageReference> NugetScripts { get; }
+
+        /// <summary>
+        /// Gets <see cref="ProcessorValues"/>s for a processor.
+        /// </summary>
+        ProcessorValues ProcessorValues { get; }
     }
 }

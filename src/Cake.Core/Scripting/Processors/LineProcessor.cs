@@ -10,7 +10,7 @@ namespace Cake.Core.Scripting.Processors
     /// <summary>
     /// Abstract line processor.
     /// </summary>
-    internal abstract class LineProcessor
+    public abstract class LineProcessor : ILineProcessor
     {
         private readonly ICakeEnvironment _environment;
 

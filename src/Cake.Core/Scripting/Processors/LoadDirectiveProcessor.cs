@@ -39,7 +39,7 @@ namespace Cake.Core.Scripting.Processors
             }
 
             var value = tokens[1];
-
+            
             // Check if this is a nuget reference
             if (value.Contains("nuget:"))
             {

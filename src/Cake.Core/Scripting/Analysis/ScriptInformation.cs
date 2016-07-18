@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
+using Cake.Core.Scripting.Processors;
 
 namespace Cake.Core.Scripting.Analysis
 {
@@ -17,6 +18,7 @@ namespace Cake.Core.Scripting.Analysis
         private readonly List<PackageReference> _addins;
         private readonly List<PackageReference> _tools;
         private readonly List<PackageReference> _nugetscripts;
+        private readonly ProcessorValues _processorValues;
         private readonly List<string> _lines;
 
         public FilePath Path
@@ -59,6 +61,14 @@ namespace Cake.Core.Scripting.Analysis
             get { return _nugetscripts; }
         }
 
+        public ProcessorValues ProcessorValues
+        {
+            get
+            {
+                return _processorValues;
+            }
+        }
+
         public IList<string> Lines
         {
             get { return _lines; }
@@ -75,6 +85,7 @@ namespace Cake.Core.Scripting.Analysis
             _tools = new List<PackageReference>();
             _nugetscripts = new List<PackageReference>();
             _lines = new List<string>();
+            _processorValues = new ProcessorValues();
         }
     }
 }

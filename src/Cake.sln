@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.Core", "Cake.Core\Cake.Core.csproj", "{8074B833-11B8-459F-BB98-BFBA2BC5C698}"
 EndProject
@@ -49,6 +49,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.NuGet", "Cake.NuGet\Ca
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.NuGet.Tests", "Cake.NuGet.Tests\Cake.NuGet.Tests.csproj", "{092064FB-64F9-412D-BEB3-4F4F98209DB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.LoadRemote.Module", "Cake.LoadRemote.Module\Cake.LoadRemote.Module.csproj", "{48351BB3-E119-4F72-8442-E7C8B7BC30E0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,10 @@ Global
 		{092064FB-64F9-412D-BEB3-4F4F98209DB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{092064FB-64F9-412D-BEB3-4F4F98209DB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{092064FB-64F9-412D-BEB3-4F4F98209DB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48351BB3-E119-4F72-8442-E7C8B7BC30E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48351BB3-E119-4F72-8442-E7C8B7BC30E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48351BB3-E119-4F72-8442-E7C8B7BC30E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48351BB3-E119-4F72-8442-E7C8B7BC30E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

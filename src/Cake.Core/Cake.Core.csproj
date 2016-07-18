@@ -54,6 +54,7 @@
     <Compile Include="Annotations\CakeAliasAttribute.cs" />
     <Compile Include="Annotations\CakeAliasCategoryAttribute.cs" />
     <Compile Include="Annotations\CakeNamespaceImportAttribute.cs" />
+    <Compile Include="Annotations\CakeProcessorAttribute.cs" />
     <Compile Include="Annotations\CakePropertyAliasAttribute.cs" />
     <Compile Include="Annotations\CakeModuleAttribute.cs" />
     <Compile Include="CakePlatform.cs" />
@@ -83,6 +84,8 @@
     <Compile Include="Configuration\Parser\ConfigurationTokenKind.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DefaultExecutionStrategy.cs" />
+    <Compile Include="Factories\CakeComponentFactory.cs" />
+    <Compile Include="Factories\ICakeComponentFactory.cs" />
     <Compile Include="Properties\Diagnostics\ICakeLog.cs" />
     <Compile Include="Properties\Diagnostics\LogAction.cs" />
     <Compile Include="Properties\Diagnostics\LogExtensions.cs" />
@@ -175,7 +178,11 @@
     <Compile Include="ITaskTeardownContext.cs" />
     <Compile Include="Modules\CoreModule.cs" />
     <Compile Include="Scripting\Processors\BreakDirectiveProcessor.cs" />
+    <Compile Include="Scripting\Processors\ILineProcessor.cs" />
+    <Compile Include="Scripting\Processors\IProcessorExtension.cs" />
+    <Compile Include="Scripting\Processors\IUriDirectiveProcessor.cs" />
     <Compile Include="Scripting\Processors\NuScriptDirectiveProcessor.cs" />
+    <Compile Include="Scripting\Processors\ProcessorValues.cs" />
     <Compile Include="Scripting\Processors\UriDirectiveProcessor.cs" />
     <Compile Include="Packaging\IPackageInstaller.cs" />
     <Compile Include="Packaging\PackageReference.cs" />
