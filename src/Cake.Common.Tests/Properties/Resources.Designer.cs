@@ -428,7 +428,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("Nuspec_ProjectFile", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to using System.Reflection;
         ///using System.Runtime.CompilerServices;
@@ -443,10 +443,12 @@ namespace Cake.Common.Tests.Properties {
         ///[assembly: AssemblyProduct(&quot;VisualStudioProduct&quot;)]
         ///[assembly: Assembl [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string VisualStudioAssemblyInfo {
-            get {
-                return ResourceManager.GetString("VisualStudioAssemblyInfo", resourceCulture);
-            }
+        internal static string VisualStudioAssemblyInfo
+        {
+            get { return ResourceManager.GetString("VisualStudioAssemblyInfo", resourceCulture); }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Microsoft Visual Studio Solution File, Format Version 12.00
         ///# Visual Studio 14
         ///VisualStudioVersion = 14.0.25123.0
@@ -461,9 +463,6 @@ namespace Cake.Common.Tests.Properties {
             get {
                 return ResourceManager.GetString("Solution_WithProjectsAndFolders", resourceCulture);
             }
-        }
-        
-        /// <summary>
         }
         
         /// <summary>

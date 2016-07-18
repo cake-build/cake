@@ -12,14 +12,14 @@ namespace Cake.Common.Solution
         /// Visual Studio project type guid for solution folder
         /// </summary>
         /// <remarks>
-        /// http://www.codeproject.com/Reference/720512/List-of-Visual-Studio-Project-Type-GUIDs
+        /// More information can be found http://www.codeproject.com/Reference/720512/List-of-Visual-Studio-Project-Type-GUIDs
         /// </remarks>
         public const string TypeIdentifier = "{2150E333-8FDC-42A3-9474-1A3956D46DE8}";
 
         private readonly List<SolutionProject> _items;
 
         /// <summary>
-        /// Child items of this folder
+        /// Gets Child items of this folder
         /// </summary>
         public List<SolutionProject> Items
         {
