@@ -15,6 +15,7 @@ namespace Cake.Common.Tests.Unit.Solution
             {
                 // Given, When
                 var result = Record.Exception(() => new SolutionParser(null, null));
+
                 // Then
                 Assert.IsArgumentNullException(result, "fileSystem");
             }
@@ -24,8 +25,10 @@ namespace Cake.Common.Tests.Unit.Solution
             {
                 // Given
                 var fixture = new SolutionParserFixture();
+
                 // When
                 var result = Record.Exception(() => new SolutionParser(fixture.FileSystem, null));
+
                 // Then
                 Assert.IsArgumentNullException(result, "environment");
             }
@@ -33,13 +36,15 @@ namespace Cake.Common.Tests.Unit.Solution
         public sealed class TheParseMethod
         {
             [Fact]
-            public void Should_Thorw_If_SolutionPath_Is_Null()
+            public void Should_Throw_If_SolutionPath_Is_Null()
             {
                 // Given
                 var fixture = new SolutionParserFixture();
                 var solutionParser = new SolutionParser(fixture.FileSystem, fixture.Environment);
+
                 // When
                 var result = Record.Exception(() => solutionParser.Parse(null));
+
                 // Then
                 Assert.IsArgumentNullException(result, "solutionPath");
             }
@@ -51,8 +56,10 @@ namespace Cake.Common.Tests.Unit.Solution
                 var fixture = new SolutionParserFixture();
                 var slnFilePath = fixture.WithSolutionFile(Resources.Solution_WithProjectsAndFolders);
                 var solutionParser = new SolutionParser(fixture.FileSystem, fixture.Environment);
+
                 // When
                 var result = solutionParser.Parse(slnFilePath);
+
                 // Then
                 Assert.NotNull(result);
                 Assert.NotNull(result.Projects);
@@ -68,8 +75,10 @@ namespace Cake.Common.Tests.Unit.Solution
                 var fixture = new SolutionParserFixture();
                 var slnFilePath = fixture.WithSolutionFile(Resources.Solution_WithProjectsAndFolders);
                 var solutionParser = new SolutionParser(fixture.FileSystem, fixture.Environment);
+
                 // When
                 var result = solutionParser.Parse(slnFilePath);
+
                 // Then
                 Assert.NotNull(result);
                 Assert.NotNull(result.Projects);
@@ -84,8 +93,10 @@ namespace Cake.Common.Tests.Unit.Solution
                 var fixture = new SolutionParserFixture();
                 var slnFilePath = fixture.WithSolutionFile(Resources.Solution_WithProjectsAndFolders);
                 var solutionParser = new SolutionParser(fixture.FileSystem, fixture.Environment);
+
                 // When
                 var result = solutionParser.Parse(slnFilePath);
+
                 // Then
                 Assert.NotNull(result);
                 Assert.NotNull(result.Projects);
