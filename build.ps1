@@ -18,6 +18,9 @@ $TOOLS_DIR = Join-Path $PSScriptRoot "tools"
 $NUGET_EXE = Join-Path $TOOLS_DIR "nuget.exe"
 $CAKE_EXE = Join-Path $TOOLS_DIR "Cake/Cake.exe"
 $NUGET_URL = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
+$PACKAGES_CONFIG = Join-Path $TOOLS_DIR "packages.config"
+$PACKAGES_CONFIG_MD5 = Join-Path $TOOLS_DIR "packages.config.md5sum"
+
 
 # Should we use experimental build of Roslyn?
 $UseExperimental = "";
@@ -52,7 +55,16 @@ if(-Not $SkipToolPackageRestore.IsPresent)
 {
     Push-Location
     Set-Location $TOOLS_DIR
+
+    # Check for changes in packages.config and remove installed tools if true.
+    if((-Not (Test-Path $PACKAGES_CONFIG_MD5)) -Or
+      ((Get-FileHash -Path $PACKAGES_CONFIG -Algorithm MD5).Hash.ToLower() -ne (Get-Content $PACKAGES_CONFIG_MD5))) {
+        Remove-Item * -Recurse -Exclude packages.config,nuget.exe
+    }
+    
     Invoke-Expression "$NUGET_EXE install -ExcludeVersion"
+    (Get-FileHash -Path $PACKAGES_CONFIG -Algorithm MD5).Hash.ToLower() | Out-File $PACKAGES_CONFIG_MD5 -Encoding "ASCII"
+    
     Pop-Location
     if ($LASTEXITCODE -ne 0) {
         exit $LASTEXITCODE
