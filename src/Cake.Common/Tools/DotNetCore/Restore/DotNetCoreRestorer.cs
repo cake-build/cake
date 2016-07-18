@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 using System;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
@@ -14,6 +15,7 @@ namespace Cake.Common.Tools.DotNetCore.Restore
     public sealed class DotNetCoreRestorer : DotNetCoreTool<DotNetCoreRestoreSettings>
     {
         private readonly ICakeEnvironment _environment;
+        private readonly ICakeLog _log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DotNetCoreRestorer" /> class.
@@ -22,13 +24,16 @@ namespace Cake.Common.Tools.DotNetCore.Restore
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="tools">The tool locator.</param>
+        /// <param name="log">The cake log.</param>
         public DotNetCoreRestorer(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             IProcessRunner processRunner,
-            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
+            IToolLocator tools,
+            ICakeLog log) : base(fileSystem, environment, processRunner, tools)
         {
             _environment = environment;
+            _log = log;
         }
 
         /// <summary>
@@ -101,12 +106,13 @@ namespace Cake.Common.Tools.DotNetCore.Restore
                     builder.AppendQuoted(runtime);
                 }
             }
-
+#pragma warning disable 0618
             // Quiet
-            if (settings.Quiet)
+            if (settings.Quiet && !settings.Verbosity.HasValue)
             {
-                builder.Append("--quiet");
+                _log.Warning(".NET CLI does not support this option anymore. Please use DotNetCoreRestoreSettings.Verbosity instead.");
             }
+#pragma warning restore 0618
 
             // Ignore failed sources
             if (settings.NoCache)

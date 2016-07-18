@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 using Cake.Common.Tools.DotNetCore.Restore;
+using Cake.Testing;
 
 namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Restore
 {
@@ -11,7 +12,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Restore
 
         protected override void RunTool()
         {
-            var tool = new DotNetCoreRestorer(FileSystem, Environment, ProcessRunner, Tools);
+            var tool = new DotNetCoreRestorer(FileSystem, Environment, ProcessRunner, Tools, new FakeLog());
             tool.Restore(Root, Settings);
         }
     }

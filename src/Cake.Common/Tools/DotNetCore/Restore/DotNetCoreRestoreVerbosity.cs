@@ -26,6 +26,16 @@ namespace Cake.Common.Tools.DotNetCore.Restore
         /// <summary>
         /// Verbose level.
         /// </summary>
-        Verbose
+        Verbose,
+
+        /// <summary>
+        /// Debug level.
+        /// </summary>
+        Debug,
+
+        /// <summary>
+        /// Minimal level.
+        /// </summary>
+        Minimal
     }
 }
