@@ -160,12 +160,13 @@ namespace Cake.Common.Solution
         private static void ParseNestedProjectLine(List<SolutionProject> projects, string line)
         {
             // pattern: {Child} = {Parent}
-            var projectIds = line.Split(new [] { " = " }, StringSplitOptions.RemoveEmptyEntries);
+            var projectIds = line.Split(new[] { " = " }, StringSplitOptions.RemoveEmptyEntries);
             var child = projects.FirstOrDefault(x => StringComparer.OrdinalIgnoreCase.Equals(x.Id, projectIds[0].Trim()));
             if (child == null)
             {
                 return;
             }
+
             // Parent should be a folder
             var parent = projects.FirstOrDefault(x => StringComparer.OrdinalIgnoreCase.Equals(x.Id, projectIds[1].Trim())) as SolutionFolder;
             if (parent == null)
