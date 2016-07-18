@@ -57,7 +57,10 @@ Param(
 
 Write-Host "Preparing to run build script..."
 
-$PSScriptRoot = split-path -parent $MyInvocation.MyCommand.Definition;
+if(!$PSScriptRoot){
+    $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
+}
+
 $TOOLS_DIR = Join-Path $PSScriptRoot "tools"
 $NUGET_EXE = Join-Path $TOOLS_DIR "nuget.exe"
 $CAKE_EXE = Join-Path $TOOLS_DIR "Cake/Cake.exe"
@@ -94,7 +97,7 @@ if ((Test-Path $PSScriptRoot) -and !(Test-Path $TOOLS_DIR)) {
 # Make sure that packages.config exist.
 if (!(Test-Path $PACKAGES_CONFIG)) {
     Write-Verbose -Message "Downloading packages.config..."
-    try { Invoke-WebRequest -Uri http://cakebuild.net/download/bootstrapper/packages -OutFile $PACKAGES_CONFIG } catch {
+    try { (New-Object System.Net.WebClient).DownloadFile("http://cakebuild.net/download/bootstrapper/packages", $PACKAGES_CONFIG) } catch {
         Throw "Could not download packages.config."
     }
 }
