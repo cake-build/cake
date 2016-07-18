@@ -26,7 +26,7 @@ SCRIPT="build.cake"
 TARGET="Travis"
 CONFIGURATION="Release"
 VERBOSITY="verbose"
-DRYRUN=
+DRYRUN=false
 SHOW_VERSION=false
 SCRIPT_ARGUMENTS=()
 
