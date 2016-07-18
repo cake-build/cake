@@ -132,6 +132,11 @@ namespace Cake.Common.Tools.OpenCover
                 builder.Append("-skipautoprops");
             }
 
+            if (settings.OldStyle)
+            {
+                builder.Append("-oldStyle");
+            }
+
             builder.AppendSwitch("-register", ":", settings.Register);
 
             if (settings.ReturnTargetCodeOffset != null)

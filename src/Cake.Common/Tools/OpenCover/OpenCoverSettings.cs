@@ -62,6 +62,11 @@ namespace Cake.Common.Tools.OpenCover
         public int? ReturnTargetCodeOffset { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the OldStyle option for OpenCover should be used
+        /// </summary>
+        public bool OldStyle { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="OpenCoverSettings"/> class.
         /// </summary>
         public OpenCoverSettings()
