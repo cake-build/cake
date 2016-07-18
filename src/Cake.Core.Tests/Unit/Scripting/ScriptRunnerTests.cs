@@ -254,7 +254,7 @@ namespace Cake.Core.Tests.Unit.Scripting
 
                 // Then
                 fixture.ScriptAnalyzer.Received(1).Analyze(
-                    Arg.Is<FilePath>(f => f.FullPath == "build.cake"));
+                    Arg.Is<FilePath>(f => f.FullPath == "build.cake"), out context);
             }
 
             [Fact]
