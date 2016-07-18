@@ -8,7 +8,9 @@ namespace Cake.Common.Tests.Fixtures.Solution
     internal sealed class SolutionParserFixture
     {
         public FakeEnvironment Environment { get; set; }
+
         public FakeFileSystem FileSystem { get; set; }
+
         public SolutionParserFixture()
         {
             Environment = FakeEnvironment.CreateWindowsEnvironment();

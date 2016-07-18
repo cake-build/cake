@@ -173,6 +173,7 @@ namespace Cake.Common.Solution
             {
                 return;
             }
+
             parent.Items.Add(child);
             child.Parent = parent;
         }

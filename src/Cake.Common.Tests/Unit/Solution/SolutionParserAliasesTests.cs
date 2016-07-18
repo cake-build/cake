@@ -15,6 +15,7 @@ namespace Cake.Common.Tests.Unit.Solution
             {
                 // Given, When
                 var result = Record.Exception(() => SolutionAliases.ParseSolution(null, null));
+
                 // Then
                 Assert.IsArgumentNullException(result, "context");
             }
@@ -28,8 +29,10 @@ namespace Cake.Common.Tests.Unit.Solution
                 var fileSystem = Substitute.For<IFileSystem>();
                 cakeContext.Environment.Returns(cakeEnvironment);
                 cakeContext.FileSystem.Returns(fileSystem);
+
                 // When
                 var result = Record.Exception(() => SolutionAliases.ParseSolution(cakeContext, null));
+
                 // Then
                 Assert.IsArgumentNullException(result, "solutionPath");
             }
