@@ -203,7 +203,7 @@ namespace Cake.Common.Tools.DotNetCore
                 settings = new DotNetCoreRestoreSettings();
             }
 
-            var restorer = new DotNetCoreRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var restorer = new DotNetCoreRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);
             restorer.Restore(root, settings);
         }
 

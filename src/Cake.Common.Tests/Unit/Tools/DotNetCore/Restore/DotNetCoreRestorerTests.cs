@@ -107,7 +107,9 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                 var fixture = new DotNetCoreRestorerFixture();
                 fixture.Settings.Sources = new[] { "https://www.example.com/source1", "https://www.example.com/source2" };
                 fixture.Settings.FallbackSources = new[] { "https://www.example.com/fallback1", "https://www.example.com/fallback2" };
+#pragma warning disable 0618
                 fixture.Settings.Quiet = true;
+#pragma warning restore 0618
                 fixture.Settings.NoCache = true;
                 fixture.Settings.DisableParallel = true;
                 fixture.Settings.ForceEnglishOutput = true;
@@ -130,8 +132,27 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                              " --configfile \"/Working/NuGet.config\"" +
                              " --infer-runtimes \"runtime1\"" +
                              " --infer-runtimes \"runtime2\"" +
-                             " --quiet --no-cache --disable-parallel --ignore-failed-sources --force-english-output" +
+                             " --no-cache --disable-parallel --ignore-failed-sources --force-english-output" +
                              " --verbosity Information", result.Args);
+            }
+
+            [Fact]
+            public void Quiet_Does_Not_Set_Verbosity()
+            {
+                // Given
+                var fixture = new DotNetCoreRestorerFixture();
+                fixture.Settings.Sources = new[] { "https://www.example.com/source1", "https://www.example.com/source2" };
+#pragma warning disable 0618
+                fixture.Settings.Quiet = true;
+#pragma warning restore 0618
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("restore" +
+                             " --source \"https://www.example.com/source1\"" +
+                             " --source \"https://www.example.com/source2\"", result.Args);
             }
         }
     }

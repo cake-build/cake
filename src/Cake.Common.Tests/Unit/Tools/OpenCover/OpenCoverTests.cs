@@ -272,6 +272,23 @@ namespace Cake.Common.Tests.Unit.Tools.OpenCover
                              "-skipautoprops " +
                              "-register:user -output:\"/Working/result.xml\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Append_OldStyle()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+                fixture.Settings.OldStyle = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"-argument\" " +
+                             "-oldStyle " +
+                             "-register:user -output:\"/Working/result.xml\"", result.Args);
+            }
         }
     }
 }
