@@ -35,5 +35,14 @@ namespace Cake.Core.Scripting
         /// <param name="installPath">The install path.</param>
         /// <returns>a list of <see cref="FilePath"/> *.cake files</returns>
         IEnumerable<KeyValuePair<PackageReference, FilePath>> InstallNugetScripts(IEnumerable<PackageReference> scripts, DirectoryPath installPath);
+
+        /// <summary>
+        /// Install the <paramref name="package"/> for <paramref name="type"/> in <paramref name="installPath"/>.
+        /// </summary>
+        /// <param name="package">The <see cref="PackageReference"/> to install</param>
+        /// <param name="type">The <see cref="PackageType"/></param>
+        /// <param name="installPath">The location to install this package</param>
+        /// <returns>Returns <see cref="IEnumerable{IFile}"/> containing the installed files.</returns>
+        IEnumerable<IFile> InstallPackage(PackageReference package, PackageType type, DirectoryPath installPath);
     }
 }

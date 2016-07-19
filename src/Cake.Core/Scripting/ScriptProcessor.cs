@@ -220,6 +220,39 @@ namespace Cake.Core.Scripting
             }
         }
 
+        /// <summary>
+        /// Install the <paramref name="package"/> for <paramref name="type"/> in <paramref name="installPath"/>.
+        /// </summary>
+        /// <param name="package">The <see cref="PackageReference"/> to install</param>
+        /// <param name="type">The <see cref="PackageType"/></param>
+        /// <param name="installPath">The location to install this package</param>
+        /// <returns>Returns <see cref="IEnumerable{IFile}"/> containing the installed files.</returns>
+        public IEnumerable<IFile> InstallPackage(PackageReference package, PackageType type, DirectoryPath installPath)
+        {
+            var installer = GetInstaller(package, type);
+
+            if (installer == null)
+            {
+                const string format = "Could not find an installer for the '{0}' scheme.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, package.Scheme);
+                throw new CakeException(message);
+            }
+
+            // Install the nuget script.
+            IReadOnlyCollection<IFile> result = installer.Install(package, type, installPath);
+            if (result.Count == 0)
+            {
+                const string format = "Failed to install nuget script '{0}'.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, package.Package);
+                throw new CakeException(message);
+            }
+
+            foreach (var file in result)
+            {
+                yield return file;
+            }
+        }
+
         private IPackageInstaller GetInstaller(PackageReference package, PackageType type)
         {
             foreach (var installer in _installers)

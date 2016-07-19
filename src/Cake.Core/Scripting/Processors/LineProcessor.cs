@@ -34,20 +34,6 @@ namespace Cake.Core.Scripting.Processors
         public abstract bool Process(IScriptAnalyzerContext analyzer, string line, out string replacement);
 
         /// <summary>
-        /// Splits the specified line into tokens.
-        /// </summary>
-        /// <param name="line">The line to split.</param>
-        /// <returns>The parts that make up the line.</returns>
-        protected static string[] Split(string line)
-        {
-            if (line == null)
-            {
-                throw new ArgumentNullException("line");
-            }
-            return line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-        }
-
-        /// <summary>
         /// Gets the absolute directory for the path.
         /// </summary>
         /// <param name="path">The path.</param>

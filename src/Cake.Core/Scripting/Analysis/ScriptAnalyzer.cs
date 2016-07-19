@@ -8,6 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Cake.Core.Diagnostics;
+using Cake.Core.Extensions;
 using Cake.Core.IO;
 using Cake.Core.Scripting.Processors;
 
@@ -22,17 +23,20 @@ namespace Cake.Core.Scripting.Analysis
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
         private readonly LineProcessor[] _lineProcessors;
-
+        private readonly IReadOnlyList<IProcessorExtension> _processorExtensions;
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptAnalyzer"/> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="log">The log.</param>
+        /// <param name="processorExtensionFinder">The script extension finder.</param>
         public ScriptAnalyzer(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
-            ICakeLog log)
+            ICakeLog log,
+            IProcessorExtensionFinder processorExtensionFinder)
         {
             if (fileSystem == null)
             {
@@ -61,6 +65,9 @@ namespace Cake.Core.Scripting.Analysis
                 new ShebangProcessor(_environment),
                 new BreakDirectiveProcessor(_environment)
             };
+            
+            // Get all processor extensions currently loaded.
+            _processorExtensions = processorExtensionFinder.FindProcessorExtensions(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         /// <summary>
@@ -124,8 +131,19 @@ namespace Cake.Core.Scripting.Analysis
             foreach (var line in lines)
             {
                 string replacement = null;
+
+                // Check if there is any processor extensions for this processor alias.
+                var split = line.Split();
+                var alias = split[0];
+                var value = split[1];
+                if (_processorExtensions.Where(p => p.CanProcessDirective(alias, value))
+                                        .Any(p => p.Process(context, line, out replacement)))
+                {
+                    // Add replacement or comment out processed lines to keep line data.
+                    context.AddScriptLine(replacement ?? string.Concat("// ", line));
+                    continue;
+                }
                 
-                // Insert the line at the end.
                 if (!_lineProcessors.Any(p => p.Process(context, line, out replacement)))
                 {
                     context.AddScriptLine(line);

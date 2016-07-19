@@ -8,6 +8,7 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.Analysis;
+using Cake.Core.Scripting.Processors;
 using Cake.Testing;
 using NSubstitute;
 
@@ -25,6 +26,7 @@ namespace Cake.Core.Tests.Fixtures
         public IScriptConventions ScriptConventions { get; set; }
         public IScriptAliasFinder AliasFinder { get; set; }
         public ICakeLog Log { get; set; }
+        public IProcessorExtensionFinder ProcessorExtensionFinder { get; set; }
 
         public IScriptHost Host { get; set; }
         public FilePath Script { get; set; }
@@ -45,13 +47,14 @@ namespace Cake.Core.Tests.Fixtures
             Configuration = Substitute.For<ICakeConfiguration>();
             AliasFinder = Substitute.For<IScriptAliasFinder>();
             Log = Substitute.For<ICakeLog>();
+            ProcessorExtensionFinder = Substitute.For<IProcessorExtensionFinder>();
 
             Session = Substitute.For<IScriptSession>();
             ArgumentDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             Engine = Substitute.For<IScriptEngine>();
             Engine.CreateSession(Arg.Any<IScriptHost>(), ArgumentDictionary).Returns(Session);
 
-            ScriptAnalyzer = new ScriptAnalyzer(FileSystem, Environment, Log);
+            ScriptAnalyzer = new ScriptAnalyzer(FileSystem, Environment, Log, ProcessorExtensionFinder);
             ScriptProcessor = Substitute.For<IScriptProcessor>();
             ScriptConventions = new ScriptConventions(FileSystem);
 

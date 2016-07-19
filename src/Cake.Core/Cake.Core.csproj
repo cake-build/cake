@@ -84,6 +84,7 @@
     <Compile Include="Configuration\Parser\ConfigurationTokenKind.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DefaultExecutionStrategy.cs" />
+    <Compile Include="Extensions\LineProcessorExtensions.cs" />
     <Compile Include="Factories\CakeComponentFactory.cs" />
     <Compile Include="Factories\ICakeComponentFactory.cs" />
     <Compile Include="Properties\Diagnostics\ICakeLog.cs" />
@@ -177,11 +178,15 @@
     <Compile Include="ITaskSetupContext.cs" />
     <Compile Include="ITaskTeardownContext.cs" />
     <Compile Include="Modules\CoreModule.cs" />
+    <Compile Include="Scripting\IScriptRunnerExtension.cs" />
     <Compile Include="Scripting\Processors\BreakDirectiveProcessor.cs" />
     <Compile Include="Scripting\Processors\ILineProcessor.cs" />
     <Compile Include="Scripting\Processors\IProcessorExtension.cs" />
+    <Compile Include="Scripting\Processors\IProcessorExtensionFinder.cs" />
     <Compile Include="Scripting\Processors\IUriDirectiveProcessor.cs" />
     <Compile Include="Scripting\Processors\NuScriptDirectiveProcessor.cs" />
+    <Compile Include="Scripting\Processors\ProcessorExtension.cs" />
+    <Compile Include="Scripting\Processors\ProcessorExtensionFinder.cs" />
     <Compile Include="Scripting\Processors\ProcessorValues.cs" />
     <Compile Include="Scripting\Processors\UriDirectiveProcessor.cs" />
     <Compile Include="Packaging\IPackageInstaller.cs" />
@@ -227,6 +232,7 @@
     <Compile Include="Scripting\ScriptHost.cs" />
     <Compile Include="Scripting\ScriptProcessor.cs" />
     <Compile Include="Scripting\ScriptRunner.cs" />
+    <Compile Include="Scripting\ScriptRunnerExtension.cs" />
     <Compile Include="TaskSetupContext.cs" />
     <Compile Include="TaskTeardownContext.cs" />
     <Compile Include="Text\ITextTransformationTemplate.cs" />

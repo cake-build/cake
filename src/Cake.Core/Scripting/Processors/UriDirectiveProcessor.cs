@@ -4,6 +4,7 @@
 using System;
 using System.Linq;
 using System.Text;
+using Cake.Core.Extensions;
 using Cake.Core.Scripting.Analysis;
 
 namespace Cake.Core.Scripting.Processors
@@ -52,7 +53,7 @@ namespace Cake.Core.Scripting.Processors
 
             replacement = null;
 
-            var tokens = Split(line);
+            var tokens = this.Split(line);
             var directive = tokens.FirstOrDefault();
             if (!string.IsNullOrWhiteSpace(directive))
             {

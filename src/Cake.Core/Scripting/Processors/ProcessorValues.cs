@@ -38,7 +38,7 @@ namespace Cake.Core.Scripting.Processors
         /// <summary>
         /// Add a value
         /// </summary>
-        /// <param name="key">The <see cref="IProcessorExtension"/></param>
+        /// <param name="key">The line processor to add <paramref name="value"/> for.</param>
         /// <param name="value">The value to set</param>
         /// <exception cref="ArgumentException">Throws if the <paramref name="key"/> is null.</exception>
         public void Add(ILineProcessor key, object value)
@@ -59,6 +59,40 @@ namespace Cake.Core.Scripting.Processors
 
             // Add the value to existing list
             ((List<object>) _values[type]).Add(value);
+        }
+
+        /// <summary>
+        /// Get the values for a <see cref="ILineProcessor"/>.
+        /// </summary>
+        /// <param name="key">The <see cref="ILineProcessor"/>.</param>
+        /// <returns>A enumeratable with values as objects, or null if the <see cref="ILineProcessor"/> is not found.</returns>
+        /// <exception cref="ArgumentException">Throws if the <paramref name="key"/> is null.</exception>
+        public IEnumerable<object> Get(ILineProcessor key)
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException("key");
+            }
+
+            var type = key.GetType();
+            if (_values.ContainsKey(type))
+            {
+                return _values[type];
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Get the values for a <see cref="ILineProcessor"/> and cast it to T.
+        /// </summary>
+        /// <param name="key">The <see cref="ILineProcessor"/>.</param>
+        /// <typeparam name="T">The type to cast to</typeparam>
+        /// <returns>A enumeratable with values as objects, or null if the <see cref="ILineProcessor"/> is not found.</returns>
+        /// <exception cref="ArgumentException">Throws if the <paramref name="key"/> is null.</exception>
+        public IEnumerable<T> Get<T>(ILineProcessor key)
+        {
+            return Get(key).OfType<T>();
         }
 
         /// <summary>

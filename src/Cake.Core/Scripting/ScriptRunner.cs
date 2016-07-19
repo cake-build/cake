@@ -27,7 +27,7 @@ namespace Cake.Core.Scripting
         private readonly IScriptAnalyzer _analyzer;
         private readonly IScriptProcessor _processor;
         private readonly IScriptConventions _conventions;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptRunner"/> class.
         /// </summary>
@@ -81,7 +81,7 @@ namespace Cake.Core.Scripting
             {
                 throw new ArgumentNullException("conventions");
             }
-
+            
             _environment = environment;
             _log = log;
             _configuration = configuration;
@@ -129,6 +129,9 @@ namespace Cake.Core.Scripting
             var scriptImports = _processor.InstallNugetScripts(result.NugetScripts, nugetScriptPath).ToList();
             RecursiveInstallNugetScripts(ref result, scriptImports, scriptAnalyzerContext, nugetScriptPath);
             
+            // Process processor extension runners.
+
+
             // Install tools.
             _log.Verbose("Processing build script...");
             var toolsPath = GetToolPath(scriptPath.GetDirectory());

@@ -71,5 +71,20 @@ namespace Cake.Core
             return value.StartsWith("\"", StringComparison.OrdinalIgnoreCase)
                    && value.EndsWith("\"", StringComparison.OrdinalIgnoreCase);
         }
+
+        /// <summary>
+        /// Split line on Whitespace.
+        /// </summary>
+        /// <param name="line">The script line.</param>
+        /// <returns>A string array containing the split result</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        internal static string[] SplitLine(this string line)
+        {
+            if (line == null)
+            {
+                throw new ArgumentNullException("line");
+            }
+            return line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        }
     }
 }

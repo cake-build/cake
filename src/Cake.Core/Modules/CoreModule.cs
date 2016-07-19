@@ -7,6 +7,7 @@ using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.Analysis;
+using Cake.Core.Scripting.Processors;
 using Cake.Core.Tooling;
 
 namespace Cake.Core.Modules
@@ -55,6 +56,7 @@ namespace Cake.Core.Modules
             registry.RegisterType<ScriptProcessor>().As<IScriptProcessor>().Singleton();
             registry.RegisterType<ScriptConventions>().As<IScriptConventions>().Singleton();
             registry.RegisterType<ScriptRunner>().As<IScriptRunner>().Singleton();
+            registry.RegisterType<ProcessorExtensionFinder>().As<IProcessorExtensionFinder>().Singleton();
         }
     }
 }
