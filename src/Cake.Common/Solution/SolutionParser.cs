@@ -16,7 +16,6 @@ namespace Cake.Common.Solution
     /// </summary>
     public sealed class SolutionParser
     {
-        private const string SolutionFolder = "{2150E333-8FDC-42A3-9474-1A3956D46DE8}";
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
 
@@ -50,7 +49,6 @@ namespace Cake.Common.Solution
             {
                 throw new ArgumentNullException("solutionPath");
             }
-
             if (solutionPath.IsRelative)
             {
                 solutionPath = solutionPath.MakeAbsolute(_environment);
@@ -70,16 +68,19 @@ namespace Cake.Common.Solution
                 visualStudioVersion = null,
                 minimumVisualStudioVersion = null;
             var projects = new List<SolutionProject>();
-
+            bool inNestedProjectsSection = false;
             foreach (var line in file.ReadLines(Encoding.UTF8))
             {
+                var trimmed = line.Trim();
                 if (line.StartsWith("Project(\"{"))
                 {
                     var project = ParseSolutionProjectLine(file, line);
-                    if (!StringComparer.OrdinalIgnoreCase.Equals(project.Type, SolutionFolder))
+                    if (StringComparer.OrdinalIgnoreCase.Equals(project.Type, SolutionFolder.TypeIdentifier))
                     {
-                        projects.Add(project);
+                        projects.Add(new SolutionFolder(project.Id, project.Name, project.Path));
+                        continue;
                     }
+                    projects.Add(project);
                 }
                 else if (line.StartsWith("Microsoft Visual Studio Solution File, "))
                 {
@@ -93,26 +94,34 @@ namespace Cake.Common.Solution
                 {
                     minimumVisualStudioVersion = string.Concat(line.Skip(29));
                 }
+                else if (trimmed.StartsWith("GlobalSection(NestedProjects)"))
+                {
+                    inNestedProjectsSection = true;
+                }
+                else if (inNestedProjectsSection && trimmed.StartsWith("EndGlobalSection"))
+                {
+                    inNestedProjectsSection = false;
+                }
+                else if (inNestedProjectsSection)
+                {
+                    ParseNestedProjectLine(projects, trimmed);
+                }
             }
-
             var solutionParserResult = new SolutionParserResult(
                 version,
                 visualStudioVersion,
                 minimumVisualStudioVersion,
                 projects.AsReadOnly());
-
             return solutionParserResult;
         }
 
         private static SolutionProject ParseSolutionProjectLine(IFile file, string line)
         {
             var withinQuotes = false;
-
             var projectTypeBuilder = new StringBuilder();
             var nameBuilder = new StringBuilder();
             var pathBuilder = new StringBuilder();
             var idBuilder = new StringBuilder();
-
             var result = new[]
             {
                 projectTypeBuilder,
@@ -135,20 +144,38 @@ namespace Cake.Common.Solution
                     }
                     continue;
                 }
-
                 if (!withinQuotes)
                 {
                     continue;
                 }
-
                 result[position].Append(c);
             }
-
             return new SolutionProject(
                 idBuilder.ToString(),
                 nameBuilder.ToString(),
                 file.Path.GetDirectory().CombineWithFilePath(pathBuilder.ToString()),
                 projectTypeBuilder.ToString());
+        }
+
+        private static void ParseNestedProjectLine(List<SolutionProject> projects, string line)
+        {
+            // pattern: {Child} = {Parent}
+            var projectIds = line.Split(new[] { " = " }, StringSplitOptions.RemoveEmptyEntries);
+            var child = projects.FirstOrDefault(x => StringComparer.OrdinalIgnoreCase.Equals(x.Id, projectIds[0].Trim()));
+            if (child == null)
+            {
+                return;
+            }
+
+            // Parent should be a folder
+            var parent = projects.FirstOrDefault(x => StringComparer.OrdinalIgnoreCase.Equals(x.Id, projectIds[1].Trim())) as SolutionFolder;
+            if (parent == null)
+            {
+                return;
+            }
+
+            parent.Items.Add(child);
+            child.Parent = parent;
         }
     }
 }

@@ -51,6 +51,11 @@ namespace Cake.Common.Solution.Project
         internal const string OutputType = "{" + XmlNamespace + "}OutputType";
 
         /// <summary>
+        /// Namespace output path element
+        /// </summary>
+        internal const string OutputPath = "{" + XmlNamespace + "}OutputPath";
+
+        /// <summary>
         /// Namespace assembly name element
         /// </summary>
         internal const string AssemblyName = "{" + XmlNamespace + "}AssemblyName";
