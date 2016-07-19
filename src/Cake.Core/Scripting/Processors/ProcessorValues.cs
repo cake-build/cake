@@ -77,7 +77,7 @@ namespace Cake.Core.Scripting.Processors
         /// Get the values for a <see cref="IProcessorExtension"/>.
         /// </summary>
         /// <param name="key">The <see cref="IProcessorExtension"/>.</param>
-        /// <returns>A enumeratable with values as objects, or null if the <see cref="IProcessorExtension"/> is not found.</returns>
+        /// <returns>A enumeratable with values as objects, or empty list if the <see cref="IProcessorExtension"/> is not found.</returns>
         /// <exception cref="ArgumentException">Throws if the <paramref name="key"/> is null.</exception>
         public IEnumerable<object> Get(IProcessorExtension key)
         {
@@ -92,7 +92,7 @@ namespace Cake.Core.Scripting.Processors
                 return _values[type];
             }
 
-            return null;
+            return new List<object>();
         }
 
         /// <summary>

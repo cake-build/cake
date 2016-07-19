@@ -28,10 +28,7 @@ namespace Cake.LoadRemote.Module
 
         public override bool Process(IScriptAnalyzerContext analyzer, string line, out string replacement)
         {
-
             // How to Support both "#l" and "#load", replace to Constants.DirectiveName and process it with the LoadRemoteProcessor.
-            //line = line.Replace("#l", Constants.DirectiveName);
-            //line = line.Replace("#load", Constants.DirectiveName);
             line = line.Trim();
             line = _matchDirectiveName.Replace(line, Constants.DirectiveName);
 

@@ -31,8 +31,7 @@ namespace Cake.LoadRemote.Module
                     var message = string.Format(CultureInfo.InvariantCulture, format, packageReference.Package);
                     throw new CakeException(message);
                 }
-
-                // ToDo refactor this
+                
                 var keyValues = files.Select(f => new KeyValuePair<PackageReference, FilePath>(packageReference, f.Path));
                 RecursiveInstallNugetScripts(ref result, keyValues, scriptAnalyzerContext, toolsPath);
             }
@@ -80,16 +79,17 @@ namespace Cake.LoadRemote.Module
                     result.Namespaces.Add(@namespace);
                 }
 
-                //var childItems = result.ProcessorValues.Get<PackageReference>(ProcessorExtension);
-                ////var childScripts = DoInstall(null, nugetScriptPath).ToList();
-                //if (childItems.Any())
-                //{
-                //    RecursiveInstallNugetScripts(ref result, childScripts, scriptAnalyzerContext, nugetScriptPath);
+                // Get any childrens to result.
+                var childItems = copyResult.ProcessorValues.Get<PackageReference>(ProcessorExtension).ToList();
+                if (childItems.Any())
+                {
+                    DoInstall(childItems, ref result, scriptAnalyzerContext, nugetScriptPath);
+                    //RecursiveInstallNugetScripts(ref result, childScripts, scriptAnalyzerContext, nugetScriptPath);
 
-                //    // Re-arrange child scripts
-                //    var siblings = childScripts.Skip(1).Select(x => x.Value.FullPath);
-                //    RearrangeNugetScripts(ref result, childScripts.First(), siblings);
-                //}
+                    //// Re-arrange child scripts
+                    //var siblings = childScripts.Skip(1).Select(x => x.Value.FullPath);
+                    //RearrangeNugetScripts(ref result, childScripts.First(), siblings);
+                }
             }
 
             if (scriptImports.Any())
