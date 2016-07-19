@@ -25,6 +25,15 @@ namespace Cake.Common.Tools.Roundhouse
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// RoundhouseMigrate(new RoundhouseSettings{
+        ///     ServerName = "Sql2008R2",
+        ///     DatabaseName = "AdventureWorks2008R2",
+        ///     SqlFilesDirectory = "./src/sql"
+        ///     });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void RoundhouseMigrate(this ICakeContext context, RoundhouseSettings settings)
         {
@@ -42,6 +51,14 @@ namespace Cake.Common.Tools.Roundhouse
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// RoundhouseDrop(new RoundhouseSettings{
+        ///     ServerName = "Sql2008R2",
+        ///     DatabaseName = "AdventureWorks2008R2"
+        ///     });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void RoundhouseDrop(this ICakeContext context, RoundhouseSettings settings)
         {
