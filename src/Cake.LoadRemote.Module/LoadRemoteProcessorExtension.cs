@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.Scripting;
@@ -9,6 +10,7 @@ namespace Cake.LoadRemote.Module
 {
     public sealed class LoadRemoteProcessorExtension : ProcessorExtension
     {
+        readonly Regex _matchDirectiveName = new Regex("^(#load|#l)", RegexOptions.Compiled);
         readonly UriDirectiveProcessor _processor;
         public override IScriptRunnerExtension ScriptRunnerExtension { get; }
 
@@ -20,7 +22,7 @@ namespace Cake.LoadRemote.Module
         /// <param name="scriptProcessor">The <see cref="IScriptProcessor"/>.</param>
         public LoadRemoteProcessorExtension(ICakeEnvironment environment, ICakeLog cakeLog, IScriptProcessor scriptProcessor) : base(environment, cakeLog, scriptProcessor)
         {
-            _processor = new LoadRemoteProcessor(environment);
+            _processor = new LoadRemoteProcessor(this, environment);
             ScriptRunnerExtension = new LoadRemoteScriptRunnerExtension(this, environment, cakeLog, scriptProcessor);
         }
 
@@ -28,8 +30,10 @@ namespace Cake.LoadRemote.Module
         {
 
             // How to Support both "#l" and "#load", replace to Constants.DirectiveName and process it with the LoadRemoteProcessor.
-            line = line.Replace("#l", Constants.DirectiveName);
-            line = line.Replace("#load", Constants.DirectiveName);
+            //line = line.Replace("#l", Constants.DirectiveName);
+            //line = line.Replace("#load", Constants.DirectiveName);
+            line = line.Trim();
+            line = _matchDirectiveName.Replace(line, Constants.DirectiveName);
 
             // Set the replacement line to the modified line.
             replacement = string.Concat("// ", line);

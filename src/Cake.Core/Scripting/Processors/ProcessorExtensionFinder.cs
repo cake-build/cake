@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Cake.Core.Diagnostics;
 
@@ -44,10 +45,10 @@ namespace Cake.Core.Scripting.Processors
                     {
                         foreach (var type in reference.DefinedTypes)
                         {
-                            if (!type.IsAbstract && type.IsAssignableFrom(typeof(IProcessorExtension)))
+                            if (!type.IsAbstract && type.GetInterfaces().Contains(typeof(IProcessorExtension)))
                             {
                                 // Create a instance of the processor extension.
-                                var instance = (IProcessorExtension)Activator.CreateInstance(typeof(IProcessorExtension), _cakeEnvironment, _log, _scriptProcessor);
+                                var instance = (IProcessorExtension)Activator.CreateInstance(type, _cakeEnvironment, _log, _scriptProcessor);
                                 result.Add(instance);
                             }
                         }

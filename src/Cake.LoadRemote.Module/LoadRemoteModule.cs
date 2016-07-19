@@ -4,7 +4,6 @@
 
 using System;
 using Cake.Core.Composition;
-using Cake.Core.Packaging;
 
 namespace Cake.LoadRemote.Module
 {
@@ -12,7 +11,7 @@ namespace Cake.LoadRemote.Module
     /// The module responsible for registering
     /// default types in the Cake.NuGet assembly.
     /// </summary>
-    public sealed class NuGetModule : ICakeModule
+    public sealed class LoadRemoteModule : ICakeModule
     {
         /// <summary>
         /// Performs custom registrations in the provided registry.

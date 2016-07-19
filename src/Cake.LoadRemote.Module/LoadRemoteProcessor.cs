@@ -10,9 +10,11 @@ namespace Cake.LoadRemote.Module
     public sealed class LoadRemoteProcessor : UriDirectiveProcessor
     {
         private readonly ICakeComponentFactory _componentFactory;
+        private readonly IProcessorExtension _processorExtension;
 
-        public LoadRemoteProcessor(ICakeEnvironment environment) : base(environment)
+        public LoadRemoteProcessor(IProcessorExtension processorExtension, ICakeEnvironment environment) : base(environment)
         {
+            _processorExtension = processorExtension;
             _componentFactory = new CakeComponentFactory();
         }
 
@@ -24,7 +26,7 @@ namespace Cake.LoadRemote.Module
         protected override void AddToContext(IScriptAnalyzerContext context, Uri uri)
         {
             var package = _componentFactory.CreatePackageReference(uri);
-            context.Script.ProcessorValues.Add(this, package);
+            context.Script.ProcessorValues.Add(_processorExtension, package);
         }
     }
 }

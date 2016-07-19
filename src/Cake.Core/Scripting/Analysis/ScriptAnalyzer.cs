@@ -136,16 +136,20 @@ namespace Cake.Core.Scripting.Analysis
             {
                 string replacement = null;
 
-                // Check if there is any processor extensions for this processor alias.
-                var split = line.Split();
-                var alias = split[0];
-                var value = split[1];
-                if (_processorExtensions.Where(p => p.CanProcessDirective(alias, value))
-                                        .Any(p => p.Process(context, line, out replacement)))
+                // only process lines that starts with a # tag.
+                if (line.Trim().StartsWith("#"))
                 {
-                    // Add replacement or comment out processed lines to keep line data.
-                    context.AddScriptLine(replacement ?? string.Concat("// ", line));
-                    continue;
+                    // Check if there is any processor extensions for this processor alias.
+                    var split = line.Split();
+                    var alias = split[0];
+                    var value = split[1];
+                    if (_processorExtensions.Where(p => p.CanProcessDirective(alias, value))
+                                            .Any(p => p.Process(context, line, out replacement)))
+                    {
+                        // Add replacement or comment out processed lines to keep line data.
+                        context.AddScriptLine(replacement ?? string.Concat("// ", line));
+                        continue;
+                    }
                 }
                 
                 if (!_lineProcessors.Any(p => p.Process(context, line, out replacement)))
