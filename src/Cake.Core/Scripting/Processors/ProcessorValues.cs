@@ -13,7 +13,7 @@ namespace Cake.Core.Scripting.Processors
         private readonly Dictionary<Type, IEnumerable<object>> _values;
 
         /// <summary>
-        /// Responsible for managing the <see cref="IProcessorExtension"/> values.
+        /// Initializes a new instance of the <see cref="ProcessorValues" /> class.
         /// </summary>
         public ProcessorValues()
         {
@@ -21,7 +21,7 @@ namespace Cake.Core.Scripting.Processors
         }
 
         /// <summary>
-        /// Responsible for managing the <see cref="IProcessorExtension"/> values.
+        /// Initializes a new instance of the <see cref="ProcessorValues" /> class.
         /// </summary>
         /// <param name="enumerable">the values to set</param>
         /// <exception cref="ArgumentNullException"><paramref name="enumerable" /> is null. </exception>
@@ -40,24 +40,31 @@ namespace Cake.Core.Scripting.Processors
         /// </summary>
         /// <param name="key">The <see cref="IProcessorExtension"/></param>
         /// <param name="value">The value to set</param>
+        /// <exception cref="ArgumentException">Throws if the <paramref name="key"/> is null.</exception>
         public void Add(ILineProcessor key, object value)
         {
+            if (key == null)
+            {
+                throw new ArgumentNullException("key");
+            }
+
             var type = key.GetType();
+
             // Check if this IProcessorExtension already exists in the list.
             if (!_values.ContainsKey(type))
             {
                 _values.Add(type, new List<object> { value });
                 return;
             }
-            
+
             // Add the value to existing list
-            ((List<object>)_values[type]).Add(value);
+            ((List<object>) _values[type]).Add(value);
         }
 
         /// <summary>
         /// Get the enumeratable
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Enumeratable with processors and values.</returns>
         public IEnumerator<KeyValuePair<Type, IEnumerable<object>>> GetEnumerator()
         {
             return _values.GetEnumerator();

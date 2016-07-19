@@ -14,9 +14,9 @@ namespace Cake.Core.Scripting.Processors
     public abstract class UriDirectiveProcessor : LineProcessor
     {
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="UriDirectiveProcessor" /> class.
         /// </summary>
-        /// <param name="environment"></param>
+        /// <param name="environment">The <see cref="ICakeEnvironment"/>.</param>
         protected UriDirectiveProcessor(ICakeEnvironment environment)
             : base(environment)
         {
@@ -25,13 +25,14 @@ namespace Cake.Core.Scripting.Processors
         /// <summary>
         /// Specify the directive name.
         /// </summary>
+        /// <returns>The directive alias to use for this <see cref="UriDirectiveProcessor"/>.</returns>
         protected abstract string GetDirectiveName();
 
         /// <summary>
         /// This method is called after the nuget uri is processed.
         /// </summary>
-        /// <param name="context"></param>
-        /// <param name="uri"></param>
+        /// <param name="context">The <see cref="IScriptAnalyzerContext"/></param>
+        /// <param name="uri">The <see cref="Uri"/></param>
         protected abstract void AddToContext(IScriptAnalyzerContext context, Uri uri);
 
         /// <summary>
