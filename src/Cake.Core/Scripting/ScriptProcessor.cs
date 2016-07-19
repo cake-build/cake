@@ -171,56 +171,6 @@ namespace Cake.Core.Scripting
         }
 
         /// <summary>
-        /// Installs the tools specified in the build scripts.
-        /// </summary>
-        /// <param name="scripts">Nuget script package references to install</param>
-        /// <param name="installPath">The install path.</param>
-        /// <returns>a list of <see cref="FilePath"/> *.cake files</returns>
-        public IEnumerable<KeyValuePair<PackageReference, FilePath>> InstallNugetScripts(
-            IEnumerable<PackageReference> scripts,
-            DirectoryPath installPath)
-        {
-            if (installPath == null)
-            {
-                throw new ArgumentNullException("installPath");
-            }
-            
-            // Make the installation root absolute.
-            installPath = installPath.MakeAbsolute(_environment);
-            scripts = scripts.ToList();
-
-            if (scripts.Any())
-            {
-                _log.Verbose("Installing nuget scripts...");
-                foreach (var script in scripts)
-                {
-                    // Get the installer.
-                    var installer = GetInstaller(script, PackageType.NugetScript);
-                    if (installer == null)
-                    {
-                        const string format = "Could not find an installer for the '{0}' scheme.";
-                        var message = string.Format(CultureInfo.InvariantCulture, format, script.Scheme);
-                        throw new CakeException(message);
-                    }
-
-                    // Install the nuget script.
-                    IReadOnlyCollection<IFile> result = installer.Install(script, PackageType.NugetScript, installPath);
-                    if (result.Count == 0)
-                    {
-                        const string format = "Failed to install nuget script '{0}'.";
-                        var message = string.Format(CultureInfo.InvariantCulture, format, script.Package);
-                        throw new CakeException(message);
-                    }
-
-                    foreach (var file in result)
-                    {
-                        yield return new KeyValuePair<PackageReference, FilePath>(script, file.Path);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
         /// Install the <paramref name="package"/> for <paramref name="type"/> in <paramref name="installPath"/>.
         /// </summary>
         /// <param name="package">The <see cref="PackageReference"/> to install</param>

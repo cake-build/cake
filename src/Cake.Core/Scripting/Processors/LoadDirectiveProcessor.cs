@@ -10,12 +10,9 @@ namespace Cake.Core.Scripting.Processors
 {
     internal sealed class LoadDirectiveProcessor : LineProcessor
     {
-        private readonly NugetScriptDirectiveProcessor _nugetScriptDirectiveProcessor;
-
         public LoadDirectiveProcessor(ICakeEnvironment environment)
             : base(environment)
         {
-            _nugetScriptDirectiveProcessor = new NugetScriptDirectiveProcessor(environment);
         }
 
         public override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
@@ -38,27 +35,9 @@ namespace Cake.Core.Scripting.Processors
             {
                 return false;
             }
-
-            var value = tokens[1];
             
-            // Check if this is a nuget reference
-            if (value.Contains("nuget:"))
-            {
-                // How to Support both "#l" and "#load", replace to #nuscript and process it with the NugetScriptDirectiveProcessor.
-                line = line.Replace(tokens[0], NugetScriptDirectiveProcessor.DirectiveName);
-
-                // Set the replacement line to the modified line.
-                replacement = string.Concat("// ", line);
-
-                // We need a out value to call the processor.
-                string outValue;
-
-                // This is a nuget reference use the NugetScript processor.
-                return _nugetScriptDirectiveProcessor.Process(context, line, out outValue);
-            }
-
             var directoryPath = GetAbsoluteDirectory(context.Script.Path);
-            var scriptPath = new FilePath(value.UnQuote()).MakeAbsolute(directoryPath);
+            var scriptPath = new FilePath(tokens[1].UnQuote()).MakeAbsolute(directoryPath);
 
             context.Analyze(scriptPath);
 

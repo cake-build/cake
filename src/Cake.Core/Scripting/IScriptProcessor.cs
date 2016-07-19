@@ -27,15 +27,7 @@ namespace Cake.Core.Scripting
         /// <param name="analyzerResult">The analyzer result.</param>
         /// <param name="installPath">The install path.</param>
         void InstallTools(ScriptAnalyzerResult analyzerResult, DirectoryPath installPath);
-
-        /// <summary>
-        /// Installs the tools specified in the build scripts.
-        /// </summary>
-        /// <param name="scripts">Nuget script package references to install</param>
-        /// <param name="installPath">The install path.</param>
-        /// <returns>a list of <see cref="FilePath"/> *.cake files</returns>
-        IEnumerable<KeyValuePair<PackageReference, FilePath>> InstallNugetScripts(IEnumerable<PackageReference> scripts, DirectoryPath installPath);
-
+        
         /// <summary>
         /// Install the <paramref name="package"/> for <paramref name="type"/> in <paramref name="installPath"/>.
         /// </summary>

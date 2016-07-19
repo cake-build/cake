@@ -56,12 +56,6 @@ namespace Cake.Core.Scripting.Analysis
         IList<PackageReference> Addins { get; }
 
         /// <summary>
-        /// Gets the nuget scripts.
-        /// </summary>
-        /// <value>The scripts.</value>
-        IList<PackageReference> NugetScripts { get; }
-
-        /// <summary>
         /// Gets <see cref="ProcessorValues"/>s for a processor.
         /// </summary>
         ProcessorValues ProcessorValues { get; }

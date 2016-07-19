@@ -184,7 +184,6 @@
     <Compile Include="Scripting\Processors\IProcessorExtension.cs" />
     <Compile Include="Scripting\Processors\IProcessorExtensionFinder.cs" />
     <Compile Include="Scripting\Processors\IUriDirectiveProcessor.cs" />
-    <Compile Include="Scripting\Processors\NuScriptDirectiveProcessor.cs" />
     <Compile Include="Scripting\Processors\ProcessorExtension.cs" />
     <Compile Include="Scripting\Processors\ProcessorExtensionFinder.cs" />
     <Compile Include="Scripting\Processors\ProcessorValues.cs" />

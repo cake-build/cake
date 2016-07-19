@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Cake.Core.Packaging;
 using Cake.Core.Scripting.Processors;
 
@@ -21,7 +20,6 @@ namespace Cake.Core.Scripting.Analysis
         private readonly HashSet<string> _usingAliases;
         private readonly HashSet<PackageReference> _addins;
         private readonly HashSet<PackageReference> _tools;
-        private readonly HashSet<PackageReference> _nugetScripts;
         private readonly ProcessorValues _processorValues;
 
         /// <summary>
@@ -88,15 +86,6 @@ namespace Cake.Core.Scripting.Analysis
         }
 
         /// <summary>
-        /// Gets the scripts.
-        /// </summary>
-        /// <value>The scripts.</value>
-        public HashSet<PackageReference> NugetScripts
-        {
-            get { return _nugetScripts; }
-        }
-
-        /// <summary>
         /// Gets <see cref="ProcessorValues"/>s for a processor.
         /// </summary>
         public ProcessorValues ProcessorValues
@@ -121,7 +110,6 @@ namespace Cake.Core.Scripting.Analysis
             _usingAliases = new HashSet<string>(Collect(script, i => i.UsingAliases));
             _tools = new HashSet<PackageReference>(Collect(script, i => i.Tools));
             _addins = new HashSet<PackageReference>(Collect(script, i => i.Addins));
-            _nugetScripts = new HashSet<PackageReference>(Collect(script, i => i.NugetScripts));
             _processorValues = new ProcessorValues(Collect(script, i => i.ProcessorValues));
         }
 
