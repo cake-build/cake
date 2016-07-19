@@ -1,17 +1,16 @@
 ﻿using System;
 using Cake.Core;
 using Cake.Core.Diagnostics;
-using Cake.Core.Packaging;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.Analysis;
 using Cake.Core.Scripting.Processors;
 
 namespace Cake.LoadRemote.Module
 {
-    public sealed class LoadRemoteProcessorExtension : ProcessorExtension<PackageReference>
+    public sealed class LoadRemoteProcessorExtension : ProcessorExtension
     {
         readonly UriDirectiveProcessor _processor;
-        public override IScriptRunnerExtension<PackageReference> ScriptRunnerExtension { get; }
+        public override IScriptRunnerExtension ScriptRunnerExtension { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoadRemoteProcessorExtension"/> class.

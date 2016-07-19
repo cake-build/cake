@@ -6,17 +6,17 @@ using Cake.Core.Scripting.Processors;
 namespace Cake.Core.Scripting
 {
     /// <summary>
-    /// Defines a script runner extension for a <see cref="IProcessorExtension{TValueType}"/>
+    /// Defines a script runner extension for a <see cref="IProcessorExtension"/>
     /// </summary>
-    public interface IScriptRunnerExtension<in TValueType>
+    public interface IScriptRunnerExtension
     {
         /// <summary>
         /// Defines installation instructions.
         /// </summary>
-        /// <param name="values">The <see cref="IProcessorExtension{TValueType}"/> values.</param>
+        /// <param name="values">The <see cref="IProcessorExtension"/> values.</param>
         /// <param name="result">The current executing <see cref="ScriptAnalyzerResult"/>.</param>
         /// <param name="scriptAnalyzerContext">The executing <see cref="IScriptAnalyzerContext"/>.</param>
         /// <param name="toolsPath">Installation path to tools.</param>
-        void Install(IEnumerable<TValueType> values, ref ScriptAnalyzerResult result, IScriptAnalyzerContext scriptAnalyzerContext, DirectoryPath toolsPath);
+        void Install(IEnumerable<object> values, ref ScriptAnalyzerResult result, IScriptAnalyzerContext scriptAnalyzerContext, DirectoryPath toolsPath);
     }
 }

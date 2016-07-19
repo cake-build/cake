@@ -8,7 +8,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Cake.Core.Diagnostics;
-using Cake.Core.Extensions;
 using Cake.Core.IO;
 using Cake.Core.Scripting.Processors;
 
@@ -24,7 +23,12 @@ namespace Cake.Core.Scripting.Analysis
         private readonly ICakeLog _log;
         private readonly LineProcessor[] _lineProcessors;
         private readonly IReadOnlyList<IProcessorExtension> _processorExtensions;
-        
+
+        /// <summary>
+        /// Get the <see cref="IProcessorExtension"/>'s
+        /// </summary>
+        public IReadOnlyList<IProcessorExtension> ProcessorExtensions { get { return _processorExtensions; } }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptAnalyzer"/> class.
         /// </summary>

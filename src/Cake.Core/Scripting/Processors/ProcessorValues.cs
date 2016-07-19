@@ -96,6 +96,31 @@ namespace Cake.Core.Scripting.Processors
         }
 
         /// <summary>
+        /// Try to get the values for a <see cref="ILineProcessor"/>.
+        /// </summary>
+        /// <param name="key">The <see cref="ILineProcessor"/>.</param>
+        /// <param name="objects">A enumeratable with values as objects, or null if the <see cref="ILineProcessor"/> is not found.</param>
+        /// <returns>True if <paramref name="key"/> is found in the <see cref="ProcessorValues"/>, else False</returns>
+        /// <exception cref="ArgumentException">Throws if the <paramref name="key"/> is null.</exception>
+        public bool TryGet(ILineProcessor key, out IEnumerable<object> objects)
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException("key");
+            }
+
+            var type = key.GetType();
+            if (_values.ContainsKey(type))
+            {
+                objects = _values[type];
+                return true;
+            }
+
+            objects = null;
+            return false;
+        }
+
+        /// <summary>
         /// Get the enumeratable
         /// </summary>
         /// <returns>Enumeratable with processors and values.</returns>

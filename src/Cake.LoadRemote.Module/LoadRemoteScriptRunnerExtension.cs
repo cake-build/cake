@@ -12,17 +12,17 @@ using Cake.Core.Scripting.Processors;
 
 namespace Cake.LoadRemote.Module
 {
-    public sealed class LoadRemoteScriptRunnerExtension : ScriptRunnerExtension<PackageReference>
+    public sealed class LoadRemoteScriptRunnerExtension : ScriptRunnerExtension
     {
-        public LoadRemoteScriptRunnerExtension(IProcessorExtension<PackageReference> processorExtension, ICakeEnvironment environment, ICakeLog cakeLog, IScriptProcessor scriptProcessor)
+        public LoadRemoteScriptRunnerExtension(IProcessorExtension processorExtension, ICakeEnvironment environment, ICakeLog cakeLog, IScriptProcessor scriptProcessor)
             : base(processorExtension, environment, cakeLog, scriptProcessor)
         {
         }
 
-        public override void DoInstall(IEnumerable<PackageReference> values, ref ScriptAnalyzerResult result, IScriptAnalyzerContext scriptAnalyzerContext, DirectoryPath toolsPath)
+        public override void DoInstall(IEnumerable<object> values, ref ScriptAnalyzerResult result, IScriptAnalyzerContext scriptAnalyzerContext, DirectoryPath toolsPath)
         {
-            values = values.ToList();
-            foreach (var packageReference in values)
+            var items = values.OfType<PackageReference>().ToList();
+            foreach (var packageReference in items)
             {
                 var files = ScriptProcessor.InstallPackage(packageReference, PackageType.NugetScript, toolsPath).ToList();
                 if (!files.Any())

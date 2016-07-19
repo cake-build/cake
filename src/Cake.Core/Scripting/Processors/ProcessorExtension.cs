@@ -6,7 +6,7 @@ namespace Cake.Core.Scripting.Processors
     /// <summary>
     /// Abstract processor extension.
     /// </summary>
-    public abstract class ProcessorExtension<TValueType> : IProcessorExtension<TValueType>
+    public abstract class ProcessorExtension : IProcessorExtension
     {
         /// <summary>
         /// Get the <see cref="ICakeEnvironment"/>.
@@ -24,7 +24,7 @@ namespace Cake.Core.Scripting.Processors
         public IScriptProcessor ScriptProcessor { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProcessorExtension{TValueType}" /> class.
+        /// Initializes a new instance of the <see cref="ProcessorExtension" /> class.
         /// </summary>
         /// <param name="environment"></param>
         /// <param name="cakeLog">The <see cref="ICakeLog"/>.</param>
@@ -37,18 +37,18 @@ namespace Cake.Core.Scripting.Processors
         }
 
         /// <summary>
-        /// Determind if this <see cref="IProcessorExtension{TValueType}"/> can process the directive <paramref name="alias"/>.
+        /// Determind if this <see cref="IProcessorExtension"/> can process the directive <paramref name="alias"/>.
         /// </summary>
         /// <param name="alias">directive processor alias</param>
         /// <param name="value">the alias value</param>
-        /// <returns>True if <see cref="IProcessorExtension{TValueType}"/> can process this <paramref name="alias"/>, else False</returns>
+        /// <returns>True if <see cref="IProcessorExtension"/> can process this <paramref name="alias"/>, else False</returns>
         public abstract bool CanProcessDirective(string alias, string value);
 
         /// <summary>
-        /// Defines the <see cref="IScriptRunnerExtension{TValueType}"/> containing installation instructions.
+        /// Defines the <see cref="IScriptRunnerExtension"/> containing installation instructions.
         /// </summary>
-        public abstract IScriptRunnerExtension<TValueType> ScriptRunnerExtension { get; }
-
+        public abstract IScriptRunnerExtension ScriptRunnerExtension { get; }
+        
         /// <summary>
         /// Processes the specified line.
         /// </summary>
@@ -64,7 +64,7 @@ namespace Cake.Core.Scripting.Processors
         /// </summary>
         /// <param name="analyzer">The <see cref="IScriptAnalyzerContext"/></param>
         /// <param name="value">The value</param>
-        protected void AddValue(IScriptAnalyzerContext analyzer, TValueType value)
+        protected void AddValue(IScriptAnalyzerContext analyzer, object value)
         {
             analyzer.Script.ProcessorValues.Add(this, value);
         }

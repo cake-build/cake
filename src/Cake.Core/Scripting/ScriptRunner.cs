@@ -126,11 +126,19 @@ namespace Cake.Core.Scripting
             
             // Import nuget scripts.
             var nugetScriptPath = GetToolPath(scriptPath.GetDirectory());
-            var scriptImports = _processor.InstallNugetScripts(result.NugetScripts, nugetScriptPath).ToList();
-            RecursiveInstallNugetScripts(ref result, scriptImports, scriptAnalyzerContext, nugetScriptPath);
+            //var scriptImports = _processor.InstallNugetScripts(result.NugetScripts, nugetScriptPath).ToList();
+            //RecursiveInstallNugetScripts(ref result, scriptImports, scriptAnalyzerContext, nugetScriptPath);
             
             // Process processor extension runners.
-
+            foreach (var processorExtension in _analyzer.ProcessorExtensions)
+            {
+                IEnumerable<object> processorValues;
+                if (result.ProcessorValues.TryGet(processorExtension, out processorValues))
+                {
+                    // Install the processor extension.
+                    processorExtension.ScriptRunnerExtension.Install(processorValues, ref result, scriptAnalyzerContext, nugetScriptPath);
+                }
+            }
 
             // Install tools.
             _log.Verbose("Processing build script...");
