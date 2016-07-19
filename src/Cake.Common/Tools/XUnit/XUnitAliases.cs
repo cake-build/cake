@@ -28,6 +28,11 @@ namespace Cake.Common.Tools.XUnit
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
+        /// <example>
+        /// <code>
+        /// XUnit("./src/**/bin/Release/*.Tests.dll");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void XUnit(this ICakeContext context, string pattern)
         {
@@ -46,6 +51,15 @@ namespace Cake.Common.Tools.XUnit
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// XUnit("./src/**/bin/Release/*.Tests.dll",
+        ///      new XUnitSettings {
+        ///         HtmlReport = true,
+        ///         OutputDirectory = "./build"
+        ///     });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void XUnit(this ICakeContext context, string pattern, XUnitSettings settings)
         {
@@ -63,6 +77,16 @@ namespace Cake.Common.Tools.XUnit
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
+        /// <example>
+        /// <code>
+        /// XUnit(new []{
+        ///     "./src/Cake.Common.Tests/bin/Release/Cake.Common.Tests.dll",
+        ///     "./src/Cake.Core.Tests/bin/Release/Cake.Core.Tests.dll",
+        ///     "./src/Cake.NuGet.Tests/bin/Release/Cake.NuGet.Tests.dll",
+        ///     "./src/Cake.Tests/bin/Release/Cake.Tests.dll"
+        ///     });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void XUnit(this ICakeContext context, IEnumerable<string> assemblies)
         {
@@ -79,6 +103,12 @@ namespace Cake.Common.Tools.XUnit
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
+        /// <example>
+        /// <code>
+        /// var testAssemblies = GetFiles("./src/**/bin/Release/*.Tests.dll");
+        /// XUnit(testAssemblies);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void XUnit(this ICakeContext context, IEnumerable<FilePath> assemblies)
         {
@@ -91,6 +121,20 @@ namespace Cake.Common.Tools.XUnit
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// XUnit(new []{
+        ///     "./src/Cake.Common.Tests/bin/Release/Cake.Common.Tests.dll",
+        ///     "./src/Cake.Core.Tests/bin/Release/Cake.Core.Tests.dll",
+        ///     "./src/Cake.NuGet.Tests/bin/Release/Cake.NuGet.Tests.dll",
+        ///     "./src/Cake.Tests/bin/Release/Cake.Tests.dll"
+        ///      },
+        ///      new XUnitSettings {
+        ///         HtmlReport = true,
+        ///         OutputDirectory = "./build"
+        ///     });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void XUnit(this ICakeContext context, IEnumerable<string> assemblies, XUnitSettings settings)
         {
@@ -108,6 +152,16 @@ namespace Cake.Common.Tools.XUnit
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var testAssemblies = GetFiles("./src/**/bin/Release/*.Tests.dll");
+        /// XUnit(testAssemblies,
+        ///      new XUnitSettings {
+        ///         HtmlReport = true,
+        ///         OutputDirectory = "./build"
+        ///     });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void XUnit(this ICakeContext context, IEnumerable<FilePath> assemblies, XUnitSettings settings)
         {
