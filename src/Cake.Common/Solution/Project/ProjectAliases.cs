@@ -28,13 +28,15 @@ namespace Cake.Common.Solution.Project
         ///     Configuration         : {0}
         ///     Platform              : {1}
         ///     OutputType            : {2}
-        ///     RootNameSpace         : {3}
-        ///     AssemblyName          : {4}
-        ///     TargetFrameworkVersion: {5}
-        ///     Files                 : {6}",
+        ///     OutputPath            : {3}
+        ///     RootNameSpace         : {4}
+        ///     AssemblyName          : {5}
+        ///     TargetFrameworkVersion: {6}
+        ///     Files                 : {7}",
         ///     parsedProject.Configuration,
         ///     parsedProject.Platform,
         ///     parsedProject.OutputType,
+        ///     parsedProject.OutputPath,
         ///     parsedProject.RootNameSpace,
         ///     parsedProject.AssemblyName,
         ///     parsedProject.TargetFrameworkVersion,
