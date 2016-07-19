@@ -55,6 +55,31 @@ Param(
     [string[]]$ScriptArgs
 )
 
+[Reflection.Assembly]::LoadWithPartialName("System.Security") | Out-Null
+function MD5HashFile([string] $filePath)
+{
+    if ([string]::IsNullOrEmpty($filePath) -or !(Test-Path $filePath -PathType Leaf))
+    {
+        return $null
+    }
+
+    [System.IO.Stream] $file = $null;
+    [System.Security.Cryptography.MD5] $md5 = $null;
+    try
+    {
+        $md5 = [System.Security.Cryptography.MD5]::Create()
+        $file = [System.IO.File]::OpenRead($filePath)
+        return [System.BitConverter]::ToString($md5.ComputeHash($file))
+    }
+    finally
+    {
+        if ($file -ne $null)
+        {
+            $file.Dispose()
+        }
+    }
+}
+
 Write-Host "Preparing to run build script..."
 
 if(!$PSScriptRoot){
@@ -132,19 +157,24 @@ if(-Not $SkipToolPackageRestore.IsPresent) {
     Set-Location $TOOLS_DIR
 
     # Check for changes in packages.config and remove installed tools if true.
-    if((-Not (Test-Path $PACKAGES_CONFIG_MD5)) -Or
-      ((Get-FileHash -Path $PACKAGES_CONFIG -Algorithm MD5).Hash.ToLower() -ne (Get-Content $PACKAGES_CONFIG_MD5))) {
+    [string] $md5Hash = MD5HashFile($PACKAGES_CONFIG)
+    if((!(Test-Path $PACKAGES_CONFIG_MD5)) -Or
+      ($md5Hash -ne (Get-Content $PACKAGES_CONFIG_MD5 ))) {
+        Write-Verbose -Message "Missing or changed package.config hash..."
         Remove-Item * -Recurse -Exclude packages.config,nuget.exe
     }
 
     Write-Verbose -Message "Restoring tools from NuGet..."
     $NuGetOutput = Invoke-Expression "&`"$NUGET_EXE`" install -ExcludeVersion -OutputDirectory `"$TOOLS_DIR`""
-    (Get-FileHash -Path $PACKAGES_CONFIG -Algorithm MD5).Hash.ToLower() | Out-File $PACKAGES_CONFIG_MD5 -Encoding "ASCII"
 
     if ($LASTEXITCODE -ne 0) {
         Throw "An error occured while restoring NuGet tools."
     }
-    Write-Verbose -Message ($NuGetOutput | out-string)
+    else
+    {
+        $md5Hash | Out-File $PACKAGES_CONFIG_MD5 -Encoding "ASCII"
+    }
+    Write-Verbose -Message ($NuGetOutput | Out-String)
     Pop-Location
 }
 
