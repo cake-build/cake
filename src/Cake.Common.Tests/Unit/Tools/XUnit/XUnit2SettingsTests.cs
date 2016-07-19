@@ -42,6 +42,16 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             }
 
             [Fact]
+            public void Should_Disable_NUnit_Report_By_Default()
+            {
+                // Given, When
+                var settings = new XUnit2Settings();
+
+                // Then
+                Assert.False(settings.NUnitReport);
+            }
+
+            [Fact]
             public void Should_Enable_Shadow_Copying_By_Default()
             {
                 // Given, When
