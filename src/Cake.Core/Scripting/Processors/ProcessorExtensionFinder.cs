@@ -13,16 +13,19 @@ namespace Cake.Core.Scripting.Processors
     {
         private readonly ICakeLog _log;
         private readonly ICakeEnvironment _cakeEnvironment;
+        private readonly IScriptProcessor _scriptProcessor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessorExtensionFinder"/> class.
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="environment">The <see cref="ICakeEnvironment"/>.</param>
-        public ProcessorExtensionFinder(ICakeLog log, ICakeEnvironment environment)
+        /// <param name="scriptProcessor">The <see cref="IScriptProcessor"/>.</param>
+        public ProcessorExtensionFinder(ICakeLog log, ICakeEnvironment environment, IScriptProcessor scriptProcessor)
         {
             _log = log;
             _cakeEnvironment = environment;
+            _scriptProcessor = scriptProcessor;
         }
 
         /// <summary>
@@ -44,7 +47,7 @@ namespace Cake.Core.Scripting.Processors
                             if (!type.IsAbstract && type.IsAssignableFrom(typeof(IProcessorExtension)))
                             {
                                 // Create a instance of the processor extension.
-                                var instance = (IProcessorExtension)Activator.CreateInstance(typeof(IProcessorExtension), _cakeEnvironment);
+                                var instance = (IProcessorExtension)Activator.CreateInstance(typeof(IProcessorExtension), _cakeEnvironment, _log, _scriptProcessor);
                                 result.Add(instance);
                             }
                         }
