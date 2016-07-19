@@ -13,8 +13,10 @@ namespace Cake.Common.Tests.Fixtures.Solution
 
         public SolutionParserFixture()
         {
-            Environment = FakeEnvironment.CreateWindowsEnvironment();
-            FileSystem = new FakeFileSystem(Environment);
+            var environment = FakeEnvironment.CreateUnixEnvironment();
+            Environment = environment;
+            var fileSystem = new FakeFileSystem(environment);
+            FileSystem = fileSystem;
         }
 
         public FilePath WithSolutionFile(string slnContent)
