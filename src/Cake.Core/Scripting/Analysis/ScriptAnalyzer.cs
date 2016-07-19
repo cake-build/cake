@@ -25,9 +25,12 @@ namespace Cake.Core.Scripting.Analysis
         private readonly IReadOnlyList<IProcessorExtension> _processorExtensions;
 
         /// <summary>
-        /// Get the <see cref="IProcessorExtension"/>'s
+        /// Gets the <see cref="IProcessorExtension"/>'s
         /// </summary>
-        public IReadOnlyList<IProcessorExtension> ProcessorExtensions { get { return _processorExtensions; } }
+        public IReadOnlyList<IProcessorExtension> ProcessorExtensions
+        {
+            get { return _processorExtensions; }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptAnalyzer"/> class.
@@ -53,6 +56,10 @@ namespace Cake.Core.Scripting.Analysis
             if (log == null)
             {
                 throw new ArgumentNullException("log");
+            }
+            if (processorExtensionFinder == null)
+            {
+                throw new ArgumentNullException("processorExtensionFinder");
             }
 
             _fileSystem = fileSystem;

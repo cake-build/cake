@@ -14,7 +14,6 @@ namespace Cake.Core.Extensions
         /// <param name="processor">The line processor.</param>
         /// <param name="line">The script line.</param>
         /// <returns>A string array containing the split result</returns>
-        /// <exception cref="ArgumentNullException"></exception>
         public static string[] Split(this ILineProcessor processor, string line)
         {
             return line.SplitLine();

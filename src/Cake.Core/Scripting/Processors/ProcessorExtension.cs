@@ -1,4 +1,5 @@
-﻿using Cake.Core.Diagnostics;
+﻿using System;
+using Cake.Core.Diagnostics;
 using Cake.Core.Scripting.Analysis;
 
 namespace Cake.Core.Scripting.Processors
@@ -9,24 +10,24 @@ namespace Cake.Core.Scripting.Processors
     public abstract class ProcessorExtension : IProcessorExtension
     {
         /// <summary>
-        /// Get the <see cref="ICakeEnvironment"/>.
+        /// Gets the <see cref="ICakeEnvironment"/>.
         /// </summary>
         public ICakeEnvironment Environment { get; private set; }
 
         /// <summary>
-        /// Get the <see cref="ICakeLog"/>
+        /// Gets the <see cref="ICakeLog"/>
         /// </summary>
         public ICakeLog Log { get; private set; }
 
         /// <summary>
-        /// The <see cref="IScriptProcessor"/>.
+        /// Gets the <see cref="IScriptProcessor"/>.
         /// </summary>
         public IScriptProcessor ScriptProcessor { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessorExtension" /> class.
         /// </summary>
-        /// <param name="environment"></param>
+        /// <param name="environment">The <see cref="ICakeEnvironment"/>.</param>
         /// <param name="cakeLog">The <see cref="ICakeLog"/>.</param>
         /// <param name="scriptProcessor">The <see cref="IScriptProcessor"/>.</param>
         protected ProcessorExtension(ICakeEnvironment environment, ICakeLog cakeLog, IScriptProcessor scriptProcessor)
@@ -45,7 +46,7 @@ namespace Cake.Core.Scripting.Processors
         public abstract bool CanProcessDirective(string alias, string value);
 
         /// <summary>
-        /// Defines the <see cref="IScriptRunnerExtension"/> containing installation instructions.
+        /// Gets the <see cref="IScriptRunnerExtension"/> containing installation instructions.
         /// </summary>
         public abstract IScriptRunnerExtension ScriptRunnerExtension { get; }
         
@@ -64,8 +65,14 @@ namespace Cake.Core.Scripting.Processors
         /// </summary>
         /// <param name="analyzer">The <see cref="IScriptAnalyzerContext"/></param>
         /// <param name="value">The value</param>
+        /// <exception cref="ArgumentException">Throws if the <paramref name="analyzer"/> is null.</exception>
         protected void AddValue(IScriptAnalyzerContext analyzer, object value)
         {
+            if (analyzer == null)
+            {
+                throw new ArgumentNullException("analyzer");
+            }
+
             analyzer.Script.ProcessorValues.Add(this, value);
         }
     }

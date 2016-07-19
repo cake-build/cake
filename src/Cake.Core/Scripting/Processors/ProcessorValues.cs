@@ -70,7 +70,7 @@ namespace Cake.Core.Scripting.Processors
             }
 
             // Add the value to existing list
-            ((List<object>) _values[type]).Add(value);
+            ((List<object>)_values[type]).Add(value);
         }
 
         /// <summary>

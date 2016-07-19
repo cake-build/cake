@@ -14,7 +14,7 @@
         bool CanProcessDirective(string alias, string value);
 
         /// <summary>
-        /// Defines the <see cref="IScriptRunnerExtension"/> containing installation instructions.
+        /// Gets the <see cref="IScriptRunnerExtension"/> containing installation instructions.
         /// </summary>
         IScriptRunnerExtension ScriptRunnerExtension { get; }
     }

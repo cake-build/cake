@@ -77,7 +77,7 @@ namespace Cake.Core
         /// </summary>
         /// <param name="line">The script line.</param>
         /// <returns>A string array containing the split result</returns>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentNullException">Throws if the <paramref name="line"/> is null.</exception>
         internal static string[] SplitLine(this string line)
         {
             if (line == null)

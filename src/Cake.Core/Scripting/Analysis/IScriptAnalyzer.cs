@@ -15,7 +15,7 @@ namespace Cake.Core.Scripting.Analysis
     public interface IScriptAnalyzer
     {
         /// <summary>
-        /// Get the <see cref="IProcessorExtension"/>'s
+        /// Gets the <see cref="IProcessorExtension"/>'s
         /// </summary>
         IReadOnlyList<IProcessorExtension> ProcessorExtensions { get; }
 

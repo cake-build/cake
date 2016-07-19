@@ -13,22 +13,22 @@ namespace Cake.Core.Scripting
     public abstract class ScriptRunnerExtension : IScriptRunnerExtension
     {
         /// <summary>
-        /// Get the <see cref="ICakeEnvironment"/>.
+        /// Gets the <see cref="ICakeEnvironment"/>.
         /// </summary>
         public ICakeEnvironment Environment { get; private set; }
 
         /// <summary>
-        /// Get the <see cref="ICakeLog"/>
+        /// Gets the <see cref="ICakeLog"/>
         /// </summary>
         public ICakeLog Log { get; private set; }
 
         /// <summary>
-        /// The <see cref="IProcessorExtension"/> used by this <see cref="IScriptRunnerExtension"/>.
+        /// Gets the <see cref="IProcessorExtension"/>.
         /// </summary>
         public IProcessorExtension ProcessorExtension { get; private set; }
 
         /// <summary>
-        /// The <see cref="IScriptProcessor"/>.
+        /// Gets the <see cref="IScriptProcessor"/>.
         /// </summary>
         public IScriptProcessor ScriptProcessor { get; private set; }
 
