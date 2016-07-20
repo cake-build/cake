@@ -30,5 +30,14 @@ namespace Cake.Core.Packaging
         /// <param name="path">The location where to install the resource.</param>
         /// <returns>The installed files.</returns>
         IReadOnlyCollection<IFile> Install(PackageReference package, PackageType type, DirectoryPath path);
+
+        /// <summary>
+        /// Installs the specified resource at the given location.
+        /// </summary>
+        /// <param name="package">The package resource.</param>
+        /// <param name="fileExtension">The file extension ex: .cake</param>
+        /// <param name="path">The location where to install the resource.</param>
+        /// <returns>The installed files.</returns>
+        IReadOnlyCollection<IFile> Install(PackageReference package, string fileExtension, DirectoryPath path);
     }
 }

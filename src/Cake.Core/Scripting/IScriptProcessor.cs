@@ -27,14 +27,14 @@ namespace Cake.Core.Scripting
         /// <param name="analyzerResult">The analyzer result.</param>
         /// <param name="installPath">The install path.</param>
         void InstallTools(ScriptAnalyzerResult analyzerResult, DirectoryPath installPath);
-        
+
         /// <summary>
-        /// Install the <paramref name="package"/> for <paramref name="type"/> in <paramref name="installPath"/>.
+        /// Install the <paramref name="package"/> for <paramref name="fileExtension"/> in <paramref name="installPath"/>.
         /// </summary>
         /// <param name="package">The <see cref="PackageReference"/> to install</param>
-        /// <param name="type">The <see cref="PackageType"/></param>
+        /// <param name="fileExtension">The file extension ex: .cake</param>
         /// <param name="installPath">The location to install this package</param>
         /// <returns>Returns <see cref="IEnumerable{IFile}"/> containing the installed files.</returns>
-        IEnumerable<IFile> InstallPackage(PackageReference package, PackageType type, DirectoryPath installPath);
+        IEnumerable<IFile> InstallPackage(PackageReference package, string fileExtension, DirectoryPath installPath);
     }
 }

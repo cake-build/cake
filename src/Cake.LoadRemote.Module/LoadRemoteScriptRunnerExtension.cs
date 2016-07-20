@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -9,13 +10,14 @@ using Cake.Core.Packaging;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.Analysis;
 using Cake.Core.Scripting.Processors;
+using Newtonsoft.Json;
 
 namespace Cake.LoadRemote.Module
 {
     public sealed class LoadRemoteScriptRunnerExtension : ScriptRunnerExtension
     {
-        public LoadRemoteScriptRunnerExtension(IProcessorExtension processorExtension, ICakeEnvironment environment, ICakeLog cakeLog, IScriptProcessor scriptProcessor)
-            : base(processorExtension, environment, cakeLog, scriptProcessor)
+        public LoadRemoteScriptRunnerExtension(IProcessorExtension processorExtension, ICakeContext cakeContext, ICakeEnvironment environment, ICakeLog cakeLog, IScriptProcessor scriptProcessor)
+            : base(processorExtension, cakeContext, environment, cakeLog, scriptProcessor)
         {
         }
 
@@ -24,7 +26,7 @@ namespace Cake.LoadRemote.Module
             var items = values.OfType<PackageReference>().ToList();
             foreach (var packageReference in items)
             {
-                var files = ScriptProcessor.InstallPackage(packageReference, PackageType.NugetScript, toolsPath).ToList();
+                var files = ScriptProcessor.InstallPackage(packageReference, ".cake", toolsPath).ToList();
                 if (!files.Any())
                 {
                     const string format = "Failed to install nuget script '{0}'.";
@@ -32,16 +34,79 @@ namespace Cake.LoadRemote.Module
                     throw new CakeException(message);
                 }
                 
+                var packageDirectory = files.First().Path.GetDirectory();
+                ConfigEntity config = GetConfig(packageDirectory);
+                files = ReArrange(files, config);
                 var keyValues = files.Select(f => new KeyValuePair<PackageReference, FilePath>(packageReference, f.Path));
                 RecursiveInstallNugetScripts(ref result, keyValues, scriptAnalyzerContext, toolsPath);
             }
         }
 
         /// <summary>
+        /// Rearrange file list based on config.
+        /// </summary>
+        /// <param name="files">The files to process.</param>
+        /// <param name="config">The config.</param>
+        /// <returns>A rearranged file list.</returns>
+        private List<IFile> ReArrange(List<IFile> files, ConfigEntity config)
+        {
+            if (config != null && config.FileOrder.Any())
+            {
+                var sortedFiles = new List<IFile>();
+                foreach (var file in config.FileOrder)
+                {
+                    var item = files.First(x => x.Path.FullPath.EndsWith(file, StringComparison.OrdinalIgnoreCase));
+                    sortedFiles.Add(item);
+                }
+
+                return sortedFiles;
+            }
+
+            return files;
+        }
+
+        /// <summary>
+        /// Get the <see cref="ConfigEntity"/>.
+        /// </summary>
+        /// <param name="path">The directory which contains the config.json file.</param>
+        /// <returns>A <see cref="ConfigEntity"/> or null if no file is found or if the file is empty.</returns>
+        /// <exception cref="CakeException">Throws if config.json is not in a valid json format.</exception>
+        private ConfigEntity GetConfig(DirectoryPath path)
+        {
+            var configFilePath = path.CombineWithFilePath(new FilePath("config.json"));
+            var configFile = CakeContext.FileSystem.GetFile(configFilePath);
+
+            if (configFile.Exists)
+            {
+                using (var stream = configFile.Open(FileMode.Open, FileAccess.Read))
+                using (var reader = new StreamReader(stream))
+                {
+                    var configValue = reader.ReadToEnd();
+                    if (!string.IsNullOrEmpty(configValue))
+                    {
+                        try
+                        {
+                            var config = JsonConvert.DeserializeObject<ConfigEntity>(configValue);
+                            return config;
+                        }
+                        catch (JsonReaderException ex)
+                        {
+                            const string format = "[{0}] config.json file is not in a valid json format.";
+                            var message = string.Format(CultureInfo.InvariantCulture, format, path.FullPath);
+                            throw new CakeException(message, ex);
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Install nuget scripts recursively.
         /// </summary>
         /// <param name="result">The current executing <see cref="ScriptAnalyzerResult"/></param>
-        /// <param name="scriptImports">The nuget script items from <see cref="IScriptProcessor.InstallNugetScripts"/></param>
+        /// <param name="scriptImports">The nuget script to install</param>
         /// <param name="scriptAnalyzerContext">The current executing <see cref="IScriptAnalyzerContext"/></param>
         /// <param name="nugetScriptPath">Installation path for nuget scripts, this is the path to tools</param>
         private void RecursiveInstallNugetScripts(ref ScriptAnalyzerResult result,
@@ -84,11 +149,6 @@ namespace Cake.LoadRemote.Module
                 if (childItems.Any())
                 {
                     DoInstall(childItems, ref result, scriptAnalyzerContext, nugetScriptPath);
-                    //RecursiveInstallNugetScripts(ref result, childScripts, scriptAnalyzerContext, nugetScriptPath);
-
-                    //// Re-arrange child scripts
-                    //var siblings = childScripts.Skip(1).Select(x => x.Value.FullPath);
-                    //RearrangeNugetScripts(ref result, childScripts.First(), siblings);
                 }
             }
 

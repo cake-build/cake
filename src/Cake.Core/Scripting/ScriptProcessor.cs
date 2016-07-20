@@ -171,15 +171,26 @@ namespace Cake.Core.Scripting
         }
 
         /// <summary>
-        /// Install the <paramref name="package"/> for <paramref name="type"/> in <paramref name="installPath"/>.
+        /// Install the <paramref name="package"/> for <paramref name="fileExtension"/> in <paramref name="installPath"/>.
         /// </summary>
         /// <param name="package">The <see cref="PackageReference"/> to install</param>
-        /// <param name="type">The <see cref="PackageType"/></param>
+        /// <param name="fileExtension">The file extension ex: .cake</param>
         /// <param name="installPath">The location to install this package</param>
         /// <returns>Returns <see cref="IEnumerable{IFile}"/> containing the installed files.</returns>
-        public IEnumerable<IFile> InstallPackage(PackageReference package, PackageType type, DirectoryPath installPath)
+        public IEnumerable<IFile> InstallPackage(PackageReference package, string fileExtension, DirectoryPath installPath)
         {
-            var installer = GetInstaller(package, type);
+            if (fileExtension == null)
+            {
+                throw new ArgumentNullException("fileExtension");
+            }
+            if (!System.IO.Path.HasExtension(fileExtension))
+            {
+                const string format = "The string parameter 'fileExtension' value is '{0}' but what is expected is a file extension.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, fileExtension);
+                throw new CakeException(message);
+            }
+
+            var installer = GetInstaller(package, PackageType.Unspecified);
 
             if (installer == null)
             {
@@ -189,7 +200,7 @@ namespace Cake.Core.Scripting
             }
 
             // Install the package type script.
-            IReadOnlyCollection<IFile> result = installer.Install(package, type, installPath);
+            IReadOnlyCollection<IFile> result = installer.Install(package, fileExtension, installPath);
             if (result.Count == 0)
             {
                 const string format = "Failed to install nuget script '{0}'.";

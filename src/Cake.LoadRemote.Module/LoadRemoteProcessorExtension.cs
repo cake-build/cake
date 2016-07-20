@@ -17,13 +17,14 @@ namespace Cake.LoadRemote.Module
         /// <summary>
         /// Initializes a new instance of the <see cref="LoadRemoteProcessorExtension"/> class.
         /// </summary>
+        /// <param name="cakeContext">The <see cref="ICakeContext"/>.</param>
         /// <param name="environment">The <see cref="ICakeEnvironment"/>.</param>
         /// <param name="cakeLog">The <see cref="ICakeLog"/>.</param>
         /// <param name="scriptProcessor">The <see cref="IScriptProcessor"/>.</param>
-        public LoadRemoteProcessorExtension(ICakeEnvironment environment, ICakeLog cakeLog, IScriptProcessor scriptProcessor) : base(environment, cakeLog, scriptProcessor)
+        public LoadRemoteProcessorExtension(ICakeContext cakeContext, ICakeEnvironment environment, ICakeLog cakeLog, IScriptProcessor scriptProcessor) : base(cakeContext, environment, cakeLog, scriptProcessor)
         {
             _processor = new LoadRemoteProcessor(this, environment);
-            ScriptRunnerExtension = new LoadRemoteScriptRunnerExtension(this, environment, cakeLog, scriptProcessor);
+            ScriptRunnerExtension = new LoadRemoteScriptRunnerExtension(this, cakeContext, environment, cakeLog, scriptProcessor);
         }
 
         public override bool Process(IScriptAnalyzerContext analyzer, string line, out string replacement)

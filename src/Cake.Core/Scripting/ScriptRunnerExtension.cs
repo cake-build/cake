@@ -13,35 +13,42 @@ namespace Cake.Core.Scripting
     public abstract class ScriptRunnerExtension : IScriptRunnerExtension
     {
         /// <summary>
-        /// Gets the <see cref="ICakeEnvironment"/>.
-        /// </summary>
-        public ICakeEnvironment Environment { get; private set; }
-
-        /// <summary>
-        /// Gets the <see cref="ICakeLog"/>
-        /// </summary>
-        public ICakeLog Log { get; private set; }
-
-        /// <summary>
         /// Gets the <see cref="IProcessorExtension"/>.
         /// </summary>
         public IProcessorExtension ProcessorExtension { get; private set; }
 
         /// <summary>
+        /// Gets the <see cref="ICakeContext"/>.
+        /// </summary>
+        public ICakeContext CakeContext { get; private set; }
+
+        /// <summary>
+        /// Gets the <see cref="ICakeEnvironment"/>.
+        /// </summary>
+        public ICakeEnvironment Environment { get; private set; }
+
+        /// <summary>
+        /// Gets the <see cref="ICakeLog"/>.
+        /// </summary>
+        public ICakeLog Log { get; private set; }
+        
+        /// <summary>
         /// Gets the <see cref="IScriptProcessor"/>.
         /// </summary>
         public IScriptProcessor ScriptProcessor { get; private set; }
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptRunnerExtension" /> class.
         /// </summary>
         /// <param name="processorExtension">The <see cref="IProcessorExtension"/> used by this <see cref="IScriptRunnerExtension"/>.</param>
+        /// <param name="cakeContext">The <see cref="ICakeContext"/>.</param>
         /// <param name="environment">The <see cref="ICakeEnvironment"/>.</param>
         /// <param name="cakeLog">The <see cref="ICakeLog"/>.</param>
         /// <param name="scriptProcessor">The <see cref="IScriptProcessor"/>.</param>
-        protected ScriptRunnerExtension(IProcessorExtension processorExtension, ICakeEnvironment environment, ICakeLog cakeLog, IScriptProcessor scriptProcessor)
+        protected ScriptRunnerExtension(IProcessorExtension processorExtension, ICakeContext cakeContext, ICakeEnvironment environment, ICakeLog cakeLog, IScriptProcessor scriptProcessor)
         {
             ProcessorExtension = processorExtension;
+            CakeContext = cakeContext;
             Environment = environment;
             Log = cakeLog;
             ScriptProcessor = scriptProcessor;

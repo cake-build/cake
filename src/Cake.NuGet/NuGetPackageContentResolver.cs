@@ -3,8 +3,9 @@
 // See the LICENSE file in the project root for more information.
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Globalization;
 using System.Linq;
+using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
 
@@ -56,46 +57,43 @@ namespace Cake.NuGet
                 }
                 return result;
             }
-            if (type == PackageType.NugetScript)
-            {
-                var result = new List<IFile>();
-                var toolDirectory = _fileSystem.GetDirectory(path);
-                if (toolDirectory.Exists)
-                {
-                    var loadOrder = new List<string>();
-
-                    // Check if there is a load.text file
-                    var loadFile = toolDirectory.GetFiles("load.txt", SearchScope.Recursive).FirstOrDefault();
-                    if (loadFile != null)
-                    {
-                        using (var reader = new StreamReader(loadFile.Open(FileMode.Open, FileAccess.Read)))
-                        {
-                            string line;
-                            while ((line = reader.ReadLine()) != null)
-                            {
-                                loadOrder.Add(line);
-                            }
-                        }
-                    }
-                    if (loadOrder.Any())
-                    {
-                        // We do a revers as the first item in the list represents the last item in the scripts result.
-                        foreach (var name in loadOrder)
-                        {
-                            var file = toolDirectory.GetFiles(name, SearchScope.Recursive).First();
-                            result.Add(file);
-                        }
-                    }
-                    else
-                    {
-                        // add cake Files
-                        var files = toolDirectory.GetFiles("*.cake", SearchScope.Recursive);
-                        result.AddRange(files);
-                    }
-                }
-                return result;
-            }
             throw new InvalidOperationException("Unknown resource type.");
+        }
+
+        /// <summary>
+        /// Gets the relevant files for a NuGet package
+        /// given a path and a resource type defined with <paramref name="fileExtension"/>.
+        /// </summary>
+        /// <param name="path">The path to search.</param>
+        /// <param name="fileExtension">The file extension ex: .cake</param>
+        /// <returns>A collection of files.</returns>
+        public IReadOnlyCollection<IFile> GetFiles(DirectoryPath path, string fileExtension)
+        {
+            if (fileExtension == null)
+            {
+                throw new ArgumentNullException("fileExtension");
+            }
+            if (!System.IO.Path.HasExtension(fileExtension))
+            {
+                const string format = "The string parameter 'fileExtension' value is '{0}' but what is expected is a file extension.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, fileExtension);
+                throw new CakeException(message);
+            }
+
+            fileExtension = System.IO.Path.GetExtension(fileExtension);
+            if (!fileExtension.StartsWith("*"))
+            {
+                fileExtension = "*" + fileExtension;
+            }
+
+            var result = new List<IFile>();
+            var directory = _fileSystem.GetDirectory(path);
+            if (directory.Exists)
+            {
+                var files = directory.GetFiles(fileExtension, SearchScope.Recursive);
+                result.AddRange(files);
+            }
+            return result;
         }
     }
 }

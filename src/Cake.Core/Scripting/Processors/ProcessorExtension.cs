@@ -10,6 +10,11 @@ namespace Cake.Core.Scripting.Processors
     public abstract class ProcessorExtension : IProcessorExtension
     {
         /// <summary>
+        /// Gets the <see cref="ICakeContext"/>.
+        /// </summary>
+        public ICakeContext CakeContext { get; private set; }
+
+        /// <summary>
         /// Gets the <see cref="ICakeEnvironment"/>.
         /// </summary>
         public ICakeEnvironment Environment { get; private set; }
@@ -27,11 +32,13 @@ namespace Cake.Core.Scripting.Processors
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessorExtension" /> class.
         /// </summary>
+        /// <param name="cakeContext">The <see cref="ICakeContext"/>.</param>
         /// <param name="environment">The <see cref="ICakeEnvironment"/>.</param>
         /// <param name="cakeLog">The <see cref="ICakeLog"/>.</param>
         /// <param name="scriptProcessor">The <see cref="IScriptProcessor"/>.</param>
-        protected ProcessorExtension(ICakeEnvironment environment, ICakeLog cakeLog, IScriptProcessor scriptProcessor)
+        protected ProcessorExtension(ICakeContext cakeContext, ICakeEnvironment environment, ICakeLog cakeLog, IScriptProcessor scriptProcessor)
         {
+            CakeContext = cakeContext;
             Environment = environment;
             Log = cakeLog;
             ScriptProcessor = scriptProcessor;

@@ -12,6 +12,7 @@ namespace Cake.Core.Scripting.Processors
     /// </summary>
     public sealed class ProcessorExtensionFinder : IProcessorExtensionFinder
     {
+        private readonly ICakeContext _cakeContext;
         private readonly ICakeLog _log;
         private readonly ICakeEnvironment _cakeEnvironment;
         private readonly IScriptProcessor _scriptProcessor;
@@ -19,11 +20,13 @@ namespace Cake.Core.Scripting.Processors
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessorExtensionFinder"/> class.
         /// </summary>
-        /// <param name="log">The log.</param>
+        /// <param name="cakeContext">The <see cref="ICakeContext"/>.</param>
+        /// <param name="log">The <see cref="ICakeLog"/>.</param>
         /// <param name="environment">The <see cref="ICakeEnvironment"/>.</param>
         /// <param name="scriptProcessor">The <see cref="IScriptProcessor"/>.</param>
-        public ProcessorExtensionFinder(ICakeLog log, ICakeEnvironment environment, IScriptProcessor scriptProcessor)
+        public ProcessorExtensionFinder(ICakeContext cakeContext, ICakeLog log, ICakeEnvironment environment, IScriptProcessor scriptProcessor)
         {
+            _cakeContext = cakeContext;
             _log = log;
             _cakeEnvironment = environment;
             _scriptProcessor = scriptProcessor;
@@ -48,7 +51,7 @@ namespace Cake.Core.Scripting.Processors
                             if (!type.IsAbstract && type.GetInterfaces().Contains(typeof(IProcessorExtension)))
                             {
                                 // Create a instance of the processor extension.
-                                var instance = (IProcessorExtension)Activator.CreateInstance(type, _cakeEnvironment, _log, _scriptProcessor);
+                                var instance = (IProcessorExtension)Activator.CreateInstance(type, _cakeContext, _cakeEnvironment, _log, _scriptProcessor);
                                 result.Add(instance);
                             }
                         }
