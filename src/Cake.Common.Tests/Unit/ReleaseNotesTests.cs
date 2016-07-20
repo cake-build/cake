@@ -14,7 +14,7 @@ namespace Cake.Common.Tests.Unit
             public void Should_Throw_If_Version_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => new ReleaseNotes(null, Enumerable.Empty<string>()));
+                var result = Record.Exception(() => new ReleaseNotes(null, Enumerable.Empty<string>(), null));
 
                 // Then
                 Assert.IsArgumentNullException(result, "version");
