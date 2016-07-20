@@ -75,7 +75,7 @@ namespace Cake.Common.Tools.XBuild
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        /// MSBuild("./src/Cake.sln", new XBuildSettings {
+        /// XBuild("./src/Cake.sln", new XBuildSettings {
         ///     Verbosity = Verbosity.Minimal,
         ///     ToolVersion = XBuildToolVersion.NET40,
         ///     Configuration = "Release"
