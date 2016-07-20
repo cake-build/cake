@@ -188,7 +188,7 @@ namespace Cake.Core.Scripting
                 throw new CakeException(message);
             }
 
-            // Install the nuget script.
+            // Install the package type script.
             IReadOnlyCollection<IFile> result = installer.Install(package, type, installPath);
             if (result.Count == 0)
             {
