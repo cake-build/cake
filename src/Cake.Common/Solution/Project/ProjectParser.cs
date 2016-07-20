@@ -81,8 +81,8 @@ namespace Cake.Common.Solution.Project
                      .Select(cfg => cfg.Value)
                      .FirstOrDefault()
                  let configPropertyGroups = project.Elements(ProjectXElement.PropertyGroup)
-                                            .Where(x => x.Elements(ProjectXElement.OutputPath) != null && x.Attribute("Condition") != null)
-                                            .Where(x => x.Attribute("Condition").Value.Contains(string.Format("== '{0}|{1}'", configuration, platform)))
+                                            .Where(x => x.Elements(ProjectXElement.OutputPath).Any() && x.Attribute("Condition") != null)
+                                            .Where(x => x.Attribute("Condition").Value.Contains(string.Concat("== '", configuration, "|", platform, "'")))
                  where !string.IsNullOrWhiteSpace(configuration)
                  select new
                  {
