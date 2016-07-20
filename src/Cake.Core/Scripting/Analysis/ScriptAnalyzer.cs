@@ -146,10 +146,20 @@ namespace Cake.Core.Scripting.Analysis
                 // only process lines that starts with a # tag.
                 if (line.Trim().StartsWith("#"))
                 {
+                    string alias = string.Empty;
+                    string value = string.Empty;
+
                     // Check if there is any processor extensions for this processor alias.
-                    var split = line.Split();
-                    var alias = split[0];
-                    var value = split[1];
+                    var tokens = line.SplitLine();
+                    if (tokens.Length >= 0)
+                    {
+                        alias = tokens[0];
+                    }
+                    if (tokens.Length > 1)
+                    {
+                        value = tokens[1];
+                    }
+
                     if (_processorExtensions.Where(p => p.CanProcessDirective(alias, value))
                                             .Any(p => p.Process(context, line, out replacement)))
                     {
