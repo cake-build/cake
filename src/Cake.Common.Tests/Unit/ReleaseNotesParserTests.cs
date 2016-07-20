@@ -144,6 +144,20 @@ namespace Cake.Common.Tests.Unit
                     Assert.Equal(1, result[0].Notes.Count);
                     Assert.Equal("Line 1", result[0].Notes[0]);
                 }
+
+                [Fact]
+                public void Should_Set_RawVersionLine_Property_To_Line_Containing_Version_Number()
+                {
+                    // Given
+                    var parser = new ReleaseNotesParser();
+                    const string content = "### New in 0.1.9-beta1 (Releases 2014/06/28)\nLine 1\n  \n\t\n";
+
+                    // When
+                    var result = parser.Parse(content);
+
+                    // Then
+                    Assert.Equal("### New in 0.1.9-beta1 (Releases 2014/06/28)", result[0].RawVersionLine);
+                }
             }
 
             public sealed class SimpleFormat
