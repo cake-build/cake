@@ -56,6 +56,12 @@ namespace Cake.Testing
         /// </value>
         public long Length { get; private set; }
 
+        /// <summary>
+        /// Gets the date and tiem the file was last modified.
+        /// </summary>
+        /// <value>The date and time the file was last modified.</value>
+        public DateTimeOffset LastModified { get; private set; }
+
         internal object ContentLock
         {
             get { return _contentLock; }

@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
+using System;
 using System.IO;
 
 namespace Cake.Core.IO
@@ -21,6 +23,12 @@ namespace Cake.Core.IO
         /// </summary>
         /// <value>The length of the file.</value>
         long Length { get; }
+
+        /// <summary>
+        /// Gets the date and time the file was last modified.
+        /// </summary>
+        /// <value>The date and time the file was last modified.</value>
+        DateTimeOffset LastModified { get; }
 
         /// <summary>
         /// Copies the file to the specified destination path.
