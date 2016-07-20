@@ -1193,5 +1193,66 @@ namespace Cake.Common.Tests.Unit.IO
                 Assert.Equal(result, 4);
             }
         }
+
+        public sealed class TheFileLastModifiedMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => FileAliases.FileLastModified(null, "some file"));
+
+                // Then
+                Assert.IsArgumentNullException(result, "context");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Path_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+
+                // When
+                var result = Record.Exception(() => FileAliases.FileLastModified(context, null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "filePath");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Directory_Does_Not_Exist()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
+                context.FileSystem.Returns(fileSystem);
+                context.Environment.Returns(environment);
+
+                // When / Then
+                Assert.Throws<FileNotFoundException>(() => FileAliases.FileLastModified(context, "non-existent-file.txt"));
+            }
+
+            [Theory]
+            [InlineData("/Working", "/Working/some file.txt")]
+            [InlineData("/Working/target", "/Working/target/some file.txt")]
+            public void Should_Return_LastModified_If_Path_Exist(string workingDirectory, string filePath)
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                environment.WorkingDirectory = workingDirectory;
+                var fileSystem = new FakeFileSystem(environment);
+                var fakeFile = fileSystem.CreateFile(filePath, new byte[] { 1, 2, 3, 4 });
+                context.FileSystem.Returns(fileSystem);
+                context.Environment.Returns(environment);
+
+                // When
+                var result = FileAliases.FileLastModified(context, filePath);
+
+                // Then
+                Assert.Equal(result, fakeFile.LastModified);
+            }
+        }
     }
 }

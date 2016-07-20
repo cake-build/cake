@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Cake.Core.IO
 {
@@ -34,6 +35,11 @@ namespace Cake.Core.IO
         public long Length
         {
             get { return _file.Length; }
+        }
+
+        public DateTimeOffset LastModified
+        {
+            get { return _file.LastWriteTime; }
         }
 
         public File(FilePath path)
