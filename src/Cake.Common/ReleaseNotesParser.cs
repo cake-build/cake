@@ -76,6 +76,7 @@ namespace Cake.Common
 
                 // Create release notes.
                 var version = Version.Parse(versionResult.Value);
+                var rawVersionLine = lines[lineIndex];
 
                 // Increase the line index.
                 lineIndex++;
@@ -104,7 +105,7 @@ namespace Cake.Common
                     lineIndex++;
                 }
 
-                result.Add(new ReleaseNotes(version, notes));
+                result.Add(new ReleaseNotes(version, notes, rawVersionLine));
             }
 
             return result.OrderByDescending(x => x.Version).ToArray();
@@ -143,7 +144,7 @@ namespace Cake.Common
                 line = line.Substring(versionResult.Length).Trim('-', ' ');
 
                 // Add the release notes to the result.
-                result.Add(new ReleaseNotes(version, new[] { line }));
+                result.Add(new ReleaseNotes(version, new[] { line }, line));
 
                 lineIndex++;
             }
