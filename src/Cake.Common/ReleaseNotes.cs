@@ -14,6 +14,7 @@ namespace Cake.Common
     {
         private readonly Version _version;
         private readonly List<string> _notes;
+        private readonly string _rawVersionLine;
 
         /// <summary>
         /// Gets the version.
@@ -34,17 +35,28 @@ namespace Cake.Common
         }
 
         /// <summary>
+        /// Gets the raw text of the line that <see cref="Version"/> was extracted from.
+        /// </summary>
+        /// <value>The raw text of the Version line.</value>
+        public string RawVersionLine
+        {
+            get { return _rawVersionLine; }
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ReleaseNotes"/> class.
         /// </summary>
         /// <param name="version">The version.</param>
         /// <param name="notes">The notes.</param>
-        public ReleaseNotes(Version version, IEnumerable<string> notes)
+        /// <param name="rawVersionLine">The raw text of the version line.</param>
+        public ReleaseNotes(Version version, IEnumerable<string> notes, string rawVersionLine)
         {
             if (version == null)
             {
                 throw new ArgumentNullException("version");
             }
             _version = version;
+            _rawVersionLine = rawVersionLine;
             _notes = new List<string>(notes ?? Enumerable.Empty<string>());
         }
     }
