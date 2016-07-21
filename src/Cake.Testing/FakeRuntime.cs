@@ -1,4 +1,5 @@
-﻿using System.Runtime.Versioning;
+﻿using System;
+using System.Runtime.Versioning;
 using Cake.Core;
 
 namespace Cake.Testing
@@ -14,11 +15,17 @@ namespace Cake.Testing
         public FrameworkName TargetFramework { get; set; }
 
         /// <summary>
+        /// Gets the version of Cake executing the script.
+        /// </summary>
+        public Version CakeVersion { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="FakeRuntime"/> class.
         /// </summary>
         public FakeRuntime()
         {
             TargetFramework = new FrameworkName(".NETFramework,Version=v4.5");
+            CakeVersion = typeof(ICakeRuntime).Assembly.GetName().Version;
         }
     }
 }

@@ -17,6 +17,11 @@ namespace Cake.Core
         public FrameworkName TargetFramework { get; private set; }
 
         /// <summary>
+        /// Gets the version of Cake executing the script.
+        /// </summary>
+        public Version CakeVersion { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CakeRuntime"/> class.
         /// </summary>
         public CakeRuntime()
@@ -26,6 +31,7 @@ namespace Cake.Core
             // that this actually is what happens on Mono.
             var frameworkName = AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName;
             TargetFramework = new FrameworkName(frameworkName ?? ".NETFramework,Version=v4.5");
+            CakeVersion = typeof(ICakeRuntime).Assembly.GetName().Version;
         }
     }
 }

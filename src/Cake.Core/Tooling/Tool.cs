@@ -205,6 +205,10 @@ namespace Cake.Core.Tooling
             {
                 info.WorkingDirectory = workingDirectory.MakeAbsolute(_environment).FullPath;
             }
+            if (info.EnvironmentVariables == null)
+            {
+                info.EnvironmentVariables = GetEnvironmentVariables(settings);
+            }
 
             // Run the process.
             var process = _processRunner.Start(toolPath, info);
@@ -252,6 +256,16 @@ namespace Cake.Core.Tooling
         protected virtual IEnumerable<FilePath> GetAlternativeToolPaths(TSettings settings)
         {
             return Enumerable.Empty<FilePath>();
+        }
+
+        /// <summary>
+        /// Gets the environment variables.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The environment variables for the tool.</returns>
+        protected virtual IDictionary<string, string> GetEnvironmentVariables(TSettings settings)
+        {
+            return settings.EnvironmentVariables;
         }
 
         private FilePath GetToolPath(TSettings settings)
