@@ -47,6 +47,12 @@ namespace Cake.Core
             {
                 return type.Name;
             }
+
+            if (type.IsArray)
+            {
+                return type.GetElementType().GetFullName(includeNamespace) + "[]";
+            }
+
             Type genericType;
             return type.IsGenericType(out genericType)
                 ? GetGenericTypeName(genericType, includeNamespace)
