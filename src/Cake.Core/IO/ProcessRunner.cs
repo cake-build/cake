@@ -78,6 +78,17 @@ namespace Cake.Core.IO
                 RedirectStandardOutput = settings.RedirectStandardOutput
             };
 
+            // Add environment variables
+            info.EnvironmentVariables["CAKE"] = "True";
+            info.EnvironmentVariables["CAKE_VERSION"] = _environment.Runtime.CakeVersion.ToString(3);
+            if (settings.EnvironmentVariables != null)
+            {
+                foreach (var environmentVariable in settings.EnvironmentVariables)
+                {
+                    info.EnvironmentVariables[environmentVariable.Key] = environmentVariable.Value;
+                }
+            }
+
             // Start and return the process.
             var process = Process.Start(info);
 

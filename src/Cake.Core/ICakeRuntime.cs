@@ -1,6 +1,8 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
+using System;
 using System.Runtime.Versioning;
 
 namespace Cake.Core
@@ -15,5 +17,11 @@ namespace Cake.Core
         /// </summary>
         /// <returns>The target framework.</returns>
         FrameworkName TargetFramework { get; }
+
+        /// <summary>
+        /// Gets the version of Cake executing the script.
+        /// </summary>
+        /// <returns>The Cake.exe version.</returns>
+        Version CakeVersion { get; }
     }
 }
