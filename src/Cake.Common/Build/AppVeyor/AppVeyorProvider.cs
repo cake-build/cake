@@ -4,8 +4,10 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using Cake.Common.Build.AppVeyor.Data;
+using Cake.Common.Net;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -117,12 +119,11 @@ namespace Cake.Common.Build.AppVeyor
                 throw new CakeException("Failed to get AppVeyor API url.");
             }
 
-            var url = string.Format(CultureInfo.InvariantCulture, "{0}/api/testresults/{1}/{2}", baseUri, resultsType, Environment.JobId);
+            var url = new Uri(string.Format(CultureInfo.InvariantCulture, "{0}/api/testresults/{1}/{2}", baseUri, resultsType, Environment.JobId));
 
-            using (var stream = File.OpenRead(path.FullPath))
             using (var client = new HttpClient())
             {
-                client.PostAsync(url, new StreamContent(stream)).Wait();
+                client.UploadFileAsync(url, path.FullPath).Wait();
             }
         }
 
