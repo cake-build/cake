@@ -108,6 +108,7 @@ So you’re thinking about contributing to Cake? Great! It’s **really** apprec
 Make sure you've read the [contribution guidelines](http://cakebuild.net/contribute/contribution-guidelines/) before sending that epic pull request.
 
 * Fork the repository.
+* Create a branch to work in.
 * Make your feature addition or bug fix.
 * Don't forget the unit tests.
 * Send a pull request.
