@@ -130,5 +130,119 @@ namespace Cake.Common.Net
 
             context.Log.Verbose("Download complete, saved to: {0}", outputPath.FullPath);
         }
+
+        /// <summary>
+        /// Uploads the specified file via a HTTP POST to the specified uri using multipart/form-data.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var address = new Uri("http://www.example.org/upload");
+        /// UploadFile(address, @"path/to/file.txt");
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="address">The URL of the upload resource.</param>
+        /// <param name="filePath">The file to upload.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Upload")]
+        public static void UploadFile(this ICakeContext context, Uri address, FilePath filePath)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            if (address == null)
+            {
+                throw new ArgumentNullException("address");
+            }
+            if (filePath == null)
+            {
+                throw new ArgumentNullException("filePath");
+            }
+
+            context.Log.Verbose("Uploading file: {0}", address);
+            using (var client = new HttpClient())
+            {
+                client.UploadFileAsync(address, filePath.FullPath).Wait();
+            }
+            context.Log.Verbose("File upload complete");
+        }
+
+        /// <summary>
+        /// Uploads the specified file via a HTTP POST to the specified uri using multipart/form-data.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var address = "http://www.example.org/upload";
+        /// UploadFile(address, @"path/to/file.txt");
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="address">The URL of the upload resource.</param>
+        /// <param name="filePath">The file to upload.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Upload")]
+        public static void UploadFile(this ICakeContext context, string address, FilePath filePath)
+        {
+            UploadFile(context, new Uri(address), filePath);
+        }
+
+        /// <summary>
+        /// Uploads the specified byte array via a HTTP POST to the specified uri using multipart/form-data.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var address = new Uri("http://www.example.org/upload");
+        /// UploadFile(address, @"path/to/file.txt");
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="address">The URL of the upload resource.</param>
+        /// <param name="data">The data to upload.</param>
+        /// <param name="fileName">The filename to give the uploaded data</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Upload")]
+        public static void UploadFile(this ICakeContext context, Uri address, byte[] data, string fileName)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            if (address == null)
+            {
+                throw new ArgumentNullException("address");
+            }
+            if (data == null)
+            {
+                throw new ArgumentNullException("data");
+            }
+
+            context.Log.Verbose("Uploading file: {0}", address);
+            using (var client = new HttpClient())
+            {
+                client.UploadFileAsync(address, data, fileName).Wait();
+            }
+            context.Log.Verbose("File upload complete");
+        }
+
+        /// <summary>
+        /// Uploads the specified byte array via a HTTP POST to the specified uri using multipart/form-data.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var address = "http://www.example.org/upload";
+        /// UploadFile(address, @"path/to/file.txt");
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="address">The URL of the upload resource.</param>
+        /// <param name="data">The data to upload.</param>
+        /// <param name="fileName">The filename to give the uploaded data</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Upload")]
+        public static void UploadFile(this ICakeContext context, string address, byte[] data, string fileName)
+        {
+            UploadFile(context, new Uri(address), data, fileName);
+        }
     }
 }
