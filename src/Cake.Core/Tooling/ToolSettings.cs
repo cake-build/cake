@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 using System;
+using System.Collections.Generic;
 using Cake.Core.IO;
 
 namespace Cake.Core.Tooling
@@ -52,5 +53,18 @@ namespace Cake.Core.Tooling
         /// </example>
         /// <value>The delegate used to customize the <see cref="Cake.Core.IO.ProcessArgumentBuilder" />.</value>
         public Func<ProcessArgumentBuilder, ProcessArgumentBuilder> ArgumentCustomization { get; set; }
+
+        /// <summary>
+        /// Gets or sets search paths for files, directories for temporary files, application-specific options, and other similar information.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// MSBuild("./src/Cake.sln", new MSBuildSettings {
+        ///     EnvironmentVariables = new Dictionary&lt;string, string&gt;{
+        ///         { "TOOLSPATH", MakeAbsolute(Directory("./tools")).FullPath }
+        ///     }});
+        /// </code>
+        /// </example>
+        public IDictionary<string, string> EnvironmentVariables { get; set; }
     }
 }
