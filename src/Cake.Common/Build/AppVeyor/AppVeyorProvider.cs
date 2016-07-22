@@ -70,6 +70,16 @@ namespace Cake.Common.Build.AppVeyor
         /// <param name="path">The file path of the artifact to upload.</param>
         public void UploadArtifact(FilePath path)
         {
+            UploadArtifact(path, settings => settings.SetArtifactType(AppVeyorUploadArtifactType.Auto));
+        }
+
+        /// <summary>
+        /// Uploads an AppVeyor artifact.
+        /// </summary>
+        /// <param name="path">The file path of the artifact to upload.</param>
+        /// <param name="settings">The settings to apply when uploading an artifact</param>
+        public void UploadArtifact(FilePath path, AppVeyorUploadArtifactsSettings settings)
+        {
             if (path == null)
             {
                 throw new ArgumentNullException("path");
@@ -90,9 +100,32 @@ namespace Cake.Common.Build.AppVeyor
             arguments.AppendQuoted(path.FullPath);
             arguments.Append("-FileName");
             arguments.AppendQuoted(path.GetFilename().FullPath);
+            arguments.Append("-ArtifactType");
+            arguments.AppendQuoted(settings.ArtifactType.ToString());
+            if (!string.IsNullOrEmpty(settings.DeploymentName))
+            {
+                if (settings.DeploymentName.Contains(" "))
+                {
+                    throw new CakeException("The deployment name can not contain spaces");
+                }
+                arguments.Append("-DeploymentName");
+                arguments.AppendQuoted(settings.DeploymentName);
+            }
 
             // Start the process.
             _processRunner.Start("appveyor", new ProcessSettings { Arguments = arguments });
+        }
+
+        /// <summary>
+        /// Uploads an AppVeyor artifact.
+        /// </summary>
+        /// <param name="path">The file path of the artifact to upload.</param>
+        /// <param name="settingsAction">The settings to apply when uploading an artifact</param>
+        public void UploadArtifact(FilePath path, Action<AppVeyorUploadArtifactsSettings> settingsAction)
+        {
+            var settings = new AppVeyorUploadArtifactsSettings();
+            settingsAction(settings);
+            UploadArtifact(path, settings);
         }
 
         /// <summary>

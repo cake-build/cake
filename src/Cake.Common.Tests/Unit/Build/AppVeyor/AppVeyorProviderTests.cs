@@ -105,6 +105,20 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
             }
 
             [Fact]
+            public void Should_Throw_If_Path_Is_Null_WithSettings()
+            {
+                // Given
+                var fixture = new AppVeyorFixture();
+                var appVeyor = fixture.CreateAppVeyorService();
+
+                // When
+                var result = Record.Exception(() => appVeyor.UploadArtifact(null, settings => settings.SetArtifactType(AppVeyorUploadArtifactType.Auto)));
+
+                // Then
+                Assert.IsArgumentNullException(result, "path");
+            }
+
+            [Fact]
             public void Should_Throw_If_Not_Running_On_AppVeyor()
             {
                 // Given
@@ -134,8 +148,64 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Is<FilePath>(p => p.FullPath == "appveyor"),
                     Arg.Is<ProcessSettings>(p => p.Arguments.Render()
-                        == "PushArtifact -Path \"/Working/file.zip\" -FileName \"file.zip\""));
+                        == "PushArtifact -Path \"/Working/file.zip\" -FileName \"file.zip\" -ArtifactType \"Auto\""));
             }
+
+            [Theory]
+            [InlineData(AppVeyorUploadArtifactType.Auto, "Auto")]
+            [InlineData(AppVeyorUploadArtifactType.WebDeployPackage, "WebDeployPackage")]
+            [InlineData(AppVeyorUploadArtifactType.NuGetPackage, "NuGetPackage")]
+            public void Should_Upload_Artifact_For_ArtifactType(AppVeyorUploadArtifactType type, string arg)
+            {
+                // Given
+                var fixture = new AppVeyorFixture();
+                fixture.IsRunningOnAppVeyor();
+                var appVeyor = fixture.CreateAppVeyorService();
+
+                // When
+                appVeyor.UploadArtifact("./file.zip", settings => settings.SetArtifactType(type));
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == "appveyor"),
+                    Arg.Is<ProcessSettings>(p => p.Arguments.Render()
+                        == string.Format("PushArtifact -Path \"/Working/file.zip\" -FileName \"file.zip\" -ArtifactType \"{0}\"", arg)));
+            }
+
+            [Fact]
+            public void Should_Upload_Artifact_For_DeploymentName()
+            {
+                // Given
+                var fixture = new AppVeyorFixture();
+                fixture.IsRunningOnAppVeyor();
+                var appVeyor = fixture.CreateAppVeyorService();
+
+                // When
+                appVeyor.UploadArtifact("./file.zip", settings => settings.SetDeploymentName("MyApp.Web"));
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == "appveyor"),
+                    Arg.Is<ProcessSettings>(p => p.Arguments.Render()
+                        == "PushArtifact -Path \"/Working/file.zip\" -FileName \"file.zip\" -ArtifactType \"Auto\" -DeploymentName \"MyApp.Web\""));
+            }
+
+            [Fact]
+            public void Should_Upload_Artifact_Throw_Exception_For_DeploymentName_Containing_Spaces()
+            {
+                // Given
+                var fixture = new AppVeyorFixture();
+                fixture.IsRunningOnAppVeyor();
+                var appVeyor = fixture.CreateAppVeyorService();
+
+                // When
+                var result = Record.Exception(() => appVeyor.UploadArtifact("./file.zip", settings => settings.SetDeploymentName("MyApp Web")));
+
+                // Then
+                Assert.IsCakeException(result, "The deployment name can not contain spaces");
+            }
+
+
         }
 
         public sealed class TheUpdateBuildVersionMethod
