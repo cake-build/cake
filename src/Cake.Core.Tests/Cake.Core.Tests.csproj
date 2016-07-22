@@ -83,6 +83,7 @@
     <Compile Include="Unit\CakeContextTests.cs" />
     <Compile Include="Unit\CakeEngineTests.cs" />
     <Compile Include="Unit\CakeReportTests.cs" />
+    <Compile Include="Unit\CakeRuntimeTests.cs" />
     <Compile Include="Unit\CakeTaskBuilderExtensionsTests.cs" />
     <Compile Include="Unit\CakeTaskBuilderTests.cs" />
     <Compile Include="Unit\CakeTaskExtensionsTests.cs" />

@@ -15,5 +15,13 @@ namespace Cake.Core
         /// </summary>
         /// <returns>The target framework.</returns>
         FrameworkName TargetFramework { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the current execution is running in debug mode.
+        /// </summary>
+        /// <returns>
+        /// Whether or not the current execution is running in debug.
+        /// </returns>
+        bool IsDebug { get; }
     }
 }
