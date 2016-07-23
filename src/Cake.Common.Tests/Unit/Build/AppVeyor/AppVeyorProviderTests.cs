@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
+using System;
 using Cake.Common.Build.AppVeyor;
 using Cake.Common.Tests.Fixtures.Build;
 using Cake.Core;
@@ -231,6 +233,146 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 // Then
                 Assert.IsExceptionWithMessage<CakeException>(result,
                     "The current build is not running on AppVeyor.");
+            }
+        }
+
+        public sealed class TheAddMessageMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Message_Is_Null()
+            {
+                // Given
+                var fixture = new AppVeyorFixture();
+                var appVeyor = fixture.CreateAppVeyorService();
+
+                // When
+                var result = Record.Exception(() => appVeyor.AddMessage(null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "message");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Message_Is_Empty()
+            {
+                // Given
+                var fixture = new AppVeyorFixture();
+                var appVeyor = fixture.CreateAppVeyorService();
+
+                // When
+                var result = Record.Exception(() => appVeyor.AddMessage(""));
+
+                // Then
+                Assert.IsCakeException(result, "The message cannot be empty.");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Not_Running_On_AppVeyor()
+            {
+                // Given
+                var fixture = new AppVeyorFixture();
+                var appVeyor = fixture.CreateAppVeyorService();
+
+                // When
+                var result = Record.Exception(() => appVeyor.AddMessage("Hello world"));
+
+                // Then
+                Assert.IsExceptionWithMessage<CakeException>(result,
+                    "The current build is not running on AppVeyor.");
+            }
+
+            [Theory]
+            [InlineData("Hello world", AppVeyorMessageCategoryType.Information, null, "\"Hello world\" -Category \"Information\"")]
+            [InlineData("Hello world", AppVeyorMessageCategoryType.Warning, null, "\"Hello world\" -Category \"Warning\"")]
+            [InlineData("Hello world", AppVeyorMessageCategoryType.Error, null, "\"Hello world\" -Category \"Error\"")]
+            [InlineData("Hello world", AppVeyorMessageCategoryType.Error, "Details of message", "\"Hello world\" -Category \"Error\" -Details \"Details of message\"")]
+            public void Should_Add_Message(string message, AppVeyorMessageCategoryType category, string details, string args)
+            {
+                // Given
+                var fixture = new AppVeyorFixture();
+                fixture.IsRunningOnAppVeyor();
+                var appVeyor = fixture.CreateAppVeyorService();
+
+                // When
+                appVeyor.AddMessage(message, category, details);
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == "appveyor"),
+                    Arg.Is<ProcessSettings>(p => p.Arguments.Render() == string.Format("AddMessage {0}", args)));
+            }
+
+            [Fact]
+            public void Should_Add_InformationalMessage()
+            {
+                // Given
+                var fixture = new AppVeyorFixture();
+                fixture.IsRunningOnAppVeyor();
+                var appVeyor = fixture.CreateAppVeyorService();
+                const string message = "Hello world";
+
+                // When
+                appVeyor.AddInformationalMessage(message);
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == "appveyor"),
+                    Arg.Is<ProcessSettings>(p => p.Arguments.Render() == string.Format("AddMessage \"{0}\" -Category \"Information\"", message)));
+            }
+
+            [Fact]
+            public void Should_Add_WarningMessage()
+            {
+                // Given
+                var fixture = new AppVeyorFixture();
+                fixture.IsRunningOnAppVeyor();
+                var appVeyor = fixture.CreateAppVeyorService();
+                const string message = "Hello world";
+
+                // When
+                appVeyor.AddWarningMessage(message);
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == "appveyor"),
+                    Arg.Is<ProcessSettings>(p => p.Arguments.Render() == string.Format("AddMessage \"{0}\" -Category \"Warning\"", message)));
+            }
+
+            [Fact]
+            public void Should_Add_ErrorMessage()
+            {
+                // Given
+                var fixture = new AppVeyorFixture();
+                fixture.IsRunningOnAppVeyor();
+                var appVeyor = fixture.CreateAppVeyorService();
+                const string message = "Hello world";
+
+                // When
+                appVeyor.AddErrorMessage(message);
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == "appveyor"),
+                    Arg.Is<ProcessSettings>(p => p.Arguments.Render() == string.Format("AddMessage \"{0}\" -Category \"Error\"", message)));
+            }
+
+            [Fact]
+            public void Should_Add_ErrorMessageWithException()
+            {
+                // Given
+                var fixture = new AppVeyorFixture();
+                fixture.IsRunningOnAppVeyor();
+                var appVeyor = fixture.CreateAppVeyorService();
+                const string message = "Hello world";
+                var exception = new CakeException("This is an exception", new ArgumentException());
+
+                // When
+                appVeyor.AddErrorMessage(message, exception);
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(p => p.FullPath == "appveyor"),
+                    Arg.Is<ProcessSettings>(p => p.Arguments.Render() == string.Format("AddMessage \"{0}\" -Category \"Error\" -Details \"{1}\"", message, exception.ToString())));
             }
         }
     }

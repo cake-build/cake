@@ -155,5 +155,43 @@ namespace Cake.Common.Build.AppVeyor
             // Start the process.
             _processRunner.Start("appveyor", new ProcessSettings { Arguments = arguments });
         }
+
+        /// <summary>
+        /// Adds a message to the AppVeyor build.  Messages can be categorised as: Information, Warning or Error
+        /// </summary>
+        /// <param name="message">A short message to display</param>
+        /// <param name="category">The category of the message</param>
+        /// <param name="details">Additional message details</param>
+        public void AddMessage(string message, AppVeyorMessageCategoryType category = AppVeyorMessageCategoryType.Information, string details = null)
+        {
+            if (message == null)
+            {
+                throw new ArgumentNullException("message");
+            }
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                throw new CakeException("The message cannot be empty.");
+            }
+
+            if (!IsRunningOnAppVeyor)
+            {
+                throw new CakeException("The current build is not running on AppVeyor.");
+            }
+
+            // Build the arguments.
+            var arguments = new ProcessArgumentBuilder();
+            arguments.Append("AddMessage");
+            arguments.AppendQuoted(message);
+            arguments.Append("-Category");
+            arguments.AppendQuoted(category.ToString());
+            if (!string.IsNullOrWhiteSpace(details))
+            {
+                arguments.Append("-Details");
+                arguments.AppendQuoted(details);
+            }
+
+            // Start the process.
+            _processRunner.Start("appveyor", new ProcessSettings { Arguments = arguments });
+        }
     }
 }
