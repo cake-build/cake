@@ -184,6 +184,7 @@ namespace Cake.Common.Build.AppVeyor
             arguments.AppendQuoted(message);
             arguments.Append("-Category");
             arguments.AppendQuoted(category.ToString());
+
             if (!string.IsNullOrWhiteSpace(details))
             {
                 arguments.Append("-Details");

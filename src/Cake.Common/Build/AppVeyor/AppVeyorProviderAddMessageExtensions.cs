@@ -11,7 +11,7 @@ namespace Cake.Common.Build.AppVeyor
         /// Adds an informational message to the AppVeyor build log
         /// </summary>
         /// <param name="provider">The AppVeyor provider</param>
-        /// <param name="format">the message</param>
+        /// <param name="format">The message</param>
         /// <param name="args">The args</param>
         public static void AddInformationalMessage(this IAppVeyorProvider provider, string format, params object[] args)
         {
@@ -22,7 +22,7 @@ namespace Cake.Common.Build.AppVeyor
         /// Adds a warning message to the AppVeyor build log
         /// </summary>
         /// <param name="provider">The AppVeyor provider</param>
-        /// <param name="format">the message</param>
+        /// <param name="format">The message</param>
         /// <param name="args">The args</param>
         public static void AddWarningMessage(this IAppVeyorProvider provider, string format, params object[] args)
         {
@@ -33,7 +33,7 @@ namespace Cake.Common.Build.AppVeyor
         /// Adds a warning message to the AppVeyor build log
         /// </summary>
         /// <param name="provider">The AppVeyor provider</param>
-        /// <param name="format">the message</param>
+        /// <param name="format">The message</param>
         /// <param name="args">The args</param>
         public static void AddErrorMessage(this IAppVeyorProvider provider, string format, params object[] args)
         {
@@ -44,7 +44,7 @@ namespace Cake.Common.Build.AppVeyor
         /// Adds a warning message to the AppVeyor build log
         /// </summary>
         /// <param name="provider">The AppVeyor provider</param>
-        /// <param name="message">the message</param>
+        /// <param name="message">The message</param>
         /// <param name="exception">The exception</param>
         public static void AddErrorMessage(this IAppVeyorProvider provider, string message, Exception exception)
         {
