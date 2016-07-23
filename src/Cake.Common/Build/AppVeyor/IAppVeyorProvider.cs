@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using Cake.Common.Build.AppVeyor.Data;
 using Cake.Core.IO;
 
@@ -45,5 +46,13 @@ namespace Cake.Common.Build.AppVeyor
         /// </summary>
         /// <param name="version">The new build version.</param>
         void UpdateBuildVersion(string version);
+
+        /// <summary>
+        /// Adds a message to the AppVeyor build log.  Messages can be categorised as: Information, Warning or Error
+        /// </summary>
+        /// <param name="message">A short message to display</param>
+        /// <param name="category">The category of the message</param>
+        /// <param name="details">Additional message details</param>
+        void AddMessage(string message, AppVeyorMessageCategoryType category = AppVeyorMessageCategoryType.Information, string details = null);
     }
 }
