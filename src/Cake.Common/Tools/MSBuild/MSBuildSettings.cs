@@ -60,9 +60,11 @@ namespace Cake.Common.Tools.MSBuild
 
         /// <summary>
         /// Gets or sets the maximum CPU count.
+        /// If this value is zero, MSBuild will use as many processes as
+        /// there are available CPUs to build the project.
         /// </summary>
         /// <value>The maximum CPU count.</value>
-        public int MaxCpuCount { get; set; }
+        public int? MaxCpuCount { get; set; }
 
         /// <summary>
         /// Gets or sets whether or not node reuse is used.
