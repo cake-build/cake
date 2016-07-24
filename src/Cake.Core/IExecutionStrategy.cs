@@ -21,8 +21,8 @@ namespace Cake.Core
         /// Performs the teardown.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="context">The context.</param>
-        void PerformTeardown(Action<ICakeContext> action, ICakeContext context);
+        /// <param name="teardownContext">The context.</param>
+        void PerformTeardown(Action<ITeardownContext> action, ITeardownContext teardownContext);
 
         /// <summary>
         /// Executes the specified task.
@@ -61,16 +61,14 @@ namespace Cake.Core
         /// Performs the specified setup action before each task is invoked.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="context">The context.</param>
-        /// <param name="setupContext">The setup context.</param>
-        void PerformTaskSetup(Action<ICakeContext, ITaskSetupContext> action, ICakeContext context, ITaskSetupContext setupContext);
+        /// <param name="taskSetupContext">The context.</param>
+        void PerformTaskSetup(Action<ITaskSetupContext> action, ITaskSetupContext taskSetupContext);
 
         /// <summary>
         /// Performs the specified teardown action after each task is invoked.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="context">The context.</param>
-        /// <param name="teardownContext">The teardown context.</param>
-        void PerformTaskTeardown(Action<ICakeContext, ITaskTeardownContext> action, ICakeContext context, ITaskTeardownContext teardownContext);
+        /// <param name="taskTeardownContext">The context.</param>
+        void PerformTaskTeardown(Action<ITaskTeardownContext> action, ITaskTeardownContext taskTeardownContext);
     }
 }

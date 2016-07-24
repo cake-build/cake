@@ -129,6 +129,7 @@
     <Compile Include="Unit\Scripting\ScriptTests.cs" />
     <Compile Include="Unit\TaskSetupContextTests.cs" />
     <Compile Include="Unit\TaskTeardownContextTests.cs" />
+    <Compile Include="Unit\TeardownContextTests.cs" />
     <Compile Include="Unit\Text\TextTransformationTemplateTests.cs" />
     <Compile Include="Unit\Tooling\ToolLocatorTests.cs" />
     <Compile Include="Unit\Tooling\ToolResolutionStrategyTests.cs" />

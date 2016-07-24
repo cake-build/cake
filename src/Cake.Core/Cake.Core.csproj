@@ -56,6 +56,7 @@
     <Compile Include="Annotations\CakeNamespaceImportAttribute.cs" />
     <Compile Include="Annotations\CakePropertyAliasAttribute.cs" />
     <Compile Include="Annotations\CakeModuleAttribute.cs" />
+    <Compile Include="CakeContextAdapter.cs" />
     <Compile Include="CakePlatform.cs" />
     <Compile Include="CakeRuntime.cs" />
     <Compile Include="Composition\ICakeContainerRegistry.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Diagnostics\Verbosity.cs" />
     <Compile Include="Extensions\CakePlatformExtensions.cs" />
     <Compile Include="ICakeRuntime.cs" />
+    <Compile Include="ITeardownContext.cs" />
     <Compile Include="PlatformFamily.cs" />
     <Compile Include="Extensions\ConsoleExtensions.cs" />
     <Compile Include="Extensions\DirectoryExtensions.cs" />
@@ -221,6 +223,7 @@
     <Compile Include="Scripting\ScriptRunner.cs" />
     <Compile Include="TaskSetupContext.cs" />
     <Compile Include="TaskTeardownContext.cs" />
+    <Compile Include="TeardownContext.cs" />
     <Compile Include="Text\ITextTransformationTemplate.cs" />
     <Compile Include="Text\TextTransformationTemplate.cs" />
     <Compile Include="Tooling\IToolRepository.cs" />

@@ -68,7 +68,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 // Given
                 var fixture = new ScriptHostFixture();
                 var host = fixture.CreateHost();
-                Action<ICakeContext, ITaskSetupContext> action = (context, setupContext) => { };
+                Action<ITaskSetupContext> action = context => { };
 
                 // When
                 host.TaskSetup(action);
@@ -86,7 +86,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 // Given
                 var fixture = new ScriptHostFixture();
                 var host = fixture.CreateHost();
-                Action<ICakeContext, ITaskTeardownContext> action = (context, setupContext) => { };
+                Action<ITaskTeardownContext> action = context => { };
 
                 // When
                 host.TaskTeardown(action);
