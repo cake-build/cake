@@ -12,29 +12,7 @@ namespace Xunit.Sdk
         /// Creates a new instance of the <see cref="NotNullException"/> class.
         /// </summary>
         public NotNullException()
-            : this(null)
-        {
-        }
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="NotNullException"/> class.
-        /// </summary>
-        /// <param name="userMessage">The user message to be displayed</param>
-        public NotNullException(string userMessage)
-            : base(CreateMessage(userMessage))
-        {
-        }
-
-        private static string CreateMessage(string userMessage)
-        {
-            string message = "Assert.NotNull() Failure.";
-
-            if (!string.IsNullOrWhiteSpace(userMessage))
-            {
-                message = string.Concat(userMessage, ". ", message);
-            }
-
-            return message;
-        }
+            : base("Assert.NotNull() Failure")
+        { }
     }
 }
