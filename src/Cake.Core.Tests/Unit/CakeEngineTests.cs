@@ -683,7 +683,7 @@ namespace Cake.Core.Tests.Unit
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
-                engine.RegisterTaskSetupAction((cc, sc) => result.Add("TASK_SETUP:" + sc.Task.Name));
+                engine.RegisterTaskSetupAction(context => result.Add("TASK_SETUP:" + context.Task.Name));
                 engine.RegisterTask("A").Does(() => result.Add("Executing A"));
                 engine.RegisterTask("B").Does(() => result.Add("Executing B")).IsDependentOn("A");
 
@@ -701,7 +701,7 @@ namespace Cake.Core.Tests.Unit
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
-                engine.RegisterTaskSetupAction((cc, sc) => { throw new Exception("fake exception"); });
+                engine.RegisterTaskSetupAction(context => { throw new Exception("fake exception"); });
                 engine.RegisterTask("A").Does(() => result.Add("Executing A"));
                 engine.RegisterTask("B").Does(() => result.Add("Executing B")).IsDependentOn("A");
 
@@ -722,8 +722,8 @@ namespace Cake.Core.Tests.Unit
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
-                engine.RegisterTaskSetupAction((cc, sc) => result.Add("TASK_SETUP:" + sc.Task.Name));
-                engine.RegisterTaskTeardownAction((cc, sc) => result.Add("TASK_TEARDOWN:" + sc.Task.Name));
+                engine.RegisterTaskSetupAction(context => result.Add("TASK_SETUP:" + context.Task.Name));
+                engine.RegisterTaskTeardownAction(context => result.Add("TASK_TEARDOWN:" + context.Task.Name));
                 engine.RegisterTask("A").Does(() => result.Add("Executing A"));
                 engine.RegisterTask("B").Does(() => result.Add("Executing B")).IsDependentOn("A");
 
@@ -741,8 +741,8 @@ namespace Cake.Core.Tests.Unit
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
-                engine.RegisterTaskSetupAction((cc, sc) => result.Add("TASK_SETUP:" + sc.Task.Name));
-                engine.RegisterTaskTeardownAction((cc, sc) => result.Add("TASK_TEARDOWN:" + sc.Task.Name));
+                engine.RegisterTaskSetupAction(context => result.Add("TASK_SETUP:" + context.Task.Name));
+                engine.RegisterTaskTeardownAction(context => result.Add("TASK_TEARDOWN:" + context.Task.Name));
                 engine.RegisterTask("A").Does(() => result.Add("Executing A"));
                 engine.RegisterTask("B").Does(() => result.Add("Executing B")).WithCriteria(() => false).IsDependentOn("A");
                 engine.RegisterTask("C").Does(() => result.Add("Executing C")).IsDependentOn("B");
@@ -772,8 +772,8 @@ namespace Cake.Core.Tests.Unit
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
-                engine.RegisterTaskSetupAction((cc, sc) => result.Add("TASK_SETUP:" + sc.Task.Name));
-                engine.RegisterTaskTeardownAction((cc, sc) => result.Add("TASK_TEARDOWN:" + sc.Task.Name));
+                engine.RegisterTaskSetupAction(context => result.Add("TASK_SETUP:" + context.Task.Name));
+                engine.RegisterTaskTeardownAction(context => result.Add("TASK_TEARDOWN:" + context.Task.Name));
                 engine.RegisterTask("A").Does(() =>
                 {
                     result.Add("FAILING (A)");
@@ -804,11 +804,11 @@ namespace Cake.Core.Tests.Unit
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
-                engine.RegisterTaskSetupAction((cc, sc) =>
+                engine.RegisterTaskSetupAction(context =>
                 {
                     throw new InvalidOperationException("Fail");
                 });
-                engine.RegisterTaskTeardownAction((cc, sc) => result.Add("TASK_TEARDOWN:" + sc.Task.Name));
+                engine.RegisterTaskTeardownAction(context => result.Add("TASK_TEARDOWN:" + context.Task.Name));
                 engine.RegisterTask("A").Does(() =>
                 {
                     result.Add("Executing A");
@@ -836,8 +836,8 @@ namespace Cake.Core.Tests.Unit
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
 
-                engine.RegisterTaskSetupAction((cc, sc) => { throw new InvalidOperationException("Task Setup: " + sc.Task.Name); });
-                engine.RegisterTaskTeardownAction((cc, tc) => { throw new InvalidOperationException("Task Teardown: " + tc.Task.Name); });
+                engine.RegisterTaskSetupAction(context => { throw new InvalidOperationException("Task Setup: " + context.Task.Name); });
+                engine.RegisterTaskTeardownAction(context => { throw new InvalidOperationException("Task Teardown: " + context.Task.Name); });
                 engine.RegisterTask("A").Does(() => { });
 
                 // When
@@ -857,7 +857,7 @@ namespace Cake.Core.Tests.Unit
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
 
-                engine.RegisterTaskTeardownAction((cc, tc) => { throw new InvalidOperationException("Task Teardown: " + tc.Task.Name); });
+                engine.RegisterTaskTeardownAction(context => { throw new InvalidOperationException("Task Teardown: " + context.Task.Name); });
                 engine.RegisterTask("A");
 
                 // When
@@ -877,8 +877,8 @@ namespace Cake.Core.Tests.Unit
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
 
-                engine.RegisterTaskSetupAction((cc, sc) => { throw new InvalidOperationException("Task Setup: " + sc.Task.Name); });
-                engine.RegisterTaskTeardownAction((cc, tc) => { throw new InvalidOperationException("Task Teardown: " + tc.Task.Name); });
+                engine.RegisterTaskSetupAction(context => { throw new InvalidOperationException("Task Setup: " + context.Task.Name); });
+                engine.RegisterTaskTeardownAction(context => { throw new InvalidOperationException("Task Teardown: " + context.Task.Name); });
                 engine.RegisterTask("A").Does(() => { });
 
                 // When
@@ -899,7 +899,7 @@ namespace Cake.Core.Tests.Unit
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
 
-                engine.RegisterTaskTeardownAction((cc, tc) => { throw new InvalidOperationException("Task Teardown: " + tc.Task.Name); });
+                engine.RegisterTaskTeardownAction(context => { throw new InvalidOperationException("Task Teardown: " + context.Task.Name); });
                 engine.RegisterTask("A").Does(() => { throw new InvalidOperationException("Task: A"); });
 
                 // When
@@ -919,7 +919,7 @@ namespace Cake.Core.Tests.Unit
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
 
-                engine.RegisterTaskTeardownAction((cc, tc) => { throw new InvalidOperationException("Task Teardown: " + tc.Task.Name); });
+                engine.RegisterTaskTeardownAction(context => { throw new InvalidOperationException("Task Teardown: " + context.Task.Name); });
                 engine.RegisterTask("A").Does(() => { throw new InvalidOperationException("Task: A"); });
 
                 // When
