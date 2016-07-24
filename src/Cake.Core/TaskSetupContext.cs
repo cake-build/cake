@@ -8,15 +8,17 @@ namespace Cake.Core
     /// <summary>
     /// Acts as a context providing info about a <see cref="CakeTask"/> before its invocation.
     /// </summary>
-    public sealed class TaskSetupContext : ITaskSetupContext
+    public sealed class TaskSetupContext : CakeContextAdapter, ITaskSetupContext
     {
         private readonly ICakeTaskInfo _task;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskSetupContext"/> class.
         /// </summary>
+        /// <param name="context">The Cake Context.</param>
         /// <param name="task">The task.</param>
-        public TaskSetupContext(ICakeTaskInfo task)
+        public TaskSetupContext(ICakeContext context, ICakeTaskInfo task)
+            : base(context)
         {
             if (task == null)
             {

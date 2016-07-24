@@ -26,7 +26,7 @@ namespace Cake.Scripting
         {
         }
 
-        public void PerformTeardown(Action<ICakeContext> action, ICakeContext context)
+        public void PerformTeardown(Action<ITeardownContext> action, ITeardownContext teardownContext)
         {
         }
 
@@ -55,11 +55,11 @@ namespace Cake.Scripting
         {
         }
 
-        public void PerformTaskSetup(Action<ICakeContext, ITaskSetupContext> action, ICakeContext context, ITaskSetupContext setupContext)
+        public void PerformTaskSetup(Action<ITaskSetupContext> action, ITaskSetupContext taskSetupContext)
         {
         }
 
-        public void PerformTaskTeardown(Action<ICakeContext, ITaskTeardownContext> action, ICakeContext context, ITaskTeardownContext teardownContext)
+        public void PerformTaskTeardown(Action<ITaskTeardownContext> action, ITaskTeardownContext taskTeardownContext)
         {
         }
     }

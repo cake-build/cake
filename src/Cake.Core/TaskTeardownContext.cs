@@ -8,7 +8,7 @@ namespace Cake.Core
     /// <summary>
     /// Acts as a context providing info about a <see cref="ICakeTaskInfo"/> following its invocation.
     /// </summary>
-    public sealed class TaskTeardownContext : ITaskTeardownContext
+    public sealed class TaskTeardownContext : CakeContextAdapter, ITaskTeardownContext
     {
         private readonly ICakeTaskInfo _task;
         private readonly TimeSpan _duration;
@@ -17,10 +17,12 @@ namespace Cake.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskTeardownContext"/> class.
         /// </summary>
+        /// <param name="context">The Cake Context.</param>
         /// <param name="task">The task.</param>
         /// <param name="duration">The duration of the task.</param>
         /// <param name="skipped">if set to <c>true</c>, the task was not executed.</param>
-        public TaskTeardownContext(ICakeTaskInfo task, TimeSpan duration, bool skipped)
+        public TaskTeardownContext(ICakeContext context, ICakeTaskInfo task, TimeSpan duration, bool skipped)
+            : base(context)
         {
             if (task == null)
             {
