@@ -1,8 +1,6 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
-
-using System;
 using System.Collections.Generic;
 using Cake.Common.Tools.WiX.Heat;
 using Cake.Core.IO;
@@ -18,7 +16,9 @@ namespace Cake.Common.Tests.Fixtures.Tools.WiX
 
         public FilePath OutputFile { get; set; }
 
-        public string HarvestType { get; set; }
+        public string HarvestTarget { get; set; }
+
+        public WiXHarvestType HarvestType { get; set; } 
 
         public HeatFixture()
             : base("heat.exe")
@@ -28,32 +28,31 @@ namespace Cake.Common.Tests.Fixtures.Tools.WiX
             ObjectFiles.Add(new FilePath("Cake.dll"));
             OutputFile = new FilePath("cake.wxs");
             Settings = new HeatSettings();
-            Settings.HarvestType = WiXHarvestType.Dir;
-            HarvestType = "Default Web Site";
+            HarvestType = WiXHarvestType.Dir;
+            HarvestTarget = "Default Web Site";
         }
 
         protected override void RunTool()
         {
             var tool = new HeatRunner(FileSystem, Environment, ProcessRunner, Tools);
 
-            switch (Settings.HarvestType)
+            switch (HarvestType)
             {
                 case WiXHarvestType.Dir:
-                    tool.Run(DirectoryPath, OutputFile, Settings);
+                    tool.Run(DirectoryPath, OutputFile, HarvestType, Settings);
                     break;
                 case WiXHarvestType.File:
                 case WiXHarvestType.Project:
                 case WiXHarvestType.Reg:
-                    tool.Run(ObjectFiles, OutputFile, Settings);
+                    tool.Run(ObjectFiles, OutputFile, HarvestType, Settings);
                     break;
                 case WiXHarvestType.Website:
                 case WiXHarvestType.Perf:
-                    tool.Run(HarvestType, OutputFile, Settings);
-                    break;
-                case null:
+                    tool.Run(HarvestTarget, OutputFile, HarvestType, Settings);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    tool.Run(DirectoryPath, OutputFile, HarvestType, Settings);
+                    break;
             }
         }
     }
