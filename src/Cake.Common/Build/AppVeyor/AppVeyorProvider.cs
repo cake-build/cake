@@ -84,6 +84,10 @@ namespace Cake.Common.Build.AppVeyor
             {
                 throw new ArgumentNullException("path");
             }
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
 
             if (!IsRunningOnAppVeyor)
             {
@@ -123,6 +127,11 @@ namespace Cake.Common.Build.AppVeyor
         /// <param name="settingsAction">The settings to apply when uploading an artifact</param>
         public void UploadArtifact(FilePath path, Action<AppVeyorUploadArtifactsSettings> settingsAction)
         {
+            if (settingsAction == null)
+            {
+                throw new ArgumentNullException("settingsAction");
+            }
+
             var settings = new AppVeyorUploadArtifactsSettings();
             settingsAction(settings);
             UploadArtifact(path, settings);
