@@ -61,7 +61,7 @@ namespace Cake.Common.Tools.SignTool
                 ? _environment.GetSpecialPath(SpecialPath.ProgramFilesX86)
                 : _environment.GetSpecialPath(SpecialPath.ProgramFiles);
 
-            // Get a list of the files we should check.
+            // Gets a list of the files we should check.
             var files = new List<FilePath>();
             if (_environment.Platform.Is64Bit)
             {

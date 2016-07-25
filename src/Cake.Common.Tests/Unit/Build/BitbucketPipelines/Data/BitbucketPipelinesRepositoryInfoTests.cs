@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build.BitbucketPipelines.Data
 {
-    public sealed class BitriseRepositoryInfoTests
+    public sealed class BitbucketPipelinesRepositoryInfoTests
     {
         public sealed class TheCommitProperty
         {
@@ -14,7 +14,7 @@ namespace Cake.Common.Tests.Unit.Build.BitbucketPipelines.Data
             public void Should_Return_Correct_Value()
             {
                 // Given
-                var info = new BitbucketPiplinesInfoFixture().CreateRepositoryInfo();
+                var info = new BitbucketPipelinesInfoFixture().CreateRepositoryInfo();
 
                 // When
                 var result = info.Commit;
@@ -30,7 +30,7 @@ namespace Cake.Common.Tests.Unit.Build.BitbucketPipelines.Data
             public void Should_Return_Correct_Value()
             {
                 // Given
-                var info = new BitbucketPiplinesInfoFixture().CreateRepositoryInfo();
+                var info = new BitbucketPipelinesInfoFixture().CreateRepositoryInfo();
 
                 // When
                 var result = info.RepoSlug;
@@ -46,7 +46,7 @@ namespace Cake.Common.Tests.Unit.Build.BitbucketPipelines.Data
             public void Should_Return_Correct_Value()
             {
                 // Given
-                var info = new BitbucketPiplinesInfoFixture().CreateRepositoryInfo();
+                var info = new BitbucketPipelinesInfoFixture().CreateRepositoryInfo();
 
                 // When
                 var result = info.RepoOwner;
@@ -62,7 +62,7 @@ namespace Cake.Common.Tests.Unit.Build.BitbucketPipelines.Data
             public void Should_Return_Correct_Value()
             {
                 // Given
-                var info = new BitbucketPiplinesInfoFixture().CreateRepositoryInfo();
+                var info = new BitbucketPipelinesInfoFixture().CreateRepositoryInfo();
 
                 // When
                 var result = info.Branch;
@@ -78,7 +78,7 @@ namespace Cake.Common.Tests.Unit.Build.BitbucketPipelines.Data
             public void Should_Return_Correct_Value()
             {
                 // Given
-                var info = new BitbucketPiplinesInfoFixture().CreateRepositoryInfo();
+                var info = new BitbucketPipelinesInfoFixture().CreateRepositoryInfo();
 
                 // When
                 var result = info.Tag;
