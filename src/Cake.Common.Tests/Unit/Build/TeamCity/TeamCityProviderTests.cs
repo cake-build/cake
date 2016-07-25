@@ -109,5 +109,23 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity
                     fixture.Log.AggregateLogMessages());
             }
         }
+
+        public sealed class TheSetParameterMethod
+        {
+            [Fact]
+            public void SetParameter_Should_Write_To_The_Log_Correctly()
+            {
+                // Given
+                var fixture = new TeamCityFixture();
+                var teamCity = fixture.CreateTeamCityService();
+                
+                // When
+                teamCity.SetParameter("internal.artifactVersion", "1.2.3.4");
+
+                // Then
+                Assert.Equal("##teamcity[setParameter name='internal.artifactVersion' value='1.2.3.4']" + Environment.NewLine, 
+                    fixture.Log.AggregateLogMessages());
+            }
+        }
     }
 }
