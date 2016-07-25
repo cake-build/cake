@@ -15,6 +15,11 @@ namespace Cake.Common.Tools.NuGet.Push
     /// </summary>
     public sealed class NuGetPusher : NuGetTool<NuGetPushSettings>
     {
+        /// <summary>
+        /// The default NuGet push source.
+        /// </summary>
+        public const string DefaultPushSource = "https://www.nuget.org/api/v2/package";
+
         private readonly ICakeEnvironment _environment;
 
         /// <summary>
@@ -73,12 +78,9 @@ namespace Cake.Common.Tools.NuGet.Push
                 builder.Append("-ConfigFile");
                 builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
             }
-
-            if (settings.Source != null)
-            {
-                builder.Append("-Source");
-                builder.AppendQuoted(settings.Source);
-            }
+            
+            builder.Append("-Source");
+            builder.AppendQuoted(settings.Source ?? DefaultPushSource);
 
             if (settings.Timeout != null)
             {
