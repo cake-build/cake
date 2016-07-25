@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 namespace Cake.Common.Build.AppVeyor
 {
@@ -15,7 +16,11 @@ namespace Cake.Common.Build.AppVeyor
         /// <param name="args">The args</param>
         public static void AddInformationalMessage(this IAppVeyorProvider provider, string format, params object[] args)
         {
-            provider.AddMessage(string.Format(format, args));
+            if (provider == null)
+            {
+                throw new ArgumentNullException("provider");
+            }
+            provider.AddMessage(string.Format(CultureInfo.InvariantCulture, format, args));
         }
 
         /// <summary>
@@ -26,7 +31,11 @@ namespace Cake.Common.Build.AppVeyor
         /// <param name="args">The args</param>
         public static void AddWarningMessage(this IAppVeyorProvider provider, string format, params object[] args)
         {
-            provider.AddMessage(string.Format(format, args), AppVeyorMessageCategoryType.Warning);
+            if (provider == null)
+            {
+                throw new ArgumentNullException("provider");
+            }
+            provider.AddMessage(string.Format(CultureInfo.InvariantCulture, format, args), AppVeyorMessageCategoryType.Warning);
         }
 
         /// <summary>
@@ -37,7 +46,11 @@ namespace Cake.Common.Build.AppVeyor
         /// <param name="args">The args</param>
         public static void AddErrorMessage(this IAppVeyorProvider provider, string format, params object[] args)
         {
-            provider.AddMessage(string.Format(format, args), AppVeyorMessageCategoryType.Error);
+            if (provider == null)
+            {
+                throw new ArgumentNullException("provider");
+            }
+            provider.AddMessage(string.Format(CultureInfo.InvariantCulture, format, args), AppVeyorMessageCategoryType.Error);
         }
 
         /// <summary>
@@ -48,7 +61,12 @@ namespace Cake.Common.Build.AppVeyor
         /// <param name="exception">The exception</param>
         public static void AddErrorMessage(this IAppVeyorProvider provider, string message, Exception exception)
         {
-            provider.AddMessage(message, AppVeyorMessageCategoryType.Error, exception.ToString());
+            if (provider == null)
+            {
+                throw new ArgumentNullException("provider");
+            }
+            provider.AddMessage(message, AppVeyorMessageCategoryType.Error,
+                exception == null ? null : exception.ToString());
         }
     }
 }
