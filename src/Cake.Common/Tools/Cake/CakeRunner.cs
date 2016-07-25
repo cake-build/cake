@@ -22,6 +22,7 @@ namespace Cake.Common.Tools.Cake
         private readonly ICakeEnvironment _environment;
         private readonly IFileSystem _fileSystem;
         private readonly IGlobber _globber;
+        private static readonly IEnumerable<FilePath> _executingAssemblyToolPaths = new FilePath[] { System.Reflection.Assembly.GetEntryAssembly().Location };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeRunner"/> class.
@@ -151,18 +152,18 @@ namespace Cake.Common.Tools.Cake
 
             if (!_environment.Platform.IsUnix())
             {
-                return Enumerable.Empty<FilePath>();
+                return _executingAssemblyToolPaths;
             }
 
             if (!_fileSystem.Exist(new DirectoryPath(homebrewCakePath)))
             {
-                return Enumerable.Empty<FilePath>();
+                return _executingAssemblyToolPaths;
             }
 
             var files = _globber.GetFiles(homebrewCakePath + "**/Cake.exe");
             var filePaths = files as FilePath[] ?? files.ToArray();
             return filePaths.Length == 0
-                ? Enumerable.Empty<FilePath>()
+                ? _executingAssemblyToolPaths
                 : filePaths.OrderByDescending(f => f.FullPath);
         }
     }
