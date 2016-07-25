@@ -42,8 +42,9 @@ namespace Cake.Common.Tools.WiX.Heat
         /// </summary>
         /// <param name="directoryPath">The directory path.</param>
         /// <param name="outputFile">The output file.</param>
+        /// <param name="harvestType">The WiX harvest type.</param>
         /// <param name="settings">The settings.</param>
-        public void Run(DirectoryPath directoryPath, FilePath outputFile, HeatSettings settings)
+        public void Run(DirectoryPath directoryPath, FilePath outputFile, WiXHarvestType harvestType, HeatSettings settings)
         {
             if (directoryPath == null)
             {
@@ -60,7 +61,7 @@ namespace Cake.Common.Tools.WiX.Heat
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetArguments(directoryPath, outputFile, settings));
+            Run(settings, GetArguments(directoryPath, outputFile, harvestType, settings));
         }
 
         /// <summary>
@@ -68,8 +69,9 @@ namespace Cake.Common.Tools.WiX.Heat
         /// </summary>
         /// <param name="objectFiles">The object files.</param>
         /// <param name="outputFile">The output file.</param>
+        /// <param name="harvestType">The WiX harvest type.</param>
         /// <param name="settings">The settings.</param>
-        public void Run(IEnumerable<FilePath> objectFiles, FilePath outputFile, HeatSettings settings)
+        public void Run(IEnumerable<FilePath> objectFiles, FilePath outputFile, WiXHarvestType harvestType, HeatSettings settings)
         {
             if (objectFiles == null)
             {
@@ -92,7 +94,7 @@ namespace Cake.Common.Tools.WiX.Heat
                 throw new ArgumentException("No object files provided.", "objectFiles");
             }
 
-            Run(settings, GetArguments(objectFilesArray, outputFile, settings));
+            Run(settings, GetArguments(objectFilesArray, outputFile, harvestType, settings));
         }
 
         /// <summary>
@@ -100,8 +102,9 @@ namespace Cake.Common.Tools.WiX.Heat
         /// </summary>
         /// <param name="harvestTarget">The harvest target.</param>
         /// <param name="outputFile">The output file.</param>
+        /// <param name="harvestType">The WiX harvest type.</param>
         /// <param name="settings">The settings.</param>
-        public void Run(string harvestTarget, FilePath outputFile, HeatSettings settings)
+        public void Run(string harvestTarget, FilePath outputFile, WiXHarvestType harvestType, HeatSettings settings)
         {
             if (harvestTarget == null)
             {
@@ -118,30 +121,14 @@ namespace Cake.Common.Tools.WiX.Heat
                 throw new ArgumentNullException("settings");
             }
 
-            Run(settings, GetArguments(harvestTarget, outputFile, settings));
+            Run(settings, GetArguments(harvestTarget, outputFile, harvestType, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(IEnumerable<FilePath> objectFiles, FilePath outputFile, HeatSettings settings)
+        private ProcessArgumentBuilder GetArguments(IEnumerable<FilePath> objectFiles, FilePath outputFile, WiXHarvestType harvestType, HeatSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
 
-            if (settings.HarvestType != null)
-            {
-                switch (settings.HarvestType)
-                {
-                    case WiXHarvestType.File:
-                        builder.Append("file");
-                        break;
-                    case WiXHarvestType.Project:
-                        builder.Append("project");
-                        break;
-                    case WiXHarvestType.Reg:
-                        builder.Append("reg");
-                        break;
-                    default:
-                        throw new ArgumentException("Incorrect harvest type for input.", "objectFiles");
-                }
-            }
+            builder.Append(GetHarvestType(harvestType));
 
             // Object files
             foreach (var objectFile in objectFiles.Select(file => file.MakeAbsolute(_environment).FullPath))
@@ -156,22 +143,11 @@ namespace Cake.Common.Tools.WiX.Heat
             return builder;
         }
 
-        private ProcessArgumentBuilder GetArguments(DirectoryPath directoryPath, FilePath outputFile, HeatSettings settings)
+        private ProcessArgumentBuilder GetArguments(DirectoryPath directoryPath, FilePath outputFile, WiXHarvestType harvestType, HeatSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
 
-            if (settings.HarvestType != null)
-            {
-                switch (settings.HarvestType)
-                {
-                    case WiXHarvestType.Dir:
-                        builder.Append("dir");
-                        break;
-                    default:
-                        throw new ArgumentException("Incorrect harvest type for input.", "directoryPath");
-                }
-            }
-
+            builder.Append(GetHarvestType(harvestType));
             builder.AppendQuoted(directoryPath.MakeAbsolute(_environment).FullPath);
 
             var args = GetArguments(outputFile, settings);
@@ -181,24 +157,11 @@ namespace Cake.Common.Tools.WiX.Heat
             return builder;
         }
 
-        private ProcessArgumentBuilder GetArguments(string harvestTarget, FilePath outputFile, HeatSettings settings)
+        private ProcessArgumentBuilder GetArguments(string harvestTarget, FilePath outputFile, WiXHarvestType harvestType, HeatSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
 
-            if (settings.HarvestType != null)
-            {
-                switch (settings.HarvestType)
-                {
-                    case WiXHarvestType.Perf:
-                        builder.Append("perf");
-                        break;
-                    case WiXHarvestType.Website:
-                        builder.Append("website");
-                        break;
-                    default:
-                        throw new ArgumentException("Incorrect harvest type for input.", "harvestTarget");
-                }
-            }
+            builder.Append(GetHarvestType(harvestType));
 
             builder.AppendQuoted(harvestTarget);
 
@@ -430,6 +393,27 @@ namespace Cake.Common.Tools.WiX.Heat
             builder.AppendQuoted(outputFile.MakeAbsolute(_environment).FullPath);
 
             return builder;
+        }
+
+        private string GetHarvestType(WiXHarvestType harvestType)
+        {
+            switch (harvestType)
+            {
+                case WiXHarvestType.Dir:
+                    return "dir";
+                case WiXHarvestType.File:
+                    return "file";
+                case WiXHarvestType.Project:
+                    return "project";
+                case WiXHarvestType.Reg:
+                    return "reg";
+                case WiXHarvestType.Perf:
+                    return "perf";
+                case WiXHarvestType.Website:
+                    return "website";
+                default:
+                    return "dir";
+            }
         }
 
         /// <summary>
