@@ -7,11 +7,11 @@ using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Build
 {
-    public class BitbucketPiplinesInfoFixture
+    public class BitbucketPipelinesInfoFixture
     {
         public ICakeEnvironment Environment { get; set; }
 
-        public BitbucketPiplinesInfoFixture()
+        public BitbucketPipelinesInfoFixture()
         {
             Environment = Substitute.For<ICakeEnvironment>();
 

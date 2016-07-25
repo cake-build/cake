@@ -7,7 +7,7 @@ using Cake.Core;
 namespace Cake.Common.Build.BitbucketPipelines
 {
     /// <summary>
-    /// Responsible for communicating with Pipelibes.
+    /// Responsible for communicating with Pipelines.
     /// </summary>
     public sealed class BitbucketPipelinesProvider : IBitbucketPipelinesProvider
     {

@@ -436,7 +436,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// // Get a flag telling us if this is a local build or not.
+        /// // Gets a flag telling us if this is a local build or not.
         /// var isLocal = BuildSystem.IsLocalBuild;
         ///
         /// // Define a task that only runs locally.

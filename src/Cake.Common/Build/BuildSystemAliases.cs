@@ -73,6 +73,7 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("context");
             }
+
             var buildSystem = context.BuildSystem();
             return buildSystem.AppVeyor;
         }
@@ -95,6 +96,7 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("context");
             }
+
             var buildSystem = context.BuildSystem();
             return buildSystem.TeamCity;
         }
@@ -117,6 +119,7 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("context");
             }
+
             var buildSystem = context.BuildSystem();
             return buildSystem.MyGet;
         }
@@ -139,6 +142,7 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("context");
             }
+
             var buildSystem = context.BuildSystem();
             return buildSystem.Bamboo;
         }
@@ -163,12 +167,13 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("context");
             }
+
             var buildSystem = context.BuildSystem();
             return buildSystem.ContinuaCI;
         }
 
         /// <summary>
-        /// Get a <see cref="JenkinsProvider"/> instance that can be user to
+        /// Gets a <see cref="JenkinsProvider"/> instance that can be user to
         /// obtain information from the Jenkins environment.
         /// </summary>
         /// <example>
@@ -187,12 +192,13 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("context");
             }
+
             var buildSystem = context.BuildSystem();
             return buildSystem.Jenkins;
         }
 
         /// <summary>
-        /// Get a <see cref="BitriseProvider"/> instance that can be user to
+        /// Gets a <see cref="BitriseProvider"/> instance that can be user to
         /// obtain information from the Bitrise environment.
         /// </summary>
         /// <example>
@@ -211,12 +217,13 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("context");
             }
+
             var buildSystem = context.BuildSystem();
             return buildSystem.Bitrise;
         }
 
         /// <summary>
-        /// Get a <see cref="TravisCIProvider"/> instance that can be user to
+        /// Gets a <see cref="TravisCIProvider"/> instance that can be user to
         /// obtain information from the Travis CI environment.
         /// </summary>
         /// <example>
@@ -235,12 +242,13 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("context");
             }
+
             var buildSystem = context.BuildSystem();
             return buildSystem.TravisCI;
         }
 
         /// <summary>
-        /// Get a <see cref="BitbucketPipelinesProvider"/> instance that can be user to
+        /// Gets a <see cref="BitbucketPipelinesProvider"/> instance that can be user to
         /// obtain information from the Bitbucket Pipelines environment.
         /// </summary>
         /// <example>
@@ -259,6 +267,7 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("context");
             }
+
             var buildSystem = context.BuildSystem();
             return buildSystem.BitbucketPipelines;
         }

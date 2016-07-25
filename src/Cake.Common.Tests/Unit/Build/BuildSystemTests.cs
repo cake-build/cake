@@ -420,7 +420,7 @@ namespace Cake.Common.Tests.Unit.Build
         public sealed class TheIsRunningOnBitbucketPipelinesProperty
         {
             [Fact]
-            public void Should_Return_True_If_Running_On_TravisCI()
+            public void Should_Return_True_If_Running_On_BitbucketPipelines()
             {
                 // Given
                 var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
