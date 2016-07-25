@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Fixtures\Build\AppVeyorFixture.cs" />
     <Compile Include="Fixtures\Build\AppVeyorInfoFixture.cs" />
+    <Compile Include="Fixtures\Build\BitbucketPipelinesInfoFixture.cs" />
     <Compile Include="Fixtures\Build\BitriseFixture.cs" />
     <Compile Include="Fixtures\Build\BitriseInfoFixture.cs" />
     <Compile Include="Fixtures\Build\ContinuaCIFixture.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="Unit\Build\AppVeyor\Data\AppVeyorPullRequestInfoTests.cs" />
     <Compile Include="Unit\Build\AppVeyor\Data\AppVeyorTagInfoTests.cs" />
     <Compile Include="Unit\Build\AppVeyor\Data\AppVeyorRepositoryInfoTests.cs" />
+    <Compile Include="Unit\Build\BitbucketPipelines\Data\BitriseRepositoryInfoTests.cs" />
     <Compile Include="Unit\Build\Bitrise\Data\BitriseApplicationInfoTests.cs" />
     <Compile Include="Unit\Build\Bitrise\Data\BitriseBuildInfoTests.cs" />
     <Compile Include="Unit\Build\Bitrise\Data\BitriseDirectoryInfoTests.cs" />

@@ -1,0 +1,8 @@
+# Cake Bitbucket Pipeline
+image: devlead/pipeline-mono
+
+pipelines:
+  default:
+    - step:
+        script:
+          - ./build.sh

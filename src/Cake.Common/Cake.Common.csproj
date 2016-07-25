@@ -100,6 +100,11 @@
     <Compile Include="Build\MyGet\IMyGetProvider.cs" />
     <Compile Include="Build\MyGet\MyGetProvider.cs" />
     <Compile Include="Build\MyGet\MyGetBuildStatus.cs" />
+    <Compile Include="Build\BitbucketPipelines\Data\BitbucketPipelinesEnvironmentInfo.cs" />
+    <Compile Include="Build\BitbucketPipelines\Data\BitbucketPipelinesRepositoryInfo.cs" />
+    <Compile Include="Build\BitbucketPipelines\BitbucketPipelinesInfo.cs" />
+    <Compile Include="Build\BitbucketPipelines\BitbucketPipelinesProvider.cs" />
+    <Compile Include="Build\BitbucketPipelines\IBitbucketPipelinesProvider.cs" />
     <Compile Include="Build\TeamCity\ITeamCityProvider.cs" />
     <Compile Include="Build\TeamCity\TeamCityDisposableExtensions.cs" />
     <Compile Include="Build\TeamCity\TeamCityProvider.cs" />
