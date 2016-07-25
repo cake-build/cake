@@ -237,6 +237,20 @@ namespace Cake.Common.Build.TeamCity
             WriteServiceMessage("buildNumber", buildNumber);
         }
 
+        /// <summary>
+        /// Tells TeamCity to set a named parameter with a given value
+        /// </summary>
+        /// <param name="parameterName">The name of the parameter to set.</param>
+        /// <param name="parameterValue">The value to set for the named parameter.</param>
+        public void SetParameter(string parameterName, string parameterValue)
+        {
+            WriteServiceMessage("setParameter", new Dictionary<string, string>
+            {
+                { "name", parameterName },
+                { "value", parameterValue }
+            });
+        }
+
         private void WriteServiceMessage(string messageName, string attributeValue)
         {
             WriteServiceMessage(messageName, new Dictionary<string, string> { { " ", attributeValue } });
