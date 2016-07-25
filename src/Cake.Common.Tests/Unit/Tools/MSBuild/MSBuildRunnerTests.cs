@@ -563,7 +563,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/m /v:normal /target:Build " +
+                Assert.Equal("/v:normal /target:Build " +
                              "\"/Working/src/Solution.sln\"", result.Args);
             }
 
@@ -578,7 +578,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/m /v:normal /nr:true /target:Build " +
+                Assert.Equal("/v:normal /nr:true /target:Build " +
                              "\"/Working/src/Solution.sln\"", result.Args);
             }
 
@@ -594,7 +594,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/m /v:normal /target:A;B " +
+                Assert.Equal("/v:normal /target:A;B " +
                              "\"/Working/src/Solution.sln\"", result.Args);
             }
 
@@ -610,7 +610,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/m /v:normal /p:A=B /p:C=D /target:Build " +
+                Assert.Equal("/v:normal /p:A=B /p:C=D /target:Build " +
                              "\"/Working/src/Solution.sln\"", result.Args);
             }
 
@@ -626,13 +626,13 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/m /v:normal /p:A=B /p:A=E /p:C=D /target:Build " +
+                Assert.Equal("/v:normal /p:A=B /p:A=E /p:C=D /target:Build " +
                              "\"/Working/src/Solution.sln\"", result.Args);
             }
 
             [Theory]
-            [InlineData("Release", "/m /v:normal /p:Configuration=\"Release\" /target:Build \"/Working/src/Solution.sln\"")]
-            [InlineData("Custom Spaced", "/m /v:normal /p:Configuration=\"Custom Spaced\" /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData("Release", "/v:normal /p:Configuration=\"Release\" /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData("Custom Spaced", "/v:normal /p:Configuration=\"Custom Spaced\" /target:Build \"/Working/src/Solution.sln\"")]
             public void Should_Append_Configuration_As_Property_To_Process_Arguments(string configuration, string expected)
             {
                 // Given
@@ -647,11 +647,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Theory]
-            [InlineData(PlatformTarget.MSIL, "/m /v:normal /p:Platform=\"Any CPU\" /target:Build \"/Working/src/Solution.sln\"")]
-            [InlineData(PlatformTarget.x86, "/m /v:normal /p:Platform=x86 /target:Build \"/Working/src/Solution.sln\"")]
-            [InlineData(PlatformTarget.x64, "/m /v:normal /p:Platform=x64 /target:Build \"/Working/src/Solution.sln\"")]
-            [InlineData(PlatformTarget.ARM, "/m /v:normal /p:Platform=arm /target:Build \"/Working/src/Solution.sln\"")]
-            [InlineData(PlatformTarget.Win32, "/m /v:normal /p:Platform=Win32 /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(PlatformTarget.MSIL, "/v:normal /p:Platform=\"Any CPU\" /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(PlatformTarget.x86, "/v:normal /p:Platform=x86 /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(PlatformTarget.x64, "/v:normal /p:Platform=x64 /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(PlatformTarget.ARM, "/v:normal /p:Platform=arm /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(PlatformTarget.Win32, "/v:normal /p:Platform=Win32 /target:Build \"/Working/src/Solution.sln\"")]
             public void Should_Append_Platform_As_Property_To_Process_Arguments(PlatformTarget platform, string expected)
             {
                 // Given
@@ -677,7 +677,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/m /v:normal /p:Platform=AnyCPU /target:Build \"/Working/src/Project.csproj\"", result.Args);
+                Assert.Equal("/v:normal /p:Platform=AnyCPU /target:Build \"/Working/src/Project.csproj\"", result.Args);
             }
 
             [Fact]
@@ -692,7 +692,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/m /v:normal /p:Platform=arm /target:Build " +
+                Assert.Equal("/v:normal /p:Platform=arm /target:Build " +
                              "\"/Working/src/Solution.sln\"", result.Args);
                 Assert.Equal("/Program86/MSBuild/12.0/Bin/MSBuild.exe", result.Path.FullPath);
             }
@@ -707,7 +707,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/m /v:normal /target:Build " +
+                Assert.Equal("/v:normal /target:Build " +
                              "\"/Working/src/Solution.sln\"", result.Args);
             }
 
@@ -753,11 +753,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Theory]
-            [InlineData(Verbosity.Quiet, "/m /v:quiet /target:Build \"/Working/src/Solution.sln\"")]
-            [InlineData(Verbosity.Minimal, "/m /v:minimal /target:Build \"/Working/src/Solution.sln\"")]
-            [InlineData(Verbosity.Normal, "/m /v:normal /target:Build \"/Working/src/Solution.sln\"")]
-            [InlineData(Verbosity.Verbose, "/m /v:detailed /target:Build \"/Working/src/Solution.sln\"")]
-            [InlineData(Verbosity.Diagnostic, "/m /v:diagnostic /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(Verbosity.Quiet, "/v:quiet /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(Verbosity.Minimal, "/v:minimal /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(Verbosity.Normal, "/v:normal /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(Verbosity.Verbose, "/v:detailed /target:Build \"/Working/src/Solution.sln\"")]
+            [InlineData(Verbosity.Diagnostic, "/v:diagnostic /target:Build \"/Working/src/Solution.sln\"")]
             public void Should_Append_Correct_Verbosity(Verbosity verbosity, string expected)
             {
                 // Given
