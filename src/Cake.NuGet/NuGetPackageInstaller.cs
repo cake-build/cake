@@ -159,6 +159,67 @@ namespace Cake.NuGet
             return _contentResolver.GetFiles(packagePath, type);
         }
 
+        /// <summary>
+        /// Installs the specified resource at the given location.
+        /// </summary>
+        /// <param name="package">The package reference.</param>
+        /// <param name="fileExtension">The file extension ex: .cake</param>
+        /// <param name="path">The location where to install the package.</param>
+        /// <returns>The installed files.</returns>
+        public IReadOnlyCollection<IFile> Install(PackageReference package, string fileExtension, DirectoryPath path)
+        {
+            if (package == null)
+            {
+                throw new ArgumentNullException("package");
+            }
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+
+            path = path.MakeAbsolute(_environment);
+
+            var root = _fileSystem.GetDirectory(path);
+            var packagePath = path.Combine(package.Package);
+
+            // Create the addin directory if it doesn't exist.
+            if (!root.Exists)
+            {
+                _log.Debug("Creating directory {0}", path);
+                root.Create();
+            }
+
+            // Fetch available content from disc.
+            var content = _contentResolver.GetFiles(packagePath, fileExtension);
+            if (content.Any())
+            {
+                _log.Debug("Package {0} has already been installed.", package.Package);
+                return content;
+            }
+
+            // Install the package.
+            _log.Debug("Installing NuGet package {0}...", package.Package);
+            var nugetPath = GetNuGetPath();
+            var process = _processRunner.Start(nugetPath, new ProcessSettings
+            {
+                Arguments = GetArguments(package, path, _config),
+                RedirectStandardOutput = true,
+                Silent = _log.Verbosity < Verbosity.Diagnostic
+            });
+            process.WaitForExit();
+
+            var exitCode = process.GetExitCode();
+            if (exitCode != 0)
+            {
+                _log.Warning("NuGet exited with {0}", exitCode);
+                var output = string.Join(Environment.NewLine, process.GetStandardOutput());
+                _log.Verbose(Verbosity.Diagnostic, "Output:\r\n{0}", output);
+            }
+
+            // Return the files.
+            return _contentResolver.GetFiles(packagePath, fileExtension);
+        }
+
         private FilePath GetNuGetPath()
         {
             var nugetPath = _toolResolver.ResolvePath();

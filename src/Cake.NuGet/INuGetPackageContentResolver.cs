@@ -21,5 +21,14 @@ namespace Cake.NuGet
         /// <param name="type">The resource type.</param>
         /// <returns>A collection of files.</returns>
         IReadOnlyCollection<IFile> GetFiles(DirectoryPath path, PackageType type);
+
+        /// <summary>
+        /// Gets the relevant files for a NuGet package
+        /// given a path and a resource type defined with <paramref name="fileExtension"/>.
+        /// </summary>
+        /// <param name="path">The path to search.</param>
+        /// <param name="fileExtension">The file extension ex: .cake</param>
+        /// <returns>A collection of files.</returns>
+        IReadOnlyCollection<IFile> GetFiles(DirectoryPath path, string fileExtension);
     }
 }

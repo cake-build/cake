@@ -170,6 +170,50 @@ namespace Cake.Core.Scripting
             }
         }
 
+        /// <summary>
+        /// Install the <paramref name="package"/> for <paramref name="fileExtension"/> in <paramref name="installPath"/>.
+        /// </summary>
+        /// <param name="package">The <see cref="PackageReference"/> to install</param>
+        /// <param name="fileExtension">The file extension ex: .cake</param>
+        /// <param name="installPath">The location to install this package</param>
+        /// <returns>Returns <see cref="IEnumerable{IFile}"/> containing the installed files.</returns>
+        public IEnumerable<IFile> InstallPackage(PackageReference package, string fileExtension, DirectoryPath installPath)
+        {
+            if (fileExtension == null)
+            {
+                throw new ArgumentNullException("fileExtension");
+            }
+            if (!System.IO.Path.HasExtension(fileExtension))
+            {
+                const string format = "The string parameter 'fileExtension' value is '{0}' but what is expected is a file extension.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, fileExtension);
+                throw new CakeException(message);
+            }
+
+            var installer = GetInstaller(package, PackageType.Unspecified);
+
+            if (installer == null)
+            {
+                const string format = "Could not find an installer for the '{0}' scheme.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, package.Scheme);
+                throw new CakeException(message);
+            }
+
+            // Install the package type script.
+            IReadOnlyCollection<IFile> result = installer.Install(package, fileExtension, installPath);
+            if (result.Count == 0)
+            {
+                const string format = "Failed to install nuget script '{0}'.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, package.Package);
+                throw new CakeException(message);
+            }
+
+            foreach (var file in result)
+            {
+                yield return file;
+            }
+        }
+
         private IPackageInstaller GetInstaller(PackageReference package, PackageType type)
         {
             foreach (var installer in _installers)

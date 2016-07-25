@@ -244,7 +244,8 @@ namespace Cake.Core.Tests.Unit.Scripting
                 // Given
                 var fixture = new ScriptRunnerFixture(path);
                 fixture.ScriptAnalyzer = Substitute.For<IScriptAnalyzer>();
-                fixture.ScriptAnalyzer.Analyze(Arg.Any<FilePath>())
+                IScriptAnalyzerContext context;
+                fixture.ScriptAnalyzer.Analyze(Arg.Any<FilePath>(), out context)
                     .Returns(new ScriptAnalyzerResult(new ScriptInformation(path), new List<string>()));
                 var runner = fixture.CreateScriptRunner();
 
@@ -253,7 +254,7 @@ namespace Cake.Core.Tests.Unit.Scripting
 
                 // Then
                 fixture.ScriptAnalyzer.Received(1).Analyze(
-                    Arg.Is<FilePath>(f => f.FullPath == "build.cake"));
+                    Arg.Is<FilePath>(f => f.FullPath == "build.cake"), out context);
             }
 
             [Fact]

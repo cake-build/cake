@@ -22,6 +22,15 @@ namespace Cake.Core.Scripting.Analysis
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
         private readonly LineProcessor[] _lineProcessors;
+        private readonly IReadOnlyList<IProcessorExtension> _processorExtensions;
+
+        /// <summary>
+        /// Gets the <see cref="IProcessorExtension"/>'s
+        /// </summary>
+        public IReadOnlyList<IProcessorExtension> ProcessorExtensions
+        {
+            get { return _processorExtensions; }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptAnalyzer"/> class.
@@ -29,10 +38,12 @@ namespace Cake.Core.Scripting.Analysis
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="log">The log.</param>
+        /// <param name="processorExtensionFinder">The script extension finder.</param>
         public ScriptAnalyzer(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
-            ICakeLog log)
+            ICakeLog log,
+            IProcessorExtensionFinder processorExtensionFinder)
         {
             if (fileSystem == null)
             {
@@ -45,6 +56,10 @@ namespace Cake.Core.Scripting.Analysis
             if (log == null)
             {
                 throw new ArgumentNullException("log");
+            }
+            if (processorExtensionFinder == null)
+            {
+                throw new ArgumentNullException("processorExtensionFinder");
             }
 
             _fileSystem = fileSystem;
@@ -61,14 +76,18 @@ namespace Cake.Core.Scripting.Analysis
                 new ShebangProcessor(_environment),
                 new BreakDirectiveProcessor(_environment)
             };
+            
+            // Get all processor extensions currently loaded.
+            _processorExtensions = processorExtensionFinder.FindProcessorExtensions(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         /// <summary>
         /// Analyzes the specified script path.
         /// </summary>
         /// <param name="path">The path to the script to analyze.</param>
+        /// <param name="analyzerContext">The <see cref="IScriptAnalyzerContext"/> associated with the script analyzed.</param>
         /// <returns>The script analysis result.</returns>
-        public ScriptAnalyzerResult Analyze(FilePath path)
+        public ScriptAnalyzerResult Analyze(FilePath path, out IScriptAnalyzerContext analyzerContext)
         {
             if (path == null)
             {
@@ -79,8 +98,11 @@ namespace Cake.Core.Scripting.Analysis
             path = path.MakeAbsolute(_environment);
 
             // Create a new context.
-            var context = new ScriptAnalyzerContext(
+            ScriptAnalyzerContext context = new ScriptAnalyzerContext(
                 _fileSystem, _environment, _log, AnalyzeCallback);
+
+            // set the context
+            analyzerContext = context;
 
             // Analyze the script.
             context.Analyze(path);
@@ -89,6 +111,17 @@ namespace Cake.Core.Scripting.Analysis
             return new ScriptAnalyzerResult(
                 context.Script,
                 context.Lines);
+        }
+
+        /// <summary>
+        /// Analyzes the specified script path.
+        /// </summary>
+        /// <param name="path">The path to the script to analyze.</param>
+        /// <returns>The script analysis result.</returns>
+        public ScriptAnalyzerResult Analyze(FilePath path)
+        {
+            IScriptAnalyzerContext context;
+            return Analyze(path, out context);
         }
 
         [SuppressMessage("ReSharper", "ConvertIfStatementToConditionalTernaryExpression")]
@@ -110,6 +143,32 @@ namespace Cake.Core.Scripting.Analysis
             {
                 string replacement = null;
 
+                // only process lines that starts with a # tag.
+                if (line.Trim().StartsWith("#"))
+                {
+                    string alias = string.Empty;
+                    string value = string.Empty;
+
+                    // Check if there is any processor extensions for this processor alias.
+                    var tokens = line.SplitLine();
+                    if (tokens.Length >= 0)
+                    {
+                        alias = tokens[0];
+                    }
+                    if (tokens.Length > 1)
+                    {
+                        value = tokens[1];
+                    }
+
+                    if (_processorExtensions.Where(p => p.CanProcessDirective(alias, value))
+                                            .Any(p => p.Process(context, line, out replacement)))
+                    {
+                        // Add replacement or comment out processed lines to keep line data.
+                        context.AddScriptLine(replacement ?? string.Concat("// ", line));
+                        continue;
+                    }
+                }
+                
                 if (!_lineProcessors.Any(p => p.Process(context, line, out replacement)))
                 {
                     context.AddScriptLine(line);

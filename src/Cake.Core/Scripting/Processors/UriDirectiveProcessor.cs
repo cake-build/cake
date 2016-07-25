@@ -4,21 +4,46 @@
 using System;
 using System.Linq;
 using System.Text;
+using Cake.Core.Extensions;
 using Cake.Core.Scripting.Analysis;
 
 namespace Cake.Core.Scripting.Processors
 {
-    internal abstract class UriDirectiveProcessor : LineProcessor
+    /// <summary>
+    /// This processor handles nuget: uri's
+    /// </summary>
+    public abstract class UriDirectiveProcessor : LineProcessor
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UriDirectiveProcessor" /> class.
+        /// </summary>
+        /// <param name="environment">The <see cref="ICakeEnvironment"/>.</param>
         protected UriDirectiveProcessor(ICakeEnvironment environment)
             : base(environment)
         {
         }
 
+        /// <summary>
+        /// Specify the directive name.
+        /// </summary>
+        /// <returns>The directive alias to use for this <see cref="UriDirectiveProcessor"/>.</returns>
         protected abstract string GetDirectiveName();
 
+        /// <summary>
+        /// This method is called after the nuget uri is processed.
+        /// </summary>
+        /// <param name="context">The <see cref="IScriptAnalyzerContext"/></param>
+        /// <param name="uri">The <see cref="Uri"/></param>
         protected abstract void AddToContext(IScriptAnalyzerContext context, Uri uri);
 
+        /// <summary>
+        /// Processes the specified line.
+        /// </summary>
+        /// <param name="context">The <see cref="IScriptAnalyzerContext"/></param>
+        /// <param name="line">The line.</param>
+        /// <param name="replacement">The replacement for line, null if no replacement</param>
+        /// <returns><c>true</c> if the line was processed
+        /// by this processor; otherwise <c>false</c>.</returns>
         public sealed override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
         {
             if (context == null)
@@ -28,7 +53,7 @@ namespace Cake.Core.Scripting.Processors
 
             replacement = null;
 
-            var tokens = Split(line);
+            var tokens = this.Split(line);
             var directive = tokens.FirstOrDefault();
             if (!string.IsNullOrWhiteSpace(directive))
             {

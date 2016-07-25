@@ -25,7 +25,7 @@ namespace Cake.Core.Scripting
         private readonly IScriptAnalyzer _analyzer;
         private readonly IScriptProcessor _processor;
         private readonly IScriptConventions _conventions;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptRunner"/> class.
         /// </summary>
@@ -79,7 +79,7 @@ namespace Cake.Core.Scripting
             {
                 throw new ArgumentNullException("conventions");
             }
-
+            
             _environment = environment;
             _log = log;
             _configuration = configuration;
@@ -119,11 +119,23 @@ namespace Cake.Core.Scripting
 
             // Analyze the script file.
             _log.Verbose("Analyzing build script...");
-            var result = _analyzer.Analyze(scriptPath.GetFilename());
+            IScriptAnalyzerContext scriptAnalyzerContext;
+            var result = _analyzer.Analyze(scriptPath.GetFilename(), out scriptAnalyzerContext);
+            var toolsPath = GetToolPath(scriptPath.GetDirectory());
+
+            // Process processor extension runners.
+            foreach (var processorExtension in _analyzer.ProcessorExtensions)
+            {
+                IEnumerable<object> processorValues;
+                if (result.ProcessorValues.TryGet(processorExtension, out processorValues))
+                {
+                    // Install the processor extension.
+                    processorExtension.ScriptRunnerExtension.Install(processorValues, ref result, scriptAnalyzerContext, toolsPath);
+                }
+            }
 
             // Install tools.
             _log.Verbose("Processing build script...");
-            var toolsPath = GetToolPath(scriptPath.GetDirectory());
             _processor.InstallTools(result, toolsPath);
 
             // Install addins.
@@ -182,12 +194,12 @@ namespace Cake.Core.Scripting
             {
                 session.ImportNamespace(@namespace);
             }
-
+            
             // Execute the script.
             var script = new Script(result.Namespaces, result.Lines, aliases, result.UsingAliases);
             session.Execute(script);
         }
-
+        
         private DirectoryPath GetToolPath(DirectoryPath root)
         {
             var toolPath = _configuration.GetValue(Constants.Paths.Tools);

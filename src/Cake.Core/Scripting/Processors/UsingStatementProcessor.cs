@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 using System;
 using System.Linq;
+using Cake.Core.Extensions;
 using Cake.Core.Scripting.Analysis;
 
 namespace Cake.Core.Scripting.Processors
@@ -23,7 +24,7 @@ namespace Cake.Core.Scripting.Processors
 
             replacement = null;
 
-            var tokens = Split(line);
+            var tokens = this.Split(line);
             if (tokens.Length <= 1)
             {
                 return false;

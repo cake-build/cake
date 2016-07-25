@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using Cake.Core.Packaging;
+using Cake.Core.Scripting.Processors;
 
 namespace Cake.Core.Scripting.Analysis
 {
@@ -19,6 +20,7 @@ namespace Cake.Core.Scripting.Analysis
         private readonly HashSet<string> _usingAliases;
         private readonly HashSet<PackageReference> _addins;
         private readonly HashSet<PackageReference> _tools;
+        private readonly ProcessorValues _processorValues;
 
         /// <summary>
         /// Gets the analyzed script.
@@ -84,6 +86,17 @@ namespace Cake.Core.Scripting.Analysis
         }
 
         /// <summary>
+        /// Gets <see cref="ProcessorValues"/>s for a processor.
+        /// </summary>
+        public ProcessorValues ProcessorValues
+        {
+            get
+            {
+                return _processorValues;
+            }
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ScriptAnalyzerResult"/> class.
         /// </summary>
         /// <param name="script">The script.</param>
@@ -97,6 +110,7 @@ namespace Cake.Core.Scripting.Analysis
             _usingAliases = new HashSet<string>(Collect(script, i => i.UsingAliases));
             _tools = new HashSet<PackageReference>(Collect(script, i => i.Tools));
             _addins = new HashSet<PackageReference>(Collect(script, i => i.Addins));
+            _processorValues = new ProcessorValues(Collect(script, i => i.ProcessorValues));
         }
 
         private IEnumerable<T> Collect<T>(IScriptInformation script, Func<IScriptInformation, IEnumerable<T>> collector)

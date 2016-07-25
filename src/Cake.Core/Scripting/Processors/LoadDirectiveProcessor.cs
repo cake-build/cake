@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 using System;
+using Cake.Core.Extensions;
 using Cake.Core.IO;
 using Cake.Core.Scripting.Analysis;
 
@@ -23,7 +24,7 @@ namespace Cake.Core.Scripting.Processors
 
             replacement = null;
 
-            var tokens = Split(line);
+            var tokens = this.Split(line);
             if (tokens.Length <= 0)
             {
                 return false;
@@ -34,7 +35,7 @@ namespace Cake.Core.Scripting.Processors
             {
                 return false;
             }
-
+            
             var directoryPath = GetAbsoluteDirectory(context.Script.Path);
             var scriptPath = new FilePath(tokens[1].UnQuote()).MakeAbsolute(directoryPath);
 
