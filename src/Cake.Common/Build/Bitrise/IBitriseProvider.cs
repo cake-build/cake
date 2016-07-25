@@ -11,18 +11,18 @@ namespace Cake.Common.Build.Bitrise
     public interface IBitriseProvider
     {
         /// <summary>
-        /// Gets a value indicating whether the current build is running on Bamboo.
+        /// Gets a value indicating whether the current build is running on Bitrise.
         /// </summary>
         /// <value>
-        /// <c>true</c> if the current build is running on Bamboo; otherwise, <c>false</c>.
+        /// <c>true</c> if the current build is running on Bitrise; otherwise, <c>false</c>.
         /// </value>
         bool IsRunningOnBitrise { get; }
 
         /// <summary>
-        /// Gets the Bamboo environment.
+        /// Gets the Bitrise environment.
         /// </summary>
         /// <value>
-        /// The Bamboo environment.
+        /// The Bitrise environment.
         /// </value>
         BitriseEnvironmentInfo Environment { get; }
     }
