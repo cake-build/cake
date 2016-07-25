@@ -19,10 +19,10 @@ namespace Cake.Common.Build.Jenkins
         bool IsRunningOnJenkins { get; }
 
         /// <summary>
-        /// Gets the Bamboo environment.
+        /// Gets the Jenkins environment.
         /// </summary>
         /// <value>
-        /// The Bamboo environment.
+        /// The Jenkins environment.
         /// </value>
         JenkinsEnvironmentInfo Environment { get; }
     }
