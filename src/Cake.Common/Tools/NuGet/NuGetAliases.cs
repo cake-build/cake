@@ -292,6 +292,8 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="packageFilePath">The <c>.nupkg</c> file path.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
+        /// <para>NOTE: Starting with NuGet 3.4.2, the Source parameter is a mandatory parameter.</para>
+        /// <para>It is strongly recommended that you ALWAYS set the Source property within the <see cref="NuGetPushSettings" /> instance.</para>
         /// <code>
         /// // Get the path to the package.
         /// var package = "./nuget/SlackPRTGCommander.0.0.1.nupkg";
@@ -314,7 +316,7 @@ namespace Cake.Common.Tools.NuGet
             }
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
-            var packer = new NuGetPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
+            var packer = new NuGetPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver, context.Log);
             packer.Push(packageFilePath, settings);
         }
 
@@ -325,6 +327,8 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="packageFilePaths">The <c>.nupkg</c> file paths.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
+        /// <para>NOTE: Starting with NuGet 3.4.2, the Source parameter is a mandatory parameter.</para>
+        /// <para>It is strongly recommended that you ALWAYS set the Source property within the <see cref="NuGetPushSettings" /> instance.</para>
         /// <code>
         /// // Get the paths to the packages.
         /// var packages = GetFiles("./**/*.nupkg");
