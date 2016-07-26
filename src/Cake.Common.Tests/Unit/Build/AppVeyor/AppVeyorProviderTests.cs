@@ -14,31 +14,6 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
 {
     public sealed class AppVeyorProviderTests
     {
-        public sealed class TheConstructor
-        {
-            [Fact]
-            public void Should_Throw_If_Environment_Is_Null()
-            {
-                // Given, When
-                var processRunner = Substitute.For<IProcessRunner>();
-                var result = Record.Exception(() => new AppVeyorProvider(null, processRunner));
-
-                // Then
-                Assert.IsArgumentNullException(result, "environment");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Process_Runner_Is_Null()
-            {
-                // Given, When
-                var environment = Substitute.For<ICakeEnvironment>();
-                var result = Record.Exception(() => new AppVeyorProvider(environment, null));
-
-                // Then
-                Assert.IsArgumentNullException(result, "processRunner");
-            }
-        }
-
         public sealed class TheIsRunningOnAppVeyorProperty
         {
             [Fact]
