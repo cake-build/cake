@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
@@ -77,6 +78,17 @@ namespace Cake.Core.IO
                 UseShellExecute = false,
                 RedirectStandardOutput = settings.RedirectStandardOutput
             };
+
+            // Add environment variables
+            info.EnvironmentVariables["CAKE"] = "True";
+            info.EnvironmentVariables["CAKE_VERSION"] = _environment.Runtime.CakeVersion.ToString(3);
+            if (settings.EnvironmentVariables != null)
+            {
+                foreach (var environmentVariable in settings.EnvironmentVariables)
+                {
+                    info.EnvironmentVariables[environmentVariable.Key] = environmentVariable.Value;
+                }
+            }
 
             // Start and return the process.
             var process = Process.Start(info);

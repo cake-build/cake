@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using Cake.Common.Tests.Fixtures.Tools.DotNetCore.Publish;
 using Cake.Testing;
 using Xunit;
@@ -78,7 +79,24 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Publish
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("publish ./src/*", result.Args);
+                Assert.Equal("publish \"./src/*\"", result.Args);
+            }
+
+            [Theory]
+            [InlineData("./src/*", "publish \"./src/*\"")]
+            [InlineData("./src/cake artifacts/", "publish \"./src/cake artifacts/\"")]
+            [InlineData("./src/cake artifacts/cake binaries", "publish \"./src/cake artifacts/cake binaries\"")]
+            public void Should_Quote_Project_Path(string text, string expected)
+            {
+                // Given
+                var fixture = new DotNetCorePublisherFixture();
+                fixture.Project = text;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]

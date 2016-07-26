@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.GitVersion;
 using Cake.Core;
@@ -197,6 +198,22 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
 
                 // Then
                 Assert.Equal("-l \"c:/temp/gitversion.log\"", result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "-nofetch")]
+            [InlineData(false, "")]
+            public void Should_Add_NoFetch_To_Arguments_If_Set(bool nofetch, string args)
+            {
+                // Given
+                var fixture = new GitVersionRunnerFixture();
+                fixture.Settings.NoFetch = nofetch;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(args, result.Args);
             }
         }
     }

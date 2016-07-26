@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using Cake.Common.Build.TeamCity;
 using Cake.Common.Tests.Fixtures.Build;
@@ -106,6 +107,24 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity
                 // Then
                 Assert.Equal("##teamcity[dotNetCoverage dotcover_home='/path/to/dotcover_home']" + Environment.NewLine +
                     "##teamcity[importData type='dotNetCoverage' tool='dotcover' path='/path/to/result.dcvr']" + Environment.NewLine,
+                    fixture.Log.AggregateLogMessages());
+            }
+        }
+
+        public sealed class TheSetParameterMethod
+        {
+            [Fact]
+            public void SetParameter_Should_Write_To_The_Log_Correctly()
+            {
+                // Given
+                var fixture = new TeamCityFixture();
+                var teamCity = fixture.CreateTeamCityService();
+                
+                // When
+                teamCity.SetParameter("internal.artifactVersion", "1.2.3.4");
+
+                // Then
+                Assert.Equal("##teamcity[setParameter name='internal.artifactVersion' value='1.2.3.4']" + Environment.NewLine, 
                     fixture.Log.AggregateLogMessages());
             }
         }

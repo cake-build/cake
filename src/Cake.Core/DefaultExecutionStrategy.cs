@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using Cake.Core.Diagnostics;
 
@@ -45,9 +46,13 @@ namespace Cake.Core
         /// Performs the teardown.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="context">The context.</param>
-        public void PerformTeardown(Action<ICakeContext> action, ICakeContext context)
+        /// <param name="teardownContext">The context.</param>
+        public void PerformTeardown(Action<ITeardownContext> action, ITeardownContext teardownContext)
         {
+            if (teardownContext == null)
+            {
+                throw new ArgumentNullException("teardownContext");
+            }
             if (action != null)
             {
                 _log.Information(string.Empty);
@@ -56,7 +61,7 @@ namespace Cake.Core
                 _log.Information("----------------------------------------");
                 _log.Verbose("Executing custom teardown action...");
 
-                action(context);
+                action(teardownContext);
             }
         }
 
@@ -139,18 +144,17 @@ namespace Cake.Core
         /// Performs the specified setup action before each task is invoked.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="context">The context.</param>
-        /// <param name="setupContext">The setup context.</param>
-        public void PerformTaskSetup(Action<ICakeContext, ITaskSetupContext> action, ICakeContext context, ITaskSetupContext setupContext)
+        /// <param name="taskSetupContext">The context.</param>
+        public void PerformTaskSetup(Action<ITaskSetupContext> action, ITaskSetupContext taskSetupContext)
         {
-            if (setupContext == null)
+            if (taskSetupContext == null)
             {
-                throw new ArgumentNullException("setupContext");
+                throw new ArgumentNullException("taskSetupContext");
             }
             if (action != null)
             {
-                _log.Debug("Executing custom task setup action ({0})...", setupContext.Task.Name);
-                action(context, setupContext);
+                _log.Debug("Executing custom task setup action ({0})...", taskSetupContext.Task.Name);
+                action(taskSetupContext);
             }
         }
 
@@ -158,18 +162,17 @@ namespace Cake.Core
         /// Performs the specified teardown action after each task is invoked.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="context">The context.</param>
-        /// <param name="teardownContext">The teardown context.</param>
-        public void PerformTaskTeardown(Action<ICakeContext, ITaskTeardownContext> action, ICakeContext context, ITaskTeardownContext teardownContext)
+        /// <param name="taskTeardownContext">The context.</param>
+        public void PerformTaskTeardown(Action<ITaskTeardownContext> action, ITaskTeardownContext taskTeardownContext)
         {
-            if (teardownContext == null)
+            if (taskTeardownContext == null)
             {
-                throw new ArgumentNullException("teardownContext");
+                throw new ArgumentNullException("taskTeardownContext");
             }
             if (action != null)
             {
-                _log.Debug("Executing custom task teardown action ({0})...", teardownContext.Task.Name);
-                action(context, teardownContext);
+                _log.Debug("Executing custom task teardown action ({0})...", taskTeardownContext.Task.Name);
+                action(taskTeardownContext);
             }
         }
     }

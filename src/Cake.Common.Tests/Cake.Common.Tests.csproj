@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Fixtures\Build\AppVeyorFixture.cs" />
     <Compile Include="Fixtures\Build\AppVeyorInfoFixture.cs" />
+    <Compile Include="Fixtures\Build\BitbucketPipelinesInfoFixture.cs" />
     <Compile Include="Fixtures\Build\BitriseFixture.cs" />
     <Compile Include="Fixtures\Build\BitriseInfoFixture.cs" />
     <Compile Include="Fixtures\Build\ContinuaCIFixture.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Fixtures\Build\TravisCIFixture.cs" />
     <Compile Include="Fixtures\Build\TravisCIInfoFixture.cs" />
     <Compile Include="Fixtures\Solution\Project\ProjectParserFixture.cs" />
+    <Compile Include="Fixtures\Solution\SolutionParserFixture.cs" />
     <Compile Include="Fixtures\Tools\CakeRunnerFixture.cs" />
     <Compile Include="Fixtures\IO\FileCopyFixture.cs" />
     <Compile Include="Fixtures\IO\FileDeleteFixture.cs" />
@@ -188,6 +190,7 @@
     <Compile Include="Unit\Build\AppVeyor\Data\AppVeyorPullRequestInfoTests.cs" />
     <Compile Include="Unit\Build\AppVeyor\Data\AppVeyorTagInfoTests.cs" />
     <Compile Include="Unit\Build\AppVeyor\Data\AppVeyorRepositoryInfoTests.cs" />
+    <Compile Include="Unit\Build\BitbucketPipelines\Data\BitbucketPipelinesRepositoryInfoTests.cs" />
     <Compile Include="Unit\Build\Bitrise\Data\BitriseApplicationInfoTests.cs" />
     <Compile Include="Unit\Build\Bitrise\Data\BitriseBuildInfoTests.cs" />
     <Compile Include="Unit\Build\Bitrise\Data\BitriseDirectoryInfoTests.cs" />
@@ -231,6 +234,8 @@
     <Compile Include="Unit\ReleaseNotesParserTests.cs" />
     <Compile Include="Unit\ReleaseNotesTests.cs" />
     <Compile Include="Unit\Solution\Project\XmlDoc\XmlDocExampleCodeParserTests.cs" />
+    <Compile Include="Unit\Solution\SolutionParserAliasesTests.cs" />
+    <Compile Include="Unit\Solution\SolutionParserTests.cs" />
     <Compile Include="Unit\Text\TextTransformationAliasesTests.cs" />
     <Compile Include="Unit\Text\TextTransformationExtensionsTests.cs" />
     <Compile Include="Unit\Text\TextTransformationTests.cs" />
@@ -372,7 +377,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\xunit.core.2.1.0\build\portable-net45+win8+wp8+wpa81\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.1.0\build\portable-net45+win8+wp8+wpa81\xunit.core.props')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

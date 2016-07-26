@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using Cake.Common.Build.Jenkins.Data;
 
 namespace Cake.Common.Build.Jenkins
@@ -19,10 +20,10 @@ namespace Cake.Common.Build.Jenkins
         bool IsRunningOnJenkins { get; }
 
         /// <summary>
-        /// Gets the Bamboo environment.
+        /// Gets the Jenkins environment.
         /// </summary>
         /// <value>
-        /// The Bamboo environment.
+        /// The Jenkins environment.
         /// </value>
         JenkinsEnvironmentInfo Environment { get; }
     }

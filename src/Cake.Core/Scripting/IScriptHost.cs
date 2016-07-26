@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using System.Collections.Generic;
 
@@ -50,7 +51,7 @@ namespace Cake.Core.Scripting
         /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        [Obsolete("Please use Teardown(Action<ICakeContext>) instead.", false)]
+        [Obsolete("Please use Teardown(Action<ITeardownContext>) instead.", false)]
         void Teardown(Action action);
 
         /// <summary>
@@ -58,21 +59,37 @@ namespace Cake.Core.Scripting
         /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        void Teardown(Action<ICakeContext> action);
+        void Teardown(Action<ITeardownContext> action);
 
         /// <summary>
         /// Allows registration of an action that's executed before each task is run.
         /// If the task setup fails, its task will not be executed but the task teardown will be performed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
+        [Obsolete("Please use TaskSetup(Action<ITaskSetupContext>) instead.", false)]
         void TaskSetup(Action<ICakeContext, ITaskSetupContext> action);
+
+        /// <summary>
+        /// Allows registration of an action that's executed before each task is run.
+        /// If the task setup fails, its task will not be executed but the task teardown will be performed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        void TaskSetup(Action<ITaskSetupContext> action);
 
         /// <summary>
         /// Allows registration of an action that's executed after each task has been run.
         /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
+        [Obsolete("Please use TaskTeardown(Action<ITaskTeardownContext>) instead.", false)]
         void TaskTeardown(Action<ICakeContext, ITaskTeardownContext> action);
+
+        /// <summary>
+        /// Allows registration of an action that's executed after each task has been run.
+        /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        void TaskTeardown(Action<ITaskTeardownContext> action);
 
         /// <summary>
         /// Runs the specified target.

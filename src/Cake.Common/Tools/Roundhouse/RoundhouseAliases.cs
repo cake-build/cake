@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -25,6 +26,15 @@ namespace Cake.Common.Tools.Roundhouse
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// RoundhouseMigrate(new RoundhouseSettings{
+        ///     ServerName = "Sql2008R2",
+        ///     DatabaseName = "AdventureWorks2008R2",
+        ///     SqlFilesDirectory = "./src/sql"
+        ///     });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void RoundhouseMigrate(this ICakeContext context, RoundhouseSettings settings)
         {
@@ -42,6 +52,14 @@ namespace Cake.Common.Tools.Roundhouse
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// RoundhouseDrop(new RoundhouseSettings{
+        ///     ServerName = "Sql2008R2",
+        ///     DatabaseName = "AdventureWorks2008R2"
+        ///     });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void RoundhouseDrop(this ICakeContext context, RoundhouseSettings settings)
         {

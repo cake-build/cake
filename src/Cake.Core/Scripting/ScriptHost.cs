@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using System.Collections.Generic;
 using Cake.Core.Diagnostics;
@@ -108,12 +109,12 @@ namespace Cake.Core.Scripting
         /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        [Obsolete("Please use Teardown(Action<ICakeContext>) instead.", false)]
+        [Obsolete("Please use Teardown(Action<ITeardownContext>) instead.", false)]
         public void Teardown(Action action)
         {
             if (Context != null && Context.Log != null)
             {
-                Context.Log.Warning("Please use Teardown(Action<ICakeContext>) instead.");
+                Context.Log.Warning("Please use Teardown(Action<ITeardownContext>) instead.");
             }
             Teardown(context => action());
         }
@@ -130,7 +131,7 @@ namespace Cake.Core.Scripting
         /// });
         /// </code>
         /// </example>
-        public void Teardown(Action<ICakeContext> action)
+        public void Teardown(Action<ITeardownContext> action)
         {
             _engine.RegisterTeardownAction(action);
         }
@@ -140,7 +141,23 @@ namespace Cake.Core.Scripting
         /// If the task setup fails, its task will not be executed but the task teardown will be performed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
+        [Obsolete("Please use TaskSetup(Action<ITaskSetupContext>) instead.", false)]
         public void TaskSetup(Action<ICakeContext, ITaskSetupContext> action)
+        {
+            if (Context != null && Context.Log != null)
+            {
+                Context.Log.Warning("Please use TaskSetup(Action<ITaskSetupContext>) instead.");
+            }
+
+            TaskSetup(context => action(context, context));
+        }
+
+        /// <summary>
+        /// Allows registration of an action that's executed before each task is run.
+        /// If the task setup fails, its task will not be executed but the task teardown will be performed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        public void TaskSetup(Action<ITaskSetupContext> action)
         {
             _engine.RegisterTaskSetupAction(action);
         }
@@ -150,7 +167,23 @@ namespace Cake.Core.Scripting
         /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
+        [Obsolete("Please use TaskTeardown(Action<ITaskTeardownContext>) instead.", false)]
         public void TaskTeardown(Action<ICakeContext, ITaskTeardownContext> action)
+        {
+            if (Context != null && Context.Log != null)
+            {
+                Context.Log.Warning("Please use TaskTeardown(Action<ITaskTeardownContext>) instead.");
+            }
+
+            TaskTeardown(context => action(context, context));
+        }
+
+        /// <summary>
+        /// Allows registration of an action that's executed after each task has been run.
+        /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        public void TaskTeardown(Action<ITaskTeardownContext> action)
         {
             _engine.RegisterTaskTeardownAction(action);
         }

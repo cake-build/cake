@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.Execute;
@@ -150,10 +151,10 @@ namespace Cake.Common.Tools.DotNetCore
         ///     {
         ///         Sources = new[] {"https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2"},
         ///         FallbackSources = new[] {"https://www.example.com/fallbacknugetfeed"},
-        ///         Packages = "./packages",
+        ///         PackagesDirectory = "./packages",
         ///         Verbosity = Information,
         ///         DisableParallel = true,
-        ///         Runtimes = new[] {"runtime1", "runtime2"}
+        ///         InferRuntimes = new[] {"runtime1", "runtime2"}
         ///     };
         ///
         ///     DotNetCoreRestore(settings);
@@ -179,10 +180,10 @@ namespace Cake.Common.Tools.DotNetCore
         ///     {
         ///         Sources = new[] {"https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2"},
         ///         FallbackSources = new[] {"https://www.example.com/fallbacknugetfeed"},
-        ///         Packages = "./packages",
+        ///         PackagesDirectory = "./packages",
         ///         Verbosity = Information,
         ///         DisableParallel = true,
-        ///         Runtimes = new[] {"runtime1", "runtime2"}
+        ///         InferRuntimes = new[] {"runtime1", "runtime2"}
         ///     };
         ///
         ///     DotNetCoreRestore("./src/*", settings);
@@ -203,7 +204,7 @@ namespace Cake.Common.Tools.DotNetCore
                 settings = new DotNetCoreRestoreSettings();
             }
 
-            var restorer = new DotNetCoreRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var restorer = new DotNetCoreRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);
             restorer.Restore(root, settings);
         }
 
@@ -235,7 +236,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <code>
         ///     var settings = new DotNetCoreBuildSettings
         ///     {
-        ///         Frameworks = new[] { "net451", "dnxcore50" },
+        ///         Framework = "netcoreapp1.0",
         ///         Configuration = "Debug",
         ///         OutputDirectory = "./artifacts/"
         ///     };
@@ -290,8 +291,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <code>
         ///     var settings = new DotNetCorePackSettings
         ///     {
-        ///         Frameworks = new[] { "dnx451", "dnxcore50" },
-        ///         Configurations = new[] { "Debug", "Release" },
+        ///         Configuration = "Release",
         ///         OutputDirectory = "./artifacts/"
         ///     };
         ///
@@ -382,7 +382,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <code>
         ///     var settings = new DotNetCoreRunSettings
         ///     {
-        ///         Framework = "dnxcore50",
+        ///         Framework = "netcoreapp1.0",
         ///         Configuration = "Release"
         ///     };
         ///
@@ -436,7 +436,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <code>
         ///     var settings = new DotNetCorePublishSettings
         ///     {
-        ///         Framework = "dnxcore50",
+        ///         Framework = "netcoreapp1.0",
         ///         Configuration = "Release",
         ///         OutputDirectory = "./artifacts/"
         ///     };

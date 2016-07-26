@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using System.Runtime.Versioning;
 
@@ -17,15 +18,17 @@ namespace Cake.Core
         public FrameworkName TargetFramework { get; private set; }
 
         /// <summary>
+        /// Gets the version of Cake executing the script.
+        /// </summary>
+        public Version CakeVersion { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CakeRuntime"/> class.
         /// </summary>
         public CakeRuntime()
         {
-            // Try to get the current framework name from the current application domain,
-            // but if that is null, we default to .NET 4.5. The reason for doing this is
-            // that this actually is what happens on Mono.
-            var frameworkName = AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName;
-            TargetFramework = new FrameworkName(frameworkName ?? ".NETFramework,Version=v4.5");
+            TargetFramework = new FrameworkName(".NETFramework,Version=v4.5");
+            CakeVersion = typeof(ICakeRuntime).Assembly.GetName().Version;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -122,15 +123,22 @@ namespace Cake.Common.Tools.MSBuild
         /// Sets the maximum CPU count.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        /// <param name="maxCpuCount">The maximum CPU count.</param>
+        /// <param name="maxCpuCount">The maximum CPU count. Set this value to zero to use as many MSBuild processes as available CPUs.</param>
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
-        public static MSBuildSettings SetMaxCpuCount(this MSBuildSettings settings, int maxCpuCount)
+        public static MSBuildSettings SetMaxCpuCount(this MSBuildSettings settings, int? maxCpuCount)
         {
             if (settings == null)
             {
                 throw new ArgumentNullException("settings");
             }
-            settings.MaxCpuCount = Math.Max(0, maxCpuCount);
+            if (maxCpuCount.HasValue)
+            {
+                settings.MaxCpuCount = Math.Max(0, maxCpuCount.Value);
+            }
+            else
+            {
+                settings.MaxCpuCount = null;
+            }
             return settings;
         }
 

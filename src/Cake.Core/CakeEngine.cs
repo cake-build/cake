@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -19,9 +20,9 @@ namespace Cake.Core
         private readonly ICakeLog _log;
         private readonly List<CakeTask> _tasks;
         private Action<ICakeContext> _setupAction;
-        private Action<ICakeContext> _teardownAction;
-        private Action<ICakeContext, ITaskSetupContext> _taskSetupAction;
-        private Action<ICakeContext, ITaskTeardownContext> _taskTeardownAction;
+        private Action<ITeardownContext> _teardownAction;
+        private Action<ITaskSetupContext> _taskSetupAction;
+        private Action<ITaskTeardownContext> _taskTeardownAction;
 
         /// <summary>
         /// Gets all registered tasks.
@@ -80,7 +81,7 @@ namespace Cake.Core
         /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        public void RegisterTeardownAction(Action<ICakeContext> action)
+        public void RegisterTeardownAction(Action<ITeardownContext> action)
         {
             _teardownAction = action;
         }
@@ -116,6 +117,7 @@ namespace Cake.Core
             // while running a setup action, or a task. We do this since we don't
             // want to throw teardown exceptions if an exception was thrown previously.
             var exceptionWasThrown = false;
+            Exception thrownException = null;
 
             try
             {
@@ -146,14 +148,15 @@ namespace Cake.Core
 
                 return report;
             }
-            catch
+            catch (Exception ex)
             {
                 exceptionWasThrown = true;
+                thrownException = ex;
                 throw;
             }
             finally
             {
-                PerformTeardown(strategy, context, exceptionWasThrown);
+                PerformTeardown(strategy, context, exceptionWasThrown, thrownException);
             }
         }
 
@@ -162,7 +165,7 @@ namespace Cake.Core
         /// If the task setup fails, the task will not be executed but the task's teardown will be performed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        public void RegisterTaskSetupAction(Action<ICakeContext, ITaskSetupContext> action)
+        public void RegisterTaskSetupAction(Action<ITaskSetupContext> action)
         {
             _taskSetupAction = action;
         }
@@ -172,7 +175,7 @@ namespace Cake.Core
         /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        public void RegisterTaskTeardownAction(Action<ICakeContext, ITaskTeardownContext> action)
+        public void RegisterTaskTeardownAction(Action<ITaskTeardownContext> action)
         {
             _taskTeardownAction = action;
         }
@@ -271,8 +274,8 @@ namespace Cake.Core
             {
                 try
                 {
-                    var taskSetupContext = new TaskSetupContext(task);
-                    strategy.PerformTaskSetup(_taskSetupAction, context, taskSetupContext);
+                    var taskSetupContext = new TaskSetupContext(context, task);
+                    strategy.PerformTaskSetup(_taskSetupAction, taskSetupContext);
                 }
                 catch
                 {
@@ -286,10 +289,10 @@ namespace Cake.Core
         {
             if (_taskTeardownAction != null)
             {
-                var taskTeardownContext = new TaskTeardownContext(task, duration, skipped);
                 try
                 {
-                    strategy.PerformTaskTeardown(_taskTeardownAction, context, taskTeardownContext);
+                    var taskTeardownContext = new TaskTeardownContext(context, task, duration, skipped);
+                    strategy.PerformTaskTeardown(_taskTeardownAction, taskTeardownContext);
                 }
                 catch (Exception ex)
                 {
@@ -350,13 +353,14 @@ namespace Cake.Core
             }
         }
 
-        private void PerformTeardown(IExecutionStrategy strategy, ICakeContext context, bool exceptionWasThrown)
+        private void PerformTeardown(IExecutionStrategy strategy, ICakeContext context, bool exceptionWasThrown, Exception thrownException)
         {
             if (_teardownAction != null)
             {
                 try
                 {
-                    strategy.PerformTeardown(_teardownAction, context);
+                    var teardownContext = new TeardownContext(context, thrownException);
+                    strategy.PerformTeardown(_teardownAction, teardownContext);
                 }
                 catch (Exception ex)
                 {

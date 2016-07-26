@@ -1,9 +1,11 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using Cake.Common.Build.AppVeyor;
 using Cake.Common.Build.Bamboo;
+using Cake.Common.Build.BitbucketPipelines;
 using Cake.Common.Build.Bitrise;
 using Cake.Common.Build.ContinuaCI;
 using Cake.Common.Build.Jenkins;
@@ -47,8 +49,9 @@ namespace Cake.Common.Build
             var jenkinsProvider = new JenkinsProvider(context.Environment);
             var bitriseProvider = new BitriseProvider(context.Environment);
             var travisCIProvider = new TravisCIProvider(context.Environment, context.Log);
+            var bitbucketPipelinesProvider = new BitbucketPipelinesProvider(context.Environment);
 
-            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider);
+            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider);
         }
 
         /// <summary>
@@ -71,6 +74,7 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("context");
             }
+
             var buildSystem = context.BuildSystem();
             return buildSystem.AppVeyor;
         }
@@ -93,6 +97,7 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("context");
             }
+
             var buildSystem = context.BuildSystem();
             return buildSystem.TeamCity;
         }
@@ -115,6 +120,7 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("context");
             }
+
             var buildSystem = context.BuildSystem();
             return buildSystem.MyGet;
         }
@@ -137,6 +143,7 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("context");
             }
+
             var buildSystem = context.BuildSystem();
             return buildSystem.Bamboo;
         }
@@ -161,12 +168,13 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("context");
             }
+
             var buildSystem = context.BuildSystem();
             return buildSystem.ContinuaCI;
         }
 
         /// <summary>
-        /// Get a <see cref="JenkinsProvider"/> instance that can be user to
+        /// Gets a <see cref="JenkinsProvider"/> instance that can be user to
         /// obtain information from the Jenkins environment.
         /// </summary>
         /// <example>
@@ -185,12 +193,13 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("context");
             }
+
             var buildSystem = context.BuildSystem();
             return buildSystem.Jenkins;
         }
 
         /// <summary>
-        /// Get a <see cref="BitriseProvider"/> instance that can be user to
+        /// Gets a <see cref="BitriseProvider"/> instance that can be user to
         /// obtain information from the Bitrise environment.
         /// </summary>
         /// <example>
@@ -209,12 +218,13 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("context");
             }
+
             var buildSystem = context.BuildSystem();
             return buildSystem.Bitrise;
         }
 
         /// <summary>
-        /// Get a <see cref="TravisCIProvider"/> instance that can be user to
+        /// Gets a <see cref="TravisCIProvider"/> instance that can be user to
         /// obtain information from the Travis CI environment.
         /// </summary>
         /// <example>
@@ -233,8 +243,34 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("context");
             }
+
             var buildSystem = context.BuildSystem();
             return buildSystem.TravisCI;
+        }
+
+        /// <summary>
+        /// Gets a <see cref="BitbucketPipelinesProvider"/> instance that can be user to
+        /// obtain information from the Bitbucket Pipelines environment.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var isBitbucketPipelinesBuild = BitbucketPipelines.IsRunningOnBitbucketPipelines;
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <returns>A <see cref="Build.BitbucketPipelines"/> instance.</returns>
+        [CakePropertyAlias(Cache = true)]
+        [CakeNamespaceImport("Cake.Common.Build.BitbucketPipelines")]
+        [CakeNamespaceImport("Cake.Common.Build.BitbucketPipelines.Data")]
+        public static IBitbucketPipelinesProvider BitbucketPipelines(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var buildSystem = context.BuildSystem();
+            return buildSystem.BitbucketPipelines;
         }
     }
 }

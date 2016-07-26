@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -23,6 +24,11 @@ namespace Cake.Common.Tools.XBuild
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="solution">The solution to build.</param>
+        /// <example>
+        /// <code>
+        /// XBuild("./src/Cake.sln");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void XBuild(this ICakeContext context, FilePath solution)
         {
@@ -35,6 +41,14 @@ namespace Cake.Common.Tools.XBuild
         /// <param name="context">The context.</param>
         /// <param name="solution">The solution to build.</param>
         /// <param name="configurator">The settings configurator.</param>
+        /// <example>
+        /// <code>
+        /// XBuild("./src/Cake.sln", configurator =>
+        ///     configurator.SetConfiguration("Debug")
+        ///         .SetVerbosity(Verbosity.Minimal)
+        ///         .UseToolVersion(XBuildToolVersion.NET40));
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void XBuild(this ICakeContext context, FilePath solution, Action<XBuildSettings> configurator)
         {
@@ -60,6 +74,15 @@ namespace Cake.Common.Tools.XBuild
         /// <param name="context">The context.</param>
         /// <param name="solution">The solution to build.</param>
         /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// XBuild("./src/Cake.sln", new XBuildSettings {
+        ///     Verbosity = Verbosity.Minimal,
+        ///     ToolVersion = XBuildToolVersion.NET40,
+        ///     Configuration = "Release"
+        ///     });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void XBuild(this ICakeContext context, FilePath solution, XBuildSettings settings)
         {

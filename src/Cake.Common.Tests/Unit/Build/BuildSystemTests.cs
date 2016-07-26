@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using Cake.Common.Build;
 using Cake.Common.Build.AppVeyor;
 using Cake.Common.Build.MyGet;
@@ -12,6 +13,7 @@ using Xunit;
 using Cake.Common.Build.ContinuaCI;
 using Cake.Common.Build.Jenkins;
 using Cake.Common.Build.TravisCI;
+using Cake.Common.Build.BitbucketPipelines;
 
 namespace Cake.Common.Tests.Unit.Build
 {
@@ -30,9 +32,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(null, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider));
+                var result = Record.Exception(() => new BuildSystem(null, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider));
 
                 // Then
                 Assert.IsArgumentNullException(result, "appVeyorProvider");
@@ -49,9 +52,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, null, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, null, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider));
 
                 // Then
                 Assert.IsArgumentNullException(result, "teamCityProvider");
@@ -68,9 +72,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, null, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, null, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider));
 
                 // Then
                 Assert.IsArgumentNullException(result, "myGetProvider");
@@ -87,13 +92,13 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, null, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, null, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider));
 
                 // Then
                 Assert.IsArgumentNullException(result, "bambooProvider");
-
             }
 
             [Fact]
@@ -107,13 +112,13 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, null,  jenkinsProvider, bitriseProvider, travisCIProvider));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, null,  jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider));
 
                 // Then
                 Assert.IsArgumentNullException(result, "continuaCIProvider");
-
             }
 
             [Fact]
@@ -127,9 +132,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, null, bitriseProvider, travisCIProvider));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, null, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider));
 
                 // Then
                 Assert.IsArgumentNullException(result, "jenkinsProvider");
@@ -146,9 +152,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, null, travisCIProvider));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, null, travisCIProvider, bitbucketPipelinesProvider));
 
                 // Then
                 Assert.IsArgumentNullException(result, "bitriseProvider");
@@ -165,12 +172,33 @@ namespace Cake.Common.Tests.Unit.Build
                 var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, null));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, null, bitbucketPipelinesProvider));
 
                 // Then
                 Assert.IsArgumentNullException(result, "travisCIProvider");
+            }
+
+            [Fact]
+            public void Should_Throw_If_BitbucketPipelines_Is_Null()
+            {
+                // Given
+                var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
+                var teamCityProvider = Substitute.For<ITeamCityProvider>();
+                var myGetProvider = Substitute.For<IMyGetProvider>();
+                var bambooProvider = Substitute.For<IBambooProvider>();
+                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
+                var jenkinsProvider = Substitute.For<IJenkinsProvider>();
+                var bitriseProvider = Substitute.For<IBitriseProvider>();
+                var travisCIProvider = Substitute.For<ITravisCIProvider>();
+
+                // When
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "bitbucketPipelinesProvider");
             }
         }
 
@@ -188,9 +216,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(true);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider);
 
                 // When
                 var result = buildSystem.IsRunningOnAppVeyor;
@@ -214,9 +243,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 teamCityProvider.IsRunningOnTeamCity.Returns(true);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider);
 
                 // When
                 var result = buildSystem.IsRunningOnTeamCity;
@@ -240,9 +270,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 myGetProvider.IsRunningOnMyGet.Returns(true);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider);
 
                 // When
                 var result = buildSystem.IsRunningOnMyGet;
@@ -266,9 +297,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 bambooProvider.IsRunningOnBamboo.Returns(true);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider);
 
                 // When
                 var result = buildSystem.IsRunningOnBamboo;
@@ -292,9 +324,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 continuaCIProvider.IsRunningOnContinuaCI.Returns(true);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider);
 
                 // When
                 var result = buildSystem.IsRunningOnContinuaCI;
@@ -318,9 +351,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 jenkinsProvider.IsRunningOnJenkins.Returns(true);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider);
 
                 // When
                 var result = buildSystem.IsRunningOnJenkins;
@@ -344,9 +378,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 bitriseProvider.IsRunningOnBitrise.Returns(true);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider);
 
                 // When
                 var result = buildSystem.IsRunningOnBitrise;
@@ -370,12 +405,40 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 travisCIProvider.IsRunningOnTravisCI.Returns(true);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider);
 
                 // When
                 var result = buildSystem.IsRunningOnTravisCI;
+
+                // Then
+                Assert.True(result);
+            }
+        }
+
+        public sealed class TheIsRunningOnBitbucketPipelinesProperty
+        {
+            [Fact]
+            public void Should_Return_True_If_Running_On_BitbucketPipelines()
+            {
+                // Given
+                var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
+                var teamCityProvider = Substitute.For<ITeamCityProvider>();
+                var myGetProvider = Substitute.For<IMyGetProvider>();
+                var bambooProvider = Substitute.For<IBambooProvider>();
+                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
+                var jenkinsProvider = Substitute.For<IJenkinsProvider>();
+                var bitriseProvider = Substitute.For<IBitriseProvider>();
+                var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
+
+                bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(true);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider);
+
+                // When
+                var result = buildSystem.IsRunningOnBitbucketPipelines;
 
                 // Then
                 Assert.True(result);
@@ -396,6 +459,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(true);
                 teamCityProvider.IsRunningOnTeamCity.Returns(false);
@@ -405,7 +469,8 @@ namespace Cake.Common.Tests.Unit.Build
                 jenkinsProvider.IsRunningOnJenkins.Returns(false);
                 bitriseProvider.IsRunningOnBitrise.Returns(false);
                 travisCIProvider.IsRunningOnTravisCI.Returns(false);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider);
+                bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(false);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider);
 
                 // When
                 var result = buildSystem.IsLocalBuild;
@@ -426,6 +491,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(false);
                 teamCityProvider.IsRunningOnTeamCity.Returns(true);
@@ -435,7 +501,8 @@ namespace Cake.Common.Tests.Unit.Build
                 jenkinsProvider.IsRunningOnJenkins.Returns(false);
                 bitriseProvider.IsRunningOnBitrise.Returns(false);
                 travisCIProvider.IsRunningOnTravisCI.Returns(false);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider);
+                bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(false);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider);
 
                 // When
                 var result = buildSystem.IsLocalBuild;
@@ -456,6 +523,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(false);
                 teamCityProvider.IsRunningOnTeamCity.Returns(false);
@@ -465,7 +533,8 @@ namespace Cake.Common.Tests.Unit.Build
                 jenkinsProvider.IsRunningOnJenkins.Returns(false);
                 bitriseProvider.IsRunningOnBitrise.Returns(false);
                 travisCIProvider.IsRunningOnTravisCI.Returns(false);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider);
+                bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(false);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider);
 
                 // When
                 var result = buildSystem.IsLocalBuild;
@@ -486,6 +555,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(false);
                 teamCityProvider.IsRunningOnTeamCity.Returns(false);
@@ -495,7 +565,8 @@ namespace Cake.Common.Tests.Unit.Build
                 jenkinsProvider.IsRunningOnJenkins.Returns(false);
                 bitriseProvider.IsRunningOnBitrise.Returns(false);
                 travisCIProvider.IsRunningOnTravisCI.Returns(false);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider);
+                bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(false);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider);
 
                 // When
                 var result = buildSystem.IsLocalBuild;
@@ -516,6 +587,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(false);
                 teamCityProvider.IsRunningOnTeamCity.Returns(false);
@@ -525,7 +597,8 @@ namespace Cake.Common.Tests.Unit.Build
                 jenkinsProvider.IsRunningOnJenkins.Returns(false);
                 bitriseProvider.IsRunningOnBitrise.Returns(false);
                 travisCIProvider.IsRunningOnTravisCI.Returns(false);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider);
+                bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(false);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider);
 
                 // When
                 var result = buildSystem.IsLocalBuild;
@@ -546,6 +619,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(false);
                 teamCityProvider.IsRunningOnTeamCity.Returns(false);
@@ -555,7 +629,8 @@ namespace Cake.Common.Tests.Unit.Build
                 jenkinsProvider.IsRunningOnJenkins.Returns(true);
                 bitriseProvider.IsRunningOnBitrise.Returns(false);
                 travisCIProvider.IsRunningOnTravisCI.Returns(false);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider);
+                bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(false);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider);
 
                 // When
                 var result = buildSystem.IsLocalBuild;
@@ -576,6 +651,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(false);
                 teamCityProvider.IsRunningOnTeamCity.Returns(false);
@@ -585,7 +661,8 @@ namespace Cake.Common.Tests.Unit.Build
                 jenkinsProvider.IsRunningOnJenkins.Returns(false);
                 bitriseProvider.IsRunningOnBitrise.Returns(true);
                 travisCIProvider.IsRunningOnTravisCI.Returns(false);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider);
+                bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(false);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider);
 
                 // When
                 var result = buildSystem.IsLocalBuild;
@@ -606,6 +683,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(false);
                 teamCityProvider.IsRunningOnTeamCity.Returns(false);
@@ -615,7 +693,40 @@ namespace Cake.Common.Tests.Unit.Build
                 jenkinsProvider.IsRunningOnJenkins.Returns(false);
                 bitriseProvider.IsRunningOnBitrise.Returns(false);
                 travisCIProvider.IsRunningOnTravisCI.Returns(true);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider);
+                bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(false);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider);
+
+                // When
+                var result = buildSystem.IsLocalBuild;
+
+                // Then
+                Assert.False(result);
+            }
+
+            [Fact]
+            public void Should_Return_False_If_Running_On_BitbucketPipelines()
+            {
+                // Given
+                var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
+                var teamCityProvider = Substitute.For<ITeamCityProvider>();
+                var myGetProvider = Substitute.For<IMyGetProvider>();
+                var bambooProvider = Substitute.For<IBambooProvider>();
+                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
+                var jenkinsProvider = Substitute.For<IJenkinsProvider>();
+                var bitriseProvider = Substitute.For<IBitriseProvider>();
+                var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
+
+                appVeyorProvider.IsRunningOnAppVeyor.Returns(false);
+                teamCityProvider.IsRunningOnTeamCity.Returns(false);
+                myGetProvider.IsRunningOnMyGet.Returns(false);
+                bambooProvider.IsRunningOnBamboo.Returns(false);
+                continuaCIProvider.IsRunningOnContinuaCI.Returns(false);
+                jenkinsProvider.IsRunningOnJenkins.Returns(false);
+                bitriseProvider.IsRunningOnBitrise.Returns(false);
+                travisCIProvider.IsRunningOnTravisCI.Returns(false);
+                bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(true);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider);
 
                 // When
                 var result = buildSystem.IsLocalBuild;
@@ -636,6 +747,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
 
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(false);
                 teamCityProvider.IsRunningOnTeamCity.Returns(false);
@@ -644,7 +756,8 @@ namespace Cake.Common.Tests.Unit.Build
                 continuaCIProvider.IsRunningOnContinuaCI.Returns(false);
                 bitriseProvider.IsRunningOnBitrise.Returns(false);
                 travisCIProvider.IsRunningOnTravisCI.Returns(false);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider);
+                bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(false);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider);
 
                 // When
                 var result = buildSystem.IsLocalBuild;

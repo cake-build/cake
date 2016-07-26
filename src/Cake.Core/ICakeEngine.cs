@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using System.Collections.Generic;
 
@@ -36,7 +37,7 @@ namespace Cake.Core
         /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        void RegisterTeardownAction(Action<ICakeContext> action);
+        void RegisterTeardownAction(Action<ITeardownContext> action);
 
         /// <summary>
         /// Runs the specified target using the specified <see cref="IExecutionStrategy"/>.
@@ -52,13 +53,13 @@ namespace Cake.Core
         /// If the task setup fails, the task will not be executed but the task's teardown will be performed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        void RegisterTaskSetupAction(Action<ICakeContext, ITaskSetupContext> action);
+        void RegisterTaskSetupAction(Action<ITaskSetupContext> action);
 
         /// <summary>
         /// Allows registration of an action that's executed after each task has been run.
         /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        void RegisterTaskTeardownAction(Action<ICakeContext, ITaskTeardownContext> action);
+        void RegisterTaskTeardownAction(Action<ITaskTeardownContext> action);
     }
 }

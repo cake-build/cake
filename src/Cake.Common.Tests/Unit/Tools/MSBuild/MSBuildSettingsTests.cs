@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using Cake.Common.Tools.MSBuild;
 using Cake.Core.Diagnostics;
 using Xunit;
@@ -103,13 +104,13 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
         public sealed class TheMaxCpuCountProperty
         {
             [Fact]
-            public void Should_Be_Empty_By_Default()
+            public void Should_Be_Null_By_Default()
             {
                 // Given
                 var settings = new MSBuildSettings();
 
                 // Then
-                Assert.Equal(0, settings.MaxCpuCount);
+                Assert.Null(settings.MaxCpuCount);
             }
         }
     }

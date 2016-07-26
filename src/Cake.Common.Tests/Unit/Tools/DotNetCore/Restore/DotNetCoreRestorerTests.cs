@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using Cake.Common.Tests.Fixtures.Tools.DotNetCore.Restore;
 using Cake.Common.Tools.DotNetCore.Restore;
 using Cake.Testing;
@@ -80,7 +81,24 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore ./src/*", result.Args);
+                Assert.Equal("restore \"./src/*\"", result.Args);
+            }
+
+            [Theory]
+            [InlineData("./src/*", "restore \"./src/*\"")]
+            [InlineData("./src/cake build/", "restore \"./src/cake build/\"")]
+            [InlineData("./src/cake build/cake cli", "restore \"./src/cake build/cake cli\"")]
+            public void Should_Quote_Root_Path(string text, string expected)
+            {
+                // Given
+                var fixture = new DotNetCoreRestorerFixture();
+                fixture.Root = text;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]
@@ -90,7 +108,9 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                 var fixture = new DotNetCoreRestorerFixture();
                 fixture.Settings.Sources = new[] { "https://www.example.com/source1", "https://www.example.com/source2" };
                 fixture.Settings.FallbackSources = new[] { "https://www.example.com/fallback1", "https://www.example.com/fallback2" };
+#pragma warning disable 0618
                 fixture.Settings.Quiet = true;
+#pragma warning restore 0618
                 fixture.Settings.NoCache = true;
                 fixture.Settings.DisableParallel = true;
                 fixture.Settings.ForceEnglishOutput = true;
@@ -113,8 +133,27 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                              " --configfile \"/Working/NuGet.config\"" +
                              " --infer-runtimes \"runtime1\"" +
                              " --infer-runtimes \"runtime2\"" +
-                             " --quiet --no-cache --disable-parallel --ignore-failed-sources --force-english-output" +
+                             " --no-cache --disable-parallel --ignore-failed-sources --force-english-output" +
                              " --verbosity Information", result.Args);
+            }
+
+            [Fact]
+            public void Quiet_Does_Not_Set_Verbosity()
+            {
+                // Given
+                var fixture = new DotNetCoreRestorerFixture();
+                fixture.Settings.Sources = new[] { "https://www.example.com/source1", "https://www.example.com/source2" };
+#pragma warning disable 0618
+                fixture.Settings.Quiet = true;
+#pragma warning restore 0618
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("restore" +
+                             " --source \"https://www.example.com/source1\"" +
+                             " --source \"https://www.example.com/source2\"", result.Args);
             }
         }
     }

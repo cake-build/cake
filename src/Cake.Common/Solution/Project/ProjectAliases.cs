@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -28,13 +29,15 @@ namespace Cake.Common.Solution.Project
         ///     Configuration         : {0}
         ///     Platform              : {1}
         ///     OutputType            : {2}
-        ///     RootNameSpace         : {3}
-        ///     AssemblyName          : {4}
-        ///     TargetFrameworkVersion: {5}
-        ///     Files                 : {6}",
+        ///     OutputPath            : {3}
+        ///     RootNameSpace         : {4}
+        ///     AssemblyName          : {5}
+        ///     TargetFrameworkVersion: {6}
+        ///     Files                 : {7}",
         ///     parsedProject.Configuration,
         ///     parsedProject.Platform,
         ///     parsedProject.OutputType,
+        ///     parsedProject.OutputPath,
         ///     parsedProject.RootNameSpace,
         ///     parsedProject.AssemblyName,
         ///     parsedProject.TargetFrameworkVersion,

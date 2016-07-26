@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Core;
 using Cake.Core.IO;
@@ -188,6 +189,19 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             var result = fixture.Run();
 
             Assert.Equal("\"/testcontainer:/Working/Test1.dll\" /category:\"!Network\" /noisolation", result.Args);
+        }
+
+        [Fact]
+        public void Should_Use_TestResultsFile_If_Provided()
+        {
+            //Given
+            var fixture = new MSTestRunnerFixture();
+            fixture.Settings.ResultsFile = @"c:\temp\myresults.trx";
+
+            //When
+            var result = fixture.Run();
+
+            Assert.Equal("\"/testcontainer:/Working/Test1.dll\" /resultsfile:\"c:\\temp\\myresults.trx\" /noisolation", result.Args);
         }
 
         [Fact]

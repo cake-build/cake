@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.NUnit;
@@ -148,19 +149,25 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 Assert.Equal("NUnit3: Process was not started.", result.Message);
             }
 
-            [Fact]
-            public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
+            [Theory]
+            [InlineData(10, "NUnit3: 10 test(s) failed (exit code 10).")]
+            [InlineData(-1, "NUnit3: Invalid argument (exit code -1).")]
+            [InlineData(-2, "NUnit3: Invalid assembly (exit code -2).")]
+            [InlineData(-4, "NUnit3: Invalid test fixture (exit code -4).")]
+            [InlineData(-100, "NUnit3: Unexpected error (exit code -100).")]
+            [InlineData(-10, "NUnit3: Unrecognised error (exit code -10).")]
+            public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code(int exitCode, string expectedMessage)
             {
                 // Given
                 var fixture = new NUnit3RunnerFixture();
-                fixture.GivenProcessExitsWithCode(1);
+                fixture.GivenProcessExitsWithCode(exitCode);
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("NUnit3: Process returned an error (exit code 1).", result.Message);
+                Assert.Equal(expectedMessage, result.Message);
             }
 
             [Fact]

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using Cake.Common.Build.Bitrise.Data;
 using Cake.Core;
 
@@ -15,10 +16,10 @@ namespace Cake.Common.Build.Bitrise
         private readonly BitriseEnvironmentInfo _bitriseEnvironment;
 
         /// <summary>
-        /// Gets a value indicating whether the current build is running on Bamboo.
+        /// Gets a value indicating whether the current build is running on Bitrise.
         /// </summary>
         /// <value>
-        /// <c>true</c> if the current build is running on Bamboo; otherwise, <c>false</c>.
+        /// <c>true</c> if the current build is running on Bitrise; otherwise, <c>false</c>.
         /// </value>
         public bool IsRunningOnBitrise
         {
@@ -26,7 +27,7 @@ namespace Cake.Common.Build.Bitrise
         }
 
         /// <summary>
-        /// Gets the Bamboo environment.
+        /// Gets the Bitrise environment.
         /// </summary>
         /// <value>
         /// The Bamboo environment.

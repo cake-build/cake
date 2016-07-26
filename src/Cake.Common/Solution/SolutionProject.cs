@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using Cake.Core.IO;
 
 namespace Cake.Common.Solution
@@ -8,12 +9,13 @@ namespace Cake.Common.Solution
     /// <summary>
     /// Represents a project in a MSBuild solution.
     /// </summary>
-    public sealed class SolutionProject
+    public class SolutionProject
     {
         private readonly string _id;
         private readonly string _name;
         private readonly FilePath _path;
         private readonly string _type;
+        private SolutionProject _parent;
 
         /// <summary>
         /// Gets the project identity.
@@ -45,6 +47,15 @@ namespace Cake.Common.Solution
         public string Type
         {
             get { return _type; }
+        }
+
+        /// <summary>
+        /// Gets the parent project if any, otherwise null.
+        /// </summary>
+        public SolutionProject Parent
+        {
+            get { return _parent; }
+            internal set { _parent = value;  }
         }
 
         /// <summary>

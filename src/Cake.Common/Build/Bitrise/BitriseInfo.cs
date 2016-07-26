@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using Cake.Core;
 
@@ -30,25 +31,6 @@ namespace Cake.Common.Build.Bitrise
         protected string GetEnvironmentString(string variable)
         {
             return _environment.GetEnvironmentVariable(variable) ?? string.Empty;
-        }
-
-        /// <summary>
-        /// Gets an environment variable as a <see cref="System.Int32"/>.
-        /// </summary>
-        /// <param name="variable">The environment variable name.</param>
-        /// <returns>The environment variable.</returns>
-        protected int GetEnvironmentInteger(string variable)
-        {
-            var value = GetEnvironmentString(variable);
-            if (!string.IsNullOrWhiteSpace(value))
-            {
-                int result;
-                if (int.TryParse(value, out result))
-                {
-                    return result;
-                }
-            }
-            return 0;
         }
 
         /// <summary>

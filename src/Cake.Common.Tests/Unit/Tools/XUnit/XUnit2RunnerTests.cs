@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.XUnit;
 using Cake.Core;
@@ -299,6 +300,53 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 // Then
                 Assert.Equal("\"/Working/Test1.dll\" \"/Working/Test2.dll\" " +
                              "-xmlv1 \"/Output/TestResults.xml\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Throw_If_NUnitReport_Is_Set_But_OutputDirectory_Is_Null()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.Settings.NUnitReport = true;
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("Cannot generate NUnit XML report when no output directory has been set.", result.Message);
+            }
+
+            [Fact]
+            public void Should_Generate_NUnit_Xml_Report_With_Correct_Name_For_Single_Assembly()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.Settings.OutputDirectory = "/Output";
+                fixture.Settings.NUnitReport = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" -nunit \"/Output/Test1.dll.xml\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Generate_NUnit_Xml_Report_With_Correct_Name_For_Multiple_Assemblies()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.AssemblyPaths = new FilePath[] { "./Test1.dll", "./Test2.dll" };
+                fixture.Settings.OutputDirectory = "/Output";
+                fixture.Settings.NUnitReport = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" \"/Working/Test2.dll\" " +
+                             "-nunit \"/Output/TestResults.xml\"", result.Args);
             }
 
             [Fact]

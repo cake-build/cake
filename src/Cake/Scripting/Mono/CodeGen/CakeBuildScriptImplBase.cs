@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using System.Collections.Generic;
 using Cake.Core;
@@ -73,7 +74,7 @@ namespace Cake.Scripting.Mono.CodeGen
         /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        [Obsolete("Please use Teardown(Action<ICakeContext>) instead.", false)]
+        [Obsolete("Please use Teardown(Action<ITeardownContext>) instead.", false)]
         public void Teardown(Action action)
         {
             ScriptHost.Teardown(context => action());
@@ -84,7 +85,7 @@ namespace Cake.Scripting.Mono.CodeGen
         /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        public void Teardown(Action<ICakeContext> action)
+        public void Teardown(Action<ITeardownContext> action)
         {
             ScriptHost.Teardown(action);
         }
@@ -94,7 +95,18 @@ namespace Cake.Scripting.Mono.CodeGen
         /// If the task setup fails, its task will not be executed but the task teardown will be performed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
+        [Obsolete("Please use TaskSetup(Action<ITaskSetupContext>) instead.", false)]
         public void TaskSetup(Action<ICakeContext, ITaskSetupContext> action)
+        {
+            ScriptHost.TaskSetup(action);
+        }
+
+        /// <summary>
+        /// Allows registration of an action that's executed before each task is run.
+        /// If the task setup fails, its task will not be executed but the task teardown will be performed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        public void TaskSetup(Action<ITaskSetupContext> action)
         {
             ScriptHost.TaskSetup(action);
         }
@@ -104,7 +116,18 @@ namespace Cake.Scripting.Mono.CodeGen
         /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
+        [Obsolete("Please use TaskSetup(Action<ITaskTeardownContext>) instead.", false)]
         public void TaskTeardown(Action<ICakeContext, ITaskTeardownContext> action)
+        {
+            ScriptHost.TaskTeardown(action);
+        }
+
+        /// <summary>
+        /// Allows registration of an action that's executed after each task has been run.
+        /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        public void TaskTeardown(Action<ITaskTeardownContext> action)
         {
             ScriptHost.TaskTeardown(action);
         }

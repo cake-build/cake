@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 namespace Cake.Common.Solution.Project
 {
     /// <summary>
@@ -51,6 +52,11 @@ namespace Cake.Common.Solution.Project
         internal const string OutputType = "{" + XmlNamespace + "}OutputType";
 
         /// <summary>
+        /// Namespace output path element
+        /// </summary>
+        internal const string OutputPath = "{" + XmlNamespace + "}OutputPath";
+
+        /// <summary>
         /// Namespace assembly name element
         /// </summary>
         internal const string AssemblyName = "{" + XmlNamespace + "}AssemblyName";
@@ -94,5 +100,40 @@ namespace Cake.Common.Solution.Project
         /// Gets the namespace for the service element.
         /// </summary>
         internal const string Service = "{" + XmlNamespace + "}Service";
+
+        /// <summary>
+        /// Gets the namespace for the hint path element.
+        /// </summary>
+        internal const string HintPath = "{" + XmlNamespace + "}HintPath";
+
+        /// <summary>
+        /// Gets the namespace for the name element.
+        /// </summary>
+        internal const string Name = "{" + XmlNamespace + "}Name";
+
+        /// <summary>
+        /// Gets the namespace for the fusion name element.
+        /// </summary>
+        internal const string FusionName = "{" + XmlNamespace + "}FusionName";
+
+        /// <summary>
+        /// Gets the namespace for the specific version element.
+        /// </summary>
+        internal const string SpecificVersion = "{" + XmlNamespace + "}SpecificVersion";
+
+        /// <summary>
+        /// Gets the namespace for the aliases element.
+        /// </summary>
+        internal const string Aliases = "{" + XmlNamespace + "}Aliases";
+
+        /// <summary>
+        /// Gets the namespace for the private element.
+        /// </summary>
+        internal const string Private = "{" + XmlNamespace + "}Private";
+
+        /// <summary>
+        /// Gets the namespace for the package element.
+        /// </summary>
+        internal const string Package = "{" + XmlNamespace + "}Package";
     }
 }

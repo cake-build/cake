@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
+using System;
 using System.Collections.Generic;
 using Cake.Core.IO;
 
@@ -39,6 +41,7 @@ namespace Cake.Common.Tools.DotNetCore.Restore
         /// <summary>
         /// Gets or sets a value indicating whether to display any output.
         /// </summary>
+        [Obsolete(".NET CLI does not support this option anymore. Please use DotNetCoreRestoreSettings.Verbosity instead.")]
         public bool Quiet { get; set; }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using System.Linq;
 using Cake.Arguments;
@@ -61,8 +62,8 @@ namespace Cake.Tests.Unit.Arguments
             }
 
             [Theory]
-            [InlineData("/home/test/build.csx")]
-            [InlineData("\"/home/test/build.csx\"")]
+            [InlineData("/home/test/build.cake")]
+            [InlineData("\"/home/test/build.cake\"")]
             public void Can_Parse_Script_With_Unix_Path(string input)
             {
                 // Given
@@ -76,7 +77,7 @@ namespace Cake.Tests.Unit.Arguments
                 // Then
                 Assert.NotNull(result);
                 Assert.NotNull(result.Script);
-                Assert.Equal("/home/test/build.csx", result.Script.FullPath);
+                Assert.Equal("/home/test/build.cake", result.Script.FullPath);
             }
 
             [Theory]
@@ -110,7 +111,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", "-unknown" });
+                    var result = parser.Parse(new[] { "build.cake", "-unknown" });
 
                     // Then
                     Assert.True(result.Arguments.ContainsKey("unknown"));
@@ -141,7 +142,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", "-unknown", "-unknown" });
+                    var result = parser.Parse(new[] { "build.cake", "-unknown", "-unknown" });
 
                     // Then
                     Assert.NotNull(result);
@@ -177,7 +178,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", input });
+                    var result = parser.Parse(new[] { "build.cake", input });
 
                     // Then
                     Assert.Equal(value, result.Verbosity);
@@ -195,7 +196,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", verbosity });
+                    var result = parser.Parse(new[] { "build.cake", verbosity });
 
                     // Then
                     Assert.True(result.HasError);
@@ -203,8 +204,8 @@ namespace Cake.Tests.Unit.Arguments
                 }
 
                 [Theory]
-                [InlineData("build.csx")]
-                [InlineData("build.csx -verbosity=quiet")]
+                [InlineData("build.cake")]
+                [InlineData("build.cake -verbosity=quiet")]
                 public void Can_Parse_Script(string input)
                 {
                     // Given
@@ -217,7 +218,7 @@ namespace Cake.Tests.Unit.Arguments
 
                     // Then
                     Assert.NotNull(result.Script);
-                    Assert.Equal("build.csx", result.Script.FullPath);
+                    Assert.Equal("build.cake", result.Script.FullPath);
                 }
 
                 [Theory]
@@ -234,7 +235,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", input });
+                    var result = parser.Parse(new[] { "build.cake", input });
 
                     // Then
                     Assert.Equal(expected, result.ShowDescription);
@@ -257,7 +258,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", input });
+                    var result = parser.Parse(new[] { "build.cake", input });
 
                     // Then
                     Assert.Equal(expected, result.PerformDryRun);
@@ -275,7 +276,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", input });
+                    var result = parser.Parse(new[] { "build.cake", input });
 
                     // Then
                     Assert.Equal(expected, result.ShowHelp);
@@ -295,7 +296,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", input });
+                    var result = parser.Parse(new[] { "build.cake", input });
 
                     // Then
                     Assert.Equal(expected, result.ShowVersion);
@@ -315,7 +316,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", input });
+                    var result = parser.Parse(new[] { "build.cake", input });
 
                     // Then
                     Assert.Equal(expected, result.PerformDebug);
@@ -332,7 +333,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", input });
+                    var result = parser.Parse(new[] { "build.cake", input });
 
                     // Then
                     Assert.Equal(expected, result.Mono);
@@ -349,7 +350,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", input });
+                    var result = parser.Parse(new[] { "build.cake", input });
 
                     // Then
                     Assert.Equal(expected, result.Experimental);
@@ -366,7 +367,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", "--unknown" });
+                    var result = parser.Parse(new[] { "build.cake", "--unknown" });
 
                     // Then
                     Assert.True(result.Arguments.ContainsKey("unknown"));
@@ -397,7 +398,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", "--unknown", "--unknown" });
+                    var result = parser.Parse(new[] { "build.cake", "--unknown", "--unknown" });
 
                     // Then
                     Assert.NotNull(result);
@@ -428,7 +429,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", input });
+                    var result = parser.Parse(new[] { "build.cake", input });
 
                     // Then
                     Assert.Equal(value, result.Verbosity);
@@ -444,7 +445,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", verbosity });
+                    var result = parser.Parse(new[] { "build.cake", verbosity });
 
                     // Then
                     Assert.True(result.HasError);
@@ -452,8 +453,8 @@ namespace Cake.Tests.Unit.Arguments
                 }
 
                 [Theory]
-                [InlineData("build.csx")]
-                [InlineData("build.csx --verbosity=quiet")]
+                [InlineData("build.cake")]
+                [InlineData("build.cake --verbosity=quiet")]
                 public void Can_Parse_Script(string input)
                 {
                     // Given
@@ -466,7 +467,7 @@ namespace Cake.Tests.Unit.Arguments
 
                     // Then
                     Assert.NotNull(result.Script);
-                    Assert.Equal("build.csx", result.Script.FullPath);
+                    Assert.Equal("build.cake", result.Script.FullPath);
                 }
 
                 [Theory]
@@ -480,7 +481,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", input });
+                    var result = parser.Parse(new[] { "build.cake", input });
 
                     // Then
                     Assert.Equal(expected, result.ShowDescription);
@@ -503,7 +504,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", input });
+                    var result = parser.Parse(new[] { "build.cake", input });
 
                     // Then
                     Assert.Equal(expected, result.PerformDryRun);
@@ -520,7 +521,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", input });
+                    var result = parser.Parse(new[] { "build.cake", input });
 
                     // Then
                     Assert.Equal(expected, result.ShowHelp);
@@ -540,7 +541,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", input });
+                    var result = parser.Parse(new[] { "build.cake", input });
 
                     // Then
                     Assert.Equal(expected, result.ShowVersion);
@@ -557,7 +558,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", input });
+                    var result = parser.Parse(new[] { "build.cake", input });
 
                     // Then
                     Assert.Equal(expected, result.PerformDebug);
@@ -574,7 +575,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", input });
+                    var result = parser.Parse(new[] { "build.cake", input });
 
                     // Then
                     Assert.Equal(expected, result.Mono);
@@ -591,7 +592,7 @@ namespace Cake.Tests.Unit.Arguments
                     var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
 
                     // When
-                    var result = parser.Parse(new[] { "build.csx", input });
+                    var result = parser.Parse(new[] { "build.cake", input });
 
                     // Then
                     Assert.Equal(expected, result.Experimental);

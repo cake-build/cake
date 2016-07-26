@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using Cake.Common.Tests.Fixtures.Tools.Chocolatey.Push;
 using Cake.Testing;
@@ -141,7 +142,6 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Push
                 // Then
                 Assert.Equal("push \"/Working/existing.nupkg\" -k 1234 -y", result.Args);
             }
-
 
             [Fact]
             public void Should_Add_Source_To_Arguments_If_Not_Null()

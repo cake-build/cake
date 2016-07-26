@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,11 @@ namespace Cake.Common.Tools.Fixie
         /// <summary>
         /// Runs all Fixie tests in the assemblies matching the specified pattern.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// Fixie("./src/UnitTests/*.dll");
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
         [CakeMethodAlias]
@@ -51,6 +57,13 @@ namespace Cake.Common.Tools.Fixie
         /// Runs all Fixie tests in the assemblies matching the specified pattern,
         /// using the specified settings.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// Fixie("./src/UnitTests/*.dll", new FixieSettings {
+        ///     NUnitXml = TestResult.xml
+        ///     });
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
         /// <param name="settings">The settings.</param>
@@ -75,6 +88,15 @@ namespace Cake.Common.Tools.Fixie
         /// <summary>
         /// Runs all Fixie tests in the specified assemblies.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var assemblies = new [] {
+        ///     "UnitTests1.dll",
+        ///     "UnitTests2.dll"
+        /// };
+        /// Fixie(assemblies);
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
         [CakeMethodAlias]
@@ -91,6 +113,12 @@ namespace Cake.Common.Tools.Fixie
         /// <summary>
         /// Runs all Fixie tests in the specified assemblies.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var assemblies = GetFiles("./src/UnitTests/*.dll");
+        /// Fixie(assemblies);
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
         [CakeMethodAlias]
@@ -103,6 +131,17 @@ namespace Cake.Common.Tools.Fixie
         /// Runs all Fixie tests in the specified assemblies,
         /// using the specified settings.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var assemblies = new [] {
+        ///     "UnitTests1.dll",
+        ///     "UnitTests2.dll"
+        /// };
+        /// Fixie(assemblies, new FixieSettings {
+        ///     NUnitXml = TestResult.xml
+        ///     });
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
         /// <param name="settings">The settings.</param>
@@ -121,6 +160,14 @@ namespace Cake.Common.Tools.Fixie
         /// Runs all Fixie tests in the specified assemblies,
         /// using the specified settings.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var assemblies = GetFiles("./src/UnitTests/*.dll");
+        /// Fixie(assemblies, new FixieSettings {
+        ///     NUnitXml = TestResult.xml
+        ///     });
+        /// </code>
+        /// </example>
         /// <param name="context">The context.</param>
         /// <param name="assemblies">The assemblies.</param>
         /// <param name="settings">The settings.</param>

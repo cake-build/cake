@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 namespace Cake.Common.Tools.DotNetCore.Restore
 {
     /// <summary>
@@ -26,6 +27,16 @@ namespace Cake.Common.Tools.DotNetCore.Restore
         /// <summary>
         /// Verbose level.
         /// </summary>
-        Verbose
+        Verbose,
+
+        /// <summary>
+        /// Debug level.
+        /// </summary>
+        Debug,
+
+        /// <summary>
+        /// Minimal level.
+        /// </summary>
+        Minimal
     }
 }

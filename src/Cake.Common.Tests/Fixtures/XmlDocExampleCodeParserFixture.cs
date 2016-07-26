@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System.Collections.Generic;
 using Cake.Common.Solution.Project.XmlDoc;
 using Cake.Common.Tests.Properties;
@@ -31,7 +32,7 @@ namespace Cake.Common.Tests.Fixtures
             FileSystem = fileSystem;
 
             Globber = Substitute.For<IGlobber>();
-            Globber.GetFiles(Pattern).Returns(new FilePath[] { "/Working/Cake.Common.xml", "/Working/Cake.UnCommon.xml"});
+            Globber.GetFiles(Pattern).Returns(new FilePath[] { "/Working/Cake.Common.xml", "/Working/Cake.UnCommon.xml" });
 
             Log = Substitute.For<ICakeLog>();
         }

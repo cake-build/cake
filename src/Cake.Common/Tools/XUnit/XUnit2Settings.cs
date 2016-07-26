@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using System.Collections.Generic;
 using Cake.Core.IO;
@@ -29,6 +30,14 @@ namespace Cake.Common.Tools.XUnit
         /// </summary>
         /// <value>The output directory.</value>
         public DirectoryPath OutputDirectory { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether an NUnit style XML report should be generated.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if an NUnit Style XML report should be generated; otherwise, <c>false</c>.
+        /// </value>
+        public bool NUnitReport { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether an XML report should be generated.

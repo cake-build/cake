@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using Cake.Core.Scripting.CodeGen;
 using Cake.Core.Tests.Fixtures;
 using Xunit;
@@ -32,6 +33,9 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             [InlineData("NonGeneric_ExtensionMethodWithNoParameters")]
             [InlineData("NonGeneric_ExtensionMethodWithParameter")]
             [InlineData("NonGeneric_ExtensionMethodWithGenericParameter")]
+            [InlineData("NonGeneric_ExtensionMethodWithGenericExpressionParameter")]
+            [InlineData("NonGeneric_ExtensionMethodWithGenericExpressionArrayParameter")]
+            [InlineData("NonGeneric_ExtensionMethodWithGenericExpressionParamsArrayParameter")]
             [InlineData("NonGeneric_ExtensionMethodWithReturnValue")]
             [InlineData("NonGeneric_ExtensionMethodWithParameterArray")]
             public void Should_Return_Correct_Generated_Code_For_Non_Generic_Methods(string name)

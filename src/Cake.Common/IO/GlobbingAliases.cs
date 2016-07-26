@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using System.Linq;
 using Cake.Core;
@@ -49,9 +50,9 @@ namespace Cake.Common.IO
         /// <example>
         /// <code>
         /// Func&lt;IFileSystemInfo, bool&gt; exclude_node_modules =
-        /// fileSystemInfo=>!fileSystemInfo.Path.FullPath.EndsWith(
-        ///                 "node_modules",
-        ///                 StringComparison.OrdinalIgnoreCase);
+        ///     fileSystemInfo => !fileSystemInfo.Path.FullPath.EndsWith(
+        ///         "node_modules", StringComparison.OrdinalIgnoreCase);
+        /// 
         /// var files = GetFiles("./**/Cake.*.dll", exclude_node_modules);
         /// foreach(var file in files)
         /// {
@@ -61,11 +62,11 @@ namespace Cake.Common.IO
         /// </example>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The glob pattern to match.</param>
-        /// <param name="predicate">The predicate used to filter files based on file system information.</param>
+        /// <param name="predicate">The predicate used to filter directories based on file system information.</param>
         /// <returns>A <see cref="FilePathCollection" />.</returns>
         [CakeMethodAlias]
         [CakeAliasCategory("Files")]
-        public static FilePathCollection GetFiles(this ICakeContext context, string pattern, Func<IFileSystemInfo, bool> predicate)
+        public static FilePathCollection GetFiles(this ICakeContext context, string pattern, Func<IDirectory, bool> predicate)
         {
             if (context == null)
             {
@@ -110,9 +111,9 @@ namespace Cake.Common.IO
         /// <example>
         /// <code>
         /// Func&lt;IFileSystemInfo, bool&gt; exclude_node_modules =
-        /// fileSystemInfo=>!fileSystemInfo.Path.FullPath.EndsWith(
-        ///                 "node_modules",
-        ///                 StringComparison.OrdinalIgnoreCase);
+        ///     fileSystemInfo => !fileSystemInfo.Path.FullPath.EndsWith(
+        ///         "node_modules", StringComparison.OrdinalIgnoreCase);
+        /// 
         /// var directories = GetDirectories("./src/**/obj/*", exclude_node_modules);
         /// foreach(var directory in directories)
         /// {
@@ -126,7 +127,7 @@ namespace Cake.Common.IO
         /// <returns>A <see cref="DirectoryPathCollection" />.</returns>
         [CakeMethodAlias]
         [CakeAliasCategory("Directories")]
-        public static DirectoryPathCollection GetDirectories(this ICakeContext context, string pattern, Func<IFileSystemInfo, bool> predicate)
+        public static DirectoryPathCollection GetDirectories(this ICakeContext context, string pattern, Func<IDirectory, bool> predicate)
         {
             if (context == null)
             {

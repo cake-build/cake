@@ -1,9 +1,11 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using System.Globalization;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
 using Cake.Core.Tooling;
@@ -16,6 +18,7 @@ namespace Cake.Common.Tools.NuGet.Push
     public sealed class NuGetPusher : NuGetTool<NuGetPushSettings>
     {
         private readonly ICakeEnvironment _environment;
+        private readonly ICakeLog _log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetPusher"/> class.
@@ -25,14 +28,17 @@ namespace Cake.Common.Tools.NuGet.Push
         /// <param name="processRunner">The process runner.</param>
         /// <param name="tools">The tool locator.</param>
         /// <param name="resolver">The NuGet tool resolver.</param>
+        /// <param name="log">The logger.</param>
         public NuGetPusher(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             IProcessRunner processRunner,
             IToolLocator tools,
-            INuGetToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
+            INuGetToolResolver resolver,
+            ICakeLog log) : base(fileSystem, environment, processRunner, tools, resolver)
         {
             _environment = environment;
+            _log = log;
         }
 
         /// <summary>
@@ -78,6 +84,10 @@ namespace Cake.Common.Tools.NuGet.Push
             {
                 builder.Append("-Source");
                 builder.AppendQuoted(settings.Source);
+            }
+            else
+            {
+                _log.Verbose("No Source property has been set.  Depending on your configuration, this may cause problems.");
             }
 
             if (settings.Timeout != null)

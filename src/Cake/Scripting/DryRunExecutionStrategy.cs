@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -26,7 +27,7 @@ namespace Cake.Scripting
         {
         }
 
-        public void PerformTeardown(Action<ICakeContext> action, ICakeContext context)
+        public void PerformTeardown(Action<ITeardownContext> action, ITeardownContext teardownContext)
         {
         }
 
@@ -55,11 +56,11 @@ namespace Cake.Scripting
         {
         }
 
-        public void PerformTaskSetup(Action<ICakeContext, ITaskSetupContext> action, ICakeContext context, ITaskSetupContext setupContext)
+        public void PerformTaskSetup(Action<ITaskSetupContext> action, ITaskSetupContext taskSetupContext)
         {
         }
 
-        public void PerformTaskTeardown(Action<ICakeContext, ITaskTeardownContext> action, ICakeContext context, ITaskTeardownContext teardownContext)
+        public void PerformTaskTeardown(Action<ITaskTeardownContext> action, ITaskTeardownContext taskTeardownContext)
         {
         }
     }

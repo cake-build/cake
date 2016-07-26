@@ -53,7 +53,11 @@
     <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Build\AppVeyor\AppVeyorMessageCategoryType.cs" />
+    <Compile Include="Build\AppVeyor\AppVeyorProviderAddMessageExtensions.cs" />
     <Compile Include="Build\AppVeyor\AppVeyorTestResultsType.cs" />
+    <Compile Include="Build\AppVeyor\AppVeyorUploadArtifactsSettings.cs" />
+    <Compile Include="Build\AppVeyor\AppVeyorUploadArtifactType.cs" />
     <Compile Include="Build\AppVeyor\Data\AppVeyorEnvironmentInfo.cs" />
     <Compile Include="Build\AppVeyor\AppVeyorInfo.cs" />
     <Compile Include="Build\AppVeyor\AppVeyorProvider.cs" />
@@ -96,6 +100,11 @@
     <Compile Include="Build\MyGet\IMyGetProvider.cs" />
     <Compile Include="Build\MyGet\MyGetProvider.cs" />
     <Compile Include="Build\MyGet\MyGetBuildStatus.cs" />
+    <Compile Include="Build\BitbucketPipelines\Data\BitbucketPipelinesEnvironmentInfo.cs" />
+    <Compile Include="Build\BitbucketPipelines\Data\BitbucketPipelinesRepositoryInfo.cs" />
+    <Compile Include="Build\BitbucketPipelines\BitbucketPipelinesInfo.cs" />
+    <Compile Include="Build\BitbucketPipelines\BitbucketPipelinesProvider.cs" />
+    <Compile Include="Build\BitbucketPipelines\IBitbucketPipelinesProvider.cs" />
     <Compile Include="Build\TeamCity\ITeamCityProvider.cs" />
     <Compile Include="Build\TeamCity\TeamCityDisposableExtensions.cs" />
     <Compile Include="Build\TeamCity\TeamCityProvider.cs" />
@@ -129,6 +138,8 @@
     <Compile Include="Solution\Project\ProjectFile.cs" />
     <Compile Include="Solution\Project\ProjectParser.cs" />
     <Compile Include="Solution\Project\ProjectParserResult.cs" />
+    <Compile Include="Solution\Project\ProjectReference.cs" />
+    <Compile Include="Solution\Project\ProjectAssemblyReference.cs" />
     <Compile Include="Solution\Project\ProjectXElement.cs" />
     <Compile Include="Solution\Project\Properties\AssemblyInfoCreator.cs" />
     <Compile Include="Solution\Project\Properties\AssemblyInfoAliases.cs" />
@@ -151,6 +162,7 @@
     <Compile Include="Solution\SolutionAliases.cs" />
     <Compile Include="Solution\SolutionParser.cs" />
     <Compile Include="Solution\SolutionParserResult.cs" />
+    <Compile Include="Solution\SolutionFolder.cs" />
     <Compile Include="Solution\SolutionProject.cs" />
     <Compile Include="Text\TextTransformationAliases.cs" />
     <Compile Include="Text\TextTransformation.cs" />

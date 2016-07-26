@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,6 +61,10 @@ namespace Cake.Common.Tools.XUnit
                 {
                     throw new CakeException("Cannot generate XML report when no output directory has been set.");
                 }
+                if (settings.NUnitReport)
+                {
+                    throw new CakeException("Cannot generate NUnit XML report when no output directory has been set.");
+                }
             }
 
             var assemblies = assemblyPaths as FilePath[] ?? assemblyPaths.ToArray();
@@ -86,6 +91,17 @@ namespace Cake.Common.Tools.XUnit
             if (settings.NoAppDomain)
             {
                 builder.Append("-noappdomain");
+            }
+
+            // Generate NUnit Style XML report?
+            if (settings.NUnitReport)
+            {
+                var reportFileName = XUnitRunnerUtilities.GetReportFileName(assemblyPaths);
+                var assemblyFilename = reportFileName.AppendExtension(".xml");
+                var outputPath = settings.OutputDirectory.MakeAbsolute(_environment).GetFilePath(assemblyFilename);
+
+                builder.Append("-nunit");
+                builder.AppendQuoted(outputPath.FullPath);
             }
 
             // Generate HTML report?

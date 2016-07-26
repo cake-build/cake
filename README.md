@@ -17,7 +17,7 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
 | Visual Studio Team Services | Windows      | ![VSTS Build Status](https://img.shields.io/vso/build/cake-build/af63183c-ac1f-4dbb-93bc-4fa862ea5809/1.svg)              |
 | MyGet Build Services        | Windows      | [![cake-myget-build-service MyGet Build Status](https://www.myget.org/BuildSource/Badge/cake-myget-build-service?identifier=53513546-050e-45de-9500-f161c99df6e2)](https://www.myget.org/) |
 
-## Table of contents
+## Table of Contents
 
 1. [Documentation](https://github.com/cake-build/cake#documentation)
 2. [Example](https://github.com/cake-build/cake#example)
@@ -34,7 +34,7 @@ You can read the latest documentation at [http://cakebuild.net/](http://cakebuil
 
 ## Example
 
-This example dowloads the Cake bootstrapper and executes a simple build script.
+This example downloads the Cake bootstrapper and executes a simple build script.
 The bootstrapper is used to bootstrap Cake in a simple way and is not in
 required in any way to execute build scripts. If you prefer to invoke the Cake
 executable yourself, [take a look at the command line usage](http://cakebuild.net/docs/cli/usage).
@@ -108,6 +108,7 @@ So you’re thinking about contributing to Cake? Great! It’s **really** apprec
 Make sure you've read the [contribution guidelines](http://cakebuild.net/contribute/contribution-guidelines/) before sending that epic pull request.
 
 * Fork the repository.
+* Create a branch to work in.
 * Make your feature addition or bug fix.
 * Don't forget the unit tests.
 * Send a pull request.

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using Cake.Common.Tools.SignTool;
 using Cake.Core;
 using Cake.Core.IO;
@@ -15,7 +16,6 @@ namespace Cake.Common.Tests.Fixtures.Tools
         public IFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
         public IRegistry Registry { get; set; }
-
 
         public SignToolResolverFixture(bool is64Bit = true)
         {

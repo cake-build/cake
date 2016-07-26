@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using System.IO;
 using System.Net.Http;
@@ -46,6 +47,50 @@ namespace Cake.Common.Net
                     }
                 }
             }
+        }
+
+        public static async Task UploadFileAsync(this HttpClient client, Uri requestUri, string path)
+        {
+            if (!File.Exists(path))
+            {
+                throw new FileNotFoundException("Unable to find specified file", path);
+            }
+
+            var file = new FileInfo(path);
+            var fileName = file.Name;
+
+            await UploadFileAsync(client, requestUri, file.OpenRead(), fileName).ConfigureAwait(false);
+        }
+
+        public static async Task UploadFileAsync(this HttpClient client, Uri requestUri, Stream stream, string fileName)
+        {
+            if (stream == null)
+            {
+                throw new ArgumentNullException("stream", "Stream can not be null");
+            }
+            if (!stream.CanRead)
+            {
+                throw new IOException("Unable to read from stream");
+            }
+
+            var boundary = "------------" + DateTime.Now.Ticks.ToString("x");
+            var multipartFormDataContent = new MultipartFormDataContent(boundary);
+
+            stream.Position = 0;
+            var streamContent = new StreamContent(stream);
+            multipartFormDataContent.Add(streamContent, fileName);
+            var response = await client.PostAsync(requestUri, multipartFormDataContent).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public static async Task UploadFileAsync(this HttpClient client, Uri requestUri, byte[] data, string fileName)
+        {
+            if (data == null)
+            {
+                throw new ArgumentNullException("data", "No data to send");
+            }
+
+            await UploadFileAsync(client, requestUri, new MemoryStream(data), fileName).ConfigureAwait(false);
         }
     }
 }

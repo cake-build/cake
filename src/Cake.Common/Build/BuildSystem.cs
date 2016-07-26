@@ -1,9 +1,11 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using Cake.Common.Build.AppVeyor;
 using Cake.Common.Build.Bamboo;
+using Cake.Common.Build.BitbucketPipelines;
 using Cake.Common.Build.Bitrise;
 using Cake.Common.Build.ContinuaCI;
 using Cake.Common.Build.Jenkins;
@@ -27,6 +29,7 @@ namespace Cake.Common.Build
         private readonly IJenkinsProvider _jenkinsProvider;
         private readonly IBitriseProvider _bitriseProvider;
         private readonly ITravisCIProvider _travisCIProvider;
+        private readonly IBitbucketPipelinesProvider _bitbucketPipelinesProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BuildSystem" /> class.
@@ -39,7 +42,8 @@ namespace Cake.Common.Build
         /// <param name="jenkinsProvider">The Jenkins Provider.</param>
         /// <param name="bitriseProvider">The Bitrise Provider.</param>
         /// <param name="travisCIProvider">The Travis CI provider.</param>
-        public BuildSystem(IAppVeyorProvider appVeyorProvider, ITeamCityProvider teamCityProvider, IMyGetProvider myGetProvider, IBambooProvider bambooProvider, IContinuaCIProvider continuaCIProvider, IJenkinsProvider jenkinsProvider, IBitriseProvider bitriseProvider, ITravisCIProvider travisCIProvider)
+        /// <param name="bitbucketPipelinesProvider">The Bitbucket Pipelines provider.</param>
+        public BuildSystem(IAppVeyorProvider appVeyorProvider, ITeamCityProvider teamCityProvider, IMyGetProvider myGetProvider, IBambooProvider bambooProvider, IContinuaCIProvider continuaCIProvider, IJenkinsProvider jenkinsProvider, IBitriseProvider bitriseProvider, ITravisCIProvider travisCIProvider, IBitbucketPipelinesProvider bitbucketPipelinesProvider)
         {
             if (appVeyorProvider == null)
             {
@@ -73,6 +77,10 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException("travisCIProvider");
             }
+            if (bitbucketPipelinesProvider == null)
+            {
+                throw new ArgumentNullException("bitbucketPipelinesProvider");
+            }
 
             _appVeyorProvider = appVeyorProvider;
             _teamCityProvider = teamCityProvider;
@@ -82,6 +90,7 @@ namespace Cake.Common.Build
             _jenkinsProvider = jenkinsProvider;
             _bitriseProvider = bitriseProvider;
             _travisCIProvider = travisCIProvider;
+            _bitbucketPipelinesProvider = bitbucketPipelinesProvider;
         }
 
         /// <summary>
@@ -387,11 +396,48 @@ namespace Cake.Common.Build
         }
 
         /// <summary>
+        /// Gets a value indicating whether this instance is running on Bitbucket Pipelines.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnBitbucketPipelines)
+        /// {
+        ///     // Get the build commit hash.
+        ///     var commitHash = BuildSystem.BitbucketPipelines.Environment.Repository.Commit;
+        /// }
+        /// </code>
+        /// </example>
+        /// <value>
+        /// <c>true</c> if this instance is running on Bitbucket Pipelines; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsRunningOnBitbucketPipelines
+        {
+            get { return _bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines; }
+        }
+
+        /// <summary>
+        /// Gets the Bitbucket Pipelines Provider.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnBitbucketPipelines)
+        /// {
+        ///     // Get the URL friendly repo name.
+        ///     var repoSlug = BuildSystem.BitbucketPipelines.Environment.Repository.RepoSlug;
+        /// }
+        /// </code>
+        /// </example>
+        public IBitbucketPipelinesProvider BitbucketPipelines
+        {
+            get { return _bitbucketPipelinesProvider; }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether the current build is local build.
         /// </summary>
         /// <example>
         /// <code>
-        /// // Get a flag telling us if this is a local build or not.
+        /// // Gets a flag telling us if this is a local build or not.
         /// var isLocal = BuildSystem.IsLocalBuild;
         ///
         /// // Define a task that only runs locally.
@@ -407,7 +453,7 @@ namespace Cake.Common.Build
         /// </value>
         public bool IsLocalBuild
         {
-            get { return !(IsRunningOnAppVeyor || IsRunningOnTeamCity || IsRunningOnMyGet || IsRunningOnBamboo || IsRunningOnContinuaCI || IsRunningOnJenkins || IsRunningOnBitrise || IsRunningOnTravisCI); }
+            get { return !(IsRunningOnAppVeyor || IsRunningOnTeamCity || IsRunningOnMyGet || IsRunningOnBamboo || IsRunningOnContinuaCI || IsRunningOnJenkins || IsRunningOnBitrise || IsRunningOnTravisCI || IsRunningOnBitbucketPipelines); }
         }
     }
 }

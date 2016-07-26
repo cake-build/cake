@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -51,8 +52,11 @@ namespace Cake.Common.Tools.MSBuild
         {
             var builder = new ProcessArgumentBuilder();
 
-            // Set the maximum number of processors.
-            builder.Append(settings.MaxCpuCount > 0 ? string.Concat("/m:", settings.MaxCpuCount) : "/m");
+            // Set the maximum number of processors?
+            if (settings.MaxCpuCount != null)
+            {
+                builder.Append(settings.MaxCpuCount > 0 ? string.Concat("/m:", settings.MaxCpuCount) : "/m");
+            }
 
             // Set the verbosity.
             builder.Append(string.Format(CultureInfo.InvariantCulture, "/v:{0}", GetVerbosityName(settings.Verbosity)));
@@ -183,7 +187,7 @@ namespace Cake.Common.Tools.MSBuild
                 throw new ArgumentNullException("settings");
             }
 
-            MSBuildPlatform buildPlatform = settings.MSBuildPlatform;
+            var buildPlatform = settings.MSBuildPlatform;
 
             // If we haven't explicitly set an MSBuild target then use the Platform Target
             if (buildPlatform == MSBuildPlatform.Automatic)

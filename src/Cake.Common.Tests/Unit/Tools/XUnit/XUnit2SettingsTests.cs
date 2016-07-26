@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using Cake.Common.Tools.XUnit;
 using Xunit;
@@ -39,6 +40,16 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
 
                 // Then
                 Assert.False(settings.HtmlReport);
+            }
+
+            [Fact]
+            public void Should_Disable_NUnit_Report_By_Default()
+            {
+                // Given, When
+                var settings = new XUnit2Settings();
+
+                // Then
+                Assert.False(settings.NUnitReport);
             }
 
             [Fact]

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using System.IO;
 using System.Linq;
@@ -17,8 +18,8 @@ namespace Cake.Core.Tests.Fixtures
 
         public MethodAliasGeneratorFixture()
         {
-            _assembly = typeof (MethodAliasGeneratorFixture).Assembly;
-            _methods = typeof (MethodAliasGeneratorData).GetMethods();
+            _assembly = typeof(MethodAliasGeneratorFixture).Assembly;
+            _methods = typeof(MethodAliasGeneratorData).GetMethods();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]

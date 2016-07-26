@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,6 +68,11 @@ namespace Cake.Common.Tools.MSTest
             if (!string.IsNullOrEmpty(settings.Category))
             {
                 builder.Append(string.Concat("/category:", settings.Category.Quote()));
+            }
+
+            if (!string.IsNullOrEmpty(settings.ResultsFile))
+            {
+                builder.Append(string.Concat("/resultsfile:", settings.ResultsFile.Quote()));
             }
 
             if (settings.NoIsolation)

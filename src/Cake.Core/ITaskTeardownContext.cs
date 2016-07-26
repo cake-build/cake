@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 
 namespace Cake.Core
@@ -8,7 +9,7 @@ namespace Cake.Core
     /// <summary>
     /// Acts as a context providing info about a <see cref="CakeTask"/> following its invocation.
     /// </summary>
-    public interface ITaskTeardownContext
+    public interface ITaskTeardownContext : ICakeContext
     {
         /// <summary>
         /// Gets the <see cref="ICakeTaskInfo"/> describing the <see cref="CakeTask"/> that has just been invoked.

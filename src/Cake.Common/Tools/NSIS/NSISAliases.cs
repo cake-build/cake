@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -25,6 +26,11 @@ namespace Cake.Common.Tools.NSIS
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="scriptFile">The path to the <c>.nsi</c> script file to compile.</param>
+        /// <example>
+        /// <code>
+        /// MakeNSIS("./src/Cake.nsi");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("MakeNSIS")]
         // ReSharper disable once InconsistentNaming
@@ -39,6 +45,13 @@ namespace Cake.Common.Tools.NSIS
         /// <param name="context">The context.</param>
         /// <param name="scriptFile">The path to the <c>.nsi</c> script file to compile.</param>
         /// <param name="settings">The <see cref="MakeNSISSettings"/> to use.</param>
+        /// <example>
+        /// <code>
+        /// MakeNSIS("./src/Cake.nsi", new MakeNSISSettings {
+        ///     NoConfig = true
+        ///     });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("MakeNSIS")]
         // ReSharper disable once InconsistentNaming

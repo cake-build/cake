@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using System.Collections.Generic;
 using Cake.Common.Tests.Fixtures.Tools.NuGet.Packer;
@@ -799,7 +800,6 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 [InlineData(NuGetMSBuildVersion.MSBuild14, "pack \"/Working/existing.csproj\" -MSBuildVersion 14")]
                 public void Should_Add_MSBuildVersion_To_Arguments_If_Set(NuGetMSBuildVersion msBuildVersion, string expected)
                 {
-
                     // Given
                     var fixture = new NuGetPackerWithProjectFileFixture();
                     fixture.Settings.MSBuildVersion = msBuildVersion;

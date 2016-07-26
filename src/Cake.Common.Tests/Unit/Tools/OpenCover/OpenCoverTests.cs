@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.NUnit;
 using Cake.Common.Tools.XUnit;
@@ -270,6 +271,23 @@ namespace Cake.Common.Tests.Unit.Tools.OpenCover
                 Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
                              "-targetargs:\"-argument\" " +
                              "-skipautoprops " +
+                             "-register:user -output:\"/Working/result.xml\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_OldStyle()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+                fixture.Settings.OldStyle = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"-argument\" " +
+                             "-oldStyle " +
                              "-register:user -output:\"/Working/result.xml\"", result.Args);
             }
         }

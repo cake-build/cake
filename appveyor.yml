@@ -22,4 +22,4 @@ branches:
 # Build cache
 cache:
 - src\packages -> src\**\packages.config
-- tools -> build.cake
+- tools -> build.cake, tools\packages.config

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using System;
 using Cake.Core;
 using Cake.Core.IO;
@@ -32,7 +33,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Close
         }
 
         /// <summary>
-        /// Creates a Release using the specified and settings.
+        /// Creates a Release using the specified settings.
         /// </summary>
         /// <param name="userName">The user name.</param>
         /// <param name="password">The password.</param>

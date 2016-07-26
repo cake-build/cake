@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
@@ -60,6 +61,12 @@ namespace Cake.Common.Tools.GitVersion
         /// Gets or sets the branch to use if using dynamic repositories.
         /// </summary>
         public string Commit { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to fetch repository information from remote when calculating version.
+        /// </summary>
+        /// <remarks>If your CI server clones the entire repository you can set this to 'true' to prevent GitVersion attempting any remote repository fetching</remarks>
+        public bool NoFetch { get; set; }
 
         /// <summary>
         /// Gets or sets the dynamic repository path. Defaults to %TEMP%.

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
 using Cake.Common.Tests.Fixtures.Tools.NuGet.Restorer;
 using Cake.Common.Tools.NuGet;
 using Cake.Testing;
@@ -249,8 +250,6 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 Assert.Equal("restore \"/Working/project.sln\" -ConfigFile \"/Working/nuget.config\" -NonInteractive", result.Args);
             }
 
-
-
             [Fact]
             public void Should_Add_FallbackSources_To_Arguments_If_Set()
             {
@@ -272,7 +271,6 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             [InlineData(NuGetMSBuildVersion.MSBuild14, "restore \"/Working/project.sln\" -MSBuildVersion 14 -NonInteractive")]
             public void Should_Add_MSBuildVersion_To_Arguments_If_Set(NuGetMSBuildVersion msBuildVersion, string expected)
             {
-
                 // Given
                 var fixture = new NuGetRestorerFixture();
                 fixture.Settings.MSBuildVersion = msBuildVersion;

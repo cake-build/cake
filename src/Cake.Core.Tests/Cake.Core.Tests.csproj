@@ -129,6 +129,7 @@
     <Compile Include="Unit\Scripting\ScriptTests.cs" />
     <Compile Include="Unit\TaskSetupContextTests.cs" />
     <Compile Include="Unit\TaskTeardownContextTests.cs" />
+    <Compile Include="Unit\TeardownContextTests.cs" />
     <Compile Include="Unit\Text\TextTransformationTemplateTests.cs" />
     <Compile Include="Unit\Tooling\ToolLocatorTests.cs" />
     <Compile Include="Unit\Tooling\ToolResolutionStrategyTests.cs" />
@@ -163,6 +164,10 @@
     <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Properties\Cached_Obsolete_ImplicitWarning_NoMessage" />
     <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Properties\Cached_Obsolete_ExplicitWarning_WithMessage" />
     <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Properties\Cached_Obsolete_ExplicitError_WithMessage" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Methods\NonGeneric_ExtensionMethodWithGenericExpressionParameter" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Methods\NonGeneric_ExtensionMethodWithGenericExpressionArrayParameter" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Methods\NonGeneric_ExtensionMethodWithGenericExpressionParamsArrayParameter" />
+    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Methods\NonGeneric_ExtensionMethodWithArrayParameter" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj">
