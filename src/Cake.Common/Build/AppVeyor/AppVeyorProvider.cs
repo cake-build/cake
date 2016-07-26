@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -11,17 +12,18 @@ using Cake.Common.Build.AppVeyor.Data;
 using Cake.Common.Net;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Build.AppVeyor
 {
     /// <summary>
     /// Responsible for communicating with AppVeyor.
     /// </summary>
-    public sealed class AppVeyorProvider : IAppVeyorProvider
+    public sealed class AppVeyorProvider : Tool<AppVeyorToolSettings>, IAppVeyorProvider
     {
         private readonly ICakeEnvironment _environment;
-        private readonly IProcessRunner _processRunner;
         private readonly AppVeyorEnvironmentInfo _environmentInfo;
+        private readonly AppVeyorToolSettings _settings;
 
         /// <summary>
         /// Gets a value indicating whether the current build is running on AppVeyor.
@@ -48,21 +50,15 @@ namespace Cake.Common.Build.AppVeyor
         /// <summary>
         /// Initializes a new instance of the <see cref="AppVeyorProvider"/> class.
         /// </summary>
+        /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        public AppVeyorProvider(ICakeEnvironment environment, IProcessRunner processRunner)
+        /// <param name="locator">The tool locator.</param>
+        public AppVeyorProvider(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IToolLocator locator) : base(fileSystem, environment, processRunner, locator)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException("environment");
-            }
-            if (processRunner == null)
-            {
-                throw new ArgumentNullException("processRunner");
-            }
             _environment = environment;
-            _processRunner = processRunner;
             _environmentInfo = new AppVeyorEnvironmentInfo(environment);
+            _settings = new AppVeyorToolSettings();
         }
 
         /// <summary>
@@ -118,7 +114,7 @@ namespace Cake.Common.Build.AppVeyor
             }
 
             // Start the process.
-            _processRunner.Start("appveyor", new ProcessSettings { Arguments = arguments });
+            Run(_settings, arguments);
         }
 
         /// <summary>
@@ -197,7 +193,7 @@ namespace Cake.Common.Build.AppVeyor
             arguments.AppendQuoted(version);
 
             // Start the process.
-            _processRunner.Start("appveyor", new ProcessSettings { Arguments = arguments });
+            Run(_settings, arguments);
         }
 
         /// <summary>
@@ -236,7 +232,25 @@ namespace Cake.Common.Build.AppVeyor
             }
 
             // Start the process.
-            _processRunner.Start("appveyor", new ProcessSettings { Arguments = arguments });
+            Run(_settings, arguments);
+        }
+
+        /// <summary>
+        /// Gets the name of the tool.
+        /// </summary>
+        /// <returns>The name of the tool.</returns>
+        protected override string GetToolName()
+        {
+            return "AppVeyor";
+        }
+
+        /// <summary>
+        /// Gets the possible names of the tool executable.
+        /// </summary>
+        /// <returns>The tool executable name.</returns>
+        protected override IEnumerable<string> GetToolExecutableNames()
+        {
+            yield return "appveyor";
         }
     }
 }

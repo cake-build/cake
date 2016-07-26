@@ -5,6 +5,7 @@
 using Cake.Common.Build.AppVeyor;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Build
@@ -13,6 +14,8 @@ namespace Cake.Common.Tests.Fixtures.Build
     {
         public ICakeEnvironment Environment { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
+        public IFileSystem FileSystem { get; set; }
+        public IToolLocator ToolLocator { get; set; }
 
         public AppVeyorFixture()
         {
@@ -21,6 +24,8 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("APPVEYOR").Returns((string)null);
 
             ProcessRunner = Substitute.For<IProcessRunner>();
+            FileSystem = Substitute.For<IFileSystem>();
+            ToolLocator = Substitute.For<IToolLocator>();
         }
 
         public void IsRunningOnAppVeyor()
@@ -30,7 +35,7 @@ namespace Cake.Common.Tests.Fixtures.Build
 
         public AppVeyorProvider CreateAppVeyorService()
         {
-            return new AppVeyorProvider(Environment, ProcessRunner);
+            return new AppVeyorProvider(FileSystem, Environment, ProcessRunner, ToolLocator);
         }
     }
 }
