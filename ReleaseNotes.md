@@ -1,3 +1,39 @@
+### New on 0.15.0 (Released 2016/07/26)
+
+* Add support for adding messages to the AppVeyor build log
+* Add environment variable support for Process & Tool
+* Add ITeardownContext to Teardown method
+* Add OutputPath to ProjectParserResult
+* Extend SolutionParserResult with solution folders information
+* Add Atlassian Bitbucket Pipelines build system support
+* Set ICakeRuntime.TargetFramework to constant
+* Do not set /m parameter for MSBuild by default
+* AppVeyor.UploadTestResults failing silently
+* GetFullName in TypeExtensions.cs not handling arrays correctly
+* Allow paths with spaces for OutputDirectory on DotNetCore Aliases
+* The GetFiles overload with a predicate doesn't work properly
+* Added ability to call SetParameter method on TeamCity Provider
+* CakeExecuteScript tool resolution fails if script in parent path
+* UploadArtifact support via the AppVeyor provider is incomplete
+* Added raw version string property in ReleaseNotes class
+* Marked Quiet property on DotNetCoreRestoreSettings as obsolete
+* Added -oldstyle support for OpenCover tool
+* Added -nofetch support for GitVersion tool
+* Add an explicit NuGet source for NuGetPush
+* Add parsing of references and project references to the project file parser
+* Add configuration for default NuGet source
+* Add MD5 checking of packages.config to bootstrappper
+* Support results file for MSTest runner
+* Support NUnit output format for XUnit2 runner
+* NUnit runner: Handle specific non-zero exit codes
+* Added examples for Fixie
+* Corrected spelling mistake in README.md
+* Improved documentation for ProcessSettings Timeout property
+* Added documentation for multiple arguments for ToolSettings
+* Corrected documentation for GitReleaseManager
+* Corrected code example for DotNetCorePackSettings
+* Add example documentation to aliases
+
 ### New on 0.14.0 (Released 2016/07/11)
 
 * Remove obsoleted XmlPoke Aliases
