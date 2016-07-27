@@ -7,9 +7,11 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Cake.Common.Build.AppVeyor.Data;
 using Cake.Common.Net;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Common.Build.AppVeyor
@@ -21,6 +23,7 @@ namespace Cake.Common.Build.AppVeyor
     {
         private readonly ICakeEnvironment _environment;
         private readonly IProcessRunner _processRunner;
+        private readonly ICakeLog _cakeLog;
         private readonly AppVeyorEnvironmentInfo _environmentInfo;
 
         /// <summary>
@@ -50,7 +53,8 @@ namespace Cake.Common.Build.AppVeyor
         /// </summary>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        public AppVeyorProvider(ICakeEnvironment environment, IProcessRunner processRunner)
+        /// <param name="cakeLog">The cake log.</param>
+        public AppVeyorProvider(ICakeEnvironment environment, IProcessRunner processRunner, ICakeLog cakeLog)
         {
             if (environment == null)
             {
@@ -60,8 +64,13 @@ namespace Cake.Common.Build.AppVeyor
             {
                 throw new ArgumentNullException("processRunner");
             }
+            if (cakeLog == null)
+            {
+                throw new ArgumentNullException("cakeLog");
+            }
             _environment = environment;
             _processRunner = processRunner;
+            _cakeLog = cakeLog;
             _environmentInfo = new AppVeyorEnvironmentInfo(environment);
         }
 
@@ -101,12 +110,9 @@ namespace Cake.Common.Build.AppVeyor
             // Build the arguments.
             var arguments = new ProcessArgumentBuilder();
             arguments.Append("PushArtifact");
-            arguments.Append("-Path");
             arguments.AppendQuoted(path.FullPath);
-            arguments.Append("-FileName");
-            arguments.AppendQuoted(path.GetFilename().FullPath);
-            arguments.Append("-ArtifactType");
-            arguments.AppendQuoted(settings.ArtifactType.ToString());
+            arguments.Append("-Type");
+            arguments.Append(settings.ArtifactType.ToString());
             if (!string.IsNullOrEmpty(settings.DeploymentName))
             {
                 if (settings.DeploymentName.Contains(" "))
@@ -162,12 +168,18 @@ namespace Cake.Common.Build.AppVeyor
                 throw new CakeException("Failed to get AppVeyor API url.");
             }
 
-            var url = new Uri(string.Format(CultureInfo.InvariantCulture, "{0}/api/testresults/{1}/{2}", baseUri, resultsType, Environment.JobId));
+            var url = new Uri(string.Format(CultureInfo.InvariantCulture, "{0}/api/testresults/{1}/{2}", baseUri, resultsType, Environment.JobId).ToLowerInvariant());
 
-            using (var client = new HttpClient())
+            _cakeLog.Write(Verbosity.Diagnostic, LogLevel.Verbose, "Uploading [{0}] to [{1}]", path.FullPath, url);
+            Task.Run(async () =>
             {
-                client.UploadFileAsync(url, path.FullPath).Wait();
-            }
+                using (var client = new HttpClient())
+                {
+                    var response = await client.UploadFileAsync(url, path.FullPath, "text/xml");
+                    var content = await response.Content.ReadAsStringAsync();
+                    _cakeLog.Write(Verbosity.Diagnostic, LogLevel.Verbose, "Server response [{0}:{1}]:\n\r{2}", response.StatusCode, response.ReasonPhrase, content);
+                }
+            }).Wait();
         }
 
         /// <summary>
