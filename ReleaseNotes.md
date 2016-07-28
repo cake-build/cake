@@ -1,3 +1,7 @@
+### New on 0.15.1 (Released 2016/07/28)
+
+* Corrected Issues found with 0.15.0 AppVeyor updates
+
 ### New on 0.15.0 (Released 2016/07/26)
 
 * Add support for adding messages to the AppVeyor build log

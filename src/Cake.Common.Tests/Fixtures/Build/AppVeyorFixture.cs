@@ -4,7 +4,9 @@
 
 using Cake.Common.Build.AppVeyor;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Testing;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Build
@@ -14,6 +16,8 @@ namespace Cake.Common.Tests.Fixtures.Build
         public ICakeEnvironment Environment { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
 
+        public FakeLog CakeLog { get; set; }
+
         public AppVeyorFixture()
         {
             Environment = Substitute.For<ICakeEnvironment>();
@@ -21,6 +25,7 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("APPVEYOR").Returns((string)null);
 
             ProcessRunner = Substitute.For<IProcessRunner>();
+            CakeLog = new FakeLog();
         }
 
         public void IsRunningOnAppVeyor()
@@ -30,7 +35,7 @@ namespace Cake.Common.Tests.Fixtures.Build
 
         public AppVeyorProvider CreateAppVeyorService()
         {
-            return new AppVeyorProvider(Environment, ProcessRunner);
+            return new AppVeyorProvider(Environment, ProcessRunner, CakeLog);
         }
     }
 }
