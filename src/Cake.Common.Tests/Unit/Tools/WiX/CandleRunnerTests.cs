@@ -221,13 +221,13 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 // Given
                 var fixture = new CandleFixture();
                 fixture.Settings.Defines = new Dictionary<string, string>();
-                fixture.Settings.Defines.Add("Foo", "Bar");
+                fixture.Settings.Defines.Add("Foo", "Foo Bar");
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("-dFoo=Bar \"/Working/Test.wxs\"", result.Args);
+                Assert.Equal("-dFoo=\"Foo Bar\" \"/Working/Test.wxs\"", result.Args);
             }
 
             [Fact]
