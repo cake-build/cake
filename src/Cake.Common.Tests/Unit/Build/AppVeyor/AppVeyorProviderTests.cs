@@ -6,6 +6,7 @@ using System;
 using Cake.Common.Build.AppVeyor;
 using Cake.Common.Tests.Fixtures.Build;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using NSubstitute;
 using Xunit;
@@ -20,8 +21,9 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
             public void Should_Throw_If_Environment_Is_Null()
             {
                 // Given, When
+                var cakeLog = Substitute.For<ICakeLog>();
                 var processRunner = Substitute.For<IProcessRunner>();
-                var result = Record.Exception(() => new AppVeyorProvider(null, processRunner));
+                var result = Record.Exception(() => new AppVeyorProvider(null, processRunner, cakeLog));
 
                 // Then
                 Assert.IsArgumentNullException(result, "environment");
@@ -31,11 +33,24 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
             public void Should_Throw_If_Process_Runner_Is_Null()
             {
                 // Given, When
+                var cakeLog = Substitute.For<ICakeLog>();
                 var environment = Substitute.For<ICakeEnvironment>();
-                var result = Record.Exception(() => new AppVeyorProvider(environment, null));
+                var result = Record.Exception(() => new AppVeyorProvider(environment, null, cakeLog));
 
                 // Then
                 Assert.IsArgumentNullException(result, "processRunner");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Log_Is_Null()
+            {
+                // Given, When
+                var processRunner = Substitute.For<IProcessRunner>();
+                var environment = Substitute.For<ICakeEnvironment>();
+                var result = Record.Exception(() => new AppVeyorProvider(environment, processRunner, null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "cakeLog");
             }
         }
 
@@ -148,7 +163,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Is<FilePath>(p => p.FullPath == "appveyor"),
                     Arg.Is<ProcessSettings>(p => p.Arguments.Render()
-                        == "PushArtifact -Path \"/Working/file.zip\" -FileName \"file.zip\" -ArtifactType \"Auto\""));
+                        == "PushArtifact \"/Working/file.zip\" -Type Auto"));
             }
 
             [Theory]
@@ -169,7 +184,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Is<FilePath>(p => p.FullPath == "appveyor"),
                     Arg.Is<ProcessSettings>(p => p.Arguments.Render()
-                        == string.Format("PushArtifact -Path \"/Working/file.zip\" -FileName \"file.zip\" -ArtifactType \"{0}\"", arg)));
+                        == string.Format("PushArtifact \"/Working/file.zip\" -Type {0}", arg)));
             }
 
             [Fact]
@@ -187,7 +202,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Is<FilePath>(p => p.FullPath == "appveyor"),
                     Arg.Is<ProcessSettings>(p => p.Arguments.Render()
-                        == "PushArtifact -Path \"/Working/file.zip\" -FileName \"file.zip\" -ArtifactType \"Auto\" -DeploymentName \"MyApp.Web\""));
+                        == "PushArtifact \"/Working/file.zip\" -Type Auto -DeploymentName \"MyApp.Web\""));
             }
 
             [Fact]

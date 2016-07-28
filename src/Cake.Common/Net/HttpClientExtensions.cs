@@ -5,6 +5,7 @@
 using System;
 using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace Cake.Common.Net
@@ -49,7 +50,7 @@ namespace Cake.Common.Net
             }
         }
 
-        public static async Task UploadFileAsync(this HttpClient client, Uri requestUri, string path)
+        public static async Task<HttpResponseMessage> UploadFileAsync(this HttpClient client, Uri requestUri, string path, string contentType = "application/octet-stream")
         {
             if (!File.Exists(path))
             {
@@ -59,10 +60,10 @@ namespace Cake.Common.Net
             var file = new FileInfo(path);
             var fileName = file.Name;
 
-            await UploadFileAsync(client, requestUri, file.OpenRead(), fileName).ConfigureAwait(false);
+            return await UploadFileAsync(client, requestUri, file.OpenRead(), fileName, contentType).ConfigureAwait(false);
         }
 
-        public static async Task UploadFileAsync(this HttpClient client, Uri requestUri, Stream stream, string fileName)
+        public static async Task<HttpResponseMessage> UploadFileAsync(this HttpClient client, Uri requestUri, Stream stream, string fileName, string contentType = "application/octet-stream")
         {
             if (stream == null)
             {
@@ -77,20 +78,25 @@ namespace Cake.Common.Net
             var multipartFormDataContent = new MultipartFormDataContent(boundary);
 
             stream.Position = 0;
-            var streamContent = new StreamContent(stream);
-            multipartFormDataContent.Add(streamContent, fileName);
+            var streamContent = new StreamContent(stream)
+            {
+                Headers = { ContentType = MediaTypeHeaderValue.Parse(contentType) }
+            };
+
+            multipartFormDataContent.Add(streamContent, fileName, fileName);
             var response = await client.PostAsync(requestUri, multipartFormDataContent).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
+            return response;
         }
 
-        public static async Task UploadFileAsync(this HttpClient client, Uri requestUri, byte[] data, string fileName)
+        public static async Task<HttpResponseMessage> UploadFileAsync(this HttpClient client, Uri requestUri, byte[] data, string fileName, string contentType = "application/octet-stream")
         {
             if (data == null)
             {
                 throw new ArgumentNullException("data", "No data to send");
             }
 
-            await UploadFileAsync(client, requestUri, new MemoryStream(data), fileName).ConfigureAwait(false);
+            return await UploadFileAsync(client, requestUri, new MemoryStream(data), fileName, contentType).ConfigureAwait(false);
         }
     }
 }

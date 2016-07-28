@@ -4,7 +4,7 @@
 // Install tools.
 #tool "nuget:?package=xunit.runner.console&version=2.1.0"
 #tool "nuget:?package=gitreleasemanager&version=0.5.0"
-#tool "nuget:?package=GitVersion.CommandLine&version=3.4.1"
+#tool "nuget:?package=GitVersion.CommandLine&version=3.6.2"
 
 // Load other scripts.
 #load "./build/parameters.cake"
