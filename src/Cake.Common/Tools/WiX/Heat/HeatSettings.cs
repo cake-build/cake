@@ -14,15 +14,6 @@ namespace Cake.Common.Tools.WiX.Heat
     public sealed class HeatSettings : ToolSettings
     {
         /// <summary>
-        /// Gets or sets the type for WiX harvest.
-        /// Default is dir.
-        /// </summary>
-        /// <value>
-        /// The type of the harvest.
-        /// </value>
-        public WiXHarvestType? HarvestType { get; set; }
-
-        /// <summary>
         /// Gets or sets the WiX extensions to use.
         /// </summary>
         public IEnumerable<string> Extensions { get; set; }

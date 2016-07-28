@@ -4,8 +4,6 @@
 
 using Cake.Common.Tests.Fixtures.Tools.WiX;
 using Cake.Common.Tools.WiX;
-using Cake.Core;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.WiX
@@ -21,24 +19,10 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 var fixture = new HeatFixture();
 
                 // When
-                var result = Record.Exception(() => WiXAliases.WiXHeat(null, fixture.DirectoryPath, fixture.OutputFile));
+                var result = Record.Exception(() => WiXAliases.WiXHeat(null, fixture.DirectoryPath, fixture.OutputFile, fixture.HarvestType));
 
                 // Then
                 Assert.IsArgumentNullException(result, "context");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Directory_Path_Is_Null()
-            {
-                // Given
-                var fixture = new HeatFixture();
-                var context = Substitute.For<ICakeContext>();
-
-                // When
-                var result = Record.Exception(() => WiXAliases.WiXHeat(context, null, fixture.OutputFile));
-
-                // Then
-                Assert.IsArgumentNullException(result, "directoryPath");
             }
         }
     }
