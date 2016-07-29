@@ -1,12 +1,10 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
-
 using System;
 using Cake.Common.Tests.Fixtures.Tools.WiX;
 using Cake.Common.Tools.WiX.Heat;
 using Cake.Core;
-using Cake.Core.IO;
 using Cake.Testing;
 using Cake.Testing.Xunit;
 using Xunit;
@@ -187,7 +185,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
             {
                 // Given
                 var fixture = new HeatFixture();
-                fixture.Settings.HarvestType = WiXHarvestType.File;
+                fixture.HarvestType = WiXHarvestType.File;
 
                 // When
                 var result = fixture.Run();
@@ -201,7 +199,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
             {
                 // Given
                 var fixture = new HeatFixture();
-                fixture.Settings.HarvestType = WiXHarvestType.Website;
+                fixture.HarvestType = WiXHarvestType.Website;
 
                 // When
                 var result = fixture.Run();
@@ -215,8 +213,8 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
             {
                 // Given
                 var fixture = new HeatFixture();
-                fixture.Settings.HarvestType = WiXHarvestType.Perf;
-                fixture.HarvestType = "Cake Category";
+                fixture.HarvestType = WiXHarvestType.Perf;
+                fixture.HarvestTarget = "Cake Category";
 
                 // When
                 var result = fixture.Run();
@@ -713,6 +711,20 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
 
                 // Then
                 Assert.Equal("dir \"/Working/src/Cake\" -wixvar -out \"/Working/cake.wxs\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Default_To_Directory_Harvest_Type()
+            {
+                // Given
+                var fixture = new HeatFixture();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("dir \"/Working/src/Cake\" -out \"/Working/cake.wxs\"", result.Args);
+
             }
         }
     }

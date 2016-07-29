@@ -79,7 +79,7 @@ namespace Cake.Common.Tools.WiX
             // Add defines
             if (settings.Defines != null && settings.Defines.Any())
             {
-                var defines = settings.Defines.Select(define => string.Format(CultureInfo.InvariantCulture, "-d{0}={1}", define.Key, define.Value));
+                var defines = settings.Defines.Select(define => string.Format(CultureInfo.InvariantCulture, "-d{0}=\"{1}\"", define.Key, define.Value));
                 foreach (var define in defines)
                 {
                     builder.Append(define);
