@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Core.Polyfill;
 using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.Cake
@@ -23,7 +24,17 @@ namespace Cake.Common.Tools.Cake
         private readonly ICakeEnvironment _environment;
         private readonly IFileSystem _fileSystem;
         private readonly IGlobber _globber;
-        private static readonly IEnumerable<FilePath> _executingAssemblyToolPaths = new FilePath[] { System.Reflection.Assembly.GetEntryAssembly().Location };
+        private static readonly IEnumerable<FilePath> _executingAssemblyToolPaths;
+
+        /// <summary>
+        /// Initializes static members of the <see cref="CakeRunner"/> class.
+        /// </summary>
+        static CakeRunner()
+        {
+            var entryAssembly = AssemblyHelper.GetExecutingAssembly();
+            var executingAssemblyToolPath = entryAssembly.Location;
+            _executingAssemblyToolPaths = new FilePath[] { executingAssemblyToolPath };
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeRunner"/> class.
