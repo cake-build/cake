@@ -87,9 +87,9 @@ namespace Cake.Common.Tools.VSTest
                 builder.Append(string.Format(CultureInfo.InvariantCulture, "/Framework:{0}", settings.FrameworkVersion.ToString().Replace("NET", "Framework")));
             }
 
-            if (settings.Logger == VSTestLogger.Trx)
+            if (!string.IsNullOrEmpty(settings.LoggerName))
             {
-                builder.Append("/Logger:trx");
+                builder.Append("/Logger:{0}", settings.LoggerName.Trim());
             }
 
             return builder;

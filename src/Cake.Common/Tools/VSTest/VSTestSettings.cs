@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
@@ -40,6 +41,55 @@ namespace Cake.Common.Tools.VSTest
         /// <summary>
         /// Gets or sets the logger to use for test results.
         /// </summary>
-        public VSTestLogger Logger { get; set; }
+        [Obsolete("Use the LoggerName instead of this property")]
+        public VSTestLogger Logger
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(LoggerName))
+                {
+                    return VSTestLogger.None;
+                }
+                else if (LoggerName.Equals("trx", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return VSTestLogger.Trx;
+                }
+                else if (LoggerName.Equals("AppVeyor", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return VSTestLogger.AppVeyor;
+                }
+                else
+                {
+                    return VSTestLogger.Custom;
+                }
+            }
+
+            set
+            {
+                switch (value)
+                {
+                    case VSTestLogger.None:
+                        LoggerName = string.Empty;
+                        break;
+                    case VSTestLogger.Trx:
+                        LoggerName = "trx";
+                        break;
+                    case VSTestLogger.AppVeyor:
+                        LoggerName = "AppVeyor";
+                        break;
+                    default:
+                        throw new ArgumentException("Please specify the name of your custom logger in the LoggerName property instead of using this obsolete property");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the name of your logger. Possible values:
+        /// - A blank string (or null): no logger
+        /// - "trx": Visual Studio's built-in logger
+        /// - "ApVeyor": AppVeyor's custom logger which is available only when building your solution on the AppVeyor platform
+        /// - any custom value: the name of your custom logger
+        /// </summary>
+        public string LoggerName { get; set; }
     }
 }
