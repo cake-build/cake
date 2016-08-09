@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
@@ -38,8 +39,12 @@ namespace Cake.Common.Tools.VSTest
         public VSTestFrameworkVersion FrameworkVersion { get; set; }
 
         /// <summary>
-        /// Gets or sets the logger to use for test results.
+        /// Gets or sets the name of your logger. Possible values:
+        /// - A blank string (or null): no logger
+        /// - "trx": Visual Studio's built-in logger
+        /// - "AppVeyor": AppVeyor's custom logger which is available only when building your solution on the AppVeyor platform
+        /// - any custom value: the name of your custom logger
         /// </summary>
-        public VSTestLogger Logger { get; set; }
+        public string Logger { get; set; }
     }
 }
