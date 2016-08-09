@@ -319,6 +319,7 @@
     <Compile Include="Unit\Tools\SpecFlow\TestExecutionReport\SpecFlowTestExecutionReporterTests.cs" />
     <Compile Include="Unit\Tools\TextTransform\TextTemplateAliasTests.cs" />
     <Compile Include="Unit\Tools\TextTransform\TextTransformRunnerTests.cs" />
+    <Compile Include="Unit\Tools\VSTest\VSTestSettingsTests.cs" />
     <Compile Include="Unit\Tools\VSTest\VSTestRunnerTests.cs" />
     <Compile Include="Unit\Tools\WiX\HeatRunnerTests.cs" />
     <Compile Include="Unit\Tools\WiX\LightRunnerTests.cs" />

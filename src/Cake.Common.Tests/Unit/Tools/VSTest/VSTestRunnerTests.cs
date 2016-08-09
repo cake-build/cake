@@ -184,12 +184,12 @@ namespace Cake.Common.Tests.Unit.Tools.VSTest
         {
             //Given
             var fixture = new VSTestRunnerFixture();
-            fixture.Settings.Logger = VSTestLogger.Trx;
+            fixture.Settings.LoggerName = "MyCustomLogger";
 
             //When
             var result = fixture.Run();
 
-            Assert.Equal("\"/Working/Test1.dll\" /Logger:trx", result.Args);
+            Assert.Equal("\"/Working/Test1.dll\" /Logger:MyCustomLogger", result.Args);
         }
 
         [Fact]
