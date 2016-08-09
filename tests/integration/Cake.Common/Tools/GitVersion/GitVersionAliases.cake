@@ -1,3 +1,4 @@
+#load "./../../../utilities/xunit.cake"
 #load "./../../../utilities/gitversion.cake"
 
 //////////////////////////////////////////////////////////////////////////////
@@ -12,15 +13,15 @@ Task("Cake.Common.Tools.GitVersionAliases.OutputTypeIsBuildServer")
     });
 
     // Then
-    Assert.NotNull(gitVersion.AssemblySemVer, "AssemblySemVer");
-    Assert.NotNull(gitVersion.BranchName, "BranchName");
-    Assert.NotNull(gitVersion.BuildMetaData, "BuildMetaData");
-    Assert.NotNull(gitVersion.BuildMetaDataPadded, "BuildMetaDataPadded");
-    Assert.NotNull(gitVersion.CommitDate, "CommitDate");
-    Assert.NotNull(gitVersion.CommitsSinceVersionSource, "CommitsSinceVersionSource");
-    Assert.NotNull(gitVersion.CommitsSinceVersionSourcePadded, "CommitsSinceVersionSourcePadded");
-    Assert.NotNull(gitVersion.FullBuildMetaData, "FullBuildMetaData");
-    Assert.NotNull(gitVersion.AssemblySemVer, "AssemblySemVer");
+    AssertNotNull(gitVersion.AssemblySemVer, "AssemblySemVer");
+    AssertNotNull(gitVersion.BranchName, "BranchName");
+    AssertNotNull(gitVersion.BuildMetaData, "BuildMetaData");
+    AssertNotNull(gitVersion.BuildMetaDataPadded, "BuildMetaDataPadded");
+    AssertNotNull(gitVersion.CommitDate, "CommitDate");
+    AssertNotNull(gitVersion.CommitsSinceVersionSource, "CommitsSinceVersionSource");
+    AssertNotNull(gitVersion.CommitsSinceVersionSourcePadded, "CommitsSinceVersionSourcePadded");
+    AssertNotNull(gitVersion.FullBuildMetaData, "FullBuildMetaData");
+    AssertNotNull(gitVersion.AssemblySemVer, "AssemblySemVer");
 });
 
 Task("Cake.Common.Tools.GitVersionAliases.OutputTypeIsJson")
@@ -33,15 +34,15 @@ Task("Cake.Common.Tools.GitVersionAliases.OutputTypeIsJson")
     });
 
     // Then
-    Assert.NotNull(gitVersion.AssemblySemVer, "AssemblySemVer");
-    Assert.NotNull(gitVersion.BranchName, "BranchName");
-    Assert.NotNull(gitVersion.BuildMetaData, "BuildMetaData");
-    Assert.NotNull(gitVersion.BuildMetaDataPadded, "BuildMetaDataPadded");
-    Assert.NotNull(gitVersion.CommitDate, "CommitDate");
-    Assert.NotNull(gitVersion.CommitsSinceVersionSource, "CommitsSinceVersionSource");
-    Assert.NotNull(gitVersion.CommitsSinceVersionSourcePadded, "CommitsSinceVersionSourcePadded");
-    Assert.NotNull(gitVersion.FullBuildMetaData, "FullBuildMetaData");
-    Assert.NotNull(gitVersion.AssemblySemVer, "AssemblySemVer");
+    AssertNotNull(gitVersion.AssemblySemVer, "AssemblySemVer");
+    AssertNotNull(gitVersion.BranchName, "BranchName");
+    AssertNotNull(gitVersion.BuildMetaData, "BuildMetaData");
+    AssertNotNull(gitVersion.BuildMetaDataPadded, "BuildMetaDataPadded");
+    AssertNotNull(gitVersion.CommitDate, "CommitDate");
+    AssertNotNull(gitVersion.CommitsSinceVersionSource, "CommitsSinceVersionSource");
+    AssertNotNull(gitVersion.CommitsSinceVersionSourcePadded, "CommitsSinceVersionSourcePadded");
+    AssertNotNull(gitVersion.FullBuildMetaData, "FullBuildMetaData");
+    AssertNotNull(gitVersion.AssemblySemVer, "AssemblySemVer");
 });
 
 Task("Cake.Common.Tools.GitVersionAliases")
