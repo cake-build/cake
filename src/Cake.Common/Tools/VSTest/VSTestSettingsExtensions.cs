@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tools.VSTest;
 
 namespace Cake.Common.Tools.VSTest
 {
