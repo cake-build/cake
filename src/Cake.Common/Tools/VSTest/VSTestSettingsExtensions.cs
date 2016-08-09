@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using Cake.Common.Tools.VSTest;
 
 namespace Cake.Common.Tools.VSTest
 {
@@ -19,7 +18,7 @@ namespace Cake.Common.Tools.VSTest
         /// <returns>The same <see cref="VSTestSettings"/> instance so that multiple calls can be chained.</returns>
         public static VSTestSettings WithoutAnyLogger(this VSTestSettings settings)
         {
-            return settings.WithLogger("");
+            return settings.WithLogger(string.Empty);
         }
 
         /// <summary>
