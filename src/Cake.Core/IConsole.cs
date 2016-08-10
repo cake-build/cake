@@ -61,5 +61,10 @@ namespace Cake.Core
         /// Sets the foreground and background console colors to their defaults.
         /// </summary>
         void ResetColor();
+        
+        /// <summary>
+        /// Pauses execution and waits for any input.
+        /// </summary>
+        void WaitForInput();
     }
 }
