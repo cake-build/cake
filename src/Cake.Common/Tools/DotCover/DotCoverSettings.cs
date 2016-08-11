@@ -53,6 +53,12 @@ namespace Cake.Common.Tools.DotCover
         public bool DisableDefaultFilters { get; set; }
 
         /// <summary>
+        /// Gets or sets a value that enables logging and specifies log file name
+        /// This represents the <c>/LogFile</c> option.
+        /// </summary>
+        public FilePath LogFile { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="DotCoverSettings"/> class.
         /// </summary>
         protected DotCoverSettings()
