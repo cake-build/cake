@@ -103,6 +103,7 @@
     <Compile Include="Fixtures\Tools\DNU\DNUFixture.cs" />
     <Compile Include="Fixtures\Tools\DNU\Pack\DNUPackerFixture.cs" />
     <Compile Include="Fixtures\Tools\DNU\Restorer\DNURestorerFixture.cs" />
+    <Compile Include="Fixtures\Tools\NuGet\Sources\NuGetListFixture.cs" />
     <Compile Include="Fixtures\Tools\OctopusDeployPusherFixture.cs" />
     <Compile Include="Fixtures\Tools\VSTestRunnerFixture.cs" />
     <Compile Include="Fixtures\Tools\SpecFlow\StepDefinitionReport\SpecFlowStepDefinitionReporterFixture.cs" />
