@@ -977,5 +977,58 @@ namespace Cake.Common.Tools.NuGet
                 NuGetUpdate(context, targetFile, settings);
             }
         }
+
+        /// <summary>
+        /// Lists the packages of a NuGet package source using the specified source
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="source">Path to the package(s) source.</param>
+        /// <returns>A list of package names and versions</returns>
+        /// <example>
+        /// <code>
+        /// var packages = NuGetList(EnvironmentVariable("PRIVATE_FEED_SOURCE"));
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("List")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Sources")]
+        public static IEnumerable<string> NuGetList(this ICakeContext context, string source)
+        {
+            return context.NuGetList(source, new NuGetSourcesSettings());
+        }
+
+        /// <summary>
+        /// Lists the packages of a NuGet package source using the specified source
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="source">Path to the package(s) source.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns>A list of package names and versions</returns>
+        /// <example>
+        /// <code>
+        /// var nugetSourceSettings = new NuGetSourcesSettings
+        ///                             {
+        ///                                 UserName = EnvironmentVariable("PRIVATE_FEED_USERNAME"),
+        ///                                 Password = EnvironmentVariable("PRIVATE_FEED_PASSWORD"),
+        ///                                 IsSensitiveSource = true,
+        ///                                 Verbosity = NuGetVerbosity.Detailed
+        ///                             };
+        /// var packages = NuGetList(EnvironmentVariable("PRIVATE_FEED_SOURCE"), nugetSourceSettings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("List")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Sources")]
+        public static IEnumerable<string> NuGetList(this ICakeContext context, string source, NuGetSourcesSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
+            var runner = new NuGetList(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
+            return runner.List(source, settings);
+        }
     }
 }
