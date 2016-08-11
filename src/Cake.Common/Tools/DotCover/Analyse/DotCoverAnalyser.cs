@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.DotCover.Analyse
     /// <summary>
     /// DotCover Analyser builder.
     /// </summary>
-    public sealed class DotCoverAnalyser : DotCoverTool<DotCoverAnalyseSettings>
+    public sealed class DotCoverAnalyser : DotCoverCoverageTool<DotCoverAnalyseSettings>
     {
         private readonly ICakeEnvironment _environment;
 
@@ -61,31 +61,13 @@ namespace Cake.Common.Tools.DotCover.Analyse
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            // Run the tool using the interceptor.
-            var interceptor = InterceptAction(context, action);
-
             // Run the tool.
-            Run(settings, GetArguments(interceptor, settings, outputPath));
-        }
-
-        private static DotCoverContext InterceptAction(
-            ICakeContext context,
-            Action<ICakeContext> action)
-        {
-            var interceptor = new DotCoverContext(context);
-            action(interceptor);
-
-            // Validate arguments.
-            if (interceptor.FilePath == null)
-            {
-                throw new CakeException("No tool was started.");
-            }
-
-            return interceptor;
+            Run(settings, GetArguments(context, action, settings, outputPath));
         }
 
         private ProcessArgumentBuilder GetArguments(
-            DotCoverContext context,
+            ICakeContext context,
+            Action<ICakeContext> action,
             DotCoverAnalyseSettings settings,
             FilePath outputPath)
         {
@@ -93,16 +75,8 @@ namespace Cake.Common.Tools.DotCover.Analyse
 
             builder.Append("Analyse");
 
-            // The target application to call.
-            builder.AppendSwitch("/TargetExecutable", "=", context.FilePath.FullPath.Quote());
-
-            // The arguments to the target application.
-            var arguments = context.Settings?.Arguments?.Render();
-            if (!string.IsNullOrWhiteSpace(arguments))
-            {
-                arguments = arguments.Replace("\"", "\\\"");
-                builder.AppendSwitch("/TargetArguments", "=", arguments.Quote());
-            }
+            // Get Target executable arguments
+            GetTargetArguments(context, action).CopyTo(builder);
 
             // Set the output file.
             outputPath = outputPath.MakeAbsolute(_environment);
@@ -114,8 +88,11 @@ namespace Cake.Common.Tools.DotCover.Analyse
                 builder.AppendSwitch("/ReportType", "=", settings.ReportType.ToString());
             }
 
-            // Set common Coverage settings
-            settings.ToArguments(_environment).CopyTo(builder);
+            // Get Coverage arguments
+            GetCoverageArguments(settings).CopyTo(builder);
+
+            // Get base arguments
+            GetArguments(settings).CopyTo(builder);
 
             return builder;
         }
