@@ -1,5 +1,5 @@
 ﻿{
-  "version": "0.15.3-*",
+  "version": "0.16.0-*",
   "description": "Provides aliases (extension methods on Cake context) that support CI, build, unit tests, zip, signing, etc. for Cake.",
   "copyright": "Copyright (c) .NET Foundation and contributors",
   "authors": [
