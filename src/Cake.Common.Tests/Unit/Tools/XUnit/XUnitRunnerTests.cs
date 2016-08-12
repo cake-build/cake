@@ -40,7 +40,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("xUnit.net (v1): Could not locate executable.", result.Message);
+                Assert.Equal("xUnit.net (v1): Could not locate executable.", result?.Message);
             }
 
             [Theory]
@@ -127,7 +127,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("xUnit.net (v1): Process was not started.", result.Message);
+                Assert.Equal("xUnit.net (v1): Process was not started.", result?.Message);
             }
 
             [Fact]
@@ -142,7 +142,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("xUnit.net (v1): Process returned an error (exit code 1).", result.Message);
+                Assert.Equal("xUnit.net (v1): Process returned an error (exit code 1).", result?.Message);
             }
 
             [Fact]
@@ -157,7 +157,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Cannot generate HTML report when no output directory has been set.", result.Message);
+                Assert.Equal("Cannot generate HTML report when no output directory has been set.", result?.Message);
             }
 
             [Fact]
@@ -187,7 +187,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Cannot generate XML report when no output directory has been set.", result.Message);
+                Assert.Equal("Cannot generate XML report when no output directory has been set.", result?.Message);
             }
 
             [Fact]

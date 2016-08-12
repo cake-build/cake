@@ -40,7 +40,7 @@ namespace Cake.Common.Tools.Fixie
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var assemblies = context.Globber.GetFiles(pattern).ToArray();
@@ -72,7 +72,7 @@ namespace Cake.Common.Tools.Fixie
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var assemblies = context.Globber.GetFiles(pattern).ToArray();
@@ -104,7 +104,7 @@ namespace Cake.Common.Tools.Fixie
         {
             if (assemblies == null)
             {
-                throw new ArgumentNullException("assemblies");
+                throw new ArgumentNullException(nameof(assemblies));
             }
             var paths = assemblies.Select(p => new FilePath(p));
             Fixie(context, paths, new FixieSettings());
@@ -150,7 +150,7 @@ namespace Cake.Common.Tools.Fixie
         {
             if (assemblies == null)
             {
-                throw new ArgumentNullException("assemblies");
+                throw new ArgumentNullException(nameof(assemblies));
             }
             var paths = assemblies.Select(p => new FilePath(p));
             Fixie(context, paths, settings);
@@ -176,11 +176,11 @@ namespace Cake.Common.Tools.Fixie
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (assemblies == null)
             {
-                throw new ArgumentNullException("assemblies");
+                throw new ArgumentNullException(nameof(assemblies));
             }
 
             var runner = new FixieRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);

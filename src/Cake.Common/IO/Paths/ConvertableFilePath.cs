@@ -12,8 +12,6 @@ namespace Cake.Common.IO.Paths
     /// </summary>
     public sealed class ConvertableFilePath
     {
-        private readonly FilePath _path;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ConvertableFilePath"/> class.
         /// </summary>
@@ -22,19 +20,16 @@ namespace Cake.Common.IO.Paths
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
-            _path = path;
+            Path = path;
         }
 
         /// <summary>
         /// Gets the path.
         /// </summary>
         /// <value>The actual path.</value>
-        public FilePath Path
-        {
-            get { return _path; }
-        }
+        public FilePath Path { get; }
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="ConvertableFilePath"/> to <see cref="FilePath"/>.
@@ -43,11 +38,7 @@ namespace Cake.Common.IO.Paths
         /// <returns>The result of the conversion. </returns>
         public static implicit operator FilePath(ConvertableFilePath path)
         {
-            if (path == null)
-            {
-                return null;
-            }
-            return path.Path;
+            return path?.Path;
         }
 
         /// <summary>
@@ -57,11 +48,7 @@ namespace Cake.Common.IO.Paths
         /// <returns>The result of the conversion.</returns>
         public static implicit operator string(ConvertableFilePath path)
         {
-            if (path == null)
-            {
-                return null;
-            }
-            return path.Path.FullPath;
+            return path?.Path.FullPath;
         }
 
         /// <summary>
@@ -72,7 +59,7 @@ namespace Cake.Common.IO.Paths
         /// </returns>
         public override string ToString()
         {
-            return _path.FullPath;
+            return Path.FullPath;
         }
     }
 }

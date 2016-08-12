@@ -44,11 +44,11 @@ namespace Cake.Common.Tools.NSIS
         {
             if (scriptFile == null)
             {
-                throw new ArgumentNullException("scriptFile");
+                throw new ArgumentNullException(nameof(scriptFile));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             Run(settings, GetArguments(scriptFile, settings));
         }

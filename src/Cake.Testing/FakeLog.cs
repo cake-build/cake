@@ -14,16 +14,12 @@ namespace Cake.Testing
     public sealed class FakeLog : ICakeLog
     {
         private readonly List<FakeLogMessage> _entries;
-        private Verbosity _verbosity;
 
         /// <summary>
         /// Gets the messages.
         /// </summary>
         /// <value>The messages.</value>
-        public IReadOnlyList<FakeLogMessage> Entries
-        {
-            get { return _entries; }
-        }
+        public IReadOnlyList<FakeLogMessage> Entries => _entries;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FakeLog"/> class.
@@ -31,18 +27,14 @@ namespace Cake.Testing
         public FakeLog()
         {
             _entries = new List<FakeLogMessage>();
-            _verbosity = Verbosity.Quiet;
+            Verbosity = Verbosity.Quiet;
         }
 
         /// <summary>
         /// Gets or sets the verbosity.
         /// </summary>
         /// <value>The verbosity.</value>
-        public Verbosity Verbosity
-        {
-            get { return _verbosity; }
-            set { _verbosity = value; }
-        }
+        public Verbosity Verbosity { get; set; }
 
         /// <summary>
         /// Writes the text representation of the specified array of objects to the

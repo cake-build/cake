@@ -42,12 +42,12 @@ namespace Cake.Common.Tools.GitLink
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             if (repositoryRootPath == null)
             {
-                throw new ArgumentNullException("repositoryRootPath");
+                throw new ArgumentNullException(nameof(repositoryRootPath));
             }
 
             Run(settings, GetArguments(repositoryRootPath, settings));

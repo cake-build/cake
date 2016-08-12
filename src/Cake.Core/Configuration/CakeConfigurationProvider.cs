@@ -26,11 +26,11 @@ namespace Cake.Core.Configuration
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             _fileSystem = fileSystem;
             _environment = environment;
@@ -46,11 +46,11 @@ namespace Cake.Core.Configuration
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
             if (arguments == null)
             {
-                throw new ArgumentNullException("arguments");
+                throw new ArgumentNullException(nameof(arguments));
             }
 
             var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);

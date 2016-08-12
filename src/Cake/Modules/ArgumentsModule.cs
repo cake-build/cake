@@ -21,7 +21,7 @@ namespace Cake.Modules
         {
             if (registry == null)
             {
-                throw new ArgumentNullException("registry");
+                throw new ArgumentNullException(nameof(registry));
             }
 
             registry.RegisterInstance(_options).As<CakeOptions>();

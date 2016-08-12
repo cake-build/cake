@@ -145,7 +145,7 @@ namespace Cake.Common.Tools.SpecFlow
         private static string RenderArguments(this SpecFlowContext context)
         {
             // The arguments to the target application.
-            if (context.Settings == null || context.Settings.Arguments == null)
+            if (context.Settings?.Arguments == null)
             {
                 throw new CakeException("No arguments were found for tool.");
             }

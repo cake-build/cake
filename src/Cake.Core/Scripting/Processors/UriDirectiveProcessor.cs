@@ -24,7 +24,7 @@ namespace Cake.Core.Scripting.Processors
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             replacement = null;

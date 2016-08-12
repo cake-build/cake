@@ -23,7 +23,7 @@ namespace Cake.NuGet
         private readonly ICakeEnvironment _environment;
         private readonly IProcessRunner _processRunner;
         private readonly INuGetToolResolver _toolResolver;
-        private readonly INuGetPackageContentResolver _contentResolver;
+        private readonly INuGetContentResolver _contentResolver;
         private readonly ICakeLog _log;
 
         private readonly ICakeConfiguration _config;
@@ -43,33 +43,33 @@ namespace Cake.NuGet
             ICakeEnvironment environment,
             IProcessRunner processRunner,
             INuGetToolResolver toolResolver,
-            INuGetPackageContentResolver contentResolver,
+            INuGetContentResolver contentResolver,
             ICakeLog log,
             ICakeConfiguration config)
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             if (processRunner == null)
             {
-                throw new ArgumentNullException("processRunner");
+                throw new ArgumentNullException(nameof(processRunner));
             }
             if (toolResolver == null)
             {
-                throw new ArgumentNullException("toolResolver");
+                throw new ArgumentNullException(nameof(toolResolver));
             }
             if (contentResolver == null)
             {
-                throw new ArgumentNullException("contentResolver");
+                throw new ArgumentNullException(nameof(contentResolver));
             }
             if (log == null)
             {
-                throw new ArgumentNullException("log");
+                throw new ArgumentNullException(nameof(log));
             }
 
             _fileSystem = fileSystem;
@@ -94,7 +94,7 @@ namespace Cake.NuGet
         {
             if (package == null)
             {
-                throw new ArgumentNullException("package");
+                throw new ArgumentNullException(nameof(package));
             }
             return package.Scheme.Equals("nuget", StringComparison.OrdinalIgnoreCase);
         }
@@ -110,11 +110,11 @@ namespace Cake.NuGet
         {
             if (package == null)
             {
-                throw new ArgumentNullException("package");
+                throw new ArgumentNullException(nameof(package));
             }
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
 
             path = path.MakeAbsolute(_environment);
@@ -156,8 +156,15 @@ namespace Cake.NuGet
                 _log.Verbose(Verbosity.Diagnostic, "Output:\r\n{0}", output);
             }
 
-            // Return the files.
-            return _contentResolver.GetFiles(packagePath, type);
+            // Get the files.
+            var result = _contentResolver.GetFiles(packagePath, type);
+            if (result.Count == 0)
+            {
+                var framework = _environment.Runtime.TargetFramework;
+                _log.Warning("Could not find any assemblies compatible with {0}.", framework.FullName);
+            }
+
+            return result;
         }
 
         private FilePath GetNuGetPath()

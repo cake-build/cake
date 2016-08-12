@@ -44,11 +44,11 @@ namespace Cake.Common.Tools.NuGet.Restore
         {
             if (targetFilePath == null)
             {
-                throw new ArgumentNullException("targetFilePath");
+                throw new ArgumentNullException(nameof(targetFilePath));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetArguments(targetFilePath, settings));

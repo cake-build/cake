@@ -3,10 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Cake.Core.Scripting.Analysis;
 
 namespace Cake.Core.Scripting.Processors
@@ -22,7 +18,7 @@ namespace Cake.Core.Scripting.Processors
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             replacement = null;

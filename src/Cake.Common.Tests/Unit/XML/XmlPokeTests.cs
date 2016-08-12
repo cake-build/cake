@@ -4,10 +4,10 @@
 
 using System.IO;
 using Cake.Common.Tests.Fixtures;
-using Cake.Common.Xml;
-using Xunit;
 using Cake.Common.Tests.Properties;
-using System.Text;
+using Cake.Common.Xml;
+using Cake.Testing.Xunit;
+using Xunit;
 
 namespace Cake.Common.Tests.Unit.XML
 {
@@ -62,7 +62,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var fixture = new XmlPokeFixture(xmlWithDtd: true);
 
                 // When
-                var result = Record.Exception(() => fixture.Poke("/plist/dict/string/text()",""));
+                var result = Record.Exception(() => fixture.Poke("/plist/dict/string/text()", ""));
 
                 // Then
                 Assert.IsType<System.Xml.XmlException>(result);
@@ -72,10 +72,10 @@ namespace Cake.Common.Tests.Unit.XML
             public void Should_Throw_If_Xml_String_Has_Dtd()
             {
                 // Given
-                var fixture = new XmlPokeFixture(xmlExists:false);
+                var fixture = new XmlPokeFixture(xmlExists: false);
 
                 // When
-                var result = Record.Exception(() => fixture.PokeString(Resources.XmlPoke_Xml_Dtd, "/plist/dict/string/text()",""));
+                var result = Record.Exception(() => fixture.PokeString(Resources.XmlPoke_Xml_Dtd, "/plist/dict/string/text()", ""));
 
                 // Then
                 Assert.IsType<System.Xml.XmlException>(result);
@@ -113,11 +113,11 @@ namespace Cake.Common.Tests.Unit.XML
                     "/configuration/appSettings/add[@key = 'server']"));
             }
 
-            [Fact]
+            [RuntimeFact(TestRuntime.Clr)]
             public void Should_Change_Attribute_From_Xml_File_With_Dtd()
             {
                 // Given
-                var fixture = new XmlPokeFixture(xmlWithDtd:true);
+                var fixture = new XmlPokeFixture(xmlWithDtd: true);
                 fixture.Settings.DtdProcessing = XmlDtdProcessing.Parse;
 
                 // When
@@ -127,6 +127,20 @@ namespace Cake.Common.Tests.Unit.XML
                 Assert.True(fixture.TestIsValue(
                     "/plist/dict/string/text()",
                     "Cake Version"));
+            }
+
+            [RuntimeFact(TestRuntime.CoreClr)]
+            public void Should_Throw_On_Net_Core_Change_Attribute_From_Xml_File_With_Dtd()
+            {
+                // Given
+                var fixture = new XmlPokeFixture(xmlWithDtd: true);
+                fixture.Settings.DtdProcessing = XmlDtdProcessing.Parse;
+
+                // When
+                var result = Record.Exception(() => fixture.Poke("/plist/dict/string", "Cake Version"));
+
+                // Then
+                Assert.IsCakeException(result, "DtdProcessing is not available on .NET Core.");
             }
         }
     }

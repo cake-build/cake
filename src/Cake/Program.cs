@@ -13,6 +13,7 @@ using Cake.Core.Modules;
 using Cake.Diagnostics;
 using Cake.Modules;
 using Cake.NuGet;
+using Cake.Polyfill;
 
 namespace Cake
 {
@@ -33,7 +34,7 @@ namespace Cake
             {
                 // Parse arguments.
                 var args = ArgumentTokenizer
-                    .Tokenize(Environment.CommandLine)
+                    .Tokenize(EnvironmentHelper.GetCommandLine())
                     .Skip(1) // Skip executable.
                     .ToArray();
 

@@ -80,7 +80,7 @@ namespace Cake.Common.Tools.Chocolatey
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
@@ -138,7 +138,7 @@ namespace Cake.Common.Tools.Chocolatey
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
@@ -208,7 +208,7 @@ namespace Cake.Common.Tools.Chocolatey
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
@@ -278,7 +278,7 @@ namespace Cake.Common.Tools.Chocolatey
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
@@ -314,7 +314,7 @@ namespace Cake.Common.Tools.Chocolatey
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
@@ -350,7 +350,7 @@ namespace Cake.Common.Tools.Chocolatey
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
@@ -386,7 +386,7 @@ namespace Cake.Common.Tools.Chocolatey
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
@@ -439,7 +439,7 @@ namespace Cake.Common.Tools.Chocolatey
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
@@ -492,7 +492,7 @@ namespace Cake.Common.Tools.Chocolatey
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
@@ -550,7 +550,7 @@ namespace Cake.Common.Tools.Chocolatey
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
@@ -603,7 +603,7 @@ namespace Cake.Common.Tools.Chocolatey
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
@@ -656,7 +656,7 @@ namespace Cake.Common.Tools.Chocolatey
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
@@ -709,7 +709,7 @@ namespace Cake.Common.Tools.Chocolatey
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
@@ -751,7 +751,7 @@ namespace Cake.Common.Tools.Chocolatey
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
@@ -776,7 +776,7 @@ namespace Cake.Common.Tools.Chocolatey
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
@@ -828,7 +828,7 @@ namespace Cake.Common.Tools.Chocolatey
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);

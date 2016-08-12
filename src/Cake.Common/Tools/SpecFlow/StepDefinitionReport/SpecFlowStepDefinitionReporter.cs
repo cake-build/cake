@@ -42,11 +42,11 @@ namespace Cake.Common.Tools.SpecFlow.StepDefinitionReport
         {
             if (projectFile == null)
             {
-                throw new ArgumentNullException("projectFile");
+                throw new ArgumentNullException(nameof(projectFile));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             // Run the tool.

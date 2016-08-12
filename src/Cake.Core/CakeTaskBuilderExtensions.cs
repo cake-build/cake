@@ -23,7 +23,7 @@ namespace Cake.Core
         {
             if (builder == null)
             {
-                throw new ArgumentNullException("builder");
+                throw new ArgumentNullException(nameof(builder));
             }
 
             builder.Task.AddDependency(name);
@@ -42,7 +42,7 @@ namespace Cake.Core
         {
             if (builder == null)
             {
-                throw new ArgumentNullException("builder");
+                throw new ArgumentNullException(nameof(builder));
             }
 
             builder.Task.AddCriteria(_ => criteria);
@@ -62,7 +62,7 @@ namespace Cake.Core
         {
             if (builder == null)
             {
-                throw new ArgumentNullException("builder");
+                throw new ArgumentNullException(nameof(builder));
             }
 
             builder.Task.AddCriteria(criteria);
@@ -82,7 +82,7 @@ namespace Cake.Core
         {
             if (builder == null)
             {
-                throw new ArgumentNullException("builder");
+                throw new ArgumentNullException(nameof(builder));
             }
 
             builder.Task.AddCriteria(criteria);
@@ -99,7 +99,7 @@ namespace Cake.Core
         {
             if (action == null)
             {
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             }
             return Does(builder, context => action());
         }
@@ -115,7 +115,7 @@ namespace Cake.Core
         {
             if (builder == null)
             {
-                throw new ArgumentNullException("builder");
+                throw new ArgumentNullException(nameof(builder));
             }
 
             builder.Task.AddAction(action);
@@ -134,7 +134,7 @@ namespace Cake.Core
         {
             if (builder == null)
             {
-                throw new ArgumentNullException("builder");
+                throw new ArgumentNullException(nameof(builder));
             }
 
             builder.Task.Description = description;
@@ -176,7 +176,7 @@ namespace Cake.Core
         {
             if (builder == null)
             {
-                throw new ArgumentNullException("builder");
+                throw new ArgumentNullException(nameof(builder));
             }
 
             builder.Task.SetErrorHandler(errorHandler);
@@ -195,7 +195,7 @@ namespace Cake.Core
         {
             if (builder == null)
             {
-                throw new ArgumentNullException("builder");
+                throw new ArgumentNullException(nameof(builder));
             }
             builder.Task.SetFinallyHandler(finallyHandler);
             return builder;
@@ -214,7 +214,7 @@ namespace Cake.Core
         {
             if (builder == null)
             {
-                throw new ArgumentNullException("builder");
+                throw new ArgumentNullException(nameof(builder));
             }
             builder.Task.SetErrorReporter(errorReporter);
             return builder;

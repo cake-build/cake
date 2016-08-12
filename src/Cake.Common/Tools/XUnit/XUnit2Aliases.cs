@@ -40,7 +40,7 @@ namespace Cake.Common.Tools.XUnit
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var assemblies = context.Globber.GetFiles(pattern).ToArray();
@@ -75,7 +75,7 @@ namespace Cake.Common.Tools.XUnit
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var assemblies = context.Globber.GetFiles(pattern).ToArray();
@@ -108,7 +108,7 @@ namespace Cake.Common.Tools.XUnit
         {
             if (assemblies == null)
             {
-                throw new ArgumentNullException("assemblies");
+                throw new ArgumentNullException(nameof(assemblies));
             }
             var paths = assemblies.Select(p => new FilePath(p));
             XUnit2(context, paths, new XUnit2Settings());
@@ -158,7 +158,7 @@ namespace Cake.Common.Tools.XUnit
         {
             if (assemblies == null)
             {
-                throw new ArgumentNullException("assemblies");
+                throw new ArgumentNullException(nameof(assemblies));
             }
             var paths = assemblies.Select(p => new FilePath(p));
             XUnit2(context, paths, settings);
@@ -187,11 +187,11 @@ namespace Cake.Common.Tools.XUnit
         {
             if (context == null)
             {
-                throw new ArgumentNullException("assemblies");
+                throw new ArgumentNullException(nameof(assemblies));
             }
             if (assemblies == null)
             {
-                throw new ArgumentNullException("assemblies");
+                throw new ArgumentNullException(nameof(assemblies));
             }
 
             var runner = new XUnit2Runner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);

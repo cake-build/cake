@@ -39,7 +39,7 @@ namespace Cake.Common.Tools.Roundhouse
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             settings.Drop |= drop;

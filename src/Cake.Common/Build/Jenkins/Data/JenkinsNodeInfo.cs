@@ -17,10 +17,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The name of the node.
         /// </value>
-        public string NodeName
-        {
-            get { return GetEnvironmentString("NODE_NAME"); }
-        }
+        public string NodeName => GetEnvironmentString("NODE_NAME");
 
         /// <summary>
         /// Gets the node labels.
@@ -28,10 +25,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The node labels.
         /// </value>
-        public string NodeLabels
-        {
-            get { return GetEnvironmentString("NODE_LABELS"); }
-        }
+        public string NodeLabels => GetEnvironmentString("NODE_LABELS");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JenkinsNodeInfo"/> class.

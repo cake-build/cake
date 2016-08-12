@@ -9,6 +9,7 @@ using System.Reflection;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.Polyfill;
 using Cake.Core.Scripting.Analysis;
 
 namespace Cake.Core.Scripting
@@ -50,35 +51,35 @@ namespace Cake.Core.Scripting
         {
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             if (log == null)
             {
-                throw new ArgumentNullException("log");
+                throw new ArgumentNullException(nameof(log));
             }
             if (configuration == null)
             {
-                throw new ArgumentNullException("configuration");
+                throw new ArgumentNullException(nameof(configuration));
             }
             if (engine == null)
             {
-                throw new ArgumentNullException("engine");
+                throw new ArgumentNullException(nameof(engine));
             }
             if (aliasFinder == null)
             {
-                throw new ArgumentNullException("aliasFinder");
+                throw new ArgumentNullException(nameof(aliasFinder));
             }
             if (analyzer == null)
             {
-                throw new ArgumentNullException("analyzer");
+                throw new ArgumentNullException(nameof(analyzer));
             }
             if (processor == null)
             {
-                throw new ArgumentNullException("processor");
+                throw new ArgumentNullException(nameof(processor));
             }
             if (conventions == null)
             {
-                throw new ArgumentNullException("conventions");
+                throw new ArgumentNullException(nameof(conventions));
             }
 
             _environment = environment;
@@ -101,15 +102,15 @@ namespace Cake.Core.Scripting
         {
             if (host == null)
             {
-                throw new ArgumentNullException("host");
+                throw new ArgumentNullException(nameof(host));
             }
             if (scriptPath == null)
             {
-                throw new ArgumentNullException("scriptPath");
+                throw new ArgumentNullException(nameof(scriptPath));
             }
             if (arguments == null)
             {
-                throw new ArgumentNullException("arguments");
+                throw new ArgumentNullException(nameof(arguments));
             }
 
             // Make the script path absolute.
@@ -146,7 +147,7 @@ namespace Cake.Core.Scripting
             {
                 if (host.Context.FileSystem.Exist((FilePath)reference))
                 {
-                    var assembly = Assembly.LoadFrom(reference);
+                    var assembly = AssemblyHelper.LoadFromString(reference);
                     assemblies.Add(assembly);
                 }
                 else

@@ -21,19 +21,13 @@ namespace Cake.Common.Tools.XBuild
         /// Gets the targets.
         /// </summary>
         /// <value>The targets.</value>
-        public ISet<string> Targets
-        {
-            get { return _targets; }
-        }
+        public ISet<string> Targets => _targets;
 
         /// <summary>
         /// Gets the properties.
         /// </summary>
         /// <value>The properties.</value>
-        public IDictionary<string, IList<string>> Properties
-        {
-            get { return _properties; }
-        }
+        public IDictionary<string, IList<string>> Properties => _properties;
 
         /// <summary>
         /// Gets or sets the tool version.

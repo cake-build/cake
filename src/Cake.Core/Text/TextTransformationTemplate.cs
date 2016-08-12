@@ -42,7 +42,7 @@ namespace Cake.Core.Text
         {
             if (template == null)
             {
-                throw new ArgumentNullException("template");
+                throw new ArgumentNullException(nameof(template));
             }
             _template = template;
             _tokens = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
@@ -58,11 +58,11 @@ namespace Cake.Core.Text
         {
             if (key == null)
             {
-                throw new ArgumentNullException("key");
+                throw new ArgumentNullException(nameof(key));
             }
             if (string.IsNullOrWhiteSpace(key))
             {
-                throw new ArgumentException("Key cannot be empty.", "key");
+                throw new ArgumentException("Key cannot be empty.", nameof(key));
             }
             if (_tokens.ContainsKey(key))
             {

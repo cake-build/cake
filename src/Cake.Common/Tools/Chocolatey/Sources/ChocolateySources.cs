@@ -42,23 +42,23 @@ namespace Cake.Common.Tools.Chocolatey.Sources
         {
             if (name == null)
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentException("Source name cannot be empty.", "name");
+                throw new ArgumentException("Source name cannot be empty.", nameof(name));
             }
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             if (string.IsNullOrWhiteSpace(source))
             {
-                throw new ArgumentException("Source cannot be empty.", "source");
+                throw new ArgumentException("Source cannot be empty.", nameof(source));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetAddArguments(name, source, settings));
@@ -73,15 +73,15 @@ namespace Cake.Common.Tools.Chocolatey.Sources
         {
             if (name == null)
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentException("Source name cannot be empty.", "name");
+                throw new ArgumentException("Source name cannot be empty.", nameof(name));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetRemoveArguments(name, settings));
@@ -96,15 +96,15 @@ namespace Cake.Common.Tools.Chocolatey.Sources
         {
             if (name == null)
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentException("Source name cannot be empty.", "name");
+                throw new ArgumentException("Source name cannot be empty.", nameof(name));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetEnableArguments(name, settings));
@@ -119,15 +119,15 @@ namespace Cake.Common.Tools.Chocolatey.Sources
         {
             if (name == null)
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentException("Source name cannot be empty.", "name");
+                throw new ArgumentException("Source name cannot be empty.", nameof(name));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetDisableArguments(name, settings));

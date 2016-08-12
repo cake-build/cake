@@ -19,11 +19,12 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet.Sources
 
         public void GivenExistingSource()
         {
-            ProcessRunner.Process.SetStandardOutput(new[] {
+            ProcessRunner.Process.SetStandardOutput(new[]
+            {
                 "  1.  https://www.nuget.org/api/v2/ [Enabled]",
                 "      https://www.nuget.org/api/v2/",
-                string.Format("  2.  {0} [Enabled]", Name),
-                string.Format("      {0}", Source)
+                $"  2.  {Name} [Enabled]",
+                $"      {Source}"
             });
         }
 

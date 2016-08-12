@@ -14,7 +14,6 @@ namespace Cake.Common.Tools
     /// </summary>
     public sealed class DotNetBuildSettings
     {
-        private readonly FilePath _solution;
         private readonly HashSet<string> _targets;
         private readonly Dictionary<string, IList<string>> _properties;
 
@@ -22,28 +21,19 @@ namespace Cake.Common.Tools
         /// Gets the solution path.
         /// </summary>
         /// <value>The solution.</value>
-        public FilePath Solution
-        {
-            get { return _solution; }
-        }
+        public FilePath Solution { get; }
 
         /// <summary>
         /// Gets the targets.
         /// </summary>
         /// <value>The targets.</value>
-        public ISet<string> Targets
-        {
-            get { return _targets; }
-        }
+        public ISet<string> Targets => _targets;
 
         /// <summary>
         /// Gets the properties.
         /// </summary>
         /// <value>The properties.</value>
-        public IDictionary<string, IList<string>> Properties
-        {
-            get { return _properties; }
-        }
+        public IDictionary<string, IList<string>> Properties => _properties;
 
         /// <summary>
         /// Gets or sets the configuration.
@@ -66,10 +56,10 @@ namespace Cake.Common.Tools
         {
             if (solution == null)
             {
-                throw new ArgumentNullException("solution");
+                throw new ArgumentNullException(nameof(solution));
             }
 
-            _solution = solution;
+            Solution = solution;
             _targets = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _properties = new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
 

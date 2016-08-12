@@ -37,15 +37,15 @@ namespace Cake.Core.Scripting.Analysis
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             if (log == null)
             {
-                throw new ArgumentNullException("log");
+                throw new ArgumentNullException(nameof(log));
             }
 
             _fileSystem = fileSystem;
@@ -73,7 +73,7 @@ namespace Cake.Core.Scripting.Analysis
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
 
             // Make the script path absolute.
@@ -97,7 +97,7 @@ namespace Cake.Core.Scripting.Analysis
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var path = context.Script.Path;

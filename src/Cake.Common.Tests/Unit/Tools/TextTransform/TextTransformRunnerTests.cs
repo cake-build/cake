@@ -53,7 +53,7 @@ namespace Cake.Common.Tests.Unit.Tools.TextTransform
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("TextTransform: Could not locate executable.", result.Message);
+                Assert.Equal("TextTransform: Could not locate executable.", result?.Message);
             }
 
             [Theory]
@@ -124,7 +124,7 @@ namespace Cake.Common.Tests.Unit.Tools.TextTransform
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("TextTransform: Process was not started.", result.Message);
+                Assert.Equal("TextTransform: Process was not started.", result?.Message);
             }
 
             [Fact]
@@ -139,7 +139,7 @@ namespace Cake.Common.Tests.Unit.Tools.TextTransform
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("TextTransform: Process returned an error (exit code 1).", result.Message);
+                Assert.Equal("TextTransform: Process returned an error (exit code 1).", result?.Message);
             }
 
             [Fact]

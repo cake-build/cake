@@ -47,19 +47,19 @@ namespace Cake.Common.Tools.SpecFlow.TestExecutionReport
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (action == null)
             {
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             }
             if (projectFile == null)
             {
-                throw new ArgumentNullException("projectFile");
+                throw new ArgumentNullException(nameof(projectFile));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             // Run the tool using the interceptor.

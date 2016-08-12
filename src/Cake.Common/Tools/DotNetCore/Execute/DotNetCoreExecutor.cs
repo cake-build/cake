@@ -42,11 +42,11 @@ namespace Cake.Common.Tools.DotNetCore.Execute
         {
             if (assemblyPath == null)
             {
-                throw new ArgumentNullException("assemblyPath");
+                throw new ArgumentNullException(nameof(assemblyPath));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetArguments(assemblyPath, arguments, settings));

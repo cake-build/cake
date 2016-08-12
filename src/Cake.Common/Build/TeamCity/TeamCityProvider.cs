@@ -46,12 +46,12 @@ namespace Cake.Common.Build.TeamCity
         {
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
 
             if (log == null)
             {
-                throw new ArgumentNullException("log");
+                throw new ArgumentNullException(nameof(log));
             }
 
             _environment = environment;
@@ -64,10 +64,7 @@ namespace Cake.Common.Build.TeamCity
         /// <value>
         /// <c>true</c> if the current build is running on TeamCity; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnTeamCity
-        {
-            get { return !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TEAMCITY_VERSION")); }
-        }
+        public bool IsRunningOnTeamCity => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TEAMCITY_VERSION"));
 
         /// <summary>
         /// Write a progress message to the TeamCity build log.
@@ -163,11 +160,11 @@ namespace Cake.Common.Build.TeamCity
         {
             if (type == null)
             {
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             }
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
 
             WriteServiceMessage("importData", new Dictionary<string, string>
@@ -186,7 +183,7 @@ namespace Cake.Common.Build.TeamCity
         {
             if (snapshotFile == null)
             {
-                throw new ArgumentNullException("snapshotFile");
+                throw new ArgumentNullException(nameof(snapshotFile));
             }
 
             var args = dotCoverHome == null ?

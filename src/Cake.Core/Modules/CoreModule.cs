@@ -26,7 +26,7 @@ namespace Cake.Core.Modules
         {
             if (registry == null)
             {
-                throw new ArgumentNullException("registry");
+                throw new ArgumentNullException(nameof(registry));
             }
 
             // Execution

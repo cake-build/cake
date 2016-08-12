@@ -20,7 +20,6 @@ namespace Cake.Common.Build.ContinuaCI
         private const string MessagePostfix = "]";
         private static readonly Dictionary<string, string> _sanitizationTokens;
         private readonly ICakeEnvironment _environment;
-        private readonly ContinuaCIEnvironmentInfo _environmentInfo;
 
         static ContinuaCIProvider()
         {
@@ -43,11 +42,11 @@ namespace Cake.Common.Build.ContinuaCI
         {
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
 
             _environment = environment;
-            _environmentInfo = new ContinuaCIEnvironmentInfo(environment);
+            Environment = new ContinuaCIEnvironmentInfo(environment);
         }
 
         /// <summary>
@@ -71,10 +70,7 @@ namespace Cake.Common.Build.ContinuaCI
         /// <value>
         /// The Continua CI environment.
         /// </value>
-        public ContinuaCIEnvironmentInfo Environment
-        {
-            get { return _environmentInfo; }
-        }
+        public ContinuaCIEnvironmentInfo Environment { get; }
 
         /// <summary>
         /// Write a status message to the Continua CI build log.

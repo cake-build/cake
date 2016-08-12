@@ -51,7 +51,7 @@ namespace Cake.Core
         {
             if (teardownContext == null)
             {
-                throw new ArgumentNullException("teardownContext");
+                throw new ArgumentNullException(nameof(teardownContext));
             }
             if (action != null)
             {
@@ -109,10 +109,7 @@ namespace Cake.Core
         /// <param name="exception">The exception.</param>
         public void ReportErrors(Action<Exception> action, Exception exception)
         {
-            if (action != null)
-            {
-                action(exception);
-            }
+            action?.Invoke(exception);
         }
 
         /// <summary>
@@ -122,10 +119,7 @@ namespace Cake.Core
         /// <param name="exception">The exception.</param>
         public void HandleErrors(Action<Exception> action, Exception exception)
         {
-            if (action != null)
-            {
-                action(exception);
-            }
+            action?.Invoke(exception);
         }
 
         /// <summary>
@@ -134,10 +128,7 @@ namespace Cake.Core
         /// <param name="action">The action.</param>
         public void InvokeFinally(Action action)
         {
-            if (action != null)
-            {
-                action();
-            }
+            action?.Invoke();
         }
 
         /// <summary>
@@ -149,7 +140,7 @@ namespace Cake.Core
         {
             if (taskSetupContext == null)
             {
-                throw new ArgumentNullException("taskSetupContext");
+                throw new ArgumentNullException(nameof(taskSetupContext));
             }
             if (action != null)
             {
@@ -167,7 +158,7 @@ namespace Cake.Core
         {
             if (taskTeardownContext == null)
             {
-                throw new ArgumentNullException("taskTeardownContext");
+                throw new ArgumentNullException(nameof(taskTeardownContext));
             }
             if (action != null)
             {

@@ -45,7 +45,7 @@ namespace Cake.Common.Tools.ILRepack
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var merger = new ILRepackRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
@@ -80,7 +80,7 @@ namespace Cake.Common.Tools.ILRepack
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var merger = new ILRepackRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);

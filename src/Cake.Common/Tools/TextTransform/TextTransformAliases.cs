@@ -40,7 +40,7 @@ namespace Cake.Common.Tools.TextTransform
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var runner = new TextTransformRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
@@ -66,7 +66,7 @@ namespace Cake.Common.Tools.TextTransform
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var runner = new TextTransformRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);

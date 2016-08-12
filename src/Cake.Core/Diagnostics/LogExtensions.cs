@@ -29,10 +29,7 @@ namespace Cake.Core.Diagnostics
         /// <param name="args">An array of objects to write using format.</param>
         public static void Error(this ICakeLog log, Verbosity verbosity, string format, params object[] args)
         {
-            if (log != null)
-            {
-                log.Write(verbosity, LogLevel.Error, format, args);
-            }
+            log?.Write(verbosity, LogLevel.Error, format, args);
         }
 
         /// <summary>
@@ -78,10 +75,7 @@ namespace Cake.Core.Diagnostics
         /// <param name="args">An array of objects to write using format.</param>
         public static void Warning(this ICakeLog log, Verbosity verbosity, string format, params object[] args)
         {
-            if (log != null)
-            {
-                log.Write(verbosity, LogLevel.Warning, format, args);
-            }
+            log?.Write(verbosity, LogLevel.Warning, format, args);
         }
 
         /// <summary>
@@ -127,10 +121,7 @@ namespace Cake.Core.Diagnostics
         /// <param name="args">An array of objects to write using format.</param>
         public static void Information(this ICakeLog log, Verbosity verbosity, string format, params object[] args)
         {
-            if (log != null)
-            {
-                log.Write(verbosity, LogLevel.Information, format, args);
-            }
+            log?.Write(verbosity, LogLevel.Information, format, args);
         }
 
         /// <summary>
@@ -176,10 +167,7 @@ namespace Cake.Core.Diagnostics
         /// <param name="args">An array of objects to write using format.</param>
         public static void Verbose(this ICakeLog log, Verbosity verbosity, string format, params object[] args)
         {
-            if (log != null)
-            {
-                log.Write(verbosity, LogLevel.Verbose, format, args);
-            }
+            log?.Write(verbosity, LogLevel.Verbose, format, args);
         }
 
         /// <summary>
@@ -225,10 +213,7 @@ namespace Cake.Core.Diagnostics
         /// <param name="args">An array of objects to write using format.</param>
         public static void Debug(this ICakeLog log, Verbosity verbosity, string format, params object[] args)
         {
-            if (log != null)
-            {
-                log.Write(verbosity, LogLevel.Debug, format, args);
-            }
+            log?.Write(verbosity, LogLevel.Debug, format, args);
         }
 
         /// <summary>

@@ -43,7 +43,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("NUnit: Could not locate executable.", result.Message);
+                Assert.Equal("NUnit: Could not locate executable.", result?.Message);
             }
 
             [Theory]
@@ -146,7 +146,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("NUnit: Process was not started.", result.Message);
+                Assert.Equal("NUnit: Process was not started.", result?.Message);
             }
 
             [Theory]
@@ -167,7 +167,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal(expectedMessage, result.Message);
+                Assert.Equal(expectedMessage, result?.Message);
             }
 
             [Fact]
@@ -197,7 +197,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
 
                 // Then
                 Assert.IsType<ArgumentException>(result);
-                Assert.Equal("NUnit: You can't specify both a results file and set NoResults to true.", result.Message);
+                Assert.Equal("NUnit: You can't specify both a results file and set NoResults to true.", result?.Message);
             }
 
             [Fact]

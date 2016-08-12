@@ -305,7 +305,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Sources
 
             [Theory]
             [InlineData("/bin/chocolatey/choco.exe", "/bin/chocolatey/choco.exe")]
-			[InlineData("./chocolatey/choco.exe", "/Working/chocolatey/choco.exe")]
+            [InlineData("./chocolatey/choco.exe", "/Working/chocolatey/choco.exe")]
             public void Should_Use_Chocolatey_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given

@@ -24,7 +24,7 @@ namespace Cake.Common.Tools
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.Targets.Add(target);
             return settings;
@@ -41,7 +41,7 @@ namespace Cake.Common.Tools
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             IList<string> currentValue;
@@ -65,7 +65,7 @@ namespace Cake.Common.Tools
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.Configuration = configuration;
             return settings;
@@ -81,7 +81,7 @@ namespace Cake.Common.Tools
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.Verbosity = verbosity;
             return settings;

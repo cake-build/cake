@@ -53,7 +53,7 @@ namespace Cake.Common.Tools.OpenCover
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             // Create the OpenCover runner.

@@ -68,7 +68,7 @@ namespace Cake.Common.Tests.Unit.Solution
                 Assert.NotNull(result);
                 Assert.NotNull(result.Projects);
                 Assert.Equal(5, result.Projects.Count);
-                var onlyProjects = result.Projects.Where(x => !x.GetType().Equals(typeof(SolutionFolder))).ToList();
+                var onlyProjects = result.Projects.Where(x => !(x is SolutionFolder)).ToList();
                 Assert.Equal(3, onlyProjects.Count);
             }
 

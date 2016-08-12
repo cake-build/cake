@@ -96,7 +96,7 @@ namespace Cake.Common.Tests.Unit.XML
             public void Should_Get_Node_Value_From_File_With_Dtd()
             {
                 // Given
-                var fixture = new XmlPeekAliasesFixture(xmlWithDtd:true);
+                var fixture = new XmlPeekAliasesFixture(xmlWithDtd: true);
                 fixture.Settings.DtdProcessing = XmlDtdProcessing.Parse;
 
                 // When

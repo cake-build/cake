@@ -18,7 +18,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.WiX
 
         public string HarvestTarget { get; set; }
 
-        public WiXHarvestType HarvestType { get; set; } 
+        public WiXHarvestType HarvestType { get; set; }
 
         public HeatFixture()
             : base("heat.exe")

@@ -17,10 +17,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         /// The AppVeyor unique project ID.
         /// </value>
-        public string Id
-        {
-            get { return GetEnvironmentString("APPVEYOR_PROJECT_ID"); }
-        }
+        public string Id => GetEnvironmentString("APPVEYOR_PROJECT_ID");
 
         /// <summary>
         /// Gets the project name.
@@ -28,10 +25,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         /// The project name.
         /// </value>
-        public string Name
-        {
-            get { return GetEnvironmentString("APPVEYOR_PROJECT_NAME"); }
-        }
+        public string Name => GetEnvironmentString("APPVEYOR_PROJECT_NAME");
 
         /// <summary>
         /// Gets the project slug (as seen in project details URL).
@@ -39,10 +33,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         /// The project slug (as seen in project details URL).
         /// </value>
-        public string Slug
-        {
-            get { return GetEnvironmentString("APPVEYOR_PROJECT_SLUG"); }
-        }
+        public string Slug => GetEnvironmentString("APPVEYOR_PROJECT_SLUG");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppVeyorProjectInfo"/> class.

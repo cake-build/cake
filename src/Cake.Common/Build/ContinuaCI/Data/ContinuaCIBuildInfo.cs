@@ -16,8 +16,6 @@ namespace Cake.Common.Build.ContinuaCI.Data
     {
         private readonly string _prefix;
 
-        private readonly ContinuaCIChangesetInfo _latestChangesetInfo;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ContinuaCIBuildInfo"/> class.
         /// </summary>
@@ -26,7 +24,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         public ContinuaCIBuildInfo(ICakeEnvironment environment, string prefix)
             : base(environment)
         {
-            _latestChangesetInfo = new ContinuaCIChangesetInfo(environment, string.Format(CultureInfo.InvariantCulture, "{0}.LatestChangeset", prefix));
+            LatestChangeset = new ContinuaCIChangesetInfo(environment, string.Format(CultureInfo.InvariantCulture, "{0}.LatestChangeset", prefix));
             _prefix = prefix;
         }
 
@@ -249,9 +247,6 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// <summary>
         /// Gets the latest build changeset
         /// </summary>
-        public ContinuaCIChangesetInfo LatestChangeset
-        {
-            get { return _latestChangesetInfo; }
-        }
+        public ContinuaCIChangesetInfo LatestChangeset { get; }
     }
 }

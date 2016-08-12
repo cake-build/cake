@@ -72,7 +72,7 @@ namespace Cake.Common.Tests.Unit
 
                     // Then
                     Assert.IsType<CakeException>(result);
-                    Assert.Equal("Could not start process.", result.Message);
+                    Assert.Equal("Could not start process.", result?.Message);
                 }
 
                 [Fact]
@@ -210,7 +210,7 @@ namespace Cake.Common.Tests.Unit
 
                     // Then
                     Assert.IsType<CakeException>(result);
-                    Assert.Equal("Could not start process.", result.Message);
+                    Assert.Equal("Could not start process.", result?.Message);
                 }
 
                 [Fact]
@@ -329,7 +329,7 @@ namespace Cake.Common.Tests.Unit
 
                     // Then
                     Assert.IsType<CakeException>(result);
-                    Assert.Equal("Could not start process.", result.Message);
+                    Assert.Equal("Could not start process.", result?.Message);
                 }
 
                 [Fact]
@@ -470,7 +470,7 @@ namespace Cake.Common.Tests.Unit
 
                     // Then
                     Assert.IsType<CakeException>(result);
-                    Assert.Equal("Could not start process.", result.Message);
+                    Assert.Equal("Could not start process.", result?.Message);
                 }
 
                 [Fact]

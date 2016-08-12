@@ -1,0 +1,39 @@
+﻿{
+  "version": "0.15.3-*",
+  "configurations": {
+    "Release": {
+      "buildOptions": {
+        "warningsAsErrors": true
+      }
+    }
+  },
+  "dependencies": {
+    "Cake.Core": {
+      "target": "project"
+    },
+    "xunit.assert.source": "2.2.0-beta2-build3300"
+  },
+  "frameworks": {
+    "netstandard1.6": {
+      "buildOptions": {
+        "define": [
+          "NETCORE"
+        ]
+      },
+      "imports": "dnxcore50",
+      "dependencies": {
+        "xunit.core": "2.2.0-beta2-build3300"
+      }
+    },
+    "net45": {
+      "dependencies": {
+        "xunit.core": "2.1.0"
+      },
+      "frameworkAssemblies": {
+        "System.Runtime": {
+          "type": "build"
+        }
+      }
+    }
+  }
+}

@@ -3,10 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Cake.Common.Solution.Project;
 using Cake.Common.Tests.Fixtures.Solution.Project;
 using Cake.Core;
@@ -219,9 +216,9 @@ namespace Cake.Common.Tests.Unit.Solution.Project
 
                 // Then
                 Assert.Equal(1, result.References.Count);
-                Assert.Equal("System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL", 
+                Assert.Equal("System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL",
                     result.References.First().Include);
-                Assert.Equal("/Working/../packages/System.Collections.Immutable.1.1.37/lib/dotnet/System.Collections.Immutable.dll", 
+                Assert.Equal("/Working/../packages/System.Collections.Immutable.1.1.37/lib/dotnet/System.Collections.Immutable.dll",
                     result.References.First().HintPath.FullPath);
                 Assert.Equal(true, result.References.First().Private);
             }

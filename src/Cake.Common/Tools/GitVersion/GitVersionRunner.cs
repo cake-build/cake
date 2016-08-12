@@ -48,7 +48,7 @@ namespace Cake.Common.Tools.GitVersion
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             if (settings.OutputType != GitVersionOutput.BuildServer)

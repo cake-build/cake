@@ -4,9 +4,20 @@
 [Tt]emp/
 [Ll]ib/
 [Pp]ackages/
-/[Bb]uild/
 /[Aa]rtifacts/
+/[Tt]ools/
 *.sln.ide/
+
+# .NET CLI
+/.dotnet/
+dotnet-install.sh*
+/.packages/
+
+# Visual Studio
+.vs/
+.vscode/
+launchSettings.json
+project.lock.json
 
 # Build related
 build-results/

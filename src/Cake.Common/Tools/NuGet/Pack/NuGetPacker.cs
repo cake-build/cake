@@ -51,7 +51,7 @@ namespace Cake.Common.Tools.NuGet.Pack
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             if (settings.OutputDirectory == null || !_fileSystem.Exist(settings.OutputDirectory))
             {
@@ -90,11 +90,11 @@ namespace Cake.Common.Tools.NuGet.Pack
         {
             if (filePath == null)
             {
-                throw new ArgumentNullException("filePath");
+                throw new ArgumentNullException(nameof(filePath));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             string extension = filePath.GetExtension();

@@ -173,7 +173,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 Assert.IsType<DirectoryNotFoundException>(result);
-                Assert.Equal("The directory '/Working/target' do not exist.", result.Message);
+                Assert.Equal("The directory '/Working/target' do not exist.", result?.Message);
             }
 
             [Fact]
@@ -190,7 +190,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 Assert.IsType<FileNotFoundException>(result);
-                Assert.Equal("The file '/Working/file1.txt' do not exist.", result.Message);
+                Assert.Equal("The file '/Working/file1.txt' do not exist.", result?.Message);
             }
 
             [Fact]
@@ -284,7 +284,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<DirectoryNotFoundException>(result);
-                    Assert.Equal("The directory '/Working/target' do not exist.", result.Message);
+                    Assert.Equal("The directory '/Working/target' do not exist.", result?.Message);
                 }
 
                 [Fact]
@@ -301,7 +301,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<FileNotFoundException>(result);
-                    Assert.Equal("The file '/Working/file2.txt' do not exist.", result.Message);
+                    Assert.Equal("The file '/Working/file2.txt' do not exist.", result?.Message);
                 }
 
                 [Fact]
@@ -380,7 +380,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<DirectoryNotFoundException>(result);
-                    Assert.Equal("The directory '/Working/target' do not exist.", result.Message);
+                    Assert.Equal("The directory '/Working/target' do not exist.", result?.Message);
                 }
 
                 [Fact]
@@ -398,7 +398,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<FileNotFoundException>(result);
-                    Assert.Equal("The file '/Working/file2.txt' do not exist.", result.Message);
+                    Assert.Equal("The file '/Working/file2.txt' do not exist.", result?.Message);
                 }
 
                 [Fact]
@@ -472,7 +472,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<DirectoryNotFoundException>(result);
-                    Assert.Equal("The directory '/Working/target' do not exist.", result.Message);
+                    Assert.Equal("The directory '/Working/target' do not exist.", result?.Message);
                 }
 
                 [Fact]
@@ -489,7 +489,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<FileNotFoundException>(result);
-                    Assert.Equal("The file '/Working/file2.txt' do not exist.", result.Message);
+                    Assert.Equal("The file '/Working/file2.txt' do not exist.", result?.Message);
                 }
 
                 [Fact]
@@ -550,7 +550,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 Assert.IsType<FileNotFoundException>(result);
-                Assert.Equal("The file '/file.txt' do not exist.", result.Message);
+                Assert.Equal("The file '/file.txt' do not exist.", result?.Message);
             }
 
             [Fact]
@@ -792,7 +792,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<DirectoryNotFoundException>(result);
-                    Assert.Equal("The directory '/Working/target' do not exist.", result.Message);
+                    Assert.Equal("The directory '/Working/target' do not exist.", result?.Message);
                 }
 
                 [Fact]
@@ -809,7 +809,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<FileNotFoundException>(result);
-                    Assert.Equal("The file '/Working/file2.txt' do not exist.", result.Message);
+                    Assert.Equal("The file '/Working/file2.txt' do not exist.", result?.Message);
                 }
 
                 [Fact]
@@ -882,7 +882,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<DirectoryNotFoundException>(result);
-                    Assert.Equal("The directory '/Working/target' do not exist.", result.Message);
+                    Assert.Equal("The directory '/Working/target' do not exist.", result?.Message);
                 }
 
                 [Fact]
@@ -899,7 +899,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<FileNotFoundException>(result);
-                    Assert.Equal("The file '/Working/file2.txt' do not exist.", result.Message);
+                    Assert.Equal("The file '/Working/file2.txt' do not exist.", result?.Message);
                 }
 
                 [Fact]
@@ -978,7 +978,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 Assert.IsType<DirectoryNotFoundException>(result);
-                Assert.Equal("The directory '/Working/target' do not exist.", result.Message);
+                Assert.Equal("The directory '/Working/target' do not exist.", result?.Message);
             }
 
             [Fact]
@@ -995,7 +995,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 Assert.IsType<FileNotFoundException>(result);
-                Assert.Equal("The file '/Working/file1.txt' do not exist.", result.Message);
+                Assert.Equal("The file '/Working/file1.txt' do not exist.", result?.Message);
             }
 
             [Fact]
@@ -1183,7 +1183,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var environment = FakeEnvironment.CreateUnixEnvironment();
                 environment.WorkingDirectory = workingDirectory;
                 var fileSystem = new FakeFileSystem(environment);
-                fileSystem.CreateFile(filePath, new byte[] {1, 2, 3, 4});
+                fileSystem.CreateFile(filePath, new byte[] { 1, 2, 3, 4 });
                 context.FileSystem.Returns(fileSystem);
                 context.Environment.Returns(environment);
 

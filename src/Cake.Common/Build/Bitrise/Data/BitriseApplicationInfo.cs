@@ -17,10 +17,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The application title.
         /// </value>
-        public string ApplicationTitle
-        {
-            get { return GetEnvironmentString("BITRISE_APP_TITLE"); }
-        }
+        public string ApplicationTitle => GetEnvironmentString("BITRISE_APP_TITLE");
 
         /// <summary>
         /// Gets the application URL.
@@ -28,10 +25,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The application URL.
         /// </value>
-        public string ApplicationUrl
-        {
-            get { return GetEnvironmentString("BITRISE_APP_URL"); }
-        }
+        public string ApplicationUrl => GetEnvironmentString("BITRISE_APP_URL");
 
         /// <summary>
         /// Gets the application slug.
@@ -39,10 +33,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The application slug.
         /// </value>
-        public string AppSlug
-        {
-            get { return GetEnvironmentString("BITRISE_APP_SLUG"); }
-        }
+        public string AppSlug => GetEnvironmentString("BITRISE_APP_SLUG");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BitriseApplicationInfo"/> class.

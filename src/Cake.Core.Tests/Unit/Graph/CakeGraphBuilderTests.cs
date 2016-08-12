@@ -57,7 +57,7 @@ namespace Cake.Core.Tests.Unit.Graph
                 var result = Assert.Throws<CakeException>(() => CakeGraphBuilder.Build(tasks));
 
                 // Then
-                Assert.Equal("Task 'A' is dependent on task 'C' which do not exist.", result.Message);
+                Assert.Equal("Task 'A' is dependent on task 'C' which do not exist.", result?.Message);
             }
         }
     }

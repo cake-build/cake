@@ -11,21 +11,13 @@ namespace Cake.Common.Build.Jenkins.Data
     /// </summary>
     public sealed class JenkinsEnvironmentInfo : JenkinsInfo
     {
-        private readonly JenkinsBuildInfo _buildProvider;
-        private readonly JenkinsRepositoryInfo _repositoryProvider;
-        private readonly JenkinsNodeInfo _nodeProvider;
-        private readonly JenkinsJobInfo _jobProvider;
-
         /// <summary>
         /// Gets Jenkins build information.
         /// </summary>
         /// <value>
         /// The build.
         /// </value>
-        public JenkinsBuildInfo Build
-        {
-            get { return _buildProvider; }
-        }
+        public JenkinsBuildInfo Build { get; }
 
         /// <summary>
         /// Gets Jenkins repository information.
@@ -33,10 +25,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The repository.
         /// </value>
-        public JenkinsRepositoryInfo Repository
-        {
-            get { return _repositoryProvider; }
-        }
+        public JenkinsRepositoryInfo Repository { get; }
 
         /// <summary>
         /// Gets Jenkins job information.
@@ -44,10 +33,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The job.
         /// </value>
-        public JenkinsJobInfo Job
-        {
-            get { return _jobProvider; }
-        }
+        public JenkinsJobInfo Job { get; }
 
         /// <summary>
         /// Gets the node.
@@ -55,10 +41,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The node.
         /// </value>
-        public JenkinsNodeInfo Node
-        {
-            get { return _nodeProvider; }
-        }
+        public JenkinsNodeInfo Node { get; }
 
         /// <summary>
         /// Gets the jenkins home.
@@ -66,10 +49,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The jenkins home.
         /// </value>
-        public string JenkinsHome
-        {
-            get { return GetEnvironmentString("JENKINS_HOME"); }
-        }
+        public string JenkinsHome => GetEnvironmentString("JENKINS_HOME");
 
         /// <summary>
         /// Gets the jenkins URL.
@@ -77,10 +57,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The jenkins URL.
         /// </value>
-        public string JenkinsUrl
-        {
-            get { return GetEnvironmentString("JENKINS_URL"); }
-        }
+        public string JenkinsUrl => GetEnvironmentString("JENKINS_URL");
 
         /// <summary>
         /// Gets the executor number.
@@ -88,10 +65,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The executor number.
         /// </value>
-        public int ExecutorNumber
-        {
-            get { return GetEnvironmentInteger("EXECUTOR_NUMBER"); }
-        }
+        public int ExecutorNumber => GetEnvironmentInteger("EXECUTOR_NUMBER");
 
         /// <summary>
         /// Gets the workspace.
@@ -99,10 +73,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The workspace.
         /// </value>
-        public string Workspace
-        {
-            get { return GetEnvironmentString("WORKSPACE"); }
-        }
+        public string Workspace => GetEnvironmentString("WORKSPACE");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JenkinsEnvironmentInfo" /> class.
@@ -110,10 +81,10 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <param name="environment">The environment.</param>
         public JenkinsEnvironmentInfo(ICakeEnvironment environment) : base(environment)
         {
-            _buildProvider = new JenkinsBuildInfo(environment);
-            _repositoryProvider = new JenkinsRepositoryInfo(environment);
-            _nodeProvider = new JenkinsNodeInfo(environment);
-            _jobProvider = new JenkinsJobInfo(environment);
+            Build = new JenkinsBuildInfo(environment);
+            Repository = new JenkinsRepositoryInfo(environment);
+            Node = new JenkinsNodeInfo(environment);
+            Job = new JenkinsJobInfo(environment);
         }
     }
 }

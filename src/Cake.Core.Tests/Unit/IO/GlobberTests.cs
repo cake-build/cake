@@ -69,7 +69,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<NotSupportedException>(result);
-                    Assert.Equal("UNC paths are not supported.", result.Message);
+                    Assert.Equal("UNC paths are not supported.", result?.Message);
                 }
 
                 [WindowsFact]
@@ -264,7 +264,7 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.NotNull(result);
                 Assert.IsType<NotSupportedException>(result);
-                Assert.Equal("Visiting a parent that is a recursive wildcard is not supported.", result.Message);
+                Assert.Equal("Visiting a parent that is a recursive wildcard is not supported.", result?.Message);
             }
 
             [Fact]

@@ -20,7 +20,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 // When
                 var result = info.ApplicationTitle;
 
-                //Then
+                // Then
                 Assert.Equal("CAKE-EXE", result);
             }
         }
@@ -36,7 +36,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 // When
                 var result = info.ApplicationUrl;
 
-                //Then
+                // Then
                 Assert.Equal("https://www.bitrise.io/app/089v339k300ba3cd", result);
             }
         }
@@ -52,7 +52,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 // When
                 var result = info.AppSlug;
 
-                //Then
+                // Then
                 Assert.Equal("089v339k300ba3cd", result);
             }
         }

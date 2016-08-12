@@ -13,10 +13,7 @@ namespace Cake
     {
         private readonly ContainerRegistry _registry;
 
-        public ICakeContainerRegistry Registry
-        {
-            get { return _registry; }
-        }
+        public ICakeContainerRegistry Registry => _registry;
 
         public CakeContainerBuilder()
         {
