@@ -11,6 +11,7 @@ using Cake.Core.Annotations;
 using Cake.Core.Composition;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.Reflection;
 using Cake.Polyfill;
 
 namespace Cake.Composition
@@ -19,12 +20,18 @@ namespace Cake.Composition
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
+        private readonly IAssemblyLoader _assemblyLoader;
         private readonly ICakeLog _log;
 
-        public ModuleSearcher(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log)
+        public ModuleSearcher(
+            IFileSystem fileSystem,
+            ICakeEnvironment environment,
+            IAssemblyLoader assemblyLoader,
+            ICakeLog log)
         {
             _fileSystem = fileSystem;
             _environment = environment;
+            _assemblyLoader = assemblyLoader;
             _log = log;
         }
 
@@ -57,7 +64,7 @@ namespace Cake.Composition
             try
             {
                 // Load the assembly.
-                var assembly = AssemblyHelper.LoadFromPath(path);
+                var assembly = _assemblyLoader.Load(path);
 
                 var attribute = assembly.GetCustomAttributes<CakeModuleAttribute>().FirstOrDefault();
                 if (attribute == null)
