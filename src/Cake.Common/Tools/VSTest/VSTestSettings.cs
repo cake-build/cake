@@ -50,11 +50,11 @@ namespace Cake.Common.Tools.VSTest
                 {
                     return VSTestLogger.None;
                 }
-                else if (LoggerName.Equals("trx", StringComparison.InvariantCultureIgnoreCase))
+                else if (LoggerName.Equals("trx", StringComparison.OrdinalIgnoreCase))
                 {
                     return VSTestLogger.Trx;
                 }
-                else if (LoggerName.Equals("AppVeyor", StringComparison.InvariantCultureIgnoreCase))
+                else if (LoggerName.Equals("AppVeyor", StringComparison.OrdinalIgnoreCase))
                 {
                     return VSTestLogger.AppVeyor;
                 }
