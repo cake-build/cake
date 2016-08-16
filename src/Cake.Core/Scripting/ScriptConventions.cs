@@ -6,8 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime;
+using System.Text;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Polyfill;
+using Cake.Core.Reflection;
 
 namespace Cake.Core.Scripting
 {
@@ -17,14 +21,20 @@ namespace Cake.Core.Scripting
     public sealed class ScriptConventions : IScriptConventions
     {
         private readonly IFileSystem _fileSystem;
+        private readonly IAssemblyLoader _loader;
+        private readonly ICakeLog _log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptConventions"/> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
-        public ScriptConventions(IFileSystem fileSystem)
+        /// <param name="loader">The assembly loader.</param>
+        /// <param name="log">The log.</param>
+        public ScriptConventions(IFileSystem fileSystem, IAssemblyLoader loader, ICakeLog log)
         {
             _fileSystem = fileSystem;
+            _loader = loader;
+            _log = log;
         }
 
         /// <summary>
@@ -35,9 +45,16 @@ namespace Cake.Core.Scripting
         {
             return new List<string>
             {
-                "System", "System.Collections.Generic", "System.Linq",
-                "System.Text", "System.Threading.Tasks", "System.IO",
-                "Cake.Core", "Cake.Core.IO", "Cake.Core.Scripting", "Cake.Core.Diagnostics"
+                "System",
+                "System.Collections.Generic",
+                "System.Linq",
+                "System.Text",
+                "System.Threading.Tasks",
+                "System.IO",
+                "Cake.Core",
+                "Cake.Core.IO",
+                "Cake.Core.Scripting",
+                "Cake.Core.Diagnostics"
             };
         }
 
@@ -49,33 +66,57 @@ namespace Cake.Core.Scripting
         public IReadOnlyList<Assembly> GetDefaultAssemblies(DirectoryPath root)
         {
             // Prepare the default assemblies.
-            var defaultAssemblies = new List<Assembly>
-            {
-                typeof(Action).GetTypeInfo().Assembly, // mscorlib
-                typeof(Uri).GetTypeInfo().Assembly, // System
-                typeof(IQueryable).GetTypeInfo().Assembly, // System.Core
-#if !NETCORE
-                typeof(System.Data.DataTable).GetTypeInfo().Assembly, // System.Data
-#endif
-                typeof(System.Xml.XmlReader).GetTypeInfo().Assembly, // System.Xml
-                typeof(System.Xml.Linq.XDocument).GetTypeInfo().Assembly, // System.Xml.Linq
-            };
+            var result = new HashSet<Assembly>(new SimpleAssemblyComparer());
+            result.Add(typeof(Action).GetTypeInfo().Assembly); // mscorlib or System.Private.Core
+            result.Add(typeof(IQueryable).GetTypeInfo().Assembly); // System.Core or System.Linq.Expressions
 
             // Load other Cake-related assemblies that we need.
+            var cakeAssemblies = LoadCakeAssemblies(root);
+            result.AddRange(cakeAssemblies);
+
+#if NETCORE
+            // Load all referenced assemblies.
+            foreach (var cakeAssembly in cakeAssemblies)
+            {
+                foreach (var reference in cakeAssembly.GetReferencedAssemblies())
+                {
+                    result.Add(_loader.Load(reference));
+                }
+            }
+#else
+            result.Add(typeof(Uri).GetTypeInfo().Assembly); // System
+            result.Add(typeof(System.Xml.XmlReader).GetTypeInfo().Assembly); // System.Xml
+            result.Add(typeof(System.Xml.Linq.XDocument).GetTypeInfo().Assembly); // System.Xml.Linq
+            result.Add(typeof(System.Data.DataTable).GetTypeInfo().Assembly); // System.Data
+#endif
+
+            // Return the assemblies.
+            return result.ToArray();
+        }
+
+        private List<Assembly> LoadCakeAssemblies(DirectoryPath root)
+        {
+            var result = new List<Assembly>();
             var assemblyDirectory = _fileSystem.GetDirectory(root);
-            var patterns = new[] { "Cake.Core.dll", "Cake.Common.dll", "Cake.exe" };
-            foreach (var pattern in patterns)
+            foreach (var pattern in GetCakeAssemblyNames())
             {
                 var cakeAssemblies = assemblyDirectory.GetFiles(pattern, SearchScope.Current);
                 foreach (var cakeAssembly in cakeAssemblies)
                 {
-                    var assembly = AssemblyHelper.LoadFromPath(cakeAssembly.Path);
-                    defaultAssemblies.Add(assembly);
+                    result.Add(_loader.Load(cakeAssembly.Path));
                 }
             }
+            return result;
+        }
 
-            // Return the assemblies.
-            return defaultAssemblies;
+        // ReSharper disable once ReturnTypeCanBeEnumerable.Local
+        private static string[] GetCakeAssemblyNames()
+        {
+#if NETCORE
+            return new[] { "Cake.Core.dll", "Cake.Common.dll" };
+#else
+            return new[] { "Cake.Core.dll", "Cake.Common.dll", "Cake.exe" };
+#endif
         }
     }
 }

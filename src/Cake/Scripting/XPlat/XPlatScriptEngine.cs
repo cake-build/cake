@@ -5,6 +5,7 @@
 #if NETCORE
 using System.Collections.Generic;
 using Cake.Core.Diagnostics;
+using Cake.Core.Reflection;
 using Cake.Core.Scripting;
 
 namespace Cake.Scripting.XPlat
@@ -12,11 +13,13 @@ namespace Cake.Scripting.XPlat
     internal sealed class XPlatScriptEngine : IScriptEngine
     {
         private readonly CakeOptions _options;
+        private readonly IAssemblyLoader _loader;
         private readonly ICakeLog _log;
 
-        public XPlatScriptEngine(CakeOptions options, ICakeLog log)
+        public XPlatScriptEngine(CakeOptions options, IAssemblyLoader loader, ICakeLog log)
         {
             _options = options;
+            _loader = loader;
             _log = log;
         }
 
@@ -24,9 +27,9 @@ namespace Cake.Scripting.XPlat
         {
             if (_options.PerformDebug)
             {
-                return new DebugXPlatScriptSession(host, _log);
+                return new DebugXPlatScriptSession(host, _loader, _log);
             }
-            return new DefaultXPlatScriptSession(host, _log);
+            return new DefaultXPlatScriptSession(host, _loader, _log);
         }
     }
 }

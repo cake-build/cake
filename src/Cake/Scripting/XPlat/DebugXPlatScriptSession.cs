@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Runtime.Loader;
 using Cake.Core;
 using Cake.Core.Diagnostics;
+using Cake.Core.Reflection;
 using Cake.Core.Scripting;
 using Cake.Scripting.Roslyn;
 using Microsoft.CodeAnalysis;
@@ -30,8 +31,8 @@ namespace Cake.Scripting.XPlat
         private readonly IScriptHost _host;
         private readonly ICakeLog _log;
 
-        public DebugXPlatScriptSession(IScriptHost host, ICakeLog log)
-            : base(log)
+        public DebugXPlatScriptSession(IScriptHost host, IAssemblyLoader loader, ICakeLog log)
+            : base(loader, log)
         {
             _host = host;
             _log = log;

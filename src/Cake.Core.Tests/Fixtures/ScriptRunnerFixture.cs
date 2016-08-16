@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.Reflection;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.Analysis;
 using Cake.Testing;
@@ -16,6 +17,7 @@ namespace Cake.Core.Tests.Fixtures
 {
     internal sealed class ScriptRunnerFixture
     {
+        public IAssemblyLoader AssemblyLoader { get; set; }
         public FakeFileSystem FileSystem { get; set; }
         public FakeEnvironment Environment { get; set; }
         public ICakeConfiguration Configuration { get; set; }
@@ -38,6 +40,8 @@ namespace Cake.Core.Tests.Fixtures
             Script = fileName;
             Source = "Hello World";
 
+            AssemblyLoader = Substitute.For<IAssemblyLoader>();
+
             Environment = FakeEnvironment.CreateUnixEnvironment();
             FileSystem = new FakeFileSystem(Environment);
             FileSystem.CreateFile(Script.MakeAbsolute(Environment)).SetContent(Source);
@@ -54,7 +58,7 @@ namespace Cake.Core.Tests.Fixtures
 
             ScriptAnalyzer = new ScriptAnalyzer(FileSystem, Environment, Log);
             ScriptProcessor = Substitute.For<IScriptProcessor>();
-            ScriptConventions = new ScriptConventions(FileSystem);
+            ScriptConventions = new ScriptConventions(FileSystem, AssemblyLoader, Log);
 
             var context = Substitute.For<ICakeContext>();
             context.Environment.Returns(c => Environment);
@@ -66,7 +70,8 @@ namespace Cake.Core.Tests.Fixtures
         public ScriptRunner CreateScriptRunner()
         {
             return new ScriptRunner(Environment, Log, Configuration, Engine,
-                AliasFinder, ScriptAnalyzer, ScriptProcessor, ScriptConventions);
+                AliasFinder, ScriptAnalyzer, ScriptProcessor,
+                ScriptConventions, AssemblyLoader);
         }
     }
 }

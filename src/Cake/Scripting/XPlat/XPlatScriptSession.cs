@@ -8,12 +8,14 @@ using System.Collections.Generic;
 using System.Reflection;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.Reflection;
 using Cake.Core.Scripting;
 
 namespace Cake.Scripting.XPlat
 {
     internal abstract class XPlatScriptSession : IScriptSession
     {
+        private readonly IAssemblyLoader _loader;
         private readonly ICakeLog _log;
 
         public HashSet<FilePath> ReferencePaths { get; }
@@ -22,9 +24,11 @@ namespace Cake.Scripting.XPlat
 
         public HashSet<string> Namespaces { get; }
 
-        protected XPlatScriptSession(ICakeLog log)
+        protected XPlatScriptSession(IAssemblyLoader loader, ICakeLog log)
         {
+            _loader = loader;
             _log = log;
+
             ReferencePaths = new HashSet<FilePath>(PathComparer.Default);
             References = new HashSet<Assembly>();
             Namespaces = new HashSet<string>(StringComparer.Ordinal);
@@ -46,8 +50,13 @@ namespace Cake.Scripting.XPlat
             {
                 throw new ArgumentNullException(nameof(path));
             }
+
             _log.Debug("Adding reference to {0}...", path.GetFilename().FullPath);
+#if NETCORE
+            References.Add(_loader.Load(path));
+#else
             ReferencePaths.Add(path);
+#endif
         }
 
         public void ImportNamespace(string @namespace)

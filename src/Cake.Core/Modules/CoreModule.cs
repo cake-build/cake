@@ -6,6 +6,7 @@ using System;
 using Cake.Core.Composition;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
+using Cake.Core.Reflection;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.Analysis;
 using Cake.Core.Tooling;
@@ -44,6 +45,9 @@ namespace Cake.Core.Modules
             registry.RegisterType<ProcessRunner>().As<IProcessRunner>().Singleton();
             registry.RegisterType<NuGetToolResolver>().As<INuGetToolResolver>().Singleton();
             registry.RegisterType<WindowsRegistry>().As<IRegistry>().Singleton();
+
+            // Reflection
+            registry.RegisterType<AssemblyLoader>().As<IAssemblyLoader>().Singleton();
 
             // Tooling
             registry.RegisterType<ToolRepository>().As<IToolRepository>().Singleton();

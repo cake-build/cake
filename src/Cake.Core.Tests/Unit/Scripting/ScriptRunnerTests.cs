@@ -87,6 +87,20 @@ namespace Cake.Core.Tests.Unit.Scripting
                 // Then
                 Assert.IsArgumentNullException(result, "conventions");
             }
+
+            [Fact]
+            public void Should_Throw_If_AssemblyLoader_Is_Null()
+            {
+                // Given
+                var fixture = new ScriptRunnerFixture();
+                fixture.AssemblyLoader = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateScriptRunner());
+
+                // Then
+                Assert.IsArgumentNullException(result, "assemblyLoader");
+            }
         }
 
         public sealed class TheRunMethod
