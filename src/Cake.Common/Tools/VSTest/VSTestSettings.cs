@@ -87,7 +87,7 @@ namespace Cake.Common.Tools.VSTest
         /// Gets or sets the name of your logger. Possible values:
         /// - A blank string (or null): no logger
         /// - "trx": Visual Studio's built-in logger
-        /// - "ApVeyor": AppVeyor's custom logger which is available only when building your solution on the AppVeyor platform
+        /// - "AppVeyor": AppVeyor's custom logger which is available only when building your solution on the AppVeyor platform
         /// - any custom value: the name of your custom logger
         /// </summary>
         public string LoggerName { get; set; }
