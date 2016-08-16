@@ -56,7 +56,7 @@ namespace Cake.Common.Tests.Unit.Tools.NSIS
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("MakeNSIS: Could not locate executable.", result.Message);
+                Assert.Equal("MakeNSIS: Could not locate executable.", result?.Message);
             }
 
             [Theory]
@@ -130,7 +130,7 @@ namespace Cake.Common.Tests.Unit.Tools.NSIS
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("MakeNSIS: Process was not started.", result.Message);
+                Assert.Equal("MakeNSIS: Process was not started.", result?.Message);
             }
 
             [Fact]
@@ -145,7 +145,7 @@ namespace Cake.Common.Tests.Unit.Tools.NSIS
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("MakeNSIS: Process returned an error (exit code 1).", result.Message);
+                Assert.Equal("MakeNSIS: Process returned an error (exit code 1).", result?.Message);
             }
 
             [Fact]

@@ -49,7 +49,7 @@ namespace Cake.Common.Tools.SignTool
         {
             if (assembly == null)
             {
-                throw new ArgumentNullException("assembly");
+                throw new ArgumentNullException(nameof(assembly));
             }
             Sign(context, new FilePath(assembly), settings);
         }
@@ -82,7 +82,7 @@ namespace Cake.Common.Tools.SignTool
         {
             if (assembly == null)
             {
-                throw new ArgumentNullException("assembly");
+                throw new ArgumentNullException(nameof(assembly));
             }
             var paths = new[] { assembly };
             Sign(context, paths, settings);
@@ -116,7 +116,7 @@ namespace Cake.Common.Tools.SignTool
         {
             if (assemblies == null)
             {
-                throw new ArgumentNullException("assemblies");
+                throw new ArgumentNullException(nameof(assemblies));
             }
             var paths = assemblies.Select(p => new FilePath(p));
             Sign(context, paths, settings);
@@ -150,15 +150,15 @@ namespace Cake.Common.Tools.SignTool
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (assemblies == null)
             {
-                throw new ArgumentNullException("assemblies");
+                throw new ArgumentNullException(nameof(assemblies));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             var runner = new SignToolSignRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Registry);

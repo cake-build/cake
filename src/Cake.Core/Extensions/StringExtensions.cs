@@ -8,12 +8,12 @@ using System;
 namespace Cake.Core
 {
     /// <summary>
-    /// Contains extension methods for <see cref="String"/>.
+    /// Contains extension methods for <see cref="System.String"/>.
     /// </summary>
     public static class StringExtensions
     {
         /// <summary>
-        /// Quotes the specified <see cref="String"/>.
+        /// Quotes the specified <see cref="System.String"/>.
         /// </summary>
         /// <param name="value">The string to quote.</param>
         /// <returns>A quoted string.</returns>

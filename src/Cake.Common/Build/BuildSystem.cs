@@ -21,16 +21,6 @@ namespace Cake.Common.Build
     /// </summary>
     public sealed class BuildSystem
     {
-        private readonly IAppVeyorProvider _appVeyorProvider;
-        private readonly ITeamCityProvider _teamCityProvider;
-        private readonly IMyGetProvider _myGetProvider;
-        private readonly IBambooProvider _bambooProvider;
-        private readonly IContinuaCIProvider _continuaCIProvider;
-        private readonly IJenkinsProvider _jenkinsProvider;
-        private readonly IBitriseProvider _bitriseProvider;
-        private readonly ITravisCIProvider _travisCIProvider;
-        private readonly IBitbucketPipelinesProvider _bitbucketPipelinesProvider;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="BuildSystem" /> class.
         /// </summary>
@@ -47,50 +37,50 @@ namespace Cake.Common.Build
         {
             if (appVeyorProvider == null)
             {
-                throw new ArgumentNullException("appVeyorProvider");
+                throw new ArgumentNullException(nameof(appVeyorProvider));
             }
             if (teamCityProvider == null)
             {
-                throw new ArgumentNullException("teamCityProvider");
+                throw new ArgumentNullException(nameof(teamCityProvider));
             }
             if (myGetProvider == null)
             {
-                throw new ArgumentNullException("myGetProvider");
+                throw new ArgumentNullException(nameof(myGetProvider));
             }
             if (bambooProvider == null)
             {
-                throw new ArgumentNullException("bambooProvider");
+                throw new ArgumentNullException(nameof(bambooProvider));
             }
             if (continuaCIProvider == null)
             {
-                throw new ArgumentNullException("continuaCIProvider");
+                throw new ArgumentNullException(nameof(continuaCIProvider));
             }
             if (jenkinsProvider == null)
             {
-                throw new ArgumentNullException("jenkinsProvider");
+                throw new ArgumentNullException(nameof(jenkinsProvider));
             }
             if (bitriseProvider == null)
             {
-                throw new ArgumentNullException("bitriseProvider");
+                throw new ArgumentNullException(nameof(bitriseProvider));
             }
             if (travisCIProvider == null)
             {
-                throw new ArgumentNullException("travisCIProvider");
+                throw new ArgumentNullException(nameof(travisCIProvider));
             }
             if (bitbucketPipelinesProvider == null)
             {
-                throw new ArgumentNullException("bitbucketPipelinesProvider");
+                throw new ArgumentNullException(nameof(bitbucketPipelinesProvider));
             }
 
-            _appVeyorProvider = appVeyorProvider;
-            _teamCityProvider = teamCityProvider;
-            _myGetProvider = myGetProvider;
-            _bambooProvider = bambooProvider;
-            _continuaCIProvider = continuaCIProvider;
-            _jenkinsProvider = jenkinsProvider;
-            _bitriseProvider = bitriseProvider;
-            _travisCIProvider = travisCIProvider;
-            _bitbucketPipelinesProvider = bitbucketPipelinesProvider;
+            AppVeyor = appVeyorProvider;
+            TeamCity = teamCityProvider;
+            MyGet = myGetProvider;
+            Bamboo = bambooProvider;
+            ContinuaCI = continuaCIProvider;
+            Jenkins = jenkinsProvider;
+            Bitrise = bitriseProvider;
+            TravisCI = travisCIProvider;
+            BitbucketPipelines = bitbucketPipelinesProvider;
         }
 
         /// <summary>
@@ -108,10 +98,7 @@ namespace Cake.Common.Build
         /// <value>
         /// <c>true</c> if the build currently is running on AppVeyor; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnAppVeyor
-        {
-            get { return _appVeyorProvider.IsRunningOnAppVeyor; }
-        }
+        public bool IsRunningOnAppVeyor => AppVeyor.IsRunningOnAppVeyor;
 
         /// <summary>
         /// Gets the AppVeyor Provider.
@@ -125,10 +112,7 @@ namespace Cake.Common.Build
         /// }
         /// </code>
         /// </example>
-        public IAppVeyorProvider AppVeyor
-        {
-            get { return _appVeyorProvider; }
-        }
+        public IAppVeyorProvider AppVeyor { get; }
 
         /// <summary>
         /// Gets a value indicating whether the current build is running on TeamCity.
@@ -145,10 +129,7 @@ namespace Cake.Common.Build
         /// <value>
         /// <c>true</c> if the build currently is running on TeamCity; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnTeamCity
-        {
-            get { return _teamCityProvider.IsRunningOnTeamCity; }
-        }
+        public bool IsRunningOnTeamCity => TeamCity.IsRunningOnTeamCity;
 
         /// <summary>
         /// Gets the TeamCity Provider.
@@ -162,10 +143,7 @@ namespace Cake.Common.Build
         /// }
         /// </code>
         /// </example>
-        public ITeamCityProvider TeamCity
-        {
-            get { return _teamCityProvider; }
-        }
+        public ITeamCityProvider TeamCity { get; }
 
         /// <summary>
         /// Gets a value indicating whether the current build is running on MyGet.
@@ -182,10 +160,7 @@ namespace Cake.Common.Build
         /// <value>
         /// <c>true</c> if the build currently is running on MyGet; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnMyGet
-        {
-            get { return _myGetProvider.IsRunningOnMyGet; }
-        }
+        public bool IsRunningOnMyGet => MyGet.IsRunningOnMyGet;
 
         /// <summary>
         /// Gets the MyGet Provider.
@@ -199,10 +174,7 @@ namespace Cake.Common.Build
         /// }
         /// </code>
         /// </example>
-        public IMyGetProvider MyGet
-        {
-            get { return _myGetProvider; }
-        }
+        public IMyGetProvider MyGet { get; }
 
         /// <summary>
         /// Gets a value indicating whether the current build is running on Bamboo.
@@ -219,10 +191,7 @@ namespace Cake.Common.Build
         /// <value>
         /// <c>true</c> if the build currently is running on Bamboo; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnBamboo
-        {
-            get { return _bambooProvider.IsRunningOnBamboo; }
-        }
+        public bool IsRunningOnBamboo => Bamboo.IsRunningOnBamboo;
 
         /// <summary>
         /// Gets the Bamboo Provider.
@@ -236,10 +205,7 @@ namespace Cake.Common.Build
         /// }
         /// </code>
         /// </example>
-        public IBambooProvider Bamboo
-        {
-            get { return _bambooProvider; }
-        }
+        public IBambooProvider Bamboo { get; }
 
         /// <summary>
         /// Gets a value indicating whether the current build is running on Continua CI.
@@ -256,10 +222,7 @@ namespace Cake.Common.Build
         /// <value>
         /// <c>true</c> if the build currently is running on Continua CI; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnContinuaCI
-        {
-            get { return _continuaCIProvider.IsRunningOnContinuaCI; }
-        }
+        public bool IsRunningOnContinuaCI => ContinuaCI.IsRunningOnContinuaCI;
 
         /// <summary>
         /// Gets the Continua CI Provider.
@@ -273,10 +236,7 @@ namespace Cake.Common.Build
         /// }
         /// </code>
         /// </example>
-        public IContinuaCIProvider ContinuaCI
-        {
-            get { return _continuaCIProvider; }
-        }
+        public IContinuaCIProvider ContinuaCI { get; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is running on Jenkins.
@@ -293,10 +253,7 @@ namespace Cake.Common.Build
         /// <value>
         /// <c>true</c> if this instance is running on jenkins; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnJenkins
-        {
-            get { return _jenkinsProvider.IsRunningOnJenkins; }
-        }
+        public bool IsRunningOnJenkins => Jenkins.IsRunningOnJenkins;
 
         /// <summary>
         /// Gets the Jenkins Provider.
@@ -313,10 +270,7 @@ namespace Cake.Common.Build
         /// }
         /// </code>
         /// </example>
-        public IJenkinsProvider Jenkins
-        {
-            get { return _jenkinsProvider; }
-        }
+        public IJenkinsProvider Jenkins { get; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is running on Bitrise.
@@ -333,10 +287,7 @@ namespace Cake.Common.Build
         /// <value>
         /// <c>true</c> if this instance is running on bitrise; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnBitrise
-        {
-            get { return _bitriseProvider.IsRunningOnBitrise; }
-        }
+        public bool IsRunningOnBitrise => Bitrise.IsRunningOnBitrise;
 
         /// <summary>
         /// Gets the Bitrise Provider.
@@ -350,10 +301,7 @@ namespace Cake.Common.Build
         /// }
         /// </code>
         /// </example>
-        public IBitriseProvider Bitrise
-        {
-            get { return _bitriseProvider; }
-        }
+        public IBitriseProvider Bitrise { get; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is running on Travis CI.
@@ -370,10 +318,7 @@ namespace Cake.Common.Build
         /// <value>
         /// <c>true</c> if this instance is running on Travis CI; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnTravisCI
-        {
-            get { return _travisCIProvider.IsRunningOnTravisCI; }
-        }
+        public bool IsRunningOnTravisCI => TravisCI.IsRunningOnTravisCI;
 
         /// <summary>
         /// Gets the Travis CI provider.
@@ -390,10 +335,7 @@ namespace Cake.Common.Build
         /// <value>
         /// The Travis CI.
         /// </value>
-        public ITravisCIProvider TravisCI
-        {
-            get { return _travisCIProvider; }
-        }
+        public ITravisCIProvider TravisCI { get; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is running on Bitbucket Pipelines.
@@ -410,10 +352,7 @@ namespace Cake.Common.Build
         /// <value>
         /// <c>true</c> if this instance is running on Bitbucket Pipelines; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnBitbucketPipelines
-        {
-            get { return _bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines; }
-        }
+        public bool IsRunningOnBitbucketPipelines => BitbucketPipelines.IsRunningOnBitbucketPipelines;
 
         /// <summary>
         /// Gets the Bitbucket Pipelines Provider.
@@ -427,10 +366,7 @@ namespace Cake.Common.Build
         /// }
         /// </code>
         /// </example>
-        public IBitbucketPipelinesProvider BitbucketPipelines
-        {
-            get { return _bitbucketPipelinesProvider; }
-        }
+        public IBitbucketPipelinesProvider BitbucketPipelines { get; }
 
         /// <summary>
         /// Gets a value indicating whether the current build is local build.
@@ -451,9 +387,6 @@ namespace Cake.Common.Build
         /// <value>
         ///   <c>true</c> if the current build is local build; otherwise, <c>false</c>.
         /// </value>
-        public bool IsLocalBuild
-        {
-            get { return !(IsRunningOnAppVeyor || IsRunningOnTeamCity || IsRunningOnMyGet || IsRunningOnBamboo || IsRunningOnContinuaCI || IsRunningOnJenkins || IsRunningOnBitrise || IsRunningOnTravisCI || IsRunningOnBitbucketPipelines); }
-        }
+        public bool IsLocalBuild => !(IsRunningOnAppVeyor || IsRunningOnTeamCity || IsRunningOnMyGet || IsRunningOnBamboo || IsRunningOnContinuaCI || IsRunningOnJenkins || IsRunningOnBitrise || IsRunningOnTravisCI || IsRunningOnBitbucketPipelines);
     }
 }

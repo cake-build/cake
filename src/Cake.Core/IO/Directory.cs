@@ -11,32 +11,19 @@ namespace Cake.Core.IO
     internal sealed class Directory : IDirectory
     {
         private readonly DirectoryInfo _directory;
-        private readonly DirectoryPath _path;
 
-        public DirectoryPath Path
-        {
-            get { return _path; }
-        }
+        public DirectoryPath Path { get; }
 
-        Path IFileSystemInfo.Path
-        {
-            get { return _path; }
-        }
+        Path IFileSystemInfo.Path => Path;
 
-        public bool Exists
-        {
-            get { return _directory.Exists; }
-        }
+        public bool Exists => _directory.Exists;
 
-        public bool Hidden
-        {
-            get { return (_directory.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden; }
-        }
+        public bool Hidden => (_directory.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
 
         public Directory(DirectoryPath path)
         {
-            _path = path;
-            _directory = new DirectoryInfo(_path.FullPath);
+            Path = path;
+            _directory = new DirectoryInfo(Path.FullPath);
         }
 
         public void Create()

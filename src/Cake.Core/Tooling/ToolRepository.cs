@@ -37,7 +37,7 @@ namespace Cake.Core.Tooling
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
 
             path = path.MakeAbsolute(_environment);

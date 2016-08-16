@@ -24,7 +24,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.Targets.Add(target);
             return settings;
@@ -40,7 +40,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.ToolVersion = version;
             return settings;
@@ -56,7 +56,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.PlatformTarget = target;
             return settings;
@@ -72,7 +72,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.MSBuildPlatform = platform;
             return settings;
@@ -89,7 +89,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             IList<string> currentValue;
@@ -113,7 +113,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.Configuration = configuration;
             return settings;
@@ -129,7 +129,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             if (maxCpuCount.HasValue)
             {
@@ -152,7 +152,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.NodeReuse = reuse;
             return settings;
@@ -168,7 +168,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.Verbosity = verbosity;
             return settings;

@@ -4,7 +4,6 @@
 
 using System;
 using Cake.Commands;
-using Cake.Diagnostics;
 
 namespace Cake
 {
@@ -24,7 +23,7 @@ namespace Cake
         {
             if (commandFactory == null)
             {
-                throw new ArgumentNullException("commandFactory");
+                throw new ArgumentNullException(nameof(commandFactory));
             }
 
             _commandFactory = commandFactory;
@@ -39,7 +38,7 @@ namespace Cake
         {
             if (options == null)
             {
-                throw new ArgumentNullException("options");
+                throw new ArgumentNullException(nameof(options));
             }
 
             // Create the correct command and execute it.

@@ -11,42 +11,25 @@ namespace Cake.Common.Solution
     /// </summary>
     public sealed class SolutionParserResult
     {
-        private readonly string _version;
-        private readonly string _visualStudioVersion;
-        private readonly string _minimumVisualStudioVersion;
-        private readonly IReadOnlyCollection<SolutionProject> _projects;
-
         /// <summary>
         /// Gets the file format version.
         /// </summary>
-        public string Version
-        {
-            get { return _version; }
-        }
+        public string Version { get; }
 
         /// <summary>
         /// Gets the version of Visual Studio that created the file.
         /// </summary>
-        public string VisualStudioVersion
-        {
-            get { return _visualStudioVersion; }
-        }
+        public string VisualStudioVersion { get; }
 
         /// <summary>
         /// Gets the minimum supported version of Visual Studio.
         /// </summary>
-        public string MinimumVisualStudioVersion
-        {
-            get { return _minimumVisualStudioVersion; }
-        }
+        public string MinimumVisualStudioVersion { get; }
 
         /// <summary>
         /// Gets all solution projects.
         /// </summary>
-        public IReadOnlyCollection<SolutionProject> Projects
-        {
-            get { return _projects; }
-        }
+        public IReadOnlyCollection<SolutionProject> Projects { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SolutionParserResult"/> class.
@@ -58,10 +41,10 @@ namespace Cake.Common.Solution
         public SolutionParserResult(string version, string visualStudioVersion,
             string minimumVisualStudioVersion, IReadOnlyCollection<SolutionProject> projects)
         {
-            _version = version;
-            _visualStudioVersion = visualStudioVersion;
-            _minimumVisualStudioVersion = minimumVisualStudioVersion;
-            _projects = projects;
+            Version = version;
+            VisualStudioVersion = visualStudioVersion;
+            MinimumVisualStudioVersion = minimumVisualStudioVersion;
+            Projects = projects;
         }
     }
 }

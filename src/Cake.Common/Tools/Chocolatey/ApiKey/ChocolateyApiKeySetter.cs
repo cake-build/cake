@@ -42,17 +42,17 @@ namespace Cake.Common.Tools.Chocolatey.ApiKey
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             if (string.IsNullOrWhiteSpace(apiKey))
             {
-                throw new ArgumentNullException("apiKey");
+                throw new ArgumentNullException(nameof(apiKey));
             }
 
             if (string.IsNullOrWhiteSpace(source))
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
 
             Run(settings, GetArguments(apiKey, source, settings));

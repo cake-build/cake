@@ -28,8 +28,8 @@ namespace Cake.Core.Tests.Unit.Configuration.Parser
 
                 // Then
                 Assert.IsType<FileNotFoundException>(result);
-                Assert.Equal("Unable to find the configuration file.", result.Message);
-                Assert.Equal("/Working/cake.config", ((FileNotFoundException)result).FileName);
+                Assert.Equal("Unable to find the configuration file.", result?.Message);
+                Assert.Equal("/Working/cake.config", ((FileNotFoundException)result)?.FileName);
             }
 
             [Fact]

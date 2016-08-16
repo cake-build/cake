@@ -24,20 +24,20 @@ namespace Cake.Common.Tools.XUnit
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             if (name == null)
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
             if (values == null)
             {
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException(nameof(values));
             }
 
             if (values.Any(v => v == null))
             {
-                throw new ArgumentException("values may not contain a null value.", "values");
+                throw new ArgumentException("values may not contain a null value.", nameof(values));
             }
 
             if (!settings.TraitsToInclude.ContainsKey(name))
@@ -64,20 +64,20 @@ namespace Cake.Common.Tools.XUnit
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             if (name == null)
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
             if (values == null)
             {
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException(nameof(values));
             }
 
             if (values.Any(v => v == null))
             {
-                throw new ArgumentException("values may not contain a null value.", "values");
+                throw new ArgumentException("values may not contain a null value.", nameof(values));
             }
 
             if (!settings.TraitsToExclude.ContainsKey(name))

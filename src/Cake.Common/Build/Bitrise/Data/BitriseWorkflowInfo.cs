@@ -17,10 +17,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The workflow identifier.
         /// </value>
-        public string WorkflowId
-        {
-            get { return GetEnvironmentString("BITRISE_TRIGGERED_WORKFLOW_ID"); }
-        }
+        public string WorkflowId => GetEnvironmentString("BITRISE_TRIGGERED_WORKFLOW_ID");
 
         /// <summary>
         /// Gets the workflow title.
@@ -28,10 +25,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The workflow title.
         /// </value>
-        public string WorkflowTitle
-        {
-            get { return GetEnvironmentString("BITRISE_TRIGGERED_WORKFLOW_TITLE"); }
-        }
+        public string WorkflowTitle => GetEnvironmentString("BITRISE_TRIGGERED_WORKFLOW_TITLE");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BitriseWorkflowInfo"/> class.

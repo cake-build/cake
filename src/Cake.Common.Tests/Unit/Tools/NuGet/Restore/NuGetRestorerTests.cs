@@ -58,7 +58,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             }
 
             [Theory]
-			[InlineData("/bin/nuget/nuget.exe", "/bin/nuget/nuget.exe")]
+            [InlineData("/bin/nuget/nuget.exe", "/bin/nuget/nuget.exe")]
             [InlineData("./tools/nuget/nuget.exe", "/Working/tools/nuget/nuget.exe")]
             public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {

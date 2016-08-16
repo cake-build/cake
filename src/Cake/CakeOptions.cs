@@ -32,10 +32,7 @@ namespace Cake
         /// Gets the script arguments.
         /// </summary>
         /// <value>The script arguments.</value>
-        public IDictionary<string, string> Arguments
-        {
-            get { return _arguments; }
-        }
+        public IDictionary<string, string> Arguments => _arguments;
 
         /// <summary>
         /// Gets or sets a value indicating whether to show task descriptions.

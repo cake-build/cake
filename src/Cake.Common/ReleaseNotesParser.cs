@@ -34,7 +34,7 @@ namespace Cake.Common
         {
             if (content == null)
             {
-                throw new ArgumentNullException("content");
+                throw new ArgumentNullException(nameof(content));
             }
 
             var lines = content.SplitLines();

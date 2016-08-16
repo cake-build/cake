@@ -45,17 +45,17 @@ namespace Cake.Common.Tools.NuGet.SetApiKey
         {
             if (string.IsNullOrWhiteSpace(apiKey))
             {
-                throw new ArgumentNullException("apiKey");
+                throw new ArgumentNullException(nameof(apiKey));
             }
 
             if (string.IsNullOrWhiteSpace(source))
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
 
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             string output = null;
             var processSettings = new ProcessSettings

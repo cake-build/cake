@@ -38,15 +38,15 @@ namespace Cake.Core.IO.NuGet
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             if (tools == null)
             {
-                throw new ArgumentNullException("tools");
+                throw new ArgumentNullException(nameof(tools));
             }
             _fileSystem = fileSystem;
             _environment = environment;

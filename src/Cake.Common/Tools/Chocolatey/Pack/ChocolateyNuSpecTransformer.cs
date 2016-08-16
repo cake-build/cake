@@ -13,9 +13,10 @@ namespace Cake.Common.Tools.Chocolatey.Pack
 {
     internal static class ChocolateyNuSpecTransformer
     {
+        private const string ChocolateyNuSpecXsd = "http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd";
+
         private static readonly Dictionary<string, Func<ChocolateyPackSettings, string>> _mappings;
         private static readonly List<string> _cdataElements;
-        private const string ChocolateyNuSpecXsd = "http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd";
 
         static ChocolateyNuSpecTransformer()
         {
@@ -159,7 +160,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
 
         private static string ToString(Uri value)
         {
-            return value == null ? null : value.ToString().TrimEnd('/');
+            return value?.ToString().TrimEnd('/');
         }
 
         private static string ToString(bool value)

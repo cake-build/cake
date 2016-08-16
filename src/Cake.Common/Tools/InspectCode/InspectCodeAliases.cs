@@ -70,7 +70,7 @@ namespace Cake.Common.Tools.InspectCode
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var runner = new InspectCodeRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);
@@ -93,7 +93,7 @@ namespace Cake.Common.Tools.InspectCode
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var runner = new InspectCodeRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);

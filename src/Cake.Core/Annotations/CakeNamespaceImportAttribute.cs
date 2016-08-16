@@ -14,16 +14,11 @@ namespace Cake.Core.Annotations
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
     public sealed class CakeNamespaceImportAttribute : Attribute
     {
-        private readonly string _namespace;
-
         /// <summary>
         /// Gets the namespace.
         /// </summary>
         /// <value>The namespace.</value>
-        public string Namespace
-        {
-            get { return _namespace; }
-        }
+        public string Namespace { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeNamespaceImportAttribute"/> class.
@@ -33,9 +28,9 @@ namespace Cake.Core.Annotations
         {
             if (@namespace == null)
             {
-                throw new ArgumentNullException("namespace");
+                throw new ArgumentNullException(nameof(@namespace));
             }
-            _namespace = @namespace;
+            Namespace = @namespace;
         }
     }
 }

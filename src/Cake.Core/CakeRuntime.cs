@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.Versioning;
+using Cake.Core.Polyfill;
 
 namespace Cake.Core
 {
@@ -15,20 +16,29 @@ namespace Cake.Core
         /// <summary>
         /// Gets the target .NET framework version that the current AppDomain is targeting.
         /// </summary>
-        public FrameworkName TargetFramework { get; private set; }
+        public FrameworkName TargetFramework { get; }
 
         /// <summary>
         /// Gets the version of Cake executing the script.
         /// </summary>
-        public Version CakeVersion { get; private set; }
+        public Version CakeVersion { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether we're running on CoreClr.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if we're runnning on CoreClr; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsCoreClr { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeRuntime"/> class.
         /// </summary>
         public CakeRuntime()
         {
-            TargetFramework = new FrameworkName(".NETFramework,Version=v4.5");
-            CakeVersion = typeof(ICakeRuntime).Assembly.GetName().Version;
+            TargetFramework = EnvironmentHelper.GetFramework();
+            CakeVersion = AssemblyHelper.GetExecutingAssembly().GetName().Version;
+            IsCoreClr = EnvironmentHelper.IsCoreClr();
         }
     }
 }

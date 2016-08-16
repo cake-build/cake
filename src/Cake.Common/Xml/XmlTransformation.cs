@@ -6,9 +6,13 @@ using System;
 using System.IO;
 using System.Text;
 using System.Xml;
-using System.Xml.Xsl;
+using Cake.Common.Polyfill;
 using Cake.Core;
 using Cake.Core.IO;
+
+#if !NETCORE
+
+#endif
 
 namespace Cake.Common.Xml
 {
@@ -45,17 +49,17 @@ namespace Cake.Common.Xml
         {
             if (string.IsNullOrWhiteSpace(xsl))
             {
-                throw new ArgumentNullException("xsl", "Null or empty XML style sheet supplied.");
+                throw new ArgumentNullException(nameof(xsl), "Null or empty XML style sheet supplied.");
             }
 
             if (string.IsNullOrWhiteSpace(xml))
             {
-                throw new ArgumentNullException("xml", "Null or empty XML data supplied.");
+                throw new ArgumentNullException(nameof(xml), "Null or empty XML data supplied.");
             }
 
             if (settings == null)
             {
-                throw new ArgumentNullException("settings", "Null settings supplied.");
+                throw new ArgumentNullException(nameof(settings), "Null settings supplied.");
             }
 
             using (TextReader
@@ -96,27 +100,27 @@ namespace Cake.Common.Xml
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem", "Null filesystem supplied.");
+                throw new ArgumentNullException(nameof(fileSystem), "Null filesystem supplied.");
             }
 
             if (xslPath == null)
             {
-                throw new ArgumentNullException("xslPath", "Null XML style sheet path supplied.");
+                throw new ArgumentNullException(nameof(xslPath), "Null XML style sheet path supplied.");
             }
 
             if (xmlPath == null)
             {
-                throw new ArgumentNullException("xmlPath", "Null XML data path supplied.");
+                throw new ArgumentNullException(nameof(xmlPath), "Null XML data path supplied.");
             }
 
             if (resultPath == null)
             {
-                throw new ArgumentNullException("resultPath", "Null result path supplied.");
+                throw new ArgumentNullException(nameof(resultPath), "Null result path supplied.");
             }
 
             if (settings == null)
             {
-                throw new ArgumentNullException("settings", "Null settings supplied.");
+                throw new ArgumentNullException(nameof(settings), "Null settings supplied.");
             }
 
             IFile
@@ -165,22 +169,22 @@ namespace Cake.Common.Xml
         {
             if (xsl == null)
             {
-                throw new ArgumentNullException("xsl", "Null XML style sheet supplied.");
+                throw new ArgumentNullException(nameof(xsl), "Null XML style sheet supplied.");
             }
 
             if (xml == null)
             {
-                throw new ArgumentNullException("xml", "Null XML data supplied.");
+                throw new ArgumentNullException(nameof(xml), "Null XML data supplied.");
             }
 
             if (result == null)
             {
-                throw new ArgumentNullException("result", "Null result supplied.");
+                throw new ArgumentNullException(nameof(result), "Null result supplied.");
             }
 
             if (settings == null)
             {
-                throw new ArgumentNullException("settings", "Null settings supplied.");
+                throw new ArgumentNullException(nameof(settings), "Null settings supplied.");
             }
 
             var xslXmlReader = XmlReader.Create(xsl);
@@ -199,22 +203,20 @@ namespace Cake.Common.Xml
         {
             if (xsl == null)
             {
-                throw new ArgumentNullException("xsl", "Null XML style sheet supplied.");
+                throw new ArgumentNullException(nameof(xsl), "Null XML style sheet supplied.");
             }
 
             if (xml == null)
             {
-                throw new ArgumentNullException("xml", "Null XML data supplied.");
+                throw new ArgumentNullException(nameof(xml), "Null XML data supplied.");
             }
 
             if (result == null)
             {
-                throw new ArgumentNullException("result", "Null result supplied.");
+                throw new ArgumentNullException(nameof(result), "Null result supplied.");
             }
 
-            var xslTransform = new XslCompiledTransform();
-            xslTransform.Load(xsl);
-            xslTransform.Transform(xml, result);
+            XmlTransformationHelper.Transform(xsl, xml, result);
         }
     }
 }

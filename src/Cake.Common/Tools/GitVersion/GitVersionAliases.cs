@@ -64,7 +64,7 @@ namespace Cake.Common.Tools.GitVersion
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             return GitVersion(context, new GitVersionSettings());
@@ -114,7 +114,7 @@ namespace Cake.Common.Tools.GitVersion
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var gitVersionRunner = new GitVersionRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);

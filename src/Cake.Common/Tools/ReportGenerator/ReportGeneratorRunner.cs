@@ -45,21 +45,21 @@ namespace Cake.Common.Tools.ReportGenerator
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             if (reports == null)
             {
-                throw new ArgumentNullException("reports");
+                throw new ArgumentNullException(nameof(reports));
             }
             if (targetDir == null)
             {
-                throw new ArgumentNullException("targetDir");
+                throw new ArgumentNullException(nameof(targetDir));
             }
 
             var reportPaths = reports as FilePath[] ?? reports.ToArray();
             if (!reportPaths.Any())
             {
-                throw new ArgumentException("reports must not be empty", "reports");
+                throw new ArgumentException("reports must not be empty", nameof(reports));
             }
 
             Run(settings, GetArgument(settings, reportPaths, targetDir));

@@ -17,10 +17,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The provision URL.
         /// </value>
-        public string ProvisionUrl
-        {
-            get { return GetEnvironmentString("BITRISE_PROVISION_URL"); }
-        }
+        public string ProvisionUrl => GetEnvironmentString("BITRISE_PROVISION_URL");
 
         /// <summary>
         /// Gets the certificate URL.
@@ -28,10 +25,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The certificate URL.
         /// </value>
-        public string CertificateUrl
-        {
-            get { return GetEnvironmentString("BITRISE_CERTIFICATE_URL"); }
-        }
+        public string CertificateUrl => GetEnvironmentString("BITRISE_CERTIFICATE_URL");
 
         /// <summary>
         /// Gets the certificate passphrase.
@@ -39,10 +33,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The certificate passphrase.
         /// </value>
-        public string CertificatePassphrase
-        {
-            get { return GetEnvironmentString("BITRISE_CERTIFICATE_PASSPHRASE"); }
-        }
+        public string CertificatePassphrase => GetEnvironmentString("BITRISE_CERTIFICATE_PASSPHRASE");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BitriseProvisioningInfo"/> class.

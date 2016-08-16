@@ -21,16 +21,12 @@ namespace Cake.Common.Text
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
-        private readonly TTemplate _template;
 
         /// <summary>
         /// Gets the text transformation template.
         /// </summary>
         /// <value>The text transformation template.</value>
-        public TTemplate Template
-        {
-            get { return _template; }
-        }
+        public TTemplate Template { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TextTransformation{TTemplate}"/> class.
@@ -43,11 +39,11 @@ namespace Cake.Common.Text
         {
             if (template == null)
             {
-                throw new ArgumentNullException("template");
+                throw new ArgumentNullException(nameof(template));
             }
             _fileSystem = fileSystem;
             _environment = environment;
-            _template = template;
+            Template = template;
         }
 
         /// <summary>
@@ -59,7 +55,7 @@ namespace Cake.Common.Text
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
 
             // Make the path absolute if necessary.
@@ -70,7 +66,7 @@ namespace Cake.Common.Text
             using (var stream = file.OpenWrite())
             using (var writer = new StreamWriter(stream, new UTF8Encoding(false), 1024, true))
             {
-                writer.Write(_template.Render());
+                writer.Write(Template.Render());
             }
         }
 
@@ -80,7 +76,7 @@ namespace Cake.Common.Text
         /// <returns>A string containing the rendered template.</returns>
         public override string ToString()
         {
-            return _template.Render();
+            return Template.Render();
         }
     }
 }

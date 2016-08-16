@@ -68,11 +68,11 @@ namespace Cake.Common.Tools.SignTool
         {
             if (assemblyPath == null)
             {
-                throw new ArgumentNullException("assemblyPath");
+                throw new ArgumentNullException(nameof(assemblyPath));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             if (assemblyPath.IsRelative)

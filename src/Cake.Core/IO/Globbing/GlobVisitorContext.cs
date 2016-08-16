@@ -10,60 +10,44 @@ namespace Cake.Core.IO.Globbing
     internal sealed class GlobVisitorContext
     {
         private readonly LinkedList<string> _pathParts;
-        private readonly List<IFileSystemInfo> _results;
-        private readonly IFileSystem _fileSystem;
-        private readonly ICakeEnvironment _environment;
         private readonly Func<IDirectory, bool> _predicate;
-        private DirectoryPath _path;
 
-        internal DirectoryPath Path
-        {
-            get { return _path; }
-        }
+        internal DirectoryPath Path { get; private set; }
 
-        public IFileSystem FileSystem
-        {
-            get { return _fileSystem; }
-        }
+        public IFileSystem FileSystem { get; }
 
-        public ICakeEnvironment Environment
-        {
-            get { return _environment; }
-        }
+        public ICakeEnvironment Environment { get; }
 
-        public List<IFileSystemInfo> Results
-        {
-            get { return _results; }
-        }
+        public List<IFileSystemInfo> Results { get; }
 
         public GlobVisitorContext(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             Func<IDirectory, bool> predicate)
         {
-            _fileSystem = fileSystem;
-            _environment = environment;
+            FileSystem = fileSystem;
+            Environment = environment;
             _predicate = predicate;
-            _results = new List<IFileSystemInfo>();
+            Results = new List<IFileSystemInfo>();
             _pathParts = new LinkedList<string>();
         }
 
         public void AddResult(IFileSystemInfo path)
         {
-            _results.Add(path);
+            Results.Add(path);
         }
 
         public void Push(string path)
         {
             _pathParts.AddLast(path);
-            _path = GenerateFullPath();
+            Path = GenerateFullPath();
         }
 
         public string Pop()
         {
             var last = _pathParts.Last;
             _pathParts.RemoveLast();
-            _path = GenerateFullPath();
+            Path = GenerateFullPath();
             return last.Value;
         }
 

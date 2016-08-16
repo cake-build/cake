@@ -38,7 +38,7 @@ namespace Cake.Common.Tools.SpecFlow
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             SpecFlowStepDefinitionReport(context, projectFile, new SpecFlowStepDefinitionReportSettings());
@@ -59,7 +59,7 @@ namespace Cake.Common.Tools.SpecFlow
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var runner = new SpecFlowStepDefinitionReporter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
@@ -84,7 +84,7 @@ namespace Cake.Common.Tools.SpecFlow
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             SpecFlowTestExecutionReport(context, action, projectFile, new SpecFlowTestExecutionReportSettings());
@@ -110,7 +110,7 @@ namespace Cake.Common.Tools.SpecFlow
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (settings == null)

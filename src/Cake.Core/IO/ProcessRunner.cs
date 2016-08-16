@@ -6,6 +6,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using Cake.Core.Diagnostics;
+using Cake.Core.Polyfill;
 
 namespace Cake.Core.IO
 {
@@ -26,11 +27,11 @@ namespace Cake.Core.IO
         {
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             if (log == null)
             {
-                throw new ArgumentNullException("log");
+                throw new ArgumentNullException(nameof(log));
             }
             _environment = environment;
             _log = log;
@@ -46,11 +47,11 @@ namespace Cake.Core.IO
         {
             if (filePath == null)
             {
-                throw new ArgumentNullException("filePath");
+                throw new ArgumentNullException(nameof(filePath));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             // Get the fileName
@@ -80,13 +81,13 @@ namespace Cake.Core.IO
             };
 
             // Add environment variables
-            info.EnvironmentVariables["CAKE"] = "True";
-            info.EnvironmentVariables["CAKE_VERSION"] = _environment.Runtime.CakeVersion.ToString(3);
+            ProcessHelper.SetEnvironmentVariable(info, "CAKE", "True");
+            ProcessHelper.SetEnvironmentVariable(info, "CAKE_VERSION", _environment.Runtime.CakeVersion.ToString(3));
             if (settings.EnvironmentVariables != null)
             {
                 foreach (var environmentVariable in settings.EnvironmentVariables)
                 {
-                    info.EnvironmentVariables[environmentVariable.Key] = environmentVariable.Value;
+                    ProcessHelper.SetEnvironmentVariable(info, environmentVariable.Key, environmentVariable.Value);
                 }
             }
 

@@ -12,16 +12,13 @@ namespace Cake.Common.Tools.ILMerge
     /// </summary>
     public sealed class TargetPlatform
     {
-        private readonly DirectoryPath _path;
-        private readonly TargetPlatformVersion _platform;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TargetPlatform"/> class.
         /// </summary>
         /// <param name="platform">The .NET framework target version.</param>
         public TargetPlatform(TargetPlatformVersion platform)
         {
-            _platform = platform;
+            Platform = platform;
         }
 
         /// <summary>
@@ -33,26 +30,20 @@ namespace Cake.Common.Tools.ILMerge
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
-            _platform = platform;
-            _path = path;
+            Platform = platform;
+            Path = path;
         }
 
         /// <summary>
         /// Gets the .NET framework target version.
         /// </summary>
-        public TargetPlatformVersion Platform
-        {
-            get { return _platform; }
-        }
+        public TargetPlatformVersion Platform { get; }
 
         /// <summary>
         /// Gets the directory where <c>mscorlib.dll</c> can be found.
         /// </summary>
-        public DirectoryPath Path
-        {
-            get { return _path; }
-        }
+        public DirectoryPath Path { get; }
     }
 }

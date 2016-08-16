@@ -23,7 +23,7 @@ namespace Cake.Core.IO
         {
             if (globber == null)
             {
-                throw new ArgumentNullException("globber");
+                throw new ArgumentNullException(nameof(globber));
             }
             return globber.Match(pattern).OfType<FilePath>();
         }
@@ -38,7 +38,7 @@ namespace Cake.Core.IO
         {
             if (globber == null)
             {
-                throw new ArgumentNullException("globber");
+                throw new ArgumentNullException(nameof(globber));
             }
             return globber.Match(pattern).OfType<DirectoryPath>();
         }
@@ -55,7 +55,7 @@ namespace Cake.Core.IO
         {
             if (globber == null)
             {
-                throw new ArgumentNullException("globber");
+                throw new ArgumentNullException(nameof(globber));
             }
             return globber.Match(pattern, null);
         }

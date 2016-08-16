@@ -23,7 +23,7 @@ namespace Cake.Core.IO
         {
             if (file == null)
             {
-                throw new ArgumentNullException("file");
+                throw new ArgumentNullException(nameof(file));
             }
             return file.Open(mode,
                 mode == FileMode.Append ? FileAccess.Write : FileAccess.ReadWrite,
@@ -41,7 +41,7 @@ namespace Cake.Core.IO
         {
             if (file == null)
             {
-                throw new ArgumentNullException("file");
+                throw new ArgumentNullException(nameof(file));
             }
             return file.Open(mode, access, FileShare.None);
         }
@@ -55,7 +55,7 @@ namespace Cake.Core.IO
         {
             if (file == null)
             {
-                throw new ArgumentNullException("file");
+                throw new ArgumentNullException(nameof(file));
             }
             return file.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
         }
@@ -70,7 +70,7 @@ namespace Cake.Core.IO
         {
             if (file == null)
             {
-                throw new ArgumentNullException("file");
+                throw new ArgumentNullException(nameof(file));
             }
             return file.Open(FileMode.Create, FileAccess.Write, FileShare.None);
         }
@@ -86,7 +86,7 @@ namespace Cake.Core.IO
         {
             if (file == null)
             {
-                throw new ArgumentNullException("file");
+                throw new ArgumentNullException(nameof(file));
             }
             using (var stream = file.OpenRead())
             using (var reader = new StreamReader(stream, encoding))

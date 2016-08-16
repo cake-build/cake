@@ -13,26 +13,17 @@ namespace Cake.Core.Scripting
     /// </summary>
     public abstract class ScriptHost : IScriptHost
     {
-        private readonly ICakeEngine _engine;
-        private readonly ICakeContext _context;
-
         /// <summary>
         /// Gets the engine.
         /// </summary>
         /// <value>The engine.</value>
-        protected ICakeEngine Engine
-        {
-            get { return _engine; }
-        }
+        protected ICakeEngine Engine { get; }
 
         /// <summary>
         /// Gets the context.
         /// </summary>
         /// <value>The context.</value>
-        public ICakeContext Context
-        {
-            get { return _context; }
-        }
+        public ICakeContext Context { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptHost"/> class.
@@ -43,24 +34,21 @@ namespace Cake.Core.Scripting
         {
             if (engine == null)
             {
-                throw new ArgumentNullException("engine");
+                throw new ArgumentNullException(nameof(engine));
             }
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
-            _engine = engine;
-            _context = context;
+            Engine = engine;
+            Context = context;
         }
 
         /// <summary>
         /// Gets all registered tasks.
         /// </summary>
         /// <value>The registered tasks.</value>
-        public IReadOnlyList<CakeTask> Tasks
-        {
-            get { return _engine.Tasks; }
-        }
+        public IReadOnlyList<CakeTask> Tasks => Engine.Tasks;
 
         /// <summary>
         /// Registers a new task.
@@ -69,7 +57,7 @@ namespace Cake.Core.Scripting
         /// <returns>A <see cref="CakeTaskBuilder{ActionTask}"/>.</returns>
         public CakeTaskBuilder<ActionTask> Task(string name)
         {
-            return _engine.RegisterTask(name);
+            return Engine.RegisterTask(name);
         }
 
         /// <summary>
@@ -80,10 +68,7 @@ namespace Cake.Core.Scripting
         [Obsolete("Please use Setup(Action<ICakeContext>) instead.", false)]
         public void Setup(Action action)
         {
-            if (Context != null && Context.Log != null)
-            {
-                Context.Log.Warning("Please use Setup(Action<ICakeContext>) instead.");
-            }
+            Context?.Log?.Warning("Please use Setup(Action<ICakeContext>) instead.");
             Setup(context => action());
         }
 
@@ -101,7 +86,7 @@ namespace Cake.Core.Scripting
         /// </example>
         public void Setup(Action<ICakeContext> action)
         {
-            _engine.RegisterSetupAction(action);
+            Engine.RegisterSetupAction(action);
         }
 
         /// <summary>
@@ -112,10 +97,7 @@ namespace Cake.Core.Scripting
         [Obsolete("Please use Teardown(Action<ITeardownContext>) instead.", false)]
         public void Teardown(Action action)
         {
-            if (Context != null && Context.Log != null)
-            {
-                Context.Log.Warning("Please use Teardown(Action<ITeardownContext>) instead.");
-            }
+            Context?.Log?.Warning("Please use Teardown(Action<ITeardownContext>) instead.");
             Teardown(context => action());
         }
 
@@ -133,7 +115,7 @@ namespace Cake.Core.Scripting
         /// </example>
         public void Teardown(Action<ITeardownContext> action)
         {
-            _engine.RegisterTeardownAction(action);
+            Engine.RegisterTeardownAction(action);
         }
 
         /// <summary>
@@ -144,11 +126,7 @@ namespace Cake.Core.Scripting
         [Obsolete("Please use TaskSetup(Action<ITaskSetupContext>) instead.", false)]
         public void TaskSetup(Action<ICakeContext, ITaskSetupContext> action)
         {
-            if (Context != null && Context.Log != null)
-            {
-                Context.Log.Warning("Please use TaskSetup(Action<ITaskSetupContext>) instead.");
-            }
-
+            Context?.Log?.Warning("Please use TaskSetup(Action<ITaskSetupContext>) instead.");
             TaskSetup(context => action(context, context));
         }
 
@@ -159,7 +137,7 @@ namespace Cake.Core.Scripting
         /// <param name="action">The action to be executed.</param>
         public void TaskSetup(Action<ITaskSetupContext> action)
         {
-            _engine.RegisterTaskSetupAction(action);
+            Engine.RegisterTaskSetupAction(action);
         }
 
         /// <summary>
@@ -170,11 +148,7 @@ namespace Cake.Core.Scripting
         [Obsolete("Please use TaskTeardown(Action<ITaskTeardownContext>) instead.", false)]
         public void TaskTeardown(Action<ICakeContext, ITaskTeardownContext> action)
         {
-            if (Context != null && Context.Log != null)
-            {
-                Context.Log.Warning("Please use TaskTeardown(Action<ITaskTeardownContext>) instead.");
-            }
-
+            Context?.Log?.Warning("Please use TaskTeardown(Action<ITaskTeardownContext>) instead.");
             TaskTeardown(context => action(context, context));
         }
 
@@ -185,7 +159,7 @@ namespace Cake.Core.Scripting
         /// <param name="action">The action to be executed.</param>
         public void TaskTeardown(Action<ITaskTeardownContext> action)
         {
-            _engine.RegisterTaskTeardownAction(action);
+            Engine.RegisterTaskTeardownAction(action);
         }
 
         /// <summary>

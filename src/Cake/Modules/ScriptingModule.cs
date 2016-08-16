@@ -5,10 +5,15 @@
 using System;
 using Cake.Core.Composition;
 using Cake.Core.Scripting;
+
+#if NETCORE
+using Cake.Scripting.XPlat;
+#else
 using Cake.Scripting.Mono;
 using Cake.Scripting.Roslyn;
 using Cake.Scripting.Roslyn.Nightly;
 using Cake.Scripting.Roslyn.Stable;
+#endif
 
 namespace Cake.Modules
 {
@@ -25,9 +30,12 @@ namespace Cake.Modules
         {
             if (registry == null)
             {
-                throw new ArgumentNullException("registry");
+                throw new ArgumentNullException(nameof(registry));
             }
 
+#if NETCORE
+            registry.RegisterType<XPlatScriptEngine>().As<IScriptEngine>().Singleton();
+#else
             // Are we running on Mono?
             var mono = _options.Mono;
             if (!mono)
@@ -58,6 +66,7 @@ namespace Cake.Modules
                     registry.RegisterType<DefaultRoslynNightlyScriptSessionFactory>().As<RoslynNightlyScriptSessionFactory>().Singleton();
                 }
             }
+#endif
         }
     }
 }

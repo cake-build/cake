@@ -22,7 +22,6 @@ namespace Cake.Common.Build.TravisCI
         private const string MessagePostfix = "\r";
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
-        private readonly TravisCIEnvironmentInfo _environmentInfo;
         private static readonly Dictionary<string, string> _sanitizationTokens;
 
         static TravisCIProvider()
@@ -47,11 +46,11 @@ namespace Cake.Common.Build.TravisCI
         {
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             _environment = environment;
             _log = log;
-            _environmentInfo = new TravisCIEnvironmentInfo(environment);
+            Environment = new TravisCIEnvironmentInfo(environment);
         }
 
         /// <summary>
@@ -60,10 +59,7 @@ namespace Cake.Common.Build.TravisCI
         /// <value>
         /// The environment.
         /// </value>
-        public TravisCIEnvironmentInfo Environment
-        {
-            get { return _environmentInfo; }
-        }
+        public TravisCIEnvironmentInfo Environment { get; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is running on Travis CI.
@@ -71,10 +67,7 @@ namespace Cake.Common.Build.TravisCI
         /// <value>
         /// <c>true</c> if this instance is running on Travis CI; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnTravisCI
-        {
-            get { return !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TRAVIS")); }
-        }
+        public bool IsRunningOnTravisCI => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TRAVIS"));
 
         /// <summary>
         /// Write the start of a message fold to the Travis CI build log.
@@ -92,11 +85,6 @@ namespace Cake.Common.Build.TravisCI
         public void WriteEndFold(string name)
         {
             WriteServiceMessage("fold", "end", name);
-        }
-
-        private void WriteServiceMessage(string messageName, string attributeValue)
-        {
-            WriteServiceMessage(messageName, new Dictionary<string, string> { { " ", attributeValue } });
         }
 
         private void WriteServiceMessage(string messageName, string attributeName, string attributeValue)

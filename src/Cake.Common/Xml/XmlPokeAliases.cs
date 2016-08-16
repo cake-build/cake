@@ -221,17 +221,17 @@ namespace Cake.Common.Xml
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (filePath == null)
             {
-                throw new ArgumentNullException("filePath");
+                throw new ArgumentNullException(nameof(filePath));
             }
 
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             var file = context.FileSystem.GetFile(filePath);
@@ -456,12 +456,12 @@ namespace Cake.Common.Xml
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (string.IsNullOrWhiteSpace(sourceXml))
             {
-                throw new ArgumentNullException("sourceXml");
+                throw new ArgumentNullException(nameof(sourceXml));
             }
 
             using (var resultStream = new MemoryStream())
@@ -487,22 +487,22 @@ namespace Cake.Common.Xml
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
 
             if (destination == null)
             {
-                throw new ArgumentNullException("destination");
+                throw new ArgumentNullException(nameof(destination));
             }
 
             if (string.IsNullOrWhiteSpace(xpath))
             {
-                throw new ArgumentNullException("xpath");
+                throw new ArgumentNullException(nameof(xpath));
             }
 
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             var document = new XmlDocument();
@@ -551,8 +551,15 @@ namespace Cake.Common.Xml
         private static XmlReaderSettings GetXmlReaderSettings(XmlPokeSettings settings)
         {
             var xmlReaderSettings = new XmlReaderSettings();
-            xmlReaderSettings.DtdProcessing = (DtdProcessing)settings.DtdProcessing;
 
+#if NETCORE
+            if (settings.DtdProcessing == XmlDtdProcessing.Parse)
+            {
+                throw new CakeException("DtdProcessing is not available on .NET Core.");
+            }
+#endif
+
+            xmlReaderSettings.DtdProcessing = (DtdProcessing)settings.DtdProcessing;
             return xmlReaderSettings;
         }
     }

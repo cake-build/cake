@@ -59,12 +59,12 @@ namespace Cake.Common.Tools.NSIS
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (scriptFile == null)
             {
-                throw new ArgumentNullException("scriptFile");
+                throw new ArgumentNullException(nameof(scriptFile));
             }
 
             var runner = new MakeNSISRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);

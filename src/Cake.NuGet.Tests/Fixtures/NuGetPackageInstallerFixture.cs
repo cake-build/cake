@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#if !NETCORE
 using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -21,7 +22,7 @@ namespace Cake.NuGet.Tests.Fixtures
         public IFileSystem FileSystem { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
         public INuGetToolResolver ToolResolver { get; set; }
-        public INuGetPackageContentResolver ContentResolver { get; set; }
+        public INuGetContentResolver ContentResolver { get; set; }
         public ICakeLog Log { get; set; }
 
         public PackageReference Package { get; set; }
@@ -35,7 +36,7 @@ namespace Cake.NuGet.Tests.Fixtures
             Environment = FakeEnvironment.CreateUnixEnvironment();
             FileSystem = new FakeFileSystem(Environment);
             ProcessRunner = Substitute.For<IProcessRunner>();
-            ContentResolver = Substitute.For<INuGetPackageContentResolver>();
+            ContentResolver = Substitute.For<INuGetContentResolver>();
             Log = Substitute.For<ICakeLog>();
             Config = Substitute.For<ICakeConfiguration>();
 
@@ -46,11 +47,10 @@ namespace Cake.NuGet.Tests.Fixtures
             PackageType = PackageType.Addin;
             InstallPath = new DirectoryPath("./nuget");
         }
-        
 
         public NuGetPackageInstaller CreateInstaller()
         {
-            return new NuGetPackageInstaller(FileSystem, Environment, ProcessRunner, ToolResolver , ContentResolver, Log, Config);
+            return new NuGetPackageInstaller(FileSystem, Environment, ProcessRunner, ToolResolver, ContentResolver, Log, Config);
         }
 
         public IReadOnlyCollection<IFile> Install()
@@ -66,3 +66,4 @@ namespace Cake.NuGet.Tests.Fixtures
         }
     }
 }
+#endif

@@ -26,12 +26,12 @@ namespace Cake.Common.Tools.TextTransform
         {
             if (sourceFile == null)
             {
-                throw new ArgumentNullException("sourceFile");
+                throw new ArgumentNullException(nameof(sourceFile));
             }
 
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetArguments(sourceFile, settings));
@@ -91,7 +91,7 @@ namespace Cake.Common.Tools.TextTransform
         {
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
 
             _environment = environment;

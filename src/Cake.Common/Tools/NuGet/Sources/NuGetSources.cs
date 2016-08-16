@@ -44,23 +44,23 @@ namespace Cake.Common.Tools.NuGet.Sources
         {
             if (name == null)
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentException("Source name cannot be empty.", "name");
+                throw new ArgumentException("Source name cannot be empty.", nameof(name));
             }
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             if (string.IsNullOrWhiteSpace(source))
             {
-                throw new ArgumentException("Source cannot be empty.", "source");
+                throw new ArgumentException("Source cannot be empty.", nameof(source));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             if (HasSource(source, settings))
@@ -82,23 +82,23 @@ namespace Cake.Common.Tools.NuGet.Sources
         {
             if (name == null)
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentException("Source name cannot be empty.", "name");
+                throw new ArgumentException("Source name cannot be empty.", nameof(name));
             }
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             if (string.IsNullOrWhiteSpace(source))
             {
-                throw new ArgumentException("Source cannot be empty.", "source");
+                throw new ArgumentException("Source cannot be empty.", nameof(source));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             if (!HasSource(source, settings))
@@ -120,15 +120,15 @@ namespace Cake.Common.Tools.NuGet.Sources
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             if (string.IsNullOrWhiteSpace(source))
             {
-                throw new ArgumentException("Source cannot be empty.", "source");
+                throw new ArgumentException("Source cannot be empty.", nameof(source));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             var processSettings = new ProcessSettings

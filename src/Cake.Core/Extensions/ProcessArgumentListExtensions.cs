@@ -23,10 +23,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder Append(this ProcessArgumentBuilder builder, string text)
         {
-            if (builder != null)
-            {
-                builder.Append(new TextArgument(text));
-            }
+            builder?.Append(new TextArgument(text));
             return builder;
         }
 
@@ -53,10 +50,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendQuoted(this ProcessArgumentBuilder builder, string text)
         {
-            if (builder != null)
-            {
-                builder.Append(new QuotedArgument(new TextArgument(text)));
-            }
+            builder?.Append(new QuotedArgument(new TextArgument(text)));
             return builder;
         }
 
@@ -83,10 +77,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendQuoted(this ProcessArgumentBuilder builder, IProcessArgument argument)
         {
-            if (builder != null)
-            {
-                builder.Append(new QuotedArgument(argument));
-            }
+            builder?.Append(new QuotedArgument(argument));
             return builder;
         }
 
@@ -98,10 +89,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendSecret(this ProcessArgumentBuilder builder, string text)
         {
-            if (builder != null)
-            {
-                builder.Append(new SecretArgument(new TextArgument(text)));
-            }
+            builder?.Append(new SecretArgument(new TextArgument(text)));
             return builder;
         }
 
@@ -129,10 +117,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendSecret(this ProcessArgumentBuilder builder, IProcessArgument argument)
         {
-            if (builder != null)
-            {
-                builder.Append(new SecretArgument(argument));
-            }
+            builder?.Append(new SecretArgument(argument));
             return builder;
         }
 
@@ -144,10 +129,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendQuotedSecret(this ProcessArgumentBuilder builder, string text)
         {
-            if (builder != null)
-            {
-                builder.AppendQuoted(new SecretArgument(new TextArgument(text)));
-            }
+            builder?.AppendQuoted(new SecretArgument(new TextArgument(text)));
             return builder;
         }
 
@@ -175,10 +157,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendQuotedSecret(this ProcessArgumentBuilder builder, IProcessArgument argument)
         {
-            if (builder != null)
-            {
-                builder.AppendQuoted(new SecretArgument(argument));
-            }
+            builder?.AppendQuoted(new SecretArgument(argument));
             return builder;
         }
 
@@ -204,10 +183,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendSwitch(this ProcessArgumentBuilder builder, string @switch, string separator, string text)
         {
-            if (builder != null)
-            {
-                builder.Append(new SwitchArgument(@switch, new TextArgument(text), separator));
-            }
+            builder?.Append(new SwitchArgument(@switch, new TextArgument(text), separator));
             return builder;
         }
 
@@ -233,10 +209,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendSwitchQuoted(this ProcessArgumentBuilder builder, string @switch, string separator, string text)
         {
-            if (builder != null)
-            {
-                builder.Append(new SwitchArgument(@switch, new QuotedArgument(new TextArgument(text)), separator));
-            }
+            builder?.Append(new SwitchArgument(@switch, new QuotedArgument(new TextArgument(text)), separator));
             return builder;
         }
 
@@ -262,10 +235,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendSwitchQuoted(this ProcessArgumentBuilder builder, string @switch, string separator, IProcessArgument argument)
         {
-            if (builder != null)
-            {
-                builder.Append(new SwitchArgument(@switch, new QuotedArgument(argument), separator));
-            }
+            builder?.Append(new SwitchArgument(@switch, new QuotedArgument(argument), separator));
             return builder;
         }
 
@@ -291,10 +261,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendSwitchSecret(this ProcessArgumentBuilder builder, string @switch, string separator, string text)
         {
-            if (builder != null)
-            {
-                builder.Append(new SwitchArgument(@switch, new SecretArgument(new TextArgument(text)), separator));
-            }
+            builder?.Append(new SwitchArgument(@switch, new SecretArgument(new TextArgument(text)), separator));
             return builder;
         }
 
@@ -320,10 +287,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendSwitchSecret(this ProcessArgumentBuilder builder, string @switch, string separator, IProcessArgument argument)
         {
-            if (builder != null)
-            {
-                builder.Append(new SwitchArgument(@switch, new SecretArgument(argument), separator));
-            }
+            builder?.Append(new SwitchArgument(@switch, new SecretArgument(argument), separator));
             return builder;
         }
 
@@ -349,10 +313,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendSwitchQuotedSecret(this ProcessArgumentBuilder builder, string @switch, string separator, string text)
         {
-            if (builder != null)
-            {
-                builder.AppendSwitchQuoted(@switch, separator, new SecretArgument(new TextArgument(text)));
-            }
+            builder?.AppendSwitchQuoted(@switch, separator, new SecretArgument(new TextArgument(text)));
             return builder;
         }
 
@@ -378,10 +339,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendQuotedSecret(this ProcessArgumentBuilder builder, string @switch, string separator, IProcessArgument argument)
         {
-            if (builder != null)
-            {
-                builder.AppendSwitchQuoted(@switch, separator, new SecretArgument(argument));
-            }
+            builder?.AppendSwitchQuoted(@switch, separator, new SecretArgument(argument));
             return builder;
         }
 
@@ -405,12 +363,12 @@ namespace Cake.Core
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
 
             if (target == null)
             {
-                throw new ArgumentNullException("target");
+                throw new ArgumentNullException(nameof(target));
             }
 
             foreach (var token in source)

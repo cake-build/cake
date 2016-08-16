@@ -15,20 +15,11 @@ namespace Cake.Common.Solution.Project.Properties
         private readonly HashSet<string> _namespaces;
         private readonly HashSet<string> _internalVisibleTo;
 
-        public IDictionary<string, string> Attributes
-        {
-            get { return _dictionary; }
-        }
+        public IDictionary<string, string> Attributes => _dictionary;
 
-        public ISet<string> Namespaces
-        {
-            get { return _namespaces; }
-        }
+        public ISet<string> Namespaces => _namespaces;
 
-        public ISet<string> InternalVisibleTo
-        {
-            get { return _internalVisibleTo; }
-        }
+        public ISet<string> InternalVisibleTo => _internalVisibleTo;
 
         public AssemblyInfoCreatorData(AssemblyInfoSettings settings)
         {

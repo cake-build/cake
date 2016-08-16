@@ -20,10 +20,7 @@ namespace Cake.Core.IO
         {
             if (!_disposed)
             {
-                if (_key != null)
-                {
-                    _key.Dispose();
-                }
+                _key?.Dispose();
             }
             _disposed = true;
         }

@@ -41,7 +41,7 @@ namespace Cake.Common.Tools.DotNetCore.Publish
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetArguments(path, settings));

@@ -84,7 +84,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
                 // Then
                 Assert.Equal("test \"./test/Project.Tests/*\"", result.Args);
             }
-            
+
             [Theory]
             [InlineData("./test/*", "test \"./test/*\"")]
             [InlineData("./test/cake unit tests/", "test \"./test/cake unit tests/\"")]

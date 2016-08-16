@@ -103,7 +103,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
 
                 // Then
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("The source 'existingsource' already exist.", result.Message);
+                Assert.Equal("The source 'existingsource' already exist.", result?.Message);
             }
 
             [Fact]
@@ -118,7 +118,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Could not locate executable.", result.Message);
+                Assert.Equal("NuGet: Could not locate executable.", result?.Message);
             }
 
             [Theory]
@@ -166,7 +166,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Process was not started.", result.Message);
+                Assert.Equal("NuGet: Process was not started.", result?.Message);
             }
 
             [Fact]
@@ -181,7 +181,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Process returned an error (exit code 1).", result.Message);
+                Assert.Equal("NuGet: Process returned an error (exit code 1).", result?.Message);
             }
 
             [Fact]
@@ -360,7 +360,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
 
                 // Then
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("The source 'source' does not exist.", result.Message);
+                Assert.Equal("The source 'source' does not exist.", result?.Message);
             }
 
             [Fact]
@@ -376,7 +376,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Could not locate executable.", result.Message);
+                Assert.Equal("NuGet: Could not locate executable.", result?.Message);
             }
 
             [Theory]
@@ -427,7 +427,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Process was not started.", result.Message);
+                Assert.Equal("NuGet: Process was not started.", result?.Message);
             }
 
             [Fact]
@@ -443,7 +443,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("NuGet: Process returned an error (exit code 1).", result.Message);
+                Assert.Equal("NuGet: Process returned an error (exit code 1).", result?.Message);
             }
 
             [Fact]

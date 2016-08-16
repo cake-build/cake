@@ -26,7 +26,7 @@ namespace Cake.Core
         {
             if (method == null)
             {
-                throw new ArgumentNullException("method");
+                throw new ArgumentNullException(nameof(method));
             }
 
             var builder = new StringBuilder();
@@ -53,7 +53,7 @@ namespace Cake.Core
         /// <returns>The full name.</returns>
         public static string GetFullName(this MethodInfo method)
         {
-            if (method != null && method.DeclaringType != null)
+            if (method?.DeclaringType != null)
             {
                 return string.Concat(method.DeclaringType.FullName, ".", method.Name);
             }
@@ -67,7 +67,7 @@ namespace Cake.Core
         /// <returns>The namespace of the method.</returns>
         public static string GetNamespace(this MethodInfo method)
         {
-            if (method != null && method.DeclaringType != null)
+            if (method?.DeclaringType != null)
             {
                 return method.DeclaringType.Namespace;
             }

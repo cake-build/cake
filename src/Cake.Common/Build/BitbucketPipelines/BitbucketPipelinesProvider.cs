@@ -12,23 +12,15 @@ namespace Cake.Common.Build.BitbucketPipelines
     /// </summary>
     public sealed class BitbucketPipelinesProvider : IBitbucketPipelinesProvider
     {
-        private readonly BitbucketPipelinesEnvironmentInfo _bitbucketPipelinesEnvironment;
-
         /// <summary>
         /// Gets a value indicating whether the current build is running on Pipelines.
         /// </summary>
         /// <value>
         /// <c>true</c> if the current build is running on Pipelines; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnBitbucketPipelines
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(Environment.Repository.RepoOwner) &&
-                       !string.IsNullOrWhiteSpace(Environment.Repository.RepoSlug) &&
-                       !string.IsNullOrWhiteSpace(Environment.Repository.Commit);
-            }
-        }
+        public bool IsRunningOnBitbucketPipelines => !string.IsNullOrWhiteSpace(Environment.Repository.RepoOwner) &&
+                                                     !string.IsNullOrWhiteSpace(Environment.Repository.RepoSlug) &&
+                                                     !string.IsNullOrWhiteSpace(Environment.Repository.Commit);
 
         /// <summary>
         /// Gets the Pipelines environment.
@@ -36,10 +28,7 @@ namespace Cake.Common.Build.BitbucketPipelines
         /// <value>
         /// The Pipelines environment.
         /// </value>
-        public BitbucketPipelinesEnvironmentInfo Environment
-        {
-            get { return _bitbucketPipelinesEnvironment; }
-        }
+        public BitbucketPipelinesEnvironmentInfo Environment { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BitbucketPipelinesProvider"/> class.
@@ -47,7 +36,7 @@ namespace Cake.Common.Build.BitbucketPipelines
         /// <param name="environment">The environment.</param>
         public BitbucketPipelinesProvider(ICakeEnvironment environment)
         {
-            _bitbucketPipelinesEnvironment = new BitbucketPipelinesEnvironmentInfo(environment);
+            Environment = new BitbucketPipelinesEnvironmentInfo(environment);
         }
     }
 }

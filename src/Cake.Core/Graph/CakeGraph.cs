@@ -19,21 +19,15 @@ namespace Cake.Core.Graph
             _edges = new List<CakeGraphEdge>();
         }
 
-        public IReadOnlyList<string> Nodes
-        {
-            get { return _nodes; }
-        }
+        public IReadOnlyList<string> Nodes => _nodes;
 
-        public IReadOnlyList<CakeGraphEdge> Edges
-        {
-            get { return _edges; }
-        }
+        public IReadOnlyList<CakeGraphEdge> Edges => _edges;
 
         public void Add(string node)
         {
             if (node == null)
             {
-                throw new ArgumentNullException("node");
+                throw new ArgumentNullException(nameof(node));
             }
             if (_nodes.Any(x => x == node))
             {

@@ -11,23 +11,13 @@ namespace Cake.Common.Build.Bitrise.Data
     /// </summary>
     public class BitriseEnvironmentInfo : BitriseInfo
     {
-        private readonly BitriseApplicationInfo _applicationProvider;
-        private readonly BitriseBuildInfo _buildProvider;
-        private readonly BitriseProvisioningInfo _provisioningProvider;
-        private readonly BitriseRepositoryInfo _repositoryProvider;
-        private readonly BitriseWorkflowInfo _workflowProvider;
-        private readonly BitriseDirectoryInfo _directoryProvider;
-
         /// <summary>
         /// Gets Bitrise application information.
         /// </summary>
         /// <value>
         /// The application.
         /// </value>
-        public BitriseApplicationInfo Application
-        {
-            get { return _applicationProvider; }
-        }
+        public BitriseApplicationInfo Application { get; }
 
         /// <summary>
         /// Gets Bitrise build information.
@@ -35,10 +25,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The build.
         /// </value>
-        public BitriseBuildInfo Build
-        {
-            get { return _buildProvider; }
-        }
+        public BitriseBuildInfo Build { get; }
 
         /// <summary>
         /// Gets Bitrise directory information.
@@ -46,10 +33,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The directory.
         /// </value>
-        public BitriseDirectoryInfo Directory
-        {
-            get { return _directoryProvider; }
-        }
+        public BitriseDirectoryInfo Directory { get; }
 
         /// <summary>
         /// Gets Bitrise provisioning information.
@@ -57,10 +41,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The provisioning.
         /// </value>
-        public BitriseProvisioningInfo Provisioning
-        {
-            get { return _provisioningProvider; }
-        }
+        public BitriseProvisioningInfo Provisioning { get; }
 
         /// <summary>
         /// Gets Bitrise repository information.
@@ -68,10 +49,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The repository.
         /// </value>
-        public BitriseRepositoryInfo Repository
-        {
-            get { return _repositoryProvider; }
-        }
+        public BitriseRepositoryInfo Repository { get; }
 
         /// <summary>
         /// Gets Bitrise workflow information.
@@ -79,10 +57,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The workflow.
         /// </value>
-        public BitriseWorkflowInfo Workflow
-        {
-            get { return _workflowProvider; }
-        }
+        public BitriseWorkflowInfo Workflow { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BitriseEnvironmentInfo"/> class.
@@ -90,12 +65,12 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <param name="environment">The environment.</param>
         public BitriseEnvironmentInfo(ICakeEnvironment environment) : base(environment)
         {
-            _applicationProvider = new BitriseApplicationInfo(environment);
-            _buildProvider = new BitriseBuildInfo(environment);
-            _provisioningProvider = new BitriseProvisioningInfo(environment);
-            _repositoryProvider = new BitriseRepositoryInfo(environment);
-            _workflowProvider = new BitriseWorkflowInfo(environment);
-            _directoryProvider = new BitriseDirectoryInfo(environment);
+            Application = new BitriseApplicationInfo(environment);
+            Build = new BitriseBuildInfo(environment);
+            Provisioning = new BitriseProvisioningInfo(environment);
+            Repository = new BitriseRepositoryInfo(environment);
+            Workflow = new BitriseWorkflowInfo(environment);
+            Directory = new BitriseDirectoryInfo(environment);
         }
     }
 }

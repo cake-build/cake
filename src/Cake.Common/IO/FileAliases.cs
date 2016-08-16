@@ -41,11 +41,11 @@ namespace Cake.Common.IO
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
             return new ConvertableFilePath(new FilePath(path));
         }
@@ -145,7 +145,7 @@ namespace Cake.Common.IO
         {
             if (filePaths == null)
             {
-                throw new ArgumentNullException("filePaths");
+                throw new ArgumentNullException(nameof(filePaths));
             }
             var paths = filePaths.Select(p => new FilePath(p));
             FileCopier.CopyFiles(context, paths, targetDirectoryPath);
@@ -298,12 +298,12 @@ namespace Cake.Common.IO
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (filePath == null)
             {
-                throw new ArgumentNullException("filePath");
+                throw new ArgumentNullException(nameof(filePath));
             }
 
             return context.FileSystem.GetFile(filePath.MakeAbsolute(context.Environment)).Exists;
@@ -326,12 +326,12 @@ namespace Cake.Common.IO
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
 
             return path.MakeAbsolute(context.Environment);
@@ -354,12 +354,12 @@ namespace Cake.Common.IO
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (filePath == null)
             {
-                throw new ArgumentNullException("filePath");
+                throw new ArgumentNullException(nameof(filePath));
             }
 
             var file = context.FileSystem.GetFile(filePath.MakeAbsolute(context.Environment));

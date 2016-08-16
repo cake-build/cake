@@ -22,30 +22,21 @@ namespace Cake.Common.Tools.OpenCover
         /// This represents the <c>-filter</c> option.
         /// </summary>
         /// <value>The filters.</value>
-        public ISet<string> Filters
-        {
-            get { return _filters; }
-        }
+        public ISet<string> Filters => _filters;
 
         /// <summary>
         /// Gets attribute filters used to exclude classes or methods.
         /// This represents the <c>-excludebyattribute</c> option.
         /// </summary>
         /// <value>The excluded attributes.</value>
-        public ISet<string> ExcludedAttributeFilters
-        {
-            get { return _excludedAttributeFilters; }
-        }
+        public ISet<string> ExcludedAttributeFilters => _excludedAttributeFilters;
 
         /// <summary>
         /// Gets file filters used to excluded classes or methods.
         /// This represents the <c>-excludebyfile</c> option.
         /// </summary>
         /// <value>The excluded file filters.</value>
-        public ISet<string> ExcludedFileFilters
-        {
-            get { return _excludedFileFilters; }
-        }
+        public ISet<string> ExcludedFileFilters => _excludedFileFilters;
 
         /// <summary>
         /// Gets or sets a value indicating whether or not auto-implemented properties should be skipped.
@@ -75,7 +66,7 @@ namespace Cake.Common.Tools.OpenCover
             _filters = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _excludedAttributeFilters = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _excludedFileFilters = new HashSet<string>(StringComparer.Ordinal);
-            this.Register = "user";
+            Register = "user";
         }
     }
 }

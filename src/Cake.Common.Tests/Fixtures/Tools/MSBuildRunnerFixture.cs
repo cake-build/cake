@@ -12,7 +12,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 {
     internal sealed class MSBuildRunnerFixture : ToolFixture<MSBuildSettings>
     {
-        public HashSet<FilePath> KnownMSBuildPaths { get; private set; }
+        public HashSet<FilePath> KnownMSBuildPaths { get; }
         public FilePath Solution { get; set; }
 
         public MSBuildRunnerFixture(bool is64BitOperativeSystem)

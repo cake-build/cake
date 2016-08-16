@@ -17,10 +17,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The branch.
         /// </value>
-        public string Branch
-        {
-            get { return GetEnvironmentString("TRAVIS_BRANCH"); }
-        }
+        public string Branch => GetEnvironmentString("TRAVIS_BRANCH");
 
         /// <summary>
         /// Gets the build directory for the current build.
@@ -28,10 +25,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The build directory.
         /// </value>
-        public string BuildDirectory
-        {
-            get { return GetEnvironmentString("TRAVIS_BUILD_DIR"); }
-        }
+        public string BuildDirectory => GetEnvironmentString("TRAVIS_BUILD_DIR");
 
         /// <summary>
         /// Gets the build identifier for the current build.
@@ -39,10 +33,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The build identifier.
         /// </value>
-        public string BuildId
-        {
-            get { return GetEnvironmentString("TRAVIS_BUILD_ID"); }
-        }
+        public string BuildId => GetEnvironmentString("TRAVIS_BUILD_ID");
 
         /// <summary>
         /// Gets the build number for the current build.
@@ -50,10 +41,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The build number.
         /// </value>
-        public int BuildNumber
-        {
-            get { return GetEnvironmentInteger("TRAVIS_BUILD_NUMBER"); }
-        }
+        public int BuildNumber => GetEnvironmentInteger("TRAVIS_BUILD_NUMBER");
 
         /// <summary>
         /// Gets the test result indicating if the current build is successful or broken.
@@ -61,10 +49,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The test result.
         /// </value>
-        public int TestResult
-        {
-            get { return GetEnvironmentInteger("TRAVIS_TEST_RESULT"); }
-        }
+        public int TestResult => GetEnvironmentInteger("TRAVIS_TEST_RESULT");
 
         /// <summary>
         /// Gets the tag name for the current build.
@@ -72,10 +57,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The tag.
         /// </value>
-        public string Tag
-        {
-            get { return GetEnvironmentString("TRAVIS_TAG"); }
-        }
+        public string Tag => GetEnvironmentString("TRAVIS_TAG");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TravisCIBuildInfo"/> class.

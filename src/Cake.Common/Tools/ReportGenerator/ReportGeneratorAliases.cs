@@ -39,7 +39,7 @@ namespace Cake.Common.Tools.ReportGenerator
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             var reports = context.Globber.GetFiles(pattern);
             ReportGenerator(context, reports, targetDir);
@@ -64,7 +64,7 @@ namespace Cake.Common.Tools.ReportGenerator
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             var reports = context.Globber.GetFiles(pattern);
             ReportGenerator(context, reports, targetDir, settings);
@@ -143,7 +143,7 @@ namespace Cake.Common.Tools.ReportGenerator
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var runner = new ReportGeneratorRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);

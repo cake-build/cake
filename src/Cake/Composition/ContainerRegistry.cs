@@ -12,10 +12,7 @@ namespace Cake.Composition
     {
         private readonly List<ContainerRegistration> _registrations;
 
-        public IReadOnlyList<ContainerRegistration> Registrations
-        {
-            get { return _registrations; }
-        }
+        public IReadOnlyList<ContainerRegistration> Registrations => _registrations;
 
         public ContainerRegistry()
         {
@@ -26,7 +23,7 @@ namespace Cake.Composition
         {
             if (module == null)
             {
-                throw new ArgumentNullException("module");
+                throw new ArgumentNullException(nameof(module));
             }
 
             module.Register(this);

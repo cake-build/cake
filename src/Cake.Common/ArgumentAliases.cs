@@ -43,7 +43,7 @@ namespace Cake.Common
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             return context.Arguments.HasArgument(name);
         }
@@ -73,7 +73,7 @@ namespace Cake.Common
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var value = context.Arguments.GetArgument(name);
@@ -110,7 +110,7 @@ namespace Cake.Common
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var value = context.Arguments.GetArgument(name);

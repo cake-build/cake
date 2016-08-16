@@ -50,11 +50,11 @@ namespace Cake.Common.Tools.NuGet.Push
         {
             if (packageFilePath == null)
             {
-                throw new ArgumentNullException("packageFilePath");
+                throw new ArgumentNullException(nameof(packageFilePath));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetArguments(packageFilePath, settings));

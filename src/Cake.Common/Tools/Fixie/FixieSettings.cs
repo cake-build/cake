@@ -14,8 +14,6 @@ namespace Cake.Common.Tools.Fixie
     /// </summary>
     public sealed class FixieSettings : ToolSettings
     {
-        private readonly IDictionary<string, IList<string>> _options = new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
-
         /// <summary>
         /// Gets or sets the file to be used to output NUnit style of XML results.
         /// </summary>
@@ -46,9 +44,6 @@ namespace Cake.Common.Tools.Fixie
         /// <value>
         /// The collection of keys and values.
         /// </value>
-        public IDictionary<string, IList<string>> Options
-        {
-            get { return _options; }
-        }
+        public IDictionary<string, IList<string>> Options { get; } = new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
     }
 }

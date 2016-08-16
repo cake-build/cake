@@ -54,7 +54,7 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("DupFinder: Process was not started.", result.Message);
+                Assert.Equal("DupFinder: Process was not started.", result?.Message);
             }
 
             [Fact]
@@ -69,7 +69,7 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("DupFinder: Process returned an error (exit code 1).", result.Message);
+                Assert.Equal("DupFinder: Process returned an error (exit code 1).", result?.Message);
             }
 
             [Fact]

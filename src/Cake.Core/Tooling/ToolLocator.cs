@@ -26,15 +26,15 @@ namespace Cake.Core.Tooling
         {
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             if (repository == null)
             {
-                throw new ArgumentNullException("repository");
+                throw new ArgumentNullException(nameof(repository));
             }
             if (strategy == null)
             {
-                throw new ArgumentNullException("strategy");
+                throw new ArgumentNullException(nameof(strategy));
             }
 
             _environment = environment;
@@ -50,7 +50,7 @@ namespace Cake.Core.Tooling
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
 
             _repository.Register(path.MakeAbsolute(_environment));
@@ -65,11 +65,11 @@ namespace Cake.Core.Tooling
         {
             if (tool == null)
             {
-                throw new ArgumentNullException("tool");
+                throw new ArgumentNullException(nameof(tool));
             }
             if (string.IsNullOrWhiteSpace(tool))
             {
-                throw new ArgumentException("Tool name cannot be empty.", "tool");
+                throw new ArgumentException("Tool name cannot be empty.", nameof(tool));
             }
 
             return _strategy.Resolve(_repository, tool);

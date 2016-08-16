@@ -25,15 +25,15 @@ namespace Cake.Common.Tools.SignTool
 
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
             if (registry == null)
             {
-                throw new ArgumentNullException("registry");
+                throw new ArgumentNullException(nameof(registry));
             }
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
         }
 
@@ -96,18 +96,15 @@ namespace Cake.Common.Tools.SignTool
                 foreach (var key in keyName)
                 {
                     var sdkKey = root.OpenKey(key);
-                    if (sdkKey != null)
+                    var installationFolder = sdkKey?.GetValue("InstallationFolder") as string;
+                    if (!string.IsNullOrWhiteSpace(installationFolder))
                     {
-                        var installationFolder = sdkKey.GetValue("InstallationFolder") as string;
-                        if (!string.IsNullOrWhiteSpace(installationFolder))
-                        {
-                            var installationPath = new DirectoryPath(installationFolder);
-                            var signToolPath = installationPath.CombineWithFilePath("bin\\signtool.exe");
+                        var installationPath = new DirectoryPath(installationFolder);
+                        var signToolPath = installationPath.CombineWithFilePath("bin\\signtool.exe");
 
-                            if (_fileSystem.Exist(signToolPath))
-                            {
-                                return signToolPath;
-                            }
+                        if (_fileSystem.Exist(signToolPath))
+                        {
+                            return signToolPath;
                         }
                     }
                 }

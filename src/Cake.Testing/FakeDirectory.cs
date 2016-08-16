@@ -16,8 +16,6 @@ namespace Cake.Testing
     public sealed class FakeDirectory : IDirectory
     {
         private readonly FakeFileSystemTree _tree;
-        private readonly DirectoryPath _path;
-        private readonly FakeDirectoryContent _content;
 
         /// <summary>
         /// Gets a value indicating whether this <see cref="IFileSystemInfo" /> exists.
@@ -39,28 +37,23 @@ namespace Cake.Testing
         /// Gets the path to the directory.
         /// </summary>
         /// <value>The path.</value>
-        public DirectoryPath Path
-        {
-            get { return _path; }
-        }
+        public DirectoryPath Path { get; }
 
-        Path IFileSystemInfo.Path
-        {
-            get { return _path; }
-        }
+        /// <summary>
+        /// Gets the path to the entry.
+        /// </summary>
+        /// <value>The path.</value>
+        Path IFileSystemInfo.Path => Path;
 
         internal FakeDirectory Parent { get; set; }
 
-        internal FakeDirectoryContent Content
-        {
-            get { return _content; }
-        }
+        internal FakeDirectoryContent Content { get; }
 
         internal FakeDirectory(FakeFileSystemTree tree, DirectoryPath path)
         {
             _tree = tree;
-            _path = path;
-            _content = new FakeDirectoryContent(this, tree.Comparer);
+            Path = path;
+            Content = new FakeDirectoryContent(this, tree.Comparer);
         }
 
         /// <summary>
@@ -90,7 +83,7 @@ namespace Cake.Testing
         {
             var result = new List<IDirectory>();
             var stack = new Stack<FakeDirectory>();
-            foreach (var child in _content.Directories.Values)
+            foreach (var child in Content.Directories.Values)
             {
                 if (child.Exists)
                 {

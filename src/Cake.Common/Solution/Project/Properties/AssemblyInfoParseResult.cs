@@ -12,19 +12,6 @@ namespace Cake.Common.Solution.Project.Properties
     /// </summary>
     public sealed class AssemblyInfoParseResult
     {
-        private readonly bool _clsCompliant;
-        private readonly string _company;
-        private readonly bool _comVisible;
-        private readonly string _configuration;
-        private readonly string _copyright;
-        private readonly string _description;
-        private readonly string _assemblyFileVersion;
-        private readonly string _guid;
-        private readonly string _assemblyInformationalVersion;
-        private readonly string _product;
-        private readonly string _title;
-        private readonly string _trademark;
-        private readonly string _assemblyVersion;
         private readonly List<string> _internalsVisibleTo;
 
         /// <summary>
@@ -33,19 +20,13 @@ namespace Cake.Common.Solution.Project.Properties
         /// <value>
         ///   <c>true</c> if the assembly is CLS compliant; otherwise, <c>false</c>.
         /// </value>
-        public bool ClsCompliant
-        {
-            get { return _clsCompliant; }
-        }
+        public bool ClsCompliant { get; }
 
         /// <summary>
         /// Gets the assembly company attribute.
         /// </summary>
         /// <value>The assembly company attribute.</value>
-        public string Company
-        {
-            get { return _company; }
-        }
+        public string Company { get; }
 
         /// <summary>
         /// Gets a value indicating whether the assembly is accessible from COM.
@@ -53,109 +34,73 @@ namespace Cake.Common.Solution.Project.Properties
         /// <value>
         ///   <c>true</c> if the assembly is accessible from COM; otherwise, <c>false</c>.
         /// </value>
-        public bool ComVisible
-        {
-            get { return _comVisible; }
-        }
+        public bool ComVisible { get; }
 
         /// <summary>
         /// Gets the assembly configuration attribute.
         /// </summary>
         /// <value>The assembly Configuration attribute.</value>
-        public string Configuration
-        {
-            get { return _configuration; }
-        }
+        public string Configuration { get; }
 
         /// <summary>
         /// Gets the assembly copyright attribute.
         /// </summary>
         /// <value>The assembly copyright attribute.</value>
-        public string Copyright
-        {
-            get { return _copyright; }
-        }
+        public string Copyright { get; }
 
         /// <summary>
         /// Gets the assembly's description attribute.
         /// </summary>
         /// <value>The assembly's Description attribute.</value>
-        public string Description
-        {
-            get { return _description; }
-        }
+        public string Description { get; }
 
         /// <summary>
         /// Gets the assembly file version.
         /// </summary>
         /// <value>The assembly file version.</value>
-        public string AssemblyFileVersion
-        {
-            get { return _assemblyFileVersion; }
-        }
+        public string AssemblyFileVersion { get; }
 
         /// <summary>
         /// Gets the assembly GUID attribute.
         /// </summary>
         /// <value>The assembly GUID attribute.</value>
-        public string Guid
-        {
-            get { return _guid; }
-        }
+        public string Guid { get; }
 
         /// <summary>
         /// Gets the assembly informational version.
         /// </summary>
         /// <value>The assembly informational version.</value>
-        public string AssemblyInformationalVersion
-        {
-            get { return _assemblyInformationalVersion; }
-        }
+        public string AssemblyInformationalVersion { get; }
 
         /// <summary>
         /// Gets the assembly product Attribute.
         /// </summary>
         /// <value>The assembly product attribute.</value>
-        public string Product
-        {
-            get { return _product; }
-        }
+        public string Product { get; }
 
         /// <summary>
         /// Gets the assembly title Attribute.
         /// </summary>
         /// <value>The assembly Title attribute.</value>
-        public string Title
-        {
-            get { return _title; }
-        }
+        public string Title { get; }
 
         /// <summary>
         /// Gets the assembly trademark Attribute.
         /// </summary>
         /// <value>The assembly Trademark attribute.</value>
-        public string Trademark
-        {
-            get { return _trademark; }
-        }
+        public string Trademark { get; }
 
         /// <summary>
         /// Gets the assembly version.
         /// </summary>
         /// <value>The assembly version.</value>
-        public string AssemblyVersion
-        {
-            get { return _assemblyVersion; }
-        }
+        public string AssemblyVersion { get; }
 
         /// <summary>
         /// Gets the assemblies that internals are visible to.
         /// </summary>
         /// <value>The assemblies that internals are visible to.</value>
-        public ICollection<string> InternalsVisibleTo
-        {
-            get { return _internalsVisibleTo; }
-        }
+        public ICollection<string> InternalsVisibleTo => _internalsVisibleTo;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AssemblyInfoParseResult"/> class.
@@ -189,19 +134,19 @@ namespace Cake.Common.Solution.Project.Properties
             string assemblyVersion,
             IEnumerable<string> internalsVisibleTo)
         {
-            _clsCompliant = !string.IsNullOrWhiteSpace(clsCompliant) && bool.Parse(clsCompliant);
-            _company = company ?? string.Empty;
-            _comVisible = !string.IsNullOrWhiteSpace(comVisible) && bool.Parse(comVisible);
-            _configuration = configuration ?? string.Empty;
-            _copyright = copyright ?? string.Empty;
-            _description = description ?? string.Empty;
-            _assemblyFileVersion = assemblyFileVersion ?? string.Empty;
-            _guid = guid ?? string.Empty;
-            _assemblyInformationalVersion = assemblyInformationalVersion ?? string.Empty;
-            _product = product ?? string.Empty;
-            _title = title ?? string.Empty;
-            _trademark = trademark ?? string.Empty;
-            _assemblyVersion = assemblyVersion ?? string.Empty;
+            ClsCompliant = !string.IsNullOrWhiteSpace(clsCompliant) && bool.Parse(clsCompliant);
+            Company = company ?? string.Empty;
+            ComVisible = !string.IsNullOrWhiteSpace(comVisible) && bool.Parse(comVisible);
+            Configuration = configuration ?? string.Empty;
+            Copyright = copyright ?? string.Empty;
+            Description = description ?? string.Empty;
+            AssemblyFileVersion = assemblyFileVersion ?? string.Empty;
+            Guid = guid ?? string.Empty;
+            AssemblyInformationalVersion = assemblyInformationalVersion ?? string.Empty;
+            Product = product ?? string.Empty;
+            Title = title ?? string.Empty;
+            Trademark = trademark ?? string.Empty;
+            AssemblyVersion = assemblyVersion ?? string.Empty;
             _internalsVisibleTo = new List<string>(internalsVisibleTo ?? Enumerable.Empty<string>());
         }
     }

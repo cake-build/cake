@@ -52,11 +52,11 @@ namespace Cake.Common.Tools.InspectCode
         {
             if (solution == null)
             {
-                throw new ArgumentNullException("solution");
+                throw new ArgumentNullException(nameof(solution));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetArguments(settings, solution));
@@ -75,7 +75,7 @@ namespace Cake.Common.Tools.InspectCode
         {
             if (configFile == null)
             {
-                throw new ArgumentNullException("configFile");
+                throw new ArgumentNullException(nameof(configFile));
             }
 
             Run(new InspectCodeSettings(), GetConfigArgument(configFile));

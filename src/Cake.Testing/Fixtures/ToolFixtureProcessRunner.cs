@@ -29,10 +29,7 @@ namespace Cake.Testing.Fixtures
         /// Gets the results.
         /// </summary>
         /// <value>The results.</value>
-        public IReadOnlyList<TFixtureResult> Results
-        {
-            get { return _results; }
-        }
+        public IReadOnlyList<TFixtureResult> Results => _results;
 
         internal ToolFixtureProcessRunner(Func<FilePath, ProcessSettings, TFixtureResult> factory)
         {

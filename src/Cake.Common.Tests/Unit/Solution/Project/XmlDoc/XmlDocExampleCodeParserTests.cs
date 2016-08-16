@@ -39,7 +39,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.XmlDoc
 
                 // Then
                 Assert.IsType<FileNotFoundException>(result);
-                Assert.Equal("Supplied xml file not found.", result.Message);
+                Assert.Equal("Supplied xml file not found.", result?.Message);
             }
 
             [Fact]
