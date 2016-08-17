@@ -52,7 +52,7 @@
     "net45": {
       "dependencies": {
         "Autofac": "3.5.2",
-        "NuGet.Core": "2.8.6",
+        "NuGet.Core": "2.12.0",
         "Mono.CSharp": "4.0.0.143",
         "Roslyn.Compilers.Common": "1.2.20906.2",
         "Roslyn.Compilers.CSharp": "1.2.20906.2",
