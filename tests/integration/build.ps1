@@ -8,7 +8,7 @@ Param(
 # FUNCTIONS
 #####################################################################
 
-Function CleanDirectory([string]$Directory) 
+Function CleanDirectory([string]$Directory)
 {
     if(Test-Path $Directory) {
         Remove-Item -Path $Directory -Recurse -Force
@@ -16,12 +16,12 @@ Function CleanDirectory([string]$Directory)
     New-Item -Path $Directory -Type directory | out-null;
 }
 
-Function BuildCake([string]$ScriptRoot) 
+Function BuildCake([string]$ScriptRoot)
 {
     # Clean the build directory.
     $RootDirectory = (Join-Path $ScriptRoot "../..");
     CleanDirectory((Join-Path $RootDirectory "artifacts"))
-    
+
     # Build Cake.
     try  {
         Push-Location;
@@ -29,24 +29,21 @@ Function BuildCake([string]$ScriptRoot)
         Invoke-Expression "./build.ps1 -Target Copy-Files" | Out-Null;
         if($LASTEXITCODE -ne 0) {
             Throw "An error occured while building Cake.";
-        }        
+        }
     }
     finally {
-        Pop-Location    
+        Pop-Location
     }
 }
 
 Function GetCakePath([string]$ScriptRoot)
 {
-    # Find and return the built directory.
-    try {
-        Push-Location
-        Set-Location (Join-Path $PSScriptRoot "../..");
-        Return (Get-ChildItem -Path "./artifacts" -Filter "Cake.exe" -Recurse | Select -First 1).Directory.FullName;
-    }
-    finally { 
-        Pop-Location
-    }   
+    Return (Get-ChildItem -Path (Join-Path $ScriptRoot "../../artifacts" -Resolve) -Filter "Cake.exe" -Recurse | Sort-Object -Property LastWriteTime -Descending | Select -First 1).Directory.FullName
+}
+
+Function GetCakeCoreCLRPath([string]$ScriptRoot)
+{
+    Return (Get-ChildItem -Path (Join-Path $ScriptRoot "../../artifacts" -Resolve) -Filter "Cake.dll" -Recurse | Sort-Object -Property LastWriteTime -Descending | Select -First 1).Directory.FullName
 }
 
 #####################################################################
@@ -57,6 +54,9 @@ $PSScriptRoot = split-path -parent $MyInvocation.MyCommand.Definition;
 $Script = (Join-Path $PSScriptRoot "windows.cake");
 $ToolsPath = Join-Path $PSScriptRoot "tools";
 $NuGetPath = Join-Path $ToolsPath "nuget.exe";
+$DotNetChannel = "preview";
+$DotNetVersion = "1.0.0-preview2-003121";
+$DotNetInstallerUri = "https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0-preview2/scripts/obtain/dotnet-install.ps1";
 $NuGetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe";
 
 # Make sure the tools directory exist.
@@ -74,6 +74,49 @@ if (!(Test-Path $NuGetPath)) {
     }
 }
 
+###########################################################################
+# INSTALL .NET CORE CLI
+###########################################################################
+
+Function Remove-PathVariable([string]$VariableToRemove)
+{
+    $path = [Environment]::GetEnvironmentVariable("PATH", "User")
+    if ($path -ne $null)
+    {
+        $newItems = $path.Split(';', [StringSplitOptions]::RemoveEmptyEntries) | Where-Object { "$($_)" -inotlike $VariableToRemove }
+        [Environment]::SetEnvironmentVariable("PATH", [System.String]::Join(';', $newItems), "User")
+    }
+
+    $path = [Environment]::GetEnvironmentVariable("PATH", "Process")
+    if ($path -ne $null)
+    {
+        $newItems = $path.Split(';', [StringSplitOptions]::RemoveEmptyEntries) | Where-Object { "$($_)" -inotlike $VariableToRemove }
+        [Environment]::SetEnvironmentVariable("PATH", [System.String]::Join(';', $newItems), "Process")
+    }
+}
+
+# Get .NET Core CLI path if installed.
+$FoundDotNetCliVersion = $null;
+if (Get-Command dotnet -ErrorAction SilentlyContinue) {
+    $FoundDotNetCliVersion = dotnet --version;
+}
+
+if($FoundDotNetCliVersion -ne $DotNetVersion) {
+    $InstallPath = Join-Path $PSScriptRoot ".dotnet"
+    if (!(Test-Path $InstallPath)) {
+        mkdir -Force $InstallPath | Out-Null;
+    }
+    (New-Object System.Net.WebClient).DownloadFile($DotNetInstallerUri, "$InstallPath\dotnet-install.ps1");
+    & $InstallPath\dotnet-install.ps1 -Channel $DotNetChannel -Version $DotNetVersion -InstallDir $InstallPath;
+
+    Remove-PathVariable "$InstallPath"
+    $env:PATH = "$InstallPath;$env:PATH"
+    $env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+    $env:DOTNET_CLI_TELEMETRY_OPTOUT=1
+}
+
+dotnet --info
+
 #####################################################################
 # BUILD CAKE
 #####################################################################
@@ -81,7 +124,7 @@ if (!(Test-Path $NuGetPath)) {
 # Build Cake.
 if(!$SkipBuildingCake.IsPresent) {
     Write-Host "Building Cake..."
-    BuildCake($PSScriptRoot);
+    BuildCake($PSScriptRoot)
 }
 
 # Get the built Cake path.
@@ -90,20 +133,36 @@ if([string]::IsNullOrWhiteSpace($BuiltCakePath)) {
     Throw "Could not resolve built Cake path."
 }
 
-# Get the local Cake path. 
-$CakePath = Join-Path $ToolsPath "Cake";
-$CakeExePath = Join-Path $CakePath "Cake.exe";
+$BuiltCakeCoreCLRPath = GetCakeCoreCLRPath($PSScriptRoot);
+if([string]::IsNullOrWhiteSpace($BuiltCakeCoreCLRPath)) {
+    Throw "Could not resolve built Cake CoreCLR path."
+}
+
+# Get the local Cake path.
+$CakePath = Join-Path $ToolsPath "Cake"
+$CakeCoreCLRPath = Join-Path $ToolsPath "Cake.CoreCLR"
+$CakeExePath = Join-Path $CakePath "Cake.exe"
+$CakeDllPath = Join-Path $CakeCoreCLRPath "Cake.dll"
 
 # Clean the local Cake path.
 if(!$SkipBuildingCake.IsPresent) {
-  CleanDirectory($CakePath);
+  CleanDirectory($CakePath)
   Copy-Item "$BuiltCakePath/*.*" $CakePath -Recurse
+
+  CleanDirectory($CakeCoreCLRPath)
+  Copy-Item "$BuiltCakeCoreCLRPath/*.*" $CakeCoreCLRPath -Recurse
 }
 
 # Ensure that Cake can be found where we expect it to.
 if(!(Test-Path $CakeExePath)) {
-  Throw "Could not locate Cake at $CakeExePath.";
+  Throw "Could not locate Cake at $CakeExePath."
 }
+
+# Ensure that Cake CoreCLR can be found where we expect it to.
+if(!(Test-Path $CakeDllPath)) {
+  Throw "Could not locate Cake CoreCLR at $CakeDllPath."
+}
+
 
 #####################################################################
 # SETUP ENVIRONMENT
@@ -117,6 +176,12 @@ $Env:MyEnvironmentVariable = "Hello World";
 
 # Run tests using new Cake.
 &$CakeExePath "--version"
-Write-Output "Running integration tests...";
+Write-Output "Running integration tests..."
 &$CakeExePath "$Script" "--target=$Target" "--verbosity=quiet" "--platform=windows" "--customarg=hello"
-Write-Output "";
+Write-Output ""
+
+# Run tests using new Cake.
+&dotnet $CakeDllPath "--version"
+Write-Output "Running CoreCLR integration tests..."
+&dotnet $CakeDllPath "$Script" "--target=$Target" "--verbosity=quiet" "--platform=windows" "--customarg=hello"
+Write-Output ""
