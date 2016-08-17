@@ -51,9 +51,9 @@ namespace Cake.Common.Tools.VSTest
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
-            settings.LoggerName = loggerName;
+            settings.Logger = loggerName;
             return settings;
         }
     }

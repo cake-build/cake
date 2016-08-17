@@ -87,9 +87,9 @@ namespace Cake.Common.Tools.VSTest
                 builder.Append(string.Format(CultureInfo.InvariantCulture, "/Framework:{0}", settings.FrameworkVersion.ToString().Replace("NET", "Framework")));
             }
 
-            if (!string.IsNullOrEmpty(settings.LoggerName))
+            if (!string.IsNullOrEmpty(settings.Logger))
             {
-                builder.Append("/Logger:{0}", settings.LoggerName.Trim());
+                builder.Append("/Logger:{0}", settings.Logger.Trim());
             }
 
             return builder;

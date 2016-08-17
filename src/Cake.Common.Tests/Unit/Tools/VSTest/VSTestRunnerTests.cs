@@ -184,7 +184,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSTest
         {
             // Given
             var fixture = new VSTestRunnerFixture();
-            fixture.Settings.LoggerName = "MyCustomLogger";
+            fixture.Settings.Logger = "MyCustomLogger";
 
             // When
             var result = fixture.Run();
