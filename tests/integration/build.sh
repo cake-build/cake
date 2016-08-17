@@ -4,7 +4,7 @@
 # FUNCTIONS
 #####################################################################
 
-function cleanDirectory() 
+function cleanDirectory()
 {
     if [ ! -z "$1" ]; then
         if [ -d $1 ]; then
@@ -35,6 +35,8 @@ for i in "$@"; do
     shift
 done
 
+mono --version
+
 # Make sure the tools folder exist.
 if [ ! -d $TOOLS_DIR ]; then
   mkdir $TOOLS_DIR
@@ -49,6 +51,22 @@ if [ ! -f $NUGET_EXE ]; then
         exit 1
     fi
 fi
+
+###########################################################################
+# INSTALL .NET CORE CLI
+###########################################################################
+
+echo "Installing .NET CLI..."
+if [ ! -d "$SCRIPT_DIR/.dotnet" ]; then
+  mkdir "$SCRIPT_DIR/.dotnet"
+fi
+curl -Lsfo "$SCRIPT_DIR/.dotnet/dotnet-install.sh" https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0-preview2/scripts/obtain/dotnet-install.sh
+sudo bash "$SCRIPT_DIR/.dotnet/dotnet-install.sh" --version 1.0.0-preview2-003121 --install-dir .dotnet --no-path
+export PATH="$SCRIPT_DIR/.dotnet":$PATH
+export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+export DOTNET_CLI_TELEMETRY_OPTOUT=1
+"$SCRIPT_DIR/.dotnet/dotnet" --info
+
 
 #####################################################################
 # BUILD CAKE
@@ -73,23 +91,40 @@ if [ ! -d $BUILT_CAKE_DIR ]; then
     exit 1
 fi
 
+# Get the built Cake CorCLR path.
+BUILT_CAKE_CORECLR_DIR=$(dirname $(find $ARTIFACTS_DIR -name 'Cake.dll'))
+if [ ! -d $BUILT_CAKE_CORECLR_DIR ]; then
+    echo "Could not locate built Cake CoreCLR."
+    exit 1
+fi
+
 # Get the local Cake path.
 CAKE_DIR=$TOOLS_DIR/Cake
 CAKE_EXE=$CAKE_DIR/Cake.exe
+CAKE_CORECLR_DIR=$TOOLS_DIR/Cake.CoreCLR
+CAKE_DLL=$CAKE_CORECLR_DIR/Cake.dll
 
 # Clean the local Cake path.
 if [ ${SKIP_BUILDING_CAKE} -eq 0 ]; then
     $(cleanDirectory $CAKE_DIR) >/dev/null
+    $(cleanDirectory $CAKE_CORECLR_DIR) >/dev/null
 fi
 
 # Copy the built Cake to the local Cake path.
 if [ ${SKIP_BUILDING_CAKE} -eq 0 ]; then
     cp -r "$BUILT_CAKE_DIR/"*.* "$CAKE_DIR/"
+    cp -r "$BUILT_CAKE_CORECLR_DIR/"*.* "$CAKE_CORECLR_DIR/"
 fi
 
 # Ensure that Cake can be found where we expect it to.
 if [ ! -f $CAKE_EXE ]; then
     echo "Could not find Cake.exe at '$CAKE_EXE'."
+    exit 1
+fi
+
+# Ensure that Cake CoreLCR can be found where we expect it to.
+if [ ! -f $CAKE_DLL ]; then
+    echo "Could not find CoreCLR Cake.dll at '$CAKE_DLL'."
     exit 1
 fi
 
@@ -104,4 +139,9 @@ export MyEnvironmentVariable="Hello World"
 #####################################################################
 
 mono $CAKE_EXE --version
+echo "Running Mono integration tests..."
 mono $CAKE_EXE "$SCRIPT" "--target=$TARGET" "--verbosity=quiet" "--platform=posix" "--customarg=hello"
+
+dotnet $CAKE_DLL --version
+echo "Running CoreCLR integration tests..."
+dotnet $CAKE_DLL "$SCRIPT" "--target=$TARGET" "--verbosity=quiet" "--platform=posix" "--customarg=hello"
