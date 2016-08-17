@@ -54,7 +54,7 @@ namespace Cake.Common.Tools.VSTest
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            base.Run(settings, GetArguments(assemblyPaths, settings));
+            Run(settings, GetArguments(assemblyPaths, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(IEnumerable<FilePath> assemblyPaths, VSTestSettings settings)
