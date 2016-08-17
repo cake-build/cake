@@ -18,7 +18,7 @@ var target = Argument<string>("target", "Run-All-Tests");
 // SETUP / TEARDOWN
 //////////////////////////////////////////////////
 
-Setup(() =>
+Setup(ctx =>
 {
     CleanDirectory(Paths.Temp);
 });
