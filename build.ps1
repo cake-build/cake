@@ -51,12 +51,19 @@ if (!(Test-Path $ToolPath)) {
 
 Function Remove-PathVariable([string]$VariableToRemove)
 {
-  $path = [Environment]::GetEnvironmentVariable("PATH", "User")
-  $newItems = $path.Split(';') | Where-Object { $_.ToString() -inotlike $VariableToRemove }
-  [Environment]::SetEnvironmentVariable("PATH", [System.String]::Join(';', $newItems), "User")
-  $path = [Environment]::GetEnvironmentVariable("PATH", "Process")
-  $newItems = $path.Split(';') | Where-Object { $_.ToString() -inotlike $VariableToRemove }
-  [Environment]::SetEnvironmentVariable("PATH", [System.String]::Join(';', $newItems), "Process")
+    $path = [Environment]::GetEnvironmentVariable("PATH", "User")
+    if ($path -ne $null)
+    {
+        $newItems = $path.Split(';', [StringSplitOptions]::RemoveEmptyEntries) | Where-Object { "$($_)" -inotlike $VariableToRemove }
+        [Environment]::SetEnvironmentVariable("PATH", [System.String]::Join(';', $newItems), "User")
+    }
+
+    $path = [Environment]::GetEnvironmentVariable("PATH", "Process")
+    if ($path -ne $null)
+    {
+        $newItems = $path.Split(';', [StringSplitOptions]::RemoveEmptyEntries) | Where-Object { "$($_)" -inotlike $VariableToRemove }
+        [Environment]::SetEnvironmentVariable("PATH", [System.String]::Join(';', $newItems), "Process")
+    }
 }
 
 # Get .NET Core CLI path if installed.
@@ -84,7 +91,7 @@ if($FoundDotNetCliVersion -ne $DotNetVersion) {
 ###########################################################################
 
 # Make sure nuget.exe exists.
-$NugetPath = Join-Path $ToolPath "nuget.exe" 
+$NugetPath = Join-Path $ToolPath "nuget.exe"
 if (!(Test-Path $NugetPath)) {
     Write-Host "Downloading NuGet.exe..."
     (New-Object System.Net.WebClient).DownloadFile($NugetUrl, $NugetPath);
