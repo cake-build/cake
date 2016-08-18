@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.Execute;
 using Cake.Common.Tools.DotNetCore.Pack;
@@ -119,7 +120,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Restore")]
         public static void DotNetCoreRestore(this ICakeContext context)
         {
-            context.DotNetCoreRestore(null, null);
+            context.DotNetCoreRestore(string.Empty, null);
         }
 
         /// <summary>
@@ -129,7 +130,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="root">List of projects and project folders to restore. Each value can be: a path to a project.json or global.json file, or a folder to recursively search for project.json files.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreRestore("./src/*");
+        ///     DotNetCoreRestore("./src/");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -165,7 +166,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Restore")]
         public static void DotNetCoreRestore(this ICakeContext context, DotNetCoreRestoreSettings settings)
         {
-            context.DotNetCoreRestore(null, settings);
+            context.DotNetCoreRestore(string.Empty, settings);
         }
 
         /// <summary>
@@ -186,7 +187,7 @@ namespace Cake.Common.Tools.DotNetCore
         ///         InferRuntimes = new[] {"runtime1", "runtime2"}
         ///     };
         ///
-        ///     DotNetCoreRestore("./src/*", settings);
+        ///     DotNetCoreRestore("./src/", settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -199,13 +200,259 @@ namespace Cake.Common.Tools.DotNetCore
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (settings == null)
+            var restorer = new DotNetCoreRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);
+            restorer.Restore(root, settings ?? new DotNetCoreRestoreSettings());
+        }
+
+        /// <summary>
+        /// Restore all NuGet Packages for the specified project.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project.</param>
+        /// <example>
+        /// <code>
+        ///     DotNetCoreRestore("./src/global.json");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Restore")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Restore")]
+        public static void DotNetCoreRestore(this ICakeContext context, FilePath project)
+        {
+            if (context == null)
             {
-                settings = new DotNetCoreRestoreSettings();
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            context.DotNetCoreRestore(project, null);
+        }
+
+        /// <summary>
+        /// Restore all NuGet Packages for the specified project.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetCoreRestoreSettings
+        ///     {
+        ///         Sources = new[] {"https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2"},
+        ///         FallbackSources = new[] {"https://www.example.com/fallbacknugetfeed"},
+        ///         PackagesDirectory = "./packages",
+        ///         Verbosity = Information,
+        ///         DisableParallel = true,
+        ///         InferRuntimes = new[] {"runtime1", "runtime2"}
+        ///     };
+        ///     DotNetCoreRestore("./src/global.json", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Restore")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Restore")]
+        public static void DotNetCoreRestore(this ICakeContext context, FilePath project, DotNetCoreRestoreSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (project == null)
+            {
+                throw new ArgumentNullException(nameof(project));
+            }
+
+            var projects = new[] { project };
+            context.DotNetCoreRestore(projects, settings ?? new DotNetCoreRestoreSettings());
+        }
+
+        /// <summary>
+        /// Restore all NuGet Packages in the specified list of file paths.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="projectFiles">List of projects to restore.</param>
+        /// <example>
+        /// <code>
+        ///     var projects = GetFiles("./src/**/project.json");
+        ///     DotNetCoreRestore(projects, settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Restore")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Restore")]
+        public static void DotNetCoreRestore(this ICakeContext context, IEnumerable<FilePath> projectFiles)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            context.DotNetCoreRestore(projectFiles, null);
+        }
+
+        /// <summary>
+        /// Restore all NuGet Packages in the specified list of file paths.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="projectFiles">List of projects to restore.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        ///     var settings = new DotNetCoreRestoreSettings
+        ///     {
+        ///         Sources = new[] {"https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2"},
+        ///         FallbackSources = new[] {"https://www.example.com/fallbacknugetfeed"},
+        ///         PackagesDirectory = "./packages",
+        ///         Verbosity = Information,
+        ///         DisableParallel = true,
+        ///         InferRuntimes = new[] {"runtime1", "runtime2"}
+        ///     };
+        ///     var projects = GetFiles("./src/**/project.json");
+        ///     DotNetCoreRestore(projects, settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Restore")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Restore")]
+        public static void DotNetCoreRestore(this ICakeContext context, IEnumerable<FilePath> projectFiles, DotNetCoreRestoreSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
             }
 
             var restorer = new DotNetCoreRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);
-            restorer.Restore(root, settings);
+            restorer.Restore(projectFiles, settings ?? new DotNetCoreRestoreSettings());
+        }
+
+        /// <summary>
+        /// Restore all NuGet Packages in the specified directory.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="directory">The directories.</param>
+        /// <example>
+        /// <code>
+        ///     DotNetCoreRestore("./src");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Restore")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Restore")]
+        public static void DotNetCoreRestore(this ICakeContext context, DirectoryPath directory)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            context.DotNetCoreRestore(directory, null);
+        }
+
+        /// <summary>
+        /// Restore all NuGet Packages in the specified directory.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="directory">The directory.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        ///   <code>
+        ///     var settings = new DotNetCoreRestoreSettings
+        ///     {
+        ///         Sources = new[] {"https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2"},
+        ///         FallbackSources = new[] {"https://www.example.com/fallbacknugetfeed"},
+        ///         PackagesDirectory = "./packages",
+        ///         Verbosity = Information,
+        ///         DisableParallel = true,
+        ///         InferRuntimes = new[] {"runtime1", "runtime2"}
+        ///     };
+        ///     DotNetCoreRestore("./src", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Restore")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Restore")]
+        public static void DotNetCoreRestore(this ICakeContext context, DirectoryPath directory, DotNetCoreRestoreSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (directory == null)
+            {
+                throw new ArgumentNullException(nameof(directory));
+            }
+
+            var directories = new[] { directory };
+            context.DotNetCoreRestore(directories, settings ?? new DotNetCoreRestoreSettings());
+        }
+
+        /// <summary>
+        /// Restore all NuGet Packages in the specified list of directories.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="directories">The directories.</param>
+        /// <example>
+        /// <code>
+        ///     var settings = new DotNetCoreRestoreSettings
+        ///     {
+        ///         Sources = new[] {"https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2"},
+        ///         FallbackSources = new[] {"https://www.example.com/fallbacknugetfeed"},
+        ///         PackagesDirectory = "./packages",
+        ///         Verbosity = Information,
+        ///         DisableParallel = true,
+        ///         InferRuntimes = new[] {"runtime1", "runtime2"}
+        ///     };
+        ///     var directories = new[] { "./src", "./test" };
+        ///     DotNetCoreRestore(directories, settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Restore")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Restore")]
+        public static void DotNetCoreRestore(this ICakeContext context, IEnumerable<DirectoryPath> directories)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            context.DotNetCoreRestore(directories, null);
+        }
+
+        /// <summary>
+        /// Restore all NuGet Packages in the specified list of directories.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="directories">The directories.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        ///     var settings = new DotNetCoreRestoreSettings
+        ///     {
+        ///         Sources = new[] {"https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2"},
+        ///         FallbackSources = new[] {"https://www.example.com/fallbacknugetfeed"},
+        ///         PackagesDirectory = "./packages",
+        ///         Verbosity = Information,
+        ///         DisableParallel = true,
+        ///         InferRuntimes = new[] {"runtime1", "runtime2"}
+        ///     };
+        ///     var directories = new[] { "./src", "./test" };
+        ///     DotNetCoreRestore(directories, settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Restore")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Restore")]
+        public static void DotNetCoreRestore(this ICakeContext context, IEnumerable<DirectoryPath> directories, DotNetCoreRestoreSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var restorer = new DotNetCoreRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);
+            restorer.Restore(directories, settings ?? new DotNetCoreRestoreSettings());
         }
 
         /// <summary>
@@ -477,7 +724,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
         public static void DotNetCoreTest(this ICakeContext context)
         {
-            context.DotNetCoreTest(null, null);
+            context.DotNetCoreTest(string.Empty, null);
         }
 
         /// <summary>
@@ -506,12 +753,12 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        ///     var settings = new DotNetCoreRunSettings
+        ///     var settings = new DotNetCoreTestSettings
         ///     {
         ///         Configuration = "Release"
         ///     };
         ///
-        ///     DotNetCoreRun("./test/Project.Tests", settings);
+        ///     DotNetCoreTest("./test/Project.Tests", settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -524,13 +771,233 @@ namespace Cake.Common.Tools.DotNetCore
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (settings == null)
+            var tester = new DotNetCoreTester(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            tester.Test(project, settings ?? new DotNetCoreTestSettings());
+        }
+
+        /// <summary>
+        /// Test a list of projects with settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The list of project files.</param>
+        /// <example>
+        /// <code>
+        ///     DotNetCoreTest("./src/project.json", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Test")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
+        public static void DotNetCoreTest(this ICakeContext context, FilePath project)
+        {
+            if (context == null)
             {
-                settings = new DotNetCoreTestSettings();
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            context.DotNetCoreRestore(project, null);
+        }
+
+        /// <summary>
+        /// Test a list of projects with settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The list of project files.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        ///     var settings = new DotNetCoreTestSettings
+        ///     {
+        ///         Configuration = "Release"
+        ///     };
+        ///
+        ///     DotNetCoreTest("./src/project.json", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Test")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
+        public static void DotNetCoreTest(this ICakeContext context, FilePath project, DotNetCoreTestSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (project == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            var projects = new[] { project };
+            context.DotNetCoreTest(projects, settings);
+        }
+
+        /// <summary>
+        /// Test a list of projects with settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="projectFiles">The list of project files.</param>
+        /// <example>
+        /// <code>
+        ///     var projects = GetFiles("./src/**/project.json");
+        ///     DotNetCoreTest(projects);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Test")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
+        public static void DotNetCoreTest(this ICakeContext context, IEnumerable<FilePath> projectFiles)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            context.DotNetCoreTest(projectFiles, null);
+        }
+
+        /// <summary>
+        /// Test a list of projects with settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="projectFiles">The list of project files.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        ///     var settings = new DotNetCoreTestSettings
+        ///     {
+        ///         Configuration = "Release"
+        ///     };
+        ///
+        ///     var projects = GetFiles("./src/**/project.json");
+        ///     DotNetCoreTest(projects, settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Test")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
+        public static void DotNetCoreTest(this ICakeContext context, IEnumerable<FilePath> projectFiles, DotNetCoreTestSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
             }
 
             var tester = new DotNetCoreTester(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            tester.Test(project, settings);
+            tester.Test(projectFiles, settings ?? new DotNetCoreTestSettings());
+        }
+
+        /// <summary>
+        /// Test a list directories containing projects.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="directory">The list of project files.</param>
+        /// <example>
+        /// <code>
+        ///     DotNetCoreTest("./src");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Test")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
+        public static void DotNetCoreTest(this ICakeContext context, DirectoryPath directory)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            context.DotNetCoreTest(directory, null);
+        }
+
+        /// <summary>
+        /// Test a directory containing projects.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="directory">The directory.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        ///     var settings = new DotNetCoreTestSettings
+        ///     {
+        ///         Configuration = "Release"
+        ///     };
+        ///
+        ///     DotNetCoreTest("./src", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Test")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
+        public static void DotNetCoreTest(this ICakeContext context, DirectoryPath directory, DotNetCoreTestSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (directory == null)
+            {
+                throw new ArgumentNullException(nameof(directory));
+            }
+
+            var directories = new[] { directory };
+            context.DotNetCoreTest(directories, settings);
+        }
+
+        /// <summary>
+        /// Test a list directories containing projects.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="directories">The list of project files.</param>
+        /// <example>
+        /// <code>
+        ///     var directories = new[] { "./src", "./test" };
+        ///     DotNetCoreTest(projects, settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Test")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
+        public static void DotNetCoreTest(this ICakeContext context, IEnumerable<DirectoryPath> directories)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            context.DotNetCoreTest(directories, null);
+        }
+
+        /// <summary>
+        /// Test a list directories containing projects.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="directories">The list of project files.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        ///     var settings = new DotNetCoreTestSettings
+        ///     {
+        ///         Configuration = "Release"
+        ///     };
+        ///     var directories = new[] { "./src", "./test" };
+        ///     DotNetCoreTest(projects, settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Test")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
+        public static void DotNetCoreTest(this ICakeContext context, IEnumerable<DirectoryPath> directories, DotNetCoreTestSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var tester = new DotNetCoreTester(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            tester.Test(directories, settings ?? new DotNetCoreTestSettings());
         }
     }
 }

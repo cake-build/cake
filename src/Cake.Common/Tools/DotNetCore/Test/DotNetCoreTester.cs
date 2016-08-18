@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -47,6 +49,32 @@ namespace Cake.Common.Tools.DotNetCore.Test
             Run(settings, GetArguments(project, settings));
         }
 
+        /// <summary>
+        /// Tests the project using the specified project files with arguments and settings.
+        /// </summary>
+        /// <param name="paths">The paths to test projects.</param>
+        /// <param name="settings">The settings.</param>
+        public void Test(IEnumerable<Path> paths, DotNetCoreTestSettings settings)
+        {
+            if (paths == null)
+            {
+                throw new ArgumentNullException(nameof(paths));
+            }
+
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            var pathsArray = paths as Path[] ?? paths.ToArray();
+            if (!pathsArray.Any())
+            {
+                throw new ArgumentException("No paths provided.", nameof(paths));
+            }
+
+            Run(settings, GetArguments(pathsArray, settings));
+        }
+
         private ProcessArgumentBuilder GetArguments(string project, DotNetCoreTestSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
@@ -54,10 +82,40 @@ namespace Cake.Common.Tools.DotNetCore.Test
             builder.Append("test");
 
             // Specific path?
-            if (project != null)
+            if (!string.IsNullOrEmpty(project))
             {
                 builder.AppendQuoted(project);
             }
+
+            var args = GetArguments(settings);
+
+            args.CopyTo(builder);
+
+            return builder;
+        }
+
+        private ProcessArgumentBuilder GetArguments(IEnumerable<Path> paths, DotNetCoreTestSettings settings)
+        {
+            var builder = CreateArgumentBuilder(settings);
+
+            builder.Append("test");
+
+            // Add files
+            foreach (var project in paths.Select(file => file.FullPath))
+            {
+                builder.AppendQuoted(project);
+            }
+
+            var args = GetArguments(settings);
+
+            args.CopyTo(builder);
+
+            return builder;
+        }
+
+        private ProcessArgumentBuilder GetArguments(DotNetCoreTestSettings settings)
+        {
+            var builder = new ProcessArgumentBuilder();
 
             // Output directory
             if (settings.OutputDirectory != null)

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Tools.DotNetCore.Test;
+using Cake.Core.IO;
 using Cake.Testing;
 using Xunit;
 
@@ -94,6 +95,40 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
                 // Given
                 var fixture = new DotNetCoreTesterFixture();
                 fixture.Project = text;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("./test/project.json", "test \"test/project.json\"")]
+            [InlineData("./test/cake unit tests/project.json", "test \"test/cake unit tests/project.json\"")]
+            [InlineData("./test/cake unit tests/cake core tests/project.json", "test \"test/cake unit tests/cake core tests/project.json\"")]
+            public void Should_Add_Project_Files_If_Provided(string text, string expected)
+            {
+                // Given
+                var fixture = new DotNetCoreTesterFixture();
+                fixture.ProjectFiles.Add(text);
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("./test", "test \"test\"")]
+            [InlineData("./test/cake unit tests/", "test \"test/cake unit tests\"")]
+            [InlineData("./test/cake unit tests/cake core tests", "test \"test/cake unit tests/cake core tests\"")]
+            public void Should_Add_Directory_Paths_If_Provided(string text, string expected)
+            {
+                // Given
+                var fixture = new DotNetCoreTesterFixture();
+                fixture.DirectoryPaths.Add(text);
 
                 // When
                 var result = fixture.Run();

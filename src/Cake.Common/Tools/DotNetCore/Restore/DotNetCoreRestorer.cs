@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -52,6 +54,32 @@ namespace Cake.Common.Tools.DotNetCore.Restore
             Run(settings, GetArguments(root, settings));
         }
 
+        /// <summary>
+        /// Restores the packages in the specified paths.
+        /// </summary>
+        /// <param name="paths">The paths to projects.</param>
+        /// <param name="settings">The settings.</param>
+        public void Restore(IEnumerable<Path> paths, DotNetCoreRestoreSettings settings)
+        {
+            if (paths == null)
+            {
+                throw new ArgumentNullException(nameof(paths));
+            }
+
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            var pathsArray = paths as Path[] ?? paths.ToArray();
+            if (!pathsArray.Any())
+            {
+                throw new ArgumentException("No paths provided.", nameof(paths));
+            }
+
+            Run(settings, GetArguments(pathsArray, settings));
+        }
+
         private ProcessArgumentBuilder GetArguments(string root, DotNetCoreRestoreSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
@@ -63,6 +91,36 @@ namespace Cake.Common.Tools.DotNetCore.Restore
             {
                 builder.AppendQuoted(root);
             }
+
+            var args = GetArguments(settings);
+
+            args.CopyTo(builder);
+
+            return builder;
+        }
+
+        private ProcessArgumentBuilder GetArguments(IEnumerable<Path> paths, DotNetCoreRestoreSettings settings)
+        {
+            var builder = CreateArgumentBuilder(settings);
+
+            builder.Append("restore");
+
+            // Add files
+            foreach (var project in paths.Select(file => file.FullPath))
+            {
+                builder.AppendQuoted(project);
+            }
+
+            var args = GetArguments(settings);
+
+            args.CopyTo(builder);
+
+            return builder;
+        }
+
+        private ProcessArgumentBuilder GetArguments(DotNetCoreRestoreSettings settings)
+        {
+            var builder = new ProcessArgumentBuilder();
 
             // Output directory
             if (settings.PackagesDirectory != null)
