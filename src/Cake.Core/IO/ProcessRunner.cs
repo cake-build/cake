@@ -103,7 +103,25 @@ namespace Cake.Core.IO
                 ? SubscribeStandardConsoleOutputQueue(process)
                 : null;
 
-            return new ProcessWrapper(process, _log, arguments.FilterUnsafe, consoleOutputQueue);
+            var consoleErrorQueue = settings.RedirectStandardError
+                ? SubscribeStandardConsoleErrorQueue(process)
+                : null;
+
+            return new ProcessWrapper(process, _log, arguments.FilterUnsafe, consoleOutputQueue, arguments.FilterUnsafe, consoleErrorQueue);
+        }
+
+        private static ConcurrentQueue<string> SubscribeStandardConsoleErrorQueue(Process process)
+        {
+            var consoleErrorQueue = new ConcurrentQueue<string>();
+            process.ErrorDataReceived += (s, e) =>
+            {
+                if (e.Data != null)
+                {
+                    consoleErrorQueue.Enqueue(e.Data);
+                }
+            };
+            process.BeginErrorReadLine();
+            return consoleErrorQueue;
         }
 
         private static ConcurrentQueue<string> SubscribeStandardConsoleOutputQueue(Process process)
