@@ -37,6 +37,7 @@ namespace Cake.Composition
         }
 
         public ICakeRegistrationBuilder<TImplementationType> RegisterInstance<TImplementationType>(TImplementationType instance)
+            where TImplementationType : class
         {
             var registration = new ContainerRegistration(typeof(TImplementationType), instance);
             _registrations.Add(registration);
