@@ -15,26 +15,26 @@ namespace Cake.NuGet
     public sealed class NuGetModule : ICakeModule
     {
         /// <summary>
-        /// Performs custom registrations in the provided registry.
+        /// Performs custom registrations in the provided registrar.
         /// </summary>
-        /// <param name="registry">The container registry.</param>
-        public void Register(ICakeContainerRegistry registry)
+        /// <param name="registrar">The container registrar.</param>
+        public void Register(ICakeContainerRegistrar registrar)
         {
-            if (registry == null)
+            if (registrar == null)
             {
-                throw new ArgumentNullException(nameof(registry));
+                throw new ArgumentNullException(nameof(registrar));
             }
 
 #if NETCORE
             // NuGet V3
-            registry.RegisterType<V3.NuGetV3ContentResolver>().As<INuGetContentResolver>().Singleton();
+            registrar.RegisterType<V3.NuGetV3ContentResolver>().As<INuGetContentResolver>().Singleton();
 #else
             // NuGet V2
-            registry.RegisterType<V2.NuGetV2ContentResolver>().As<INuGetContentResolver>().Singleton();
+            registrar.RegisterType<V2.NuGetV2ContentResolver>().As<INuGetContentResolver>().Singleton();
 #endif
 
             // URI resource support.
-            registry.RegisterType<NuGetPackageInstaller>().As<IPackageInstaller>().Singleton();
+            registrar.RegisterType<NuGetPackageInstaller>().As<IPackageInstaller>().Singleton();
         }
     }
 }
