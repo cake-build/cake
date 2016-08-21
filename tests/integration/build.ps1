@@ -13,22 +13,22 @@ Function CleanDirectory([string]$Directory)
     if(Test-Path $Directory) {
         Remove-Item -Path $Directory -Recurse -Force
     }
-    New-Item -Path $Directory -Type directory | out-null;
+    New-Item -Path $Directory -Type Directory | Out-Null
 }
 
 Function BuildCake([string]$ScriptRoot)
 {
     # Clean the build directory.
-    $RootDirectory = (Join-Path $ScriptRoot "../..");
+    $RootDirectory = (Join-Path $ScriptRoot "../..")
     CleanDirectory((Join-Path $RootDirectory "artifacts"))
 
     # Build Cake.
     try  {
-        Push-Location;
-        Set-Location $RootDirectory;
-        Invoke-Expression "./build.ps1 -Target Copy-Files" | Out-Null;
+        Push-Location
+        Set-Location $RootDirectory
+        Invoke-Expression "./build.ps1 -Target Copy-Files" | Out-Null
         if($LASTEXITCODE -ne 0) {
-            Throw "An error occured while building Cake.";
+            Throw "An error occured while building Cake."
         }
     }
     finally {
@@ -50,28 +50,19 @@ Function GetCakeCoreCLRPath([string]$ScriptRoot)
 # PREPARATION
 #####################################################################
 
-$PSScriptRoot = split-path -parent $MyInvocation.MyCommand.Definition;
-$Script = (Join-Path $PSScriptRoot "windows.cake");
-$ToolsPath = Join-Path $PSScriptRoot "tools";
-$NuGetPath = Join-Path $ToolsPath "nuget.exe";
-$DotNetChannel = "preview";
-$DotNetVersion = "1.0.0-preview2-003121";
-$DotNetInstallerUri = "https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0-preview2/scripts/obtain/dotnet-install.ps1";
-$NuGetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe";
+$PSScriptRoot = split-path -parent $MyInvocation.MyCommand.Definition
+$Script = (Join-Path $PSScriptRoot "windows.cake")
+$ToolsPath = Join-Path $PSScriptRoot "tools"
+$NuGetPath = Join-Path $ToolsPath "nuget.exe"
+$DotNetChannel = "preview"
+$DotNetVersion = "1.0.0-preview2-003121"
+$DotNetInstallerUri = "https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0-preview2/scripts/obtain/dotnet-install.ps1"
+$NuGetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
 
 # Make sure the tools directory exist.
 if(!(Test-Path $ToolsPath)) {
-    Write-Verbose "Creating tools directory...";
-    New-Item -Path $ToolsPath -Type directory | out-null;
-}
-
-# Make sure NuGet exist.
-if (!(Test-Path $NuGetPath)) {
-    Write-Verbose "Downloading NuGet..."
-    (New-Object System.Net.WebClient).DownloadFile($NuGetUrl, $NuGetPath);
-    if (!(Test-Path $NuGetPath)) {
-        Throw "Could not find NuGet.exe";
-    }
+    Write-Verbose "Creating tools directory..."
+    New-Item -Path $ToolsPath -Type Directory | Out-Null
 }
 
 ###########################################################################
@@ -96,18 +87,18 @@ Function Remove-PathVariable([string]$VariableToRemove)
 }
 
 # Get .NET Core CLI path if installed.
-$FoundDotNetCliVersion = $null;
+$FoundDotNetCliVersion = $null
 if (Get-Command dotnet -ErrorAction SilentlyContinue) {
-    $FoundDotNetCliVersion = dotnet --version;
+    $FoundDotNetCliVersion = dotnet --version
 }
 
 if($FoundDotNetCliVersion -ne $DotNetVersion) {
     $InstallPath = Join-Path $PSScriptRoot ".dotnet"
     if (!(Test-Path $InstallPath)) {
-        mkdir -Force $InstallPath | Out-Null;
+        mkdir -Force $InstallPath | Out-Null
     }
-    (New-Object System.Net.WebClient).DownloadFile($DotNetInstallerUri, "$InstallPath\dotnet-install.ps1");
-    & $InstallPath\dotnet-install.ps1 -Channel $DotNetChannel -Version $DotNetVersion -InstallDir $InstallPath;
+    (New-Object System.Net.WebClient).DownloadFile($DotNetInstallerUri, "$InstallPath\dotnet-install.ps1")
+    & $InstallPath\dotnet-install.ps1 -Channel $DotNetChannel -Version $DotNetVersion -InstallDir $InstallPath
 
     Remove-PathVariable "$InstallPath"
     $env:PATH = "$InstallPath;$env:PATH"
@@ -128,12 +119,12 @@ if(!$SkipBuildingCake.IsPresent) {
 }
 
 # Get the built Cake path.
-$BuiltCakePath = GetCakePath($PSScriptRoot);
+$BuiltCakePath = GetCakePath($PSScriptRoot)
 if([string]::IsNullOrWhiteSpace($BuiltCakePath)) {
     Throw "Could not resolve built Cake path."
 }
 
-$BuiltCakeCoreCLRPath = GetCakeCoreCLRPath($PSScriptRoot);
+$BuiltCakeCoreCLRPath = GetCakeCoreCLRPath($PSScriptRoot)
 if([string]::IsNullOrWhiteSpace($BuiltCakeCoreCLRPath)) {
     Throw "Could not resolve built Cake CoreCLR path."
 }
@@ -146,10 +137,12 @@ $CakeDllPath = Join-Path $CakeCoreCLRPath "Cake.dll"
 
 # Clean the local Cake path.
 if(!$SkipBuildingCake.IsPresent) {
-  CleanDirectory($CakePath)
+  CleanDirectory($ToolsPath)
+  New-Item -Path $CakePath -Type Directory | Out-Null
+  New-Item -Path $CakeCoreCLRPath -Type Directory | Out-Null
+
   Copy-Item "$BuiltCakePath/*.*" $CakePath -Recurse
 
-  CleanDirectory($CakeCoreCLRPath)
   Copy-Item "$BuiltCakeCoreCLRPath/*.*" $CakeCoreCLRPath -Recurse
 }
 
@@ -163,12 +156,21 @@ if(!(Test-Path $CakeDllPath)) {
   Throw "Could not locate Cake CoreCLR at $CakeDllPath."
 }
 
+# Make sure NuGet exist.
+if (!(Test-Path $NuGetPath)) {
+    Write-Verbose "Downloading NuGet..."
+    (New-Object System.Net.WebClient).DownloadFile($NuGetUrl, $NuGetPath)
+    if (!(Test-Path $NuGetPath)) {
+        Throw "Could not find NuGet.exe"
+    }
+}
+
 
 #####################################################################
 # SETUP ENVIRONMENT
 #####################################################################
 
-$Env:MyEnvironmentVariable = "Hello World";
+$Env:MyEnvironmentVariable = "Hello World"
 
 #####################################################################
 # RUN TESTS

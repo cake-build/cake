@@ -28,6 +28,6 @@ namespace Cake.Core.Composition
         /// <typeparam name="T">The instance type.</typeparam>
         /// <param name="instance">The instance to register.</param>
         /// <returns>A registration builder used to configure the registration.</returns>
-        ICakeRegistrationBuilder<T> RegisterInstance<T>(T instance);
+        ICakeRegistrationBuilder<T> RegisterInstance<T>(T instance) where T : class;
     }
 }
