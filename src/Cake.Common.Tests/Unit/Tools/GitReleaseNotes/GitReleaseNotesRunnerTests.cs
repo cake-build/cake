@@ -67,7 +67,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("GitReleaseNotes: Process was not started.", result.Message);
+                Assert.Equal("GitReleaseNotes: Process was not started.", result?.Message);
             }
 
             [Fact]
@@ -82,7 +82,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("GitReleaseNotes: Process returned an error (exit code 1).", result.Message);
+                Assert.Equal("GitReleaseNotes: Process returned an error (exit code 1).", result?.Message);
             }
 
             [Fact]

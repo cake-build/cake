@@ -11,20 +11,13 @@ namespace Cake.Common.Build.TravisCI.Data
     /// </summary>
     public sealed class TravisCIEnvironmentInfo : TravisCIInfo
     {
-        private readonly TravisCIBuildInfo _buildProvider;
-        private readonly TravisCIJobInfo _jobProvider;
-        private readonly TravisCIRepositoryInfo _repositoryProvider;
-
         /// <summary>
         /// Gets Travis CI build information for the current build.
         /// </summary>
         /// <value>
         /// The build.
         /// </value>
-        public TravisCIBuildInfo Build
-        {
-            get { return _buildProvider; }
-        }
+        public TravisCIBuildInfo Build { get; }
 
         /// <summary>
         /// Gets Travis CI job information for the current build.
@@ -32,10 +25,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The job.
         /// </value>
-        public TravisCIJobInfo Job
-        {
-            get { return _jobProvider; }
-        }
+        public TravisCIJobInfo Job { get; }
 
         /// <summary>
         /// Gets Travis CI repository information for the current build.
@@ -43,10 +33,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The repository.
         /// </value>
-        public TravisCIRepositoryInfo Repository
-        {
-            get { return _repositoryProvider; }
-        }
+        public TravisCIRepositoryInfo Repository { get; }
 
         /// <summary>
         /// Gets a value indicating whether the current build is continuous integration.
@@ -54,10 +41,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// <c>true</c> if ci; otherwise, <c>false</c>.
         /// </value>
-        public bool CI
-        {
-            get { return GetEnvironmentBoolean("CI"); }
-        }
+        public bool CI => GetEnvironmentBoolean("CI");
 
         /// <summary>
         /// Gets the Travis CI home directory.
@@ -65,10 +49,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The home.
         /// </value>
-        public string Home
-        {
-            get { return GetEnvironmentString("HOME"); }
-        }
+        public string Home => GetEnvironmentString("HOME");
 
         /// <summary>
         /// Gets a value indicating whether the environment is Travis.
@@ -76,10 +57,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         ///   <c>true</c> if Travis; otherwise, <c>false</c>.
         /// </value>
-        public bool Travis
-        {
-            get { return GetEnvironmentBoolean("TRAVIS"); }
-        }
+        public bool Travis => GetEnvironmentBoolean("TRAVIS");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TravisCIEnvironmentInfo"/> class.
@@ -88,9 +66,9 @@ namespace Cake.Common.Build.TravisCI.Data
         public TravisCIEnvironmentInfo(ICakeEnvironment environment)
             : base(environment)
         {
-            _buildProvider = new TravisCIBuildInfo(environment);
-            _jobProvider = new TravisCIJobInfo(environment);
-            _repositoryProvider = new TravisCIRepositoryInfo(environment);
+            Build = new TravisCIBuildInfo(environment);
+            Job = new TravisCIJobInfo(environment);
+            Repository = new TravisCIRepositoryInfo(environment);
         }
     }
 }

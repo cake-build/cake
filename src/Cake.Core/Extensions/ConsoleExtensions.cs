@@ -16,10 +16,7 @@ namespace Cake.Core
         /// <param name="console">The console to write to.</param>
         public static void WriteLine(this IConsole console)
         {
-            if (console != null)
-            {
-                console.WriteLine(string.Empty);
-            }
+            console?.WriteLine(string.Empty);
         }
 
         /// <summary>
@@ -28,10 +25,7 @@ namespace Cake.Core
         /// <param name="console">The console to write to.</param>
         public static void WriteErrorLine(this IConsole console)
         {
-            if (console != null)
-            {
-                console.WriteErrorLine(string.Empty);
-            }
+            console?.WriteErrorLine(string.Empty);
         }
     }
 }

@@ -14,7 +14,6 @@ namespace Cake.Common.Build.Bamboo
     public sealed class BambooProvider : IBambooProvider
     {
         private readonly ICakeEnvironment _environment;
-        private readonly BambooEnvironmentInfo _environmentInfo;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BambooProvider"/> class.
@@ -24,10 +23,10 @@ namespace Cake.Common.Build.Bamboo
         {
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             _environment = environment;
-            _environmentInfo = new BambooEnvironmentInfo(environment);
+            Environment = new BambooEnvironmentInfo(environment);
         }
 
          /// <summary>
@@ -36,10 +35,7 @@ namespace Cake.Common.Build.Bamboo
         /// <value>
         /// <c>true</c> if the current build is running on Bamboo.; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnBamboo
-        {
-            get { return !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("bamboo_buildNumber")); }
-        }
+        public bool IsRunningOnBamboo => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("bamboo_buildNumber"));
 
         /// <summary>
         /// Gets the Bamboo environment.
@@ -47,9 +43,6 @@ namespace Cake.Common.Build.Bamboo
         /// <value>
         /// The Bamboo environment.
         /// </value>
-        public BambooEnvironmentInfo Environment
-        {
-            get { return _environmentInfo; }
-        }
+        public BambooEnvironmentInfo Environment { get; }
     }
 }

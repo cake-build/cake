@@ -36,7 +36,7 @@ namespace Cake.Core.Tooling
         {
             if (globber == null)
             {
-                throw new ArgumentNullException("globber");
+                throw new ArgumentNullException(nameof(globber));
             }
 
             _globber = globber;
@@ -53,15 +53,15 @@ namespace Cake.Core.Tooling
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             if (processRunner == null)
             {
-                throw new ArgumentNullException("processRunner");
+                throw new ArgumentNullException(nameof(processRunner));
             }
 
             _fileSystem = fileSystem;
@@ -93,9 +93,9 @@ namespace Cake.Core.Tooling
             ProcessSettings processSettings,
             Action<IProcess> postAction)
         {
-            if (arguments == null && (processSettings == null || processSettings.Arguments == null))
+            if (arguments == null && (processSettings?.Arguments == null))
             {
-                throw new ArgumentNullException("arguments");
+                throw new ArgumentNullException(nameof(arguments));
             }
 
             var process = RunProcess(settings, arguments, processSettings);
@@ -121,10 +121,7 @@ namespace Cake.Core.Tooling
             finally
             {
                 // Post action specified?
-                if (postAction != null)
-                {
-                    postAction(process);
-                }
+                postAction?.Invoke(process);
             }
         }
 
@@ -166,9 +163,9 @@ namespace Cake.Core.Tooling
             ProcessArgumentBuilder arguments,
             ProcessSettings processSettings)
         {
-            if (arguments == null && (processSettings == null || processSettings.Arguments == null))
+            if (arguments == null && (processSettings?.Arguments == null))
             {
-                throw new ArgumentNullException("arguments");
+                throw new ArgumentNullException(nameof(arguments));
             }
 
             // Should we customize the arguments?

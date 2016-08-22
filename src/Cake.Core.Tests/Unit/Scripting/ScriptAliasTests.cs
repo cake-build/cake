@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Cake.Core.Scripting;
 using Xunit;
 
@@ -27,7 +28,7 @@ namespace Cake.Core.Tests.Unit.Scripting
             public void Should_Not_Throw_If_Method_Is_Null()
             {
                 // Given
-                var method = typeof(TheConstructor).GetMethods().First();
+                var method = typeof(TheConstructor).GetTypeInfo().GetMethods().First();
 
                 // When
                 var result = new ScriptAlias(method, ScriptAliasType.Method, null);

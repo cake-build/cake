@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#if !NETCORE
 namespace Cake.Scripting.Mono.CodeGen.Parsing
 {
     internal enum ScriptTokenType
@@ -20,3 +21,4 @@ namespace Cake.Scripting.Mono.CodeGen.Parsing
         Character = 11
     }
 }
+#endif

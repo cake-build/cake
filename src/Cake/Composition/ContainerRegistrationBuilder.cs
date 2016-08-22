@@ -8,39 +8,34 @@ namespace Cake.Composition
 {
     internal sealed class ContainerRegistrationBuilder<T> : ICakeRegistrationBuilder<T>
     {
-        private readonly ContainerRegistration _registration;
-
-        public ContainerRegistration Registration
-        {
-            get { return _registration; }
-        }
+        public ContainerRegistration Registration { get; }
 
         public ContainerRegistrationBuilder(ContainerRegistration registration)
         {
-            _registration = registration;
+            Registration = registration;
         }
 
         public ICakeRegistrationBuilder<T> As<TRegistrationType>()
         {
-            _registration.RegistrationTypes.Add(typeof(TRegistrationType));
+            Registration.RegistrationTypes.Add(typeof(TRegistrationType));
             return this;
         }
 
         public ICakeRegistrationBuilder<T> AsSelf()
         {
-            _registration.RegistrationTypes.Add(typeof(T));
+            Registration.RegistrationTypes.Add(typeof(T));
             return this;
         }
 
         public ICakeRegistrationBuilder<T> Singleton()
         {
-            _registration.IsSingleton = true;
+            Registration.IsSingleton = true;
             return this;
         }
 
         public ICakeRegistrationBuilder<T> Transient()
         {
-            _registration.IsSingleton = false;
+            Registration.IsSingleton = false;
             return this;
         }
     }

@@ -20,7 +20,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 // When
                 var result = info.GitRepositoryUrl;
 
-                //Then
+                // Then
                 Assert.Equal("git@github.com:/cake-build/cake.git", result);
             }
         }
@@ -36,7 +36,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 // When
                 var result = info.GitBranch;
 
-                //Then
+                // Then
                 Assert.Equal("cake-branch", result);
             }
         }
@@ -52,7 +52,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 // When
                 var result = info.GitTag;
 
-                //Then
+                // Then
                 Assert.Equal("v0.0.1", result);
             }
         }
@@ -68,7 +68,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 // When
                 var result = info.GitCommit;
 
-                //Then
+                // Then
                 Assert.Equal("63dd7b", result);
             }
         }
@@ -84,7 +84,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 // When
                 var result = info.PullRequest;
 
-                //Then
+                // Then
                 Assert.Equal("[WIP] Bitrise cake support #000", result);
             }
         }

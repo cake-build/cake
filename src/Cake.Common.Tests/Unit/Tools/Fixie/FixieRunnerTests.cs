@@ -41,7 +41,7 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Fixie: Could not locate executable.", result.Message);
+                Assert.Equal("Fixie: Could not locate executable.", result?.Message);
             }
 
             [Theory]
@@ -144,7 +144,7 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Fixie: Process was not started.", result.Message);
+                Assert.Equal("Fixie: Process was not started.", result?.Message);
             }
 
             [Fact]
@@ -159,7 +159,7 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Fixie: Process returned an error (exit code 1).", result.Message);
+                Assert.Equal("Fixie: Process returned an error (exit code 1).", result?.Message);
             }
 
             [Fact]

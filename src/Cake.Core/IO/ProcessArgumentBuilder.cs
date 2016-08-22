@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,10 +20,7 @@ namespace Cake.Core.IO
         /// <summary>
         /// Gets the number of arguments contained in the <see cref="ProcessArgumentBuilder"/>.
         /// </summary>
-        public int Count
-        {
-            get { return _tokens.Count; }
-        }
+        public int Count => _tokens.Count;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessArgumentBuilder"/> class.
@@ -118,11 +114,23 @@ namespace Cake.Core.IO
             return builder;
         }
 
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>
+        /// An enumerator that can be used to iterate through the collection.
+        /// </returns>
         IEnumerator<IProcessArgument> IEnumerable<IProcessArgument>.GetEnumerator()
         {
             return _tokens.GetEnumerator();
         }
 
+        /// <summary>
+        /// Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="T:System.Collections.IEnumerator" /> that can be used to iterate through the collection.
+        /// </returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable)_tokens).GetEnumerator();

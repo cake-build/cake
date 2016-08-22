@@ -69,7 +69,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Another task with the name 'task' has already been added.", result.Message);
+                Assert.Equal("Another task with the name 'task' has already been added.", result?.Message);
             }
 
             [Fact]
@@ -84,7 +84,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Another task with the name 'TASK' has already been added.", result.Message);
+                Assert.Equal("Another task with the name 'TASK' has already been added.", result?.Message);
             }
         }
 
@@ -258,7 +258,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("The target 'Run-Some-Tests' was not found.", result.Message);
+                Assert.Equal("The target 'Run-Some-Tests' was not found.", result?.Message);
             }
 
             [Fact]
@@ -275,7 +275,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Whoopsie", result.Message);
+                Assert.Equal("Whoopsie", result?.Message);
             }
 
             [Fact]
@@ -302,8 +302,7 @@ namespace Cake.Core.Tests.Unit
                     .OnError(exception => { invoked = true; });
 
                 // When
-                Record.Exception(() =>
-                    engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
+                Record.Exception(() => engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
                 Assert.True(invoked);
@@ -325,7 +324,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Totally my fault", result.Message);
+                Assert.Equal("Totally my fault", result?.Message);
             }
 
             [Fact]
@@ -361,7 +360,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Could not reach target 'B' since it was skipped due to a criteria.", result.Message);
+                Assert.Equal("Could not reach target 'B' since it was skipped due to a criteria.", result?.Message);
             }
 
             [Fact]
@@ -440,7 +439,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.NotNull(result);
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Fail", result.Message);
+                Assert.Equal("Fail", result?.Message);
                 Assert.True(fixture.Log.Entries.Any(x => x.Message == "Executing custom teardown action..."));
             }
 
@@ -462,7 +461,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.NotNull(result);
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Fail", result.Message);
+                Assert.Equal("Fail", result?.Message);
                 Assert.True(fixture.Log.Entries.Any(x => x.Message == "Executing custom teardown action..."));
             }
 
@@ -484,7 +483,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.NotNull(result);
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Setup", result.Message);
+                Assert.Equal("Setup", result?.Message);
             }
 
             [Fact]
@@ -542,7 +541,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.NotNull(result);
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Task", result.Message);
+                Assert.Equal("Task", result?.Message);
             }
 
             [Fact]
@@ -655,7 +654,7 @@ namespace Cake.Core.Tests.Unit
                     engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
-                Assert.Equal("Task", result.Message);
+                Assert.Equal("Task", result?.Message);
             }
 
             [Fact]
@@ -674,7 +673,7 @@ namespace Cake.Core.Tests.Unit
                     engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
-                Assert.Equal("Error", result.Message);
+                Assert.Equal("Error", result?.Message);
             }
 
             [Fact]
@@ -788,7 +787,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.NotNull(exception);
                 Assert.IsType<InvalidOperationException>(exception);
-                Assert.Equal("Fail", exception.Message);
+                Assert.Equal("Fail", exception?.Message);
                 Assert.Equal(
                     new List<string>
                     {
@@ -822,7 +821,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.NotNull(exception);
                 Assert.IsType<InvalidOperationException>(exception);
-                Assert.Equal("Fail", exception.Message);
+                Assert.Equal("Fail", exception?.Message);
                 Assert.Equal(
                     new List<string>
                     {
@@ -848,7 +847,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.NotNull(result);
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Task Setup: A", result.Message);
+                Assert.Equal("Task Setup: A", result?.Message);
             }
 
             [Fact]
@@ -868,7 +867,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.NotNull(result);
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Task Teardown: A", result.Message);
+                Assert.Equal("Task Teardown: A", result?.Message);
             }
 
             [Fact]
@@ -889,7 +888,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.NotNull(result);
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Task Setup: A", result.Message);
+                Assert.Equal("Task Setup: A", result?.Message);
                 Assert.True(fixture.Log.Entries.Any(x => x.Message.StartsWith("Task Teardown error (A):")));
             }
 
@@ -910,7 +909,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.NotNull(result);
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Task: A", result.Message);
+                Assert.Equal("Task: A", result?.Message);
             }
 
             [Fact]
@@ -954,12 +953,11 @@ namespace Cake.Core.Tests.Unit
             public void Should_Return_Report_That_Marks_Executed_Tasks_As_Executed()
             {
                 // Given
-                var result = new List<string>();
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
-                engine.RegisterTask("A").IsDependentOn("B").Does(() => result.Add("A"));
+                engine.RegisterTask("A").IsDependentOn("B").Does(() => { });
                 engine.RegisterTask("B").IsDependentOn("C");
-                engine.RegisterTask("C").WithCriteria(() => false).Does(() => result.Add("C"));
+                engine.RegisterTask("C").WithCriteria(() => false).Does(() => { });
 
                 // When
                 var report = engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
@@ -972,12 +970,11 @@ namespace Cake.Core.Tests.Unit
             public void Should_Return_Report_That_Marks_Skipped_Tasks_As_Skipped()
             {
                 // Given
-                var result = new List<string>();
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
-                engine.RegisterTask("A").IsDependentOn("B").Does(() => result.Add("A"));
+                engine.RegisterTask("A").IsDependentOn("B");
                 engine.RegisterTask("B").IsDependentOn("C");
-                engine.RegisterTask("C").WithCriteria(() => false).Does(() => result.Add("C"));
+                engine.RegisterTask("C").WithCriteria(() => false);
 
                 // When
                 var report = engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");
@@ -990,12 +987,11 @@ namespace Cake.Core.Tests.Unit
             public void Should_Return_Report_That_Marks_Delegated_Tasks_As_Delegated()
             {
                 // Given
-                var result = new List<string>();
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
-                engine.RegisterTask("A").IsDependentOn("B").Does(() => result.Add("A"));
+                engine.RegisterTask("A").IsDependentOn("B");
                 engine.RegisterTask("B").IsDependentOn("C");
-                engine.RegisterTask("C").WithCriteria(() => false).Does(() => result.Add("C"));
+                engine.RegisterTask("C").WithCriteria(() => false);
 
                 // When
                 var report = engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "A");

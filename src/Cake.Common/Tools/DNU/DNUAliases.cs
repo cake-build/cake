@@ -131,7 +131,7 @@ namespace Cake.Common.Tools.DNU
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (settings == null)
@@ -189,7 +189,7 @@ namespace Cake.Common.Tools.DNU
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (settings == null)
@@ -247,7 +247,7 @@ namespace Cake.Common.Tools.DNU
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (settings == null)

@@ -29,7 +29,7 @@ namespace Cake.Scripting
         {
             if (console == null)
             {
-                throw new ArgumentNullException("console");
+                throw new ArgumentNullException(nameof(console));
             }
             _console = console;
             _descriptions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);

@@ -32,11 +32,11 @@ namespace Cake.Common
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (variable == null)
             {
-                throw new ArgumentNullException("variable");
+                throw new ArgumentNullException(nameof(variable));
             }
             return context.Environment.GetEnvironmentVariable(variable);
         }
@@ -72,7 +72,7 @@ namespace Cake.Common
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             return context.Environment.GetEnvironmentVariables();
         }
@@ -99,11 +99,11 @@ namespace Cake.Common
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (variable == null)
             {
-                throw new ArgumentNullException("variable");
+                throw new ArgumentNullException(nameof(variable));
             }
             return context.Environment.GetEnvironmentVariable(variable) != null;
         }
@@ -151,7 +151,7 @@ namespace Cake.Common
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             return context.Environment.Platform.IsUnix();
         }

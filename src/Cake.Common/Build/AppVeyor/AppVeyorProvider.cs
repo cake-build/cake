@@ -4,8 +4,6 @@
 
 using System;
 using System.Globalization;
-using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Cake.Common.Build.AppVeyor.Data;
@@ -24,7 +22,6 @@ namespace Cake.Common.Build.AppVeyor
         private readonly ICakeEnvironment _environment;
         private readonly IProcessRunner _processRunner;
         private readonly ICakeLog _cakeLog;
-        private readonly AppVeyorEnvironmentInfo _environmentInfo;
 
         /// <summary>
         /// Gets a value indicating whether the current build is running on AppVeyor.
@@ -32,10 +29,7 @@ namespace Cake.Common.Build.AppVeyor
         /// <value>
         /// <c>true</c> if the current build is running on AppVeyor.; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnAppVeyor
-        {
-            get { return !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("APPVEYOR")); }
-        }
+        public bool IsRunningOnAppVeyor => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("APPVEYOR"));
 
         /// <summary>
         /// Gets the AppVeyor environment.
@@ -43,10 +37,7 @@ namespace Cake.Common.Build.AppVeyor
         /// <value>
         /// The AppVeyor environment.
         /// </value>
-        public AppVeyorEnvironmentInfo Environment
-        {
-            get { return _environmentInfo; }
-        }
+        public AppVeyorEnvironmentInfo Environment { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppVeyorProvider"/> class.
@@ -58,20 +49,20 @@ namespace Cake.Common.Build.AppVeyor
         {
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             if (processRunner == null)
             {
-                throw new ArgumentNullException("processRunner");
+                throw new ArgumentNullException(nameof(processRunner));
             }
             if (cakeLog == null)
             {
-                throw new ArgumentNullException("cakeLog");
+                throw new ArgumentNullException(nameof(cakeLog));
             }
             _environment = environment;
             _processRunner = processRunner;
             _cakeLog = cakeLog;
-            _environmentInfo = new AppVeyorEnvironmentInfo(environment);
+            Environment = new AppVeyorEnvironmentInfo(environment);
         }
 
         /// <summary>
@@ -92,11 +83,11 @@ namespace Cake.Common.Build.AppVeyor
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             if (!IsRunningOnAppVeyor)
@@ -136,7 +127,7 @@ namespace Cake.Common.Build.AppVeyor
         {
             if (settingsAction == null)
             {
-                throw new ArgumentNullException("settingsAction");
+                throw new ArgumentNullException(nameof(settingsAction));
             }
 
             var settings = new AppVeyorUploadArtifactsSettings();
@@ -153,7 +144,7 @@ namespace Cake.Common.Build.AppVeyor
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
 
             if (!IsRunningOnAppVeyor)
@@ -190,7 +181,7 @@ namespace Cake.Common.Build.AppVeyor
         {
             if (version == null)
             {
-                throw new ArgumentNullException("version");
+                throw new ArgumentNullException(nameof(version));
             }
             if (string.IsNullOrWhiteSpace(version))
             {
@@ -222,7 +213,7 @@ namespace Cake.Common.Build.AppVeyor
         {
             if (message == null)
             {
-                throw new ArgumentNullException("message");
+                throw new ArgumentNullException(nameof(message));
             }
             if (string.IsNullOrWhiteSpace(message))
             {

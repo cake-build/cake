@@ -39,7 +39,7 @@ namespace Cake.Common.Tools.DotNetCore.Run
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetArguments(project, arguments, settings));

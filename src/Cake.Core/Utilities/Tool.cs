@@ -35,19 +35,19 @@ namespace Cake.Core.Utilities
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             if (processRunner == null)
             {
-                throw new ArgumentNullException("processRunner");
+                throw new ArgumentNullException(nameof(processRunner));
             }
             if (globber == null)
             {
-                throw new ArgumentNullException("globber");
+                throw new ArgumentNullException(nameof(globber));
             }
 
             _fileSystem = fileSystem;
@@ -88,9 +88,9 @@ namespace Cake.Core.Utilities
         protected void Run(TSettings settings, ProcessArgumentBuilder arguments, FilePath toolPath,
             ProcessSettings processSettings, Action<IProcess> postAction)
         {
-            if (arguments == null && (processSettings == null || processSettings.Arguments == null))
+            if (arguments == null && (processSettings?.Arguments == null))
             {
-                throw new ArgumentNullException("arguments");
+                throw new ArgumentNullException(nameof(arguments));
             }
 
             var process = RunProcess(settings, arguments, toolPath, processSettings);
@@ -110,10 +110,7 @@ namespace Cake.Core.Utilities
             finally
             {
                 // Post action specified?
-                if (postAction != null)
-                {
-                    postAction(process);
-                }
+                postAction?.Invoke(process);
             }
         }
 
@@ -151,9 +148,9 @@ namespace Cake.Core.Utilities
         protected IProcess RunProcess(TSettings settings, ProcessArgumentBuilder arguments, FilePath toolPath,
             ProcessSettings processSettings)
         {
-            if (arguments == null && (processSettings == null || processSettings.Arguments == null))
+            if (arguments == null && (processSettings?.Arguments == null))
             {
-                throw new ArgumentNullException("arguments");
+                throw new ArgumentNullException(nameof(arguments));
             }
 
             // Get the tool name.

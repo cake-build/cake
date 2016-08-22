@@ -87,6 +87,20 @@ namespace Cake.Core.Tests.Unit.Scripting
                 // Then
                 Assert.IsArgumentNullException(result, "conventions");
             }
+
+            [Fact]
+            public void Should_Throw_If_AssemblyLoader_Is_Null()
+            {
+                // Given
+                var fixture = new ScriptRunnerFixture();
+                fixture.AssemblyLoader = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateScriptRunner());
+
+                // Then
+                Assert.IsArgumentNullException(result, "assemblyLoader");
+            }
         }
 
         public sealed class TheRunMethod
@@ -162,6 +176,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 Assert.Equal("/build", fixture.Environment.WorkingDirectory.FullPath);
             }
 
+#if !NETCORE
             [Theory]
             [InlineData("mscorlib")]
             [InlineData("System")]
@@ -169,7 +184,7 @@ namespace Cake.Core.Tests.Unit.Scripting
             [InlineData("System.Data")]
             [InlineData("System.Xml")]
             [InlineData("System.Xml.Linq")]
-            public void Should_Add_References_To_Session(string @assemblyName)
+            public void Should_Add_References_To_Session(string assemblyName)
             {
                 // Given
                 var fixture = new ScriptRunnerFixture();
@@ -182,6 +197,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 fixture.Session.Received(1).AddReference(
                     Arg.Is<Assembly>(a => a.FullName.StartsWith(assemblyName + ", ", StringComparison.OrdinalIgnoreCase)));
             }
+#endif
 
             [Theory]
             [InlineData("System")]

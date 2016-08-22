@@ -4,16 +4,16 @@
 
 using Cake.Common.Build;
 using Cake.Common.Build.AppVeyor;
-using Cake.Common.Build.MyGet;
-using Cake.Common.Build.TeamCity;
 using Cake.Common.Build.Bamboo;
+using Cake.Common.Build.BitbucketPipelines;
 using Cake.Common.Build.Bitrise;
-using NSubstitute;
-using Xunit;
 using Cake.Common.Build.ContinuaCI;
 using Cake.Common.Build.Jenkins;
+using Cake.Common.Build.MyGet;
+using Cake.Common.Build.TeamCity;
 using Cake.Common.Build.TravisCI;
-using Cake.Common.Build.BitbucketPipelines;
+using NSubstitute;
+using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build
 {

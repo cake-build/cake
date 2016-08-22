@@ -17,10 +17,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The git commit sha.
         /// </value>
-        public string GitCommitSha
-        {
-            get { return GetEnvironmentString("GIT_COMMIT"); }
-        }
+        public string GitCommitSha => GetEnvironmentString("GIT_COMMIT");
 
         /// <summary>
         /// Gets the git branch.
@@ -28,10 +25,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The git branch.
         /// </value>
-        public string GitBranch
-        {
-            get { return GetEnvironmentString("GIT_BRANCH"); }
-        }
+        public string GitBranch => GetEnvironmentString("GIT_BRANCH");
 
         /// <summary>
         /// Gets the SVN revision.
@@ -39,10 +33,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The SVN revision.
         /// </value>
-        public string SvnRevision
-        {
-            get { return GetEnvironmentString("SVN_REVISION"); }
-        }
+        public string SvnRevision => GetEnvironmentString("SVN_REVISION");
 
         /// <summary>
         /// Gets the CVS branch.
@@ -50,10 +41,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The CVS branch.
         /// </value>
-        public string CvsBranch
-        {
-            get { return GetEnvironmentString("CVS_BRANCH"); }
-        }
+        public string CvsBranch => GetEnvironmentString("CVS_BRANCH");
 
         /// <summary>
         /// Gets the SVN URL.
@@ -61,13 +49,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The SVN URL.
         /// </value>
-        public string SvnUrl
-        {
-            get
-            {
-                return GetEnvironmentString("SVN_URL");
-            }
-        }
+        public string SvnUrl => GetEnvironmentString("SVN_URL");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JenkinsRepositoryInfo"/> class.

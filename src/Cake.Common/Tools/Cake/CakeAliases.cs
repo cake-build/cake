@@ -47,7 +47,7 @@ namespace Cake.Common.Tools.Cake
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var cakeRunner = new CakeRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner, context.Tools);
@@ -91,7 +91,7 @@ namespace Cake.Common.Tools.Cake
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var cakeRunner = new CakeRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner, context.Tools);

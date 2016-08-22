@@ -17,7 +17,8 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet.SetApiKey
             Source = "http://a.com";
 
             // Set the standard output.
-            ProcessRunner.Process.SetStandardOutput(new[] {
+            ProcessRunner.Process.SetStandardOutput(new[]
+            {
                 string.Concat("The API Key '", ApiKey, "' was saved for '", Source, "'.")
             });
         }

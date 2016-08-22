@@ -13,7 +13,6 @@ namespace Cake.Common.Build.Bitrise
     public sealed class BitriseProvider : IBitriseProvider
     {
         private readonly ICakeEnvironment _environment;
-        private readonly BitriseEnvironmentInfo _bitriseEnvironment;
 
         /// <summary>
         /// Gets a value indicating whether the current build is running on Bitrise.
@@ -21,10 +20,7 @@ namespace Cake.Common.Build.Bitrise
         /// <value>
         /// <c>true</c> if the current build is running on Bitrise; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnBitrise
-        {
-            get { return !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("BITRISE_BUILD_URL")); }
-        }
+        public bool IsRunningOnBitrise => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("BITRISE_BUILD_URL"));
 
         /// <summary>
         /// Gets the Bitrise environment.
@@ -32,10 +28,7 @@ namespace Cake.Common.Build.Bitrise
         /// <value>
         /// The Bamboo environment.
         /// </value>
-        public BitriseEnvironmentInfo Environment
-        {
-            get { return _bitriseEnvironment; }
-        }
+        public BitriseEnvironmentInfo Environment { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BitriseProvider"/> class.
@@ -44,7 +37,7 @@ namespace Cake.Common.Build.Bitrise
         public BitriseProvider(ICakeEnvironment environment)
         {
             _environment = environment;
-            _bitriseEnvironment = new BitriseEnvironmentInfo(_environment);
+            Environment = new BitriseEnvironmentInfo(_environment);
         }
     }
 }

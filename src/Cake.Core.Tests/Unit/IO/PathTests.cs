@@ -45,8 +45,8 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.IsType<ArgumentException>(result);
-                Assert.Equal("path", ((ArgumentException)result).ParamName);
-                Assert.Equal(string.Format("Path cannot be empty.{0}Parameter name: path", Environment.NewLine), result.Message);
+                Assert.Equal("path", ((ArgumentException)result)?.ParamName);
+                Assert.Equal($"Path cannot be empty.{Environment.NewLine}Parameter name: path", result?.Message);
             }
 
             [Fact]
@@ -97,8 +97,8 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.IsType<ArgumentException>(result);
-                Assert.Equal("path", ((ArgumentException)result).ParamName);
-                Assert.Equal(string.Format("Illegal characters in directory path (*).{0}Parameter name: path", Environment.NewLine), result.Message);
+                Assert.Equal("path", ((ArgumentException)result)?.ParamName);
+                Assert.Equal($"Illegal characters in directory path (*).{Environment.NewLine}Parameter name: path", result?.Message);
             }
 
             [Theory]

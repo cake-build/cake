@@ -2,17 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#if !NETCORE
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Reflection;
+using System.Text;
 using Cake.Core;
 using Cake.Core.Scripting;
-using Xunit;
 using Cake.Scripting.Mono.CodeGen;
 using Cake.Scripting.Mono.CodeGen.Parsing;
+using Xunit;
 
 namespace Cake.Tests.Fixtures
 {
@@ -61,7 +62,7 @@ namespace Cake.Tests.Fixtures
         private static IEnumerable<string> ReadLinesFromResource(Assembly assembly, string path, bool input)
         {
             Assert.NotNull(assembly);
-            using (var stream = assembly.GetManifestResourceStream(string.Format("{0}.{1}", path, input ? "input" : "output")))
+            using (var stream = assembly.GetManifestResourceStream($"{path}.{(input ? "input" : "output")}"))
             {
                 if (stream != null)
                 {
@@ -104,3 +105,4 @@ namespace Cake.Tests.Fixtures
         }
     }
 }
+#endif

@@ -42,15 +42,15 @@ namespace Cake.Common.Tools.XUnit
         {
             if (assemblyPath == null)
             {
-                throw new ArgumentNullException("assemblyPath");
+                throw new ArgumentNullException(nameof(assemblyPath));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             // Make sure we got output directory set when generating reports.
-            if (settings.OutputDirectory == null || string.IsNullOrWhiteSpace(settings.OutputDirectory.FullPath))
+            if (string.IsNullOrWhiteSpace(settings.OutputDirectory?.FullPath))
             {
                 if (settings.HtmlReport)
                 {

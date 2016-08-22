@@ -64,19 +64,19 @@ namespace Cake.Common.Tools.OctopusDeploy
         {
             if (packagePaths == null || !packagePaths.Any())
             {
-                throw new ArgumentNullException("packagePaths");
+                throw new ArgumentNullException(nameof(packagePaths));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             if (string.IsNullOrEmpty(server))
             {
-                throw new ArgumentException("No server specified.", "settings");
+                throw new ArgumentException("No server specified.", nameof(settings));
             }
             if (string.IsNullOrEmpty(apiKey))
             {
-                throw new ArgumentException("No API key specified.", "settings");
+                throw new ArgumentException("No API key specified.", nameof(settings));
             }
 
             var builder = new OctopusPushArgumentBuilder(packagePaths, server, apiKey, _environment, settings);

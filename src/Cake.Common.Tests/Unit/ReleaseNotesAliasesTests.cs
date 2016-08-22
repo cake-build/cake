@@ -42,7 +42,7 @@ namespace Cake.Common.Tests.Unit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Release notes file '/Working/ReleaseNotes.md' do not exist.", result.Message);
+                Assert.Equal("Release notes file '/Working/ReleaseNotes.md' do not exist.", result?.Message);
             }
 
             [Fact]

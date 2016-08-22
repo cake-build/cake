@@ -16,10 +16,7 @@ namespace Cake
         /// Gets the arguments.
         /// </summary>
         /// <value>The arguments.</value>
-        public IReadOnlyDictionary<string, string> Arguments
-        {
-            get { return _arguments; }
-        }
+        public IReadOnlyDictionary<string, string> Arguments => _arguments;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeArguments" /> class.

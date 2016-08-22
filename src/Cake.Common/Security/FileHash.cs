@@ -13,9 +13,7 @@ namespace Cake.Common.Security
     /// </summary>
     public sealed class FileHash
     {
-        private readonly FilePath _filePath;
         private readonly byte[] _hash;
-        private readonly HashAlgorithm _hashAlgorithm;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileHash"/> class.
@@ -27,42 +25,33 @@ namespace Cake.Common.Security
         {
             if (filePath == null)
             {
-                throw new ArgumentNullException("filePath");
+                throw new ArgumentNullException(nameof(filePath));
             }
 
             if (hash == null)
             {
-                throw new ArgumentNullException("hash");
+                throw new ArgumentNullException(nameof(hash));
             }
 
-            _filePath = filePath;
+            Path = filePath;
             _hash = (byte[])hash.Clone();
-            _hashAlgorithm = hashAlgorithm;
+            Algorithm = hashAlgorithm;
         }
 
         /// <summary>
         /// Gets the algorithm used for the hash computation.
         /// </summary>
-        public HashAlgorithm Algorithm
-        {
-            get { return _hashAlgorithm; }
-        }
+        public HashAlgorithm Algorithm { get; }
 
         /// <summary>
         /// Gets the <see cref="FilePath"/> for the file.
         /// </summary>
-        public FilePath Path
-        {
-            get { return _filePath; }
-        }
+        public FilePath Path { get; }
 
         /// <summary>
         /// Gets the raw computed hash.
         /// </summary>
-        public byte[] ComputedHash
-        {
-            get { return (byte[])_hash.Clone(); }
-        }
+        public byte[] ComputedHash => (byte[])_hash.Clone();
 
         /// <summary>
         /// Convert the file hash to a hexadecimal string.

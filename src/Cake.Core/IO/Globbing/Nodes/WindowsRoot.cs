@@ -10,20 +10,15 @@ namespace Cake.Core.IO.Globbing.Nodes
     [DebuggerDisplay("{Drive,nq}:")]
     internal sealed class WindowsRoot : GlobNode
     {
-        private readonly string _drive;
-
-        public string Drive
-        {
-            get { return _drive; }
-        }
+        public string Drive { get; }
 
         public WindowsRoot(string drive)
         {
             if (drive == null)
             {
-                throw new ArgumentNullException("drive");
+                throw new ArgumentNullException(nameof(drive));
             }
-            _drive = drive;
+            Drive = drive;
         }
 
         [DebuggerStepThrough]

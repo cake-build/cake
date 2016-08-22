@@ -44,17 +44,17 @@ namespace Cake.Common.Tools.WiX
         {
             if (objectFiles == null)
             {
-                throw new ArgumentNullException("objectFiles");
+                throw new ArgumentNullException(nameof(objectFiles));
             }
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             var objectFilesArray = objectFiles as FilePath[] ?? objectFiles.ToArray();
             if (!objectFilesArray.Any())
             {
-                throw new ArgumentException("No object files provided.", "objectFiles");
+                throw new ArgumentException("No object files provided.", nameof(objectFiles));
             }
 
             Run(settings, GetArguments(objectFilesArray, settings));
@@ -91,7 +91,7 @@ namespace Cake.Common.Tools.WiX
             }
 
             // Output file
-            if (settings.OutputFile != null && !string.IsNullOrEmpty(settings.OutputFile.FullPath))
+            if (!string.IsNullOrEmpty(settings.OutputFile?.FullPath))
             {
                 builder.Append("-o");
                 builder.AppendQuoted(settings.OutputFile.MakeAbsolute(_environment).FullPath);

@@ -12,16 +12,11 @@ namespace Cake.Core.Annotations
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false, Inherited = false)]
     public sealed class CakeModuleAttribute : Attribute
     {
-        private readonly Type _moduleType;
-
         /// <summary>
         /// Gets the module type.
         /// </summary>
         /// <value>The module type.</value>
-        public Type ModuleType
-        {
-            get { return _moduleType; }
-        }
+        public Type ModuleType { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeModuleAttribute"/> class.
@@ -31,10 +26,10 @@ namespace Cake.Core.Annotations
         {
             if (moduleType == null)
             {
-                throw new ArgumentNullException("moduleType");
+                throw new ArgumentNullException(nameof(moduleType));
             }
 
-            _moduleType = moduleType;
+            ModuleType = moduleType;
         }
     }
 }

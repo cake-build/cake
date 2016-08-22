@@ -1,6 +1,7 @@
 #load "./paths.cake"
 #load "./packages.cake"
 #load "./version.cake"
+#load "./credentials.cake"
 
 public class BuildParameters
 {
@@ -13,6 +14,7 @@ public class BuildParameters
     public bool IsPullRequest { get; private set; }
     public bool IsMainCakeRepo { get; private set; }
     public bool IsMainCakeBranch { get; private set; }
+    public bool IsCoreClrBranch { get; private set; }
     public bool IsTagged { get; private set; }
     public bool IsPublishBuild { get; private set; }
     public bool IsReleaseBuild { get; private set; }
@@ -23,25 +25,38 @@ public class BuildParameters
     public BuildPaths Paths { get; private set; }
     public BuildPackages Packages { get; private set; }
 
-    public void SetBuildVersion(BuildVersion version)
+    public bool ShouldPublish
     {
-        Version  = version;
+        get
+        {
+            return !IsLocalBuild && !IsPullRequest && IsMainCakeRepo
+                && IsMainCakeBranch && IsTagged;
+        }
     }
 
-    public void SetBuildPaths(BuildPaths paths)
+    public bool ShouldPublishToMyGet
     {
-        Paths  = paths;
+        get 
+        {
+            return !IsLocalBuild && !IsPullRequest && !IsCoreClrBranch
+                && IsMainCakeRepo && (IsTagged || !IsMainCakeBranch);
+        }
     }
 
-    public void SetBuildPackages(BuildPackages packages)
+    public void Initialize(ICakeContext context)
     {
-        Packages  = packages;
+        Version = BuildVersion.Calculate(context, this);
+
+        Paths = BuildPaths.GetPaths(context, Configuration, Version.SemVersion);
+
+        Packages = BuildPackages.GetPackages(
+            Paths.Directories.NugetRoot,
+            Version.SemVersion,
+            new [] { "Cake", "Cake.Core", "Cake.Common", "Cake.Testing", "Cake.CoreCLR" },
+            new [] { "cake.portable" });
     }
 
-    public static BuildParameters GetParameters(
-        ICakeContext context,
-        BuildSystem buildSystem
-        )
+    public static BuildParameters GetParameters(ICakeContext context)
     {
         if (context == null)
         {
@@ -49,6 +64,7 @@ public class BuildParameters
         }
 
         var target = context.Argument("target", "Default");
+        var buildSystem = context.BuildSystem();
 
         return new BuildParameters {
             Target = target,
@@ -60,44 +76,32 @@ public class BuildParameters
             IsPullRequest = buildSystem.AppVeyor.Environment.PullRequest.IsPullRequest,
             IsMainCakeRepo = StringComparer.OrdinalIgnoreCase.Equals("cake-build/cake", buildSystem.AppVeyor.Environment.Repository.Name),
             IsMainCakeBranch = StringComparer.OrdinalIgnoreCase.Equals("main", buildSystem.AppVeyor.Environment.Repository.Branch),
-            IsTagged = (
-                buildSystem.AppVeyor.Environment.Repository.Tag.IsTag &&
-                !string.IsNullOrWhiteSpace(buildSystem.AppVeyor.Environment.Repository.Tag.Name)
-            ),
-            GitHub = new BuildCredentials (
-                userName: context.EnvironmentVariable("CAKE_GITHUB_USERNAME"),
-                password: context.EnvironmentVariable("CAKE_GITHUB_PASSWORD")
-            ),
+            IsCoreClrBranch = StringComparer.OrdinalIgnoreCase.Equals("coreclr", buildSystem.AppVeyor.Environment.Repository.Branch),
+            IsTagged = IsBuildTagged(buildSystem),
+            GitHub = BuildCredentials.GetGitHubCredentials(context),
             ReleaseNotes = context.ParseReleaseNotes("./ReleaseNotes.md"),
-            IsPublishBuild = new [] {
-                "ReleaseNotes",
-                "Create-Release-Notes"
-            }.Any(
-                releaseTarget => StringComparer.OrdinalIgnoreCase.Equals(releaseTarget, target)
-            ),
-            IsReleaseBuild = new [] {
-                "Publish",
-                "Publish-NuGet",
-                "Publish-Chocolatey",
-                "Publish-HomeBrew",
-                "Publish-GitHub-Release"
-            }.Any(
-                publishTarget => StringComparer.OrdinalIgnoreCase.Equals(publishTarget, target)
-            ),
+            IsPublishBuild = IsPublishing(target),
+            IsReleaseBuild = IsReleasing(target),
             SkipGitVersion = StringComparer.OrdinalIgnoreCase.Equals("True", context.EnvironmentVariable("CAKE_SKIP_GITVERSION"))
         };
     }
-}
 
-public class BuildCredentials
-{
-    public string UserName { get; private set; }
-    public string Password { get; private set; }
-
-    public BuildCredentials(string userName, string password)
+    private static bool IsBuildTagged(BuildSystem buildSystem)
     {
-        UserName = userName;
-        Password = password;
+        return buildSystem.AppVeyor.Environment.Repository.Tag.IsTag 
+            && !string.IsNullOrWhiteSpace(buildSystem.AppVeyor.Environment.Repository.Tag.Name);
+    }
+
+    private static bool IsReleasing(string target)
+    {
+        var targets = new [] { "Publish", "Publish-NuGet", "Publish-Chocolatey", "Publish-HomeBrew", "Publish-GitHub-Release" };
+        return targets.Any(t => StringComparer.OrdinalIgnoreCase.Equals(t, target));
+    }
+
+    private static bool IsPublishing(string target)
+    {
+        var targets = new [] { "ReleaseNotes", "Create-Release-Notes" };
+        return targets.Any(t => StringComparer.OrdinalIgnoreCase.Equals(t, target));
     }
 }
 

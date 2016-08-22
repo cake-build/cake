@@ -46,7 +46,7 @@ namespace Cake.Common.Tools.DotNetCore.Restore
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetArguments(root, settings));

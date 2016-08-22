@@ -9,6 +9,8 @@ using System.Reflection;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.Polyfill;
+using Cake.Core.Reflection;
 using Cake.Core.Scripting.Analysis;
 
 namespace Cake.Core.Scripting
@@ -26,6 +28,7 @@ namespace Cake.Core.Scripting
         private readonly IScriptAnalyzer _analyzer;
         private readonly IScriptProcessor _processor;
         private readonly IScriptConventions _conventions;
+        private readonly IAssemblyLoader _assemblyLoader;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptRunner"/> class.
@@ -38,6 +41,7 @@ namespace Cake.Core.Scripting
         /// <param name="analyzer">The script analyzer.</param>
         /// <param name="processor">The script processor.</param>
         /// <param name="conventions">The script conventions.</param>
+        /// <param name="assemblyLoader">The assembly loader.</param>
         public ScriptRunner(
             ICakeEnvironment environment,
             ICakeLog log,
@@ -46,39 +50,44 @@ namespace Cake.Core.Scripting
             IScriptAliasFinder aliasFinder,
             IScriptAnalyzer analyzer,
             IScriptProcessor processor,
-            IScriptConventions conventions)
+            IScriptConventions conventions,
+            IAssemblyLoader assemblyLoader)
         {
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             if (log == null)
             {
-                throw new ArgumentNullException("log");
+                throw new ArgumentNullException(nameof(log));
             }
             if (configuration == null)
             {
-                throw new ArgumentNullException("configuration");
+                throw new ArgumentNullException(nameof(configuration));
             }
             if (engine == null)
             {
-                throw new ArgumentNullException("engine");
+                throw new ArgumentNullException(nameof(engine));
             }
             if (aliasFinder == null)
             {
-                throw new ArgumentNullException("aliasFinder");
+                throw new ArgumentNullException(nameof(aliasFinder));
             }
             if (analyzer == null)
             {
-                throw new ArgumentNullException("analyzer");
+                throw new ArgumentNullException(nameof(analyzer));
             }
             if (processor == null)
             {
-                throw new ArgumentNullException("processor");
+                throw new ArgumentNullException(nameof(processor));
             }
             if (conventions == null)
             {
-                throw new ArgumentNullException("conventions");
+                throw new ArgumentNullException(nameof(conventions));
+            }
+            if (assemblyLoader == null)
+            {
+                throw new ArgumentNullException(nameof(assemblyLoader));
             }
 
             _environment = environment;
@@ -89,6 +98,7 @@ namespace Cake.Core.Scripting
             _analyzer = analyzer;
             _processor = processor;
             _conventions = conventions;
+            _assemblyLoader = assemblyLoader;
         }
 
         /// <summary>
@@ -101,15 +111,15 @@ namespace Cake.Core.Scripting
         {
             if (host == null)
             {
-                throw new ArgumentNullException("host");
+                throw new ArgumentNullException(nameof(host));
             }
             if (scriptPath == null)
             {
-                throw new ArgumentNullException("scriptPath");
+                throw new ArgumentNullException(nameof(scriptPath));
             }
             if (arguments == null)
             {
-                throw new ArgumentNullException("arguments");
+                throw new ArgumentNullException(nameof(arguments));
             }
 
             // Make the script path absolute.
@@ -142,17 +152,19 @@ namespace Cake.Core.Scripting
             // Load all references.
             var assemblies = new HashSet<Assembly>();
             assemblies.AddRange(_conventions.GetDefaultAssemblies(applicationRoot));
+
             foreach (var reference in result.References)
             {
-                if (host.Context.FileSystem.Exist((FilePath)reference))
+                var referencePath = new FilePath(reference);
+                if (host.Context.FileSystem.Exist(referencePath))
                 {
-                    var assembly = Assembly.LoadFrom(reference);
+                    var assembly = _assemblyLoader.Load(referencePath);
                     assemblies.Add(assembly);
                 }
                 else
                 {
                     // Add a reference to the session.
-                    session.AddReference(reference);
+                    session.AddReference(referencePath);
                 }
             }
 

@@ -62,7 +62,7 @@ namespace Cake.Common.Tools.GitLink
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var runner = new GitLinkRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);

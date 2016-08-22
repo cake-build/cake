@@ -12,20 +12,11 @@ namespace Cake.Testing
         private readonly FakeFile _file;
         private long _position;
 
-        public override bool CanRead
-        {
-            get { return true; }
-        }
+        public override bool CanRead => true;
 
-        public override bool CanSeek
-        {
-            get { return true; }
-        }
+        public override bool CanSeek => true;
 
-        public override bool CanWrite
-        {
-            get { return true; }
-        }
+        public override bool CanWrite => true;
 
         public FakeFileStream(FakeFile file)
         {

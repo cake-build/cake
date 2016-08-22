@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Composition;
-using Cake.Core.Composition;
 using Cake.Core.Configuration;
 using Cake.Core.IO;
 using Cake.Modules;

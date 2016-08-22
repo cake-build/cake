@@ -126,7 +126,7 @@ namespace Cake.Common.Tools.DupFinder
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var runner = new DupFinderRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);
@@ -173,12 +173,12 @@ namespace Cake.Common.Tools.DupFinder
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (pattern == null)
             {
-                throw new ArgumentNullException("pattern");
+                throw new ArgumentNullException(nameof(pattern));
             }
 
             var sourceFiles = context.Globber.GetFiles(pattern).ToArray();
@@ -208,7 +208,7 @@ namespace Cake.Common.Tools.DupFinder
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var runner = new DupFinderRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);

@@ -22,7 +22,7 @@ namespace Cake.Common.Build.AppVeyor
         {
             if (provider == null)
             {
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             }
             provider.AddMessage(string.Format(CultureInfo.InvariantCulture, format, args));
         }
@@ -37,7 +37,7 @@ namespace Cake.Common.Build.AppVeyor
         {
             if (provider == null)
             {
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             }
             provider.AddMessage(string.Format(CultureInfo.InvariantCulture, format, args), AppVeyorMessageCategoryType.Warning);
         }
@@ -52,7 +52,7 @@ namespace Cake.Common.Build.AppVeyor
         {
             if (provider == null)
             {
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             }
             provider.AddMessage(string.Format(CultureInfo.InvariantCulture, format, args), AppVeyorMessageCategoryType.Error);
         }
@@ -67,10 +67,10 @@ namespace Cake.Common.Build.AppVeyor
         {
             if (provider == null)
             {
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             }
             provider.AddMessage(message, AppVeyorMessageCategoryType.Error,
-                exception == null ? null : exception.ToString());
+                exception?.ToString());
         }
     }
 }

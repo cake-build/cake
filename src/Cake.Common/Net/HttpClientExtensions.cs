@@ -67,7 +67,7 @@ namespace Cake.Common.Net
         {
             if (stream == null)
             {
-                throw new ArgumentNullException("stream", "Stream can not be null");
+                throw new ArgumentNullException(nameof(stream), "Stream can not be null");
             }
             if (!stream.CanRead)
             {
@@ -93,7 +93,7 @@ namespace Cake.Common.Net
         {
             if (data == null)
             {
-                throw new ArgumentNullException("data", "No data to send");
+                throw new ArgumentNullException(nameof(data), "No data to send");
             }
 
             return await UploadFileAsync(client, requestUri, new MemoryStream(data), fileName, contentType).ConfigureAwait(false);

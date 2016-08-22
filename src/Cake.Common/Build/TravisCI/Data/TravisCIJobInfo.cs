@@ -17,10 +17,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The job identifier.
         /// </value>
-        public string JobId
-        {
-            get { return GetEnvironmentString("TRAVIS_JOB_ID"); }
-        }
+        public string JobId => GetEnvironmentString("TRAVIS_JOB_ID");
 
         /// <summary>
         /// Gets the job number for the current job.
@@ -28,10 +25,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The job number.
         /// </value>
-        public string JobNumber
-        {
-            get { return GetEnvironmentString("TRAVIS_JOB_NUMBER"); }
-        }
+        public string JobNumber => GetEnvironmentString("TRAVIS_JOB_NUMBER");
 
         /// <summary>
         /// Gets the name of the operating system for the current job.
@@ -39,10 +33,8 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The name of the os.
         /// </value>
-        public string OSName
-        {
-            get { return GetEnvironmentString("TRAVIS_OS_NAME"); }
-        }
+        // ReSharper disable once InconsistentNaming
+        public string OSName => GetEnvironmentString("TRAVIS_OS_NAME");
 
         /// <summary>
         /// Gets a value indicating whether encrypted environment variables are being used for the current job.
@@ -50,10 +42,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// <c>true</c> if [secure environment variables are in use]; otherwise, <c>false</c>.
         /// </value>
-        public bool SecureEnvironmentVariables
-        {
-            get { return GetEnvironmentBoolean("TRAVIS_SECURE_ENV_VARS"); }
-        }
+        public bool SecureEnvironmentVariables => GetEnvironmentBoolean("TRAVIS_SECURE_ENV_VARS");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TravisCIJobInfo"/> class.

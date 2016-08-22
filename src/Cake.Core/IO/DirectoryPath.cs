@@ -45,7 +45,7 @@ namespace Cake.Core.IO
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
             var combinedPath = System.IO.Path.Combine(FullPath, path.GetFilename().FullPath);
             return new FilePath(combinedPath);
@@ -61,7 +61,7 @@ namespace Cake.Core.IO
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
             if (!path.IsRelative)
             {
@@ -81,7 +81,7 @@ namespace Cake.Core.IO
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
             if (!path.IsRelative)
             {
@@ -100,7 +100,7 @@ namespace Cake.Core.IO
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
             if (path.IsRelative)
             {
@@ -120,7 +120,7 @@ namespace Cake.Core.IO
         {
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             return IsRelative
                 ? environment.WorkingDirectory.Combine(this).Collapse()
@@ -175,7 +175,7 @@ namespace Cake.Core.IO
         {
             if (to == null)
             {
-                throw new ArgumentNullException("to");
+                throw new ArgumentNullException(nameof(to));
             }
 
             return GetRelativePath(to.GetDirectory()).GetFilePath(to.GetFilename());

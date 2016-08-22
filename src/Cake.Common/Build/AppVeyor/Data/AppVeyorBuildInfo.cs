@@ -17,10 +17,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         /// The path to the clone directory.
         /// </value>
-        public string Folder
-        {
-            get { return GetEnvironmentString("APPVEYOR_BUILD_FOLDER"); }
-        }
+        public string Folder => GetEnvironmentString("APPVEYOR_BUILD_FOLDER");
 
         /// <summary>
         /// Gets the AppVeyor unique build ID.
@@ -28,10 +25,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         /// The AppVeyor unique build ID.
         /// </value>
-        public string Id
-        {
-            get { return GetEnvironmentString("APPVEYOR_BUILD_ID"); }
-        }
+        public string Id => GetEnvironmentString("APPVEYOR_BUILD_ID");
 
         /// <summary>
         /// Gets the build number.
@@ -39,10 +33,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         /// The build number.
         /// </value>
-        public int Number
-        {
-            get { return GetEnvironmentInteger("APPVEYOR_BUILD_NUMBER"); }
-        }
+        public int Number => GetEnvironmentInteger("APPVEYOR_BUILD_NUMBER");
 
         /// <summary>
         /// Gets the build version.
@@ -50,10 +41,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         /// The build version.
         /// </value>
-        public string Version
-        {
-            get { return GetEnvironmentString("APPVEYOR_BUILD_VERSION"); }
-        }
+        public string Version => GetEnvironmentString("APPVEYOR_BUILD_VERSION");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppVeyorBuildInfo"/> class.

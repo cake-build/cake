@@ -11,8 +11,6 @@ namespace Cake.Common.Build.Bamboo.Data
     /// </summary>
     public sealed class BambooRepositoryInfo : BambooInfo
     {
-        private readonly BambooCommitInfo _commitProvider;
-
         /// <summary>
         /// Gets the revision control system.
         /// <list type="bullet">
@@ -36,10 +34,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// <value>
         ///   The revision control system.
         /// </value>
-        public string Scm
-        {
-            get { return GetEnvironmentString("bamboo_planRepository_type"); }
-        }
+        public string Scm => GetEnvironmentString("bamboo_planRepository_type");
 
         /// <summary>
         /// Gets the repository name as named in Bamboo
@@ -47,10 +42,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// <value>
         ///   The bamboo repository name.
         /// </value>
-        public string Name
-        {
-            get { return GetEnvironmentString("bamboo_repository_name"); }
-        }
+        public string Name => GetEnvironmentString("bamboo_repository_name");
 
         /// <summary>
         /// Gets the build branch.
@@ -58,10 +50,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// <value>
         ///   The build branch.
         /// </value>
-        public string Branch
-        {
-            get { return GetEnvironmentString("bamboo_planRepository_branch"); }
-        }
+        public string Branch => GetEnvironmentString("bamboo_planRepository_branch");
 
         /// <summary>
         /// Gets the commit information for the build.
@@ -69,10 +58,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// <value>
         ///   The commit information for the build.
         /// </value>
-        public BambooCommitInfo Commit
-        {
-            get { return _commitProvider; }
-        }
+        public BambooCommitInfo Commit { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BambooRepositoryInfo"/> class.
@@ -81,7 +67,7 @@ namespace Cake.Common.Build.Bamboo.Data
         public BambooRepositoryInfo(ICakeEnvironment environment)
             : base(environment)
         {
-            _commitProvider = new BambooCommitInfo(environment);
+            Commit = new BambooCommitInfo(environment);
         }
     }
 }

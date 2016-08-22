@@ -36,20 +36,17 @@ namespace Cake.Commands
         {
             if (options == null)
             {
-                throw new ArgumentNullException("options");
+                throw new ArgumentNullException(nameof(options));
             }
 
-            var message = "Attach debugger to process {0} to continue";
-            var pid = _debugger.GetProcessId();
-
             _log.Debug("Performing debug...");
-            _log.Information(Verbosity.Quiet, message, pid);
+            _log.Information(Verbosity.Quiet, "Attach debugger to process {0} to continue", _debugger.GetProcessId());
 
             _debugger.WaitForAttach(Timeout.InfiniteTimeSpan);
-
             _log.Debug("Debugger attached");
 
             _scriptRunner.Run(_host, options.Script, options.Arguments);
+
             return true;
         }
     }

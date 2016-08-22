@@ -11,20 +11,13 @@ namespace Cake.Common.Build.Bamboo.Data
     /// </summary>
     public sealed class BambooEnvironmentInfo : BambooInfo
     {
-        private readonly BambooPlanInfo _planProvider;
-        private readonly BambooBuildInfo _buildProvider;
-        private readonly BambooRepositoryInfo _repositoryProvider;
-
         /// <summary>
         /// Gets Bamboo plan information.
         /// </summary>
         /// <value>
         ///   The Bamboo plan information.
         /// </value>
-        public BambooPlanInfo Plan
-        {
-            get { return _planProvider; }
-        }
+        public BambooPlanInfo Plan { get; }
 
         /// <summary>
         /// Gets Bamboo build information.
@@ -32,10 +25,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// <value>
         ///   The Bamboo build information.
         /// </value>
-        public BambooBuildInfo Build
-        {
-            get { return _buildProvider; }
-        }
+        public BambooBuildInfo Build { get; }
 
         /// <summary>
         /// Gets Bamboo repository information.
@@ -43,10 +33,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// <value>
         ///   The Bamboo repository information.
         /// </value>
-        public BambooRepositoryInfo Repository
-        {
-            get { return _repositoryProvider; }
-        }
+        public BambooRepositoryInfo Repository { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BambooEnvironmentInfo"/> class.
@@ -55,9 +42,9 @@ namespace Cake.Common.Build.Bamboo.Data
         public BambooEnvironmentInfo(ICakeEnvironment environment)
             : base(environment)
         {
-            _planProvider = new BambooPlanInfo(environment);
-            _buildProvider = new BambooBuildInfo(environment);
-            _repositoryProvider = new BambooRepositoryInfo(environment);
+            Plan = new BambooPlanInfo(environment);
+            Build = new BambooBuildInfo(environment);
+            Repository = new BambooRepositoryInfo(environment);
         }
     }
 }

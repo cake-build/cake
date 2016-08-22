@@ -14,37 +14,25 @@ namespace Cake.Core.Scripting
     /// </summary>
     public sealed class ScriptAlias
     {
-        private readonly string _name;
-        private readonly MethodInfo _method;
-        private readonly ScriptAliasType _type;
         private readonly List<string> _namespaces;
 
         /// <summary>
         /// Gets the name of the alias.
         /// </summary>
         /// <value>The name.</value>
-        public string Name
-        {
-            get { return _name; }
-        }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the method associated with the alias.
         /// </summary>
         /// <value>The method associated with the alias.</value>
-        public MethodInfo Method
-        {
-            get { return _method; }
-        }
+        public MethodInfo Method { get; }
 
         /// <summary>
         /// Gets the alias type.
         /// </summary>
         /// <value>The alias type.</value>
-        public ScriptAliasType Type
-        {
-            get { return _type; }
-        }
+        public ScriptAliasType Type { get; }
 
         /// <summary>
         /// Gets all namespaces that the alias need to be imported.
@@ -52,10 +40,7 @@ namespace Cake.Core.Scripting
         /// <value>
         /// The namespaces that the alias need to be imported.
         /// </value>
-        public IReadOnlyList<string> Namespaces
-        {
-            get { return _namespaces; }
-        }
+        public IReadOnlyList<string> Namespaces => _namespaces;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptAlias"/> class.
@@ -67,11 +52,11 @@ namespace Cake.Core.Scripting
         {
             if (method == null)
             {
-                throw new ArgumentNullException("method");
+                throw new ArgumentNullException(nameof(method));
             }
-            _name = method.Name;
-            _method = method;
-            _type = type;
+            Name = method.Name;
+            Method = method;
+            Type = type;
             _namespaces = new List<string>(namespaces ?? Enumerable.Empty<string>());
         }
     }

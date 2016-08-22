@@ -11,36 +11,23 @@ namespace Cake.Testing
     /// </summary>
     public sealed class FakeLogMessage
     {
-        private readonly Verbosity _verbosity;
-        private readonly LogLevel _level;
-        private readonly string _message;
-
         /// <summary>
         /// Gets the verbosity.
         /// </summary>
         /// <value>The verbosity.</value>
-        public Verbosity Verbosity
-        {
-            get { return _verbosity; }
-        }
+        public Verbosity Verbosity { get; }
 
         /// <summary>
         /// Gets the log level.
         /// </summary>
         /// <value>The log level.</value>
-        public LogLevel Level
-        {
-            get { return _level; }
-        }
+        public LogLevel Level { get; }
 
         /// <summary>
         /// Gets the message.
         /// </summary>
         /// <value>The message.</value>
-        public string Message
-        {
-            get { return _message; }
-        }
+        public string Message { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FakeLogMessage"/> class.
@@ -50,9 +37,9 @@ namespace Cake.Testing
         /// <param name="message">The message.</param>
         public FakeLogMessage(Verbosity verbosity, LogLevel level, string message)
         {
-            _level = level;
-            _verbosity = verbosity;
-            _message = message;
+            Level = level;
+            Verbosity = verbosity;
+            Message = message;
         }
     }
 }

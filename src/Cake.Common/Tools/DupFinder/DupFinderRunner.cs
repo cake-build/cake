@@ -52,12 +52,12 @@ namespace Cake.Common.Tools.DupFinder
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             if (filePaths == null)
             {
-                throw new ArgumentNullException("filePaths");
+                throw new ArgumentNullException(nameof(filePaths));
             }
 
             Run(settings, GetArgument(settings, filePaths));
@@ -76,7 +76,7 @@ namespace Cake.Common.Tools.DupFinder
         {
             if (configFile == null)
             {
-                throw new ArgumentNullException("configFile");
+                throw new ArgumentNullException(nameof(configFile));
             }
 
             Run(new DupFinderSettings(), GetConfigArgument(configFile));

@@ -33,15 +33,15 @@ namespace Cake.Common.IO
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             if (log == null)
             {
-                throw new ArgumentNullException("log");
+                throw new ArgumentNullException(nameof(log));
             }
             _fileSystem = fileSystem;
             _environment = environment;
@@ -60,15 +60,15 @@ namespace Cake.Common.IO
         {
             if (rootPath == null)
             {
-                throw new ArgumentNullException("rootPath");
+                throw new ArgumentNullException(nameof(rootPath));
             }
             if (outputPath == null)
             {
-                throw new ArgumentNullException("outputPath");
+                throw new ArgumentNullException(nameof(outputPath));
             }
             if (filePaths == null)
             {
-                throw new ArgumentNullException("filePaths");
+                throw new ArgumentNullException(nameof(filePaths));
             }
 
             // Make root path and output file path absolute.
@@ -115,11 +115,11 @@ namespace Cake.Common.IO
         {
             if (zipPath == null)
             {
-                throw new ArgumentNullException("zipPath");
+                throw new ArgumentNullException(nameof(zipPath));
             }
             if (outputPath == null)
             {
-                throw new ArgumentNullException("outputPath");
+                throw new ArgumentNullException(nameof(outputPath));
             }
 
             // Make root path and output file path absolute.

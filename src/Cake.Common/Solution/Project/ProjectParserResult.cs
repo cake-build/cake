@@ -13,108 +13,65 @@ namespace Cake.Common.Solution.Project
     /// </summary>
     public sealed class ProjectParserResult
     {
-        private readonly string _configuration;
-        private readonly string _platform;
-        private readonly string _projectGuid;
-        private readonly string _outputType;
-        private readonly DirectoryPath _outputPath;
-        private readonly string _rootNameSpace;
-        private readonly string _assemblyName;
-        private readonly string _targetFrameworkVersion;
-        private readonly string _targetFrameworkProfile;
-        private readonly ICollection<ProjectFile> _files;
-        private readonly ICollection<ProjectAssemblyReference> _references;
-        private readonly ICollection<ProjectReference> _projectReferences;
-
         /// <summary>
         /// Gets the build configuration.
         /// </summary>
         /// <value>The build configuration.</value>
-        public string Configuration
-        {
-            get { return _configuration; }
-        }
+        public string Configuration { get; }
 
         /// <summary>
         /// Gets the target platform.
         /// </summary>
         /// <value>The platform.</value>
-        public string Platform
-        {
-            get { return _platform; }
-        }
+        public string Platform { get; }
 
         /// <summary>
         /// Gets the unique project identifier.
         /// </summary>
         /// <value>The unique project identifier.</value>
-        public string ProjectGuid
-        {
-            get { return _projectGuid; }
-        }
+        public string ProjectGuid { get; }
 
         /// <summary>
         /// Gets the compiler output type, i.e. <c>Exe/Library</c>.
         /// </summary>
         /// <value>The output type.</value>
-        public string OutputType
-        {
-            get { return _outputType; }
-        }
+        public string OutputType { get; }
 
         /// <summary>
         /// Gets the compiler output path.
         /// </summary>
         /// <value>The output path.</value>
-        public DirectoryPath OutputPath
-        {
-            get { return _outputPath; }
-        }
+        public DirectoryPath OutputPath { get; }
 
         /// <summary>
         /// Gets the default root namespace.
         /// </summary>
         /// <value>The root namespace.</value>
-        public string RootNameSpace
-        {
-            get { return _rootNameSpace; }
-        }
+        public string RootNameSpace { get; }
 
         /// <summary>
         /// Gets the build target assembly name.
         /// </summary>
         /// <value>The assembly name.</value>
-        public string AssemblyName
-        {
-            get { return _assemblyName; }
-        }
+        public string AssemblyName { get; }
 
         /// <summary>
         /// Gets the compiler target framework version.
         /// </summary>
         /// <value>The target framework version.</value>
-        public string TargetFrameworkVersion
-        {
-            get { return _targetFrameworkVersion; }
-        }
+        public string TargetFrameworkVersion { get; }
 
         /// <summary>
         /// Gets the compiler target framework profile.
         /// </summary>
         /// <value>The target framework profile.</value>
-        public string TargetFrameworkProfile
-        {
-            get { return _targetFrameworkProfile; }
-        }
+        public string TargetFrameworkProfile { get; }
 
         /// <summary>
         /// Gets the project content files.
         /// </summary>
         /// <value>The files.</value>
-        public ICollection<ProjectFile> Files
-        {
-            get { return _files; }
-        }
+        public ICollection<ProjectFile> Files { get; }
 
         /// <summary>
         /// Gets the references.
@@ -122,10 +79,7 @@ namespace Cake.Common.Solution.Project
         /// <value>
         /// The references.
         /// </value>
-        public ICollection<ProjectAssemblyReference> References
-        {
-            get { return _references; }
-        }
+        public ICollection<ProjectAssemblyReference> References { get; }
 
         /// <summary>
         /// Gets the references to other projects.
@@ -133,10 +87,7 @@ namespace Cake.Common.Solution.Project
         /// <value>
         /// The references.
         /// </value>
-        public ICollection<ProjectReference> ProjectReferences
-        {
-            get { return _projectReferences; }
-        }
+        public ICollection<ProjectReference> ProjectReferences { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectParserResult" /> class.
@@ -167,18 +118,18 @@ namespace Cake.Common.Solution.Project
             IEnumerable<ProjectAssemblyReference> references,
             IEnumerable<ProjectReference> projectReferences)
         {
-            _configuration = configuration;
-            _platform = platform;
-            _projectGuid = projectGuid;
-            _outputType = outputType;
-            _outputPath = outputPath;
-            _rootNameSpace = rootNameSpace;
-            _assemblyName = assemblyName;
-            _targetFrameworkVersion = targetFrameworkVersion;
-            _targetFrameworkProfile = targetFrameworkProfile;
-            _files = files.ToList().AsReadOnly();
-            _references = references.ToList().AsReadOnly();
-            _projectReferences = projectReferences.ToList().AsReadOnly();
+            Configuration = configuration;
+            Platform = platform;
+            ProjectGuid = projectGuid;
+            OutputType = outputType;
+            OutputPath = outputPath;
+            RootNameSpace = rootNameSpace;
+            AssemblyName = assemblyName;
+            TargetFrameworkVersion = targetFrameworkVersion;
+            TargetFrameworkProfile = targetFrameworkProfile;
+            Files = files.ToList().AsReadOnly();
+            References = references.ToList().AsReadOnly();
+            ProjectReferences = projectReferences.ToList().AsReadOnly();
         }
     }
 }

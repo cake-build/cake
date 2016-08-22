@@ -9,34 +9,25 @@ namespace Cake.Diagnostics.Formatting
 {
     internal sealed class PropertyToken : FormatToken
     {
-        private readonly int _position;
-        private readonly string _format;
+        public string Format { get; }
 
-        public string Format
-        {
-            get { return _format; }
-        }
-
-        public int Position
-        {
-            get { return _position; }
-        }
+        public int Position { get; }
 
         public PropertyToken(int position, string format)
         {
-            _position = position;
-            _format = format;
+            Position = position;
+            Format = format;
         }
 
         public override string Render(object[] args)
         {
-            var value = args[_position];
-            if (!string.IsNullOrWhiteSpace(_format))
+            var value = args[Position];
+            if (!string.IsNullOrWhiteSpace(Format))
             {
                 var formattable = value as IFormattable;
                 if (formattable != null)
                 {
-                    return formattable.ToString(_format, CultureInfo.InvariantCulture);
+                    return formattable.ToString(Format, CultureInfo.InvariantCulture);
                 }
             }
             return value == null ? "[NULL]" : value.ToString();

@@ -71,7 +71,7 @@ namespace Cake.Common.Tools.NuGet
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
@@ -122,7 +122,7 @@ namespace Cake.Common.Tools.NuGet
         {
             if (filePaths == null)
             {
-                throw new ArgumentNullException("filePaths");
+                throw new ArgumentNullException(nameof(filePaths));
             }
 
             foreach (var filePath in filePaths)
@@ -172,7 +172,7 @@ namespace Cake.Common.Tools.NuGet
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
@@ -249,7 +249,7 @@ namespace Cake.Common.Tools.NuGet
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
@@ -276,7 +276,7 @@ namespace Cake.Common.Tools.NuGet
         {
             if (targetFilePaths == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             foreach (var targetFilePath in targetFilePaths)
@@ -312,7 +312,7 @@ namespace Cake.Common.Tools.NuGet
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
@@ -347,7 +347,7 @@ namespace Cake.Common.Tools.NuGet
         {
             if (packageFilePaths == null)
             {
-                throw new ArgumentNullException("packageFilePaths");
+                throw new ArgumentNullException(nameof(packageFilePaths));
             }
 
             foreach (var packageFilePath in packageFilePaths)
@@ -421,7 +421,7 @@ namespace Cake.Common.Tools.NuGet
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
@@ -494,7 +494,7 @@ namespace Cake.Common.Tools.NuGet
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
@@ -573,7 +573,7 @@ namespace Cake.Common.Tools.NuGet
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
@@ -640,7 +640,7 @@ namespace Cake.Common.Tools.NuGet
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
@@ -669,7 +669,7 @@ namespace Cake.Common.Tools.NuGet
         {
             if (packageIds == null)
             {
-                throw new ArgumentNullException("packageIds");
+                throw new ArgumentNullException(nameof(packageIds));
             }
 
             foreach (var packageId in packageIds)
@@ -739,7 +739,7 @@ namespace Cake.Common.Tools.NuGet
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
@@ -770,7 +770,7 @@ namespace Cake.Common.Tools.NuGet
         {
             if (packageConfigPaths == null)
             {
-                throw new ArgumentNullException("packageConfigPaths");
+                throw new ArgumentNullException(nameof(packageConfigPaths));
             }
 
             foreach (var packageConfigPath in packageConfigPaths)
@@ -801,7 +801,7 @@ namespace Cake.Common.Tools.NuGet
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
@@ -851,7 +851,7 @@ namespace Cake.Common.Tools.NuGet
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
@@ -939,7 +939,7 @@ namespace Cake.Common.Tools.NuGet
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
@@ -969,7 +969,7 @@ namespace Cake.Common.Tools.NuGet
         {
             if (targetFiles == null)
             {
-                throw new ArgumentNullException("targetFiles");
+                throw new ArgumentNullException(nameof(targetFiles));
             }
 
             foreach (var targetFile in targetFiles)

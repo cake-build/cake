@@ -45,32 +45,32 @@ namespace Cake.Common.Tools.GitReleaseManager.Publish
         {
             if (string.IsNullOrWhiteSpace(userName))
             {
-                throw new ArgumentNullException("userName");
+                throw new ArgumentNullException(nameof(userName));
             }
 
             if (string.IsNullOrWhiteSpace(password))
             {
-                throw new ArgumentNullException("password");
+                throw new ArgumentNullException(nameof(password));
             }
 
             if (string.IsNullOrWhiteSpace(owner))
             {
-                throw new ArgumentNullException("owner");
+                throw new ArgumentNullException(nameof(owner));
             }
 
             if (string.IsNullOrWhiteSpace(repository))
             {
-                throw new ArgumentNullException("repository");
+                throw new ArgumentNullException(nameof(repository));
             }
 
             if (string.IsNullOrWhiteSpace(tagName))
             {
-                throw new ArgumentNullException("tagName");
+                throw new ArgumentNullException(nameof(tagName));
             }
 
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetArguments(userName, password, owner, repository, tagName, settings));

@@ -50,7 +50,7 @@ namespace Cake.Common.Tools.Cake
         {
             if (scriptPath == null)
             {
-                throw new ArgumentNullException("scriptPath");
+                throw new ArgumentNullException(nameof(scriptPath));
             }
 
             scriptPath = scriptPath.MakeAbsolute(_environment);
@@ -74,7 +74,7 @@ namespace Cake.Common.Tools.Cake
         {
             if (string.IsNullOrWhiteSpace(cakeExpression))
             {
-                throw new ArgumentNullException("cakeExpression");
+                throw new ArgumentNullException(nameof(cakeExpression));
             }
             DirectoryPath tempPath = _environment.GetEnvironmentVariable("TEMP") ?? "./";
             var tempScriptFile = _fileSystem.GetFile(tempPath
