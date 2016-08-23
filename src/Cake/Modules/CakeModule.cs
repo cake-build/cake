@@ -17,44 +17,44 @@ namespace Cake.Modules
 {
     internal sealed class CakeModule : ICakeModule
     {
-        public void Register(ICakeContainerRegistry registry)
+        public void Register(ICakeContainerRegistrar registrar)
         {
-            if (registry == null)
+            if (registrar == null)
             {
-                throw new ArgumentNullException(nameof(registry));
+                throw new ArgumentNullException(nameof(registrar));
             }
 
             // Core services.
-            registry.RegisterType<CakeReportPrinter>().As<ICakeReportPrinter>().Singleton();
-            registry.RegisterType<CakeConsole>().As<IConsole>().Singleton();
+            registrar.RegisterType<CakeReportPrinter>().As<ICakeReportPrinter>().Singleton();
+            registrar.RegisterType<CakeConsole>().As<IConsole>().Singleton();
 
             // Modules
-            registry.RegisterType<ModuleSearcher>().Singleton();
-            registry.RegisterType<ModuleLoader>().Singleton();
+            registrar.RegisterType<ModuleSearcher>().Singleton();
+            registrar.RegisterType<ModuleLoader>().Singleton();
 
             // Configuration
-            registry.RegisterType<CakeConfigurationProvider>().Singleton();
+            registrar.RegisterType<CakeConfigurationProvider>().Singleton();
 
             // Cake services.
-            registry.RegisterType<ArgumentParser>().As<IArgumentParser>().Singleton();
-            registry.RegisterType<CommandFactory>().As<ICommandFactory>().Singleton();
-            registry.RegisterType<CakeApplication>().Singleton();
-            registry.RegisterType<CakeBuildLog>().As<ICakeLog>().Singleton();
-            registry.RegisterType<VerbosityParser>().Singleton();
-            registry.RegisterType<CakeDebugger>().As<IDebugger>().Singleton();
+            registrar.RegisterType<ArgumentParser>().As<IArgumentParser>().Singleton();
+            registrar.RegisterType<CommandFactory>().As<ICommandFactory>().Singleton();
+            registrar.RegisterType<CakeApplication>().Singleton();
+            registrar.RegisterType<CakeBuildLog>().As<ICakeLog>().Singleton();
+            registrar.RegisterType<VerbosityParser>().Singleton();
+            registrar.RegisterType<CakeDebugger>().As<IDebugger>().Singleton();
 
             // Scripting
-            registry.RegisterType<BuildScriptHost>().Singleton();
-            registry.RegisterType<DescriptionScriptHost>().Singleton();
-            registry.RegisterType<DryRunScriptHost>().Singleton();
+            registrar.RegisterType<BuildScriptHost>().Singleton();
+            registrar.RegisterType<DescriptionScriptHost>().Singleton();
+            registrar.RegisterType<DryRunScriptHost>().Singleton();
 
             // Register commands.
-            registry.RegisterType<BuildCommand>().AsSelf().Transient();
-            registry.RegisterType<DebugCommand>().AsSelf().Transient();
-            registry.RegisterType<DescriptionCommand>().AsSelf().Transient();
-            registry.RegisterType<DryRunCommand>().AsSelf().Transient();
-            registry.RegisterType<HelpCommand>().AsSelf().Transient();
-            registry.RegisterType<VersionCommand>().AsSelf().Transient();
+            registrar.RegisterType<BuildCommand>().AsSelf().Transient();
+            registrar.RegisterType<DebugCommand>().AsSelf().Transient();
+            registrar.RegisterType<DescriptionCommand>().AsSelf().Transient();
+            registrar.RegisterType<DryRunCommand>().AsSelf().Transient();
+            registrar.RegisterType<HelpCommand>().AsSelf().Transient();
+            registrar.RegisterType<VersionCommand>().AsSelf().Transient();
         }
     }
 }

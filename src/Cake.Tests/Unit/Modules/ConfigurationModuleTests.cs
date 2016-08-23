@@ -23,7 +23,7 @@ namespace Cake.Tests.Unit.Modules
                 var fileSystem = Substitute.For<IFileSystem>();
                 var environment = FakeEnvironment.CreateUnixEnvironment();
                 var provider = new CakeConfigurationProvider(fileSystem, environment);
-                var registry = new ContainerRegistry();
+                var registry = new ContainerRegistrar();
                 var options = new CakeOptions { Script = "./foo/bar/build.cake" };
                 var module = new ConfigurationModule(provider, options);
 

@@ -38,10 +38,10 @@ namespace Cake
                     .Skip(1) // Skip executable.
                     .ToArray();
 
-                var builder = new CakeContainerBuilder();
-                builder.Registry.RegisterModule(new CakeModule());
-                builder.Registry.RegisterModule(new CoreModule());
-                builder.Registry.RegisterModule(new NuGetModule());
+                var builder = new ContainerRegistrar();
+                builder.RegisterModule(new CakeModule());
+                builder.RegisterModule(new CoreModule());
+                builder.RegisterModule(new NuGetModule());
 
                 // Build the container.
                 using (var container = builder.Build())
@@ -57,11 +57,11 @@ namespace Cake
                     log.Verbosity = options.Verbosity;
 
                     // Rebuild the container.
-                    builder = new CakeContainerBuilder();
+                    builder = new ContainerRegistrar();
                     var provider = container.Resolve<CakeConfigurationProvider>();
-                    builder.Registry.RegisterModule(new ConfigurationModule(provider, options));
-                    builder.Registry.RegisterModule(new ArgumentsModule(options));
-                    builder.Registry.RegisterModule(new ScriptingModule(options));
+                    builder.RegisterModule(new ConfigurationModule(provider, options));
+                    builder.RegisterModule(new ArgumentsModule(options));
+                    builder.RegisterModule(new ScriptingModule(options));
                     builder.Update(container);
 
                     // Load all modules.
