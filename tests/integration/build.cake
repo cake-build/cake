@@ -7,6 +7,7 @@
 #load "./Cake.Common/EnvironmentAliases.cake"
 #load "./Cake.Common/IO/DirectoryAliases.cake"
 #load "./Cake.Common/IO/FileAliases.cake"
+#load "./Cake.Common/ReleaseNotesAliases.cake"
 #load "./Cake.Common/Solution/SolutionAliases.cake"
 #load "./Cake.Common/Solution/Project/ProjectAliases.cake"
 #load "./Cake.Common/Solution/Project/Properties/AssemblyInfoAliases.cake"
@@ -40,6 +41,7 @@ Task("Cake.Common")
     .IsDependentOn("Cake.Common.EnvironmentAliases")
     .IsDependentOn("Cake.Common.IO.DirectoryAliases")
     .IsDependentOn("Cake.Common.IO.FileAliases")
+    .IsDependentOn("Cake.Common.ReleaseNotesAliases")
     .IsDependentOn("Cake.Common.Solution.SolutionAliases")
     .IsDependentOn("Cake.Common.Solution.Project.ProjectAliases")
     .IsDependentOn("Cake.Common.Solution.Project.Properties.AssemblyInfoAliases")
