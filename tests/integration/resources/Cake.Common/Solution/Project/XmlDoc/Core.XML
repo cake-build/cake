@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Core</name>
+    </assembly>
+    <members>
+        <member name="T:Core.CoreClass">
+            <summary>
+            This is a core class.
+            </summary>
+        </member>
+        <member name="M:Core.CoreClass.CoreMethod">
+            <summary>
+            Does core methody things.
+            </summary>
+            <example>
+            <code>
+            CoreClass.CoreMethod();
+            </code>
+            </example>
+        </member>
+    </members>
+</doc>
