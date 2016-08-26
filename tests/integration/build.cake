@@ -13,6 +13,7 @@
 #load "./Cake.Common/Solution/Project/ProjectAliases.cake"
 #load "./Cake.Common/Solution/Project/Properties/AssemblyInfoAliases.cake"
 #load "./Cake.Common/Solution/Project/XmlDoc/XmlDocAliases.cake"
+#load "./Cake.Common/Text/TextTransformationAliases.cake"
 #load "./Cake.Core/Tooling/ToolLocator.cake"
 
 //////////////////////////////////////////////////
@@ -47,7 +48,9 @@ Task("Cake.Common")
     .IsDependentOn("Cake.Common.Solution.SolutionAliases")
     .IsDependentOn("Cake.Common.Solution.Project.ProjectAliases")
     .IsDependentOn("Cake.Common.Solution.Project.Properties.AssemblyInfoAliases")
-    .IsDependentOn("Cake.Common.Solution.Project.XmlDoc.XmlDocAliases");
+    .IsDependentOn("Cake.Common.Solution.Project.XmlDoc.XmlDocAliases")
+    .IsDependentOn("Cake.Common.Text.TextTransformationAliases");
+
 
 Task("Run-All-Tests")
     .IsDependentOn("Cake.Core")
