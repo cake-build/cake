@@ -22,6 +22,10 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
 | MyGet Build Services        | Windows      | [![MyGet Build Status](https://www.myget.org/BuildSource/Badge/cake-myget-build-service?identifier=53513546-050e-45de-9500-f161c99df6e2)](https://www.myget.org/)   |  &nbsp;                                                                                                                                                             |
 | Bitbucket Pipelines         | Linux        | [![Build Status](https://bitbucketshield.azurewebsites.net/status/cakebuild/cake-integration-tests/develop)](https://bitbucketshield.azurewebsites.net/url/cakebuild/cake-integration-tests/develop) | [![Build Status](https://bitbucketshield.azurewebsites.net/status/cakebuild/cake-integration-tests/IntegrationTests_develop)](https://bitbucketshield.azurewebsites.net/url/cakebuild/cake-integration-tests/IntegrationTests_develop) |
 
+## Code Coverage
+
+[![Coverage Status](https://coveralls.io/repos/github/cake-build/cake/badge.svg?branch=develop)](https://coveralls.io/github/cake-build/cake?branch=develop)
+
 ## Table of Contents
 
 1. [Documentation](https://github.com/cake-build/cake#documentation)

@@ -1,9 +1,13 @@
 // Install addins.
 #addin "nuget:https://www.nuget.org/api/v2?package=Newtonsoft.Json&version=9.0.1"
+#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Coveralls&version=0.2.0"
 
 // Install tools.
 #tool "nuget:https://www.nuget.org/api/v2?package=gitreleasemanager&version=0.5.0"
 #tool "nuget:https://www.nuget.org/api/v2?package=GitVersion.CommandLine&version=3.6.2"
+#tool "nuget:https://www.nuget.org/api/v2?package=coveralls.io&version=1.3.4"
+#tool "nuget:https://www.nuget.org/api/v2?package=OpenCover&version=4.6.519"
+#tool "nuget:https://www.nuget.org/api/v2?package=ReportGenerator&version=2.4.5"
 
 // Load other scripts.
 #load "./build/parameters.cake"
@@ -42,7 +46,7 @@ Setup(context =>
 //////////////////////////////////////////////////////////////////////
 
 Task("Clean")
-    .Does(() => 
+    .Does(() =>
 {
     CleanDirectories(parameters.Paths.Directories.ToClean);
 });
@@ -97,15 +101,27 @@ Task("Run-Unit-Tests")
     .Does(() =>
 {
     var projects = GetFiles("./src/**/*.Tests.xproj");
-    foreach(var project in projects) 
+    foreach(var project in projects)
     {
-        if(IsRunningOnWindows()) 
+        if(IsRunningOnWindows())
         {
-            DotNetCoreTest(project.GetDirectory().FullPath, new DotNetCoreTestSettings {
-                Configuration = parameters.Configuration,
-                NoBuild = true,
-                Verbose = false
-            });
+            OpenCover(tool => {
+                tool.DotNetCoreTest(project.GetDirectory().FullPath, new DotNetCoreTestSettings {
+                    Configuration = parameters.Configuration,
+                    NoBuild = true,
+                    Verbose = false,
+                    ArgumentCustomization = args =>
+                        args.Append("-xml").Append(parameters.Paths.Directories.TestResults.CombineWithFilePath(project.GetFilenameWithoutExtension()).FullPath + ".xml")
+                });
+            },
+            parameters.Paths.Files.TestCoverageOutputFilePath,
+            new OpenCoverSettings {
+                ReturnTargetCodeOffset = 0,
+                ArgumentCustomization = args => args.Append("-mergeoutput")
+            }
+            .WithFilter("+[*]* -[xunit.*]* -[*.Tests]* -[Cake.Testing]* -[Cake.Testing.Xunit]* ")
+            .ExcludeByAttribute("*.ExcludeFromCodeCoverage*")
+            .ExcludeByFile("*/*Designer.cs;*/*.g.cs;*/*.g.i.cs"));
         }
         else
         {
@@ -124,6 +140,12 @@ Task("Run-Unit-Tests")
                 }
             }
         }
+    }
+
+    // Generate the HTML version of the Code Coverage report if the XML file exists
+    if(FileExists(parameters.Paths.Files.TestCoverageOutputFilePath))
+    {
+        ReportGenerator(parameters.Paths.Files.TestCoverageOutputFilePath, parameters.Paths.Directories.TestResults);
     }
 });
 
@@ -197,9 +219,9 @@ Task("Create-NuGet-Packages")
     var projects = GetFiles("./**/*.xproj");
     foreach(var project in projects)
     {
-        var name = project.GetDirectory().FullPath; 
-        if(name.EndsWith("Cake") || name.EndsWith("Tests") 
-            || name.EndsWith("Xunit") || name.EndsWith("NuGet")) 
+        var name = project.GetDirectory().FullPath;
+        if(name.EndsWith("Cake") || name.EndsWith("Tests")
+            || name.EndsWith("Xunit") || name.EndsWith("NuGet"))
         {
             continue;
         }
@@ -245,6 +267,20 @@ Task("Upload-AppVeyor-Artifacts")
     {
         AppVeyor.UploadArtifact(package);
     }
+});
+
+Task("Upload-Coverage-Report")
+    .WithCriteria(() => FileExists(parameters.Paths.Files.TestCoverageOutputFilePath))
+    .WithCriteria(() => !parameters.IsLocalBuild)
+    .WithCriteria(() => !parameters.IsPullRequest)
+    .WithCriteria(() => parameters.IsMainCakeRepo)
+    .IsDependentOn("Run-Unit-Tests")
+    .Does(() =>
+{
+    CoverallsIo(parameters.Paths.Files.TestCoverageOutputFilePath, new CoverallsIoSettings()
+    {
+        RepoToken = parameters.Coveralls.RepoToken
+    });
 });
 
 Task("Publish-MyGet")
@@ -395,6 +431,7 @@ Task("Default")
 
 Task("AppVeyor")
   .IsDependentOn("Upload-AppVeyor-Artifacts")
+  .IsDependentOn("Upload-Coverage-Report")
   .IsDependentOn("Publish-MyGet")
   .IsDependentOn("Publish-NuGet")
   .IsDependentOn("Publish-Chocolatey")
