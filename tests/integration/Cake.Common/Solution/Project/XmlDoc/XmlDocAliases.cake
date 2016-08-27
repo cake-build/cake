@@ -36,7 +36,7 @@ Task("Cake.Common.Solution.Project.XmlDoc.XmlDocAliases.ParseXmlDocFilesExampleC
         );
 
     // When
-    var result = ParseXmlDocFilesExampleCode(path.FullPath + "/**/*.xml")
+    var result = ParseXmlDocFilesExampleCode(path.FullPath + "/**/*.XML")
                     .OrderBy(code=>code.Name)
                     .ToArray();
     var first = result.FirstOrDefault();
