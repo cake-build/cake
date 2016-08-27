@@ -290,6 +290,23 @@ namespace Cake.Common.Tests.Unit.Tools.OpenCover
                              "-oldStyle " +
                              "-register:user -output:\"/Working/result.xml\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Append_MergeOutput()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+                fixture.Settings.MergeOutput = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"-argument\" " +
+                             "-mergeoutput " +
+                             "-register:user -output:\"/Working/result.xml\"", result.Args);
+            }
         }
     }
 }

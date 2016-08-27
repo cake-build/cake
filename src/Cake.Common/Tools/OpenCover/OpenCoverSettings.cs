@@ -59,6 +59,11 @@ namespace Cake.Common.Tools.OpenCover
         public bool OldStyle { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to merge the results with an existing file
+        /// </summary>
+        public bool MergeOutput { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="OpenCoverSettings"/> class.
         /// </summary>
         public OpenCoverSettings()
