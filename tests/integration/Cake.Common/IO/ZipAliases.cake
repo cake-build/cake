@@ -64,14 +64,13 @@ Task("Cake.Common.IO.ZipAliases.Zip.Pattern")
 {
     // Given
     var sourcePath = Paths.Resources.Combine("./Cake.Common/IO");
-    var sourceFile = sourcePath.CombineWithFilePath("./testfile.txt");
 
     var targetPath = Paths.Temp.Combine("./Cake.Common.IO.ZipAliases/Pattern");
     var targetFile = targetPath.CombineWithFilePath("testfile.zip");
     EnsureDirectoryExist(targetPath);
 
     // When
-    Zip(sourcePath, targetFile, sourcePath.FullPath + "./**/testfile.*");
+    Zip(sourcePath, targetFile, sourcePath.FullPath + "/**/testfile.*");
 
     // Then
     Assert.True(PathExists(targetFile), "Exists: " + targetFile.FullPath);
