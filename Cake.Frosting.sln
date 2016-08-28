@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cake.Frosting", "Cake.Frosting\Cake.Frosting.xproj", "{A608FD39-2B71-4B6E-B238-AE80BB2794F8}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Sandbox", "Sandbox\Sandbox.xproj", "{ED379398-DA69-4D1E-B712-27DC0D67ABC3}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cake.Frosting.Tests", "Cake.Frosting.Tests\Cake.Frosting.Tests.xproj", "{6948279D-7066-4707-902D-2D105FE61E6C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{E9CC2BB3-4D65-4F23-89EF-0BD3F593A086}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Meta", "Meta", "{E00C4E89-C607-4B5E-9C48-A8BFC8903FB7}"
+	ProjectSection(SolutionItems) = preProject
+		Frosting.ruleset = Frosting.ruleset
+		stylecop.json = stylecop.json
+		Test.ruleset = Test.ruleset
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A608FD39-2B71-4B6E-B238-AE80BB2794F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A608FD39-2B71-4B6E-B238-AE80BB2794F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A608FD39-2B71-4B6E-B238-AE80BB2794F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A608FD39-2B71-4B6E-B238-AE80BB2794F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED379398-DA69-4D1E-B712-27DC0D67ABC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED379398-DA69-4D1E-B712-27DC0D67ABC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED379398-DA69-4D1E-B712-27DC0D67ABC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED379398-DA69-4D1E-B712-27DC0D67ABC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6948279D-7066-4707-902D-2D105FE61E6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6948279D-7066-4707-902D-2D105FE61E6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6948279D-7066-4707-902D-2D105FE61E6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6948279D-7066-4707-902D-2D105FE61E6C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ED379398-DA69-4D1E-B712-27DC0D67ABC3} = {E9CC2BB3-4D65-4F23-89EF-0BD3F593A086}
+	EndGlobalSection
+EndGlobal

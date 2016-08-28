@@ -1,0 +1,52 @@
+﻿{
+  "version": "0.1.0-*",
+  "description": "The .NET Core host for Cake.",
+  "copyright": "Copyright (c) .NET Foundation and contributors",
+  "authors": [
+    "Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors"
+  ],
+  "packOptions": {
+    "summary": "This package makes it possible to write your build scripts as a portable console application.",
+    "licenseUrl": "https://github.com/cake-build/frosting/blob/develop/LICENSE",
+    "iconUrl": "https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png",
+    "requireLicenseAcceptance": false,
+    "tags": [
+      "Cake",
+      "Build",
+      "Build automation"
+    ],
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/cake-build/frosting"
+    }
+  },
+  "dependencies": {
+    "NETStandard.Library": "1.6.0",
+    "Cake.Core": "0.16.0-alpha0046",
+    "Cake.Common": "0.16.0-alpha0046",
+    "Autofac": "4.0.0",
+    "StyleCop.Analyzers": {
+      "version": "1.0.0",
+      "type": "build"
+    }
+  },
+  "buildOptions": {
+    "xmlDoc": true,
+    "additionalArguments": [
+      "/ruleset:../Frosting.ruleset",
+      "/additionalfile:../stylecop.json"
+    ]
+  },
+  "configurations": {
+    "Release": {
+      "buildOptions": {
+        "warningsAsErrors": true
+      }
+    }
+  },
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  }
+}
