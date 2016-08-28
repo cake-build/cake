@@ -20,6 +20,7 @@ public class BuildParameters
     public bool IsReleaseBuild { get; private set; }
     public bool SkipGitVersion { get; private set; }
     public BuildCredentials GitHub { get; private set; }
+    public CoverallsCredentials Coveralls { get; private set; }
     public ReleaseNotes ReleaseNotes { get; private set; }
     public BuildVersion Version { get; private set; }
     public BuildPaths Paths { get; private set; }
@@ -36,7 +37,7 @@ public class BuildParameters
 
     public bool ShouldPublishToMyGet
     {
-        get 
+        get
         {
             return !IsLocalBuild && !IsPullRequest && !IsCoreClrBranch
                 && IsMainCakeRepo && (IsTagged || !IsMainCakeBranch);
@@ -79,6 +80,7 @@ public class BuildParameters
             IsCoreClrBranch = StringComparer.OrdinalIgnoreCase.Equals("coreclr", buildSystem.AppVeyor.Environment.Repository.Branch),
             IsTagged = IsBuildTagged(buildSystem),
             GitHub = BuildCredentials.GetGitHubCredentials(context),
+            Coveralls = CoverallsCredentials.GetCoverallsCredentials(context),
             ReleaseNotes = context.ParseReleaseNotes("./ReleaseNotes.md"),
             IsPublishBuild = IsPublishing(target),
             IsReleaseBuild = IsReleasing(target),
@@ -88,7 +90,7 @@ public class BuildParameters
 
     private static bool IsBuildTagged(BuildSystem buildSystem)
     {
-        return buildSystem.AppVeyor.Environment.Repository.Tag.IsTag 
+        return buildSystem.AppVeyor.Environment.Repository.Tag.IsTag
             && !string.IsNullOrWhiteSpace(buildSystem.AppVeyor.Environment.Repository.Tag.Name);
     }
 
