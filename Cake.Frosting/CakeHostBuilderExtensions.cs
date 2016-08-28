@@ -15,7 +15,7 @@ namespace Cake.Frosting
         /// <summary>
         /// Specify the startup type to be used by the Cake host.
         /// </summary>
-        /// <typeparam name="TStartup">The type of the startup.</typeparam>
+        /// <typeparam name="TStartup">The startup type.</typeparam>
         /// <param name="builder">The <see cref="ICakeHostBuilder"/> to configure.</param>
         /// <returns>The same <see cref="ICakeHostBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ICakeHostBuilder UseStartup<TStartup>(this ICakeHostBuilder builder)
@@ -23,8 +23,11 @@ namespace Cake.Frosting
         {
             Guard.ArgumentNotNull(builder, nameof(builder));
 
-            var startup = new TStartup();
-            return builder.ConfigureServices(services => startup.Configure(services));
+            return builder.ConfigureServices(services =>
+            {
+                var startup = new TStartup();
+                startup.Configure(services);
+            });
         }
 
         /// <summary>

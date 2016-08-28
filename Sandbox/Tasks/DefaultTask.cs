@@ -1,5 +1,4 @@
-﻿using Cake.Core;
-using Cake.Frosting;
+﻿using Cake.Frosting;
 
 namespace Sandbox.Tasks
 {
