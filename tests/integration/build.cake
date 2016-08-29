@@ -5,6 +5,7 @@
 // Tests
 #load "./Cake.Common/ArgumentAliases.cake"
 #load "./Cake.Common/EnvironmentAliases.cake"
+#load "./Cake.Common/Diagnostics/LoggingAliases.cake"
 #load "./Cake.Common/IO/DirectoryAliases.cake"
 #load "./Cake.Common/IO/FileAliases.cake"
 #load "./Cake.Common/IO/ZipAliases.cake"
@@ -42,6 +43,7 @@ Task("Cake.Core")
 Task("Cake.Common")
     .IsDependentOn("Cake.Common.ArgumentAliases")
     .IsDependentOn("Cake.Common.EnvironmentAliases")
+    .IsDependentOn("Cake.Common.Diagnostics.LoggingAliases")
     .IsDependentOn("Cake.Common.IO.DirectoryAliases")
     .IsDependentOn("Cake.Common.IO.FileAliases")
     .IsDependentOn("Cake.Common.IO.ZipAliases")
