@@ -51,12 +51,16 @@ namespace Cake.Common.Tools.GitVersion
                 throw new ArgumentNullException(nameof(settings));
             }
 
+            var arguments = GetArguments(settings);
+
             if (settings.OutputType != GitVersionOutput.BuildServer)
             {
                 var jsonString = string.Empty;
 
-                Run(settings, GetArguments(settings), new ProcessSettings { RedirectStandardOutput = true },
-                process => jsonString = string.Join("\n", process.GetStandardOutput()));
+                Run(settings,
+                    arguments,
+                    new ProcessSettings { RedirectStandardOutput = true },
+                    process => jsonString = string.Join("\n", process.GetStandardOutput()));
 
                 var jsonSerializer = new DataContractJsonSerializer(typeof(GitVersion));
 
@@ -66,7 +70,7 @@ namespace Cake.Common.Tools.GitVersion
                 }
             }
 
-            Run(settings, GetArguments(settings));
+            Run(settings, arguments);
 
             return new GitVersion();
         }

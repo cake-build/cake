@@ -15,6 +15,7 @@
 #load "./Cake.Common/Solution/Project/XmlDoc/XmlDocAliases.cake"
 #load "./Cake.Common/Text/TextTransformationAliases.cake"
 #load "./Cake.Core/Tooling/ToolLocator.cake"
+#load "./Cake.Common/Tools/GitVersion/GitVersionAliases.cake"
 
 //////////////////////////////////////////////////
 // ARGUMENTS
@@ -52,9 +53,13 @@ Task("Cake.Common")
     .IsDependentOn("Cake.Common.Text.TextTransformationAliases");
 
 
+Task("Cake.Common.Tools")
+    .IsDependentOn("Cake.Common.Tools.GitVersionAliases");
+
 Task("Run-All-Tests")
     .IsDependentOn("Cake.Core")
-    .IsDependentOn("Cake.Common");
+    .IsDependentOn("Cake.Common")
+    .IsDependentOn("Cake.Common.Tools");
 
 //////////////////////////////////////////////////
 
