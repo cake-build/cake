@@ -9,7 +9,7 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript")
     var file = path.CombineWithFilePath("./build.cake");
 
     // When
-     CakeExecuteScript(file);
+     CakeExecuteScript(file, GetCakeSettings(Context));
 });
 
 Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.Settings.Ok")
@@ -20,9 +20,7 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.Settings.Ok")
     var file = path.CombineWithFilePath("./test.cake");
 
     // When
-    CakeExecuteScript(file, new CakeSettings {
-        Arguments = new Dictionary<string, string> {{ "ok", "yes" }}
-    });
+    CakeExecuteScript(file, GetCakeSettings(Context, new Dictionary<string, string> {{ "ok", "yes" }}));
 });
 
 Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.Settings.NotOk")
@@ -33,9 +31,8 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.Settings.NotOk")
     var file = path.CombineWithFilePath("./test.cake");
 
     // When
-    var exception = Record.Exception(() => CakeExecuteScript(file, new CakeSettings {
-        Arguments = new Dictionary<string, string> {{ "ok", "no" }}
-        })
+    var exception = Record.Exception(
+        () => CakeExecuteScript(file, GetCakeSettings(Context, new Dictionary<string, string> {{ "ok", "no" }}))
     );
 
     // Then
@@ -50,7 +47,7 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression")
     // Given
     var script = "System.Environment.Exit(0);";
     // When
-     CakeExecuteExpression(script);
+     CakeExecuteExpression(script, GetCakeSettings(Context));
 });
 
 Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.Ok")
@@ -60,9 +57,7 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.Ok")
     var script = "System.Environment.Exit((Argument<string>(\"ok\", \"no\")==\"yes\") ? 0 : 1);";
 
     // When
-    CakeExecuteExpression(script, new CakeSettings {
-        Arguments = new Dictionary<string, string> {{ "ok", "yes" }}
-    });
+    CakeExecuteExpression(script, GetCakeSettings(Context, new Dictionary<string, string> {{ "ok", "yes" }}));
 });
 
 Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.NotOk")
@@ -72,9 +67,8 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.NotOk")
     var script = "System.Environment.Exit((Argument<string>(\"ok\", \"no\")==\"yes\") ? 0 : 1);";
 
     // When
-    var exception = Record.Exception(() => CakeExecuteExpression(script, new CakeSettings {
-        Arguments = new Dictionary<string, string> {{ "ok", "no" }}
-        })
+    var exception = Record.Exception(
+        () => CakeExecuteExpression(script, GetCakeSettings(Context, new Dictionary<string, string> {{ "ok", "no" }}))
     );
 
     // Then
@@ -90,3 +84,33 @@ Task("Cake.Common.Tools.Cake.CakeAliases")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.Ok")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.NotOk");
+
+public static FilePath FindToolInPath(ICakeContext context, string tool)
+{
+    var pathEnv = context.EnvironmentVariable("PATH");
+    if (string.IsNullOrEmpty(pathEnv)||string.IsNullOrEmpty(tool))
+    {
+        return tool;
+    }
+    var paths = pathEnv.Split(new []{context.IsRunningOnUnix() ? ':' : ';'},  StringSplitOptions.RemoveEmptyEntries);
+    return paths.Select(
+            path=>new DirectoryPath(path).CombineWithFilePath(tool)
+        ).FirstOrDefault(filePath=>System.IO.File.Exists(filePath.FullPath));
+}
+
+public static CakeSettings GetCakeSettings(ICakeContext context, IDictionary<string, string> arguments = null)
+{
+    var settings = new CakeSettings { Arguments = arguments };
+    if (context.Environment.Runtime.IsCoreClr)
+    {
+        settings.ToolPath = FindToolInPath(context, context.IsRunningOnUnix() ? "dotnet" : "dotnet.exe");
+        settings.ArgumentCustomization = args => "./tools/Cake.CoreCLR/Cake.dll " + args.Render();
+
+    }
+    else if (context.IsRunningOnUnix())
+    {
+        settings.ToolPath = FindToolInPath(context, "mono");
+        settings.ArgumentCustomization = args => "./tools/Cake/Cake.exe " + args.Render();
+    }
+    return settings;
+}
