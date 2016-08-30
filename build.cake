@@ -125,6 +125,7 @@ Task("Run-Unit-Tests")
                 parameters.Paths.Files.TestCoverageOutputFilePath,
                 new OpenCoverSettings {
                     ReturnTargetCodeOffset = 0,
+                    Register = "user",
                     ArgumentCustomization = args => args.Append("-mergeoutput")
                 }
                 .WithFilter("+[*]* -[xunit.*]* -[*.Tests]* -[Cake.Testing]* -[Cake.Testing.Xunit]* ")
