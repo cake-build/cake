@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Cake.Core.Packaging
 {
@@ -35,7 +36,7 @@ namespace Cake.Core.Packaging
         /// Gets the parameters.
         /// </summary>
         /// <value>The parameters.</value>
-        public IReadOnlyDictionary<string, string> Parameters { get; }
+        public IReadOnlyDictionary<string, IReadOnlyList<string>> Parameters { get; }
 
         /// <summary>
         /// Gets the package.
@@ -61,9 +62,22 @@ namespace Cake.Core.Packaging
         {
             OriginalString = uri.OriginalString;
             Scheme = uri.Scheme;
-            Parameters = new ReadOnlyDictionary<string, string>(uri.GetQueryString());
+            Parameters = uri.GetQueryString();
 
-            Package = Parameters.ContainsKey("package") ? Parameters["package"] : null;
+            if (Parameters.ContainsKey("package"))
+            {
+                if (Parameters["package"].Count == 1)
+                {
+                    Package = Parameters["package"].FirstOrDefault();
+                }
+                else if (Parameters["package"].Count > 1)
+                {
+                    throw new ArgumentException(
+                        "Query string contains more than one parameter 'package'.",
+                        nameof(uri));
+                }
+            }
+
             if (Package == null)
             {
                 throw new ArgumentException(
