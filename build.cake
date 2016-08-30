@@ -101,67 +101,77 @@ Task("Run-Unit-Tests")
     .Does(() =>
 {
     var projects = GetFiles("./src/**/*.Tests.xproj");
-    foreach(var project in projects)
+    var apiUrl = EnvironmentVariable("APPVEYOR_API_URL");
+    try
     {
-        if(IsRunningOnWindows())
+        if (!string.IsNullOrEmpty(apiUrl))
         {
-            var apiUrl = EnvironmentVariable("APPVEYOR_API_URL");
-            try
+            // Disable XUnit AppVeyorReporter see https://github.com/cake-build/cake/issues/1200
+            System.Environment.SetEnvironmentVariable("APPVEYOR_API_URL", null);
+        }
+        foreach(var project in projects)
+        {
+            if(IsRunningOnWindows())
             {
-                if (!string.IsNullOrEmpty(apiUrl))
+                foreach(var framework in new []{ "netcoreapp1.0", "net451" })
                 {
-                    // Disable XUnit AppVeyorReporter see https://github.com/cake-build/cake/issues/1200
-                    System.Environment.SetEnvironmentVariable("APPVEYOR_API_URL", null);
+                    OpenCover(tool => {
+                        tool.DotNetCoreTest(project.GetDirectory().FullPath, new DotNetCoreTestSettings {
+                            Configuration = parameters.Configuration,
+                            NoBuild = true,
+                            Verbose = false,
+                            Framework = framework,
+                            ArgumentCustomization = args => args
+                                .Append("-xml")
+                                .Append(string.Format("{0}.{1}.xml",
+                                    parameters.Paths.Directories.TestResults.CombineWithFilePath(project.GetFilenameWithoutExtension()).FullPath,
+                                    framework
+                                ))
+                        });
+                    },
+                    parameters.Paths.Files.TestCoverageOutputFilePath,
+                    new OpenCoverSettings {
+                        ReturnTargetCodeOffset = 0,
+                        ArgumentCustomization = args => args.Append("-mergeoutput")
+                    }
+                    .WithFilter("+[*]* -[xunit.*]* -[*.Tests]* -[Cake.Testing]* -[Cake.Testing.Xunit]* ")
+                    .ExcludeByAttribute("*.ExcludeFromCodeCoverage*")
+                    .ExcludeByFile("*/*Designer.cs;*/*.g.cs;*/*.g.i.cs"));
                 }
-                OpenCover(tool => {
-                    tool.DotNetCoreTest(project.GetDirectory().FullPath, new DotNetCoreTestSettings {
-                        Configuration = parameters.Configuration,
-                        NoBuild = true,
-                        Verbose = false,
-                        ArgumentCustomization = args =>
-                            args.Append("-xml").Append(parameters.Paths.Directories.TestResults.CombineWithFilePath(project.GetFilenameWithoutExtension()).FullPath + ".xml")
-                    });
-                },
-                parameters.Paths.Files.TestCoverageOutputFilePath,
-                new OpenCoverSettings {
-                    ReturnTargetCodeOffset = 0,
-                    ArgumentCustomization = args => args.Append("-mergeoutput")
-                }
-                .WithFilter("+[*]* -[xunit.*]* -[*.Tests]* -[Cake.Testing]* -[Cake.Testing.Xunit]* ")
-                .ExcludeByAttribute("*.ExcludeFromCodeCoverage*")
-                .ExcludeByFile("*/*Designer.cs;*/*.g.cs;*/*.g.i.cs"));
             }
-            finally
+            else
             {
-                if (!string.IsNullOrEmpty(apiUrl))
+                var name = project.GetFilenameWithoutExtension();
+                var dirPath = project.GetDirectory().FullPath;
+                var config = parameters.Configuration;
+                var xunit = GetFiles(dirPath + "/bin/" + config + "/net451/*/dotnet-test-xunit.exe").First().FullPath;
+                var testfile = GetFiles(dirPath + "/bin/" + config + "/net451/*/" + name + ".dll").First().FullPath;
+
+                using(var process = StartAndReturnProcess("mono", new ProcessSettings{ Arguments = xunit + " " + testfile }))
                 {
-                    System.Environment.SetEnvironmentVariable("APPVEYOR_API_URL", apiUrl);
+                    process.WaitForExit();
+                    if (process.GetExitCode() != 0)
+                    {
+                        throw new Exception("Mono tests failed!");
+                    }
                 }
             }
         }
-        else
+    }
+    finally
+    {
+        if (!string.IsNullOrEmpty(apiUrl))
         {
-            var name = project.GetFilenameWithoutExtension();
-            var dirPath = project.GetDirectory().FullPath;
-            var config = parameters.Configuration;
-            var xunit = GetFiles(dirPath + "/bin/" + config + "/net451/*/dotnet-test-xunit.exe").First().FullPath;
-            var testfile = GetFiles(dirPath + "/bin/" + config + "/net451/*/" + name + ".dll").First().FullPath;
-
-            using(var process = StartAndReturnProcess("mono", new ProcessSettings{ Arguments = xunit + " " + testfile }))
-            {
-                process.WaitForExit();
-                if (process.GetExitCode() != 0)
-                {
-                    throw new Exception("Mono tests failed!");
-                }
-            }
+            System.Environment.SetEnvironmentVariable("APPVEYOR_API_URL", apiUrl);
         }
     }
 
     // Generate the HTML version of the Code Coverage report if the XML file exists
     if(FileExists(parameters.Paths.Files.TestCoverageOutputFilePath))
     {
-        ReportGenerator(parameters.Paths.Files.TestCoverageOutputFilePath, parameters.Paths.Directories.TestResults);
+        var reportDir = parameters.Paths.Directories.TestResults.Combine("Report");
+        EnsureDirectoryExists(reportDir);
+        ReportGenerator(parameters.Paths.Files.TestCoverageOutputFilePath, reportDir);
     }
 });
 
@@ -207,6 +217,9 @@ Task("Zip-Files")
     // .NET Core
     var coreclrFiles = GetFiles( parameters.Paths.Directories.ArtifactsBinNetCoreApp10.FullPath + "/**/*");
     Zip(parameters.Paths.Directories.ArtifactsBinNetCoreApp10, parameters.Paths.Files.ZipArtifactPathCoreClr, coreclrFiles);
+
+    // Test Results 
+    Zip(parameters.Paths.Directories.TestResults, parameters.Paths.Files.ZipArtifactPathTestResults);
 });
 
 Task("Create-Chocolatey-Packages")
@@ -277,11 +290,31 @@ Task("Upload-AppVeyor-Artifacts")
     .WithCriteria(() => parameters.IsRunningOnAppVeyor)
     .Does(() =>
 {
-    AppVeyor.UploadArtifact(parameters.Paths.Files.ZipArtifactPathDesktop);
-    AppVeyor.UploadArtifact(parameters.Paths.Files.ZipArtifactPathCoreClr);
+    Action<int,Action> withRetry;
+    withRetry = (retry, action) => {
+        try
+        {
+            action();
+        }
+        catch(Exception ex)
+        {
+            if (retry>5)
+                throw;
+            withRetry(retry++, action);
+        }
+    };
+    var zipSetting = new AppVeyorUploadArtifactsSettings { ArtifactType = AppVeyorUploadArtifactType.WebDeployPackage };
+    var nugetSetting = new AppVeyorUploadArtifactsSettings { ArtifactType = AppVeyorUploadArtifactType.NuGetPackage };
+    withRetry(1, ()=> AppVeyor.UploadArtifact(parameters.Paths.Files.ZipArtifactPathDesktop, zipSetting));
+    withRetry(1, ()=> AppVeyor.UploadArtifact(parameters.Paths.Files.ZipArtifactPathCoreClr, zipSetting));
+    withRetry(1, ()=> AppVeyor.UploadArtifact(parameters.Paths.Files.ZipArtifactPathTestResults, zipSetting));
+    foreach(var testResult in GetFiles(parameters.Paths.Directories.TestResults + "/*.Tests.*.xml"))
+    {
+        withRetry(1, ()=> AppVeyor.UploadTestResults(testResult, AppVeyorTestResultsType.XUnit));
+    }
     foreach(var package in GetFiles(parameters.Paths.Directories.NugetRoot + "/*"))
     {
-        AppVeyor.UploadArtifact(package);
+        withRetry(1, ()=> AppVeyor.UploadArtifact(package, nugetSetting));
     }
 });
 
