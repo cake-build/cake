@@ -13,6 +13,7 @@ namespace Cake.Core.IO.Globbing
         Identifier,
         WindowsRoot,
         Parent,
+        Current,
         EndOfText
     }
 }

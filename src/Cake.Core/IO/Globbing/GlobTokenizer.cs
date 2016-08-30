@@ -59,6 +59,10 @@ namespace Cake.Core.IO.Globbing
                         TakeCharacter();
                         return GlobTokenKind.Parent;
                     }
+                    if (_currentCharacter == '/')
+                    {
+                        return GlobTokenKind.Current;
+                    }
                 }
                 while (IsAlphaNumeric(_currentCharacter))
                 {

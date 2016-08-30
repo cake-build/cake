@@ -19,7 +19,8 @@ namespace Cake.NuGet.V3
 
         public NuGetV3ContentResolver(
             IFileSystem fileSystem,
-            ICakeEnvironment environment) : base(fileSystem)
+            ICakeEnvironment environment,
+            IGlobber globber) : base(fileSystem, environment, globber)
         {
             _fileSystem = fileSystem;
             _environment = environment;
