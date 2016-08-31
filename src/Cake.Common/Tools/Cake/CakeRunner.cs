@@ -23,12 +23,34 @@ namespace Cake.Common.Tools.Cake
         private readonly ICakeEnvironment _environment;
         private readonly IFileSystem _fileSystem;
         private readonly IGlobber _globber;
-        private static readonly IEnumerable<FilePath> _executingAssemblyToolPaths = new FilePath[] { System.Reflection.Assembly.GetEntryAssembly().Location };
+        private static readonly IEnumerable<FilePath> _executingAssemblyToolPaths = GetEntryAssembly();
+
+        private static IEnumerable<FilePath> GetEntryAssembly()
+        {
+            string location = null;
+            try
+            {
+                location = System.Reflection.Assembly.GetEntryAssembly()?.Location;
+            }
+            catch
+            {
+            }
+            if (!string.IsNullOrWhiteSpace(location))
+            {
+                yield return location;
+            }
+            else
+            {
+                var directory = new FilePath(System.Reflection.IntrospectionExtensions.GetTypeInfo(typeof(CakeRunner)).Assembly.Location).GetDirectory();
+                yield return directory.CombineWithFilePath("Cake.exe");
+                yield return directory.CombineWithFilePath("Cake.dll");
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeRunner"/> class.
         /// </summary>
-        /// <param name="fileSystem">The file system.</param>
+        /// <param name="fileSystem">The file system.</param>11
         /// <param name="environment">The environment.</param>
         /// <param name="globber">The globber.</param>
         /// <param name="processRunner">The process runner.</param>
