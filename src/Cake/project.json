@@ -1,6 +1,7 @@
 ﻿{
   "version": "0.16.0-*",
   "buildOptions": {
+    "debugType": "portable",
     "emitEntryPoint": true,
     "xmlDoc": true,
     "additionalArguments": [

@@ -16,10 +16,14 @@
   <files>
     <file src="Autofac.dll" />
     <file src="Cake.Common.dll" />
+    <file src="Cake.Common.pdb" />
     <file src="Cake.Core.dll" />
+    <file src="Cake.Core.pdb" />
     <file src="Cake.deps.json" />
     <file src="Cake.dll" />
+    <file src="Cake.pdb" />
     <file src="Cake.NuGet.dll" />
+    <file src="Cake.NuGet.pdb" />
     <file src="Cake.runtimeconfig.json" />
     <file src="Microsoft.CodeAnalysis.CSharp.dll" />
     <file src="Microsoft.CodeAnalysis.CSharp.Scripting.dll" />
