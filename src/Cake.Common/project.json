@@ -45,6 +45,7 @@
   },
   "frameworks": {
     "netstandard1.6": {
+      "debugType": "portable",
       "buildOptions": {
         "define": [
           "NETCORE"
