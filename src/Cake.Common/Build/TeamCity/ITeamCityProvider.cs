@@ -53,6 +53,13 @@ namespace Cake.Common.Build.TeamCity
         void SetBuildNumber(string buildNumber);
 
         /// <summary>
+        /// Tells TeamCity to set a named parameter with a given value
+        /// </summary>
+        /// <param name="parameterName">The name of the parameter to set.</param>
+        /// <param name="parameterValue">The value to set for the named parameter.</param>
+        void SetParameter(string parameterName, string parameterValue);
+
+        /// <summary>
         /// Write the end of a message block to the TeamCity build log.
         /// </summary>
         /// <param name="blockName">Block name.</param>
