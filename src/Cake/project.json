@@ -33,6 +33,7 @@
   "frameworks": {
     "netcoreapp1.0": {
       "buildOptions": {
+        "debugType": "portable",
         "define": [
           "NETCORE"
         ]
