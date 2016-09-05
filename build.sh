@@ -14,6 +14,7 @@ CAKE_VERSION=0.15.2
 CAKE_EXE=$TOOLS_DIR/Cake.$CAKE_VERSION/Cake.exe
 
 # Define default arguments.
+SCRIPT="build.cake"
 TARGET="Travis"
 CONFIGURATION="Release"
 VERBOSITY="verbose"
@@ -22,7 +23,8 @@ SCRIPT_ARGUMENTS=()
 
 # Parse arguments.
 for i in "$@"; do
-    case $1 in
+    case $1 in    
+        -s|--script) SCRIPT="$2"; shift ;;
         -t|--target) TARGET="$2"; shift ;;
         -c|--configuration) CONFIGURATION="$2"; shift ;;
         -v|--verbosity) VERBOSITY="$2"; shift ;;
@@ -90,4 +92,4 @@ fi
 ###########################################################################
 
 # Start Cake
-exec mono "$CAKE_EXE" build.cake --verbosity=$VERBOSITY --configuration=$CONFIGURATION --target=$TARGET $DRYRUN "${SCRIPT_ARGUMENTS[@]}"
+exec mono "$CAKE_EXE" $SCRIPT --verbosity=$VERBOSITY --configuration=$CONFIGURATION --target=$TARGET $DRYRUN "${SCRIPT_ARGUMENTS[@]}"
