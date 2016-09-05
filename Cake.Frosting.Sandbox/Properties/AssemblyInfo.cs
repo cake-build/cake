@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Cake.Frosting.Cli")]
+[assembly: AssemblyTitle("Cake.Frosting.Sandbox")]
 [assembly: AssemblyProduct("Cake.Frosting")]
 [assembly: AssemblyCopyright("Copyright (c) .NET Foundation and Contributors")]
 
@@ -18,4 +18,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("60d9c7c2-0c09-425e-940d-cd19e4fc3889")]
+[assembly: Guid("ed379398-da69-4d1e-b712-27dc0d67abc3")]

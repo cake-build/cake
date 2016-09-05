@@ -5,11 +5,11 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cake.Frosting", "Cake.Frosting\Cake.Frosting.xproj", "{A608FD39-2B71-4B6E-B238-AE80BB2794F8}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Sandbox", "Sandbox\Sandbox.xproj", "{ED379398-DA69-4D1E-B712-27DC0D67ABC3}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cake.Frosting.Sandbox", "Cake.Frosting.Sandbox\Cake.Frosting.Sandbox.xproj", "{ED379398-DA69-4D1E-B712-27DC0D67ABC3}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cake.Frosting.Tests", "Cake.Frosting.Tests\Cake.Frosting.Tests.xproj", "{6948279D-7066-4707-902D-2D105FE61E6C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{E9CC2BB3-4D65-4F23-89EF-0BD3F593A086}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{E9CC2BB3-4D65-4F23-89EF-0BD3F593A086}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Meta", "Meta", "{E00C4E89-C607-4B5E-9C48-A8BFC8903FB7}"
 	ProjectSection(SolutionItems) = preProject
@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Meta", "Meta", "{E00C4E89-C
 	EndProjectSection
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cake.Frosting.Cli", "Cake.Frosting.Cli\Cake.Frosting.Cli.xproj", "{60D9C7C2-0C09-425E-940D-CD19E4FC3889}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cake.Frosting.Testing", "Cake.Frosting.Testing\Cake.Frosting.Testing.xproj", "{778E6393-6768-407C-8795-7A3C4A51579F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,11 +44,16 @@ Global
 		{60D9C7C2-0C09-425E-940D-CD19E4FC3889}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60D9C7C2-0C09-425E-940D-CD19E4FC3889}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60D9C7C2-0C09-425E-940D-CD19E4FC3889}.Release|Any CPU.Build.0 = Release|Any CPU
+		{778E6393-6768-407C-8795-7A3C4A51579F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{778E6393-6768-407C-8795-7A3C4A51579F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{778E6393-6768-407C-8795-7A3C4A51579F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{778E6393-6768-407C-8795-7A3C4A51579F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{ED379398-DA69-4D1E-B712-27DC0D67ABC3} = {E9CC2BB3-4D65-4F23-89EF-0BD3F593A086}
+		{778E6393-6768-407C-8795-7A3C4A51579F} = {E9CC2BB3-4D65-4F23-89EF-0BD3F593A086}
 	EndGlobalSection
 EndGlobal

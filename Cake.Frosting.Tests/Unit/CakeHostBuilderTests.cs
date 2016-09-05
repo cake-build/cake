@@ -1,4 +1,8 @@
-﻿using Cake.Core.Composition;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using Cake.Core.Composition;
 using Cake.Frosting.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
@@ -24,6 +28,5 @@ namespace Cake.Frosting.Tests.Unit
                 Assert.Same(host, result);
             }
         }
-
     }
 }
