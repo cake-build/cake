@@ -74,6 +74,7 @@ public class BuildPaths
 
         var zipArtifactPathCoreClr = artifactsDir.CombineWithFilePath("Cake-bin-coreclr-v" + semVersion + ".zip");
         var zipArtifactPathDesktop = artifactsDir.CombineWithFilePath("Cake-bin-net45-v" + semVersion + ".zip");
+        var zipArtifactPathTestResults = artifactsDir.CombineWithFilePath("TestResults-v" + semVersion + ".zip");
 
         var testCoverageOutputFilePath = testResultsDir.CombineWithFilePath("OpenCover.xml");
 
@@ -95,7 +96,8 @@ public class BuildPaths
             artifactSourcePaths,
             zipArtifactPathCoreClr,
             zipArtifactPathDesktop,
-            testCoverageOutputFilePath);
+            testCoverageOutputFilePath,
+            zipArtifactPathTestResults);
 
         return new BuildPaths
         {
@@ -115,6 +117,7 @@ public class BuildFiles
     public FilePath ZipArtifactPathCoreClr { get; private set; }
     public FilePath ZipArtifactPathDesktop { get; private set; }
     public FilePath TestCoverageOutputFilePath { get; private set; }
+    public FilePath ZipArtifactPathTestResults { get; private set; }
 
     public BuildFiles(
         ICakeContext context,
@@ -124,7 +127,8 @@ public class BuildFiles
         FilePath[] artifactsSourcePaths,
         FilePath zipArtifactPathCoreClr,
         FilePath zipArtifactPathDesktop,
-        FilePath testCoverageOutputFilePath
+        FilePath testCoverageOutputFilePath,
+        FilePath zipArtifactPathTestResults
         )
     {
         CakeAssemblyPaths = Filter(context, cakeAssemblyPaths);
@@ -134,6 +138,7 @@ public class BuildFiles
         ZipArtifactPathCoreClr = zipArtifactPathCoreClr;
         ZipArtifactPathDesktop = zipArtifactPathDesktop;
         TestCoverageOutputFilePath = testCoverageOutputFilePath;
+        ZipArtifactPathTestResults = zipArtifactPathTestResults;
     }
 
     private static FilePath[] Filter(ICakeContext context, FilePath[] files)
