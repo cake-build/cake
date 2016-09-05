@@ -9,7 +9,7 @@ namespace Cake.Frosting
     /// <summary>
     /// Represents a collection of service registrations.
     /// </summary>
-    /// <seealso cref="Cake.Core.Composition.ICakeContainerRegistrar" />
+    /// <seealso cref="ICakeContainerRegistrar" />
     public interface ICakeServices : ICakeContainerRegistrar
     {
     }

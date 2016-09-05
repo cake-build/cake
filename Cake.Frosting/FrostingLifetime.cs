@@ -38,7 +38,8 @@ namespace Cake.Frosting
         /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
         /// </summary>
         /// <param name="context">The context.</param>
-        public virtual void Teardown(TContext context)
+        /// <param name="info">The teardown information.</param>
+        public virtual void Teardown(TContext context, ITeardownContext info)
         {
         }
 
@@ -56,7 +57,7 @@ namespace Cake.Frosting
             Guard.ArgumentNotNull(context, nameof(context));
             Guard.ArgumentNotNull(info, nameof(info));
 
-            Teardown((TContext)context);
+            Teardown((TContext)context, info);
         }
     }
 }

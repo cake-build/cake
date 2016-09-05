@@ -9,8 +9,18 @@ using Cake.Core;
 // ReSharper disable once CheckNamespace
 namespace Cake.Frosting.Internal
 {
-    internal static class CakeTaskExtensions
+    internal static class FrostingTaskExtensions
     {
+        public static bool IsRunOverridden(this IFrostingTask task, IFrostingContext context)
+        {
+            return task.GetType().GetMethod("Run", new[] { context.GetType() }).IsOverriden();
+        }
+
+        public static bool IsShouldRunOverridden(this IFrostingTask task, IFrostingContext context)
+        {
+            return task.GetType().GetMethod("ShouldRun", new[] { context.GetType() }).IsOverriden();
+        }
+
         public static bool HasCompatibleContext(this IFrostingTask task, IFrostingContext context)
         {
             return context.GetType().IsConvertableTo(task.GetContextType());

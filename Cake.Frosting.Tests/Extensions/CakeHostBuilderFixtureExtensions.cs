@@ -1,6 +1,7 @@
 ﻿using Cake.Core;
 using Cake.Core.Composition;
 using Cake.Frosting.Tests.Data;
+using Cake.Frosting.Tests.Fakes;
 using Cake.Frosting.Tests.Fixtures;
 using NSubstitute;
 
@@ -23,16 +24,28 @@ namespace Cake.Frosting.Tests
             return fixture;
         }
 
-        public static IFrostingLifetime RegisterLifetimeSubstitute(this CakeHostBuilderFixture fixture)
+        public static FakeLifetime RegisterLifetimeSubstitute(this CakeHostBuilderFixture fixture)
         {
-            var lifetime = Substitute.For<IFrostingLifetime>();
+            var lifetime = new FakeLifetime();
+            return fixture.RegisterLifetimeSubstitute(lifetime);
+        }
+
+        public static T RegisterLifetimeSubstitute<T>(this CakeHostBuilderFixture fixture, T lifetime)
+            where T : class, IFrostingLifetime
+        {
             fixture.Builder.ConfigureServices(s => s.RegisterInstance(lifetime).As<IFrostingLifetime>());
             return lifetime;
         }
 
-        public static IFrostingTaskLifetime RegisterTaskLifetimeSubstitute(this CakeHostBuilderFixture fixture)
+        public static FakeTaskLifetime RegisterTaskLifetimeSubstitute(this CakeHostBuilderFixture fixture)
         {
-            var lifetime = Substitute.For<IFrostingTaskLifetime>();
+            var lifetime = new FakeTaskLifetime();
+            return fixture.RegisterTaskLifetimeSubstitute(lifetime);
+        }
+
+        public static T RegisterTaskLifetimeSubstitute<T>(this CakeHostBuilderFixture fixture, T lifetime)
+            where T : class, IFrostingTaskLifetime
+        {
             fixture.Builder.ConfigureServices(s => s.RegisterInstance(lifetime).As<IFrostingTaskLifetime>());
             return lifetime;
         }

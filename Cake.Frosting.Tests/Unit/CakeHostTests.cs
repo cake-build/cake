@@ -1,6 +1,8 @@
-﻿using Cake.Core;
+﻿using System;
+using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Frosting.Tests.Data.Tasks;
+using Cake.Frosting.Tests.Fakes;
 using Cake.Frosting.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
@@ -65,7 +67,25 @@ namespace Cake.Frosting.Tests.Unit
             fixture.Run();
 
             // Then
-            lifetime.Received(1).Setup(Arg.Any<ICakeContext>());
+            Assert.True(lifetime.CalledSetup);
+        }
+
+        [Fact]
+        public void Should_Not_Call_Setup_On_Registered_Lifetime_If_Not_Overridden()
+        {
+            // Given
+            var fixture = new CakeHostBuilderFixture();
+            fixture.RegisterDefaultTask();
+            fixture.RegisterLifetimeSubstitute(new FakeLifetime.WithoutOverrides());
+            fixture.UseExecutionStrategySubstitute();
+
+            // When
+            fixture.Run();
+
+            // Then
+            fixture.Strategy.Received(0).PerformSetup(
+                Arg.Any<Action<ICakeContext>>(),
+                Arg.Any<ICakeContext>());
         }
 
         [Fact]
@@ -80,7 +100,25 @@ namespace Cake.Frosting.Tests.Unit
             fixture.Run();
 
             // Then
-            lifetime.Received(1).Teardown(Arg.Any<ICakeContext>(), Arg.Any<ITeardownContext>());
+            Assert.True(lifetime.CalledTeardown);
+        }
+
+        [Fact]
+        public void Should_Not_Call_Teardown_On_Registered_Lifetime_If_Not_Overridden()
+        {
+            // Given
+            var fixture = new CakeHostBuilderFixture();
+            fixture.RegisterDefaultTask();
+            fixture.RegisterLifetimeSubstitute(new FakeLifetime.WithoutOverrides());
+            fixture.UseExecutionStrategySubstitute();
+
+            // When
+            fixture.Run();
+
+            // Then
+            fixture.Strategy.Received(0).PerformTeardown(
+                Arg.Any<Action<ITeardownContext>>(),
+                Arg.Any<ITeardownContext>());
         }
 
         [Fact]
@@ -95,7 +133,25 @@ namespace Cake.Frosting.Tests.Unit
             fixture.Run();
 
             // Then
-            lifetime.Received(1).Setup(Arg.Any<ICakeContext>(), Arg.Any<ITaskSetupContext>());
+            Assert.True(lifetime.CalledSetup);
+        }
+
+        [Fact]
+        public void Should_Not_Call_Setup_On_Registered_Task_Lifetime_If_Not_Overridden()
+        {
+            // Given
+            var fixture = new CakeHostBuilderFixture();
+            fixture.RegisterDefaultTask();
+            fixture.RegisterTaskLifetimeSubstitute(new FakeTaskLifetime.WithoutOverrides());
+            fixture.UseExecutionStrategySubstitute();
+
+            // When
+            fixture.Run();
+
+            // Then
+            fixture.Strategy.Received(0).PerformTaskSetup(
+                Arg.Any<Action<ITaskSetupContext>>(),
+                Arg.Any<ITaskSetupContext>());
         }
 
         [Fact]
@@ -110,7 +166,25 @@ namespace Cake.Frosting.Tests.Unit
             fixture.Run();
 
             // Then
-            lifetime.Received(1).Setup(Arg.Any<ICakeContext>(), Arg.Any<ITaskSetupContext>());
+            Assert.True(lifetime.CalledTeardown);
+        }
+
+        [Fact]
+        public void Should_Not_Call_Teardown_On_Registered_Task_Lifetime_If_Not_Overridden()
+        {
+            // Given
+            var fixture = new CakeHostBuilderFixture();
+            fixture.RegisterDefaultTask();
+            fixture.RegisterTaskLifetimeSubstitute(new FakeTaskLifetime.WithoutOverrides());
+            fixture.UseExecutionStrategySubstitute();
+
+            // When
+            fixture.Run();
+
+            // Then
+            fixture.Strategy.Received(0).PerformTaskTeardown(
+                Arg.Any<Action<ITaskTeardownContext>>(),
+                Arg.Any<ITaskTeardownContext>());
         }
 
         [Fact]
@@ -167,7 +241,7 @@ namespace Cake.Frosting.Tests.Unit
             Assert.Equal(1, result);
             fixture.Log.Received(1).Write(
                 Verbosity.Quiet, LogLevel.Error,
-                "Error: {0}", "The dependency DateTime does not implement IFrostingTask.");
+                "Error: {0}", "The dependency 'DateTime' is not a valid task.");
         }
 
         [Fact]
