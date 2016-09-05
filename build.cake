@@ -105,15 +105,7 @@ Task("Run-Unit-Tests")
     {
         if(IsRunningOnWindows())
         {
-            var apiUrl = EnvironmentVariable("APPVEYOR_API_URL");
-            try
-            {
-                if (!string.IsNullOrEmpty(apiUrl))
-                {
-                    // Disable XUnit AppVeyorReporter see https://github.com/cake-build/cake/issues/1200
-                    System.Environment.SetEnvironmentVariable("APPVEYOR_API_URL", null);
-                }
-                OpenCover(tool => {
+            OpenCover(tool => {
                     tool.DotNetCoreTest(project.GetDirectory().FullPath, new DotNetCoreTestSettings {
                         Configuration = parameters.Configuration,
                         NoBuild = true,
@@ -130,14 +122,6 @@ Task("Run-Unit-Tests")
                 .WithFilter("+[*]* -[xunit.*]* -[*.Tests]* -[Cake.Testing]* -[Cake.Testing.Xunit]* ")
                 .ExcludeByAttribute("*.ExcludeFromCodeCoverage*")
                 .ExcludeByFile("*/*Designer.cs;*/*.g.cs;*/*.g.i.cs"));
-            }
-            finally
-            {
-                if (!string.IsNullOrEmpty(apiUrl))
-                {
-                    System.Environment.SetEnvironmentVariable("APPVEYOR_API_URL", apiUrl);
-                }
-            }
         }
         else
         {
