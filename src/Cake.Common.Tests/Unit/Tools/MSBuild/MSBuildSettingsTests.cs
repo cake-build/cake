@@ -113,5 +113,18 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.Null(settings.MaxCpuCount);
             }
         }
+
+        public sealed class TheLoggersProperty
+        {
+            [Fact]
+            public void Should_Be_Empty_By_Default()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Empty(settings.Loggers);
+            }
+        }
     }
 }

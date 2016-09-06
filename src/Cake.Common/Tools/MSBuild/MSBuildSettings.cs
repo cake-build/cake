@@ -16,6 +16,7 @@ namespace Cake.Common.Tools.MSBuild
     {
         private readonly HashSet<string> _targets;
         private readonly Dictionary<string, IList<string>> _properties;
+        private readonly List<MSBuildLogger> _loggers;
 
         /// <summary>
         /// Gets the targets.
@@ -76,12 +77,18 @@ namespace Cake.Common.Tools.MSBuild
         public Verbosity Verbosity { get; set; }
 
         /// <summary>
+        /// Gets the loggers.
+        /// </summary>
+        public ICollection<MSBuildLogger> Loggers => _loggers;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MSBuildSettings"/> class.
         /// </summary>
         public MSBuildSettings()
         {
             _targets = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _properties = new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
+            _loggers = new List<MSBuildLogger>();
 
             ToolVersion = MSBuildToolVersion.Default;
             Configuration = string.Empty;

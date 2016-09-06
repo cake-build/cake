@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Linq;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core.Diagnostics;
 using Xunit;
@@ -256,6 +257,43 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // When
                 var result = settings.SetVerbosity(Verbosity.Normal);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
+        public sealed class TheWithLoggersMethod
+        {
+            [Fact]
+            public void Should_Add_Logger()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                settings.WithLogger("LoggerAssembly1", "LoggerClass1", "LoggerParameters1");
+                settings.WithLogger("LoggerAssembly2", "LoggerClass2", "LoggerParameters2");
+
+                // Then
+                var loggers = settings.Loggers.ToArray();
+                Assert.Equal(2, loggers.Length);
+                Assert.Equal("LoggerAssembly1", loggers[0].Assembly);
+                Assert.Equal("LoggerClass1", loggers[0].Class);
+                Assert.Equal("LoggerParameters1", loggers[0].Parameters);
+                Assert.Equal("LoggerAssembly2", loggers[1].Assembly);
+                Assert.Equal("LoggerClass2", loggers[1].Class);
+                Assert.Equal("LoggerParameters2", loggers[1].Parameters);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.WithLogger("Logger");
 
                 // Then
                 Assert.Equal(settings, result);

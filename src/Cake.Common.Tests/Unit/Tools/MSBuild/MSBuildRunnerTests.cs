@@ -785,6 +785,23 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Then
                 Assert.IsCakeException(result, "Encountered unknown MSBuild build log verbosity.");
             }
+
+            [Fact]
+            public void Should_Append_Logger_To_Process_Arguments()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false);
+                fixture.Settings.WithLogger("A", "B", "C");
+                fixture.Settings.WithLogger("D", "E");
+                fixture.Settings.WithLogger("F");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:Build /logger:B,A;C /logger:E,D /logger:F " +
+                             "\"/Working/src/Solution.sln\"", result.Args);
+            }
         }
     }
 }
