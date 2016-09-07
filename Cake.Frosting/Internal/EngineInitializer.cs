@@ -51,6 +51,12 @@ namespace Cake.Frosting.Internal
                             cakeTask.WithCriteria(task.ShouldRun);
                         }
 
+                        // Continue on error?
+                        if (task.IsContinueOnError())
+                        {
+                            cakeTask.ContinueOnError();
+                        }
+
                         // Add dependencies
                         var attributes = task.GetType().GetTypeInfo().GetCustomAttributes<DependencyAttribute>();
                         foreach (var dependency in attributes)

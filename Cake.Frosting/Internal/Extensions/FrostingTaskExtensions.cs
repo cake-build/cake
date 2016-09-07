@@ -26,6 +26,11 @@ namespace Cake.Frosting.Internal
             return context.GetType().IsConvertableTo(task.GetContextType());
         }
 
+        public static bool IsContinueOnError(this IFrostingTask task)
+        {
+            return task.GetType().GetTypeInfo().GetCustomAttribute<TaskNameAttribute>() != null;
+        }
+
         public static Type GetContextType(this IFrostingTask task)
         {
             var baseType = task.GetType().GetTypeInfo().BaseType;
