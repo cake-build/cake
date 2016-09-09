@@ -123,13 +123,6 @@ namespace Cake.Common.Tools.MSBuild
                 }
             }
 
-            // Got a specific parameters that need to be added?
-            if (!string.IsNullOrWhiteSpace(settings.AdditionalParameters))
-            {
-                // Add the configuration as a property.
-                builder.Append(settings.AdditionalParameters);
-            }
-
             // Add the solution as the last parameter.
             builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
 

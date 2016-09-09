@@ -85,11 +85,6 @@ namespace Cake.Common.Tools.MSBuild
         public bool? NoConsoleLogger { get; set; }
 
         /// <summary>
-        /// Gets or sets any additional parameters to append to the command line
-        /// </summary>
-        public string AdditionalParameters { get; set; }
-
-        /// <summary>
         /// Gets or sets the amount of information to display in the build log.
         /// Each logger displays events based on the verbosity level that you set for that logger.
         /// </summary>
@@ -114,7 +109,6 @@ namespace Cake.Common.Tools.MSBuild
             Configuration = string.Empty;
             Verbosity = Verbosity.Normal;
             MSBuildPlatform = MSBuildPlatform.Automatic;
-            AdditionalParameters = string.Empty;
         }
     }
 }

@@ -614,21 +614,6 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Fact]
-            public void Should_Use_Additional_Parameters_If_Specified()
-            {
-                // Given
-                var fixture = new MSBuildRunnerFixture(false);
-                fixture.Settings.AdditionalParameters = "/A /B /C:123 /D:A /E /F=G";
-
-                // When
-                var result = fixture.Run();
-
-                // Then
-                Assert.Equal("/v:normal /target:Build /A /B /C:123 /D:A /E /F=G " +
-                             "\"/Working/src/Solution.sln\"", result.Args);
-            }
-
-            [Fact]
             public void Should_Append_Targets_To_Process_Arguments()
             {
                 // Given

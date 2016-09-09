@@ -291,37 +291,6 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
         }
 
-        public sealed class TheAddParametersMethod
-        {
-            [Theory]
-            [InlineData("")]
-            [InlineData("/A /B /C")]
-            public void Should_Set_Additional_Parameters(string parameters)
-            {
-                // Given
-                var settings = new MSBuildSettings();
-
-                // When
-                settings.AddParameters(parameters);
-
-                // Then
-                Assert.Equal(parameters, settings.AdditionalParameters);
-            }
-
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new MSBuildSettings();
-
-                // When
-                var result = settings.AddParameters("");
-
-                // Then
-                Assert.Equal(settings, result);
-            }
-        }
-
         public sealed class TheSetVerbosityMethod
         {
             [Theory]

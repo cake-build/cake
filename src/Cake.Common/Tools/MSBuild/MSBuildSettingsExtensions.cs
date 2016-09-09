@@ -207,22 +207,6 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
-        /// Sets the additional parameters.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <param name="additionalParameters">the additional parameters to append.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
-        public static MSBuildSettings AddParameters(this MSBuildSettings settings, string additionalParameters)
-        {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-            settings.AdditionalParameters = additionalParameters;
-            return settings;
-        }
-
-        /// <summary>
         /// Adds a custom logger.
         /// </summary>
         /// <param name="settings">The settings.</param>
