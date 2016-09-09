@@ -222,6 +222,21 @@ namespace Cake.Frosting.Tests.Unit
         }
 
         [Fact]
+        public void Should_Abort_Build_If_Task_That_Is_Not_ContinueOnError_Throws()
+        {
+            // Given
+            var fixture = new CakeHostBuilderFixture();
+            fixture.RegisterTask<NoContinueOnErrorTask>();
+            fixture.Options.Target = "No-Continue-On-Error";
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.NotEqual(0, result);
+        }
+
+        [Fact]
         public void Should_Execute_Tasks_In_Correct_Order()
         {
             // Given

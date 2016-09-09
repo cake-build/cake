@@ -28,7 +28,7 @@ namespace Cake.Frosting.Internal
 
         public static bool IsContinueOnError(this IFrostingTask task)
         {
-            return task.GetType().GetTypeInfo().GetCustomAttribute<TaskNameAttribute>() != null;
+            return task.GetType().GetTypeInfo().GetCustomAttribute<ContinueOnErrorAttribute>() != null;
         }
 
         public static Type GetContextType(this IFrostingTask task)
