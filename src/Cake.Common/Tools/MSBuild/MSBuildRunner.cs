@@ -58,6 +58,18 @@ namespace Cake.Common.Tools.MSBuild
                 builder.Append(settings.MaxCpuCount > 0 ? string.Concat("/m:", settings.MaxCpuCount) : "/m");
             }
 
+            // Set the detailed summary flag
+            if (settings.DetailedSummary.GetValueOrDefault())
+            {
+                builder.Append("/ds");
+            }
+
+            // Set the no console logger flag
+            if (settings.NoConsoleLogger.GetValueOrDefault())
+            {
+                builder.Append("/noconlog");
+            }
+
             // Set the verbosity.
             builder.Append(string.Format(CultureInfo.InvariantCulture, "/v:{0}", GetVerbosityName(settings.Verbosity)));
 
@@ -109,6 +121,13 @@ namespace Cake.Common.Tools.MSBuild
                     var argument = GetLoggerArgument(logger);
                     builder.Append(argument);
                 }
+            }
+
+            // Got a specific parameters that need to be added?
+            if (!string.IsNullOrWhiteSpace(settings.AdditionalParameters))
+            {
+                // Add the configuration as a property.
+                builder.Append(settings.AdditionalParameters);
             }
 
             // Add the solution as the last parameter.

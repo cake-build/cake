@@ -159,6 +159,38 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
+        /// Sets whether or not detailed summary should be enabled.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="detailedSummary"><c>true</c> if detailed summary should be enabled; otherwise <c>false</c>.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetDetailedSummary(this MSBuildSettings settings, bool detailedSummary)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            settings.DetailedSummary = detailedSummary;
+            return settings;
+        }
+
+        /// <summary>
+        /// Sets whether or not no console logging should be enabled.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="noConsoleLog"><c>true</c> if no console log should be enabled; otherwise <c>false</c>.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetNoConsoleLogger(this MSBuildSettings settings, bool noConsoleLog)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            settings.NoConsoleLogger = noConsoleLog;
+            return settings;
+        }
+
+        /// <summary>
         /// Sets the build log verbosity.
         /// </summary>
         /// <param name="settings">The settings.</param>
@@ -171,6 +203,22 @@ namespace Cake.Common.Tools.MSBuild
                 throw new ArgumentNullException(nameof(settings));
             }
             settings.Verbosity = verbosity;
+            return settings;
+        }
+
+        /// <summary>
+        /// Sets the additional parameters.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="additionalParameters">the additional parameters to append.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings AddParameters(this MSBuildSettings settings, string additionalParameters)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            settings.AdditionalParameters = additionalParameters;
             return settings;
         }
 
