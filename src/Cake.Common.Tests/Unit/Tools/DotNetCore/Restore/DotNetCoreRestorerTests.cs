@@ -97,7 +97,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore  --infer-runtimes", result.Args);
+                Assert.Equal("restore --infer-runtimes", result.Args);
             }
 
             [Theory]
