@@ -2,15 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Autofac;
+using Cake.Frosting.Internal.Composition;
 
 namespace Cake.Frosting.Internal.Commands
 {
     internal sealed class CommandFactory
     {
-        private readonly ILifetimeScope _scope;
+        private readonly Container _scope;
 
-        public CommandFactory(ILifetimeScope scope)
+        public CommandFactory(Container scope)
         {
             _scope = scope;
         }

@@ -3,43 +3,45 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using Autofac;
-using Autofac.Builder;
+using System.Reflection;
 using Cake.Core.Composition;
 
 namespace Cake.Frosting.Internal.Composition
 {
-    internal class ContainerRegistration<T, TActivator> : ICakeRegistrationBuilder
-        where TActivator : IConcreteActivatorData
+    internal class RegistrationBuilder : ICakeRegistrationBuilder
     {
-        private IRegistrationBuilder<T, TActivator, SingleRegistrationStyle> _registration;
+        private readonly ComponentRegistration _registration;
 
-        public ContainerRegistration(IRegistrationBuilder<T, TActivator, SingleRegistrationStyle> registration)
+        public RegistrationBuilder(ComponentRegistration registration)
         {
             _registration = registration;
         }
 
         public ICakeRegistrationBuilder As(Type type)
         {
-            _registration = _registration.As(type);
+            if (!type.GetTypeInfo().IsAssignableFrom(_registration.ImplementationType))
+            {
+                throw new InvalidOperationException("Invalid registration.");
+            }
+            _registration.RegistrationTypes.Add(type);
             return this;
         }
 
         public ICakeRegistrationBuilder AsSelf()
         {
-            _registration = _registration.AsSelf();
+            _registration.RegistrationTypes.Add(_registration.ImplementationType);
             return this;
         }
 
         public ICakeRegistrationBuilder Singleton()
         {
-            _registration = _registration.SingleInstance();
+            _registration.Singleton = true;
             return this;
         }
 
         public ICakeRegistrationBuilder Transient()
         {
-            _registration = _registration.InstancePerDependency();
+            _registration.Singleton = false;
             return this;
         }
     }

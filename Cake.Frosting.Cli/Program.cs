@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using Autofac;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Frosting.Cli.Project;
@@ -25,11 +24,8 @@ namespace Cake.Frosting.Cli
         {
             try
             {
-                using (var container = BuildContainer())
-                {
-                    var application = container.Resolve<Application>();
-                    return application.Run(args);
-                }
+                var application = CreateApplication();
+                return application.Run(args);
             }
             catch (Exception exception)
             {
@@ -38,22 +34,14 @@ namespace Cake.Frosting.Cli
             }
         }
 
-        private static IContainer BuildContainer()
+        private static Application CreateApplication()
         {
-            var builder = new ContainerBuilder();
+            var fileSystem = new FileSystem();
+            var environment = new CakeEnvironment(new CakePlatform(), new CakeRuntime());
+            var projectServices = new ProjectServices(fileSystem, environment);
+            var startupFinder = new StartupFinder();
 
-            builder.RegisterType<FileSystem>().As<IFileSystem>().SingleInstance();
-            builder.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().SingleInstance();
-            builder.RegisterType<CakePlatform>().As<ICakePlatform>().SingleInstance();
-            builder.RegisterType<CakeRuntime>().As<ICakeRuntime>().SingleInstance();
-
-            builder.RegisterType<Application>().SingleInstance();
-            builder.RegisterType<ProjectLocator>().SingleInstance();
-            builder.RegisterType<ProjectBuilder>().SingleInstance();
-            builder.RegisterType<ProjectLoader>().SingleInstance();
-            builder.RegisterType<StartupFinder>().SingleInstance();
-
-            return builder.Build();
+            return new Application(environment, projectServices, startupFinder);
         }
     }
 }

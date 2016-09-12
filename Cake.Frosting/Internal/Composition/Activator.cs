@@ -2,16 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Autofac;
-
-// ReSharper disable once CheckNamespace
 namespace Cake.Frosting.Internal.Composition
 {
-    internal static class ContainerExtensions
+    internal abstract class Activator
     {
-        public static void Update(this IContainer container, ContainerRegistrar registrar)
-        {
-            registrar.Builder.Update(container);
-        }
+        public abstract object Activate(Container container);
+
+        public abstract Activator CreateCopy();
     }
 }

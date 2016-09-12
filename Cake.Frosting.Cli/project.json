@@ -43,7 +43,6 @@
       "type": "platform",
       "version": "1.0.0"
     },
-    "Autofac": "4.1.0",
     "Microsoft.DotNet.ProjectModel": "1.0.0-rc3-003121",
     "Microsoft.DotNet.Compiler.Common": "1.0.0-preview2-003121",
     "Cake.Frosting": {

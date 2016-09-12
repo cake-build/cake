@@ -24,7 +24,6 @@
     "NETStandard.Library": "1.6.0",
     "Cake.Core": "0.16.0-alpha0046",
     "Cake.Common": "0.16.0-alpha0046",
-    "Autofac": "4.1.0",
     "StyleCop.Analyzers": {
       "version": "1.0.0",
       "type": "build"

@@ -11,39 +11,42 @@ namespace Cake.Frosting.Cli
     internal sealed class Application
     {
         private readonly ICakeEnvironment _environment;
-        private readonly ProjectLocator _locator;
-        private readonly ProjectBuilder _builder;
-        private readonly ProjectLoader _loader;
+        private readonly ProjectServices _projectServices;
         private readonly StartupFinder _finder;
 
-        public Application(ICakeEnvironment environment, ProjectLocator locator,
-            ProjectBuilder builder, ProjectLoader loader, StartupFinder finder)
+        public Application(
+            ICakeEnvironment environment,
+            ProjectServices projectServices,
+            StartupFinder finder)
         {
             _environment = environment;
-            _locator = locator;
-            _builder = builder;
-            _loader = loader;
+            _projectServices = projectServices;
             _finder = finder;
         }
 
         public int Run(string[] args)
         {
-            // Get the project.
-            var project = _locator.GetProject(_environment.WorkingDirectory);
-            if (project == null)
+            // Get the project context.
+            var context = _projectServices.Locator.GetProject(_environment.WorkingDirectory);
+            if (context == null)
             {
                 throw new FrostingException("The specified path does not contain a Cake.Frosting project.");
             }
 
             // Build the project.
-            var buildResult = _builder.Build(project);
+            var buildResult = _projectServices.Builder.Build(context);
             if (buildResult != 0)
             {
                 throw new FrostingException($"Build failed (exit code {buildResult}).");
             }
 
             // Load project output.
-            var assembly = _loader.Load(project);
+            var assembly = _projectServices.Loader.Load(context);
+            if (assembly == null)
+            {
+                throw new FrostingException("Could not load project output.");
+            }
+
             var startup = _finder.FindStartup(assembly);
             if (startup == null)
             {

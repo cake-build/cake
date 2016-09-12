@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Autofac;
 using Cake.Core.Composition;
 using Cake.Core.Modules;
 using Cake.Frosting.Internal;
@@ -19,14 +18,14 @@ namespace Cake.Frosting
     /// <seealso cref="Cake.Frosting.ICakeHostBuilder" />
     public sealed class CakeHostBuilder : ICakeHostBuilder
     {
-        private readonly ContainerRegistrar _registrations;
+        private readonly CakeServices _registrations;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeHostBuilder"/> class.
         /// </summary>
         public CakeHostBuilder()
         {
-            _registrations = new ContainerRegistrar();
+            _registrations = new CakeServices();
         }
 
         /// <summary>
@@ -57,13 +56,13 @@ namespace Cake.Frosting
             {
                 // Create the "base" container with the minimum
                 // stuff registered to run Cake at all.
-                var registrar = new ContainerRegistrar();
+                var registrar = new CakeServices();
                 registrar.RegisterModule(new CoreModule());
                 registrar.RegisterModule(new Module());
                 var container = registrar.Build();
 
                 // Add custom registrations to the container.
-                AddCustomRegistrations(container);
+                container.Update(_registrations);
 
                 // Find and register tasks with the container.
                 RegisterTasks(container);
@@ -77,12 +76,12 @@ namespace Cake.Frosting
             }
         }
 
-        private static void RegisterTasks(IContainer container)
+        private static void RegisterTasks(Container container)
         {
             // Create a child scope to not affect the underlying
             // container in case the ICakeTaskFinder references
             // something that is later replaced.
-            using (var scope = container.BeginLifetimeScope())
+            using (var scope = container.CreateChildScope())
             {
                 // Find tasks in registered assemblies.
                 var assemblies = scope.Resolve<IEnumerable<Assembly>>();
@@ -91,7 +90,7 @@ namespace Cake.Frosting
 
                 if (tasks.Length > 0)
                 {
-                    var registrar = new ContainerRegistrar();
+                    var registrar = new CakeServices();
                     foreach (var task in tasks)
                     {
                         registrar.RegisterType(task).As<IFrostingTask>().Singleton();
@@ -99,11 +98,6 @@ namespace Cake.Frosting
                     container.Update(registrar);
                 }
             }
-        }
-
-        private void AddCustomRegistrations(IContainer container)
-        {
-            container.Update(_registrations);
         }
     }
 }

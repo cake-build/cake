@@ -27,10 +27,10 @@ namespace Cake.Frosting.Cli.Project
         public Assembly Load(ProjectContext context)
         {
             var root = _environment.WorkingDirectory;
-            var binaryPath = root.Combine("bin").Combine("Release").Combine(context.TargetFramework.GetShortFolderName());
-            var assemblyPath = binaryPath.CombineWithFilePath(context.ProjectFile.Name + ".dll").MakeAbsolute(_environment);
+            var assemblyPath = GetOutputAssemblyPath(context, root);
 
             Console.WriteLine("Loading ./{0}...", root.GetRelativePath(assemblyPath).FullPath);
+
             var loader = new AssemblyLoader(_fileSystem, assemblyPath.GetDirectory());
             var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath.FullPath);
             DependencyContext.Default.Merge(DependencyContext.Load(assembly));
@@ -48,6 +48,17 @@ namespace Cake.Frosting.Cli.Project
             }
 
             return assembly;
+        }
+
+        private FilePath GetOutputAssemblyPath(ProjectContext context, DirectoryPath root)
+        {
+            var binaryPath = root.Combine("bin").Combine("Release").Combine(context.TargetFramework.GetShortFolderName());
+            var assemblyPath = binaryPath.CombineWithFilePath(context.ProjectFile.Name + ".dll").MakeAbsolute(_environment);
+            if (!_fileSystem.Exist(assemblyPath))
+            {
+                throw new FrostingException($"Could not find assembly '{assemblyPath.FullPath}'.");
+            }
+            return assemblyPath;
         }
     }
 }
