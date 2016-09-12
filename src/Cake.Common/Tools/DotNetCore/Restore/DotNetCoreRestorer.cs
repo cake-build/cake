@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -101,7 +102,7 @@ namespace Cake.Common.Tools.DotNetCore.Restore
             // List of runtime identifiers
             if (settings.InferRuntimes != null)
             {
-                if ((settings.InferRuntimes.Count == 1) && string.IsNullOrEmpty(settings.InferRuntimes[0]))
+                if ((settings.InferRuntimes.Count == 1) && string.IsNullOrEmpty(settings.InferRuntimes.First()))
                 {
                     builder.Append("--infer-runtimes");
                 }
