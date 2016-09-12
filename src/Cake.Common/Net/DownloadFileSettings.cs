@@ -18,5 +18,10 @@ namespace Cake.Common.Net
         /// Gets or sets the Password to use when downloading the file
         /// </summary>
         public string Password { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value that controls whether default credentials are sent when downloading the file
+        /// </summary>
+        public bool UseDefaultCredentials { get; set; }
     }
 }
