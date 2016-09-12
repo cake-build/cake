@@ -83,7 +83,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                 // Then
                 Assert.Equal("restore \"./src/*\"", result.Args);
             }
-            
+
             [Theory]
             [InlineData(null)]
             [InlineData("")]
