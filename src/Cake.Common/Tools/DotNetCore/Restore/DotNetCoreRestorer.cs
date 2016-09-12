@@ -101,10 +101,17 @@ namespace Cake.Common.Tools.DotNetCore.Restore
             // List of runtime identifiers
             if (settings.InferRuntimes != null)
             {
-                foreach (var runtime in settings.InferRuntimes)
+                if ((settings.InferRuntimes.Count == 1) && string.IsNullOrEmpty(settings.InferRuntimes[0]))
                 {
                     builder.Append("--infer-runtimes");
-                    builder.AppendQuoted(runtime);
+                }
+                else
+                {
+                    foreach (var runtime in settings.InferRuntimes)
+                    {
+                        builder.Append("--infer-runtimes");
+                        builder.AppendQuoted(runtime);
+                    }
                 }
             }
 #pragma warning disable 0618
