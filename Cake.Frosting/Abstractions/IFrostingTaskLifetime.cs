@@ -4,6 +4,7 @@
 
 using Cake.Core;
 
+// ReSharper disable once CheckNamespace
 namespace Cake.Frosting
 {
     /// <summary>

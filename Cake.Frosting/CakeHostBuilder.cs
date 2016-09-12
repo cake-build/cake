@@ -59,7 +59,7 @@ namespace Cake.Frosting
                 // stuff registered to run Cake at all.
                 var registrar = new ContainerRegistrar();
                 registrar.RegisterModule(new CoreModule());
-                registrar.RegisterModule(new FrostingModule());
+                registrar.RegisterModule(new Module());
                 var container = registrar.Build();
 
                 // Add custom registrations to the container.

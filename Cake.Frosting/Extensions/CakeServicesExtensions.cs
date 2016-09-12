@@ -6,6 +6,7 @@ using System.Reflection;
 using Cake.Core.Composition;
 using Cake.Frosting.Internal;
 
+// ReSharper disable once CheckNamespace
 namespace Cake.Frosting
 {
     /// <summary>

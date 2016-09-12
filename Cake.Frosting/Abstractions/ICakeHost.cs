@@ -2,17 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+// ReSharper disable once CheckNamespace
 namespace Cake.Frosting
 {
     /// <summary>
-    /// Represents a startup configuration.
+    /// Represents a configured Cake host.
     /// </summary>
-    public interface IFrostingStartup
+    public interface ICakeHost
     {
         /// <summary>
-        /// Configures services used by Cake.
+        /// Runs the configured Cake host.
         /// </summary>
-        /// <param name="services">The services to configure.</param>
-        void Configure(ICakeServices services);
+        /// <returns>An exit code indicating success or failure.</returns>
+        int Run();
     }
 }

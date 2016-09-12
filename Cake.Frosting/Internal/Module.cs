@@ -11,9 +11,10 @@ using Cake.Frosting.Internal;
 using Cake.Frosting.Internal.Commands;
 using Cake.Frosting.Internal.Diagnostics;
 
+// ReSharper disable once CheckNamespace
 namespace Cake.Frosting
 {
-    internal class FrostingModule : ICakeModule
+    internal class Module : ICakeModule
     {
         public void Register(ICakeContainerRegistrar registry)
         {
@@ -22,7 +23,6 @@ namespace Cake.Frosting
 
             // Core services
             registry.RegisterType<CakeHost>().As<ICakeHost>().Singleton();
-            registry.RegisterType<CakeHostServices>().Singleton();
             registry.RegisterType<DefaultExecutionStrategy>().As<IExecutionStrategy>().Singleton();
             registry.RegisterType<EngineInitializer>().Singleton();
             registry.RegisterType<TaskFinder>().As<ICakeTaskFinder>().Singleton();

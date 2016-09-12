@@ -2,15 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Cake.Core;
+using Cake.Core.Composition;
 
+// ReSharper disable once CheckNamespace
 namespace Cake.Frosting
 {
     /// <summary>
-    /// Represents the build context.
+    /// Represents a collection of service registrations.
     /// </summary>
-    /// <seealso cref="ICakeContext" />
-    public interface IFrostingContext : ICakeContext
+    /// <seealso cref="ICakeContainerRegistrar" />
+    public interface ICakeServices : ICakeContainerRegistrar
     {
     }
 }
