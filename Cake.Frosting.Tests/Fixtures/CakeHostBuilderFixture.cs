@@ -16,7 +16,7 @@ namespace Cake.Frosting.Tests.Fixtures
     {
         public CakeHostBuilder Builder { get; set; }
 
-        public IFileSystem FileSystem { get; set; }
+        public FakeFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
         public ICakeEngine Engine { get; set; }
         public ICakeLog Log { get; set; }
@@ -27,7 +27,10 @@ namespace Cake.Frosting.Tests.Fixtures
         {
             Builder = new CakeHostBuilder();
             Environment = FakeEnvironment.CreateUnixEnvironment();
+
             FileSystem = new FakeFileSystem(Environment);
+            FileSystem.CreateDirectory("/Working");
+
             Log = Substitute.For<ICakeLog>();
             Engine = new CakeEngine(Log);
             Options = new CakeHostOptions();

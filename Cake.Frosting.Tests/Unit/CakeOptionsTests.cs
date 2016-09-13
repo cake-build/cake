@@ -34,7 +34,7 @@ namespace Cake.Frosting.Tests.Unit
                 var result = options.WorkingDirectory;
 
                 // Then
-                Assert.Equal(".", result.FullPath);
+                Assert.Null(result);
             }
 
             [Fact]

@@ -50,7 +50,7 @@ namespace Cake.Frosting
         public CakeHostOptions()
         {
             Arguments = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            WorkingDirectory = ".";
+            WorkingDirectory = null;
             Target = "Default";
             Verbosity = Verbosity.Normal;
             Command = CakeHostCommand.Run;

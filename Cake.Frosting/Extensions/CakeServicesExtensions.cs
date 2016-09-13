@@ -4,6 +4,7 @@
 
 using System.Reflection;
 using Cake.Core.Composition;
+using Cake.Core.IO;
 using Cake.Frosting.Internal;
 
 // ReSharper disable once CheckNamespace
@@ -93,6 +94,20 @@ namespace Cake.Frosting
         }
 
         /// <summary>
+        /// Sets the relative working directory to be used when running the build.
+        /// </summary>
+        /// <param name="services">The service registration collection.</param>
+        /// <param name="path">The working directory path.</param>
+        /// <returns>The same <see cref="ICakeServices"/> instance so that multiple calls can be chained.</returns>
+        public static ICakeServices UseWorkingDirectory(this ICakeServices services, DirectoryPath path)
+        {
+            Guard.ArgumentNotNull(services, nameof(services));
+
+            services.RegisterInstance(new WorkingDirectory(path)).AsSelf().Singleton();
+            return services;
+        }
+
+        /// <summary>
         ///  Add or replace a setting in the configuration.
         /// </summary>
         /// <param name="services">The service registration collection.</param>
@@ -101,6 +116,8 @@ namespace Cake.Frosting
         /// <returns>The same <see cref="ICakeServices"/> instance so that multiple calls can be chained.</returns>
         public static ICakeServices UseSetting(this ICakeServices services, string key, string value)
         {
+            Guard.ArgumentNotNull(services, nameof(services));
+
             var info = new ConfigurationSetting(key, value);
             services.RegisterInstance(info).AsSelf().Singleton();
             return services;

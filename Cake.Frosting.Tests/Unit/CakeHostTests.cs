@@ -8,6 +8,7 @@ using Cake.Core.Diagnostics;
 using Cake.Frosting.Tests.Data.Tasks;
 using Cake.Frosting.Tests.Fakes;
 using Cake.Frosting.Tests.Fixtures;
+using Cake.Testing;
 using NSubstitute;
 using Xunit;
 
@@ -36,6 +37,7 @@ namespace Cake.Frosting.Tests.Unit
             // Given
             var fixture = new CakeHostBuilderFixture();
             fixture.RegisterDefaultTask();
+            fixture.FileSystem.CreateDirectory("/Working/Temp");
             fixture.Options.WorkingDirectory = "./Temp";
 
             // When

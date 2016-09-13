@@ -38,16 +38,15 @@ namespace Cake.Frosting.Internal
             {
                 if (_configuration == null)
                 {
-                    // Add additional configuration values.
                     var arguments = new Dictionary<string, string>(_options.Arguments, StringComparer.OrdinalIgnoreCase);
                     if (_values != null)
                     {
+                        // Add additional configuration values.
                         foreach (var value in _values)
                         {
                             arguments[value.Key] = value.Value;
                         }
                     }
-
                     _configuration = _provider.CreateConfiguration(_environment.WorkingDirectory, arguments);
                 }
                 return _configuration.GetValue(key);

@@ -31,6 +31,7 @@ namespace Sandbox
         public void Configure(ICakeServices services)
         {
             services.UseContext<Settings>();
+            services.UseWorkingDirectory(".");
         }
     }
 }
