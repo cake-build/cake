@@ -20,5 +20,11 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// </summary>
         /// <value>The dependency's version.</value>
         public string Version { get; set; }
+
+        /// <summary>
+        /// Gets or sets the dependency's version.
+        /// </summary>
+        /// <value>The dependency's version.</value>
+        public string TargetFramework { get; set; }
     }
 }
