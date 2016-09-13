@@ -14,7 +14,7 @@ namespace Cake.Frosting.Internal
         private readonly CakeConfigurationProvider _provider;
         private readonly CakeHostOptions _options;
         private readonly ICakeEnvironment _environment;
-        private readonly IEnumerable<ConfigurationValue> _values;
+        private readonly IEnumerable<ConfigurationSetting> _values;
         private readonly object _lock;
         private ICakeConfiguration _configuration;
 
@@ -22,7 +22,7 @@ namespace Cake.Frosting.Internal
             CakeConfigurationProvider provider,
             CakeHostOptions options,
             ICakeEnvironment environment,
-            IEnumerable<ConfigurationValue> values)
+            IEnumerable<ConfigurationSetting> values)
         {
             _provider = provider;
             _options = options;

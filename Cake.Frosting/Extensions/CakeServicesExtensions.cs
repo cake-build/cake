@@ -101,7 +101,7 @@ namespace Cake.Frosting
         /// <returns>The same <see cref="ICakeServices"/> instance so that multiple calls can be chained.</returns>
         public static ICakeServices UseSetting(this ICakeServices services, string key, string value)
         {
-            var info = new ConfigurationValue(key, value);
+            var info = new ConfigurationSetting(key, value);
             services.RegisterInstance(info).AsSelf().Singleton();
             return services;
         }

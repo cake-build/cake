@@ -4,13 +4,13 @@
 
 namespace Cake.Frosting.Internal
 {
-    internal sealed class ConfigurationValue
+    internal sealed class ConfigurationSetting
     {
         public string Key { get; }
 
         public string Value { get; }
 
-        public ConfigurationValue(string key, string value)
+        public ConfigurationSetting(string key, string value)
         {
             Key = key;
             Value = value;
