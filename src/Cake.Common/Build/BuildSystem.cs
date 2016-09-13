@@ -34,6 +34,7 @@ namespace Cake.Common.Build
         /// <param name="bitriseProvider">The Bitrise Provider.</param>
         /// <param name="travisCIProvider">The Travis CI provider.</param>
         /// <param name="bitbucketPipelinesProvider">The Bitbucket Pipelines provider.</param>
+        /// <param name="goCDProvider">The Go.CD provider.</param>
         public BuildSystem(
             IAppVeyorProvider appVeyorProvider,
             ITeamCityProvider teamCityProvider,
