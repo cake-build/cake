@@ -32,19 +32,53 @@ namespace Cake.Frosting.Tests.Unit
         }
 
         [Fact]
-        public void Should_Set_Working_Directory_From_Options()
+        public void Should_Set_Working_Directory_From_Options_If_Set()
         {
             // Given
             var fixture = new CakeHostBuilderFixture();
             fixture.RegisterDefaultTask();
-            fixture.FileSystem.CreateDirectory("/Working/Temp");
-            fixture.Options.WorkingDirectory = "./Temp";
+            fixture.FileSystem.CreateDirectory("/Working/Foo");
+            fixture.Options.WorkingDirectory = "./Foo";
 
             // When
             fixture.Run();
 
             // Then
-            Assert.Equal("/Working/Temp", fixture.Environment.WorkingDirectory.FullPath);
+            Assert.Equal("/Working/Foo", fixture.Environment.WorkingDirectory.FullPath);
+        }
+
+        [Fact]
+        public void Should_Use_Working_Directory_From_Service_Configuration_If_Set()
+        {
+            // Given
+            var fixture = new CakeHostBuilderFixture();
+            fixture.RegisterDefaultTask();
+            fixture.FileSystem.CreateDirectory("/Working/Foo");
+            fixture.Builder.ConfigureServices(s => s.UseWorkingDirectory("./Foo"));
+
+            // When
+            fixture.Run();
+
+            // Then
+            Assert.Equal("/Working/Foo", fixture.Environment.WorkingDirectory.FullPath);
+        }
+
+        [Fact]
+        public void Should_Prefer_Working_Directory_From_Options_Over_Configuration()
+        {
+            // Given
+            var fixture = new CakeHostBuilderFixture();
+            fixture.RegisterDefaultTask();
+            fixture.FileSystem.CreateDirectory("/Working/Foo");
+            fixture.FileSystem.CreateDirectory("/Working/Bar");
+            fixture.Options.WorkingDirectory = "./Bar";
+            fixture.Builder.ConfigureServices(s => s.UseWorkingDirectory("./Foo"));
+
+            // When
+            fixture.Run();
+
+            // Then
+            Assert.Equal("/Working/Bar", fixture.Environment.WorkingDirectory.FullPath);
         }
 
         [Fact]

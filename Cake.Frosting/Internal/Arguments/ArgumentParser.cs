@@ -19,12 +19,7 @@ namespace Cake.Frosting.Internal.Arguments
                 throw new ArgumentNullException(nameof(args));
             }
 
-            var options = new CakeHostOptions
-            {
-                WorkingDirectory = ".",
-                Target = "Default",
-                Verbosity = Verbosity.Normal
-            };
+            var options = new CakeHostOptions();
 
             foreach (var argument in args)
             {
