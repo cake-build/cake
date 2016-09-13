@@ -13,6 +13,7 @@ namespace Cake.Common.Build.GoCD.Data
     {
         /// <summary>
         /// Gets the source control revision.
+        /// </summary>
         /// <value>
         /// The the source control revision.
         /// </value>

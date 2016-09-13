@@ -211,7 +211,6 @@ namespace Cake.Common.Tests.Unit.Build
                 Assert.IsArgumentNullException(result, "bitbucketPipelinesProvider");
             }
 
-
             [Fact]
             public void Should_Throw_If_GoCD_Is_Null()
             {
@@ -232,7 +231,6 @@ namespace Cake.Common.Tests.Unit.Build
                 // Then
                 Assert.IsArgumentNullException(result, "goCDProvider");
             }
-
         }
 
         public sealed class TheIsRunningOnAppVeyorProperty
