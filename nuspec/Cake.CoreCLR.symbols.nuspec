@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>Cake.CoreCLR</id>
+    <version>0.0.0</version>
+    <authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors</authors>
+    <description>The Cake script runner.</description>
+    <summary>Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.</summary>
+    <licenseUrl>https://github.com/cake-build/cake/blob/develop/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/cake-build/cake</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <copyright>Copyright (c) .NET Foundation and contributors</copyright>
+    <tags>Cake Script Build</tags>
+  </metadata>
+  <files>
+    <file src="Cake.dll" target="lib/netstandard1.6" />
+    <file src="Cake.pdb" target="lib/netstandard1.6" />
+    <file src="Cake.xml" target="lib/netstandard1.6" />
+  </files>
+</package>

@@ -260,6 +260,16 @@ Task("Create-NuGet-Packages")
         });
     }
 
+    // Cake - Symbols - .NET 4.5
+    NuGetPack("./nuspec/Cake.symbols.nuspec", new NuGetPackSettings {
+        Version = parameters.Version.SemVersion,
+        ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
+        BasePath = parameters.Paths.Directories.ArtifactsBinNet45,
+        OutputDirectory = parameters.Paths.Directories.NugetRoot,
+        Symbols = true,
+        NoPackageAnalysis = true
+    });
+
     // Cake - .NET 4.5
     NuGetPack("./nuspec/Cake.nuspec", new NuGetPackSettings {
         Version = parameters.Version.SemVersion,
@@ -267,6 +277,16 @@ Task("Create-NuGet-Packages")
         BasePath = parameters.Paths.Directories.ArtifactsBinNet45,
         OutputDirectory = parameters.Paths.Directories.NugetRoot,
         Symbols = false,
+        NoPackageAnalysis = true
+    });
+
+    // Cake Symbols - .NET Core
+    NuGetPack("./nuspec/Cake.CoreCLR.symbols.nuspec", new NuGetPackSettings {
+        Version = parameters.Version.SemVersion,
+        ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
+        BasePath = parameters.Paths.Directories.ArtifactsBinNetCoreApp10,
+        OutputDirectory = parameters.Paths.Directories.NugetRoot,
+        Symbols = true,
         NoPackageAnalysis = true
     });
 
