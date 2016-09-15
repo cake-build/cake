@@ -17,10 +17,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The source directory.
         /// </value>
-        public string SourceDirectory
-        {
-            get { return GetEnvironmentString("BITRISE_SOURCE_DIR"); }
-        }
+        public string SourceDirectory => GetEnvironmentString("BITRISE_SOURCE_DIR");
 
         /// <summary>
         /// Gets the deploy directory.
@@ -28,10 +25,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The deploy directory.
         /// </value>
-        public string DeployDirectory
-        {
-            get { return GetEnvironmentString("BITRISE_DEPLOY_DIR"); }
-        }
+        public string DeployDirectory => GetEnvironmentString("BITRISE_DEPLOY_DIR");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BitriseDirectoryInfo"/> class.

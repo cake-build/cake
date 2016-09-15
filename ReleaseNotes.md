@@ -1,3 +1,15 @@
+### New on 0.16.0 (Released 2016/09/15)
+* Change API for registering dependencies with Cake
+* Add include & exlude parameters to #tool directive
+* Allow passing username and password to DownloadFile alias
+* Port to .NET Core
+* Publish symbol files
+* Add missing MergeOutput Option for OpenCover
+* ICakeContainerRegistry missing constraint
+* NugetV2Resolver doesn't support new netstandard
+* Implement custom logger support for MSBuild
+* Support MSBuild logger switches
+
 ### New on 0.15.2 (Released 2016/07/29)
 
 * Ensured that WiX candle definitions are enclosed in quotes

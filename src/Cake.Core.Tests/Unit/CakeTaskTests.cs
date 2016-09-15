@@ -34,7 +34,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.IsType<ArgumentException>(result);
-                Assert.Equal("Task name cannot be empty.", result.Message);
+                Assert.Equal("Task name cannot be empty.", result?.Message);
             }
         }
 
@@ -66,7 +66,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("The task 'task' already have a dependency on 'other'.", result.Message);
+                Assert.Equal("The task 'task' already have a dependency on 'other'.", result?.Message);
             }
         }
 
@@ -139,7 +139,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("There can only be one error handler per task.", result.Message);
+                Assert.Equal("There can only be one error handler per task.", result?.Message);
             }
         }
 
@@ -183,7 +183,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("There can only be one finally handler per task.", result.Message);
+                Assert.Equal("There can only be one finally handler per task.", result?.Message);
             }
         }
 
@@ -227,7 +227,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("There can only be one error reporter per task.", result.Message);
+                Assert.Equal("There can only be one error reporter per task.", result?.Message);
             }
         }
 

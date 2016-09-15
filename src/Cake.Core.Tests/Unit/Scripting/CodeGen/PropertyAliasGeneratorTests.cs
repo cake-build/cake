@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Reflection;
 using Cake.Core.Scripting.CodeGen;
 using Cake.Core.Tests.Fixtures;
 using Xunit;
@@ -33,14 +34,14 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             public void Should_Throw_If_Declaring_Type_Is_Not_Static()
             {
                 // Given
-                var method = GetType().GetMethod("Should_Throw_If_Declaring_Type_Is_Not_Static");
+                var method = GetType().GetTypeInfo().GetMethod("Should_Throw_If_Declaring_Type_Is_Not_Static");
 
                 // When
                 var result = Record.Exception(() => PropertyAliasGenerator.Generate(method));
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("The type 'Cake.Core.Tests.Unit.Scripting.CodeGen.PropertyAliasGeneratorTests+TheGenerateMethod' is not static.", result.Message);
+                Assert.Equal("The type 'Cake.Core.Tests.Unit.Scripting.CodeGen.PropertyAliasGeneratorTests+TheGenerateMethod' is not static.", result?.Message);
             }
 
             [Fact]
@@ -51,7 +52,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("The method 'NotAnExtensionMethod' is not an extension method.", result.Message);
+                Assert.Equal("The method 'NotAnExtensionMethod' is not an extension method.", result?.Message);
             }
 
             [Fact]
@@ -62,7 +63,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("The method 'NotAScriptMethod' is not a property alias.", result.Message);
+                Assert.Equal("The method 'NotAScriptMethod' is not a property alias.", result?.Message);
             }
 
             [Fact]
@@ -73,7 +74,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("The property alias 'PropertyAliasWithMoreThanOneMethod' has an invalid signature.", result.Message);
+                Assert.Equal("The property alias 'PropertyAliasWithMoreThanOneMethod' has an invalid signature.", result?.Message);
             }
 
             [Fact]
@@ -84,7 +85,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("The property alias 'PropertyAliasWithoutContext' has an invalid signature.", result.Message);
+                Assert.Equal("The property alias 'PropertyAliasWithoutContext' has an invalid signature.", result?.Message);
             }
 
             [Fact]
@@ -95,7 +96,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("The property alias 'GenericScriptMethod' cannot be generic.", result.Message);
+                Assert.Equal("The property alias 'GenericScriptMethod' cannot be generic.", result?.Message);
             }
 
             [Fact]
@@ -106,7 +107,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("The property alias 'PropertyAliasReturningVoid' cannot return void.", result.Message);
+                Assert.Equal("The property alias 'PropertyAliasReturningVoid' cannot return void.", result?.Message);
             }
 
             [Theory]

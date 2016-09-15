@@ -27,7 +27,7 @@ namespace Cake.Testing
         {
             if (fixture == null)
             {
-                throw new ArgumentNullException("fixture");
+                throw new ArgumentNullException(nameof(fixture));
             }
             var file = fixture.FileSystem.GetFile(fixture.DefaultToolPath);
             if (file.Exists)
@@ -49,7 +49,7 @@ namespace Cake.Testing
         {
             if (fixture == null)
             {
-                throw new ArgumentNullException("fixture");
+                throw new ArgumentNullException(nameof(fixture));
             }
             if (fixture.Settings.ToolPath != null)
             {
@@ -71,7 +71,7 @@ namespace Cake.Testing
         {
             if (fixture == null)
             {
-                throw new ArgumentNullException("fixture");
+                throw new ArgumentNullException(nameof(fixture));
             }
             fixture.ProcessRunner.Process = null;
         }
@@ -90,7 +90,7 @@ namespace Cake.Testing
         {
             if (fixture == null)
             {
-                throw new ArgumentNullException("fixture");
+                throw new ArgumentNullException(nameof(fixture));
             }
             fixture.ProcessRunner.Process.SetExitCode(exitCode);
         }

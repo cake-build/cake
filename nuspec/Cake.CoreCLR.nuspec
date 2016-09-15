@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>Cake.CoreCLR</id>
+    <version>0.0.0</version>
+    <authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors</authors>
+    <description>The Cake script runner.</description>
+    <summary>Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.</summary>
+    <licenseUrl>https://github.com/cake-build/cake/blob/develop/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/cake-build/cake</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <copyright>Copyright (c) .NET Foundation and contributors</copyright>
+    <tags>Cake Script Build</tags>
+  </metadata>
+  <files>
+    <file src="Autofac.dll" />
+    <file src="Cake.Common.dll" />
+    <file src="Cake.Core.dll" />
+    <file src="Cake.deps.json" />
+    <file src="Cake.dll" />
+    <file src="Cake.NuGet.dll" />
+    <file src="Cake.runtimeconfig.json" />
+    <file src="Microsoft.CodeAnalysis.CSharp.dll" />
+    <file src="Microsoft.CodeAnalysis.CSharp.Scripting.dll" />
+    <file src="Microsoft.CodeAnalysis.dll" />
+    <file src="Microsoft.CodeAnalysis.Scripting.dll" />
+    <file src="Microsoft.DotNet.InternalAbstractions.dll" />
+    <file src="Microsoft.Extensions.DependencyModel.dll" />
+    <file src="Newtonsoft.Json.dll" />
+    <file src="NuGet.Client.dll" />
+    <file src="NuGet.Common.dll" />
+    <file src="NuGet.ContentModel.dll" />
+    <file src="NuGet.Frameworks.dll" />
+    <file src="NuGet.Packaging.Core.dll" />
+    <file src="NuGet.Packaging.Core.Types.dll" />
+    <file src="NuGet.Packaging.dll" />
+    <file src="NuGet.Repositories.dll" />
+    <file src="NuGet.RuntimeModel.dll" />
+    <file src="NuGet.Versioning.dll" />
+    <file src="System.ComponentModel.Primitives.dll" />
+    <file src="System.ComponentModel.TypeConverter.dll" />
+    <file src="System.Diagnostics.StackTrace.dll" />
+    <file src="System.Private.DataContractSerialization.dll" />
+    <file src="System.Runtime.Serialization.Json.dll" />
+    <file src="System.Runtime.Serialization.Primitives.dll" />
+    <file src="System.Xml.XmlDocument.dll" />
+    <file src="System.Xml.XmlSerializer.dll" />
+    <file src="System.Xml.XPath.dll" />
+    <file src="System.Xml.XPath.XDocument.dll" />
+    <file src="System.Xml.XPath.XmlDocument.dll" />
+    <file src="runtimes/unix/lib/netstandard1.3/System.Diagnostics.FileVersionInfo.dll" target="runtimes/unix/lib/netstandard1.3/" />
+    <file src="runtimes/unix/lib/netstandard1.3/System.Text.Encoding.CodePages.dll" target="runtimes/unix/lib/netstandard1.3/" />
+    <file src="runtimes/win/lib/netstandard1.3/System.Diagnostics.FileVersionInfo.dll" target="runtimes/win/lib/netstandard1.3/" />
+    <file src="runtimes/win/lib/netstandard1.3/System.Text.Encoding.CodePages.dll" target="runtimes/win/lib/netstandard1.3/" />
+  </files>
+</package>

@@ -21,7 +21,7 @@ namespace Cake.Common.Build.TravisCI
         {
             if (travisCIProvider == null)
             {
-                throw new ArgumentNullException("travisCIProvider");
+                throw new ArgumentNullException(nameof(travisCIProvider));
             }
             travisCIProvider.WriteStartFold(name);
             return new TravisCIActionDisposable(travisCIProvider, tci => tci.WriteEndFold(name));

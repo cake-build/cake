@@ -41,7 +41,7 @@ namespace Cake.Common.Solution.Project.Properties
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var creator = new AssemblyInfoCreator(context.FileSystem, context.Environment, context.Log);
@@ -67,7 +67,7 @@ namespace Cake.Common.Solution.Project.Properties
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var parser = new AssemblyInfoParser(context.FileSystem, context.Environment);

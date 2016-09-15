@@ -42,7 +42,7 @@ namespace Cake.Common.Tools.DNU.Restore
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetArguments(path, settings));

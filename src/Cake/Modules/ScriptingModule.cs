@@ -5,10 +5,15 @@
 using System;
 using Cake.Core.Composition;
 using Cake.Core.Scripting;
+
+#if NETCORE
+using Cake.Scripting.XPlat;
+#else
 using Cake.Scripting.Mono;
 using Cake.Scripting.Roslyn;
 using Cake.Scripting.Roslyn.Nightly;
 using Cake.Scripting.Roslyn.Stable;
+#endif
 
 namespace Cake.Modules
 {
@@ -21,13 +26,16 @@ namespace Cake.Modules
             _options = options ?? new CakeOptions();
         }
 
-        public void Register(ICakeContainerRegistry registry)
+        public void Register(ICakeContainerRegistrar registrar)
         {
-            if (registry == null)
+            if (registrar == null)
             {
-                throw new ArgumentNullException("registry");
+                throw new ArgumentNullException(nameof(registrar));
             }
 
+#if NETCORE
+            registrar.RegisterType<XPlatScriptEngine>().As<IScriptEngine>().Singleton();
+#else
             // Are we running on Mono?
             var mono = _options.Mono;
             if (!mono)
@@ -38,26 +46,27 @@ namespace Cake.Modules
             if (mono)
             {
                 // Mono compiler
-                registry.RegisterType<MonoScriptEngine>().As<IScriptEngine>().Singleton();
+                registrar.RegisterType<MonoScriptEngine>().As<IScriptEngine>().Singleton();
             }
             else
             {
                 // Roslyn
-                registry.RegisterType<RoslynScriptEngine>().As<IScriptEngine>().Singleton();
+                registrar.RegisterType<RoslynScriptEngine>().As<IScriptEngine>().Singleton();
 
                 if (_options.PerformDebug)
                 {
                     // Debug
-                    registry.RegisterType<DebugRoslynScriptSessionFactory>().As<RoslynScriptSessionFactory>().Singleton();
-                    registry.RegisterType<DebugRoslynNightlyScriptSessionFactory>().As<RoslynNightlyScriptSessionFactory>().Singleton();
+                    registrar.RegisterType<DebugRoslynScriptSessionFactory>().As<RoslynScriptSessionFactory>().Singleton();
+                    registrar.RegisterType<DebugRoslynNightlyScriptSessionFactory>().As<RoslynNightlyScriptSessionFactory>().Singleton();
                 }
                 else
                 {
                     // Default
-                    registry.RegisterType<DefaultRoslynScriptSessionFactory>().As<RoslynScriptSessionFactory>().Singleton();
-                    registry.RegisterType<DefaultRoslynNightlyScriptSessionFactory>().As<RoslynNightlyScriptSessionFactory>().Singleton();
+                    registrar.RegisterType<DefaultRoslynScriptSessionFactory>().As<RoslynScriptSessionFactory>().Singleton();
+                    registrar.RegisterType<DefaultRoslynNightlyScriptSessionFactory>().As<RoslynNightlyScriptSessionFactory>().Singleton();
                 }
             }
+#endif
         }
     }
 }

@@ -1,0 +1,1 @@
+Cake.Common.Security.SecurityAliases

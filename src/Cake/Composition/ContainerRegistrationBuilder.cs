@@ -2,45 +2,44 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+using Autofac;
+using Autofac.Builder;
 using Cake.Core.Composition;
 
 namespace Cake.Composition
 {
-    internal sealed class ContainerRegistrationBuilder<T> : ICakeRegistrationBuilder<T>
+    internal class ContainerRegistrationBuilder<T, TActivator> : ICakeRegistrationBuilder
+        where TActivator : IConcreteActivatorData
     {
-        private readonly ContainerRegistration _registration;
+        private IRegistrationBuilder<T, TActivator, SingleRegistrationStyle> _registration;
 
-        public ContainerRegistration Registration
-        {
-            get { return _registration; }
-        }
-
-        public ContainerRegistrationBuilder(ContainerRegistration registration)
+        public ContainerRegistrationBuilder(IRegistrationBuilder<T, TActivator, SingleRegistrationStyle> registration)
         {
             _registration = registration;
         }
 
-        public ICakeRegistrationBuilder<T> As<TRegistrationType>()
+        public ICakeRegistrationBuilder As(Type type)
         {
-            _registration.RegistrationTypes.Add(typeof(TRegistrationType));
+            _registration = _registration.As(type);
             return this;
         }
 
-        public ICakeRegistrationBuilder<T> AsSelf()
+        public ICakeRegistrationBuilder AsSelf()
         {
-            _registration.RegistrationTypes.Add(typeof(T));
+            _registration = _registration.AsSelf();
             return this;
         }
 
-        public ICakeRegistrationBuilder<T> Singleton()
+        public ICakeRegistrationBuilder Singleton()
         {
-            _registration.IsSingleton = true;
+            _registration = _registration.SingleInstance();
             return this;
         }
 
-        public ICakeRegistrationBuilder<T> Transient()
+        public ICakeRegistrationBuilder Transient()
         {
-            _registration.IsSingleton = false;
+            _registration = _registration.InstancePerDependency();
             return this;
         }
     }

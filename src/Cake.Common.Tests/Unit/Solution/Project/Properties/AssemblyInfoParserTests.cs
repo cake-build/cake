@@ -73,7 +73,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Assembly info file '/Working/output.cs' does not exist.", result.Message);
+                Assert.Equal("Assembly info file '/Working/output.cs' does not exist.", result?.Message);
             }
 
             [Theory]

@@ -3,9 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Tools.SpecFlow.TestExecutionReport;
+using Cake.Common.Tools.MSTest;
 using Cake.Common.Tools.NUnit;
 using Cake.Common.Tools.XUnit;
-using Cake.Common.Tools.MSTest;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;

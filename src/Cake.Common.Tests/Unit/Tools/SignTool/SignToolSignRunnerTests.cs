@@ -99,7 +99,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("SignTool SIGN: The assembly '/Working/a.dll' do not exist.", result.Message);
+                Assert.Equal("SignTool SIGN: The assembly '/Working/a.dll' do not exist.", result?.Message);
             }
 
             [Fact]
@@ -114,7 +114,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("SignTool SIGN: Timestamp server URL is required but not specified.", result.Message);
+                Assert.Equal("SignTool SIGN: Timestamp server URL is required but not specified.", result?.Message);
             }
 
             [Fact]
@@ -130,7 +130,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("SignTool SIGN: One of Certificate path or Certificate thumbprint is required but neither are specified.", result.Message);
+                Assert.Equal("SignTool SIGN: One of Certificate path or Certificate thumbprint is required but neither are specified.", result?.Message);
             }
 
             [Fact]
@@ -145,7 +145,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("SignTool SIGN: Certificate path and Certificate thumbprint cannot be specified together.", result.Message);
+                Assert.Equal("SignTool SIGN: Certificate path and Certificate thumbprint cannot be specified together.", result?.Message);
             }
 
             [Fact]
@@ -162,7 +162,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("SignTool SIGN: Certificate thumbprint and Password cannot be specified together.", result.Message);
+                Assert.Equal("SignTool SIGN: Certificate thumbprint and Password cannot be specified together.", result?.Message);
             }
 
             [Fact]
@@ -177,7 +177,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("SignTool SIGN: The certificate '/Working/cert.pfx' do not exist.", result.Message);
+                Assert.Equal("SignTool SIGN: The certificate '/Working/cert.pfx' do not exist.", result?.Message);
             }
 
             [Fact]
@@ -192,7 +192,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("SignTool SIGN: Password is required with Certificate path but not specified.", result.Message);
+                Assert.Equal("SignTool SIGN: Password is required with Certificate path but not specified.", result?.Message);
             }
 
             [Fact]

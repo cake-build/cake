@@ -29,10 +29,7 @@ namespace Cake.Common.Tools.DotCover
         /// Ant-style patterns are supported here (e.g.ProjectFolder/**/*.dll)
         /// This represents the <c>/Scope</c> option.
         /// </summary>
-        public ISet<string> Scope
-        {
-            get { return _scope; }
-        }
+        public ISet<string> Scope => _scope;
 
         /// <summary>
         /// Gets the coverage filters using the following syntax: +:module=*;class=*;function=*;
@@ -40,20 +37,14 @@ namespace Cake.Common.Tools.DotCover
         /// Asterisk wildcard (*) is supported here.
         /// This represents the <c>/Filters</c> option.
         /// </summary>
-        public ISet<string> Filters
-        {
-            get { return _filters; }
-        }
+        public ISet<string> Filters => _filters;
 
         /// <summary>
         /// Gets the attribute filters using the following syntax: filter1;filter2;...
         /// Asterisk wildcard(*) is supported here
         /// This represents the <c>/AttributeFilters</c> option.
         /// </summary>
-        public ISet<string> AttributeFilters
-        {
-            get { return _attributeFilters; }
-        }
+        public ISet<string> AttributeFilters => _attributeFilters;
 
         /// <summary>
         /// Gets or sets a value indicating whether the default (automatically added) filters should be disabled

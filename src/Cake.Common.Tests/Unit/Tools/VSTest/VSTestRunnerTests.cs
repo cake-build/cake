@@ -54,7 +54,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSTest
 
             // Then
             Assert.IsType<CakeException>(result);
-            Assert.Equal("VSTest: Could not locate executable.", result.Message);
+            Assert.Equal("VSTest: Could not locate executable.", result?.Message);
         }
 
         [Theory]
@@ -134,7 +134,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSTest
 
             // Then
             Assert.IsType<CakeException>(result);
-            Assert.Equal("VSTest: Process was not started.", result.Message);
+            Assert.Equal("VSTest: Process was not started.", result?.Message);
         }
 
         [Fact]
@@ -149,7 +149,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSTest
 
             // Then
             Assert.IsType<CakeException>(result);
-            Assert.Equal("VSTest: Process returned an error (exit code 1).", result.Message);
+            Assert.Equal("VSTest: Process returned an error (exit code 1).", result?.Message);
         }
 
         [Fact]
@@ -182,52 +182,56 @@ namespace Cake.Common.Tests.Unit.Tools.VSTest
         [Fact]
         public void Should_Use_Logger_If_Provided()
         {
-            //Given
+            // Given
             var fixture = new VSTestRunnerFixture();
             fixture.Settings.Logger = VSTestLogger.Trx;
 
-            //When
+            // When
             var result = fixture.Run();
 
+            // Then
             Assert.Equal("\"/Working/Test1.dll\" /Logger:trx", result.Args);
         }
 
         [Fact]
         public void Should_Use_SettingsFile_If_Provided()
         {
-            //Given
+            // Given
             var fixture = new VSTestRunnerFixture();
             fixture.Settings.SettingsFile = new FilePath("Local.RunSettings");
 
-            //When
+            // When
             var result = fixture.Run();
 
+            // Then
             Assert.Equal("\"/Working/Test1.dll\" /Settings:Local.RunSettings", result.Args);
         }
 
         [Fact]
         public void Should_Use_PlatformArchitecture_If_Provided()
         {
-            //Given
+            // Given
             var fixture = new VSTestRunnerFixture();
             fixture.Settings.PlatformArchitecture = VSTestPlatform.x64;
 
-            //When
+            // When
             var result = fixture.Run();
 
+            // Then
             Assert.Equal("\"/Working/Test1.dll\" /Platform:x64", result.Args);
         }
 
         [Fact]
         public void Should_Use_FrameworkVersion_If_Provided()
         {
-            //Given
+            // Given
             var fixture = new VSTestRunnerFixture();
             fixture.Settings.FrameworkVersion = VSTestFrameworkVersion.NET40;
 
-            //When
+            // When
             var result = fixture.Run();
 
+            // Then
             Assert.Equal("\"/Working/Test1.dll\" /Framework:Framework40", result.Args);
         }
 

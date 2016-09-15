@@ -1,8 +1,9 @@
 # Cake Bitbucket Pipeline
-image: devlead/pipeline-mono
+image: devlead/bitbucket-pipelines-dotnet
 
 pipelines:
   default:
     - step:
         script:
-          - ./build.sh
+          - ln -s /opt/dotnet .dotnet
+          - ./build.sh -t "Run-Unit-Tests"

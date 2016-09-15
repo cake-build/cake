@@ -34,7 +34,7 @@ namespace Cake.Common.Tools.WiX
         {
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             _environment = environment;
         }
@@ -48,18 +48,18 @@ namespace Cake.Common.Tools.WiX
         {
             if (sourceFiles == null)
             {
-                throw new ArgumentNullException("sourceFiles");
+                throw new ArgumentNullException(nameof(sourceFiles));
             }
 
             var sourceFilesArray = sourceFiles as FilePath[] ?? sourceFiles.ToArray();
             if (!sourceFilesArray.Any())
             {
-                throw new ArgumentException("No source files specified.", "sourceFiles");
+                throw new ArgumentException("No source files specified.", nameof(sourceFiles));
             }
 
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             Run(settings, GetArguments(sourceFilesArray, settings));
@@ -109,7 +109,7 @@ namespace Cake.Common.Tools.WiX
             }
 
             // Output directory
-            if (settings.OutputDirectory != null && !string.IsNullOrEmpty(settings.OutputDirectory.FullPath))
+            if (!string.IsNullOrEmpty(settings.OutputDirectory?.FullPath))
             {
                 // Candle want the path to end with \\, double separator chars.
                 var fullPath = string.Concat(settings.OutputDirectory.MakeAbsolute(_environment).FullPath, '\\', '\\');

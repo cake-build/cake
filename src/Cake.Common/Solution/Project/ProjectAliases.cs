@@ -59,7 +59,7 @@ namespace Cake.Common.Solution.Project
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var parser = new ProjectParser(context.FileSystem, context.Environment);

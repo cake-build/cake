@@ -19,16 +19,16 @@ namespace Cake.Modules
             _options = options;
         }
 
-        public void Register(ICakeContainerRegistry registry)
+        public void Register(ICakeContainerRegistrar registrar)
         {
-            if (registry == null)
+            if (registrar == null)
             {
-                throw new ArgumentNullException("registry");
+                throw new ArgumentNullException(nameof(registrar));
             }
 
             var root = _options.Script.GetDirectory();
             var configuration = _provider.CreateConfiguration(root, _options.Arguments);
-            registry.RegisterInstance(configuration).As<ICakeConfiguration>();
+            registrar.RegisterInstance(configuration).As<ICakeConfiguration>();
         }
     }
 }

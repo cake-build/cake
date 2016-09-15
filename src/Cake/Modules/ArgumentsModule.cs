@@ -17,15 +17,15 @@ namespace Cake.Modules
             _options = options;
         }
 
-        public void Register(ICakeContainerRegistry registry)
+        public void Register(ICakeContainerRegistrar registrar)
         {
-            if (registry == null)
+            if (registrar == null)
             {
-                throw new ArgumentNullException("registry");
+                throw new ArgumentNullException(nameof(registrar));
             }
 
-            registry.RegisterInstance(_options).As<CakeOptions>();
-            registry.RegisterType<CakeArguments>().As<ICakeArguments>().Singleton();
+            registrar.RegisterInstance(_options).As<CakeOptions>();
+            registrar.RegisterType<CakeArguments>().As<ICakeArguments>().Singleton();
         }
     }
 }

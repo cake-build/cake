@@ -10,15 +10,15 @@ namespace Cake.Core.Tests.Fixtures
 {
     public sealed class DummyToolFixture : ToolFixture<DummySettings>
     {
-	    public Action<int> ExitCodeValidation { get; set; }
+        public Action<int> ExitCodeValidation { get; set; }
 
-	    public DummyToolFixture()
+        public DummyToolFixture()
             : base("dummy.exe")
-	    {
-		    ExitCodeValidation = null;
-	    }
+        {
+            ExitCodeValidation = null;
+        }
 
-	    protected override void RunTool()
+        protected override void RunTool()
         {
             var tool = new DummyTool(FileSystem, Environment, ProcessRunner, Tools, ExitCodeValidation);
             tool.Run(Settings);

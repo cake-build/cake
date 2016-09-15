@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Composition;
-using Cake.Core.Composition;
 using Cake.Core.Configuration;
 using Cake.Core.IO;
 using Cake.Modules;
@@ -24,7 +23,7 @@ namespace Cake.Tests.Unit.Modules
                 var fileSystem = Substitute.For<IFileSystem>();
                 var environment = FakeEnvironment.CreateUnixEnvironment();
                 var provider = new CakeConfigurationProvider(fileSystem, environment);
-                var registry = new ContainerRegistry();
+                var registry = new ContainerRegistrar();
                 var options = new CakeOptions { Script = "./foo/bar/build.cake" };
                 var module = new ConfigurationModule(provider, options);
 

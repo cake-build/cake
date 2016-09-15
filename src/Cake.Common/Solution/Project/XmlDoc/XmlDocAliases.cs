@@ -40,12 +40,12 @@ namespace Cake.Common.Solution.Project.XmlDoc
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (xmlFilePath == null)
             {
-                throw new ArgumentNullException("xmlFilePath");
+                throw new ArgumentNullException(nameof(xmlFilePath));
             }
 
             var parser = new XmlDocExampleCodeParser(context.FileSystem, context.Globber, context.Log);
@@ -76,12 +76,12 @@ namespace Cake.Common.Solution.Project.XmlDoc
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (string.IsNullOrWhiteSpace(pattern))
             {
-                throw new ArgumentNullException("pattern");
+                throw new ArgumentNullException(nameof(pattern));
             }
 
             var parser = new XmlDocExampleCodeParser(context.FileSystem, context.Globber, context.Log);

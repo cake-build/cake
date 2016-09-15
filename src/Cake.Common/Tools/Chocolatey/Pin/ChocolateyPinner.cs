@@ -41,12 +41,12 @@ namespace Cake.Common.Tools.Chocolatey.Pin
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
 
             Run(settings, GetArguments(name, settings));

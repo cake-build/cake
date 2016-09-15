@@ -40,7 +40,7 @@ namespace Cake.Common.Tools.NUnit
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var assemblies = context.Globber.GetFiles(pattern).ToArray();
@@ -73,7 +73,7 @@ namespace Cake.Common.Tools.NUnit
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var assemblies = context.Globber.GetFiles(pattern).ToArray();
@@ -105,7 +105,7 @@ namespace Cake.Common.Tools.NUnit
         {
             if (assemblies == null)
             {
-                throw new ArgumentNullException("assemblies");
+                throw new ArgumentNullException(nameof(assemblies));
             }
             var paths = assemblies.Select(p => new FilePath(p));
             NUnit(context, paths, new NUnitSettings());
@@ -152,7 +152,7 @@ namespace Cake.Common.Tools.NUnit
         {
             if (assemblies == null)
             {
-                throw new ArgumentNullException("assemblies");
+                throw new ArgumentNullException(nameof(assemblies));
             }
             var paths = assemblies.Select(p => new FilePath(p));
             NUnit(context, paths, settings);
@@ -179,11 +179,11 @@ namespace Cake.Common.Tools.NUnit
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (assemblies == null)
             {
-                throw new ArgumentNullException("assemblies");
+                throw new ArgumentNullException(nameof(assemblies));
             }
 
             var runner = new NUnitRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);

@@ -11,6 +11,7 @@ using Cake.Core.Annotations;
 using Cake.Core.Composition;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.Reflection;
 
 namespace Cake.Composition
 {
@@ -18,12 +19,18 @@ namespace Cake.Composition
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
+        private readonly IAssemblyLoader _assemblyLoader;
         private readonly ICakeLog _log;
 
-        public ModuleSearcher(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log)
+        public ModuleSearcher(
+            IFileSystem fileSystem,
+            ICakeEnvironment environment,
+            IAssemblyLoader assemblyLoader,
+            ICakeLog log)
         {
             _fileSystem = fileSystem;
             _environment = environment;
+            _assemblyLoader = assemblyLoader;
             _log = log;
         }
 
@@ -41,65 +48,74 @@ namespace Cake.Composition
             var files = root.GetFiles("Cake.*.Module.dll", SearchScope.Recursive);
             foreach (var file in files)
             {
-                if (ShouldLoadModule(file.Path))
+                var module = LoadModule(file.Path);
+                if (module != null)
                 {
-                    var module = LoadModule(file.Path);
-                    if (module != null)
-                    {
-                        result.Add(module);
-                    }
+                    result.Add(module);
                 }
             }
 
             return result;
         }
 
-        private static bool ShouldLoadModule(FilePath path)
+        private Type LoadModule(FilePath path)
         {
             try
             {
-                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
-                var assembly = Assembly.ReflectionOnlyLoadFrom(path.FullPath);
-                var attributes = CustomAttributeData.GetCustomAttributes(assembly);
-                foreach (var attribute in attributes)
+                var assembly = LoadAssembly(path);
+
+                var attribute = assembly.GetCustomAttributes<CakeModuleAttribute>().FirstOrDefault();
+                if (attribute == null)
                 {
-                    if (attribute.AttributeType.FullName == typeof(CakeModuleAttribute).FullName)
-                    {
-                        return true;
-                    }
+                    _log.Warning("The assembly '{0}' does not have module metadata.", path.FullPath);
+                    return null;
                 }
-                return false;
-            }
-            finally
-            {
-                // Unregister reflection-only assembly resolve.
-                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
-            }
-        }
 
-        private static Assembly CurrentDomain_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            return Assembly.ReflectionOnlyLoad(args.Name);
-        }
+                if (!typeof(ICakeModule).IsAssignableFrom(attribute.ModuleType))
+                {
+                    _log.Warning("The module type '{0}' is not an actual module.", attribute.ModuleType.FullName);
+                    return null;
+                }
 
-        private Type LoadModule(FilePath path)
-        {
-            var assembly = Assembly.LoadFrom(path.FullPath);
-
-            var attribute = assembly.GetCustomAttributes<CakeModuleAttribute>().FirstOrDefault();
-            if (attribute == null)
-            {
-                _log.Warning("The assembly '{0}' does not have module metadata.", path.FullPath);
-                return null;
-            }
-
-            if (!typeof(ICakeModule).IsAssignableFrom(attribute.ModuleType))
-            {
-                _log.Warning("The module type '{0}' is not an actual module.", attribute.ModuleType.FullName);
                 return attribute.ModuleType;
             }
+            catch (CakeException)
+            {
+                throw;
+            }
+            catch
+            {
+                _log.Warning("Could not load module '{0}'.", path.FullPath);
+                return null;
+            }
+        }
 
-            return attribute.ModuleType;
+        private Assembly LoadAssembly(FilePath path)
+        {
+            VerifyCompatibility(path);
+            return _assemblyLoader.Load(path);
+        }
+
+        private static void VerifyCompatibility(FilePath path)
+        {
+#if !NETCORE
+            // Make sure that the module is compatible.
+            // Kind of hackish, but this will have to do until we figure out a better way...
+            var assembly = Assembly.ReflectionOnlyLoadFrom(path.FullPath);
+            var references = assembly.GetReferencedAssemblies();
+            foreach (var reference in references)
+            {
+                if (reference.Name != null && reference.Name.Equals("Cake.Core", StringComparison.OrdinalIgnoreCase))
+                {
+                    var minVersion = new Version(0, 16, 0);
+                    if (reference.Version < minVersion)
+                    {
+                        const string format = "The module '{0}' is targeting an incompatible version of Cake.Core.dll. It needs to target at least version {1}.";
+                        throw new CakeException(string.Format(format, path.GetFilename().FullPath, minVersion.ToString(3)));
+                    }
+                }
+            }
+#endif
         }
     }
 }

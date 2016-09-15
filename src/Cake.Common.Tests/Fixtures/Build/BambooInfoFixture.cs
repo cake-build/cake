@@ -16,7 +16,7 @@ namespace Cake.Common.Tests.Fixtures.Build
         {
             Environment = Substitute.For<ICakeEnvironment>();
 
-            //BambooBuildInfo
+            // BambooBuildInfo
             Environment.GetEnvironmentVariable("bamboo_build_working_directory").Returns("C:\\build\\CAKE-CAKE-JOB1");
             Environment.GetEnvironmentVariable("bamboo_buildNumber").Returns("28");
             Environment.GetEnvironmentVariable("bamboo_buildKey").Returns("CAKE-CAKE-JOB1");
@@ -24,21 +24,21 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("bamboo_buildResultsUrl").Returns("https://cakebuild.atlassian.net/builds/browse/CAKE-CAKE-JOB1-28");
             Environment.GetEnvironmentVariable("bamboo_buildTimeStamp").Returns("2015-12-15T22:53:37.847+01:00");
 
-            //BambooCustomBuildInfo
+            // BambooCustomBuildInfo
             Environment.GetEnvironmentVariable("bamboo_customRevision").Returns("Cake with Iceing");
 
-            //BambooCommitInfo
+            // BambooCommitInfo
             Environment.GetEnvironmentVariable("bamboo_planRepository_revision").Returns("d4a3a4cb304548450e3cab2ff735f778ffe58d03");
 
-            //BambooPlanInfo
+            // BambooPlanInfo
             Environment.GetEnvironmentVariable("bamboo_planKey").Returns("CAKE-CAKE");
-            Environment.GetEnvironmentVariable ("bamboo_planName").Returns ("cake-bamboo - dev");
+            Environment.GetEnvironmentVariable("bamboo_planName").Returns("cake-bamboo - dev");
             Environment.GetEnvironmentVariable("bamboo_shortJobKey").Returns("JOB1");
             Environment.GetEnvironmentVariable("bamboo_shortJobName").Returns("Build Cake");
             Environment.GetEnvironmentVariable("bamboo_shortPlanKey").Returns("CAKE");
             Environment.GetEnvironmentVariable("bamboo_shortPlanName").Returns("Cake");
 
-            //BambooRepositoryInfo
+            // BambooRepositoryInfo
             Environment.GetEnvironmentVariable("bamboo_planRepository_type").Returns("git");
             Environment.GetEnvironmentVariable("bamboo_repository_name").Returns("Cake/Develop");
             Environment.GetEnvironmentVariable("bamboo_planRepository_branch").Returns("develop");

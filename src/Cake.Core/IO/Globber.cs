@@ -28,11 +28,11 @@ namespace Cake.Core.IO
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
 
             _environment = environment;
@@ -53,7 +53,7 @@ namespace Cake.Core.IO
         {
             if (pattern == null)
             {
-                throw new ArgumentNullException("pattern");
+                throw new ArgumentNullException(nameof(pattern));
             }
             if (string.IsNullOrWhiteSpace(pattern))
             {

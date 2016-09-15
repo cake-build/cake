@@ -76,7 +76,7 @@ namespace Cake.Common.Tools.OctopusDeploy
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var packer = new OctopusDeployReleaseCreator(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
@@ -110,12 +110,12 @@ namespace Cake.Common.Tools.OctopusDeploy
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (packagePaths == null)
             {
-                throw new ArgumentNullException("packagePaths");
+                throw new ArgumentNullException(nameof(packagePaths));
             }
 
             var pusher = new OctopusDeployPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);

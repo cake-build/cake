@@ -69,7 +69,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<NotSupportedException>(result);
-                    Assert.Equal("UNC paths are not supported.", result.Message);
+                    Assert.Equal("UNC paths are not supported.", result?.Message);
                 }
 
                 [WindowsFact]
@@ -264,7 +264,7 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.NotNull(result);
                 Assert.IsType<NotSupportedException>(result);
-                Assert.Equal("Visiting a parent that is a recursive wildcard is not supported.", result.Message);
+                Assert.Equal("Visiting a parent that is a recursive wildcard is not supported.", result?.Message);
             }
 
             [Fact]
@@ -506,6 +506,21 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.Equal(1, result.Length);
                 Assert.ContainsFilePath(result, "/Foo (Bar)/Baz.c");
+            }
+
+            [Fact]
+            public void Should_Parse_Glob_Expressions_With_Relative_Directory_Not_At_The_Beginning()
+            {
+                // Given
+                var fixture = new GlobberFixture();
+
+                // When
+                var result = fixture.Match("/Working/./*.Test.dll");
+
+                // Then
+                Assert.Equal(2, result.Length);
+                Assert.ContainsFilePath(result, "/Working/Foo.Bar.Test.dll");
+                Assert.ContainsFilePath(result, "/Working/Bar.Qux.Test.dll");
             }
         }
     }

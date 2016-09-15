@@ -269,10 +269,10 @@ namespace Cake.Common.Tests.Unit.IO.Paths
                 public void Should_Return_Null_If_Convertable_Directory_Path_Is_Null()
                 {
                     // Given
-                    var path = (ConvertableDirectoryPath) null;
+                    var path = (ConvertableDirectoryPath)null;
 
                     // When
-                    var result = (DirectoryPath) path;
+                    var result = (DirectoryPath)path;
 
                     // Then
                     Assert.Null(result);

@@ -27,7 +27,7 @@ namespace Cake.Scripting
         {
             if (log == null)
             {
-                throw new ArgumentNullException("log");
+                throw new ArgumentNullException(nameof(log));
             }
             _log = log;
         }

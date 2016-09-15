@@ -22,7 +22,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.Equal(MSBuildToolVersion.Default, settings.ToolVersion);
             }
 
-            [Fact()]
+            [Fact]
             public void Should_Set_Default_Platform_Target_To_Null()
             {
                 // Given, When
@@ -68,7 +68,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var settings = new MSBuildSettings();
 
                 // When
-                settings.Properties.Add("THEKEY", new []{"THEVALUE"});
+                settings.Properties.Add("THEKEY", new[] { "THEVALUE" });
 
                 // Then
                 Assert.True(settings.Properties.ContainsKey("thekey"));
@@ -111,6 +111,19 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 Assert.Null(settings.MaxCpuCount);
+            }
+        }
+
+        public sealed class TheLoggersProperty
+        {
+            [Fact]
+            public void Should_Be_Empty_By_Default()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Empty(settings.Loggers);
             }
         }
     }

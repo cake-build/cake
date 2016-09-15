@@ -53,7 +53,7 @@ namespace Cake.Core.IO
         ///             { "CI", "True" },
         ///             { "TEMP", MakeAbsolute(Directory("./Temp")).FullPath }
         ///         }
-        ///     }); 
+        ///     });
         /// </code>
         /// </example>
         public IDictionary<string, string> EnvironmentVariables { get; set; }

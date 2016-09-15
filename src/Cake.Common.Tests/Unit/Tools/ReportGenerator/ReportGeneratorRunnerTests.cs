@@ -111,7 +111,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportGenerator
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("ReportGenerator: Process was not started.", result.Message);
+                Assert.Equal("ReportGenerator: Process was not started.", result?.Message);
             }
 
             [Fact]
@@ -126,7 +126,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportGenerator
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("ReportGenerator: Process returned an error (exit code 1).", result.Message);
+                Assert.Equal("ReportGenerator: Process returned an error (exit code 1).", result?.Message);
             }
 
             [Fact]

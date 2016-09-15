@@ -59,7 +59,7 @@ namespace Cake.Common.Tests.Unit.Tools
                 var settings = new DotNetBuildSettings(new FilePath("./Test.sln"));
 
                 // When
-                settings.Properties.Add("THEKEY", new []{"THEVALUE"});
+                settings.Properties.Add("THEKEY", new[] { "THEVALUE" });
 
                 // Then
                 Assert.True(settings.Properties.ContainsKey("thekey"));

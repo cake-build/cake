@@ -1,0 +1,16 @@
+branches:
+  main:
+    mode: ContinuousDelivery
+    tag:
+    increment: Patch
+    prevent-increment-of-merged-branch-version: true
+    track-merge-target: false
+  dev(elop)?(ment)?$:
+    mode: ContinuousDeployment
+    tag: alpha
+    increment: Minor
+    prevent-increment-of-merged-branch-version: false
+    track-merge-target: true
+ignore:
+  sha:
+    - 2a4757b270f7946122ba6622e3d2e72b2b2808a7

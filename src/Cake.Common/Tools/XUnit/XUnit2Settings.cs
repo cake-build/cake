@@ -97,7 +97,7 @@ namespace Cake.Common.Tools.XUnit
             {
                 if (value.HasValue && value < 0)
                 {
-                    throw new ArgumentOutOfRangeException("value", value, "Value may not be negative.");
+                    throw new ArgumentOutOfRangeException(nameof(value), value, "Value may not be negative.");
                 }
                 _maxThreads = value;
             }

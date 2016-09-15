@@ -17,10 +17,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   <c>true</c> if build was started by pushed tag; otherwise, <c>false</c>.
         /// </value>
-        public bool IsTag
-        {
-            get { return GetEnvironmentBoolean("APPVEYOR_REPO_TAG"); }
-        }
+        public bool IsTag => GetEnvironmentBoolean("APPVEYOR_REPO_TAG");
 
         /// <summary>
         /// Gets the name for builds started by tag; otherwise this variable is undefined.
@@ -28,10 +25,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The name of the tag.
         /// </value>
-        public string Name
-        {
-            get { return GetEnvironmentString("APPVEYOR_REPO_TAG_NAME"); }
-        }
+        public string Name => GetEnvironmentString("APPVEYOR_REPO_TAG_NAME");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppVeyorTagInfo"/> class.

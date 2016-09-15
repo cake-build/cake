@@ -42,7 +42,7 @@ namespace Cake.Common.Tools.ILMerge
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var merger = new ILMergeRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
@@ -73,7 +73,7 @@ namespace Cake.Common.Tools.ILMerge
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var merger = new ILMergeRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);

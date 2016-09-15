@@ -53,7 +53,7 @@ namespace Cake.Common.Xml
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             return XmlTransformation.Transform(xsl, xml);
@@ -91,7 +91,7 @@ namespace Cake.Common.Xml
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             return XmlTransformation.Transform(xsl, xml, settings);
@@ -156,7 +156,7 @@ namespace Cake.Common.Xml
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             var settings = new XmlTransformationSettings();
@@ -225,7 +225,7 @@ namespace Cake.Common.Xml
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             XmlTransformation.Transform(context.FileSystem, xslPath, xmlPath, resultPath, settings);

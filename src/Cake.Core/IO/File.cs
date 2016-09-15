@@ -10,36 +10,20 @@ namespace Cake.Core.IO
     internal sealed class File : IFile
     {
         private readonly FileInfo _file;
-        private readonly FilePath _path;
 
-        public FilePath Path
-        {
-            get { return _path; }
-        }
+        public FilePath Path { get; }
 
-        Path IFileSystemInfo.Path
-        {
-            get { return _path; }
-        }
+        Path IFileSystemInfo.Path => Path;
 
-        public bool Exists
-        {
-            get { return _file.Exists; }
-        }
+        public bool Exists => _file.Exists;
 
-        public bool Hidden
-        {
-            get { return (_file.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden; }
-        }
+        public bool Hidden => (_file.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
 
-        public long Length
-        {
-            get { return _file.Length; }
-        }
+        public long Length => _file.Length;
 
         public File(FilePath path)
         {
-            _path = path;
+            Path = path;
             _file = new FileInfo(path.FullPath);
         }
 
@@ -47,7 +31,7 @@ namespace Cake.Core.IO
         {
             if (destination == null)
             {
-                throw new ArgumentNullException("destination");
+                throw new ArgumentNullException(nameof(destination));
             }
             _file.CopyTo(destination.FullPath, overwrite);
         }
@@ -56,7 +40,7 @@ namespace Cake.Core.IO
         {
             if (destination == null)
             {
-                throw new ArgumentNullException("destination");
+                throw new ArgumentNullException(nameof(destination));
             }
             _file.MoveTo(destination.FullPath);
         }

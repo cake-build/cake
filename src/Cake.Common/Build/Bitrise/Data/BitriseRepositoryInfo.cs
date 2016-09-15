@@ -17,10 +17,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The git repository URL.
         /// </value>
-        public string GitRepositoryUrl
-        {
-            get { return GetEnvironmentString("GIT_REPOSITORY_URL"); }
-        }
+        public string GitRepositoryUrl => GetEnvironmentString("GIT_REPOSITORY_URL");
 
         /// <summary>
         /// Gets the git branch.
@@ -28,10 +25,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The git branch.
         /// </value>
-        public string GitBranch
-        {
-            get { return GetEnvironmentString("BITRISE_GIT_BRANCH"); }
-        }
+        public string GitBranch => GetEnvironmentString("BITRISE_GIT_BRANCH");
 
         /// <summary>
         /// Gets the git tag.
@@ -39,10 +33,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The git tag.
         /// </value>
-        public string GitTag
-        {
-            get { return GetEnvironmentString("BITRISE_GIT_TAG"); }
-        }
+        public string GitTag => GetEnvironmentString("BITRISE_GIT_TAG");
 
         /// <summary>
         /// Gets the git commit.
@@ -50,10 +41,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The git commit.
         /// </value>
-        public string GitCommit
-        {
-            get { return GetEnvironmentString("BITRISE_GIT_COMMIT"); }
-        }
+        public string GitCommit => GetEnvironmentString("BITRISE_GIT_COMMIT");
 
         /// <summary>
         /// Gets the pull request.
@@ -61,10 +49,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The pull request.
         /// </value>
-        public string PullRequest
-        {
-            get { return GetEnvironmentString("BITRISE_PULL_REQUEST"); }
-        }
+        public string PullRequest => GetEnvironmentString("BITRISE_PULL_REQUEST");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BitriseRepositoryInfo"/> class.

@@ -42,7 +42,7 @@ namespace Cake.Core
         {
             if (directory == null)
             {
-                throw new ArgumentNullException("directory");
+                throw new ArgumentNullException(nameof(directory));
             }
             return directory.GetDirectories(filter, scope)
                 .Where(entry => Filter(entry, predicate, action));
@@ -75,7 +75,7 @@ namespace Cake.Core
         {
             if (directory == null)
             {
-                throw new ArgumentNullException("directory");
+                throw new ArgumentNullException(nameof(directory));
             }
             return directory.GetFiles(filter, scope)
                 .Where(entry => Filter(entry, predicate, action));
@@ -85,9 +85,9 @@ namespace Cake.Core
             Action<IFileSystemInfo> predicateFiltered)
         {
             var include = wherePredicate == null || wherePredicate(entry);
-            if (!include && predicateFiltered != null)
+            if (!include)
             {
-                predicateFiltered(entry);
+                predicateFiltered?.Invoke(entry);
             }
             return include;
         }

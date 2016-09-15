@@ -124,7 +124,7 @@ namespace Cake.Core.Tests.Unit.Extensions
             public void ShouldAppendFormattedTextArgument()
             {
                 var result = new ProcessArgumentBuilder()
-                    .AppendQuotedSecret("/arg1:{0} /arg2:{1}", "Value1","Value2")
+                    .AppendQuotedSecret("/arg1:{0} /arg2:{1}", "Value1", "Value2")
                     .Render();
 
                 Assert.Equal("\"/arg1:Value1 /arg2:Value2\"", result);

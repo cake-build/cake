@@ -11,10 +11,6 @@ namespace Cake.Core
     /// </summary>
     public sealed class TaskTeardownContext : CakeContextAdapter, ITaskTeardownContext
     {
-        private readonly ICakeTaskInfo _task;
-        private readonly TimeSpan _duration;
-        private readonly bool _skipped;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskTeardownContext"/> class.
         /// </summary>
@@ -27,12 +23,12 @@ namespace Cake.Core
         {
             if (task == null)
             {
-                throw new ArgumentNullException("task");
+                throw new ArgumentNullException(nameof(task));
             }
 
-            _task = task;
-            _duration = duration;
-            _skipped = skipped;
+            Task = task;
+            Duration = duration;
+            Skipped = skipped;
         }
 
         /// <summary>
@@ -41,10 +37,7 @@ namespace Cake.Core
         /// <value>
         /// The task.
         /// </value>
-        public ICakeTaskInfo Task
-        {
-            get { return _task; }
-        }
+        public ICakeTaskInfo Task { get; }
 
         /// <summary>
         /// Gets the duration of the <see cref="CakeTask"/>'s execution.
@@ -52,10 +45,7 @@ namespace Cake.Core
         /// <value>
         /// The duration of the <see cref="CakeTask"/>'s execution.
         /// </value>
-        public TimeSpan Duration
-        {
-            get { return _duration; }
-        }
+        public TimeSpan Duration { get; }
 
         /// <summary>
         /// Gets a value indicating whether the <see cref="CakeTask"/> was skipped (not executed).
@@ -63,9 +53,6 @@ namespace Cake.Core
         /// <value>
         /// <c>true</c> if skipped; otherwise, <c>false</c>.
         /// </value>
-        public bool Skipped
-        {
-            get { return _skipped; }
-        }
+        public bool Skipped { get; }
     }
 }

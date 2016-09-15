@@ -14,7 +14,6 @@ namespace Cake.Core
     /// </summary>
     public abstract class CakeTask : ICakeTaskInfo
     {
-        private readonly string _name;
         private readonly List<string> _dependencies;
         private readonly List<Func<ICakeContext, bool>> _criterias;
 
@@ -22,10 +21,7 @@ namespace Cake.Core
         /// Gets the name of the task.
         /// </summary>
         /// <value>The name of the task.</value>
-        public string Name
-        {
-            get { return _name; }
-        }
+        public string Name { get; }
 
         /// <summary>
         /// Gets or sets the description of the task.
@@ -37,19 +33,13 @@ namespace Cake.Core
         /// Gets the task's dependencies.
         /// </summary>
         /// <value>The task's dependencies.</value>
-        public IReadOnlyList<string> Dependencies
-        {
-            get { return _dependencies; }
-        }
+        public IReadOnlyList<string> Dependencies => _dependencies;
 
         /// <summary>
         /// Gets the task's criterias.
         /// </summary>
         /// <value>The task's criterias.</value>
-        public IReadOnlyList<Func<ICakeContext, bool>> Criterias
-        {
-            get { return _criterias; }
-        }
+        public IReadOnlyList<Func<ICakeContext, bool>> Criterias => _criterias;
 
         /// <summary>
         /// Gets the error handler.
@@ -75,13 +65,13 @@ namespace Cake.Core
         {
             if (name == null)
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentException("Task name cannot be empty.");
             }
-            _name = name;
+            Name = name;
             _dependencies = new List<string>();
             _criterias = new List<Func<ICakeContext, bool>>();
         }
@@ -95,7 +85,7 @@ namespace Cake.Core
             if (_dependencies.Any(x => x == name))
             {
                 const string format = "The task '{0}' already have a dependency on '{1}'.";
-                var message = string.Format(CultureInfo.InvariantCulture, format, _name, name);
+                var message = string.Format(CultureInfo.InvariantCulture, format, Name, name);
                 throw new CakeException(message);
             }
             _dependencies.Add(name);
@@ -109,7 +99,7 @@ namespace Cake.Core
         {
             if (criteria == null)
             {
-                throw new ArgumentNullException("criteria");
+                throw new ArgumentNullException(nameof(criteria));
             }
             _criterias.Add(criteria);
         }
@@ -123,7 +113,7 @@ namespace Cake.Core
         {
             if (errorHandler == null)
             {
-                throw new ArgumentNullException("errorHandler");
+                throw new ArgumentNullException(nameof(errorHandler));
             }
             if (ErrorHandler != null)
             {
@@ -144,7 +134,7 @@ namespace Cake.Core
         {
             if (errorReporter == null)
             {
-                throw new ArgumentNullException("errorReporter");
+                throw new ArgumentNullException(nameof(errorReporter));
             }
             if (ErrorReporter != null)
             {
@@ -162,7 +152,7 @@ namespace Cake.Core
         {
             if (finallyHandler == null)
             {
-                throw new ArgumentNullException("finallyHandler");
+                throw new ArgumentNullException(nameof(finallyHandler));
             }
             if (FinallyHandler != null)
             {

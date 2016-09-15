@@ -37,15 +37,15 @@ namespace Cake.Core.Tooling
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
             if (environment == null)
             {
-                throw new ArgumentNullException("environment");
+                throw new ArgumentNullException(nameof(environment));
             }
             if (globber == null)
             {
-                throw new ArgumentNullException("globber");
+                throw new ArgumentNullException(nameof(globber));
             }
 
             _fileSystem = fileSystem;
@@ -67,15 +67,15 @@ namespace Cake.Core.Tooling
         {
             if (repository == null)
             {
-                throw new ArgumentNullException("repository");
+                throw new ArgumentNullException(nameof(repository));
             }
             if (tool == null)
             {
-                throw new ArgumentNullException("tool");
+                throw new ArgumentNullException(nameof(tool));
             }
             if (string.IsNullOrWhiteSpace(tool))
             {
-                throw new ArgumentException("Tool name cannot be empty.", "tool");
+                throw new ArgumentException("Tool name cannot be empty.", nameof(tool));
             }
 
             // Does this file already have registrations?
@@ -103,7 +103,7 @@ namespace Cake.Core.Tooling
         {
             var pattern = string.Concat(GetToolsDirectory().FullPath, "/**/", tool);
             var toolPath = _globber.GetFiles(pattern).FirstOrDefault();
-            return toolPath != null ? toolPath.MakeAbsolute(_environment) : null;
+            return toolPath?.MakeAbsolute(_environment);
         }
 
         private FilePath LookInPath(string tool)

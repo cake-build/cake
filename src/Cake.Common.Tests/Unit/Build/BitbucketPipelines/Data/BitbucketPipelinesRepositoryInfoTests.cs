@@ -20,7 +20,7 @@ namespace Cake.Common.Tests.Unit.Build.BitbucketPipelines.Data
                 // When
                 var result = info.Commit;
 
-                //Then
+                // Then
                 Assert.Equal("4efbc1ffb993dfbcf024e6a9202865cc0b6d9c50", result);
             }
         }
@@ -36,7 +36,7 @@ namespace Cake.Common.Tests.Unit.Build.BitbucketPipelines.Data
                 // When
                 var result = info.RepoSlug;
 
-                //Then
+                // Then
                 Assert.Equal("cake", result);
             }
         }
@@ -52,7 +52,7 @@ namespace Cake.Common.Tests.Unit.Build.BitbucketPipelines.Data
                 // When
                 var result = info.RepoOwner;
 
-                //Then
+                // Then
                 Assert.Equal("cakebuild", result);
             }
         }
@@ -68,7 +68,7 @@ namespace Cake.Common.Tests.Unit.Build.BitbucketPipelines.Data
                 // When
                 var result = info.Branch;
 
-                //Then
+                // Then
                 Assert.Equal("develop", result);
             }
         }
@@ -84,7 +84,7 @@ namespace Cake.Common.Tests.Unit.Build.BitbucketPipelines.Data
                 // When
                 var result = info.Tag;
 
-                //Then
+                // Then
                 Assert.Equal("BitbucketPiplines", result);
             }
         }

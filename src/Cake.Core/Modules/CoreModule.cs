@@ -6,6 +6,7 @@ using System;
 using Cake.Core.Composition;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
+using Cake.Core.Reflection;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.Analysis;
 using Cake.Core.Tooling;
@@ -19,43 +20,46 @@ namespace Cake.Core.Modules
     public sealed class CoreModule : ICakeModule
     {
         /// <summary>
-        /// Performs custom registrations in the provided registry.
+        /// Performs custom registrations in the provided registrar.
         /// </summary>
-        /// <param name="registry">The container registry.</param>
-        public void Register(ICakeContainerRegistry registry)
+        /// <param name="registrar">The container registrar.</param>
+        public void Register(ICakeContainerRegistrar registrar)
         {
-            if (registry == null)
+            if (registrar == null)
             {
-                throw new ArgumentNullException("registry");
+                throw new ArgumentNullException(nameof(registrar));
             }
 
             // Execution
-            registry.RegisterType<CakeEngine>().As<ICakeEngine>().Singleton();
-            registry.RegisterType<CakeContext>().As<ICakeContext>().Singleton();
+            registrar.RegisterType<CakeEngine>().As<ICakeEngine>().Singleton();
+            registrar.RegisterType<CakeContext>().As<ICakeContext>().Singleton();
 
             // Environment
-            registry.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().Singleton();
-            registry.RegisterType<CakeRuntime>().As<ICakeRuntime>().Singleton();
-            registry.RegisterType<CakePlatform>().As<ICakePlatform>().Singleton();
+            registrar.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().Singleton();
+            registrar.RegisterType<CakeRuntime>().As<ICakeRuntime>().Singleton();
+            registrar.RegisterType<CakePlatform>().As<ICakePlatform>().Singleton();
 
             // IO
-            registry.RegisterType<FileSystem>().As<IFileSystem>().Singleton();
-            registry.RegisterType<Globber>().As<IGlobber>().Singleton();
-            registry.RegisterType<ProcessRunner>().As<IProcessRunner>().Singleton();
-            registry.RegisterType<NuGetToolResolver>().As<INuGetToolResolver>().Singleton();
-            registry.RegisterType<WindowsRegistry>().As<IRegistry>().Singleton();
+            registrar.RegisterType<FileSystem>().As<IFileSystem>().Singleton();
+            registrar.RegisterType<Globber>().As<IGlobber>().Singleton();
+            registrar.RegisterType<ProcessRunner>().As<IProcessRunner>().Singleton();
+            registrar.RegisterType<NuGetToolResolver>().As<INuGetToolResolver>().Singleton();
+            registrar.RegisterType<WindowsRegistry>().As<IRegistry>().Singleton();
+
+            // Reflection
+            registrar.RegisterType<AssemblyLoader>().As<IAssemblyLoader>().Singleton();
 
             // Tooling
-            registry.RegisterType<ToolRepository>().As<IToolRepository>().Singleton();
-            registry.RegisterType<ToolResolutionStrategy>().As<IToolResolutionStrategy>().Singleton();
-            registry.RegisterType<ToolLocator>().As<IToolLocator>().Singleton();
+            registrar.RegisterType<ToolRepository>().As<IToolRepository>().Singleton();
+            registrar.RegisterType<ToolResolutionStrategy>().As<IToolResolutionStrategy>().Singleton();
+            registrar.RegisterType<ToolLocator>().As<IToolLocator>().Singleton();
 
             // Scripting
-            registry.RegisterType<ScriptAliasFinder>().As<IScriptAliasFinder>().Singleton();
-            registry.RegisterType<ScriptAnalyzer>().As<IScriptAnalyzer>().Singleton();
-            registry.RegisterType<ScriptProcessor>().As<IScriptProcessor>().Singleton();
-            registry.RegisterType<ScriptConventions>().As<IScriptConventions>().Singleton();
-            registry.RegisterType<ScriptRunner>().As<IScriptRunner>().Singleton();
+            registrar.RegisterType<ScriptAliasFinder>().As<IScriptAliasFinder>().Singleton();
+            registrar.RegisterType<ScriptAnalyzer>().As<IScriptAnalyzer>().Singleton();
+            registrar.RegisterType<ScriptProcessor>().As<IScriptProcessor>().Singleton();
+            registrar.RegisterType<ScriptConventions>().As<IScriptConventions>().Singleton();
+            registrar.RegisterType<ScriptRunner>().As<IScriptRunner>().Singleton();
         }
     }
 }

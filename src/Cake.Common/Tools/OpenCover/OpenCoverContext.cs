@@ -12,63 +12,32 @@ namespace Cake.Common.Tools.OpenCover
     internal sealed class OpenCoverContext : ICakeContext
     {
         private readonly ICakeContext _context;
-        private readonly ICakeLog _log;
         private readonly OpenCoverProcessRunner _runner;
 
-        public IFileSystem FileSystem
-        {
-            get { return _context.FileSystem; }
-        }
+        public IFileSystem FileSystem => _context.FileSystem;
 
-        public ICakeEnvironment Environment
-        {
-            get { return _context.Environment; }
-        }
+        public ICakeEnvironment Environment => _context.Environment;
 
-        public IGlobber Globber
-        {
-            get { return _context.Globber; }
-        }
+        public IGlobber Globber => _context.Globber;
 
-        public ICakeLog Log
-        {
-            get { return _log; }
-        }
+        public ICakeLog Log { get; }
 
-        public ICakeArguments Arguments
-        {
-            get { return _context.Arguments; }
-        }
+        public ICakeArguments Arguments => _context.Arguments;
 
-        public IProcessRunner ProcessRunner
-        {
-            get { return _runner; }
-        }
+        public IProcessRunner ProcessRunner => _runner;
 
-        public IRegistry Registry
-        {
-            get { return _context.Registry; }
-        }
+        public IRegistry Registry => _context.Registry;
 
-        public IToolLocator Tools
-        {
-            get { return _context.Tools; }
-        }
+        public IToolLocator Tools => _context.Tools;
 
-        public FilePath FilePath
-        {
-            get { return _runner.FilePath; }
-        }
+        public FilePath FilePath => _runner.FilePath;
 
-        public ProcessSettings Settings
-        {
-            get { return _runner.ProcessSettings; }
-        }
+        public ProcessSettings Settings => _runner.ProcessSettings;
 
         public OpenCoverContext(ICakeContext context)
         {
             _context = context;
-            _log = new NullLog();
+            Log = new NullLog();
             _runner = new OpenCoverProcessRunner();
         }
     }

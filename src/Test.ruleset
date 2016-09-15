@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="Cake Ruleset" ToolsVersion="12.0">
+  <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
+    <Rule Id="SA1100" Action="None" />
+    <Rule Id="SA1101" Action="None" />
+    <Rule Id="SA1116" Action="None" />
+    <Rule Id="SA1117" Action="None" />
+    <Rule Id="SA1118" Action="None" />
+    <Rule Id="SA1121" Action="None" />
+    <Rule Id="SA1122" Action="None" />
+    <Rule Id="SA1124" Action="None" />
+    <Rule Id="SA1127" Action="None" />
+    <Rule Id="SA1128" Action="None" />
+    <Rule Id="SA1200" Action="None" />
+    <Rule Id="SA1201" Action="None" />
+    <Rule Id="SA1202" Action="None" />
+    <Rule Id="SA1204" Action="None" />
+    <Rule Id="SA1300" Action="None" />
+    <Rule Id="SA1306" Action="None" />
+    <Rule Id="SA1310" Action="None" />
+    <Rule Id="SA1402" Action="None" />
+    <Rule Id="SA1309" Action="None" />
+    <Rule Id="SA1403" Action="None" />
+    <Rule Id="SA1404" Action="None" />
+    <Rule Id="SA1405" Action="None" />
+    <Rule Id="SA1513" Action="None" />
+    <Rule Id="SA1515" Action="None" />
+    <Rule Id="SA1516" Action="None" />
+    <Rule Id="SA1625" Action="None" />
+    <Rule Id="SA1633" Action="None" />
+    <Rule Id="SA1649" Action="None" />
+    <Rule Id="SA1652" Action="None" />
+  </Rules>
+</RuleSet>

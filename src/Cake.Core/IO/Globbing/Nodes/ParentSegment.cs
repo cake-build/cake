@@ -6,6 +6,7 @@ using System.Diagnostics;
 
 namespace Cake.Core.IO.Globbing.Nodes
 {
+    [DebuggerDisplay("..")]
     internal sealed class ParentSegment : GlobNode
     {
         [DebuggerStepThrough]

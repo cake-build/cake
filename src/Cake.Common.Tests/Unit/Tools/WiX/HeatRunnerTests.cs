@@ -44,7 +44,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("directoryPath", ((ArgumentException)result).ParamName);
+                Assert.Equal("directoryPath", ((ArgumentException)result)?.ParamName);
             }
 
             [Fact]
@@ -59,7 +59,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
 
                 // Then
                 Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal("outputFile", ((ArgumentException)result).ParamName);
+                Assert.Equal("outputFile", ((ArgumentException)result)?.ParamName);
             }
 
             [Fact]
@@ -101,7 +101,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Heat: Could not locate executable.", result.Message);
+                Assert.Equal("Heat: Could not locate executable.", result?.Message);
             }
 
             [Theory]
@@ -162,7 +162,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Heat: Process was not started.", result.Message);
+                Assert.Equal("Heat: Process was not started.", result?.Message);
             }
 
             [Fact]
@@ -177,7 +177,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Heat: Process returned an error (exit code 1).", result.Message);
+                Assert.Equal("Heat: Process returned an error (exit code 1).", result?.Message);
             }
 
             [Fact]
@@ -625,7 +625,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 // When
                 var result = fixture.Run();
 
-                //Then
+                // Then
                 Assert.Equal("dir \"/Working/src/Cake\" -template fragment -out \"/Working/cake.wxs\"", result.Args);
             }
 
@@ -639,7 +639,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 // When
                 var result = fixture.Run();
 
-                //Then
+                // Then
                 Assert.Equal("dir \"/Working/src/Cake\" -template module -out \"/Working/cake.wxs\"", result.Args);
             }
 
@@ -653,7 +653,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 // When
                 var result = fixture.Run();
 
-                //Then
+                // Then
                 Assert.Equal("dir \"/Working/src/Cake\" -template product -out \"/Working/cake.wxs\"", result.Args);
             }
 
@@ -724,7 +724,6 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
 
                 // Then
                 Assert.Equal("dir \"/Working/src/Cake\" -out \"/Working/cake.wxs\"", result.Args);
-
             }
         }
     }

@@ -21,10 +21,7 @@ namespace Cake.Core.Scripting
         /// Gets the namespaces imported via the <c>using</c> statement.
         /// </summary>
         /// <value>The namespaces.</value>
-        public IReadOnlyList<string> Namespaces
-        {
-            get { return _namespaces; }
-        }
+        public IReadOnlyList<string> Namespaces => _namespaces;
 
         /// <summary>
         /// Gets the script lines.
@@ -32,28 +29,19 @@ namespace Cake.Core.Scripting
         /// <value>
         /// The lines.
         /// </value>
-        public IReadOnlyList<string> Lines
-        {
-            get { return _lines; }
-        }
+        public IReadOnlyList<string> Lines => _lines;
 
         /// <summary>
         /// Gets the aliases.
         /// </summary>
         /// <value>The aliases.</value>
-        public IReadOnlyList<ScriptAlias> Aliases
-        {
-            get { return _aliases; }
-        }
+        public IReadOnlyList<ScriptAlias> Aliases => _aliases;
 
         /// <summary>
         /// Gets the using alias directives.
         /// </summary>
         /// <value>The using alias directives.</value>
-        public IReadOnlyList<string> UsingAliasDirectives
-        {
-            get { return _usingAliasDirectives; }
-        }
+        public IReadOnlyList<string> UsingAliasDirectives => _usingAliasDirectives;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Script" /> class.

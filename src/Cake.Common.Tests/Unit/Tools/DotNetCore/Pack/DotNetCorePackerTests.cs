@@ -81,7 +81,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Pack
                 // Then
                 Assert.Equal("pack \"./src/*\"", result.Args);
             }
-            
+
             [Theory]
             [InlineData("./src/*", "pack \"./src/*\"")]
             [InlineData("./src/cake artifacts/", "pack \"./src/cake artifacts/\"")]

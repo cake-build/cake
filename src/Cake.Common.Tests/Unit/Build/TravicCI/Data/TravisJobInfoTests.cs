@@ -41,6 +41,7 @@ namespace Cake.Common.Tests.Unit.Build.TravicCI.Data
             }
         }
 
+        // ReSharper disable once InconsistentNaming
         public sealed class TheOSNameProperty
         {
             [Fact]

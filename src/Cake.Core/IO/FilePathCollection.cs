@@ -14,22 +14,15 @@ namespace Cake.Core.IO
     /// </summary>
     public sealed class FilePathCollection : IEnumerable<FilePath>
     {
-        private readonly PathComparer _comparer;
         private readonly HashSet<FilePath> _paths;
 
         /// <summary>
         /// Gets the number of files in the collection.
         /// </summary>
         /// <value>The number of files in the collection.</value>
-        public int Count
-        {
-            get { return _paths.Count; }
-        }
+        public int Count => _paths.Count;
 
-        internal PathComparer Comparer
-        {
-            get { return _comparer; }
-        }
+        internal PathComparer Comparer { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FilePathCollection"/> class.
@@ -49,9 +42,9 @@ namespace Cake.Core.IO
         {
             if (comparer == null)
             {
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             }
-            _comparer = comparer;
+            Comparer = comparer;
             _paths = new HashSet<FilePath>(paths, comparer);
         }
 
@@ -75,7 +68,7 @@ namespace Cake.Core.IO
         {
             if (paths == null)
             {
-                throw new ArgumentNullException("paths");
+                throw new ArgumentNullException(nameof(paths));
             }
             foreach (var path in paths)
             {
@@ -103,7 +96,7 @@ namespace Cake.Core.IO
         {
             if (paths == null)
             {
-                throw new ArgumentNullException("paths");
+                throw new ArgumentNullException(nameof(paths));
             }
             foreach (var path in paths)
             {
@@ -120,7 +113,7 @@ namespace Cake.Core.IO
         {
             if (collection == null)
             {
-                throw new ArgumentNullException("collection");
+                throw new ArgumentNullException(nameof(collection));
             }
             return new FilePathCollection(collection, collection.Comparer) { path };
         }
@@ -133,7 +126,7 @@ namespace Cake.Core.IO
         {
             if (collection == null)
             {
-                throw new ArgumentNullException("collection");
+                throw new ArgumentNullException(nameof(collection));
             }
             return new FilePathCollection(collection, collection.Comparer) { paths };
         }
@@ -148,7 +141,7 @@ namespace Cake.Core.IO
         {
             if (collection == null)
             {
-                throw new ArgumentNullException("collection");
+                throw new ArgumentNullException(nameof(collection));
             }
             var result = new FilePathCollection(collection, collection.Comparer);
             result.Remove(path);
@@ -165,7 +158,7 @@ namespace Cake.Core.IO
         {
             if (collection == null)
             {
-                throw new ArgumentNullException("collection");
+                throw new ArgumentNullException(nameof(collection));
             }
             var result = new FilePathCollection(collection, collection.Comparer);
             result.Remove(paths);
@@ -183,6 +176,12 @@ namespace Cake.Core.IO
             return _paths.GetEnumerator();
         }
 
+        /// <summary>
+        /// Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="T:System.Collections.IEnumerator" /> that can be used to iterate through the collection.
+        /// </returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

@@ -11,18 +11,13 @@ namespace Cake.Common.Build.Bamboo.Data
     /// </summary>
     public sealed class BambooBuildInfo : BambooInfo
     {
-        private readonly BambooCustomBuildInfo _customBuildProvider;
-
         /// <summary>
         /// Gets the path to the clone directory.
         /// </summary>
         /// <value>
         /// The path to the clone directory.
         /// </value>
-        public string Folder
-        {
-            get { return GetEnvironmentString("bamboo_build_working_directory"); }
-        }
+        public string Folder => GetEnvironmentString("bamboo_build_working_directory");
 
         /// <summary>
         /// Gets the build number.
@@ -30,10 +25,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// <value>
         /// The build number.
         /// </value>
-        public int Number
-        {
-            get { return GetEnvironmentInteger("bamboo_buildNumber"); }
-        }
+        public int Number => GetEnvironmentInteger("bamboo_buildNumber");
 
         /// <summary>
         /// Gets the job key for the current job, in the form PROJECT-PLAN-JOB, e.g. BAM-MAIN-JOBX
@@ -41,10 +33,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// <value>
         ///   The Bamboo Build Key.
         /// </value>
-        public string BuildKey
-        {
-            get { return GetEnvironmentString("bamboo_buildKey"); }
-        }
+        public string BuildKey => GetEnvironmentString("bamboo_buildKey");
 
         /// <summary>
         /// Gets the Bamboo Build Result Key.
@@ -54,10 +43,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// <value>
         ///   The Build Result Key.
         /// </value>
-        public string ResultKey
-        {
-            get { return GetEnvironmentString("bamboo_buildResultKey"); }
-        }
+        public string ResultKey => GetEnvironmentString("bamboo_buildResultKey");
 
         /// <summary>
         /// Gets the URL of the result in Bamboo once the job has finished executing.
@@ -65,10 +51,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// <value>
         ///   The Bamboo build result url.
         /// </value>
-        public string ResultsUrl
-        {
-            get { return GetEnvironmentString("bamboo_buildResultsUrl"); }
-        }
+        public string ResultsUrl => GetEnvironmentString("bamboo_buildResultsUrl");
 
         /// <summary>
         /// Gets the time when build was started in ISO 8601 format e.g. 2010-01-01T01:00:00.000+01:00.
@@ -76,10 +59,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// <value>
         ///   The Bamboo build timestamp.
         /// </value>
-        public string BuildTimestamp
-        {
-            get { return GetEnvironmentString("bamboo_buildTimeStamp"); }
-        }
+        public string BuildTimestamp => GetEnvironmentString("bamboo_buildTimeStamp");
 
         /// <summary>
         /// Gets Bamboo custom build information.
@@ -87,10 +67,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// <value>
         ///   The Bamboo custom build information.
         /// </value>
-        public BambooCustomBuildInfo CustomBuild
-        {
-            get { return _customBuildProvider; }
-        }
+        public BambooCustomBuildInfo CustomBuild { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BambooBuildInfo"/> class.
@@ -99,7 +76,7 @@ namespace Cake.Common.Build.Bamboo.Data
         public BambooBuildInfo(ICakeEnvironment environment)
             : base(environment)
         {
-            _customBuildProvider = new BambooCustomBuildInfo(environment);
+            CustomBuild = new BambooCustomBuildInfo(environment);
         }
     }
 }

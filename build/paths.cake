@@ -14,12 +14,10 @@ public class BuildPaths
         {
             throw new ArgumentNullException("context");
         }
-
         if (string.IsNullOrEmpty(configuration))
         {
             throw new ArgumentNullException("configuration");
         }
-
         if (string.IsNullOrEmpty(semVersion))
         {
             throw new ArgumentNullException("semVersion");
@@ -28,26 +26,32 @@ public class BuildPaths
         var buildDir = context.Directory("./src/Cake/bin") + context.Directory(configuration);
         var artifactsDir = (DirectoryPath)(context.Directory("./artifacts") + context.Directory("v" + semVersion));
         var artifactsBinDir = artifactsDir.Combine("bin");
+        var artifactsBinNet45 = artifactsBinDir.Combine("net45");
+        var artifactsBinNetCoreApp10 = artifactsBinDir.Combine("netcoreapp1.0");
         var testResultsDir = artifactsDir.Combine("test-results");
         var nugetRoot = artifactsDir.Combine("nuget");
         var testingDir = context.Directory("./src/Cake.Testing/bin") + context.Directory(configuration);
 
-        var cakeAssemblyPaths = new FilePath[] {
-            buildDir + context.File("Cake.exe"),
-            buildDir + context.File("Cake.pdb"),
-            buildDir + context.File("Cake.Core.dll"),
-            buildDir + context.File("Cake.Core.pdb"),
-            buildDir + context.File("Cake.Core.xml"),
-            buildDir + context.File("Cake.NuGet.dll"),
-            buildDir + context.File("Cake.NuGet.pdb"),
-            buildDir + context.File("Cake.NuGet.xml"),
-            buildDir + context.File("Cake.Common.dll"),
-            buildDir + context.File("Cake.Common.pdb"),
-            buildDir + context.File("Cake.Common.xml"),
-            buildDir + context.File("Mono.CSharp.dll"),
-            buildDir + context.File("Autofac.dll"),
-            buildDir + context.File("NuGet.Core.dll")
+        var cakeFiles = new FilePath[] {
+            context.File("Cake.exe"),
+            context.File("Cake.pdb"),
+            context.File("Cake.Core.dll"),
+            context.File("Cake.Core.pdb"),
+            context.File("Cake.Core.xml"),
+            context.File("Cake.NuGet.dll"),
+            context.File("Cake.NuGet.pdb"),
+            context.File("Cake.NuGet.xml"),
+            context.File("Cake.Common.dll"),
+            context.File("Cake.Common.pdb"),
+            context.File("Cake.Common.xml"),
+            context.File("Mono.CSharp.dll"),
+            context.File("Autofac.dll"),
+            context.File("NuGet.Core.dll")
         };
+
+        var cakeAssemblyPaths = cakeFiles.Concat(new FilePath[] {"LICENSE"})
+            .Select(file => buildDir.Path.CombineWithFilePath(file))
+            .ToArray();
 
         var testingAssemblyPaths = new FilePath[] {
             testingDir + context.File("Cake.Testing.dll"),
@@ -63,28 +67,35 @@ public class BuildPaths
 
         var artifactSourcePaths = cakeAssemblyPaths.Concat(testingAssemblyPaths.Concat(repoFilesPaths)).ToArray();
 
-        var chocolateyFiles = cakeAssemblyPaths.Concat(new FilePath[] {"LICENSE"})
-            .Select(
-                file => new ChocolateyNuSpecContent {Source = string.Concat("./../", file.FullPath)}
-            ).ToArray();
+        var relPath = new DirectoryPath("./").MakeAbsolute(context.Environment).GetRelativePath(artifactsBinNet45.MakeAbsolute(context.Environment));
+        var chocolateyFiles = cakeFiles.Concat(new FilePath[] {"LICENSE"})
+            .Select(file => new ChocolateyNuSpecContent {Source = "../" + relPath.CombineWithFilePath(file).FullPath})
+            .ToArray();
 
-        var zipArtifactPath = artifactsDir.CombineWithFilePath("Cake-bin-v" + semVersion + ".zip");
+        var zipArtifactPathCoreClr = artifactsDir.CombineWithFilePath("Cake-bin-coreclr-v" + semVersion + ".zip");
+        var zipArtifactPathDesktop = artifactsDir.CombineWithFilePath("Cake-bin-net45-v" + semVersion + ".zip");
 
+        var testCoverageOutputFilePath = testResultsDir.CombineWithFilePath("OpenCover.xml");
+
+        // Directories
         var buildDirectories = new BuildDirectories(
             artifactsDir,
             testResultsDir,
             nugetRoot,
-            artifactsBinDir
-            );
+            artifactsBinDir,
+            artifactsBinNet45,
+            artifactsBinNetCoreApp10);
 
+        // Files
         var buildFiles = new BuildFiles(
             context,
             cakeAssemblyPaths,
             testingAssemblyPaths,
             repoFilesPaths,
             artifactSourcePaths,
-            zipArtifactPath
-            );
+            zipArtifactPathCoreClr,
+            zipArtifactPathDesktop,
+            testCoverageOutputFilePath);
 
         return new BuildPaths
         {
@@ -101,7 +112,9 @@ public class BuildFiles
     public ICollection<FilePath> TestingAssemblyPaths { get; private set; }
     public ICollection<FilePath> RepoFilesPaths { get; private set; }
     public ICollection<FilePath> ArtifactsSourcePaths { get; private set; }
-    public FilePath ZipArtifactPath { get; private set; }
+    public FilePath ZipArtifactPathCoreClr { get; private set; }
+    public FilePath ZipArtifactPathDesktop { get; private set; }
+    public FilePath TestCoverageOutputFilePath { get; private set; }
 
     public BuildFiles(
         ICakeContext context,
@@ -109,21 +122,24 @@ public class BuildFiles
         FilePath[] testingAssemblyPaths,
         FilePath[] repoFilesPaths,
         FilePath[] artifactsSourcePaths,
-        FilePath zipArtifactPath
+        FilePath zipArtifactPathCoreClr,
+        FilePath zipArtifactPathDesktop,
+        FilePath testCoverageOutputFilePath
         )
     {
         CakeAssemblyPaths = Filter(context, cakeAssemblyPaths);
         TestingAssemblyPaths = Filter(context, testingAssemblyPaths);
         RepoFilesPaths = Filter(context, repoFilesPaths);
         ArtifactsSourcePaths = Filter(context, artifactsSourcePaths);
-        ZipArtifactPath = zipArtifactPath;
+        ZipArtifactPathCoreClr = zipArtifactPathCoreClr;
+        ZipArtifactPathDesktop = zipArtifactPathDesktop;
+        TestCoverageOutputFilePath = testCoverageOutputFilePath;
     }
 
     private static FilePath[] Filter(ICakeContext context, FilePath[] files)
     {
         // Not a perfect solution, but we need to filter PDB files
         // when building on an OS that's not Windows (since they don't exist there).
-
         if(!context.IsRunningOnWindows())
         {
             return files.Where(f => !f.FullPath.EndsWith("pdb")).ToArray();
@@ -138,24 +154,32 @@ public class BuildDirectories
     public DirectoryPath TestResults { get; private set; }
     public DirectoryPath NugetRoot { get; private set; }
     public DirectoryPath ArtifactsBin { get; private set; }
+    public DirectoryPath ArtifactsBinNet45 { get; private set; }
+    public DirectoryPath ArtifactsBinNetCoreApp10 { get; private set; }
     public ICollection<DirectoryPath> ToClean { get; private set; }
 
     public BuildDirectories(
         DirectoryPath artifactsDir,
         DirectoryPath testResultsDir,
         DirectoryPath nugetRoot,
-        DirectoryPath artifactsBinDir
+        DirectoryPath artifactsBinDir,
+        DirectoryPath artifactsBinNet45,
+        DirectoryPath artifactsBinNetCoreApp10
         )
     {
         Artifacts = artifactsDir;
         TestResults = testResultsDir;
         NugetRoot = nugetRoot;
         ArtifactsBin = artifactsBinDir;
+        ArtifactsBinNet45 = artifactsBinNet45;
+        ArtifactsBinNetCoreApp10 = artifactsBinNetCoreApp10;
         ToClean = new[] {
             Artifacts,
             TestResults,
             NugetRoot,
-            ArtifactsBin
+            ArtifactsBin,
+            ArtifactsBinNet45,
+            ArtifactsBinNetCoreApp10
         };
     }
 }

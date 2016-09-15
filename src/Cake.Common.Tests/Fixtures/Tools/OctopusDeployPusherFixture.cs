@@ -33,7 +33,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         protected override void RunTool()
         {
             var tool = new OctopusDeployPusher(FileSystem, Environment, ProcessRunner, Tools);
-            tool.PushPackage(Server, ApiKey, Packages == null ? null : Packages.ToArray(), Settings);
+            tool.PushPackage(Server, ApiKey, Packages?.ToArray(), Settings);
         }
     }
 }

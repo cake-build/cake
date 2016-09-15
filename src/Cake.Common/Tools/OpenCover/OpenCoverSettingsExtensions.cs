@@ -21,7 +21,7 @@ namespace Cake.Common.Tools.OpenCover
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.Filters.Add(filter);
             return settings;
@@ -38,7 +38,7 @@ namespace Cake.Common.Tools.OpenCover
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.ExcludedAttributeFilters.Add(filter);
             return settings;
@@ -54,7 +54,7 @@ namespace Cake.Common.Tools.OpenCover
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.ExcludedFileFilters.Add(filter);
             return settings;

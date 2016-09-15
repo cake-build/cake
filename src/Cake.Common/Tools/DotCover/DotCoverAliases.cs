@@ -57,7 +57,7 @@ namespace Cake.Common.Tools.DotCover
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (settings == null)
@@ -107,7 +107,7 @@ namespace Cake.Common.Tools.DotCover
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (settings == null)

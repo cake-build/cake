@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Common</name>
+    </assembly>
+    <members>
+        <member name="T:Common.CommonClass">
+            <summary>
+            This is a common class.
+            </summary>
+        </member>
+        <member name="M:Common.CommonClass.CommonMethod">
+            <summary>
+            Does common methody things.
+            </summary>
+            <example>
+            <code>
+            CommonClass.CommonMethod();
+            </code>
+            </example>
+        </member>
+    </members>
+</doc>

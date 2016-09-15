@@ -102,10 +102,37 @@ namespace Cake.Common.Tools.MSBuild
                 builder.Append("/target:Build");
             }
 
+            if (settings.Loggers.Count > 0)
+            {
+                foreach (var logger in settings.Loggers)
+                {
+                    var argument = GetLoggerArgument(logger);
+                    builder.Append(argument);
+                }
+            }
+
             // Add the solution as the last parameter.
             builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
 
             return builder;
+        }
+
+        private static string GetLoggerArgument(MSBuildLogger logger)
+        {
+            string argument = "/logger:";
+            if (!string.IsNullOrWhiteSpace(logger.Class))
+            {
+                argument += string.Format("{0},{1}", logger.Class, logger.Assembly);
+            }
+            else
+            {
+                argument += logger.Assembly;
+            }
+            if (!string.IsNullOrWhiteSpace(logger.Parameters))
+            {
+                argument += string.Concat(";", logger.Parameters);
+            }
+            return argument;
         }
 
         private static string GetPlatformName(PlatformTarget platform, bool isSolution)
@@ -124,7 +151,7 @@ namespace Cake.Common.Tools.MSBuild
                 case PlatformTarget.Win32:
                     return "Win32";
                 default:
-                    throw new ArgumentOutOfRangeException("platform", platform, "Invalid platform");
+                    throw new ArgumentOutOfRangeException(nameof(platform), platform, "Invalid platform");
             }
         }
 
@@ -184,7 +211,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             var buildPlatform = settings.MSBuildPlatform;

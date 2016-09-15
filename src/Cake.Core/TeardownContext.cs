@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 using System;
-using Cake.Core.Diagnostics;
-using Cake.Core.IO;
-using Cake.Core.Tooling;
 
 namespace Cake.Core
 {
@@ -13,8 +10,6 @@ namespace Cake.Core
     /// </summary>
     public sealed class TeardownContext : CakeContextAdapter, ITeardownContext
     {
-        private readonly Exception _thrownException;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TeardownContext"/> class.
         /// </summary>
@@ -23,7 +18,7 @@ namespace Cake.Core
         public TeardownContext(ICakeContext context, Exception throwException)
             : base(context)
         {
-            _thrownException = throwException;
+            ThrownException = throwException;
         }
 
         /// <summary>
@@ -32,17 +27,11 @@ namespace Cake.Core
         /// <value>
         /// <c>true</c> if successful; otherwise <c>false</c>.
         /// </value>
-        public bool Successful
-        {
-            get { return _thrownException == null; }
-        }
+        public bool Successful => ThrownException == null;
 
         /// <summary>
         /// Gets the exception that was thrown by the target.
         /// </summary>
-        public Exception ThrownException
-        {
-            get { return _thrownException; }
-        }
+        public Exception ThrownException { get; }
     }
 }

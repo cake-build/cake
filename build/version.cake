@@ -2,13 +2,11 @@ public class BuildVersion
 {
     public string Version { get; private set; }
     public string SemVersion { get; private set; }
+    public string DotNetAsterix { get; private set; }
     public string Milestone { get; private set; }
     public string CakeVersion { get; private set; }
 
-    public static BuildVersion CalculatingSemanticVersion(
-        ICakeContext context,
-        BuildParameters parameters
-        )
+    public static BuildVersion Calculate(ICakeContext context, BuildParameters parameters)
     {
         if (context == null)
         {
@@ -49,10 +47,9 @@ public class BuildVersion
 
         if (string.IsNullOrEmpty(version) || string.IsNullOrEmpty(semVersion))
         {
-            context.Information("Fetching verson from SolutionInfo");
-            var assemblyInfo = context.ParseAssemblyInfo("./src/SolutionInfo.cs");
-            version = assemblyInfo.AssemblyVersion;
-            semVersion = assemblyInfo.AssemblyInformationalVersion;
+            context.Information("Fetching verson from first project.json...");
+            version = ReadProjectJsonVersion(context);
+            semVersion = version;
             milestone = string.Concat("v", version);
         }
 
@@ -62,8 +59,38 @@ public class BuildVersion
         {
             Version = version,
             SemVersion = semVersion,
+            DotNetAsterix = semVersion.Substring(version.Length).TrimStart('-'),
             Milestone = milestone,
             CakeVersion = cakeVersion
         };
+    }
+
+    public static string ReadProjectJsonVersion(ICakeContext context)
+    {
+        var projects = context.GetFiles("./**/project.json");
+        foreach(var project in projects) 
+        {
+            var content = System.IO.File.ReadAllText(project.FullPath, Encoding.UTF8);
+            var node = Newtonsoft.Json.Linq.JObject.Parse(content);
+            if(node["version"] != null) 
+            {
+                var version = node["version"].ToString();
+                return version.Replace("-*", "");
+            }
+        }
+        throw new CakeException("Could not parse version.");
+    }
+
+    public bool PatchProjectJson(FilePath project)
+    {
+        var content = System.IO.File.ReadAllText(project.FullPath, Encoding.UTF8);
+        var node = Newtonsoft.Json.Linq.JObject.Parse(content);
+        if(node["version"] != null) 
+        {
+            node["version"].Replace(string.Concat(Version, "-*"));
+            System.IO.File.WriteAllText(project.FullPath, node.ToString(), Encoding.UTF8);
+            return true;
+        };
+        return false;
     }
 }

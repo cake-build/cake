@@ -2,11 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+using System.Collections.Generic;
 using Cake.Common.Build.ContinuaCI.Data;
 using Cake.Core;
 using NSubstitute;
-using System;
-using System.Collections.Generic;
 
 namespace Cake.Common.Tests.Fixtures.Build
 {
@@ -18,7 +18,7 @@ namespace Cake.Common.Tests.Fixtures.Build
         {
             Environment = Substitute.For<ICakeEnvironment>();
 
-            //ContinuaCIBuildInfo
+            // ContinuaCIBuildInfo
             Environment.GetEnvironmentVariable("ContinuaCI.Build.Id").Returns("99");
             Environment.GetEnvironmentVariable("ContinuaCI.Build.Version").Returns("v1.2.3");
             Environment.GetEnvironmentVariable("ContinuaCI.Build.StartedBy").Returns("TestTrigger");
@@ -38,7 +38,7 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("ContinuaCI.Build.ChangesetUserNames").Returns("george,bill");
             Environment.GetEnvironmentVariable("ContinuaCI.Build.ChangesetTagNames").Returns("tag1,tag2,tag 3");
 
-            //ContinuaCIChangesetInfo
+            // ContinuaCIChangesetInfo
             Environment.GetEnvironmentVariable("ContinuaCI.Build.LatestChangeset.Revision").Returns("55");
             Environment.GetEnvironmentVariable("ContinuaCI.Build.LatestChangeset.Branch").Returns("master");
             Environment.GetEnvironmentVariable("ContinuaCI.Build.LatestChangeset.Created").Returns("2016-01-02T12:00:16.666+11:00");
@@ -49,13 +49,13 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("ContinuaCI.Build.LatestChangeset.TagNames").Returns("the tag,the other tag");
             Environment.GetEnvironmentVariable("ContinuaCI.Build.LatestChangeset.IssueNames").Returns("an important issue,another more important issue,a not so important issue");
 
-            //ContinuaCIProjectInfo
+            // ContinuaCIProjectInfo
             Environment.GetEnvironmentVariable("ContinuaCI.Project.Name").Returns("the project from hell");
 
-            //ContinuaCIConfigurationInfo
+            // ContinuaCIConfigurationInfo
             Environment.GetEnvironmentVariable("ContinuaCI.Configuration.Name").Returns("The configuration from the end of the universe");
 
-            //ContinuaCIEnvironmentInfo
+            // ContinuaCIEnvironmentInfo
             Environment.GetEnvironmentVariables().Returns(new Dictionary<string, string>()
                                                             {
                                                                 { "ContinuaCI.Variable.TestVar1", "gorgonzola" },

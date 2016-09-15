@@ -68,7 +68,7 @@ namespace Cake.Common.Tests.Unit.Diagnostics
             public void Should_Evaluate_And_Write_Warning_Message_To_Log()
             {
                 // Given
-                var fixture = new LogActionFixture(verbosity:Verbosity.Minimal);
+                var fixture = new LogActionFixture(verbosity: Verbosity.Minimal);
 
                 // When
                 fixture.Context.Warning(fixture.Log);
@@ -115,7 +115,7 @@ namespace Cake.Common.Tests.Unit.Diagnostics
             public void Should_Evaluate_And_Write_Information_Message_To_Log()
             {
                 // Given
-                var fixture = new LogActionFixture(verbosity:Verbosity.Normal);
+                var fixture = new LogActionFixture(verbosity: Verbosity.Normal);
 
                 // When
                 fixture.Context.Information(fixture.Log);
@@ -129,7 +129,7 @@ namespace Cake.Common.Tests.Unit.Diagnostics
             public void Should_Not_Evaluate_And_Write_Information_Message_To_Log()
             {
                 // Given
-                var fixture = new LogActionFixture(verbosity:Verbosity.Minimal);
+                var fixture = new LogActionFixture(verbosity: Verbosity.Minimal);
 
                 // When
                 fixture.Context.Information(fixture.Log);
@@ -162,7 +162,7 @@ namespace Cake.Common.Tests.Unit.Diagnostics
             public void Should_Evaluate_And_Write_Verbose_Message_To_Log()
             {
                 // Given
-                var fixture = new LogActionFixture(verbosity:Verbosity.Verbose);
+                var fixture = new LogActionFixture(verbosity: Verbosity.Verbose);
 
                 // When
                 fixture.Context.Verbose(fixture.Log);
@@ -176,7 +176,7 @@ namespace Cake.Common.Tests.Unit.Diagnostics
             public void Should_Not_Evaluate_And_Write_Verbose_Message_To_Log()
             {
                 // Given
-                var fixture = new LogActionFixture(verbosity:Verbosity.Normal);
+                var fixture = new LogActionFixture(verbosity: Verbosity.Normal);
 
                 // When
                 fixture.Context.Verbose(fixture.Log);
@@ -209,7 +209,7 @@ namespace Cake.Common.Tests.Unit.Diagnostics
             public void Should_Evaluate_And_Write_Debug_Message_To_Log()
             {
                 // Given
-                var fixture = new LogActionFixture(verbosity:Verbosity.Diagnostic);
+                var fixture = new LogActionFixture(verbosity: Verbosity.Diagnostic);
 
                 // When
                 fixture.Context.Debug(fixture.Log);
@@ -223,7 +223,7 @@ namespace Cake.Common.Tests.Unit.Diagnostics
             public void Should_Not_Evaluate_And_Write_Debug_Message_To_Log()
             {
                 // Given
-                var fixture = new LogActionFixture(verbosity:Verbosity.Normal);
+                var fixture = new LogActionFixture(verbosity: Verbosity.Normal);
 
                 // When
                 fixture.Context.Debug(fixture.Log);

@@ -21,10 +21,7 @@ namespace Cake.Core
         /// <value>
         ///   <c>true</c> if this report is empty; otherwise, <c>false</c>.
         /// </value>
-        public bool IsEmpty
-        {
-            get { return _report.Count == 0; }
-        }
+        public bool IsEmpty => _report.Count == 0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeReport"/> class.

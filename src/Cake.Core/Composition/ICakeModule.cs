@@ -11,9 +11,9 @@ namespace Cake.Core.Composition
     public interface ICakeModule
     {
         /// <summary>
-        /// Performs custom registrations in the provided registry.
+        /// Performs custom registrations in the provided registrar.
         /// </summary>
-        /// <param name="registry">The container registry.</param>
-        void Register(ICakeContainerRegistry registry);
+        /// <param name="registrar">The container registrar.</param>
+        void Register(ICakeContainerRegistrar registrar);
     }
 }

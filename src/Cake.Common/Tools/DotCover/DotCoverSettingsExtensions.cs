@@ -22,7 +22,7 @@ namespace Cake.Common.Tools.DotCover
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.Scope.Add(scope);
             return settings;
@@ -39,7 +39,7 @@ namespace Cake.Common.Tools.DotCover
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.Filters.Add(filter);
             return settings;
@@ -56,7 +56,7 @@ namespace Cake.Common.Tools.DotCover
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.AttributeFilters.Add(attributeFilter);
             return settings;

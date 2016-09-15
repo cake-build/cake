@@ -23,7 +23,7 @@ namespace Cake.Core
         {
             if (processRunner == null)
             {
-                throw new ArgumentNullException("processRunner");
+                throw new ArgumentNullException(nameof(processRunner));
             }
             return processRunner.Start(filePath, new ProcessSettings());
         }

@@ -22,15 +22,9 @@ namespace Cake.Core.Scripting.Analysis
         private ScriptInformation _root;
         private ScriptInformation _current;
 
-        public IScriptInformation Script
-        {
-            get { return _current; }
-        }
+        public IScriptInformation Script => _current;
 
-        public IReadOnlyList<string> Lines
-        {
-            get { return _lines; }
-        }
+        public IReadOnlyList<string> Lines => _lines;
 
         public ScriptAnalyzerContext(
             IFileSystem fileSystem,
@@ -51,7 +45,7 @@ namespace Cake.Core.Scripting.Analysis
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
 
             // Get the absolute path to the script and make
@@ -96,10 +90,7 @@ namespace Cake.Core.Scripting.Analysis
                 _root = script;
             }
 
-            if (_current != null)
-            {
-                _current.Includes.Add(script);
-            }
+            _current?.Includes.Add(script);
 
             _current = script;
             _stack.Push(_current);

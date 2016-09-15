@@ -17,10 +17,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The build number.
         /// </value>
-        public int BuildNumber
-        {
-            get { return GetEnvironmentInteger("BUILD_NUMBER"); }
-        }
+        public int BuildNumber => GetEnvironmentInteger("BUILD_NUMBER");
 
         /// <summary>
         /// Gets the build identifier.
@@ -28,10 +25,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The build identifier.
         /// </value>
-        public string BuildId
-        {
-            get { return GetEnvironmentString("BUILD_ID"); }
-        }
+        public string BuildId => GetEnvironmentString("BUILD_ID");
 
         /// <summary>
         /// Gets the display name of the build.
@@ -39,10 +33,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The display name of the build.
         /// </value>
-        public string BuildDisplayName
-        {
-            get { return GetEnvironmentString("BUILD_DISPLAY_NAME"); }
-        }
+        public string BuildDisplayName => GetEnvironmentString("BUILD_DISPLAY_NAME");
 
         /// <summary>
         /// Gets the build URL.
@@ -50,10 +41,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The build URL.
         /// </value>
-        public string BuildTag
-        {
-            get { return GetEnvironmentString("BUILD_TAG"); }
-        }
+        public string BuildTag => GetEnvironmentString("BUILD_TAG");
 
         /// <summary>
         /// Gets the build URL.
@@ -61,10 +49,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The build URL.
         /// </value>
-        public string BuildUrl
-        {
-            get { return GetEnvironmentString("BUILD_URL"); }
-        }
+        public string BuildUrl => GetEnvironmentString("BUILD_URL");
 
         /// <summary>
         /// Gets the executor number.
@@ -72,10 +57,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The executor number.
         /// </value>
-        public int ExecutorNumber
-        {
-            get { return GetEnvironmentInteger("EXECUTOR_NUMBER"); }
-        }
+        public int ExecutorNumber => GetEnvironmentInteger("EXECUTOR_NUMBER");
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="JenkinsBuildInfo"/> class.

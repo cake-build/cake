@@ -23,11 +23,11 @@ namespace Cake.Core
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             if (arguments == null)
             {
-                throw new ArgumentNullException("arguments");
+                throw new ArgumentNullException(nameof(arguments));
             }
 
             if (settings.Arguments == null)
@@ -49,11 +49,11 @@ namespace Cake.Core
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
 
             settings.WorkingDirectory = path;
@@ -70,7 +70,7 @@ namespace Cake.Core
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             settings.RedirectStandardOutput = redirect;
@@ -87,7 +87,7 @@ namespace Cake.Core
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             settings.Timeout = timeout;

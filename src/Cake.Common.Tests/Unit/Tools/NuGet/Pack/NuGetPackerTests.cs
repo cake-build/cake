@@ -148,7 +148,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Run();
 
                     // Then
-                    Assert.False(fixture.FileSystem.Exist((FilePath) "/Working/existing.temp.nuspec"));
+                    Assert.False(fixture.FileSystem.Exist((FilePath)"/Working/existing.temp.nuspec"));
                 }
 
                 [Fact]

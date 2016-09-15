@@ -14,19 +14,13 @@ namespace Cake.Core.IO
     /// </summary>
     public abstract class Path
     {
-        private readonly string _path;
-        private readonly bool _isRelative;
-        private readonly string[] _segments;
         private static readonly char[] _invalidPathCharacters;
 
         /// <summary>
         /// Gets the full path.
         /// </summary>
         /// <value>The full path.</value>
-        public string FullPath
-        {
-            get { return _path; }
-        }
+        public string FullPath { get; }
 
         /// <summary>
         /// Gets a value indicating whether this path is relative.
@@ -34,19 +28,13 @@ namespace Cake.Core.IO
         /// <value>
         /// <c>true</c> if this path is relative; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRelative
-        {
-            get { return _isRelative; }
-        }
+        public bool IsRelative { get; }
 
         /// <summary>
         /// Gets the segments making up the path.
         /// </summary>
         /// <value>The segments making up the path.</value>
-        public string[] Segments
-        {
-            get { return _segments; }
-        }
+        public string[] Segments { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Path"/> class.
@@ -56,40 +44,40 @@ namespace Cake.Core.IO
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
             if (string.IsNullOrWhiteSpace(path))
             {
-                throw new ArgumentException("Path cannot be empty.", "path");
+                throw new ArgumentException("Path cannot be empty.", nameof(path));
             }
 
-            _path = path.Replace('\\', '/').Trim();
-            _path = _path == "./" ? string.Empty : _path;
+            FullPath = path.Replace('\\', '/').Trim();
+            FullPath = FullPath == "./" ? string.Empty : FullPath;
 
             // Remove relative part of a path.
-            if (_path.StartsWith("./", StringComparison.Ordinal))
+            if (FullPath.StartsWith("./", StringComparison.Ordinal))
             {
-                _path = _path.Substring(2);
+                FullPath = FullPath.Substring(2);
             }
 
             // Remove trailing slashes.
-            _path = _path.TrimEnd('/', '\\');
+            FullPath = FullPath.TrimEnd('/', '\\');
 
 #if !UNIX
-            if (_path.EndsWith(":", StringComparison.OrdinalIgnoreCase))
+            if (FullPath.EndsWith(":", StringComparison.OrdinalIgnoreCase))
             {
-                _path = string.Concat(_path, "/");
+                FullPath = string.Concat(FullPath, "/");
             }
 #endif
 
             // Relative path?
-            _isRelative = !System.IO.Path.IsPathRooted(_path);
+            IsRelative = !System.IO.Path.IsPathRooted(FullPath);
 
             // Extract path segments.
-            _segments = _path.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-            if (_path.StartsWith("/") && _segments.Length > 0)
+            Segments = FullPath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            if (FullPath.StartsWith("/") && Segments.Length > 0)
             {
-                _segments[0] = "/" + _segments[0];
+                Segments[0] = "/" + Segments[0];
             }
 
             // Validate the path.
@@ -98,7 +86,7 @@ namespace Cake.Core.IO
                 if (_invalidPathCharacters.Contains(character))
                 {
                     const string format = "Illegal characters in directory path ({0}).";
-                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, format, character), "path");
+                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, format, character), nameof(path));
                 }
             }
         }

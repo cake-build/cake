@@ -11,28 +11,20 @@ namespace Cake.Core.IO.Globbing
     internal sealed class GlobParserContext
     {
         private readonly GlobTokenizer _tokenizer;
-        private readonly RegexOptions _regexOptions;
-        private GlobToken _currentToken;
 
-        public GlobToken CurrentToken
-        {
-            get { return _currentToken; }
-        }
+        public GlobToken CurrentToken { get; private set; }
 
-        public RegexOptions Options
-        {
-            get { return _regexOptions; }
-        }
+        public RegexOptions Options { get; }
 
         public GlobParserContext(string pattern, bool caseSensitive)
         {
             _tokenizer = new GlobTokenizer(pattern);
-            _currentToken = null;
-            _regexOptions = RegexOptions.Compiled | RegexOptions.Singleline;
+            CurrentToken = null;
+            Options = RegexOptions.Compiled | RegexOptions.Singleline;
 
             if (!caseSensitive)
             {
-                _regexOptions |= RegexOptions.IgnoreCase;
+                Options |= RegexOptions.IgnoreCase;
             }
         }
 
@@ -43,7 +35,7 @@ namespace Cake.Core.IO.Globbing
 
         public void Accept()
         {
-            _currentToken = _tokenizer.Scan();
+            CurrentToken = _tokenizer.Scan();
         }
 
         public void Accept(GlobTokenKind kind)
@@ -53,7 +45,7 @@ namespace Cake.Core.IO.Globbing
 
         public void Accept(params GlobTokenKind[] kind)
         {
-            if (kind.Any(k => k == _currentToken.Kind))
+            if (kind.Any(k => k == CurrentToken.Kind))
             {
                 Accept();
                 return;

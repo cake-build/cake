@@ -3,9 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using Cake.Testing;
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Core.IO;
+using Cake.Testing;
 using Cake.Testing.Xunit;
 using Xunit;
 

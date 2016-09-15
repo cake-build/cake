@@ -37,8 +37,8 @@ namespace Cake.Tests.Unit
                 var context = Substitute.For<ICakeContext>();
                 var console = new FakeConsole();
                 var report = new CakeReport();
-                string taskName = "TaskName";
-                TimeSpan duration = TimeSpan.FromSeconds(10);
+                var taskName = "TaskName";
+                var duration = TimeSpan.FromSeconds(10);
 
                 report.Add(taskName, duration);
                 var printer = new CakeReportPrinter(console, context);
@@ -47,7 +47,7 @@ namespace Cake.Tests.Unit
                 printer.Write(report);
 
                 // Then
-                string expected = String.Format("{0,-30}{1,-20}", taskName, duration);
+                string expected = $"{taskName, -30}{duration, -20}";
                 Assert.Contains(console.Messages, s => s == expected);
             }
 
@@ -58,9 +58,9 @@ namespace Cake.Tests.Unit
                 var context = Substitute.For<ICakeContext>();
                 var console = new FakeConsole();
                 var report = new CakeReport();
-                string taskName = "TaskName";
-                string taskName2 = "Task-Name-That-Has-A-Length-Of-44-Characters";
-                TimeSpan duration = TimeSpan.FromSeconds(10);
+                var taskName = "TaskName";
+                var taskName2 = "Task-Name-That-Has-A-Length-Of-44-Characters";
+                var duration = TimeSpan.FromSeconds(10);
 
                 report.Add(taskName, duration);
                 report.Add(taskName2, duration);
@@ -70,7 +70,7 @@ namespace Cake.Tests.Unit
                 printer.Write(report);
 
                 // Then
-                string expected = String.Format("{0,-45}{1,-20}", taskName, duration);
+                string expected = $"{taskName, -45}{duration, -20}";
                 Assert.Contains(console.Messages, s => s == expected);
             }
 
@@ -81,9 +81,9 @@ namespace Cake.Tests.Unit
                 var context = Substitute.For<ICakeContext>();
                 var console = new FakeConsole();
                 var report = new CakeReport();
-                string taskName = "TaskName";
-                string taskNameThatWasSkipped = "TaskName-That-Was-Skipped";
-                TimeSpan duration = TimeSpan.FromSeconds(10);
+                var taskName = "TaskName";
+                var taskNameThatWasSkipped = "TaskName-That-Was-Skipped";
+                var duration = TimeSpan.FromSeconds(10);
 
                 report.Add(taskName, duration);
                 report.AddSkipped(taskNameThatWasSkipped);
@@ -94,7 +94,7 @@ namespace Cake.Tests.Unit
                 printer.Write(report);
 
                 // Then
-                string expected = String.Format("{0,-30}{1,-20}", taskNameThatWasSkipped, "Skipped");
+                string expected = $"{taskNameThatWasSkipped, -30}{"Skipped", -20}";
                 Assert.Contains(console.Messages, s => s == expected);
             }
 
@@ -110,10 +110,10 @@ namespace Cake.Tests.Unit
                 context.Log.Returns(log);
                 var console = new FakeConsole();
                 var report = new CakeReport();
-                string taskName = "TaskName";
-                string tasknameThatWasDelegated = "TaskName-That-Was-Delegated";
-                TimeSpan duration = TimeSpan.FromSeconds(10);
-                TimeSpan durationDelegatedTask = TimeSpan.FromSeconds(5);
+                var taskName = "TaskName";
+                var tasknameThatWasDelegated = "TaskName-That-Was-Delegated";
+                var duration = TimeSpan.FromSeconds(10);
+                var durationDelegatedTask = TimeSpan.FromSeconds(5);
 
                 report.Add(taskName, duration);
                 report.AddDelegated(tasknameThatWasDelegated, durationDelegatedTask);
@@ -124,7 +124,7 @@ namespace Cake.Tests.Unit
                 printer.Write(report);
 
                 // Then
-                string expected = String.Format("{0,-30}{1,-20}", tasknameThatWasDelegated, durationDelegatedTask);
+                var expected = $"{tasknameThatWasDelegated, -30}{durationDelegatedTask, -20}";
                 Assert.Contains(console.Messages, s => s == expected);
             }
 
@@ -141,10 +141,10 @@ namespace Cake.Tests.Unit
                 context.Log.Returns(log);
                 var console = new FakeConsole();
                 var report = new CakeReport();
-                string taskName = "TaskName";
-                string tasknameThatWasDelegated = "TaskName-That-Was-Delegated";
-                TimeSpan duration = TimeSpan.FromSeconds(10);
-                TimeSpan durationDelegatedTask = TimeSpan.FromSeconds(5);
+                var taskName = "TaskName";
+                var tasknameThatWasDelegated = "TaskName-That-Was-Delegated";
+                var duration = TimeSpan.FromSeconds(10);
+                var durationDelegatedTask = TimeSpan.FromSeconds(5);
 
                 report.Add(taskName, duration);
                 report.AddDelegated(tasknameThatWasDelegated, durationDelegatedTask);
@@ -155,7 +155,7 @@ namespace Cake.Tests.Unit
                 printer.Write(report);
 
                 // Then
-                string expected = String.Format("{0,-30}{1,-20}", tasknameThatWasDelegated, durationDelegatedTask);
+                var expected = $"{tasknameThatWasDelegated, -30}{durationDelegatedTask, -20}";
                 Assert.DoesNotContain(console.Messages, s => s == expected);
             }
         }

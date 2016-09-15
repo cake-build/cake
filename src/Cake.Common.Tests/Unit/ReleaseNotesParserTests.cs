@@ -35,7 +35,7 @@ namespace Cake.Common.Tests.Unit
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Unknown release notes format.", result.Message);
+                Assert.Equal("Unknown release notes format.", result?.Message);
             }
 
             public sealed class ComplexFormat
@@ -52,7 +52,7 @@ namespace Cake.Common.Tests.Unit
 
                     // Then
                     Assert.IsType<CakeException>(result);
-                    Assert.Equal("Could not parse version from release notes header.", result.Message);
+                    Assert.Equal("Could not parse version from release notes header.", result?.Message);
                 }
 
                 [Fact]
@@ -175,7 +175,7 @@ namespace Cake.Common.Tests.Unit
 
                     // Then
                     Assert.IsType<CakeException>(result);
-                    Assert.Equal("Could not parse version from release notes header.", result.Message);
+                    Assert.Equal("Could not parse version from release notes header.", result?.Message);
                 }
 
                 [Fact]

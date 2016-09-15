@@ -24,7 +24,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.Targets.Add(target);
             return settings;
@@ -40,7 +40,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.ToolVersion = version;
             return settings;
@@ -56,7 +56,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.PlatformTarget = target;
             return settings;
@@ -72,7 +72,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.MSBuildPlatform = platform;
             return settings;
@@ -89,7 +89,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
 
             IList<string> currentValue;
@@ -113,7 +113,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.Configuration = configuration;
             return settings;
@@ -129,7 +129,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             if (maxCpuCount.HasValue)
             {
@@ -152,7 +152,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.NodeReuse = reuse;
             return settings;
@@ -168,9 +168,36 @@ namespace Cake.Common.Tools.MSBuild
         {
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             settings.Verbosity = verbosity;
+            return settings;
+        }
+
+        /// <summary>
+        /// Adds a custom logger.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="loggerAssembly">The assembly containing the logger. Should match the format {AssemblyName[,StrongName] | AssemblyFile}</param>
+        /// <param name="loggerClass">The class implementing the logger. Should match the format [PartialOrFullNamespace.]LoggerClassName. If the assembly contains only one logger, class does not need to be specified.</param>
+        /// <param name="loggerParameters">Parameters to be passed to the logger.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings WithLogger(this MSBuildSettings settings, string loggerAssembly, string loggerClass = null, string loggerParameters = null)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            if (string.IsNullOrWhiteSpace(loggerAssembly))
+            {
+                throw new ArgumentException(nameof(loggerAssembly));
+            }
+            settings.Loggers.Add(new MSBuildLogger
+            {
+                Assembly = loggerAssembly,
+                Class = loggerClass,
+                Parameters = loggerParameters
+            });
             return settings;
         }
     }
