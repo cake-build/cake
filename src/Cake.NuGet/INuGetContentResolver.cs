@@ -19,8 +19,9 @@ namespace Cake.NuGet
         /// given a path and a resource type.
         /// </summary>
         /// <param name="path">The path to search.</param>
+        /// <param name="package">The package.</param>
         /// <param name="type">The resource type.</param>
         /// <returns>A collection of files.</returns>
-        IReadOnlyCollection<IFile> GetFiles(DirectoryPath path, PackageType type);
+        IReadOnlyCollection<IFile> GetFiles(DirectoryPath path, PackageReference package, PackageType type);
     }
 }

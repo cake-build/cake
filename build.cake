@@ -113,23 +113,32 @@ Task("Run-Unit-Tests")
                     // Disable XUnit AppVeyorReporter see https://github.com/cake-build/cake/issues/1200
                     System.Environment.SetEnvironmentVariable("APPVEYOR_API_URL", null);
                 }
-                OpenCover(tool => {
+
+                Action<ICakeContext> testAction = tool => {
                     tool.DotNetCoreTest(project.GetDirectory().FullPath, new DotNetCoreTestSettings {
                         Configuration = parameters.Configuration,
                         NoBuild = true,
                         Verbose = false,
                         ArgumentCustomization = args =>
                             args.Append("-xml").Append(parameters.Paths.Directories.TestResults.CombineWithFilePath(project.GetFilenameWithoutExtension()).FullPath + ".xml")
-                    });
-                },
-                parameters.Paths.Files.TestCoverageOutputFilePath,
-                new OpenCoverSettings {
-                    ReturnTargetCodeOffset = 0,
-                    ArgumentCustomization = args => args.Append("-mergeoutput")
+                    });};
+
+                if(!parameters.SkipOpenCover)
+                {
+                    OpenCover(testAction,
+                        parameters.Paths.Files.TestCoverageOutputFilePath,
+                        new OpenCoverSettings {
+                            ReturnTargetCodeOffset = 0,
+                            ArgumentCustomization = args => args.Append("-mergeoutput")
+                        }
+                        .WithFilter("+[*]* -[xunit.*]* -[*.Tests]* -[Cake.Testing]* -[Cake.Testing.Xunit]* ")
+                        .ExcludeByAttribute("*.ExcludeFromCodeCoverage*")
+                        .ExcludeByFile("*/*Designer.cs;*/*.g.cs;*/*.g.i.cs"));
                 }
-                .WithFilter("+[*]* -[xunit.*]* -[*.Tests]* -[Cake.Testing]* -[Cake.Testing.Xunit]* ")
-                .ExcludeByAttribute("*.ExcludeFromCodeCoverage*")
-                .ExcludeByFile("*/*Designer.cs;*/*.g.cs;*/*.g.i.cs"));
+                else
+                {
+                    testAction(Context);
+                }
             }
             finally
             {
@@ -251,6 +260,16 @@ Task("Create-NuGet-Packages")
         });
     }
 
+    // Cake - Symbols - .NET 4.5
+    NuGetPack("./nuspec/Cake.symbols.nuspec", new NuGetPackSettings {
+        Version = parameters.Version.SemVersion,
+        ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
+        BasePath = parameters.Paths.Directories.ArtifactsBinNet45,
+        OutputDirectory = parameters.Paths.Directories.NugetRoot,
+        Symbols = true,
+        NoPackageAnalysis = true
+    });
+
     // Cake - .NET 4.5
     NuGetPack("./nuspec/Cake.nuspec", new NuGetPackSettings {
         Version = parameters.Version.SemVersion,
@@ -258,6 +277,16 @@ Task("Create-NuGet-Packages")
         BasePath = parameters.Paths.Directories.ArtifactsBinNet45,
         OutputDirectory = parameters.Paths.Directories.NugetRoot,
         Symbols = false,
+        NoPackageAnalysis = true
+    });
+
+    // Cake Symbols - .NET Core
+    NuGetPack("./nuspec/Cake.CoreCLR.symbols.nuspec", new NuGetPackSettings {
+        Version = parameters.Version.SemVersion,
+        ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
+        BasePath = parameters.Paths.Directories.ArtifactsBinNetCoreApp10,
+        OutputDirectory = parameters.Paths.Directories.NugetRoot,
+        Symbols = true,
         NoPackageAnalysis = true
     });
 
