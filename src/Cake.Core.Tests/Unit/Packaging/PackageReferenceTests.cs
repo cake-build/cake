@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Linq;
 using Cake.Core.Packaging;
 using Xunit;
 
@@ -88,8 +89,8 @@ namespace Cake.Core.Tests.Unit.Packaging
 
                 // Then
                 Assert.Equal(2, result.Count);
-                Assert.Equal("Cake.Foo", result["package"]);
-                Assert.Equal("1.2.3", result["version"]);
+                Assert.Equal("Cake.Foo", result["package"].First());
+                Assert.Equal("1.2.3", result["version"].First());
             }
         }
 
