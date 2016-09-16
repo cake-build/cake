@@ -1,10 +1,17 @@
 ﻿{
-  "version": "0.16.0-*",
+  "version": "0.16.1-*",
   "configurations": {
     "Release": {
       "buildOptions": {
         "warningsAsErrors": true
       }
+    }
+  },
+  "buildOptions": {
+    "compile": {
+      "includeFiles": [
+        "../SolutionInfo.cs"
+      ]
     }
   },
   "dependencies": {

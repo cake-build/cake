@@ -68,11 +68,11 @@ public class BuildVersion
     public static string ReadProjectJsonVersion(ICakeContext context)
     {
         var projects = context.GetFiles("./**/project.json");
-        foreach(var project in projects) 
+        foreach(var project in projects)
         {
             var content = System.IO.File.ReadAllText(project.FullPath, Encoding.UTF8);
             var node = Newtonsoft.Json.Linq.JObject.Parse(content);
-            if(node["version"] != null) 
+            if(node["version"] != null)
             {
                 var version = node["version"].ToString();
                 return version.Replace("-*", "");
@@ -85,7 +85,7 @@ public class BuildVersion
     {
         var content = System.IO.File.ReadAllText(project.FullPath, Encoding.UTF8);
         var node = Newtonsoft.Json.Linq.JObject.Parse(content);
-        if(node["version"] != null) 
+        if(node["version"] != null)
         {
             node["version"].Replace(string.Concat(Version, "-*"));
             System.IO.File.WriteAllText(project.FullPath, node.ToString(), Encoding.UTF8);
