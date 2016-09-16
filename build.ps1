@@ -31,7 +31,7 @@ Param(
     [string[]]$ScriptArgs
 )
 
-$CakeVersion = "0.15.2"
+$CakeVersion = "0.16.0"
 $DotNetChannel = "preview";
 $DotNetVersion = "1.0.0-preview2-003121";
 $DotNetInstallerUri = "https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0-preview2/scripts/obtain/dotnet-install.ps1";
