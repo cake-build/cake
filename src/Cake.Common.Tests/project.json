@@ -1,10 +1,15 @@
 ﻿{
-  "version": "0.16.0-*",
+  "version": "0.16.1-*",
   "buildOptions": {
     "additionalArguments": [
       "/ruleset:../Test.ruleset",
       "/additionalfile:../stylecop.json"
-    ]
+    ],
+    "compile": {
+      "includeFiles": [
+        "../SolutionInfo.cs"
+      ]
+    }
   },
   "configurations": {
     "Release": {
