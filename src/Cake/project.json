@@ -1,12 +1,17 @@
 ﻿{
-  "version": "0.16.0-*",
+  "version": "0.16.1-*",
   "buildOptions": {
     "emitEntryPoint": true,
     "xmlDoc": true,
     "additionalArguments": [
       "/ruleset:../Cake.ruleset",
       "/additionalfile:../stylecop.json"
-    ]
+    ],
+    "compile": {
+      "includeFiles": [
+        "../SolutionInfo.cs"
+      ]
+    }
   },
   "configurations": {
     "Release": {
