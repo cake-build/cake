@@ -38,6 +38,8 @@
     <file src="NuGet.Repositories.dll" />
     <file src="NuGet.RuntimeModel.dll" />
     <file src="NuGet.Versioning.dll" />
+    <file src="System.Collections.NonGeneric.dll" />
+    <file src="System.Collections.Specialized.dll" />
     <file src="System.ComponentModel.Primitives.dll" />
     <file src="System.ComponentModel.TypeConverter.dll" />
     <file src="System.Diagnostics.StackTrace.dll" />
