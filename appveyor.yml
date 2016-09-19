@@ -23,4 +23,4 @@ branches:
 cache:
 - tools -> build.cake
 on_finish:
-- ps: Get-EventLog AppVeyor -newest 10 | Format-List
+- ps: Get-EventLog AppVeyor -newest 30 | Format-List
