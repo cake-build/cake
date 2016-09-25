@@ -1,4 +1,10 @@
+### New on 0.16.1 (Released 2016/09/25)
+
+* Issue with debugging in v0.16.0 (.NET Core)
+* Add missing assembly properties
+
 ### New on 0.16.0 (Released 2016/09/15)
+
 * Change API for registering dependencies with Cake
 * Add include & exlude parameters to #tool directive
 * Allow passing username and password to DownloadFile alias
