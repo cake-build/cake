@@ -34,7 +34,12 @@
     "additionalArguments": [
       "/ruleset:../Cake.ruleset",
       "/additionalfile:../stylecop.json"
-    ]
+    ],
+    "compile": {
+      "includeFiles": [
+        "../SolutionInfo.cs"
+      ]
+    }
   },
   "configurations": {
     "Release": {
