@@ -4,7 +4,12 @@
     "additionalArguments": [
       "/ruleset:../Test.ruleset",
       "/additionalfile:../stylecop.json"
-    ]
+    ],
+    "compile": {
+      "includeFiles": [
+        "../SolutionInfo.cs"
+      ]
+    }
   },
   "configurations": {
     "Release": {

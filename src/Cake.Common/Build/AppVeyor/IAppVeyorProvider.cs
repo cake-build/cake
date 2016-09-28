@@ -19,6 +19,32 @@ namespace Cake.Common.Build.AppVeyor
         /// <value>
         /// <c>true</c> if the current build is running on AppVeyor.; otherwise, <c>false</c>.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     Information("Running on AppVeyor");
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via AppVeyor</para>
+        /// <example>
+        /// <code>
+        /// if (AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     Information("Running on AppVeyor");
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
         bool IsRunningOnAppVeyor { get; }
 
         /// <summary>
@@ -27,6 +53,60 @@ namespace Cake.Common.Build.AppVeyor
         /// <value>
         /// The AppVeyor environment.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     Information(
+        ///         @"Environment:
+        ///         ApiUrl: {0}
+        ///         Configuration: {1}
+        ///         JobId: {2}
+        ///         JobName: {3}
+        ///         Platform: {4}
+        ///         ScheduledBuild: {5}",
+        ///         BuildSystem.AppVeyor.Environment.ApiUrl,
+        ///         BuildSystem.AppVeyor.Environment.Configuration,
+        ///         BuildSystem.AppVeyor.Environment.JobId,
+        ///         BuildSystem.AppVeyor.Environment.JobName,
+        ///         BuildSystem.AppVeyor.Environment.Platform,
+        ///         BuildSystem.AppVeyor.Environment.ScheduledBuild
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via AppVeyor</para>
+        /// <example>
+        /// <code>
+        /// if (AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     Information(
+        ///         @"Environment:
+        ///         ApiUrl: {0}
+        ///         Configuration: {1}
+        ///         JobId: {2}
+        ///         JobName: {3}
+        ///         Platform: {4}
+        ///         ScheduledBuild: {5}",
+        ///         AppVeyor.Environment.ApiUrl,
+        ///         AppVeyor.Environment.Configuration,
+        ///         AppVeyor.Environment.JobId,
+        ///         AppVeyor.Environment.JobName,
+        ///         AppVeyor.Environment.Platform,
+        ///         AppVeyor.Environment.ScheduledBuild
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
         AppVeyorEnvironmentInfo Environment { get; }
 
         /// <summary>
@@ -68,6 +148,64 @@ namespace Cake.Common.Build.AppVeyor
         /// <param name="message">A short message to display</param>
         /// <param name="category">The category of the message</param>
         /// <param name="details">Additional message details</param>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     BuildSystem.AppVeyor.AddMessage(
+        ///             "This is a error message.",
+        ///             AppVeyorMessageCategoryType.Error,
+        ///             "Error details."
+        ///         );
+        ///
+        ///     BuildSystem.AppVeyor.AddMessage(
+        ///             "This is a information message.",
+        ///             AppVeyorMessageCategoryType.Information,
+        ///             "Information details."
+        ///         );
+        ///
+        ///     BuildSystem.AppVeyor.AddMessage(
+        ///             "This is a warning message.",
+        ///             AppVeyorMessageCategoryType.Warning,
+        ///             "Warning details."
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via AppVeyor</para>
+        /// <example>
+        /// <code>
+        /// if (AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     AppVeyor.AddMessage(
+        ///             "This is a error message.",
+        ///             AppVeyorMessageCategoryType.Error,
+        ///             "Error details."
+        ///         );
+        ///
+        ///     AppVeyor.AddMessage(
+        ///             "This is a information message.",
+        ///             AppVeyorMessageCategoryType.Information,
+        ///             "Information details."
+        ///         );
+        ///
+        ///     AppVeyor.AddMessage(
+        ///             "This is a warning message.",
+        ///             AppVeyorMessageCategoryType.Warning,
+        ///             "Warning details."
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
         void AddMessage(string message, AppVeyorMessageCategoryType category = AppVeyorMessageCategoryType.Information, string details = null);
     }
 }
