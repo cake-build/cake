@@ -13,6 +13,7 @@ using Cake.Common.Build.GoCD;
 using Cake.Common.Build.Jenkins;
 using Cake.Common.Build.MyGet;
 using Cake.Common.Build.TeamCity;
+using Cake.Common.Build.TFBuild;
 using Cake.Common.Build.TravisCI;
 
 namespace Cake.Common.Build
@@ -37,6 +38,7 @@ namespace Cake.Common.Build
         /// <param name="bitbucketPipelinesProvider">The Bitbucket Pipelines provider.</param>
         /// <param name="goCDProvider">The Go.CD provider.</param>
         /// <param name="gitlabCIProvider">The GitLab CI provider.</param>
+        /// <param name="tfBuildProvider">The TF Build provider.</param>
         public BuildSystem(
             IAppVeyorProvider appVeyorProvider,
             ITeamCityProvider teamCityProvider,
@@ -48,7 +50,8 @@ namespace Cake.Common.Build
             ITravisCIProvider travisCIProvider,
             IBitbucketPipelinesProvider bitbucketPipelinesProvider,
             IGoCDProvider goCDProvider,
-            IGitLabCIProvider gitlabCIProvider)
+            IGitLabCIProvider gitlabCIProvider,
+            ITFBuildProvider tfBuildProvider)
         {
             if (appVeyorProvider == null)
             {
@@ -94,6 +97,10 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException(nameof(gitlabCIProvider));
             }
+            if (tfBuildProvider == null)
+            {
+                throw new ArgumentNullException(nameof(tfBuildProvider));
+            }
 
             AppVeyor = appVeyorProvider;
             TeamCity = teamCityProvider;
@@ -106,6 +113,7 @@ namespace Cake.Common.Build
             BitbucketPipelines = bitbucketPipelinesProvider;
             GoCD = goCDProvider;
             GitLabCI = gitlabCIProvider;
+            TFBuild = tfBuildProvider;
         }
 
         /// <summary>
@@ -456,6 +464,54 @@ namespace Cake.Common.Build
         public bool IsRunningOnGitLabCI => GitLabCI.IsRunningOnGitLabCI;
 
         /// <summary>
+        /// Gets a value indicating whether this instance is running on VSTS.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnVSTS)
+        /// {
+        ///     // Get the build commit hash.
+        ///     var commitHash = BuildSystem.TFBuild.Environment.Repository.SourceVersion;
+        /// }
+        /// </code>
+        /// </example>
+        /// <value>
+        /// <c>true</c> if this instance is running on VSTS; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsRunningOnVSTS => TFBuild.IsRunningOnVSTS;
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is running on TFS.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnTFS)
+        /// {
+        ///     // Get the build commit hash.
+        ///     var commitHash = BuildSystem.TFBuild.Environment.Repository.SourceVersion;
+        /// }
+        /// </code>
+        /// </example>
+        /// <value>
+        /// <c>true</c> if this instance is running on TFS; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsRunningOnTFS => TFBuild.IsRunningOnTFS;
+
+        /// <summary>
+        /// Gets the TF Build Provider.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnVSTS)
+        /// {
+        ///     // Get the build definition name.
+        ///     var definitionName = BuildSystem.TFBuild.Environment.BuildDefinition.Name;
+        /// }
+        /// </code>
+        /// </example>
+        public ITFBuildProvider TFBuild { get; }
+
+        /// <summary>
         /// Gets a value indicating whether the current build is local build.
         /// </summary>
         /// <example>
@@ -474,6 +530,6 @@ namespace Cake.Common.Build
         /// <value>
         ///   <c>true</c> if the current build is local build; otherwise, <c>false</c>.
         /// </value>
-        public bool IsLocalBuild => !(IsRunningOnAppVeyor || IsRunningOnTeamCity || IsRunningOnMyGet || IsRunningOnBamboo || IsRunningOnContinuaCI || IsRunningOnJenkins || IsRunningOnBitrise || IsRunningOnTravisCI || IsRunningOnBitbucketPipelines || IsRunningOnGoCD || IsRunningOnGitLabCI);
+        public bool IsLocalBuild => !(IsRunningOnAppVeyor || IsRunningOnTeamCity || IsRunningOnMyGet || IsRunningOnBamboo || IsRunningOnContinuaCI || IsRunningOnJenkins || IsRunningOnBitrise || IsRunningOnTravisCI || IsRunningOnBitbucketPipelines || IsRunningOnGoCD || IsRunningOnGitLabCI || IsRunningOnTFS || IsRunningOnVSTS);
     }
 }
