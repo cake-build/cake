@@ -57,13 +57,13 @@ namespace Cake.Common.Tests.Unit.Tools.SonarQube
             var fixture = new SonarQubeRunnerFixture();
 
             // When
-            var result = fixture.Run();
+            fixture.Run();
 
             // Then
             Assert.Equal(3, fixture.ProcessRunner.Results.Count);
-            Assert.Equal("MSBuild.SonarQube.Runner.exe", fixture.ProcessRunner.Results[0].Path.GetFilename());
-            Assert.Equal("MSBuild.exe", fixture.ProcessRunner.Results[1].Path.GetFilename());
-            Assert.Equal("MSBuild.SonarQube.Runner.exe", fixture.ProcessRunner.Results[2].Path.GetFilename());
+            Assert.Equal("MSBuild.SonarQube.Runner.exe", fixture.ProcessRunner.Results[0].Path.GetFilename().ToString());
+            Assert.Equal("MSBuild.exe", fixture.ProcessRunner.Results[1].Path.GetFilename().ToString());
+            Assert.Equal("MSBuild.SonarQube.Runner.exe", fixture.ProcessRunner.Results[2].Path.GetFilename().ToString());
         }
     }
 }

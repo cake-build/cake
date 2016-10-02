@@ -48,7 +48,7 @@ namespace Cake.Common.Tools.SonarQube
         /// <returns>The default tool path.</returns>
         protected sealed override IEnumerable<FilePath> GetAlternativeToolPaths(SonarQubeSettings settings)
         {
-            return new[] { new FilePath(@"C:\ProgramData\chocolatey\lib\msbuild-sonarqube-runner\tools") };
+            return new[] { new FilePath(@"C:\ProgramData\chocolatey\lib\msbuild-sonarqube-runner\tools\MSBuild.SonarQube.Runner.exe") };
         }
 
         /// <summary>

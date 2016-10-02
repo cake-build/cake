@@ -27,7 +27,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         protected override FilePath GetDefaultToolPath(string toolFilename)
         {
-            return new FilePath(@"C:\ProgramData\chocolatey\lib\msbuild-sonarqube-runner\tools");
+            return new FilePath(@"C:\ProgramData\chocolatey\lib\msbuild-sonarqube-runner\tools\MSBuild.SonarQube.Runner.exe");
         }
 
         protected override void RunTool()
