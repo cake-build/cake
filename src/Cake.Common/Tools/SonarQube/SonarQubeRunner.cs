@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
@@ -81,15 +82,25 @@ namespace Cake.Common.Tools.SonarQube
             return builder;
         }
 
-        internal void Run(FilePath solutionPath, SonarQubeSettings settings)
+        internal void Run(FilePath solution, SonarQubeSettings settings)
         {
+            if (solution == null)
+            {
+                throw new ArgumentNullException(nameof(solution));
+            }
+
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
             // Begin
             Run(settings, GetBeginArguments(settings));
 
             // Compile
             var msBuildSettings = new MSBuildSettings();
             msBuildSettings.Targets.Add("Rebuild");
-            _internalRunner.Run(solutionPath, msBuildSettings);
+            _internalRunner.Run(solution, msBuildSettings);
 
             // End
             Run(settings, GetEndArguments());

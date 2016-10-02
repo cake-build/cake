@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using Cake.Common.Tools.SonarQube;
 using Cake.Core.IO;
+using Cake.Testing;
 using Cake.Testing.Fixtures;
 
 namespace Cake.Common.Tests.Fixtures.Tools
@@ -17,6 +18,11 @@ namespace Cake.Common.Tests.Fixtures.Tools
             : base("MSBuild.SonarQube.Runner.exe")
         {
             SolutionPath = "./Test.sln";
+
+            Environment.SetSpecialPath(SpecialPath.ProgramFilesX86, "/Program Files");
+            Environment.SetSpecialPath(SpecialPath.Windows, "/Windows");
+
+            FileSystem.CreateFile("/Program Files/MSBuild/14.0/Bin/amd64/MSBuild.exe");
         }
 
         protected override FilePath GetDefaultToolPath(string toolFilename)

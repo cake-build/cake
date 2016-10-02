@@ -8,7 +8,7 @@ namespace Cake.Common.Tests.Unit.Tools.SonarQube
     public sealed class SonarQubeRunnerTests
     {
         [Fact]
-        public void Should_Throw_If_Solution_Path_Is_Null()
+        public void Should_Throw_If_Solution_Is_Null()
         {
             // Given
             var fixture = new SonarQubeRunnerFixture();
@@ -19,6 +19,20 @@ namespace Cake.Common.Tests.Unit.Tools.SonarQube
 
             // Then
             Assert.IsArgumentNullException(result, "solution");
+        }
+
+        [Fact]
+        public void Should_Throw_If_Settings_Is_Null()
+        {
+            // Given
+            var fixture = new SonarQubeRunnerFixture();
+            fixture.Settings = null;
+
+            // When
+            var result = Record.Exception(() => fixture.Run());
+
+            // Then
+            Assert.IsArgumentNullException(result, "settings");
         }
 
         [Fact]
@@ -33,7 +47,23 @@ namespace Cake.Common.Tests.Unit.Tools.SonarQube
 
             // Then
             Assert.IsType<CakeException>(result);
-            Assert.Equal("MSTest: Process returned an error (exit code 1).", result?.Message);
+            Assert.Equal("SonarQube: Process returned an error (exit code 1).", result?.Message);
+        }
+
+        [Fact]
+        public void Check_3_processes_are_launched()
+        {
+            // Given
+            var fixture = new SonarQubeRunnerFixture();
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal(3, fixture.ProcessRunner.Results.Count);
+            Assert.Equal("MSBuild.SonarQube.Runner.exe", fixture.ProcessRunner.Results[0].Path.GetFilename());
+            Assert.Equal("MSBuild.exe", fixture.ProcessRunner.Results[1].Path.GetFilename());
+            Assert.Equal("MSBuild.SonarQube.Runner.exe", fixture.ProcessRunner.Results[2].Path.GetFilename());
         }
     }
 }

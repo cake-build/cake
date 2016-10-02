@@ -64,10 +64,6 @@ namespace Cake.Common.Tools.SonarQube
             {
                 throw new ArgumentNullException(nameof(context));
             }
-            if (solution == null)
-            {
-                throw new ArgumentNullException(nameof(solution));
-            }
 
             var runner = new SonarQubeRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(solution, settings);
