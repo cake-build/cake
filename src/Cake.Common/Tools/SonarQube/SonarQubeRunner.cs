@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Cake.Common.Tools.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -11,6 +12,7 @@ namespace Cake.Common.Tools.SonarQube
     public sealed class SonarQubeRunner : Tool<SonarQubeSettings>
     {
         private readonly ICakeEnvironment _environment;
+        private readonly MSBuildRunner _internalRunner;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SonarQubeRunner" /> class.
@@ -26,6 +28,7 @@ namespace Cake.Common.Tools.SonarQube
             IToolLocator tools) : base(fileSystem, environment, runner, tools)
         {
             _environment = environment;
+            _internalRunner = new MSBuildRunner(fileSystem, environment, runner, tools);
         }
 
         /// <summary>
@@ -38,6 +41,16 @@ namespace Cake.Common.Tools.SonarQube
         }
 
         /// <summary>
+        /// Gets alternative file paths which the tool may exist in
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The default tool path.</returns>
+        protected sealed override IEnumerable<FilePath> GetAlternativeToolPaths(SonarQubeSettings settings)
+        {
+            return new[] { new FilePath(@"C:\ProgramData\chocolatey\lib\msbuild-sonarqube-runner\tools") };
+        }
+
+        /// <summary>
         /// Gets the name of the tool.
         /// </summary>
         /// <returns>The tool name.</returns>
@@ -46,16 +59,40 @@ namespace Cake.Common.Tools.SonarQube
             return "SonarQube";
         }
 
-        private ProcessArgumentBuilder GetArguments(FilePath solution, SonarQubeSettings settings)
+        private ProcessArgumentBuilder GetBeginArguments(SonarQubeSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
+
+            builder.Append($"begin /d:sonar.host.url={settings.HostUrl} /d:sonar.login={settings.Login} /k:\"{settings.ProjectKey}\" /n:\"{settings.ProjectName}\" /v:\"{settings.ProjectVersion}\"");
+            if (settings.Password != null)
+            {
+                builder.Append($" /d:sonar.password={settings.Password}");
+            }
 
             return builder;
         }
 
-        internal void Run(FilePath solution, SonarQubeSettings settings)
+        private ProcessArgumentBuilder GetEndArguments()
         {
-            Run(settings, GetArguments(solution, settings));
+            var builder = new ProcessArgumentBuilder();
+
+            builder.Append("end");
+
+            return builder;
+        }
+
+        internal void Run(FilePath solutionPath, SonarQubeSettings settings)
+        {
+            // Begin
+            Run(settings, GetBeginArguments(settings));
+
+            // Compile
+            var msBuildSettings = new MSBuildSettings();
+            msBuildSettings.Targets.Add("Rebuild");
+            _internalRunner.Run(solutionPath, msBuildSettings);
+
+            // End
+            Run(settings, GetEndArguments());
         }
     }
 }
