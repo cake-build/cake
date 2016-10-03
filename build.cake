@@ -96,23 +96,6 @@ Task("Build")
     }
 });
 
-Task("SonarQube")
-	.IsDependentOn("Build")
-	.Does(() =>
-{
-	ChocolateyInstall("sonarqube-msbuild-runner");
-
-	SonarQube("./src/Cake.sln", new SonarQubeSettings
-	{
-       HostUrl = EnvironmentVariable("SONAR_HOST_URL"),
-       Login = EnvironmentVariable("SONAR_TOKEN"),
-       ProjectKey = EnvironmentVariable("APPVEYOR_PROJECT_SLUG"),
-       ProjectName = EnvironmentVariable("APPVEYOR_PROJECT_NAME"),
-       ProjectVersion = EnvironmentVariable("APPVEYOR_BUILD_NUMBER")
-    });	
-});
-	
-
 Task("Run-Unit-Tests")
     .IsDependentOn("Build")
     .Does(() =>
