@@ -73,7 +73,7 @@ namespace Cake.Common.Tools.NuGet.Pack
             {
                 throw new CakeException("Required setting Description not specified.");
             }
-            if (settings.Files == null || settings.Files.Count == 0)
+            if ((settings.Files == null || settings.Files.Count == 0) && (settings.Dependencies == null || settings.Dependencies.Count == 0))
             {
                 throw new CakeException("Required setting Files not specified.");
             }
