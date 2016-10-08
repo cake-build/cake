@@ -59,7 +59,7 @@ namespace Cake.Common.Solution
             var file = _fileSystem.GetFile(solutionPath);
             if (!file.Exists)
             {
-                const string format = "Solution file '{0}' do not exist.";
+                const string format = "Solution file '{0}' does not exist.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, solutionPath.FullPath);
                 throw new CakeException(message);
             }

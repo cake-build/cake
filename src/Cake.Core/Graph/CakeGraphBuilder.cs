@@ -22,7 +22,7 @@ namespace Cake.Core.Graph
                 {
                     if (!graph.Exist(dependency))
                     {
-                        const string format = "Task '{0}' is dependent on task '{1}' which do not exist.";
+                        const string format = "Task '{0}' is dependent on task '{1}' which does not exist.";
                         var message = string.Format(CultureInfo.InvariantCulture, format, task.Name, dependency);
                         throw new CakeException(message);
                     }

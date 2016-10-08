@@ -15,7 +15,7 @@ namespace Cake.Testing
     public static class ToolFixtureExtensions
     {
         /// <summary>
-        /// Ensures that the tool do not exist under the tool settings tool path.
+        /// Ensures that the tool does not exist under the tool settings tool path.
         /// </summary>
         /// <typeparam name="TToolSettings">The type of the tool settings.</typeparam>
         /// <typeparam name="TFixtureResult">The type of the fixture result.</typeparam>

@@ -99,7 +99,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("SignTool SIGN: The assembly '/Working/a.dll' do not exist.", result?.Message);
+                Assert.Equal("SignTool SIGN: The assembly '/Working/a.dll' does not exist.", result?.Message);
             }
 
             [Fact]
@@ -177,7 +177,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("SignTool SIGN: The certificate '/Working/cert.pfx' do not exist.", result?.Message);
+                Assert.Equal("SignTool SIGN: The certificate '/Working/cert.pfx' does not exist.", result?.Message);
             }
 
             [Fact]

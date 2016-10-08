@@ -15,11 +15,11 @@ namespace Cake.Testing
     public static class FakeFileSystemExtensions
     {
         /// <summary>
-        /// Ensures that the specified file do not exist.
+        /// Ensures that the specified file does not exist.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="path">The path.</param>
-        public static void EnsureFileDoNotExist(this FakeFileSystem fileSystem, FilePath path)
+        public static void EnsureFileDoesNotExist(this FakeFileSystem fileSystem, FilePath path)
         {
             if (fileSystem == null)
             {
