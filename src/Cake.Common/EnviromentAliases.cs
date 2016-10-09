@@ -16,7 +16,7 @@ namespace Cake.Common
     public static class EnvironmentAliases
     {
         /// <summary>
-        /// Retrieves the value of the environment variable or <c>null</c> if the environment variable do not exist.
+        /// Retrieves the value of the environment variable or <c>null</c> if the environment variable does not exist.
         /// </summary>
         /// <example>
         /// <code>
@@ -25,7 +25,7 @@ namespace Cake.Common
         /// </example>
         /// <param name="context">The context.</param>
         /// <param name="variable">The environment variable.</param>
-        /// <returns>The environment variable or <c>null</c> if the environment variable do not exist.</returns>
+        /// <returns>The environment variable or <c>null</c> if the environment variable does not exist.</returns>
         [CakeMethodAlias]
         [CakeAliasCategory("Environment Variables")]
         public static string EnvironmentVariable(this ICakeContext context, string variable)

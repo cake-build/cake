@@ -218,7 +218,7 @@ namespace Cake.Testing
         {
             if (!file.Exists)
             {
-                throw new FileNotFoundException("File do not exist.");
+                throw new FileNotFoundException("File does not exist.");
             }
 
             // Already exists?
@@ -237,7 +237,7 @@ namespace Cake.Testing
             var directory = FindDirectory(destination.GetDirectory());
             if (directory == null || !directory.Exists)
             {
-                throw new DirectoryNotFoundException("The destination path {0} do not exist.");
+                throw new DirectoryNotFoundException("The destination path {0} does not exist.");
             }
 
             // Make sure the file exist.

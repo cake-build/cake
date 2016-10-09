@@ -51,7 +51,7 @@ namespace Cake.Common.IO
             // Make sure the target directory exist.
             if (!context.FileSystem.Exist(targetDirectoryPath))
             {
-                const string format = "The directory '{0}' do not exist.";
+                const string format = "The directory '{0}' does not exist.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, targetDirectoryPath.FullPath);
                 throw new DirectoryNotFoundException(message);
             }
@@ -98,7 +98,7 @@ namespace Cake.Common.IO
             // Make sure the target directory exist.
             if (!context.FileSystem.Exist(absoluteTargetDirectoryPath))
             {
-                const string format = "The directory '{0}' do not exist.";
+                const string format = "The directory '{0}' does not exist.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, absoluteTargetDirectoryPath.FullPath);
                 throw new DirectoryNotFoundException(message);
             }
@@ -117,7 +117,7 @@ namespace Cake.Common.IO
             // Get the file.
             if (!context.FileSystem.Exist(absoluteFilePath))
             {
-                const string format = "The file '{0}' do not exist.";
+                const string format = "The file '{0}' does not exist.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, absoluteFilePath.FullPath);
                 throw new FileNotFoundException(message, absoluteFilePath.FullPath);
             }

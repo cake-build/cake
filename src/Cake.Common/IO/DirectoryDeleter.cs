@@ -33,7 +33,7 @@ namespace Cake.Common.IO
             var directory = context.FileSystem.GetDirectory(path);
             if (!directory.Exists)
             {
-                const string format = "The directory '{0}' do not exist.";
+                const string format = "The directory '{0}' does not exist.";
                 throw new IOException(string.Format(CultureInfo.InvariantCulture, format, path.FullPath));
             }
 
