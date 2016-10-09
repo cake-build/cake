@@ -68,7 +68,7 @@ namespace Cake.Common.IO
             var file = context.FileSystem.GetFile(filePath);
             if (!file.Exists)
             {
-                const string format = "The file '{0}' do not exist.";
+                const string format = "The file '{0}' does not exist.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, filePath.FullPath);
                 throw new FileNotFoundException(message, filePath.FullPath);
             }

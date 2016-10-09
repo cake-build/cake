@@ -87,7 +87,7 @@ namespace Cake.Common.Tools.SignTool
         {
             if (!_fileSystem.Exist(assemblyPath))
             {
-                const string format = "{0}: The assembly '{1}' do not exist.";
+                const string format = "{0}: The assembly '{1}' does not exist.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName(), assemblyPath.FullPath);
                 throw new CakeException(message);
             }
@@ -145,7 +145,7 @@ namespace Cake.Common.Tools.SignTool
 
                 if (!_fileSystem.Exist(settings.CertPath))
                 {
-                    const string format = "{0}: The certificate '{1}' do not exist.";
+                    const string format = "{0}: The certificate '{1}' does not exist.";
                     var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName(), settings.CertPath.FullPath);
                     throw new CakeException(message);
                 }

@@ -59,7 +59,7 @@ namespace Cake.Common.Solution.Project
             var file = _fileSystem.GetFile(projectPath);
             if (!file.Exists)
             {
-                const string format = "Project file '{0}' do not exist.";
+                const string format = "Project file '{0}' does not exist.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, projectPath.FullPath);
                 throw new CakeException(message);
             }

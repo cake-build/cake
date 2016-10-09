@@ -638,7 +638,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 Assert.IsType<IOException>(result);
-                Assert.Equal("The directory '/Temp/DoNotExist' do not exist.", result?.Message);
+                Assert.Equal("The directory '/Temp/DoNotExist' does not exist.", result?.Message);
             }
 
             [Fact]
@@ -751,7 +751,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<IOException>(result);
-                    Assert.Equal("The directory '/Temp/DoNotExist' do not exist.", result?.Message);
+                    Assert.Equal("The directory '/Temp/DoNotExist' does not exist.", result?.Message);
                 }
 
                 [Fact]
@@ -875,7 +875,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<IOException>(result);
-                    Assert.Equal("The directory '/Temp/DoNotExist' do not exist.", result?.Message);
+                    Assert.Equal("The directory '/Temp/DoNotExist' does not exist.", result?.Message);
                 }
 
                 [Fact]
