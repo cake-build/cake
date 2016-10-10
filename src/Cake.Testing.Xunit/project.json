@@ -1,5 +1,5 @@
 ﻿{
-  "version": "0.16.1-*",
+  "version": "0.16.2-*",
   "configurations": {
     "Release": {
       "buildOptions": {
@@ -8,6 +8,7 @@
     }
   },
   "buildOptions": {
+    "platform": "AnyCpu",
     "compile": {
       "includeFiles": [
         "../SolutionInfo.cs"
