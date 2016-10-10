@@ -1,5 +1,5 @@
 ﻿{
-  "version": "0.16.1-*",
+  "version": "0.16.2-*",
   "description": "Provides aliases (extension methods on Cake context) that support CI, build, unit tests, zip, signing, etc. for Cake.",
   "copyright": "Copyright (c) .NET Foundation and contributors",
   "authors": [
@@ -31,6 +31,7 @@
   },
   "buildOptions": {
     "xmlDoc": true,
+    "platform": "AnyCpu",
     "additionalArguments": [
       "/ruleset:../Cake.ruleset",
       "/additionalfile:../stylecop.json"
