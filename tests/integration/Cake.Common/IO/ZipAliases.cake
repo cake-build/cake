@@ -7,7 +7,6 @@ Task("Cake.Common.IO.ZipAliases.Unzip")
     // Given
     var sourcePath = Paths.Resources.Combine("./Cake.Common/IO");
     var sourceFile = sourcePath.CombineWithFilePath("./testfile.zip");
-    var expectFile = sourcePath.CombineWithFilePath("./testfile.txt");
 
     var targetPath = Paths.Temp.Combine("./Cake.Common.IO.ZipAliases/Unzip");
     var targetFile = targetPath.CombineWithFilePath("testfile.txt");
@@ -25,7 +24,6 @@ Task("Cake.Common.IO.ZipAliases.Zip.FilePaths")
 {
     // Given
     var sourcePath = Paths.Resources.Combine("./Cake.Common/IO");
-    var sourceFile = sourcePath.CombineWithFilePath("./testfile.txt");
 
     var targetPath = Paths.Temp.Combine("./Cake.Common.IO.ZipAliases/FilePaths");
     var targetFile = targetPath.CombineWithFilePath("testfile.zip");
@@ -44,7 +42,6 @@ Task("Cake.Common.IO.ZipAliases.Zip.Strings")
 {
     // Given
     var sourcePath = Paths.Resources.Combine("./Cake.Common/IO");
-    var sourceFile = sourcePath.CombineWithFilePath("./testfile.txt");
 
     var targetPath = Paths.Temp.Combine("./Cake.Common.IO.ZipAliases/Strings");
     var targetFile = targetPath.CombineWithFilePath("testfile.zip");
