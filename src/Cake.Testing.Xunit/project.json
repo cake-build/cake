@@ -8,6 +8,7 @@
     }
   },
   "buildOptions": {
+    "platform": "AnyCpu",
     "compile": {
       "includeFiles": [
         "../SolutionInfo.cs"
