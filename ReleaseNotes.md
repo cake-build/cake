@@ -1,3 +1,7 @@
+### New on 0.16.2 (Released 2016/10/11)
+
+* Fixed CakeExecuteScript getting access denied errors on mono/m
+
 ### New on 0.16.1 (Released 2016/09/25)
 
 * Issue with debugging in v0.16.0 (.NET Core)
