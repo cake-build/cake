@@ -1,8 +1,9 @@
 ﻿{
-  "version": "0.16.1-*",
+  "version": "0.16.2-*",
   "buildOptions": {
     "emitEntryPoint": true,
     "xmlDoc": true,
+    "platform": "AnyCpu",
     "additionalArguments": [
       "/ruleset:../Cake.ruleset",
       "/additionalfile:../stylecop.json"
