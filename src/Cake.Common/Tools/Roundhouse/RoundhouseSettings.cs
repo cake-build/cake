@@ -199,7 +199,7 @@ namespace Cake.Common.Tools.Roundhouse
         /// Gets or sets the schema name to use instead of [RoundhousE].
         /// </summary>
         /// <value>
-        /// The schema where RH stores it's tables.
+        /// The schema where RH stores its tables.
         /// </value>
         public string SchemaName { get; set; }
 

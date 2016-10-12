@@ -37,7 +37,7 @@ namespace Cake.Core.Reflection
 
             if (path.Segments.Length == 1 && !_fileSystem.Exist(path))
             {
-                // Not a valid path. Try loading it by it's name.
+                // Not a valid path. Try loading it by its name.
                 return Assembly.Load(new AssemblyName(path.FullPath));
             }
 
