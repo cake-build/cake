@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Core;
+using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotCover
 {
@@ -60,6 +62,53 @@ namespace Cake.Common.Tools.DotCover
             }
             settings.AttributeFilters.Add(attributeFilter);
             return settings;
+        }
+
+        internal static ProcessArgumentBuilder ToArguments(this DotCoverSettings settings, ICakeEnvironment environment)
+        {
+            var builder = new ProcessArgumentBuilder();
+
+            // TargetWorkingDir
+            if (settings.TargetWorkingDir != null)
+            {
+                builder.AppendSwitch("/TargetWorkingDir", "=", settings.TargetWorkingDir.MakeAbsolute(environment).FullPath.Quote());
+            }
+
+            // Scope
+            if (settings.Scope.Count > 0)
+            {
+                var scope = string.Join(";", settings.Scope);
+                builder.AppendSwitch("/Scope", "=", scope.Quote());
+            }
+
+            // Filters
+            if (settings.Filters.Count > 0)
+            {
+                var filters = string.Join(";", settings.Filters);
+                builder.AppendSwitch("/Filters", "=", filters.Quote());
+            }
+
+            // Filters
+            if (settings.AttributeFilters.Count > 0)
+            {
+                var attributeFilters = string.Join(";", settings.AttributeFilters);
+                builder.AppendSwitch("/AttributeFilters", "=", attributeFilters.Quote());
+            }
+
+            // DisableDefaultFilters
+            if (settings.DisableDefaultFilters)
+            {
+                builder.Append("/DisableDefaultFilters");
+            }
+
+            // LogFile
+            if (settings.LogFile != null)
+            {
+                var logFilePath = settings.LogFile.MakeAbsolute(environment);
+                builder.AppendSwitch("/LogFile", "=", logFilePath.FullPath.Quote());
+            }
+
+            return builder;
         }
     }
 }
