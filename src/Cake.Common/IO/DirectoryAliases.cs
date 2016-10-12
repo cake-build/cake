@@ -131,7 +131,7 @@ namespace Cake.Common.IO
 
         /// <summary>
         /// Cleans the directories matching the specified pattern.
-        /// Cleaning the directory will remove all it's content but not the directory itself.
+        /// Cleaning the directory will remove all its content but not the directory itself.
         /// </summary>
         /// <example>
         /// <code>
@@ -155,7 +155,7 @@ namespace Cake.Common.IO
 
         /// <summary>
         /// Cleans the directories matching the specified pattern.
-        /// Cleaning the directory will remove all it's content but not the directory itself.
+        /// Cleaning the directory will remove all its content but not the directory itself.
         /// </summary>
         /// <example>
         /// <code>
@@ -184,7 +184,7 @@ namespace Cake.Common.IO
 
         /// <summary>
         /// Cleans the specified directories.
-        /// Cleaning a directory will remove all it's content but not the directory itself.
+        /// Cleaning a directory will remove all its content but not the directory itself.
         /// </summary>
         /// <example>
         /// <code>
@@ -210,7 +210,7 @@ namespace Cake.Common.IO
 
         /// <summary>
         /// Cleans the specified directories.
-        /// Cleaning a directory will remove all it's content but not the directory itself.
+        /// Cleaning a directory will remove all its content but not the directory itself.
         /// </summary>
         /// <example>
         /// <code>
