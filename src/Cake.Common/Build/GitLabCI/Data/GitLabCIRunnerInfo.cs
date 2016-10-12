@@ -43,6 +43,17 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// The defined runner tags.
         /// </value>
-        public string[] Tags => GetEnvironmentString("CI_RUNNER_TAGS").Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+        public string[] Tags
+        {
+            get
+            {
+                var tags = GetEnvironmentString("CI_RUNNER_TAGS").Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < tags.Length; i++)
+                {
+                    tags[i] = tags[i].Trim();
+                }
+                return tags;
+            }
+        }
     }
 }

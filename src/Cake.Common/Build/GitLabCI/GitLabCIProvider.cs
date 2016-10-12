@@ -42,6 +42,6 @@ namespace Cake.Common.Build.GitLabCI
         /// <value>
         /// <c>true</c> if the current build is running on GitLab CI; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnGitLabCI => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("GITLAB_CI"));
+        public bool IsRunningOnGitLabCI => _environment.GetEnvironmentVariable("CI_SERVER")?.Equals("yes", StringComparison.OrdinalIgnoreCase) ?? false;
     }
 }
