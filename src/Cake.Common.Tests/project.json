@@ -1,6 +1,7 @@
 ﻿{
   "version": "0.17.0-*",
   "buildOptions": {
+    "platform": "AnyCpu",
     "additionalArguments": [
       "/ruleset:../Test.ruleset",
       "/additionalfile:../stylecop.json"

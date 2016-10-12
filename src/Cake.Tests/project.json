@@ -27,6 +27,7 @@
     }
   },
   "buildOptions": {
+    "platform": "AnyCpu",
     "embed": [
       "Data/MonoScriptProcessor/ArrayInitializer/*",
       "Data/MonoScriptProcessor/Blocks/*",

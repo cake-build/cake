@@ -204,7 +204,21 @@ namespace Cake.Common.Tests.Unit.Tools.VSTest
             var result = fixture.Run();
 
             // Then
-            Assert.Equal("\"/Working/Test1.dll\" /Settings:Local.RunSettings", result.Args);
+            Assert.Equal("\"/Working/Test1.dll\" /Settings:\"/Working/Local.RunSettings\"", result.Args);
+        }
+
+        [Fact]
+        public void Should_Quote_Absolute_SettingsFile_Path()
+        {
+            // Given
+            var fixture = new VSTestRunnerFixture();
+            fixture.Settings.SettingsFile = new FilePath("Filename with spaces.RunSettings");
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("\"/Working/Test1.dll\" /Settings:\"/Working/Filename with spaces.RunSettings\"", result.Args);
         }
 
         [Fact]

@@ -64,12 +64,12 @@ namespace Cake.Common.Tools.VSTest
             // Add the assembly to build.
             foreach (var assemblyPath in assemblyPaths)
             {
-                builder.Append(assemblyPath.MakeAbsolute(_environment).FullPath.Quote());
+                builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
             }
 
             if (settings.SettingsFile != null)
             {
-                builder.Append(string.Format(CultureInfo.InvariantCulture, "/Settings:{0}", settings.SettingsFile));
+                builder.AppendSwitchQuoted("/Settings", ":", settings.SettingsFile.MakeAbsolute(_environment).FullPath);
             }
 
             if (settings.InIsolation)
@@ -79,12 +79,12 @@ namespace Cake.Common.Tools.VSTest
 
             if (settings.PlatformArchitecture != VSTestPlatform.Default)
             {
-                builder.Append(string.Format(CultureInfo.InvariantCulture, "/Platform:{0}", settings.PlatformArchitecture));
+                builder.AppendSwitch("/Platform", ":", settings.PlatformArchitecture.ToString());
             }
 
             if (settings.FrameworkVersion != VSTestFrameworkVersion.Default)
             {
-                builder.Append(string.Format(CultureInfo.InvariantCulture, "/Framework:{0}", settings.FrameworkVersion.ToString().Replace("NET", "Framework")));
+                builder.AppendSwitch("/Framework", ":", settings.FrameworkVersion.ToString().Replace("NET", "Framework"));
             }
 
             if (!string.IsNullOrEmpty(settings.Logger))

@@ -24,6 +24,7 @@
     }
   },
   "buildOptions": {
+    "platform": "AnyCpu",
     "embed": [
       "Unit/Scripting/CodeGen/Expected/Methods/*",
       "Unit/Scripting/CodeGen/Expected/Properties/*"

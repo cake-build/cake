@@ -31,6 +31,7 @@
   },
   "buildOptions": {
     "xmlDoc": true,
+    "platform": "AnyCpu",
     "additionalArguments": [
       "/ruleset:../Cake.ruleset",
       "/additionalfile:../stylecop.json"
