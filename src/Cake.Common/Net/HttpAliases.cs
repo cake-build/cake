@@ -197,7 +197,7 @@ namespace Cake.Common.Net
             // We track the last posted value since the event seems to fire many times for the same value.
             var percentComplete = 0;
 
-            using (var http = new HttpClient())
+            using (var http = new HttpClient(new HttpClientHandler { UseDefaultCredentials = settings.UseDefaultCredentials }))
             {
                 if (!string.IsNullOrWhiteSpace(settings.Username) && !string.IsNullOrWhiteSpace(settings.Password))
                 {
