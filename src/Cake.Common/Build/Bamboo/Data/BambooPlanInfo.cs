@@ -23,7 +23,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// Gets the Bamboo short Plan Name
         /// </summary>
         /// <value>
-        ///   The Bamboo Plan Name in it's short form.
+        ///   The Bamboo Plan Name in its short form.
         /// </value>
         public string ShortPlanName => GetEnvironmentString("bamboo_shortPlanName");
 
@@ -39,7 +39,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// Gets the Bamboo short Plan Key.
         /// </summary>
         /// <value>
-        ///   The Bamboo Plan Key in it's hort form.
+        ///   The Bamboo Plan Key in its short form.
         /// </value>
         public string ShortPlanKey => GetEnvironmentString("bamboo_shortPlanKey");
 
@@ -47,7 +47,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// Gets the Bamboo short job key.
         /// </summary>
         /// <value>
-        ///   The Bamboo job key in it's short form.
+        ///   The Bamboo job key in its short form.
         /// </value>
         public string ShortJobKey => GetEnvironmentString("bamboo_shortJobKey");
 
@@ -55,7 +55,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// Gets the Bamboo short Job Name.
         /// </summary>
         /// <value>
-        ///   The Bamboo Job Name in it's short form.
+        ///   The Bamboo Job Name in its short form.
         /// </value>
         public string ShortJobName => GetEnvironmentString("bamboo_shortJobName");
 

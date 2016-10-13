@@ -108,38 +108,8 @@ namespace Cake.Common.Tools.DotCover.Cover
             outputPath = outputPath.MakeAbsolute(_environment);
             builder.AppendSwitch("/Output", "=", outputPath.FullPath.Quote());
 
-            // TargetWorkingDir
-            if (settings.TargetWorkingDir != null)
-            {
-                builder.AppendSwitch("/TargetWorkingDir", "=", settings.TargetWorkingDir.MakeAbsolute(_environment).FullPath.Quote());
-            }
-
-            // Scope
-            if (settings.Scope.Count > 0)
-            {
-                var scope = string.Join(";", settings.Scope);
-                builder.AppendSwitch("/Scope", "=", scope.Quote());
-            }
-
-            // Filters
-            if (settings.Filters.Count > 0)
-            {
-                var filters = string.Join(";", settings.Filters);
-                builder.AppendSwitch("/Filters", "=", filters.Quote());
-            }
-
-            // Filters
-            if (settings.AttributeFilters.Count > 0)
-            {
-                var attributeFilters = string.Join(";", settings.AttributeFilters);
-                builder.AppendSwitch("/AttributeFilters", "=", attributeFilters.Quote());
-            }
-
-            // DisableDefaultFilters
-            if (settings.DisableDefaultFilters)
-            {
-                builder.Append("/DisableDefaultFilters");
-            }
+            // Set common Coverage settings
+            settings.ToArguments(_environment).CopyTo(builder);
 
             return builder;
         }
