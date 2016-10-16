@@ -27,6 +27,20 @@ namespace Cake.Common.Tests.Unit.Tools
             }
 
             [Fact]
+            public void Should_Add_Targets_To_Configuration()
+            {
+                // Given
+                var settings = new DotNetBuildSettings(new FilePath("./Test.sln"));
+
+                // When
+                settings.WithTarget("Target", "Target2");
+
+                // Then
+                Assert.True(settings.Targets.Contains("Target"));
+                Assert.True(settings.Targets.Contains("Target2"));
+            }
+
+            [Fact]
             public void Should_Return_The_Same_Configuration()
             {
                 // Given
