@@ -33,7 +33,7 @@ namespace Cake.Common.Tests.Unit.Tools
                 var settings = new DotNetBuildSettings(new FilePath("./Test.sln"));
 
                 // When
-                settings.WithTarget("Target", "Target2");
+                settings.WithTargets(new[] { "Target", "Target2" });
 
                 // Then
                 Assert.True(settings.Targets.Contains("Target"));
