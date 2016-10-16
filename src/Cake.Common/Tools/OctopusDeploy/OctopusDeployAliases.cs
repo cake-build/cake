@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cake.Common.Tools.MSBuild;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -120,6 +121,40 @@ namespace Cake.Common.Tools.OctopusDeploy
 
             var pusher = new OctopusDeployPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             pusher.PushPackage(server, apiKey, packagePaths.ToArray(), settings);
+        }
+
+        /// <summary>
+        /// Packs the specified folder into an Octopus Deploy package.
+        /// </summary>
+        /// <param name="context">The cake context</param>
+        /// <param name="id">The package ID.</param>
+        [CakeMethodAlias]
+        public static void OctoPack(this ICakeContext context, string id)
+        {
+            OctoPack(context, id, null);
+        }
+
+        /// <summary>
+        /// Packs the specified folder into an Octopus Deploy package.
+        /// </summary>
+        /// <param name="context">The cake context</param>
+        /// <param name="id">The package ID.</param>
+        /// <param name="settings">The settings</param>
+        [CakeMethodAlias]
+        public static void OctoPack(this ICakeContext context, string id, OctopusPackSettings settings = null)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            var packer = new OctopusDeployPacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            packer.Pack(id, settings);
         }
     }
 }
