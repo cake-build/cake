@@ -36,7 +36,7 @@ namespace Cake.Common.Tools
         /// <param name="settings">The settings.</param>
         /// <param name="targets">The .NET build targets.</param>
         /// <returns>The same <see cref="DotNetBuildSettings"/> instance so that multiple calls can be chained.</returns>
-        public static DotNetBuildSettings WithTarget(this DotNetBuildSettings settings, params string[] targets)
+        public static DotNetBuildSettings WithTargets(this DotNetBuildSettings settings, IEnumerable<string> targets)
         {
             if (settings == null)
             {
