@@ -197,7 +197,7 @@ namespace Cake.Common.Net
             // We track the last posted value since the event seems to fire many times for the same value.
             var percentComplete = 0;
 
-            using (var http = new HttpClient())
+            using (var http = GetHttpClient(context))
             {
                 if (!string.IsNullOrWhiteSpace(settings.Username) && !string.IsNullOrWhiteSpace(settings.Password))
                 {
@@ -252,7 +252,7 @@ namespace Cake.Common.Net
             }
 
             context.Log.Verbose("Uploading file: {0}", address);
-            using (var client = new HttpClient())
+            using (var client = GetHttpClient(context))
             {
                 client.UploadFileAsync(address, filePath.FullPath).Wait();
             }
@@ -309,7 +309,7 @@ namespace Cake.Common.Net
             }
 
             context.Log.Verbose("Uploading file: {0}", address);
-            using (var client = new HttpClient())
+            using (var client = GetHttpClient(context))
             {
                 client.UploadFileAsync(address, data, fileName).Wait();
             }
@@ -334,6 +334,19 @@ namespace Cake.Common.Net
         public static void UploadFile(this ICakeContext context, string address, byte[] data, string fileName)
         {
             UploadFile(context, new Uri(address), data, fileName);
+        }
+
+        /// <summary>
+        /// Gets an <see cref="HttpClient"/> pre-populated with the correct default headers such as User-Agent.
+        /// The returned client should be disposed of by the caller.
+        /// </summary>
+        /// <param name="context">The current Cake context.</param>
+        /// <returns>A <see cref="HttpClient"/> instance.</returns>
+        private static HttpClient GetHttpClient(ICakeContext context)
+        {
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Cake", context.Environment.Runtime.CakeVersion.ToString()));
+            return client;
         }
     }
 }
