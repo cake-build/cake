@@ -46,5 +46,25 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// Gets or sets a value indicating whether the Ignore Existing flag.
         /// </summary>
         public bool IgnoreExisting { get; set; }
+
+        /// <summary>
+        /// Gets or sets the octopus channel for the new release.
+        /// </summary>
+        public string Channel { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether octopus channel rules should be ignored.
+        /// </summary>
+        public bool IgnoreChannelRules { get; set; }
+
+        /// <summary>
+        /// Gets or sets the octopus deployment environment for the new release.
+        /// </summary>
+        public string DeployTo { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether progress of the deployment will be shown.
+        /// </summary>
+        public bool DeploymentProgress { get; set; }
     }
 }
