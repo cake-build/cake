@@ -4,6 +4,9 @@
 
 using Cake.Common.Build.GoCD;
 using Cake.Common.Tests.Fixtures.Build;
+using Cake.Core;
+using Cake.Core.Diagnostics;
+using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build.GoCD
@@ -16,10 +19,22 @@ namespace Cake.Common.Tests.Unit.Build.GoCD
             public void Should_Throw_If_Environment_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => new GoCDProvider(null));
+                var cakeLog = Substitute.For<ICakeLog>();
+                var result = Record.Exception(() => new GoCDProvider(null, cakeLog));
 
                 // Then
                 Assert.IsArgumentNullException(result, "environment");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Log_Is_Null()
+            {
+                // Given, When
+                var environment = Substitute.For<ICakeEnvironment>();
+                var result = Record.Exception(() => new GoCDProvider(environment, null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "cakeLog");
             }
         }
 
@@ -69,6 +84,52 @@ namespace Cake.Common.Tests.Unit.Build.GoCD
 
                 // Then
                 Assert.NotNull(result);
+            }
+        }
+
+        public sealed class TheGetHistoryMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Username_Is_Null()
+            {
+                // Given
+                var fixture = new GoCDFixture();
+                var appVeyor = fixture.CreateGoCDService();
+
+                // When
+                var result = Record.Exception(() => appVeyor.GetHistory(null, "password"));
+
+                // Then
+                Assert.IsArgumentNullException(result, "username");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Password_Is_Null()
+            {
+                // Given
+                var fixture = new GoCDFixture();
+                var appVeyor = fixture.CreateGoCDService();
+
+                // When
+                var result = Record.Exception(() => appVeyor.GetHistory("username", null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "password");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Not_Running_On_GoCD()
+            {
+                // Given
+                var fixture = new GoCDFixture();
+                var appVeyor = fixture.CreateGoCDService();
+
+                // When
+                var result = Record.Exception(() => appVeyor.GetHistory("username", "password"));
+
+                // Then
+                Assert.IsExceptionWithMessage<CakeException>(result,
+                    "The current build is not running on Go.CD.");
             }
         }
     }
