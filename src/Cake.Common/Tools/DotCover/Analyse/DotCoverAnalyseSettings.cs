@@ -7,7 +7,7 @@ namespace Cake.Common.Tools.DotCover.Analyse
     /// <summary>
     /// Contains settings used by <see cref="DotCoverAnalyser" />.
     /// </summary>
-    public sealed class DotCoverAnalyseSettings : DotCoverSettings
+    public sealed class DotCoverAnalyseSettings : DotCoverCoverageSettings
     {
         /// <summary>
         /// Gets or sets the type of the report.

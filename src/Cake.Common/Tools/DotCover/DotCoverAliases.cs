@@ -5,6 +5,7 @@
 using System;
 using Cake.Common.Tools.DotCover.Analyse;
 using Cake.Common.Tools.DotCover.Cover;
+using Cake.Common.Tools.DotCover.Report;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -122,6 +123,51 @@ namespace Cake.Common.Tools.DotCover
 
             // Run DotCover cover.
             coverer.Cover(context, action, outputFile, settings);
+        }
+
+        /// <summary>
+        /// Runs <see href="https://www.jetbrains.com/dotcover/help/dotCover__Console_Runner_Commands.html#report">DotCover Report</see>
+        /// for the specified action and settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="sourceFile">The DotCover coverage snapshot file name.</param>
+        /// <param name="outputFile">The DotCover output file.</param>
+        /// <param name="settings">The settings</param>
+        /// <example>
+        /// <code>
+        /// DotCoverReport(new FilePath("./result.dcvr"),
+        ///   new FilePath("./result.html"),
+        ///   new DotCoverReportSettings {
+        ///     ReportType = DotCoverReportType.HTML
+        ///   });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Report")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotCover.Report")]
+        public static void DotCoverReport(
+            this ICakeContext context,
+            FilePath sourceFile,
+            FilePath outputFile,
+            DotCoverReportSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            if (settings == null)
+            {
+                settings = new DotCoverReportSettings();
+            }
+
+            // Create the DotCover reporter.
+            var reporter = new DotCoverReporter(
+                context.FileSystem, context.Environment,
+                context.ProcessRunner, context.Tools);
+
+            // Run DotCover report.
+            reporter.Report(sourceFile, outputFile, settings);
         }
     }
 }

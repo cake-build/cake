@@ -14,8 +14,10 @@ namespace Cake.Common.Tools.DotCover
     /// </summary>
     /// <typeparam name="TSettings">The settings type</typeparam>
     public abstract class DotCoverTool<TSettings> : Tool<TSettings>
-        where TSettings : ToolSettings
+        where TSettings : DotCoverSettings
     {
+        private readonly ICakeEnvironment _environment;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DotCoverTool{TSettings}" /> class.
         /// </summary>
@@ -29,6 +31,7 @@ namespace Cake.Common.Tools.DotCover
             IProcessRunner processRunner,
             IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
         {
+            _environment = environment;
         }
 
         /// <summary>
@@ -47,6 +50,25 @@ namespace Cake.Common.Tools.DotCover
         protected override IEnumerable<string> GetToolExecutableNames()
         {
             return new[] { "dotCover.exe" };
+        }
+
+        /// <summary>
+        /// Get arguments from global settings
+        /// </summary>
+        /// <param name="settings">The settings</param>
+        /// <returns>The process arguments</returns>
+        protected ProcessArgumentBuilder GetArguments(DotCoverSettings settings)
+        {
+            var builder = new ProcessArgumentBuilder();
+
+            // LogFile
+            if (settings.LogFile != null)
+            {
+                var logFilePath = settings.LogFile.MakeAbsolute(_environment);
+                builder.AppendSwitch("/LogFile", "=", logFilePath.FullPath.Quote());
+            }
+
+            return builder;
         }
     }
 }
