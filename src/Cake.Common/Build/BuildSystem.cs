@@ -8,6 +8,8 @@ using Cake.Common.Build.Bamboo;
 using Cake.Common.Build.BitbucketPipelines;
 using Cake.Common.Build.Bitrise;
 using Cake.Common.Build.ContinuaCI;
+using Cake.Common.Build.GitLabCI;
+using Cake.Common.Build.GoCD;
 using Cake.Common.Build.Jenkins;
 using Cake.Common.Build.MyGet;
 using Cake.Common.Build.TeamCity;
@@ -33,7 +35,20 @@ namespace Cake.Common.Build
         /// <param name="bitriseProvider">The Bitrise Provider.</param>
         /// <param name="travisCIProvider">The Travis CI provider.</param>
         /// <param name="bitbucketPipelinesProvider">The Bitbucket Pipelines provider.</param>
-        public BuildSystem(IAppVeyorProvider appVeyorProvider, ITeamCityProvider teamCityProvider, IMyGetProvider myGetProvider, IBambooProvider bambooProvider, IContinuaCIProvider continuaCIProvider, IJenkinsProvider jenkinsProvider, IBitriseProvider bitriseProvider, ITravisCIProvider travisCIProvider, IBitbucketPipelinesProvider bitbucketPipelinesProvider)
+        /// <param name="goCDProvider">The Go.CD provider.</param>
+        /// <param name="gitlabCIProvider">The GitLab CI provider.</param>
+        public BuildSystem(
+            IAppVeyorProvider appVeyorProvider,
+            ITeamCityProvider teamCityProvider,
+            IMyGetProvider myGetProvider,
+            IBambooProvider bambooProvider,
+            IContinuaCIProvider continuaCIProvider,
+            IJenkinsProvider jenkinsProvider,
+            IBitriseProvider bitriseProvider,
+            ITravisCIProvider travisCIProvider,
+            IBitbucketPipelinesProvider bitbucketPipelinesProvider,
+            IGoCDProvider goCDProvider,
+            IGitLabCIProvider gitlabCIProvider)
         {
             if (appVeyorProvider == null)
             {
@@ -71,6 +86,14 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException(nameof(bitbucketPipelinesProvider));
             }
+            if (goCDProvider == null)
+            {
+                throw new ArgumentNullException(nameof(goCDProvider));
+            }
+            if (gitlabCIProvider == null)
+            {
+                throw new ArgumentNullException(nameof(gitlabCIProvider));
+            }
 
             AppVeyor = appVeyorProvider;
             TeamCity = teamCityProvider;
@@ -81,6 +104,8 @@ namespace Cake.Common.Build
             Bitrise = bitriseProvider;
             TravisCI = travisCIProvider;
             BitbucketPipelines = bitbucketPipelinesProvider;
+            GoCD = goCDProvider;
+            GitLabCI = gitlabCIProvider;
         }
 
         /// <summary>
@@ -369,6 +394,68 @@ namespace Cake.Common.Build
         public IBitbucketPipelinesProvider BitbucketPipelines { get; }
 
         /// <summary>
+        /// Gets a value indicating whether the current build is running on Go.CD.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnGoCD)
+        /// {
+        ///     // Get the build counter.
+        ///     var counter = BuildSystem.GoCD.Environment.Pipeline.Counter;
+        /// }
+        /// </code>
+        /// </example>
+        /// <value>
+        /// <c>true</c> if the build currently is running on Go.CD; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsRunningOnGoCD => GoCD.IsRunningOnGoCD;
+
+        /// <summary>
+        /// Gets the Go.CD Provider.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnGoCD)
+        /// {
+        ///     // Get the pipeline counter.
+        ///     var counter = BuildSystem.GoCD.Environment.Environment.Pipeline.Counter;
+        /// }
+        /// </code>
+        /// </example>
+        public IGoCDProvider GoCD { get; }
+
+        /// <summary>
+        /// Gets the GitLab CI Provider.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnGitLabCI)
+        /// {
+        ///     // Get the build commit hash.
+        ///     var commitHash = BuildSystem.GitLabCI.Environment.Build.Reference;
+        /// }
+        /// </code>
+        /// </example>
+        public IGitLabCIProvider GitLabCI { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is running on GitLab CI.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnGitLabCI)
+        /// {
+        ///     // Get the build commit hash.
+        ///     var commitHash = BuildSystem.GitLabCI.Environment.Build.Reference;
+        /// }
+        /// </code>
+        /// </example>
+        /// <value>
+        /// <c>true</c> if this instance is running on GitLab CI; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsRunningOnGitLabCI => GitLabCI.IsRunningOnGitLabCI;
+
+        /// <summary>
         /// Gets a value indicating whether the current build is local build.
         /// </summary>
         /// <example>
@@ -387,6 +474,6 @@ namespace Cake.Common.Build
         /// <value>
         ///   <c>true</c> if the current build is local build; otherwise, <c>false</c>.
         /// </value>
-        public bool IsLocalBuild => !(IsRunningOnAppVeyor || IsRunningOnTeamCity || IsRunningOnMyGet || IsRunningOnBamboo || IsRunningOnContinuaCI || IsRunningOnJenkins || IsRunningOnBitrise || IsRunningOnTravisCI || IsRunningOnBitbucketPipelines);
+        public bool IsLocalBuild => !(IsRunningOnAppVeyor || IsRunningOnTeamCity || IsRunningOnMyGet || IsRunningOnBamboo || IsRunningOnContinuaCI || IsRunningOnJenkins || IsRunningOnBitrise || IsRunningOnTravisCI || IsRunningOnBitbucketPipelines || IsRunningOnGoCD || IsRunningOnGitLabCI);
     }
 }
