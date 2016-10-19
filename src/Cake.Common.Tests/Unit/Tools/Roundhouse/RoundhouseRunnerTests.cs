@@ -216,6 +216,45 @@ namespace Cake.Common.Tests.Unit.Tools.Roundhouse
                              "\"--f=/db/scripts\" \"--vf=version.xml\" " +
                              "\"--vx=/Build/Version\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Execute_Process_With_All_Switches_Settings()
+            {
+                // Given
+                var fixture = new RoundhouseRunnerFixture();
+                fixture.Settings.CreateDatabaseCustomScript = "cust-create.sql";
+                fixture.Settings.DatabaseType = "roundhouse.databases.postgresql";
+                fixture.Settings.Environment = "STAGING";
+                fixture.Settings.OutputPath = "out_path";
+                fixture.Settings.RepositoryPath = "git@github.com:chucknorris/roundhouse.git";
+                fixture.Settings.SqlFilesDirectory = "/db/scripts";
+                fixture.Settings.VersionFile = "version.xml";
+                fixture.Settings.VersionXPath = "/Build/Version";
+                fixture.Settings.Baseline = true;
+                fixture.Settings.SearchAllSubdirectoriesInsteadOfTraverse = true;
+                fixture.Settings.DisableTokenReplacement = true;
+                fixture.Settings.RunAllAnyTimeScripts = true;
+                fixture.Settings.Debug = true;
+                fixture.Settings.DisableOutput = true;
+                fixture.Settings.DoNotCreateDatabase = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"--cds=cust-create.sql\" " +
+                             "\"--dt=roundhouse.databases.postgresql\" " +
+                             "\"--env=STAGING\" \"--o=out_path\" " +
+                             "\"--r=git@github.com:chucknorris/roundhouse.git\" " +
+                             "\"--f=/db/scripts\" \"--vf=version.xml\" " +
+                             "\"--vx=/Build/Version\"" +
+                             "\"--baseline\"" +
+                             "\"--searchallinsteadoftraverse\"" +
+                             "\"--disabletokens\"" +
+                             "\"--debug\"" +
+                             "\"--disableoutput\"" +
+                             "\"--donotcreatedatabase\"", result.Args);
+            }
         }
     }
 }

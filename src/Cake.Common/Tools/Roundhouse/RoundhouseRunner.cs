@@ -81,6 +81,13 @@ namespace Cake.Common.Tools.Roundhouse
             AppendFlag(builder, "dryrun", settings.DryRun);
             AppendFlag(builder, "restore", settings.Restore);
             AppendFlag(builder, "silent", settings.Silent);
+            AppendFlag(builder, "baseline", settings.Baseline);
+            AppendFlag(builder, "searchallinsteadoftraverse", settings.SearchAllSubdirectoriesInsteadOfTraverse);
+            AppendFlag(builder, "disabletokens", settings.DisableTokenReplacement);
+            AppendFlag(builder, "runallanytimescripts", settings.RunAllAnyTimeScripts);
+            AppendFlag(builder, "debug ", settings.Debug);
+            AppendFlag(builder, "disableoutput ", settings.DisableOutput);
+            AppendFlag(builder, "donotcreatedatabase", settings.DoNotCreateDatabase);
             AppendFlag(builder, "w", settings.WarnOnOneTimeScriptChanges);
             AppendFlag(builder, "t", settings.WithTransaction);
         }

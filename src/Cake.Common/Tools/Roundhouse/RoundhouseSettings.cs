@@ -298,5 +298,63 @@ namespace Cake.Common.Tools.Roundhouse
         /// This instructs RH to log what would have run, but not to actually run anything against the database. Use this option if you are trying to figure out what RH is going to do.
         /// </value>
         public bool DryRun { get; set; }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether to create a database if it does not exist.
+        /// </summary>
+        /// <value>
+        /// This instructs RH to not create a database if it does not exists. Defaults to <c>false</c>.
+        /// </value>
+        public bool DoNotCreateDatabase { get; set; }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether to disable output of backup, items ran, permissions dumps, etc.
+        /// </summary>
+        /// <value>
+        /// Disable output of backups, items ran, permissions dumps, etc. Log files are kept. Useful for example in CI environment. Defaults to <c>false</c>.
+        /// </value>
+        public bool DisableOutput { get; set; }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether to create an insert for its recording tables, but not run anything.
+        /// </summary>
+        /// <value>
+        /// This instructs RH to create an insert for its recording tables, but not to actually run anything against the database. Use this option if 
+        /// you already have scripts that have been run through other means. Defaults to <c>false</c>.
+        /// </value>
+        public bool Baseline { get; set; }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether to write debug messages.
+        /// </summary>
+        /// <value>
+        ///  This instructs RH to write out all messages. Defaults to <c>false</c>.
+        /// </value>
+        public bool Debug { get; set; }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether to execute any time scripts.
+        /// </summary>
+        /// <value>
+        /// This instructs RH to run any time scripts every time it is run. Defaults to <c>false</c>.
+        /// </value>
+        public bool RunAllAnyTimeScripts { get; set; }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether to perform token replacement.
+        /// </summary>
+        /// <value>
+        /// This instructs RH to not perform token replacement {{somename}}. Defaults to <c>false</c>.
+        /// </value>
+        public bool DisableTokenReplacement { get; set; }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether to search all subdirectories.
+        /// </summary>
+        /// <value>
+        /// Each Migration folder's subdirectories are traversed by default. This option pulls back scripts from the main directory 
+        /// and all subdirectories at once. Defaults to <c>false</c>.
+        /// </value>
+        public bool SearchAllSubdirectoriesInsteadOfTraverse { get; set; }
     }
 }
