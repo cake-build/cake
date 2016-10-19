@@ -44,7 +44,7 @@ namespace Cake.Common.Tools.Roundhouse
             }
 
             var runner = new RoundhouseRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            runner.Run(settings);
+            runner.Run(settings, settings.Drop);
         }
 
         /// <summary>
