@@ -15,10 +15,12 @@ namespace Cake.NuGet.Tests.Fixtures
     {
         public FakeFileSystem FileSystem { get; set; }
         public FakeEnvironment Environment { get; set; }
+        public Globber Globber { get; set; }
         public ICakeLog Log { get; set; }
 
         public DirectoryPath Path { get; set; }
         public PackageType PackageType { get; set; }
+        public PackageReference Package { get; set; }
 
         protected NuGetContentResolverFixture(string framework)
         {
@@ -26,16 +28,18 @@ namespace Cake.NuGet.Tests.Fixtures
             Environment.Runtime.TargetFramework = new FrameworkName(framework);
 
             FileSystem = new FakeFileSystem(Environment);
+            Globber = new Globber(FileSystem, Environment);
             Log = new FakeLog();
 
             Path = "/Working";
             PackageType = PackageType.Addin;
+            Package = new PackageReference("nuget:?package=Foo");
         }
 
         public IReadOnlyCollection<IFile> GetFiles()
         {
             var resolver = GetResolver();
-            return resolver.GetFiles(Path, PackageType);
+            return resolver.GetFiles(Path, Package, PackageType);
         }
 
         protected abstract INuGetContentResolver GetResolver();

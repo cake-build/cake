@@ -481,6 +481,22 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     // Then
                     Assert.Equal(expected, result.Args);
                 }
+
+                [Theory]
+                [InlineData(true)]
+                [InlineData(false)]
+                public void Should_Keep_NuSpec_File_According_To_Flag(bool keepTemporaryNuSpecFile)
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithNuSpecFixture();
+                    fixture.Settings.KeepTemporaryNuSpecFile = keepTemporaryNuSpecFile;
+
+                    // When
+                    fixture.Run();
+
+                    // Then
+                    Assert.Equal(keepTemporaryNuSpecFile, fixture.FileSystem.Exist((FilePath)"/Working/existing.temp.nuspec"));
+                }
             }
 
             public sealed class WithProjectFile

@@ -120,7 +120,7 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
-        /// Sets the maximum CPU count.
+        /// Sets the maximum CPU count. Without this set MSBuild will compile projects in this solution one at a time.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="maxCpuCount">The maximum CPU count. Set this value to zero to use as many MSBuild processes as available CPUs.</param>

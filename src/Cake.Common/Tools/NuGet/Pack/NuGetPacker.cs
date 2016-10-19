@@ -124,7 +124,7 @@ namespace Cake.Common.Tools.NuGet.Pack
             }
             finally
             {
-                if (processedNuspecFilePath != null)
+                if (processedNuspecFilePath != null && !settings.KeepTemporaryNuSpecFile)
                 {
                     // Delete the processed file.
                     var file = _fileSystem.GetFile(processedNuspecFilePath);

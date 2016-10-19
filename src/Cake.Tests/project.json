@@ -1,5 +1,5 @@
 ﻿{
-  "version": "0.16.0-*",
+  "version": "0.17.0-*",
   "dependencies": {
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "Cake": {
@@ -27,6 +27,7 @@
     }
   },
   "buildOptions": {
+    "platform": "AnyCpu",
     "embed": [
       "Data/MonoScriptProcessor/ArrayInitializer/*",
       "Data/MonoScriptProcessor/Blocks/*",
@@ -38,7 +39,12 @@
     "additionalArguments": [
       "/ruleset:../Test.ruleset",
       "/additionalfile:../stylecop.json"
-    ]
+    ],
+    "compile": {
+      "includeFiles": [
+        "../SolutionInfo.cs"
+      ]
+    }
   },
   "frameworks": {
     "net451": {

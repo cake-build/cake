@@ -107,10 +107,5 @@ public static CakeSettings GetCakeSettings(ICakeContext context, IDictionary<str
         settings.ArgumentCustomization = args => "./tools/Cake.CoreCLR/Cake.dll " + args.Render();
 
     }
-    else if (context.IsRunningOnUnix())
-    {
-        settings.ToolPath = FindToolInPath(context, "mono");
-        settings.ArgumentCustomization = args => "./tools/Cake/Cake.exe " + args.Render();
-    }
     return settings;
 }

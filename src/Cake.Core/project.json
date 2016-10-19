@@ -1,5 +1,5 @@
 ﻿{
-  "version": "0.16.0-*",
+  "version": "0.17.0-*",
   "description": "The Cake core library.",
   "copyright": "Copyright (c) .NET Foundation and contributors",
   "authors": [
@@ -28,10 +28,16 @@
   },
   "buildOptions": {
     "xmlDoc": true,
+    "platform": "AnyCpu",
     "additionalArguments": [
       "/ruleset:../Cake.ruleset",
       "/additionalfile:../stylecop.json"
-    ]
+    ],
+    "compile": {
+      "includeFiles": [
+        "../SolutionInfo.cs"
+      ]
+    }
   },
   "configurations": {
     "Release": {

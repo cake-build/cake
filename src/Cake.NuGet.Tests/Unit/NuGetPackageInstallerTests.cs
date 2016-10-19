@@ -248,7 +248,7 @@ namespace Cake.NuGet.Tests.Unit
                 // Given
                 var fixture = new NuGetPackageInstallerFixture();
                 fixture.ContentResolver.GetFiles(
-                    Arg.Any<DirectoryPath>(), Arg.Any<PackageType>())
+                    Arg.Any<DirectoryPath>(), Arg.Any<PackageReference>(), Arg.Any<PackageType>())
                     .Returns(new List<IFile> { Substitute.For<IFile>() });
 
                 // When

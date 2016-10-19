@@ -19,6 +19,7 @@ public class BuildParameters
     public bool IsPublishBuild { get; private set; }
     public bool IsReleaseBuild { get; private set; }
     public bool SkipGitVersion { get; private set; }
+    public bool SkipOpenCover { get; private set; }
     public BuildCredentials GitHub { get; private set; }
     public CoverallsCredentials Coveralls { get; private set; }
     public ReleaseNotes ReleaseNotes { get; private set; }
@@ -84,7 +85,8 @@ public class BuildParameters
             ReleaseNotes = context.ParseReleaseNotes("./ReleaseNotes.md"),
             IsPublishBuild = IsPublishing(target),
             IsReleaseBuild = IsReleasing(target),
-            SkipGitVersion = StringComparer.OrdinalIgnoreCase.Equals("True", context.EnvironmentVariable("CAKE_SKIP_GITVERSION"))
+            SkipGitVersion = StringComparer.OrdinalIgnoreCase.Equals("True", context.EnvironmentVariable("CAKE_SKIP_GITVERSION")),
+            SkipOpenCover = StringComparer.OrdinalIgnoreCase.Equals("True", context.EnvironmentVariable("CAKE_SKIP_OPENCOVER"))
         };
     }
 

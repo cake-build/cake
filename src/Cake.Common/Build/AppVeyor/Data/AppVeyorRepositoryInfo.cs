@@ -23,6 +23,12 @@ namespace Cake.Common.Build.AppVeyor.Data
         ///   <item>
         ///     <description>kiln</description>
         ///   </item>
+        ///   <item>
+        ///     <description>vso</description>
+        ///   </item>
+        ///   <item>
+        ///     <description>gitlab</description>
+        ///   </item>
         /// </list>
         /// </summary>
         /// <value>
@@ -68,6 +74,44 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The tag information for the build.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     Information(
+        ///         @"Repository:
+        ///         IsTag: {0}
+        ///         Name: {1}",
+        ///         BuildSystem.AppVeyor.Environment.Repository.Tag.IsTag,
+        ///         BuildSystem.AppVeyor.Environment.Repository.Tag.Name
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via AppVeyor</para>
+        /// <example>
+        /// <code>
+        /// if (AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     Information(
+        ///         @"Repository:
+        ///         IsTag: {0}
+        ///         Name: {1}",
+        ///         AppVeyor.Environment.Repository.Tag.IsTag,
+        ///         AppVeyor.Environment.Repository.Tag.Name
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
         public AppVeyorTagInfo Tag { get; }
 
         /// <summary>
@@ -76,6 +120,60 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The commit information for the build.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     Information(
+        ///         @"Repository:
+        ///         Author: {0}
+        ///         Email: {1}
+        ///         ExtendedMessage: {2}
+        ///         Id: {3}
+        ///         Message: {4}
+        ///         Timestamp: {5}",
+        ///         BuildSystem.AppVeyor.Environment.Repository.Commit.Author,
+        ///         BuildSystem.AppVeyor.Environment.Repository.Commit.Email,
+        ///         BuildSystem.AppVeyor.Environment.Repository.Commit.ExtendedMessage,
+        ///         BuildSystem.AppVeyor.Environment.Repository.Commit.Id,
+        ///         BuildSystem.AppVeyor.Environment.Repository.Commit.Message,
+        ///         BuildSystem.AppVeyor.Environment.Repository.Commit.Timestamp
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via AppVeyor</para>
+        /// <example>
+        /// <code>
+        /// if (AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     Information(
+        ///         @"Repository:
+        ///         Author: {0}
+        ///         Email: {1}
+        ///         ExtendedMessage: {2}
+        ///         Id: {3}
+        ///         Message: {4}
+        ///         Timestamp: {5}",
+        ///         AppVeyor.Environment.Repository.Commit.Author,
+        ///         AppVeyor.Environment.Repository.Commit.Email,
+        ///         AppVeyor.Environment.Repository.Commit.ExtendedMessage,
+        ///         AppVeyor.Environment.Repository.Commit.Id,
+        ///         AppVeyor.Environment.Repository.Commit.Message,
+        ///         AppVeyor.Environment.Repository.Commit.Timestamp
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
         public AppVeyorCommitInfo Commit { get; }
 
         /// <summary>

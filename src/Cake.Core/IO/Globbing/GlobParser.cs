@@ -125,6 +125,11 @@ namespace Cake.Core.IO.Globbing
                 context.Accept();
                 return new ParentSegment();
             }
+            if (context.CurrentToken.Kind == GlobTokenKind.Current)
+            {
+                context.Accept();
+                return new CurrentSegment();
+            }
 
             var items = new List<GlobToken>();
             while (true)

@@ -199,6 +199,11 @@ namespace Cake.Core.IO.Globbing
             context.Push(last);
         }
 
+        public void VisitCurrent(CurrentSegment node, GlobVisitorContext context)
+        {
+            node.Next.Accept(this, context);
+        }
+
         private static IEnumerable<IFileSystemInfo> FindCandidates(
             DirectoryPath path,
             MatchableNode node,

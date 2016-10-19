@@ -27,7 +27,8 @@ namespace Cake.NuGet.V2
         public NuGetV2ContentResolver(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
-            ICakeLog log) : base(fileSystem)
+            IGlobber globber,
+            ICakeLog log) : base(fileSystem, environment, globber)
         {
             _fileSystem = fileSystem;
             _environment = environment;
