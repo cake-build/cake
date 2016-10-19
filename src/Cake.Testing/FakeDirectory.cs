@@ -65,6 +65,15 @@ namespace Cake.Testing
         }
 
         /// <summary>
+        /// Moves the directory to the specified destination path.
+        /// </summary>
+        /// <param name="destination">The destination path.</param>
+        public void Move(DirectoryPath destination)
+        {
+            _tree.MoveDirectory(this, destination);
+        }
+
+        /// <summary>
         /// Deletes the directory.
         /// </summary>
         /// <param name="recursive">Will perform a recursive delete if set to <c>true</c>.</param>
