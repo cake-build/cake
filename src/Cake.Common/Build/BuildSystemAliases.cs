@@ -51,7 +51,7 @@ namespace Cake.Common.Build
             var bitriseProvider = new BitriseProvider(context.Environment);
             var travisCIProvider = new TravisCIProvider(context.Environment, context.Log);
             var bitbucketPipelinesProvider = new BitbucketPipelinesProvider(context.Environment);
-            var goCDProvider = new GoCDProvider(context.Environment);
+            var goCDProvider = new GoCDProvider(context.Environment, context.Log);
 
             return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider);
         }
