@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.DotCover.Cover
     /// <summary>
     /// DotCover Coverer builder.
     /// </summary>
-    public sealed class DotCoverCoverer : DotCoverTool<DotCoverCoverSettings>
+    public sealed class DotCoverCoverer : DotCoverCoverageTool<DotCoverCoverSettings>
     {
         private readonly ICakeEnvironment _environment;
 
@@ -61,31 +61,13 @@ namespace Cake.Common.Tools.DotCover.Cover
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            // Run the tool using the interceptor.
-            var interceptor = InterceptAction(context, action);
-
             // Run the tool.
-            Run(settings, GetArguments(interceptor, settings, outputPath));
-        }
-
-        private static DotCoverContext InterceptAction(
-            ICakeContext context,
-            Action<ICakeContext> action)
-        {
-            var interceptor = new DotCoverContext(context);
-            action(interceptor);
-
-            // Validate arguments.
-            if (interceptor.FilePath == null)
-            {
-                throw new CakeException("No tool was started.");
-            }
-
-            return interceptor;
+            Run(settings, GetArguments(context, action, settings, outputPath));
         }
 
         private ProcessArgumentBuilder GetArguments(
-            DotCoverContext context,
+            ICakeContext context,
+            Action<ICakeContext> action,
             DotCoverCoverSettings settings,
             FilePath outputPath)
         {
@@ -93,53 +75,18 @@ namespace Cake.Common.Tools.DotCover.Cover
 
             builder.Append("Cover");
 
-            // The target application to call.
-            builder.AppendSwitch("/TargetExecutable", "=", context.FilePath.FullPath.Quote());
-
-            // The arguments to the target application.
-            var arguments = context.Settings?.Arguments?.Render();
-            if (!string.IsNullOrWhiteSpace(arguments))
-            {
-                arguments = arguments.Replace("\"", "\\\"");
-                builder.AppendSwitch("/TargetArguments", "=", arguments.Quote());
-            }
+            // Get Target executable arguments
+            GetTargetArguments(context, action).CopyTo(builder);
 
             // Set the output file.
             outputPath = outputPath.MakeAbsolute(_environment);
             builder.AppendSwitch("/Output", "=", outputPath.FullPath.Quote());
 
-            // TargetWorkingDir
-            if (settings.TargetWorkingDir != null)
-            {
-                builder.AppendSwitch("/TargetWorkingDir", "=", settings.TargetWorkingDir.MakeAbsolute(_environment).FullPath.Quote());
-            }
+            // Get Coverage arguments
+            GetCoverageArguments(settings).CopyTo(builder);
 
-            // Scope
-            if (settings.Scope.Count > 0)
-            {
-                var scope = string.Join(";", settings.Scope);
-                builder.AppendSwitch("/Scope", "=", scope.Quote());
-            }
-
-            // Filters
-            if (settings.Filters.Count > 0)
-            {
-                var filters = string.Join(";", settings.Filters);
-                builder.AppendSwitch("/Filters", "=", filters.Quote());
-            }
-
-            // Filters
-            if (settings.AttributeFilters.Count > 0)
-            {
-                var attributeFilters = string.Join(";", settings.AttributeFilters);
-                builder.AppendSwitch("/AttributeFilters", "=", attributeFilters.Quote());
-            }
-
-            // DisableDefaultFilters
-            if (settings.DisableDefaultFilters)
-            {
-                builder.Append("/DisableDefaultFilters");
-            }
+            // Get base arguments
+            GetArguments(settings).CopyTo(builder);
 
             return builder;
         }

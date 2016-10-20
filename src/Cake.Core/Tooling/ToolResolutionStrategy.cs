@@ -147,7 +147,16 @@ namespace Cake.Core.Tooling
             {
                 var separator = new[] { _environment.Platform.IsUnix() ? ':' : ';' };
                 var paths = path.Split(separator, StringSplitOptions.RemoveEmptyEntries);
-                result.AddRange(paths.Select(p => new DirectoryPath(p)));
+                foreach (var p in paths)
+                {
+                    try
+                    {
+                        result.Add(new DirectoryPath(p.Trim(' ', '"', '\'')));
+                    }
+                    catch
+                    {
+                    }
+                }
             }
 
             return result;

@@ -66,7 +66,7 @@ namespace Cake.Common
             var file = context.FileSystem.GetFile(filePath);
             if (!file.Exists)
             {
-                const string format = "Release notes file '{0}' do not exist.";
+                const string format = "Release notes file '{0}' does not exist.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, filePath.FullPath);
                 throw new CakeException(message);
             }

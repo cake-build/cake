@@ -236,6 +236,23 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Analyse
             }
 
             [Fact]
+            public void Should_Append_LogFile()
+            {
+                // Given
+                var fixture = new DotCoverAnalyserFixture();
+                fixture.Settings.LogFile = "./logfile.log";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("Analyse /TargetExecutable=\"/Working/tools/Test.exe\" " +
+                             "/TargetArguments=\"-argument\" " +
+                             "/Output=\"/Working/result.xml\" " +
+                             "/LogFile=\"/Working/logfile.log\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Capture_XUnit()
             {
                 // Given

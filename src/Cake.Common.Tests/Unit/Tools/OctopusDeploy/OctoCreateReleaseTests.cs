@@ -393,7 +393,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             }
 
             [Fact]
-            public void Should_Add_Ignore_Existing_Flag_To_Arguments_If_Not_Null()
+            public void Should_Add_Ignore_Existing_Flag_To_Arguments_If_True()
             {
                 // Given
                 var fixture = new OctopusDeployReleaseCreatorFixture();
@@ -406,6 +406,70 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 Assert.Equal("create-release --project \"testProject\" " +
                              "--server http://octopus --apiKey API-12345 " +
                              "--ignoreexisting", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Channel_To_Arguments_If_Not_Null()
+            {
+                // Given
+                var fixture = new OctopusDeployReleaseCreatorFixture();
+                fixture.Settings.Channel = @"somechannel";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--channel \"somechannel\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Ignore_Channel_Rules_To_Arguments_If_True()
+            {
+                // Given
+                var fixture = new OctopusDeployReleaseCreatorFixture();
+                fixture.Settings.IgnoreChannelRules = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--ignorechannelrules", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Deployment_Environment_To_Arguments_If_Not_Null()
+            {
+                // Given
+                var fixture = new OctopusDeployReleaseCreatorFixture();
+                fixture.Settings.DeployTo = @"someenvironment";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--deployto \"someenvironment\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Deployment_Progress_To_Arguments_If_True()
+            {
+                // Given
+                var fixture = new OctopusDeployReleaseCreatorFixture();
+                fixture.Settings.DeploymentProgress = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--progress", result.Args);
             }
         }
     }

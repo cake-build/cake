@@ -1,12 +1,18 @@
 ﻿{
-  "version": "0.16.0-*",
+  "version": "0.17.0-*",
   "buildOptions": {
     "emitEntryPoint": true,
     "xmlDoc": true,
+    "platform": "AnyCpu",
     "additionalArguments": [
       "/ruleset:../Cake.ruleset",
       "/additionalfile:../stylecop.json"
-    ]
+    ],
+    "compile": {
+      "includeFiles": [
+        "../SolutionInfo.cs"
+      ]
+    }
   },
   "configurations": {
     "Release": {
@@ -33,6 +39,7 @@
   "frameworks": {
     "netcoreapp1.0": {
       "buildOptions": {
+        "debugType": "portable",
         "define": [
           "NETCORE"
         ]

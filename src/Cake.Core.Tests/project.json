@@ -1,5 +1,5 @@
 ﻿{
-  "version": "0.16.0-*",
+  "version": "0.17.0-*",
   "dependencies": {
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "Cake.Core": {
@@ -24,6 +24,7 @@
     }
   },
   "buildOptions": {
+    "platform": "AnyCpu",
     "embed": [
       "Unit/Scripting/CodeGen/Expected/Methods/*",
       "Unit/Scripting/CodeGen/Expected/Properties/*"
@@ -31,7 +32,12 @@
     "additionalArguments": [
       "/ruleset:../Test.ruleset",
       "/additionalfile:../stylecop.json"
-    ]
+    ],
+    "compile": {
+      "includeFiles": [
+        "../SolutionInfo.cs"
+      ]
+    }
   },
   "frameworks": {
     "net451": {

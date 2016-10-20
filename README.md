@@ -20,7 +20,11 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
 | Bamboo                      | Windows      | [![Bamboo Build Status](https://bambooshield.azurewebsites.net/planstatus/Flat/CAKE-CAKE.svg)](https://cakebuild.atlassian.net/builds/browse/CAKE-CAKE)             |                                                                                                                                                                     |
 | Visual Studio Team Services | Windows      | ![VSTS Build Status](https://img.shields.io/vso/build/cake-build/af63183c-ac1f-4dbb-93bc-4fa862ea5809/1.svg)                                                        |                                                                                                                                                                     |
 | MyGet Build Services        | Windows      | [![MyGet Build Status](https://www.myget.org/BuildSource/Badge/cake-myget-build-service?identifier=53513546-050e-45de-9500-f161c99df6e2)](https://www.myget.org/)   |  &nbsp;                                                                                                                                                             |
+| Bitbucket Pipelines         | Linux        | [![Build Status](https://bitbucketshield.azurewebsites.net/status/cakebuild/cake-integration-tests/develop)](https://bitbucketshield.azurewebsites.net/url/cakebuild/cake-integration-tests/develop) | [![Build Status](https://bitbucketshield.azurewebsites.net/status/cakebuild/cake-integration-tests/IntegrationTests_develop)](https://bitbucketshield.azurewebsites.net/url/cakebuild/cake-integration-tests/IntegrationTests_develop) |
 
+## Code Coverage
+
+[![Coverage Status](https://coveralls.io/repos/github/cake-build/cake/badge.svg?branch=develop)](https://coveralls.io/github/cake-build/cake?branch=develop)
 
 ## Table of Contents
 
@@ -137,6 +141,8 @@ Cake is provided as-is under the MIT license. For more information see [LICENSE]
 ## Thanks
 
 A big thank you has to go to [JetBrains](https://www.jetbrains.com) who provide each of the Cake Developers with an [Open Source License](https://www.jetbrains.com/support/community/#section=open-source) for [ReSharper](https://www.jetbrains.com/resharper/) that helps with the development of Cake.
+
+The Cake Team would also like to say thank you to the guys at [MyGet](https://www.myget.org/) for their support in providing a Professional Subscription which allows us to continue to push all of our pre-release editions of Cake NuGet packages for early consumption by the Cake Community.
 
 ## Code of Conduct
 

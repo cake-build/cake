@@ -33,6 +33,18 @@ namespace Cake.Common.Tools.OctopusDeploy
             AppendArgumentIfNotNull("packagesFolder", _settings.PackagesFolder);
             AppendArgumentIfNotNull("releasenotes", _settings.ReleaseNotes);
             AppendArgumentIfNotNull("releasenotesfile", _settings.ReleaseNotesFile);
+            AppendArgumentIfNotNull("channel", _settings.Channel);
+            AppendArgumentIfNotNull("deployto", _settings.DeployTo);
+
+            if (_settings.IgnoreChannelRules)
+            {
+                _builder.Append("--ignorechannelrules");
+            }
+
+            if (_settings.DeploymentProgress)
+            {
+                _builder.Append("--progress");
+            }
 
             if (_settings.IgnoreExisting)
             {

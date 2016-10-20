@@ -120,7 +120,7 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
-        /// Sets the maximum CPU count.
+        /// Sets the maximum CPU count. Without this set MSBuild will compile projects in this solution one at a time.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="maxCpuCount">The maximum CPU count. Set this value to zero to use as many MSBuild processes as available CPUs.</param>
@@ -171,6 +171,33 @@ namespace Cake.Common.Tools.MSBuild
                 throw new ArgumentNullException(nameof(settings));
             }
             settings.Verbosity = verbosity;
+            return settings;
+        }
+
+        /// <summary>
+        /// Adds a custom logger.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="loggerAssembly">The assembly containing the logger. Should match the format {AssemblyName[,StrongName] | AssemblyFile}</param>
+        /// <param name="loggerClass">The class implementing the logger. Should match the format [PartialOrFullNamespace.]LoggerClassName. If the assembly contains only one logger, class does not need to be specified.</param>
+        /// <param name="loggerParameters">Parameters to be passed to the logger.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings WithLogger(this MSBuildSettings settings, string loggerAssembly, string loggerClass = null, string loggerParameters = null)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            if (string.IsNullOrWhiteSpace(loggerAssembly))
+            {
+                throw new ArgumentException(nameof(loggerAssembly));
+            }
+            settings.Loggers.Add(new MSBuildLogger
+            {
+                Assembly = loggerAssembly,
+                Class = loggerClass,
+                Parameters = loggerParameters
+            });
             return settings;
         }
     }

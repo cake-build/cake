@@ -4,6 +4,8 @@
 
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.Diagnostics;
@@ -32,7 +34,30 @@ namespace Cake.Common.Net
         [CakeAliasCategory("Download")]
         public static FilePath DownloadFile(this ICakeContext context, string address)
         {
-            return DownloadFile(context, new Uri(address));
+            return DownloadFile(context, address, new DownloadFileSettings());
+        }
+
+        /// <summary>
+        /// Downloads the specified resource over HTTP to a temporary file with specified settings.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var resource = DownloadFile("http://www.example.org/index.html", new DownloadFileSettings()
+        /// {
+        ///     Username = "bob",
+        ///     Password = "builder"
+        /// });
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="address">The URL of the resource to download.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The path to the downloaded file.</returns>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Download")]
+        public static FilePath DownloadFile(this ICakeContext context, string address, DownloadFileSettings settings)
+        {
+            return DownloadFile(context, new Uri(address), settings);
         }
 
         /// <summary>
@@ -57,7 +82,38 @@ namespace Cake.Common.Net
             }
             var tempFolder = context.Environment.GetSpecialPath(SpecialPath.LocalTemp);
             var tempFilename = tempFolder.CombineWithFilePath(new FilePath(System.IO.Path.GetRandomFileName()));
-            DownloadFile(context, address, tempFilename);
+            DownloadFile(context, address, tempFilename, new DownloadFileSettings());
+            return tempFilename;
+        }
+
+        /// <summary>
+        /// Downloads the specified resource over HTTP to a temporary file with specified settings.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var address = new Uri("http://www.example.org/index.html");
+        /// var resource = DownloadFile(address, new DownloadFileSettings()
+        /// {
+        ///     Username = "bob",
+        ///     Password = "builder"
+        /// });
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="address">The URL of file to download.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The path to the downloaded file.</returns>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Download")]
+        public static FilePath DownloadFile(this ICakeContext context, Uri address, DownloadFileSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            var tempFolder = context.Environment.GetSpecialPath(SpecialPath.LocalTemp);
+            var tempFilename = tempFolder.CombineWithFilePath(new FilePath(System.IO.Path.GetRandomFileName()));
+            DownloadFile(context, address, tempFilename, settings);
             return tempFilename;
         }
 
@@ -76,7 +132,30 @@ namespace Cake.Common.Net
         [CakeAliasCategory("Download")]
         public static void DownloadFile(this ICakeContext context, string address, FilePath outputPath)
         {
-            DownloadFile(context, new Uri(address), outputPath);
+            DownloadFile(context, new Uri(address), outputPath, new DownloadFileSettings());
+        }
+
+        /// <summary>
+        /// Downloads the specified resource over HTTP to the specified output path and settings.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// DownloadFile("http://www.example.org/index.html", "./outputdir", new DownloadFileSettings()
+        /// {
+        ///     Username = "bob",
+        ///     Password = "builder"
+        /// });
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="address">The URL of the resource to download.</param>
+        /// <param name="outputPath">The output path.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Download")]
+        public static void DownloadFile(this ICakeContext context, string address, FilePath outputPath, DownloadFileSettings settings)
+        {
+            DownloadFile(context, new Uri(address), outputPath, settings);
         }
 
         /// <summary>
@@ -85,15 +164,20 @@ namespace Cake.Common.Net
         /// <example>
         /// <code>
         /// var address = new Uri("http://www.example.org/index.html");
-        /// DownloadFile(address, "./outputdir");
+        /// DownloadFile(address, "./outputdir", new DownloadFileSettings()
+        /// {
+        ///     Username = "bob",
+        ///     Password = "builder"
+        /// });
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
         /// <param name="address">The URL of the resource to download.</param>
         /// <param name="outputPath">The output path.</param>
+        /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
         [CakeAliasCategory("Download")]
-        public static void DownloadFile(this ICakeContext context, Uri address, FilePath outputPath)
+        public static void DownloadFile(this ICakeContext context, Uri address, FilePath outputPath, DownloadFileSettings settings)
         {
             if (context == null)
             {
@@ -113,8 +197,14 @@ namespace Cake.Common.Net
             // We track the last posted value since the event seems to fire many times for the same value.
             var percentComplete = 0;
 
-            using (var http = new HttpClient())
+            using (var http = GetHttpClient(context))
             {
+                if (!string.IsNullOrWhiteSpace(settings.Username) && !string.IsNullOrWhiteSpace(settings.Password))
+                {
+                    var byteArray = Encoding.ASCII.GetBytes(string.Concat(settings.Username, ":", settings.Password));
+                    http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+                }
+
                 var progress = new Progress<int>(progressPercentage =>
                 {
                     // Only write to log if the value changed and only ever 5%.
@@ -162,7 +252,7 @@ namespace Cake.Common.Net
             }
 
             context.Log.Verbose("Uploading file: {0}", address);
-            using (var client = new HttpClient())
+            using (var client = GetHttpClient(context))
             {
                 client.UploadFileAsync(address, filePath.FullPath).Wait();
             }
@@ -219,7 +309,7 @@ namespace Cake.Common.Net
             }
 
             context.Log.Verbose("Uploading file: {0}", address);
-            using (var client = new HttpClient())
+            using (var client = GetHttpClient(context))
             {
                 client.UploadFileAsync(address, data, fileName).Wait();
             }
@@ -244,6 +334,19 @@ namespace Cake.Common.Net
         public static void UploadFile(this ICakeContext context, string address, byte[] data, string fileName)
         {
             UploadFile(context, new Uri(address), data, fileName);
+        }
+
+        /// <summary>
+        /// Gets an <see cref="HttpClient"/> pre-populated with the correct default headers such as User-Agent.
+        /// The returned client should be disposed of by the caller.
+        /// </summary>
+        /// <param name="context">The current Cake context.</param>
+        /// <returns>A <see cref="HttpClient"/> instance.</returns>
+        private static HttpClient GetHttpClient(ICakeContext context)
+        {
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Cake", context.Environment.Runtime.CakeVersion.ToString()));
+            return client;
         }
     }
 }

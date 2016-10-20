@@ -37,10 +37,10 @@ namespace Cake.Composition
                     RegisterExternalModules(moduleTypes, temporaryContainer);
 
                     // Now let the modules register their types.
-                    var builder = new CakeContainerBuilder();
+                    var builder = new ContainerRegistrar();
                     foreach (var module in temporaryContainer.Resolve<IEnumerable<ICakeModule>>())
                     {
-                        builder.Registry.RegisterModule(module);
+                        builder.RegisterModule(module);
                     }
                     builder.Update(container);
                 }

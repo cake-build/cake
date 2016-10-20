@@ -16,6 +16,7 @@ namespace Cake.Common.Tools.MSBuild
     {
         private readonly HashSet<string> _targets;
         private readonly Dictionary<string, IList<string>> _properties;
+        private readonly List<MSBuildLogger> _loggers;
 
         /// <summary>
         /// Gets the targets.
@@ -56,7 +57,8 @@ namespace Cake.Common.Tools.MSBuild
         /// <summary>
         /// Gets or sets the maximum CPU count.
         /// If this value is zero, MSBuild will use as many processes as
-        /// there are available CPUs to build the project.
+        /// there are available CPUs to build the project. If not set
+        /// MSBuild compile projects in this solution one at a time.
         /// </summary>
         /// <value>The maximum CPU count.</value>
         public int? MaxCpuCount { get; set; }
@@ -76,12 +78,18 @@ namespace Cake.Common.Tools.MSBuild
         public Verbosity Verbosity { get; set; }
 
         /// <summary>
+        /// Gets the loggers.
+        /// </summary>
+        public ICollection<MSBuildLogger> Loggers => _loggers;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MSBuildSettings"/> class.
         /// </summary>
         public MSBuildSettings()
         {
             _targets = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _properties = new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
+            _loggers = new List<MSBuildLogger>();
 
             ToolVersion = MSBuildToolVersion.Default;
             Configuration = string.Empty;

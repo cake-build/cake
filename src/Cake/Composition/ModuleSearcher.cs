@@ -12,7 +12,6 @@ using Cake.Core.Composition;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Reflection;
-using Cake.Polyfill;
 
 namespace Cake.Composition
 {
@@ -63,8 +62,7 @@ namespace Cake.Composition
         {
             try
             {
-                // Load the assembly.
-                var assembly = _assemblyLoader.Load(path);
+                var assembly = LoadAssembly(path);
 
                 var attribute = assembly.GetCustomAttributes<CakeModuleAttribute>().FirstOrDefault();
                 if (attribute == null)
@@ -81,11 +79,43 @@ namespace Cake.Composition
 
                 return attribute.ModuleType;
             }
+            catch (CakeException)
+            {
+                throw;
+            }
             catch
             {
                 _log.Warning("Could not load module '{0}'.", path.FullPath);
                 return null;
             }
+        }
+
+        private Assembly LoadAssembly(FilePath path)
+        {
+            VerifyCompatibility(path);
+            return _assemblyLoader.Load(path);
+        }
+
+        private static void VerifyCompatibility(FilePath path)
+        {
+#if !NETCORE
+            // Make sure that the module is compatible.
+            // Kind of hackish, but this will have to do until we figure out a better way...
+            var assembly = Assembly.ReflectionOnlyLoadFrom(path.FullPath);
+            var references = assembly.GetReferencedAssemblies();
+            foreach (var reference in references)
+            {
+                if (reference.Name != null && reference.Name.Equals("Cake.Core", StringComparison.OrdinalIgnoreCase))
+                {
+                    var minVersion = new Version(0, 16, 0);
+                    if (reference.Version < minVersion)
+                    {
+                        const string format = "The module '{0}' is targeting an incompatible version of Cake.Core.dll. It needs to target at least version {1}.";
+                        throw new CakeException(string.Format(format, path.GetFilename().FullPath, minVersion.ToString(3)));
+                    }
+                }
+            }
+#endif
         }
     }
 }

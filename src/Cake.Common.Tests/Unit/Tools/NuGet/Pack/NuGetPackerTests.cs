@@ -481,6 +481,22 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     // Then
                     Assert.Equal(expected, result.Args);
                 }
+
+                [Theory]
+                [InlineData(true)]
+                [InlineData(false)]
+                public void Should_Keep_NuSpec_File_According_To_Flag(bool keepTemporaryNuSpecFile)
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithNuSpecFixture();
+                    fixture.Settings.KeepTemporaryNuSpecFile = keepTemporaryNuSpecFile;
+
+                    // When
+                    fixture.Run();
+
+                    // Then
+                    Assert.Equal(keepTemporaryNuSpecFile, fixture.FileSystem.Exist((FilePath)"/Working/existing.temp.nuspec"));
+                }
             }
 
             public sealed class WithProjectFile
@@ -838,6 +854,30 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 }
 
                 [Fact]
+                public void Should_Pack_If_Sufficient_Settings_For_MetaPackage_Specified()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithoutNuSpecFixture();
+                    fixture.Settings.OutputDirectory = "/Working/";
+                    fixture.Settings.Id = "nonexisting";
+                    fixture.Settings.Version = "1.0.0";
+                    fixture.Settings.Description = "The description";
+                    fixture.Settings.Authors = new[] { "Author #1", "Author #2" };
+                    fixture.Settings.Files = null;
+                    fixture.Settings.Dependencies = new List<NuSpecDependency>
+                    {
+                        new NuSpecDependency { Id = "Test1", Version = "1.0.0" }
+                    };
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal("pack -Version \"1.0.0\" -OutputDirectory \"/Working\" " +
+                                 "\"/Working/nonexisting.temp.nuspec\"", result.Args);
+                }
+
+                [Fact]
                 public void Should_Throw_If_OutputDirectory_Setting_Not_Specified()
                 {
                     // Given
@@ -913,7 +953,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 }
 
                 [Fact]
-                public void Should_Throw_If_Files_Setting_Not_Specified()
+                public void Should_Throw_If_Files_Setting_And_Dependencies_Not_Specified()
                 {
                     // Given
                     var fixture = new NuGetPackerWithoutNuSpecFixture();
@@ -922,7 +962,8 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Version = "1.0.0";
                     fixture.Settings.Authors = new[] { "Author #1", "Author #2" };
                     fixture.Settings.Description = "The description";
-
+                    fixture.Settings.Dependencies = null;
+                    fixture.Settings.Files = null;
                     // When
                     var result = Record.Exception(() => fixture.Run());
 

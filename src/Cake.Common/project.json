@@ -1,5 +1,5 @@
 ﻿{
-  "version": "0.16.0-*",
+  "version": "0.17.0-*",
   "description": "Provides aliases (extension methods on Cake context) that support CI, build, unit tests, zip, signing, etc. for Cake.",
   "copyright": "Copyright (c) .NET Foundation and contributors",
   "authors": [
@@ -31,10 +31,16 @@
   },
   "buildOptions": {
     "xmlDoc": true,
+    "platform": "AnyCpu",
     "additionalArguments": [
       "/ruleset:../Cake.ruleset",
       "/additionalfile:../stylecop.json"
-    ]
+    ],
+    "compile": {
+      "includeFiles": [
+        "../SolutionInfo.cs"
+      ]
+    }
   },
   "configurations": {
     "Release": {
@@ -45,6 +51,7 @@
   },
   "frameworks": {
     "netstandard1.6": {
+      "debugType": "portable",
       "buildOptions": {
         "define": [
           "NETCORE"
@@ -57,7 +64,7 @@
         "System.Xml.XPath.XmlDocument": "4.0.1",
         "System.Runtime.Serialization.Json": "4.0.2",
         "System.Xml.ReaderWriter": "4.0.11",
-        "System.ComponentModel.TypeConverter": "4.0.0"
+        "System.ComponentModel.TypeConverter": "4.1.0"
       }
     },
     "net45": {

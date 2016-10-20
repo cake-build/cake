@@ -130,7 +130,7 @@ namespace Cake.NuGet
             }
 
             // Fetch available content from disc.
-            var content = _contentResolver.GetFiles(packagePath, type);
+            var content = _contentResolver.GetFiles(packagePath, package, type);
             if (content.Any())
             {
                 _log.Debug("Package {0} has already been installed.", package.Package);
@@ -157,11 +157,19 @@ namespace Cake.NuGet
             }
 
             // Get the files.
-            var result = _contentResolver.GetFiles(packagePath, type);
+            var result = _contentResolver.GetFiles(packagePath, package, type);
             if (result.Count == 0)
             {
-                var framework = _environment.Runtime.TargetFramework;
-                _log.Warning("Could not find any assemblies compatible with {0}.", framework.FullName);
+                if (type == PackageType.Addin)
+                {
+                    var framework = _environment.Runtime.TargetFramework;
+                    _log.Warning("Could not find any assemblies compatible with {0}.", framework.FullName);
+                }
+                else if (type == PackageType.Tool)
+                {
+                    const string format = "Could not find any relevant files for tool '{0}'. Perhaps you need an include parameter?";
+                    _log.Warning(format, package.Package);
+                }
             }
 
             return result;
@@ -211,7 +219,7 @@ namespace Cake.NuGet
             if (definition.Parameters.ContainsKey("version"))
             {
                 arguments.Append("-Version");
-                arguments.AppendQuoted(definition.Parameters["version"]);
+                arguments.AppendQuoted(definition.Parameters["version"].First());
             }
 
             // Prerelease

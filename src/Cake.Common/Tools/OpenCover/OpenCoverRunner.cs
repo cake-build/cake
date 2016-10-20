@@ -135,6 +135,11 @@ namespace Cake.Common.Tools.OpenCover
                 builder.Append("-oldStyle");
             }
 
+            if (settings.MergeOutput)
+            {
+                builder.Append("-mergeoutput");
+            }
+
             builder.AppendSwitch("-register", ":", settings.Register);
 
             if (settings.ReturnTargetCodeOffset != null)
