@@ -51,6 +51,26 @@ namespace Cake.Common.Tools.OctopusDeploy
             }
         }
 
+        protected void AppendMultipleTimes(string argumentName, string[] values)
+        {
+            if (values != null && values.Length > 0)
+            {
+                foreach (var value in values)
+                {
+                    Builder.AppendSwitchQuoted("--" + argumentName, "=", value);
+                }
+            }
+        }
+
+        protected ProcessArgumentBuilder AppendConditionalFlag(bool condition, string flag)
+        {
+            if (condition)
+            {
+                Builder.Append(flag);
+            }
+            return Builder;
+        }
+
         protected void AppendCommonArguments()
         {
             Builder.Append("--server");
