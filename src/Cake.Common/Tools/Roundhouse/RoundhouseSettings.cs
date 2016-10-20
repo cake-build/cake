@@ -319,8 +319,7 @@ namespace Cake.Common.Tools.Roundhouse
         ///  Gets or sets a value indicating whether to create an insert for its recording tables, but not run anything.
         /// </summary>
         /// <value>
-        /// This instructs RH to create an insert for its recording tables, but not to actually run anything against the database. Use this option if 
-        /// you already have scripts that have been run through other means. Defaults to <c>false</c>.
+        /// This instructs RH to create an insert for its recording tables, but not to actually run anything against the database. Use this option if you already have scripts that have been run through other means. Defaults to <c>false</c>.
         /// </value>
         public bool Baseline { get; set; }
 
@@ -352,8 +351,7 @@ namespace Cake.Common.Tools.Roundhouse
         ///  Gets or sets a value indicating whether to search all subdirectories.
         /// </summary>
         /// <value>
-        /// Each Migration folder's subdirectories are traversed by default. This option pulls back scripts from the main directory 
-        /// and all subdirectories at once. Defaults to <c>false</c>.
+        /// Each Migration folder's subdirectories are traversed by default. This option pulls back scripts from the main directory and all subdirectories at once. Defaults to <c>false</c>.
         /// </value>
         public bool SearchAllSubdirectoriesInsteadOfTraverse { get; set; }
     }
