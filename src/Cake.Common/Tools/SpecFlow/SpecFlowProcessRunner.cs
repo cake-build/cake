@@ -34,6 +34,11 @@ namespace Cake.Common.Tools.SpecFlow
                 return 0;
             }
 
+            public IEnumerable<string> GetStandardError()
+            {
+                return Enumerable.Empty<string>();
+            }
+
             public IEnumerable<string> GetStandardOutput()
             {
                 return Enumerable.Empty<string>();

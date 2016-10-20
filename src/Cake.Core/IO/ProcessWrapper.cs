@@ -14,15 +14,19 @@ namespace Cake.Core.IO
     {
         private readonly Process _process;
         private readonly ICakeLog _log;
+        private readonly Func<string, string> _filterError;
         private readonly Func<string, string> _filterOutput;
+        private readonly ConcurrentQueue<string> _consoleErrorQueue;
         private readonly ConcurrentQueue<string> _consoleOutputQueue;
 
-        public ProcessWrapper(Process process, ICakeLog log, Func<string, string> filterOutput, ConcurrentQueue<string> consoleOutputQueue)
+        public ProcessWrapper(Process process, ICakeLog log, Func<string, string> filterOutput, ConcurrentQueue<string> consoleOutputQueue, Func<string, string> filterError, ConcurrentQueue<string> consoleErrorQueue)
         {
             _process = process;
             _log = log;
             _filterOutput = filterOutput ?? (source => "[REDACTED]");
             _consoleOutputQueue = consoleOutputQueue;
+            _filterError = filterError ?? (source => "[REDACTED]");
+            _consoleErrorQueue = consoleErrorQueue;
         }
 
         public void WaitForExit()
@@ -47,6 +51,24 @@ namespace Cake.Core.IO
         public int GetExitCode()
         {
             return _process.ExitCode;
+        }
+
+        public IEnumerable<string> GetStandardError()
+        {
+            if (_consoleErrorQueue == null)
+            {
+                yield break;
+            }
+            while (!_consoleErrorQueue.IsEmpty || !_process.HasExited)
+            {
+                string line;
+                if (!_consoleErrorQueue.TryDequeue(out line))
+                {
+                    continue;
+                }
+                _log.Debug(log => log("{0}", _filterOutput(line)));
+                yield return line;
+            }
         }
 
         public IEnumerable<string> GetStandardOutput()

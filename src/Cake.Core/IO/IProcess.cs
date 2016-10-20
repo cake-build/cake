@@ -31,6 +31,12 @@ namespace Cake.Core.IO
         int GetExitCode();
 
         /// <summary>
+        /// Get the standard error of process.
+        /// </summary>
+        /// <returns>Returns process error output <see cref="ProcessSettings.RedirectStandardError">RedirectStandardError</see> is true</returns>
+        IEnumerable<string> GetStandardError();
+
+        /// <summary>
         /// Get the standard output of process
         /// </summary>
         /// <returns>Returns process output <see cref="ProcessSettings.RedirectStandardOutput">RedirectStandardOutput</see> is true</returns>
