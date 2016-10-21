@@ -33,11 +33,21 @@ namespace Cake.Core
         void RegisterSetupAction(Action<ICakeContext> action);
 
         /// <summary>
+        /// Raised during setup before any tasks are run.
+        /// </summary>
+        event EventHandler<SetupEventArgs> Setup;
+
+        /// <summary>
         /// Allows registration of an action that's executed after all other tasks have been run.
         /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
         void RegisterTeardownAction(Action<ITeardownContext> action);
+
+        /// <summary>
+        /// Raised during teardown after all other tasks have been run.
+        /// </summary>
+        event EventHandler<TeardownEventArgs> Teardown;
 
         /// <summary>
         /// Runs the specified target using the specified <see cref="IExecutionStrategy"/>.
@@ -56,10 +66,20 @@ namespace Cake.Core
         void RegisterTaskSetupAction(Action<ITaskSetupContext> action);
 
         /// <summary>
+        /// Raised before each task is run.
+        /// </summary>
+        event EventHandler<TaskSetupEventArgs> TaskSetup;
+
+        /// <summary>
         /// Allows registration of an action that's executed after each task has been run.
         /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
         void RegisterTaskTeardownAction(Action<ITaskTeardownContext> action);
+
+        /// <summary>
+        /// Raised after each task has been run.
+        /// </summary>
+        event EventHandler<TaskTeardownEventArgs> TaskTeardown;
     }
 }
