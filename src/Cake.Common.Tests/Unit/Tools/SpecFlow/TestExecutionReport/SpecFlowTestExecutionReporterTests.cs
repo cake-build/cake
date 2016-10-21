@@ -180,6 +180,79 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
             }
 
             [Fact]
+            public void Should_Rethrow_Exception_From_Action()
+            {
+                // Given
+                var exception = new CakeException("The exception message");
+                var fixture = new SpecFlowTestExecutionReporterFixture();
+                fixture.Settings.ThrowOnTestFailure = true;
+                var intercepting = true;
+
+                fixture.Action = context =>
+                {
+                    context.ProcessRunner.Start(
+                        new FilePath("/Working/tools/MSTest.exe"),
+                        new ProcessSettings()
+                        {
+                            Arguments = "/resultsfile:\"/Working/TestResult.trx\""
+                        });
+
+                    // Quick fix to avoid throwing exception while intercepting action
+                    if (intercepting)
+                    {
+                        intercepting = false;
+                    }
+                    else
+                    {
+                        throw exception;
+                    }
+                };
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                Assert.IsCakeException(result, exception.Message);
+            }
+
+            [Fact]
+            public void Should_Not_Rethrow_Exception_From_Action()
+            {
+                // Given
+                var exception = new CakeException("The exception message");
+                var fixture = new SpecFlowTestExecutionReporterFixture();
+                fixture.Settings.ThrowOnTestFailure = false;
+                var intercepting = true;
+
+                fixture.Action = context =>
+                {
+                    var process = context.ProcessRunner.Start(
+                        new FilePath("/Working/tools/MSTest.exe"),
+                        new ProcessSettings()
+                        {
+                            Arguments = "/resultsfile:\"/Working/TestResult.trx\""
+                        });
+
+                    // Quick fix to avoid throwing exception while intercepting action
+                    if (intercepting)
+                    {
+                        intercepting = false;
+                    }
+                    else
+                    {
+                        throw exception;
+                    }
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("mstestexecutionreport \"/Working/Tests.csproj\" " +
+                             "/testResult:\"/Working/TestResult.trx\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Capture_XUnit2()
             {
                 // Given

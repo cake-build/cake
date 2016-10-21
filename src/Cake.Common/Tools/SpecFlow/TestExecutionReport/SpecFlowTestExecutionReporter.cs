@@ -69,6 +69,7 @@ namespace Cake.Common.Tools.SpecFlow.TestExecutionReport
             var builder = GetArguments(interceptor, settings, projectFile);
 
             // Execute the action
+            CakeException testException = null;
             try
             {
                 action(context);
@@ -77,10 +78,16 @@ namespace Cake.Common.Tools.SpecFlow.TestExecutionReport
             {
                 // Write warning to log
                 context.Warning(e.Message);
+                testException = e;
             }
 
             // Run the tool.
             Run(settings, builder);
+
+            if (settings.ThrowOnTestFailure && testException != null)
+            {
+                throw testException;
+            }
         }
 
         private static SpecFlowContext InterceptAction(
