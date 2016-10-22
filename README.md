@@ -114,7 +114,7 @@ chmod +x build.sh
 
 So you’re thinking about contributing to Cake? Great! It’s **really** appreciated.
 
-Make sure you've read the [contribution guidelines](http://cakebuild.net/contribute/contribution-guidelines/) before sending that epic pull request.
+Make sure you've read the [contribution guidelines](http://cakebuild.net/contribute/contribution-guidelines/) before sending that epic pull request. You'll also need to sign the [contribution license agreement](https://cla2.dotnetfoundation.org/) (CLA) for anything other than a trivial change.  **NOTE:** The .Net Foundation CLA Bot will provide a link to this CLA within the PR that you submit if it is deemed as required.
 
 * Fork the repository.
 * Create a branch to work in.
@@ -149,6 +149,10 @@ The Cake Team would also like to say thank you to the guys at [MyGet](https://ww
 This project has adopted the code of conduct defined by the [Contributor Covenant](http://contributor-covenant.org/)
 to clarify expected behavior in our community.
 For more information see the [.NET Foundation Code of Conduct](http://www.dotnetfoundation.org/code-of-conduct).
+
+## Contribution License Agreement
+
+By signing the [CLA](https://cla2.dotnetfoundation.org/), the community is free to use your contribution to .NET Foundation projects.
 
 ## .NET Foundation
 

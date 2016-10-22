@@ -48,6 +48,15 @@ namespace Cake.Core.IO
         }
 
         /// <summary>
+        /// Prepends an argument.
+        /// </summary>
+        /// <param name="argument">The argument.</param>
+        public void Prepend(IProcessArgument argument)
+        {
+            _tokens.Insert(0, argument);
+        }
+
+        /// <summary>
         /// Renders the arguments as a <see cref="string"/>.
         /// Sensitive information will be included.
         /// </summary>

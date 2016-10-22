@@ -23,6 +23,12 @@ namespace Cake.Core.IO
         void Create();
 
         /// <summary>
+        /// Moves the directory to the specified destination path.
+        /// </summary>
+        /// <param name="destination">The destination path.</param>
+        void Move(DirectoryPath destination);
+
+        /// <summary>
         /// Deletes the directory.
         /// </summary>
         /// <param name="recursive">Will perform a recursive delete if set to <c>true</c>.</param>
