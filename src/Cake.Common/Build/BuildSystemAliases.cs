@@ -13,6 +13,7 @@ using Cake.Common.Build.GoCD;
 using Cake.Common.Build.Jenkins;
 using Cake.Common.Build.MyGet;
 using Cake.Common.Build.TeamCity;
+using Cake.Common.Build.TFBuild;
 using Cake.Common.Build.TravisCI;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -54,7 +55,8 @@ namespace Cake.Common.Build
             var bitbucketPipelinesProvider = new BitbucketPipelinesProvider(context.Environment);
             var goCDProvider = new GoCDProvider(context.Environment);
             var gitlabCIProvider = new GitLabCIProvider(context.Environment);
-            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitlabCIProvider);
+            var tfBuildProvider = new TFBuildProvider(context.Environment);
+            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitlabCIProvider, tfBuildProvider);
         }
 
         /// <summary>
@@ -177,7 +179,7 @@ namespace Cake.Common.Build
         }
 
         /// <summary>
-        /// Gets a <see cref="JenkinsProvider"/> instance that can be user to
+        /// Gets a <see cref="JenkinsProvider"/> instance that can be used to
         /// obtain information from the Jenkins environment.
         /// </summary>
         /// <example>
@@ -202,7 +204,7 @@ namespace Cake.Common.Build
         }
 
         /// <summary>
-        /// Gets a <see cref="BitriseProvider"/> instance that can be user to
+        /// Gets a <see cref="BitriseProvider"/> instance that can be used to
         /// obtain information from the Bitrise environment.
         /// </summary>
         /// <example>
@@ -227,7 +229,7 @@ namespace Cake.Common.Build
         }
 
         /// <summary>
-        /// Gets a <see cref="TravisCIProvider"/> instance that can be user to
+        /// Gets a <see cref="TravisCIProvider"/> instance that can be used to
         /// obtain information from the Travis CI environment.
         /// </summary>
         /// <example>
@@ -252,7 +254,7 @@ namespace Cake.Common.Build
         }
 
         /// <summary>
-        /// Gets a <see cref="BitbucketPipelinesProvider"/> instance that can be user to
+        /// Gets a <see cref="BitbucketPipelinesProvider"/> instance that can be used to
         /// obtain information from the Bitbucket Pipelines environment.
         /// </summary>
         /// <example>
@@ -277,7 +279,7 @@ namespace Cake.Common.Build
         }
 
         /// <summary>
-        /// Gets a <see cref="GoCDProvider"/> instance that can be user to
+        /// Gets a <see cref="GoCDProvider"/> instance that can be used to
         /// obtain information from the Go.CD environment.
         /// </summary>
         /// <example>
@@ -302,7 +304,7 @@ namespace Cake.Common.Build
         }
 
         /// <summary>
-        /// Gets a <see cref="GitLabCIProvider"/> instance that can be user to
+        /// Gets a <see cref="GitLabCIProvider"/> instance that can be used to
         /// obtain information from the GitLab CI environment.
         /// </summary>
         /// <example>
@@ -311,7 +313,7 @@ namespace Cake.Common.Build
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
-        /// <returns>A <see cref="Build.GitLabCI"/> instance.</returns>
+        /// <returns>A <see cref="Cake.Common.Build.GitLabCI"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]
         [CakeNamespaceImport("Cake.Common.Build.GitLabCI")]
         [CakeNamespaceImport("Cake.Common.Build.GitLabCI.Data")]
@@ -324,6 +326,31 @@ namespace Cake.Common.Build
 
             var buildSystem = context.BuildSystem();
             return buildSystem.GitLabCI;
+        }
+
+        /// <summary>
+        /// Gets a <see cref="TFBuildProvider"/> instance that can be used to
+        /// obtain information from the Team Foundation Build environment.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var isTFSBuild = TFBuild.IsRunningOnTFS;
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <returns>A <see cref="Build.TFBuild"/> instance.</returns>
+        [CakePropertyAlias(Cache = true)]
+        [CakeNamespaceImport("Cake.Common.Build.TFBuild")]
+        [CakeNamespaceImport("Cake.Common.Build.TFBuild.Data")]
+        public static ITFBuildProvider TFBuild(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var buildSystem = context.BuildSystem();
+            return buildSystem.TFBuild;
         }
     }
 }
