@@ -584,6 +584,36 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Fact]
+            public void Should_Use_Detailed_Summary_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false);
+                fixture.Settings.DetailedSummary = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/ds /v:normal /target:Build " +
+                             "\"/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Use_No_Console_Logger_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false);
+                fixture.Settings.NoConsoleLogger = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/noconlog /v:normal /target:Build " +
+                             "\"/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Append_Targets_To_Process_Arguments()
             {
                 // Given
