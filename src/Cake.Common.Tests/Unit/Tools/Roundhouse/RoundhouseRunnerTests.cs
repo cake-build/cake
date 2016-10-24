@@ -158,12 +158,20 @@ namespace Cake.Common.Tests.Unit.Tools.Roundhouse
                 fixture.Settings.Silent = true;
                 fixture.Settings.WarnOnOneTimeScriptChanges = true;
                 fixture.Settings.WithTransaction = true;
+                fixture.Settings.Baseline = true;
+                fixture.Settings.RunAllAnyTimeScripts = true;
+                fixture.Settings.SearchAllSubdirectoriesInsteadOfTraverse = true;
+                fixture.Settings.DisableTokenReplacement = true;
+                fixture.Settings.RunAllAnyTimeScripts = true;
+                fixture.Settings.Debug = true;
+                fixture.Settings.DisableOutput = true;
+                fixture.Settings.DoNotCreateDatabase = true;
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("--drop --dryrun --restore --silent --w --t", result.Args);
+                Assert.Equal("--drop --dryrun --restore --silent --baseline --searchallinsteadoftraverse --disabletokens --runallanytimescripts --debug --disableoutput --donotcreatedatabase --w --t", result.Args);
             }
 
             [Fact]
