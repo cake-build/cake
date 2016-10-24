@@ -17,6 +17,7 @@ namespace Cake.Common.Tools.MSBuild
         private readonly HashSet<string> _targets;
         private readonly Dictionary<string, IList<string>> _properties;
         private readonly List<MSBuildLogger> _loggers;
+        private readonly List<MSBuildFileLogger> _fileLoggers;
 
         /// <summary>
         /// Gets the targets.
@@ -98,6 +99,11 @@ namespace Cake.Common.Tools.MSBuild
         public ICollection<MSBuildLogger> Loggers => _loggers;
 
         /// <summary>
+        /// Gets the file loggers
+        /// </summary>
+        public ICollection<MSBuildFileLogger> FileLoggers => _fileLoggers;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MSBuildSettings"/> class.
         /// </summary>
         public MSBuildSettings()
@@ -105,6 +111,7 @@ namespace Cake.Common.Tools.MSBuild
             _targets = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _properties = new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
             _loggers = new List<MSBuildLogger>();
+            _fileLoggers = new List<MSBuildFileLogger>();
 
             ToolVersion = MSBuildToolVersion.Default;
             Configuration = string.Empty;
