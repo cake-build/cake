@@ -235,10 +235,9 @@ namespace Cake.Common.Tools.MSBuild
 
         /// <summary>
         /// Adds a file logger.
-        ///
-        /// each file logger will be declared in the order added
-        /// the first file logger will match up to the /fl parameter
-        /// the next nine (max) file loggers will match up to the /fl1 through /fl9 respectively
+        /// Each file logger will be declared in the order added.
+        /// The first file logger will match up to the /fl parameter.
+        /// The next nine (max) file loggers will match up to the /fl1 through /fl9 respectively.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="fileLoggerParameters">Parameters to be passed to the logger.</param>
@@ -249,21 +248,20 @@ namespace Cake.Common.Tools.MSBuild
             {
                 throw new ArgumentNullException(nameof(settings));
             }
-
             if (fileLoggerParameters == null)
             {
                 throw new ArgumentNullException(nameof(fileLoggerParameters));
             }
             settings.FileLoggers.Add(fileLoggerParameters);
+
             return settings;
         }
 
         /// <summary>
         /// Adds a file logger with all the default settings.
-        ///
-        /// each file logger will be declared in the order added
-        /// the first file logger will match up to the /fl parameter
-        /// the next nine (max) file loggers will match up to the /fl1 through /fl9 respectively
+        /// Each file logger will be declared in the order added.
+        /// The first file logger will match up to the /fl parameter.
+        /// The next nine (max) file loggers will match up to the /fl1 through /fl9 respectively.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>

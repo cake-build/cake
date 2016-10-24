@@ -839,17 +839,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Given
                 var fixture = new MSBuildRunnerFixture(false);
                 fixture.Settings.AddFileLogger(new MSBuildFileLogger { AppendToLogFile = false, Encoding = "E", HideVerboseItemAndPropertyList = false, LogFile = "A", MSBuildFileLoggerOutput = MSBuildFileLoggerOutput.All, PerformanceSummaryEnabled = false, ShowCommandLine = false, ShowEventId = false, ShowTimestamp = false, SummaryDisabled = false, Verbosity = Verbosity.Diagnostic });
-
                 fixture.Settings.AddFileLogger(new MSBuildFileLogger { AppendToLogFile = true, HideVerboseItemAndPropertyList = true, MSBuildFileLoggerOutput = MSBuildFileLoggerOutput.ErrorsOnly, PerformanceSummaryEnabled = true, ShowCommandLine = true, ShowEventId = true, ShowTimestamp = true, SummaryDisabled = true, Verbosity = Verbosity.Minimal });
-
                 fixture.Settings.AddFileLogger(new MSBuildFileLogger { MSBuildFileLoggerOutput = MSBuildFileLoggerOutput.WarningsOnly, Verbosity = Verbosity.Normal });
-
                 fixture.Settings.AddFileLogger(new MSBuildFileLogger { Verbosity = Verbosity.Quiet });
-
                 fixture.Settings.AddFileLogger(new MSBuildFileLogger { Verbosity = Verbosity.Verbose });
-
                 fixture.Settings.AddFileLogger(new MSBuildFileLogger { });
-
                 fixture.Settings.AddFileLogger();
 
                 // When
@@ -863,11 +857,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(false);
-
                 fixture.Settings.AddFileLogger();
 
                 // When
                 var result = fixture.Run();
+
                 // Then
                 Assert.Equal(@"/v:normal /target:Build /fl ""/Working/src/Solution.sln""", result.Args);
             }
@@ -877,7 +871,6 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(false);
-
                 fixture.Settings.AddFileLogger();
                 fixture.Settings.AddFileLogger();
                 fixture.Settings.AddFileLogger();
@@ -892,6 +885,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // When
                 var ex = Assert.Throws<System.InvalidOperationException>(() => fixture.Run());
+
                 // Then
                 Assert.Equal(@"Too Many FileLoggers", ex.Message);
             }

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core.Diagnostics;
@@ -32,7 +31,7 @@ namespace Cake.Common.Tools.MSBuild
         public bool SummaryDisabled { get; set; }
 
         /// <summary>
-        /// Gets or sets show ErrorsOnly, WarningsOnly, or All
+        /// Gets or sets show ErrorsOnly, WarningsOnly, or All.
         /// </summary>
         public MSBuildFileLoggerOutput MSBuildFileLoggerOutput { get; set; }
 
@@ -58,15 +57,13 @@ namespace Cake.Common.Tools.MSBuild
 
         /// <summary>
         /// Gets or sets Verbosity. Override the /verbosity setting for this logger.
-        ///
-        /// specify the following verbosity levels: q[uiet], m[inimal], n[ormal], v[erbose] (detailed), and diag[nostic].
+        /// Specify the following verbosity levels: q[uiet], m[inimal], n[ormal], v[erbose] (detailed), and diag[nostic].
         /// </summary>
         public Verbosity? Verbosity { get; set; }
 
         /// <summary>
         /// Gets or sets LogFile. The path to the log file into which the build log is written.
-        ///
-        /// an empty string will use msbuild.log
+        /// An empty string will use msbuild.log.
         /// </summary>
         public string LogFile { get; set; }
 
@@ -81,7 +78,7 @@ namespace Cake.Common.Tools.MSBuild
         public string Encoding { get; set; }
 
         /// <summary>
-        /// process the file logger config and return parameters as a string
+        /// Process the file logger config and return parameters as a string.
         /// </summary>
         /// <returns>The parameters separated by semi-colons.</returns>
         public string GetParameters()

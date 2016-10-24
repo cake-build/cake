@@ -126,9 +126,9 @@ namespace Cake.Common.Tools.MSBuild
             // Got any file loggers?
             if (settings.FileLoggers.Count > 0)
             {
-                var arguments = settings.FileLoggers.Select((logger, indx) =>
+                var arguments = settings.FileLoggers.Select((logger, index) =>
                 {
-                    return GetLoggerArgument(indx, logger);
+                    return GetLoggerArgument(index, logger);
                 });
 
                 foreach (var argument in arguments)
@@ -143,20 +143,20 @@ namespace Cake.Common.Tools.MSBuild
             return builder;
         }
 
-        private static string GetLoggerArgument(int indx, MSBuildFileLogger logger)
+        private static string GetLoggerArgument(int index, MSBuildFileLogger logger)
         {
-            if (indx >= 10)
+            if (index >= 10)
             {
                 throw new InvalidOperationException("Too Many FileLoggers");
             }
 
-            var cntr = indx == 0 ? string.Empty : indx.ToString();
-            var argument = $"/fl{cntr}";
+            var counter = index == 0 ? string.Empty : index.ToString();
+            var argument = $"/fl{counter}";
 
             var parameters = logger.GetParameters();
             if (!string.IsNullOrWhiteSpace(parameters))
             {
-                argument = $"{argument} /flp{cntr}:{parameters}";
+                argument = $"{argument} /flp{counter}:{parameters}";
             }
             return argument;
         }
