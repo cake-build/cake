@@ -72,9 +72,29 @@ namespace Cake.Common.Tools.VSTest
                 builder.AppendSwitchQuoted("/Settings", ":", settings.SettingsFile.MakeAbsolute(_environment).FullPath);
             }
 
+            if (settings.Parallel)
+            {
+                builder.Append("/Parallel");
+            }
+
+            if (settings.EnableCodeCoverage)
+            {
+                builder.Append("/EnableCodeCoverage");
+            }
+
             if (settings.InIsolation)
             {
                 builder.Append("/InIsolation");
+            }
+
+            if (settings.UseVsixExtensions != null)
+            {
+                builder.AppendSwitch("/UseVsixExtensions", ":", settings.UseVsixExtensions.Value ? "true" : "false");
+            }
+
+            if (settings.TestAdapterPath != null)
+            {
+                builder.AppendSwitchQuoted("/TestAdapterPath", ":", settings.TestAdapterPath.MakeAbsolute(_environment).FullPath);
             }
 
             if (settings.PlatformArchitecture != VSTestPlatform.Default)
@@ -87,9 +107,19 @@ namespace Cake.Common.Tools.VSTest
                 builder.AppendSwitch("/Framework", ":", settings.FrameworkVersion.ToString().Replace("NET", "Framework"));
             }
 
+            if (settings.TestCaseFilter != null)
+            {
+                builder.AppendSwitchQuoted("/TestCaseFilter", ":", settings.TestCaseFilter);
+            }
+
             if (settings.Logger == VSTestLogger.Trx)
             {
                 builder.Append("/Logger:trx");
+            }
+
+            if (settings.Diag != null)
+            {
+                builder.AppendSwitchQuoted("/Diag", ":", settings.Diag.MakeAbsolute(_environment).FullPath);
             }
 
             return builder;
