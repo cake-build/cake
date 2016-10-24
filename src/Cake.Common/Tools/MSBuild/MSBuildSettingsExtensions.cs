@@ -200,5 +200,50 @@ namespace Cake.Common.Tools.MSBuild
             });
             return settings;
         }
+
+        /// <summary>
+        /// Adds a file logger.
+        ///
+        /// each file logger will be declared in the order added
+        /// the first file logger will match up to the /fl parameter
+        /// the next nine (max) file loggers will match up to the /fl1 through /fl9 respectively
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="fileLoggerParameters">Parameters to be passed to the logger.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings AddFileLogger(this MSBuildSettings settings, MSBuildFileLogger fileLoggerParameters)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            if (fileLoggerParameters == null)
+            {
+                throw new ArgumentNullException(nameof(fileLoggerParameters));
+            }
+            settings.FileLoggers.Add(fileLoggerParameters);
+            return settings;
+        }
+
+        /// <summary>
+        /// Adds a file logger with all the default settings.
+        ///
+        /// each file logger will be declared in the order added
+        /// the first file logger will match up to the /fl parameter
+        /// the next nine (max) file loggers will match up to the /fl1 through /fl9 respectively
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings AddFileLogger(this MSBuildSettings settings)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.FileLoggers.Add(new MSBuildFileLogger());
+            return settings;
+        }
     }
 }

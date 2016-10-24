@@ -126,5 +126,18 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.Empty(settings.Loggers);
             }
         }
+
+        public sealed class TheFileLoggersProperty
+        {
+            [Fact]
+            public void Should_Be_Empty_By_Default()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Empty(settings.FileLoggers);
+            }
+        }
     }
 }
