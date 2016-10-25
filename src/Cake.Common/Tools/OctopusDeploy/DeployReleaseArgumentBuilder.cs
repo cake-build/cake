@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Globalization;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -91,7 +92,7 @@ namespace Cake.Common.Tools.OctopusDeploy
 
             if (_settings.DeployAt.HasValue)
             {
-                Builder.AppendSwitchQuoted("--deployat", "=", _settings.DeployAt.Value.ToString("yyyy-MM-dd HH:mm"));
+                Builder.AppendSwitchQuoted("--deployat", "=", _settings.DeployAt.Value.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture));
             }
 
             AppendMultipleTimes("tenant", _settings.Tenant);
