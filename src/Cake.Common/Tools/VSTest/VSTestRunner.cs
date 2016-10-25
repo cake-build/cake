@@ -54,7 +54,7 @@ namespace Cake.Common.Tools.VSTest
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            base.Run(settings, GetArguments(assemblyPaths, settings));
+            Run(settings, GetArguments(assemblyPaths, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(IEnumerable<FilePath> assemblyPaths, VSTestSettings settings)
@@ -112,14 +112,14 @@ namespace Cake.Common.Tools.VSTest
                 builder.AppendSwitchQuoted("/TestCaseFilter", ":", settings.TestCaseFilter);
             }
 
-            if (settings.Logger == VSTestLogger.Trx)
-            {
-                builder.Append("/Logger:trx");
-            }
-
             if (settings.Diag != null)
             {
                 builder.AppendSwitchQuoted("/Diag", ":", settings.Diag.MakeAbsolute(_environment).FullPath);
+            }
+
+            if (!string.IsNullOrEmpty(settings.Logger))
+            {
+                builder.Append("/Logger:{0}", settings.Logger.Trim());
             }
 
             return builder;
