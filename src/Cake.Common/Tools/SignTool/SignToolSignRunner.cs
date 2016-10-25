@@ -104,9 +104,27 @@ namespace Cake.Common.Tools.SignTool
             // SIGN Command.
             builder.Append("SIGN");
 
+            // SHA-256.
+            if (settings.DigestAlgorithm == SignToolDigestAlgorithm.Sha256)
+            {
+                builder.Append("/fd sha256");
+            }
+
             // TimeStamp server.
-            builder.Append("/t");
-            builder.AppendQuoted(settings.TimeStampUri.AbsoluteUri);
+            if (settings.TimeStampDigestAlgorithm == SignToolDigestAlgorithm.Sha256)
+            {
+                // If Sha256 use RFC 3161 timestamp server.
+                builder.Append("/tr");
+                builder.AppendQuoted(settings.TimeStampUri.AbsoluteUri);
+
+                builder.Append("/td sha256");
+            }
+            else
+            {
+                // Otherwise use SHA-1 Authenticode timestamp server
+                builder.Append("/t");
+                builder.AppendQuoted(settings.TimeStampUri.AbsoluteUri);
+            }
 
             if (settings.CertPath == null && string.IsNullOrEmpty(settings.CertThumbprint))
             {
@@ -178,6 +196,12 @@ namespace Cake.Common.Tools.SignTool
             {
                 builder.Append("/du");
                 builder.AppendQuoted(settings.DescriptionUri.AbsoluteUri);
+            }
+
+            // Append signature.
+            if (settings.AppendSignature)
+            {
+                builder.Append("/as");
             }
 
             // Target Assembly to sign.

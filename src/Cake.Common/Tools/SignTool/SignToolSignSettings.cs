@@ -42,5 +42,20 @@ namespace Cake.Common.Tools.SignTool
         /// Gets or sets the signed content's expanded description URL.
         /// </summary>
         public Uri DescriptionUri { get; set; }
+
+        /// <summary>
+        /// Gets or sets the file digest algorithm
+        /// </summary>
+        public SignToolDigestAlgorithm DigestAlgorithm { get; set; }
+
+        /// <summary>
+        /// Gets or sets the timestamp digest algorithm
+        /// </summary>
+        public SignToolDigestAlgorithm TimeStampDigestAlgorithm { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the signature should be appended
+        /// </summary>
+        public bool AppendSignature { get; set; }
     }
 }
