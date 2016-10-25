@@ -58,6 +58,18 @@ namespace Cake.Common.Tools.MSBuild
                 builder.Append(settings.MaxCpuCount > 0 ? string.Concat("/m:", settings.MaxCpuCount) : "/m");
             }
 
+            // Set the detailed summary flag.
+            if (settings.DetailedSummary.GetValueOrDefault())
+            {
+                builder.Append("/ds");
+            }
+
+            // Set the no console logger flag.
+            if (settings.NoConsoleLogger.GetValueOrDefault())
+            {
+                builder.Append("/noconlog");
+            }
+
             // Set the verbosity.
             builder.Append(string.Format(CultureInfo.InvariantCulture, "/v:{0}", GetVerbosityName(settings.Verbosity)));
 
@@ -111,10 +123,42 @@ namespace Cake.Common.Tools.MSBuild
                 }
             }
 
+            // Got any file loggers?
+            if (settings.FileLoggers.Count > 0)
+            {
+                var arguments = settings.FileLoggers.Select((logger, index) =>
+                {
+                    return GetLoggerArgument(index, logger);
+                });
+
+                foreach (var argument in arguments)
+                {
+                    builder.Append(argument);
+                }
+            }
+
             // Add the solution as the last parameter.
             builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
 
             return builder;
+        }
+
+        private static string GetLoggerArgument(int index, MSBuildFileLogger logger)
+        {
+            if (index >= 10)
+            {
+                throw new InvalidOperationException("Too Many FileLoggers");
+            }
+
+            var counter = index == 0 ? string.Empty : index.ToString();
+            var argument = $"/fl{counter}";
+
+            var parameters = logger.GetParameters();
+            if (!string.IsNullOrWhiteSpace(parameters))
+            {
+                argument = $"{argument} /flp{counter}:{parameters}";
+            }
+            return argument;
         }
 
         private static string GetLoggerArgument(MSBuildLogger logger)
