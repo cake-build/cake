@@ -20,8 +20,11 @@ namespace Cake.Common.Net
         public string Password { get; set; }
 
         /// <summary>
-        /// Gets or sets a value that controls whether default credentials are sent when downloading the file
+        /// Gets or sets a value indicating whether default credentials are sent when downloading the file
         /// </summary>
+        /// <remarks>
+        /// If set to true, any Username and Password that has been speficied will be ignored.
+        /// </remarks>
         public bool UseDefaultCredentials { get; set; }
     }
 }

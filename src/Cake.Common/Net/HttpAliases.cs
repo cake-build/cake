@@ -197,12 +197,15 @@ namespace Cake.Common.Net
             // We track the last posted value since the event seems to fire many times for the same value.
             var percentComplete = 0;
 
-            using (var http = GetHttpClient(context))
+            using (var http = GetHttpClient(context, settings.UseDefaultCredentials))
             {
-                if (!string.IsNullOrWhiteSpace(settings.Username) && !string.IsNullOrWhiteSpace(settings.Password))
+                if (!settings.UseDefaultCredentials)
                 {
-                    var byteArray = Encoding.ASCII.GetBytes(string.Concat(settings.Username, ":", settings.Password));
-                    http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+                    if (!string.IsNullOrWhiteSpace(settings.Username) && !string.IsNullOrWhiteSpace(settings.Password))
+                    {
+                        var byteArray = Encoding.ASCII.GetBytes(string.Concat(settings.Username, ":", settings.Password));
+                        http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+                    }
                 }
 
                 var progress = new Progress<int>(progressPercentage =>
@@ -252,7 +255,7 @@ namespace Cake.Common.Net
             }
 
             context.Log.Verbose("Uploading file: {0}", address);
-            using (var client = GetHttpClient(context))
+            using (var client = GetHttpClient(context, false))
             {
                 client.UploadFileAsync(address, filePath.FullPath).Wait();
             }
@@ -309,7 +312,7 @@ namespace Cake.Common.Net
             }
 
             context.Log.Verbose("Uploading file: {0}", address);
-            using (var client = GetHttpClient(context))
+            using (var client = GetHttpClient(context, false))
             {
                 client.UploadFileAsync(address, data, fileName).Wait();
             }
@@ -341,10 +344,11 @@ namespace Cake.Common.Net
         /// The returned client should be disposed of by the caller.
         /// </summary>
         /// <param name="context">The current Cake context.</param>
+        /// <param name="useDefaultCredentials">Indicates whether or not to use default credentials.</param>
         /// <returns>A <see cref="HttpClient"/> instance.</returns>
-        private static HttpClient GetHttpClient(ICakeContext context)
+        private static HttpClient GetHttpClient(ICakeContext context, bool useDefaultCredentials)
         {
-            var client = new HttpClient();
+            var client = useDefaultCredentials ? new HttpClient(new HttpClientHandler { UseDefaultCredentials = true }) : new HttpClient();
             client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Cake", context.Environment.Runtime.CakeVersion.ToString()));
             return client;
         }
