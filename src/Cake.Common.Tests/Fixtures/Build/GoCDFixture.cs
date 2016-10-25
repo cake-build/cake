@@ -4,6 +4,7 @@
 
 using Cake.Common.Build.GoCD;
 using Cake.Core;
+using Cake.Testing;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Build
@@ -12,10 +13,13 @@ namespace Cake.Common.Tests.Fixtures.Build
     {
         public ICakeEnvironment Environment { get; set; }
 
+        public FakeLog CakeLog { get; set; }
+
         public GoCDFixture()
         {
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.GetEnvironmentVariable("https://127.0.0.1:8154/go").Returns((string)null);
+            CakeLog = new FakeLog();
         }
 
         public void IsRunningOnGoCD()
@@ -25,7 +29,7 @@ namespace Cake.Common.Tests.Fixtures.Build
 
         public GoCDProvider CreateGoCDService()
         {
-            return new GoCDProvider(Environment);
+            return new GoCDProvider(Environment, CakeLog);
         }
     }
 }
