@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.VSTest
     public static class VSTestSettingsExtensions
     {
         /// <summary>
-        /// Do not Log
+        /// Do not Log.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The same <see cref="VSTestSettings"/> instance so that multiple calls can be chained.</returns>
@@ -22,7 +22,7 @@ namespace Cake.Common.Tools.VSTest
         }
 
         /// <summary>
-        /// Log to a trx file
+        /// Log to a trx file.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The same <see cref="VSTestSettings"/> instance so that multiple calls can be chained.</returns>
@@ -32,7 +32,7 @@ namespace Cake.Common.Tools.VSTest
         }
 
         /// <summary>
-        /// Log to the AppVeyor logger (which is only available when building your solution on the AppVeyor platform)
+        /// Log to the AppVeyor logger (which is only available when building your solution on the AppVeyor platform).
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The same <see cref="VSTestSettings"/> instance so that multiple calls can be chained.</returns>
@@ -42,7 +42,7 @@ namespace Cake.Common.Tools.VSTest
         }
 
         /// <summary>
-        /// Log to a custom logger
+        /// Log to a custom logger.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="loggerName">The name of the logger</param>
