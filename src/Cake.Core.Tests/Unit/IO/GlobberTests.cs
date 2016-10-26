@@ -142,6 +142,20 @@ namespace Cake.Core.Tests.Unit.IO
                   Assert.Equal(1, result.Length);
                   Assert.ContainsFilePath(result, "C:/Some %2F Directory/MyTool.dll");
                 }
+
+                [WindowsFact]
+                public void Should_Parse_Glob_Expressions_With_Exclamation_In_Them()
+                {
+                    // Given
+                    var fixture = new GlobberFixture(windows: true);
+
+                    // When
+                    var result = fixture.Match("C:/Some ! Directory/*.dll");
+
+                    // Then
+                    Assert.Equal(1, result.Length);
+                    Assert.ContainsFilePath(result, "C:/Some ! Directory/MyTool.dll");
+                }
             }
 
             public sealed class WithPredicate
