@@ -95,11 +95,31 @@ namespace Cake.Common.Tools.NuGet.Pack
 
                 // Add the files
                 dependenciesElement.RemoveAll();
-                foreach (var dependency in settings.Dependencies)
+                if (settings.Dependencies.All(c => string.IsNullOrEmpty(c.TargetFramework)))
                 {
-                    var fileElement = document.CreateAndAppendElement(dependenciesElement, "dependency");
-                    fileElement.AddAttributeIfSpecified(dependency.Id, "id");
-                    fileElement.AddAttributeIfSpecified(dependency.Version, "version");
+                    foreach (var dependency in settings.Dependencies)
+                    {
+                        var fileElement = document.CreateAndAppendElement(dependenciesElement, "dependency");
+                        fileElement.AddAttributeIfSpecified(dependency.Id, "id");
+                        fileElement.AddAttributeIfSpecified(dependency.Version, "version");
+                    }
+                }
+                else
+                {
+                    foreach (var targetFrameworkDependencies in settings.Dependencies.GroupBy(x => x.TargetFramework))
+                    {
+                        var groupElement = document.CreateAndAppendElement(dependenciesElement, "group");
+                        if (!string.IsNullOrEmpty(targetFrameworkDependencies.Key))
+                        {
+                            groupElement.AddAttributeIfSpecified(targetFrameworkDependencies.Key, "targetFramework");
+                        }
+                        foreach (var dependency in targetFrameworkDependencies)
+                        {
+                            var fileElement = document.CreateAndAppendElement(groupElement, "dependency");
+                            fileElement.AddAttributeIfSpecified(dependency.Id, "id");
+                            fileElement.AddAttributeIfSpecified(dependency.Version, "version");
+                        }
+                    }
                 }
             }
         }
