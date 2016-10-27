@@ -101,7 +101,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Copy")]
         public static void CopyFiles(this ICakeContext context, string pattern, DirectoryPath targetDirectoryPath)
         {
-            FileCopier.CopyFiles(context, pattern, targetDirectoryPath);
+            FileCopier.CopyFiles(context, pattern, targetDirectoryPath, false);
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Copy")]
         public static void CopyFiles(this ICakeContext context, IEnumerable<FilePath> filePaths, DirectoryPath targetDirectoryPath)
         {
-            FileCopier.CopyFiles(context, filePaths, targetDirectoryPath);
+            FileCopier.CopyFiles(context, filePaths, targetDirectoryPath, false);
         }
 
         /// <summary>
@@ -148,7 +148,75 @@ namespace Cake.Common.IO
                 throw new ArgumentNullException(nameof(filePaths));
             }
             var paths = filePaths.Select(p => new FilePath(p));
-            FileCopier.CopyFiles(context, paths, targetDirectoryPath);
+            FileCopier.CopyFiles(context, paths, targetDirectoryPath, false);
+        }
+
+        /// <summary>
+        /// Copies all files matching the provided pattern to a new location.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="pattern">The pattern.</param>
+        /// <param name="targetDirectoryPath">The target directory path.</param>
+        /// <param name="preserveFolderStructure">Keep the folder structure.</param>
+        /// <example>
+        /// <code>
+        /// CopyFiles("Cake.*", "./publish");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Copy")]
+        public static void CopyFiles(this ICakeContext context, string pattern, DirectoryPath targetDirectoryPath, bool preserveFolderStructure)
+        {
+            FileCopier.CopyFiles(context, pattern, targetDirectoryPath, preserveFolderStructure);
+        }
+
+        /// <summary>
+        /// Copies existing files to a new location.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="filePaths">The file paths.</param>
+        /// <param name="targetDirectoryPath">The target directory path.</param>
+        /// <param name="preserveFolderStructure">Keep the folder structure.</param>
+        /// <example>
+        /// <code>
+        /// var files = GetFiles("./**/Cake.*");
+        /// CopyFiles(files, "destination");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Copy")]
+        public static void CopyFiles(this ICakeContext context, IEnumerable<FilePath> filePaths, DirectoryPath targetDirectoryPath, bool preserveFolderStructure)
+        {
+            FileCopier.CopyFiles(context, filePaths, targetDirectoryPath, preserveFolderStructure);
+        }
+
+        /// <summary>
+        /// Copies existing files to a new location.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="filePaths">The file paths.</param>
+        /// <param name="targetDirectoryPath">The target directory path.</param>
+        /// <param name="preserveFolderStructure">Keep the folder structure.</param>
+        /// <example>
+        /// <code>
+        /// CreateDirectory("destination");
+        /// var files = new [] {
+        ///     "Cake.exe",
+        ///     "Cake.pdb"
+        /// };
+        /// CopyFiles(files, "destination");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Copy")]
+        public static void CopyFiles(this ICakeContext context, IEnumerable<string> filePaths, DirectoryPath targetDirectoryPath, bool preserveFolderStructure)
+        {
+            if (filePaths == null)
+            {
+                throw new ArgumentNullException(nameof(filePaths));
+            }
+            var paths = filePaths.Select(p => new FilePath(p));
+            FileCopier.CopyFiles(context, paths, targetDirectoryPath, preserveFolderStructure);
         }
 
         /// <summary>

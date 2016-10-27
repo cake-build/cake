@@ -305,6 +305,20 @@ namespace Cake.Common.Tests.Unit.IO
                 }
 
                 [Fact]
+                public void Should_Keep_Folder_Structure()
+                {
+                    // Given
+                    var fixture = new FileCopyFixture();
+
+                    // When
+                    FileAliases.CopyFiles(fixture.Context, fixture.SourceFilePaths, "./target");
+
+                    // Then
+                    fixture.TargetFiles[0].Received(1).Copy(Arg.Any<FilePath>(), true);
+                    fixture.TargetFiles[1].Received(1).Copy(Arg.Any<FilePath>(), true);
+                }
+
+                [Fact]
                 public void Should_Copy_Files()
                 {
                     // Given
@@ -402,6 +416,21 @@ namespace Cake.Common.Tests.Unit.IO
                 }
 
                 [Fact]
+                public void Should_Keep_Folder_Structure()
+                {
+                    // Given
+                    var fixture = new FileCopyFixture();
+                    var filePaths = fixture.SourceFilePaths.Select(x => x.FullPath);
+
+                    // When
+                    FileAliases.CopyFiles(fixture.Context, filePaths, "./target");
+
+                    // Then
+                    fixture.TargetFiles[0].Received(1).Copy(Arg.Any<FilePath>(), true);
+                    fixture.TargetFiles[1].Received(1).Copy(Arg.Any<FilePath>(), true);
+                }
+
+                [Fact]
                 public void Should_Copy_Files()
                 {
                     // Given
@@ -490,6 +519,20 @@ namespace Cake.Common.Tests.Unit.IO
                     // Then
                     Assert.IsType<FileNotFoundException>(result);
                     Assert.Equal("The file '/Working/file2.txt' does not exist.", result?.Message);
+                }
+
+                [Fact]
+                public void Should_Keep_Folder_Structure()
+                {
+                    // Given
+                    var fixture = new FileCopyFixture();
+
+                    // When
+                    FileAliases.CopyFiles(fixture.Context, "*", "./target", true);
+
+                    // Then
+                    fixture.TargetFiles[0].Received(1).Copy(Arg.Any<FilePath>(), true);
+                    fixture.TargetFiles[1].Received(1).Copy(Arg.Any<FilePath>(), true);
                 }
 
                 [Fact]
