@@ -24,6 +24,11 @@ namespace Cake.Common.Tools.SignTool
         public string CertThumbprint { get; set; }
 
         /// <summary>
+        /// Gets or sets the name of the subject of the signing certificate. This value can be a substring of the entire subject name.
+        /// </summary>
+        public string CertSubjectName { get; set; }
+
+        /// <summary>
         /// Gets or sets the <c>PFX</c> certificate path.
         /// </summary>
         public FilePath CertPath { get; set; }
