@@ -22,6 +22,11 @@ namespace Cake.Common.Tools.DotNetCore.Test
         public DirectoryPath OutputDirectory { get; set; }
 
         /// <summary>
+        /// Gets or sets the XML output file
+        /// </summary>
+        public FilePath XmlPath { get; set; }
+
+        /// <summary>
         /// Gets or sets the target runtime.
         /// </summary>
         public string Runtime { get; set; }

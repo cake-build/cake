@@ -99,6 +99,13 @@ namespace Cake.Common.Tools.DotNetCore.Test
                 builder.Append("--no-build");
             }
 
+            // Xml output for test results
+            if (settings.XmlPath != null)
+            {
+                builder.Append("-xml");
+                builder.AppendQuoted(settings.XmlPath.MakeAbsolute(_environment).FullPath);
+            }
+
             return builder;
         }
     }
