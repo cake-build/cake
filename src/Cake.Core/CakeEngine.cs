@@ -221,7 +221,7 @@ namespace Cake.Core
             }
             catch (Exception exception)
             {
-                _log.Error("An error occured when executing task '{0}'.", task.Name);
+                _log.Error("An error occurred when executing task '{0}'.", task.Name);
 
                 exceptionWasThrown = true;
 
@@ -293,7 +293,7 @@ namespace Cake.Core
                 }
                 catch (Exception ex)
                 {
-                    _log.Error("An error occured in the custom task teardown action ({0}).", task.Name);
+                    _log.Error("An error occurred in the custom task teardown action ({0}).", task.Name);
                     if (!exceptionWasThrown)
                     {
                         // If no other exception was thrown, we throw this one.
@@ -361,7 +361,7 @@ namespace Cake.Core
                 }
                 catch (Exception ex)
                 {
-                    _log.Error("An error occured in the custom teardown action.");
+                    _log.Error("An error occurred in the custom teardown action.");
                     if (!exceptionWasThrown)
                     {
                         // If no other exception was thrown, we throw this one.

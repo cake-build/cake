@@ -487,7 +487,7 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
-            public void Should_Throw_Exception_Occuring_In_Teardown_If_No_Previous_Exception_Was_Thrown()
+            public void Should_Throw_Exception_Occurring_In_Teardown_If_No_Previous_Exception_Was_Thrown()
             {
                 // Given
                 var fixture = new CakeEngineFixture();
@@ -851,7 +851,7 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
-            public void Should_Throw_Exception_Occuring_In_Task_Teardown_If_No_Previous_Exception_Was_Thrown()
+            public void Should_Throw_Exception_Occurring_In_Task_Teardown_If_No_Previous_Exception_Was_Thrown()
             {
                 // Given
                 var fixture = new CakeEngineFixture();
