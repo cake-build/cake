@@ -91,10 +91,10 @@ namespace Cake
         public bool Experimental { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether an error occured during parsing.
+        /// Gets or sets a value indicating whether an error occurred during parsing.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if an error occured during parsing; otherwise, <c>false</c>.
+        ///   <c>true</c> if an error occurred during parsing; otherwise, <c>false</c>.
         /// </value>
         public bool HasError { get; set; }
 
