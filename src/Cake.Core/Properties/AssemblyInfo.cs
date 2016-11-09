@@ -21,6 +21,7 @@ using System.Runtime.InteropServices;
 // We're CLS compliant.
 [assembly: CLSCompliant(true)]
 
-// Make internals visible to unit test assembly.
+// Make internals visible to other Cake assemblies.
+[assembly: InternalsVisibleTo("Cake.Common")]
 [assembly: InternalsVisibleTo("Cake.Core.Tests")]
 [assembly: InternalsVisibleTo("Cake.Testing.Xunit")]

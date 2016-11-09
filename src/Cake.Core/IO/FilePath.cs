@@ -53,9 +53,9 @@ namespace Cake.Core.IO
         }
 
         /// <summary>
-        /// Gets the filename without it's extension.
+        /// Gets the filename without its extension.
         /// </summary>
-        /// <returns>The filename without it's extension.</returns>
+        /// <returns>The filename without its extension.</returns>
         public FilePath GetFilenameWithoutExtension()
         {
             var filename = System.IO.Path.GetFileNameWithoutExtension(FullPath);

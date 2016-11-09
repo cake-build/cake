@@ -584,6 +584,36 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Fact]
+            public void Should_Use_Detailed_Summary_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false);
+                fixture.Settings.DetailedSummary = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/ds /v:normal /target:Build " +
+                             "\"/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Use_No_Console_Logger_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false);
+                fixture.Settings.NoConsoleLogger = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/noconlog /v:normal /target:Build " +
+                             "\"/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Append_Targets_To_Process_Arguments()
             {
                 // Given
@@ -801,6 +831,63 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Then
                 Assert.Equal("/v:normal /target:Build /logger:B,A;C /logger:E,D /logger:F " +
                              "\"/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_FileLogger_To_Process_Arguments()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false);
+                fixture.Settings.AddFileLogger(new MSBuildFileLogger { AppendToLogFile = false, Encoding = "E", HideVerboseItemAndPropertyList = false, LogFile = "A", MSBuildFileLoggerOutput = MSBuildFileLoggerOutput.All, PerformanceSummaryEnabled = false, ShowCommandLine = false, ShowEventId = false, ShowTimestamp = false, SummaryDisabled = false, Verbosity = Verbosity.Diagnostic });
+                fixture.Settings.AddFileLogger(new MSBuildFileLogger { AppendToLogFile = true, HideVerboseItemAndPropertyList = true, MSBuildFileLoggerOutput = MSBuildFileLoggerOutput.ErrorsOnly, PerformanceSummaryEnabled = true, ShowCommandLine = true, ShowEventId = true, ShowTimestamp = true, SummaryDisabled = true, Verbosity = Verbosity.Minimal });
+                fixture.Settings.AddFileLogger(new MSBuildFileLogger { MSBuildFileLoggerOutput = MSBuildFileLoggerOutput.WarningsOnly, Verbosity = Verbosity.Normal });
+                fixture.Settings.AddFileLogger(new MSBuildFileLogger { Verbosity = Verbosity.Quiet });
+                fixture.Settings.AddFileLogger(new MSBuildFileLogger { Verbosity = Verbosity.Verbose });
+                fixture.Settings.AddFileLogger(new MSBuildFileLogger { });
+                fixture.Settings.AddFileLogger();
+
+                // When
+                var result = fixture.Run();
+                // Then
+                Assert.Equal(@"/v:normal /target:Build /fl /flp:logfile=A;Encoding=E;Verbosity=Diagnostic /fl1 /flp1:Append;PerformanceSummary;NoSummary;ErrorsOnly;NoItemAndPropertyList;ShowCommandLine;ShowTimestamp;ShowEventId;Verbosity=Minimal /fl2 /flp2:WarningsOnly;Verbosity=Normal /fl3 /flp3:Verbosity=Quiet /fl4 /flp4:Verbosity=Verbose /fl5 /fl6 ""/Working/src/Solution.sln""", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_Default_FileLogger_To_Process_Arguments()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false);
+                fixture.Settings.AddFileLogger();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(@"/v:normal /target:Build /fl ""/Working/src/Solution.sln""", result.Args);
+            }
+
+            [Fact]
+            public void Should_Throw_Exception_For_Too_Many_FileLoggers()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false);
+                fixture.Settings.AddFileLogger();
+                fixture.Settings.AddFileLogger();
+                fixture.Settings.AddFileLogger();
+                fixture.Settings.AddFileLogger();
+                fixture.Settings.AddFileLogger();
+                fixture.Settings.AddFileLogger();
+                fixture.Settings.AddFileLogger();
+                fixture.Settings.AddFileLogger();
+                fixture.Settings.AddFileLogger();
+                fixture.Settings.AddFileLogger();
+                fixture.Settings.AddFileLogger();
+
+                // When
+                var ex = Assert.Throws<System.InvalidOperationException>(() => fixture.Run());
+
+                // Then
+                Assert.Equal(@"Too Many FileLoggers", ex.Message);
             }
         }
     }

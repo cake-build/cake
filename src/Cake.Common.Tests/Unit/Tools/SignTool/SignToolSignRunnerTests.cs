@@ -4,6 +4,7 @@
 
 using System;
 using Cake.Common.Tests.Fixtures.Tools;
+using Cake.Common.Tools.SignTool;
 using Cake.Core;
 using Cake.Testing;
 using Xunit;
@@ -99,7 +100,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("SignTool SIGN: The assembly '/Working/a.dll' do not exist.", result?.Message);
+                Assert.Equal("SignTool SIGN: The assembly '/Working/a.dll' does not exist.", result?.Message);
             }
 
             [Fact]
@@ -177,7 +178,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("SignTool SIGN: The certificate '/Working/cert.pfx' do not exist.", result?.Message);
+                Assert.Equal("SignTool SIGN: The certificate '/Working/cert.pfx' does not exist.", result?.Message);
             }
 
             [Fact]
@@ -278,6 +279,48 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
 
                 // Then
                 Assert.Equal("SIGN /t \"https://t.com/\" /sha1 \"ThumbprintTest\" \"/Working/a.dll\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Call_Sign_Tool_With_Correct_Parameters_With_Sha256_Digest_Algorithm()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.DigestAlgorithm = SignToolDigestAlgorithm.Sha256;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("SIGN /fd sha256 /t \"https://t.com/\" /f \"/Working/cert.pfx\" /p secret \"/Working/a.dll\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Call_Sign_Tool_With_Correct_Parameters_With_RFC6131_Timestamp_Uri_And_Sha256_Timestamp_Algorithm()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.TimeStampDigestAlgorithm = SignToolDigestAlgorithm.Sha256;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("SIGN /tr \"https://t.com/\" /td sha256 /f \"/Working/cert.pfx\" /p secret \"/Working/a.dll\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Call_Sign_Tool_With_Correct_Parameters_With_Append_Signature()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.AppendSignature = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("SIGN /t \"https://t.com/\" /f \"/Working/cert.pfx\" /p secret /as \"/Working/a.dll\"", result.Args);
             }
         }
     }

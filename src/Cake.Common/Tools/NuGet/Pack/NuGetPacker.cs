@@ -73,7 +73,7 @@ namespace Cake.Common.Tools.NuGet.Pack
             {
                 throw new CakeException("Required setting Description not specified.");
             }
-            if (settings.Files == null || settings.Files.Count == 0)
+            if ((settings.Files == null || settings.Files.Count == 0) && (settings.Dependencies == null || settings.Dependencies.Count == 0))
             {
                 throw new CakeException("Required setting Files not specified.");
             }
@@ -124,7 +124,7 @@ namespace Cake.Common.Tools.NuGet.Pack
             }
             finally
             {
-                if (processedNuspecFilePath != null)
+                if (processedNuspecFilePath != null && !settings.KeepTemporaryNuSpecFile)
                 {
                     // Delete the processed file.
                     var file = _fileSystem.GetFile(processedNuspecFilePath);

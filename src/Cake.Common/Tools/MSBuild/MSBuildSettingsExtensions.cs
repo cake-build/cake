@@ -120,7 +120,7 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
-        /// Sets the maximum CPU count.
+        /// Sets the maximum CPU count. Without this set MSBuild will compile projects in this solution one at a time.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="maxCpuCount">The maximum CPU count. Set this value to zero to use as many MSBuild processes as available CPUs.</param>
@@ -155,6 +155,38 @@ namespace Cake.Common.Tools.MSBuild
                 throw new ArgumentNullException(nameof(settings));
             }
             settings.NodeReuse = reuse;
+            return settings;
+        }
+
+        /// <summary>
+        /// Sets whether or not detailed summary should be enabled.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="detailedSummary"><c>true</c> if detailed summary should be enabled; otherwise <c>false</c>.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetDetailedSummary(this MSBuildSettings settings, bool detailedSummary)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            settings.DetailedSummary = detailedSummary;
+            return settings;
+        }
+
+        /// <summary>
+        /// Sets whether or not no console logging should be enabled.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="noConsoleLog"><c>true</c> if no console log should be enabled; otherwise <c>false</c>.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetNoConsoleLogger(this MSBuildSettings settings, bool noConsoleLog)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            settings.NoConsoleLogger = noConsoleLog;
             return settings;
         }
 
@@ -198,6 +230,49 @@ namespace Cake.Common.Tools.MSBuild
                 Class = loggerClass,
                 Parameters = loggerParameters
             });
+            return settings;
+        }
+
+        /// <summary>
+        /// Adds a file logger.
+        /// Each file logger will be declared in the order added.
+        /// The first file logger will match up to the /fl parameter.
+        /// The next nine (max) file loggers will match up to the /fl1 through /fl9 respectively.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="fileLoggerParameters">Parameters to be passed to the logger.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings AddFileLogger(this MSBuildSettings settings, MSBuildFileLogger fileLoggerParameters)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            if (fileLoggerParameters == null)
+            {
+                throw new ArgumentNullException(nameof(fileLoggerParameters));
+            }
+            settings.FileLoggers.Add(fileLoggerParameters);
+
+            return settings;
+        }
+
+        /// <summary>
+        /// Adds a file logger with all the default settings.
+        /// Each file logger will be declared in the order added.
+        /// The first file logger will match up to the /fl parameter.
+        /// The next nine (max) file loggers will match up to the /fl1 through /fl9 respectively.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings AddFileLogger(this MSBuildSettings settings)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.FileLoggers.Add(new MSBuildFileLogger());
             return settings;
         }
     }

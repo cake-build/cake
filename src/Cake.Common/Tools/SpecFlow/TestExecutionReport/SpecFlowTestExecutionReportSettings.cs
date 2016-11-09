@@ -9,5 +9,10 @@ namespace Cake.Common.Tools.SpecFlow.TestExecutionReport
     /// </summary>
     public sealed class SpecFlowTestExecutionReportSettings : SpecFlowSettings
     {
+        /// <summary>
+        /// Gets or sets a value indicating whether exceptions from the
+        /// intercepted action should be rethrown after report generation
+        /// </summary>
+        public bool ThrowOnTestFailure { get; set; }
     }
 }

@@ -229,6 +229,68 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
         }
 
+        public sealed class TheDetailedSummaryMethod
+        {
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public void Should_Set_Detailed_Summary(bool detailedSummary)
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                settings.SetDetailedSummary(detailedSummary);
+
+                // Then
+                Assert.Equal(detailedSummary, settings.DetailedSummary);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.SetDetailedSummary(true);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
+        public sealed class TheNoConsoleLoggerMethod
+        {
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public void Should_Set_No_Console_Logger(bool noConsoleLog)
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                settings.SetNoConsoleLogger(noConsoleLog);
+
+                // Then
+                Assert.Equal(noConsoleLog, settings.NoConsoleLogger);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.SetNoConsoleLogger(true);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
         public sealed class TheSetVerbosityMethod
         {
             [Theory]
@@ -297,6 +359,44 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 Assert.Equal(settings, result);
+            }
+        }
+
+        public sealed class TheAddFileLoggersMethod
+        {
+            [Fact]
+            public void Should_Add_Logger()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+                var fileLogger = new MSBuildFileLogger();
+                var fileLogger2 = new MSBuildFileLogger { LogFile = "A" };
+
+                // When
+                settings.AddFileLogger(fileLogger);
+                settings.AddFileLogger(fileLogger2);
+
+                // Then
+                var loggers = settings.FileLoggers.ToArray();
+                Assert.Equal(2, loggers.Length);
+                Assert.Equal(fileLogger, loggers[0]);
+                Assert.Equal(fileLogger2, loggers[1]);
+                Assert.Equal("A", loggers[1].LogFile);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.AddFileLogger(new MSBuildFileLogger());
+                var result1 = settings.AddFileLogger();
+
+                // Then
+                Assert.Equal(settings, result);
+                Assert.Equal(settings, result1);
             }
         }
     }

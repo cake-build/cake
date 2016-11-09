@@ -115,7 +115,7 @@ namespace Cake.Scripting.Mono
             catch (InternalErrorException)
             {
                 // The error will be logged via the report printer.
-                throw new CakeException("An error occured while executing build script.");
+                throw new CakeException("An error occurred while executing build script.");
             }
         }
     }

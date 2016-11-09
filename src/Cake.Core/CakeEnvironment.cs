@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Versioning;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Polyfill;
 
@@ -16,6 +17,8 @@ namespace Cake.Core
     /// </summary>
     public sealed class CakeEnvironment : ICakeEnvironment
     {
+        private readonly ICakeLog _log;
+
         /// <summary>
         /// Gets or sets the working directory.
         /// </summary>
@@ -49,10 +52,12 @@ namespace Cake.Core
         /// </summary>
         /// <param name="platform">The platform.</param>
         /// <param name="runtime">The runtime.</param>
-        public CakeEnvironment(ICakePlatform platform, ICakeRuntime runtime)
+        /// <param name="log">The log.</param>
+        public CakeEnvironment(ICakePlatform platform, ICakeRuntime runtime, ICakeLog log)
         {
             Platform = platform;
             Runtime = runtime;
+            _log = log;
 
             // Get the application root.
             var assembly = AssemblyHelper.GetExecutingAssembly();
@@ -95,10 +100,31 @@ namespace Cake.Core
         {
             return Environment.GetEnvironmentVariables()
                 .Cast<System.Collections.DictionaryEntry>()
-                .ToDictionary(
-                    key => (string)key.Key,
-                    value => value.Value as string,
-                    StringComparer.OrdinalIgnoreCase);
+                .Aggregate(
+                    new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase),
+                    (dictionary, entry) =>
+                    {
+                        var key = (string)entry.Key;
+                        var value = entry.Value as string;
+                        string existingValue;
+                        if (dictionary.TryGetValue(key, out existingValue))
+                        {
+                            if (!StringComparer.OrdinalIgnoreCase.Equals(value, existingValue))
+                            {
+                                _log.Warning("GetEnvironmentVariables() encountered duplicate for key: {0}, value: {1} (existing value: {2})",
+                                    key,
+                                    value,
+                                    existingValue);
+                            }
+                        }
+                        else
+                        {
+                            dictionary.Add(key, value);
+                        }
+
+                        return dictionary;
+                    },
+                    dictionary => dictionary);
         }
 
         /// <summary>

@@ -218,7 +218,7 @@ namespace Cake.Testing
         {
             if (!file.Exists)
             {
-                throw new FileNotFoundException("File do not exist.");
+                throw new FileNotFoundException("File does not exist.");
             }
 
             // Already exists?
@@ -237,7 +237,7 @@ namespace Cake.Testing
             var directory = FindDirectory(destination.GetDirectory());
             if (directory == null || !directory.Exists)
             {
-                throw new DirectoryNotFoundException("The destination path {0} do not exist.");
+                throw new DirectoryNotFoundException("The destination path {0} does not exist.");
             }
 
             // Make sure the file exist.
@@ -261,6 +261,74 @@ namespace Cake.Testing
 
             // Delete the original file.
             fakeFile.Delete();
+        }
+
+        public void MoveDirectory(FakeDirectory fakeDirectory, DirectoryPath destination)
+        {
+            var root = new Stack<FakeDirectory>();
+            var result = new Stack<FakeDirectory>();
+
+            if (string.IsNullOrEmpty(destination.FullPath))
+            {
+                throw new ArgumentException("The destination directory is empty.");
+            }
+
+            if (fakeDirectory.Path.Equals(destination))
+            {
+                throw new IOException("The directory being moved and the destination directory have the same name.");
+            }
+
+            if (FindDirectory(destination) != null)
+            {
+                throw new IOException("The destination directory already exists.");
+            }
+
+            string destinationParentPathStr = string.Join("/", destination.Segments.Take(destination.Segments.Length - 1).DefaultIfEmpty("/"));
+            DirectoryPath destinationParentPath = new DirectoryPath(destinationParentPathStr == string.Empty ? "/" : destinationParentPathStr);
+            if (FindDirectory(destinationParentPath) == null)
+            {
+                throw new DirectoryNotFoundException("The parent destination directory " + destinationParentPath.FullPath + " could not be found.");
+            }
+
+            if (fakeDirectory.Exists)
+            {
+                root.Push(fakeDirectory);
+            }
+
+            // Create destination directories and move files
+            while (root.Count > 0)
+            {
+                var node = root.Pop();
+                result.Push(node);
+
+                // Create destination directory
+                DirectoryPath relativePath = fakeDirectory.Path.GetRelativePath(node.Path);
+                DirectoryPath destinationPath = destination.Combine(relativePath);
+                CreateDirectory(destinationPath);
+
+                var files = node.Content.Files.Select(x => x).ToArray();
+                foreach (var file in files)
+                {
+                    // Move the file.
+                    MoveFile(file.Value, destinationPath.CombineWithFilePath(file.Key.GetFilename()));
+                }
+
+                var directories = node.Content.Directories;
+                foreach (var child in directories)
+                {
+                    root.Push(child.Value);
+                }
+            }
+
+            // Delete source directories
+            while (result.Count > 0)
+            {
+                var directory = result.Pop();
+
+                // Delete the directory.
+                directory.Parent.Content.Remove(directory);
+                directory.Exists = false;
+            }
         }
     }
 }

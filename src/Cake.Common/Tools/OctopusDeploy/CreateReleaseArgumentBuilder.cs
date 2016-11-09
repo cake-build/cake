@@ -2,101 +2,113 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Globalization;
 using Cake.Core;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.OctopusDeploy
 {
-    internal class CreateReleaseArgumentBuilder
+    internal sealed class CreateReleaseArgumentBuilder : OctopusDeployArgumentBuilder<CreateReleaseSettings>
     {
         private readonly string _projectName;
         private readonly CreateReleaseSettings _settings;
         private readonly ICakeEnvironment _environment;
 
-        private readonly ProcessArgumentBuilder _builder;
-
-        public CreateReleaseArgumentBuilder(string projectName, CreateReleaseSettings settings, ICakeEnvironment environment)
+        public CreateReleaseArgumentBuilder(string projectName, CreateReleaseSettings settings, ICakeEnvironment environment) : base(environment, settings)
         {
             _projectName = projectName;
             _settings = settings;
             _environment = environment;
-            _builder = new ProcessArgumentBuilder();
         }
 
         public ProcessArgumentBuilder Get()
         {
+            Builder.Append("create-release");
+            Builder.AppendSwitchQuoted("--project", _projectName);
+
             AppendCommonArguments();
 
             AppendArgumentIfNotNull("releaseNumber", _settings.ReleaseNumber);
             AppendArgumentIfNotNull("defaultpackageversion", _settings.DefaultPackageVersion);
-            AppendPackages(_settings, _builder);
+            AppendPackages(_settings, Builder);
             AppendArgumentIfNotNull("packagesFolder", _settings.PackagesFolder);
             AppendArgumentIfNotNull("releasenotes", _settings.ReleaseNotes);
             AppendArgumentIfNotNull("releasenotesfile", _settings.ReleaseNotesFile);
+            AppendArgumentIfNotNull("channel", _settings.Channel);
+
+            if (_settings.IgnoreChannelRules)
+            {
+                Builder.Append("--ignorechannelrules");
+            }
+
+            if (_settings.DeploymentProgress)
+            {
+                Builder.Append("--progress");
+            }
 
             if (_settings.IgnoreExisting)
             {
-                _builder.Append("--ignoreexisting");
+                Builder.Append("--ignoreexisting");
             }
 
-            return _builder;
+            AppendDeploymnetArguments();
+
+            return Builder;
         }
 
-        private void AppendCommonArguments()
+        private void AppendDeploymnetArguments()
         {
-            _builder.Append("create-release");
+            AppendArgumentIfNotNull("deployto", _settings.DeployTo);
+            AppendConditionalFlag(_settings.ShowProgress, "--progress");
+            AppendConditionalFlag(_settings.ForcePackageDownload, "--forcepackagedownload");
+            AppendConditionalFlag(_settings.WaitForDeployment, "--waitfordeployment");
 
-            _builder.Append("--project");
-            _builder.AppendQuoted(_projectName);
-
-            _builder.Append("--server");
-            _builder.Append(_settings.Server);
-
-            _builder.Append("--apiKey");
-            _builder.AppendSecret(_settings.ApiKey);
-
-            AppendArgumentIfNotNull("username", _settings.Username);
-
-            if (_settings.Password != null)
+            if (_settings.DeploymentTimeout.HasValue)
             {
-                _builder.Append("--password");
-                _builder.AppendQuotedSecret(_settings.Password);
+                Builder.AppendSwitchQuoted("--deploymenttimeout", "=", _settings.DeploymentTimeout.Value.ToString("hh\\:mm\\:ss"));
             }
 
-            AppendArgumentIfNotNull("configFile", _settings.ConfigurationFile);
+            AppendConditionalFlag(_settings.CancelOnTimeout, "--cancelontimeout");
 
-            if (_settings.EnableDebugLogging)
+            if (_settings.DeploymentChecksLeepCycle.HasValue)
             {
-                _builder.Append("--debug");
+                Builder.AppendSwitchQuoted("--deploymentchecksleepcycle", "=", _settings.DeploymentChecksLeepCycle.Value.ToString("hh\\:mm\\:ss"));
             }
 
-            if (_settings.IgnoreSslErrors)
+            if (_settings.GuidedFailure.HasValue)
             {
-                _builder.Append("--ignoreSslErrors");
+                Builder.AppendSwitch("--guidedfailure", "=", _settings.GuidedFailure.ToString());
             }
 
-            if (_settings.EnableServiceMessages)
+            if (_settings.SpecificMachines != null && _settings.SpecificMachines.Length > 0)
             {
-                _builder.Append("--enableServiceMessages");
+                Builder.AppendSwitchQuoted("--specificmachines", "=", string.Join(",", _settings.SpecificMachines));
             }
-        }
 
-        private void AppendArgumentIfNotNull(string argumentName, string value)
-        {
-            if (value != null)
-            {
-                _builder.Append("--" + argumentName);
-                _builder.AppendQuoted(value);
-            }
-        }
+            AppendConditionalFlag(_settings.Force, "--force");
 
-        private void AppendArgumentIfNotNull(string argumentName, FilePath value)
-        {
-            if (value != null)
+            AppendMultipleTimes("skip", _settings.SkipSteps);
+
+            AppendConditionalFlag(_settings.NoRawLog, "--norawlog");
+
+            AppendArgumentIfNotNull("rawlogfile", _settings.RawLogFile);
+
+            if (_settings.Variables != null && _settings.Variables.Count > 0)
             {
-                _builder.Append("--" + argumentName);
-                _builder.AppendQuoted(value.MakeAbsolute(_environment).FullPath);
+                foreach (var pair in _settings.Variables)
+                {
+                    Builder.AppendSwitchQuoted("--variable", "=", $"{pair.Key}:{pair.Value}");
+                }
             }
+
+            if (_settings.DeployAt.HasValue)
+            {
+                Builder.AppendSwitchQuoted("--deployat", "=", _settings.DeployAt.Value.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture));
+            }
+
+            AppendMultipleTimes("tenant", _settings.Tenant);
+
+            AppendMultipleTimes("tenanttag", _settings.TenantTags);
         }
 
         private static void AppendPackages(CreateReleaseSettings settings, ProcessArgumentBuilder builder)

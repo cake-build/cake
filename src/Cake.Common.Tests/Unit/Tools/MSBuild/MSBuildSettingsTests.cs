@@ -114,6 +114,32 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
         }
 
+        public sealed class TheDetailedSummaryProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Null(settings.DetailedSummary);
+            }
+        }
+
+        public sealed class TheNoConsoleLogProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Null(settings.NoConsoleLogger);
+            }
+        }
+
         public sealed class TheLoggersProperty
         {
             [Fact]
@@ -124,6 +150,19 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 Assert.Empty(settings.Loggers);
+            }
+        }
+
+        public sealed class TheFileLoggersProperty
+        {
+            [Fact]
+            public void Should_Be_Empty_By_Default()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Empty(settings.FileLoggers);
             }
         }
     }

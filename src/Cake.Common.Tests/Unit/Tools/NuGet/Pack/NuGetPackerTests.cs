@@ -481,6 +481,109 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     // Then
                     Assert.Equal(expected, result.Args);
                 }
+
+                [Theory]
+                [InlineData(true)]
+                [InlineData(false)]
+                public void Should_Keep_NuSpec_File_According_To_Flag(bool keepTemporaryNuSpecFile)
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithNuSpecFixture();
+                    fixture.Settings.KeepTemporaryNuSpecFile = keepTemporaryNuSpecFile;
+
+                    // When
+                    fixture.Run();
+
+                    // Then
+                    Assert.Equal(keepTemporaryNuSpecFile, fixture.FileSystem.Exist((FilePath)"/Working/existing.temp.nuspec"));
+                }
+
+                [Fact]
+                public void Should_Replace_Template_Tokens_In_Nuspec_With_Files_And_DependencyTargetFramework()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithNuSpecFixture();
+
+                    fixture.Settings.Id = "The ID";
+                    fixture.Settings.Version = "The version";
+                    fixture.Settings.Title = "The title";
+                    fixture.Settings.Authors = new[] { "Author #1", "Author #2" };
+                    fixture.Settings.Owners = new[] { "Owner #1", "Owner #2" };
+                    fixture.Settings.Description = "The description";
+                    fixture.Settings.Summary = "The summary";
+                    fixture.Settings.LicenseUrl = new Uri("https://license.com");
+                    fixture.Settings.ProjectUrl = new Uri("https://project.com");
+                    fixture.Settings.IconUrl = new Uri("https://icon.com");
+                    fixture.Settings.DevelopmentDependency = true;
+                    fixture.Settings.RequireLicenseAcceptance = true;
+                    fixture.Settings.Copyright = "The copyright";
+                    fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
+                    fixture.Settings.Tags = new[] { "Tag1", "Tag2", "Tag3" };
+                    fixture.Settings.Files = new[]
+                    {
+                        new NuSpecContent { Source = "Cake.Core.dll", Target = "lib/net45" },
+                        new NuSpecContent { Source = "Cake.Core.xml", Target = "lib/net45" },
+                        new NuSpecContent { Source = "Cake.Core.pdb", Target = "lib/net45" },
+                        new NuSpecContent { Source = "LICENSE" }
+                    };
+                    fixture.Settings.Dependencies = new[]
+                    {
+                        new NuSpecDependency { Id = "Test1", Version = "1.0.0", TargetFramework = "net452" },
+                        new NuSpecDependency { Id = "Test2", Version = "[1.0.0]", TargetFramework = "net462" }
+                    };
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal(
+                        Resources.Nuspec_Metadata_WithTragetFramworkDependencies.NormalizeLineEndings(),
+                        result.NuspecContent.NormalizeLineEndings());
+                }
+
+                [Fact]
+                public void Should_Replace_Template_Tokens_In_Nuspec_With_Files_And_DependencyTargetFramework_Without_Namespaces()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithNuSpecFixture();
+                    fixture.WithNuSpecXml(Resources.Nuspec_NoMetadataValues_WithoutNamespaces);
+
+                    fixture.Settings.Id = "The ID";
+                    fixture.Settings.Version = "The version";
+                    fixture.Settings.Title = "The title";
+                    fixture.Settings.Authors = new[] { "Author #1", "Author #2" };
+                    fixture.Settings.Owners = new[] { "Owner #1", "Owner #2" };
+                    fixture.Settings.Description = "The description";
+                    fixture.Settings.Summary = "The summary";
+                    fixture.Settings.LicenseUrl = new Uri("https://license.com");
+                    fixture.Settings.ProjectUrl = new Uri("https://project.com");
+                    fixture.Settings.IconUrl = new Uri("https://icon.com");
+                    fixture.Settings.DevelopmentDependency = true;
+                    fixture.Settings.RequireLicenseAcceptance = true;
+                    fixture.Settings.Copyright = "The copyright";
+                    fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
+                    fixture.Settings.Tags = new[] { "Tag1", "Tag2", "Tag3" };
+                    fixture.Settings.Files = new[]
+                    {
+                        new NuSpecContent { Source = "Cake.Core.dll", Target = "lib/net45" },
+                        new NuSpecContent { Source = "Cake.Core.xml", Target = "lib/net45" },
+                        new NuSpecContent { Source = "Cake.Core.pdb", Target = "lib/net45" },
+                        new NuSpecContent { Source = "LICENSE" }
+                    };
+                    fixture.Settings.Dependencies = new[]
+                    {
+                        new NuSpecDependency { Id = "Test1", Version = "1.0.0", TargetFramework = "net452" },
+                        new NuSpecDependency { Id = "Test2", Version = "[1.0.0]", TargetFramework = "net462" }
+                    };
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal(
+                        Resources.Nuspec_Metadata_WithoutNamespaces_WithTargetFramworkDependencies.NormalizeLineEndings(),
+                        result.NuspecContent.NormalizeLineEndings());
+                }
             }
 
             public sealed class WithProjectFile
@@ -838,6 +941,30 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 }
 
                 [Fact]
+                public void Should_Pack_If_Sufficient_Settings_For_MetaPackage_Specified()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithoutNuSpecFixture();
+                    fixture.Settings.OutputDirectory = "/Working/";
+                    fixture.Settings.Id = "nonexisting";
+                    fixture.Settings.Version = "1.0.0";
+                    fixture.Settings.Description = "The description";
+                    fixture.Settings.Authors = new[] { "Author #1", "Author #2" };
+                    fixture.Settings.Files = null;
+                    fixture.Settings.Dependencies = new List<NuSpecDependency>
+                    {
+                        new NuSpecDependency { Id = "Test1", Version = "1.0.0" }
+                    };
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal("pack -Version \"1.0.0\" -OutputDirectory \"/Working\" " +
+                                 "\"/Working/nonexisting.temp.nuspec\"", result.Args);
+                }
+
+                [Fact]
                 public void Should_Throw_If_OutputDirectory_Setting_Not_Specified()
                 {
                     // Given
@@ -913,7 +1040,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 }
 
                 [Fact]
-                public void Should_Throw_If_Files_Setting_Not_Specified()
+                public void Should_Throw_If_Files_Setting_And_Dependencies_Not_Specified()
                 {
                     // Given
                     var fixture = new NuGetPackerWithoutNuSpecFixture();
@@ -922,12 +1049,39 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Version = "1.0.0";
                     fixture.Settings.Authors = new[] { "Author #1", "Author #2" };
                     fixture.Settings.Description = "The description";
-
+                    fixture.Settings.Dependencies = null;
+                    fixture.Settings.Files = null;
                     // When
                     var result = Record.Exception(() => fixture.Run());
 
                     // Then
                     Assert.IsCakeException(result, "Required setting Files not specified.");
+                }
+
+                [Fact]
+                public void Should_Pack_If_Sufficient_Settings_For_MetaPackage_With_TargetFrameWork_Specified()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithoutNuSpecFixture();
+                    fixture.Settings.OutputDirectory = "/Working/";
+                    fixture.Settings.Id = "nonexisting";
+                    fixture.Settings.Version = "1.0.0";
+                    fixture.Settings.Description = "The description";
+                    fixture.Settings.Authors = new[] { "Author #1", "Author #2" };
+                    fixture.Settings.Files = null;
+                    fixture.Settings.Dependencies = new List<NuSpecDependency>
+                    {
+                        new NuSpecDependency { Id = "Test1", Version = "1.0.0", TargetFramework = "net452" },
+                        new NuSpecDependency { Id = "Test1", Version = "1.0.0", TargetFramework = "net462" }
+                    };
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal(
+                        Resources.Nuspec_Metadata_WithTargetFrameworkDependencies.NormalizeLineEndings(),
+                        result.NuspecContent.NormalizeLineEndings());
                 }
             }
         }

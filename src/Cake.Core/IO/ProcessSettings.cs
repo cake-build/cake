@@ -24,6 +24,12 @@ namespace Cake.Core.IO
         public DirectoryPath WorkingDirectory { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the error output of an application is written to the <see cref="P:System.Diagnostics.Process.StandardError"/> stream.
+        /// </summary>
+        /// <value>true if error output should be written to <see cref="P:System.Diagnostics.Process.StandardError"/>; otherwise, false. The default is false.</value>
+        public bool RedirectStandardError { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the output of an application is written to the <see cref="P:System.Diagnostics.Process.StandardOutput"/> stream.
         /// </summary>
         /// <value>true if output should be written to <see cref="P:System.Diagnostics.Process.StandardOutput"/>; otherwise, false. The default is false.</value>

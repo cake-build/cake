@@ -54,7 +54,7 @@ namespace Cake.Common.Tools.VSTest
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            base.Run(settings, GetArguments(assemblyPaths, settings));
+            Run(settings, GetArguments(assemblyPaths, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(IEnumerable<FilePath> assemblyPaths, VSTestSettings settings)
@@ -64,12 +64,22 @@ namespace Cake.Common.Tools.VSTest
             // Add the assembly to build.
             foreach (var assemblyPath in assemblyPaths)
             {
-                builder.Append(assemblyPath.MakeAbsolute(_environment).FullPath.Quote());
+                builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
             }
 
             if (settings.SettingsFile != null)
             {
-                builder.Append(string.Format(CultureInfo.InvariantCulture, "/Settings:{0}", settings.SettingsFile));
+                builder.AppendSwitchQuoted("/Settings", ":", settings.SettingsFile.MakeAbsolute(_environment).FullPath);
+            }
+
+            if (settings.Parallel)
+            {
+                builder.Append("/Parallel");
+            }
+
+            if (settings.EnableCodeCoverage)
+            {
+                builder.Append("/EnableCodeCoverage");
             }
 
             if (settings.InIsolation)
@@ -77,19 +87,39 @@ namespace Cake.Common.Tools.VSTest
                 builder.Append("/InIsolation");
             }
 
+            if (settings.UseVsixExtensions != null)
+            {
+                builder.AppendSwitch("/UseVsixExtensions", ":", settings.UseVsixExtensions.Value ? "true" : "false");
+            }
+
+            if (settings.TestAdapterPath != null)
+            {
+                builder.AppendSwitchQuoted("/TestAdapterPath", ":", settings.TestAdapterPath.MakeAbsolute(_environment).FullPath);
+            }
+
             if (settings.PlatformArchitecture != VSTestPlatform.Default)
             {
-                builder.Append(string.Format(CultureInfo.InvariantCulture, "/Platform:{0}", settings.PlatformArchitecture));
+                builder.AppendSwitch("/Platform", ":", settings.PlatformArchitecture.ToString());
             }
 
             if (settings.FrameworkVersion != VSTestFrameworkVersion.Default)
             {
-                builder.Append(string.Format(CultureInfo.InvariantCulture, "/Framework:{0}", settings.FrameworkVersion.ToString().Replace("NET", "Framework")));
+                builder.AppendSwitch("/Framework", ":", settings.FrameworkVersion.ToString().Replace("NET", "Framework"));
             }
 
-            if (settings.Logger == VSTestLogger.Trx)
+            if (settings.TestCaseFilter != null)
             {
-                builder.Append("/Logger:trx");
+                builder.AppendSwitchQuoted("/TestCaseFilter", ":", settings.TestCaseFilter);
+            }
+
+            if (settings.Diag != null)
+            {
+                builder.AppendSwitchQuoted("/Diag", ":", settings.Diag.MakeAbsolute(_environment).FullPath);
+            }
+
+            if (!string.IsNullOrEmpty(settings.Logger))
+            {
+                builder.Append("/Logger:{0}", settings.Logger.Trim());
             }
 
             return builder;

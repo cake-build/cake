@@ -131,7 +131,7 @@ namespace Cake.Common.IO
 
         /// <summary>
         /// Cleans the directories matching the specified pattern.
-        /// Cleaning the directory will remove all it's content but not the directory itself.
+        /// Cleaning the directory will remove all its content but not the directory itself.
         /// </summary>
         /// <example>
         /// <code>
@@ -155,7 +155,7 @@ namespace Cake.Common.IO
 
         /// <summary>
         /// Cleans the directories matching the specified pattern.
-        /// Cleaning the directory will remove all it's content but not the directory itself.
+        /// Cleaning the directory will remove all its content but not the directory itself.
         /// </summary>
         /// <example>
         /// <code>
@@ -184,7 +184,7 @@ namespace Cake.Common.IO
 
         /// <summary>
         /// Cleans the specified directories.
-        /// Cleaning a directory will remove all it's content but not the directory itself.
+        /// Cleaning a directory will remove all its content but not the directory itself.
         /// </summary>
         /// <example>
         /// <code>
@@ -210,7 +210,7 @@ namespace Cake.Common.IO
 
         /// <summary>
         /// Cleans the specified directories.
-        /// Cleaning a directory will remove all it's content but not the directory itself.
+        /// Cleaning a directory will remove all its content but not the directory itself.
         /// </summary>
         /// <example>
         /// <code>
@@ -438,6 +438,24 @@ namespace Cake.Common.IO
             }
 
             return path.MakeAbsolute(context.Environment);
+        }
+
+        /// <summary>
+        /// Moves an existing directory to a new location, providing the option to specify a new directory name.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="directoryPath">The directory path.</param>
+        /// <param name="targetDirectoryPath">The target directory path.</param>
+        /// <example>
+        /// <code>
+        /// MoveDirectory("mydir", "newparent/newdir");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Move")]
+        public static void MoveDirectory(this ICakeContext context, DirectoryPath directoryPath, DirectoryPath targetDirectoryPath)
+        {
+            DirectoryMover.MoveDirectory(context, directoryPath, targetDirectoryPath);
         }
     }
 }

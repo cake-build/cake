@@ -13,6 +13,7 @@ namespace Cake.Testing
     public sealed class FakeProcess : IProcess
     {
         private int _exitCode;
+        private IEnumerable<string> _standardError;
         private IEnumerable<string> _standardOutput;
 
         /// <summary>
@@ -49,6 +50,15 @@ namespace Cake.Testing
         }
 
         /// <summary>
+        /// Get the standard error of process
+        /// </summary>
+        /// <returns>Returns process error output <see cref="ProcessSettings.RedirectStandardError">RedirectStandardError</see> is true</returns>
+        public IEnumerable<string> GetStandardError()
+        {
+            return _standardError;
+        }
+
+        /// <summary>
         /// Get the standard output of process
         /// </summary>
         /// <returns>Returns process output <see cref="ProcessSettings.RedirectStandardOutput">RedirectStandardOutput</see> is true</returns>
@@ -71,6 +81,15 @@ namespace Cake.Testing
         public void SetExitCode(int exitCode)
         {
             _exitCode = exitCode;
+        }
+
+        /// <summary>
+        /// Sets the standard error.
+        /// </summary>
+        /// <param name="standardError">The standard error.</param>
+        public void SetStandardError(IEnumerable<string> standardError)
+        {
+            _standardError = standardError;
         }
 
         /// <summary>

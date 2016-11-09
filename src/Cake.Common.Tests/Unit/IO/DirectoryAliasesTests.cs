@@ -638,7 +638,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 Assert.IsType<IOException>(result);
-                Assert.Equal("The directory '/Temp/DoNotExist' do not exist.", result?.Message);
+                Assert.Equal("The directory '/Temp/DoNotExist' does not exist.", result?.Message);
             }
 
             [Fact]
@@ -751,7 +751,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<IOException>(result);
-                    Assert.Equal("The directory '/Temp/DoNotExist' do not exist.", result?.Message);
+                    Assert.Equal("The directory '/Temp/DoNotExist' does not exist.", result?.Message);
                 }
 
                 [Fact]
@@ -875,7 +875,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // Then
                     Assert.IsType<IOException>(result);
-                    Assert.Equal("The directory '/Temp/DoNotExist' do not exist.", result?.Message);
+                    Assert.Equal("The directory '/Temp/DoNotExist' does not exist.", result?.Message);
                 }
 
                 [Fact]
@@ -1205,6 +1205,103 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 Assert.Equal("/Working/build", result.FullPath);
+            }
+        }
+
+        public sealed class TheMoveDirectoryMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given, When
+                var source = new DirectoryPath("./source");
+                var target = new DirectoryPath("./target");
+
+                var result = Record.Exception(() =>
+                    DirectoryAliases.MoveDirectory(null, source, target));
+
+                // Then
+                Assert.IsArgumentNullException(result, "context");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Source_Directory_Path_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var target = new DirectoryPath("./target");
+
+                // When
+                var result = Record.Exception(() =>
+                    DirectoryAliases.MoveDirectory(context, null, target));
+
+                // Then
+                Assert.IsArgumentNullException(result, "directoryPath");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Target_Directory_Path_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var source = new DirectoryPath("./source");
+
+                // When
+                var result = Record.Exception(() =>
+                    DirectoryAliases.MoveDirectory(context, source, null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "targetDirectoryPath");
+            }
+
+            [Fact]
+            public void Should_Recursively_Move_Files_And_Directory()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
+                CreateFileStructure(fileSystem);
+                context.FileSystem.Returns(fileSystem);
+                var sourcePath = new DirectoryPath("/Temp");
+                var destinationPath = new DirectoryPath("/Temp2");
+
+                // When
+                DirectoryAliases.MoveDirectory(context, sourcePath, destinationPath);
+
+                // Then
+                Assert.False(fileSystem.GetDirectory("/Temp/Stuff").Exists);
+                Assert.False(fileSystem.GetDirectory("/Temp/Things").Exists);
+                Assert.True(fileSystem.GetDirectory("/Temp2/Stuff").Exists);
+                Assert.True(fileSystem.GetDirectory("/Temp2/Things").Exists);
+
+                Assert.False(fileSystem.GetFile("/Temp/Stuff/file1.txt").Exists);
+                Assert.False(fileSystem.GetFile("/Temp/Stuff/file2.txt").Exists);
+                Assert.False(fileSystem.GetFile("/Temp/Things/file1.txt").Exists);
+                Assert.True(fileSystem.GetFile("/Temp2/Stuff/file1.txt").Exists);
+                Assert.True(fileSystem.GetFile("/Temp2/Stuff/file2.txt").Exists);
+                Assert.True(fileSystem.GetFile("/Temp2/Things/file1.txt").Exists);
+            }
+
+            private static void CreateFileStructure(FakeFileSystem ffs)
+            {
+                Action<string> dir = path => ffs.CreateDirectory(path);
+                Action<string> file = path => ffs.CreateFile(path);
+
+                dir("/Temp");
+                {
+                    file("/Temp/file1.txt");
+                    file("/Temp/file2.txt");
+                    dir("/Temp/Stuff");
+                    {
+                        file("/Temp/Stuff/file1.txt");
+                        file("/Temp/Stuff/file2.txt");
+                    }
+                    dir("/Temp/Things");
+                    {
+                        file("/Temp/Things/file1.txt");
+                    }
+                }
             }
         }
     }
