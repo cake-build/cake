@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Tools;
+using Cake.Common.Tools.OctopusDeploy;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
@@ -190,6 +191,21 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
 
                 // Then
                 Assert.Equal("pack --id MyPackage --overwrite", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Format_To_Arguments_If_Zip()
+            {
+               // Given
+               var fixture = new OctopusDeployPackerFixture();
+               fixture.Id = "MyPackage";
+               fixture.Settings.Format = OctopusPackFormat.Zip;
+
+               // When
+               var result = fixture.Run();
+
+               // Then
+               Assert.Equal("pack --id MyPackage --format Zip", result.Args);
             }
         }
     }
