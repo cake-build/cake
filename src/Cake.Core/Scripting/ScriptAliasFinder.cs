@@ -123,12 +123,19 @@ namespace Cake.Core.Scripting
                     namespaces.Add(namespaceAttribute.Namespace);
                 }
 
+                // Find out if the assembly has been decorated with any more namespaces
+                namespaceAttributes = method.DeclaringType.GetTypeInfo().Assembly.GetCustomAttributes<CakeNamespaceImportAttribute>();
+                foreach (var namespaceAttribute in namespaceAttributes)
+                {
+                    namespaces.Add(namespaceAttribute.Namespace);
+                }
+
                 return new ScriptAlias(method, type, namespaces);
             }
             catch (Exception ex)
             {
                 // Log this error.
-                const string format = "An error occured while generating code for alias {0}.";
+                const string format = "An error occurred while generating code for alias {0}.";
                 _log.Error(format, method.GetSignature(false));
                 _log.Error("Error: {0}", ex.Message);
             }

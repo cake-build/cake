@@ -126,9 +126,9 @@ namespace Cake.Common.Tools.SignTool
                 builder.AppendQuoted(settings.TimeStampUri.AbsoluteUri);
             }
 
-            if (settings.CertPath == null && string.IsNullOrEmpty(settings.CertThumbprint))
+            if (settings.CertPath == null && string.IsNullOrEmpty(settings.CertThumbprint) && string.IsNullOrEmpty(settings.CertSubjectName))
             {
-                const string format = "{0}: One of Certificate path or Certificate thumbprint is required but neither are specified.";
+                const string format = "{0}: One of Certificate path, Certificate thumbprint or Certificate subject name is required but neither are specified.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
                 throw new CakeException(message);
             }
@@ -136,6 +136,13 @@ namespace Cake.Common.Tools.SignTool
             if (settings.CertPath != null && !string.IsNullOrEmpty(settings.CertThumbprint))
             {
                 const string format = "{0}: Certificate path and Certificate thumbprint cannot be specified together.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
+                throw new CakeException(message);
+            }
+
+            if (settings.CertPath != null && !string.IsNullOrEmpty(settings.CertSubjectName))
+            {
+                const string format = "{0}: Certificate path and Certificate subject name cannot be specified together.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
                 throw new CakeException(message);
             }
@@ -150,6 +157,13 @@ namespace Cake.Common.Tools.SignTool
             if (!string.IsNullOrEmpty(settings.CertThumbprint) && !string.IsNullOrEmpty(settings.Password))
             {
                 const string format = "{0}: Certificate thumbprint and Password cannot be specified together.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
+                throw new CakeException(message);
+            }
+
+            if (!string.IsNullOrEmpty(settings.CertSubjectName) && !string.IsNullOrEmpty(settings.Password))
+            {
+                const string format = "{0}: Certificate subject name and Password cannot be specified together.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
                 throw new CakeException(message);
             }
@@ -182,6 +196,12 @@ namespace Cake.Common.Tools.SignTool
             {
                 builder.Append("/sha1");
                 builder.AppendQuoted(settings.CertThumbprint);
+            }
+
+            if (!string.IsNullOrEmpty(settings.CertSubjectName))
+            {
+                builder.Append("/n");
+                builder.AppendQuoted(settings.CertSubjectName);
             }
 
             // Signed content description.

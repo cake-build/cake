@@ -121,6 +121,16 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 // Then
                 Assert.Empty(settings.TraitsToExclude);
             }
+
+            [Fact]
+            public void Should_Set_UseX86_To_False_By_Default()
+            {
+                // Given, When
+                var settings = new XUnit2Settings();
+
+                // Then
+                Assert.False(settings.UseX86);
+            }
         }
     }
 }

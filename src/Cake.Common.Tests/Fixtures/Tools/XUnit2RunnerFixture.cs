@@ -19,6 +19,11 @@ namespace Cake.Common.Tests.Fixtures.Tools
             AssemblyPaths = new FilePath[] { "./Test1.dll" };
         }
 
+        public XUnit2RunnerFixture(string toolFileName) : base(toolFileName)
+        {
+            AssemblyPaths = new FilePath[] { "./Test1.dll" };
+        }
+
         protected override void RunTool()
         {
             var runner = new XUnit2Runner(FileSystem, Environment, ProcessRunner, Tools);

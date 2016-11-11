@@ -36,7 +36,7 @@ namespace Cake.Common.Tools.VSTest
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The same <see cref="VSTestSettings"/> instance so that multiple calls can be chained.</returns>
-        public static VSTestSettings WithApVeyorLogger(this VSTestSettings settings)
+        public static VSTestSettings WithAppVeyorLogger(this VSTestSettings settings)
         {
             return settings.WithLogger("AppVeyor");
         }

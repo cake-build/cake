@@ -47,6 +47,8 @@ namespace Cake.Core.Tests.Fixtures
             FileSystem.CreateFile("C:/Tools & Services/MyTool.dll");
             FileSystem.CreateFile("C:/Tools + Services/MyTool.dll");
             FileSystem.CreateFile("C:/Some %2F Directory/MyTool.dll");
+            FileSystem.CreateFile("C:/Some ! Directory/MyTool.dll");
+            FileSystem.CreateFile("C:/Some@Directory/MyTool.dll");
         }
 
         private void PrepareUnixFixture()
@@ -61,6 +63,7 @@ namespace Cake.Core.Tests.Fixtures
             FileSystem.CreateDirectory("/Working/Bar");
             FileSystem.CreateDirectory("/Foo/Bar");
             FileSystem.CreateDirectory("/Foo (Bar)");
+            FileSystem.CreateDirectory("/Foo@Bar/");
 
             // Files
             FileSystem.CreateFile("/Working/Foo/Bar/Qux.c");
@@ -75,6 +78,7 @@ namespace Cake.Core.Tests.Fixtures
             FileSystem.CreateFile("/Working/Quz.FooTest.dll");
             FileSystem.CreateFile("/Foo/Bar.baz");
             FileSystem.CreateFile("/Foo (Bar)/Baz.c");
+            FileSystem.CreateFile("/Foo@Bar/Baz.c");
         }
 
         public void SetWorkingDirectory(DirectoryPath path)
