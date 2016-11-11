@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+using System.Reflection;
 using Cake.Core.Annotations;
 using Xunit;
 
@@ -19,6 +21,38 @@ namespace Cake.Core.Tests.Unit.Annotations
 
                 // Then
                 Assert.IsArgumentNullException(result, "namespace");
+            }
+        }
+
+        public sealed class TheType
+        {
+            private readonly AttributeUsageAttribute _attributeUsage;
+
+            public TheType()
+            {
+                // Given, When
+                _attributeUsage = (AttributeUsageAttribute)typeof(CakeNamespaceImportAttribute).GetTypeInfo().GetCustomAttribute(typeof(AttributeUsageAttribute));
+            }
+
+            [Fact]
+            public void Should_Be_Able_To_Target_Method()
+            {
+                // Then
+                Assert.True(_attributeUsage.ValidOn.HasFlag(AttributeTargets.Method));
+            }
+
+            [Fact]
+            public void Should_Be_Able_To_Target_Class()
+            {
+                // Then
+                Assert.True(_attributeUsage.ValidOn.HasFlag(AttributeTargets.Class));
+            }
+
+            [Fact]
+            public void Should_Be_Able_To_Target_Assembly()
+            {
+                // Then
+                Assert.True(_attributeUsage.ValidOn.HasFlag(AttributeTargets.Assembly));
             }
         }
     }
