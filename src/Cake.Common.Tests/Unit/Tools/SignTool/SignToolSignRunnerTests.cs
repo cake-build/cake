@@ -119,19 +119,20 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
             }
 
             [Fact]
-            public void Should_Throw_If_Certificate_Path_And_Thumbprint_Are_Null()
+            public void Should_Throw_If_Certificate_Path_And_Thumbprint_And_Subject_Name_Are_Null()
             {
                 // Given
                 var fixture = new SignToolSignRunnerFixture();
                 fixture.Settings.CertPath = null;
                 fixture.Settings.CertThumbprint = null;
+                fixture.Settings.CertSubjectName = null;
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("SignTool SIGN: One of Certificate path or Certificate thumbprint is required but neither are specified.", result?.Message);
+                Assert.Equal("SignTool SIGN: One of Certificate path, Certificate thumbprint or Certificate subject name is required but neither are specified.", result?.Message);
             }
 
             [Fact]
@@ -150,6 +151,21 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
             }
 
             [Fact]
+            public void Should_Throw_If_Certificate_Path_And_Subject_Name_Are_Both_Specified()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.CertSubjectName = "abc";
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("SignTool SIGN: Certificate path and Certificate subject name cannot be specified together.", result?.Message);
+            }
+
+            [Fact]
             public void Should_Throw_If_Certificate_Thumbprint_And_Password_Are_Both_Specified()
             {
                 // Given
@@ -164,6 +180,23 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 // Then
                 Assert.IsType<CakeException>(result);
                 Assert.Equal("SignTool SIGN: Certificate thumbprint and Password cannot be specified together.", result?.Message);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Certificate_Subject_Name_And_Password_Are_Both_Specified()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.CertPath = null;
+                fixture.Settings.Password = "123";
+                fixture.Settings.CertSubjectName = "abc";
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("SignTool SIGN: Certificate subject name and Password cannot be specified together.", result?.Message);
             }
 
             [Fact]
@@ -279,6 +312,22 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
 
                 // Then
                 Assert.Equal("SIGN /t \"https://t.com/\" /sha1 \"ThumbprintTest\" \"/Working/a.dll\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Call_Sign_Tool_With_Correct_Parameters_With_Subject_Name()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.CertPath = null;
+                fixture.Settings.Password = null;
+                fixture.Settings.CertSubjectName = "SubjectNameTest";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("SIGN /t \"https://t.com/\" /n \"SubjectNameTest\" \"/Working/a.dll\"", result.Args);
             }
 
             [Fact]
