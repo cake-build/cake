@@ -98,7 +98,19 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.IsType<ArgumentException>(result);
                 Assert.Equal("path", ((ArgumentException)result)?.ParamName);
-                Assert.Equal($"Illegal characters in directory path (*).{Environment.NewLine}Parameter name: path", result?.Message);
+                Assert.Equal($"Illegal characters in path (*).{Environment.NewLine}Parameter name: path", result?.Message);
+            }
+
+            [WindowsFact]
+            public void Should_Throw_If_Path_Contains_Illegal_Characters_Non_GlobberSymbol()
+            {
+                // Given
+                var result = Record.Exception(() => new TestingPath("hello/A|B/world.txt"));
+
+                // Then
+                Assert.IsType<ArgumentException>(result);
+                Assert.Equal("path", ((ArgumentException)result)?.ParamName);
+                Assert.Equal($"Illegal characters in path (|).{Environment.NewLine}Parameter name: path", result?.Message);
             }
 
             [Theory]

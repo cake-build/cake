@@ -51,6 +51,16 @@ namespace Cake.Core.IO
                 throw new ArgumentException("Path cannot be empty.", nameof(path));
             }
 
+            // Validate the path.
+            foreach (var character in path)
+            {
+                if (_invalidPathCharacters.Contains(character))
+                {
+                    const string format = "Illegal characters in path ({0}).";
+                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, format, character), nameof(path));
+                }
+            }
+
             FullPath = path.Replace('\\', '/').Trim();
             FullPath = FullPath == "./" ? string.Empty : FullPath;
 
@@ -78,16 +88,6 @@ namespace Cake.Core.IO
             if (FullPath.StartsWith("/") && Segments.Length > 0)
             {
                 Segments[0] = "/" + Segments[0];
-            }
-
-            // Validate the path.
-            foreach (var character in path)
-            {
-                if (_invalidPathCharacters.Contains(character))
-                {
-                    const string format = "Illegal characters in directory path ({0}).";
-                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, format, character), nameof(path));
-                }
             }
         }
 
