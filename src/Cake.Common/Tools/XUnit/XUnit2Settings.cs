@@ -78,6 +78,14 @@ namespace Cake.Common.Tools.XUnit
         public ParallelismOption Parallelism { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to run tests in using x86 test runner.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> to run tests with the x86 test runner; otherwise, <c>false</c>.
+        /// </value>
+        public bool UseX86 { get; set; }
+
+        /// <summary>
         /// Gets or sets the maximum thread count for collection parallelization.
         /// </summary>
         /// <value>

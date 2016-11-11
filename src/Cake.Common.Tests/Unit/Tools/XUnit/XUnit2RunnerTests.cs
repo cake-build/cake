@@ -92,6 +92,35 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             }
 
             [Fact]
+            public void Should_Throw_If_XUnit_X86_Flag_Is_Not_Set_To_True()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture("xunit.console.x86.exe");
+                fixture.Settings.UseX86 = false;
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("xUnit.net (v2): Could not locate executable.", result?.Message);
+            }
+
+            [Fact]
+            public void Should_Find_XUnit_X86_Runner_If_Tool_Path_Not_Provided()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture("xunit.console.x86.exe");
+                fixture.Settings.UseX86 = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/Working/tools/xunit.console.x86.exe", result.Path.FullPath);
+            }
+
+            [Fact]
             public void Should_Use_Provided_Assembly_Path_In_Process_Arguments()
             {
                 // Given
