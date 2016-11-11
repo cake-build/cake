@@ -123,6 +123,13 @@ namespace Cake.Core.Scripting
                     namespaces.Add(namespaceAttribute.Namespace);
                 }
 
+                // Find out if the assembly has been decorated with any more namespaces
+                namespaceAttributes = method.DeclaringType.GetTypeInfo().Assembly.GetCustomAttributes<CakeNamespaceImportAttribute>();
+                foreach (var namespaceAttribute in namespaceAttributes)
+                {
+                    namespaces.Add(namespaceAttribute.Namespace);
+                }
+
                 return new ScriptAlias(method, type, namespaces);
             }
             catch (Exception ex)
