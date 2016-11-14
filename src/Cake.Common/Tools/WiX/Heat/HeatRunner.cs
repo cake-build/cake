@@ -264,26 +264,26 @@ namespace Cake.Common.Tools.WiX.Heat
 
             if (settings.OutputGroup != null)
             {
-                builder.Append("-pog:");
+                builder.Append("-pog");
                 switch (settings.OutputGroup)
                 {
                     case WiXOutputGroupType.Binaries:
-                        builder.Append("binaries");
+                        builder.Append("Binaries");
                         break;
                     case WiXOutputGroupType.Symbols:
-                        builder.Append("symbols");
+                        builder.Append("Symbols");
                         break;
                     case WiXOutputGroupType.Documents:
-                        builder.Append("documents");
+                        builder.Append("Documents");
                         break;
-                    case WiXOutputGroupType.Satallites:
-                        builder.Append("satallites");
+                    case WiXOutputGroupType.Satellites:
+                        builder.Append("Satellites");
                         break;
                     case WiXOutputGroupType.Sources:
-                        builder.Append("sources");
+                        builder.Append("Sources");
                         break;
                     case WiXOutputGroupType.Content:
-                        builder.Append("content");
+                        builder.Append("Content");
                         break;
                 }
             }
