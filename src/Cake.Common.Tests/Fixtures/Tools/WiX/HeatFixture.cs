@@ -12,7 +12,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.WiX
     {
         public DirectoryPath DirectoryPath { get; set; }
 
-        public List<FilePath> ObjectFiles { get; set; }
+        public FilePath ObjectFile { get; set; }
 
         public FilePath OutputFile { get; set; }
 
@@ -24,8 +24,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.WiX
             : base("heat.exe")
         {
             DirectoryPath = new DirectoryPath("./src/Cake");
-            ObjectFiles = new List<FilePath>();
-            ObjectFiles.Add(new FilePath("Cake.dll"));
+            ObjectFile = new FilePath("Cake.dll");
             OutputFile = new FilePath("cake.wxs");
             Settings = new HeatSettings();
             HarvestType = WiXHarvestType.Dir;
@@ -44,7 +43,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.WiX
                 case WiXHarvestType.File:
                 case WiXHarvestType.Project:
                 case WiXHarvestType.Reg:
-                    tool.Run(ObjectFiles, OutputFile, HarvestType, Settings);
+                    tool.Run(ObjectFile, OutputFile, HarvestType, Settings);
                     break;
                 case WiXHarvestType.Website:
                 case WiXHarvestType.Perf:
