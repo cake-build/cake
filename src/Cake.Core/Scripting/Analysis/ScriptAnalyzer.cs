@@ -11,6 +11,7 @@ using System.Linq;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting.Processors;
+using Cake.Core.Scripting.Processors.Loading;
 
 namespace Cake.Core.Scripting.Analysis
 {
@@ -30,10 +31,12 @@ namespace Cake.Core.Scripting.Analysis
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="log">The log.</param>
+        /// <param name="providers">The load directive providers.</param>
         public ScriptAnalyzer(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
-            ICakeLog log)
+            ICakeLog log,
+            IEnumerable<ILoadDirectiveProvider> providers)
         {
             if (fileSystem == null)
             {
@@ -54,13 +57,13 @@ namespace Cake.Core.Scripting.Analysis
 
             _lineProcessors = new LineProcessor[]
             {
-                new LoadDirectiveProcessor(_environment),
+                new LoadDirectiveProcessor(providers),
                 new ReferenceDirectiveProcessor(_fileSystem, _environment),
-                new UsingStatementProcessor(_environment),
-                new AddInDirectiveProcessor(_environment),
-                new ToolDirectiveProcessor(_environment),
-                new ShebangProcessor(_environment),
-                new BreakDirectiveProcessor(_environment)
+                new UsingStatementProcessor(),
+                new AddInDirectiveProcessor(),
+                new ToolDirectiveProcessor(),
+                new ShebangProcessor(),
+                new BreakDirectiveProcessor()
             };
         }
 
@@ -81,14 +84,14 @@ namespace Cake.Core.Scripting.Analysis
 
             // Create a new context.
             var context = new ScriptAnalyzerContext(
-                _fileSystem, _environment, _log, AnalyzeCallback);
+                _fileSystem, _environment, _log, AnalyzeCallback, path);
 
             // Analyze the script.
             context.Analyze(path);
 
             // Create and return the results.
             return new ScriptAnalyzerResult(
-                context.Script,
+                context.Current,
                 context.Lines);
         }
 
@@ -100,7 +103,7 @@ namespace Cake.Core.Scripting.Analysis
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var path = context.Script.Path;
+            var path = context.Current.Path;
 
             // Read the source.
             _log.Debug("Analyzing {0}...", path.FullPath);

@@ -12,10 +12,15 @@ namespace Cake.Core.Scripting.Analysis
     public interface IScriptAnalyzerContext
     {
         /// <summary>
+        /// Gets the path to the initial script being executed.
+        /// </summary>
+        FilePath Root { get; }
+
+        /// <summary>
         /// Gets the current script being processed.
         /// </summary>
         /// <value>The current script being processed.</value>
-        IScriptInformation Script { get; }
+        IScriptInformation Current { get; }
 
         /// <summary>
         /// Processes the specified script path using the same context.

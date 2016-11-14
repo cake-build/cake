@@ -19,6 +19,9 @@ dotnet-install.sh*
 launchSettings.json
 project.lock.json
 
+# Rider
+.idea/
+
 # Build related
 build-results/
 tools/Cake/

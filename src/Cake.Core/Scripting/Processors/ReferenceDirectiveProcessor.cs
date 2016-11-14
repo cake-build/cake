@@ -11,11 +11,12 @@ namespace Cake.Core.Scripting.Processors
     internal sealed class ReferenceDirectiveProcessor : LineProcessor
     {
         private readonly IFileSystem _fileSystem;
+        private readonly ICakeEnvironment _environment;
 
         public ReferenceDirectiveProcessor(IFileSystem fileSystem, ICakeEnvironment environment)
-            : base(environment)
         {
             _fileSystem = fileSystem;
+            _environment = environment;
         }
 
         public override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
@@ -41,10 +42,10 @@ namespace Cake.Core.Scripting.Processors
 
             var referencePath = new FilePath(tokens[1].UnQuote());
 
-            var directoryPath = GetAbsoluteDirectory(context.Script.Path);
+            var directoryPath = context.Current.Path.MakeAbsolute(_environment).GetDirectory();
             var absoluteReferencePath = referencePath.MakeAbsolute(directoryPath);
 
-            context.Script.References.Add(_fileSystem.Exist(absoluteReferencePath)
+            context.Current.References.Add(_fileSystem.Exist(absoluteReferencePath)
                 ? absoluteReferencePath.FullPath : referencePath.FullPath);
 
             return true;

@@ -2,9 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting.Analysis;
+using Cake.Core.Scripting.Processors.Loading;
 using Cake.Testing;
 using NSubstitute;
 
@@ -15,17 +17,19 @@ namespace Cake.Core.Tests.Fixtures
         public FakeFileSystem FileSystem { get; set; }
         public FakeEnvironment Environment { get; set; }
         public ICakeLog Log { get; set; }
+        public List<ILoadDirectiveProvider> Providers { get; set; }
 
         public ScriptAnalyzerFixture()
         {
             Environment = FakeEnvironment.CreateUnixEnvironment();
             FileSystem = new FakeFileSystem(Environment);
             Log = Substitute.For<ICakeLog>();
+            Providers = new List<ILoadDirectiveProvider>();
         }
 
         public ScriptAnalyzer CreateAnalyzer()
         {
-            return new ScriptAnalyzer(FileSystem, Environment, Log);
+            return new ScriptAnalyzer(FileSystem, Environment, Log, Providers);
         }
 
         public ScriptAnalyzerResult Analyze(FilePath script)

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using Cake.Core.IO;
 using Cake.Core.Scripting.Analysis;
 
 namespace Cake.Core.Scripting.Processors
@@ -13,17 +12,6 @@ namespace Cake.Core.Scripting.Processors
     /// </summary>
     internal abstract class LineProcessor
     {
-        private readonly ICakeEnvironment _environment;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LineProcessor"/> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        protected LineProcessor(ICakeEnvironment environment)
-        {
-            _environment = environment;
-        }
-
         /// <summary>
         /// Processes the specified line.
         /// </summary>
@@ -46,30 +34,6 @@ namespace Cake.Core.Scripting.Processors
                 throw new ArgumentNullException(nameof(line));
             }
             return line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-        }
-
-        /// <summary>
-        /// Gets the absolute directory for the path.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns>The absolute directory path.</returns>
-        protected DirectoryPath GetAbsoluteDirectory(FilePath path)
-        {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
-
-            // Get the script location.
-            var scriptLocation = path.GetDirectory();
-            if (scriptLocation.IsRelative)
-            {
-                // Concatenate the starting working directory
-                // with the script file path.
-                scriptLocation = _environment.WorkingDirectory
-                    .CombineWithFilePath(path).GetDirectory();
-            }
-            return scriptLocation;
         }
     }
 }

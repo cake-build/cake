@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Cake.Core.Scripting.Analysis;
@@ -11,12 +12,7 @@ namespace Cake.Core.Scripting.Processors
 {
     internal abstract class UriDirectiveProcessor : LineProcessor
     {
-        protected UriDirectiveProcessor(ICakeEnvironment environment)
-            : base(environment)
-        {
-        }
-
-        protected abstract string GetDirectiveName();
+        protected abstract IEnumerable<string> GetDirectiveNames();
 
         protected abstract void AddToContext(IScriptAnalyzerContext context, Uri uri);
 
@@ -33,7 +29,7 @@ namespace Cake.Core.Scripting.Processors
             var directive = tokens.FirstOrDefault();
             if (!string.IsNullOrWhiteSpace(directive))
             {
-                if (directive.Equals(GetDirectiveName(), StringComparison.OrdinalIgnoreCase))
+                if (GetDirectiveNames().Any(n => directive.Equals(n, StringComparison.OrdinalIgnoreCase)))
                 {
                     if (tokens.Length >= 2)
                     {
@@ -53,7 +49,7 @@ namespace Cake.Core.Scripting.Processors
             return false;
         }
 
-        private static Uri ParseUriFromTokens(string[] tokens)
+        private Uri ParseUriFromTokens(string[] tokens)
         {
             Uri uri;
             if (!Uri.TryCreate(tokens[1].UnQuote(), UriKind.Absolute, out uri))
@@ -63,7 +59,7 @@ namespace Cake.Core.Scripting.Processors
             return uri;
         }
 
-        private static Uri CreateUriFromLegacyFormat(string[] tokens)
+        protected virtual Uri CreateUriFromLegacyFormat(string[] tokens)
         {
             var builder = new StringBuilder();
             builder.Append("nuget:");

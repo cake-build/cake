@@ -17,7 +17,7 @@ namespace Cake.NuGet
     /// <summary>
     /// Installer for NuGet URI resources.
     /// </summary>
-    public sealed class NuGetPackageInstaller : IPackageInstaller
+    public sealed class NuGetPackageInstaller : INuGetPackageInstaller
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
