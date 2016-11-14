@@ -1,9 +1,11 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
-//
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 // NOTE: Portions of this code was taken from the ScriptCS project
 // which is licensed under the MIT license. https://github.com/scriptcs/scriptcs
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #if !NETCORE
 using System;
