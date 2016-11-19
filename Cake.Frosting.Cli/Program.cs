@@ -4,6 +4,7 @@
 
 using System;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Frosting.Cli.Project;
 using Cake.Frosting.Cli.Reflection;
@@ -37,7 +38,7 @@ namespace Cake.Frosting.Cli
         private static Application CreateApplication()
         {
             var fileSystem = new FileSystem();
-            var environment = new CakeEnvironment(new CakePlatform(), new CakeRuntime());
+            var environment = new CakeEnvironment(new CakePlatform(), new CakeRuntime(), new NullLog());
             var projectServices = new ProjectServices(fileSystem, environment);
             var startupFinder = new StartupFinder();
 
