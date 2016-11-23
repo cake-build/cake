@@ -23,6 +23,16 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             }
 
             [Fact]
+            public void Should_Set_ReportName_To_Null_By_Default()
+            {
+                // Given, When
+                var settings = new XUnit2Settings();
+
+                // Then
+                Assert.Null(settings.ReportName);
+            }
+
+            [Fact]
             public void Should_Disable_XML_Report_By_Default()
             {
                 // Given, When

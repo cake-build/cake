@@ -9,11 +9,18 @@ namespace Cake.Common.Tools.XUnit
 {
     internal static class XUnitRunnerUtilities
     {
-        internal static FilePath GetReportFileName(IReadOnlyList<FilePath> assemblyPaths)
+        internal static FilePath GetReportFileName(IReadOnlyList<FilePath> assemblyPaths, XUnit2Settings settings)
         {
-            return assemblyPaths.Count == 1
-                ? assemblyPaths[0].GetFilename()
-                : new FilePath("TestResults");
+            if (string.IsNullOrEmpty(settings.ReportName))
+            {
+                return assemblyPaths.Count == 1
+                    ? assemblyPaths[0].GetFilename()
+                    : new FilePath("TestResults");
+            }
+            else
+            {
+                return settings.ReportName;
+            }
         }
     }
 }
