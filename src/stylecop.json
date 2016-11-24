@@ -11,7 +11,9 @@
           "documentPrivateElements": false,
           "documentInterfaces": true,
           "documentPrivateFields": false,
-          "headerDecoration": "// Licensed to the .NET Foundation under one or more agreements.\n// The .NET Foundation licenses this file to you under the MIT license.\n// See the LICENSE file in the project root for more information."
+          "xmlHeader": false,
+          "companyName": ".NET Foundation",
+          "copyrightText": "Licensed to the .NET Foundation under one or more agreements.\nThe .NET Foundation licenses this file to you under the MIT license.\nSee the LICENSE file in the project root for more information."
       },
       "layoutRules": {
           "newlineAtEndOfFile": "allow"
