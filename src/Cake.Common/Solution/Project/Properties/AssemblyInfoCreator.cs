@@ -123,6 +123,15 @@ namespace Cake.Common.Solution.Project.Properties
                     }
                     writer.WriteLine();
                 }
+
+                if (data.CustomAttributes.Count > 0)
+                {
+                    writer.WriteLine(comment + " Custom Attributes");
+                    foreach (var attribute in data.CustomAttributes)
+                    {
+                        writer.WriteLine(string.Format(attributeWithValueFormat, attribute.Key, attribute.Value));
+                    }
+                }
             }
         }
     }

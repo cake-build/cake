@@ -12,10 +12,13 @@ namespace Cake.Common.Solution.Project.Properties
     internal sealed class AssemblyInfoCreatorData
     {
         private readonly Dictionary<string, string> _dictionary;
+        private readonly Dictionary<string, string> _customAttributes;
         private readonly HashSet<string> _namespaces;
         private readonly HashSet<string> _internalVisibleTo;
 
         public IDictionary<string, string> Attributes => _dictionary;
+
+        public IDictionary<string, string> CustomAttributes => _customAttributes;
 
         public ISet<string> Namespaces => _namespaces;
 
@@ -24,6 +27,7 @@ namespace Cake.Common.Solution.Project.Properties
         public AssemblyInfoCreatorData(AssemblyInfoSettings settings)
         {
             _dictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            _customAttributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _namespaces = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _internalVisibleTo = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
@@ -54,13 +58,20 @@ namespace Cake.Common.Solution.Project.Properties
                     _namespaces.Add("System.Runtime.CompilerServices");
                 }
             }
+            if (settings.CustomAttributes != null)
+            {
+                foreach (var item in settings.CustomAttributes.Where(item => item != null))
+                {
+                    AddCustomAttribute(item.Name, item.NameSpace, item.Value);
+                }
+            }
         }
 
         private void AddAttribute(string name, string @namespace, bool? value)
         {
             if (value != null)
             {
-                AddAttributeCore(name, @namespace, value.Value ? "true" : "false");
+                AddAttributeCore(Attributes, name, @namespace, value.Value ? "true" : "false");
             }
         }
 
@@ -68,19 +79,27 @@ namespace Cake.Common.Solution.Project.Properties
         {
             if (value != null)
             {
-                AddAttributeCore(name, @namespace, string.Concat("\"", value, "\""));
+                AddAttributeCore(Attributes, name, @namespace, string.Concat("\"", value, "\""));
             }
         }
 
-        private void AddAttributeCore(string name, string @namespace, string value)
+        private void AddCustomAttribute(string name, string @namespace, string value)
         {
-            if (Attributes.ContainsKey(name))
+            if (value != null)
             {
-                Attributes[name] = value;
+                AddAttributeCore(CustomAttributes, name, @namespace, string.Concat("\"", value, "\""));
+            }
+        }
+
+        private void AddAttributeCore(IDictionary<string, string> dict, string name, string @namespace, string value)
+        {
+            if (dict.ContainsKey(name))
+            {
+                dict[name] = value;
             }
             else
             {
-                Attributes.Add(name, value);
+                dict.Add(name, value);
             }
             Namespaces.Add(@namespace);
         }

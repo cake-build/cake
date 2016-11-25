@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -330,6 +330,21 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 // Then
                 Assert.True(result.Contains("using System.Reflection;"));
                 Assert.True(result.Contains("[assembly: AssemblyConfiguration(\"TheConfiguration\")]"));
+            }
+
+            [Fact]
+            public void Should_Add_CustomAttributes_If_Set()
+            {
+                // Given
+                var fixture = new AssemblyInfoFixture();
+                fixture.Settings.CustomAttributes = new Collection<AssemblyInfoCustomAttribute> { new AssemblyInfoCustomAttribute { Name = "TestAttribute", NameSpace = "Test.NameSpace", Value = "TestValue" } };
+
+                // When
+                var result = fixture.CreateAndReturnContent();
+
+                // Then
+                Assert.True(result.Contains("using Test.NameSpace;"));
+                Assert.True(result.Contains("[assembly: TestAttribute(\"TestValue\")]"));
             }
         }
     }
