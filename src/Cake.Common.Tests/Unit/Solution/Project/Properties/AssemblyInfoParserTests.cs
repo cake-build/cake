@@ -333,6 +333,27 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             }
 
             [Fact]
+            public void Should_Correctly_Parse_VisualStudio_VB_AssemblyInfo_File()
+            {
+                // Given
+                var fixture = new AssemblyInfoParserFixture_VB();
+                fixture.CreateAssemblyInfo = false;
+                fixture.WithAssemblyInfoContents(Resources.VisualStudioAssemblyInfo_VB.NormalizeLineEndings());
+
+                // When
+                var result = fixture.Parse();
+
+                // Then
+                Assert.Equal(result.Title, "VisualStudioAssemblyTitle");
+                Assert.Equal(result.Description, "VisualStudioAssemblyDescription");
+                Assert.Equal(result.Configuration, "VisualStudioConfiguration");
+                Assert.Equal(result.Company, "VisualStudioCompany");
+                Assert.Equal(result.Product, "VisualStudioProduct");
+                Assert.Equal(result.Copyright, "VisualStudioCopyright");
+                Assert.Equal(result.Trademark, "VisualStudioTrademark");
+            }
+
+            [Fact]
             public void Should_Correctly_Parse_MonoDevelop_AssemblyInfo_File()
             {
                 // Given
