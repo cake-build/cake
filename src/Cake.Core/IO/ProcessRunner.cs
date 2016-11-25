@@ -77,6 +77,7 @@ namespace Cake.Core.IO
                 Arguments = arguments.Render(),
                 WorkingDirectory = workingDirectory.FullPath,
                 UseShellExecute = false,
+                RedirectStandardError = settings.RedirectStandardError,
                 RedirectStandardOutput = settings.RedirectStandardOutput
             };
 
