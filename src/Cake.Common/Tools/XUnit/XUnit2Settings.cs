@@ -61,6 +61,12 @@ namespace Cake.Common.Tools.XUnit
         public bool HtmlReport { get; set; }
 
         /// <summary>
+        /// Gets or sets the name that should be used for the HTML and XML reports.
+        /// </summary>
+        /// <value>The custom report name.</value>
+        public string ReportName { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to not use app domains to run test code.
         /// </summary>
         /// <value>

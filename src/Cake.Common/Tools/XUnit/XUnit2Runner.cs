@@ -97,7 +97,7 @@ namespace Cake.Common.Tools.XUnit
             // Generate NUnit Style XML report?
             if (settings.NUnitReport)
             {
-                var reportFileName = XUnitRunnerUtilities.GetReportFileName(assemblyPaths);
+                var reportFileName = XUnitRunnerUtilities.GetReportFileName(assemblyPaths, settings);
                 var assemblyFilename = reportFileName.AppendExtension(".xml");
                 var outputPath = settings.OutputDirectory.MakeAbsolute(_environment).GetFilePath(assemblyFilename);
 
@@ -108,7 +108,7 @@ namespace Cake.Common.Tools.XUnit
             // Generate HTML report?
             if (settings.HtmlReport)
             {
-                var reportFileName = XUnitRunnerUtilities.GetReportFileName(assemblyPaths);
+                var reportFileName = XUnitRunnerUtilities.GetReportFileName(assemblyPaths, settings);
                 var assemblyFilename = reportFileName.AppendExtension(".html");
                 var outputPath = settings.OutputDirectory.MakeAbsolute(_environment).GetFilePath(assemblyFilename);
 
@@ -119,7 +119,7 @@ namespace Cake.Common.Tools.XUnit
             // Generate XML report?
             if (settings.XmlReport || settings.XmlReportV1)
             {
-                var reportFileName = XUnitRunnerUtilities.GetReportFileName(assemblyPaths);
+                var reportFileName = XUnitRunnerUtilities.GetReportFileName(assemblyPaths, settings);
                 var assemblyFilename = reportFileName.AppendExtension(".xml");
                 var outputPath = settings.OutputDirectory.MakeAbsolute(_environment).GetFilePath(assemblyFilename);
 
