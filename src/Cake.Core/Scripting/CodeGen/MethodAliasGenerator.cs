@@ -145,24 +145,8 @@ namespace Cake.Core.Scripting.CodeGen
                 {
                     yield return ", ";
                 }
-                if (parameter.IsOut)
-                {
-                    yield return "out ";
-                }
-                else if (parameter.ParameterType.IsByRef)
-                {
-                    yield return "ref ";
-                }
-                if (includeType)
-                {
-                    if (parameter.IsDefined(typeof(ParamArrayAttribute)))
-                    {
-                        yield return "params ";
-                    }
-                    yield return parameter.ParameterType.GetFullName();
-                    yield return " ";
-                }
-                yield return parameter.Name;
+
+                yield return ParameterEmitter.Emit(parameter, includeType);
             }
         }
 
