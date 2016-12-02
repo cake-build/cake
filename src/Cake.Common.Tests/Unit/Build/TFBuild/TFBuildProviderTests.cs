@@ -4,6 +4,9 @@
 
 using Cake.Common.Build.TFBuild;
 using Cake.Common.Tests.Fixtures.Build;
+using Cake.Core;
+using Cake.Core.Diagnostics;
+using Cake.Testing;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build.TFBuild
@@ -16,10 +19,20 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild
             public void Should_Throw_If_Environment_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => new TFBuildProvider(null));
+                var result = Record.Exception(() => new TFBuildProvider(null, new NullLog()));
 
                 // Then
                 Assert.IsArgumentNullException(result, "environment");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Log_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => new TFBuildProvider(new FakeEnvironment(PlatformFamily.Unknown), null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "log");
             }
         }
 
