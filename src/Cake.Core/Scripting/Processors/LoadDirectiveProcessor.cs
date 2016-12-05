@@ -3,45 +3,50 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using Cake.Core.IO;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Cake.Core.Scripting.Analysis;
+using Cake.Core.Scripting.Processors.Loading;
 
 namespace Cake.Core.Scripting.Processors
 {
-    internal sealed class LoadDirectiveProcessor : LineProcessor
+    internal sealed class LoadDirectiveProcessor : UriDirectiveProcessor
     {
-        public LoadDirectiveProcessor(ICakeEnvironment environment)
-            : base(environment)
+        private readonly IEnumerable<ILoadDirectiveProvider> _providers;
+
+        public LoadDirectiveProcessor(IEnumerable<ILoadDirectiveProvider> providers)
         {
+            _providers = providers ?? Enumerable.Empty<ILoadDirectiveProvider>();
         }
 
-        public override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
+        protected override IEnumerable<string> GetDirectiveNames()
         {
-            if (context == null)
+            return new[] { "#l", "#load" };
+        }
+
+        protected override Uri CreateUriFromLegacyFormat(string[] tokens)
+        {
+            var builder = new StringBuilder();
+            builder.Append("local:");
+
+            var id = tokens.Select(value => value.UnQuote()).Skip(1).FirstOrDefault();
+            builder.Append("?path=" + id);
+
+            return new Uri(builder.ToString());
+        }
+
+        protected override void AddToContext(IScriptAnalyzerContext context, Uri uri)
+        {
+            var reference = new LoadReference(uri);
+
+            foreach (var provider in _providers)
             {
-                throw new ArgumentNullException(nameof(context));
+                if (provider.CanLoad(context, reference))
+                {
+                    provider.Load(context, reference);
+                }
             }
-
-            replacement = null;
-
-            var tokens = Split(line);
-            if (tokens.Length <= 0)
-            {
-                return false;
-            }
-
-            if (!tokens[0].Equals("#l", StringComparison.Ordinal) &&
-                !tokens[0].Equals("#load", StringComparison.Ordinal))
-            {
-                return false;
-            }
-
-            var directoryPath = GetAbsoluteDirectory(context.Script.Path);
-            var scriptPath = new FilePath(tokens[1].UnQuote()).MakeAbsolute(directoryPath);
-
-            context.Analyze(scriptPath);
-
-            return true;
         }
     }
 }

@@ -19,7 +19,6 @@
           "newlineAtEndOfFile": "allow"
       },
       "maintainabilityRules": {
-          
       },
       "orderingRules": {
           "usingDirectivesPlacement": "outsideNamespace",

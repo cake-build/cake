@@ -16,13 +16,16 @@ namespace Cake.Core.Scripting.Analysis
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
+        private readonly FilePath _script;
         private readonly Stack<ScriptInformation> _stack;
         private readonly List<string> _lines;
         private readonly HashSet<FilePath> _processedScripts;
-        private ScriptInformation _root;
         private ScriptInformation _current;
 
-        public IScriptInformation Script => _current;
+        // ReSharper disable once ConvertToAutoProperty
+        public FilePath Root => _script;
+
+        public IScriptInformation Current => _current;
 
         public IReadOnlyList<string> Lines => _lines;
 
@@ -30,12 +33,14 @@ namespace Cake.Core.Scripting.Analysis
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             ICakeLog log,
-            Action<IScriptAnalyzerContext> callback)
+            Action<IScriptAnalyzerContext> callback,
+            FilePath script)
         {
             _fileSystem = fileSystem;
             _environment = environment;
             _log = log;
             _callback = callback;
+            _script = script.MakeAbsolute(_environment);
             _processedScripts = new HashSet<FilePath>(new PathComparer(_environment));
             _stack = new Stack<ScriptInformation>();
             _lines = new List<string>();
@@ -84,11 +89,6 @@ namespace Cake.Core.Scripting.Analysis
         public void Push(FilePath path)
         {
             var script = new ScriptInformation(path);
-
-            if (_root == null)
-            {
-                _root = script;
-            }
 
             _current?.Includes.Add(script);
 

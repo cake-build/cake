@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using Cake.Core.Packaging;
 using Cake.Core.Scripting.Analysis;
 
@@ -10,20 +11,15 @@ namespace Cake.Core.Scripting.Processors
 {
     internal sealed class AddInDirectiveProcessor : UriDirectiveProcessor
     {
-        public AddInDirectiveProcessor(ICakeEnvironment environment)
-            : base(environment)
+        protected override IEnumerable<string> GetDirectiveNames()
         {
-        }
-
-        protected override string GetDirectiveName()
-        {
-            return "#addin";
+            return new[] { "#addin" };
         }
 
         protected override void AddToContext(IScriptAnalyzerContext context, Uri uri)
         {
             var package = new PackageReference(uri);
-            context.Script.Addins.Add(package);
+            context.Current.Addins.Add(package);
         }
     }
 }

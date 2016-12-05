@@ -5,6 +5,7 @@
 using System;
 using Cake.Core.Composition;
 using Cake.Core.Packaging;
+using Cake.Core.Scripting.Processors.Loading;
 
 namespace Cake.NuGet
 {
@@ -31,10 +32,14 @@ namespace Cake.NuGet
 #else
             // NuGet V2
             registrar.RegisterType<V2.NuGetV2ContentResolver>().As<INuGetContentResolver>().Singleton();
+            registrar.RegisterType<NuGetLoadDirectiveProvider>().As<ILoadDirectiveProvider>().Singleton();
 #endif
 
             // URI resource support.
-            registrar.RegisterType<NuGetPackageInstaller>().As<IPackageInstaller>().Singleton();
+            registrar.RegisterType<NuGetPackageInstaller>()
+                .As<INuGetPackageInstaller>()
+                .As<IPackageInstaller>()
+                .Singleton();
         }
     }
 }

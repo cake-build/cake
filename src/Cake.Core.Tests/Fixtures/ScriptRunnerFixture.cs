@@ -10,6 +10,7 @@ using Cake.Core.IO;
 using Cake.Core.Reflection;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.Analysis;
+using Cake.Core.Scripting.Processors.Loading;
 using Cake.Testing;
 using NSubstitute;
 
@@ -56,7 +57,7 @@ namespace Cake.Core.Tests.Fixtures
             Engine = Substitute.For<IScriptEngine>();
             Engine.CreateSession(Arg.Any<IScriptHost>(), ArgumentDictionary).Returns(Session);
 
-            ScriptAnalyzer = new ScriptAnalyzer(FileSystem, Environment, Log);
+            ScriptAnalyzer = new ScriptAnalyzer(FileSystem, Environment, Log, new[] { new FileLoadDirectiveProvider() });
             ScriptProcessor = Substitute.For<IScriptProcessor>();
             ScriptConventions = new ScriptConventions(FileSystem, AssemblyLoader, Log);
 
