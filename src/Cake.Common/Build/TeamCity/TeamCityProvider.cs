@@ -302,6 +302,20 @@ namespace Cake.Common.Build.TeamCity
             });
         }
 
+        /// <summary>
+        /// Reports a statistical data to TeamCity, which can be used in custom charts.
+        /// </summary>
+        /// <param name="statisticalKey">The name of the statistical data to set.</param>
+        /// <param name="statisticalValue">The value to set for the statistical data.</param>
+        public void StatisticalValue(string statisticalKey, string statisticalValue)
+        {
+             WriteServiceMessage("buildStatisticValue", new Dictionary<string, string>
+            {
+                { "key", statisticalKey },
+                { "value", statisticalValue }
+            });
+        }
+
         private void WriteServiceMessage(string messageName, string attributeValue)
         {
             WriteServiceMessage(messageName, new Dictionary<string, string> { { " ", attributeValue } });
