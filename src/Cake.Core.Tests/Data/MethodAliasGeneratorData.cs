@@ -199,5 +199,11 @@ namespace Cake.Core.Tests.Data
         {
             throw new NotImplementedException();
         }
+
+        [CakeMethodAlias]
+        public static void NonGeneric_ExtensionMethodWithReservedKeywordParameter(this ICakeContext context, int @new)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

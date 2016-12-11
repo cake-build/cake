@@ -341,6 +341,22 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             public static void OptionalNullableBoolWithNonNullDefault(bool? arg = true)
             {
             }
+
+            public static void RequiredIntKeyword(int @new)
+            {
+            }
+
+            public static void RequiredNullableIntKeyword(int? @new)
+            {
+            }
+
+            public static void OptionalIntKeywordWithNonNullDefault(int @new = 1)
+            {
+            }
+
+            public static void OptionalNullableIntKeywordWithNullDefault(int? @new = null)
+            {
+            }
         }
 
         [Theory]
@@ -424,6 +440,10 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
         [InlineData("OptionalNullableFloatWithNonNullDefault", "System.Nullable<System.Single> arg = (System.Single)1")]
         [InlineData("OptionalNullableEnumWithNonNullDefault", "System.Nullable<Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests+TestEnum> arg = (Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests+TestEnum)1")]
         [InlineData("OptionalNullableBoolWithNonNullDefault", "System.Nullable<System.Boolean> arg = (System.Boolean)true")]
+        [InlineData("RequiredIntKeyword", "System.Int32 @new")]
+        [InlineData("RequiredNullableIntKeyword", "System.Nullable<System.Int32> @new")]
+        [InlineData("OptionalIntKeywordWithNonNullDefault", "System.Int32 @new = (System.Int32)1")]
+        [InlineData("OptionalNullableIntKeywordWithNullDefault", "System.Nullable<System.Int32> @new = null")]
         public void Should_Return_Correct_Generated_Code_For_Method_Parameters(string methodName, string expected)
         {
             // Given

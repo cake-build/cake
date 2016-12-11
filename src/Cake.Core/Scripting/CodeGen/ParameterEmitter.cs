@@ -15,6 +15,8 @@ namespace Cake.Core.Scripting.CodeGen
     /// </summary>
     internal sealed class ParameterEmitter
     {
+        private static readonly ParameterFormatter _parameterFormatter = new ParameterFormatter();
+
         internal static string Emit(ParameterInfo parameter, bool includeType)
         {
             return string.Join(string.Empty, BuildParameterTokens(parameter, includeType));
@@ -39,7 +41,8 @@ namespace Cake.Core.Scripting.CodeGen
                 yield return parameter.ParameterType.GetFullName();
                 yield return " ";
             }
-            yield return parameter.Name;
+
+            yield return _parameterFormatter.FormatName(parameter);
 
             // GH-1166; add support for specifying default parameter values
             if (includeType && parameter.IsOptional)
