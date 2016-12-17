@@ -13,12 +13,12 @@ namespace Cake.Frosting.Internal
     {
         public static bool IsRunOverridden(this IFrostingTask task, IFrostingContext context)
         {
-            return task.GetType().GetMethod("Run", new[] { context.GetType() }).IsOverriden();
+            return task.GetType().GetMethod(nameof(IFrostingTask.Run), new[] { context.GetType() }).IsOverriden();
         }
 
         public static bool IsShouldRunOverridden(this IFrostingTask task, IFrostingContext context)
         {
-            return task.GetType().GetMethod("ShouldRun", new[] { context.GetType() }).IsOverriden();
+            return task.GetType().GetMethod(nameof(IFrostingTask.ShouldRun), new[] { context.GetType() }).IsOverriden();
         }
 
         public static bool HasCompatibleContext(this IFrostingTask task, IFrostingContext context)
@@ -29,6 +29,16 @@ namespace Cake.Frosting.Internal
         public static bool IsContinueOnError(this IFrostingTask task)
         {
             return task.GetType().GetTypeInfo().GetCustomAttribute<ContinueOnErrorAttribute>() != null;
+        }
+
+        public static bool IsOnErrorOverridden(this IFrostingTask task, IFrostingContext context)
+        {
+            return task.GetType().GetMethod(nameof(IFrostingTask.OnError), new[] { typeof(Exception), context.GetType() }).IsOverriden();
+        }
+
+        public static bool IsFinallyOverridden(this IFrostingTask task, IFrostingContext context)
+        {
+            return task.GetType().GetMethod(nameof(IFrostingTask.Finally), new[] { context.GetType() }).IsOverriden();
         }
 
         public static Type GetContextType(this IFrostingTask task)

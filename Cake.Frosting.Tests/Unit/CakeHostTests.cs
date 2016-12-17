@@ -327,5 +327,55 @@ namespace Cake.Frosting.Tests.Unit
             // Then
             Assert.Equal(0, result);
         }
+
+        [Fact]
+        public void Should_Execute_OnError_Method_If_Run_Failed()
+        {
+            // Given
+            var fixture = new CakeHostBuilderFixture();
+            fixture.RegisterTask<OnErrorRunFailedTask>();
+            fixture.Options.Target = "On-Error-Run-Failed";
+
+            // When
+            fixture.Run();
+
+            // Then
+            fixture.Log.Received(1).Error("An error has occurred. {0}", "On test exception");
+        }
+
+        [Fact]
+        public void Should_Not_Execute_OnError_Method_If_Run_Completed()
+        {
+            // Given
+            var fixture = new CakeHostBuilderFixture();
+            fixture.RegisterTask<OnErrorRunCompletedTask>();
+            fixture.Options.Target = "On-Error-Run-Completed";
+
+            // When
+            fixture.Run();
+
+            // Then
+            fixture.Log.DidNotReceive().Error("OnErrorRunCompletedTask Exception");
+        }
+
+        [Fact]
+        public void Should_Execute_Finally_Method_After_All_Methods()
+        {
+            // Given
+            var fixture = new CakeHostBuilderFixture();
+            fixture.RegisterTask<FinallyTask>();
+            fixture.Options.Target = "Finally";
+
+            // When
+            fixture.Run();
+
+            // Then
+            Received.InOrder(() =>
+            {
+                fixture.Log.Information("Run method called");
+                fixture.Log.Information("OnError method called");
+                fixture.Log.Information("Finally method called");
+            });
+        }
     }
 }

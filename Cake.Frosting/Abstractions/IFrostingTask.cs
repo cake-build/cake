@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Core;
 
 // ReSharper disable once CheckNamespace
@@ -26,5 +27,18 @@ namespace Cake.Frosting
         ///   <c>true</c> if the task should run; otherwise <c>false</c>.
         /// </returns>
         bool ShouldRun(ICakeContext context);
+
+        /// <summary>
+        /// The error handler to be executed if an exception occurs in the task.
+        /// </summary>
+        /// <param name="exception">The exception</param>
+        /// <param name="context">The context.</param>
+        void OnError(Exception exception, ICakeContext context);
+
+        /// <summary>
+        /// The finally handler to be executed after the task have finished executing.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        void Finally(ICakeContext context);
     }
 }

@@ -31,7 +31,7 @@ namespace Cake.Frosting.Internal
                     // Get the task's context type.
                     if (!task.HasCompatibleContext(context))
                     {
-                        const string format = "Task cannot be used since the context isn't convertable to {0}.";
+                        const string format = "Task cannot be used since the context isn't convertible to {0}.";
                         _log.Warning(format, task.GetContextType().FullName);
                     }
                     else
@@ -55,6 +55,18 @@ namespace Cake.Frosting.Internal
                         if (task.IsContinueOnError())
                         {
                             cakeTask.ContinueOnError();
+                        }
+
+                        // Is the on error method overridden?
+                        if (task.IsOnErrorOverridden(context))
+                        {
+                            cakeTask.OnError(exception => task.OnError(exception, context));
+                        }
+
+                        // Is the finally method overridden?
+                        if (task.IsFinallyOverridden(context))
+                        {
+                            cakeTask.Finally(() => task.Finally(context));
                         }
 
                         // Add dependencies
