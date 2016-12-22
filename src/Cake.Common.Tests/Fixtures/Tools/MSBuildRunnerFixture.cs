@@ -30,6 +30,8 @@ namespace Cake.Common.Tests.Fixtures.Tools
             KnownMSBuildPaths.Add("/Program86/MSBuild/12.0/Bin/amd64/MSBuild.exe");
             KnownMSBuildPaths.Add("/Program86/MSBuild/14.0/Bin/MSBuild.exe");
             KnownMSBuildPaths.Add("/Program86/MSBuild/14.0/Bin/amd64/MSBuild.exe");
+            KnownMSBuildPaths.Add("/Program86/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin/MSBuild.exe");
+            KnownMSBuildPaths.Add("/Program86/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin/amd64/MSBuild.exe");
 
             // Install all known MSBuild versions.
             foreach (var msBuildPath in KnownMSBuildPaths)
