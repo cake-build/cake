@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Common.Build.TeamCity.Data;
 using Cake.Core.IO;
 
 namespace Cake.Common.Build.TeamCity
@@ -11,6 +12,56 @@ namespace Cake.Common.Build.TeamCity
     /// </summary>
     public interface ITeamCityProvider
     {
+        /// <summary>
+        /// Gets the TeamCity environment.
+        /// </summary>
+        /// <value>
+        /// The TeamCity environment.
+        /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TeamCity.IsRunningOnTeamCity)
+        /// {
+        ///     Information(
+        ///         @"Environment:
+        ///         PullRequest: {0}
+        ///         Build Configuration Name: {1}
+        ///         TeamCity Project Name: {2}",
+        ///         BuildSystem.TeamCity.Environment.PullRequest.IsPullRequest,
+        ///         BuildSystem.TeamCity.Environment.Build.BuildConfName,
+        ///         BuildSystem.TeamCity.Environment.Project.Name
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TeamCity");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TeamCity</para>
+        /// <example>
+        /// <code>
+        /// if (TeamCity.IsRunningOnTeamCity)
+        /// {
+        ///     Information(
+        ///         @"Environment:
+        ///         PullRequest: {0}
+        ///         Build Configuration Name: {1}
+        ///         TeamCity Project Name: {2}",
+        ///         BuildSystem.TeamCity.Environment.PullRequest.IsPullRequest,
+        ///         BuildSystem.TeamCity.Environment.Build.BuildConfName,
+        ///         BuildSystem.TeamCity.Environment.Project.Name
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TeamCity");
+        /// }
+        /// </code>
+        /// </example>
+        TeamCityEnvironmentInfo Environment { get; }
+
         /// <summary>
         /// Report a build problem to TeamCity.
         /// </summary>
