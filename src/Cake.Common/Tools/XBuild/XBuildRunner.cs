@@ -131,7 +131,7 @@ namespace Cake.Common.Tools.XBuild
         /// <returns>The tool executable name.</returns>
         protected override IEnumerable<string> GetToolExecutableNames()
         {
-            return new[] { "xunit", "xunit.bat" };
+            return new[] { "xbuild", "xbuild.exe" };
         }
 
         /// <summary>
