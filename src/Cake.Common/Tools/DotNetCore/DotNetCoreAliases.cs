@@ -506,12 +506,12 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        ///     var settings = new DotNetCoreRunSettings
+        ///     var settings = new DotNetCoreTestSettings
         ///     {
         ///         Configuration = "Release"
         ///     };
         ///
-        ///     DotNetCoreRun("./test/Project.Tests", settings);
+        ///     DotNetCoreTest("./test/Project.Tests", settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
