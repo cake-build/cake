@@ -55,7 +55,7 @@ namespace Cake.Common.Build
             var bitbucketPipelinesProvider = new BitbucketPipelinesProvider(context.Environment);
             var goCDProvider = new GoCDProvider(context.Environment, context.Log);
             var gitlabCIProvider = new GitLabCIProvider(context.Environment);
-            var tfBuildProvider = new TFBuildProvider(context.Environment);
+            var tfBuildProvider = new TFBuildProvider(context.Environment, context.Log);
             return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitlabCIProvider, tfBuildProvider);
         }
 

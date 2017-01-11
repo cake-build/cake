@@ -34,5 +34,13 @@ namespace Cake.Common.Build.TFBuild
         /// The TF Build environment.
         /// </value>
         TFBuildEnvironmentInfo Environment { get; }
+
+        /// <summary>
+        /// Gets the TF Build Commands provider.
+        /// </summary>
+        /// <value>
+        /// The TF Build commands provider.
+        /// </value>
+        ITFBuildCommands Commands { get; }
     }
 }
