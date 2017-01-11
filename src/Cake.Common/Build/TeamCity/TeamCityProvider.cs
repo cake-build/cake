@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using Cake.Common.Build.TeamCity.Data;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -23,6 +24,56 @@ namespace Cake.Common.Build.TeamCity
         private static readonly Dictionary<string, string> _sanitizationTokens;
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
+
+        /// <summary>
+        /// Gets the TeamCity environment.
+        /// </summary>
+        /// <value>
+        /// The TeamCity environment.
+        /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TeamCity.IsRunningOnTeamCity)
+        /// {
+        ///     Information(
+        ///         @"Environment:
+        ///         PullRequest: {0}
+        ///         Build Configuration Name: {1}
+        ///         TeamCity Project Name: {2}",
+        ///         BuildSystem.TeamCity.Environment.PullRequest.IsPullRequest,
+        ///         BuildSystem.TeamCity.Environment.Build.BuildConfName,
+        ///         BuildSystem.TeamCity.Environment.Project.Name
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TeamCity");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TeamCity</para>
+        /// <example>
+        /// <code>
+        /// if (TeamCity.IsRunningOnTeamCity)
+        /// {
+        ///     Information(
+        ///         @"Environment:
+        ///         PullRequest: {0}
+        ///         Build Configuration Name: {1}
+        ///         TeamCity Project Name: {2}",
+        ///         BuildSystem.TeamCity.Environment.PullRequest.IsPullRequest,
+        ///         BuildSystem.TeamCity.Environment.Build.BuildConfName,
+        ///         BuildSystem.TeamCity.Environment.Project.Name
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TeamCity");
+        /// }
+        /// </code>
+        /// </example>
+        public TeamCityEnvironmentInfo Environment { get; }
 
         static TeamCityProvider()
         {
@@ -56,6 +107,8 @@ namespace Cake.Common.Build.TeamCity
 
             _environment = environment;
             _log = log;
+
+            Environment = new TeamCityEnvironmentInfo(environment);
         }
 
         /// <summary>
