@@ -158,7 +158,7 @@ namespace Cake.Core.Scripting
                 var referencePath = new FilePath(reference);
                 if (host.Context.FileSystem.Exist(referencePath))
                 {
-                    var assembly = _assemblyLoader.Load(referencePath);
+                    var assembly = _assemblyLoader.Load(referencePath, true);
                     assemblies.Add(assembly);
                 }
                 else
