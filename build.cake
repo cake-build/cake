@@ -1,6 +1,8 @@
 // Install addins.
 #addin "nuget:https://www.nuget.org/api/v2?package=Newtonsoft.Json&version=9.0.1"
 #addin "nuget:https://www.nuget.org/api/v2?package=Cake.Coveralls&version=0.2.0"
+#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Twitter&version=0.1.0"
+#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Gitter&version=0.2.0"
 
 // Install tools.
 #tool "nuget:https://www.nuget.org/api/v2?package=gitreleasemanager&version=0.5.0"
@@ -39,6 +41,45 @@ Setup(context =>
         parameters.Target,
         parameters.Version.CakeVersion,
         parameters.IsTagged);
+});
+
+Teardown(context =>
+{
+        Information("Starting Teardown...");
+
+    if(context.Successful)
+    {
+        if(parameters.ShouldPublish)
+        {
+            if(parameters.CanPostToTwitter)
+            {
+                var message = "Version " + parameters.Version.SemVersion + " of Cake has just been released, https://www.nuget.org/packages/Cake.";
+
+                TwitterSendTweet(parameters.Twitter.ConsumerKey, parameters.Twitter.ConsumerSecret, parameters.Twitter.AccessToken, parameters.Twitter.AccessTokenSecret, message);
+            }
+
+            if(parameters.CanPostToGitter)
+            {
+                var message = "@/all Version " + parameters.Version.SemVersion + " of the Cake has just been released, https://www.nuget.org/packages/Cake.";
+
+                var postMessageResult = Gitter.Chat.PostMessage(
+                    message: message,
+                    messageSettings: new GitterChatMessageSettings { Token = parameters.Gitter.Token, RoomId = parameters.Gitter.RoomId}
+                );
+
+                if (postMessageResult.Ok)
+                {
+                    Information("Message {0} succcessfully sent", postMessageResult.TimeStamp);
+                }
+                else
+                {
+                    Error("Failed to send message: {0}", postMessageResult.Error);
+                }
+            }
+        }
+    }
+
+    Information("Finished running tasks.");
 });
 
 //////////////////////////////////////////////////////////////////////
