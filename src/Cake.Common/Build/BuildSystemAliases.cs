@@ -138,7 +138,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// var isBambooBuild = Bamboo.IsRunningBamboo;
+        /// var isBambooBuild = Bamboo.IsRunningOnBamboo;
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
