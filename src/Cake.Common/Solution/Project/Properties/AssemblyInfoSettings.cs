@@ -94,5 +94,11 @@ namespace Cake.Common.Solution.Project.Properties
         /// </summary>
         /// <value>The configuration.</value>
         public string Configuration { get; set; }
+		
+		/// <summary>
+        /// Gets or sets the configuration of the key file.
+        /// </summary>
+        /// <value>The configuration.</value>
+        public string KeyFileAttribute { get; set; }
     }
 }
