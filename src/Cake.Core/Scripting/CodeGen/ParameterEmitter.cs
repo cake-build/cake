@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -89,7 +90,9 @@ namespace Cake.Core.Scripting.CodeGen
                 }
 
                 // nullable numerics are handled in the previous block, so just cast it and use the value.
-                return $"({type.GetFullName()}){value}";
+                return string.Format(CultureInfo.InvariantCulture, "({0}){1}",
+                    type.GetFullName(),
+                    value);
             }
 
             // if it's not a special case, just pass the call
@@ -115,7 +118,7 @@ namespace Cake.Core.Scripting.CodeGen
                 return $"'{value}'";
             }
 
-            return value.ToString();
+            return string.Format(CultureInfo.InvariantCulture, "{0}", value);
         }
 
         private static readonly HashSet<Type> _numericTypes = new HashSet<Type>
