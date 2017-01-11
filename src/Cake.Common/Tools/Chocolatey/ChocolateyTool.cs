@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
@@ -68,6 +69,121 @@ namespace Cake.Common.Tools.Chocolatey
                 return new[] { path };
             }
             return Enumerable.Empty<FilePath>();
+        }
+
+        /// <summary>
+        /// Adds common arguments to the process builder.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="builder">The process argument builder.</param>
+        /// <returns>The process argument builder.</returns>
+        protected ProcessArgumentBuilder AddCommonArguments(ChocolateySettings settings, ProcessArgumentBuilder builder)
+        {
+            // Debug
+            if (settings.Debug)
+            {
+                builder.Append("-d");
+            }
+
+            // Verbose
+            if (settings.Verbose)
+            {
+                builder.Append("-v");
+            }
+
+            // Accept License
+            if (settings.AcceptLicense)
+            {
+                builder.Append("--acceptLicense");
+            }
+
+            // Always say yes, so as to not show interactive prompt
+            builder.Append("-y");
+
+            // Force
+            if (settings.Force)
+            {
+                builder.Append("-f");
+            }
+
+            // Noop
+            if (settings.Noop)
+            {
+                builder.Append("--noop");
+            }
+
+            // Limit Output
+            if (settings.LimitOutput)
+            {
+                builder.Append("-r");
+            }
+
+            // Execution Timeout
+            if (settings.ExecutionTimeout != 0)
+            {
+                builder.Append("--execution-timeout");
+                builder.AppendQuoted(settings.ExecutionTimeout.ToString(CultureInfo.InvariantCulture));
+            }
+
+            // Cache Location
+            if (!string.IsNullOrWhiteSpace(settings.CacheLocation))
+            {
+                builder.Append("-c");
+                builder.AppendQuoted(settings.CacheLocation);
+            }
+
+            // Allow Unofficial
+            if (settings.AllowUnofficial)
+            {
+                builder.Append("--allowunofficial");
+            }
+
+            // Package source
+            if (!string.IsNullOrWhiteSpace(settings.Source))
+            {
+                builder.Append("-s");
+                builder.AppendQuoted(settings.Source);
+            }
+
+            // Version
+            if (settings.Version != null)
+            {
+                builder.Append("--version");
+                builder.AppendQuoted(settings.Version);
+            }
+
+            // OverrideArguments
+            if (settings.OverrideArguments)
+            {
+                builder.Append("-o");
+            }
+
+            // NotSilent
+            if (settings.NotSilent)
+            {
+                builder.Append("--notSilent");
+            }
+
+            // Package Parameters
+            if (!string.IsNullOrWhiteSpace(settings.PackageParameters))
+            {
+                builder.Append("--params");
+                builder.AppendQuoted(settings.PackageParameters);
+            }
+
+            // Side by side installation
+            if (settings.SideBySide)
+            {
+                builder.Append("-m");
+            }
+
+            // Skip PowerShell
+            if (settings.SkipPowerShell)
+            {
+                builder.Append("-n");
+            }
+
+            return builder;
         }
     }
 }

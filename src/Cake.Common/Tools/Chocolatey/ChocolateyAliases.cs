@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using Cake.Common.Tools.Chocolatey.ApiKey;
 using Cake.Common.Tools.Chocolatey.Config;
 using Cake.Common.Tools.Chocolatey.Features;
@@ -11,6 +12,7 @@ using Cake.Common.Tools.Chocolatey.Pack;
 using Cake.Common.Tools.Chocolatey.Pin;
 using Cake.Common.Tools.Chocolatey.Push;
 using Cake.Common.Tools.Chocolatey.Sources;
+using Cake.Common.Tools.Chocolatey.Uninstall;
 using Cake.Common.Tools.Chocolatey.Upgrade;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -284,6 +286,149 @@ namespace Cake.Common.Tools.Chocolatey
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateyInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             runner.InstallFromConfig(packageConfigPath, settings);
+        }
+
+        /// <summary>
+        /// Uninstalls a Chocolatey package.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageId">The id of the package to uninstall.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyUninstall("MyChocolateyPackage");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Uninstall")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Uninstall")]
+        public static void ChocolateyUninstall(this ICakeContext context, string packageId)
+        {
+            var settings = new ChocolateyUninstallSettings();
+            ChocolateyUninstall(context, packageId, settings);
+        }
+
+        /// <summary>
+        /// Uninstalls a Chocolatey package using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageId">The id of the package to uninstall.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyUninstall("MyChocolateyPackage", new ChocolateyUninstallSettings {
+        ///     Source                  = true,
+        ///     Version                 = "1.2.3",
+        ///     UninstallArguments      = "arg1",
+        ///     OverrideArguments       = false,
+        ///     NotSilent               = false,
+        ///     PackageParameters       = "param1",
+        ///     SideBySide              = false,
+        ///     IgnoreDependencies      = false,
+        ///     ForceDependencies       = false,
+        ///     SkipPowerShell          = false,
+        ///     Debug                   = false,
+        ///     Verbose                 = false,
+        ///     FailOnStandardError     = false,
+        ///     UseSystemPowershell     = false,
+        ///     AllVersions             = false,
+        ///     Force                   = false,
+        ///     Noop                    = false,
+        ///     LimitOutput             = false,
+        ///     ExecutionTimeout        = 13,
+        ///     CacheLocation           = @"C:\temp",
+        ///     AllowUnofficial         = false,
+        ///     GlobalArguments         = false,
+        ///     GlobalPackageParameters = false,
+        ///     IgnorePackageExitCodes  = false,
+        ///     UsePackageExitCodes     = false,
+        ///     UseAutoUninstaller      = false,
+        ///     SkipAutoUninstaller     = false,
+        ///     FailOnAutoUninstaller   = false,
+        ///     IgnoreAutoUninstaller   = false
+        ///     });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Uninstall")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Uninstall")]
+        public static void ChocolateyUninstall(this ICakeContext context, string packageId, ChocolateyUninstallSettings settings)
+        {
+            ChocolateyUninstall(context, new[] { packageId }, settings);
+        }
+
+        /// <summary>
+        /// Uninstalls a Chocolatey package.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageIds">The ids of the packages to uninstall.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyUninstall("MyChocolateyPackage");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Uninstall")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Uninstall")]
+        public static void ChocolateyUninstall(this ICakeContext context, IEnumerable<string> packageIds)
+        {
+            var settings = new ChocolateyUninstallSettings();
+            ChocolateyUninstall(context, packageIds, settings);
+        }
+
+        /// <summary>
+        /// Uninstalls Chocolatey packages using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageIds">The ids of the packages to uninstall.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyUninstall("MyChocolateyPackage", new ChocolateyUninstallSettings {
+        ///     Source                  = true,
+        ///     Version                 = "1.2.3",
+        ///     UninstallArguments      = "arg1",
+        ///     OverrideArguments       = false,
+        ///     NotSilent               = false,
+        ///     PackageParameters       = "param1",
+        ///     SideBySide              = false,
+        ///     IgnoreDependencies      = false,
+        ///     ForceDependencies       = false,
+        ///     SkipPowerShell          = false,
+        ///     Debug                   = false,
+        ///     Verbose                 = false,
+        ///     FailOnStandardError     = false,
+        ///     UseSystemPowershell     = false,
+        ///     AllVersions             = false,
+        ///     Force                   = false,
+        ///     Noop                    = false,
+        ///     LimitOutput             = false,
+        ///     ExecutionTimeout        = 13,
+        ///     CacheLocation           = @"C:\temp",
+        ///     AllowUnofficial         = false,
+        ///     GlobalArguments         = false,
+        ///     GlobalPackageParameters = false,
+        ///     IgnorePackageExitCodes  = false,
+        ///     UsePackageExitCodes     = false,
+        ///     UseAutoUninstaller      = false,
+        ///     SkipAutoUninstaller     = false,
+        ///     FailOnAutoUninstaller   = false,
+        ///     IgnoreAutoUninstaller   = false
+        ///     });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Uninstall")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Uninstall")]
+        public static void ChocolateyUninstall(this ICakeContext context, IEnumerable<string> packageIds, ChocolateyUninstallSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
+            var runner = new ChocolateyUninstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
+            runner.Uninstall(packageIds, settings);
         }
 
         /// <summary>
