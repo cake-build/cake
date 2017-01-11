@@ -60,6 +60,11 @@ namespace Cake.Common.Xml
         ///     new XmlPeekSettings {
         ///         Namespaces = new Dictionary&lt;string, string&gt; {{ "pastery", "http://cakebuild.net/pastery" }}
         ///     });
+        /// string unknown = XmlPeek("./pastery.xml", "/pastery:pastery/pastery:cake/@recipe",
+        ///     new XmlPeekSettings {
+        ///         Namespaces = new Dictionary&lt;string, string&gt; {{ "pastery", "http://cakebuild.net/pastery" }},
+        ///         SuppressWarnings = true
+        ///     });
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -91,7 +96,7 @@ namespace Cake.Common.Xml
             using (var xmlReader = XmlReader.Create(fileStream, GetXmlReaderSettings(settings)))
             {
                 var xmlValue = XmlPeek(xmlReader, xpath, settings);
-                if (xmlValue == null)
+                if (xmlValue == null && !settings.SuppressWarning)
                 {
                     context.Log.Warning("Warning: Failed to find node matching the XPath '{0}'", xpath);
                 }

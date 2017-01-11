@@ -3,8 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 using System.IO;
+using System.Linq;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Xml;
+using Cake.Core.Diagnostics;
+using Cake.Testing;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.XML
@@ -104,6 +107,36 @@ namespace Cake.Common.Tests.Unit.XML
 
                 // Then
                 Assert.Equal("CFBundleDisplayName", result);
+            }
+
+            [Fact]
+            public void Should_Log_Unknown_Warning_With_Suppress_Warnings_Off()
+            {
+                // Given
+                var fixture = new XmlPeekAliasesFixture();
+
+                // When
+                var result = fixture.Peek("/configuration/test2/text()");
+
+                // Then
+                Assert.Equal(null, result);
+                var warning = fixture.FakeLog.Entries.FirstOrDefault(x => x.Level == LogLevel.Warning);
+                Assert.Equal("Warning: Failed to find node matching the XPath '/configuration/test2/text()'", warning.Message);
+            }
+
+            [Fact]
+            public void Should_Not_Log_Unknown_Warning_With_Suppress_Warnings_On()
+            {
+                // Given
+                var fixture = new XmlPeekAliasesFixture(true, false, true);
+
+                // When
+                var result = fixture.Peek("/configuration/test2/text()");
+
+                // Then
+                Assert.Equal(null, result);
+                var warning = fixture.FakeLog.Entries.FirstOrDefault(x => x.Level == LogLevel.Warning);
+                Assert.Equal(null, warning);
             }
         }
     }

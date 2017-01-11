@@ -22,6 +22,11 @@ namespace Cake.Common.Xml
         public bool PreserveWhitespace { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to suppress the xpath not found warning.
+        /// </summary>
+        public bool SuppressWarning { get; set; }
+
+        /// <summary>
         /// Gets or sets a value that determines the processing of DTDs.
         /// </summary>
         public XmlDtdProcessing DtdProcessing { get; set; }

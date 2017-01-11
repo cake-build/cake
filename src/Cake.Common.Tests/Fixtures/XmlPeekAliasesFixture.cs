@@ -15,12 +15,13 @@ namespace Cake.Common.Tests.Fixtures
     {
        public IFileSystem FileSystem { get; set; }
        public ICakeContext Context { get; set; }
+       public FakeLog FakeLog { get; set; }
        public FilePath XmlPath { get; set; }
        public XmlPeekSettings Settings { get; set; }
 
-       public XmlPeekAliasesFixture(bool xmlExists = true, bool xmlWithDtd = false)
+       public XmlPeekAliasesFixture(bool xmlExists = true, bool xmlWithDtd = false, bool suppressWarning = false)
        {
-           Settings = new XmlPeekSettings();
+           Settings = new XmlPeekSettings { SuppressWarning = suppressWarning };
 
            var environment = FakeEnvironment.CreateUnixEnvironment();
            var fileSystem = new FakeFileSystem(environment);
@@ -34,10 +35,12 @@ namespace Cake.Common.Tests.Fixtures
            }
 
            FileSystem = fileSystem;
+           FakeLog = new FakeLog();
 
            Context = Substitute.For<ICakeContext>();
            Context.FileSystem.Returns(FileSystem);
            Context.Environment.Returns(environment);
+           Context.Log.Returns(FakeLog);
        }
 
        public string Peek(string xpath)
