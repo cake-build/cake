@@ -10,6 +10,7 @@
 #tool "nuget:https://www.nuget.org/api/v2?package=coveralls.io&version=1.3.4"
 #tool "nuget:https://www.nuget.org/api/v2?package=OpenCover&version=4.6.519"
 #tool "nuget:https://www.nuget.org/api/v2?package=ReportGenerator&version=2.4.5"
+#tool "nuget:https://www.nuget.org/api/v2?package=SignClient&version=0.5.0-beta4&prerelease"
 
 // Load other scripts.
 #load "./build/parameters.cake"
@@ -342,7 +343,56 @@ Task("Create-NuGet-Packages")
     });
 });
 
+Task("Sign-Binaries")
+    .IsDependentOn("Zip-Files")
+    .IsDependentOn("Create-Chocolatey-Packages")
+    .IsDependentOn("Create-NuGet-Packages")
+    .WithCriteria(() => parameters.ShouldPublish && !parameters.SkipSigning)
+    .Does(() =>
+{
+    // Get the secret.
+    var secret = EnvironmentVariable("SIGNING_SECRET");
+    if(string.IsNullOrWhiteSpace(secret)) {
+        throw new InvalidOperationException("Could not resolve signing secret.");
+    }
+
+    var client = File("./tools/SignClient/tools/SignClient.dll");
+    var settings = File("./signclient.json");
+    var filter = File("./signclient.filter");
+
+    // Get the files to sign.
+    var files = GetFiles(string.Concat(parameters.Paths.Directories.NugetRoot, "/", "*.nupkg")) 
+        + parameters.Paths.Files.ZipArtifactPathDesktop
+        + parameters.Paths.Files.ZipArtifactPathCoreClr;
+
+    foreach(var file in files) 
+    {
+        Information("Signing {0}...", file.FullPath);
+
+        // Build the argument list.
+        var arguments = new ProcessArgumentBuilder()
+            .AppendQuoted(MakeAbsolute(client.Path).FullPath)
+            .Append("zip")
+            .AppendSwitchQuoted("-c", MakeAbsolute(settings.Path).FullPath)
+            .AppendSwitchQuoted("-i", MakeAbsolute(file).FullPath)
+            .AppendSwitchQuoted("-f", MakeAbsolute(filter).FullPath)
+            .AppendSwitchQuotedSecret("-s", secret)
+            .AppendSwitchQuoted("-n", "Cake")
+            .AppendSwitchQuoted("-d", "Cake (C# Make) is a cross platform build automation system.")
+            .AppendSwitchQuoted("-u", "http://cakebuild.net");
+
+        // Sign the binary.
+        var result = StartProcess("dotnet", new ProcessSettings {  Arguments = arguments });
+        if(result != 0)
+        {
+            // We should not recover from this.
+            throw new InvalidOperationException("Signing failed!");
+        }
+    }
+});
+
 Task("Upload-AppVeyor-Artifacts")
+    .IsDependentOn("Sign-Binaries")
     .IsDependentOn("Create-Chocolatey-Packages")
     .WithCriteria(() => parameters.IsRunningOnAppVeyor)
     .Does(() =>
@@ -370,6 +420,7 @@ Task("Upload-Coverage-Report")
 });
 
 Task("Publish-MyGet")
+    .IsDependentOn("Sign-Binaries")
     .IsDependentOn("Package")
     .WithCriteria(() => parameters.ShouldPublishToMyGet)
     .Does(() =>
@@ -402,6 +453,7 @@ Task("Publish-MyGet")
 });
 
 Task("Publish-NuGet")
+    .IsDependentOn("Sign-Binaries")
     .IsDependentOn("Create-NuGet-Packages")
     .WithCriteria(() => parameters.ShouldPublish)
     .Does(() =>
@@ -434,6 +486,7 @@ Task("Publish-NuGet")
 });
 
 Task("Publish-Chocolatey")
+    .IsDependentOn("Sign-Binaries")
     .IsDependentOn("Create-Chocolatey-Packages")
     .WithCriteria(() => parameters.ShouldPublish)
     .Does(() =>
@@ -466,8 +519,9 @@ Task("Publish-Chocolatey")
 });
 
 Task("Publish-HomeBrew")
-    .WithCriteria(() => parameters.ShouldPublish)
+    .IsDependentOn("Sign-Binaries")
     .IsDependentOn("Zip-Files")
+    .WithCriteria(() => parameters.ShouldPublish)
 	.Does(() =>
 {
     var hash = CalculateFileHash(parameters.Paths.Files.ZipArtifactPathDesktop).ToHex();
