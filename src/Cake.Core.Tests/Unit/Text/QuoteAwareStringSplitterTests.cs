@@ -3,12 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Linq;
-using Cake.Arguments;
+using Cake.Core.Text;
 using Xunit;
 
-namespace Cake.Tests.Unit.Arguments
+namespace Cake.Core.Tests.Unit.Text
 {
-    public sealed class ArgumentTokenizerTests
+    public sealed class QuoteAwareStringSplitterTests
     {
         public sealed class TheTokenizeMethod
         {
@@ -19,7 +19,7 @@ namespace Cake.Tests.Unit.Arguments
                 var input = string.Empty;
 
                 // When
-                var result = ArgumentTokenizer.Tokenize(input).ToArray();
+                var result = QuoteAwareStringSplitter.Split(input).ToArray();
 
                 // Then
                 Assert.Equal(0, result.Length);
@@ -32,7 +32,7 @@ namespace Cake.Tests.Unit.Arguments
                 const string input = "\"C:\\cake-walk\\cake.exe\"";
 
                 // When
-                var result = ArgumentTokenizer.Tokenize(input).ToArray();
+                var result = QuoteAwareStringSplitter.Split(input).ToArray();
 
                 // Then
                 Assert.Equal(1, result.Length);
@@ -46,7 +46,7 @@ namespace Cake.Tests.Unit.Arguments
                 const string input = "\"C:\\cake walk\\cake.exe\"";
 
                 // When
-                var result = ArgumentTokenizer.Tokenize(input).ToArray();
+                var result = QuoteAwareStringSplitter.Split(input).ToArray();
 
                 // Then
                 Assert.Equal(1, result.Length);
@@ -60,7 +60,7 @@ namespace Cake.Tests.Unit.Arguments
                 const string input = "\"C:\\cake-walk\\cake.exe\" \"build.cake\" \"-dryrun\"";
 
                 // When
-                var result = ArgumentTokenizer.Tokenize(input).ToArray();
+                var result = QuoteAwareStringSplitter.Split(input).ToArray();
 
                 // Then
                 Assert.Equal(3, result.Length);
@@ -76,7 +76,7 @@ namespace Cake.Tests.Unit.Arguments
                 const string input = "\"C:\\cake-walk\\cake.exe\" build.cake -verbosity \"diagnostic\"";
 
                 // When
-                var result = ArgumentTokenizer.Tokenize(input).ToArray();
+                var result = QuoteAwareStringSplitter.Split(input).ToArray();
 
                 // Then
                 Assert.Equal(4, result.Length);
@@ -93,7 +93,7 @@ namespace Cake.Tests.Unit.Arguments
                 const string input = @"cake.exe build.cake -target=""te st""";
 
                 // When
-                var result = ArgumentTokenizer.Tokenize(input).ToArray();
+                var result = QuoteAwareStringSplitter.Split(input).ToArray();
 
                 // Then
                 Assert.Equal(3, result.Length);

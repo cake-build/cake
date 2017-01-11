@@ -30,6 +30,25 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
         }
 
         [Theory]
+        [InlineData("#l \"test/my utils.cake\"")]
+        [InlineData("#load \"test/my utils.cake\"")]
+        public void Should_Process_Single_Script_Reference_With_Spaces_In_File_Name_Found_In_Source(string source)
+        {
+            // Given
+            var fixture = new ScriptAnalyzerFixture();
+            fixture.Providers.Add(new FileLoadDirectiveProvider());
+            fixture.GivenScriptExist("/Working/script.cake", source);
+            fixture.GivenScriptExist("/Working/test/my utils.cake", "Console.WriteLine();");
+
+            // When
+            var result = fixture.Analyze("/Working/script.cake");
+
+            // Then
+            Assert.Equal(1, result.Script.Includes.Count);
+            Assert.Equal("/Working/test/my utils.cake", result.Script.Includes[0].Path.FullPath);
+        }
+
+        [Theory]
         [InlineData("#l \"utils.cake\"\n#l \"other.cake\"")]
         [InlineData("#load \"utils.cake\"\n#load \"other.cake\"")]
         public void Should_Process_Multiple_Script_References_Found_In_Source(string source)
