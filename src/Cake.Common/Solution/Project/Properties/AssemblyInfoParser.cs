@@ -18,8 +18,10 @@ namespace Cake.Common.Solution.Project.Properties
     /// </summary>
     public sealed class AssemblyInfoParser
     {
-        private const string NonQuotedPattern = @"^\s*\[assembly: {0} ?\((?<attributeValue>.*)\)";
-        private const string QuotedPattern = @"^\s*\[assembly: {0} ?\(""(?<attributeValue>.*)""\)";
+        private const string CSharpNonQuotedPattern = @"^\s*\[assembly: {0} ?\((?<attributeValue>.*)\)";
+        private const string CSharpQuotedPattern = @"^\s*\[assembly: {0} ?\(""(?<attributeValue>.*)""\)";
+        private const string VBNonQuotedPattern = @"^\s*\<Assembly: {0} ?\((?<attributeValue>.*)\)";
+        private const string VBQuotedPattern = @"^\s*\<Assembly: {0} ?\(""(?<attributeValue>.*)""\)";
         private const string DefaultVersion = "1.0.0.0";
 
         private readonly IFileSystem _fileSystem;
@@ -61,6 +63,9 @@ namespace Cake.Common.Solution.Project.Properties
                 assemblyInfoPath = assemblyInfoPath.MakeAbsolute(_environment);
             }
 
+            string nonQuotedPattern = CSharpNonQuotedPattern;
+            string quotedPattern = CSharpQuotedPattern;
+
             // Get the release notes file.
             var file = _fileSystem.GetFile(assemblyInfoPath);
             if (!file.Exists)
@@ -69,25 +74,30 @@ namespace Cake.Common.Solution.Project.Properties
                 var message = string.Format(CultureInfo.InvariantCulture, format, assemblyInfoPath.FullPath);
                 throw new CakeException(message);
             }
+            if (file.Path.GetExtension() == ".vb")
+            {
+                nonQuotedPattern = VBNonQuotedPattern;
+                quotedPattern = VBQuotedPattern;
+            }
 
             using (var reader = new StreamReader(file.OpenRead()))
             {
                 var content = reader.ReadToEnd();
                 return new AssemblyInfoParseResult(
-                    ParseSingle(NonQuotedPattern, "CLSCompliant", content),
-                    ParseSingle(QuotedPattern, "AssemblyCompany", content),
-                    ParseSingle(NonQuotedPattern, "ComVisible", content),
-                    ParseSingle(QuotedPattern, "AssemblyConfiguration", content),
-                    ParseSingle(QuotedPattern, "AssemblyCopyright", content),
-                    ParseSingle(QuotedPattern, "AssemblyDescription", content),
-                    ParseSingle(QuotedPattern, "AssemblyFileVersion", content) ?? DefaultVersion,
-                    ParseSingle(QuotedPattern, "Guid", content),
-                    ParseSingle(QuotedPattern, "AssemblyInformationalVersion", content) ?? DefaultVersion,
-                    ParseSingle(QuotedPattern, "AssemblyProduct", content),
-                    ParseSingle(QuotedPattern, "AssemblyTitle", content),
-                    ParseSingle(QuotedPattern, "AssemblyTrademark", content),
-                    ParseSingle(QuotedPattern, "AssemblyVersion", content) ?? DefaultVersion,
-                    ParseMultiple(QuotedPattern, "InternalsVisibleTo", content));
+                    ParseSingle(nonQuotedPattern, "CLSCompliant", content),
+                    ParseSingle(quotedPattern, "AssemblyCompany", content),
+                    ParseSingle(nonQuotedPattern, "ComVisible", content),
+                    ParseSingle(quotedPattern, "AssemblyConfiguration", content),
+                    ParseSingle(quotedPattern, "AssemblyCopyright", content),
+                    ParseSingle(quotedPattern, "AssemblyDescription", content),
+                    ParseSingle(quotedPattern, "AssemblyFileVersion", content) ?? DefaultVersion,
+                    ParseSingle(quotedPattern, "Guid", content),
+                    ParseSingle(quotedPattern, "AssemblyInformationalVersion", content) ?? DefaultVersion,
+                    ParseSingle(quotedPattern, "AssemblyProduct", content),
+                    ParseSingle(quotedPattern, "AssemblyTitle", content),
+                    ParseSingle(quotedPattern, "AssemblyTrademark", content),
+                    ParseSingle(quotedPattern, "AssemblyVersion", content) ?? DefaultVersion,
+                    ParseMultiple(quotedPattern, "InternalsVisibleTo", content));
             }
         }
 

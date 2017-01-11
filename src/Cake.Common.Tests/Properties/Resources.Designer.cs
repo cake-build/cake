@@ -11,8 +11,8 @@
 namespace Cake.Common.Tests.Properties {
     using System;
     using System.Reflection;
-    
-    
+
+
     /// <summary>
     ///    A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -23,14 +23,14 @@ namespace Cake.Common.Tests.Properties {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
-        
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         internal Resources() {
         }
-        
+
         /// <summary>
         ///    Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -44,7 +44,7 @@ namespace Cake.Common.Tests.Properties {
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///    Overrides the current thread's CurrentUICulture property for all
         ///    resource lookups using this strongly typed resource class.
@@ -58,7 +58,7 @@ namespace Cake.Common.Tests.Properties {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. --&gt;
@@ -76,7 +76,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("ChocolateyNuspec_Metadata", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. --&gt;
@@ -96,7 +96,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("ChocolateyNuspec_Metadata_WithoutNamespaces", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. --&gt;
@@ -111,7 +111,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("ChocolateyNuspec_NoMetadataElement", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. --&gt;
@@ -127,7 +127,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("ChocolateyNuspec_NoMetadataValues", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. --&gt;
@@ -143,7 +143,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("ChocolateyNuspec_NoMetadataValues_WithoutNamespaces", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  &lt;Project ToolsVersion=&quot;12.0&quot; DefaultTargets=&quot;Build&quot; xmlns=&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&gt;
         ///  &lt;Import Project=&quot;$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props&quot; Condition=&quot;Exists(&apos;$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props&apos;)&quot; /&gt;
@@ -157,7 +157,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("Csproj_IncompleteFile", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  &lt;Project ToolsVersion=&quot;12.0&quot; DefaultTargets=&quot;Build&quot; xmlns=&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&gt;
         ///  &lt;Import Project=&quot;$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props&quot; Condition=&quot;Exists(&apos;$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props&apos;)&quot; /&gt;
@@ -171,7 +171,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("Csproj_ProjectFile", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;DuplicatesReport ToolsVersion=&quot;103.0&quot;&gt;
@@ -188,7 +188,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("DupFinderReportNoDuplicates", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;DuplicatesReport ToolsVersion=&quot;103.0&quot;&gt;
@@ -212,7 +212,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("DupFinderReportWithDuplicates", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;!-- Generated by InspectCode 8.2.1000.4527 --&gt;
@@ -232,7 +232,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("InspectCodeReportNoViolations", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;!-- Generated by InspectCode 8.2.1000.4527 --&gt;
@@ -255,7 +255,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("InspectCodeReportWithViolations", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  using System.Reflection;
         ///using System.Runtime.CompilerServices;
@@ -275,7 +275,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("MonoDevelopAssemblyInfo", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
@@ -294,7 +294,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("Nuspec_Metadata", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
@@ -313,7 +313,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("Nuspec_Metadata_WithDependencies", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package&gt;
@@ -335,7 +335,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("Nuspec_Metadata_WithoutNamespaces", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package&gt;
@@ -357,7 +357,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("Nuspec_Metadata_WithoutNamespaces_WithDependencies", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package&gt;
@@ -379,7 +379,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("Nuspec_Metadata_WithoutNamespaces_WithTargetFramworkDependencies", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
@@ -397,7 +397,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("Nuspec_Metadata_WithTargetFrameworkDependencies", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
@@ -416,7 +416,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("Nuspec_Metadata_WithTragetFramworkDependencies", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
@@ -433,7 +433,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("Nuspec_NoMetadataElement", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
@@ -451,7 +451,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("Nuspec_NoMetadataValues", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package&gt;
@@ -469,7 +469,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("Nuspec_NoMetadataValues_WithoutNamespaces", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;Project ToolsVersion=&quot;4.0&quot; DefaultTargets=&quot;Build&quot; xmlns=&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&gt;
@@ -486,7 +486,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("Nuspec_ProjectFile", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  Microsoft Visual Studio Solution File, Format Version 12.00
         ///# Visual Studio 14
@@ -503,7 +503,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("Solution_WithProjectsAndFolders", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  using System.Reflection;
         ///using System.Runtime.CompilerServices;
@@ -523,7 +523,27 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("VisualStudioAssemblyInfo", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Imports System.Reflection
+        ///Imports System.Runtime.CompilerServices;
+        ///
+        ///&apos; Information about this assembly is defined by the following attributes.
+        ///&apos; Change them to the values specific to your project.
+        ///
+        ///&lt;Assembly: AssemblyTitle(&quot;VisualStudioAssemblyTitle&quot;)&gt;
+        ///&lt;Assembly: AssemblyDescription(&quot;VisualStudioAssemblyDescription&quot;)&gt;
+        ///&lt;Assembly: AssemblyConfiguration(&quot;VisualStudioConfiguration&quot;)&gt;
+        ///&lt;Assembly: AssemblyCompany(&quot;VisualStudioCompany&quot;)&gt;
+        ///&lt;Assembly: AssemblyProduct(&quot;VisualStudioProduct&quot;)&gt;
+        ///&lt;Assembly: Assemb [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string VisualStudioAssemblyInfo_VB {
+            get {
+                return ResourceManager.GetString("VisualStudioAssemblyInfo_VB", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///    Looks up a localized string similar to  &lt;?xml version=&quot;1.0&quot;?&gt;
         ///&lt;doc&gt;
@@ -544,7 +564,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("XmlDoc_ExampeCode_Cake_Common_Xml", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
         ///&lt;configuration&gt;
@@ -561,7 +581,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("XmlPeek_Xml", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
         ///&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
@@ -578,7 +598,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("XmlPeek_Xml_Dtd", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
         ///&lt;configuration&gt;
@@ -593,7 +613,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("XmlPoke_Xml", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
         ///&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
@@ -610,7 +630,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("XmlPoke_Xml_Dtd", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;html&gt;&lt;body style=&quot;font-family:Arial;font-size:12pt;background-color:#EEEEEE&quot;&gt;&lt;div style=&quot;background-color:teal;color:white;padding:4px&quot;&gt;&lt;span style=&quot;font-weight:bold&quot;&gt;Belgian Waffles
         ///                    -
@@ -624,7 +644,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("XmlTransformation_Htm", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  &lt;html&gt;&lt;body style=&quot;font-family:Arial;font-size:12pt;background-color:#EEEEEE&quot;&gt;&lt;div style=&quot;background-color:teal;color:white;padding:4px&quot;&gt;&lt;span style=&quot;font-weight:bold&quot;&gt;Belgian Waffles
         ///                    -
@@ -639,7 +659,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("XmlTransformation_Htm_NoXmlDeclaration", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
         ///&lt;breakfast_menu&gt;
@@ -660,7 +680,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("XmlTransformation_Xml", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///    Looks up a localized string similar to  &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
         ///&lt;html xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot; xsl:version=&quot;1.0&quot;&gt;
