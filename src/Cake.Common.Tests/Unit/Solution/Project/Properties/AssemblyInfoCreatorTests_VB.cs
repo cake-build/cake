@@ -286,6 +286,21 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 Assert.True(result.Contains("Imports System.Reflection"));
                 Assert.True(result.Contains("<Assembly: AssemblyConfiguration(\"TheConfiguration\")>"));
             }
+
+            [Fact]
+            public void Should_Add_CustomAttributes_If_Set()
+            {
+                // Given
+                var fixture = new AssemblyInfoFixture_VB();
+                fixture.Settings.CustomAttributes = new Collection<AssemblyInfoCustomAttribute> { new AssemblyInfoCustomAttribute { Name = "TestAttribute", NameSpace = "Test.NameSpace", Value = "TestValue" } };
+
+                // When
+                var result = fixture.CreateAndReturnContent();
+
+                // Then
+                Assert.True(result.Contains("Imports Test.NameSpace"));
+                Assert.True(result.Contains("<Assembly: TestAttribute(\"TestValue\")>"));
+            }
         }
     }
 }
