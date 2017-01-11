@@ -88,5 +88,10 @@ namespace Cake.Common.Tools.MSBuild
         /// MSBuild tool version: <c>.NET 4.6</c>
         /// </summary>
         NET46 = 5,
+
+        /// <summary>
+        /// MSBuild tool version: <c>Visual Studio 2017</c>
+        /// </summary>
+        VS2017 = 6
     }
 }
