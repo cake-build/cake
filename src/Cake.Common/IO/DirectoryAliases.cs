@@ -367,6 +367,7 @@ namespace Cake.Common.IO
             foreach (var file in files)
             {
                 var temppath = destinationDir.Path.CombineWithFilePath(file.Path.GetFilename());
+                context.Log.Verbose("Copying file {0} to {1}", file.Path, temppath);
                 file.Copy(temppath, true);
             }
 
