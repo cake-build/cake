@@ -18,6 +18,7 @@
 #load "./Cake.Common/Text/TextTransformationAliases.cake"
 #load "./Cake.Common/Tools/Cake/CakeAliases.cake"
 #load "./Cake.Common/Tools/DotNetCore/DotNetCoreAliases.cake"
+#load "./Cake.Core/Scripting/LoadDirective.cake"
 #load "./Cake.Core/Tooling/ToolLocator.cake"
 
 //////////////////////////////////////////////////
@@ -40,6 +41,7 @@ Setup(ctx =>
 //////////////////////////////////////////////////
 
 Task("Cake.Core")
+    .IsDependentOn("Cake.Core.Scripting.LoadDirective")
     .IsDependentOn("Cake.Core.Tooling.ToolLocator");
 
 Task("Cake.Common")

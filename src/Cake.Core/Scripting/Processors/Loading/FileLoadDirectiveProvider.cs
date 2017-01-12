@@ -4,6 +4,7 @@
 
 using System;
 using System.Linq;
+using System.Net;
 using Cake.Core.IO;
 using Cake.Core.Scripting.Analysis;
 
@@ -35,6 +36,9 @@ namespace Cake.Core.Scripting.Processors.Loading
             {
                 throw new CakeException("Query string for #load is missing parameter 'path'.");
             }
+
+            // URL decode the path.
+            path = new FilePath(WebUtility.UrlDecode(path.FullPath));
 
             // Get the current script path.
             var current = context.Current.Path.GetDirectory();

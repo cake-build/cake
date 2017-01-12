@@ -118,6 +118,23 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
             }
 
             [Theory]
+            [InlineData("#r \"hello world.dll\"")]
+            [InlineData("#reference \"hello world.dll\"")]
+            public void Should_Return_Single_Assembly_Reference_With_Space_In_File_Name_Found_In_Source(string source)
+            {
+                // Given
+                var fixture = new ScriptAnalyzerFixture();
+                fixture.GivenScriptExist("/Working/script.cake", source);
+
+                // When
+                var result = fixture.Analyze("/Working/script.cake");
+
+                // Then
+                Assert.Equal(1, result.Script.References.Count);
+                Assert.Equal("hello world.dll", result.Script.References.ElementAt(0));
+            }
+
+            [Theory]
             [InlineData("#r \"hello.dll\"\n#r \"world.dll\"")]
             [InlineData("#r \"hello.dll\"\nConsole.WriteLine();\n#r \"world.dll\"")]
             public void Should_Return_Multiple_Assembly_References_Found_In_Source(string source)

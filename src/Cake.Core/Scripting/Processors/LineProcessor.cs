@@ -3,7 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Linq;
 using Cake.Core.Scripting.Analysis;
+using Cake.Core.Text;
 
 namespace Cake.Core.Scripting.Processors
 {
@@ -33,7 +35,8 @@ namespace Cake.Core.Scripting.Processors
             {
                 throw new ArgumentNullException(nameof(line));
             }
-            return line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            return QuoteAwareStringSplitter.Split(line).ToArray();
         }
     }
 }
