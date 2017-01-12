@@ -44,7 +44,6 @@
     "Cake.Core": {
       "target": "project"
     },
-    "xunit.core": "2.2.0-beta2-build3300",
     "StyleCop.Analyzers": {
       "version": "1.0.0",
       "type": "build"
