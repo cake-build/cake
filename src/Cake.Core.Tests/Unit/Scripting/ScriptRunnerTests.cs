@@ -319,7 +319,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 // Then
                 fixture.ScriptProcessor.Received(1).InstallAddins(
                     Arg.Any<ScriptAnalyzerResult>(),
-                    Arg.Is<DirectoryPath>(path => path.FullPath == "/Working/Addins"));
+                    Arg.Is<DirectoryPath>(path => path.FullPath == "/Working/tools/Addins"));
             }
 
             [Fact]

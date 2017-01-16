@@ -19,6 +19,7 @@
     "Cake.Core": {
       "target": "project"
     },
+    "xunit.core": "2.2.0-beta2-build3300",
     "xunit.assert.source": "2.2.0-beta2-build3300"
   },
   "frameworks": {
@@ -35,7 +36,7 @@
     },
     "net45": {
       "dependencies": {
-        "xunit.core": "2.1.0"
+        "xunit.core": "2.2.0-beta2-build3300"
       },
       "frameworkAssemblies": {
         "System.Runtime": {

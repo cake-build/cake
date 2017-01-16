@@ -1,15 +1,18 @@
 ﻿{
   "version": "0.18.0-*",
   "buildOptions": {
-    "platform": "AnyCpu",
+    "platform": "anycpu",
     "additionalArguments": [
       "/ruleset:../Test.ruleset",
       "/additionalfile:../stylecop.json"
     ],
     "compile": {
-      "includeFiles": [
-        "../SolutionInfo.cs"
-      ]
+        "includeFiles": [
+            "../SolutionInfo.cs"
+        ]
+    },
+    "copyToOutput": {
+        "include": [ "./Properties/PropertyList-1.0.dtd" ]
     }
   },
   "configurations": {

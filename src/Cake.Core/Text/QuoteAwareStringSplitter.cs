@@ -6,16 +6,24 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Cake.Arguments
+namespace Cake.Core.Text
 {
-    internal static class ArgumentTokenizer
+    /// <summary>
+    /// Utility that that respect quotes when splitting a string.
+    /// </summary>
+    public static class QuoteAwareStringSplitter
     {
-        public static IEnumerable<string> Tokenize(string arguments)
+        /// <summary>
+        /// Splits the provided string on spaces while respecting quoted strings.
+        /// </summary>
+        /// <param name="text">The string to split.</param>
+        /// <returns>The split, individual parts.</returns>
+        public static IEnumerable<string> Split(string text)
         {
-            return Tokenize(new StringReader(arguments));
+            return Split(new StringReader(text));
         }
 
-        private static IEnumerable<string> Tokenize(StringReader reader)
+        private static IEnumerable<string> Split(StringReader reader)
         {
             while (reader.Peek() != -1)
             {

@@ -11,6 +11,7 @@ using Cake.Composition;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.Modules;
+using Cake.Core.Text;
 using Cake.Diagnostics;
 using Cake.Modules;
 using Cake.NuGet;
@@ -34,8 +35,8 @@ namespace Cake
             try
             {
                 // Parse arguments.
-                var args = ArgumentTokenizer
-                    .Tokenize(EnvironmentHelper.GetCommandLine())
+                var args = QuoteAwareStringSplitter
+                    .Split(EnvironmentHelper.GetCommandLine())
                     .Skip(1) // Skip executable.
                     .ToArray();
 
