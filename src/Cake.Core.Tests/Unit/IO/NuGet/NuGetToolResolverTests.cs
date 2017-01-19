@@ -117,6 +117,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
             }
 
             [Theory]
+            [InlineData("/Library/Frameworks/Mono.framework/Versions/Current/Commands/nuget")]
             [InlineData("/usr/local/bin/nuget")]
             [InlineData("/usr/bin/nuget")]
             public void Should_Be_Able_To_Resolve_Path_Via_Special_Unix_Paths(string path)
