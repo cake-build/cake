@@ -14,7 +14,12 @@ namespace Cake.Common.Tests.Fixtures.Tools
         public List<FilePath> Assemblies { get; set; }
 
         public NUnitRunnerFixture()
-            : base("nunit-console.exe")
+            : this("nunit-console.exe")
+        {
+        }
+
+        public NUnitRunnerFixture(string toolFilename)
+            : base(toolFilename)
         {
             Assemblies = new List<FilePath>();
             Assemblies.Add(new FilePath("./Test1.dll"));

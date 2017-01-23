@@ -17,6 +17,7 @@ namespace Cake.Common.Tools.NUnit
     public sealed class NUnitRunner : Tool<NUnitSettings>
     {
         private readonly ICakeEnvironment _environment;
+        private bool _x86;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NUnitRunner"/> class.
@@ -49,6 +50,8 @@ namespace Cake.Common.Tools.NUnit
             {
                 throw new ArgumentNullException(nameof(settings));
             }
+
+            _x86 = settings.X86;
 
             Run(settings, GetArguments(assemblyPaths, settings));
         }
@@ -171,7 +174,12 @@ namespace Cake.Common.Tools.NUnit
         /// <returns>The tool executable name.</returns>
         protected override IEnumerable<string> GetToolExecutableNames()
         {
-            return new[] { "nunit-console.exe" };
+            if (!_x86)
+            {
+                return new[] { "nunit-console.exe" };
+            }
+
+            return new[] { "nunit-console-x86.exe" };
         }
 
         /// <summary>
