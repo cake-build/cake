@@ -137,5 +137,13 @@ namespace Cake.Common.Tools.NUnit
         ///     Otherwise a single domain is used.
         /// </summary>
         public NUnitAppDomainUsage AppDomainUsage { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to run tests in an x86 process on 64 bit systems.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> to run tests in an x86 process on 64 bit systems; otherwise, <c>false</c>.
+        /// </value>
+        public bool X86 { get; set; }
     }
 }
