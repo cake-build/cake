@@ -23,6 +23,7 @@ namespace Cake.Core.IO.NuGet
         {
             _unixSystemPaths = new[]
             {
+                new FilePath("/Library/Frameworks/Mono.framework/Versions/Current/Commands/nuget"),
                 new FilePath("/usr/local/bin/nuget"),
                 new FilePath("/usr/bin/nuget")
             };
