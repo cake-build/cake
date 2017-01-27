@@ -34,5 +34,14 @@ namespace Cake.Common.Build.GoCD
         /// <param name="password">The Go.CD password.</param>
         /// <returns>The Go.CD build history.</returns>
         GoCDHistoryInfo GetHistory(string username, string password);
+
+        /// <summary>
+        /// Gets the Go.CD build history, including the repository modifications that caused the pipeline to start.
+        /// </summary>
+        /// <param name="username">The Go.CD username.</param>
+        /// <param name="password">The Go.CD password.</param>
+        /// <param name="serverUrl">The Go.CD server URL.</param>
+        /// <returns>The Go.CD build history.</returns>
+        GoCDHistoryInfo GetHistory(string username, string password, string serverUrl);
     }
 }

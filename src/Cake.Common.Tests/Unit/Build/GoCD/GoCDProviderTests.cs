@@ -118,6 +118,20 @@ namespace Cake.Common.Tests.Unit.Build.GoCD
             }
 
             [Fact]
+            public void Should_Throw_If_Server_Url_Is_Null()
+            {
+                // Given
+                var fixture = new GoCDFixture();
+                var appVeyor = fixture.CreateGoCDService();
+
+                // When
+                var result = Record.Exception(() => appVeyor.GetHistory("username", "password", null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "serverUrl");
+            }
+
+            [Fact]
             public void Should_Throw_If_Not_Running_On_GoCD()
             {
                 // Given
