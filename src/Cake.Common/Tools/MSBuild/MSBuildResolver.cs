@@ -12,6 +12,18 @@ namespace Cake.Common.Tools.MSBuild
     {
         public static FilePath GetMSBuildPath(IFileSystem fileSystem, ICakeEnvironment environment, MSBuildToolVersion version, MSBuildPlatform buildPlatform)
         {
+            if (environment.Platform.Family == PlatformFamily.OSX)
+            {
+                var macMSBuildPath = new FilePath("/Library/Frameworks/Mono.framework/Versions/Current/Commands/msbuild");
+
+                if (fileSystem.Exist(macMSBuildPath))
+                {
+                    return macMSBuildPath;
+                }
+
+                throw new CakeException("Could not resolve MSBuild.");
+            }
+
             var binPath = version == MSBuildToolVersion.Default
                 ? GetHighestAvailableMSBuildVersion(fileSystem, environment, buildPlatform)
                 : GetMSBuildPath(fileSystem, environment, (MSBuildVersion)version, buildPlatform);
