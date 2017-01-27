@@ -19,7 +19,7 @@ namespace Cake.Common.Tools.GitLink
     /// </code>
     /// </para>
     /// </summary>
-    [CakeAliasCategory("GitTools")]
+    [CakeAliasCategory("GitLink")]
     public static class GitLinkAliases
     {
         /// <summary>
