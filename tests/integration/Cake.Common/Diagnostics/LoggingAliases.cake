@@ -4,7 +4,7 @@ var verbosities = Enum.GetValues(typeof(Cake.Core.Diagnostics.Verbosity))
                     .Cast<Cake.Core.Diagnostics.Verbosity>()
                     .ToArray();
 
-var logStringMethods = new [] {
+var logStringFormatMethods = new [] {
     new { Name = "Error", Action = new Action<string, object[]>(Error)},
     new { Name = "Warning", Action = new Action<string, object[]>(Warning)},
     new { Name = "Information", Action = new Action<string, object[]>(Information)},
@@ -20,14 +20,30 @@ var logActionMethods = new [] {
     new { Name = "Debug", Action = new Action<LogAction>(Debug), Verbosity = Verbosity.Diagnostic }
 };
 
+var logStringMethods = new [] {
+    new { Name = "Error", Action = new Action<string>(Error)},
+    new { Name = "Warning", Action = new Action<string>(Warning)},
+    new { Name = "Information", Action = new Action<string>(Information)},
+    new { Name = "Verbose", Action = new Action<string>(Verbose)},
+    new { Name = "Debug", Action = new Action<string>(Debug)}
+};
+
+var logObjectMethods = new [] {
+    new { Name = "Error", Action = new Action<object>(Error)},
+    new { Name = "Warning", Action = new Action<object>(Warning)},
+    new { Name = "Information", Action = new Action<object>(Information)},
+    new { Name = "Verbose", Action = new Action<object>(Verbose)},
+    new { Name = "Debug", Action = new Action<object>(Debug)}
+};
+
 var loggingAliasesTask = Task("Cake.Common.Diagnostics.LoggingAliases");
 
 Array.ForEach(
     verbosities,
     verbosity => Array.ForEach(
-                            logStringMethods,
-                            logStringMethod => loggingAliasesTask.IsDependentOn(
-                                    Task(string.Format("Cake.Common.Diagnostics.LoggingAliases.String.{0}.{1}", verbosity, logStringMethod.Name))
+                            logStringFormatMethods,
+                            logStringFormatMethod => loggingAliasesTask.IsDependentOn(
+                                    Task(string.Format("Cake.Common.Diagnostics.LoggingAliases.StringFormat.{0}.{1}", verbosity, logStringFormatMethod.Name))
                                         .Does(() =>
                                     {
                                         var originalVerbosity = Context.Log.Verbosity;
@@ -37,7 +53,7 @@ Array.ForEach(
                                             Context.Log.Verbosity = verbosity;
 
                                             // When
-                                            logStringMethod.Action("Cake.Common.Diagnostics.LoggingAliases.String.{0}.{1}", new object[] { verbosity, logStringMethod.Name });
+                                            logStringFormatMethod.Action("Cake.Common.Diagnostics.LoggingAliases.StringFormat.{0}.{1}", new object[] { verbosity, logStringFormatMethod.Name });
                                         }
                                         finally
                                         {
@@ -70,6 +86,56 @@ Array.ForEach(
 
                                             // Then
                                             Assert.True(called || verbosity<logActionMethod.Verbosity);
+                                        }
+                                        finally
+                                        {
+                                            Context.Log.Verbosity = originalVerbosity;
+                                        }
+                                    }).Task.Name
+                        ))
+);
+
+Array.ForEach(
+    verbosities,
+    verbosity => Array.ForEach(
+                            logStringMethods,
+                            logStringMethod => loggingAliasesTask.IsDependentOn(
+                                    Task(string.Format("Cake.Common.Diagnostics.LoggingAliases.String.{0}.{1}", verbosity, logStringMethod.Name))
+                                        .Does(() =>
+                                    {
+                                        var originalVerbosity = Context.Log.Verbosity;
+                                        try
+                                        {
+                                            // Given
+                                            Context.Log.Verbosity = verbosity;
+
+                                            // When
+                                            logStringMethod.Action(string.Format("Cake.Common.Diagnostics.LoggingAliases.String.{0}.{1}: {2}", verbosity, logStringMethod.Name, "{Bon}jour"));
+                                        }
+                                        finally
+                                        {
+                                            Context.Log.Verbosity = originalVerbosity;
+                                        }
+                                    }).Task.Name
+                        ))
+);
+
+Array.ForEach(
+    verbosities,
+    verbosity => Array.ForEach(
+                            logObjectMethods,
+                            logObjectMethod => loggingAliasesTask.IsDependentOn(
+                                    Task(string.Format("Cake.Common.Diagnostics.LoggingAliases.Object.{0}.{1}", verbosity, logObjectMethod.Name))
+                                        .Does(() =>
+                                    {
+                                        var originalVerbosity = Context.Log.Verbosity;
+                                        try
+                                        {
+                                            // Given
+                                            Context.Log.Verbosity = verbosity;
+
+                                            // When
+                                            logObjectMethod.Action(new { Test = "Cake.Common.Diagnostics.LoggingAliases.Object", Verbosity = verbosity, Name = logObjectMethod.Name });
                                         }
                                         finally
                                         {

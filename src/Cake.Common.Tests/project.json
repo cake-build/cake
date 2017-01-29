@@ -7,12 +7,14 @@
       "/additionalfile:../stylecop.json"
     ],
     "compile": {
-        "includeFiles": [
-            "../SolutionInfo.cs"
-        ]
+      "includeFiles": [
+        "../SolutionInfo.cs"
+      ]
     },
     "copyToOutput": {
-        "include": [ "./Properties/PropertyList-1.0.dtd" ]
+      "include": [
+        "./Properties/PropertyList-1.0.dtd"
+      ]
     }
   },
   "configurations": {
