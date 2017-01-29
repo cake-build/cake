@@ -25,9 +25,9 @@ namespace Cake.Common.Tools.WiX.Heat
         Documents = 2,
 
         /// <summary>
-        /// OutputGroup: <c>Satallites</c>
+        /// OutputGroup: <c>Satellites</c>
         /// </summary>
-        Satallites = 3,
+        Satellites = 3,
 
         /// <summary>
         /// OutputGroup: <c>Sources</c>
