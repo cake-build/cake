@@ -29,15 +29,9 @@
           "NETCORE"
         ]
       },
-      "imports": "dnxcore50",
-      "dependencies": {
-        "xunit.core": "2.2.0-beta2-build3300"
-      }
+      "imports": "dnxcore50"
     },
     "net45": {
-      "dependencies": {
-        "xunit.core": "2.2.0-beta2-build3300"
-      },
       "frameworkAssemblies": {
         "System.Runtime": {
           "type": "build"
