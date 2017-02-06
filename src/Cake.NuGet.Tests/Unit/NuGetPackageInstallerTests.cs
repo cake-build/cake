@@ -176,6 +176,40 @@ namespace Cake.NuGet.Tests.Unit
                 Assert.Null(result);
                 fixture.Config.Received().GetValue(NUGET_CONFIGKEY);
             }
+
+            [Fact]
+            public void Should_Use_NoCache_Flag_If_Parameter_Is_Used()
+            {
+                var fixture = new NuGetPackageInstallerFixture();
+                fixture.Package = new PackageReference("nuget:?package=Cake.Core&nocache");
+
+                // When
+                var result = Record.Exception(() => fixture.Install());
+
+                // Then
+                Assert.Null(result);
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(settings =>
+                        settings.Arguments.Render().Contains("-NoCache")));
+            }
+
+            [Fact]
+            public void Should_Not_Use_NoCache_Flag_If_Parameter_Is_Used()
+            {
+                var fixture = new NuGetPackageInstallerFixture();
+                fixture.Package = new PackageReference("nuget:?package=Cake.Core");
+
+                // When
+                var result = Record.Exception(() => fixture.Install());
+
+                // Then
+                Assert.Null(result);
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Any<FilePath>(),
+                    Arg.Is<ProcessSettings>(settings =>
+                        !settings.Arguments.Render().Contains("-NoCache")));
+            }
         }
 
         public sealed class TheInstallMethod
@@ -239,7 +273,7 @@ namespace Cake.NuGet.Tests.Unit
                             "-Source \"https://myget.org/temp/\" " +
                             "-Version \"1.2.3\" " +
                             "-Prerelease -ExcludeVersion " +
-                            "-NonInteractive -NoCache"));
+                            "-NonInteractive"));
             }
 
             [Fact]

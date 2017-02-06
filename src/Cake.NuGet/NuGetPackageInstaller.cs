@@ -228,7 +228,13 @@ namespace Cake.NuGet
                 arguments.Append("-Prerelease");
             }
 
-            arguments.Append("-ExcludeVersion -NonInteractive -NoCache");
+            // NoCache
+            if (definition.Parameters.ContainsKey("nocache"))
+            {
+                arguments.Append("-NoCache");
+            }
+
+            arguments.Append("-ExcludeVersion -NonInteractive");
             return arguments;
         }
     }
