@@ -8,6 +8,7 @@ using Cake.Common.Tools.Chocolatey.ApiKey;
 using Cake.Common.Tools.Chocolatey.Config;
 using Cake.Common.Tools.Chocolatey.Features;
 using Cake.Common.Tools.Chocolatey.Install;
+using Cake.Common.Tools.Chocolatey.New;
 using Cake.Common.Tools.Chocolatey.Pack;
 using Cake.Common.Tools.Chocolatey.Pin;
 using Cake.Common.Tools.Chocolatey.Push;
@@ -979,6 +980,63 @@ namespace Cake.Common.Tools.Chocolatey
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateyUpgrader(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             runner.Upgrade(packageId, settings);
+        }
+
+        /// <summary>
+        /// Generate package specification files for a new package using the default settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageId">The id of the package to create.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyNew("MyChocolateyPackage");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("New")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.New")]
+        public static void ChocolateyNew(this ICakeContext context, string packageId)
+        {
+            ChocolateyNew(context, packageId, new ChocolateyNewSettings());
+        }
+
+        /// <summary>
+        /// Generate package specification files for a new package using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageId">The id of the package to create.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyNew("MyChocolateyPackage", new ChocolateyNewSettings {
+        ///     PackageVersion = "1.2.3",
+        ///     MaintainerName = "John Doe",
+        ///     MaintainerRepo = "johndoe"
+        /// });
+        /// </code>
+        /// </example>
+        /// <example>
+        /// <code>
+        /// var settings = new ChocolateyNewSettings {
+        ///     MaintainerName = "John Doe"
+        /// }
+        /// settings.AdditionalPropertyValues("Tags", "CustomPackage");
+        /// ChocolateyNew("MyChocolateyPackage", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("New")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.New")]
+        public static void ChocolateyNew(this ICakeContext context, string packageId, ChocolateyNewSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
+            var runner = new ChocolateyScaffolder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
+            runner.CreatePackage(packageId, settings);
         }
     }
 }
