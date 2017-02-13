@@ -33,7 +33,7 @@ namespace Cake.Common.Tools.NuGet.Add
         }
 
         /// <summary>
-        /// Adds NuGet pcakges to the package source, which is a folder or a UNC share. Http soruces are not supported.
+        /// Adds NuGet packages to the package source, which is a folder or a UNC share. Http sources are not supported.
         /// </summary>
         /// <param name="packageId">The source package id.</param>
         /// <param name="settings">The settings.</param>
