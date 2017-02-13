@@ -195,7 +195,7 @@ namespace Cake.NuGet.Tests.Unit
             }
 
             [Fact]
-            public void Should_Not_Use_NoCache_Flag_If_Parameter_Is_Used()
+            public void Should_Not_Use_NoCache_Flag_If_Parameter_Is_Not_Used()
             {
                 var fixture = new NuGetPackageInstallerFixture();
                 fixture.Package = new PackageReference("nuget:?package=Cake.Core");
