@@ -4,6 +4,8 @@
 
 using System;
 using System.Collections.Generic;
+using Cake.Common.Tools.NuGet.Add;
+using Cake.Common.Tools.NuGet.Init;
 using Cake.Common.Tools.NuGet.Install;
 using Cake.Common.Tools.NuGet.Pack;
 using Cake.Common.Tools.NuGet.Push;
@@ -976,6 +978,127 @@ namespace Cake.Common.Tools.NuGet
             {
                 NuGetUpdate(context, targetFile, settings);
             }
+        }
+
+        /// <summary>
+        /// Adds a NuGet package using package id and source.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageId">The id of the package to add.</param>
+        /// <param name="source">Path to the local feed source.</param>
+        /// <example>
+        /// <code>
+        /// NuGetAdd("MyNugetPackage", "//bar/packages/");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Add")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Add")]
+        public static void NuGetAdd(this ICakeContext context, string packageId, string source)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            if (string.IsNullOrWhiteSpace(source))
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            NuGetAdd(context, packageId, new NuGetAddSettings { Source = source });
+        }
+
+        /// <summary>
+        /// Adds a NuGet package using package id and source.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageId">The id of the package to add.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// NuGetAdd("MyNugetPackage", new NuGetAddSettings({
+        ///     Source = "//bar/packages/"
+        ///     });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Add")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Add")]
+        public static void NuGetAdd(this ICakeContext context, string packageId, NuGetAddSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
+            var runner = new NuGetAdder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
+            runner.Add(packageId, settings);
+        }
+
+        /// <summary>
+        /// Adds all packages from source to destination.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="source">The local feed package source.</param>
+        /// <param name="destination">The local feed destination source.</param>
+        /// <example>
+        /// <code>
+        /// NuGetInit("//foo/packages", "//bar/packages/");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Init")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Init")]
+        public static void NuGetInit(this ICakeContext context, string source, string destination)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            if (string.IsNullOrWhiteSpace(source))
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+            if (string.IsNullOrWhiteSpace(destination))
+            {
+                throw new ArgumentNullException(nameof(destination));
+            }
+
+            NuGetInit(context, source, destination, new NuGetInitSettings());
+        }
+
+        /// <summary>
+        /// Adds all packages from source to destination using specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="source">The local feed package source.</param>
+        /// <param name="destination">The local feed destination source.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// NuGetInit("//foo/packages", "//bar/packages/", new NuGetInitSettings {
+        ///     Expand = true
+        ///     });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Init")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Init")]
+        public static void NuGetInit(this ICakeContext context, string source, string destination, NuGetInitSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
+            var runner = new NuGetIniter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
+            runner.Init(source, destination, settings);
         }
     }
 }
