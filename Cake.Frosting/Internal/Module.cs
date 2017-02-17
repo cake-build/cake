@@ -46,6 +46,9 @@ namespace Cake.Frosting
             registry.RegisterType<ReportPrinter>().As<ICakeReportPrinter>().Singleton();
             registry.RegisterType<RawArguments>().As<ICakeArguments>().Singleton();
 
+            // Tooling
+            registry.RegisterType<ToolInstaller>().As<IToolInstaller>().Singleton();
+
             // Register default stuff.
             registry.RegisterType<FrostingContext>().AsSelf().As<IFrostingContext>().Singleton();
             registry.RegisterType<CakeHostOptions>().AsSelf().Singleton();

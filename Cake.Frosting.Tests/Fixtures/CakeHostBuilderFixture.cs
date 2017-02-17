@@ -21,6 +21,7 @@ namespace Cake.Frosting.Tests.Fixtures
         public ICakeEngine Engine { get; set; }
         public ICakeLog Log { get; set; }
         public IExecutionStrategy Strategy { get; set; }
+        public IToolInstaller Installer { get; set; }
         public CakeHostOptions Options { get; set; }
 
         public CakeHostBuilderFixture()
@@ -33,16 +34,19 @@ namespace Cake.Frosting.Tests.Fixtures
 
             Log = Substitute.For<ICakeLog>();
             Engine = new CakeEngine(Log);
+            Installer = Substitute.For<IToolInstaller>();
             Options = new CakeHostOptions();
         }
 
         public ICakeHost Build()
         {
+            // Replace registrations with more suitable ones.
             Builder.ConfigureServices(s => s.RegisterType<NullConsole>().As<IConsole>());
             Builder.ConfigureServices(s => s.RegisterInstance(Environment).As<ICakeEnvironment>());
             Builder.ConfigureServices(s => s.RegisterInstance(FileSystem).As<IFileSystem>());
             Builder.ConfigureServices(s => s.RegisterInstance(Engine).As<ICakeEngine>());
             Builder.ConfigureServices(s => s.RegisterInstance(Log).As<ICakeLog>());
+            Builder.ConfigureServices(s => s.RegisterInstance(Installer).As<IToolInstaller>());
             Builder.ConfigureServices(s => s.RegisterInstance(Options).As<CakeHostOptions>());
 
             if (Strategy != null)

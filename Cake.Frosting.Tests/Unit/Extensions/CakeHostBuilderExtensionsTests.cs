@@ -42,7 +42,7 @@ namespace Cake.Frosting.Tests.Unit.Extensions
             }
         }
 
-        public sealed class TheBuildExtensionMethod
+        public sealed class TheWithArgumentsMethod
         {
             [Fact]
             public void Should_Throw_If_Builder_Reference_Is_Null()

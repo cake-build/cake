@@ -2,12 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Reflection;
 using Cake.Core.Composition;
 using Cake.Core.IO;
+using Cake.Core.Packaging;
 using Cake.Frosting.Internal;
 
-// ReSharper disable once CheckNamespace
 namespace Cake.Frosting
 {
     /// <summary>
@@ -80,15 +81,15 @@ namespace Cake.Frosting
         /// <summary>
         /// Registers the specified module type.
         /// </summary>
-        /// <typeparam name="T">The type of the module</typeparam>
+        /// <typeparam name="TModule">The type of the module.</typeparam>
         /// <param name="services">The service registration collection.</param>
         /// <returns>The same <see cref="ICakeServices"/> instance so that multiple calls can be chained.</returns>
-        public static ICakeServices UseModule<T>(this ICakeServices services)
-            where T : ICakeModule, new()
+        public static ICakeServices UseModule<TModule>(this ICakeServices services)
+            where TModule : ICakeModule, new()
         {
             Guard.ArgumentNotNull(services, nameof(services));
 
-            var module = new T();
+            var module = new TModule();
             module.Register(services);
             return services;
         }
@@ -120,6 +121,36 @@ namespace Cake.Frosting
 
             var info = new ConfigurationSetting(key, value);
             services.RegisterInstance(info).AsSelf().Singleton();
+            return services;
+        }
+
+        /// <summary>
+        /// Registers a specific tool for installation.
+        /// </summary>
+        /// <typeparam name="TPackageInstaller">The type of the package installer.</typeparam>
+        /// <param name="services">The service registration collection.</param>
+        /// <returns>The same <see cref="ICakeServices"/> instance so that multiple calls can be chained.</returns>
+        public static ICakeServices UsePackageInstaller<TPackageInstaller>(this ICakeServices services)
+            where TPackageInstaller : IPackageInstaller
+        {
+            Guard.ArgumentNotNull(services, nameof(services));
+
+            services.RegisterType<TPackageInstaller>().As<IPackageInstaller>().Singleton();
+            return services;
+        }
+
+        /// <summary>
+        /// Registers a specific tool for installation.
+        /// </summary>
+        /// <param name="services">The service registration collection.</param>
+        /// <param name="uri">The tool URI.</param>
+        /// <returns>The same <see cref="ICakeServices"/> instance so that multiple calls can be chained.</returns>
+        public static ICakeServices UseTool(this ICakeServices services, Uri uri)
+        {
+            Guard.ArgumentNotNull(services, nameof(services));
+
+            var package = new PackageReference(uri.OriginalString);
+            services.RegisterInstance(package).Singleton();
             return services;
         }
     }

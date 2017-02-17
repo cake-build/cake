@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <Copyright>Copyright (c) .NET Foundation and contributors</Copyright>
     <Authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors</Authors>
@@ -20,9 +19,7 @@
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <LangVersion>7</LangVersion>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Cake.Frosting\Cake.Frosting.csproj" />
   </ItemGroup>
-
 </Project>

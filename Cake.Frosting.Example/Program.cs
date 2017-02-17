@@ -12,11 +12,6 @@ namespace Cake.Frosting.Example
             var host = new CakeHostBuilder()
                 .UseStartup<Startup>()
                 .WithArguments(args)
-                .ConfigureServices(services =>
-                {
-                    // You could also configure services like this.
-                    services.UseContext<Settings>();
-                })
                 .Build();
 
             // Run the host.
@@ -29,7 +24,6 @@ namespace Cake.Frosting.Example
         public void Configure(ICakeServices services)
         {
             services.UseContext<Settings>();
-            services.UseWorkingDirectory(".");
         }
     }
 }

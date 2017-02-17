@@ -5,6 +5,7 @@
 using System;
 using Cake.Core;
 using Cake.Core.Diagnostics;
+using Cake.Core.Packaging;
 using Cake.Frosting.Testing;
 using Cake.Frosting.Tests.Data.Tasks;
 using Cake.Frosting.Tests.Fakes;
@@ -377,6 +378,22 @@ namespace Cake.Frosting.Tests.Unit
                 fixture.Log.Information("OnError method called");
                 fixture.Log.Information("Finally method called");
             });
+        }
+
+        [Fact]
+        public void Should_Install_Tools()
+        {
+            // Given
+            var fixture = new CakeHostBuilderFixture();
+            fixture.Builder.ConfigureServices(s => s.UseTool(new Uri("foo:?package=Bar")));
+            fixture.RegisterDefaultTask();
+
+            // When
+            fixture.Run();
+
+            // Then
+            fixture.Installer.Received(1).Install(Arg.Is<PackageReference>(
+                p => p.OriginalString == "foo:?package=Bar"));
         }
     }
 }

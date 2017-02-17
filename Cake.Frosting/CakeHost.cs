@@ -4,9 +4,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.Packaging;
 using Cake.Frosting.Internal;
 using Cake.Frosting.Internal.Commands;
 using Cake.Frosting.Internal.Composition;
@@ -24,6 +26,8 @@ namespace Cake.Frosting
         private readonly ICakeEnvironment _environment;
         private readonly ICakeEngine _engine;
         private readonly ICakeLog _log;
+        private readonly IToolInstaller _installer;
+        private readonly List<PackageReference> _tools;
         private readonly CommandFactory _commandFactory;
         private readonly WorkingDirectory _workingDirectory;
         private readonly EngineInitializer _engineInitializer;
@@ -33,6 +37,7 @@ namespace Cake.Frosting
 
         public CakeHost(IFrostingContext context, Container container, CakeHostOptions options,
             IFileSystem fileSystem, ICakeEnvironment environment, ICakeEngine engine, ICakeLog log,
+            IToolInstaller installer, IEnumerable<PackageReference> tools,
             EngineInitializer engineInitializer, CommandFactory commandFactory,
             WorkingDirectory workingDirectory = null, IEnumerable<IFrostingTask> tasks = null,
             IFrostingLifetime lifetime = null, IFrostingTaskLifetime taskLifetime = null)
@@ -55,6 +60,8 @@ namespace Cake.Frosting
             _environment = environment;
             _engine = engine;
             _log = log;
+            _installer = installer;
+            _tools = new List<PackageReference>(tools ?? Enumerable.Empty<PackageReference>());
             _engineInitializer = engineInitializer;
             _commandFactory = commandFactory;
 
@@ -75,6 +82,16 @@ namespace Cake.Frosting
                 // Set the working directory.
                 _environment.WorkingDirectory = GetWorkingDirectory();
                 _log.Debug("Working directory: {0}", _environment.WorkingDirectory.FullPath);
+
+                // Install tools.
+                if (_tools.Count > 0)
+                {
+                    _log.Verbose("Installing tools...");
+                    foreach (var tool in _tools)
+                    {
+                        _installer.Install(tool);
+                    }
+                }
 
                 // Initialize the engine and register everything.
                 _engineInitializer.Initialize(_engine, _context, _tasks, _lifetime, _taskLifetime);

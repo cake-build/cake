@@ -5,6 +5,7 @@
 using System;
 using System.Reflection;
 using Cake.Core.Composition;
+using Cake.Core.Packaging;
 using Cake.Frosting.Tests.Data;
 using NSubstitute;
 using Xunit;
@@ -189,6 +190,79 @@ namespace Cake.Frosting.Tests.Unit.Extensions
 
                 // Then
                 services.Received(1).RegisterType(typeof(DummyModule.DummyModuleSentinel));
+            }
+        }
+
+        public sealed class TheUsePackageInstallerExtensionMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Services_Reference_Is_Null()
+            {
+                // Given
+                ICakeServices services = null;
+
+                // When
+                var result = Record.Exception(() => services.UsePackageInstaller<DummyPackageInstaller>());
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "services");
+            }
+
+            [Fact]
+            public void Should_Register_The_Package_Installer()
+            {
+                // Given
+                var services = Substitute.For<ICakeServices>();
+                var builder = Substitute.For<ICakeRegistrationBuilder>();
+                services.RegisterType(Arg.Any<Type>()).Returns(builder); // Return a builder object when registering
+                builder.As(Arg.Any<Type>()).Returns(builder); // Return same builder object when chaining
+
+                // When
+                services.UsePackageInstaller<DummyPackageInstaller>();
+
+                // Then
+                Received.InOrder(() =>
+                {
+                    services.RegisterType<DummyPackageInstaller>();
+                    builder.As<IPackageInstaller>();
+                    builder.Singleton();
+                });
+            }
+        }
+
+        public sealed class TheUseToolExtensionMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Services_Reference_Is_Null()
+            {
+                // Given
+                ICakeServices services = null;
+
+                // When
+                var result = Record.Exception(() => services.UseTool(new Uri("nuget:?package=Foo")));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "services");
+            }
+
+            [Fact]
+            public void Should_Register_The_PackageReference()
+            {
+                // Given
+                var services = Substitute.For<ICakeServices>();
+                var builder = Substitute.For<ICakeRegistrationBuilder>();
+                services.RegisterInstance(Arg.Any<PackageReference>()).Returns(builder); // Return a builder object when registering
+                builder.As(Arg.Any<Type>()).Returns(builder); // Return same builder object when chaining
+
+                // When
+                services.UseTool(new Uri("nuget:?package=Foo"));
+
+                // Then
+                Received.InOrder(() =>
+                {
+                    services.RegisterInstance(Arg.Is<PackageReference>(
+                        r => r.OriginalString == "nuget:?package=Foo"));
+                });
             }
         }
     }

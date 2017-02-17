@@ -5,7 +5,6 @@
 using Cake.Frosting.Internal;
 using Cake.Frosting.Internal.Arguments;
 
-// ReSharper disable once CheckNamespace
 namespace Cake.Frosting
 {
     /// <summary>

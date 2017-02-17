@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <PackageId>Cake.Frosting</PackageId>
     <Description>The .NET Core host for Cake.</Description>
@@ -21,14 +20,11 @@
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <LangVersion>7</LangVersion>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Cake.Core" Version="0.17.0" />
     <PackageReference Include="Cake.Common" Version="0.17.0" />
   </ItemGroup>
-
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
-  
 </Project>
