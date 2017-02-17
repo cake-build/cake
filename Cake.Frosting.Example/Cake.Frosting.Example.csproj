@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Copyright>Copyright (c) .NET Foundation and contributors</Copyright>
+    <Authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors</Authors>
+    <PackageTags>Cake;Build;Build automation</PackageTags>
+    <PackageIconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</PackageIconUrl>
+    <PackageLicenseUrl>https://github.com/cake-build/frosting/blob/develop/LICENSE</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/cake-build/frosting</RepositoryUrl>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <AssemblyName>Cake.Frosting.Example</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <PackageId>Cake.Frosting.Example</PackageId>
+    <RuntimeFrameworkVersion>1.0.3</RuntimeFrameworkVersion>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <LangVersion>7</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cake.Frosting\Cake.Frosting.csproj" />
+  </ItemGroup>
+
+</Project>

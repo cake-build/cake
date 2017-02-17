@@ -4,12 +4,20 @@
 
 using Cake.Core;
 using Cake.Core.Diagnostics;
-using Cake.Frosting;
 
-namespace Sandbox.Tasks
+namespace Cake.Frosting.Example
 {
-    [TaskName("Build")]
-    public sealed class BuildTask : FrostingTask<Settings>
+    public sealed class Hello : FrostingTask<Settings>
+    {
+    }
+
+    [Dependency(typeof(Hello))]
+    public sealed class World : FrostingTask<Settings>
+    {
+    }
+
+    [Dependency(typeof(World))]
+    public sealed class Magic : FrostingTask<Settings>
     {
         public override bool ShouldRun(Settings context)
         {
@@ -19,7 +27,13 @@ namespace Sandbox.Tasks
 
         public override void Run(Settings context)
         {
-            context.Log.Information("Magic: {0}", context.Magic);
+            context.Log.Information("Value is: {0}", context.Magic);
         }
+    }
+
+    [TaskName("Default")]
+    [Dependency(typeof(Magic))]
+    public class DefaultTask : FrostingTask
+    {
     }
 }

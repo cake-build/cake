@@ -25,7 +25,7 @@ namespace Cake.Frosting.Tests.Unit.Extensions
                 var result = Record.Exception(() => services.UseContext<FrostingContext>());
 
                 // Then
-                Assert.IsArgumentNullException(result, "services");
+                AssertEx.IsArgumentNullException(result, "services");
             }
 
             [Fact]
@@ -64,7 +64,7 @@ namespace Cake.Frosting.Tests.Unit.Extensions
                 var result = Record.Exception(() => services.UseLifetime<DummyLifetime>());
 
                 // Then
-                Assert.IsArgumentNullException(result, "services");
+                AssertEx.IsArgumentNullException(result, "services");
             }
 
             [Fact]
@@ -101,7 +101,7 @@ namespace Cake.Frosting.Tests.Unit.Extensions
                 var result = Record.Exception(() => services.UseTaskLifetime<DummyTaskLifetime>());
 
                 // Then
-                Assert.IsArgumentNullException(result, "services");
+                AssertEx.IsArgumentNullException(result, "services");
             }
 
             [Fact]
@@ -139,7 +139,7 @@ namespace Cake.Frosting.Tests.Unit.Extensions
                 var result = Record.Exception(() => services.UseAssembly(assembly));
 
                 // Then
-                Assert.IsArgumentNullException(result, "services");
+                AssertEx.IsArgumentNullException(result, "services");
             }
 
             [Fact]
@@ -175,7 +175,7 @@ namespace Cake.Frosting.Tests.Unit.Extensions
                 var result = Record.Exception(() => services.UseModule<DummyModule>());
 
                 // Then
-                Assert.IsArgumentNullException(result, "services");
+                AssertEx.IsArgumentNullException(result, "services");
             }
 
             [Fact]

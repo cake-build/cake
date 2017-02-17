@@ -3,9 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Core;
-using Cake.Frosting;
 
-namespace Sandbox
+namespace Cake.Frosting.Example
 {
     public class Settings : FrostingContext
     {

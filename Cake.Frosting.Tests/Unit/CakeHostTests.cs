@@ -5,6 +5,7 @@
 using System;
 using Cake.Core;
 using Cake.Core.Diagnostics;
+using Cake.Frosting.Testing;
 using Cake.Frosting.Tests.Data.Tasks;
 using Cake.Frosting.Tests.Fakes;
 using Cake.Frosting.Tests.Fixtures;

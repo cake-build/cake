@@ -6,11 +6,9 @@ using Cake.Core;
 using Cake.Core.Composition;
 using Cake.Frosting.Tests.Data;
 using Cake.Frosting.Tests.Fakes;
-using Cake.Frosting.Tests.Fixtures;
 using NSubstitute;
 
-// ReSharper disable once CheckNamespace
-namespace Cake.Frosting.Tests
+namespace Cake.Frosting.Tests.Fixtures
 {
     internal static class CakeHostBuilderFixtureExtensions
     {

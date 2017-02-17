@@ -7,12 +7,12 @@ using System;
 // ReSharper disable once CheckNamespace
 namespace Xunit
 {
-    public partial class Assert
+    public class AssertEx
     {
         public static void IsArgumentNullException(Exception exception, string parameterName)
         {
-            IsType<ArgumentNullException>(exception);
-            Equal(parameterName, ((ArgumentNullException) exception).ParamName);
+            Assert.IsType<ArgumentNullException>(exception);
+            Assert.Equal(parameterName, ((ArgumentNullException) exception).ParamName);
         }
     }
 }

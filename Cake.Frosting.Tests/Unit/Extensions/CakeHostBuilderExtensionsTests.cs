@@ -23,7 +23,7 @@ namespace Cake.Frosting.Tests.Unit.Extensions
                 var result = Record.Exception(() => builder.UseStartup<DummyStartup>());
 
                 // Then
-                Assert.IsArgumentNullException(result, "builder");
+                AssertEx.IsArgumentNullException(result, "builder");
             }
 
             [Fact]
@@ -54,7 +54,7 @@ namespace Cake.Frosting.Tests.Unit.Extensions
                 var result = Record.Exception(() => builder.WithArguments(new string[] { }));
 
                 // Then
-                Assert.IsArgumentNullException(result, "builder");
+                AssertEx.IsArgumentNullException(result, "builder");
             }
 
             [Theory]

@@ -7,7 +7,7 @@ using System.Linq;
 using Cake.Core;
 
 // ReSharper disable once CheckNamespace
-namespace Cake.Frosting.Tests
+namespace Cake.Frosting.Testing
 {
     public static class CakeEngineExtensions
     {

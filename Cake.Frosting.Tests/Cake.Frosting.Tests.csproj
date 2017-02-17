@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Copyright>Copyright (c) .NET Foundation and contributors</Copyright>
+    <Authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors</Authors>
+    <PackageTags>Cake;Build;Build automation</PackageTags>
+    <PackageIconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</PackageIconUrl>
+    <PackageLicenseUrl>https://github.com/cake-build/frosting/blob/develop/LICENSE</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/cake-build/frosting</RepositoryUrl>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <OutputType>exe</OutputType>
+    <LangVersion>7</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cake.Frosting.Testing\Cake.Frosting.Testing.csproj" />
+    <ProjectReference Include="..\Cake.Frosting\Cake.Frosting.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-rc3-build1252" />
+    <PackageReference Include="xunit" Version="2.2.0-rc3-build3528" />
+    <PackageReference Include="NSubstitute" Version="2.0.0-rc" />
+    <PackageReference Include="Cake.Testing" Version="0.17.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+  </ItemGroup>
+
+</Project>
