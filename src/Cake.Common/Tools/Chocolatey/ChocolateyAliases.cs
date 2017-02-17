@@ -967,6 +967,49 @@ namespace Cake.Common.Tools.Chocolatey
         }
 
         /// <summary>
+        /// Pushes Chocolatey packages to a Chocolatey server and publishes them.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageFilePaths">The <c>.nupkg</c> file paths.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// // Get the paths to the packages.
+        /// var packages = GetFiles("./**/*.nupkg");
+        ///
+        /// // Push the package.
+        /// ChocolateyPush(packages, new ChocolateyPushSettings {
+        ///     Source                = "http://example.com/chocolateyfeed",
+        ///     ApiKey                = "4003d786-cc37-4004-bfdf-c4f3e8ef9b3a"
+        ///     Timeout               = 300
+        ///     Debug                 = false,
+        ///     Verbose               = false,
+        ///     Force                 = false,
+        ///     Noop                  = false,
+        ///     LimitOutput           = false,
+        ///     ExecutionTimeout      = 13,
+        ///     CacheLocation         = @"C:\temp",
+        ///     AllowUnofficial        = false
+        /// });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Push")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Push")]
+        public static void ChocolateyPush(this ICakeContext context, IEnumerable<FilePath> packageFilePaths, ChocolateyPushSettings settings)
+        {
+            if (packageFilePaths == null)
+            {
+                throw new ArgumentNullException(nameof(packageFilePaths));
+            }
+
+            foreach (var packageFilePath in packageFilePaths)
+            {
+                ChocolateyPush(context, packageFilePath, settings);
+            }
+        }
+
+        /// <summary>
         /// Upgrades Chocolatey package.
         /// </summary>
         /// <param name="context">The context.</param>
