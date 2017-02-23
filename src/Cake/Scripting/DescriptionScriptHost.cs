@@ -50,7 +50,7 @@ namespace Cake.Scripting
             _console.WriteLine();
             _console.WriteLine("{0,-30}{1}", "Task", "Description");
             _console.WriteLine(string.Concat(Enumerable.Range(0, 79).Select(s => "=")));
-            foreach (var key in _descriptions.Keys)
+            foreach (var key in _descriptions.Keys.OrderBy(x => x))
             {
                 _console.WriteLine("{0,-30}{1}", key, _descriptions[key]);
             }
