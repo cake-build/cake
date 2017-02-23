@@ -59,6 +59,23 @@ namespace Cake.Core.Tests.Unit.Graph
                 // Then
                 Assert.Equal("Task 'A' is dependent on task 'C' which does not exist.", result?.Message);
             }
+
+            [Fact]
+            public void Should_Not_Create_Dependendy_When_Depending_On_Task_That_Does_Not_Exist_And_Ignore_Flag_Is_Set()
+            {
+                // Given
+                var task = new ActionTask("A");
+                task.AddDependency("C", true);
+
+                var tasks = new List<CakeTask> { task };
+                var graph = CakeGraphBuilder.Build(tasks);
+
+                // When
+                var result = graph.Edges.SingleOrDefault(x => x.Start == "A" && x.End == "C");
+
+                // Then
+                Assert.Null(result);
+            }
         }
     }
 }
