@@ -162,10 +162,7 @@ namespace Cake.Common.Tools.SignTool
             }
 
             var runner = new SignToolSignRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Registry);
-            foreach (var assembly in assemblies)
-            {
-                runner.Run(assembly, settings);
-            }
+            runner.Run(assemblies, settings);
         }
     }
 }

@@ -14,10 +14,9 @@ namespace Cake.Common.Tests.Fixtures.Tools
     internal sealed class SignToolSignRunnerFixture : ToolFixture<SignToolSignSettings>
     {
         public ISignToolResolver Resolver { get; set; }
-        public IFile AssemblyFile { get; set; }
         public IFile CertificateFile { get; set; }
 
-        public FilePath AssemblyPath { get; set; }
+        public FilePath[] AssemblyPaths { get; set; }
 
         public SignToolSignRunnerFixture()
             : base("signtool.exe")
@@ -26,7 +25,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
             Settings.Password = "secret";
             Settings.TimeStampUri = new Uri("https://t.com");
 
-            AssemblyPath = new FilePath("./a.dll");
+            AssemblyPaths = new[] { new FilePath("./a.dll") };
             FileSystem.CreateFile("/Working/a.dll");
             FileSystem.CreateFile("/Working/cert.pfx");
 
@@ -36,7 +35,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         protected override void RunTool()
         {
             var tool = new SignToolSignRunner(FileSystem, Environment, ProcessRunner, Tools, null, Resolver);
-            tool.Run(AssemblyPath, Settings);
+            tool.Run(AssemblyPaths, Settings);
         }
     }
 }

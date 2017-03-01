@@ -6,6 +6,7 @@ using System;
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.SignTool;
 using Cake.Core;
+using Cake.Core.IO;
 using Cake.Testing;
 using Xunit;
 
@@ -61,17 +62,17 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
         public sealed class TheRunMethod
         {
             [Fact]
-            public void Should_Throw_If_Assembly_Path_Is_Null()
+            public void Should_Throw_If_Assembly_Paths_Is_Null()
             {
                 // Given
                 var fixture = new SignToolSignRunnerFixture();
-                fixture.AssemblyPath = null;
+                fixture.AssemblyPaths = null;
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "assemblyPath");
+                Assert.IsArgumentNullException(result, "assemblyPaths");
             }
 
             [Fact]
@@ -370,6 +371,28 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
 
                 // Then
                 Assert.Equal("SIGN /t \"https://t.com/\" /f \"/Working/cert.pfx\" /p secret /as \"/Working/a.dll\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Call_Sign_Tool_With_Correct_Parameters_With_Thumbprint_And_Multiple_Assemblies()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.CertPath = null;
+                fixture.Settings.Password = null;
+                fixture.Settings.CertThumbprint = "ThumbprintTest";
+                fixture.AssemblyPaths = new[]
+                {
+                    new FilePath("./a.dll"),
+                    new FilePath("./foo/b.dll")
+                };
+                fixture.FileSystem.CreateFile("/Working/foo/b.dll");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("SIGN /t \"https://t.com/\" /sha1 \"ThumbprintTest\" \"/Working/a.dll\" \"/Working/foo/b.dll\"", result.Args);
             }
         }
     }
