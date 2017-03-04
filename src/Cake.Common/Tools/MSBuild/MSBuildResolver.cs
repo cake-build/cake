@@ -95,7 +95,8 @@ namespace Cake.Common.Tools.MSBuild
             {
                 "Enterprise",
                 "Professional",
-                "Community"
+                "Community",
+                "BuildTools"
             };
 
             var visualStudio2017Path = environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
