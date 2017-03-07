@@ -138,8 +138,7 @@ namespace Cake.Core.Scripting
             _processor.InstallTools(result, toolsPath);
 
             // Install addins.
-            var applicationRoot = _environment.ApplicationRoot;
-            var addinRoot = GetAddinPath(applicationRoot);
+            var addinRoot = GetAddinPath(scriptPath.GetDirectory());
             var addinReferences = _processor.InstallAddins(result, addinRoot);
             foreach (var addinReference in addinReferences)
             {
@@ -150,6 +149,7 @@ namespace Cake.Core.Scripting
             var session = _engine.CreateSession(host, arguments);
 
             // Load all references.
+            var applicationRoot = _environment.ApplicationRoot;
             var assemblies = new HashSet<Assembly>();
             assemblies.AddRange(_conventions.GetDefaultAssemblies(applicationRoot));
 
@@ -158,7 +158,7 @@ namespace Cake.Core.Scripting
                 var referencePath = new FilePath(reference);
                 if (host.Context.FileSystem.Exist(referencePath))
                 {
-                    var assembly = _assemblyLoader.Load(referencePath);
+                    var assembly = _assemblyLoader.Load(referencePath, true);
                     assemblies.Add(assembly);
                 }
                 else
@@ -212,7 +212,7 @@ namespace Cake.Core.Scripting
             return root.Combine("tools");
         }
 
-        private DirectoryPath GetAddinPath(DirectoryPath applicationRoot)
+        private DirectoryPath GetAddinPath(DirectoryPath root)
         {
             var addinPath = _configuration.GetValue(Constants.Paths.Addins);
             if (!string.IsNullOrWhiteSpace(addinPath))
@@ -220,7 +220,8 @@ namespace Cake.Core.Scripting
                 return new DirectoryPath(addinPath).MakeAbsolute(_environment);
             }
 
-            return applicationRoot.Combine("../Addins").Collapse();
+            var toolPath = GetToolPath(root);
+            return toolPath.Combine("Addins").Collapse();
         }
     }
 }

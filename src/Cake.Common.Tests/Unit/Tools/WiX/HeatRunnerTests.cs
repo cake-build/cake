@@ -444,7 +444,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("dir \"/Working/src/Cake\" -pog: binaries -out \"/Working/cake.wxs\"", result.Args);
+                Assert.Equal("dir \"/Working/src/Cake\" -pog Binaries -out \"/Working/cake.wxs\"", result.Args);
             }
 
             [Fact]
@@ -458,7 +458,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("dir \"/Working/src/Cake\" -pog: symbols -out \"/Working/cake.wxs\"", result.Args);
+                Assert.Equal("dir \"/Working/src/Cake\" -pog Symbols -out \"/Working/cake.wxs\"", result.Args);
             }
 
             [Fact]
@@ -472,21 +472,21 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("dir \"/Working/src/Cake\" -pog: documents -out \"/Working/cake.wxs\"", result.Args);
+                Assert.Equal("dir \"/Working/src/Cake\" -pog Documents -out \"/Working/cake.wxs\"", result.Args);
             }
 
             [Fact]
-            public void Should_Add_Satallites_Output_Group_To_Arguments_If_Provided()
+            public void Should_Add_Satellites_Output_Group_To_Arguments_If_Provided()
             {
                 // Given
                 var fixture = new HeatFixture();
-                fixture.Settings.OutputGroup = WiXOutputGroupType.Satallites;
+                fixture.Settings.OutputGroup = WiXOutputGroupType.Satellites;
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("dir \"/Working/src/Cake\" -pog: satallites -out \"/Working/cake.wxs\"", result.Args);
+                Assert.Equal("dir \"/Working/src/Cake\" -pog Satellites -out \"/Working/cake.wxs\"", result.Args);
             }
 
             [Fact]
@@ -500,7 +500,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("dir \"/Working/src/Cake\" -pog: sources -out \"/Working/cake.wxs\"", result.Args);
+                Assert.Equal("dir \"/Working/src/Cake\" -pog Sources -out \"/Working/cake.wxs\"", result.Args);
             }
 
             [Fact]
@@ -514,7 +514,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("dir \"/Working/src/Cake\" -pog: content -out \"/Working/cake.wxs\"", result.Args);
+                Assert.Equal("dir \"/Working/src/Cake\" -pog Content -out \"/Working/cake.wxs\"", result.Args);
             }
 
             [Fact]

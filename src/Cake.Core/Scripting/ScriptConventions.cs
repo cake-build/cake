@@ -103,7 +103,7 @@ namespace Cake.Core.Scripting
                 var cakeAssemblies = assemblyDirectory.GetFiles(pattern, SearchScope.Current);
                 foreach (var cakeAssembly in cakeAssemblies)
                 {
-                    result.Add(_loader.Load(cakeAssembly.Path));
+                    result.Add(_loader.Load(cakeAssembly.Path, false));
                 }
             }
             return result;

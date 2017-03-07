@@ -28,8 +28,8 @@ namespace Cake.Common.Tests.Fixtures.IO
             Paths = new List<FilePath>();
             Files = new List<IFile>();
             _lookup = new Dictionary<string, IFile>();
-            CreatFile("./file1.txt", "/Working/file1.txt");
-            CreatFile("./file2.txt", "/Working/file2.txt");
+            CreateFile("./file1.txt", "/Working/file1.txt");
+            CreateFile("./file2.txt", "/Working/file2.txt");
 
             // Setup the globber to return all files for wild card.
             Globber = Substitute.For<IGlobber>();
@@ -51,7 +51,7 @@ namespace Cake.Common.Tests.Fixtures.IO
             Context.Globber.Returns(Globber);
         }
 
-        private void CreatFile(FilePath relativePath, FilePath absolutePath)
+        private void CreateFile(FilePath relativePath, FilePath absolutePath)
         {
             // Create the target file.
             var file = Substitute.For<IFile>();

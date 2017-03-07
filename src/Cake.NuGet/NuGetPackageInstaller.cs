@@ -17,7 +17,7 @@ namespace Cake.NuGet
     /// <summary>
     /// Installer for NuGet URI resources.
     /// </summary>
-    public sealed class NuGetPackageInstaller : IPackageInstaller
+    public sealed class NuGetPackageInstaller : INuGetPackageInstaller
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
@@ -228,7 +228,13 @@ namespace Cake.NuGet
                 arguments.Append("-Prerelease");
             }
 
-            arguments.Append("-ExcludeVersion -NonInteractive -NoCache");
+            // NoCache
+            if (definition.Parameters.ContainsKey("nocache"))
+            {
+                arguments.Append("-NoCache");
+            }
+
+            arguments.Append("-ExcludeVersion -NonInteractive");
             return arguments;
         }
     }

@@ -24,7 +24,7 @@ namespace Cake.Common.Tools.InnoSetup
         /// Compiles the given Inno Setup script using the default settings.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="scriptFile">The path to the <c>.nsi</c> script file to compile.</param>
+        /// <param name="scriptFile">The path to the <c>.iss</c> script file to compile.</param>
         /// <example>
         /// <code>
         /// InnoSetup("./src/Cake.iss");
@@ -40,7 +40,7 @@ namespace Cake.Common.Tools.InnoSetup
         /// Compiles the given Inno Setup script using the given <paramref name="settings"/>.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="scriptFile">The path to the <c>.nsi</c> script file to compile.</param>
+        /// <param name="scriptFile">The path to the <c>.iss</c> script file to compile.</param>
         /// <param name="settings">The <see cref="InnoSetupSettings"/> to use.</param>
         /// <example>
         /// <code>

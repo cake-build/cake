@@ -61,6 +61,12 @@ namespace Cake.Common.Tools.XUnit
         public bool HtmlReport { get; set; }
 
         /// <summary>
+        /// Gets or sets the name that should be used for the HTML and XML reports.
+        /// </summary>
+        /// <value>The custom report name.</value>
+        public string ReportName { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to not use app domains to run test code.
         /// </summary>
         /// <value>
@@ -76,6 +82,14 @@ namespace Cake.Common.Tools.XUnit
         /// The parallelism option.
         /// </value>
         public ParallelismOption Parallelism { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to run tests in using x86 test runner.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> to run tests with the x86 test runner; otherwise, <c>false</c>.
+        /// </value>
+        public bool UseX86 { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum thread count for collection parallelization.

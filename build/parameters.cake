@@ -20,8 +20,11 @@ public class BuildParameters
     public bool IsReleaseBuild { get; private set; }
     public bool SkipGitVersion { get; private set; }
     public bool SkipOpenCover { get; private set; }
+    public bool SkipSigning { get; private set; }
     public BuildCredentials GitHub { get; private set; }
     public CoverallsCredentials Coveralls { get; private set; }
+    public TwitterCredentials Twitter { get; private set; }
+    public GitterCredentials Gitter { get; private set; }
     public ReleaseNotes ReleaseNotes { get; private set; }
     public BuildVersion Version { get; private set; }
     public BuildPaths Paths { get; private set; }
@@ -42,6 +45,25 @@ public class BuildParameters
         {
             return !IsLocalBuild && !IsPullRequest && !IsCoreClrBranch
                 && IsMainCakeRepo && (IsTagged || !IsMainCakeBranch);
+        }
+    }
+
+    public bool CanPostToTwitter
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(Twitter.ConsumerKey) &&
+                !string.IsNullOrEmpty(Twitter.ConsumerSecret) &&
+                !string.IsNullOrEmpty(Twitter.AccessToken) &&
+                !string.IsNullOrEmpty(Twitter.AccessTokenSecret);
+        }
+    }
+
+    public bool CanPostToGitter
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(Gitter.Token) && !string.IsNullOrEmpty(Gitter.RoomId);
         }
     }
 
@@ -82,9 +104,12 @@ public class BuildParameters
             IsTagged = IsBuildTagged(buildSystem),
             GitHub = BuildCredentials.GetGitHubCredentials(context),
             Coveralls = CoverallsCredentials.GetCoverallsCredentials(context),
+            Twitter = TwitterCredentials.GetTwitterCredentials(context),
+            Gitter = GitterCredentials.GetGitterCredentials(context),
             ReleaseNotes = context.ParseReleaseNotes("./ReleaseNotes.md"),
             IsPublishBuild = IsPublishing(target),
             IsReleaseBuild = IsReleasing(target),
+            SkipSigning = StringComparer.OrdinalIgnoreCase.Equals("True", context.Argument("skipsigning", "False")),
             SkipGitVersion = StringComparer.OrdinalIgnoreCase.Equals("True", context.EnvironmentVariable("CAKE_SKIP_GITVERSION")),
             SkipOpenCover = StringComparer.OrdinalIgnoreCase.Equals("True", context.EnvironmentVariable("CAKE_SKIP_OPENCOVER"))
         };

@@ -122,7 +122,8 @@ namespace Cake.Common.Net
         /// </summary>
         /// <example>
         /// <code>
-        /// DownloadFile("http://www.example.org/index.html", "./outputdir");
+        /// var outputPath = File("./index.html");
+        /// DownloadFile("http://www.example.org/index.html", outputPath);
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
@@ -140,7 +141,8 @@ namespace Cake.Common.Net
         /// </summary>
         /// <example>
         /// <code>
-        /// DownloadFile("http://www.example.org/index.html", "./outputdir", new DownloadFileSettings()
+        /// var outputPath = File("./index.html");
+        /// DownloadFile("http://www.example.org/index.html", outputPath, new DownloadFileSettings()
         /// {
         ///     Username = "bob",
         ///     Password = "builder"
@@ -164,7 +166,8 @@ namespace Cake.Common.Net
         /// <example>
         /// <code>
         /// var address = new Uri("http://www.example.org/index.html");
-        /// DownloadFile(address, "./outputdir", new DownloadFileSettings()
+        /// var outputPath = File("./index.html");
+        /// DownloadFile(address, outputPath, new DownloadFileSettings()
         /// {
         ///     Username = "bob",
         ///     Password = "builder"

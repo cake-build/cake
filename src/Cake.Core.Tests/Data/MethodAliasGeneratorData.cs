@@ -121,5 +121,89 @@ namespace Cake.Core.Tests.Data
         {
             throw new NotImplementedException();
         }
+
+        [CakeMethodAlias]
+        public static void NonGeneric_ExtensionMethodWithOptionalObjectParameter(this ICakeContext context, int value, object option = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+        public static void NonGeneric_ExtensionMethodWithOptionalBooleanParameter(this ICakeContext context, int value, bool flag = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+        public static void NonGeneric_ExtensionMethodWithOptionalStringParameter(this ICakeContext context, int value, string s = @"there is a ""string"" here and a \t tab")
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+        public static void NonGeneric_ExtensionMethodWithOptionalEnumParameter(this ICakeContext context, int value, AttributeTargets targets = AttributeTargets.Class)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+        public static void NonGeneric_ExtensionMethodWithOptionalCharParameter(this ICakeContext context, string s, char c = 's')
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+        public static void NonGeneric_ExtensionMethodWithOptionalDecimalParameter(this ICakeContext context, string s, decimal value = 12.12m)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+        public static void NonGeneric_ExtensionMethodWithOptionalNullableTParameter(this ICakeContext context, string s, int? value = 0)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+        public static void NonGeneric_ExtensionMethodWithOptionalNullableBooleanParameter(this ICakeContext context, string s, bool? value = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+        public static void NonGeneric_ExtensionMethodWithOptionalNullableCharParameter(this ICakeContext context, string s, char? value = 's')
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+        public static void NonGeneric_ExtensionMethodWithOptionalNullableEnumParameter(this ICakeContext context, string s, AttributeTargets? targets = AttributeTargets.Class)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+        public static void NonGeneric_ExtensionMethodWithOptionalNullableDecimalParameter(this ICakeContext context, string s, decimal? value = 123.12m)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+        public static void NonGeneric_ExtensionMethodWithOptionalNullableLongParameter(this ICakeContext context, string s, long? value = 1234567890L)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+        public static void NonGeneric_ExtensionMethodWithOptionalNullableDoubleParameter(this ICakeContext context, string s, double? value = 1234567890.12)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+        public static void NonGeneric_ExtensionMethodWithReservedKeywordParameter(this ICakeContext context, int @new)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -124,6 +124,11 @@ namespace Cake.Common.Tools.OctopusDeploy
                 builder.Append("--overwrite");
             }
 
+            if (settings.Format == OctopusPackFormat.Zip)
+            {
+                builder.AppendSwitch("--format", "Zip");
+            }
+
             return builder;
         }
     }

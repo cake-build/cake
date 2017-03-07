@@ -17,6 +17,7 @@ namespace Cake.Common.Tools.XUnit
     public sealed class XUnit2Runner : Tool<XUnit2Settings>
     {
         private readonly ICakeEnvironment _environment;
+        private bool _useX86;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XUnit2Runner" /> class.
@@ -66,7 +67,7 @@ namespace Cake.Common.Tools.XUnit
                     throw new CakeException("Cannot generate NUnit XML report when no output directory has been set.");
                 }
             }
-
+            _useX86 = settings.UseX86;
             var assemblies = assemblyPaths as FilePath[] ?? assemblyPaths.ToArray();
             Run(settings, GetArguments(assemblies, settings));
         }
@@ -96,7 +97,7 @@ namespace Cake.Common.Tools.XUnit
             // Generate NUnit Style XML report?
             if (settings.NUnitReport)
             {
-                var reportFileName = XUnitRunnerUtilities.GetReportFileName(assemblyPaths);
+                var reportFileName = XUnitRunnerUtilities.GetReportFileName(assemblyPaths, settings);
                 var assemblyFilename = reportFileName.AppendExtension(".xml");
                 var outputPath = settings.OutputDirectory.MakeAbsolute(_environment).GetFilePath(assemblyFilename);
 
@@ -107,7 +108,7 @@ namespace Cake.Common.Tools.XUnit
             // Generate HTML report?
             if (settings.HtmlReport)
             {
-                var reportFileName = XUnitRunnerUtilities.GetReportFileName(assemblyPaths);
+                var reportFileName = XUnitRunnerUtilities.GetReportFileName(assemblyPaths, settings);
                 var assemblyFilename = reportFileName.AppendExtension(".html");
                 var outputPath = settings.OutputDirectory.MakeAbsolute(_environment).GetFilePath(assemblyFilename);
 
@@ -118,7 +119,7 @@ namespace Cake.Common.Tools.XUnit
             // Generate XML report?
             if (settings.XmlReport || settings.XmlReportV1)
             {
-                var reportFileName = XUnitRunnerUtilities.GetReportFileName(assemblyPaths);
+                var reportFileName = XUnitRunnerUtilities.GetReportFileName(assemblyPaths, settings);
                 var assemblyFilename = reportFileName.AppendExtension(".xml");
                 var outputPath = settings.OutputDirectory.MakeAbsolute(_environment).GetFilePath(assemblyFilename);
 
@@ -175,7 +176,7 @@ namespace Cake.Common.Tools.XUnit
         /// <returns>The tool executable name.</returns>
         protected override IEnumerable<string> GetToolExecutableNames()
         {
-            return new[] { "xunit.console.exe" };
+            return _useX86 ? new[] { "xunit.console.x86.exe" } : new[] { "xunit.console.exe" };
         }
     }
 }

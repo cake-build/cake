@@ -14,7 +14,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             var binPath = version == MSBuildToolVersion.Default
                 ? GetHighestAvailableMSBuildVersion(fileSystem, environment, buildPlatform)
-                : GetMSBuildPath(environment, (MSBuildVersion)version, buildPlatform);
+                : GetMSBuildPath(fileSystem, environment, (MSBuildVersion)version, buildPlatform);
 
             if (binPath == null)
             {
@@ -29,6 +29,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             var versions = new[]
             {
+                MSBuildVersion.MSBuild15,
                 MSBuildVersion.MSBuild14,
                 MSBuildVersion.MSBuild12,
                 MSBuildVersion.MSBuild4,
@@ -38,7 +39,7 @@ namespace Cake.Common.Tools.MSBuild
 
             foreach (var version in versions)
             {
-                var path = GetMSBuildPath(environment, version, buildPlatform);
+                var path = GetMSBuildPath(fileSystem, environment, version, buildPlatform);
                 if (fileSystem.Exist(path))
                 {
                     return path;
@@ -47,10 +48,12 @@ namespace Cake.Common.Tools.MSBuild
             return null;
         }
 
-        private static DirectoryPath GetMSBuildPath(ICakeEnvironment environment, MSBuildVersion version, MSBuildPlatform buildPlatform)
+        private static DirectoryPath GetMSBuildPath(IFileSystem fileSystem, ICakeEnvironment environment, MSBuildVersion version, MSBuildPlatform buildPlatform)
         {
             switch (version)
             {
+                case MSBuildVersion.MSBuild15:
+                    return GetVisualStudio2017Path(fileSystem, environment, buildPlatform);
                 case MSBuildVersion.MSBuild14:
                     return GetVisualStudioPath(environment, buildPlatform, "14.0");
                 case MSBuildVersion.MSBuild12:
@@ -83,6 +86,42 @@ namespace Cake.Common.Tools.MSBuild
                 binPath = binPath.Combine("amd64");
             }
             return binPath;
+        }
+
+        private static DirectoryPath GetVisualStudio2017Path(IFileSystem fileSystem, ICakeEnvironment environment,
+            MSBuildPlatform buildPlatform)
+        {
+            var vsEditions = new[]
+            {
+                "Enterprise",
+                "Professional",
+                "Community",
+                "BuildTools"
+            };
+
+            var visualStudio2017Path = environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
+
+            foreach (var edition in vsEditions)
+            {
+                // Get the bin path.
+                var binPath = visualStudio2017Path.Combine(string.Concat("Microsoft Visual Studio/2017/", edition, "/MSBuild/15.0/Bin"));
+                if (fileSystem.Exist(binPath))
+                {
+                    if (buildPlatform == MSBuildPlatform.Automatic)
+                    {
+                        if (environment.Platform.Is64Bit)
+                        {
+                            binPath = binPath.Combine("amd64");
+                        }
+                    }
+                    if (buildPlatform == MSBuildPlatform.x64)
+                    {
+                        binPath = binPath.Combine("amd64");
+                    }
+                    return binPath;
+                }
+            }
+            return visualStudio2017Path.Combine("Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin");
         }
 
         private static DirectoryPath GetFrameworkPath(ICakeEnvironment environment, MSBuildPlatform buildPlatform, string version)

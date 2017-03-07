@@ -9,11 +9,6 @@ namespace Cake.Core.Scripting.Processors
 {
     internal sealed class BreakDirectiveProcessor : LineProcessor
     {
-        public BreakDirectiveProcessor(ICakeEnvironment environment)
-            : base(environment)
-        {
-        }
-
         public override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
         {
             if (context == null)

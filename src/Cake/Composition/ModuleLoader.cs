@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using Autofac;
+using Cake.Core;
 using Cake.Core.Composition;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
@@ -17,17 +18,19 @@ namespace Cake.Composition
         private readonly ModuleSearcher _searcher;
         private readonly ICakeLog _log;
         private readonly ICakeConfiguration _configuration;
+        private readonly ICakeEnvironment _environment;
 
-        public ModuleLoader(ModuleSearcher searcher, ICakeLog log, ICakeConfiguration configuration)
+        public ModuleLoader(ModuleSearcher searcher, ICakeLog log, ICakeConfiguration configuration, ICakeEnvironment environment)
         {
             _searcher = searcher;
             _log = log;
             _configuration = configuration;
+            _environment = environment;
         }
 
         public void LoadModules(IContainer container, CakeOptions options)
         {
-            var root = GetModulePath(options);
+            var root = GetModulePath(options.Script.GetDirectory());
             var moduleTypes = _searcher.Search(root);
             if (moduleTypes.Count > 0)
             {
@@ -47,14 +50,27 @@ namespace Cake.Composition
             }
         }
 
-        private DirectoryPath GetModulePath(CakeOptions options)
+        private DirectoryPath GetToolPath(DirectoryPath root)
         {
-            var root = _configuration.GetValue(Constants.Paths.Modules);
-            if (string.IsNullOrWhiteSpace(root))
+            var toolPath = _configuration.GetValue(Constants.Paths.Tools);
+            if (!string.IsNullOrWhiteSpace(toolPath))
             {
-                return options.Script.GetDirectory().Combine("tools/modules");
+                return new DirectoryPath(toolPath).MakeAbsolute(_environment);
             }
-            return new DirectoryPath(root);
+
+            return root.Combine("tools");
+        }
+
+        private DirectoryPath GetModulePath(DirectoryPath root)
+        {
+            var modulePath = _configuration.GetValue(Constants.Paths.Modules);
+            if (!string.IsNullOrWhiteSpace(modulePath))
+            {
+                return new DirectoryPath(modulePath).MakeAbsolute(_environment);
+            }
+
+            var toolPath = GetToolPath(root);
+            return toolPath.Combine("Modules").Collapse();
         }
 
         private void RegisterExternalModules(IEnumerable<Type> moduleTypes, ILifetimeScope scope)

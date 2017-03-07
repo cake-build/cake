@@ -60,6 +60,27 @@ namespace Cake.Core
                 : includeNamespace ? type.FullName : type.Name;
         }
 
+        /// <summary>
+        /// Gets whether or not a given <see cref="System.Type"/> is a subclass of an raw/open generic.
+        /// </summary>
+        /// <param name="toCheck">The type to check</param>
+        /// <param name="generic">The open generic to test</param>
+        /// <code>typeof(Nullable&lt;int&gt;).IsSubclassOfRawGeneric(typeof(Nullable&lt;&gt;));</code>
+        /// <returns>Returns <c>true</c> if the type is a subtype of a raw generic, else <c>false</c></returns>
+        public static bool IsSubclassOfRawGeneric(this Type toCheck, Type generic)
+        {
+            while (toCheck != null && toCheck != typeof(object))
+            {
+                var cur = toCheck.GetTypeInfo().IsGenericType ? toCheck.GetGenericTypeDefinition() : toCheck;
+                if (generic == cur)
+                {
+                    return true;
+                }
+                toCheck = toCheck.GetTypeInfo().BaseType;
+            }
+            return false;
+        }
+
         private static string GetGenericTypeName(this Type type, bool includeNamespace)
         {
             var builder = new StringBuilder();

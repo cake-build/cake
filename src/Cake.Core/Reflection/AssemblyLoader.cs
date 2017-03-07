@@ -5,16 +5,19 @@
 using System;
 using System.Reflection;
 using Cake.Core.IO;
+using Cake.Core.Polyfill;
 
 namespace Cake.Core.Reflection
 {
     internal sealed class AssemblyLoader : IAssemblyLoader
     {
         private readonly IFileSystem _fileSystem;
+        private readonly AssemblyVerifier _verifier;
 
-        public AssemblyLoader(IFileSystem fileSystem)
+        public AssemblyLoader(IFileSystem fileSystem, AssemblyVerifier verifier)
         {
             _fileSystem = fileSystem;
+            _verifier = verifier;
         }
 
         public Assembly Load(AssemblyName assemblyName)
@@ -27,25 +30,14 @@ namespace Cake.Core.Reflection
             return Assembly.Load(assemblyName);
         }
 
-        public Assembly Load(FilePath path)
+        public Assembly Load(FilePath path, bool verify)
         {
-#if NETCORE
-            if (path == null)
+            var assembly = AssemblyHelper.LoadAssembly(_fileSystem, path);
+            if (verify)
             {
-                throw new ArgumentNullException(nameof(path));
+                _verifier.Verify(assembly);
             }
-
-            if (path.Segments.Length == 1 && !_fileSystem.Exist(path))
-            {
-                // Not a valid path. Try loading it by its name.
-                return Assembly.Load(new AssemblyName(path.FullPath));
-            }
-
-            var loader = new CakeAssemblyLoadContext(_fileSystem, path.GetDirectory());
-            return loader.LoadFromAssemblyPath(path.FullPath);
-#else
-            return Assembly.LoadFrom(path.FullPath);
-#endif
+            return assembly;
         }
     }
 }

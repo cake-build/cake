@@ -69,7 +69,7 @@ namespace Cake.Common.Tools.SignTool
         ///     .Does(() =>
         /// {
         ///     var file = new FilePath("Core.dll");
-        ///     Sign(files, new SignToolSignSettings {
+        ///     Sign(file, new SignToolSignSettings {
         ///             TimeStampUri = new Uri("http://timestamp.digicert.com"),
         ///             CertPath = "digitalcertificate.pfx",
         ///             Password = "TopSecret"
@@ -162,10 +162,7 @@ namespace Cake.Common.Tools.SignTool
             }
 
             var runner = new SignToolSignRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Registry);
-            foreach (var assembly in assemblies)
-            {
-                runner.Run(assembly, settings);
-            }
+            runner.Run(assemblies, settings);
         }
     }
 }

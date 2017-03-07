@@ -115,6 +115,23 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Theory]
+            [InlineData(MSBuildToolVersion.VS2017, PlatformTarget.x64, false, "/Program86/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin/amd64/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2017, PlatformTarget.x86, false, "/Program86/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin/MSBuild.exe")]
+            public void Should_Get_Correct_Path_To_MSBuild_Version_15(MSBuildToolVersion version, PlatformTarget target, bool is64BitOperativeSystem, string expected)
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem);
+                fixture.Settings.ToolVersion = version;
+                fixture.Settings.PlatformTarget = target;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Path.FullPath);
+            }
+
+            [Theory]
             [InlineData(MSBuildToolVersion.NET40, PlatformTarget.MSIL, true, "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.NET40, PlatformTarget.MSIL, false, "/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.NET45, PlatformTarget.MSIL, true, "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe")]

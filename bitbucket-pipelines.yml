@@ -6,4 +6,7 @@ pipelines:
     - step:
         script:
           - ln -s /opt/dotnet .dotnet
-          - ./build.sh -t "Run-Unit-Tests"
+          - mkdir tools
+          - ln -s /opt/nuget/nuget.exe ./tools
+          - mono ./tools/nuget.exe install Cake -OutputDirectory ./tools -ExcludeVersion
+          - mono ./tools/Cake/Cake.exe build.cake --target="Run-Unit-Tests"

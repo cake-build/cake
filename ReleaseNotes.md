@@ -1,3 +1,62 @@
+### New on 0.18.0 (Released 2017/03/07)
+
+* Remove obsoleted DNU aliases
+* WiXHeat misleading signature- no mode operates on file list
+* Add "build tools" path for MSBuild 2017 to MSBuildResolver
+* Add ChocolateyNew Alias
+* Add support for NuGet Init and Add commands
+* NUnitSettings does not have X86 property
+* Enhance TeamCity provider
+* Support for TF Build Commands
+* Provide ability to add Custom attributes when creating AssemblyInfo
+* Support for uninstall packages using Chocolatey
+* Provide ability to specify name for xunit report
+* MSBuild support for Visual Studio 2017 (aka "15")
+* Add support for importing namespaces at the assembly level
+* Add DotCover Merge
+* Proposal: Allow modules to listen for script lifecycle events
+* Support optional parameters on alias methods
+* Support downloadable .cake script directive
+* Extending the Sign command
+* Fix ParseAssemblyInfo does not work .vb
+* Duplicate depedencies references in project.json for Cake.Testing.XUnit
+* Cake.Testing package depends on xunit.core package
+* Optional parameter codegen not invariant
+* XBuildRunner#GetToolExecutableNames returning wrong executables
+* Space in Reference Preprocessor Directive Throws Illegal characters in path
+* Spaces in #load path will cause an Illegal characters in path error.
+* Add CakeNamespaceImport for BuildSystem Aliases
+* HeatSettings.OutputGroup is unusable
+* OctoPack not passing --format to octo.exe
+* Error: Unknown Token when directory contains @ character.
+* Using reserved name for parameter name causes a parser failure
+* signtool.exe should be called only once when signing multiple files
+* Missing MSBuild15 on enum NuGetMSBuildVersion for VS 2017
+* Add ChocoPush alias for an IEnumerable<FilePath>
+* Add ChocoPack alias for an IEnumerable<FilePath>
+* Usage of -NoCache on installing tools and addins
+* Mac OSX is not properly detected when running on Mono
+* NuGet Tool Locator system paths on mac need updating
+* Logging throws exception when there are curly braces in the string
+* CopyDirectory - Missing Log information
+* Teach XmlPeek to silence warnings, if needed
+* Http call in unit test
+* Add optional Go.CD Server URL Parameter to GetHistory
+* Add RedirectStandardError to ProcessRunner
+* Cake's default tools / addins / modules paths are not so default as they seem.
+* ArgumentException with illegal character information
+* Add mechanism to validate addins
+* Support XUnit's x86 .exe runner
+* Add Gitter and Twitter Notifications
+* DownloadFile typo in docs
+* Typo in SignTool docs
+* Fix typos in GitVersion documentation
+* Correct issue with GitLink Alias Category
+* Fix commented example for DotNetCoreTest
+* Fix doc comments in InnoSetupAliases
+* Fix typo in comment
+* Fixed Spelling Mistake.
+
 ### New on 0.17.0 (Released 2016/11/09)
 
 * Allow custom loggers in the VSTestSettings

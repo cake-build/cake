@@ -13,6 +13,8 @@ namespace Cake
 
         public static class Paths
         {
+            public const string Tools = "Paths_Tools";
+
             public const string Modules = "Paths_Modules";
         }
     }

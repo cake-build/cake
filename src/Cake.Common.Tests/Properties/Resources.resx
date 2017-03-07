@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -526,7 +526,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
   </data>
   <data name="XmlPoke_Xml_Dtd" xml:space="preserve">
     <value>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "./Properties/PropertyList-1.0.dtd"&gt;
 &lt;plist version="1.0"&gt;
 &lt;dict&gt;
 	&lt;key&gt;CFBundleDisplayName&lt;/key&gt;
@@ -548,7 +548,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
   </data>
   <data name="XmlPeek_Xml_Dtd" xml:space="preserve">
     <value>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "./Properties/PropertyList-1.0.dtd"&gt;
 &lt;plist version="1.0"&gt;
 &lt;dict&gt;
 	&lt;key&gt;CFBundleDisplayName&lt;/key&gt;
@@ -676,7 +676,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;Compile Include="Properties\AssemblyInfo.cs" /&gt;
   &lt;/ItemGroup&gt;
   &lt;Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" /&gt;
-  &lt;!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  &lt;!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   &lt;Target Name="BeforeBuild"&gt;
   &lt;/Target&gt;
@@ -977,5 +977,33 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;file src="LICENSE" /&gt;
   &lt;/files&gt;
 &lt;/package&gt;</value>
+  </data>
+  <data name="VisualStudioAssemblyInfo_VB" xml:space="preserve">
+    <value>Imports System.Reflection
+Imports System.Runtime.CompilerServices;
+
+' Information about this assembly is defined by the following attributes.
+' Change them to the values specific to your project.
+
+&lt;Assembly: AssemblyTitle("VisualStudioAssemblyTitle")&gt;
+&lt;Assembly: AssemblyDescription("VisualStudioAssemblyDescription")&gt;
+&lt;Assembly: AssemblyConfiguration("VisualStudioConfiguration")&gt;
+&lt;Assembly: AssemblyCompany("VisualStudioCompany")&gt;
+&lt;Assembly: AssemblyProduct("VisualStudioProduct")&gt;
+&lt;Assembly: AssemblyCopyright("VisualStudioCopyright")&gt;
+&lt;Assembly: AssemblyTrademark("VisualStudioTrademark")&gt;
+&lt;Assembly: AssemblyCulture("en-US")&gt;
+
+' The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
+' The form "{Major}.{Minor}.*" will automatically update the build and revision,
+' and "{Major}.{Minor}.{Build}.*" will update just the revision.
+
+&lt;Assembly: AssemblyVersion("1.0.13")&gt;
+
+' The following attributes are used to specify the signing key for the assembly,
+' if desired. See the Mono documentation for more information about signing.
+
+'&lt;Assembly: AssemblyDelaySign(false)&gt;
+'&lt;Assembly: AssemblyKeyFile("")&gt;</value>
   </data>
 </root>

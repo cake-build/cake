@@ -60,36 +60,36 @@ namespace Cake.Common.Tools.SignTool
         }
 
         /// <summary>
-        /// Signs the specified assembly.
+        /// Signs the specified assemblies.
         /// </summary>
-        /// <param name="assemblyPath">The assembly path.</param>
+        /// <param name="assemblyPaths">The assembly paths.</param>
         /// <param name="settings">The settings.</param>
-        public void Run(FilePath assemblyPath, SignToolSignSettings settings)
+        public void Run(IEnumerable<FilePath> assemblyPaths, SignToolSignSettings settings)
         {
-            if (assemblyPath == null)
+            if (assemblyPaths == null)
             {
-                throw new ArgumentNullException(nameof(assemblyPath));
+                throw new ArgumentNullException(nameof(assemblyPaths));
             }
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            if (assemblyPath.IsRelative)
-            {
-                assemblyPath = assemblyPath.MakeAbsolute(_environment);
-            }
+            var absoluteAssemblyPaths = assemblyPaths.Select(p => p.IsRelative ? p.MakeAbsolute(_environment) : p).ToArray();
 
-            Run(settings, GetArguments(assemblyPath, settings));
+            Run(settings, GetArguments(absoluteAssemblyPaths, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, SignToolSignSettings settings)
+        private ProcessArgumentBuilder GetArguments(FilePath[] absoluteAssemblyPaths, SignToolSignSettings settings)
         {
-            if (!_fileSystem.Exist(assemblyPath))
+            foreach (var path in absoluteAssemblyPaths)
             {
-                const string format = "{0}: The assembly '{1}' does not exist.";
-                var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName(), assemblyPath.FullPath);
-                throw new CakeException(message);
+                if (!_fileSystem.Exist(path))
+                {
+                    const string format = "{0}: The assembly '{1}' does not exist.";
+                    var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName(), path.FullPath);
+                    throw new CakeException(message);
+                }
             }
 
             if (settings.TimeStampUri == null)
@@ -126,9 +126,9 @@ namespace Cake.Common.Tools.SignTool
                 builder.AppendQuoted(settings.TimeStampUri.AbsoluteUri);
             }
 
-            if (settings.CertPath == null && string.IsNullOrEmpty(settings.CertThumbprint))
+            if (settings.CertPath == null && string.IsNullOrEmpty(settings.CertThumbprint) && string.IsNullOrEmpty(settings.CertSubjectName))
             {
-                const string format = "{0}: One of Certificate path or Certificate thumbprint is required but neither are specified.";
+                const string format = "{0}: One of Certificate path, Certificate thumbprint or Certificate subject name is required but neither are specified.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
                 throw new CakeException(message);
             }
@@ -136,6 +136,13 @@ namespace Cake.Common.Tools.SignTool
             if (settings.CertPath != null && !string.IsNullOrEmpty(settings.CertThumbprint))
             {
                 const string format = "{0}: Certificate path and Certificate thumbprint cannot be specified together.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
+                throw new CakeException(message);
+            }
+
+            if (settings.CertPath != null && !string.IsNullOrEmpty(settings.CertSubjectName))
+            {
+                const string format = "{0}: Certificate path and Certificate subject name cannot be specified together.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
                 throw new CakeException(message);
             }
@@ -150,6 +157,13 @@ namespace Cake.Common.Tools.SignTool
             if (!string.IsNullOrEmpty(settings.CertThumbprint) && !string.IsNullOrEmpty(settings.Password))
             {
                 const string format = "{0}: Certificate thumbprint and Password cannot be specified together.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
+                throw new CakeException(message);
+            }
+
+            if (!string.IsNullOrEmpty(settings.CertSubjectName) && !string.IsNullOrEmpty(settings.Password))
+            {
+                const string format = "{0}: Certificate subject name and Password cannot be specified together.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
                 throw new CakeException(message);
             }
@@ -184,6 +198,12 @@ namespace Cake.Common.Tools.SignTool
                 builder.AppendQuoted(settings.CertThumbprint);
             }
 
+            if (!string.IsNullOrEmpty(settings.CertSubjectName))
+            {
+                builder.Append("/n");
+                builder.AppendQuoted(settings.CertSubjectName);
+            }
+
             // Signed content description.
             if (!string.IsNullOrEmpty(settings.Description))
             {
@@ -204,8 +224,11 @@ namespace Cake.Common.Tools.SignTool
                 builder.Append("/as");
             }
 
-            // Target Assembly to sign.
-            builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
+            // Target Assemblies to sign.
+            foreach (var path in absoluteAssemblyPaths)
+            {
+                builder.AppendQuoted(path.FullPath);
+            }
 
             return builder;
         }

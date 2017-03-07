@@ -1,0 +1,53 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using Cake.Common.Tests.Fixtures.Build;
+using NSubstitute;
+using Xunit;
+
+namespace Cake.Common.Tests.Unit.Build.TeamCity.Data
+{
+    public sealed class TeamCityPullRequestInfoTests
+    {
+        public sealed class TheIsPullRequestProperty
+        {
+            [Theory]
+            [InlineData("refs/pull-requests/1/merge", true)]
+            [InlineData("refs/heads/master", false)]
+            public void Should_Return_Correct_Value(string value, bool expected)
+            {
+                // Given
+                var fixture = new TeamCityInfoFixture();
+                fixture.Environment.GetEnvironmentVariable("Git_Branch").Returns(value);
+                var info = fixture.CreatePullRequestInfo();
+
+                // When
+                var result = info.IsPullRequest;
+
+                // Then
+                Assert.Equal(expected, result);
+            }
+        }
+
+        public sealed class TheNumberProperty
+        {
+            [Theory]
+            [InlineData("refs/pull-requests/1/merge", 1)]
+            [InlineData("refs/heads/master", null)]
+            public void Should_Return_Correct_Value(string value, int? expected)
+            {
+                // Given
+                var fixture = new TeamCityInfoFixture();
+                fixture.Environment.GetEnvironmentVariable("Git_Branch").Returns(value);
+                var info = fixture.CreatePullRequestInfo();
+
+                // When
+                var result = info.Number;
+
+                // Then
+                Assert.Equal(expected, result);
+            }
+        }
+    }
+}

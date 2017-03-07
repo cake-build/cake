@@ -3,8 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using Cake.Common.Tools.DotCover.Analyse;
 using Cake.Common.Tools.DotCover.Cover;
+using Cake.Common.Tools.DotCover.Merge;
 using Cake.Common.Tools.DotCover.Report;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -168,6 +170,81 @@ namespace Cake.Common.Tools.DotCover
 
             // Run DotCover report.
             reporter.Report(sourceFile, outputFile, settings);
+        }
+
+        /// <summary>
+        /// Runs <see href="https://www.jetbrains.com/dotcover/help/dotCover__Console_Runner_Commands.html#merge">DotCover Merge</see>
+        /// for the specified action and settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="sourceFiles">The list of DotCover coverage snapshot files.</param>
+        /// <param name="outputFile">The merged output file.</param>
+        /// <example>
+        /// <code>
+        /// DotCoverMerge(new[] {
+        ///     new FilePath("./result1.dcvr"),
+        ///     new FilePath("./result2.dcvr")
+        ///   },
+        ///   new FilePath("./merged.dcvr"));
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Merge")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotCover.Merge")]
+        public static void DotCoverMerge(
+            this ICakeContext context,
+            IEnumerable<FilePath> sourceFiles,
+            FilePath outputFile)
+        {
+            DotCoverMerge(context, sourceFiles, outputFile, new DotCoverMergeSettings());
+        }
+
+        /// <summary>
+        /// Runs <see href="https://www.jetbrains.com/dotcover/help/dotCover__Console_Runner_Commands.html#merge">DotCover Merge</see>
+        /// for the specified action and settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="sourceFiles">The list of DotCover coverage snapshot files.</param>
+        /// <param name="outputFile">The merged output file.</param>
+        /// <param name="settings">The settings</param>
+        /// <example>
+        /// <code>
+        /// DotCoverMerge(new[] {
+        ///     new FilePath("./result1.dcvr"),
+        ///     new FilePath("./result2.dcvr")
+        ///   },
+        ///   new FilePath("./merged.dcvr"),
+        ///   new DotCoverMergeSettings {
+        ///     LogFile = new FilePath("./log.txt")
+        ///   });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Merge")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotCover.Merge")]
+        public static void DotCoverMerge(
+            this ICakeContext context,
+            IEnumerable<FilePath> sourceFiles,
+            FilePath outputFile,
+            DotCoverMergeSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            if (settings == null)
+            {
+                settings = new DotCoverMergeSettings();
+            }
+
+            // Create the DotCover merger.
+            var merger = new DotCoverMerger(
+                context.FileSystem, context.Environment,
+                context.ProcessRunner, context.Tools);
+
+            // Run DotCover report.
+            merger.Merge(sourceFiles, outputFile, settings);
         }
     }
 }

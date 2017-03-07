@@ -10,11 +10,6 @@ namespace Cake.Core.Scripting.Processors
 {
     internal sealed class UsingStatementProcessor : LineProcessor
     {
-        public UsingStatementProcessor(ICakeEnvironment environment)
-            : base(environment)
-        {
-        }
-
         public override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
         {
             if (context == null)
@@ -45,12 +40,12 @@ namespace Cake.Core.Scripting.Processors
             // Using alias directive?
             if (tokens.Any(t => t == "="))
             {
-                context.Script.UsingAliases.Add(string.Join(" ", tokens));
+                context.Current.UsingAliases.Add(string.Join(" ", tokens));
                 return true;
             }
 
             // Namespace
-            context.Script.Namespaces.Add(@namespace);
+            context.Current.Namespaces.Add(@namespace);
             return true;
         }
     }

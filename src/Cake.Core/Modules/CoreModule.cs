@@ -9,6 +9,8 @@ using Cake.Core.IO.NuGet;
 using Cake.Core.Reflection;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.Analysis;
+using Cake.Core.Scripting.Processors;
+using Cake.Core.Scripting.Processors.Loading;
 using Cake.Core.Tooling;
 
 namespace Cake.Core.Modules
@@ -48,6 +50,7 @@ namespace Cake.Core.Modules
 
             // Reflection
             registrar.RegisterType<AssemblyLoader>().As<IAssemblyLoader>().Singleton();
+            registrar.RegisterType<AssemblyVerifier>().AsSelf().Singleton();
 
             // Tooling
             registrar.RegisterType<ToolRepository>().As<IToolRepository>().Singleton();
@@ -60,6 +63,9 @@ namespace Cake.Core.Modules
             registrar.RegisterType<ScriptProcessor>().As<IScriptProcessor>().Singleton();
             registrar.RegisterType<ScriptConventions>().As<IScriptConventions>().Singleton();
             registrar.RegisterType<ScriptRunner>().As<IScriptRunner>().Singleton();
+
+            // Load directive providers.
+            registrar.RegisterType<FileLoadDirectiveProvider>().As<ILoadDirectiveProvider>().Singleton();
         }
     }
 }

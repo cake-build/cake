@@ -10,6 +10,7 @@ namespace Cake.Common.Tools.MSBuild
         MSBuild35 = 2,
         MSBuild4 = 3,
         MSBuild12 = 4,
-        MSBuild14 = 5
+        MSBuild14 = 5,
+        MSBuild15 = 6
     }
 }

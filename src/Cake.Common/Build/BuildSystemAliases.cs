@@ -55,7 +55,7 @@ namespace Cake.Common.Build
             var bitbucketPipelinesProvider = new BitbucketPipelinesProvider(context.Environment);
             var goCDProvider = new GoCDProvider(context.Environment, context.Log);
             var gitlabCIProvider = new GitLabCIProvider(context.Environment);
-            var tfBuildProvider = new TFBuildProvider(context.Environment);
+            var tfBuildProvider = new TFBuildProvider(context.Environment, context.Log);
             return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitlabCIProvider, tfBuildProvider);
         }
 
@@ -96,6 +96,7 @@ namespace Cake.Common.Build
         /// <param name="context">The context.</param>
         /// <returns>A <see cref="Cake.Common.Build.TeamCity"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]
+        [CakeNamespaceImport("Cake.Common.Build.TeamCity")]
         public static ITeamCityProvider TeamCity(this ICakeContext context)
         {
             if (context == null)
@@ -119,6 +120,7 @@ namespace Cake.Common.Build
         /// <param name="context">The context.</param>
         /// <returns>A <see cref="Cake.Common.Build.MyGet"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]
+        [CakeNamespaceImport("Cake.Common.Build.MyGet")]
         public static IMyGetProvider MyGet(this ICakeContext context)
         {
             if (context == null)
@@ -136,12 +138,14 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// var isBambooBuild = Bamboo.IsRunningBamboo;
+        /// var isBambooBuild = Bamboo.IsRunningOnBamboo;
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
         /// <returns>A <see cref="Cake.Common.Build.Bamboo"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]
+        [CakeNamespaceImport("Cake.Common.Build.Bamboo")]
+        [CakeNamespaceImport("Cake.Common.Build.Bamboo.Data")]
         public static IBambooProvider Bamboo(this ICakeContext context)
         {
             if (context == null)

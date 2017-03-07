@@ -92,30 +92,7 @@ namespace Cake.Composition
 
         private Assembly LoadAssembly(FilePath path)
         {
-            VerifyCompatibility(path);
-            return _assemblyLoader.Load(path);
-        }
-
-        private static void VerifyCompatibility(FilePath path)
-        {
-#if !NETCORE
-            // Make sure that the module is compatible.
-            // Kind of hackish, but this will have to do until we figure out a better way...
-            var assembly = Assembly.ReflectionOnlyLoadFrom(path.FullPath);
-            var references = assembly.GetReferencedAssemblies();
-            foreach (var reference in references)
-            {
-                if (reference.Name != null && reference.Name.Equals("Cake.Core", StringComparison.OrdinalIgnoreCase))
-                {
-                    var minVersion = new Version(0, 16, 0);
-                    if (reference.Version < minVersion)
-                    {
-                        const string format = "The module '{0}' is targeting an incompatible version of Cake.Core.dll. It needs to target at least version {1}.";
-                        throw new CakeException(string.Format(format, path.GetFilename().FullPath, minVersion.ToString(3)));
-                    }
-                }
-            }
-#endif
+            return _assemblyLoader.Load(path, true);
         }
     }
 }

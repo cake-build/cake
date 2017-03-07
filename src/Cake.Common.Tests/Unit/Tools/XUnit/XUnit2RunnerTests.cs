@@ -92,6 +92,35 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             }
 
             [Fact]
+            public void Should_Throw_If_XUnit_X86_Flag_Is_Not_Set_To_True()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture("xunit.console.x86.exe");
+                fixture.Settings.UseX86 = false;
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("xUnit.net (v2): Could not locate executable.", result?.Message);
+            }
+
+            [Fact]
+            public void Should_Find_XUnit_X86_Runner_If_Tool_Path_Not_Provided()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture("xunit.console.x86.exe");
+                fixture.Settings.UseX86 = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/Working/tools/xunit.console.x86.exe", result.Path.FullPath);
+            }
+
+            [Fact]
             public void Should_Use_Provided_Assembly_Path_In_Process_Arguments()
             {
                 // Given
@@ -192,6 +221,22 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             }
 
             [Fact]
+            public void Should_Generate_Html_Report_With_Correct_Name_For_Single_Assembly_ReportName()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.Settings.OutputDirectory = "/Output";
+                fixture.Settings.HtmlReport = true;
+                fixture.Settings.ReportName = "xUnitReport";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" -html \"/Output/xUnitReport.html\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Generate_Html_Report_With_Correct_Name_For_Multiple_Assemblies()
             {
                 // Given
@@ -206,6 +251,24 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 // Then
                 Assert.Equal("\"/Working/Test1.dll\" \"/Working/Test2.dll\" " +
                              "-html \"/Output/TestResults.html\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Generate_Html_Report_With_Correct_Name_For_Multiple_Assemblies_ReportName()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.AssemblyPaths = new FilePath[] { "./Test1.dll", "./Test2.dll" };
+                fixture.Settings.OutputDirectory = "/Output";
+                fixture.Settings.HtmlReport = true;
+                fixture.Settings.ReportName = "xUnitReport";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" \"/Working/Test2.dll\" " +
+                             "-html \"/Output/xUnitReport.html\"", result.Args);
             }
 
             [Fact]
@@ -239,6 +302,21 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             }
 
             [Fact]
+            public void Should_Generate_Xml_Report_With_Correct_Name_For_Single_Assembly_ReportName()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.Settings.OutputDirectory = "/Output";
+                fixture.Settings.XmlReport = true;
+                fixture.Settings.ReportName = "xUnitReport";
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" -xml \"/Output/xUnitReport.xml\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Generate_Xml_Report_With_Correct_Name_For_Multiple_Assemblies()
             {
                 // Given
@@ -253,6 +331,24 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 // Then
                 Assert.Equal("\"/Working/Test1.dll\" \"/Working/Test2.dll\" " +
                              "-xml \"/Output/TestResults.xml\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Generate_Xml_Report_With_Correct_Name_For_Multiple_Assemblies_ReportName()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.AssemblyPaths = new FilePath[] { "./Test1.dll", "./Test2.dll" };
+                fixture.Settings.OutputDirectory = "/Output";
+                fixture.Settings.XmlReport = true;
+                fixture.Settings.ReportName = "xUnitReport";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" \"/Working/Test2.dll\" " +
+                             "-xml \"/Output/xUnitReport.xml\"", result.Args);
             }
 
             [Fact]
@@ -286,6 +382,22 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             }
 
             [Fact]
+            public void Should_Generate_Legacy_Xml_Report_With_Correct_Name_For_Single_Assembly_ReportName()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.Settings.OutputDirectory = "/Output";
+                fixture.Settings.XmlReportV1 = true;
+                fixture.Settings.ReportName = "xUnitReport";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" -xmlv1 \"/Output/xUnitReport.xml\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Generate_Legacy_Xml_Report_With_Correct_Name_For_Multiple_Assemblies()
             {
                 // Given
@@ -300,6 +412,24 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 // Then
                 Assert.Equal("\"/Working/Test1.dll\" \"/Working/Test2.dll\" " +
                              "-xmlv1 \"/Output/TestResults.xml\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Generate_Legacy_Xml_Report_With_Correct_Name_For_Multiple_Assemblies_ReportName()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.AssemblyPaths = new FilePath[] { "./Test1.dll", "./Test2.dll" };
+                fixture.Settings.OutputDirectory = "/Output";
+                fixture.Settings.XmlReportV1 = true;
+                fixture.Settings.ReportName = "xUnitReport";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" \"/Working/Test2.dll\" " +
+                             "-xmlv1 \"/Output/xUnitReport.xml\"", result.Args);
             }
 
             [Fact]
@@ -333,6 +463,22 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             }
 
             [Fact]
+            public void Should_Generate_NUnit_Xml_Report_With_Correct_Name_For_Single_Assembly_ReportName()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.Settings.OutputDirectory = "/Output";
+                fixture.Settings.NUnitReport = true;
+                fixture.Settings.ReportName = "xUnitReport";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" -nunit \"/Output/xUnitReport.xml\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Generate_NUnit_Xml_Report_With_Correct_Name_For_Multiple_Assemblies()
             {
                 // Given
@@ -347,6 +493,24 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 // Then
                 Assert.Equal("\"/Working/Test1.dll\" \"/Working/Test2.dll\" " +
                              "-nunit \"/Output/TestResults.xml\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Generate_NUnit_Xml_Report_With_Correct_Name_For_Multiple_Assemblies_ReportName()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.AssemblyPaths = new FilePath[] { "./Test1.dll", "./Test2.dll" };
+                fixture.Settings.OutputDirectory = "/Output";
+                fixture.Settings.NUnitReport = true;
+                fixture.Settings.ReportName = "xUnitReport";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" \"/Working/Test2.dll\" " +
+                             "-nunit \"/Output/xUnitReport.xml\"", result.Args);
             }
 
             [Fact]

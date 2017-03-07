@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using Cake.Core.Diagnostics;
 using Cake.Core.Graph;
 
@@ -74,6 +75,11 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Raised during setup before any tasks are run.
+        /// </summary>
+        public event EventHandler<SetupEventArgs> Setup;
+
+        /// <summary>
         /// Allows registration of an action that's executed after all other tasks have been run.
         /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
         /// </summary>
@@ -82,6 +88,11 @@ namespace Cake.Core
         {
             _teardownAction = action;
         }
+
+        /// <summary>
+        /// Raised during teardown after all other tasks have been run.
+        /// </summary>
+        public event EventHandler<TeardownEventArgs> Teardown;
 
         /// <summary>
         /// Runs the specified target.
@@ -168,6 +179,11 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Raised before each task is run.
+        /// </summary>
+        public event EventHandler<TaskSetupEventArgs> TaskSetup;
+
+        /// <summary>
         /// Allows registration of an action that's executed after each task has been run.
         /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
         /// </summary>
@@ -177,8 +193,14 @@ namespace Cake.Core
             _taskTeardownAction = action;
         }
 
+        /// <summary>
+        /// Raised after each task has been run.
+        /// </summary>
+        public event EventHandler<TaskTeardownEventArgs> TaskTeardown;
+
         private void PerformSetup(IExecutionStrategy strategy, ICakeContext context)
         {
+            PublishEvent(Setup, new SetupEventArgs(context));
             if (_setupAction != null)
             {
                 strategy.PerformSetup(_setupAction, context);
@@ -266,12 +288,13 @@ namespace Cake.Core
 
         private void PerformTaskSetup(ICakeContext context, IExecutionStrategy strategy, ICakeTaskInfo task, bool skipped)
         {
+            var taskSetupContext = new TaskSetupContext(context, task);
+            PublishEvent(TaskSetup, new TaskSetupEventArgs(taskSetupContext));
             // Trying to stay consistent with the behavior of script-level Setup & Teardown (if setup fails, don't run the task, but still run the teardown)
             if (_taskSetupAction != null)
             {
                 try
                 {
-                    var taskSetupContext = new TaskSetupContext(context, task);
                     strategy.PerformTaskSetup(_taskSetupAction, taskSetupContext);
                 }
                 catch
@@ -284,11 +307,12 @@ namespace Cake.Core
 
         private void PerformTaskTeardown(ICakeContext context, IExecutionStrategy strategy, ICakeTaskInfo task, TimeSpan duration, bool skipped, bool exceptionWasThrown)
         {
+            var taskTeardownContext = new TaskTeardownContext(context, task, duration, skipped);
+            PublishEvent(TaskTeardown, new TaskTeardownEventArgs(taskTeardownContext));
             if (_taskTeardownAction != null)
             {
                 try
                 {
-                    var taskTeardownContext = new TaskTeardownContext(context, task, duration, skipped);
                     strategy.PerformTaskTeardown(_taskTeardownAction, taskTeardownContext);
                 }
                 catch (Exception ex)
@@ -352,11 +376,12 @@ namespace Cake.Core
 
         private void PerformTeardown(IExecutionStrategy strategy, ICakeContext context, bool exceptionWasThrown, Exception thrownException)
         {
+            var teardownContext = new TeardownContext(context, thrownException);
+            PublishEvent(Teardown, new TeardownEventArgs(teardownContext));
             if (_teardownAction != null)
             {
                 try
                 {
-                    var teardownContext = new TeardownContext(context, thrownException);
                     strategy.PerformTeardown(_teardownAction, teardownContext);
                 }
                 catch (Exception ex)
@@ -368,6 +393,25 @@ namespace Cake.Core
                         throw;
                     }
                     _log.Error("Teardown error: {0}", ex.ToString());
+                }
+            }
+        }
+
+        private void PublishEvent<T>(EventHandler<T> eventHandler, T eventArgs) where T : EventArgs
+        {
+            if (eventHandler != null)
+            {
+                foreach (var @delegate in eventHandler.GetInvocationList())
+                {
+                    var handler = (EventHandler<T>)@delegate;
+                    try
+                    {
+                        handler(this, eventArgs);
+                    }
+                    catch (Exception e)
+                    {
+                        _log.Error("An error occurred in the event handler {0}: {1}", handler.GetMethodInfo().Name, e.Message);
+                    }
                 }
             }
         }

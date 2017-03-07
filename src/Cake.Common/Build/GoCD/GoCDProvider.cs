@@ -69,6 +69,18 @@ namespace Cake.Common.Build.GoCD
         /// <returns>The Go.CD build history.</returns>
         public GoCDHistoryInfo GetHistory(string username, string password)
         {
+            return GetHistory(username, password, Environment.GoCDUrl);
+        }
+
+        /// <summary>
+        /// Gets the Go.CD build history, including the repository modifications that caused the pipeline to start.
+        /// </summary>
+        /// <param name="username">The Go.CD username.</param>
+        /// <param name="password">The Go.CD password.</param>
+        /// <param name="serverUrl">The Go.CD server URL.</param>
+        /// <returns>The Go.CD build history.</returns>
+        public GoCDHistoryInfo GetHistory(string username, string password, string serverUrl)
+        {
             if (username == null)
             {
                 throw new ArgumentNullException(nameof(username));
@@ -79,6 +91,11 @@ namespace Cake.Common.Build.GoCD
                 throw new ArgumentNullException(nameof(password));
             }
 
+            if (serverUrl == null)
+            {
+                throw new ArgumentNullException(nameof(serverUrl));
+            }
+
             if (!IsRunningOnGoCD)
             {
                 throw new CakeException("The current build is not running on Go.CD.");
@@ -87,7 +104,7 @@ namespace Cake.Common.Build.GoCD
             var url = new Uri(string.Format(
                 CultureInfo.InvariantCulture,
                 "{0}/go/api/pipelines/{1}/history/0",
-                this.Environment.GoCDUrl,
+                serverUrl,
                 this.Environment.Pipeline.Name).ToLowerInvariant());
 
             _cakeLog.Write(Verbosity.Diagnostic, LogLevel.Verbose, "Getting [{0}]", url);

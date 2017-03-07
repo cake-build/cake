@@ -38,6 +38,20 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             [InlineData("NonGeneric_ExtensionMethodWithGenericExpressionParamsArrayParameter")]
             [InlineData("NonGeneric_ExtensionMethodWithReturnValue")]
             [InlineData("NonGeneric_ExtensionMethodWithParameterArray")]
+            [InlineData("NonGeneric_ExtensionMethodWithOptionalObjectParameter")]
+            [InlineData("NonGeneric_ExtensionMethodWithOptionalBooleanParameter")]
+            [InlineData("NonGeneric_ExtensionMethodWithOptionalStringParameter")]
+            [InlineData("NonGeneric_ExtensionMethodWithOptionalEnumParameter")]
+            [InlineData("NonGeneric_ExtensionMethodWithOptionalCharParameter")]
+            [InlineData("NonGeneric_ExtensionMethodWithOptionalDecimalParameter")]
+            [InlineData("NonGeneric_ExtensionMethodWithOptionalNullableTParameter")]
+            [InlineData("NonGeneric_ExtensionMethodWithOptionalNullableBooleanParameter")]
+            [InlineData("NonGeneric_ExtensionMethodWithOptionalNullableCharParameter")]
+            [InlineData("NonGeneric_ExtensionMethodWithOptionalNullableEnumParameter")]
+            [InlineData("NonGeneric_ExtensionMethodWithOptionalNullableDecimalParameter")]
+            [InlineData("NonGeneric_ExtensionMethodWithOptionalNullableLongParameter")]
+            [InlineData("NonGeneric_ExtensionMethodWithOptionalNullableDoubleParameter")]
+            [InlineData("NonGeneric_ExtensionMethodWithReservedKeywordParameter")]
             public void Should_Return_Correct_Generated_Code_For_Non_Generic_Methods(string name)
             {
                 // Given
