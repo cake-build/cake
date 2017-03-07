@@ -92,6 +92,67 @@ namespace Cake.Common.Tools.Chocolatey
         }
 
         /// <summary>
+        /// Creates Chocolatey packages using the specified Nuspec files.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="filePaths">The nuspec file paths.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        ///     var chocolateyPackSettings   = new ChocolateyPackSettings {
+        ///                                     Id                      = "TestChocolatey",
+        ///                                     Title                   = "The tile of the package",
+        ///                                     Version                 = "0.0.0.1",
+        ///                                     Authors                 = new[] {"John Doe"},
+        ///                                     Owners                  = new[] {"Contoso"},
+        ///                                     Summary                 = "Excellent summary of what the package does",
+        ///                                     Description             = "The description of the package",
+        ///                                     ProjectUrl              = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     PackageSourceUrl        = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     ProjectSourceUrl        = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     DocsUrl                 = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     MailingListUrl          = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     BugTrackerUrl           = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     Tags                    = new [] {"Cake", "Script", "Build"},
+        ///                                     Copyright               = "Some company 2015",
+        ///                                     LicenseUrl              = new Uri("https://github.com/SomeUser/TestChocolatey/blob/master/LICENSE.md"),
+        ///                                     RequireLicenseAcceptance= false,
+        ///                                     IconUrl                 = new Uri("http://cdn.rawgit.com/SomeUser/TestChocolatey/master/icons/testchocolatey.png"),
+        ///                                     ReleaseNotes            = new [] {"Bug fixes", "Issue fixes", "Typos"},
+        ///                                     Files                   = new [] {
+        ///                                                                          new ChocolateyNuSpecContent {Source = "bin/TestChocolatey.dll", Target = "bin"},
+        ///                                                                       },
+        ///                                     Debug                   = false,
+        ///                                     Verbose                 = false,
+        ///                                     Force                   = false,
+        ///                                     Noop                    = false,
+        ///                                     LimitOutput             = false,
+        ///                                     ExecutionTimeout        = 13,
+        ///                                     CacheLocation           = @"C:\temp",
+        ///                                     AllowUnofficial          = false
+        ///                                 };
+        ///
+        ///     var nuspecFiles = GetFiles("./**/*.nuspec");
+        ///     ChocolateyPack(nuspecFiles, chocolateyPackSettings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Pack")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Pack")]
+        public static void ChocolateyPack(this ICakeContext context, IEnumerable<FilePath> filePaths, ChocolateyPackSettings settings)
+        {
+            if (filePaths == null)
+            {
+                throw new ArgumentNullException(nameof(filePaths));
+            }
+
+            foreach (var filePath in filePaths)
+            {
+                ChocolateyPack(context, filePath, settings);
+            }
+        }
+
+        /// <summary>
         /// Creates a Chocolatey package using the specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
