@@ -1,8 +1,8 @@
 // Install addins.
 #addin "nuget:https://www.nuget.org/api/v2?package=Newtonsoft.Json&version=9.0.1"
-#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Coveralls&version=0.2.0"
-#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Twitter&version=0.1.0"
-#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Gitter&version=0.2.0"
+#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Coveralls&version=0.4.0"
+#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Twitter&version=0.4.0"
+#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Gitter&version=0.5.0"
 
 // Install tools.
 #tool "nuget:https://www.nuget.org/api/v2?package=gitreleasemanager&version=0.5.0"
@@ -361,11 +361,11 @@ Task("Sign-Binaries")
     var filter = File("./signclient.filter");
 
     // Get the files to sign.
-    var files = GetFiles(string.Concat(parameters.Paths.Directories.NugetRoot, "/", "*.nupkg")) 
+    var files = GetFiles(string.Concat(parameters.Paths.Directories.NugetRoot, "/", "*.nupkg"))
         + parameters.Paths.Files.ZipArtifactPathDesktop
         + parameters.Paths.Files.ZipArtifactPathCoreClr;
 
-    foreach(var file in files) 
+    foreach(var file in files)
     {
         Information("Signing {0}...", file.FullPath);
 
