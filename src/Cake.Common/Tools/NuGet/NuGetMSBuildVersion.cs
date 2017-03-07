@@ -22,6 +22,11 @@ namespace Cake.Common.Tools.NuGet
         /// <summary>
         /// MSBuildVersion : <c>14</c>
         /// </summary>
-        MSBuild14 = 14
+        MSBuild14 = 14,
+
+        /// <summary>
+        /// MSBuildVersion : <c>15</c>
+        /// </summary>
+        MSBuild15 = 15
     }
 }
