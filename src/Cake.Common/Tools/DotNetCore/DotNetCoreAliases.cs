@@ -489,8 +489,26 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="context">The context.</param>
         /// <param name="project">The project path.</param>
         /// <example>
+        /// <para>Specify the path to the .csproj file in the test project</para>
         /// <code>
-        ///     DotNetCoreTest("./src/Project");
+        ///     DotNetCoreTest("./test/Project.Tests/Project.Tests.csproj");
+        /// </code>
+        /// <para>You could also specify a task that runs multiple test projects.</para>
+        /// <para>Cake task:</para>
+        /// <code>
+        /// Task("Test")
+        ///     .Does(() =>
+        /// {
+        ///     var projectFiles = GetFiles("./test/**/*.csproj");
+        ///     foreach(var file in projectFiles)
+        ///     {
+        ///         DotNetCoreTest(file.FullPath);
+        ///     }
+        /// });
+        /// </code>
+        /// <para>If your test project is using project.json, the project parameter should just be the directory path.</para>
+        /// <code>
+        ///     DotNetCoreTest("./test/Project.Tests/");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -514,7 +532,34 @@ namespace Cake.Common.Tools.DotNetCore
         ///         Configuration = "Release"
         ///     };
         ///
-        ///     DotNetCoreTest("./test/Project.Tests", settings);
+        ///     DotNetCoreTest("./test/Project.Tests/Project.Tests.csproj", settings);
+        /// </code>
+        /// <para>You could also specify a task that runs multiple test projects.</para>
+        /// <para>Cake task:</para>
+        /// <code>
+        /// Task("Test")
+        ///     .Does(() =>
+        /// {
+        ///     var settings = new DotNetCoreTestSettings
+        ///     {
+        ///         Configuration = "Release"
+        ///     };
+        ///
+        ///     var projectFiles = GetFiles("./test/**/*.csproj");
+        ///     foreach(var file in projectFiles)
+        ///     {
+        ///         DotNetCoreTest(file.FullPath, settings);
+        ///     }
+        /// });
+        /// </code>
+        /// <para>If your test project is using project.json, the project parameter should just be the directory path.</para>
+        /// <code>
+        ///     var settings = new DotNetCoreTestSettings
+        ///     {
+        ///         Configuration = "Release"
+        ///     };
+        ///
+        ///     DotNetCoreTest("./test/Project.Tests/", settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
