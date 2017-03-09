@@ -147,13 +147,6 @@ namespace Cake.Common.Tools.SignTool
                 throw new CakeException(message);
             }
 
-            if (settings.CertPath != null && string.IsNullOrEmpty(settings.Password))
-            {
-                const string format = "{0}: Password is required with Certificate path but not specified.";
-                var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
-                throw new CakeException(message);
-            }
-
             if (!string.IsNullOrEmpty(settings.CertThumbprint) && !string.IsNullOrEmpty(settings.Password))
             {
                 const string format = "{0}: Certificate thumbprint and Password cannot be specified together.";
@@ -187,8 +180,11 @@ namespace Cake.Common.Tools.SignTool
                 builder.AppendQuoted(settings.CertPath.MakeAbsolute(_environment).FullPath);
 
                 // PFX Password.
-                builder.Append("/p");
-                builder.AppendSecret(settings.Password);
+                if (!string.IsNullOrEmpty(settings.Password))
+                {
+                    builder.Append("/p");
+                    builder.AppendSecret(settings.Password);
+                }
             }
 
             // Certificate thumbprint.
