@@ -25,12 +25,15 @@ namespace Cake.Common.Tests.Fixtures.Solution.Project
             var fileSystem = new FakeFileSystem(environment);
             fileSystem.CreateFile(ProjFilePath.FullPath).SetContent(Resources.Csproj_ProjectFile);
             fileSystem.CreateFile("/Working/Cake.Incomplete.csproj").SetContent(Resources.Csproj_IncompleteFile);
-            fileSystem.CreateFile("/Working/Cake.ContainsWildcard.csproj").SetContent(Resources.Csproj_With_WildCard_FilePaths);
+            fileSystem.CreateFile("/Working/Wildcard/src/Cake.ContainsWildcard.csproj").SetContent(Resources.Csproj_With_WildCard_FilePaths);
+            fileSystem.CreateFile("/Working/Wildcard/src/Program.cs");
+            fileSystem.CreateFile("/Working/Wildcard/src/Client.cs");
+            fileSystem.CreateFile("/Working/Wildcard/other/recursive-segment/Recursive.cs");
+            fileSystem.CreateFile("/Working/Wildcard/other/Random.cs");
             FileSystem = fileSystem;
 
             Globber = Substitute.For<IGlobber>();
             Globber.GetFiles(Pattern).Returns(new FilePath[] { "/Working/Cake.Sample.csproj", "/Working/Cake.Incomplete.csproj" });
-            Globber.Match("**\\*.cs", Arg.Any<Func<IDirectory, bool>>()).Returns(new FilePath[] { "/Working/Program.cs", "/Working/Client.cs" });
 
             Log = Substitute.For<ICakeLog>();
         }
@@ -39,20 +42,20 @@ namespace Cake.Common.Tests.Fixtures.Solution.Project
 
         public ProjectParserResult Parse()
         {
-            var parser = new ProjectParser(this.FileSystem, this.Environment, this.Globber);
+            var parser = new ProjectParser(this.FileSystem, this.Environment);
             return parser.Parse(ProjFilePath);
         }
 
         public ProjectParserResult ParseIncomplete()
         {
-            var parser = new ProjectParser(this.FileSystem, this.Environment, this.Globber);
+            var parser = new ProjectParser(this.FileSystem, this.Environment);
             return parser.Parse("/Working/Cake.Incomplete.csproj");
         }
 
         public ProjectParserResult ParseWithWildcardFilePaths()
         {
-            var parser = new ProjectParser(this.FileSystem, this.Environment, this.Globber);
-            return parser.Parse("/Working/Cake.ContainsWildcard.csproj");
+            var parser = new ProjectParser(this.FileSystem, this.Environment);
+            return parser.Parse("/Working/Wildcard/src/Cake.ContainsWildcard.csproj");
         }
 
         public string Pattern { get; set; }

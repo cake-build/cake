@@ -1106,6 +1106,7 @@ limitations under the License.
   &lt;/ItemGroup&gt;
   &lt;ItemGroup&gt;
     &lt;Compile Include="**\*.cs" /&gt;
+    &lt;Compile Include="..\other\**\*.cs" /&gt;
   &lt;/ItemGroup&gt;
   &lt;ItemGroup&gt;
     &lt;None Include="packages.config" /&gt;

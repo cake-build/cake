@@ -62,7 +62,7 @@ namespace Cake.Common.Solution.Project
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var parser = new ProjectParser(context.FileSystem, context.Environment, context.Globber);
+            var parser = new ProjectParser(context.FileSystem, context.Environment);
             return parser.Parse(projectPath);
         }
     }

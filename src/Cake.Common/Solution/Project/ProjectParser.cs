@@ -18,25 +18,13 @@ namespace Cake.Common.Solution.Project
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
-        private readonly IGlobber _globber;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectParser"/> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
-        public ProjectParser(IFileSystem fileSystem, ICakeEnvironment environment) : this(fileSystem, environment, new Globber(fileSystem, environment))
-        {
-            // provide this constructor overload to create backward compatibility to existing consumers of the ProjectParser
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ProjectParser"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="globber">The globber</param>
-        public ProjectParser(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber)
+        public ProjectParser(IFileSystem fileSystem, ICakeEnvironment environment)
         {
             if (fileSystem == null)
             {
@@ -46,14 +34,9 @@ namespace Cake.Common.Solution.Project
             {
                 throw new ArgumentNullException(nameof(environment));
             }
-            if (globber == null)
-            {
-                throw new ArgumentNullException(nameof(globber));
-            }
 
             _fileSystem = fileSystem;
             _environment = environment;
-            _globber = globber;
         }
 
         /// <summary>
@@ -144,10 +127,6 @@ namespace Cake.Common.Solution.Project
 
             var rootPath = projectPath.GetDirectory();
 
-            // this is a bit of a cheat to get the globber to root itself in the project's directory.
-            // basically, is the directory being walked the project directory or a child node?
-            Func<IDirectory, bool> predicate = info => info.Path.FullPath.StartsWith(rootPath.FullPath, StringComparison.OrdinalIgnoreCase);
-
             // project the file inclusions; if it's wildcarded, glob the pattern and derive the path relative to the project.
             // if it's just a normal Include="path/to/file.cs" return a single element
             // project the SelectMany to get all the files that were found as a result of the directive.
@@ -164,11 +143,11 @@ namespace Cake.Common.Solution.Project
                  let value = include.Value
                  where !string.IsNullOrEmpty(value)
                  let isCompiled = element.Name == ProjectXElement.Compile
-                 let fileIncludes = value.Contains("*") ? _globber.Match(value, predicate).OfType<FilePath>().Select(x => projectPath.GetRelativePath(x).FullPath) : new[] { value }
+                 let fileIncludes = value.Contains("*") ? new ProjectFileResolver(_fileSystem, _environment).GetFiles(rootPath, value).Select(x => projectPath.GetRelativePath(x).FullPath) : new[] { value }
                  from relativePath in fileIncludes
                  select new ProjectFile
                  {
-                     FilePath = rootPath.CombineWithFilePath(relativePath),
+                     FilePath = rootPath.CombineWithFilePath(relativePath).Collapse(),
                      RelativePath = relativePath,
                      Compile = isCompiled
                  }).ToArray();

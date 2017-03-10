@@ -9,7 +9,6 @@ using Cake.Common.Tests.Fixtures.Solution.Project;
 using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
-using NSubstitute.Core.SequenceChecking;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Solution.Project
@@ -23,10 +22,9 @@ namespace Cake.Common.Tests.Unit.Solution.Project
             {
                 // Given
                 var environment = Substitute.For<ICakeEnvironment>();
-                var globber = Substitute.For<IGlobber>();
 
                 // When
-                var result = Record.Exception(() => new ProjectParser(null, environment, globber));
+                var result = Record.Exception(() => new ProjectParser(null, environment));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "fileSystem");
@@ -37,27 +35,12 @@ namespace Cake.Common.Tests.Unit.Solution.Project
             {
                 // Given
                 var fileSystem = Substitute.For<IFileSystem>();
-                var globber = Substitute.For<IGlobber>();
 
                 // When
-                var result = Record.Exception(() => new ProjectParser(fileSystem, null, globber));
+                var result = Record.Exception(() => new ProjectParser(fileSystem, null));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "environment");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Globber_Is_Null()
-            {
-                // Given
-                var fileSystem = Substitute.For<IFileSystem>();
-                var environment = Substitute.For<ICakeEnvironment>();
-
-                // When
-                var result = Record.Exception(() => new ProjectParser(fileSystem, environment, null));
-
-                // Then
-                Assert.IsArgumentNullException(result, "globber");
             }
         }
 
@@ -258,7 +241,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project
             }
 
             [Fact]
-            public void Should_Handle_Wildcard_FilePaths()
+            public void Should_Return_Correct_Files_When_Include_Contains_Wildcards()
             {
                 // Given
                 var fixture = new ProjectParserFixture();
@@ -268,11 +251,16 @@ namespace Cake.Common.Tests.Unit.Solution.Project
 
                 // Then
                 Assert.NotNull(result);
-                Assert.Equal(3, result.Files.Count);
+                Assert.Equal(5, result.Files.Count);
 
-                Assert.Contains(result.Files, file => file.FilePath.FullPath.EndsWith("packages.config") && !file.Compile);
-                Assert.Contains(result.Files, file => file.FilePath.FullPath.EndsWith("Program.cs") && file.Compile);
-                Assert.Contains(result.Files, file => file.FilePath.FullPath.EndsWith("Client.cs") && file.Compile);
+                // explicit inclusion
+                Assert.Contains(result.Files, file => file.FilePath.FullPath == "/Working/Wildcard/src/packages.config" && !file.Compile);
+                // next two included by **/*.cs
+                Assert.Contains(result.Files, file => file.FilePath.FullPath == "/Working/Wildcard/src/Program.cs" && file.Compile);
+                Assert.Contains(result.Files, file => file.FilePath.FullPath == "/Working/Wildcard/src/Client.cs" && file.Compile);
+                // next two include by ../other/**/*.cs
+                Assert.Contains(result.Files, file => file.FilePath.FullPath == "/Working/Wildcard/other/recursive-segment/Recursive.cs" && file.Compile);
+                Assert.Contains(result.Files, file => file.FilePath.FullPath == "/Working/Wildcard/other/Random.cs" && file.Compile);
             }
         }
     }
