@@ -1,3 +1,10 @@
+### New on 0.19.0 (Released 2017/03/23)
+
+* Add VSWhere support
+* Error: SignTool SIGN: Password is required with Certificate path but not specified.
+* MSBuild on Mac/Linux
+* Categorize logging aliases by level
+
 ### New on 0.18.0 (Released 2017/03/07)
 
 * Remove obsoleted DNU aliases
