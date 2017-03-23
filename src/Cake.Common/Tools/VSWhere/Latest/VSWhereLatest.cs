@@ -32,7 +32,7 @@ namespace Cake.Common.Tools.VSWhere.Latest
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>Installation path of the newest or last install.</returns>
-        public FilePath Latest(VSWhereLatestSettings settings)
+        public DirectoryPath Latest(VSWhereLatestSettings settings)
         {
             if (settings == null)
             {

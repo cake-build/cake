@@ -41,7 +41,7 @@ namespace Cake.Common.Tools.VSWhere
         [CakeMethodAlias]
         [CakeAliasCategory("Legacy")]
         [CakeNamespaceImport("Cake.Common.Tools.VSWhere.Legacy")]
-        public static FilePath VSWhereLegacy(this ICakeContext context, bool latest)
+        public static DirectoryPath VSWhereLegacy(this ICakeContext context, bool latest)
         {
             var settings = new VSWhereLegacySettings();
             settings.Latest = latest;
@@ -62,7 +62,7 @@ namespace Cake.Common.Tools.VSWhere
         [CakeMethodAlias]
         [CakeAliasCategory("Legacy")]
         [CakeNamespaceImport("Cake.Common.Tools.VSWhere.Legacy")]
-        public static FilePathCollection VSWhereLegacy(this ICakeContext context, VSWhereLegacySettings settings)
+        public static DirectoryPathCollection VSWhereLegacy(this ICakeContext context, VSWhereLegacySettings settings)
         {
             if (context == null)
             {
@@ -91,7 +91,7 @@ namespace Cake.Common.Tools.VSWhere
         [CakeMethodAlias]
         [CakeAliasCategory("Latest")]
         [CakeNamespaceImport("Cake.Common.Tools.VSWhere.Latest")]
-        public static FilePath VSWhereLatest(this ICakeContext context)
+        public static DirectoryPath VSWhereLatest(this ICakeContext context)
         {
             var settings = new VSWhereLatestSettings();
             return VSWhereLatest(context, settings);
@@ -111,7 +111,7 @@ namespace Cake.Common.Tools.VSWhere
         [CakeMethodAlias]
         [CakeAliasCategory("Latest")]
         [CakeNamespaceImport("Cake.Common.Tools.VSWhere.Latest")]
-        public static FilePath VSWhereLatest(this ICakeContext context, VSWhereLatestSettings settings)
+        public static DirectoryPath VSWhereLatest(this ICakeContext context, VSWhereLatestSettings settings)
         {
             if (context == null)
             {
@@ -134,7 +134,7 @@ namespace Cake.Common.Tools.VSWhere
         [CakeMethodAlias]
         [CakeAliasCategory("All")]
         [CakeNamespaceImport("Cake.Common.Tools.VSWhere.All")]
-        public static FilePathCollection VSWhereAll(this ICakeContext context)
+        public static DirectoryPathCollection VSWhereAll(this ICakeContext context)
         {
             var settings = new VSWhereAllSettings();
             return VSWhereAll(context, settings);
@@ -154,7 +154,7 @@ namespace Cake.Common.Tools.VSWhere
         [CakeMethodAlias]
         [CakeAliasCategory("All")]
         [CakeNamespaceImport("Cake.Common.Tools.VSWhere.All")]
-        public static FilePathCollection VSWhereAll(this ICakeContext context, VSWhereAllSettings settings)
+        public static DirectoryPathCollection VSWhereAll(this ICakeContext context, VSWhereAllSettings settings)
         {
             if (context == null)
             {
@@ -184,7 +184,7 @@ namespace Cake.Common.Tools.VSWhere
         [CakeMethodAlias]
         [CakeAliasCategory("Product")]
         [CakeNamespaceImport("Cake.Common.Tools.VSWhere.Product")]
-        public static FilePathCollection VSWhereProducts(this ICakeContext context, string products)
+        public static DirectoryPathCollection VSWhereProducts(this ICakeContext context, string products)
         {
             var settings = new VSWhereProductSettings();
             return VSWhereProducts(context, products, settings);
@@ -205,7 +205,7 @@ namespace Cake.Common.Tools.VSWhere
         [CakeMethodAlias]
         [CakeAliasCategory("Product")]
         [CakeNamespaceImport("Cake.Common.Tools.VSWhere.Product")]
-        public static FilePathCollection VSWhereProducts(this ICakeContext context, string products, VSWhereProductSettings settings)
+        public static DirectoryPathCollection VSWhereProducts(this ICakeContext context, string products, VSWhereProductSettings settings)
         {
             if (context == null)
             {

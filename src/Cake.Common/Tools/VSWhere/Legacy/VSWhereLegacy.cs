@@ -31,7 +31,7 @@ namespace Cake.Common.Tools.VSWhere.Legacy
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>Installation paths for all instances.</returns>
-        public FilePathCollection Legacy(VSWhereLegacySettings settings)
+        public DirectoryPathCollection Legacy(VSWhereLegacySettings settings)
         {
             if (settings == null)
             {
