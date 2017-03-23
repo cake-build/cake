@@ -67,6 +67,7 @@ namespace Cake.Common.Tools.SignTool
             if (_environment.Platform.Is64Bit)
             {
                 // 64-bit specific paths.
+                files.Add(programFilesPath.Combine(@"Windows Kits\10\bin\x64").CombineWithFilePath("signtool.exe"));
                 files.Add(programFilesPath.Combine(@"Windows Kits\8.1\bin\x64").CombineWithFilePath("signtool.exe"));
                 files.Add(programFilesPath.Combine(@"Windows Kits\8.0\bin\x64").CombineWithFilePath("signtool.exe"));
                 files.Add(programFilesPath.Combine(@"Microsoft SDKs\Windows\v7.1A\Bin").CombineWithFilePath("signtool.exe"));
@@ -74,42 +75,61 @@ namespace Cake.Common.Tools.SignTool
             else
             {
                 // 32-bit specific paths.
+                files.Add(programFilesPath.Combine(@"Windows Kits\10\bin\x86").CombineWithFilePath("signtool.exe"));
                 files.Add(programFilesPath.Combine(@"Windows Kits\8.1\bin\x86").CombineWithFilePath("signtool.exe"));
                 files.Add(programFilesPath.Combine(@"Windows Kits\8.0\bin\x86").CombineWithFilePath("signtool.exe"));
                 files.Add(programFilesPath.Combine(@"Microsoft SDKs\Windows\v7.1A\Bin").CombineWithFilePath("signtool.exe"));
             }
 
-            // Return the first path that exist.
+            // Return the first path that exists.
             return files.FirstOrDefault(file => _fileSystem.Exist(file));
         }
 
         private FilePath GetFromRegistry()
         {
+            // Gets a list of the files we should check.
+            var files = new List<FilePath>();
+
             using (var root = _registry.LocalMachine.OpenKey("Software\\Microsoft\\Microsoft SDKs\\Windows"))
             {
-                if (root == null)
+                if (root != null)
                 {
-                    return null;
-                }
-
-                var keyName = root.GetSubKeyNames();
-                foreach (var key in keyName)
-                {
-                    var sdkKey = root.OpenKey(key);
-                    var installationFolder = sdkKey?.GetValue("InstallationFolder") as string;
-                    if (!string.IsNullOrWhiteSpace(installationFolder))
+                    var keyName = root.GetSubKeyNames();
+                    foreach (var key in keyName)
                     {
-                        var installationPath = new DirectoryPath(installationFolder);
-                        var signToolPath = installationPath.CombineWithFilePath("bin\\signtool.exe");
-
-                        if (_fileSystem.Exist(signToolPath))
+                        var sdkKey = root.OpenKey(key);
+                        var installationFolder = sdkKey?.GetValue("InstallationFolder") as string;
+                        if (!string.IsNullOrWhiteSpace(installationFolder))
                         {
-                            return signToolPath;
+                            var installationPath = new DirectoryPath(installationFolder);
+                            files.Add(installationPath.CombineWithFilePath("bin\\signtool.exe"));
                         }
                     }
                 }
             }
-            return null;
+
+            using (var root = _registry.LocalMachine.OpenKey("Software\\Microsoft\\Windows Kits\\Installed Roots"))
+            {
+                if (root != null)
+                {
+                    var windowsKits = new[] { "KitsRoot", "KitsRoot81", "KitsRoot10" };
+                    foreach (var kit in windowsKits)
+                    {
+                        var kitsRoot = root.GetValue(kit) as string;
+                        if (!string.IsNullOrWhiteSpace(kitsRoot))
+                        {
+                            var kitsPath = new DirectoryPath(kitsRoot);
+
+                            files.Add(_environment.Platform.Is64Bit
+                                ? kitsPath.CombineWithFilePath("bin\\x64\\signtool.exe")
+                                : kitsPath.CombineWithFilePath("bin\\x86\\signtool.exe"));
+                        }
+                    }
+                }
+            }
+
+            // Return the first path that exists.
+            return files.FirstOrDefault(file => _fileSystem.Exist(file));
         }
     }
 }
