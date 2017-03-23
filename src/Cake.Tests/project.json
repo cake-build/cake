@@ -1,5 +1,5 @@
 ﻿{
-  "version": "0.18.0-*",
+  "version": "0.19.0-*",
   "dependencies": {
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "Cake": {
