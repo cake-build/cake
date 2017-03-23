@@ -1,3 +1,7 @@
+### New on 0.19.1 (Released 2017/03/24)
+
+* 1543 VSWhere aliases should return Directory Paths and not File Paths
+
 ### New on 0.19.0 (Released 2017/03/23)
 
 * Add VSWhere support
