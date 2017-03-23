@@ -27,6 +27,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Error")]
         public static void Error(this ICakeContext context, string format, params object[] args)
         {
             if (context == null)
@@ -48,6 +49,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Error")]
         public static void Error(this ICakeContext context, LogAction logAction)
         {
             if (context == null)
@@ -68,6 +70,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Error")]
         public static void Error(this ICakeContext context, object value)
         {
             if (context == null)
@@ -88,6 +91,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Error")]
         public static void Error(this ICakeContext context, string value)
         {
             if (context == null)
@@ -109,6 +113,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Warning")]
         public static void Warning(this ICakeContext context, string format, params object[] args)
         {
             if (context == null)
@@ -130,6 +135,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Warning")]
         public static void Warning(this ICakeContext context, LogAction logAction)
         {
             if (context == null)
@@ -150,6 +156,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Warning")]
         public static void Warning(this ICakeContext context, object value)
         {
             if (context == null)
@@ -170,6 +177,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Warning")]
         public static void Warning(this ICakeContext context, string value)
         {
             if (context == null)
@@ -191,6 +199,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Information")]
         public static void Information(this ICakeContext context, string format, params object[] args)
         {
             if (context == null)
@@ -212,6 +221,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Information")]
         public static void Information(this ICakeContext context, LogAction logAction)
         {
             if (context == null)
@@ -232,6 +242,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Information")]
         public static void Information(this ICakeContext context, object value)
         {
             if (context == null)
@@ -252,6 +263,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Information")]
         public static void Information(this ICakeContext context, string value)
         {
             if (context == null)
@@ -273,6 +285,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Verbose")]
         public static void Verbose(this ICakeContext context, string format, params object[] args)
         {
             if (context == null)
@@ -294,6 +307,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Verbose")]
         public static void Verbose(this ICakeContext context, LogAction logAction)
         {
             if (context == null)
@@ -314,6 +328,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Verbose")]
         public static void Verbose(this ICakeContext context, object value)
         {
             if (context == null)
@@ -334,6 +349,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Verbose")]
         public static void Verbose(this ICakeContext context, string value)
         {
             if (context == null)
@@ -355,6 +371,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Debug")]
         public static void Debug(this ICakeContext context, string format, params object[] args)
         {
             if (context == null)
@@ -376,6 +393,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Debug")]
         public static void Debug(this ICakeContext context, LogAction logAction)
         {
             if (context == null)
@@ -396,6 +414,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Debug")]
         public static void Debug(this ICakeContext context, object value)
         {
             if (context == null)
@@ -416,6 +435,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Debug")]
         public static void Debug(this ICakeContext context, string value)
         {
             if (context == null)
