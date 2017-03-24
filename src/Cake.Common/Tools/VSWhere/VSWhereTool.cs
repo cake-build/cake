@@ -57,13 +57,13 @@ namespace Cake.Common.Tools.VSWhere
         /// <param name="settings">The settings.</param>
         /// <param name="builder">The process argument builder.</param>
         /// <returns>The parsed file paths.</returns>
-        protected FilePathCollection RunVSWhere(TSettings settings, ProcessArgumentBuilder builder)
+        protected DirectoryPathCollection RunVSWhere(TSettings settings, ProcessArgumentBuilder builder)
         {
             IEnumerable<string> installationPaths = null;
             Run(settings, builder, new ProcessSettings { RedirectStandardOutput = true },
                 process => installationPaths = process.GetStandardOutput());
 
-            return new FilePathCollection(installationPaths?.Select(FilePath.FromString) ?? Enumerable.Empty<FilePath>(),
+            return new DirectoryPathCollection(installationPaths?.Select(DirectoryPath.FromString) ?? Enumerable.Empty<DirectoryPath>(),
                 PathComparer.Default);
         }
 

@@ -31,7 +31,7 @@ namespace Cake.Common.Tools.VSWhere.Product
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>Installation paths for all instances.</returns>
-        public FilePathCollection Products(VSWhereProductSettings settings)
+        public DirectoryPathCollection Products(VSWhereProductSettings settings)
         {
             if (settings == null)
             {
