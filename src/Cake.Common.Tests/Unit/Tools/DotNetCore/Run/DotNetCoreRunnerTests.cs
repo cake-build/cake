@@ -98,6 +98,20 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Run
                 // Then
                 Assert.Equal("run --framework dnxcore50 --configuration Release", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_Host_Arguments()
+            {
+                // Given
+                var fixture = new DotNetCoreRunnerFixture();
+                fixture.Settings.DiagnosticOutput = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("--diagnostics run", result.Args);
+            }
         }
     }
 }

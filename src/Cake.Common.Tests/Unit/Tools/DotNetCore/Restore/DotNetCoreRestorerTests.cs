@@ -155,6 +155,20 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                              " --source \"https://www.example.com/source1\"" +
                              " --source \"https://www.example.com/source2\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_Host_Arguments()
+            {
+                // Given
+                var fixture = new DotNetCoreRestorerFixture();
+                fixture.Settings.DiagnosticOutput = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("--diagnostics restore", result.Args);
+            }
         }
     }
 }

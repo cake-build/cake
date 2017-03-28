@@ -51,6 +51,19 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// Runs the dotnet cli command using the specified settings and arguments.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="arguments">The arguments.</param>
+        protected void RunCommand(TSettings settings, ProcessArgumentBuilder arguments)
+        {
+            // add arguments common to all commands last
+            AppendCommonArguments(arguments, settings);
+
+            Run(settings, arguments, null, null);
+        }
+
+        /// <summary>
         /// Creates a <see cref="ProcessArgumentBuilder"/> and adds common commandline arguments.
         /// </summary>
         /// <param name="settings">The settings.</param>
@@ -62,6 +75,29 @@ namespace Cake.Common.Tools.DotNetCore
             if (settings.Verbose)
             {
                 builder.Append("--verbose");
+            }
+
+            if (settings.DiagnosticOutput)
+            {
+                builder.Append("--diagnostics");
+            }
+
+            return builder;
+        }
+
+        /// <summary>
+        /// Adds common commandline arguments.
+        /// </summary>
+        /// <param name="builder">Process argument builder to update.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns>Returns <see cref="ProcessArgumentBuilder"/> updated with common commandline arguments.</returns>
+        private ProcessArgumentBuilder AppendCommonArguments(ProcessArgumentBuilder builder, TSettings settings)
+        {
+            // Verbosity
+            if (settings.Verbosity.HasValue)
+            {
+                builder.Append("--verbosity");
+                builder.Append(settings.Verbosity.ToString());
             }
 
             return builder;

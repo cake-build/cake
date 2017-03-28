@@ -93,6 +93,21 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Execute
                 // Then
                 Assert.Equal("--verbose /Working/bin/Debug/app.dll", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_Host_Arguments()
+            {
+                // Given
+                var fixture = new DotNetCoreExecutorFixture();
+                fixture.AssemblyPath = "./bin/Debug/app.dll";
+                fixture.Settings.DiagnosticOutput = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("--diagnostics /Working/bin/Debug/app.dll", result.Args);
+            }
         }
     }
 }
