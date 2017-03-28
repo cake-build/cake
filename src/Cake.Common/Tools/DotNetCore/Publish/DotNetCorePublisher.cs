@@ -44,7 +44,7 @@ namespace Cake.Common.Tools.DotNetCore.Publish
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            Run(settings, GetArguments(path, settings));
+            RunCommand(settings, GetArguments(path, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(string path, DotNetCorePublishSettings settings)

@@ -67,6 +67,6 @@ namespace Cake.Common.Tools.DotNetCore.Restore
         /// <summary>
         /// Gets or sets the verbosity of logging to use.
         /// </summary>
-        public DotNetCoreRestoreVerbosity? Verbosity { get; set; }
+        public new DotNetCoreRestoreVerbosity? Verbosity { get; set; }
     }
 }

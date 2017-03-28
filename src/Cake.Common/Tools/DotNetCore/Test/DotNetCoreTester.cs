@@ -44,7 +44,7 @@ namespace Cake.Common.Tools.DotNetCore.Test
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            Run(settings, GetArguments(project, settings));
+            RunCommand(settings, GetArguments(project, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(string project, DotNetCoreTestSettings settings)
