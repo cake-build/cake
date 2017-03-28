@@ -42,7 +42,7 @@ namespace Cake.Common.Tools.DotNetCore.Run
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            Run(settings, GetArguments(project, arguments, settings));
+            RunCommand(settings, GetArguments(project, arguments, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(string project, ProcessArgumentBuilder arguments, DotNetCoreRunSettings settings)

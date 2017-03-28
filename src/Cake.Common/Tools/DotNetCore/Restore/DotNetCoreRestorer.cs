@@ -49,7 +49,7 @@ namespace Cake.Common.Tools.DotNetCore.Restore
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            Run(settings, GetArguments(root, settings));
+            RunCommand(settings, GetArguments(root, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(string root, DotNetCoreRestoreSettings settings)

@@ -15,5 +15,15 @@ namespace Cake.Common.Tools.DotNetCore
         /// Gets or sets a value indicating whether to not enable verbose output.
         /// </summary>
         public bool Verbose { get; set; }
+
+        /// <summary>
+        /// Gets or sets the verbosity of logging to use.
+        /// </summary>
+        public DotNetCoreVerbosity? Verbosity { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to not enable diagnostic output.
+        /// </summary>
+        public bool DiagnosticOutput { get; set; }
     }
 }
