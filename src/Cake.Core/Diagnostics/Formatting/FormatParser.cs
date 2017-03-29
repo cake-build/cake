@@ -45,7 +45,7 @@ namespace Cake.Core.Diagnostics.Formatting
             if ((char)reader.Peek() == '{')
             {
                 reader.Read();
-                return new LiteralToken("{{");
+                return new LiteralToken("{");
             }
             var builder = new StringBuilder();
             while (true)
@@ -105,6 +105,12 @@ namespace Cake.Core.Diagnostics.Formatting
                 if (character == '{')
                 {
                     break;
+                }
+                if (character == '}' && reader.Peek() == '}')
+                {
+                    // escaped curly sequence, consume the first character,
+                    // let the iteration/append continue below.
+                    reader.Read();
                 }
                 builder.Append((char)reader.Read());
             }
