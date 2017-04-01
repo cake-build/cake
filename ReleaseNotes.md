@@ -1,3 +1,7 @@
+### New on 0.19.2 (Released 2017/04/01)
+
+* 1546 MSBuild Logger Path are not correctly quoted
+
 ### New on 0.19.1 (Released 2017/03/24)
 
 * 1543 VSWhere aliases should return Directory Paths and not File Paths
