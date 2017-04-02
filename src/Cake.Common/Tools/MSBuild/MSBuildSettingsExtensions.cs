@@ -345,7 +345,13 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings WithConsoleLoggerParameter(this MSBuildSettings settings, string parameter)
         {
-            throw new NotImplementedException();
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.ConsoleLoggerParameters.Add(parameter);
+            return settings;
         }
     }
 }

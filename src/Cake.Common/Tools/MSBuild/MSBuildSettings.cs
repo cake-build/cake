@@ -135,7 +135,7 @@ namespace Cake.Common.Tools.MSBuild
         /// Use this setting when working with the new csproj format.
         /// </summary>
         public bool Restore { get; set; }
-        
+
         /// <summary>
         /// Gets the console logger parameters.
         /// </summary>
