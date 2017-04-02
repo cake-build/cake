@@ -336,5 +336,16 @@ namespace Cake.Common.Tools.MSBuild
 
             return settings;
         }
+
+        /// <summary>
+        /// Adds a console logger parameter.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="parameter">The console logger parameter.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings WithConsoleLoggerParameter(this MSBuildSettings settings, string parameter)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
