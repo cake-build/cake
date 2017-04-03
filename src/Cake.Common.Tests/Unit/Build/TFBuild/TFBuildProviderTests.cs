@@ -22,7 +22,7 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild
                 var result = Record.Exception(() => new TFBuildProvider(null, new NullLog()));
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -32,7 +32,7 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild
                 var result = Record.Exception(() => new TFBuildProvider(new FakeEnvironment(PlatformFamily.Unknown), null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "log");
+                AssertEx.IsArgumentNullException(result, "log");
             }
         }
 

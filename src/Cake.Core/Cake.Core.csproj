@@ -1,0 +1,74 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>The Cake core library.</Description>
+    <Copyright>Copyright (c) .NET Foundation and contributors</Copyright>
+    <VersionPrefix>0.20.0</VersionPrefix>
+    <Authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström and contributors</Authors>
+    <TargetFrameworks>netstandard1.6;net45</TargetFrameworks>
+    <PlatformTarget>AnyCpu</PlatformTarget>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyName>Cake.Core</AssemblyName>
+    <PackageId>Cake.Core</PackageId>
+    <PackageTags>Cake;Script;Build</PackageTags>
+    <PackageIconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</PackageIconUrl>
+    <PackageLicenseUrl>https://github.com/cake-build/cake/blob/develop/LICENSE</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/cake-build/cake</RepositoryUrl>
+    <OutputType>Library</OutputType>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+  </PropertyGroup>
+
+  <!-- StyleCop -->
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>..\Cake.ruleset</CodeAnalysisRuleSet>
+    <Company>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström and contributors</Company>
+  </PropertyGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta001">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\SolutionInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
+    <PackageReference Include="Microsoft.Win32.Registry" Version="4.3.0" />
+    <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
+    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
+    <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="1.1.1" />
+    <PackageReference Include="Microsoft.NET.Sdk">
+      <Version>1.0.0-alpha-20161104-2</Version>
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
+    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+</Project>

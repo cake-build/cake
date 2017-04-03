@@ -25,7 +25,7 @@ namespace Cake.Tests.Unit.Commands
                 var result = Record.Exception(() => fixture.Execute());
 
                 // Then
-                Assert.IsArgumentNullException(result, "options");
+                AssertEx.IsArgumentNullException(result, "options");
             }
 
             [Fact]

@@ -20,7 +20,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSWhere
                 var result = Record.Exception(() => VSWhereAliases.VSWhereLegacy(null, true));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -33,7 +33,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSWhere
                 var result = Record.Exception(() => VSWhereAliases.VSWhereLegacy(context, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
         }
 
@@ -46,7 +46,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSWhere
                 var result = Record.Exception(() => VSWhereAliases.VSWhereLatest(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -59,7 +59,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSWhere
                 var result = Record.Exception(() => VSWhereAliases.VSWhereLatest(context, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
         }
 
@@ -72,7 +72,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSWhere
                 var result = Record.Exception(() => VSWhereAliases.VSWhereAll(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -85,7 +85,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSWhere
                 var result = Record.Exception(() => VSWhereAliases.VSWhereAll(context, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
         }
 
@@ -101,7 +101,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSWhere
                 var result = Record.Exception(() => VSWhereAliases.VSWhereProducts(context, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "products");
+                AssertEx.IsArgumentNullException(result, "products");
             }
 
             [Fact]
@@ -114,7 +114,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSWhere
                 var result = Record.Exception(() => VSWhereAliases.VSWhereProducts(context, "Community", null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
         }
     }

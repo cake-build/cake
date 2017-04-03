@@ -16,7 +16,7 @@ namespace Cake.Core.Tests.Unit.Annotations
             var result = Record.Exception(() => new CakeModuleAttribute(null));
 
             // Then
-            Assert.IsArgumentNullException(result, "moduleType");
+            AssertEx.IsArgumentNullException(result, "moduleType");
         }
     }
 }

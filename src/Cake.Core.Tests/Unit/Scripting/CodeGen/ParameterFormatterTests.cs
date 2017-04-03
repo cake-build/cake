@@ -19,7 +19,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             var result = Record.Exception(() => _parameterFormatter.FormatName((ParameterInfo)null));
 
             // Then
-            Assert.IsArgumentNullException(result, "parameterInfo");
+            AssertEx.IsArgumentNullException(result, "parameterInfo");
         }
 
         [Theory]
@@ -33,7 +33,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             var result = Record.Exception(() => _parameterFormatter.FormatName(arg));
 
             // Then
-            Assert.IsArgumentException(result, "parameterName", "Parameter name cannot be null or whitespace");
+            AssertEx.IsArgumentException(result, "parameterName", "Parameter name cannot be null or whitespace");
         }
 
         [Theory]

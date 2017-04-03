@@ -24,7 +24,7 @@ namespace Cake.Common.Tests.Unit.Text
                 var result = Record.Exception(() => fixture.CreateTextTransformation());
 
                 // Then
-                Assert.IsArgumentNullException(result, "template");
+                AssertEx.IsArgumentNullException(result, "template");
             }
         }
 
@@ -41,7 +41,7 @@ namespace Cake.Common.Tests.Unit.Text
                 var result = Record.Exception(() => transformation.Save(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "path");
             }
 
             [Fact]

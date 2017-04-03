@@ -24,7 +24,7 @@ namespace Cake.Common.Tests.Unit
                 var result = Record.Exception(() => context.ParseAllReleaseNotes(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "filePath");
+                AssertEx.IsArgumentNullException(result, "filePath");
             }
 
             [Fact]

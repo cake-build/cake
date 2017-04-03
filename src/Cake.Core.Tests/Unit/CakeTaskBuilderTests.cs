@@ -17,7 +17,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => new CakeTaskBuilder<ActionTask>(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "task");
+                AssertEx.IsArgumentNullException(result, "task");
             }
         }
 

@@ -21,7 +21,7 @@ namespace Cake.Common.Tests.Unit
                 var result = Record.Exception(() => parser.Parse(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "content");
+                AssertEx.IsArgumentNullException(result, "content");
             }
 
             [Fact]

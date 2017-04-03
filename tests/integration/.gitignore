@@ -2,5 +2,8 @@
 tools/
 temp/
 
+# Dotnet
+.dotnet
+
 # Windows
 Thumbs.db

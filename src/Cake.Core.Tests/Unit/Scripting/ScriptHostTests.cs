@@ -22,7 +22,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => new ScriptHostFixture.TestingScriptHost(null, context));
 
                 // Then
-                Assert.IsArgumentNullException(result, "engine");
+                AssertEx.IsArgumentNullException(result, "engine");
             }
         }
 

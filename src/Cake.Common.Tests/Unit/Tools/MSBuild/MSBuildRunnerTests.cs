@@ -538,7 +538,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "MSBuild: Could not locate executable.");
+                AssertEx.IsCakeException(result, "MSBuild: Could not locate executable.");
             }
 
             [Fact]
@@ -783,7 +783,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "MSBuild: Process was not started.");
+                AssertEx.IsCakeException(result, "MSBuild: Process was not started.");
             }
 
             [Fact]
@@ -797,7 +797,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "MSBuild: Process returned an error (exit code 1).");
+                AssertEx.IsCakeException(result, "MSBuild: Process returned an error (exit code 1).");
             }
 
             [Theory]
@@ -830,7 +830,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "Encountered unknown MSBuild build log verbosity.");
+                AssertEx.IsCakeException(result, "Encountered unknown MSBuild build log verbosity.");
             }
 
             [Fact]

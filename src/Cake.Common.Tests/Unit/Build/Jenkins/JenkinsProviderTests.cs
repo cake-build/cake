@@ -19,7 +19,7 @@ namespace Cake.Common.Tests.Unit.Build.Jenkins
                 var result = Record.Exception(() => new JenkinsProvider(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
         }
 

@@ -20,7 +20,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => task.AddCriteria(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "criteria");
+                AssertEx.IsArgumentNullException(result, "criteria");
             }
 
             [Fact]

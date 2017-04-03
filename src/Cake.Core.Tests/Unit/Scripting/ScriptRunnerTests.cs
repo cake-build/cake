@@ -29,7 +29,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => fixture.CreateScriptRunner());
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -43,7 +43,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => fixture.CreateScriptRunner());
 
                 // Then
-                Assert.IsArgumentNullException(result, "engine");
+                AssertEx.IsArgumentNullException(result, "engine");
             }
 
             [Fact]
@@ -57,7 +57,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => fixture.CreateScriptRunner());
 
                 // Then
-                Assert.IsArgumentNullException(result, "aliasFinder");
+                AssertEx.IsArgumentNullException(result, "aliasFinder");
             }
 
             [Fact]
@@ -71,7 +71,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => fixture.CreateScriptRunner());
 
                 // Then
-                Assert.IsArgumentNullException(result, "analyzer");
+                AssertEx.IsArgumentNullException(result, "analyzer");
             }
 
             [Fact]
@@ -85,7 +85,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => fixture.CreateScriptRunner());
 
                 // Then
-                Assert.IsArgumentNullException(result, "conventions");
+                AssertEx.IsArgumentNullException(result, "conventions");
             }
 
             [Fact]
@@ -99,7 +99,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => fixture.CreateScriptRunner());
 
                 // Then
-                Assert.IsArgumentNullException(result, "assemblyLoader");
+                AssertEx.IsArgumentNullException(result, "assemblyLoader");
             }
         }
 
@@ -116,7 +116,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => runner.Run(null, fixture.Script, fixture.ArgumentDictionary));
 
                 // Then
-                Assert.IsArgumentNullException(result, "host");
+                AssertEx.IsArgumentNullException(result, "host");
             }
 
             [Fact]
@@ -130,7 +130,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => runner.Run(fixture.Host, null, fixture.ArgumentDictionary));
 
                 // Then
-                Assert.IsArgumentNullException(result, "scriptPath");
+                AssertEx.IsArgumentNullException(result, "scriptPath");
             }
 
             [Fact]
@@ -144,7 +144,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => runner.Run(fixture.Host, fixture.Script, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "arguments");
+                AssertEx.IsArgumentNullException(result, "arguments");
             }
 
             [Fact]

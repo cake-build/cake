@@ -25,7 +25,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Add
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "packageId");
+                AssertEx.IsArgumentNullException(result, "packageId");
             }
 
             [Fact]
@@ -39,7 +39,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Add
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -53,7 +53,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Add
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "NuGet: Could not locate executable.");
+                AssertEx.IsCakeException(result, "NuGet: Could not locate executable.");
             }
 
             [Theory]
@@ -100,7 +100,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Add
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "NuGet: Process was not started.");
+                AssertEx.IsCakeException(result, "NuGet: Process was not started.");
             }
 
             [Fact]
@@ -114,7 +114,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Add
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "NuGet: Process returned an error (exit code 1).");
+                AssertEx.IsCakeException(result, "NuGet: Process returned an error (exit code 1).");
             }
 
             [Fact]

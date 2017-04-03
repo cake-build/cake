@@ -27,7 +27,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "fileSystem");
+                AssertEx.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -41,7 +41,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -55,7 +55,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "processRunner");
+                AssertEx.IsArgumentNullException(result, "processRunner");
             }
         }
 
@@ -72,7 +72,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "assemblyPaths");
+                AssertEx.IsArgumentNullException(result, "assemblyPaths");
             }
 
             [Fact]
@@ -86,7 +86,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]

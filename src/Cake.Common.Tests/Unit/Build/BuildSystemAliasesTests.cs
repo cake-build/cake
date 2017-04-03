@@ -18,7 +18,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => BuildSystemAliases.BuildSystem(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
         }
         public sealed class TheAppVeyorMethod
@@ -30,7 +30,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => BuildSystemAliases.AppVeyor(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
         }
         public sealed class TheTeamCityMethod
@@ -42,7 +42,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => BuildSystemAliases.TeamCity(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
         }
         public sealed class TheBambooMethod
@@ -54,7 +54,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => BuildSystemAliases.Bamboo(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
         }
 
@@ -67,7 +67,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => BuildSystemAliases.Jenkins(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
         }
 
@@ -80,7 +80,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => BuildSystemAliases.Bitrise(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
         }
 
@@ -93,7 +93,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => BuildSystemAliases.TravisCI(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
         }
 
@@ -106,7 +106,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => BuildSystemAliases.BitbucketPipelines(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
         }
 
@@ -119,7 +119,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => BuildSystemAliases.GitLabCI(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
         }
 
@@ -132,7 +132,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => BuildSystemAliases.TFBuild(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
         }
     }

@@ -18,7 +18,7 @@ namespace Cake.Common.Tests.Unit
                 var result = Record.Exception(() => new ReleaseNotes(null, Enumerable.Empty<string>(), null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "version");
+                AssertEx.IsArgumentNullException(result, "version");
             }
         }
     }

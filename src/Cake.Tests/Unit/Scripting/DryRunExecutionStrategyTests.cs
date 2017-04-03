@@ -21,7 +21,7 @@ namespace Cake.Tests.Unit.Scripting
                 var result = Record.Exception(() => new DryRunExecutionStrategy(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "log");
+                AssertEx.IsArgumentNullException(result, "log");
             }
         }
 

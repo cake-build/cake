@@ -24,7 +24,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportUnit
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "inputFolder");
+                AssertEx.IsArgumentNullException(result, "inputFolder");
             }
 
             [Fact]
@@ -38,7 +38,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportUnit
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -111,7 +111,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportUnit
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "inputFile");
+                AssertEx.IsArgumentNullException(result, "inputFile");
             }
 
             [Fact]
@@ -125,7 +125,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportUnit
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "outputFile");
+                AssertEx.IsArgumentNullException(result, "outputFile");
             }
 
             [Fact]
@@ -139,7 +139,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportUnit
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]

@@ -32,7 +32,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => new TestingPath(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "path");
             }
 
             [Theory]

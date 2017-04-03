@@ -1,0 +1,72 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Contains testing utilities for Cake.</Description>
+    <Copyright>Copyright (c) .NET Foundation and contributors</Copyright>
+    <VersionPrefix>0.20.0</VersionPrefix>
+    <Authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström and contributors</Authors>
+    <TargetFrameworks>netstandard1.6;net45</TargetFrameworks>
+    <PlatformTarget>AnyCpu</PlatformTarget>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyName>Cake.Testing</AssemblyName>
+    <PackageId>Cake.Testing</PackageId>
+    <PackageTags>Cake;Script;Build</PackageTags>
+    <PackageIconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</PackageIconUrl>
+    <PackageLicenseUrl>https://github.com/cake-build/cake/blob/develop/LICENSE</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/cake-build/cake</RepositoryUrl>
+    <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.6' ">$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+  </PropertyGroup>
+
+  <!-- StyleCop -->
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>..\Cake.ruleset</CodeAnalysisRuleSet>
+    <Company>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström and contributors</Company>
+  </PropertyGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta001">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\SolutionInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
+    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
+    <PackageReference Include="Microsoft.NET.Sdk">
+      <Version>1.0.0-alpha-20161104-2</Version>
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+    <Reference Include="System.Runtime" />
+    <Reference Include="System.Threading.Tasks" />
+    <Reference Include="System.Web" />
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+</Project>

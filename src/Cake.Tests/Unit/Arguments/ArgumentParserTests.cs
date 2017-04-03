@@ -29,7 +29,7 @@ namespace Cake.Tests.Unit.Arguments
                 var result = Record.Exception(() => parser.Parse(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "args");
+                AssertEx.IsArgumentNullException(result, "args");
             }
 
             [Fact]
