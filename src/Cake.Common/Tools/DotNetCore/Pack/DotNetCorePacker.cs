@@ -66,17 +66,22 @@ namespace Cake.Common.Tools.DotNetCore.Pack
                 builder.AppendQuoted(settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
             }
 
-            // Build base path
-            if (settings.BuildBasePath != null)
-            {
-                builder.Append("--build-base-path");
-                builder.AppendQuoted(settings.BuildBasePath.MakeAbsolute(_environment).FullPath);
-            }
-
             // No build
             if (settings.NoBuild)
             {
                 builder.Append("--no-build");
+            }
+
+            // Include symbols
+            if (settings.IncludeSymbols)
+            {
+                builder.Append("--include-symbols");
+            }
+
+            // Include source
+            if (settings.IncludeSource)
+            {
+                builder.Append("--include-source");
             }
 
             // Configuration
@@ -91,6 +96,12 @@ namespace Cake.Common.Tools.DotNetCore.Pack
             {
                 builder.Append("--version-suffix");
                 builder.Append(settings.VersionSuffix);
+            }
+
+            // Serviceable
+            if (settings.Serviceable)
+            {
+                builder.Append("--serviceable");
             }
 
             return builder;
