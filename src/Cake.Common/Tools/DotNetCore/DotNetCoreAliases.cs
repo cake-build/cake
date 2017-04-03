@@ -4,6 +4,7 @@
 
 using System;
 using Cake.Common.Tools.DotNetCore.Build;
+using Cake.Common.Tools.DotNetCore.Clean;
 using Cake.Common.Tools.DotNetCore.Execute;
 using Cake.Common.Tools.DotNetCore.Pack;
 using Cake.Common.Tools.DotNetCore.Publish;
@@ -531,6 +532,61 @@ namespace Cake.Common.Tools.DotNetCore
 
             var tester = new DotNetCoreTester(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             tester.Test(project, settings);
+        }
+
+        /// <summary>
+        /// Cleans a project's output.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project's path.</param>
+        /// <example>
+        /// <code>
+        ///     DotNetCoreClean("./src/project");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Clean")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Clean")]
+        public static void DotNetCoreClean(this ICakeContext context, string project)
+        {
+            context.DotNetCoreClean(project, null);
+        }
+
+        /// <summary>
+        /// Cleans a project's output.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The projects path.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        ///     var settings = new DotNetCoreCleanSettings
+        ///     {
+        ///         Framework = "netcoreapp1.0",
+        ///         Configuration = "Debug",
+        ///         OutputDirectory = "./artifacts/"
+        ///     };
+        ///
+        ///     DotNetCoreClean("./src/project", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Clean")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Clean")]
+        public static void DotNetCoreClean(this ICakeContext context, string project, DotNetCoreCleanSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings == null)
+            {
+                settings = new DotNetCoreCleanSettings();
+            }
+
+            var cleaner = new DotNetCoreCleaner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            cleaner.Clean(project, settings);
         }
     }
 }
