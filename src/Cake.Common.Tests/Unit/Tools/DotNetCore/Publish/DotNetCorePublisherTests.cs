@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Tools.DotNetCore.Publish;
+using Cake.Common.Tools.DotNetCore;
 using Cake.Testing;
 using Xunit;
 
@@ -107,17 +108,15 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Publish
                 fixture.Settings.Framework = "dnxcore50";
                 fixture.Settings.Configuration = "Release";
                 fixture.Settings.Runtime = "runtime1";
-                fixture.Settings.BuildBasePath = "./temp/";
                 fixture.Settings.OutputDirectory = "./artifacts/";
-                fixture.Settings.NoBuild = true;
-                fixture.Settings.NativeSubDirectory = true;
                 fixture.Settings.VersionSuffix = "rc1";
+                fixture.Settings.Verbosity = DotNetCoreVerbosity.Minimal;
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("publish --output \"/Working/artifacts\" --build-base-path \"/Working/temp\" --runtime runtime1 --framework dnxcore50 --configuration Release --version-suffix rc1 --native-subdirectory --no-build", result.Args);
+                Assert.Equal("publish --output \"/Working/artifacts\" --runtime runtime1 --framework dnxcore50 --configuration Release --version-suffix rc1 --verbosity Minimal", result.Args);
             }
 
             [Fact]
