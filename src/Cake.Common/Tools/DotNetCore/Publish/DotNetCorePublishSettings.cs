@@ -12,11 +12,6 @@ namespace Cake.Common.Tools.DotNetCore.Publish
     public sealed class DotNetCorePublishSettings : DotNetCoreSettings
     {
         /// <summary>
-        /// Gets or sets the directory in which to place temporary outputs.
-        /// </summary>
-        public DirectoryPath BuildBasePath { get; set; }
-
-        /// <summary>
         /// Gets or sets the output directory.
         /// </summary>
         public DirectoryPath OutputDirectory { get; set; }
@@ -40,16 +35,5 @@ namespace Cake.Common.Tools.DotNetCore.Publish
         /// Gets or sets the value that defines what `*` should be replaced with in version field in project.json.
         /// </summary>
         public string VersionSuffix { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to not build projects before publishing.
-        /// </summary>
-        public bool NoBuild { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to enable a temporary mechanism to include subdirectories
-        /// from native assets of dependency packages in output.
-        /// </summary>
-        public bool NativeSubDirectory { get; set; }
     }
 }
