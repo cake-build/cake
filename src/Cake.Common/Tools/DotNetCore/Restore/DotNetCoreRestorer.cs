@@ -64,6 +64,13 @@ namespace Cake.Common.Tools.DotNetCore.Restore
                 builder.AppendQuoted(root);
             }
 
+            // Runtime
+            if (!string.IsNullOrEmpty(settings.Runtime))
+            {
+                builder.Append("--runtime");
+                builder.Append(settings.Runtime);
+            }
+
             // Output directory
             if (settings.PackagesDirectory != null)
             {
@@ -81,39 +88,12 @@ namespace Cake.Common.Tools.DotNetCore.Restore
                 }
             }
 
-            // List of fallback package sources
-            if (settings.FallbackSources != null)
-            {
-                foreach (var source in settings.FallbackSources)
-                {
-                    builder.Append("--fallbacksource");
-                    builder.AppendQuoted(source);
-                }
-            }
-
             // Config file
             if (settings.ConfigFile != null)
             {
                 builder.Append("--configfile");
                 builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
             }
-
-            // List of runtime identifiers
-            if (settings.InferRuntimes != null)
-            {
-                foreach (var runtime in settings.InferRuntimes)
-                {
-                    builder.Append("--infer-runtimes");
-                    builder.AppendQuoted(runtime);
-                }
-            }
-#pragma warning disable 0618
-            // Quiet
-            if (settings.Quiet && !settings.Verbosity.HasValue)
-            {
-                _log.Warning(".NET CLI does not support this option anymore. Please use DotNetCoreRestoreSettings.Verbosity instead.");
-            }
-#pragma warning restore 0618
 
             // Ignore failed sources
             if (settings.NoCache)
@@ -133,17 +113,10 @@ namespace Cake.Common.Tools.DotNetCore.Restore
                 builder.Append("--ignore-failed-sources");
             }
 
-            // Force english output
-            if (settings.ForceEnglishOutput)
+            // Ignore project to project references
+            if (settings.NoDependencies)
             {
-                builder.Append("--force-english-output");
-            }
-
-            // Verbosity
-            if (settings.Verbosity.HasValue)
-            {
-                builder.Append("--verbosity");
-                builder.Append(settings.Verbosity.ToString());
+                builder.Append("--no-dependencies");
             }
 
             return builder;
