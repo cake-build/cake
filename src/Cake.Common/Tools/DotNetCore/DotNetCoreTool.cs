@@ -72,11 +72,6 @@ namespace Cake.Common.Tools.DotNetCore
         {
             var builder = new ProcessArgumentBuilder();
 
-            if (settings.Verbose)
-            {
-                builder.Append("--verbose");
-            }
-
             if (settings.DiagnosticOutput)
             {
                 builder.Append("--diagnostics");

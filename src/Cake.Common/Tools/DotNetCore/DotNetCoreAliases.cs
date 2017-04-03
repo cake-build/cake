@@ -73,9 +73,9 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        ///     var settings = new DotNetCoreSettings
+        ///     var settings = new DotNetCoreExecuteSettings
         ///     {
-        ///         Verbose = true
+        ///         FrameworkVersion = "1.0.3"
         ///     };
         ///
         ///     DotNetCoreExecute("./bin/Debug/app.dll", "--arg", settings);
@@ -84,7 +84,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Execute")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Execute")]
-        public static void DotNetCoreExecute(this ICakeContext context, FilePath assemblyPath, ProcessArgumentBuilder arguments, DotNetCoreSettings settings)
+        public static void DotNetCoreExecute(this ICakeContext context, FilePath assemblyPath, ProcessArgumentBuilder arguments, DotNetCoreExecuteSettings settings)
         {
             if (context == null)
             {
