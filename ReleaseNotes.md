@@ -1,3 +1,7 @@
+### New on 0.19.3 (Released 2017/04/03)
+
+* 1544 Windows 10 SDK path is not being resolved
+
 ### New on 0.19.2 (Released 2017/04/01)
 
 * 1546 MSBuild Logger Path are not correctly quoted
