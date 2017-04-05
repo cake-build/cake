@@ -116,6 +116,20 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Pack
                 // Then
                 Assert.Equal("pack --output \"/Working/artifacts\" --build-base-path \"/Working/temp\" --no-build --configuration Release --version-suffix rc1", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_Host_Arguments()
+            {
+                // Given
+                var fixture = new DotNetCorePackFixture();
+                fixture.Settings.DiagnosticOutput = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("--diagnostics pack", result.Args);
+            }
         }
     }
 }

@@ -120,6 +120,20 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
                 // Then
                 Assert.Equal("test --output \"/Working/artifacts\" --build-base-path \"/Working/temp\" --runtime runtime1 --framework dnxcore50 --configuration Release --no-build", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_Host_Arguments()
+            {
+                // Given
+                var fixture = new DotNetCoreTesterFixture();
+                fixture.Settings.DiagnosticOutput = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("--diagnostics test", result.Args);
+            }
         }
     }
 }

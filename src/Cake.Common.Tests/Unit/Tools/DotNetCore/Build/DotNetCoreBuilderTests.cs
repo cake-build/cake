@@ -155,6 +155,21 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Build
                 // Then
                 Assert.Equal("build \"./src/*\" --build-base-path \"/Working/temp\" --build-profile --no-incremental --no-dependencies", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_Host_Arguments()
+            {
+                // Given
+                var fixture = new DotNetCoreBuilderFixture();
+                fixture.Project = "./src/*";
+                fixture.Settings.DiagnosticOutput = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("--diagnostics build \"./src/*\"", result.Args);
+            }
         }
     }
 }
