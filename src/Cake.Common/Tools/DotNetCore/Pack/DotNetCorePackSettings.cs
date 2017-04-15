@@ -12,11 +12,6 @@ namespace Cake.Common.Tools.DotNetCore.Pack
     public sealed class DotNetCorePackSettings : DotNetCoreSettings
     {
         /// <summary>
-        /// Gets or sets the directory in which to place temporary outputs.
-        /// </summary>
-        public DirectoryPath BuildBasePath { get; set; }
-
-        /// <summary>
         /// Gets or sets the output directory.
         /// </summary>
         public DirectoryPath OutputDirectory { get; set; }
@@ -35,5 +30,24 @@ namespace Cake.Common.Tools.DotNetCore.Pack
         /// Gets or sets a value indicating whether to not build project before packing.
         /// </summary>
         public bool NoBuild { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to generate the symbols nupkg.
+        /// </summary>
+        public bool IncludeSymbols { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to includes the source files in the NuGet package.
+        /// The sources files are included in the src folder within the nupkg.
+        /// </summary>
+        public bool IncludeSource { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to set the serviceable flag in the package.
+        /// </summary>
+        /// <remarks>
+        /// For more information, see https://aka.ms/nupkgservicing
+        /// </remarks>
+        public bool Serviceable { get; set; }
     }
 }
