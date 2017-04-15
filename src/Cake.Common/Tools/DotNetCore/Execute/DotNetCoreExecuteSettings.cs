@@ -9,5 +9,9 @@ namespace Cake.Common.Tools.DotNetCore.Execute
     /// </summary>
     public sealed class DotNetCoreExecuteSettings : DotNetCoreSettings
     {
+        /// <summary>
+        /// Gets or sets the version of the installed Shared Framework to use to run the application.
+        /// </summary>
+        public string FrameworkVersion { get; set; }
     }
 }
