@@ -12,19 +12,32 @@ namespace Cake.Common.Tools.DotNetCore.Test
     public sealed class DotNetCoreTestSettings : DotNetCoreSettings
     {
         /// <summary>
-        /// Gets or sets the directory in which to place temporary outputs.
+        /// Gets or sets the settings file to use when running tests.
         /// </summary>
-        public DirectoryPath BuildBasePath { get; set; }
+        public FilePath Settings { get; set; }
+
+        /// <summary>
+        /// Gets or sets the filter expression to filter out tests in the current project.
+        /// </summary>
+        /// <remarks>
+        /// For more information on filtering support, see https://aka.ms/vstest-filtering
+        /// </remarks>
+        public string Filter { get; set; }
+
+        /// <summary>
+        /// Gets or sets the path to use for the custom test adapter in the test run.
+        /// </summary>
+        public DirectoryPath TestAdapterPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets a logger for test results
+        /// </summary>
+        public string Logger { get; set; }
 
         /// <summary>
         /// Gets or sets the output directory.
         /// </summary>
         public DirectoryPath OutputDirectory { get; set; }
-
-        /// <summary>
-        /// Gets or sets the target runtime.
-        /// </summary>
-        public string Runtime { get; set; }
 
         /// <summary>
         /// Gets or sets the configuration under which to build.
@@ -40,5 +53,10 @@ namespace Cake.Common.Tools.DotNetCore.Test
         /// Gets or sets a value indicating whether to not build the project before testing.
         /// </summary>
         public bool NoBuild { get; set; }
+
+        /// <summary>
+        /// Gets or sets a file to write diagnostic messages to.
+        /// </summary>
+        public FilePath DiagnosticFile { get; set; }
     }
 }
