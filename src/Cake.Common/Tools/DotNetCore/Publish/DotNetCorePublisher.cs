@@ -66,13 +66,6 @@ namespace Cake.Common.Tools.DotNetCore.Publish
                 builder.AppendQuoted(settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
             }
 
-            // Build base path
-            if (settings.BuildBasePath != null)
-            {
-                builder.Append("--build-base-path");
-                builder.AppendQuoted(settings.BuildBasePath.MakeAbsolute(_environment).FullPath);
-            }
-
             // Runtime
             if (!string.IsNullOrEmpty(settings.Runtime))
             {
@@ -99,16 +92,6 @@ namespace Cake.Common.Tools.DotNetCore.Publish
             {
                 builder.Append("--version-suffix");
                 builder.Append(settings.VersionSuffix);
-            }
-
-            if (settings.NativeSubDirectory)
-            {
-                builder.Append("--native-subdirectory");
-            }
-
-            if (settings.NoBuild)
-            {
-                builder.Append("--no-build");
             }
 
             return builder;
