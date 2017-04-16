@@ -1,6 +1,7 @@
 # Misc folders
 tools/
 temp/
+.dotnet/
 
 # Dotnet
 .dotnet
