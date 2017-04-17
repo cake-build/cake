@@ -5,6 +5,12 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.Setup")
     .WithCriteria(false)
     .Does(() =>
 {
+    var dotnetExePath = Paths.TestRoot.CombineWithFilePath(Context.IsRunningOnUnix() ? ".dotnet/dotnet" : ".dotnet/dotnet.exe");
+    if (FileExists(dotnetExePath))
+    {
+        Context.Tools.RegisterFile(dotnetExePath);
+    }
+
     var sourcePath = Paths.Resources.Combine("./Cake.Common/Tools/DotNetCore");
     var targetPath = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
     EnsureDirectoryExist(targetPath.Combine("../").Collapse());
