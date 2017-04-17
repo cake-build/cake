@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Net.NetworkInformation;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
