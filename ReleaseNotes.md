@@ -1,3 +1,8 @@
+### New on 0.19.4 (Released 2017/04/19)
+
+* 1556 TeamCity BuildNumber is a string
+* 1566 Generic alias methods with type constraints fail compilation
+
 ### New on 0.19.3 (Released 2017/04/03)
 
 * 1544 Windows 10 SDK path is not being resolved
