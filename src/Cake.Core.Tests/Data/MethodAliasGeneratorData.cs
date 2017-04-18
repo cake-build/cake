@@ -89,6 +89,14 @@ namespace Cake.Core.Tests.Data
         }
 
         [CakeMethodAlias]
+        public static TOut Generic_ExtensionMethodWithGenericReturnValueAndTypeParamConstraints<TIn, TOut>(this ICakeContext context, TIn arg)
+            where TIn : class, new()
+            where TOut : System.Collections.ArrayList, IDisposable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
         public static void NonGeneric_ExtensionMethodWithParameterArray(this ICakeContext context, params int[] values)
         {
             throw new NotImplementedException();
