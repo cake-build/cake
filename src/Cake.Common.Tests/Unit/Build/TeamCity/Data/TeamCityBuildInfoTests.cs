@@ -37,7 +37,7 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity.Data
                 var result = info.Number;
 
                 // Then
-                Assert.Equal(10, result);
+                Assert.Equal("10-Foo", result);
             }
         }
     }
