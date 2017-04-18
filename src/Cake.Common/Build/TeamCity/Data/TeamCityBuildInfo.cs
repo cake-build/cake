@@ -20,12 +20,12 @@ namespace Cake.Common.Build.TeamCity.Data
         public string BuildConfName => GetEnvironmentString("TEAMCITY_BUILDCONF_NAME");
 
         /// <summary>
-        /// Gets the build counter.
+        /// Gets the build number.
         /// </summary>
         /// <value>
-        /// The build counter.
+        /// The build number.
         /// </value>
-        public int Number => GetEnvironmentInteger("BUILD_NUMBER");
+        public string Number => GetEnvironmentString("BUILD_NUMBER");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TeamCityBuildInfo"/> class.
