@@ -85,6 +85,22 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
             }
 
             [Theory]
+            [InlineData(null)]
+            [InlineData("")]
+            public void Should_Add_Infer_Runtimes_Without_Arguments(string value)
+            {
+                // Given
+                var fixture = new DotNetCoreRestorerFixture();
+                fixture.Settings.InferRuntimes = new[] { value };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("restore --infer-runtimes", result.Args);
+            }
+
+            [Theory]
             [InlineData("./src/*", "restore \"./src/*\"")]
             [InlineData("./src/cake build/", "restore \"./src/cake build/\"")]
             [InlineData("./src/cake build/cake cli", "restore \"./src/cake build/cake cli\"")]
