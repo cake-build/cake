@@ -16,6 +16,7 @@ using Cake.Common.Tools.DotNetCore.Publish;
 using Cake.Common.Tools.DotNetCore.Restore;
 using Cake.Common.Tools.DotNetCore.Run;
 using Cake.Common.Tools.DotNetCore.Test;
+using Cake.Common.Tools.DotNetCore.Tool;
 using Cake.Common.Tools.DotNetCore.VSTest;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -1052,6 +1053,63 @@ namespace Cake.Common.Tools.DotNetCore
 
             var tester = new DotNetCoreVSTester(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             tester.Test(testFiles, settings);
+        }
+
+        /// <summary>
+        /// /// Execute an .NET Core Extensibility Tool.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The projects path.</param>
+        /// <param name="command">The command to execute.</param>
+        /// <example>
+        /// <code>
+        ///     DotNetCoreTool("./src/project", "xunit", "-xml report.xml");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Tool")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Tool")]
+        public static void DotNetCoreTool(this ICakeContext context, string project, string command)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var arguments = new ProcessArgumentBuilder();
+            var settings = new DotNetCoreToolSettings();
+            var projectPath = FilePath.FromString(project);
+
+            var runner = new DotNetCoreToolRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            runner.Execute(projectPath, command, arguments, settings);
+        }
+
+        /// <summary>
+        /// Execute an .NET Core Extensibility Tool.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="projectPath">The projects path.</param>
+        /// <param name="command">The command to execute.</param>
+        /// <param name="arguments">The arguments.</param>
+        /// <example>
+        /// <code>
+        ///     DotNetCoreTool("./src/project", "xunit", "-xml report.xml");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Tool")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Tool")]
+        public static void DotNetCoreTool(this ICakeContext context, FilePath projectPath, string command, ProcessArgumentBuilder arguments)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var settings = new DotNetCoreToolSettings();
+            var runner = new DotNetCoreToolRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+
+            runner.Execute(projectPath, command, arguments, settings);
         }
     }
 }
