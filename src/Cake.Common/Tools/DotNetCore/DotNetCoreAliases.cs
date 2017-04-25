@@ -7,6 +7,7 @@ using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.Clean;
 using Cake.Common.Tools.DotNetCore.Execute;
 using Cake.Common.Tools.DotNetCore.NuGet.Delete;
+using Cake.Common.Tools.DotNetCore.NuGet.Push;
 using Cake.Common.Tools.DotNetCore.Pack;
 using Cake.Common.Tools.DotNetCore.Publish;
 using Cake.Common.Tools.DotNetCore.Restore;
@@ -728,6 +729,60 @@ namespace Cake.Common.Tools.DotNetCore
 
              var restorer = new DotNetCoreNuGetDeleter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
              restorer.Delete(packageName, packageVersion, settings);
-         }
+        }
+
+        /// <summary>
+        /// Pushes one or more packages to a server.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageName">Name of package to push.</param>
+        /// <example>
+        /// <code>
+        ///     DotNetCoreNuGetPush("*.nupkg");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Push")]
+        public static void DotNetCoreNuGetPush(this ICakeContext context, string packageName)
+        {
+            context.DotNetCoreNuGetPush(packageName, null);
+        }
+
+        /// <summary>
+        /// Pushes one or more packages to a server using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageName">Name of package to push.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        ///  <code>
+        ///     var settings = new DotNetCoreNuGetPushSettings
+        ///     {
+        ///         Source = "https://www.example.com/nugetfeed",
+        ///         ApiKey = "4003d786-cc37-4004-bfdf-c4f3e8ef9b3a"
+        ///     };
+        ///
+        ///     DotNetCoreNuGetPush("foo*.nupkg", settings);
+        ///  </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Push")]
+        public static void DotNetCoreNuGetPush(this ICakeContext context, string packageName, DotNetCoreNuGetPushSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings == null)
+            {
+                settings = new DotNetCoreNuGetPushSettings();
+            }
+
+            var restorer = new DotNetCoreNuGetPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            restorer.Push(packageName, settings);
+        }
     }
 }
