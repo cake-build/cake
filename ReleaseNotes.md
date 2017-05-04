@@ -1,3 +1,7 @@
+### New on 0.19.5 (Released 2017/05/04)
+
+* 1587 Arguments missing for Octopus Deploy tool
+
 ### New on 0.19.4 (Released 2017/04/19)
 
 * 1556 TeamCity BuildNumber is a string
