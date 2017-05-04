@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using Cake.Common.Tools.Chocolatey.ApiKey;
 using Cake.Common.Tools.Chocolatey.Config;
+using Cake.Common.Tools.Chocolatey.Download;
 using Cake.Common.Tools.Chocolatey.Features;
 using Cake.Common.Tools.Chocolatey.Install;
 using Cake.Common.Tools.Chocolatey.New;
@@ -1141,6 +1142,64 @@ namespace Cake.Common.Tools.Chocolatey
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateyScaffolder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             runner.CreatePackage(packageId, settings);
+        }
+
+        /// <summary>
+        /// Downloads a Chocolatey package to the current working directory.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageId">The id of the package to download.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyDownload("MyChocolateyPackage");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Download")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Download")]
+        public static void ChocolateyDownload(this ICakeContext context, string packageId)
+        {
+            var settings = new ChocolateyDownloadSettings();
+            ChocolateyDownload(context, packageId, settings);
+        }
+
+        /// <summary>
+        /// Downloads a Chocolatey package using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageId">The id of the package to install.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <para>Download a package to a specific folder:</para>
+        /// <code>
+        /// ChocolateyDownload(
+        ///     "MyChocolateyPackage",
+        ///     new ChocolateyDownloadSettings {
+        ///         OutputDirectory = @"C:\download\"
+        ///     });
+        /// </code>
+        /// <para>Download and internalize a package:</para>
+        /// <code>
+        /// ChocolateyDownload(
+        ///     "MyChocolateyPackage",
+        ///     new ChocolateyDownloadSettings {
+        ///         Internalize = true
+        ///     });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Download")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Download")]
+        public static void ChocolateyDownload(this ICakeContext context, string packageId, ChocolateyDownloadSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
+            var runner = new ChocolateyDownloader(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
+            runner.Download(packageId, settings);
         }
     }
 }
