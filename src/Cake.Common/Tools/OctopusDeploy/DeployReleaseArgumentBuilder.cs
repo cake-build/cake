@@ -98,6 +98,8 @@ namespace Cake.Common.Tools.OctopusDeploy
             AppendMultipleTimes("tenant", _settings.Tenant);
 
             AppendMultipleTimes("tenanttag", _settings.TenantTags);
+
+            AppendArgumentIfNotNull("channel", _settings.Channel);
         }
     }
 }
