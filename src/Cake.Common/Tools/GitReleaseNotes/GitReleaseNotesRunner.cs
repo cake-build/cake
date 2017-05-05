@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.GitReleaseNotes
     /// <summary>
     /// The GitReleaseNotes runner.
     /// </summary>
-    public sealed class GitReleaseNotesRunner : Tool<GitReleaseNotesSettings>
+    internal sealed class GitReleaseNotesRunner : Tool<GitReleaseNotesSettings>
     {
         private readonly ICakeEnvironment _environment;
 

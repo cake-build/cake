@@ -15,7 +15,7 @@ namespace Cake.Common.Tools.NuGet.Sources
     /// <summary>
     /// The NuGet sources is used to work with user config feeds &amp; credentials
     /// </summary>
-    public sealed class NuGetSources : NuGetTool<NuGetSourcesSettings>
+    internal sealed class NuGetSources : NuGetTool<NuGetSourcesSettings>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetSources"/> class.

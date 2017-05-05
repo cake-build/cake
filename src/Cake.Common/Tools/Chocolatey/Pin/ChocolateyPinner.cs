@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.Chocolatey.Pin
     /// <summary>
     /// The Chocolatey package pinner used to pin Chocolatey packages.
     /// </summary>
-    public sealed class ChocolateyPinner : ChocolateyTool<ChocolateyPinSettings>
+    internal sealed class ChocolateyPinner : ChocolateyTool<ChocolateyPinSettings>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ChocolateyPinner"/> class.

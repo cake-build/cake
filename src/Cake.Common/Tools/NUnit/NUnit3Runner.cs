@@ -15,7 +15,7 @@ namespace Cake.Common.Tools.NUnit
     /// <summary>
     /// The NUnit unit test runner.
     /// </summary>
-    public sealed class NUnit3Runner : Tool<NUnit3Settings>
+    internal sealed class NUnit3Runner : Tool<NUnit3Settings>
     {
         private readonly ICakeEnvironment _environment;
 

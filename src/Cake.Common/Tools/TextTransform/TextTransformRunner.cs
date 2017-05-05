@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.TextTransform
     /// <summary>
     /// The Text Transform runner.
     /// </summary>
-    public sealed class TextTransformRunner : Tool<TextTransformSettings>
+    internal sealed class TextTransformRunner : Tool<TextTransformSettings>
     {
         private readonly ICakeEnvironment _environment;
 

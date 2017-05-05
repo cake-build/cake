@@ -14,7 +14,7 @@ namespace Cake.Common.Tools.OctopusDeploy
     /// <summary>
     /// The Octopus Deploy package push runner
     /// </summary>
-    public class OctopusDeployPusher : Tool<OctopusPushSettings>
+    internal class OctopusDeployPusher : Tool<OctopusPushSettings>
     {
         private readonly ICakeEnvironment _environment;
 

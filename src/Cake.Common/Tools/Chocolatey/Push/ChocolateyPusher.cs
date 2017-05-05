@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.Chocolatey.Push
     /// <summary>
     /// The Chocolatey package pusher.
     /// </summary>
-    public sealed class ChocolateyPusher : ChocolateyTool<ChocolateyPushSettings>
+    internal sealed class ChocolateyPusher : ChocolateyTool<ChocolateyPushSettings>
     {
         private readonly ICakeEnvironment _environment;
 

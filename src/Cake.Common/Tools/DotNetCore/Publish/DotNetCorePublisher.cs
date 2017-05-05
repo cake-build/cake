@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.DotNetCore.Publish
     /// <summary>
     /// .NET Core project runner.
     /// </summary>
-    public sealed class DotNetCorePublisher : DotNetCoreTool<DotNetCorePublishSettings>
+    internal sealed class DotNetCorePublisher : DotNetCoreTool<DotNetCorePublishSettings>
     {
         private readonly ICakeEnvironment _environment;
 

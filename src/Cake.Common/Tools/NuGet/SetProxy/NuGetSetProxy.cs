@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.NuGet.SetProxy
     /// <summary>
     /// The NuGet set command used to set the proxy settings to be used while connecting to your NuGet feed.
     /// </summary>
-    public sealed class NuGetSetProxy : NuGetTool<NuGetSetProxySettings>
+    internal sealed class NuGetSetProxy : NuGetTool<NuGetSetProxySettings>
     {
         private readonly ICakeEnvironment _environment;
 

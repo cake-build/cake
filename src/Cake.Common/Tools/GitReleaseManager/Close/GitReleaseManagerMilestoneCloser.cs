@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Close
     /// <summary>
     /// The GitReleaseManager Milestone Closer used to close milestones.
     /// </summary>
-    public sealed class GitReleaseManagerMilestoneCloser : GitReleaseManagerTool<GitReleaseManagerCloseMilestoneSettings>
+    internal sealed class GitReleaseManagerMilestoneCloser : GitReleaseManagerTool<GitReleaseManagerCloseMilestoneSettings>
     {
         private readonly ICakeEnvironment _environment;
 

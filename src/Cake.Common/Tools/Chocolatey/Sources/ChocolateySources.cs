@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.Chocolatey.Sources
     /// <summary>
     /// The Chocolatey sources is used to work with user config feeds &amp; credentials
     /// </summary>
-    public sealed class ChocolateySources : ChocolateyTool<ChocolateySourcesSettings>
+    internal sealed class ChocolateySources : ChocolateyTool<ChocolateySourcesSettings>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ChocolateySources"/> class.

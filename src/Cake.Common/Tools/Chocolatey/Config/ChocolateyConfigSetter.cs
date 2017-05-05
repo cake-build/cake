@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.Chocolatey.Config
     /// <summary>
     /// The Chocolatey configuration setter.
     /// </summary>
-    public sealed class ChocolateyConfigSetter : ChocolateyTool<ChocolateyConfigSettings>
+    internal sealed class ChocolateyConfigSetter : ChocolateyTool<ChocolateyConfigSettings>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ChocolateyConfigSetter"/> class.

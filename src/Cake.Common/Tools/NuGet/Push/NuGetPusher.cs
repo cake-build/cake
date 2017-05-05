@@ -15,7 +15,7 @@ namespace Cake.Common.Tools.NuGet.Push
     /// <summary>
     /// The NuGet package pusher.
     /// </summary>
-    public sealed class NuGetPusher : NuGetTool<NuGetPushSettings>
+    internal sealed class NuGetPusher : NuGetTool<NuGetPushSettings>
     {
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;

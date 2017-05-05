@@ -16,7 +16,7 @@ namespace Cake.Common.Tools.XBuild
     /// <summary>
     /// The XBuild runner.
     /// </summary>
-    public sealed class XBuildRunner : Tool<XBuildSettings>
+    internal sealed class XBuildRunner : Tool<XBuildSettings>
     {
         private readonly ICakeEnvironment _environment;
         private readonly IFileSystem _fileSystem;

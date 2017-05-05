@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Export
     /// <summary>
     /// The GitReleaseManager Release Publisher used to publish releases.
     /// </summary>
-    public sealed class GitReleaseManagerExporter : GitReleaseManagerTool<GitReleaseManagerExportSettings>
+    internal sealed class GitReleaseManagerExporter : GitReleaseManagerTool<GitReleaseManagerExportSettings>
     {
         private readonly ICakeEnvironment _environment;
 

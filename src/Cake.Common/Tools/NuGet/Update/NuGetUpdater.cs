@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.NuGet.Update
     /// <summary>
     /// The NuGet package updater.
     /// </summary>
-    public sealed class NuGetUpdater : NuGetTool<NuGetUpdateSettings>
+    internal sealed class NuGetUpdater : NuGetTool<NuGetUpdateSettings>
     {
         private readonly ICakeEnvironment _environment;
 

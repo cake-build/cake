@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.Roundhouse
     /// <summary>
     /// The Roundhouse console application runner.
     /// </summary>
-    public sealed class RoundhouseRunner : Tool<RoundhouseSettings>
+    internal sealed class RoundhouseRunner : Tool<RoundhouseSettings>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RoundhouseRunner"/> class.

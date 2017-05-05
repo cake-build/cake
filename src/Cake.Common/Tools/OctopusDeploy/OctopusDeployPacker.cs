@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.OctopusDeploy
     /// <summary>
     /// The Octopus deploy package packer
     /// </summary>
-    public sealed class OctopusDeployPacker : Tool<OctopusPackSettings>
+    internal sealed class OctopusDeployPacker : Tool<OctopusPackSettings>
     {
         private readonly ICakeEnvironment _environment;
 

@@ -15,7 +15,7 @@ namespace Cake.Common.Tools.SignTool
     /// <summary>
     /// The SignTool SIGN assembly runner.
     /// </summary>
-    public sealed class SignToolSignRunner : Tool<SignToolSignSettings>
+    internal sealed class SignToolSignRunner : Tool<SignToolSignSettings>
     {
         private readonly ISignToolResolver _resolver;
         private readonly IFileSystem _fileSystem;

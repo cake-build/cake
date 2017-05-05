@@ -15,7 +15,7 @@ namespace Cake.Common.Tools.NSIS
     /// The runner which executes NSIS.
     /// </summary>
     // ReSharper disable once InconsistentNaming
-    public sealed class MakeNSISRunner : Tool<MakeNSISSettings>
+    internal sealed class MakeNSISRunner : Tool<MakeNSISSettings>
     {
         private readonly ICakeEnvironment _environment;
 

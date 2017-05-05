@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.NuGet.Init
     /// <summary>
     /// The NuGet package init tool copies all the packages from the source to the hierarchical destination.
     /// </summary>
-    public sealed class NuGetIniter : NuGetTool<NuGetInitSettings>
+    internal sealed class NuGetIniter : NuGetTool<NuGetInitSettings>
     {
         private readonly ICakeEnvironment _environment;
 

@@ -15,7 +15,7 @@ namespace Cake.Common.Tools.NuGet.Pack
     /// <summary>
     /// The NuGet packer.
     /// </summary>
-    public sealed class NuGetPacker : NuGetTool<NuGetPackSettings>
+    internal sealed class NuGetPacker : NuGetTool<NuGetPackSettings>
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;

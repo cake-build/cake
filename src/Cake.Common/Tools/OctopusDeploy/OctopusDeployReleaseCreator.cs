@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.OctopusDeploy
     /// <summary>
     /// The Octopus Deploy release creator runner
     /// </summary>
-    public sealed class OctopusDeployReleaseCreator : Tool<CreateReleaseSettings>
+    internal sealed class OctopusDeployReleaseCreator : Tool<CreateReleaseSettings>
     {
         private readonly ICakeEnvironment _environment;
 

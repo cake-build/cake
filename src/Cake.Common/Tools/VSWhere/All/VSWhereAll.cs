@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.VSWhere.All
     /// <summary>
     /// The VSWhere tool that finds all instances regardless if they are complete.
     /// </summary>
-    public sealed class VSWhereAll : VSWhereTool<VSWhereAllSettings>
+    internal sealed class VSWhereAll : VSWhereTool<VSWhereAllSettings>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="VSWhereAll"/> class.

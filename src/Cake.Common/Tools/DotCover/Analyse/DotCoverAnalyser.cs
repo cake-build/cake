@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.DotCover.Analyse
     /// <summary>
     /// DotCover Analyser builder.
     /// </summary>
-    public sealed class DotCoverAnalyser : DotCoverCoverageTool<DotCoverAnalyseSettings>
+    internal sealed class DotCoverAnalyser : DotCoverCoverageTool<DotCoverAnalyseSettings>
     {
         private readonly ICakeEnvironment _environment;
 

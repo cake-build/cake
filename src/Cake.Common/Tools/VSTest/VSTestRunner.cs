@@ -16,7 +16,7 @@ namespace Cake.Common.Tools.VSTest
     /// The VSTest unit test runner.
     /// Used by Visual Studio 2012 and newer.
     /// </summary>
-    public sealed class VSTestRunner : Tool<VSTestSettings>
+    internal sealed class VSTestRunner : Tool<VSTestSettings>
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;

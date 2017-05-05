@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.GitLink
     /// <summary>
     /// GitLink runner
     /// </summary>
-    public sealed class GitLinkRunner : Tool<GitLinkSettings>
+    internal sealed class GitLinkRunner : Tool<GitLinkSettings>
     {
         private readonly ICakeEnvironment _environment;
 

@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.NuGet.Install
     /// <summary>
     /// The NuGet package installer used to install NuGet packages.
     /// </summary>
-    public sealed class NuGetInstaller : NuGetTool<NuGetInstallSettings>
+    internal sealed class NuGetInstaller : NuGetTool<NuGetInstallSettings>
     {
         private readonly ICakeEnvironment _environment;
 

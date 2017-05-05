@@ -17,7 +17,7 @@ namespace Cake.Common.Tools.InspectCode
     /// <summary>
     /// InspectCode runner
     /// </summary>
-    public sealed class InspectCodeRunner : Tool<InspectCodeSettings>
+    internal sealed class InspectCodeRunner : Tool<InspectCodeSettings>
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;

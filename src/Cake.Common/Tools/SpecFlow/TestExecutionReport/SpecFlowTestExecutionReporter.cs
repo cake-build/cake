@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.SpecFlow.TestExecutionReport
     /// <summary>
     /// SpecFlow MSTest execution report runner.
     /// </summary>
-    public sealed class SpecFlowTestExecutionReporter : SpecFlowTool<SpecFlowTestExecutionReportSettings>
+    internal sealed class SpecFlowTestExecutionReporter : SpecFlowTool<SpecFlowTestExecutionReportSettings>
     {
         private readonly ICakeEnvironment _environment;
 

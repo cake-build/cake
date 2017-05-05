@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.DotNetCore.Build
     /// <summary>
     /// .NET Core project builder.
     /// </summary>
-    public sealed class DotNetCoreBuilder : DotNetCoreTool<DotNetCoreBuildSettings>
+    internal sealed class DotNetCoreBuilder : DotNetCoreTool<DotNetCoreBuildSettings>
     {
         private readonly ICakeEnvironment _environment;
 

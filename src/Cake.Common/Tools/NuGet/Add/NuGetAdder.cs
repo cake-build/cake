@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.NuGet.Add
     /// <summary>
     /// The NuGet package add tool used to add NuGet packages to folder or UNC shares.
     /// </summary>
-    public sealed class NuGetAdder : NuGetTool<NuGetAddSettings>
+    internal sealed class NuGetAdder : NuGetTool<NuGetAddSettings>
     {
         private readonly ICakeEnvironment _environment;
 

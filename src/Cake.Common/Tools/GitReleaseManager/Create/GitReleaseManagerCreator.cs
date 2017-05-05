@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Create
     /// <summary>
     /// The GitReleaseManager Release Creator used to create releases.
     /// </summary>
-    public sealed class GitReleaseManagerCreator : GitReleaseManagerTool<GitReleaseManagerCreateSettings>
+    internal sealed class GitReleaseManagerCreator : GitReleaseManagerTool<GitReleaseManagerCreateSettings>
     {
         private readonly ICakeEnvironment _environment;
 

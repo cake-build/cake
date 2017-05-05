@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.DotNetCore.Test
     /// <summary>
     /// .NET Core project tester.
     /// </summary>
-    public sealed class DotNetCoreTester : DotNetCoreTool<DotNetCoreTestSettings>
+    internal sealed class DotNetCoreTester : DotNetCoreTool<DotNetCoreTestSettings>
     {
         private readonly ICakeEnvironment _environment;
 

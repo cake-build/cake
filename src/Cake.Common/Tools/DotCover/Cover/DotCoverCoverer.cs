@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.DotCover.Cover
     /// <summary>
     /// DotCover Coverer builder.
     /// </summary>
-    public sealed class DotCoverCoverer : DotCoverCoverageTool<DotCoverCoverSettings>
+    internal sealed class DotCoverCoverer : DotCoverCoverageTool<DotCoverCoverSettings>
     {
         private readonly ICakeEnvironment _environment;
 

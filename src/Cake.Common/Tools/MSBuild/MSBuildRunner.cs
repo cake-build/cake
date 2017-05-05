@@ -17,7 +17,7 @@ namespace Cake.Common.Tools.MSBuild
     /// <summary>
     /// The MSBuild runner.
     /// </summary>
-    public sealed class MSBuildRunner : Tool<MSBuildSettings>
+    internal sealed class MSBuildRunner : Tool<MSBuildSettings>
     {
         private readonly ICakeEnvironment _environment;
         private readonly IFileSystem _fileSystem;
