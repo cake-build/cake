@@ -6,6 +6,7 @@ using System;
 using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.Clean;
 using Cake.Common.Tools.DotNetCore.Execute;
+using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Common.Tools.DotNetCore.NuGet.Delete;
 using Cake.Common.Tools.DotNetCore.NuGet.Push;
 using Cake.Common.Tools.DotNetCore.Pack;
@@ -762,18 +763,18 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
         public static void DotNetCoreNuGetDelete(this ICakeContext context, string packageName, string packageVersion, DotNetCoreNuGetDeleteSettings settings)
         {
-             if (context == null)
-             {
-                 throw new ArgumentNullException(nameof(context));
-             }
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
 
-             if (settings == null)
-             {
-                 settings = new DotNetCoreNuGetDeleteSettings();
-             }
+            if (settings == null)
+            {
+                settings = new DotNetCoreNuGetDeleteSettings();
+            }
 
-             var restorer = new DotNetCoreNuGetDeleter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-             restorer.Delete(packageName, packageVersion, settings);
+            var nugetDeleter = new DotNetCoreNuGetDeleter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            nugetDeleter.Delete(packageName, packageVersion, settings);
         }
 
         /// <summary>
@@ -828,6 +829,113 @@ namespace Cake.Common.Tools.DotNetCore
 
             var restorer = new DotNetCoreNuGetPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             restorer.Push(packageName, settings);
+        }
+
+        /// <summary>
+        /// Builds the specified targets in a project file found in the current working directory.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <example>
+        ///  <code>
+        ///     DotNetCoreMSBuild();
+        ///  </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("MSBuild")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.MSBuild")]
+        public static void DotNetCoreMSBuild(this ICakeContext context)
+        {
+            context.DotNetCoreMSBuild(null, null);
+        }
+
+        /// <summary>
+        /// Builds the specified targets in the project file.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="projectOrDirectory">Project file or directory to search for project file.</param>
+        /// <example>
+        ///  <code>
+        ///     DotNetCoreMSBuild("foobar.proj");
+        ///  </code>
+        /// </example>
+        /// <remarks>
+        /// If a directory is specified, MSBuild searches that directory for a project file.
+        /// </remarks>
+        [CakeMethodAlias]
+        [CakeAliasCategory("MSBuild")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.MSBuild")]
+        public static void DotNetCoreMSBuild(this ICakeContext context, string projectOrDirectory)
+        {
+            if (string.IsNullOrWhiteSpace(projectOrDirectory))
+            {
+                throw new ArgumentNullException(nameof(projectOrDirectory));
+            }
+
+            context.DotNetCoreMSBuild(projectOrDirectory, null);
+        }
+
+        /// <summary>
+        /// Builds the specified targets in a project file found in the current working directory.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        ///  <code>
+        ///     var settings = new DotNetCoreMSBuildSettings
+        ///     {
+        ///         NoLogo = true,
+        ///         MaxCpuCount = -1
+        ///     };
+        ///
+        ///     DotNetCoreMSBuild(settings);
+        ///  </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("MSBuild")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.MSBuild")]
+        public static void DotNetCoreMSBuild(this ICakeContext context, DotNetCoreMSBuildSettings settings)
+        {
+            context.DotNetCoreMSBuild(null, settings);
+        }
+
+        /// <summary>
+        /// Builds the specified targets in the project file.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="projectOrDirectory">Project file or directory to search for project file.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        ///  <code>
+        ///     var settings = new DotNetCoreMSBuildSettings
+        ///     {
+        ///         NoLogo = true,
+        ///         MaxCpuCount = -1
+        ///     };
+        ///
+        ///     DotNetCoreMSBuild("foobar.proj", settings);
+        ///  </code>
+        /// </example>
+        /// <remarks>
+        /// If a project file is not specified, MSBuild searches the current working directory for a file that has a file
+        /// extension that ends in "proj" and uses that file. If a directory is specified, MSBuild searches that directory for a project file.
+        /// </remarks>
+        [CakeMethodAlias]
+        [CakeAliasCategory("MSBuild")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.MSBuild")]
+        public static void DotNetCoreMSBuild(this ICakeContext context, string projectOrDirectory, DotNetCoreMSBuildSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings == null)
+            {
+                settings = new DotNetCoreMSBuildSettings();
+            }
+
+            var builder = new DotNetCoreMSBuildBuilder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            builder.Build(projectOrDirectory, settings);
         }
     }
 }

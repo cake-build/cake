@@ -4,13 +4,27 @@
 
 namespace Cake.Common.Tools.MSBuild
 {
-    internal enum MSBuildVersion
+    /// <summary>
+    /// Represents a MSBuild version
+    /// </summary>
+    public enum MSBuildVersion
     {
+        /// <summary>Version 2.0</summary>
         MSBuild20 = 1,
+
+        /// <summary>Version 3.5</summary>
         MSBuild35 = 2,
+
+        /// <summary>Version 4.0</summary>
         MSBuild4 = 3,
+
+        /// <summary>Version 12.0</summary>
         MSBuild12 = 4,
+
+        /// <summary>Version 14.0</summary>
         MSBuild14 = 5,
+
+        /// <summary>Version 15.0</summary>
         MSBuild15 = 6
     }
 }

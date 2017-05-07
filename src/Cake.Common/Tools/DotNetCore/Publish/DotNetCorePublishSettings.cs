@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotNetCore.Publish
@@ -35,5 +36,10 @@ namespace Cake.Common.Tools.DotNetCore.Publish
         /// Gets or sets the value that defines what `*` should be replaced with in version field in project.json.
         /// </summary>
         public string VersionSuffix { get; set; }
+
+        /// <summary>
+        /// Gets or sets additional arguments to be passed to MSBuild.
+        /// </summary>
+        public DotNetCoreMSBuildSettings MSBuildSettings { get; set; }
     }
 }

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotNetCore.Restore
@@ -51,5 +52,10 @@ namespace Cake.Common.Tools.DotNetCore.Restore
         /// Gets or sets a value indicating whether to ignore project to project references and restore only the root project.
         /// </summary>
         public bool NoDependencies { get; set; }
+
+        /// <summary>
+        /// Gets or sets additional arguments to be passed to MSBuild.
+        /// </summary>
+        public DotNetCoreMSBuildSettings MSBuildSettings { get; set; }
     }
 }
