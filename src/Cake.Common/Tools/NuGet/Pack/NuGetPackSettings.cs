@@ -14,6 +14,62 @@ namespace Cake.Common.Tools.NuGet.Pack
     /// </summary>
     public sealed class NuGetPackSettings : ToolSettings
     {
+        internal NuGetPackSettings(
+            DirectoryPath basePath,
+            DirectoryPath outputDirectory,
+            bool noPackageAnalysis,
+            bool includeReferencedProjects,
+            bool symbols,
+            string id,
+            string version,
+            string title,
+            ICollection<string> authors,
+            ICollection<string> owners,
+            string description,
+            string summary,
+            Uri projectUrl,
+            Uri iconUrl,
+            Uri licenseUrl,
+            string copyright,
+            ICollection<string> releaseNotes,
+            ICollection<string> tags,
+            bool developmentDependency,
+            bool requireLicenseAcceptance,
+            ICollection<NuSpecContent> files,
+            ICollection<NuSpecDependency> dependencies,
+            NuGetVerbosity? verbosity,
+            IDictionary<string, string> properties,
+            NuGetMSBuildVersion? msBuildVersion,
+            bool keepTemporaryNuSpecFile)
+        {
+            BasePath = basePath;
+            OutputDirectory = outputDirectory;
+            NoPackageAnalysis = noPackageAnalysis;
+            IncludeReferencedProjects = includeReferencedProjects;
+            Symbols = symbols;
+            Id = id;
+            Version = version;
+            Title = title;
+            Authors = authors;
+            Owners = owners;
+            Description = description;
+            Summary = summary;
+            ProjectUrl = projectUrl;
+            IconUrl = iconUrl;
+            LicenseUrl = licenseUrl;
+            Copyright = copyright;
+            ReleaseNotes = releaseNotes;
+            Tags = tags;
+            DevelopmentDependency = developmentDependency;
+            RequireLicenseAcceptance = requireLicenseAcceptance;
+            Files = files;
+            Dependencies = dependencies;
+            Verbosity = verbosity;
+            Properties = properties;
+            MSBuildVersion = msBuildVersion;
+            KeepTemporaryNuSpecFile = keepTemporaryNuSpecFile;
+        } 
+
         /// <summary>
         /// Gets or sets the base path.
         /// </summary>
