@@ -15,11 +15,7 @@ namespace Cake.Frosting.Internal.Commands
 
         public DryRunExecutionStrategy(ICakeLog log)
         {
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
-            _log = log;
+            _log = log ?? throw new ArgumentNullException(nameof(log));
             _counter = 1;
         }
 

@@ -8,7 +8,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/cake-build/frosting</RepositoryUrl>
     <VersionPrefix>0.1.0</VersionPrefix>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFrameworks>net461;netcoreapp1.1</TargetFrameworks>
     <AssemblyName>Cake.Frosting.Example</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>Cake.Frosting.Example</PackageId>

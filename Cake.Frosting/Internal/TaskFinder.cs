@@ -15,6 +15,11 @@ namespace Cake.Frosting.Internal
             var result = new List<Type>();
             foreach (var assembly in assemblies)
             {
+                if (assembly == null)
+                {
+                    continue;
+                }
+
                 foreach (var type in assembly.GetExportedTypes())
                 {
                     var info = type.GetTypeInfo();

@@ -15,8 +15,8 @@ namespace Cake.Frosting.Internal
         /// <value>The foreground color.</value>
         public ConsoleColor ForegroundColor
         {
-            get { return Console.ForegroundColor; }
-            set { Console.ForegroundColor = value; }
+            get => Console.ForegroundColor;
+            set => Console.ForegroundColor = value;
         }
 
         /// <summary>
@@ -25,8 +25,8 @@ namespace Cake.Frosting.Internal
         /// <value>The background color.</value>
         public ConsoleColor BackgroundColor
         {
-            get { return Console.BackgroundColor; }
-            set { Console.BackgroundColor = value; }
+            get => Console.BackgroundColor;
+            set => Console.BackgroundColor = value;
         }
 
         /// <summary>

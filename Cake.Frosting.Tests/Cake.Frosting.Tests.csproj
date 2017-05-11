@@ -8,13 +8,17 @@
     <PackageLicenseUrl>https://github.com/cake-build/frosting/blob/develop/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/cake-build/frosting</RepositoryUrl>
-    <TargetFrameworks>netcoreapp1.1;net461</TargetFrameworks>
+    <TargetFrameworks>net461;netcoreapp1.1</TargetFrameworks>
     <OutputType>exe</OutputType>
     <LangVersion>7</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">
+    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\Cake.Frosting.Testing\Cake.Frosting.Testing.csproj" />
     <ProjectReference Include="..\Cake.Frosting\Cake.Frosting.csproj" />
   </ItemGroup>
 

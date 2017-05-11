@@ -1,12 +1,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.Frosting", "Cake.Frosting\Cake.Frosting.csproj", "{A608FD39-2B71-4B6E-B238-AE80BB2794F8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.Frosting.Example", "Cake.Frosting.Example\Cake.Frosting.Example.csproj", "{ED379398-DA69-4D1E-B712-27DC0D67ABC3}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.Frosting.Testing", "Cake.Frosting.Testing\Cake.Frosting.Testing.csproj", "{778E6393-6768-407C-8795-7A3C4A51579F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{8BFACDC8-8BBF-4751-BB54-85B0D28A61A2}"
 EndProject
@@ -46,18 +44,6 @@ Global
 		{ED379398-DA69-4D1E-B712-27DC0D67ABC3}.Release|x64.Build.0 = Release|Any CPU
 		{ED379398-DA69-4D1E-B712-27DC0D67ABC3}.Release|x86.ActiveCfg = Release|Any CPU
 		{ED379398-DA69-4D1E-B712-27DC0D67ABC3}.Release|x86.Build.0 = Release|Any CPU
-		{778E6393-6768-407C-8795-7A3C4A51579F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{778E6393-6768-407C-8795-7A3C4A51579F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{778E6393-6768-407C-8795-7A3C4A51579F}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{778E6393-6768-407C-8795-7A3C4A51579F}.Debug|x64.Build.0 = Debug|Any CPU
-		{778E6393-6768-407C-8795-7A3C4A51579F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{778E6393-6768-407C-8795-7A3C4A51579F}.Debug|x86.Build.0 = Debug|Any CPU
-		{778E6393-6768-407C-8795-7A3C4A51579F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{778E6393-6768-407C-8795-7A3C4A51579F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{778E6393-6768-407C-8795-7A3C4A51579F}.Release|x64.ActiveCfg = Release|Any CPU
-		{778E6393-6768-407C-8795-7A3C4A51579F}.Release|x64.Build.0 = Release|Any CPU
-		{778E6393-6768-407C-8795-7A3C4A51579F}.Release|x86.ActiveCfg = Release|Any CPU
-		{778E6393-6768-407C-8795-7A3C4A51579F}.Release|x86.Build.0 = Release|Any CPU
 		{F6A8095C-E2B6-4D8B-88A1-213376387FD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F6A8095C-E2B6-4D8B-88A1-213376387FD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6A8095C-E2B6-4D8B-88A1-213376387FD5}.Debug|x64.ActiveCfg = Debug|Any CPU

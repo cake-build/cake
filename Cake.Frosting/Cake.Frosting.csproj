@@ -25,8 +25,8 @@
     <DebugType>portable</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Cake.Core" Version="0.18.0" />
-    <PackageReference Include="Cake.Common" Version="0.18.0" />
+    <PackageReference Include="Cake.Core" Version="0.19.5" />
+    <PackageReference Include="Cake.Common" Version="0.19.5" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
