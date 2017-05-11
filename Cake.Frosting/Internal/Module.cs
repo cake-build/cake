@@ -19,7 +19,11 @@ namespace Cake.Frosting
         public void Register(ICakeContainerRegistrar registry)
         {
             // Register the entry assembly.
+#if NETCORE
             registry.RegisterInstance(Assembly.GetEntryAssembly());
+#else
+            registry.RegisterInstance(Assembly.GetExecutingAssembly());
+#endif
 
             // Core services
             registry.RegisterType<CakeHost>().As<ICakeHost>().Singleton();

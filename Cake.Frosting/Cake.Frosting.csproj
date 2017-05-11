@@ -20,6 +20,10 @@
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <LangVersion>7</LangVersion>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
+    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Cake.Core" Version="0.18.0" />
     <PackageReference Include="Cake.Common" Version="0.18.0" />
