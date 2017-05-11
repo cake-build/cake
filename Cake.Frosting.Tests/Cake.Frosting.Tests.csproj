@@ -8,7 +8,7 @@
     <PackageLicenseUrl>https://github.com/cake-build/frosting/blob/develop/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/cake-build/frosting</RepositoryUrl>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFrameworks>netcoreapp1.1;net461</TargetFrameworks>
     <OutputType>exe</OutputType>
     <LangVersion>7</LangVersion>
   </PropertyGroup>
