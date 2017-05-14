@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tests.Fixtures;
 using Cake.Testing.Xunit;
@@ -577,6 +578,34 @@ namespace Cake.Core.Tests.Unit.IO
                 Assert.Equal(2, result.Length);
                 AssertEx.ContainsFilePath(result, "/Working/Foo.Bar.Test.dll");
                 AssertEx.ContainsFilePath(result, "/Working/Bar.Qux.Test.dll");
+            }
+
+            [Fact]
+            public void Should_Parse_Glob_Expressions_With_Unicode_Characters_And_Ending_With_Identifier()
+            {
+                // Given
+                var fixture = new GlobberFixture();
+
+                // When
+                var result = fixture.Match("/嵌套/**/文件.延期");
+
+                // Then
+                Assert.Equal(1, result.Length);
+                AssertEx.ContainsFilePath(result, "/嵌套/目录/文件.延期");
+            }
+
+            [Fact]
+            public void Should_Parse_Glob_Expressions_With_Unicode_Characters_And_Not_Ending_With_Identifier()
+            {
+                // Given
+                var fixture = new GlobberFixture();
+
+                // When
+                var result = fixture.Match("/嵌套/**/文件.*");
+
+                // Then
+                Assert.Equal(1, result.Length);
+                AssertEx.ContainsFilePath(result, "/嵌套/目录/文件.延期");
             }
         }
     }
