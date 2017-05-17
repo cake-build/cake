@@ -2,8 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+using Cake.Core.IO;
 using Cake.Core.Tests.Fixtures;
+using Cake.Core.Tooling;
 using Cake.Testing;
+using NSubstitute;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit.Tooling
@@ -176,6 +180,36 @@ namespace Cake.Core.Tests.Unit.Tooling
 
                 // Then
                 Assert.Null(result);
+            }
+
+            [Fact]
+            public void Should_Resolve_Tool_From_Environment_Variable_Gracefully_Proceed_If_FileSystem_Throw_Exception()
+            {
+                // Given
+                var fixture = new ToolResolutionStrategyFixture();
+                fixture.Environment.SetEnvironmentVariable("PATH", "/Working/fail:/Working/temp");
+                fixture.FileSystem.CreateFile("/Working/temp/tool.exe");
+
+                var fileSystem = Substitute.For<IFileSystem>();
+                fileSystem.GetFile(Arg.Any<FilePath>()).Returns(call =>
+                {
+                    var path = call.Arg<FilePath>();
+                    if (path.FullPath == "/Working/fail/tool.exe")
+                    {
+                        throw new Exception("Error!");
+                    }
+                    return fixture.FileSystem.GetFile(path);
+                });
+
+                var strategy = new ToolResolutionStrategy(fileSystem, fixture.Environment, fixture.Globber, fixture.Configuration);
+
+                // When
+                var result = strategy.Resolve(fixture.Repository, "tool.exe");
+
+                // Then
+                Assert.Equal("/Working/temp/tool.exe", result.FullPath);
+                fileSystem.Received().GetFile(Arg.Is<FilePath>(p => p.FullPath == "/Working/fail/tool.exe"));
+                fileSystem.Received().GetFile(Arg.Is<FilePath>(p => p.FullPath == "/Working/temp/tool.exe"));
             }
         }
     }

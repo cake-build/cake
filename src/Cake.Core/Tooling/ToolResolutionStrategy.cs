@@ -118,9 +118,15 @@ namespace Cake.Core.Tooling
                 foreach (var pathDir in _path)
                 {
                     var file = pathDir.CombineWithFilePath(tool);
-                    if (_fileSystem.Exist(file))
+                    try
                     {
-                        return file.MakeAbsolute(_environment);
+                        if (_fileSystem.Exist(file))
+                        {
+                            return file.MakeAbsolute(_environment);
+                        }
+                    }
+                    catch
+                    {
                     }
                 }
 
