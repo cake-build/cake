@@ -1,6 +1,7 @@
 ﻿{
   "version": "0.20.0-*",
   "buildOptions": {
+    "debugType": "portable",
     "emitEntryPoint": true,
     "xmlDoc": true,
     "platform": "AnyCpu",

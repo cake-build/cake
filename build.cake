@@ -444,6 +444,14 @@ Task("Publish-MyGet")
             Source = apiUrl,
             ApiKey = apiKey
         });
+
+        if (FileExists(package.SymbolsPath))
+        {
+            NuGetPush(package.SymbolsPath, new NuGetPushSettings {
+                Source = apiUrl,
+                ApiKey = apiKey
+            });
+        }
     }
 })
 .OnError(exception =>

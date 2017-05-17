@@ -21,6 +21,7 @@
     }
   },
   "buildOptions": {
+    "debugType": "portable",
     "xmlDoc": true,
     "platform": "AnyCpu",
     "additionalArguments": [

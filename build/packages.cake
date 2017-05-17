@@ -14,7 +14,7 @@ public class BuildPackages
         var toChocolateyPackage = BuildPackage(nugetRooPath, semVersion, isChocolateyPackage: true);
         var nugetPackages = packageIds.Select(toNugetPackage).ToArray();
         var chocolateyPackages = chocolateyPackageIds.Select(toChocolateyPackage).ToArray();
-        
+
         return new BuildPackages {
             All = nugetPackages.Union(chocolateyPackages).ToArray(),
             Nuget = nugetPackages,
@@ -23,14 +23,15 @@ public class BuildPackages
     }
 
     private static Func<string, BuildPackage> BuildPackage(
-        DirectoryPath nugetRooPath, 
-        string semVersion, 
+        DirectoryPath nugetRooPath,
+        string semVersion,
         bool isChocolateyPackage = false)
     {
         return package => new BuildPackage(
             id: package,
             nuspecPath: string.Concat("./nuspec/", package, ".nuspec"),
             packagePath: nugetRooPath.CombineWithFilePath(string.Concat(package, ".", semVersion, ".nupkg")),
+            symbolsPath: nugetRooPath.CombineWithFilePath(string.Concat(package, ".", semVersion, ".symbols.nupkg")),
             isChocolateyPackage: isChocolateyPackage);
     }
 }
@@ -40,17 +41,20 @@ public class BuildPackage
     public string Id { get; private set; }
     public FilePath NuspecPath { get; private set; }
     public FilePath PackagePath { get; private set; }
+    public FilePath SymbolsPath { get; private set; }
     public bool IsChocolateyPackage { get; private set; }
 
     public BuildPackage(
         string id,
         FilePath nuspecPath,
         FilePath packagePath,
+        FilePath symbolsPath,
         bool isChocolateyPackage)
     {
         Id = id;
         NuspecPath = nuspecPath;
         PackagePath = packagePath;
+        SymbolsPath = symbolsPath;
         IsChocolateyPackage = isChocolateyPackage;
     }
 }
