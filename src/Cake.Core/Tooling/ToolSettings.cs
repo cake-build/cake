@@ -42,6 +42,9 @@ namespace Cake.Core.Tooling
         ///     new NuGetSourcesSettings { UserName = "user", Password = "incorrect",
         ///     ArgumentCustomization = args=&gt;args.Append("-StorePasswordInClearText")
         /// });
+        /// // or with multiple arguments:
+        /// MSTest(pathPattern, new MSTestSettings() { ArgumentCustomization = args =&gt; args.Append("/detail:errormessage")
+		///	                                                                                  .Append("/resultsfile:TestResults.trx") });
         /// </code>
         /// </example>
         /// <example>
