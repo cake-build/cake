@@ -37,6 +37,7 @@ namespace Cake.Common.Tools.NUnit
         /// describing exactly which tests to use. Examples of usage are:
         ///    --where:cat==Data
         ///    --where "method =~ /DataTest*/ &amp;&amp; cat = Slow"
+        /// See <a href="https://github.com/nunit/docs/wiki/Test-Selection-Language">https://github.com/nunit/docs/wiki/Test-Selection-Language</a>.
         /// </value>
         public string Where { get; set; }
 
