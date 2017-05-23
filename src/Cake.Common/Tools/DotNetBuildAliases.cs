@@ -27,6 +27,11 @@ namespace Cake.Common.Tools
         /// </example>
         /// <param name="context">The context.</param>
         /// <param name="solution">The solution.</param>
+        /// <example>
+        /// <code>
+        /// DotNetBuild("./src/Cake.sln");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void DotNetBuild(this ICakeContext context, FilePath solution)
         {
@@ -48,6 +53,11 @@ namespace Cake.Common.Tools
         /// <param name="context">The context.</param>
         /// <param name="solution">The solution.</param>
         /// <param name="configurator">The configurator.</param>
+        /// <example>
+        /// <code>
+        /// DotNetBuild("./src/Cake.sln", configurator => configurator.SetConfiguration("Debug"));
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static void DotNetBuild(this ICakeContext context, FilePath solution, Action<DotNetBuildSettings> configurator)
         {
