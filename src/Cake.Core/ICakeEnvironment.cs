@@ -59,6 +59,12 @@ namespace Cake.Core
         ICakeRuntime Runtime { get; }
 
         /// <summary>
+        /// Gets the environment specific path comparer.
+        /// </summary>
+        /// <value>The environment specific path comparer.</value>
+        PathComparer PathComparer { get; }
+
+        /// <summary>
         /// Gets whether or not the current operative system is 64 bit.
         /// </summary>
         /// <returns>Whether or not the current operative system is 64 bit.</returns>

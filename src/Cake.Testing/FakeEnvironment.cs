@@ -56,6 +56,12 @@ namespace Cake.Testing
         public FakeRuntime Runtime { get; }
 
         /// <summary>
+        /// Gets the environment specific path comparer.
+        /// </summary>
+        /// <value>The environment specific path comparer.</value>
+        public PathComparer PathComparer { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="FakeEnvironment"/> class.
         /// </summary>
         /// <param name="family">The platform family.</param>
@@ -64,6 +70,7 @@ namespace Cake.Testing
         {
             Platform = new FakePlatform(family, is64Bit);
             Runtime = new FakeRuntime();
+            PathComparer = new PathComparer(this);
             _environmentVariables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _specialPaths = new Dictionary<SpecialPath, DirectoryPath>();
         }

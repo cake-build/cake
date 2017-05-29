@@ -48,6 +48,12 @@ namespace Cake.Core
         public ICakeRuntime Runtime { get; }
 
         /// <summary>
+        /// Gets the environment specific path comparer.
+        /// </summary>
+        /// <value>The environment specific path comparer.</value>
+        public PathComparer PathComparer { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CakeEnvironment" /> class.
         /// </summary>
         /// <param name="platform">The platform.</param>
@@ -57,6 +63,7 @@ namespace Cake.Core
         {
             Platform = platform;
             Runtime = runtime;
+            PathComparer = new PathComparer(this);
             _log = log;
 
             // Get the application root.
