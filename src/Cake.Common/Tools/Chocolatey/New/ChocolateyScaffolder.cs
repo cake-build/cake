@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.Chocolatey.New
     /// <summary>
     /// The Chocolatey project scaffolder used to generate package specification files for a new package.
     /// </summary>
-    public sealed class ChocolateyScaffolder : ChocolateyTool<ChocolateyNewSettings>
+    internal sealed class ChocolateyScaffolder : ChocolateyTool<ChocolateyNewSettings>
     {
         private readonly ICakeEnvironment _environment;
 

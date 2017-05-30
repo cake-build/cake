@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.ReportUnit
     /// <summary>
     /// ReportUnit runner.
     /// </summary>
-    public sealed class ReportUnitRunner : Tool<ReportUnitSettings>
+    internal sealed class ReportUnitRunner : Tool<ReportUnitSettings>
     {
         private readonly ICakeEnvironment _environment;
 

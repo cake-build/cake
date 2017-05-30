@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.Chocolatey.Upgrade
     /// <summary>
     /// The Chocolatey package upgrader.
     /// </summary>
-    public sealed class ChocolateyUpgrader : ChocolateyTool<ChocolateyUpgradeSettings>
+    internal sealed class ChocolateyUpgrader : ChocolateyTool<ChocolateyUpgradeSettings>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ChocolateyUpgrader"/> class.

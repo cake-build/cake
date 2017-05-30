@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.DotNetCore.Pack
     /// <summary>
     /// .NET Core project packer.
     /// </summary>
-    public sealed class DotNetCorePacker : DotNetCoreTool<DotNetCorePackSettings>
+    internal sealed class DotNetCorePacker : DotNetCoreTool<DotNetCorePackSettings>
     {
         private readonly ICakeEnvironment _environment;
 

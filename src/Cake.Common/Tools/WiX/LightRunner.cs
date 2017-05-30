@@ -15,7 +15,7 @@ namespace Cake.Common.Tools.WiX
     /// <summary>
     /// The WiX Light runner.
     /// </summary>
-    public sealed class LightRunner : Tool<LightSettings>
+    internal sealed class LightRunner : Tool<LightSettings>
     {
         private readonly ICakeEnvironment _environment;
 

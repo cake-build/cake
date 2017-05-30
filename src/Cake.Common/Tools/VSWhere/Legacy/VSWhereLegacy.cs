@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.VSWhere.Legacy
     /// <summary>
     /// The VSWhere tool that finds Visual Studio products.
     /// </summary>
-    public sealed class VSWhereLegacy : VSWhereTool<VSWhereLegacySettings>
+    internal sealed class VSWhereLegacy : VSWhereTool<VSWhereLegacySettings>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="VSWhereLegacy"/> class.

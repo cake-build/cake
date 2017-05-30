@@ -15,7 +15,7 @@ namespace Cake.Common.Tools.ReportGenerator
     /// <summary>
     /// ReportGenerator runner.
     /// </summary>
-    public sealed class ReportGeneratorRunner : Tool<ReportGeneratorSettings>
+    internal sealed class ReportGeneratorRunner : Tool<ReportGeneratorSettings>
     {
         private readonly ICakeEnvironment _environment;
 

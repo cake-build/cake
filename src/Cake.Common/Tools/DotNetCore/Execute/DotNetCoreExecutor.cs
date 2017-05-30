@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.DotNetCore.Execute
     /// <summary>
     /// .NET Core assembly executor.
     /// </summary>
-    public sealed class DotNetCoreExecutor : DotNetCoreTool<DotNetCoreSettings>
+    internal sealed class DotNetCoreExecutor : DotNetCoreTool<DotNetCoreSettings>
     {
         private readonly ICakeEnvironment _environment;
 

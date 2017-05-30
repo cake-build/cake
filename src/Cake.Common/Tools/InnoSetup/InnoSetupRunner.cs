@@ -15,7 +15,7 @@ namespace Cake.Common.Tools.InnoSetup
     /// <summary>
     /// The runner which executes Inno Setup.
     /// </summary>
-    public sealed class InnoSetupRunner : Tool<InnoSetupSettings>
+    internal sealed class InnoSetupRunner : Tool<InnoSetupSettings>
     {
         private readonly IRegistry _registry;
         private readonly ICakeEnvironment _environment;

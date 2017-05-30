@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.Chocolatey.Features
     /// <summary>
     /// The Chocolatey feature toggler used to enable/disable Chocolatey Features.
     /// </summary>
-    public sealed class ChocolateyFeatureToggler : ChocolateyTool<ChocolateyFeatureSettings>
+    internal sealed class ChocolateyFeatureToggler : ChocolateyTool<ChocolateyFeatureSettings>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ChocolateyFeatureToggler"/> class.

@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.DotCover.Report
     /// <summary>
     /// DotCover Report reporter.
     /// </summary>
-    public sealed class DotCoverReporter : DotCoverTool<DotCoverReportSettings>
+    internal sealed class DotCoverReporter : DotCoverTool<DotCoverReportSettings>
     {
         private readonly ICakeEnvironment _environment;
 

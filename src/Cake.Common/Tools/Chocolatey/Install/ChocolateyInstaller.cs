@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.Chocolatey.Install
     /// <summary>
     /// The Chocolatey package installer used to install Chocolatey packages.
     /// </summary>
-    public sealed class ChocolateyInstaller : ChocolateyTool<ChocolateyInstallSettings>
+    internal sealed class ChocolateyInstaller : ChocolateyTool<ChocolateyInstallSettings>
     {
         private readonly ICakeEnvironment _environment;
 

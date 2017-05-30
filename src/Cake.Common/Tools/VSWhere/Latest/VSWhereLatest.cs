@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.VSWhere.Latest
     /// <summary>
     /// The VSWhere tool that returns only the newest version and last installed.
     /// </summary>
-    public sealed class VSWhereLatest : VSWhereTool<VSWhereLatestSettings>
+    internal sealed class VSWhereLatest : VSWhereTool<VSWhereLatestSettings>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="VSWhereLatest"/> class.

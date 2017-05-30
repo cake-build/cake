@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.XUnit
     /// <summary>
     /// The xUnit.net (v1) test runner.
     /// </summary>
-    public sealed class XUnitRunner : Tool<XUnitSettings>
+    internal sealed class XUnitRunner : Tool<XUnitSettings>
     {
         private readonly ICakeEnvironment _environment;
 

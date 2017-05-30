@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.ILMerge
     /// <summary>
     /// The ILMerge runner.
     /// </summary>
-    public sealed class ILMergeRunner : Tool<ILMergeSettings>
+    internal sealed class ILMergeRunner : Tool<ILMergeSettings>
     {
         private readonly ICakeEnvironment _environment;
 

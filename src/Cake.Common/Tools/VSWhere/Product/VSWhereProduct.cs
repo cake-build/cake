@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.VSWhere.Product
     /// <summary>
     /// The VSWhere tool that finds Visual Studio products.
     /// </summary>
-    public sealed class VSWhereProduct : VSWhereTool<VSWhereProductSettings>
+    internal sealed class VSWhereProduct : VSWhereTool<VSWhereProductSettings>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="VSWhereProduct"/> class.

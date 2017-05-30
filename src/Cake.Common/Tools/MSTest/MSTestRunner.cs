@@ -14,7 +14,7 @@ namespace Cake.Common.Tools.MSTest
     /// <summary>
     /// The MSTest unit test runner.
     /// </summary>
-    public sealed class MSTestRunner : Tool<MSTestSettings>
+    internal sealed class MSTestRunner : Tool<MSTestSettings>
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;

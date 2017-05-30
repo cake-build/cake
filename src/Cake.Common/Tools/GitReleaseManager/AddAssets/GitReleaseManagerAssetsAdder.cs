@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.GitReleaseManager.AddAssets
     /// <summary>
     /// The GitReleaseManager Asset Adder used to add assets to a release.
     /// </summary>
-    public sealed class GitReleaseManagerAssetsAdder : GitReleaseManagerTool<GitReleaseManagerAddAssetsSettings>
+    internal sealed class GitReleaseManagerAssetsAdder : GitReleaseManagerTool<GitReleaseManagerAddAssetsSettings>
     {
         private readonly ICakeEnvironment _environment;
 

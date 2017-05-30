@@ -14,7 +14,7 @@ namespace Cake.Common.Tools.DotCover.Merge
     /// <summary>
     /// DotCover Merge merger.
     /// </summary>
-    public sealed class DotCoverMerger : DotCoverTool<DotCoverMergeSettings>
+    internal sealed class DotCoverMerger : DotCoverTool<DotCoverMergeSettings>
     {
         private readonly ICakeEnvironment _environment;
 

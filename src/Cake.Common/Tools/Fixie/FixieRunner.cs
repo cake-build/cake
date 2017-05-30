@@ -14,7 +14,7 @@ namespace Cake.Common.Tools.Fixie
     /// <summary>
     /// The Fixie test runner.
     /// </summary>
-    public sealed class FixieRunner : Tool<FixieSettings>
+    internal sealed class FixieRunner : Tool<FixieSettings>
     {
         private readonly ICakeEnvironment _environment;
 

@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.Chocolatey.ApiKey
     /// <summary>
     /// The Chocolatey package pinner used to pin Chocolatey packages.
     /// </summary>
-    public sealed class ChocolateyApiKeySetter : ChocolateyTool<ChocolateyApiKeySettings>
+    internal sealed class ChocolateyApiKeySetter : ChocolateyTool<ChocolateyApiKeySettings>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ChocolateyApiKeySetter"/> class.

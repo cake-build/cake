@@ -14,7 +14,7 @@ namespace Cake.Common.Tools.ILRepack
     /// <summary>
     /// The ILMerge runner.
     /// </summary>
-    public sealed class ILRepackRunner : Tool<ILRepackSettings>
+    internal sealed class ILRepackRunner : Tool<ILRepackSettings>
     {
         private readonly ICakeEnvironment _environment;
 

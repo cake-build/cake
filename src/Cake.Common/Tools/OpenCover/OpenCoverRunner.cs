@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.OpenCover
     /// <summary>
     /// The OpenCover runner.
     /// </summary>
-    public sealed class OpenCoverRunner : Tool<OpenCoverSettings>
+    internal sealed class OpenCoverRunner : Tool<OpenCoverSettings>
     {
         private readonly ICakeEnvironment _environment;
 

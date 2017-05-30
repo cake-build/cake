@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.SpecFlow.StepDefinitionReport
     /// <summary>
     /// SpecFlow StepDefinition execution report runner.
     /// </summary>
-    public sealed class SpecFlowStepDefinitionReporter : SpecFlowTool<SpecFlowStepDefinitionReportSettings>
+    internal sealed class SpecFlowStepDefinitionReporter : SpecFlowTool<SpecFlowStepDefinitionReportSettings>
     {
         private readonly ICakeEnvironment _environment;
 

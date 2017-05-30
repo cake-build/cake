@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.NuGet.Restore
     /// <summary>
     /// The NuGet package restorer used to restore solution packages.
     /// </summary>
-    public sealed class NuGetRestorer : NuGetTool<NuGetRestoreSettings>
+    internal sealed class NuGetRestorer : NuGetTool<NuGetRestoreSettings>
     {
         private readonly ICakeEnvironment _environment;
 

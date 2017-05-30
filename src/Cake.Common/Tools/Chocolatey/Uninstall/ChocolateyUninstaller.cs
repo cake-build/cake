@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.Chocolatey.Uninstall
     /// <summary>
     /// The Chocolatey package uninstall used to uninstall Chocolatey packages.
     /// </summary>
-    public sealed class ChocolateyUninstaller : ChocolateyTool<ChocolateyUninstallSettings>
+    internal sealed class ChocolateyUninstaller : ChocolateyTool<ChocolateyUninstallSettings>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ChocolateyUninstaller"/> class.

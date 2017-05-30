@@ -15,7 +15,7 @@ namespace Cake.Common.Tools.WiX
     /// <summary>
     /// The WiX Candle runner.
     /// </summary>
-    public sealed class CandleRunner : Tool<CandleSettings>
+    internal sealed class CandleRunner : Tool<CandleSettings>
     {
         private readonly ICakeEnvironment _environment;
 

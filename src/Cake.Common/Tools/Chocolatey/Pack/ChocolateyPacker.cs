@@ -14,7 +14,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
     /// <summary>
     /// The Chocolatey packer.
     /// </summary>
-    public sealed class ChocolateyPacker : ChocolateyTool<ChocolateyPackSettings>
+    internal sealed class ChocolateyPacker : ChocolateyTool<ChocolateyPackSettings>
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;

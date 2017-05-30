@@ -19,7 +19,7 @@ namespace Cake.Common.Tools.Cake
     /// <summary>
     /// Cake out process runner
     /// </summary>
-    public sealed class CakeRunner : Tool<CakeSettings>
+    internal sealed class CakeRunner : Tool<CakeSettings>
     {
         private readonly ICakeEnvironment _environment;
         private readonly IFileSystem _fileSystem;

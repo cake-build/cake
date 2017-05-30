@@ -15,7 +15,7 @@ namespace Cake.Common.Tools.WiX.Heat
     /// <summary>
     /// The WiX Heat runner.
     /// </summary>
-    public sealed class HeatRunner : Tool<HeatSettings>
+    internal sealed class HeatRunner : Tool<HeatSettings>
     {
         private readonly ICakeEnvironment _environment;
 

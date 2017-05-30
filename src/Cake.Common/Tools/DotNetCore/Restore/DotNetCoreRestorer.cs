@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.DotNetCore.Restore
     /// <summary>
     /// .NET Core project restorer.
     /// </summary>
-    public sealed class DotNetCoreRestorer : DotNetCoreTool<DotNetCoreRestoreSettings>
+    internal sealed class DotNetCoreRestorer : DotNetCoreTool<DotNetCoreRestoreSettings>
     {
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;

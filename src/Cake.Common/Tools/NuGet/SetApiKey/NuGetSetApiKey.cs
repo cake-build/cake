@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.NuGet.SetApiKey
     /// <summary>
     /// The NuGet set API key used to set API key used for API/feed authentication.
     /// </summary>
-    public sealed class NuGetSetApiKey : NuGetTool<NuGetSetApiKeySettings>
+    internal sealed class NuGetSetApiKey : NuGetTool<NuGetSetApiKeySettings>
     {
         private readonly ICakeEnvironment _environment;
 

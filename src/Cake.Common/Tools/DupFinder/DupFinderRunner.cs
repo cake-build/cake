@@ -17,7 +17,7 @@ namespace Cake.Common.Tools.DupFinder
     /// <summary>
     /// DupFinder runner
     /// </summary>
-    public sealed class DupFinderRunner : Tool<DupFinderSettings>
+    internal sealed class DupFinderRunner : Tool<DupFinderSettings>
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
