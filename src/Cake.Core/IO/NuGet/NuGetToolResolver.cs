@@ -66,18 +66,6 @@ namespace Cake.Core.IO.NuGet
                 return _cachedPath.Path;
             }
 
-            // Try to resolve it with the regular tool resolver.
-            var toolsExe = _tools.Resolve("nuget.exe");
-            if (toolsExe != null)
-            {
-                var toolsFile = _fileSystem.GetFile(toolsExe);
-                if (toolsFile.Exists)
-                {
-                    _cachedPath = toolsFile;
-                    return _cachedPath.Path;
-                }
-            }
-
             // Check if path set to environment variable
             var environmentExe = _environment.GetEnvironmentVariable("NUGET_EXE");
             if (!string.IsNullOrWhiteSpace(environmentExe))
@@ -86,6 +74,18 @@ namespace Cake.Core.IO.NuGet
                 if (envFile.Exists)
                 {
                     _cachedPath = envFile;
+                    return _cachedPath.Path;
+                }
+            }
+
+            // Try to resolve it with the regular tool resolver.
+            var toolsExe = _tools.Resolve("nuget.exe");
+            if (toolsExe != null)
+            {
+                var toolsFile = _fileSystem.GetFile(toolsExe);
+                if (toolsFile.Exists)
+                {
+                    _cachedPath = toolsFile;
                     return _cachedPath.Path;
                 }
             }
