@@ -83,26 +83,31 @@ namespace Cake.Common
         /// <param name="context">The context.</param>
         /// <param name="fileName">Name of the file.</param>
         /// <param name="settings">The settings.</param>
-        /// <param name="redirectedOutput">outputs process output <see cref="ProcessSettings.RedirectStandardOutput">RedirectStandardOutput</see> is true</param>
+        /// <param name="redirectedStandardOutput">Returns process output if <see cref="ProcessSettings.RedirectStandardOutput"/> is true.
+        /// Otherwise <c>null</c> is returned.</param>
         /// <returns>The exit code that the started process specified when it terminated.</returns>
         /// <example>
         /// <code>
-        /// IEnumerable&lt;string&gt; redirectedOutput;
-        /// var exitCodeWithArgument = StartProcess("ping", new ProcessSettings{
-        /// Arguments = "localhost",
-        /// RedirectStandardOutput = true
-        /// },
-        /// out redirectedOutput
-        /// );
-        /// //Output last line of process output
-        /// Information("Last line of output: {0}", redirectedOutput.LastOrDefault());
+        /// IEnumerable&lt;string&gt; redirectedStandardOutput;
+        /// var exitCodeWithArgument =
+        ///     StartProcess(
+        ///         "ping",
+        ///         new ProcessSettings {
+        ///             Arguments = "localhost",
+        ///             RedirectStandardOutput = true
+        ///         },
+        ///         out redirectedStandardOutput
+        ///     );
+        ///
+        /// // Output last line of process output.
+        /// Information("Last line of output: {0}", redirectedStandardOutput.LastOrDefault());
         ///
         /// // This should output 0 as valid arguments supplied
         /// Information("Exit code: {0}", exitCodeWithArgument);
         /// </code>
         /// </example>
         [CakeMethodAlias]
-        public static int StartProcess(this ICakeContext context, FilePath fileName, ProcessSettings settings, out IEnumerable<string> redirectedOutput)
+        public static int StartProcess(this ICakeContext context, FilePath fileName, ProcessSettings settings, out IEnumerable<string> redirectedStandardOutput)
         {
             var process = StartAndReturnProcess(context, fileName, settings);
 
@@ -124,7 +129,7 @@ namespace Cake.Common
                 process.WaitForExit();
             }
 
-            redirectedOutput = settings.RedirectStandardOutput
+            redirectedStandardOutput = settings.RedirectStandardOutput
                 ? process.GetStandardOutput()
                 : null;
 
