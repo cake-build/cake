@@ -82,5 +82,10 @@ namespace Cake
         {
             Console.ResetColor();
         }
+
+        public void WaitForInput()
+        {
+            Console.ReadKey();
+        }
     }
 }

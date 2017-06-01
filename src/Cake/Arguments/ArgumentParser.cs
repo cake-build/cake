@@ -176,6 +176,11 @@ namespace Cake.Arguments
                 options.Experimental = ParseBooleanValue(value);
             }
 
+            if (name.Equals("confirmerror", StringComparison.OrdinalIgnoreCase))
+            {
+                options.ConfirmError = ParseBooleanValue(value);
+            }
+
             if (options.Arguments.ContainsKey(name))
             {
                 _log.Error("Multiple arguments with the same name ({0}).", name);

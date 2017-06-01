@@ -99,6 +99,12 @@ namespace Cake
         public bool HasError { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to confirm any errors at the end.
+        /// This allows the user to read the error message before the program is closed.
+        /// </summary>
+        public bool ConfirmError { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CakeOptions"/> class.
         /// </summary>
         public CakeOptions()
@@ -108,6 +114,7 @@ namespace Cake
             Verbosity = Verbosity.Normal;
             ShowDescription = false;
             ShowHelp = false;
+            ConfirmError = false;
         }
     }
 }

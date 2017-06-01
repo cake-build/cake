@@ -112,5 +112,13 @@ namespace Cake.Testing
             ForegroundColor = ConsoleColor.Gray;
             BackgroundColor = ConsoleColor.Black;
         }
+
+        /// <summary>
+        /// Pauses execution and waits for any input.
+        /// </summary>
+        public void WaitForInput()
+        {
+            // Do nothing
+        }
     }
 }

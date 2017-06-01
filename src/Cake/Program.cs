@@ -31,6 +31,7 @@ namespace Cake
         public static int Main()
         {
             ICakeLog log = null;
+            CakeOptions options = null;
 
             try
             {
@@ -54,7 +55,7 @@ namespace Cake
 
                     // Parse the options.
                     var parser = container.Resolve<IArgumentParser>();
-                    var options = parser.Parse(args);
+                    options = parser.Parse(args);
 
                     // Set verbosity.
                     log.Verbosity = options.Verbosity;
@@ -78,7 +79,8 @@ namespace Cake
             }
             catch (Exception ex)
             {
-                log = log ?? new CakeBuildLog(new CakeConsole());
+                var console = new CakeConsole();
+                log = log ?? new CakeBuildLog(console);
                 if (log.Verbosity == Verbosity.Diagnostic)
                 {
                     log.Error("Error: {0}", ex);
@@ -86,6 +88,10 @@ namespace Cake
                 else
                 {
                     log.Error("Error: {0}", ex.Message);
+                }
+                if (options != null && options.ConfirmError)
+                {
+                   console.WaitForInput(); 
                 }
                 return 1;
             }

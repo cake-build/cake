@@ -355,7 +355,24 @@ namespace Cake.Tests.Unit.Arguments
                     // Then
                     Assert.Equal(expected, result.Experimental);
                 }
-            }
+
+				[Theory]
+				[InlineData("-confirmerror", true)]
+				[InlineData("-confirmerror=true", true)]
+				[InlineData("-confirmerror=false", false)]
+				public void Can_Parse_ConfirmError(string input, bool expected)
+				{
+					// Given
+					var fixture = new ArgumentParserFixture();
+					var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
+
+					// When
+					var result = parser.Parse(new[] { "build.cake", input });
+
+					// Then
+					Assert.Equal(expected, result.ConfirmError);
+				}
+			}
 
             public sealed class WithTwoDashLongArguments
             {
@@ -597,7 +614,24 @@ namespace Cake.Tests.Unit.Arguments
                     // Then
                     Assert.Equal(expected, result.Experimental);
                 }
-            }
+
+				[Theory]
+				[InlineData("--confirmerror", true)]
+				[InlineData("--confirmerror=true", true)]
+				[InlineData("--confirmerror=false", false)]
+				public void Can_Parse_ConfirmError(string input, bool expected)
+				{
+					// Given
+					var fixture = new ArgumentParserFixture();
+					var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
+
+					// When
+					var result = parser.Parse(new[] { "build.cake", input });
+
+					// Then
+					Assert.Equal(expected, result.ConfirmError);
+				}
+			}
         }
     }
 }
