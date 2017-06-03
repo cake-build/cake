@@ -32,9 +32,9 @@ Param(
 )
 
 $CakeVersion = "0.18.0"
-$DotNetChannel = "preview";
-$DotNetVersion = "1.0.0-preview2-003121";
-$DotNetInstallerUri = "https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0-preview2/scripts/obtain/dotnet-install.ps1";
+$DotNetChannel = "release";
+$DotNetVersion = "1.0.4";
+$DotNetInstallerUri = "https://raw.githubusercontent.com/dotnet/cli/master/scripts/obtain/dotnet-install.ps1";
 $NugetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
 
 # Make sure tools folder exists
