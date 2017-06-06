@@ -4,6 +4,7 @@
 
 using Cake.Common.Tests.Fixtures.Tools.DotNetCore.Restore;
 using Cake.Common.Tools.DotNetCore.Restore;
+using Cake.Core.IO;
 using Cake.Testing;
 using Xunit;
 
@@ -82,6 +83,40 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
 
                 // Then
                 Assert.Equal("restore \"./src/*\"", result.Args);
+            }
+
+            [Theory]
+            [InlineData("./src/project.json", "restore \"src/project.json\"")]
+            [InlineData("./test/project.json", "restore \"test/project.json\"")]
+            [InlineData("./test/Unit Tests/project.json", "restore \"test/Unit Tests/project.json\"")]
+            public void Should_Add_Project_Files_If_Provided(string text, string expected)
+            {
+                // Given
+                var fixture = new DotNetCoreRestorerFixture();
+                fixture.ProjectFiles.Add(text);
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("./src", "restore \"src\"")]
+            [InlineData("./test", "restore \"test\"")]
+            [InlineData("./test/Unit Tests", "restore \"test/Unit Tests\"")]
+            public void Should_Add_Directory_Paths_If_Provided(string text, string expected)
+            {
+                // Given
+                var fixture = new DotNetCoreRestorerFixture();
+                fixture.DirectoryPaths.Add(text);
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
             }
 
             [Theory]
