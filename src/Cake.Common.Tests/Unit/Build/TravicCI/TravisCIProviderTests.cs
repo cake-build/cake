@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Common.Build.TravisCI;
 using Cake.Common.Tests.Fixtures.Build;
 using Cake.Testing.Extensions;
@@ -24,7 +25,7 @@ namespace Cake.Common.Tests.Unit.Build.TravicCI
                 travisCI.WriteStartFold("cake");
 
                 // Then
-                Assert.Contains("travis_fold:start:cake\r", fixture.Log.AggregateLogMessages());
+                Assert.Contains("travis_fold:start:cake\r", fixture.Log.AggregateLogMessages(), StringComparison.Ordinal);
             }
         }
 
@@ -41,7 +42,7 @@ namespace Cake.Common.Tests.Unit.Build.TravicCI
                 travisCI.WriteEndFold("cake");
 
                 // Then
-                Assert.Contains("travis_fold:end:cake\r", fixture.Log.AggregateLogMessages());
+                Assert.Contains("travis_fold:end:cake\r", fixture.Log.AggregateLogMessages(), StringComparison.Ordinal);
             }
         }
 
@@ -60,8 +61,8 @@ namespace Cake.Common.Tests.Unit.Build.TravicCI
                 }
 
                 // Then
-                Assert.Contains("travis_fold:start:cake\r", fixture.Log.AggregateLogMessages());
-                Assert.Contains("travis_fold:end:cake\r", fixture.Log.AggregateLogMessages());
+                Assert.Contains("travis_fold:start:cake\r", fixture.Log.AggregateLogMessages(), StringComparison.Ordinal);
+                Assert.Contains("travis_fold:end:cake\r", fixture.Log.AggregateLogMessages(), StringComparison.Ordinal);
             }
 
             [Fact]
@@ -77,7 +78,7 @@ namespace Cake.Common.Tests.Unit.Build.TravicCI
                 }
 
                 // Then
-                Assert.Contains("travis_fold:start:cake\r", fixture.Log.AggregateLogMessages());
+                Assert.Contains("travis_fold:start:cake\r", fixture.Log.AggregateLogMessages(), StringComparison.Ordinal);
             }
 
             [Fact]
@@ -93,7 +94,7 @@ namespace Cake.Common.Tests.Unit.Build.TravicCI
                 }
 
                 // Then
-                Assert.Contains("travis_fold:end:cake\r", fixture.Log.AggregateLogMessages());
+                Assert.Contains("travis_fold:end:cake\r", fixture.Log.AggregateLogMessages(), StringComparison.Ordinal);
             }
         }
     }

@@ -39,5 +39,11 @@
     <Rule Id="SA1633" Action="None" /> <!-- Remove later -->
     <Rule Id="SA1649" Action="None" />
     <Rule Id="SA1652" Action="None" />
+    <Rule Id="xUnit1012" Action="None" /> <!-- Remove later -->
+    <Rule Id="xUnit1013" Action="None" /> <!-- Remove later -->
+    <Rule Id="xUnit2000" Action="None" /> <!-- Remove later -->
+    <Rule Id="xUnit2002" Action="None" /> <!-- Remove later -->
+    <Rule Id="xUnit2003" Action="None" /> <!-- Remove later -->
+    <Rule Id="xUnit2004" Action="None" /> <!-- Remove later -->
   </Rules>
 </RuleSet>
