@@ -112,8 +112,8 @@ fi
 
 # Copy the built Cake to the local Cake path.
 if [ ${SKIP_BUILDING_CAKE} -eq 0 ]; then
-    cp -r "$BUILT_CAKE_DIR/"*.* "$CAKE_DIR/"
-    cp -r "$BUILT_CAKE_CORECLR_DIR/"*.* "$CAKE_CORECLR_DIR/"
+    cp -r "$BUILT_CAKE_DIR/"* "$CAKE_DIR/"
+    cp -r "$BUILT_CAKE_CORECLR_DIR/"* "$CAKE_CORECLR_DIR/"
 fi
 
 # Ensure that Cake can be found where we expect it to.
