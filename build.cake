@@ -1,5 +1,4 @@
 // Install addins.
-#addin "nuget:https://www.nuget.org/api/v2?package=Newtonsoft.Json&version=9.0.1"
 #addin "nuget:https://www.nuget.org/api/v2?package=Cake.Coveralls&version=0.4.0"
 #addin "nuget:https://www.nuget.org/api/v2?package=Cake.Twitter&version=0.4.0"
 #addin "nuget:https://www.nuget.org/api/v2?package=Cake.Gitter&version=0.5.0"

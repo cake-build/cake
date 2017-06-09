@@ -56,8 +56,8 @@ $MonoScript = (Join-Path $PSScriptRoot "build.cake")
 $ToolsPath = Join-Path $PSScriptRoot "tools"
 $NuGetPath = Join-Path $ToolsPath "nuget.exe"
 $DotNetChannel = "preview"
-$DotNetVersion = "1.0.1"
-$DotNetInstallerUri = "https://raw.githubusercontent.com/dotnet/cli/rel/1.0.1/scripts/obtain/dotnet-install.ps1";
+$DotNetVersion = "1.0.4";
+$DotNetInstallerUri = "https://dot.net/v1/dotnet-install.ps1";
 $NuGetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
 
 # Make sure the tools directory exist.
