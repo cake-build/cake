@@ -219,7 +219,7 @@ Task("Create-NuGet-Packages")
     .Does(() =>
 {
     // Build libraries
-    var projects = GetFiles("./**/*.xproj");
+    var projects = GetFiles("./src/**/*.csproj");
     foreach(var project in projects)
     {
         var name = project.GetDirectory().FullPath;
@@ -229,12 +229,14 @@ Task("Create-NuGet-Packages")
             continue;
         }
 
-        DotNetCorePack(project.GetDirectory().FullPath, new DotNetCorePackSettings {
-            VersionSuffix = parameters.Version.DotNetAsterix,
+        DotNetCorePack(project.FullPath, new DotNetCorePackSettings {
             Configuration = parameters.Configuration,
             OutputDirectory = parameters.Paths.Directories.NugetRoot,
             NoBuild = true,
-            Verbose = false
+            ArgumentCustomization = args => args
+                .Append("/p:Version={0}", parameters.Version.SemVersion)
+                .Append("/p:AssemblyVersion={0}", parameters.Version.Version)
+                .Append("/p:FileVersion={0}", parameters.Version.Version)
         });
     }
 
