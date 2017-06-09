@@ -21,7 +21,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => new TeardownContext(null, exception));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
         }
     }

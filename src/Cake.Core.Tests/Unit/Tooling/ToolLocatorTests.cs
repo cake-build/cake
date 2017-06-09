@@ -25,7 +25,7 @@ namespace Cake.Core.Tests.Unit.Tooling
                 var result = Record.Exception(() => new ToolLocator(null, repository, strategy));
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -39,7 +39,7 @@ namespace Cake.Core.Tests.Unit.Tooling
                 var result = Record.Exception(() => new ToolLocator(environment, null, strategy));
 
                 // Then
-                Assert.IsArgumentNullException(result, "repository");
+                AssertEx.IsArgumentNullException(result, "repository");
             }
 
             [Fact]
@@ -53,7 +53,7 @@ namespace Cake.Core.Tests.Unit.Tooling
                 var result = Record.Exception(() => new ToolLocator(environment, repository, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "strategy");
+                AssertEx.IsArgumentNullException(result, "strategy");
             }
         }
 
@@ -72,7 +72,7 @@ namespace Cake.Core.Tests.Unit.Tooling
                 var result = Record.Exception(() => locator.RegisterFile(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "path");
             }
 
             [Fact]
@@ -108,7 +108,7 @@ namespace Cake.Core.Tests.Unit.Tooling
                 var result = Record.Exception(() => locator.Resolve(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "tool");
+                AssertEx.IsArgumentNullException(result, "tool");
             }
 
             [Theory]
@@ -127,7 +127,7 @@ namespace Cake.Core.Tests.Unit.Tooling
                 var result = Record.Exception(() => locator.Resolve(tool));
 
                 // Then
-                Assert.IsArgumentException(result, "tool", "Tool name cannot be empty.");
+                AssertEx.IsArgumentException(result, "tool", "Tool name cannot be empty.");
             }
 
             [Fact]

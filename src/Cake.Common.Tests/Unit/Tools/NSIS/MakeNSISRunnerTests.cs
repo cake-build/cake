@@ -27,7 +27,7 @@ namespace Cake.Common.Tests.Unit.Tools.NSIS
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "scriptFile");
+                AssertEx.IsArgumentNullException(result, "scriptFile");
             }
 
             [Fact]
@@ -41,7 +41,7 @@ namespace Cake.Common.Tests.Unit.Tools.NSIS
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]

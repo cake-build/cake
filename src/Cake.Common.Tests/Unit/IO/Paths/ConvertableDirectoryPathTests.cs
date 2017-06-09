@@ -20,7 +20,7 @@ namespace Cake.Common.Tests.Unit.IO.Paths
                 var result = Record.Exception(() => new ConvertableDirectoryPath(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "path");
             }
         }
 
@@ -78,7 +78,7 @@ namespace Cake.Common.Tests.Unit.IO.Paths
                         (ConvertableDirectoryPath)null + new ConvertableDirectoryPath("other"));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "left");
+                    AssertEx.IsArgumentNullException(result, "left");
                 }
 
                 [Fact]
@@ -89,7 +89,7 @@ namespace Cake.Common.Tests.Unit.IO.Paths
                         new ConvertableDirectoryPath("./root") + (ConvertableDirectoryPath)null);
 
                     // Then
-                    Assert.IsArgumentNullException(result, "right");
+                    AssertEx.IsArgumentNullException(result, "right");
                 }
             }
 
@@ -129,7 +129,7 @@ namespace Cake.Common.Tests.Unit.IO.Paths
                         (ConvertableDirectoryPath)null + new DirectoryPath("other"));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "left");
+                    AssertEx.IsArgumentNullException(result, "left");
                 }
 
                 [Fact]
@@ -140,7 +140,7 @@ namespace Cake.Common.Tests.Unit.IO.Paths
                         new ConvertableDirectoryPath("./root") + (DirectoryPath)null);
 
                     // Then
-                    Assert.IsArgumentNullException(result, "right");
+                    AssertEx.IsArgumentNullException(result, "right");
                 }
             }
 
@@ -180,7 +180,7 @@ namespace Cake.Common.Tests.Unit.IO.Paths
                         (ConvertableDirectoryPath)null + new ConvertableFilePath("other.txt"));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "directory");
+                    AssertEx.IsArgumentNullException(result, "directory");
                 }
 
                 [Fact]
@@ -191,7 +191,7 @@ namespace Cake.Common.Tests.Unit.IO.Paths
                         new ConvertableDirectoryPath("./root") + (ConvertableFilePath)null);
 
                     // Then
-                    Assert.IsArgumentNullException(result, "file");
+                    AssertEx.IsArgumentNullException(result, "file");
                 }
             }
 
@@ -231,7 +231,7 @@ namespace Cake.Common.Tests.Unit.IO.Paths
                         (ConvertableDirectoryPath)null + new FilePath("other.txt"));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "directory");
+                    AssertEx.IsArgumentNullException(result, "directory");
                 }
 
                 [Fact]
@@ -242,7 +242,7 @@ namespace Cake.Common.Tests.Unit.IO.Paths
                         new ConvertableDirectoryPath("./root") + (FilePath)null);
 
                     // Then
-                    Assert.IsArgumentNullException(result, "file");
+                    AssertEx.IsArgumentNullException(result, "file");
                 }
             }
         }

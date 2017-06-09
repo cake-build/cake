@@ -23,7 +23,7 @@ namespace Cake.Core.Tests.Unit.Configuration
                 var result = Record.Exception(() => fixture.Create());
 
                 // Then
-                Assert.IsArgumentNullException(result, "fileSystem");
+                AssertEx.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -37,7 +37,7 @@ namespace Cake.Core.Tests.Unit.Configuration
                 var result = Record.Exception(() => fixture.Create());
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
         }
 
@@ -54,7 +54,7 @@ namespace Cake.Core.Tests.Unit.Configuration
                 var result = Record.Exception(() => fixture.Create());
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "path");
             }
 
             [Fact]
@@ -68,7 +68,7 @@ namespace Cake.Core.Tests.Unit.Configuration
                 var result = Record.Exception(() => fixture.Create());
 
                 // Then
-                Assert.IsArgumentNullException(result, "arguments");
+                AssertEx.IsArgumentNullException(result, "arguments");
             }
 
             [Fact]

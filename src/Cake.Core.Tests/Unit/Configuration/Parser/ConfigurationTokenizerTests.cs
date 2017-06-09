@@ -44,7 +44,7 @@ namespace Cake.Core.Tests.Unit.Configuration.Parser
                 var result = Record.Exception(() => ConfigurationTokenizer.Tokenize(section));
 
                 // Then
-                Assert.IsExceptionWithMessage<InvalidOperationException>(result, "Encountered malformed section.");
+                AssertEx.IsExceptionWithMessage<InvalidOperationException>(result, "Encountered malformed section.");
             }
 
             [Fact]

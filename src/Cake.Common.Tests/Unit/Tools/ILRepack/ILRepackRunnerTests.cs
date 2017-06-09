@@ -29,7 +29,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILRepack
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "outputAssemblyPath");
+                AssertEx.IsArgumentNullException(result, "outputAssemblyPath");
             }
 
             [Fact]
@@ -43,7 +43,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILRepack
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "primaryAssemblyPath");
+                AssertEx.IsArgumentNullException(result, "primaryAssemblyPath");
             }
 
             [Fact]
@@ -57,7 +57,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILRepack
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "assemblyPaths");
+                AssertEx.IsArgumentNullException(result, "assemblyPaths");
             }
 
             [Fact]

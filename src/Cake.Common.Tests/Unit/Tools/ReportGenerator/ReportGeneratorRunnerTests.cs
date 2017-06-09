@@ -26,7 +26,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportGenerator
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "reports");
+                AssertEx.IsArgumentNullException(result, "reports");
             }
 
             [Fact]
@@ -40,7 +40,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportGenerator
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentException(result, "reports", "reports must not be empty");
+                AssertEx.IsArgumentException(result, "reports", "reports must not be empty");
             }
 
             [Fact]
@@ -54,7 +54,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportGenerator
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "targetDir");
+                AssertEx.IsArgumentNullException(result, "targetDir");
             }
 
             [Fact]
@@ -68,7 +68,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportGenerator
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]

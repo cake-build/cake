@@ -3,7 +3,7 @@
   <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <id>Cake.CoreCLR</id>
     <version>0.0.0</version>
-    <authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors</authors>
+    <authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström and contributors</authors>
     <description>The Cake script runner.</description>
     <summary>Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.</summary>
     <licenseUrl>https://github.com/cake-build/cake/blob/develop/LICENSE</licenseUrl>
@@ -14,18 +14,20 @@
     <tags>Cake Script Build</tags>
   </metadata>
   <files>
-    <file src="Autofac.dll" />
+    <file src="LICENSE" />
+    <file src="Cake.dll" />
+    <file src="Cake.dll.config" />
+    <file src="Cake.deps.json" />
+    <file src="Cake.runtimeconfig.json" />
     <file src="Cake.Common.dll" />
     <file src="Cake.Core.dll" />
-    <file src="Cake.deps.json" />
-    <file src="Cake.dll" />
     <file src="Cake.NuGet.dll" />
-    <file src="Cake.runtimeconfig.json" />
+    <file src="Autofac.dll" />
     <file src="Microsoft.CodeAnalysis.CSharp.dll" />
     <file src="Microsoft.CodeAnalysis.CSharp.Scripting.dll" />
     <file src="Microsoft.CodeAnalysis.dll" />
     <file src="Microsoft.CodeAnalysis.Scripting.dll" />
-    <file src="Microsoft.DotNet.InternalAbstractions.dll" />
+    <file src="Microsoft.DotNet.PlatformAbstractions.dll" />
     <file src="Microsoft.Extensions.DependencyModel.dll" />
     <file src="Newtonsoft.Json.dll" />
     <file src="NuGet.Client.dll" />
@@ -38,22 +40,89 @@
     <file src="NuGet.Repositories.dll" />
     <file src="NuGet.RuntimeModel.dll" />
     <file src="NuGet.Versioning.dll" />
+    <file src="System.AppContext.dll" />
+    <file src="System.Buffers.dll" />
+    <file src="System.Collections.Concurrent.dll" />
+    <file src="System.Collections.Immutable.dll" />
     <file src="System.Collections.NonGeneric.dll" />
     <file src="System.Collections.Specialized.dll" />
+    <file src="System.ComponentModel.dll" />
     <file src="System.ComponentModel.Primitives.dll" />
     <file src="System.ComponentModel.TypeConverter.dll" />
+    <file src="System.Diagnostics.DiagnosticSource.dll" />
     <file src="System.Diagnostics.StackTrace.dll" />
+    <file src="System.Dynamic.Runtime.dll" />
+    <file src="System.IO.Compression.ZipFile.dll" />
+    <file src="System.IO.FileSystem.Primitives.dll" />
+    <file src="System.Linq.dll" />
+    <file src="System.Linq.Expressions.dll" />
+    <file src="System.ObjectModel.dll" />
     <file src="System.Private.DataContractSerialization.dll" />
+    <file src="System.Reflection.Emit.dll" />
+    <file src="System.Reflection.Emit.ILGeneration.dll" />
+    <file src="System.Reflection.Emit.Lightweight.dll" />
+    <file src="System.Reflection.Metadata.dll" />
+    <file src="System.Reflection.TypeExtensions.dll" />
+    <file src="System.Runtime.InteropServices.RuntimeInformation.dll" />
+    <file src="System.Runtime.Loader.dll" />
+    <file src="System.Runtime.Numerics.dll" />
     <file src="System.Runtime.Serialization.Json.dll" />
     <file src="System.Runtime.Serialization.Primitives.dll" />
+    <file src="System.Security.Cryptography.OpenSsl.dll" />
+    <file src="System.Security.Cryptography.Primitives.dll" />
+    <file src="System.Text.RegularExpressions.dll" />
+    <file src="System.Threading.dll" />
+    <file src="System.Threading.Tasks.Extensions.dll" />
+    <file src="System.Threading.Tasks.Parallel.dll" />
+    <file src="System.Threading.Thread.dll" />
+    <file src="System.Threading.ThreadPool.dll" />
+    <file src="System.ValueTuple.dll" />
+    <file src="System.Xml.ReaderWriter.dll" />
+    <file src="System.Xml.XDocument.dll" />
     <file src="System.Xml.XmlDocument.dll" />
     <file src="System.Xml.XmlSerializer.dll" />
     <file src="System.Xml.XPath.dll" />
     <file src="System.Xml.XPath.XDocument.dll" />
     <file src="System.Xml.XPath.XmlDocument.dll" />
-    <file src="runtimes/unix/lib/netstandard1.3/System.Diagnostics.FileVersionInfo.dll" target="runtimes/unix/lib/netstandard1.3/" />
-    <file src="runtimes/unix/lib/netstandard1.3/System.Text.Encoding.CodePages.dll" target="runtimes/unix/lib/netstandard1.3/" />
-    <file src="runtimes/win/lib/netstandard1.3/System.Diagnostics.FileVersionInfo.dll" target="runtimes/win/lib/netstandard1.3/" />
-    <file src="runtimes/win/lib/netstandard1.3/System.Text.Encoding.CodePages.dll" target="runtimes/win/lib/netstandard1.3/" />
+    <file src="runtimes/debian.8-x64/native/System.Security.Cryptography.Native.OpenSsl.so" />
+    <file src="runtimes/fedora.23-x64/native/System.Security.Cryptography.Native.OpenSsl.so" />
+    <file src="runtimes/fedora.24-x64/native/System.Security.Cryptography.Native.OpenSsl.so" />
+    <file src="runtimes/linux/lib/netstandard1.4/System.Diagnostics.Process.dll" />
+    <file src="runtimes/opensuse.13.2-x64/native/System.Security.Cryptography.Native.OpenSsl.so" />
+    <file src="runtimes/opensuse.42.1-x64/native/System.Security.Cryptography.Native.OpenSsl.so" />
+    <file src="runtimes/osx/lib/netstandard1.4/System.Diagnostics.Process.dll" />
+    <file src="runtimes/osx/lib/netstandard1.6/System.Security.Cryptography.Algorithms.dll" />
+    <file src="runtimes/osx.10.10-x64/native/System.Security.Cryptography.Native.Apple.dylib" />
+    <file src="runtimes/osx.10.10-x64/native/System.Security.Cryptography.Native.OpenSsl.dylib" />
+    <file src="runtimes/rhel.7-x64/native/System.Security.Cryptography.Native.OpenSsl.so" />
+    <file src="runtimes/ubuntu.14.04-x64/native/System.Security.Cryptography.Native.OpenSsl.so" />
+    <file src="runtimes/ubuntu.16.04-x64/native/System.Security.Cryptography.Native.OpenSsl.so" />
+    <file src="runtimes/ubuntu.16.10-x64/native/System.Security.Cryptography.Native.OpenSsl.so" />
+    <file src="runtimes/unix/lib/netstandard1.1/System.Runtime.InteropServices.RuntimeInformation.dll" />
+    <file src="runtimes/unix/lib/netstandard1.3/Microsoft.Win32.Registry.dll" />
+    <file src="runtimes/unix/lib/netstandard1.3/System.Diagnostics.FileVersionInfo.dll" />
+    <file src="runtimes/unix/lib/netstandard1.3/System.Globalization.Extensions.dll" />
+    <file src="runtimes/unix/lib/netstandard1.3/System.IO.Compression.dll" />
+    <file src="runtimes/unix/lib/netstandard1.3/System.Security.Cryptography.Csp.dll" />
+    <file src="runtimes/unix/lib/netstandard1.3/System.Security.Cryptography.Encoding.dll" />
+    <file src="runtimes/unix/lib/netstandard1.3/System.Text.Encoding.CodePages.dll" />
+    <file src="runtimes/unix/lib/netstandard1.6/System.Net.Http.dll" />
+    <file src="runtimes/unix/lib/netstandard1.6/System.Security.Cryptography.Algorithms.dll" />
+    <file src="runtimes/unix/lib/netstandard1.6/System.Security.Cryptography.Cng.dll" />
+    <file src="runtimes/unix/lib/netstandard1.6/System.Security.Cryptography.OpenSsl.dll" />
+    <file src="runtimes/unix/lib/netstandard1.6/System.Security.Cryptography.X509Certificates.dll" />
+    <file src="runtimes/win/lib/netstandard1.1/System.Runtime.InteropServices.RuntimeInformation.dll" />
+    <file src="runtimes/win/lib/netstandard1.3/Microsoft.Win32.Registry.dll" />
+    <file src="runtimes/win/lib/netstandard1.3/System.Diagnostics.FileVersionInfo.dll" />
+    <file src="runtimes/win/lib/netstandard1.3/System.Globalization.Extensions.dll" />
+    <file src="runtimes/win/lib/netstandard1.3/System.IO.Compression.dll" />
+    <file src="runtimes/win/lib/netstandard1.3/System.Net.Http.dll" />
+    <file src="runtimes/win/lib/netstandard1.3/System.Security.Cryptography.Csp.dll" />
+    <file src="runtimes/win/lib/netstandard1.3/System.Security.Cryptography.Encoding.dll" />
+    <file src="runtimes/win/lib/netstandard1.3/System.Text.Encoding.CodePages.dll" />
+    <file src="runtimes/win/lib/netstandard1.4/System.Diagnostics.Process.dll" />
+    <file src="runtimes/win/lib/netstandard1.6/System.Security.Cryptography.Algorithms.dll" />
+    <file src="runtimes/win/lib/netstandard1.6/System.Security.Cryptography.Cng.dll" />
+    <file src="runtimes/win/lib/netstandard1.6/System.Security.Cryptography.X509Certificates.dll" />
   </files>
 </package>

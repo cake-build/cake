@@ -23,7 +23,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => new ProcessRunner(null, log));
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -36,7 +36,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => new ProcessRunner(environment, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "log");
+                AssertEx.IsArgumentNullException(result, "log");
             }
         }
 
@@ -54,7 +54,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => runner.Start("./app.exe", null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -70,7 +70,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => runner.Start(null, info));
 
                 // Then
-                Assert.IsArgumentNullException(result, "filePath");
+                AssertEx.IsArgumentNullException(result, "filePath");
             }
         }
     }

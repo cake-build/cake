@@ -31,7 +31,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => DirectoryAliases.Directory(null, path));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -44,7 +44,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => DirectoryAliases.Directory(context, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "path");
             }
 
             [Fact]
@@ -71,7 +71,7 @@ namespace Cake.Common.Tests.Unit.IO
                     DirectoryAliases.CleanDirectory(null, "/Temp/Hello"));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -86,7 +86,7 @@ namespace Cake.Common.Tests.Unit.IO
                     DirectoryAliases.CleanDirectory(context, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "path");
             }
 
             [Fact]
@@ -246,7 +246,7 @@ namespace Cake.Common.Tests.Unit.IO
                         DirectoryAliases.CleanDirectories(null, paths));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "context");
+                    AssertEx.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -260,7 +260,7 @@ namespace Cake.Common.Tests.Unit.IO
                         DirectoryAliases.CleanDirectories(context, (IEnumerable<DirectoryPath>)null));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "directories");
+                    AssertEx.IsArgumentNullException(result, "directories");
                 }
 
                 [Fact]
@@ -339,7 +339,7 @@ namespace Cake.Common.Tests.Unit.IO
                         DirectoryAliases.CleanDirectories(null, paths));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "context");
+                    AssertEx.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -353,7 +353,7 @@ namespace Cake.Common.Tests.Unit.IO
                         DirectoryAliases.CleanDirectories(context, (IEnumerable<string>)null));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "directories");
+                    AssertEx.IsArgumentNullException(result, "directories");
                 }
 
                 [Fact]
@@ -433,7 +433,7 @@ namespace Cake.Common.Tests.Unit.IO
                     DirectoryAliases.CreateDirectory(null, path));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -447,7 +447,7 @@ namespace Cake.Common.Tests.Unit.IO
                     DirectoryAliases.CreateDirectory(context, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "path");
             }
 
             [Fact]
@@ -522,7 +522,7 @@ namespace Cake.Common.Tests.Unit.IO
                      DirectoryAliases.EnsureDirectoryExists(null, path));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -536,7 +536,7 @@ namespace Cake.Common.Tests.Unit.IO
                      DirectoryAliases.EnsureDirectoryExists(context, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "path");
             }
 
             [Fact]
@@ -607,7 +607,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => DirectoryAliases.DeleteDirectory(null, "/Temp/DoNotExist"));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -622,7 +622,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => context.DeleteDirectory(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "path");
             }
 
             [Fact]
@@ -719,7 +719,7 @@ namespace Cake.Common.Tests.Unit.IO
                         DirectoryAliases.DeleteDirectories(null, paths));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "context");
+                    AssertEx.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -733,7 +733,7 @@ namespace Cake.Common.Tests.Unit.IO
                         context.DeleteDirectories((IEnumerable<DirectoryPath>)null));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "directories");
+                    AssertEx.IsArgumentNullException(result, "directories");
                 }
 
                 [Fact]
@@ -842,7 +842,7 @@ namespace Cake.Common.Tests.Unit.IO
                         DirectoryAliases.DeleteDirectories(null, paths));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "context");
+                    AssertEx.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -856,7 +856,7 @@ namespace Cake.Common.Tests.Unit.IO
                         context.DeleteDirectories((IEnumerable<string>)null));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "directories");
+                    AssertEx.IsArgumentNullException(result, "directories");
                 }
 
                 [Fact]
@@ -1118,7 +1118,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => DirectoryAliases.DirectoryExists(null, "something"));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -1131,7 +1131,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => DirectoryAliases.DirectoryExists(context, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "path");
             }
 
             [Fact]
@@ -1177,7 +1177,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => DirectoryAliases.MakeAbsolute(null, "./build"));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -1190,7 +1190,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => DirectoryAliases.MakeAbsolute(context, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "path");
             }
 
             [Fact]
@@ -1221,7 +1221,7 @@ namespace Cake.Common.Tests.Unit.IO
                     DirectoryAliases.MoveDirectory(null, source, target));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -1236,7 +1236,7 @@ namespace Cake.Common.Tests.Unit.IO
                     DirectoryAliases.MoveDirectory(context, null, target));
 
                 // Then
-                Assert.IsArgumentNullException(result, "directoryPath");
+                AssertEx.IsArgumentNullException(result, "directoryPath");
             }
 
             [Fact]
@@ -1251,7 +1251,7 @@ namespace Cake.Common.Tests.Unit.IO
                     DirectoryAliases.MoveDirectory(context, source, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "targetDirectoryPath");
+                AssertEx.IsArgumentNullException(result, "targetDirectoryPath");
             }
 
             [Fact]

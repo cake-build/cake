@@ -44,7 +44,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => new BuildSystem(null, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitlabCIProvider, tfBuildProvider));
 
                 // Then
-                Assert.IsArgumentNullException(result, "appVeyorProvider");
+                AssertEx.IsArgumentNullException(result, "appVeyorProvider");
             }
 
             [Fact]
@@ -67,7 +67,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => new BuildSystem(appVeyorProvider, null, myGetProvider, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitlabCIProvider, tfBuildProvider));
 
                 // Then
-                Assert.IsArgumentNullException(result, "teamCityProvider");
+                AssertEx.IsArgumentNullException(result, "teamCityProvider");
             }
 
             [Fact]
@@ -90,7 +90,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, null, bambooProvider, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitlabCIProvider, tfBuildProvider));
 
                 // Then
-                Assert.IsArgumentNullException(result, "myGetProvider");
+                AssertEx.IsArgumentNullException(result, "myGetProvider");
             }
 
             [Fact]
@@ -113,7 +113,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, null, continuaCIProvider,  jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitlabCIProvider, tfBuildProvider));
 
                 // Then
-                Assert.IsArgumentNullException(result, "bambooProvider");
+                AssertEx.IsArgumentNullException(result, "bambooProvider");
             }
 
             [Fact]
@@ -136,7 +136,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, null,  jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitlabCIProvider, tfBuildProvider));
 
                 // Then
-                Assert.IsArgumentNullException(result, "continuaCIProvider");
+                AssertEx.IsArgumentNullException(result, "continuaCIProvider");
             }
 
             [Fact]
@@ -159,7 +159,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, null, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitlabCIProvider, tfBuildProvider));
 
                 // Then
-                Assert.IsArgumentNullException(result, "jenkinsProvider");
+                AssertEx.IsArgumentNullException(result, "jenkinsProvider");
             }
 
             [Fact]
@@ -182,7 +182,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, null, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitlabCIProvider, tfBuildProvider));
 
                 // Then
-                Assert.IsArgumentNullException(result, "bitriseProvider");
+                AssertEx.IsArgumentNullException(result, "bitriseProvider");
             }
 
             [Fact]
@@ -205,7 +205,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, null, bitbucketPipelinesProvider, goCDProvider, gitlabCIProvider, tfBuildProvider));
 
                 // Then
-                Assert.IsArgumentNullException(result, "travisCIProvider");
+                AssertEx.IsArgumentNullException(result, "travisCIProvider");
             }
 
             [Fact]
@@ -228,7 +228,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, null, goCDProvider, gitlabCIProvider, tfBuildProvider));
 
                 // Then
-                Assert.IsArgumentNullException(result, "bitbucketPipelinesProvider");
+                AssertEx.IsArgumentNullException(result, "bitbucketPipelinesProvider");
             }
 
             [Fact]
@@ -251,7 +251,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, null, gitlabCIProvider, tfBuildProvider));
 
                 // Then
-                Assert.IsArgumentNullException(result, "goCDProvider");
+                AssertEx.IsArgumentNullException(result, "goCDProvider");
             }
 
             [Fact]
@@ -274,7 +274,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, null, tfBuildProvider));
 
                 // Then
-                Assert.IsArgumentNullException(result, "gitlabCIProvider");
+                AssertEx.IsArgumentNullException(result, "gitlabCIProvider");
             }
 
             [Fact]
@@ -297,7 +297,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitlabCIProvider, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "tfBuildProvider");
+                AssertEx.IsArgumentNullException(result, "tfBuildProvider");
             }
         }
 

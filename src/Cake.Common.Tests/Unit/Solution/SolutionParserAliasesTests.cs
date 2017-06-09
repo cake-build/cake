@@ -21,7 +21,7 @@ namespace Cake.Common.Tests.Unit.Solution
                 var result = Record.Exception(() => SolutionAliases.ParseSolution(null, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -38,7 +38,7 @@ namespace Cake.Common.Tests.Unit.Solution
                 var result = Record.Exception(() => SolutionAliases.ParseSolution(cakeContext, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "solutionPath");
+                AssertEx.IsArgumentNullException(result, "solutionPath");
             }
         }
     }

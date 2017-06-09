@@ -23,7 +23,7 @@ namespace Cake.NuGet.Tests.Unit.V3
             var result = Record.Exception(() => fixture.GetFiles());
 
             // Then
-            Assert.IsArgumentNullException(result, "path");
+            AssertEx.IsArgumentNullException(result, "path");
         }
 
         [Fact]

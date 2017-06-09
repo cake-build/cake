@@ -100,7 +100,7 @@ namespace Cake.Core.Tests.Unit.Tooling
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "dummy: Process returned an error (exit code 11).");
+                AssertEx.IsCakeException(result, "dummy: Process returned an error (exit code 11).");
             }
 
             [Fact]
@@ -142,7 +142,7 @@ namespace Cake.Core.Tests.Unit.Tooling
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "UnitTest");
+                AssertEx.IsCakeException(result, "UnitTest");
             }
         }
     }

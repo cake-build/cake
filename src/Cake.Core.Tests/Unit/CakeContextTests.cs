@@ -22,7 +22,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateContext());
 
                 // Then
-                Assert.IsArgumentNullException(result, "fileSystem");
+                AssertEx.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -36,7 +36,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateContext());
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -50,7 +50,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateContext());
 
                 // Then
-                Assert.IsArgumentNullException(result, "globber");
+                AssertEx.IsArgumentNullException(result, "globber");
             }
 
             [Fact]
@@ -64,7 +64,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateContext());
 
                 // Then
-                Assert.IsArgumentNullException(result, "log");
+                AssertEx.IsArgumentNullException(result, "log");
             }
 
             [Fact]
@@ -78,7 +78,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateContext());
 
                 // Then
-                Assert.IsArgumentNullException(result, "arguments");
+                AssertEx.IsArgumentNullException(result, "arguments");
             }
 
             [Fact]
@@ -92,7 +92,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateContext());
 
                 // Then
-                Assert.IsArgumentNullException(result, "processRunner");
+                AssertEx.IsArgumentNullException(result, "processRunner");
             }
 
             [Fact]
@@ -106,7 +106,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateContext());
 
                 // Then
-                Assert.IsArgumentNullException(result, "tools");
+                AssertEx.IsArgumentNullException(result, "tools");
             }
         }
 

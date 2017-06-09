@@ -22,7 +22,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 var result = Record.Exception(() => WiXAliases.WiXHeat(null, fixture.DirectoryPath, fixture.OutputFile, fixture.HarvestType));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
         }
     }

@@ -25,7 +25,7 @@ namespace Cake.Common.Tests.Unit.Security
                 var result = Record.Exception(() => calculator.Calculate(null, HashAlgorithm.MD5));
 
                 // Then
-                Assert.IsArgumentNullException(result, "filePath");
+                AssertEx.IsArgumentNullException(result, "filePath");
             }
 
             [Fact]
@@ -43,7 +43,7 @@ namespace Cake.Common.Tests.Unit.Security
                 var result = Record.Exception(() => calculator.Calculate("./non-existent-path", HashAlgorithm.MD5));
 
                 // Then
-                Assert.IsExceptionWithMessage<CakeException>(result, "File 'non-existent-path' does not exist.");
+                AssertEx.IsExceptionWithMessage<CakeException>(result, "File 'non-existent-path' does not exist.");
             }
         }
     }

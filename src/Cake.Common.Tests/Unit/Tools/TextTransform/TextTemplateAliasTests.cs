@@ -24,7 +24,7 @@ namespace Cake.Common.Tests.Unit.Tools.TextTransform
                 var result = Record.Exception(() => TextTransformAliases.TransformTemplate(null, fixture.SourceFile));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -37,7 +37,7 @@ namespace Cake.Common.Tests.Unit.Tools.TextTransform
                 var result = Record.Exception(() => TextTransformAliases.TransformTemplate(context, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "sourceFile");
+                AssertEx.IsArgumentNullException(result, "sourceFile");
             }
         }
     }

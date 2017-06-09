@@ -25,7 +25,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var result = Record.Exception(() => FileExtensions.Open(null, FileMode.Create));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "file");
+                    AssertEx.IsArgumentNullException(result, "file");
                 }
 
                 [Theory]
@@ -57,7 +57,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var result = Record.Exception(() => FileExtensions.Open(null, FileMode.Create, FileAccess.Write));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "file");
+                    AssertEx.IsArgumentNullException(result, "file");
                 }
 
                 [Theory]
@@ -90,7 +90,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => FileExtensions.OpenRead(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "file");
+                AssertEx.IsArgumentNullException(result, "file");
             }
 
             [Fact]
@@ -116,7 +116,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => FileExtensions.OpenWrite(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "file");
+                AssertEx.IsArgumentNullException(result, "file");
             }
 
             [Fact]
@@ -142,7 +142,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => FileExtensions.ReadLines(null, Encoding.UTF8));
 
                 // Then
-                Assert.IsArgumentNullException(result, "file");
+                AssertEx.IsArgumentNullException(result, "file");
             }
 
             [Fact]

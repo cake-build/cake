@@ -113,7 +113,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => comparer.GetHashCode(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "obj");
+                AssertEx.IsArgumentNullException(result, "obj");
             }
 
             [Theory]

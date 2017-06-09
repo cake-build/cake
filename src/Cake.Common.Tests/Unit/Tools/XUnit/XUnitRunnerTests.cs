@@ -25,7 +25,7 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "assemblyPath");
+                AssertEx.IsArgumentNullException(result, "assemblyPath");
             }
 
             [Fact]

@@ -41,7 +41,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = Record.Exception(() => fixture.Load());
 
                 // Then
-                Assert.IsExceptionWithMessage<NotSupportedException>(result, "The NuGet provider for #load is not supported on .NET Core.");
+                AssertEx.IsExceptionWithMessage<NotSupportedException>(result, "The NuGet provider for #load is not supported on .NET Core.");
             }
 
             [RuntimeFact(TestRuntime.Clr)]

@@ -29,7 +29,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = Record.Exception(() => creator.Create(null, new AssemblyInfoSettings()));
 
                 // Then
-                Assert.IsArgumentNullException(result, "outputPath");
+                AssertEx.IsArgumentNullException(result, "outputPath");
             }
 
             [Fact]
@@ -43,7 +43,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = Record.Exception(() => creator.Create("A.cs", null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]

@@ -22,7 +22,7 @@ namespace Cake.Core.Tests.Unit.Graph
                 var result = Record.Exception(() => graph.Add(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "node");
+                AssertEx.IsArgumentNullException(result, "node");
             }
 
             [Fact]

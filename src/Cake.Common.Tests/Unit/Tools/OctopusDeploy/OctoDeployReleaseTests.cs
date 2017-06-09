@@ -25,7 +25,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "server");
+                AssertEx.IsArgumentNullException(result, "server");
             }
 
             [Fact]
@@ -39,7 +39,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "apiKey");
+                AssertEx.IsArgumentNullException(result, "apiKey");
             }
 
             [Fact]
@@ -53,7 +53,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "projectName");
+                AssertEx.IsArgumentNullException(result, "projectName");
             }
 
             [Fact]
@@ -67,7 +67,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "deployTo");
+                AssertEx.IsArgumentNullException(result, "deployTo");
             }
 
             [Fact]
@@ -81,7 +81,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "releaseNumber");
+                AssertEx.IsArgumentNullException(result, "releaseNumber");
             }
 
             [Fact]
@@ -95,7 +95,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]

@@ -21,7 +21,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => new TaskSetupContext(null, task));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -34,7 +34,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => new TaskSetupContext(context, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "task");
+                AssertEx.IsArgumentNullException(result, "task");
             }
         }
     }

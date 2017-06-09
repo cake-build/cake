@@ -30,7 +30,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = Record.Exception(() => fixture.Transform());
 
                 // Then
-                Assert.IsArgumentNullException(result, "xmlPath");
+                AssertEx.IsArgumentNullException(result, "xmlPath");
             }
 
             [Fact]
@@ -44,7 +44,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = Record.Exception(() => fixture.Transform());
 
                 // Then
-                Assert.IsArgumentNullException(result, "xslPath");
+                AssertEx.IsArgumentNullException(result, "xslPath");
             }
 
             [Fact]
@@ -58,7 +58,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = Record.Exception(() => fixture.Transform());
 
                 // Then
-                Assert.IsArgumentNullException(result, "resultPath");
+                AssertEx.IsArgumentNullException(result, "resultPath");
             }
 
             [Fact]
@@ -72,7 +72,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = Record.Exception(() => fixture.Transform());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -88,7 +88,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = Record.Exception(() => fixture.Transform());
 
                 // Then
-                Assert.IsExceptionWithMessage<FileNotFoundException>(result, "XML File not found.");
+                AssertEx.IsExceptionWithMessage<FileNotFoundException>(result, "XML File not found.");
             }
 
             [Fact]
@@ -104,7 +104,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = Record.Exception(() => fixture.Transform());
 
                 // Then
-                Assert.IsExceptionWithMessage<FileNotFoundException>(result, "Xsl File not found.");
+                AssertEx.IsExceptionWithMessage<FileNotFoundException>(result, "Xsl File not found.");
             }
 
             [Fact]
@@ -118,7 +118,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = Record.Exception(() => fixture.Transform());
 
                 // Then
-                Assert.IsExceptionWithMessage<CakeException>(result, "Result file found and overwrite set to false.");
+                AssertEx.IsExceptionWithMessage<CakeException>(result, "Result file found and overwrite set to false.");
             }
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
@@ -210,7 +210,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = Record.Exception(() => XmlTransformation.Transform(xsl, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "xml");
+                AssertEx.IsArgumentNullException(result, "xml");
             }
 
             [Fact]
@@ -223,7 +223,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = Record.Exception(() => XmlTransformation.Transform(null, xml));
 
                 // Then
-                Assert.IsArgumentNullException(result, "xsl");
+                AssertEx.IsArgumentNullException(result, "xsl");
             }
 
             [Fact]
@@ -237,7 +237,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = Record.Exception(() => XmlTransformation.Transform(xsl, xml, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
         }
     }

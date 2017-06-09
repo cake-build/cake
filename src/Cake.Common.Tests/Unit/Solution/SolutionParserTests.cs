@@ -21,7 +21,7 @@ namespace Cake.Common.Tests.Unit.Solution
                 var result = Record.Exception(() => new SolutionParser(null, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "fileSystem");
+                AssertEx.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -34,7 +34,7 @@ namespace Cake.Common.Tests.Unit.Solution
                 var result = Record.Exception(() => new SolutionParser(fixture.FileSystem, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
         }
         public sealed class TheParseMethod
@@ -50,7 +50,7 @@ namespace Cake.Common.Tests.Unit.Solution
                 var result = Record.Exception(() => solutionParser.Parse(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "solutionPath");
+                AssertEx.IsArgumentNullException(result, "solutionPath");
             }
 
             [Fact]

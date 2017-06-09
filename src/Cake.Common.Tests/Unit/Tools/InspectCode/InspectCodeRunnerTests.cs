@@ -28,7 +28,7 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "solution");
+                AssertEx.IsArgumentNullException(result, "solution");
             }
 
             [Fact]
@@ -114,7 +114,7 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "Code Inspection Violations found in code base.");
+                AssertEx.IsCakeException(result, "Code Inspection Violations found in code base.");
             }
 
             [Fact]
@@ -305,7 +305,7 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "configFile");
+                AssertEx.IsArgumentNullException(result, "configFile");
             }
 
             [Fact]

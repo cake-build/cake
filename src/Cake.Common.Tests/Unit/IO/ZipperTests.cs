@@ -30,7 +30,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => new Zipper(null, environment, log));
 
                 // Then
-                Assert.IsArgumentNullException(result, "fileSystem");
+                AssertEx.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -44,7 +44,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => new Zipper(fileSystem, null, log));
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -58,7 +58,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => new Zipper(fileSystem, environment, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "log");
+                AssertEx.IsArgumentNullException(result, "log");
             }
         }
 
@@ -77,7 +77,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => zipper.Zip(null, "/file.zip", new FilePath[] { "/Root/file.txt" }));
 
                 // Then
-                Assert.IsArgumentNullException(result, "rootPath");
+                AssertEx.IsArgumentNullException(result, "rootPath");
             }
 
             [Fact]
@@ -93,7 +93,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => zipper.Zip("/Root", null, new FilePath[] { "/Root/file.txt" }));
 
                 // Then
-                Assert.IsArgumentNullException(result, "outputPath");
+                AssertEx.IsArgumentNullException(result, "outputPath");
             }
 
             [Fact]
@@ -109,7 +109,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => zipper.Zip("/Root", "/file.txt", null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "filePaths");
+                AssertEx.IsArgumentNullException(result, "filePaths");
             }
 
             [Fact]

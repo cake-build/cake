@@ -28,7 +28,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = Record.Exception(() => new AssemblyInfoParser(null, environment));
 
                 // Then
-                Assert.IsArgumentNullException(result, "fileSystem");
+                AssertEx.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -41,7 +41,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = Record.Exception(() => new AssemblyInfoParser(fileSystem, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
         }
 
@@ -58,7 +58,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = Record.Exception(() => fixture.Parse());
 
                 // Then
-                Assert.IsArgumentNullException(result, "assemblyInfoPath");
+                AssertEx.IsArgumentNullException(result, "assemblyInfoPath");
             }
 
             [Fact]

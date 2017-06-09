@@ -23,7 +23,7 @@ namespace Cake.Core.Tests.Unit.Tooling
                 var result = Record.Exception(() => fixture.Resolve("tool.exe"));
 
                 // Then
-                Assert.IsArgumentNullException(result, "fileSystem");
+                AssertEx.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -37,7 +37,7 @@ namespace Cake.Core.Tests.Unit.Tooling
                 var result = Record.Exception(() => fixture.Resolve("tool.exe"));
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -51,7 +51,7 @@ namespace Cake.Core.Tests.Unit.Tooling
                 var result = Record.Exception(() => fixture.Resolve("tool.exe"));
 
                 // Then
-                Assert.IsArgumentNullException(result, "globber");
+                AssertEx.IsArgumentNullException(result, "globber");
             }
         }
 
@@ -68,7 +68,7 @@ namespace Cake.Core.Tests.Unit.Tooling
                 var result = Record.Exception(() => fixture.Resolve("tool.exe"));
 
                 // Then
-                Assert.IsArgumentNullException(result, "repository");
+                AssertEx.IsArgumentNullException(result, "repository");
             }
 
             [Fact]
@@ -81,7 +81,7 @@ namespace Cake.Core.Tests.Unit.Tooling
                 var result = Record.Exception(() => fixture.Resolve(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "tool");
+                AssertEx.IsArgumentNullException(result, "tool");
             }
 
             [Theory]
@@ -97,7 +97,7 @@ namespace Cake.Core.Tests.Unit.Tooling
                 var result = Record.Exception(() => fixture.Resolve(tool));
 
                 // Then
-                Assert.IsArgumentException(result, "tool", "Tool name cannot be empty.");
+                AssertEx.IsArgumentException(result, "tool", "Tool name cannot be empty.");
             }
 
             [Fact]

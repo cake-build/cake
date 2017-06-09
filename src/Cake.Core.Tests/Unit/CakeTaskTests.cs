@@ -19,7 +19,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => new ActionTask(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "name");
+                AssertEx.IsArgumentNullException(result, "name");
             }
 
             [Theory]
@@ -82,7 +82,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => task.AddCriteria(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "criteria");
+                AssertEx.IsArgumentNullException(result, "criteria");
             }
 
             [Fact]
@@ -111,7 +111,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => task.SetErrorHandler(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "errorHandler");
+                AssertEx.IsArgumentNullException(result, "errorHandler");
             }
 
             [Fact]
@@ -155,7 +155,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => task.SetFinallyHandler(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "finallyHandler");
+                AssertEx.IsArgumentNullException(result, "finallyHandler");
             }
 
             [Fact]
@@ -199,7 +199,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => task.SetErrorReporter(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "errorReporter");
+                AssertEx.IsArgumentNullException(result, "errorReporter");
             }
 
             [Fact]

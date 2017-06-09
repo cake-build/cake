@@ -27,7 +27,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -41,7 +41,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "action");
+                AssertEx.IsArgumentNullException(result, "action");
             }
 
             [Fact]
@@ -55,7 +55,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "outputPath");
+                AssertEx.IsArgumentNullException(result, "outputPath");
             }
 
             [Fact]
@@ -69,7 +69,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -83,7 +83,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "No tool was started.");
+                AssertEx.IsCakeException(result, "No tool was started.");
             }
 
             [Fact]

@@ -19,7 +19,7 @@ namespace Cake.Common.Tests.Unit.Build.GitLabCI
                 var result = Record.Exception(() => new GitLabCIProvider(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
         }
 

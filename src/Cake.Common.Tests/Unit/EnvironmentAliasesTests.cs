@@ -119,7 +119,7 @@ namespace Cake.Common.Tests.Unit
                 var result = Record.Exception(() => EnvironmentAliases.IsRunningOnWindows(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Theory]
@@ -149,7 +149,7 @@ namespace Cake.Common.Tests.Unit
                 var result = Record.Exception(() => EnvironmentAliases.IsRunningOnUnix(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Theory]

@@ -18,7 +18,7 @@ namespace Cake.Core.Tests.Unit.Annotations
                 var result = Record.Exception(() => new CakeAliasCategoryAttribute(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "name");
+                AssertEx.IsArgumentNullException(result, "name");
             }
         }
     }
