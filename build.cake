@@ -270,14 +270,21 @@ Task("Create-NuGet-Packages")
         NoPackageAnalysis = true
     });
 
+    var netCoreFullArtifactPath = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinNetCoreApp10).FullPath;
+    var netCoreFullArtifactPathLength = netCoreFullArtifactPath.Length+1;
+
     // Cake - .NET Core
     NuGetPack("./nuspec/Cake.CoreCLR.nuspec", new NuGetPackSettings {
         Version = parameters.Version.SemVersion,
         ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
-        BasePath = parameters.Paths.Directories.ArtifactsBinNetCoreApp10,
+        BasePath = netCoreFullArtifactPath,
         OutputDirectory = parameters.Paths.Directories.NugetRoot,
         Symbols = false,
-        NoPackageAnalysis = true
+        NoPackageAnalysis = true,
+        Files = GetFiles(netCoreFullArtifactPath + "/**/*")
+                                .Select(file=>file.FullPath.Substring(netCoreFullArtifactPathLength))
+                                .Select(file=> new NuSpecContent { Source = file, Target = file })
+                                .ToArray()
     });
 });
 
