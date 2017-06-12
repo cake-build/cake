@@ -19,7 +19,7 @@ namespace Cake.Core.Tests.Unit.Text
                 var result = Record.Exception(() => new TextTransformationTemplate(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "template");
+                AssertEx.IsArgumentNullException(result, "template");
             }
         }
 
@@ -35,7 +35,7 @@ namespace Cake.Core.Tests.Unit.Text
                 var result = Record.Exception(() => transformation.Register(null, "value"));
 
                 // Then
-                Assert.IsArgumentNullException(result, "key");
+                AssertEx.IsArgumentNullException(result, "key");
             }
 
             [Theory]

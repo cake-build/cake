@@ -29,7 +29,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
         }
 
@@ -46,7 +46,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "sourceFiles");
+                AssertEx.IsArgumentNullException(result, "sourceFiles");
             }
 
             [Fact]
@@ -75,7 +75,7 @@ namespace Cake.Common.Tests.Unit.Tools.WiX
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]

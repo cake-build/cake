@@ -23,7 +23,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => new Globber(null, environment));
 
                 // Then
-                Assert.IsArgumentNullException(result, "fileSystem");
+                AssertEx.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -36,7 +36,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => new Globber(fileSystem, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
         }
 
@@ -55,7 +55,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                     // Then
                     Assert.Equal(1, result.Length);
-                    Assert.ContainsFilePath(result, "C:/Working/Foo/Bar/Qux.c");
+                    AssertEx.ContainsFilePath(result, "C:/Working/Foo/Bar/Qux.c");
                 }
 
                 [WindowsFact]
@@ -84,7 +84,7 @@ namespace Cake.Core.Tests.Unit.IO
                     // Then
                     Assert.Equal(1, result.Length);
                     Assert.IsType<FilePath>(result[0]);
-                    Assert.ContainsFilePath(result, "C:/Working/Foo/Bar/Qux.c");
+                    AssertEx.ContainsFilePath(result, "C:/Working/Foo/Bar/Qux.c");
                 }
 
                 [WindowsFact]
@@ -98,7 +98,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                     // Then
                     Assert.Equal(1, result.Length);
-                    Assert.ContainsFilePath(result, "C:/Program Files (x86)/Foo.c");
+                    AssertEx.ContainsFilePath(result, "C:/Program Files (x86)/Foo.c");
                 }
 
                 [WindowsFact]
@@ -112,7 +112,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                   // Then
                   Assert.Equal(1, result.Length);
-                  Assert.ContainsFilePath(result, "C:/Tools & Services/MyTool.dll");
+                  AssertEx.ContainsFilePath(result, "C:/Tools & Services/MyTool.dll");
                 }
 
                 [WindowsFact]
@@ -126,7 +126,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                   // Then
                   Assert.Equal(1, result.Length);
-                  Assert.ContainsFilePath(result, "C:/Tools + Services/MyTool.dll");
+                  AssertEx.ContainsFilePath(result, "C:/Tools + Services/MyTool.dll");
                 }
 
                 [WindowsFact]
@@ -140,7 +140,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                   // Then
                   Assert.Equal(1, result.Length);
-                  Assert.ContainsFilePath(result, "C:/Some %2F Directory/MyTool.dll");
+                  AssertEx.ContainsFilePath(result, "C:/Some %2F Directory/MyTool.dll");
                 }
 
                 [WindowsFact]
@@ -154,7 +154,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                     // Then
                     Assert.Equal(1, result.Length);
-                    Assert.ContainsFilePath(result, "C:/Some ! Directory/MyTool.dll");
+                    AssertEx.ContainsFilePath(result, "C:/Some ! Directory/MyTool.dll");
                 }
 
                 [WindowsFact]
@@ -168,7 +168,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                     // Then
                     Assert.Equal(1, result.Length);
-                    Assert.ContainsFilePath(result, "C:/Some@Directory/MyTool.dll");
+                    AssertEx.ContainsFilePath(result, "C:/Some@Directory/MyTool.dll");
                 }
             }
 
@@ -187,7 +187,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                     // Then
                     Assert.Equal(1, result.Length);
-                    Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.h");
+                    AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.h");
                 }
 
                 [Fact]
@@ -231,7 +231,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => fixture.Match(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "pattern");
+                AssertEx.IsArgumentNullException(result, "pattern");
             }
 
             [Fact]
@@ -258,11 +258,11 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(5, result.Length);
-                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
-                Assert.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
-                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
-                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Baz/Qux.c");
-                Assert.ContainsFilePath(result, "/Working/Bar/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Baz/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.c");
             }
 
             [Fact]
@@ -276,7 +276,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(1, result.Length);
-                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
             }
 
             [Fact]
@@ -291,7 +291,7 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.Equal(1, result.Length);
                 Assert.IsType<FilePath>(result[0]);
-                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
             }
 
             [Fact]
@@ -321,7 +321,7 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.Equal(1, result.Length);
                 Assert.IsType<FilePath>(result[0]);
-                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
             }
 
             [Fact]
@@ -335,7 +335,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(1, result.Length);
-                Assert.ContainsDirectoryPath(result, "/Working/Foo/Bar");
+                AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar");
             }
 
             [Fact]
@@ -350,7 +350,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(1, result.Length);
-                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
             }
 
             [Fact]
@@ -365,7 +365,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(1, result.Length);
-                Assert.ContainsDirectoryPath(result, "/Working/Foo/Bar");
+                AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar");
             }
 
             [Fact]
@@ -379,21 +379,21 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(15, result.Length);
-                Assert.ContainsDirectoryPath(result, "/Working/Foo");
-                Assert.ContainsDirectoryPath(result, "/Working/Foo/Bar");
-                Assert.ContainsDirectoryPath(result, "/Working/Foo/Baz");
-                Assert.ContainsDirectoryPath(result, "/Working/Foo/Bar/Baz");
-                Assert.ContainsDirectoryPath(result, "/Working/Bar");
-                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
-                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
-                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.h");
-                Assert.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
-                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Baz/Qux.c");
-                Assert.ContainsFilePath(result, "/Working/Foo.Bar.Test.dll");
-                Assert.ContainsFilePath(result, "/Working/Bar.Qux.Test.dll");
-                Assert.ContainsFilePath(result, "/Working/Quz.FooTest.dll");
-                Assert.ContainsFilePath(result, "/Working/Bar/Qux.c");
-                Assert.ContainsFilePath(result, "/Working/Bar/Qux.h");
+                AssertEx.ContainsDirectoryPath(result, "/Working/Foo");
+                AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar");
+                AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Baz");
+                AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar/Baz");
+                AssertEx.ContainsDirectoryPath(result, "/Working/Bar");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.h");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Baz/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo.Bar.Test.dll");
+                AssertEx.ContainsFilePath(result, "/Working/Bar.Qux.Test.dll");
+                AssertEx.ContainsFilePath(result, "/Working/Quz.FooTest.dll");
+                AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.h");
             }
 
             [Fact]
@@ -407,8 +407,8 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(2, result.Length);
-                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
-                Assert.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
             }
 
             [Fact]
@@ -422,8 +422,8 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(2, result.Length);
-                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
-                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
             }
 
             [Fact]
@@ -437,8 +437,8 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(2, result.Length);
-                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
-                Assert.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
             }
 
             [Fact]
@@ -452,8 +452,8 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(2, result.Length);
-                Assert.ContainsFilePath(result, "/Working/Foo.Bar.Test.dll");
-                Assert.ContainsFilePath(result, "/Working/Bar.Qux.Test.dll");
+                AssertEx.ContainsFilePath(result, "/Working/Foo.Bar.Test.dll");
+                AssertEx.ContainsFilePath(result, "/Working/Bar.Qux.Test.dll");
             }
 
             [WindowsFact]
@@ -467,8 +467,8 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(2, result.Length);
-                Assert.ContainsFilePath(result, "C:/Working/Project.A.Test.dll");
-                Assert.ContainsFilePath(result, "C:/Working/Project.B.Test.dll");
+                AssertEx.ContainsFilePath(result, "C:/Working/Project.A.Test.dll");
+                AssertEx.ContainsFilePath(result, "C:/Working/Project.B.Test.dll");
             }
 
             [Fact]
@@ -482,11 +482,11 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(5, result.Length);
-                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
-                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
-                Assert.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
-                Assert.ContainsFilePath(result, "/Working/Foo/Bar/Baz/Qux.c");
-                Assert.ContainsFilePath(result, "/Working/Bar/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Baz/Qux.c");
+                AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.c");
             }
 
             [Fact]
@@ -500,12 +500,12 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(6, result.Length);
-                Assert.ContainsDirectoryPath(result, "/Working");
-                Assert.ContainsDirectoryPath(result, "/Working/Foo");
-                Assert.ContainsDirectoryPath(result, "/Working/Foo/Bar");
-                Assert.ContainsDirectoryPath(result, "/Working/Foo/Baz");
-                Assert.ContainsDirectoryPath(result, "/Working/Foo/Bar/Baz");
-                Assert.ContainsDirectoryPath(result, "/Working/Bar");
+                AssertEx.ContainsDirectoryPath(result, "/Working");
+                AssertEx.ContainsDirectoryPath(result, "/Working/Foo");
+                AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar");
+                AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Baz");
+                AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar/Baz");
+                AssertEx.ContainsDirectoryPath(result, "/Working/Bar");
             }
 
             [Fact]
@@ -519,7 +519,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(1, result.Length);
-                Assert.ContainsFilePath(result, "/Foo/Bar.baz");
+                AssertEx.ContainsFilePath(result, "/Foo/Bar.baz");
             }
 
             [Fact]
@@ -533,7 +533,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(1, result.Length);
-                Assert.ContainsDirectoryPath(result, "/Foo/Bar");
+                AssertEx.ContainsDirectoryPath(result, "/Foo/Bar");
             }
 
             [Fact]
@@ -547,7 +547,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(1, result.Length);
-                Assert.ContainsFilePath(result, "/Foo (Bar)/Baz.c");
+                AssertEx.ContainsFilePath(result, "/Foo (Bar)/Baz.c");
             }
 
             [Fact]
@@ -561,7 +561,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(1, result.Length);
-                Assert.ContainsFilePath(result, "/Foo@Bar/Baz.c");
+                AssertEx.ContainsFilePath(result, "/Foo@Bar/Baz.c");
             }
 
             [Fact]
@@ -575,8 +575,8 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(2, result.Length);
-                Assert.ContainsFilePath(result, "/Working/Foo.Bar.Test.dll");
-                Assert.ContainsFilePath(result, "/Working/Bar.Qux.Test.dll");
+                AssertEx.ContainsFilePath(result, "/Working/Foo.Bar.Test.dll");
+                AssertEx.ContainsFilePath(result, "/Working/Bar.Qux.Test.dll");
             }
         }
     }

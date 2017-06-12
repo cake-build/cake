@@ -27,7 +27,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
                 var result = Record.Exception(() => PropertyAliasGenerator.Generate(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "method");
+                AssertEx.IsArgumentNullException(result, "method");
             }
 
             [Fact]

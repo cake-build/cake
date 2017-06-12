@@ -26,7 +26,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitLink
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "repositoryRootPath");
+                AssertEx.IsArgumentNullException(result, "repositoryRootPath");
             }
 
             [Fact]

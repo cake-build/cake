@@ -56,8 +56,8 @@ $MonoScript = (Join-Path $PSScriptRoot "build.cake")
 $ToolsPath = Join-Path $PSScriptRoot "tools"
 $NuGetPath = Join-Path $ToolsPath "nuget.exe"
 $DotNetChannel = "preview"
-$DotNetVersion = "1.0.0-preview2-003121"
-$DotNetInstallerUri = "https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0-preview2/scripts/obtain/dotnet-install.ps1"
+$DotNetVersion = "1.0.4";
+$DotNetInstallerUri = "https://dot.net/v1/dotnet-install.ps1";
 $NuGetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
 
 # Make sure the tools directory exist.
@@ -142,9 +142,8 @@ if(!$SkipBuildingCake.IsPresent) {
   New-Item -Path $CakePath -Type Directory | Out-Null
   New-Item -Path $CakeCoreCLRPath -Type Directory | Out-Null
 
-  Copy-Item "$BuiltCakePath/*.*" $CakePath -Recurse
-
-  Copy-Item "$BuiltCakeCoreCLRPath/*.*" $CakeCoreCLRPath -Recurse
+  Get-ChildItem -Path $BuiltCakePath | Copy-Item -Destination $CakePath -Recurse -Container
+  Get-ChildItem -Path $BuiltCakeCoreCLRPath | Copy-Item -Destination $CakeCoreCLRPath -Recurse -Container
 }
 
 # Ensure that Cake can be found where we expect it to.

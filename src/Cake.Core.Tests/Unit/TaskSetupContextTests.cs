@@ -22,7 +22,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => new TaskTeardownContext(null, task, TimeSpan.Zero, false));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -35,7 +35,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => new TaskTeardownContext(context, null, TimeSpan.Zero, false));
 
                 // Then
-                Assert.IsArgumentNullException(result, "task");
+                AssertEx.IsArgumentNullException(result, "task");
             }
         }
     }

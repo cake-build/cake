@@ -19,7 +19,7 @@ namespace Cake.Common.Tests.Unit.Build.Bamboo
                 var result = Record.Exception(() => new BambooProvider(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
         }
 

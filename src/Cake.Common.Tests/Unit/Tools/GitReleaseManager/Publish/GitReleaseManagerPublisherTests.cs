@@ -24,7 +24,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "userName");
+                AssertEx.IsArgumentNullException(result, "userName");
             }
 
             [Fact]
@@ -38,7 +38,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "password");
+                AssertEx.IsArgumentNullException(result, "password");
             }
 
             [Fact]
@@ -52,7 +52,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "owner");
+                AssertEx.IsArgumentNullException(result, "owner");
             }
 
             [Fact]
@@ -66,7 +66,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "repository");
+                AssertEx.IsArgumentNullException(result, "repository");
             }
 
             [Fact]
@@ -80,7 +80,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "tagName");
+                AssertEx.IsArgumentNullException(result, "tagName");
             }
 
             [Fact]
@@ -94,7 +94,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -108,7 +108,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "GitReleaseManager: Could not locate executable.");
+                AssertEx.IsCakeException(result, "GitReleaseManager: Could not locate executable.");
             }
 
             [Theory]
@@ -155,7 +155,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "GitReleaseManager: Process was not started.");
+                AssertEx.IsCakeException(result, "GitReleaseManager: Process was not started.");
             }
 
             [Fact]
@@ -169,7 +169,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "GitReleaseManager: Process returned an error (exit code 1).");
+                AssertEx.IsCakeException(result, "GitReleaseManager: Process returned an error (exit code 1).");
             }
 
             [Fact]

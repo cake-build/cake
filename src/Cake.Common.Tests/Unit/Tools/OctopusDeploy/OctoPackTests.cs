@@ -22,7 +22,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "id");
+                AssertEx.IsArgumentNullException(result, "id");
             }
 
             [Fact]

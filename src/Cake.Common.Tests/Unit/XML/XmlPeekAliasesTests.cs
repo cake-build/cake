@@ -26,7 +26,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = Record.Exception(() => fixture.Peek("gibblygook"));
 
                 // Then
-                Assert.IsArgumentNullException(result, "filePath");
+                AssertEx.IsArgumentNullException(result, "filePath");
             }
 
             [Fact]
@@ -53,7 +53,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = Record.Exception(() => fixture.Peek(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "xpath");
+                AssertEx.IsArgumentNullException(result, "xpath");
             }
 
             [Fact]

@@ -26,7 +26,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 var result = Record.Exception(() => new AppVeyorProvider(null, processRunner, cakeLog));
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -38,7 +38,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 var result = Record.Exception(() => new AppVeyorProvider(environment, null, cakeLog));
 
                 // Then
-                Assert.IsArgumentNullException(result, "processRunner");
+                AssertEx.IsArgumentNullException(result, "processRunner");
             }
 
             [Fact]
@@ -50,7 +50,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 var result = Record.Exception(() => new AppVeyorProvider(environment, processRunner, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "cakeLog");
+                AssertEx.IsArgumentNullException(result, "cakeLog");
             }
         }
 
@@ -116,7 +116,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 var result = Record.Exception(() => appVeyor.UploadArtifact(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "path");
             }
 
             [Fact]
@@ -130,7 +130,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 var result = Record.Exception(() => appVeyor.UploadArtifact(null, settings => settings.SetArtifactType(AppVeyorUploadArtifactType.Auto)));
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "path");
             }
 
             [Fact]
@@ -144,7 +144,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 var result = Record.Exception(() => appVeyor.UploadArtifact("./file.zip"));
 
                 // Then
-                Assert.IsExceptionWithMessage<CakeException>(result,
+                AssertEx.IsExceptionWithMessage<CakeException>(result,
                     "The current build is not running on AppVeyor.");
             }
 
@@ -217,7 +217,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 var result = Record.Exception(() => appVeyor.UploadArtifact("./file.zip", settings => settings.SetDeploymentName("MyApp Web")));
 
                 // Then
-                Assert.IsCakeException(result, "The deployment name can not contain spaces");
+                AssertEx.IsCakeException(result, "The deployment name can not contain spaces");
             }
         }
 
@@ -234,7 +234,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 var result = Record.Exception(() => appVeyor.UpdateBuildVersion(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "version");
+                AssertEx.IsArgumentNullException(result, "version");
             }
 
             [Theory]
@@ -250,7 +250,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 var result = Record.Exception(() => appVeyor.UpdateBuildVersion(version));
 
                 // Then
-                Assert.IsExceptionWithMessage<CakeException>(result,
+                AssertEx.IsExceptionWithMessage<CakeException>(result,
                     "The build version cannot be empty.");
             }
 
@@ -265,7 +265,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 var result = Record.Exception(() => appVeyor.UpdateBuildVersion("build-123"));
 
                 // Then
-                Assert.IsExceptionWithMessage<CakeException>(result,
+                AssertEx.IsExceptionWithMessage<CakeException>(result,
                     "The current build is not running on AppVeyor.");
             }
 
@@ -300,7 +300,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 var result = Record.Exception(() => appVeyor.UploadTestResults(null, AppVeyorTestResultsType.XUnit));
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "path");
             }
 
             [Fact]
@@ -314,7 +314,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 var result = Record.Exception(() => appVeyor.UploadTestResults("./file.xml", AppVeyorTestResultsType.XUnit));
 
                 // Then
-                Assert.IsExceptionWithMessage<CakeException>(result,
+                AssertEx.IsExceptionWithMessage<CakeException>(result,
                     "The current build is not running on AppVeyor.");
             }
         }
@@ -332,7 +332,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 var result = Record.Exception(() => appVeyor.AddMessage(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "message");
+                AssertEx.IsArgumentNullException(result, "message");
             }
 
             [Fact]
@@ -346,7 +346,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 var result = Record.Exception(() => appVeyor.AddMessage(""));
 
                 // Then
-                Assert.IsCakeException(result, "The message cannot be empty.");
+                AssertEx.IsCakeException(result, "The message cannot be empty.");
             }
 
             [Fact]
@@ -360,7 +360,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 var result = Record.Exception(() => appVeyor.AddMessage("Hello world"));
 
                 // Then
-                Assert.IsExceptionWithMessage<CakeException>(result,
+                AssertEx.IsExceptionWithMessage<CakeException>(result,
                     "The current build is not running on AppVeyor.");
             }
 

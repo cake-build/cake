@@ -80,8 +80,8 @@ namespace Cake.Common.Tools.Cake
         /// </summary>
         /// <param name="cakeExpression">Code expression to execute</param>
         /// <param name="settings">optional cake settings</param>
-       [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
-       public void ExecuteExpression(string cakeExpression, CakeSettings settings = null)
+        [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
+        public void ExecuteExpression(string cakeExpression, CakeSettings settings = null)
         {
             if (string.IsNullOrWhiteSpace(cakeExpression))
             {

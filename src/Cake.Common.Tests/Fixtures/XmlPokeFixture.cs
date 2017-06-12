@@ -16,42 +16,42 @@ namespace Cake.Common.Tests.Fixtures
 {
     internal sealed class XmlPokeFixture
     {
-       public IFileSystem FileSystem { get; set; }
-       public ICakeContext Context { get; set; }
-       public FilePath XmlPath { get; set; }
-       public XmlPokeSettings Settings { get; set; }
+        public IFileSystem FileSystem { get; set; }
+        public ICakeContext Context { get; set; }
+        public FilePath XmlPath { get; set; }
+        public XmlPokeSettings Settings { get; set; }
 
-       public XmlPokeFixture(bool xmlExists = true, bool xmlWithDtd = false)
-       {
-           Settings = new XmlPokeSettings();
+        public XmlPokeFixture(bool xmlExists = true, bool xmlWithDtd = false)
+        {
+            Settings = new XmlPokeSettings();
 
-           var environment = FakeEnvironment.CreateUnixEnvironment();
-           var fileSystem = new FakeFileSystem(environment);
-           fileSystem.CreateDirectory("/Working");
+            var environment = FakeEnvironment.CreateUnixEnvironment();
+            var fileSystem = new FakeFileSystem(environment);
+            fileSystem.CreateDirectory("/Working");
 
-           if (xmlExists)
-           {
-               string content = xmlWithDtd ? Resources.XmlPoke_Xml_Dtd : Resources.XmlPoke_Xml;
-               var xmlFile = fileSystem.CreateFile("/Working/web.config").SetContent(content);
-               XmlPath = xmlFile.Path;
-           }
+            if (xmlExists)
+            {
+                string content = xmlWithDtd ? Resources.XmlPoke_Xml_Dtd : Resources.XmlPoke_Xml;
+                var xmlFile = fileSystem.CreateFile("/Working/web.config").SetContent(content);
+                XmlPath = xmlFile.Path;
+            }
 
-           FileSystem = fileSystem;
+            FileSystem = fileSystem;
 
-           Context = Substitute.For<ICakeContext>();
-           Context.FileSystem.Returns(FileSystem);
-           Context.Environment.Returns(environment);
-       }
+            Context = Substitute.For<ICakeContext>();
+            Context.FileSystem.Returns(FileSystem);
+            Context.Environment.Returns(environment);
+        }
 
-       public void Poke(string xpath, string value)
-       {
-           XmlPokeAliases.XmlPoke(Context, XmlPath, xpath, value, Settings);
-       }
+        public void Poke(string xpath, string value)
+        {
+            XmlPokeAliases.XmlPoke(Context, XmlPath, xpath, value, Settings);
+        }
 
-       public string PokeString(string xml, string xpath, string value)
-       {
-           return XmlPokeAliases.XmlPokeString(Context, xml, xpath, value, Settings);
-       }
+        public string PokeString(string xml, string xpath, string value)
+        {
+            return XmlPokeAliases.XmlPokeString(Context, xml, xpath, value, Settings);
+        }
 
         public bool TestIsValue(string xpath, string value)
         {

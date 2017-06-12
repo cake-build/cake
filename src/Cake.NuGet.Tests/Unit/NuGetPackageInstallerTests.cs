@@ -29,7 +29,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateInstaller());
 
                 // Then
-                Assert.IsArgumentNullException(result, "fileSystem");
+                AssertEx.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -43,7 +43,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateInstaller());
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -57,7 +57,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateInstaller());
 
                 // Then
-                Assert.IsArgumentNullException(result, "processRunner");
+                AssertEx.IsArgumentNullException(result, "processRunner");
             }
 
             [Fact]
@@ -71,7 +71,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateInstaller());
 
                 // Then
-                Assert.IsArgumentNullException(result, "toolResolver");
+                AssertEx.IsArgumentNullException(result, "toolResolver");
             }
 
             [Fact]
@@ -85,7 +85,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateInstaller());
 
                 // Then
-                Assert.IsArgumentNullException(result, "contentResolver");
+                AssertEx.IsArgumentNullException(result, "contentResolver");
             }
 
             [Fact]
@@ -99,7 +99,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateInstaller());
 
                 // Then
-                Assert.IsArgumentNullException(result, "log");
+                AssertEx.IsArgumentNullException(result, "log");
             }
         }
 
@@ -118,7 +118,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = Record.Exception(() => fixture.CanInstall());
 
                 // Then
-                Assert.IsArgumentNullException(result, "package");
+                AssertEx.IsArgumentNullException(result, "package");
             }
 
             [Fact]
@@ -225,7 +225,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = Record.Exception(() => fixture.Install());
 
                 // Then
-                Assert.IsArgumentNullException(result, "package");
+                AssertEx.IsArgumentNullException(result, "package");
             }
 
             [Fact]
@@ -239,7 +239,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = Record.Exception(() => fixture.Install());
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "path");
             }
 
             [Fact]

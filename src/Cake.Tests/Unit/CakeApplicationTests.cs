@@ -24,7 +24,7 @@ namespace Cake.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateApplication());
 
                 // Then
-                Assert.IsArgumentNullException(result, "commandFactory");
+                AssertEx.IsArgumentNullException(result, "commandFactory");
             }
         }
 
@@ -41,7 +41,7 @@ namespace Cake.Tests.Unit
                 var result = Record.Exception(() => fixture.RunApplication());
 
                 // Then
-                Assert.IsArgumentNullException(result, "options");
+                AssertEx.IsArgumentNullException(result, "options");
             }
 
             [Fact]

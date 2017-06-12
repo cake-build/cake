@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Meta", "Meta", "{E9FAF832-F327-4F36-8AB3-2A96345DB1A9}"
 	ProjectSection(SolutionItems) = preProject
@@ -29,25 +29,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8615F41E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{DD6045D3-D869-48FE-9BB1-9F61EF73F192}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cake.Core", "Cake.Core\Cake.Core.xproj", "{979E80D3-9A69-4CDA-A87E-5C696C60FA16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.Core", "Cake.Core\Cake.Core.csproj", "{979E80D3-9A69-4CDA-A87E-5C696C60FA16}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cake.Testing", "Cake.Testing\Cake.Testing.xproj", "{162561BD-77D2-4465-81B3-31D202932D64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.Testing", "Cake.Testing\Cake.Testing.csproj", "{162561BD-77D2-4465-81B3-31D202932D64}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cake.Testing.Xunit", "Cake.Testing.Xunit\Cake.Testing.Xunit.xproj", "{6D63A97C-ECC9-41FA-918B-7AFB1BC727D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.Testing.Xunit", "Cake.Testing.Xunit\Cake.Testing.Xunit.csproj", "{6D63A97C-ECC9-41FA-918B-7AFB1BC727D8}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cake.Core.Tests", "Cake.Core.Tests\Cake.Core.Tests.xproj", "{93E2320B-44E5-4451-8297-0DBA3A7799B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.Core.Tests", "Cake.Core.Tests\Cake.Core.Tests.csproj", "{93E2320B-44E5-4451-8297-0DBA3A7799B3}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cake.Common", "Cake.Common\Cake.Common.xproj", "{D23ED278-EC14-4196-B09D-C9F6F32F8E18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.Common", "Cake.Common\Cake.Common.csproj", "{D23ED278-EC14-4196-B09D-C9F6F32F8E18}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cake.Common.Tests", "Cake.Common.Tests\Cake.Common.Tests.xproj", "{B46B6733-38D8-497D-B17B-603F929E8BA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.Common.Tests", "Cake.Common.Tests\Cake.Common.Tests.csproj", "{B46B6733-38D8-497D-B17B-603F929E8BA7}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cake.NuGet", "Cake.NuGet\Cake.NuGet.xproj", "{B6792A96-C798-496A-85D4-8DE581C6867A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.NuGet", "Cake.NuGet\Cake.NuGet.csproj", "{B6792A96-C798-496A-85D4-8DE581C6867A}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cake.NuGet.Tests", "Cake.NuGet.Tests\Cake.NuGet.Tests.xproj", "{2502455D-AEAC-4AD7-B29C-B1D3AFFF9E84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.NuGet.Tests", "Cake.NuGet.Tests\Cake.NuGet.Tests.csproj", "{2502455D-AEAC-4AD7-B29C-B1D3AFFF9E84}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cake", "Cake\Cake.xproj", "{4386AEB3-B574-4B13-ADF8-32654B8B9910}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake", "Cake\Cake.csproj", "{4386AEB3-B574-4B13-ADF8-32654B8B9910}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cake.Tests", "Cake.Tests\Cake.Tests.xproj", "{D524DC0D-5F5E-4668-BCC3-2C7918BE9B2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.Tests", "Cake.Tests\Cake.Tests.csproj", "{D524DC0D-5F5E-4668-BCC3-2C7918BE9B2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

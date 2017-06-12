@@ -13,7 +13,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.XmlDoc
     {
         public sealed class TheParseMethod
         {
-             [Fact]
+            [Fact]
             public void Should_Throw_If_Xml_Path_Was_Null()
             {
                 // Given
@@ -24,7 +24,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.XmlDoc
                 var result = Record.Exception(() => fixture.Parse());
 
                 // Then
-                Assert.IsArgumentNullException(result, "xmlFilePath");
+                AssertEx.IsArgumentNullException(result, "xmlFilePath");
             }
 
             [Fact]
@@ -58,7 +58,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.XmlDoc
 
         public sealed class TheParseFilesMethod
         {
-             [Fact]
+            [Fact]
             public void Should_Throw_If_Pattern_Was_Null()
             {
                 // Given
@@ -69,7 +69,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.XmlDoc
                 var result = Record.Exception(() => fixture.ParseFiles());
 
                 // Then
-                Assert.IsArgumentNullException(result, "pattern");
+                AssertEx.IsArgumentNullException(result, "pattern");
             }
 
             [Fact]
@@ -83,7 +83,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.XmlDoc
                 var result = Record.Exception(() => fixture.ParseFiles());
 
                 // Then
-                Assert.IsArgumentNullException(result, "pattern");
+                AssertEx.IsArgumentNullException(result, "pattern");
             }
 
             [Fact]

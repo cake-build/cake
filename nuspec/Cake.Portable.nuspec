@@ -5,25 +5,19 @@
     <id>cake.portable</id>
     <title>Cake.Portable</title>
     <version>0.0.0</version>
-    <authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors</authors>
+    <authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström and contributors</authors>
     <summary>Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.</summary>
     <description>The Cake script runner.</description>
     <projectUrl>http://cakebuild.net/</projectUrl>
     <packageSourceUrl>https://github.com/cake-build/cake</packageSourceUrl>
     <projectSourceUrl>https://github.com/cake-build/cake</projectSourceUrl>
     <docsUrl>http://cakebuild.net/docs</docsUrl>
-    <!--<mailingListUrl></mailingListUrl>-->
     <bugTrackerUrl>https://github.com/cake-build/cake/issues</bugTrackerUrl>
     <tags>Cake Script Build</tags>
     <copyright>Copyright (c) .NET Foundation and contributors</copyright>
     <licenseUrl>https://github.com/cake-build/cake/blob/develop/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</iconUrl>
-    <!--<dependencies>
-      <dependency id="" version="__VERSION__" />
-      <dependency id="" />
-    </dependencies>-->
-    <!--<provides></provides>-->
   </metadata>
   <files></files>
 </package>

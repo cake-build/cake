@@ -24,7 +24,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -38,7 +38,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "Chocolatey: Could not locate executable.");
+                AssertEx.IsCakeException(result, "Chocolatey: Could not locate executable.");
             }
 
             [Theory]
@@ -85,7 +85,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "Chocolatey: Process was not started.");
+                AssertEx.IsCakeException(result, "Chocolatey: Process was not started.");
             }
 
             [Fact]
@@ -99,7 +99,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pin
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "Chocolatey: Process returned an error (exit code 1).");
+                AssertEx.IsCakeException(result, "Chocolatey: Process returned an error (exit code 1).");
             }
 
             [Fact]

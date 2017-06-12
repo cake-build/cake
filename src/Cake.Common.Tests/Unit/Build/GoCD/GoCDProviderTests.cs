@@ -23,7 +23,7 @@ namespace Cake.Common.Tests.Unit.Build.GoCD
                 var result = Record.Exception(() => new GoCDProvider(null, cakeLog));
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -34,7 +34,7 @@ namespace Cake.Common.Tests.Unit.Build.GoCD
                 var result = Record.Exception(() => new GoCDProvider(environment, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "cakeLog");
+                AssertEx.IsArgumentNullException(result, "cakeLog");
             }
         }
 
@@ -100,7 +100,7 @@ namespace Cake.Common.Tests.Unit.Build.GoCD
                 var result = Record.Exception(() => appVeyor.GetHistory(null, "password"));
 
                 // Then
-                Assert.IsArgumentNullException(result, "username");
+                AssertEx.IsArgumentNullException(result, "username");
             }
 
             [Fact]
@@ -114,7 +114,7 @@ namespace Cake.Common.Tests.Unit.Build.GoCD
                 var result = Record.Exception(() => appVeyor.GetHistory("username", null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "password");
+                AssertEx.IsArgumentNullException(result, "password");
             }
 
             [Fact]
@@ -128,7 +128,7 @@ namespace Cake.Common.Tests.Unit.Build.GoCD
                 var result = Record.Exception(() => appVeyor.GetHistory("username", "password", null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "serverUrl");
+                AssertEx.IsArgumentNullException(result, "serverUrl");
             }
 
             [Fact]
@@ -142,7 +142,7 @@ namespace Cake.Common.Tests.Unit.Build.GoCD
                 var result = Record.Exception(() => appVeyor.GetHistory("username", "password"));
 
                 // Then
-                Assert.IsExceptionWithMessage<CakeException>(result,
+                AssertEx.IsExceptionWithMessage<CakeException>(result,
                     "The current build is not running on Go.CD.");
             }
         }

@@ -29,7 +29,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = Record.Exception(() => new AssemblyInfoCreator(null, environment, log));
 
                 // Then
-                Assert.IsArgumentNullException(result, "fileSystem");
+                AssertEx.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -43,7 +43,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = Record.Exception(() => new AssemblyInfoCreator(fileSystem, null, log));
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -57,7 +57,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = Record.Exception(() => new AssemblyInfoCreator(fileSystem, environment, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "log");
+                AssertEx.IsArgumentNullException(result, "log");
             }
         }
 
@@ -74,7 +74,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = Record.Exception(() => creator.Create(null, new AssemblyInfoSettings()));
 
                 // Then
-                Assert.IsArgumentNullException(result, "outputPath");
+                AssertEx.IsArgumentNullException(result, "outputPath");
             }
 
             [Fact]
@@ -88,7 +88,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = Record.Exception(() => creator.Create("A.cs", null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]

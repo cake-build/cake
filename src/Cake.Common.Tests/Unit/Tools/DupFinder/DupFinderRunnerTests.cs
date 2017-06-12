@@ -26,7 +26,7 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "filePaths");
+                AssertEx.IsArgumentNullException(result, "filePaths");
             }
 
             [Fact]
@@ -115,7 +115,7 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "Duplicates found in code base.");
+                AssertEx.IsCakeException(result, "Duplicates found in code base.");
             }
 
             [Fact]
@@ -347,7 +347,7 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "configFile");
+                AssertEx.IsArgumentNullException(result, "configFile");
             }
 
             [Fact]

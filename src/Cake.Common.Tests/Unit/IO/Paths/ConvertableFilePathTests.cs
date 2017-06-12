@@ -20,7 +20,7 @@ namespace Cake.Common.Tests.Unit.IO.Paths
                 var result = Record.Exception(() => new ConvertableFilePath(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "path");
             }
         }
 

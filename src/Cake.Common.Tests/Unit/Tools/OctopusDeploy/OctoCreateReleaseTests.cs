@@ -26,7 +26,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "projectName");
+                AssertEx.IsArgumentNullException(result, "projectName");
             }
 
             [Fact]
@@ -40,7 +40,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentException(result, "settings", "No server specified.");
+                AssertEx.IsArgumentException(result, "settings", "No server specified.");
             }
 
             [Fact]
@@ -54,7 +54,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentException(result, "settings", "No API key specified.");
+                AssertEx.IsArgumentException(result, "settings", "No API key specified.");
             }
 
             [Fact]
@@ -68,7 +68,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -82,7 +82,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "Octo: Could not locate executable.");
+                AssertEx.IsCakeException(result, "Octo: Could not locate executable.");
             }
 
             [Theory]
@@ -142,7 +142,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "Octo: Process was not started.");
+                AssertEx.IsCakeException(result, "Octo: Process was not started.");
             }
 
             [Fact]
@@ -156,7 +156,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "Octo: Process returned an error (exit code 1).");
+                AssertEx.IsCakeException(result, "Octo: Process returned an error (exit code 1).");
             }
 
             [Fact]

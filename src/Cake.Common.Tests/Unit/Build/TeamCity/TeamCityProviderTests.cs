@@ -22,7 +22,7 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity
                 var result = Record.Exception(() => new TeamCityProvider(null, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -35,7 +35,7 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity
                 var result = Record.Exception(() => new TeamCityProvider(fixture.Environment, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "log");
+                AssertEx.IsArgumentNullException(result, "log");
             }
         }
 

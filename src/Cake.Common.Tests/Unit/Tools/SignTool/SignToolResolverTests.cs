@@ -22,7 +22,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = Record.Exception(() => fixture.Resolve());
 
                 // Then
-                Assert.IsArgumentNullException(result, "fileSystem");
+                AssertEx.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -36,7 +36,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = Record.Exception(() => fixture.Resolve());
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -50,7 +50,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = Record.Exception(() => fixture.Resolve());
 
                 // Then
-                Assert.IsArgumentNullException(result, "registry");
+                AssertEx.IsArgumentNullException(result, "registry");
             }
         }
 
@@ -113,7 +113,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = Record.Exception(() => fixture.Resolve());
 
                 // Then
-                Assert.IsCakeException(result, "Failed to find signtool.exe.");
+                AssertEx.IsCakeException(result, "Failed to find signtool.exe.");
             }
 
             [Fact]
@@ -126,7 +126,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = Record.Exception(() => fixture.Resolve());
 
                 // Then
-                Assert.IsCakeException(result, "Failed to find signtool.exe.");
+                AssertEx.IsCakeException(result, "Failed to find signtool.exe.");
             }
         }
     }

@@ -1,5 +1,4 @@
 // Install addins.
-#addin "nuget:https://www.nuget.org/api/v2?package=Newtonsoft.Json&version=9.0.1"
 #addin "nuget:https://www.nuget.org/api/v2?package=Cake.Coveralls&version=0.4.0"
 #addin "nuget:https://www.nuget.org/api/v2?package=Cake.Twitter&version=0.4.0"
 #addin "nuget:https://www.nuget.org/api/v2?package=Cake.Gitter&version=0.5.0"
@@ -46,7 +45,7 @@ Setup(context =>
 
 Teardown(context =>
 {
-        Information("Starting Teardown...");
+    Information("Starting Teardown...");
 
     if(context.Successful)
     {
@@ -93,27 +92,13 @@ Task("Clean")
     CleanDirectories(parameters.Paths.Directories.ToClean);
 });
 
-Task("Patch-Project-Json")
-    .IsDependentOn("Clean")
-    .Does(() =>
-{
-    var projects = GetFiles("./src/**/project.json");
-    foreach(var project in projects)
-    {
-        if(!parameters.Version.PatchProjectJson(project)) {
-            Warning("No version specified in {0}.", project.FullPath);
-        }
-    }
-});
-
 Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-    DotNetCoreRestore("./", new DotNetCoreRestoreSettings
+    DotNetCoreRestore("./src/Cake.sln", new DotNetCoreRestoreSettings
     {
         Verbose = false,
-        Verbosity = DotNetCoreRestoreVerbosity.Warning,
         Sources = new [] {
             "https://www.myget.org/F/xunit/api/v3/index.json",
             "https://dotnet.myget.org/F/dotnet-core/api/v3/index.json",
@@ -124,95 +109,44 @@ Task("Restore-NuGet-Packages")
 });
 
 Task("Build")
-    .IsDependentOn("Patch-Project-Json")
     .IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
 {
-    var projects = GetFiles("./**/*.xproj");
-    foreach(var project in projects)
+    // Build the solution.
+    var path = MakeAbsolute(new DirectoryPath("./src/Cake.sln"));
+    DotNetCoreBuild(path.FullPath, new DotNetCoreBuildSettings()
     {
-        DotNetCoreBuild(project.GetDirectory().FullPath, new DotNetCoreBuildSettings {
-            VersionSuffix = parameters.Version.DotNetAsterix,
-            Configuration = parameters.Configuration
-        });
-    }
+        Configuration = parameters.Configuration,
+        ArgumentCustomization = args => args
+            .Append("/p:Version={0}", parameters.Version.SemVersion)
+            .Append("/p:AssemblyVersion={0}", parameters.Version.Version)
+            .Append("/p:FileVersion={0}", parameters.Version.Version)
+    });
 });
 
 Task("Run-Unit-Tests")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    var projects = GetFiles("./src/**/*.Tests.xproj");
+    // context.DotNetCoreTest($"{project.Path.FullPath}/{project.Name}.csproj", new DotNetCoreTestSettings()
+    // {
+    //     Configuration = context.Configuration,
+    //     NoBuild = true,
+    //     Verbose = false
+    // });
+
+    var projects = GetFiles("./src/**/*.Tests.csproj");
     foreach(var project in projects)
     {
-        if(IsRunningOnWindows())
+        var exitCode = StartProcess("dotnet", new ProcessSettings {
+            Arguments = "xunit --no-build -noshadow -configuration " + parameters.Configuration,
+            WorkingDirectory = project.GetDirectory()
+        });
+
+        if (exitCode != 0)
         {
-            var apiUrl = EnvironmentVariable("APPVEYOR_API_URL");
-            try
-            {
-                if (!string.IsNullOrEmpty(apiUrl))
-                {
-                    // Disable XUnit AppVeyorReporter see https://github.com/cake-build/cake/issues/1200
-                    System.Environment.SetEnvironmentVariable("APPVEYOR_API_URL", null);
-                }
-
-                Action<ICakeContext> testAction = tool => {
-                    tool.DotNetCoreTest(project.GetDirectory().FullPath, new DotNetCoreTestSettings {
-                        Configuration = parameters.Configuration,
-                        NoBuild = true,
-                        Verbose = false,
-                        ArgumentCustomization = args =>
-                            args.Append("-xml").Append(parameters.Paths.Directories.TestResults.CombineWithFilePath(project.GetFilenameWithoutExtension()).FullPath + ".xml")
-                    });};
-
-                if(!parameters.SkipOpenCover)
-                {
-                    OpenCover(testAction,
-                        parameters.Paths.Files.TestCoverageOutputFilePath,
-                        new OpenCoverSettings {
-                            ReturnTargetCodeOffset = 0,
-                            ArgumentCustomization = args => args.Append("-mergeoutput")
-                        }
-                        .WithFilter("+[*]* -[xunit.*]* -[*.Tests]* -[Cake.Testing]* -[Cake.Testing.Xunit]* ")
-                        .ExcludeByAttribute("*.ExcludeFromCodeCoverage*")
-                        .ExcludeByFile("*/*Designer.cs;*/*.g.cs;*/*.g.i.cs"));
-                }
-                else
-                {
-                    testAction(Context);
-                }
-            }
-            finally
-            {
-                if (!string.IsNullOrEmpty(apiUrl))
-                {
-                    System.Environment.SetEnvironmentVariable("APPVEYOR_API_URL", apiUrl);
-                }
-            }
+            throw new Exception(string.Format("dotnet xunit exited with code: {0}", exitCode));
         }
-        else
-        {
-            var name = project.GetFilenameWithoutExtension();
-            var dirPath = project.GetDirectory().FullPath;
-            var config = parameters.Configuration;
-            var xunit = GetFiles(dirPath + "/bin/" + config + "/net451/*/dotnet-test-xunit.exe").First().FullPath;
-            var testfile = GetFiles(dirPath + "/bin/" + config + "/net451/*/" + name + ".dll").First().FullPath;
-
-            using(var process = StartAndReturnProcess("mono", new ProcessSettings{ Arguments = xunit + " " + testfile }))
-            {
-                process.WaitForExit();
-                if (process.GetExitCode() != 0)
-                {
-                    throw new Exception("Mono tests failed!");
-                }
-            }
-        }
-    }
-
-    // Generate the HTML version of the Code Coverage report if the XML file exists
-    if(FileExists(parameters.Paths.Files.TestCoverageOutputFilePath))
-    {
-        ReportGenerator(parameters.Paths.Files.TestCoverageOutputFilePath, parameters.Paths.Directories.TestResults);
     }
 });
 
@@ -227,7 +161,6 @@ Task("Copy-Files")
         VersionSuffix = parameters.Version.DotNetAsterix,
         Configuration = parameters.Configuration,
         OutputDirectory = parameters.Paths.Directories.ArtifactsBinNet45,
-        NoBuild = true,
         Verbose = false
     });
 
@@ -236,15 +169,17 @@ Task("Copy-Files")
     {
         Framework = "netcoreapp1.0",
         Configuration = parameters.Configuration,
-        VersionSuffix = "alpha",
         OutputDirectory = parameters.Paths.Directories.ArtifactsBinNetCoreApp10,
-        NoBuild = true,
         Verbose = false
     });
 
     // Copy license
     CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinNet45);
     CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinNetCoreApp10);
+
+    // Copy Cake.XML (since publish does not do this anymore)
+    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/net45/Cake.xml", parameters.Paths.Directories.ArtifactsBinNet45);
+    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/netcoreapp1.0/netcoreapp1.0/Cake.xml", parameters.Paths.Directories.ArtifactsBinNetCoreApp10);
 });
 
 Task("Zip-Files")
@@ -283,22 +218,23 @@ Task("Create-NuGet-Packages")
     .Does(() =>
 {
     // Build libraries
-    var projects = GetFiles("./**/*.xproj");
+    var projects = GetFiles("./src/**/*.csproj");
     foreach(var project in projects)
     {
         var name = project.GetDirectory().FullPath;
-        if(name.EndsWith("Cake") || name.EndsWith("Tests")
-            || name.EndsWith("Xunit") || name.EndsWith("NuGet"))
+        if(name.EndsWith("Cake") || name.EndsWith("Tests") || name.EndsWith("Xunit"))
         {
             continue;
         }
 
-        DotNetCorePack(project.GetDirectory().FullPath, new DotNetCorePackSettings {
-            VersionSuffix = parameters.Version.DotNetAsterix,
+        DotNetCorePack(project.FullPath, new DotNetCorePackSettings {
             Configuration = parameters.Configuration,
             OutputDirectory = parameters.Paths.Directories.NugetRoot,
             NoBuild = true,
-            Verbose = false
+            ArgumentCustomization = args => args
+                .Append("/p:Version={0}", parameters.Version.SemVersion)
+                .Append("/p:AssemblyVersion={0}", parameters.Version.Version)
+                .Append("/p:FileVersion={0}", parameters.Version.Version)
         });
     }
 
@@ -332,14 +268,21 @@ Task("Create-NuGet-Packages")
         NoPackageAnalysis = true
     });
 
+    var netCoreFullArtifactPath = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinNetCoreApp10).FullPath;
+    var netCoreFullArtifactPathLength = netCoreFullArtifactPath.Length+1;
+
     // Cake - .NET Core
     NuGetPack("./nuspec/Cake.CoreCLR.nuspec", new NuGetPackSettings {
         Version = parameters.Version.SemVersion,
         ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
-        BasePath = parameters.Paths.Directories.ArtifactsBinNetCoreApp10,
+        BasePath = netCoreFullArtifactPath,
         OutputDirectory = parameters.Paths.Directories.NugetRoot,
         Symbols = false,
-        NoPackageAnalysis = true
+        NoPackageAnalysis = true,
+        Files = GetFiles(netCoreFullArtifactPath + "/**/*")
+                                .Select(file=>file.FullPath.Substring(netCoreFullArtifactPathLength))
+                                .Select(file=> new NuSpecContent { Source = file, Target = file })
+                                .ToArray()
     });
 });
 

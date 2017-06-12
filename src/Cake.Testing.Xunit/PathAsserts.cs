@@ -9,7 +9,7 @@ using Cake.Core.IO;
 // ReSharper disable once CheckNamespace
 namespace Xunit
 {
-    public partial class Assert
+    public partial class AssertEx
     {
         private static readonly PathComparer _comparer = new PathComparer(false);
 
@@ -30,8 +30,8 @@ namespace Xunit
             var path = paths.FirstOrDefault(x => _comparer.Equals(x, expected));
 
             // Assert
-            NotNull(path);
-            IsType<T>(path);
+            Assert.NotNull(path);
+            Assert.IsType<T>(path);
         }
     }
 }

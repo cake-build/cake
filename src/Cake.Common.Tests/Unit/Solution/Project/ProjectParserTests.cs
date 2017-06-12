@@ -27,7 +27,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project
                 var result = Record.Exception(() => new ProjectParser(null, environment));
 
                 // Then
-                Assert.IsArgumentNullException(result, "fileSystem");
+                AssertEx.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -40,7 +40,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project
                 var result = Record.Exception(() => new ProjectParser(fileSystem, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
         }
 
