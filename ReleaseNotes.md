@@ -1,3 +1,17 @@
+### New on 0.20.0 (Released 2017/06/12)
+
+* 1539 Update solution to Visual Studio 2017
+* 1640 Fetch version from solutioninfo & remove newtonsoft dependency
+* 1638 Unix Integration tests fail post new SDK
+* 1635 Non Nuspec assemblies not packaged after VS2017 upgrade
+* 1603 Push Cake.NuGet to MyGet/NuGet
+* 1538 Update DotNetInstallerUri to https://dot.net/v1/dotnet-install.ps1
+* 1620 Improve documentation for RedirectStandardError and RedirectStandardOutput
+* 1613 Added documentation link to NUnit3Settings.Where
+* 1605 Fix the contribution-guidelines link again
+* 1604 Fix the contribution guidelines link in the README
+* 1595 Add Alistair and Martin names to all required places
+
 ### New on 0.19.5 (Released 2017/05/04)
 
 * 1587 Arguments missing for Octopus Deploy tool
