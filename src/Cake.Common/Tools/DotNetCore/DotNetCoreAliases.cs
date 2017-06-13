@@ -591,132 +591,132 @@ namespace Cake.Common.Tools.DotNetCore
             cleaner.Clean(project, settings);
         }
 
-         /// <summary>
-         /// Delete a NuGet Package from a server.
-         /// </summary>
-         /// <param name="context">The context.</param>
-         /// <example>
-         /// <code>
-         ///     DotNetCoreNuGetDelete();
-         /// </code>
-         /// </example>
-         [CakeMethodAlias]
-         [CakeAliasCategory("NuGet")]
-         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
-         public static void DotNetCoreNuGetDelete(this ICakeContext context)
-         {
-             context.DotNetCoreNuGetDelete(null, null, null);
-         }
+        /// <summary>
+        /// Delete a NuGet Package from a server.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <example>
+        /// <code>
+        ///     DotNetCoreNuGetDelete();
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
+        public static void DotNetCoreNuGetDelete(this ICakeContext context)
+        {
+            context.DotNetCoreNuGetDelete(null, null, null);
+        }
 
-         /// <summary>
-         /// Deletes a package from the NuGet.org.
-         /// </summary>
-         /// <param name="context">The context.</param>
-         /// <param name="packageName">Name of package to delete.</param>
-         /// <example>
-         /// <code>
-         ///     DotNetCoreNuGetDelete("Microsoft.AspNetCore.Mvc");
-         /// </code>
-         /// </example>
-         [CakeMethodAlias]
-         [CakeAliasCategory("NuGet")]
-         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
-         public static void DotNetCoreNuGetDelete(this ICakeContext context, string packageName)
-         {
-             context.DotNetCoreNuGetDelete(packageName, null, null);
-         }
+        /// <summary>
+        /// Deletes a package from the NuGet.org.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageName">Name of package to delete.</param>
+        /// <example>
+        /// <code>
+        ///     DotNetCoreNuGetDelete("Microsoft.AspNetCore.Mvc");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
+        public static void DotNetCoreNuGetDelete(this ICakeContext context, string packageName)
+        {
+            context.DotNetCoreNuGetDelete(packageName, null, null);
+        }
 
-         /// <summary>
-         /// Deletes a specific version of a package from the NuGet.org.
-         /// </summary>
-         /// <param name="context">The context.</param>
-         /// <param name="packageName">Name of package to delete.</param>
-         /// <param name="packageVersion">Version of package to delete.</param>
-         /// <example>
-         /// <code>
-         ///     DotNetCoreRestore("Microsoft.AspNetCore.Mvc", "1.0");
-         /// </code>
-         /// </example>
-         [CakeMethodAlias]
-         [CakeAliasCategory("NuGet")]
-         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
-         public static void DotNetCoreNuGetDelete(this ICakeContext context, string packageName, string packageVersion)
-         {
-             context.DotNetCoreNuGetDelete(packageName, packageVersion, null);
-         }
+        /// <summary>
+        /// Deletes a specific version of a package from the NuGet.org.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageName">Name of package to delete.</param>
+        /// <param name="packageVersion">Version of package to delete.</param>
+        /// <example>
+        /// <code>
+        ///     DotNetCoreRestore("Microsoft.AspNetCore.Mvc", "1.0");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
+        public static void DotNetCoreNuGetDelete(this ICakeContext context, string packageName, string packageVersion)
+        {
+            context.DotNetCoreNuGetDelete(packageName, packageVersion, null);
+        }
 
-         /// <summary>
-         /// Deletes a package from a server
-         /// </summary>
-         /// <param name="context">The context.</param>
-         /// <param name="packageName">Name of package to delete.</param>
-         /// <param name="settings">The settings.</param>
-         /// <example>
-         /// <code>
-         ///     var settings = new DotNetCoreNuGetDeleteSettings
-         ///     {
-         ///         Source = "https://www.example.com/nugetfeed",
-         ///         NonInteractive = true
-         ///     };
-         ///
-         ///     DotNetCoreNuGetDelete("Microsoft.AspNetCore.Mvc", settings);
-         /// </code>
-         /// </example>
-         [CakeMethodAlias]
-         [CakeAliasCategory("NuGet")]
-         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
-         public static void DotNetCoreNuGetDelete(this ICakeContext context, string packageName, DotNetCoreNuGetDeleteSettings settings)
-         {
-             context.DotNetCoreNuGetDelete(packageName, null, settings);
-         }
+        /// <summary>
+        /// Deletes a package from a server
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageName">Name of package to delete.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        ///     var settings = new DotNetCoreNuGetDeleteSettings
+        ///     {
+        ///         Source = "https://www.example.com/nugetfeed",
+        ///         NonInteractive = true
+        ///     };
+        ///
+        ///     DotNetCoreNuGetDelete("Microsoft.AspNetCore.Mvc", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
+        public static void DotNetCoreNuGetDelete(this ICakeContext context, string packageName, DotNetCoreNuGetDeleteSettings settings)
+        {
+            context.DotNetCoreNuGetDelete(packageName, null, settings);
+        }
 
-         /// <summary>
-         /// Deletes a package from a server using the specified settings.
-         /// </summary>
-         /// <param name="context">The context.</param>
-         /// <param name="settings">The settings.</param>
-         /// <example>
-         /// <code>
-         ///     var settings = new DotNetCoreNuGetDeleteSettings
-         ///     {
-         ///         Source = "https://www.example.com/nugetfeed",
-         ///         NonInteractive = true
-         ///     };
-         ///
-         ///     DotNetCoreNuGetDelete(settings);
-         /// </code>
-         /// </example>
-         [CakeMethodAlias]
-         [CakeAliasCategory("NuGet")]
-         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
-         public static void DotNetCoreNuGetDelete(this ICakeContext context, DotNetCoreNuGetDeleteSettings settings)
-         {
-             context.DotNetCoreNuGetDelete(null, null, settings);
-         }
+        /// <summary>
+        /// Deletes a package from a server using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        ///     var settings = new DotNetCoreNuGetDeleteSettings
+        ///     {
+        ///         Source = "https://www.example.com/nugetfeed",
+        ///         NonInteractive = true
+        ///     };
+        ///
+        ///     DotNetCoreNuGetDelete(settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
+        public static void DotNetCoreNuGetDelete(this ICakeContext context, DotNetCoreNuGetDeleteSettings settings)
+        {
+            context.DotNetCoreNuGetDelete(null, null, settings);
+        }
 
-         /// <summary>
-         /// Deletes a package from a server using the specified settings.
-         /// </summary>
-         /// <param name="context">The context.</param>
-         /// <param name="packageName">Name of package to delete.</param>
-         /// <param name="packageVersion">Version of package to delete.</param>
-         /// <param name="settings">The settings.</param>
-         /// <example>
-         ///  <code>
-         ///     var settings = new DotNetCoreNuGetDeleteSettings
-         ///     {
-         ///         Source = "https://www.example.com/nugetfeed",
-         ///         NonInteractive = true
-         ///     };
-         ///
-         ///     DotNetCoreNuGetDelete("Microsoft.AspNetCore.Mvc", "1.0", settings);
-         ///  </code>
-         /// </example>
-         [CakeMethodAlias]
-         [CakeAliasCategory("NuGet")]
-         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
-         public static void DotNetCoreNuGetDelete(this ICakeContext context, string packageName, string packageVersion, DotNetCoreNuGetDeleteSettings settings)
-         {
+        /// <summary>
+        /// Deletes a package from a server using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageName">Name of package to delete.</param>
+        /// <param name="packageVersion">Version of package to delete.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        ///  <code>
+        ///     var settings = new DotNetCoreNuGetDeleteSettings
+        ///     {
+        ///         Source = "https://www.example.com/nugetfeed",
+        ///         NonInteractive = true
+        ///     };
+        ///
+        ///     DotNetCoreNuGetDelete("Microsoft.AspNetCore.Mvc", "1.0", settings);
+        ///  </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
+        public static void DotNetCoreNuGetDelete(this ICakeContext context, string packageName, string packageVersion, DotNetCoreNuGetDeleteSettings settings)
+        {
              if (context == null)
              {
                  throw new ArgumentNullException(nameof(context));
