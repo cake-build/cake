@@ -2,7 +2,6 @@
 #load "./../../../utilities/paths.cake"
 
 Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.Setup")
-    .WithCriteria(false)
     .Does(() =>
 {
     var dotnetExePath = Paths.TestRoot.CombineWithFilePath(Context.IsRunningOnUnix() ? ".dotnet/dotnet" : ".dotnet/dotnet.exe");
@@ -18,7 +17,6 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.Setup")
 });
 
 Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreRestore")
-    .WithCriteria(false)
     .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.Setup")
     .Does(() =>
 {
@@ -30,7 +28,6 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreRestore")
 });
 
 Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreBuild")
-    .WithCriteria(false)
     .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreRestore")
     .Does(() =>
 {
@@ -47,7 +44,6 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreBuild")
 });
 
 Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest")
-    .WithCriteria(false)
     .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreBuild")
     .Does(() =>
 {
@@ -60,7 +56,6 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest")
 });
 
 Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreRun")
-    .WithCriteria(false)
     .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest")
     .Does(() =>
 {
@@ -73,7 +68,6 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreRun")
 });
 
 Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCorePack")
-    .WithCriteria(false)
     .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest")
     .Does(() =>
 {
@@ -94,7 +88,6 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCorePack")
 });
 
 Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCorePublish")
-    .WithCriteria(false)
     .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest")
     .Does(() =>
 {
@@ -124,7 +117,6 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCorePublish")
 });
 
 Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreExecute")
-    .WithCriteria(false)
     .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest")
     .Does(() =>
 {
@@ -137,7 +129,6 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreExecute")
 });
 
 Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest.Fail")
-    .WithCriteria(false)
     .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest")
     .Does(() =>
 {
