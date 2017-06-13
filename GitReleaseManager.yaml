@@ -6,7 +6,6 @@ issue-labels-include:
 - Documentation
 issue-labels-exclude:
 - Build
-- cla-already-signed
 issue-labels-alias:
     - name:    Documentation
       header:  Documentation
