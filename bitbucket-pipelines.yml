@@ -8,5 +8,4 @@ pipelines:
           - ln -s /opt/dotnet .dotnet
           - mkdir tools
           - ln -s /opt/nuget/nuget.exe ./tools
-          - mono ./tools/nuget.exe install Cake -OutputDirectory ./tools -ExcludeVersion
-          - mono ./tools/Cake/Cake.exe build.cake --target="Run-Unit-Tests"
+          - cake --target="Run-Unit-Tests"
