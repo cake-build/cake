@@ -64,7 +64,7 @@ namespace Cake
                     var provider = container.Resolve<CakeConfigurationProvider>();
                     builder.RegisterModule(new ConfigurationModule(provider, options));
                     builder.RegisterModule(new ArgumentsModule(options));
-                    builder.RegisterModule(new ScriptingModule(options));
+                    builder.RegisterModule(new ScriptingModule());
                     builder.Update(container);
 
                     // Load all modules.

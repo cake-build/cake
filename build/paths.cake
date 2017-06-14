@@ -26,8 +26,8 @@ public class BuildPaths
         var buildDir = context.Directory("./src/Cake/bin") + context.Directory(configuration);
         var artifactsDir = (DirectoryPath)(context.Directory("./artifacts") + context.Directory("v" + semVersion));
         var artifactsBinDir = artifactsDir.Combine("bin");
-        var artifactsBinNet45 = artifactsBinDir.Combine("net45");
-        var artifactsBinNetCoreApp10 = artifactsBinDir.Combine("netcoreapp1.0");
+        var artifactsBinFullFx = artifactsBinDir.Combine("net462");
+        var artifactsBinNetCore = artifactsBinDir.Combine("netcoreapp1.0");
         var testResultsDir = artifactsDir.Combine("test-results");
         var nugetRoot = artifactsDir.Combine("nuget");
         var testingDir = context.Directory("./src/Cake.Testing/bin") + context.Directory(configuration);
@@ -67,13 +67,13 @@ public class BuildPaths
 
         var artifactSourcePaths = cakeAssemblyPaths.Concat(testingAssemblyPaths.Concat(repoFilesPaths)).ToArray();
 
-        var relPath = new DirectoryPath("./").MakeAbsolute(context.Environment).GetRelativePath(artifactsBinNet45.MakeAbsolute(context.Environment));
+        var relPath = new DirectoryPath("./").MakeAbsolute(context.Environment).GetRelativePath(artifactsBinFullFx.MakeAbsolute(context.Environment));
         var chocolateyFiles = cakeFiles.Concat(new FilePath[] {"LICENSE"})
             .Select(file => new ChocolateyNuSpecContent {Source = "../" + relPath.CombineWithFilePath(file).FullPath})
             .ToArray();
 
         var zipArtifactPathCoreClr = artifactsDir.CombineWithFilePath("Cake-bin-coreclr-v" + semVersion + ".zip");
-        var zipArtifactPathDesktop = artifactsDir.CombineWithFilePath("Cake-bin-net45-v" + semVersion + ".zip");
+        var zipArtifactPathDesktop = artifactsDir.CombineWithFilePath("Cake-bin-net462-v" + semVersion + ".zip");
 
         var testCoverageOutputFilePath = testResultsDir.CombineWithFilePath("OpenCover.xml");
 
@@ -83,8 +83,8 @@ public class BuildPaths
             testResultsDir,
             nugetRoot,
             artifactsBinDir,
-            artifactsBinNet45,
-            artifactsBinNetCoreApp10);
+            artifactsBinFullFx,
+            artifactsBinNetCore);
 
         // Files
         var buildFiles = new BuildFiles(
@@ -154,8 +154,8 @@ public class BuildDirectories
     public DirectoryPath TestResults { get; private set; }
     public DirectoryPath NugetRoot { get; private set; }
     public DirectoryPath ArtifactsBin { get; private set; }
-    public DirectoryPath ArtifactsBinNet45 { get; private set; }
-    public DirectoryPath ArtifactsBinNetCoreApp10 { get; private set; }
+    public DirectoryPath ArtifactsBinFullFx { get; private set; }
+    public DirectoryPath ArtifactsBinNetCore { get; private set; }
     public ICollection<DirectoryPath> ToClean { get; private set; }
 
     public BuildDirectories(
@@ -163,23 +163,23 @@ public class BuildDirectories
         DirectoryPath testResultsDir,
         DirectoryPath nugetRoot,
         DirectoryPath artifactsBinDir,
-        DirectoryPath artifactsBinNet45,
-        DirectoryPath artifactsBinNetCoreApp10
+        DirectoryPath artifactsBinFullFx,
+        DirectoryPath artifactsBinNetCore
         )
     {
         Artifacts = artifactsDir;
         TestResults = testResultsDir;
         NugetRoot = nugetRoot;
         ArtifactsBin = artifactsBinDir;
-        ArtifactsBinNet45 = artifactsBinNet45;
-        ArtifactsBinNetCoreApp10 = artifactsBinNetCoreApp10;
+        ArtifactsBinFullFx = artifactsBinFullFx;
+        ArtifactsBinNetCore = artifactsBinNetCore;
         ToClean = new[] {
             Artifacts,
             TestResults,
             NugetRoot,
             ArtifactsBin,
-            ArtifactsBinNet45,
-            ArtifactsBinNetCoreApp10
+            ArtifactsBinFullFx,
+            ArtifactsBinNetCore
         };
     }
 }

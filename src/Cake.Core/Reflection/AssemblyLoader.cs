@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.IO;
 using System.Reflection;
 using Cake.Core.IO;
 using Cake.Core.Polyfill;
@@ -24,12 +25,7 @@ namespace Cake.Core.Reflection
 
         public Assembly Load(AssemblyName assemblyName)
         {
-            if (assemblyName == null)
-            {
-                throw new ArgumentNullException(nameof(assemblyName));
-            }
-
-            return Assembly.Load(assemblyName);
+            return AssemblyHelper.LoadAssembly(assemblyName);
         }
 
         public Assembly Load(FilePath path, bool verify)
@@ -40,6 +36,11 @@ namespace Cake.Core.Reflection
                 _verifier.Verify(assembly);
             }
             return assembly;
+        }
+
+        public Assembly LoadFromStream(Stream assemblyStream, Stream symbolStream)
+        {
+            return AssemblyHelper.LoadAssembly(assemblyStream, symbolStream);
         }
     }
 }

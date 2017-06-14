@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if NETCORE
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -11,9 +10,9 @@ using Cake.Core.IO;
 using Cake.Core.Reflection;
 using Cake.Core.Scripting;
 
-namespace Cake.Scripting.XPlat
+namespace Cake.Scripting.Roslyn
 {
-    internal abstract class XPlatScriptSession : IScriptSession
+    internal abstract class RoslynScriptSessionBase : IScriptSession
     {
         private readonly IAssemblyLoader _loader;
         private readonly ICakeLog _log;
@@ -24,7 +23,7 @@ namespace Cake.Scripting.XPlat
 
         public HashSet<string> Namespaces { get; }
 
-        protected XPlatScriptSession(IAssemblyLoader loader, ICakeLog log)
+        protected RoslynScriptSessionBase(IAssemblyLoader loader, ICakeLog log)
         {
             _loader = loader;
             _log = log;
@@ -40,7 +39,7 @@ namespace Cake.Scripting.XPlat
             {
                 throw new ArgumentNullException(nameof(assembly));
             }
-            _log.Debug("Adding reference to {0}...", new FilePath(assembly.Location).GetFilename().FullPath);
+            _log.Debug("Adding assembly reference to {0}...", new FilePath(assembly.Location).GetFilename().FullPath);
             References.Add(assembly);
         }
 
@@ -71,4 +70,3 @@ namespace Cake.Scripting.XPlat
         public abstract void Execute(Script script);
     }
 }
-#endif

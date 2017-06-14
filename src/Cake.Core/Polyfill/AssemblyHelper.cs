@@ -8,6 +8,10 @@ using System.Reflection;
 using Cake.Core.IO;
 using Cake.Core.Reflection;
 
+#if NETCORE
+using System.Runtime.Loader;
+#endif
+
 namespace Cake.Core.Polyfill
 {
     internal static class AssemblyHelper
@@ -19,6 +23,15 @@ namespace Cake.Core.Polyfill
 #else
             return Assembly.GetExecutingAssembly();
 #endif
+        }
+
+        public static Assembly LoadAssembly(AssemblyName assemblyName)
+        {
+            if (assemblyName == null)
+            {
+                throw new ArgumentNullException(nameof(assemblyName));
+            }
+            return Assembly.Load(assemblyName);
         }
 
         public static Assembly LoadAssembly(ICakeEnvironment environment, IFileSystem fileSystem, FilePath path)
@@ -42,6 +55,23 @@ namespace Cake.Core.Polyfill
             return loader.LoadFromAssemblyPath(path.FullPath);
 #else
             return Assembly.LoadFrom(path.FullPath);
+#endif
+        }
+
+        public static Assembly LoadAssembly(Stream assemblyStream, Stream symbolStream)
+        {
+            if (assemblyStream == null)
+            {
+                throw new ArgumentNullException(nameof(assemblyStream));
+            }
+            if (symbolStream == null)
+            {
+                throw new ArgumentNullException(nameof(symbolStream));
+            }
+#if NETCORE
+            return AssemblyLoadContext.Default.LoadFromStream(assemblyStream, symbolStream);
+#else
+            return AppDomain.CurrentDomain.Load(assemblyStream.ToArray(), symbolStream.ToArray());
 #endif
         }
     }

@@ -2,22 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if NETCORE
 using System.Linq;
 using Cake.Core.Diagnostics;
 using Cake.Core.Reflection;
 using Cake.Core.Scripting;
-using Cake.Scripting.Roslyn;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 
-namespace Cake.Scripting.XPlat
+namespace Cake.Scripting.Roslyn
 {
-    internal sealed class DefaultXPlatScriptSession : XPlatScriptSession
+    internal sealed class RoslynScriptSession : RoslynScriptSessionBase
     {
         private readonly IScriptHost _host;
         private readonly ICakeLog _log;
 
-        public DefaultXPlatScriptSession(IScriptHost host, IAssemblyLoader loader, ICakeLog log)
+        public RoslynScriptSession(IScriptHost host, IAssemblyLoader loader, ICakeLog log)
             : base(loader, log)
         {
             _host = host;
@@ -41,4 +39,3 @@ namespace Cake.Scripting.XPlat
         }
     }
 }
-#endif

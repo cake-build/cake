@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.IO;
 using System.Reflection;
 using Cake.Core.IO;
 
@@ -13,18 +14,26 @@ namespace Cake.Core.Reflection
     public interface IAssemblyLoader
     {
         /// <summary>
-        /// Loads the specified assembly from its assembly name.
+        /// Loads an assembly from its assembly name.
         /// </summary>
         /// <param name="assemblyName">The assembly name.</param>
         /// <returns>The loaded assembly.</returns>
         Assembly Load(AssemblyName assemblyName);
 
         /// <summary>
-        /// Loads the specified assembly from the specified path.
+        /// Loads an assembly from the specified path.
         /// </summary>
         /// <param name="path">The assembly path to load.</param>
         /// <param name="verify">If the assembly should be verified whether or not it will work properly with Cake or not.</param>
         /// <returns>The loaded assembly.</returns>
         Assembly Load(FilePath path, bool verify);
+
+        /// <summary>
+        /// Loads an assembly from the specified stream.
+        /// </summary>
+        /// <param name="assemblyStream">The assembly stream.</param>
+        /// <param name="symbolStream">The assembly symbol stream.</param>
+        /// <returns>The loaded assembly.</returns>
+        Assembly LoadFromStream(Stream assemblyStream, Stream symbolStream);
     }
 }
