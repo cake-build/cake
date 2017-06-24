@@ -9,15 +9,18 @@ using Cake.Core.Text;
 
 namespace Cake.Polyfill
 {
-    public static IEnumerable<string> GetCommandLineArgs(bool skipExecutable = true)
+    internal static class EnvironmentHelper
     {
+        public static IEnumerable<string> GetCommandLineArgs(bool skipExecutable = true)
+        {
 #if NETCORE
-        return Environment.GetCommandLineArgs()
-            .Skip(skipExecutable ? 1 : 0);
+            return Environment.GetCommandLineArgs()
+                .Skip(skipExecutable ? 1 : 0);
 #else
-        return QuoteAwareStringSplitter
-            .Split(Environment.CommandLine)
-            .Skip(skipExecutable ? 1 : 0);
+            return QuoteAwareStringSplitter
+                .Split(Environment.CommandLine)
+                .Skip(skipExecutable ? 1 : 0);
 #endif
+        }
     }
 }
