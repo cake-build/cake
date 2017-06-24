@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Linq;
 using Autofac;
 using Cake.Arguments;
 using Cake.Common.Modules;
@@ -11,7 +10,6 @@ using Cake.Composition;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.Modules;
-using Cake.Core.Text;
 using Cake.Diagnostics;
 using Cake.Modules;
 using Cake.NuGet;
@@ -35,10 +33,7 @@ namespace Cake
             try
             {
                 // Parse arguments.
-                var args = QuoteAwareStringSplitter
-                    .Split(EnvironmentHelper.GetCommandLine())
-                    .Skip(1) // Skip executable.
-                    .ToArray();
+                var args = EnvironmentHelper.GetCommandLineArgs();
 
                 var builder = new ContainerRegistrar();
                 builder.RegisterModule(new CakeModule());
