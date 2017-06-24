@@ -3,19 +3,21 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Cake.Core.Text;
 
 namespace Cake.Polyfill
 {
-    internal static class EnvironmentHelper
+    public static IEnumerable<string> GetCommandLineArgs(bool skipExecutable = true)
     {
-        public static string GetCommandLine()
-        {
 #if NETCORE
-            // Extremely naive solution.
-            return string.Join(" ", Environment.GetCommandLineArgs());
+        return Environment.GetCommandLineArgs()
+            .Skip(skipExecutable ? 1 : 0);
 #else
-            return Environment.CommandLine;
+        return QuoteAwareStringSplitter
+            .Split(Environment.CommandLine)
+            .Skip(skipExecutable ? 1 : 0);
 #endif
-        }
     }
 }
