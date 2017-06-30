@@ -36,6 +36,12 @@ namespace Cake.Common.Tools.Chocolatey.Download
         public bool Internalize { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether all URLs, not only from known helpers, should be internalized.
+        /// Requires Chocolatey business edition (Licensed version 1.11.1+).
+        /// </summary>
+        public bool InternalizeAllUrls { get; set; }
+
+        /// <summary>
         /// Gets or sets the location for downloaded resource when <see cref="Internalize"/> is set.
         /// <c>null</c> or <see cref="string.Empty"/> if downloaded resources should be embedded in the package.
         /// Can be a file share or an internal URL location.
