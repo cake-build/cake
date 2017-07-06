@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotNetCore.Build
@@ -46,5 +47,10 @@ namespace Cake.Common.Tools.DotNetCore.Build
         /// Gets or sets a value indicating whether to ignore project to project references and only build the root project.
         /// </summary>
         public bool NoDependencies { get; set; }
+
+        /// <summary>
+        /// Gets or sets additional arguments to be passed to MSBuild.
+        /// </summary>
+        public DotNetCoreMSBuildSettings MSBuildSettings { get; set; }
     }
 }
