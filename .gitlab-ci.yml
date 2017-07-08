@@ -5,8 +5,7 @@ stages:
 build_job:
   stage: build
   script:
-  - ln -s /opt/dotnet .dotnet
+  - ln -s /usr/share/dotnet .dotnet
   - mkdir tools
   - ln -s /opt/nuget/nuget.exe ./tools
-  - mono ./tools/nuget.exe install Cake -OutputDirectory ./tools -ExcludeVersion
-  - mono ./tools/Cake/Cake.exe build.cake --target="Run-Unit-Tests"
+  - cake  build.cake --target="Run-Unit-Tests"
