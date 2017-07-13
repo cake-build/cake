@@ -104,7 +104,11 @@ Task("Restore-NuGet-Packages")
             "https://dotnet.myget.org/F/dotnet-core/api/v3/index.json",
             "https://dotnet.myget.org/F/cli-deps/api/v3/index.json",
             "https://api.nuget.org/v3/index.json",
-        }
+        },
+        ArgumentCustomization = args => args
+            .Append("/p:Version={0}", parameters.Version.SemVersion)
+            .Append("/p:AssemblyVersion={0}", parameters.Version.Version)
+            .Append("/p:FileVersion={0}", parameters.Version.Version)
     });
 });
 
