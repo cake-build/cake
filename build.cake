@@ -20,6 +20,7 @@
 
 BuildParameters parameters = BuildParameters.GetParameters(Context);
 bool publishingError = false;
+DotNetCoreMSBuildSettings msBuildSettings = null;
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -41,6 +42,11 @@ Setup(context =>
         parameters.Target,
         parameters.Version.CakeVersion,
         parameters.IsTagged);
+
+    msBuildSettings = new DotNetCoreMSBuildSettings()
+                            .WithProperty("Version", parameters.Version.SemVersion)
+                            .WithProperty("AssemblyVersion", parameters.Version.Version)
+                            .WithProperty("FileVersion", parameters.Version.Version);
 });
 
 Teardown(context =>
@@ -98,17 +104,14 @@ Task("Restore-NuGet-Packages")
 {
     DotNetCoreRestore("./src/Cake.sln", new DotNetCoreRestoreSettings
     {
-        Verbose = false,
+        Verbosity = DotNetCoreVerbosity.Minimal,
         Sources = new [] {
             "https://www.myget.org/F/xunit/api/v3/index.json",
             "https://dotnet.myget.org/F/dotnet-core/api/v3/index.json",
             "https://dotnet.myget.org/F/cli-deps/api/v3/index.json",
             "https://api.nuget.org/v3/index.json",
         },
-        ArgumentCustomization = args => args
-            .Append("/p:Version={0}", parameters.Version.SemVersion)
-            .Append("/p:AssemblyVersion={0}", parameters.Version.Version)
-            .Append("/p:FileVersion={0}", parameters.Version.Version)
+        MSBuildSettings = msBuildSettings
     });
 });
 
@@ -121,10 +124,7 @@ Task("Build")
     DotNetCoreBuild(path.FullPath, new DotNetCoreBuildSettings()
     {
         Configuration = parameters.Configuration,
-        ArgumentCustomization = args => args
-            .Append("/p:Version={0}", parameters.Version.SemVersion)
-            .Append("/p:AssemblyVersion={0}", parameters.Version.Version)
-            .Append("/p:FileVersion={0}", parameters.Version.Version)
+        MSBuildSettings = msBuildSettings
     });
 });
 
@@ -165,7 +165,7 @@ Task("Copy-Files")
         VersionSuffix = parameters.Version.DotNetAsterix,
         Configuration = parameters.Configuration,
         OutputDirectory = parameters.Paths.Directories.ArtifactsBinNet45,
-        Verbose = false
+        Verbosity = DotNetCoreVerbosity.Minimal
     });
 
     // .NET Core
@@ -174,7 +174,7 @@ Task("Copy-Files")
         Framework = "netcoreapp1.0",
         Configuration = parameters.Configuration,
         OutputDirectory = parameters.Paths.Directories.ArtifactsBinNetCoreApp10,
-        Verbose = false
+        Verbosity = DotNetCoreVerbosity.Minimal
     });
 
     // Copy license
@@ -235,10 +235,7 @@ Task("Create-NuGet-Packages")
             Configuration = parameters.Configuration,
             OutputDirectory = parameters.Paths.Directories.NugetRoot,
             NoBuild = true,
-            ArgumentCustomization = args => args
-                .Append("/p:Version={0}", parameters.Version.SemVersion)
-                .Append("/p:AssemblyVersion={0}", parameters.Version.Version)
-                .Append("/p:FileVersion={0}", parameters.Version.Version)
+            MSBuildSettings = msBuildSettings
         });
     }
 
