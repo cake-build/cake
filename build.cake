@@ -132,25 +132,11 @@ Task("Run-Unit-Tests")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    // context.DotNetCoreTest($"{project.Path.FullPath}/{project.Name}.csproj", new DotNetCoreTestSettings()
-    // {
-    //     Configuration = context.Configuration,
-    //     NoBuild = true,
-    //     Verbose = false
-    // });
-
     var projects = GetFiles("./src/**/*.Tests.csproj");
     foreach(var project in projects)
     {
-        var exitCode = StartProcess("dotnet", new ProcessSettings {
-            Arguments = "xunit --no-build -noshadow -configuration " + parameters.Configuration,
-            WorkingDirectory = project.GetDirectory()
-        });
-
-        if (exitCode != 0)
-        {
-            throw new Exception(string.Format("dotnet xunit exited with code: {0}", exitCode));
-        }
+        DotNetCoreTool(project,
+            "xunit",  "--no-build -noshadow -configuration " + parameters.Configuration);
     }
 });
 
