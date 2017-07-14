@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -44,7 +45,7 @@ namespace Cake.Common.Tools.DotNetCore.Pack
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            Run(settings, GetArguments(project, settings));
+            RunCommand(settings, GetArguments(project, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(string project, DotNetCorePackSettings settings)
@@ -66,17 +67,22 @@ namespace Cake.Common.Tools.DotNetCore.Pack
                 builder.AppendQuoted(settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
             }
 
-            // Build base path
-            if (settings.BuildBasePath != null)
-            {
-                builder.Append("--build-base-path");
-                builder.AppendQuoted(settings.BuildBasePath.MakeAbsolute(_environment).FullPath);
-            }
-
             // No build
             if (settings.NoBuild)
             {
                 builder.Append("--no-build");
+            }
+
+            // Include symbols
+            if (settings.IncludeSymbols)
+            {
+                builder.Append("--include-symbols");
+            }
+
+            // Include source
+            if (settings.IncludeSource)
+            {
+                builder.Append("--include-source");
             }
 
             // Configuration
@@ -91,6 +97,17 @@ namespace Cake.Common.Tools.DotNetCore.Pack
             {
                 builder.Append("--version-suffix");
                 builder.Append(settings.VersionSuffix);
+            }
+
+            // Serviceable
+            if (settings.Serviceable)
+            {
+                builder.Append("--serviceable");
+            }
+
+            if (settings.MSBuildSettings != null)
+            {
+                builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);
             }
 
             return builder;

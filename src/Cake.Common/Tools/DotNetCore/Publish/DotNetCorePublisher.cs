@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -44,7 +45,7 @@ namespace Cake.Common.Tools.DotNetCore.Publish
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            Run(settings, GetArguments(path, settings));
+            RunCommand(settings, GetArguments(path, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(string path, DotNetCorePublishSettings settings)
@@ -64,13 +65,6 @@ namespace Cake.Common.Tools.DotNetCore.Publish
             {
                 builder.Append("--output");
                 builder.AppendQuoted(settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
-            }
-
-            // Build base path
-            if (settings.BuildBasePath != null)
-            {
-                builder.Append("--build-base-path");
-                builder.AppendQuoted(settings.BuildBasePath.MakeAbsolute(_environment).FullPath);
             }
 
             // Runtime
@@ -101,14 +95,9 @@ namespace Cake.Common.Tools.DotNetCore.Publish
                 builder.Append(settings.VersionSuffix);
             }
 
-            if (settings.NativeSubDirectory)
+            if (settings.MSBuildSettings != null)
             {
-                builder.Append("--native-subdirectory");
-            }
-
-            if (settings.NoBuild)
-            {
-                builder.Append("--no-build");
+                builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);
             }
 
             return builder;

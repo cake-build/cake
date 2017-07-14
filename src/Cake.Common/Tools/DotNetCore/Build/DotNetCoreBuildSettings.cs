@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotNetCore.Build
@@ -11,11 +12,6 @@ namespace Cake.Common.Tools.DotNetCore.Build
     /// </summary>
     public sealed class DotNetCoreBuildSettings : DotNetCoreSettings
     {
-        /// <summary>
-        /// Gets or sets the directory in which to place temporary outputs.
-        /// </summary>
-        public DirectoryPath BuildBasePath { get; set; }
-
         /// <summary>
         /// Gets or sets the output directory.
         /// </summary>
@@ -42,11 +38,6 @@ namespace Cake.Common.Tools.DotNetCore.Build
         public string VersionSuffix { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to print the incremental safety checks that prevent incremental compilation.
-        /// </summary>
-        public bool BuildProfile { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether to mark the build as unsafe for incrementality.
         /// This turns off incremental compilation and forces a clean rebuild of the project dependency graph.
         /// </summary>
@@ -56,5 +47,10 @@ namespace Cake.Common.Tools.DotNetCore.Build
         /// Gets or sets a value indicating whether to ignore project to project references and only build the root project.
         /// </summary>
         public bool NoDependencies { get; set; }
+
+        /// <summary>
+        /// Gets or sets additional arguments to be passed to MSBuild.
+        /// </summary>
+        public DotNetCoreMSBuildSettings MSBuildSettings { get; set; }
     }
 }

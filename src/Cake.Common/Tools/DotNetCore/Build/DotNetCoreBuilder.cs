@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -48,7 +49,7 @@ namespace Cake.Common.Tools.DotNetCore.Build
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            Run(settings, GetArguments(project, settings));
+            RunCommand(settings, GetArguments(project, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(string project, DotNetCoreBuildSettings settings)
@@ -68,13 +69,6 @@ namespace Cake.Common.Tools.DotNetCore.Build
             {
                 builder.Append("--output");
                 builder.AppendQuoted(settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
-            }
-
-            // Temporary output directory
-            if (settings.BuildBasePath != null)
-            {
-                builder.Append("--build-base-path");
-                builder.AppendQuoted(settings.BuildBasePath.MakeAbsolute(_environment).FullPath);
             }
 
             // Runtime
@@ -105,12 +99,6 @@ namespace Cake.Common.Tools.DotNetCore.Build
                 builder.Append(settings.VersionSuffix);
             }
 
-            // Build Profile
-            if (settings.BuildProfile)
-            {
-                builder.Append("--build-profile");
-            }
-
             // No Incremental
             if (settings.NoIncremental)
             {
@@ -121,6 +109,11 @@ namespace Cake.Common.Tools.DotNetCore.Build
             if (settings.NoDependencies)
             {
                 builder.Append("--no-dependencies");
+            }
+
+            if (settings.MSBuildSettings != null)
+            {
+                builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);
             }
 
             return builder;

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotNetCore.Publish
@@ -11,11 +12,6 @@ namespace Cake.Common.Tools.DotNetCore.Publish
     /// </summary>
     public sealed class DotNetCorePublishSettings : DotNetCoreSettings
     {
-        /// <summary>
-        /// Gets or sets the directory in which to place temporary outputs.
-        /// </summary>
-        public DirectoryPath BuildBasePath { get; set; }
-
         /// <summary>
         /// Gets or sets the output directory.
         /// </summary>
@@ -42,14 +38,8 @@ namespace Cake.Common.Tools.DotNetCore.Publish
         public string VersionSuffix { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to not build projects before publishing.
+        /// Gets or sets additional arguments to be passed to MSBuild.
         /// </summary>
-        public bool NoBuild { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to enable a temporary mechanism to include subdirectories
-        /// from native assets of dependency packages in output.
-        /// </summary>
-        public bool NativeSubDirectory { get; set; }
+        public DotNetCoreMSBuildSettings MSBuildSettings { get; set; }
     }
 }
