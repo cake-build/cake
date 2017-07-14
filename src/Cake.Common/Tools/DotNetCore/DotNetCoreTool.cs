@@ -64,6 +64,20 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// Runs the dotnet cli command using the specified settings and arguments.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="arguments">The arguments.</param>
+        /// <param name="processSettings">The processSettings.</param>
+        protected void RunCommand(TSettings settings, ProcessArgumentBuilder arguments, ProcessSettings processSettings)
+        {
+            // add arguments common to all commands last
+            AppendCommonArguments(arguments, settings);
+
+            Run(settings, arguments, processSettings, null);
+        }
+
+        /// <summary>
         /// Creates a <see cref="ProcessArgumentBuilder"/> and adds common commandline arguments.
         /// </summary>
         /// <param name="settings">The settings.</param>
