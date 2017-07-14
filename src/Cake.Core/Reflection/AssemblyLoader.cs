@@ -11,11 +11,13 @@ namespace Cake.Core.Reflection
 {
     internal sealed class AssemblyLoader : IAssemblyLoader
     {
+        private readonly ICakeEnvironment _environment;
         private readonly IFileSystem _fileSystem;
         private readonly AssemblyVerifier _verifier;
 
-        public AssemblyLoader(IFileSystem fileSystem, AssemblyVerifier verifier)
+        public AssemblyLoader(ICakeEnvironment environment, IFileSystem fileSystem, AssemblyVerifier verifier)
         {
+            _environment = environment;
             _fileSystem = fileSystem;
             _verifier = verifier;
         }
@@ -32,7 +34,7 @@ namespace Cake.Core.Reflection
 
         public Assembly Load(FilePath path, bool verify)
         {
-            var assembly = AssemblyHelper.LoadAssembly(_fileSystem, path);
+            var assembly = AssemblyHelper.LoadAssembly(_environment, _fileSystem, path);
             if (verify)
             {
                 _verifier.Verify(assembly);

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.IO;
 using System.Reflection;
 using Cake.Core.IO;
 using Cake.Core.Reflection;
@@ -20,7 +21,7 @@ namespace Cake.Core.Polyfill
 #endif
         }
 
-        public static Assembly LoadAssembly(IFileSystem fileSystem, FilePath path)
+        public static Assembly LoadAssembly(ICakeEnvironment environment, IFileSystem fileSystem, FilePath path)
         {
 #if NETCORE
             if (path == null)
@@ -35,7 +36,7 @@ namespace Cake.Core.Polyfill
             }
 
             var loader = new CakeAssemblyLoadContext(fileSystem, path.GetDirectory());
-            return loader.LoadFromAssemblyPath(path.FullPath);
+            return loader.LoadFromAssemblyPath(path.MakeAbsolute(environment).FullPath);
 #else
             return Assembly.LoadFrom(path.FullPath);
 #endif
