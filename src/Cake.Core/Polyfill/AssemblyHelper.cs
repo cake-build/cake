@@ -35,8 +35,11 @@ namespace Cake.Core.Polyfill
                 return Assembly.Load(new AssemblyName(path.FullPath));
             }
 
+            // Make the path absolute.
+            path = path.MakeAbsolute(environment);
+
             var loader = new CakeAssemblyLoadContext(fileSystem, path.GetDirectory());
-            return loader.LoadFromAssemblyPath(path.MakeAbsolute(environment).FullPath);
+            return loader.LoadFromAssemblyPath(path.FullPath);
 #else
             return Assembly.LoadFrom(path.FullPath);
 #endif
