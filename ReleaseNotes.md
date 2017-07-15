@@ -1,3 +1,8 @@
+### New on 0.21.1 (Released 2017/07/15)
+
+* 1685 Add DotNetCoreTool alias overload that takes DotNetCoreToolSettings parameter
+* 1686 AssemblyLoadContext root path is relative
+
 ### New on 0.21.0 (Released 2017/07/14)
 
 * 1533 Update DotNetCore Aliases to match tooling 1.0
