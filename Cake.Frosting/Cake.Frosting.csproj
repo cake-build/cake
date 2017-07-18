@@ -13,7 +13,7 @@
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>Cake.Frosting</AssemblyName>
-    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
     <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
@@ -25,8 +25,8 @@
     <DebugType>portable</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Cake.Core" Version="0.19.5" />
-    <PackageReference Include="Cake.Common" Version="0.19.5" />
+    <PackageReference Include="Cake.Core" Version="0.21.1" />
+    <PackageReference Include="Cake.Common" Version="0.21.1" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

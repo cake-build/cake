@@ -27,7 +27,7 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
     <PackageReference Include="xunit" Version="2.2.0" />
     <PackageReference Include="NSubstitute" Version="2.0.2" />
-    <PackageReference Include="Cake.Testing" Version="0.18.0" />
+    <PackageReference Include="Cake.Testing" Version="0.21.1" />
   </ItemGroup>
 
   <ItemGroup>
