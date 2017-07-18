@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Copyright>Copyright (c) .NET Foundation and contributors</Copyright>
-    <Authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park and contributors</Authors>
+    <Authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström and contributors</Authors>
     <PackageTags>Cake;Build;Build automation</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</PackageIconUrl>
     <PackageLicenseUrl>https://github.com/cake-build/frosting/blob/develop/LICENSE</PackageLicenseUrl>
