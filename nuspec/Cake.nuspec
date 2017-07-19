@@ -14,56 +14,5 @@
     <tags>Cake Script Build</tags>
   </metadata>
   <files>
-    <file src="Autofac.dll" />
-    <file src="Cake.Common.dll" />
-    <file src="Cake.Common.xml" />
-    <file src="Cake.Core.dll" />
-    <file src="Cake.Core.xml" />
-    <file src="Cake.exe" />
-    <file src="Cake.exe.config" />
-    <file src="Cake.NuGet.dll" />
-    <file src="Cake.NuGet.xml" />
-    <file src="Cake.xml" />
-    <file src="Microsoft.CodeAnalysis.CSharp.dll" />
-    <file src="Microsoft.CodeAnalysis.CSharp.Scripting.dll" />
-    <file src="Microsoft.CodeAnalysis.dll" />
-    <file src="Microsoft.CodeAnalysis.Scripting.dll" />
-    <file src="Microsoft.Web.XmlTransform.dll" />
-    <file src="NuGet.Core.dll" />
-    <file src="System.AppContext.dll" />
-    <file src="System.Collections.Immutable.dll" />
-    <file src="System.Console.dll" />
-    <file src="System.Diagnostics.FileVersionInfo.dll" />
-    <file src="System.Diagnostics.StackTrace.dll" />
-    <file src="System.IO.Compression.dll" />
-    <file src="System.IO.dll" />
-    <file src="System.IO.FileSystem.dll" />
-    <file src="System.IO.FileSystem.Primitives.dll" />
-    <file src="System.Reflection.dll" />
-    <file src="System.Reflection.Metadata.dll" />
-    <file src="System.Runtime.dll" />
-    <file src="System.Runtime.Extensions.dll" />
-    <file src="System.Runtime.InteropServices.dll" />
-    <file src="System.Security.Cryptography.Algorithms.dll" />
-    <file src="System.Security.Cryptography.Encoding.dll" />
-    <file src="System.Security.Cryptography.Primitives.dll" />
-    <file src="System.Security.Cryptography.X509Certificates.dll" />
-    <file src="System.Text.Encoding.CodePages.dll" />
-    <file src="System.Threading.Thread.dll" />
-    <file src="System.ValueTuple.dll" />
-    <file src="System.Xml.ReaderWriter.dll" />
-    <file src="System.Xml.XmlDocument.dll" />
-    <file src="System.Xml.XPath.dll" />
-    <file src="System.Xml.XPath.XDocument.dll" />
-    <file src="runtimes/unix/lib/netstandard1.3/System.Diagnostics.FileVersionInfo.dll" />
-    <file src="runtimes/unix/lib/netstandard1.3/System.IO.Compression.dll" />
-    <file src="runtimes/unix/lib/netstandard1.3/System.Security.Cryptography.Encoding.dll" />
-    <file src="runtimes/unix/lib/netstandard1.3/System.Text.Encoding.CodePages.dll" />
-    <file src="runtimes/win/lib/net46/System.Diagnostics.FileVersionInfo.dll" />
-    <file src="runtimes/win/lib/net46/System.IO.Compression.dll" />
-    <file src="runtimes/win/lib/net46/System.Security.Cryptography.Encoding.dll" />
-    <file src="runtimes/win/lib/net461/System.Security.Cryptography.Algorithms.dll" />
-    <file src="runtimes/win/lib/net461/System.Security.Cryptography.X509Certificates.dll" />
-    <file src="runtimes/win/lib/netstandard1.3/System.Text.Encoding.CodePages.dll" />
   </files>
 </package>

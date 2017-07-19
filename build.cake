@@ -144,7 +144,7 @@ Task("Copy-Files")
     .IsDependentOn("Run-Unit-Tests")
     .Does(() =>
 {
-    // .NET 4.5
+    // .NET 4.6.2
     DotNetCorePublish("./src/Cake", new DotNetCorePublishSettings
     {
         Framework = "net462",
@@ -176,7 +176,7 @@ Task("Zip-Files")
     .IsDependentOn("Copy-Files")
     .Does(() =>
 {
-    // .NET 4.5
+    // .NET 4.6.2
     var homebrewFiles = GetFiles( parameters.Paths.Directories.ArtifactsBinFullFx.FullPath + "/**/*");
     Zip(parameters.Paths.Directories.ArtifactsBinFullFx, parameters.Paths.Files.ZipArtifactPathDesktop, homebrewFiles);
 
@@ -193,12 +193,19 @@ Task("Create-Chocolatey-Packages")
 {
     foreach(var package in parameters.Packages.Chocolatey)
     {
+        var netFxFullArtifactPath = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinFullFx).FullPath;
+        var curDirLength =  MakeAbsolute(Directory("./")).FullPath.Length + 1;
+
         // Create package.
         ChocolateyPack(package.NuspecPath, new ChocolateyPackSettings {
             Version = parameters.Version.SemVersion,
             ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
             OutputDirectory = parameters.Paths.Directories.NugetRoot,
-            //Files = parameters.Paths.ChocolateyFiles
+            Files = GetFiles(netFxFullArtifactPath + "/**/*")
+                                    .Where(file => file.FullPath.IndexOf("/runtimes/", StringComparison.OrdinalIgnoreCase) < 0)
+                                    .Select(file=>"../" + file.FullPath.Substring(curDirLength))
+                                    .Select(file=> new ChocolateyNuSpecContent { Source = file })
+                                    .ToArray()
         });
     }
 });
@@ -221,11 +228,12 @@ Task("Create-NuGet-Packages")
             Configuration = parameters.Configuration,
             OutputDirectory = parameters.Paths.Directories.NugetRoot,
             NoBuild = true,
+            IncludeSymbols = true,
             MSBuildSettings = msBuildSettings
         });
     }
 
-    // Cake - Symbols - .NET 4.5
+    // Cake - Symbols - .NET 4.6.2
     NuGetPack("./nuspec/Cake.symbols.nuspec", new NuGetPackSettings {
         Version = parameters.Version.SemVersion,
         ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
@@ -235,9 +243,10 @@ Task("Create-NuGet-Packages")
         NoPackageAnalysis = true
     });
 
-    // Cake - .NET 4.5
     var netFxFullArtifactPath = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinFullFx).FullPath;
     var netFxFullArtifactPathLength = netFxFullArtifactPath.Length+1;
+
+    // Cake - .NET 4.6.2
     NuGetPack("./nuspec/Cake.nuspec", new NuGetPackSettings {
         Version = parameters.Version.SemVersion,
         ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
@@ -246,6 +255,7 @@ Task("Create-NuGet-Packages")
         Symbols = false,
         NoPackageAnalysis = true,
         Files = GetFiles(netFxFullArtifactPath + "/**/*")
+                                .Where(file => file.FullPath.IndexOf("/runtimes/", StringComparison.OrdinalIgnoreCase) < 0)
                                 .Select(file=>file.FullPath.Substring(netFxFullArtifactPathLength))
                                 .Select(file=> new NuSpecContent { Source = file, Target = file })
                                 .ToArray()
