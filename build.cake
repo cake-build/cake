@@ -47,6 +47,13 @@ Setup(context =>
                             .WithProperty("Version", parameters.Version.SemVersion)
                             .WithProperty("AssemblyVersion", parameters.Version.Version)
                             .WithProperty("FileVersion", parameters.Version.Version);
+
+    if(!parameters.IsRunningOnWindows)
+    {
+        // Use targeting pack when not running on Windows.
+        Information("Build will use NET462 targeting pack since not building on Windows.");
+        msBuildSettings.WithProperty("UseTargetingPack", "true");
+    }
 });
 
 Teardown(context =>
