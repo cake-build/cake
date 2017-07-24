@@ -42,7 +42,7 @@ namespace Cake.Core.Scripting.Processors.Loading
 
             // Get the current script path.
             var current = context.Current.Path.GetDirectory();
-            path = path?.MakeAbsolute(current);
+            path = path.MakeAbsolute(current);
 
             // Analyze the script.
             context.Analyze(path);

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using Cake.Core.Diagnostics;
 using Cake.Core.Reflection;
 using Cake.Core.Scripting;
@@ -22,7 +21,7 @@ namespace Cake.Scripting.Roslyn
             _log = log;
         }
 
-        public IScriptSession CreateSession(IScriptHost host, IDictionary<string, string> arguments)
+        public IScriptSession CreateSession(IScriptHost host)
         {
             return new RoslynScriptSession(host, _loader, _log, _options);
         }

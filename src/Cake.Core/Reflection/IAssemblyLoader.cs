@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.IO;
 using System.Reflection;
 using Cake.Core.IO;
 
@@ -27,13 +26,5 @@ namespace Cake.Core.Reflection
         /// <param name="verify">If the assembly should be verified whether or not it will work properly with Cake or not.</param>
         /// <returns>The loaded assembly.</returns>
         Assembly Load(FilePath path, bool verify);
-
-        /// <summary>
-        /// Loads an assembly from the specified stream.
-        /// </summary>
-        /// <param name="assemblyStream">The assembly stream.</param>
-        /// <param name="symbolStream">The assembly symbol stream.</param>
-        /// <returns>The loaded assembly.</returns>
-        Assembly LoadFromStream(Stream assemblyStream, Stream symbolStream);
     }
 }

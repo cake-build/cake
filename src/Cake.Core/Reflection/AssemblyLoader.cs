@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.IO;
 using System.Reflection;
 using Cake.Core.IO;
 using Cake.Core.Polyfill;
@@ -36,11 +34,6 @@ namespace Cake.Core.Reflection
                 _verifier.Verify(assembly);
             }
             return assembly;
-        }
-
-        public Assembly LoadFromStream(Stream assemblyStream, Stream symbolStream)
-        {
-            return AssemblyHelper.LoadAssembly(assemblyStream, symbolStream);
         }
     }
 }

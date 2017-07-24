@@ -321,6 +321,23 @@ namespace Cake.Tests.Unit.Arguments
                     // Then
                     Assert.Equal(expected, result.PerformDebug);
                 }
+
+                [Theory]
+                [InlineData("-mono", true)]
+                [InlineData("-mono=true", true)]
+                [InlineData("-mono=false", false)]
+                public void Can_Parse_Mono(string input, bool expected)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.cake", input });
+
+                    // Then
+                    Assert.Equal(expected, result.Mono);
+                }
             }
 
             public sealed class WithTwoDashLongArguments
@@ -528,6 +545,23 @@ namespace Cake.Tests.Unit.Arguments
 
                     // Then
                     Assert.Equal(expected, result.PerformDebug);
+                }
+
+                [Theory]
+                [InlineData("--mono", true)]
+                [InlineData("--mono=true", true)]
+                [InlineData("--mono=false", false)]
+                public void Can_Parse_Mono(string input, bool expected)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.cake", input });
+
+                    // Then
+                    Assert.Equal(expected, result.Mono);
                 }
             }
         }

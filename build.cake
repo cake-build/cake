@@ -43,10 +43,13 @@ Setup(context =>
         parameters.Version.CakeVersion,
         parameters.IsTagged);
 
+    var releaseNotes = string.Join("\n", parameters.ReleaseNotes.Notes.ToArray()).Replace("\"", "\"\"");
+
     msBuildSettings = new DotNetCoreMSBuildSettings()
                             .WithProperty("Version", parameters.Version.SemVersion)
                             .WithProperty("AssemblyVersion", parameters.Version.Version)
-                            .WithProperty("FileVersion", parameters.Version.Version);
+                            .WithProperty("FileVersion", parameters.Version.Version)
+                            .WithProperty("PackageReleaseNotes", string.Concat("\"", releaseNotes, "\""));
 
     if(!parameters.IsRunningOnWindows)
     {
@@ -158,7 +161,7 @@ Task("Copy-Files")
         VersionSuffix = parameters.Version.DotNetAsterix,
         Configuration = parameters.Configuration,
         OutputDirectory = parameters.Paths.Directories.ArtifactsBinFullFx,
-        Verbosity = DotNetCoreVerbosity.Minimal
+        MSBuildSettings = msBuildSettings
     });
 
     // .NET Core
@@ -167,7 +170,7 @@ Task("Copy-Files")
         Framework = "netcoreapp1.0",
         Configuration = parameters.Configuration,
         OutputDirectory = parameters.Paths.Directories.ArtifactsBinNetCore,
-        Verbosity = DotNetCoreVerbosity.Minimal
+        MSBuildSettings = msBuildSettings
     });
 
     // Copy license

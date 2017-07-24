@@ -9,7 +9,6 @@ using System.Reflection;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Core.Polyfill;
 using Cake.Core.Reflection;
 using Cake.Core.Scripting.Analysis;
 
@@ -146,7 +145,7 @@ namespace Cake.Core.Scripting
             }
 
             // Create and prepare the session.
-            var session = _engine.CreateSession(host, arguments);
+            var session = _engine.CreateSession(host);
 
             // Load all references.
             var applicationRoot = _environment.ApplicationRoot;

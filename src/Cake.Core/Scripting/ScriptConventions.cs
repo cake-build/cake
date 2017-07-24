@@ -6,11 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime;
-using System.Text;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Core.Polyfill;
 using Cake.Core.Reflection;
 
 namespace Cake.Core.Scripting
@@ -22,19 +18,16 @@ namespace Cake.Core.Scripting
     {
         private readonly IFileSystem _fileSystem;
         private readonly IAssemblyLoader _loader;
-        private readonly ICakeLog _log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptConventions"/> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="loader">The assembly loader.</param>
-        /// <param name="log">The log.</param>
-        public ScriptConventions(IFileSystem fileSystem, IAssemblyLoader loader, ICakeLog log)
+        public ScriptConventions(IFileSystem fileSystem, IAssemblyLoader loader)
         {
             _fileSystem = fileSystem;
             _loader = loader;
-            _log = log;
         }
 
         /// <summary>
