@@ -24,11 +24,7 @@ namespace Cake.Scripting.Roslyn
 
         public IScriptSession CreateSession(IScriptHost host, IDictionary<string, string> arguments)
         {
-            if (_options.PerformDebug)
-            {
-                return new RoslynDebugScriptSession(host, _loader, _log);
-            }
-            return new RoslynScriptSession(host, _loader, _log);
+            return new RoslynScriptSession(host, _loader, _log, _options);
         }
     }
 }
