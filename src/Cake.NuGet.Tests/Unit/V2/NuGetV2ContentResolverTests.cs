@@ -5,7 +5,6 @@
 #if !NETCORE
 using System.Linq;
 using Cake.NuGet.Tests.Fixtures;
-using Cake.Testing;
 using Xunit;
 
 namespace Cake.NuGet.Tests.Unit
@@ -16,8 +15,10 @@ namespace Cake.NuGet.Tests.Unit
         public void Should_Throw_If_Path_Is_Null()
         {
             // Given
-            var fixture = new NuGetV2ContentResolverFixture();
-            fixture.Path = null;
+            var fixture = new NuGetV2ContentResolverFixture()
+            {
+                Path = null
+            };
 
             // When
             var result = Record.Exception(() => fixture.GetFiles());
@@ -31,12 +32,12 @@ namespace Cake.NuGet.Tests.Unit
         {
             // Given
             var fixture = new NuGetV2ContentResolverFixture(".NETFramework,Version=v4.5");
-            fixture.FileSystem.CreateFile("/Working/lib/net45/file.dll");
-            fixture.FileSystem.CreateFile("/Working/lib/net451/file.dll");
-            fixture.FileSystem.CreateFile("/Working/lib/net452/file.dll");
-            fixture.FileSystem.CreateFile("/Working/lib/net461/file.dll");
-            fixture.FileSystem.CreateFile("/Working/lib/netstandard1.5/file.dll");
-            fixture.FileSystem.CreateFile("/Working/lib/netstandard1.6/file.dll");
+            fixture.CreateCLRAssembly("/Working/lib/net45/file.dll");
+            fixture.CreateCLRAssembly("/Working/lib/net451/file.dll");
+            fixture.CreateCLRAssembly("/Working/lib/net452/file.dll");
+            fixture.CreateCLRAssembly("/Working/lib/net461/file.dll");
+            fixture.CreateCLRAssembly("/Working/lib/netstandard1.5/file.dll");
+            fixture.CreateCLRAssembly("/Working/lib/netstandard1.6/file.dll");
 
             // When
             var result = fixture.GetFiles();
@@ -51,10 +52,10 @@ namespace Cake.NuGet.Tests.Unit
         {
             // Given
             var fixture = new NuGetV2ContentResolverFixture(".NETFramework,Version=v4.5.2");
-            fixture.FileSystem.CreateFile("/Working/lib/net45/file.dll");
-            fixture.FileSystem.CreateFile("/Working/lib/net451/file.dll");
-            fixture.FileSystem.CreateFile("/Working/lib/net461/file.dll");
-            fixture.FileSystem.CreateFile("/Working/lib/netstandard1.5/file.dll");
+            fixture.CreateCLRAssembly("/Working/lib/net45/file.dll");
+            fixture.CreateCLRAssembly("/Working/lib/net451/file.dll");
+            fixture.CreateCLRAssembly("/Working/lib/net461/file.dll");
+            fixture.CreateCLRAssembly("/Working/lib/netstandard1.5/file.dll");
 
             // When
             var result = fixture.GetFiles();
@@ -69,15 +70,31 @@ namespace Cake.NuGet.Tests.Unit
         {
             // Given
             var fixture = new NuGetV2ContentResolverFixture(".NETStandard,Version=v4.5");
-            fixture.FileSystem.CreateFile("/Working/lib/net451/file.dll");
-            fixture.FileSystem.CreateFile("/Working/lib/net452/file.dll");
-            fixture.FileSystem.CreateFile("/Working/lib/net461/file.dll");
+            fixture.CreateCLRAssembly("/Working/lib/net451/file.dll");
+            fixture.CreateCLRAssembly("/Working/lib/net452/file.dll");
+            fixture.CreateCLRAssembly("/Working/lib/net461/file.dll");
 
             // When
             var result = fixture.GetFiles();
 
             // Then
             Assert.Equal(0, result.Count);
+        }
+
+        [Fact]
+        public void Should_Return_Only_CLR_Assemblies()
+        {
+            // Given
+            var fixture = new NuGetV2ContentResolverFixture(".NETFramework,Version=v4.5.2");
+            fixture.CreateCLRAssembly("/Working/lib/net451/file.dll");
+            fixture.CreateNonCLRAssembly("/Working/lib/net451/lib/native.dll");
+
+            // When
+            var result = fixture.GetFiles();
+
+            // Then
+            Assert.Equal(1, result.Count);
+            Assert.Equal("/Working/lib/net451/file.dll", result.ElementAt(0).Path.FullPath);
         }
     }
 }

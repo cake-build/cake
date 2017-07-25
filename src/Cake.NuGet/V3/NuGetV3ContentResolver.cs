@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Core.Packaging;
 using NuGet.Frameworks;
 
 namespace Cake.NuGet.V3
@@ -26,7 +27,7 @@ namespace Cake.NuGet.V3
             _environment = environment;
         }
 
-        protected override IReadOnlyCollection<IFile> GetAddinAssemblies(DirectoryPath path)
+        protected override IReadOnlyCollection<IFile> GetAddinAssemblies(DirectoryPath path, PackageReference package)
         {
             if (!_fileSystem.Exist(path))
             {
@@ -38,7 +39,10 @@ namespace Cake.NuGet.V3
             var current = NuGetFramework.Parse(_environment.Runtime.TargetFramework.FullName, provider);
 
             // Get all candidate files.
-            var assemblies = _fileSystem.GetDirectory(path).GetFiles("*.dll", SearchScope.Recursive);
+            var assemblies = GetFiles(path, package, new[] { path.FullPath + "/**/*.dll" })
+                                .Where(file => !"Cake.Core.dll".Equals(file.Path.GetFilename().FullPath, StringComparison.OrdinalIgnoreCase)
+                                                && IsCLRAssembly(file))
+                                .ToList();
 
             // Iterate all found files.
             var comparer = new NuGetFrameworkFullComparer();

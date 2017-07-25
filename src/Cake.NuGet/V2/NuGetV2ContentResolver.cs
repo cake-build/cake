@@ -35,7 +35,7 @@ namespace Cake.NuGet.V2
             _log = log;
         }
 
-        protected override IReadOnlyCollection<IFile> GetAddinAssemblies(DirectoryPath packageDirectory)
+        protected override IReadOnlyCollection<IFile> GetAddinAssemblies(DirectoryPath packageDirectory, PackageReference package)
         {
             if (packageDirectory == null)
             {
@@ -50,7 +50,7 @@ namespace Cake.NuGet.V2
                 return new List<IFile>();
             }
 
-            var packageAssemblies = GetAllPackageAssemblies(packageDirectory);
+            var packageAssemblies = GetAllPackageAssemblies(packageDirectory, package);
             if (!packageAssemblies.Any())
             {
                 _log.Warning("Unable to locate any assemblies under {0}", packageDirectory.FullPath);
@@ -67,12 +67,11 @@ namespace Cake.NuGet.V2
             return compatibleAssemblyPaths.Select(_fileSystem.GetFile).ToList().AsReadOnly();
         }
 
-        private FilePath[] GetAllPackageAssemblies(DirectoryPath packageDirectory)
+        private FilePath[] GetAllPackageAssemblies(DirectoryPath packageDirectory, PackageReference package)
         {
-            return _fileSystem.GetDirectory(packageDirectory).GetFiles("*.dll", SearchScope.Recursive)
-                .Where(
-                    file =>
-                        !"Cake.Core.dll".Equals(file.Path.GetFilename().FullPath, StringComparison.OrdinalIgnoreCase))
+            return GetFiles(packageDirectory, package, new[] { packageDirectory.FullPath + "/**/*.dll" })
+                .Where(file => !"Cake.Core.dll".Equals(file.Path.GetFilename().FullPath, StringComparison.OrdinalIgnoreCase)
+                            && IsCLRAssembly(file))
                 .Select(a => a.Path)
                 .ToArray();
         }
