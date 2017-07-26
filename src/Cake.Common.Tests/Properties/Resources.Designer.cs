@@ -582,6 +582,14 @@ namespace Cake.Common.Tests.Properties {
             }
         }
 
+        public static string XmlPeek_Xml_With_Namespace
+        {
+            get
+            {
+                return ResourceManager.GetString("XmlPeek_Xml_With_Namespace", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///    Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
         ///&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;

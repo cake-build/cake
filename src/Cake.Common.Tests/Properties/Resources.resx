@@ -1012,4 +1012,19 @@ Imports System.Runtime.CompilerServices;
 '&lt;Assembly: AssemblyDelaySign(false)&gt;
 '&lt;Assembly: AssemblyKeyFile("")&gt;</value>
   </data>
+  <data name="XmlPeek_Xml_With_Namespace" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003"&gt;
+  &lt;PropertyGroup&gt;
+    &lt;WebPublishMethod&gt;FileSystem&lt;/WebPublishMethod&gt;
+    &lt;LastUsedBuildConfiguration&gt;DeploymentTemplate&lt;/LastUsedBuildConfiguration&gt;
+    &lt;LastUsedPlatform&gt;Any CPU&lt;/LastUsedPlatform&gt;
+    &lt;SiteUrlToLaunchAfterPublish /&gt;
+    &lt;LaunchSiteAfterPublish&gt;True&lt;/LaunchSiteAfterPublish&gt;
+    &lt;ExcludeApp_Data&gt;False&lt;/ExcludeApp_Data&gt;
+    &lt;publishUrl&gt;C:\Deployment\DeploymentTemplate\WebApi&lt;/publishUrl&gt;
+    &lt;DeleteExistingFiles&gt;False&lt;/DeleteExistingFiles&gt;
+  &lt;/PropertyGroup&gt;
+&lt;/Project&gt;</value>
+  </data>
 </root>
