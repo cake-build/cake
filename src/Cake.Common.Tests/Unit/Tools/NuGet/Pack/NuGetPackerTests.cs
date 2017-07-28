@@ -305,6 +305,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Copyright = "The copyright";
                     fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
                     fixture.Settings.Tags = new[] { "Tag1", "Tag2", "Tag3" };
+                    fixture.Settings.Language = "en-us";
 
                     // When
                     var result = fixture.Run();
@@ -336,6 +337,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Copyright = "The copyright";
                     fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
                     fixture.Settings.Tags = new[] { "Tag1", "Tag2", "Tag3" };
+                    fixture.Settings.Language = "en-us";
 
                     // When
                     var result = fixture.Run();
@@ -368,6 +370,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Copyright = "The copyright";
                     fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
                     fixture.Settings.Tags = new[] { "Tag1", "Tag2", "Tag3" };
+                    fixture.Settings.Language = "en-us";
 
                     // When
                     var result = fixture.Run();
@@ -399,6 +402,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Copyright = "The copyright";
                     fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
                     fixture.Settings.Tags = new[] { "Tag1", "Tag2", "Tag3" };
+                    fixture.Settings.Language = "en-us";
                     fixture.Settings.Files = new[]
                     {
                         new NuSpecContent { Source = "Cake.Core.dll", Target = "lib/net45" },
@@ -443,6 +447,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Copyright = "The copyright";
                     fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
                     fixture.Settings.Tags = new[] { "Tag1", "Tag2", "Tag3" };
+                    fixture.Settings.Language = "en-us";
                     fixture.Settings.Files = new[]
                     {
                         new NuSpecContent { Source = "Cake.Core.dll", Target = "lib/net45" },
@@ -519,6 +524,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Copyright = "The copyright";
                     fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
                     fixture.Settings.Tags = new[] { "Tag1", "Tag2", "Tag3" };
+                    fixture.Settings.Language = "en-us";
                     fixture.Settings.Files = new[]
                     {
                         new NuSpecContent { Source = "Cake.Core.dll", Target = "lib/net45" },
@@ -563,6 +569,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Copyright = "The copyright";
                     fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
                     fixture.Settings.Tags = new[] { "Tag1", "Tag2", "Tag3" };
+                    fixture.Settings.Language = "en-us";
                     fixture.Settings.Files = new[]
                     {
                         new NuSpecContent { Source = "Cake.Core.dll", Target = "lib/net45" },
