@@ -36,7 +36,8 @@ namespace Cake.Common.Tools.NuGet.Pack
                 { "requireLicenseAcceptance", settings => ToString(settings.RequireLicenseAcceptance) },
                 { "copyright", settings => ToString(settings.Copyright) },
                 { "releaseNotes", settings => ToMultiLineString(settings.ReleaseNotes) },
-                { "tags", settings => ToSpaceSeparatedString(settings.Tags) }
+                { "tags", settings => ToSpaceSeparatedString(settings.Tags) },
+                { "language", settings => ToString(settings.Language) }
             };
 
             _cdataElements = new List<string> { "releaseNotes" };
