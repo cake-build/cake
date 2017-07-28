@@ -36,7 +36,7 @@ namespace Cake.NuGet
 
             if (type == PackageType.Addin)
             {
-                return GetAddinAssemblies(path);
+                return GetAddinAssemblies(path, package);
             }
             if (type == PackageType.Tool)
             {
@@ -46,7 +46,7 @@ namespace Cake.NuGet
             throw new InvalidOperationException("Unknown resource type.");
         }
 
-        protected abstract IReadOnlyCollection<IFile> GetAddinAssemblies(DirectoryPath path);
+        protected abstract IReadOnlyCollection<IFile> GetAddinAssemblies(DirectoryPath path, PackageReference package);
 
         private IReadOnlyCollection<IFile> GetToolFiles(DirectoryPath path, PackageReference package)
         {
@@ -59,12 +59,12 @@ namespace Cake.NuGet
             return result;
         }
 
-        private IEnumerable<IFile> GetFiles(DirectoryPath path, PackageReference package)
+        protected IEnumerable<IFile> GetFiles(DirectoryPath path, PackageReference package, string[] patterns = null)
         {
             var collection = new FilePathCollection(new PathComparer(_environment));
 
             // Get default files (exe and dll).
-            var patterns = new[] { path.FullPath + "/**/*.exe", path.FullPath + "/**/*.dll" };
+            patterns = patterns ?? new[] { path.FullPath + "/**/*.exe", path.FullPath + "/**/*.dll" };
             foreach (var pattern in patterns)
             {
                 collection.Add(_globber.GetFiles(pattern));
@@ -92,6 +92,45 @@ namespace Cake.NuGet
 
             // Return the files.
             return collection.Select(p => _fileSystem.GetFile(p)).ToArray();
+        }
+
+        protected bool IsCLRAssembly(IFile file)
+        {
+            if (!file.Exists || file.Length < 365)
+            {
+                return false;
+            }
+
+            using (var fs = file.OpenRead())
+            {
+                using (var reader = new System.IO.BinaryReader(fs))
+                {
+                    const uint MagicOffset = 0x18;
+                    const uint Magic32Bit = 0x10b;
+                    const int Offset32Bit = 0x5e;
+                    const int Offset64Bit = 0x6e;
+                    const int OffsetDictionary = 0x70;
+
+                    // PE Header Start
+                    fs.Position = 0x3C;
+
+                    // Go to Magic header
+                    fs.Position = reader.ReadUInt32() + MagicOffset;
+
+                    // Check magic to get 32 / 64 bit offset
+                    var is32Bit = reader.ReadUInt16() == Magic32Bit;
+                    var offset = fs.Position + (is32Bit ? Offset32Bit : Offset64Bit) + OffsetDictionary;
+
+                    if (offset + 4 > fs.Length)
+                    {
+                        return false;
+                    }
+
+                    // Go to dictionary start
+                    fs.Position = offset;
+                    return reader.ReadUInt32() > 0;
+                }
+            }
         }
     }
 }

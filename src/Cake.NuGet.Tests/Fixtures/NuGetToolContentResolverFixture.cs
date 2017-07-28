@@ -21,7 +21,7 @@ namespace Cake.NuGet.Tests.Fixtures
             {
             }
 
-            protected override IReadOnlyCollection<IFile> GetAddinAssemblies(DirectoryPath path)
+            protected override IReadOnlyCollection<IFile> GetAddinAssemblies(DirectoryPath path, PackageReference package)
             {
                 throw new NotSupportedException("Only tools can be resolved with this resolver.");
             }
