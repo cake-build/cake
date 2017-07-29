@@ -101,7 +101,7 @@ RunTarget(target);
 ./build.ps1
 ```
 
-##### Linux / OS X
+##### Linux
 
 ```console
 # Adjust the permissions for the bootstrapper script.
@@ -109,6 +109,24 @@ chmod +x build.sh
 
 # Execute the bootstrapper script.
 ./build.sh
+```
+##### OS X
+
+```console
+# Install Cake with Homebrew
+brew install cake
+
+# Download OSX specific script
+curl -Lsfo build-osx.sh http://cakebuild.net/download/bootstrapper/osx
+
+# Remove the tools folder that contains non-OSX files which would otherwise causes `Error: An item with the same key has already been added`.
+rm -rf tools
+
+# Adjust the permissions for the bootstrapper script.
+chmod +x build.sh
+
+# Run it
+./build-osx.sh
 ```
 
 ## Contributing
