@@ -42,7 +42,7 @@ namespace Cake.Common.Tools.GitVersion
         /// <summary>
         /// Gets or sets the pre-release number.
         /// </summary>
-        public string PreReleaseNumber { get; set; }
+        public int PreReleaseNumber { get; set; }
 
         /// <summary>
         /// Gets or sets the build metadata.
@@ -117,7 +117,7 @@ namespace Cake.Common.Tools.GitVersion
         /// <summary>
         /// Gets or sets the commits since version source
         /// </summary>
-        public string CommitsSinceVersionSource { get; set; }
+        public int CommitsSinceVersionSource { get; set; }
 
         /// <summary>
         /// Gets or sets the commits since version source padded
