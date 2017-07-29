@@ -3,10 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.IO;
 using System.Reflection;
 using Cake.Core.IO;
+
+#if NETCORE
 using Cake.Core.Reflection;
+#endif
 
 namespace Cake.Core.Polyfill
 {
@@ -19,6 +21,15 @@ namespace Cake.Core.Polyfill
 #else
             return Assembly.GetExecutingAssembly();
 #endif
+        }
+
+        public static Assembly LoadAssembly(AssemblyName assemblyName)
+        {
+            if (assemblyName == null)
+            {
+                throw new ArgumentNullException(nameof(assemblyName));
+            }
+            return Assembly.Load(assemblyName);
         }
 
         public static Assembly LoadAssembly(ICakeEnvironment environment, IFileSystem fileSystem, FilePath path)

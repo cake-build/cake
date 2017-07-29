@@ -40,7 +40,7 @@ namespace Cake.Core.Reflection
                     // The assembly is referencing a version of Cake that contains breaking changes.
                     throw new CakeException($"The assembly '{assembly.FullName}' is referencing an older version of Cake.Core ({reference.Version.ToString(3)}). " +
                         $"This assembly need to reference at least Cake.Core version {Constants.LatestBreakingChange.ToString(3)}. " +
-                        $"Another option is to downgrade Cake to an earlier version.");
+                        "Another option is to downgrade Cake to an earlier version.");
                 }
             }
         }

@@ -55,11 +55,11 @@ namespace Cake.Core.Tests.Fixtures
             Session = Substitute.For<IScriptSession>();
             ArgumentDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             Engine = Substitute.For<IScriptEngine>();
-            Engine.CreateSession(Arg.Any<IScriptHost>(), ArgumentDictionary).Returns(Session);
+            Engine.CreateSession(Arg.Any<IScriptHost>()).Returns(Session);
 
             ScriptAnalyzer = new ScriptAnalyzer(FileSystem, Environment, Log, new[] { new FileLoadDirectiveProvider() });
             ScriptProcessor = Substitute.For<IScriptProcessor>();
-            ScriptConventions = new ScriptConventions(FileSystem, AssemblyLoader, Log);
+            ScriptConventions = new ScriptConventions(FileSystem, AssemblyLoader);
 
             var context = Substitute.For<ICakeContext>();
             context.Environment.Returns(c => Environment);

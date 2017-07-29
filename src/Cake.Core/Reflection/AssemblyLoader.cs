@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Reflection;
 using Cake.Core.IO;
 using Cake.Core.Polyfill;
@@ -24,12 +23,7 @@ namespace Cake.Core.Reflection
 
         public Assembly Load(AssemblyName assemblyName)
         {
-            if (assemblyName == null)
-            {
-                throw new ArgumentNullException(nameof(assemblyName));
-            }
-
-            return Assembly.Load(assemblyName);
+            return AssemblyHelper.LoadAssembly(assemblyName);
         }
 
         public Assembly Load(FilePath path, bool verify)
