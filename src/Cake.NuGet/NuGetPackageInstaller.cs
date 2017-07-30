@@ -12,6 +12,15 @@ using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
 using Cake.Core.Packaging;
 
+#if NETCORE
+using NuGet.Versioning;
+#else
+using NuGet;
+#endif
+
+using IFileSystem = Cake.Core.IO.IFileSystem;
+using PackageReference = Cake.Core.Packaging.PackageReference;
+
 namespace Cake.NuGet
 {
     /// <summary>
@@ -117,44 +126,33 @@ namespace Cake.NuGet
                 throw new ArgumentNullException(nameof(path));
             }
 
-            path = path.MakeAbsolute(_environment);
-
-            var root = _fileSystem.GetDirectory(path);
-            var packagePath = path.Combine(package.Package);
-
             // Create the addin directory if it doesn't exist.
+            path = GetPackagePath(path.MakeAbsolute(_environment), package);
+            var root = _fileSystem.GetDirectory(path);
             if (!root.Exists)
             {
                 _log.Debug("Creating directory {0}", path);
                 root.Create();
             }
 
-            // Fetch available content from disc.
-            var content = _contentResolver.GetFiles(packagePath, package, type);
-            if (content.Any())
+            // Package already exist?
+            var packagePath = GetPackagePath(root);
+            if (packagePath != null)
             {
-                _log.Debug("Package {0} has already been installed.", package.Package);
-                return content;
+                // Fetch available content from disc.
+                var content = _contentResolver.GetFiles(packagePath, package, type);
+                if (content.Any())
+                {
+                    _log.Debug("Package {0} has already been installed.", package.Package);
+                    return content;
+                }
             }
 
             // Install the package.
-            _log.Debug("Installing NuGet package {0}...", package.Package);
-            var nugetPath = GetNuGetPath();
-            var process = _processRunner.Start(nugetPath, new ProcessSettings
-            {
-                Arguments = GetArguments(package, path, _config),
-                RedirectStandardOutput = true,
-                Silent = _log.Verbosity < Verbosity.Diagnostic
-            });
-            process.WaitForExit();
+            InstallPackage(package, path);
 
-            var exitCode = process.GetExitCode();
-            if (exitCode != 0)
-            {
-                _log.Warning("NuGet exited with {0}", exitCode);
-                var output = string.Join(Environment.NewLine, process.GetStandardOutput());
-                _log.Verbose(Verbosity.Diagnostic, "Output:\r\n{0}", output);
-            }
+            // Try locating the install folder again.
+            packagePath = GetPackagePath(root);
 
             // Get the files.
             var result = _contentResolver.GetFiles(packagePath, package, type);
@@ -173,6 +171,44 @@ namespace Cake.NuGet
             }
 
             return result;
+        }
+
+        private static DirectoryPath GetPackagePath(IDirectory root)
+        {
+            var directories = root.GetDirectories("*", SearchScope.Current).ToArray();
+            return directories.FirstOrDefault()?.Path;
+        }
+
+        private static DirectoryPath GetPackagePath(DirectoryPath root, PackageReference package)
+        {
+            if (package.Parameters.ContainsKey("version"))
+            {
+                var version = package.Parameters["version"].First();
+                return root.Combine($"{package.Package}.{version}".ToLowerInvariant());
+            }
+            return root.Combine(package.Package.ToLowerInvariant());
+        }
+
+        private void InstallPackage(PackageReference package, DirectoryPath path)
+        {
+            _log.Debug("Installing NuGet package {0}...", package.Package);
+
+            var nugetPath = GetNuGetPath();
+            var process = _processRunner.Start(nugetPath, new ProcessSettings
+            {
+                Arguments = GetArguments(package, path, _config),
+                RedirectStandardOutput = true,
+                Silent = _log.Verbosity < Verbosity.Diagnostic
+            });
+            process.WaitForExit();
+
+            var exitCode = process.GetExitCode();
+            if (exitCode != 0)
+            {
+                _log.Warning("NuGet exited with {0}", exitCode);
+                var output = string.Join(Environment.NewLine, process.GetStandardOutput());
+                _log.Verbose(Verbosity.Diagnostic, "Output:\r\n{0}", output);
+            }
         }
 
         private FilePath GetNuGetPath()
@@ -234,7 +270,8 @@ namespace Cake.NuGet
                 arguments.Append("-NoCache");
             }
 
-            arguments.Append("-ExcludeVersion -NonInteractive");
+            arguments.Append("-ExcludeVersion");
+            arguments.Append("-NonInteractive");
             return arguments;
         }
     }
