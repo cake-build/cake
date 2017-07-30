@@ -4,10 +4,10 @@
 
 using System;
 using System.Linq;
-using Cake.Diagnostics.Formatting;
+using Cake.Core.Diagnostics.Formatting;
 using Xunit;
 
-namespace Cake.Tests.Unit.Diagnostics
+namespace Cake.Core.Tests.Unit.Diagnostics
 {
     public class FormatParserTests
     {
