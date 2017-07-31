@@ -1441,5 +1441,68 @@ namespace Cake.Common.Tests.Unit.IO
                 }
             }
         }
+
+        public sealed class TheGetSubDirectoriesMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given, When
+                var directoryPath = new DirectoryPath("./some/path");
+
+                var result = Record.Exception(() =>
+                    DirectoryAliases.GetSubDirectories(null, directoryPath));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "context");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Directory_Path_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+
+                // When
+                var result = Record.Exception(() =>
+                    DirectoryAliases.GetSubDirectories(context, null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "directoryPath");
+            }
+
+            [Fact]
+            public void Should_List_All_Directories_In_Directory()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
+                CreateFileStructure(fileSystem);
+                context.FileSystem.Returns(fileSystem);
+                var directoryPath = new DirectoryPath("/Temp");
+
+                // When
+                var directories = DirectoryAliases.GetSubDirectories(context, directoryPath);
+
+                // Then
+                Assert.True(directories.Any(d => d.GetDirectoryName() == "Stuff"));
+                Assert.True(directories.Any(d => d.GetDirectoryName() == "Things"));
+                Assert.False(directories.Any(d => d.GetDirectoryName() == "file1.txt"));
+            }
+
+            private static void CreateFileStructure(FakeFileSystem ffs)
+            {
+                Action<string> dir = path => ffs.CreateDirectory(path);
+                Action<string> file = path => ffs.CreateFile(path);
+
+                dir("/Temp");
+                {
+                    file("/Temp/file1.txt");
+                    dir("/Temp/Stuff");
+                    dir("/Temp/Things");
+                }
+            }
+        }
     }
 }

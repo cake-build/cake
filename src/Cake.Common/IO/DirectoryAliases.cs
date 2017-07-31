@@ -537,5 +537,45 @@ namespace Cake.Common.IO
         {
             DirectoryMover.MoveDirectory(context, directoryPath, targetDirectoryPath);
         }
+
+        /// <summary>
+        /// Gets a list of all the directories inside a directory.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var directories = GetSubDirectories("some/dir");
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="directoryPath">The directory path.</param>
+        /// <returns>An absolute directory path.</returns>
+        [CakeMethodAlias]
+        [CakeAliasCategory("List")]
+        public static DirectoryPathCollection GetSubDirectories(this ICakeContext context, DirectoryPath directoryPath)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (directoryPath == null)
+            {
+                throw new ArgumentNullException(nameof(directoryPath));
+            }
+
+            directoryPath = directoryPath.MakeAbsolute(context.Environment);
+
+            // Get the directory and verify it exist.
+            var directory = context.FileSystem.GetDirectory(directoryPath);
+            if (!directory.Exists)
+            {
+                const string format = "The directory '{0}' does not exist.";
+                var message = string.Format(System.Globalization.CultureInfo.InvariantCulture, format, directoryPath.FullPath);
+                throw new System.IO.DirectoryNotFoundException(message);
+            }
+
+            var directories = directory.GetDirectories("*", SearchScope.Current, fsi => true).Select(d => new DirectoryPath(d.Path.FullPath)).ToList();
+            return new DirectoryPathCollection(directories, new PathComparer(context.Environment.Platform.IsUnix()));
+        }
     }
 }
