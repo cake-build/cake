@@ -65,6 +65,7 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="directories">The directory paths.</param>
         /// <param name="recursive">Will perform a recursive delete if set to <c>true</c>.</param>
+        [Obsolete("Use the overload that accepts DeleteDirectorySettings instead.")]
         [CakeMethodAlias]
         [CakeAliasCategory("Delete")]
         public static void DeleteDirectories(this ICakeContext context, IEnumerable<DirectoryPath> directories, bool recursive = false)
@@ -74,9 +75,39 @@ namespace Cake.Common.IO
                 throw new ArgumentNullException(nameof(directories));
             }
 
+            DeleteDirectories(context, directories, new DeleteDirectorySettings { Recursive = recursive });
+        }
+
+        /// <summary>
+        /// Deletes the specified directories.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var directoriesToDelete = new DirectoryPath[]{
+        ///     Directory("be"),
+        ///     Directory("gone")
+        /// };
+        /// DeleteDirectories(directoriesToDelete, new DeleteDirectorySettings {
+        ///     Recursive = true,
+        ///     Force = true
+        /// });
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="directories">The directory paths.</param>
+        /// <param name="settings">The delete settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Delete")]
+        public static void DeleteDirectories(this ICakeContext context, IEnumerable<DirectoryPath> directories, DeleteDirectorySettings settings)
+        {
+            if (directories == null)
+            {
+                throw new ArgumentNullException(nameof(directories));
+            }
+
             foreach (var directory in directories)
             {
-                DeleteDirectory(context, directory, recursive);
+                DeleteDirectory(context, directory, settings);
             }
         }
 
@@ -95,9 +126,35 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="directories">The directory paths.</param>
         /// <param name="recursive">Will perform a recursive delete if set to <c>true</c>.</param>
+        [Obsolete("Use the overload that accepts DeleteDirectorySettings instead.")]
         [CakeMethodAlias]
         [CakeAliasCategory("Delete")]
         public static void DeleteDirectories(this ICakeContext context, IEnumerable<string> directories, bool recursive = false)
+        {
+            DeleteDirectories(context, directories, new DeleteDirectorySettings { Recursive = recursive });
+        }
+
+        /// <summary>
+        /// Deletes the specified directories.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var directoriesToDelete = new []{
+        ///     "be",
+        ///     "gone"
+        /// };
+        /// DeleteDirectories(directoriesToDelete, new DeleteDirectorySettings {
+        ///     Recursive = true,
+        ///     Force = true
+        /// });
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="directories">The directory paths.</param>
+        /// <param name="settings">The delete settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Delete")]
+        public static void DeleteDirectories(this ICakeContext context, IEnumerable<string> directories, DeleteDirectorySettings settings)
         {
             if (directories == null)
             {
@@ -107,7 +164,7 @@ namespace Cake.Common.IO
             var paths = directories.Select(p => new DirectoryPath(p));
             foreach (var directory in paths)
             {
-                DeleteDirectory(context, directory, recursive);
+                DeleteDirectory(context, directory, settings);
             }
         }
 
@@ -122,11 +179,33 @@ namespace Cake.Common.IO
         /// <param name="context">The context.</param>
         /// <param name="path">The directory path.</param>
         /// <param name="recursive">Will perform a recursive delete if set to <c>true</c>.</param>
+        [Obsolete("Use the overload that accepts DeleteDirectorySettings instead.")]
         [CakeMethodAlias]
         [CakeAliasCategory("Delete")]
         public static void DeleteDirectory(this ICakeContext context, DirectoryPath path, bool recursive = false)
         {
-            DirectoryDeleter.Delete(context, path, recursive);
+            DeleteDirectory(context, path, new DeleteDirectorySettings { Recursive = recursive });
+        }
+
+        /// <summary>
+        /// Deletes the specified directory.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// DeleteDirectory("./be/gone", new DeleteDirectorySettings {
+        ///     Recursive = true,
+        ///     Force = true
+        /// });
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="path">The directory path.</param>
+        /// <param name="settings">The delete settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Delete")]
+        public static void DeleteDirectory(this ICakeContext context, DirectoryPath path, DeleteDirectorySettings settings)
+        {
+            DirectoryDeleter.Delete(context, path, settings);
         }
 
         /// <summary>

@@ -24,6 +24,12 @@ namespace Cake.Core.IO
         long Length { get; }
 
         /// <summary>
+        /// Gets or sets the file attributes.
+        /// </summary>
+        /// <value>The file attributes.</value>
+        FileAttributes Attributes { get; set; }
+
+        /// <summary>
         /// Copies the file to the specified destination path.
         /// </summary>
         /// <param name="destination">The destination path.</param>

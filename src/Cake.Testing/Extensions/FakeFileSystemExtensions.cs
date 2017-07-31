@@ -41,8 +41,9 @@ namespace Cake.Testing
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="path">The path.</param>
+        /// <param name="attributes">The file attributes to set.</param>
         /// <returns>The same <see cref="FakeFile"/> instance so that multiple calls can be chained.</returns>
-        public static FakeFile CreateFile(this FakeFileSystem fileSystem, FilePath path)
+        public static FakeFile CreateFile(this FakeFileSystem fileSystem, FilePath path, FileAttributes attributes = 0)
         {
             if (fileSystem == null)
             {
@@ -58,6 +59,7 @@ namespace Cake.Testing
             {
                 file.OpenWrite().Dispose();
             }
+            file.Attributes = attributes;
             return file;
         }
 

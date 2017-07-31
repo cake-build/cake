@@ -21,6 +21,12 @@ namespace Cake.Core.IO
 
         public long Length => _file.Length;
 
+        public FileAttributes Attributes
+        {
+            get { return _file.Attributes; }
+            set { _file.Attributes = value; }
+        }
+
         public File(FilePath path)
         {
             Path = path;

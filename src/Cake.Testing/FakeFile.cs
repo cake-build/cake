@@ -52,6 +52,12 @@ namespace Cake.Testing
         /// </value>
         public long Length { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the file attributes.
+        /// </summary>
+        /// <value>The file attributes.</value>
+        public FileAttributes Attributes { get; set; }
+
         internal object ContentLock { get; } = new object();
 
         /// <summary>
