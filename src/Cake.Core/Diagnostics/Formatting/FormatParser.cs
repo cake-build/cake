@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Cake.Diagnostics.Formatting
+namespace Cake.Core.Diagnostics.Formatting
 {
     internal static class FormatParser
     {

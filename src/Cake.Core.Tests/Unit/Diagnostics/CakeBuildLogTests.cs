@@ -3,11 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Core.Diagnostics;
-using Cake.Diagnostics;
 using Cake.Testing;
 using Xunit;
 
-namespace Cake.Tests.Unit.Diagnostics
+namespace Cake.Core.Tests.Unit.Diagnostics
 {
     public sealed class CakeBuildLogTests
     {

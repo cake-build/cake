@@ -3,11 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using Cake.Core;
 
-namespace Cake
+namespace Cake.Core
 {
-    internal sealed class CakeConsole : IConsole
+    /// <summary>
+    /// The default console implementation.
+    /// </summary>
+    public sealed class CakeConsole : IConsole
     {
         /// <summary>
         /// Gets or sets the foreground color.

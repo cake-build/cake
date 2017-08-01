@@ -5,7 +5,7 @@
 using System;
 using System.Globalization;
 
-namespace Cake.Diagnostics.Formatting
+namespace Cake.Core.Diagnostics.Formatting
 {
     internal sealed class PropertyToken : FormatToken
     {
