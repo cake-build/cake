@@ -57,6 +57,11 @@ Setup(context =>
         Information("Build will use NET462 targeting pack since not building on Windows.");
         msBuildSettings.WithProperty("UseTargetingPack", "true");
     }
+    else if (StringComparer.OrdinalIgnoreCase.Equals(EnvironmentVariable("USE_TARGETING_PACK"), "true"))
+    {
+        Information("Environment variable USE_TARGETING_PACK=true, build will use NET462 targeting pack.");
+        msBuildSettings.WithProperty("UseTargetingPack", "true");
+    }
 });
 
 Teardown(context =>
