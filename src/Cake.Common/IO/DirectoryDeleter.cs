@@ -14,7 +14,7 @@ namespace Cake.Common.IO
 {
     internal static class DirectoryDeleter
     {
-        public static void Delete(ICakeContext context, DirectoryPath path, bool recursive)
+        public static void Delete(ICakeContext context, DirectoryPath path, DeleteDirectorySettings settings)
         {
             if (context == null)
             {
@@ -39,14 +39,25 @@ namespace Cake.Common.IO
 
             var hasDirectories = directory.GetDirectories("*", SearchScope.Current).Any();
             var hasFiles = directory.GetFiles("*", SearchScope.Current).Any();
-            if (!recursive && (hasDirectories || hasFiles))
+            if (!settings.Recursive && (hasDirectories || hasFiles))
             {
                 const string format = "Cannot delete directory '{0}' without recursion since it's not empty.";
                 throw new IOException(string.Format(CultureInfo.InvariantCulture, format, path.FullPath));
             }
 
             context.Log.Verbose("Deleting directory {0}", path);
-            directory.Delete(recursive);
+
+            if (settings.Force)
+            {
+                context.Log.Verbose("Removing ReadOnly attributes on all files in directory {0}", path);
+                var searchOption = settings.Recursive ? SearchScope.Recursive : SearchScope.Current;
+                foreach (var file in directory.GetFiles("*", searchOption))
+                {
+                    file.Attributes &= ~FileAttributes.ReadOnly;
+                }
+            }
+
+            directory.Delete(settings.Recursive);
         }
     }
 }
