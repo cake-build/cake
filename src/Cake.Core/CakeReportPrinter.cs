@@ -6,22 +6,33 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Cake.Core;
 using Cake.Core.Diagnostics;
 
-namespace Cake
+namespace Cake.Core
 {
-    internal sealed class CakeReportPrinter : ICakeReportPrinter
+    /// <summary>
+    /// The default report printer.
+    /// </summary>
+    public sealed class CakeReportPrinter : ICakeReportPrinter
     {
         private readonly IConsole _console;
         private readonly ICakeContext _context;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CakeReportPrinter"/> class.
+        /// </summary>
+        /// <param name="console">The console.</param>
+        /// <param name="context">The context.</param>
         public CakeReportPrinter(IConsole console, ICakeContext context)
         {
             _context = context;
             _console = console;
         }
 
+        /// <summary>
+        /// Writes the specified report to a target.
+        /// </summary>
+        /// <param name="report">The report to write.</param>
         public void Write(CakeReport report)
         {
             if (report == null)

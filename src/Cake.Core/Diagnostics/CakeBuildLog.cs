@@ -4,20 +4,30 @@
 
 using System;
 using System.Collections.Generic;
-using Cake.Core;
-using Cake.Core.Diagnostics;
-using Cake.Diagnostics.Formatting;
+using Cake.Core.Diagnostics.Formatting;
 
-namespace Cake.Diagnostics
+namespace Cake.Core.Diagnostics
 {
-    internal sealed class CakeBuildLog : ICakeLog
+    /// <summary>
+    /// The default Cake build log.
+    /// </summary>
+    public sealed class CakeBuildLog : ICakeLog
     {
         private readonly IConsole _console;
         private readonly object _lock;
         private readonly IDictionary<LogLevel, ConsolePalette> _palettes;
 
+        /// <summary>
+        /// Gets or sets the verbosity.
+        /// </summary>
+        /// <value>The verbosity.</value>
         public Verbosity Verbosity { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CakeBuildLog" /> class.
+        /// </summary>
+        /// <param name="console">The console.</param>
+        /// <param name="verbosity">The verbosity.</param>
         public CakeBuildLog(IConsole console, Verbosity verbosity = Verbosity.Normal)
         {
             _console = console;
@@ -26,6 +36,14 @@ namespace Cake.Diagnostics
             Verbosity = verbosity;
         }
 
+        /// <summary>
+        /// Writes the text representation of the specified array of objects to the
+        /// log using the specified verbosity, log level and format information.
+        /// </summary>
+        /// <param name="verbosity">The verbosity.</param>
+        /// <param name="level">The log level.</param>
+        /// <param name="format">A composite format string.</param>
+        /// <param name="args">An array of objects to write using format.</param>
         public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
         {
             if (verbosity > Verbosity)

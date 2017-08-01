@@ -4,7 +4,7 @@
 
 using System;
 
-namespace Cake.Diagnostics
+namespace Cake.Core.Diagnostics
 {
     internal sealed class ConsolePalette
     {
