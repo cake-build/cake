@@ -17,7 +17,7 @@ namespace Cake.Core.Polyfill
             info.Environment[envKey] = value;
 #else
             var envKey = info.EnvironmentVariables.Keys.Cast<string>().FirstOrDefault(existingKey => StringComparer.OrdinalIgnoreCase.Equals(existingKey, key)) ?? key;
-            info.EnvironmentVariables[key] = value;
+            info.EnvironmentVariables[envKey] = value;
 #endif
         }
     }
