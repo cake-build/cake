@@ -12,7 +12,7 @@ namespace Cake.Core
     /// <summary>
     /// Adapter to ensure correct conversion of Cake Context in derived classes.
     /// </summary>
-    public abstract class CakeContextAdapter
+    public abstract class CakeContextAdapter : ICakeContext
     {
         private readonly ICakeContext _context;
 
