@@ -43,6 +43,11 @@ namespace Cake.Common.Tests.Fixtures
            Context.Log.Returns(FakeLog);
        }
 
+       public void SetContent(string xml)
+       {
+           var file = ((FakeFileSystem)FileSystem).GetFile(XmlPath).SetContent(xml);
+       }
+
        public string Peek(string xpath)
        {
            return XmlPeekAliases.XmlPeek(Context, XmlPath, xpath, Settings);

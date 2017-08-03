@@ -132,14 +132,15 @@ namespace Cake.Common.Xml
             document.PreserveWhitespace = settings.PreserveWhitespace;
             document.Load(source);
 
-            var namespaceManager = new XmlNamespaceManager(document.NameTable);
+            var navigator = document.CreateNavigator();
+            var namespaceManager = new XmlNamespaceManager(navigator.NameTable);
+
             foreach (var xmlNamespace in settings.Namespaces)
             {
                 namespaceManager.AddNamespace(xmlNamespace.Key /* Prefix */, xmlNamespace.Value /* URI */);
             }
 
-            var node = document.SelectSingleNode(xpath, namespaceManager);
-
+            var node = navigator.SelectSingleNode(xpath, namespaceManager);
             return node?.Value;
         }
 
