@@ -4,7 +4,9 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Cake.Core;
 using Cake.Core.Diagnostics;
+using Cake.Core.IO;
 
 namespace Cake.Common.Tools.MSBuild
 {
@@ -65,7 +67,7 @@ namespace Cake.Common.Tools.MSBuild
         /// Gets or sets LogFile. The path to the log file into which the build log is written.
         /// An empty string will use msbuild.log.
         /// </summary>
-        public string LogFile { get; set; }
+        public FilePath LogFile { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the build log is appended to the log file or overwrites it. When true, the build log is appended to the log file.
@@ -80,11 +82,12 @@ namespace Cake.Common.Tools.MSBuild
         /// <summary>
         /// Process the file logger config and return parameters as a string.
         /// </summary>
+        /// <param name="environment">The environment.</param>
         /// <returns>The parameters separated by semi-colons.</returns>
-        public string GetParameters()
+        public string GetParameters(ICakeEnvironment environment)
         {
             var parameters = new List<string>();
-            parameters.Add(!string.IsNullOrWhiteSpace(LogFile) ? $"logfile={LogFile}" : null);
+            parameters.Add(LogFile != null ? $"logfile={LogFile.MakeAbsolute(environment).FullPath.Quote()}" : null);
             parameters.Add(!string.IsNullOrWhiteSpace(Encoding) ? $"Encoding={Encoding}" : null);
             parameters.Add(AppendToLogFile ? "Append" : null);
             parameters.Add(PerformanceSummaryEnabled ? "PerformanceSummary" : null);

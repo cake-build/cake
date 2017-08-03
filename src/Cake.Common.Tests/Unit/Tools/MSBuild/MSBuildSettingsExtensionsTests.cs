@@ -381,7 +381,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.Equal(2, loggers.Length);
                 Assert.Equal(fileLogger, loggers[0]);
                 Assert.Equal(fileLogger2, loggers[1]);
-                Assert.Equal("A", loggers[1].LogFile);
+                Assert.Equal("A", loggers[1].LogFile.FullPath);
             }
 
             [Fact]

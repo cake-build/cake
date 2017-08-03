@@ -866,7 +866,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // When
                 var result = fixture.Run();
                 // Then
-                Assert.Equal(@"/v:normal /target:Build /fl /flp:logfile=A;Encoding=E;Verbosity=Diagnostic /fl1 /flp1:Append;PerformanceSummary;NoSummary;ErrorsOnly;NoItemAndPropertyList;ShowCommandLine;ShowTimestamp;ShowEventId;Verbosity=Minimal /fl2 /flp2:WarningsOnly;Verbosity=Normal /fl3 /flp3:Verbosity=Quiet /fl4 /flp4:Verbosity=Verbose /fl5 /fl6 ""/Working/src/Solution.sln""", result.Args);
+                Assert.Equal(@"/v:normal /target:Build /fl /flp:logfile=""/Working/A"";Encoding=E;Verbosity=Diagnostic /fl1 /flp1:Append;PerformanceSummary;NoSummary;ErrorsOnly;NoItemAndPropertyList;ShowCommandLine;ShowTimestamp;ShowEventId;Verbosity=Minimal /fl2 /flp2:WarningsOnly;Verbosity=Normal /fl3 /flp3:Verbosity=Quiet /fl4 /flp4:Verbosity=Verbose /fl5 /fl6 ""/Working/src/Solution.sln""", result.Args);
             }
 
             [Fact]
