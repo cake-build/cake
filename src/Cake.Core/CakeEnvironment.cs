@@ -60,9 +60,10 @@ namespace Cake.Core
             _log = log;
 
             // Get the application root.
-            var assembly = AssemblyHelper.GetExecutingAssembly();
+            // TODO: Figure out how to get this without assemmbly.Location
+            /*var assembly = AssemblyHelper.GetExecutingAssembly();
             var path = System.IO.Path.GetDirectoryName(assembly.Location);
-            ApplicationRoot = new DirectoryPath(path);
+            ApplicationRoot = new DirectoryPath(path);*/
 
             // Get the working directory.
             WorkingDirectory = new DirectoryPath(System.IO.Directory.GetCurrentDirectory());

@@ -71,25 +71,18 @@ namespace Cake.Core.Scripting
                                 {
                                     notFound.Add(fileNotFoundException.FileName);
                                 }
-#if !NETCORE
-                                if (!string.IsNullOrEmpty(fileNotFoundException.FusionLog))
-                                {
-                                    _log.Debug("Fusion Log:");
-                                    _log.Debug(fileNotFoundException.FusionLog);
-                                }
-#endif
                             }
                             _log.Debug(string.Empty);
                         }
 
                         foreach (var file in notFound)
                         {
-                            _log.Warning("Could not load {0} (missing {1})", reference.Location, file);
+                            _log.Warning("Could not load {0} (missing {1})", reference.FullName, file);
                         }
                     }
                     catch (FileNotFoundException ex)
                     {
-                        _log.Warning("Could not load {0} (missing {1}))", reference.Location, ex.FileName);
+                        _log.Warning("Could not load {0} (missing {1}))", reference.FullName, ex.FileName);
                     }
                 }
             }

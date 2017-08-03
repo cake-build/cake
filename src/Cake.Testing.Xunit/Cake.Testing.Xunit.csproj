@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Cake.Testing.Xunit</AssemblyName>
-    <TargetFrameworks>net462;netstandard1.6</TargetFrameworks>
+    <TargetFramework>netstandard1.3</TargetFramework>
     <OutputType>Library</OutputType>
     <PlatformTarget>AnyCpu</PlatformTarget>
   </PropertyGroup>
@@ -18,13 +18,6 @@
   <!-- Project references -->
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
-  </ItemGroup>
-
-  <!-- .NET Framework packages -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
-    <Reference Include="System.Runtime" />
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
 </Project>

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Cake.NuGet</AssemblyName>
-    <TargetFrameworks>net462;netstandard1.6</TargetFrameworks>
+    <TargetFramework>netstandard1.3</TargetFramework>
     <OutputType>Library</OutputType>
     <PlatformTarget>AnyCpu</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -21,16 +21,9 @@
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
   </ItemGroup>
 
-  <!-- .NET Core packages -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
+  <!-- NuGet packages -->
+  <ItemGroup>
     <PackageReference Include="NuGet.Client" Version="4.0.0" />
-  </ItemGroup>
-
-  <!-- .NET Framework packages -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
-    <PackageReference Include="NuGet.Core" Version="2.14.0" />
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
 </Project>

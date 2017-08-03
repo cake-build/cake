@@ -67,21 +67,15 @@ namespace Cake.Core.Scripting
             var cakeAssemblies = LoadCakeAssemblies(root);
             result.AddRange(cakeAssemblies);
 
-#if NETCORE
             // Load all referenced assemblies.
-            foreach (var cakeAssembly in cakeAssemblies)
-            {
-                foreach (var reference in cakeAssembly.GetReferencedAssemblies())
-                {
-                    result.Add(_loader.Load(reference));
-                }
-            }
-#else
-            result.Add(typeof(Uri).GetTypeInfo().Assembly); // System
-            result.Add(typeof(System.Xml.XmlReader).GetTypeInfo().Assembly); // System.Xml
-            result.Add(typeof(System.Xml.Linq.XDocument).GetTypeInfo().Assembly); // System.Xml.Linq
-            result.Add(typeof(System.Data.DataTable).GetTypeInfo().Assembly); // System.Data
-#endif
+            // TODO: GetReferencedAssemblies()
+            // foreach (var cakeAssembly in cakeAssemblies)
+            // {
+            //     foreach (var reference in cakeAssembly.GetReferencedAssemblies())
+            //     {
+            //         result.Add(_loader.Load(reference));
+            //     }
+            // }
 
             // Return the assemblies.
             return result.ToArray();

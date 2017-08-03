@@ -2,35 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if NETCORE
 using System.Runtime.InteropServices;
-#else
-using System;
-#endif
-
 using System.Runtime.Versioning;
 
 namespace Cake.Core.Polyfill
 {
     internal class EnvironmentHelper
     {
-#if !NETCORE
-        private static bool? _isRunningOnMac;
-#endif
-
         public static bool Is64BitOperativeSystem()
         {
-#if NETCORE
             return RuntimeInformation.OSArchitecture == Architecture.X64
                 || RuntimeInformation.OSArchitecture == Architecture.Arm64;
-#else
-            return Environment.Is64BitOperatingSystem;
-#endif
         }
 
         public static PlatformFamily GetPlatformFamily()
         {
-#if NETCORE
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 return PlatformFamily.OSX;
@@ -43,35 +29,13 @@ namespace Cake.Core.Polyfill
             {
                 return PlatformFamily.Windows;
             }
-#else
-            var platform = (int)Environment.OSVersion.Platform;
-            if (platform <= 3 || platform == 5)
-            {
-                return PlatformFamily.Windows;
-            }
-            if (!_isRunningOnMac.HasValue)
-            {
-                _isRunningOnMac = Native.MacOSX.IsRunningOnMac();
-            }
-            if (_isRunningOnMac ?? false || platform == (int)PlatformID.MacOSX)
-            {
-                return PlatformFamily.OSX;
-            }
-            if (platform == 4 || platform == 6 || platform == 128)
-            {
-                return PlatformFamily.Linux;
-            }
-#endif
             return PlatformFamily.Unknown;
         }
 
         public static bool IsCoreClr()
         {
-#if NETCORE
+            // TODO: Fix this
             return true;
-#else
-            return false;
-#endif
         }
 
         public static bool IsUnix()
@@ -87,11 +51,7 @@ namespace Cake.Core.Polyfill
 
         public static FrameworkName GetFramework()
         {
-#if NETCORE
-            return new FrameworkName(".NETStandard,Version=v1.6");
-#else
-            return new FrameworkName(".NETFramework,Version=v4.6.2");
-#endif
+            return new FrameworkName(".NETStandard,Version=v1.3");
         }
     }
 }

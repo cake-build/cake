@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Cake.Core</AssemblyName>
-    <TargetFrameworks>net462;netstandard1.6</TargetFrameworks>
+    <TargetFramework>netstandard1.3</TargetFramework>
     <OutputType>Library</OutputType>
     <PlatformTarget>AnyCpu</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -16,8 +16,8 @@
   <!-- Import shared functionality -->
   <Import Project="..\Shared.msbuild" />
 
-  <!-- .NET Core packages -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
+  <!-- NuGet packages -->
+  <ItemGroup>
     <PackageReference Include="Microsoft.Win32.Registry" Version="4.3.0" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
@@ -25,16 +25,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="1.1.1" />
   </ItemGroup>
 
-  <!-- .NET Framework packages -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
+  <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 

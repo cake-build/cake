@@ -32,7 +32,8 @@ namespace Cake.Core.Reflection
             // Verify that the assembly is valid.
             // We're still pre 1.0, so there are breaking changes from time to time.
             // We can refuse to load assemblies that reference too old version of Cake.
-            var references = assembly.GetReferencedAssemblies();
+            // TODO: GetReferencedAssemblies() not in netstandard1.3
+            /*var references = assembly.GetReferencedAssemblies();
             foreach (var reference in references)
             {
                 if (reference.Name.Equals("Cake.Core") && reference.Version < Constants.LatestBreakingChange)
@@ -42,7 +43,7 @@ namespace Cake.Core.Reflection
                         $"This assembly need to reference at least Cake.Core version {Constants.LatestBreakingChange.ToString(3)}. " +
                         "Another option is to downgrade Cake to an earlier version.");
                 }
-            }
+            }*/
         }
     }
 }
