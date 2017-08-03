@@ -9,6 +9,7 @@ using Cake.Common.Tests.Fixtures.Solution.Project;
 using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
+using NSubstitute.Core.SequenceChecking;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Solution.Project
@@ -22,9 +23,10 @@ namespace Cake.Common.Tests.Unit.Solution.Project
             {
                 // Given
                 var environment = Substitute.For<ICakeEnvironment>();
+                var globber = Substitute.For<IGlobber>();
 
                 // When
-                var result = Record.Exception(() => new ProjectParser(null, environment));
+                var result = Record.Exception(() => new ProjectParser(null, environment, globber));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "fileSystem");
@@ -35,12 +37,27 @@ namespace Cake.Common.Tests.Unit.Solution.Project
             {
                 // Given
                 var fileSystem = Substitute.For<IFileSystem>();
+                var globber = Substitute.For<IGlobber>();
 
                 // When
-                var result = Record.Exception(() => new ProjectParser(fileSystem, null));
+                var result = Record.Exception(() => new ProjectParser(fileSystem, null, globber));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "environment");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Globber_Is_Null()
+            {
+                // Given
+                var fileSystem = Substitute.For<IFileSystem>();
+                var environment = Substitute.For<ICakeEnvironment>();
+
+                // When
+                var result = Record.Exception(() => new ProjectParser(fileSystem, environment, null));
+
+                // Then
+                Assert.IsArgumentNullException(result, "globber");
             }
         }
 
@@ -238,6 +255,24 @@ namespace Cake.Common.Tests.Unit.Solution.Project
                 Assert.Equal("..\\Cake.Common\\Cake.Common.csproj", result.ProjectReferences.First().RelativePath);
                 Assert.Equal("{ABC3F1CB-F84E-43ED-A120-0CCFE344D250}", result.ProjectReferences.First().Project);
                 Assert.Equal("Cake.Common", result.ProjectReferences.First().Name);
+            }
+
+            [Fact]
+            public void Should_Handle_Wildcard_FilePaths()
+            {
+                // Given
+                var fixture = new ProjectParserFixture();
+
+                // When
+                var result = fixture.ParseWithWildcardFilePaths();
+
+                // Then
+                Assert.NotNull(result);
+                Assert.Equal(3, result.Files.Count);
+
+                Assert.Contains(result.Files, file => file.FilePath.FullPath.EndsWith("packages.config") && !file.Compile);
+                Assert.Contains(result.Files, file => file.FilePath.FullPath.EndsWith("Program.cs") && file.Compile);
+                Assert.Contains(result.Files, file => file.FilePath.FullPath.EndsWith("Client.cs") && file.Compile);
             }
         }
     }

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Common.Solution.Project;
 using Cake.Common.Tests.Properties;
 using Cake.Core;
@@ -24,10 +25,12 @@ namespace Cake.Common.Tests.Fixtures.Solution.Project
             var fileSystem = new FakeFileSystem(environment);
             fileSystem.CreateFile(ProjFilePath.FullPath).SetContent(Resources.Csproj_ProjectFile);
             fileSystem.CreateFile("/Working/Cake.Incomplete.csproj").SetContent(Resources.Csproj_IncompleteFile);
+            fileSystem.CreateFile("/Working/Cake.ContainsWildcard.csproj").SetContent(Resources.Csproj_With_WildCard_FilePaths);
             FileSystem = fileSystem;
 
             Globber = Substitute.For<IGlobber>();
             Globber.GetFiles(Pattern).Returns(new FilePath[] { "/Working/Cake.Sample.csproj", "/Working/Cake.Incomplete.csproj" });
+            Globber.Match("**\\*.cs", Arg.Any<Func<IDirectory, bool>>()).Returns(new FilePath[] { "/Working/Program.cs", "/Working/Client.cs" });
 
             Log = Substitute.For<ICakeLog>();
         }
@@ -36,14 +39,20 @@ namespace Cake.Common.Tests.Fixtures.Solution.Project
 
         public ProjectParserResult Parse()
         {
-            var parser = new ProjectParser(FileSystem, Environment);
+            var parser = new ProjectParser(this.FileSystem, this.Environment, this.Globber);
             return parser.Parse(ProjFilePath);
         }
 
         public ProjectParserResult ParseIncomplete()
         {
-            var parser = new ProjectParser(FileSystem, Environment);
+            var parser = new ProjectParser(this.FileSystem, this.Environment, this.Globber);
             return parser.Parse("/Working/Cake.Incomplete.csproj");
+        }
+
+        public ProjectParserResult ParseWithWildcardFilePaths()
+        {
+            var parser = new ProjectParser(this.FileSystem, this.Environment, this.Globber);
+            return parser.Parse("/Working/Cake.ContainsWildcard.csproj");
         }
 
         public string Pattern { get; set; }
