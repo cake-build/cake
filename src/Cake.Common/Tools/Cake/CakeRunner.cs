@@ -32,7 +32,7 @@ namespace Cake.Common.Tools.Cake
         static CakeRunner()
         {
             var entryAssembly = AssemblyHelper.GetExecutingAssembly();
-            var executingAssemblyToolPath = entryAssembly.Location;
+            var executingAssemblyToolPath = string.Empty; // TODO: entryAssembly.Location;
             _executingAssemblyToolPaths = new FilePath[] { executingAssemblyToolPath };
         }
 

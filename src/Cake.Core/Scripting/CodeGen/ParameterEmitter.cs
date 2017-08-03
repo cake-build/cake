@@ -55,7 +55,7 @@ namespace Cake.Core.Scripting.CodeGen
         private static string BuildDefaultParameterValueToken(ParameterInfo parameter)
         {
             var type = parameter.ParameterType;
-            var value = parameter.RawDefaultValue;
+            var value = parameter.DefaultValue;
 
             // this addresses the issue seen in Mono where both RawDefaultValue and DefaultValue
             // return System.Reflection.Missing when parameter type is Nullable<decimal>

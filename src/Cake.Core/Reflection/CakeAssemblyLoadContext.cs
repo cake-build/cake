@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if NETCORE
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
@@ -25,7 +24,7 @@ namespace Cake.Core.Reflection
         protected override Assembly Load(AssemblyName assemblyName)
         {
             // Exists in default dependency context?
-            var context = DependencyContext.Default;
+            var context = (DependencyContext)null; // TODO: DependencyContext.Default;
             var library = context.CompileLibraries.FirstOrDefault(d => d.Name.Contains(assemblyName.Name));
             if (library != null)
             {
@@ -47,4 +46,3 @@ namespace Cake.Core.Reflection
         }
     }
 }
-#endif

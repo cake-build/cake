@@ -5,10 +5,7 @@
 using System;
 using System.Reflection;
 using Cake.Core.IO;
-
-#if NETCORE
 using Cake.Core.Reflection;
-#endif
 
 namespace Cake.Core.Polyfill
 {
@@ -16,11 +13,7 @@ namespace Cake.Core.Polyfill
     {
         public static Assembly GetExecutingAssembly()
         {
-#if NETCORE
             return typeof(CakeEnvironment).GetTypeInfo().Assembly;
-#else
-            return Assembly.GetExecutingAssembly();
-#endif
         }
 
         public static Assembly LoadAssembly(AssemblyName assemblyName)
@@ -34,7 +27,6 @@ namespace Cake.Core.Polyfill
 
         public static Assembly LoadAssembly(ICakeEnvironment environment, IFileSystem fileSystem, FilePath path)
         {
-#if NETCORE
             if (path == null)
             {
                 throw new ArgumentNullException(nameof(path));
@@ -51,9 +43,6 @@ namespace Cake.Core.Polyfill
 
             var loader = new CakeAssemblyLoadContext(fileSystem, path.GetDirectory());
             return loader.LoadFromAssemblyPath(path.FullPath);
-#else
-            return Assembly.LoadFrom(path.FullPath);
-#endif
         }
     }
 }
