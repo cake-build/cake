@@ -20,10 +20,18 @@ namespace Cake.Common.Build.Jenkins.Data
         public string JobName => GetEnvironmentString("JOB_NAME");
 
         /// <summary>
-        /// Gets the name of the job.
+        /// Gets the short name of the project of this build stripping off folder paths, such as "foo" for "bar/foo".
         /// </summary>
         /// <value>
-        /// The name of the job.
+        /// The base name of the job.
+        /// </value>
+        public string JobBaseName => GetEnvironmentString("JOB_BASE_NAME");
+
+        /// <summary>
+        /// Gets the URL of the job.
+        /// </summary>
+        /// <value>
+        /// The URL of the job.
         /// </value>
         public string JobUrl => GetEnvironmentString("JOB_URL");
 

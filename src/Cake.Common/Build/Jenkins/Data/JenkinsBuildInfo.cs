@@ -7,7 +7,7 @@ using Cake.Core;
 namespace Cake.Common.Build.Jenkins.Data
 {
     /// <summary>
-    /// Provides Jenkins build information for a current build.
+    /// Provides Jenkins build information for the current build.
     /// </summary>
     public sealed class JenkinsBuildInfo : JenkinsInfo
     {
@@ -20,7 +20,7 @@ namespace Cake.Common.Build.Jenkins.Data
         public int BuildNumber => GetEnvironmentInteger("BUILD_NUMBER");
 
         /// <summary>
-        /// Gets the build identifier.
+        /// Gets the build identifier which is identical to <see cref="BuildNumber"/> starting from Jenkins 1.597 and a YYYY-MM-DD_hh-mm-ss timestamp for older builds.
         /// </summary>
         /// <value>
         /// The build identifier.
@@ -36,10 +36,10 @@ namespace Cake.Common.Build.Jenkins.Data
         public string BuildDisplayName => GetEnvironmentString("BUILD_DISPLAY_NAME");
 
         /// <summary>
-        /// Gets the build URL.
+        /// Gets the build tag which is a string of "jenkins-${JOB_NAME}-${BUILD_NUMBER}". All forward slashes (/) in the JOB_NAME are replaced with dashes (-).
         /// </summary>
         /// <value>
-        /// The build URL.
+        /// The build tag.
         /// </value>
         public string BuildTag => GetEnvironmentString("BUILD_TAG");
 
@@ -58,6 +58,14 @@ namespace Cake.Common.Build.Jenkins.Data
         /// The executor number.
         /// </value>
         public int ExecutorNumber => GetEnvironmentInteger("EXECUTOR_NUMBER");
+
+        /// <summary>
+        /// Gets the absolute path of the workspace directory assigned to the build.
+        /// </summary>
+        /// <value>
+        /// The workspace directory path.
+        /// </value>
+        public string Workspace => GetEnvironmentString("WORKSPACE");
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="JenkinsBuildInfo"/> class.
