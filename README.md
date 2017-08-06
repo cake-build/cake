@@ -40,17 +40,17 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
 
 ## Documentation
 
-You can read the latest documentation at [http://cakebuild.net/](http://cakebuild.net/).
+You can read the latest documentation at [https://cakebuild.net/](https://cakebuild.net/).
 
 ## Example
 
 This example downloads the Cake bootstrapper and executes a simple build script.
 The bootstrapper is used to bootstrap Cake in a simple way and is not in
 required in any way to execute build scripts. If you prefer to invoke the Cake
-executable yourself, [take a look at the command line usage](http://cakebuild.net/docs/cli/usage).
+executable yourself, [take a look at the command line usage](https://cakebuild.net/docs/cli/usage).
 
 This example is also available on our homepage:
-[http://cakebuild.net/docs/tutorials/setting-up-a-new-project](http://cakebuild.net/docs/tutorials/setting-up-a-new-project)
+[https://cakebuild.net/docs/tutorials/setting-up-a-new-project](https://cakebuild.net/docs/tutorials/setting-up-a-new-project)
 
 ### 1. Install the Cake bootstrapper
 
@@ -60,19 +60,19 @@ build script.
 ##### Windows
 
 ```powershell
-Invoke-WebRequest http://cakebuild.net/download/bootstrapper/windows -OutFile build.ps1
+Invoke-WebRequest https://cakebuild.net/download/bootstrapper/windows -OutFile build.ps1
 ```
 
 ##### Linux
 
 ```console
-curl -Lsfo build.sh http://cakebuild.net/download/bootstrapper/linux
+curl -Lsfo build.sh https://cakebuild.net/download/bootstrapper/linux
 ```
 
 ##### OS X
 
 ```console
-curl -Lsfo build.sh http://cakebuild.net/download/bootstrapper/osx
+curl -Lsfo build.sh https://cakebuild.net/download/bootstrapper/osx
 ```
 
 ### 2. Create a Cake script
@@ -115,7 +115,7 @@ chmod +x build.sh
 
 So you’re thinking about contributing to Cake? Great! It’s **really** appreciated.
 
-Make sure you've read the [contribution guidelines](http://cakebuild.net/docs/contributing/contribution-guidelines) before sending that epic pull request. You'll also need to sign the [contribution license agreement](https://cla2.dotnetfoundation.org/) (CLA) for anything other than a trivial change.  **NOTE:** The .NET Foundation CLA Bot will provide a link to this CLA within the PR that you submit if it is deemed as required.
+Make sure you've read the [contribution guidelines](https://cakebuild.net/docs/contributing/contribution-guidelines) before sending that epic pull request. You'll also need to sign the [contribution license agreement](https://cla2.dotnetfoundation.org/) (CLA) for anything other than a trivial change.  **NOTE:** The .NET Foundation CLA Bot will provide a link to this CLA within the PR that you submit if it is deemed as required.
 
 * Fork the repository.
 * Create a branch to work in.
