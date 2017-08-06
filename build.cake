@@ -53,14 +53,11 @@ Setup(context =>
 
     if(!parameters.IsRunningOnWindows)
     {
-        // Use targeting pack when not running on Windows.
-        Information("Build will use NET462 targeting pack since not building on Windows.");
-        msBuildSettings.WithProperty("UseTargetingPack", "true");
-    }
-    else if (StringComparer.OrdinalIgnoreCase.Equals(EnvironmentVariable("USE_TARGETING_PACK"), "true"))
-    {
-        Information("Environment variable USE_TARGETING_PACK=true, build will use NET462 targeting pack.");
-        msBuildSettings.WithProperty("UseTargetingPack", "true");
+        var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
+        
+        // Use FrameworkPathOverride when not running on Windows.
+        Information("Build will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
+        msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
     }
 });
 
@@ -159,10 +156,10 @@ Task("Copy-Files")
     .IsDependentOn("Run-Unit-Tests")
     .Does(() =>
 {
-    // .NET 4.6.2
+    // .NET 4.6
     DotNetCorePublish("./src/Cake", new DotNetCorePublishSettings
     {
-        Framework = "net462",
+        Framework = "net46",
         VersionSuffix = parameters.Version.DotNetAsterix,
         Configuration = parameters.Configuration,
         OutputDirectory = parameters.Paths.Directories.ArtifactsBinFullFx,
@@ -183,15 +180,15 @@ Task("Copy-Files")
     CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinNetCore);
 
     // Copy Cake.XML (since publish does not do this anymore)
-    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/net462/Cake.xml", parameters.Paths.Directories.ArtifactsBinFullFx);
-    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/netcoreapp1.0/netcoreapp1.0/Cake.xml", parameters.Paths.Directories.ArtifactsBinNetCore);
+    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/net46/Cake.xml", parameters.Paths.Directories.ArtifactsBinFullFx);
+    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/netcoreapp1.0/Cake.xml", parameters.Paths.Directories.ArtifactsBinNetCore);
 });
 
 Task("Zip-Files")
     .IsDependentOn("Copy-Files")
     .Does(() =>
 {
-    // .NET 4.6.2
+    // .NET 4.6
     var homebrewFiles = GetFiles( parameters.Paths.Directories.ArtifactsBinFullFx.FullPath + "/**/*");
     Zip(parameters.Paths.Directories.ArtifactsBinFullFx, parameters.Paths.Files.ZipArtifactPathDesktop, homebrewFiles);
 
@@ -248,7 +245,7 @@ Task("Create-NuGet-Packages")
         });
     }
 
-    // Cake - Symbols - .NET 4.6.2
+    // Cake - Symbols - .NET 4.6
     NuGetPack("./nuspec/Cake.symbols.nuspec", new NuGetPackSettings {
         Version = parameters.Version.SemVersion,
         ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
@@ -261,7 +258,7 @@ Task("Create-NuGet-Packages")
     var netFxFullArtifactPath = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinFullFx).FullPath;
     var netFxFullArtifactPathLength = netFxFullArtifactPath.Length+1;
 
-    // Cake - .NET 4.6.2
+    // Cake - .NET 4.6
     NuGetPack("./nuspec/Cake.nuspec", new NuGetPackSettings {
         Version = parameters.Version.SemVersion,
         ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
