@@ -16,7 +16,7 @@ No tasks will be executed.
 .PARAMETER ScriptArgs
 Remaining arguments are added here.
 .LINK
-http://cakebuild.net
+https://cakebuild.net
 #>
 
 [CmdletBinding()]

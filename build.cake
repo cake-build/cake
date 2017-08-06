@@ -340,7 +340,7 @@ Task("Sign-Binaries")
             .AppendSwitchQuotedSecret("-s", secret)
             .AppendSwitchQuoted("-n", "Cake")
             .AppendSwitchQuoted("-d", "Cake (C# Make) is a cross platform build automation system.")
-            .AppendSwitchQuoted("-u", "http://cakebuild.net");
+            .AppendSwitchQuoted("-u", "https://cakebuild.net");
 
         // Sign the binary.
         var result = StartProcess("dotnet", new ProcessSettings {  Arguments = arguments });

@@ -49,7 +49,7 @@ namespace Cake.Common.Xml
         /// <para>XML document:</para>
         /// <![CDATA[
         /// <?xml version="1.0" encoding="UTF-8"?>
-        /// <pastery xmlns = "http://cakebuild.net/pastery" >
+        /// <pastery xmlns = "https://cakebuild.net/pastery" >
         ///     <cake price="1.62" />
         /// </pastery>
         /// ]]>
@@ -58,11 +58,11 @@ namespace Cake.Common.Xml
         /// <code>
         /// string version = XmlPeek("./pastery.xml", "/pastery:pastery/pastery:cake/@price",
         ///     new XmlPeekSettings {
-        ///         Namespaces = new Dictionary&lt;string, string&gt; {{ "pastery", "http://cakebuild.net/pastery" }}
+        ///         Namespaces = new Dictionary&lt;string, string&gt; {{ "pastery", "https://cakebuild.net/pastery" }}
         ///     });
         /// string unknown = XmlPeek("./pastery.xml", "/pastery:pastery/pastery:cake/@recipe",
         ///     new XmlPeekSettings {
-        ///         Namespaces = new Dictionary&lt;string, string&gt; {{ "pastery", "http://cakebuild.net/pastery" }},
+        ///         Namespaces = new Dictionary&lt;string, string&gt; {{ "pastery", "https://cakebuild.net/pastery" }},
         ///         SuppressWarning = true
         ///     });
         /// </code>
