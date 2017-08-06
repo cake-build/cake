@@ -53,7 +53,7 @@ Task("Cake.Common.IO.FileAliases.CopyFiles.Pattern")
         sourcePath.CombineWithFilePath("Cake.Core.txt"),
         sourcePath.CombineWithFilePath("Cake.NuGet.txt"),
         sourcePath.CombineWithFilePath("Autofac.txt"),
-        sourcePath.CombineWithFilePath("ht.CSharp.txt"),
+        sourcePath.CombineWithFilePath("Mono.CSharp.txt"),
         sourcePath.CombineWithFilePath("NuGet.Core.txt")
     };
     var targetCopyFiles = new FilePath[] {
