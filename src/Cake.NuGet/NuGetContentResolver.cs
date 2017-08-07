@@ -8,16 +8,17 @@ using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
+using NuGet.Frameworks;
 
 namespace Cake.NuGet
 {
-    internal abstract class NuGetContentResolver : INuGetContentResolver
+    internal sealed class NuGetContentResolver : INuGetContentResolver
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
 
-        protected NuGetContentResolver(
+        public NuGetContentResolver(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             IGlobber globber)
@@ -46,7 +47,64 @@ namespace Cake.NuGet
             throw new InvalidOperationException("Unknown resource type.");
         }
 
-        protected abstract IReadOnlyCollection<IFile> GetAddinAssemblies(DirectoryPath path, PackageReference package);
+        private IReadOnlyCollection<IFile> GetAddinAssemblies(DirectoryPath path, PackageReference package)
+        {
+            if (!_fileSystem.Exist(path))
+            {
+                return new List<IFile>();
+            }
+
+            // Get current framework.
+            var provider = DefaultFrameworkNameProvider.Instance;
+            var current = NuGetFramework.Parse(_environment.Runtime.TargetFramework.FullName, provider);
+
+            // Get all candidate files.
+            var assemblies = GetFiles(path, package, new[] { path.FullPath + "/**/*.dll" })
+                .Where(file => !"Cake.Core.dll".Equals(file.Path.GetFilename().FullPath, StringComparison.OrdinalIgnoreCase)
+                               && IsCLRAssembly(file))
+                .ToList();
+
+            // Iterate all found files.
+            var comparer = new NuGetFrameworkFullComparer();
+            var mapping = new Dictionary<NuGetFramework, List<FilePath>>(comparer);
+            foreach (var assembly in assemblies)
+            {
+                // Get relative path.
+                var relative = path.GetRelativePath(assembly.Path);
+                var framework = ParseFromDirectoryPath(current, relative.GetDirectory());
+                if (!mapping.ContainsKey(framework))
+                {
+                    mapping.Add(framework, new List<FilePath>());
+                }
+                mapping[framework].Add(assembly.Path);
+            }
+
+            // Reduce found frameworks to the closest one.
+            var reducer = new FrameworkReducer();
+            var nearest = reducer.GetNearest(current, mapping.Keys);
+            if (nearest == null || !mapping.ContainsKey(nearest))
+            {
+                return new List<IFile>();
+            }
+
+            // Return the result.
+            return mapping[nearest].Select(p => _fileSystem.GetFile(p)).ToList();
+        }
+
+        private NuGetFramework ParseFromDirectoryPath(NuGetFramework current, DirectoryPath path)
+        {
+            var queue = new Queue<string>(path.Segments);
+            while (queue.Count > 0)
+            {
+                var other = NuGetFramework.Parse(queue.Dequeue(), DefaultFrameworkNameProvider.Instance);
+                var compatible = DefaultCompatibilityProvider.Instance.IsCompatible(other, current);
+                if (compatible || queue.Count == 0)
+                {
+                    return other;
+                }
+            }
+            throw new InvalidOperationException("Something went wrong when parsing framework.");
+        }
 
         private IReadOnlyCollection<IFile> GetToolFiles(DirectoryPath path, PackageReference package)
         {
@@ -59,7 +117,7 @@ namespace Cake.NuGet
             return result;
         }
 
-        protected IEnumerable<IFile> GetFiles(DirectoryPath path, PackageReference package, string[] patterns = null)
+        private IEnumerable<IFile> GetFiles(DirectoryPath path, PackageReference package, string[] patterns = null)
         {
             var collection = new FilePathCollection(new PathComparer(_environment));
 
@@ -94,7 +152,7 @@ namespace Cake.NuGet
             return collection.Select(p => _fileSystem.GetFile(p)).ToArray();
         }
 
-        protected bool IsCLRAssembly(IFile file)
+        private bool IsCLRAssembly(IFile file)
         {
             if (!file.Exists || file.Length < 365)
             {
