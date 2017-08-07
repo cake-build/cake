@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
 using Cake.NuGet.Tests.Fixtures;
+using Cake.Testing;
 using NSubstitute;
 using Xunit;
 using LogLevel = Cake.Core.Diagnostics.LogLevel;
@@ -269,11 +270,58 @@ namespace Cake.NuGet.Tests.Unit
                     Arg.Is<FilePath>(path => path.FullPath == "/Working/tools/nuget.exe"),
                     Arg.Is<ProcessSettings>(settings =>
                         settings.Arguments.Render() == "install \"Cake.Foo\" " +
-                            "-OutputDirectory \"/Working/nuget\" " +
+                            "-OutputDirectory \"/Working/nuget/cake.foo.1.2.3\" " +
                             "-Source \"https://myget.org/temp/\" " +
                             "-Version \"1.2.3\" " +
-                            "-Prerelease -ExcludeVersion " +
+                            "-Prerelease " +
+                            "-ExcludeVersion " +
                             "-NonInteractive"));
+            }
+
+            [Fact]
+            public void Should_Install_Resource_Without_Version_Number_If_None_Is_Provided()
+            {
+                // Given
+                var fixture = new NuGetPackageInstallerFixture()
+                {
+                    Package = new PackageReference("nuget:https://myget.org/temp/?package=Cake.Foo&prerelease")
+                };
+
+                // When
+                fixture.Install();
+
+                // Then
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(path => path.FullPath == "/Working/tools/nuget.exe"),
+                    Arg.Is<ProcessSettings>(settings =>
+                        settings.Arguments.Render() == "install \"Cake.Foo\" " +
+                        "-OutputDirectory \"/Working/nuget/cake.foo\" " +
+                        "-Source \"https://myget.org/temp/\" " +
+                        "-Prerelease " +
+                        "-ExcludeVersion " +
+                        "-NonInteractive"));
+            }
+
+            [Theory]
+            [InlineData("nuget:?package=Cake.Foo", "/Working/nuget/cake.foo/caKe.fOO")]
+            [InlineData("nuget:?package=Cake.Foo&version=1.2.3", "/Working/nuget/cake.foo.1.2.3/caKe.fOO")]
+            public void Should_Look_For_Files_In_The_Correct_Directory(string uri, string path)
+            {
+                // Given
+                var fixture = new NuGetPackageInstallerFixture()
+                {
+                    Package = new PackageReference(uri)
+                };
+
+                fixture.InstallPackageAtSpecifiedPath(path);
+
+                // When
+                fixture.Install();
+
+                // Then
+                fixture.ContentResolver.Received(1).GetFiles(
+                    Arg.Is<DirectoryPath>(p => p.FullPath == path),
+                    Arg.Any<PackageReference>(), Arg.Any<PackageType>());
             }
 
             [Fact]
@@ -281,6 +329,7 @@ namespace Cake.NuGet.Tests.Unit
             {
                 // Given
                 var fixture = new NuGetPackageInstallerFixture();
+                fixture.FileSystem.CreateDirectory("/Working/nuget/cake.foo.1.2.3/Cake.Foo");
                 fixture.ContentResolver.GetFiles(
                     Arg.Any<DirectoryPath>(), Arg.Any<PackageReference>(), Arg.Any<PackageType>())
                     .Returns(new List<IFile> { Substitute.For<IFile>() });
