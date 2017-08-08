@@ -136,7 +136,7 @@ namespace Cake.NuGet
             }
 
             // Package already exist?
-            var packagePath = GetPackagePath(root);
+            var packagePath = GetPackagePath(root, package.Package);
             if (packagePath != null)
             {
                 // Fetch available content from disc.
@@ -152,7 +152,7 @@ namespace Cake.NuGet
             InstallPackage(package, path);
 
             // Try locating the install folder again.
-            packagePath = GetPackagePath(root);
+            packagePath = GetPackagePath(root, package.Package);
 
             // Get the files.
             var result = _contentResolver.GetFiles(packagePath, package, type);
@@ -173,10 +173,10 @@ namespace Cake.NuGet
             return result;
         }
 
-        private static DirectoryPath GetPackagePath(IDirectory root)
+        private static DirectoryPath GetPackagePath(IDirectory root, string package)
         {
             var directories = root.GetDirectories("*", SearchScope.Current).ToArray();
-            return directories.FirstOrDefault()?.Path;
+            return directories.FirstOrDefault(p => p.Path.GetDirectoryName().Equals(package, StringComparison.OrdinalIgnoreCase))?.Path;
         }
 
         private static DirectoryPath GetPackagePath(DirectoryPath root, PackageReference package)

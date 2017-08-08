@@ -4,6 +4,7 @@
 
 #if !NETCORE
 using System.Collections.Generic;
+using System.Linq;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
 using Cake.NuGet.Tests.Fixtures;
@@ -342,6 +343,28 @@ namespace Cake.NuGet.Tests.Unit
                     Verbosity.Diagnostic, LogLevel.Debug,
                     "Package {0} has already been installed.",
                     "Cake.Foo");
+            }
+
+            [Fact]
+            public void Should_Return_Correct_Files_When_Resource_Has_Dependencies()
+            {
+                // Given
+                var fixture = new NuGetPackageInstallerFixture();
+                fixture.FileSystem.CreateFile("/Working/nuget/cake.foo.1.2.3/Cake.Abc/Cake.Abc.dll");
+                fixture.FileSystem.CreateFile("/Working/nuget/cake.foo.1.2.3/Cake.Foo/Cake.Foo.dll");
+                fixture.FileSystem.CreateFile("/Working/nuget/cake.foo.1.2.3/Cake.Xyz/Cake.Xyz.dll");
+                fixture.ContentResolver.GetFiles(
+                        Arg.Any<DirectoryPath>(), Arg.Any<PackageReference>(), Arg.Any<PackageType>())
+                    .Returns(new List<IFile> { Substitute.For<IFile>() });
+
+                // When
+                var result = fixture.Install();
+
+                // Then
+                fixture.ContentResolver.Received(1).GetFiles(
+                    Arg.Is<DirectoryPath>(x => x.FullPath.Equals("/Working/nuget/cake.foo.1.2.3/Cake.Foo")),
+                    fixture.Package,
+                    PackageType.Addin);
             }
         }
     }
