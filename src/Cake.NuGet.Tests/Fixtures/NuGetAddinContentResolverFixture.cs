@@ -10,14 +10,11 @@ using Cake.Core.Packaging;
 
 namespace Cake.NuGet.Tests.Fixtures
 {
-    internal sealed class NuGetToolContentResolverFixture : NuGetContentResolverFixture
+    internal sealed class NuGetAddinContentResolverFixture : NuGetContentResolverFixture
     {
-        public NuGetToolContentResolverFixture(string uri)
-            : base(".NETFramework,Version=v4.5")
+        public NuGetAddinContentResolverFixture(string framework)
+            : base(framework)
         {
-            Package = new PackageReference(uri);
-            PackageType = PackageType.Tool;
-            Path = new DirectoryPath(string.Concat("/Working/tools/", Package.Package));
         }
     }
 }
