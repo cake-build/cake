@@ -3,8 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Linq;
+using Cake.Core.Diagnostics;
 using Cake.NuGet.Tests.Fixtures;
 using Cake.Testing;
+using NSubstitute;
 using Xunit;
 
 namespace Cake.NuGet.Tests.Unit
@@ -221,6 +223,92 @@ namespace Cake.NuGet.Tests.Unit
                 // Then
                 Assert.Equal(1, result.Count);
                 Assert.Equal("/Working/lib/netstandard1.6/file.dll", result.ElementAt(0).Path.FullPath);
+            }
+
+            [Theory]
+            [InlineData(".NETStandard,Version=v1.6")]
+            [InlineData(".NETFramework,Version=v4.6")]
+            public void Should_Return_Files_When_Located_In_Root(string framework)
+            {
+                // Given
+                var fixture = new NuGetAddinContentResolverFixture(framework);
+
+                fixture.CreateCLRAssembly("/Working/file1.dll");
+                fixture.CreateCLRAssembly("/Working/file2.dll");
+                fixture.CreateCLRAssembly("/Working/file3.dll");
+
+                // When
+                var result = fixture.GetFiles();
+
+                // Then
+                Assert.Equal(3, result.Count);
+                Assert.Equal("/Working/file1.dll", result.ElementAt(0).Path.FullPath);
+                Assert.Equal("/Working/file2.dll", result.ElementAt(1).Path.FullPath);
+                Assert.Equal("/Working/file3.dll", result.ElementAt(2).Path.FullPath);
+            }
+
+            [Theory]
+            [InlineData(".NETStandard,Version=v1.6", "netstandard1.6")]
+            [InlineData(".NETFramework,Version=v4.6", "net46")]
+            public void Should_Return_Exact_Framework_Even_Though_Files_Located_In_Root(string framework, string expected)
+            {
+                // Given
+                var fixture = new NuGetAddinContentResolverFixture(framework);
+
+                fixture.CreateCLRAssembly("/Working/lib/net46/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/netstandard1.6/file.dll");
+                fixture.CreateCLRAssembly("/Working/file.dll");
+
+                // When
+                var result = fixture.GetFiles();
+
+                // Then
+                Assert.Equal(1, result.Count);
+                Assert.Equal($"/Working/lib/{expected}/file.dll", result.ElementAt(0).Path.FullPath);
+            }
+
+            [Theory]
+            [InlineData(".NETStandard,Version=v1.6")]
+            [InlineData(".NETFramework,Version=v4.6")]
+            public void Should_Return_From_Root_If_No_Compatible_Framework_Found(string framework)
+            {
+                // Given
+                var fixture = new NuGetAddinContentResolverFixture(framework);
+
+                fixture.CreateCLRAssembly("/Working/lib/net461/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/netstandard2.0/file.dll");
+                fixture.CreateCLRAssembly("/Working/file.dll");
+
+                // When
+                var result = fixture.GetFiles();
+
+                // Then
+                Assert.Equal(1, result.Count);
+                Assert.Equal($"/Working/file.dll", result.ElementAt(0).Path.FullPath);
+            }
+
+            [Theory]
+            [InlineData(".NETStandard,Version=v1.6")]
+            [InlineData(".NETFramework,Version=v4.6")]
+            public void Should_Log_Warning_For_Files_Located_In_Root(string framework)
+            {
+                // Given
+                var fixture = new NuGetAddinContentResolverFixture(framework);
+
+                fixture.CreateCLRAssembly("/Working/file.dll");
+                fixture.CreateCLRAssembly("/Working/file2.dll");
+                fixture.CreateCLRAssembly("/Working/file3.dll");
+
+                // When
+                fixture.GetFiles();
+
+                // Then
+                var entries = fixture.Log.Entries.Where(x => x.Level == LogLevel.Warning &&
+                    x.Message.Equals($"Could not find any assemblies compatible with {framework} in NuGet package {fixture.Package.Package}. " +
+                                     "Falling back to using root folder of NuGet package."))
+                    .ToList();
+
+                Assert.Equal(1, entries.Count);
             }
         }
     }
