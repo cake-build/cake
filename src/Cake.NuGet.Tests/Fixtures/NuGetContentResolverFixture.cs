@@ -48,11 +48,9 @@ namespace Cake.NuGet.Tests.Fixtures
 
         public IReadOnlyCollection<IFile> GetFiles()
         {
-            var resolver = GetResolver();
+            var resolver = new NuGetContentResolver(FileSystem, Environment, Globber);
             return resolver.GetFiles(Path, Package, PackageType);
         }
-
-        protected abstract INuGetContentResolver GetResolver();
 
         private static readonly byte[] ClrAssemblyData = new byte[]
         {

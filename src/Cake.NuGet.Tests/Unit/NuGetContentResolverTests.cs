@@ -108,5 +108,120 @@ namespace Cake.NuGet.Tests.Unit
                 Assert.True(files.Any(p => p.Path.FullPath == "/Working/tools/Foo/Foo.XML"));
             }
         }
+
+        public sealed class Addins
+        {
+            [Fact]
+            public void Should_Throw_If_Path_Is_Null()
+            {
+                // Given
+                var fixture = new NuGetAddinContentResolverFixture(".NETStandard,Version=v1.6");
+                fixture.Path = null;
+
+                // When
+                var result = Record.Exception(() => fixture.GetFiles());
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "path");
+            }
+
+            [Theory]
+            [InlineData(".NETStandard,Version=v1.6", "netstandard1.6")]
+            [InlineData(".NETFramework,Version=v4.6", "net46")]
+            public void Should_Return_Exact_Framework_If_Possible(string framework, string expected)
+            {
+                // Given
+                var fixture = new NuGetAddinContentResolverFixture(framework);
+                fixture.CreateCLRAssembly("/Working/lib/net45/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/net451/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/net452/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/net46/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/net461/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/netstandard1.5/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/netstandard1.6/file.dll");
+
+                // When
+                var result = fixture.GetFiles();
+
+                // Then
+                Assert.Equal(1, result.Count);
+                Assert.Equal($"/Working/lib/{expected}/file.dll", result.ElementAt(0).Path.FullPath);
+            }
+
+            [Theory]
+            [InlineData(".NETStandard,Version=v1.6", "netstandard1.5")]
+            [InlineData(".NETFramework,Version=v4.6", "net452")]
+            public void Should_Return_Nearest_Compatible_Framework_If_An_Exact_Match_Is_Not_Possible(string framework, string expected)
+            {
+                // Given
+                var fixture = new NuGetAddinContentResolverFixture(framework);
+                fixture.CreateCLRAssembly("/Working/lib/net45/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/net451/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/net452/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/net461/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/netstandard1.5/file.dll");
+
+                // When
+                var result = fixture.GetFiles();
+
+                // Then
+                Assert.Equal(1, result.Count);
+                Assert.Equal($"/Working/lib/{expected}/file.dll", result.ElementAt(0).Path.FullPath);
+            }
+
+            [Theory]
+            [InlineData(".NETStandard,Version=v1.6")]
+            [InlineData(".NETFramework,Version=v4.6")]
+            public void Should_Return_Empty_Result_If_Any_Match_Is_Not_Possible(string framework)
+            {
+                // Given
+                var fixture = new NuGetAddinContentResolverFixture(framework);
+
+                fixture.CreateCLRAssembly("/Working/lib/net461/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/net462/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/netstandard2.0/file.dll");
+
+                // When
+                var result = fixture.GetFiles();
+
+                // Then
+                Assert.Equal(0, result.Count);
+            }
+
+            [Fact]
+            public void Should_Return_Compatible_Netstandard_If_An_Exact_Match_Is_Not_Possible()
+            {
+                // Given
+                var fixture = new NuGetAddinContentResolverFixture(".NETFramework,Version=v4.6");
+
+                fixture.CreateCLRAssembly("/Working/lib/netstandard1.0/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/netstandard1.3/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/netstandard2.0/file.dll");
+
+                // When
+                var result = fixture.GetFiles();
+
+                // Then
+                Assert.Equal(1, result.Count);
+                Assert.Equal($"/Working/lib/netstandard1.3/file.dll", result.ElementAt(0).Path.FullPath);
+            }
+
+            [Fact]
+            public void Should_Return_Only_CLR_Assemblies()
+            {
+                // Given
+                var fixture = new NuGetAddinContentResolverFixture(".NETStandard,Version=v1.6");
+
+                fixture.CreateCLRAssembly("/Working/lib/netstandard1.6/file.dll");
+                fixture.CreateNonCLRAssembly("/Working/lib/netstandard1.6/lib/native.dll");
+
+                // When
+                var result = fixture.GetFiles();
+
+                // Then
+                Assert.Equal(1, result.Count);
+                Assert.Equal("/Working/lib/netstandard1.6/file.dll", result.ElementAt(0).Path.FullPath);
+            }
+        }
     }
 }
