@@ -16,7 +16,7 @@ namespace Cake.NuGet.Tests.Fixtures
         public FakeFileSystem FileSystem { get; set; }
         public FakeEnvironment Environment { get; set; }
         public Globber Globber { get; set; }
-        public ICakeLog Log { get; set; }
+        public FakeLog Log { get; set; }
 
         public DirectoryPath Path { get; set; }
         public PackageType PackageType { get; set; }
@@ -48,7 +48,7 @@ namespace Cake.NuGet.Tests.Fixtures
 
         public IReadOnlyCollection<IFile> GetFiles()
         {
-            var resolver = new NuGetContentResolver(FileSystem, Environment, Globber);
+            var resolver = new NuGetContentResolver(FileSystem, Environment, Globber, Log);
             return resolver.GetFiles(Path, Package, PackageType);
         }
 

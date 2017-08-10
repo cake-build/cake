@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
 using NuGet.Frameworks;
@@ -17,15 +18,18 @@ namespace Cake.NuGet
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
+        private readonly ICakeLog _log;
 
         public NuGetContentResolver(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
-            IGlobber globber)
+            IGlobber globber,
+            ICakeLog log)
         {
             _fileSystem = fileSystem;
             _environment = environment;
             _globber = globber;
+            _log = log;
         }
 
         public IReadOnlyCollection<IFile> GetFiles(DirectoryPath path, PackageReference package, PackageType type)
@@ -87,6 +91,13 @@ namespace Cake.NuGet
                 return new List<IFile>();
             }
 
+            if (nearest == NuGetFramework.AnyFramework)
+            {
+                var framework = _environment.Runtime.TargetFramework;
+                _log.Warning("Could not find any assemblies compatible with {0} in NuGet package {1}. " +
+                             "Falling back to using root folder of NuGet package.", framework.FullName, package.Package);
+            }
+
             // Return the result.
             return mapping[nearest].Select(p => _fileSystem.GetFile(p)).ToList();
         }
@@ -103,7 +114,9 @@ namespace Cake.NuGet
                     return other;
                 }
             }
-            throw new InvalidOperationException("Something went wrong when parsing framework.");
+
+            // Treat as AnyFramework if root folder
+            return NuGetFramework.AnyFramework;
         }
 
         private IReadOnlyCollection<IFile> GetToolFiles(DirectoryPath path, PackageReference package)
