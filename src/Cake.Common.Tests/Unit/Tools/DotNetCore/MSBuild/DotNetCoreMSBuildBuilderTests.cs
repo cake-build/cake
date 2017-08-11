@@ -269,7 +269,9 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                AssertEx.IsExceptionWithMessage<ArgumentOutOfRangeException>(result, $"Invalid value{Environment.NewLine}Parameter name: toolVersion{Environment.NewLine}Actual value was {toolVersion}.");
+                Assert.IsType<ArgumentOutOfRangeException>(result);
+                Assert.Equal("toolVersion", ((ArgumentOutOfRangeException)result)?.ParamName);
+                Assert.Equal(toolVersion, (int)((ArgumentOutOfRangeException)result)?.ActualValue);
             }
 
             [Fact]
