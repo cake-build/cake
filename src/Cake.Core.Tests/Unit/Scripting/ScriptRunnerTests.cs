@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Cake.Core.IO;
+using Cake.Core.Packaging;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.Analysis;
 using Cake.Core.Tests.Fixtures;
@@ -284,7 +285,7 @@ namespace Cake.Core.Tests.Unit.Scripting
 
                 // Then
                 fixture.ScriptProcessor.Received(1).InstallTools(
-                    Arg.Any<ScriptAnalyzerResult>(),
+                    Arg.Any<IReadOnlyCollection<PackageReference>>(),
                     Arg.Is<DirectoryPath>(path => path.FullPath == "/Working/tools"));
             }
 
@@ -301,7 +302,7 @@ namespace Cake.Core.Tests.Unit.Scripting
 
                 // Then
                 fixture.ScriptProcessor.Received(1).InstallTools(
-                    Arg.Any<ScriptAnalyzerResult>(),
+                    Arg.Any<IReadOnlyCollection<PackageReference>>(),
                     Arg.Is<DirectoryPath>(path => path.FullPath == "/Working/stuff"));
             }
 
@@ -317,7 +318,7 @@ namespace Cake.Core.Tests.Unit.Scripting
 
                 // Then
                 fixture.ScriptProcessor.Received(1).InstallAddins(
-                    Arg.Any<ScriptAnalyzerResult>(),
+                    Arg.Any<IReadOnlyCollection<PackageReference>>(),
                     Arg.Is<DirectoryPath>(path => path.FullPath == "/Working/tools/Addins"));
             }
 
@@ -334,7 +335,7 @@ namespace Cake.Core.Tests.Unit.Scripting
 
                 // Then
                 fixture.ScriptProcessor.Received(1).InstallAddins(
-                    Arg.Any<ScriptAnalyzerResult>(),
+                    Arg.Any<IReadOnlyCollection<PackageReference>>(),
                     Arg.Is<DirectoryPath>(path => path.FullPath == "/Working/stuff"));
             }
 
@@ -350,7 +351,7 @@ namespace Cake.Core.Tests.Unit.Scripting
 
                 // Then
                 fixture.ScriptProcessor.Received(1).InstallTools(
-                    Arg.Any<ScriptAnalyzerResult>(),
+                    Arg.Any<IReadOnlyCollection<PackageReference>>(),
                     Arg.Is<DirectoryPath>(p => p.FullPath == "/Working/foo/tools"));
             }
         }

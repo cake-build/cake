@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using Cake.Core.IO;
+using Cake.Core.Packaging;
 using Cake.Core.Scripting.Analysis;
 
 namespace Cake.Core.Scripting
@@ -16,16 +17,16 @@ namespace Cake.Core.Scripting
         /// <summary>
         /// Installs the addins.
         /// </summary>
-        /// <param name="analyzerResult">The analyzer result.</param>
+        /// <param name="addins">The addins to install.</param>
         /// <param name="installPath">The install path.</param>
         /// <returns>A list containing file paths to installed addin assemblies.</returns>
-        IReadOnlyList<FilePath> InstallAddins(ScriptAnalyzerResult analyzerResult, DirectoryPath installPath);
+        IReadOnlyList<FilePath> InstallAddins(IReadOnlyCollection<PackageReference> addins, DirectoryPath installPath);
 
         /// <summary>
-        /// Installs the tools specified in the build scripts.
+        /// Installs the tools.
         /// </summary>
-        /// <param name="analyzerResult">The analyzer result.</param>
+        /// <param name="tools">The tools to install.</param>
         /// <param name="installPath">The install path.</param>
-        void InstallTools(ScriptAnalyzerResult analyzerResult, DirectoryPath installPath);
+        void InstallTools(IReadOnlyCollection<PackageReference> tools, DirectoryPath installPath);
     }
 }
