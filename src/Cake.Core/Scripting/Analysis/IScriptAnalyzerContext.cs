@@ -33,5 +33,11 @@ namespace Cake.Core.Scripting.Analysis
         /// </summary>
         /// <param name="line">The script line to add.</param>
         void AddScriptLine(string line);
+
+        /// <summary>
+        /// Adds a script error to the result.
+        /// </summary>
+        /// <param name="error">The script error to add.</param>
+        void AddScriptError(string error);
     }
 }

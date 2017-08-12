@@ -20,6 +20,7 @@ namespace Cake.Core.Scripting.Analysis
         private readonly Stack<ScriptInformation> _stack;
         private readonly List<string> _lines;
         private readonly HashSet<FilePath> _processedScripts;
+        private readonly List<ScriptAnalyzerError> _errors;
         private ScriptInformation _current;
 
         // ReSharper disable once ConvertToAutoProperty
@@ -28,6 +29,8 @@ namespace Cake.Core.Scripting.Analysis
         public IScriptInformation Current => _current;
 
         public IReadOnlyList<string> Lines => _lines;
+
+        public IReadOnlyList<ScriptAnalyzerError> Errors => _errors;
 
         public ScriptAnalyzerContext(
             IFileSystem fileSystem,
@@ -44,6 +47,7 @@ namespace Cake.Core.Scripting.Analysis
             _processedScripts = new HashSet<FilePath>(new PathComparer(_environment));
             _stack = new Stack<ScriptInformation>();
             _lines = new List<string>();
+            _errors = new List<ScriptAnalyzerError>();
         }
 
         public void Analyze(FilePath path)
@@ -60,7 +64,9 @@ namespace Cake.Core.Scripting.Analysis
             {
                 const string format = "Could not find script '{0}'.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, path.FullPath);
-                throw new CakeException(message);
+                _errors.Add(new ScriptAnalyzerError(path, 0, message));
+                _current = new ScriptInformation(path);
+                return;
             }
 
             if (_processedScripts.Contains(path))
@@ -84,6 +90,14 @@ namespace Cake.Core.Scripting.Analysis
         {
             _lines.Add(line);
             _current.Lines.Add(line);
+        }
+
+        public void AddScriptError(string error)
+        {
+            if (error != null)
+            {
+                _errors.Add(new ScriptAnalyzerError(_current.Path, _current.Lines.Count + 1, error));
+            }
         }
 
         public void Push(FilePath path)

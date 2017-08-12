@@ -60,11 +60,22 @@ namespace Cake.Core.Scripting.Analysis
         public HashSet<PackageReference> Tools { get; }
 
         /// <summary>
+        /// Gets a value indicating whether to analysis succeded without errors.
+        /// </summary>
+        public bool Succeeded { get; }
+
+        /// <summary>
+        /// Gets the list of analyzer errors.
+        /// </summary>
+        public IReadOnlyList<ScriptAnalyzerError> Errors { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ScriptAnalyzerResult"/> class.
         /// </summary>
         /// <param name="script">The script.</param>
         /// <param name="lines">The merged script lines.</param>
-        public ScriptAnalyzerResult(IScriptInformation script, IReadOnlyList<string> lines)
+        /// <param name="errors">The analyzer errors.</param>
+        public ScriptAnalyzerResult(IScriptInformation script, IReadOnlyList<string> lines, IReadOnlyList<ScriptAnalyzerError> errors = null)
         {
             Script = script;
             Lines = lines;
@@ -73,9 +84,11 @@ namespace Cake.Core.Scripting.Analysis
             _usingAliases = new HashSet<string>(Collect(script, i => i.UsingAliases));
             Tools = new HashSet<PackageReference>(Collect(script, i => i.Tools));
             Addins = new HashSet<PackageReference>(Collect(script, i => i.Addins));
+            Errors = errors ?? new List<ScriptAnalyzerError>(0);
+            Succeeded = Errors.Count == 0;
         }
 
-        private IEnumerable<T> Collect<T>(IScriptInformation script, Func<IScriptInformation, IEnumerable<T>> collector)
+        private static IEnumerable<T> Collect<T>(IScriptInformation script, Func<IScriptInformation, IEnumerable<T>> collector)
         {
             var stack = new Stack<IScriptInformation>();
             stack.Push(script);
