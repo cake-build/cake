@@ -134,11 +134,11 @@ namespace Cake.Core.Scripting
             // Install tools.
             _log.Verbose("Processing build script...");
             var toolsPath = GetToolPath(scriptPath.GetDirectory());
-            _processor.InstallTools(result, toolsPath);
+            _processor.InstallTools(result.Tools, toolsPath);
 
             // Install addins.
             var addinRoot = GetAddinPath(scriptPath.GetDirectory());
-            var addinReferences = _processor.InstallAddins(result, addinRoot);
+            var addinReferences = _processor.InstallAddins(result.Addins, addinRoot);
             foreach (var addinReference in addinReferences)
             {
                 result.References.Add(addinReference.FullPath);
