@@ -131,6 +131,17 @@ namespace Cake.Core.Scripting
             _log.Verbose("Analyzing build script...");
             var result = _analyzer.Analyze(scriptPath.GetFilename());
 
+            // Log all errors and throw
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    var format = $"{error.File.MakeAbsolute(_environment).FullPath}:{error.Line}: {{0}}";
+                    _log.Error(format, error.Message);
+                }
+                throw new CakeException("Errors occured while analyzing script.");
+            }
+
             // Install tools.
             _log.Verbose("Processing build script...");
             var toolsPath = GetToolPath(scriptPath.GetDirectory());

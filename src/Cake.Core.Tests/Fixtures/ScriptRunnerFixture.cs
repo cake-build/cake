@@ -28,7 +28,7 @@ namespace Cake.Core.Tests.Fixtures
         public IScriptProcessor ScriptProcessor { get; set; }
         public IScriptConventions ScriptConventions { get; set; }
         public IScriptAliasFinder AliasFinder { get; set; }
-        public ICakeLog Log { get; set; }
+        public FakeLog Log { get; set; }
 
         public IScriptHost Host { get; set; }
         public FilePath Script { get; set; }
@@ -50,7 +50,7 @@ namespace Cake.Core.Tests.Fixtures
 
             Configuration = Substitute.For<ICakeConfiguration>();
             AliasFinder = Substitute.For<IScriptAliasFinder>();
-            Log = Substitute.For<ICakeLog>();
+            Log = new FakeLog();
 
             Session = Substitute.For<IScriptSession>();
             ArgumentDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);

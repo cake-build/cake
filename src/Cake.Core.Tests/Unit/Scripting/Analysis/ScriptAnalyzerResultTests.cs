@@ -107,6 +107,33 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 Assert.Contains(result.Tools, package => package.OriginalString == "nuget:?package=First.Package");
                 Assert.Contains(result.Tools, package => package.OriginalString == "nuget:?package=Second.Package");
             }
+
+            [Fact]
+            public void Should_Set_Succeeded_To_False_If_Any_Errors()
+            {
+                // Given
+                var script = new ScriptInformation("./build.cake");
+                var error = new ScriptAnalyzerError("./build.cake", 1, "error message");
+
+                // When
+                var result = new ScriptAnalyzerResult(script, new List<string>(), new List<ScriptAnalyzerError> { error });
+
+                // Then
+                Assert.False(result.Succeeded);
+            }
+
+            [Fact]
+            public void Should_Set_Succeeded_To_True_If_Not_Any_Errors()
+            {
+                // Given
+                var script = new ScriptInformation("./build.cake");
+
+                // When
+                var result = new ScriptAnalyzerResult(script, new List<string>(), new List<ScriptAnalyzerError>());
+
+                // Then
+                Assert.True(result.Succeeded);
+            }
         }
     }
 }

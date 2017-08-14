@@ -4,14 +4,17 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.Analysis;
 using Cake.Core.Tests.Fixtures;
+using Cake.Testing;
 using NSubstitute;
 using Xunit;
+using LogLevel = Cake.Core.Diagnostics.LogLevel;
 
 namespace Cake.Core.Tests.Unit.Scripting
 {
@@ -353,6 +356,29 @@ namespace Cake.Core.Tests.Unit.Scripting
                 fixture.ScriptProcessor.Received(1).InstallTools(
                     Arg.Any<IReadOnlyCollection<PackageReference>>(),
                     Arg.Is<DirectoryPath>(p => p.FullPath == "/Working/foo/tools"));
+            }
+
+            [Fact]
+            public void Should_Log_All_Analyzer_Errors_And_Throw()
+            {
+                // Given
+                var fixture = new ScriptRunnerFixture();
+                fixture.ScriptAnalyzer = Substitute.For<IScriptAnalyzer>();
+                fixture.ScriptAnalyzer.Analyze(Arg.Any<FilePath>())
+                    .Returns(new ScriptAnalyzerResult(new ScriptInformation(fixture.Script), new List<string>(), new List<ScriptAnalyzerError>
+                    {
+                        new ScriptAnalyzerError("/Working/script1.cake", 2, "Error in script 1"),
+                        new ScriptAnalyzerError("/Working/script2.cake", 7, "Error in script 2")
+                    }));
+                var runner = fixture.CreateScriptRunner();
+
+                // When
+                var exception = Record.Exception(() => runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary));
+
+                // Then
+                AssertEx.IsCakeException(exception, "Errors occured while analyzing script.");
+                Assert.True(fixture.Log.Entries.Any(x => x.Level == LogLevel.Error && x.Message == "/Working/script1.cake:2: Error in script 1"));
+                Assert.True(fixture.Log.Entries.Any(x => x.Level == LogLevel.Error && x.Message == "/Working/script2.cake:7: Error in script 2"));
             }
         }
     }
