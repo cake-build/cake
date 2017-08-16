@@ -93,6 +93,11 @@ namespace Cake.Common.Tools.VSWhere
                 builder.Append(settings.ReturnProperty);
             }
 
+            if (settings.IncludePrerelease)
+            {
+                builder.Append("-prerelease");
+            }
+
             builder.Append("-nologo");
 
             return builder;

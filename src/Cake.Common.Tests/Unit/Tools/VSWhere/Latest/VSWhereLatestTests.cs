@@ -169,6 +169,20 @@ namespace Cake.Common.Tests.Unit.Tools.VSWhere.Latest
                 // Then
                 Assert.Equal("-latest -nologo", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_Prerelease_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new VSWhereLatestFixture();
+                fixture.Settings.IncludePrerelease = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-latest -property installationPath -prerelease -nologo", result.Args);
+            }
         }
     }
 }
