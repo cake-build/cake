@@ -280,6 +280,19 @@ namespace Cake.NuGet.Tests.Unit
             }
 
             [Fact]
+            public void Should_Create_Directory_For_Installed_Package()
+            {
+                // Given
+                var fixture = new NuGetPackageInstallerFixture();
+
+                // When
+                fixture.Install();
+
+                // Then
+                Assert.True(fixture.FileSystem.GetDirectory("/Working/nuget/cake.foo.1.2.3").Exists);
+            }
+
+            [Fact]
             public void Should_Install_Resource_Without_Version_Number_If_None_Is_Provided()
             {
                 // Given
@@ -365,6 +378,22 @@ namespace Cake.NuGet.Tests.Unit
                     Arg.Is<DirectoryPath>(x => x.FullPath.Equals("/Working/nuget/cake.foo.1.2.3/Cake.Foo")),
                     fixture.Package,
                     PackageType.Addin);
+            }
+
+            [Fact]
+            public void Should_Delete_Installation_Directory_If_Installation_Failed()
+            {
+                // Given
+                var fixture = new NuGetPackageInstallerFixture();
+                var process = Substitute.For<IProcess>();
+                process.GetExitCode().Returns(128);
+                fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns(process);
+
+                // When
+                fixture.Install();
+
+                // Then
+                Assert.False(fixture.FileSystem.GetDirectory("/Working/nuget/cake.foo.1.2.3").Exists);
             }
         }
     }
