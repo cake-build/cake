@@ -1027,4 +1027,13 @@ Imports System.Runtime.CompilerServices;
   &lt;/PropertyGroup&gt;
 &lt;/Project&gt;</value>
   </data>
+  <data name="XmlPoke_Xml_Without_Declaration" xml:space="preserve">
+    <value>&lt;configuration&gt;
+    &lt;appSettings&gt;
+        &lt;add key="server" value="testhost.somecompany.com" /&gt;
+        &lt;add key="test" value="true" /&gt;
+    &lt;/appSettings&gt;
+    &lt;test&gt;test value&lt;/test&gt;
+&lt;/configuration&gt;</value>
+  </data>
 </root>
