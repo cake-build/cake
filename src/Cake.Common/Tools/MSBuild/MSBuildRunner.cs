@@ -8,7 +8,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
@@ -72,7 +71,7 @@ namespace Cake.Common.Tools.MSBuild
             }
 
             // Set the verbosity.
-            builder.Append(string.Format(CultureInfo.InvariantCulture, "/v:{0}", GetVerbosityName(settings.Verbosity)));
+            builder.Append(string.Format(CultureInfo.InvariantCulture, "/v:{0}", settings.Verbosity.GetMSBuildVerbosityName()));
 
             if (settings.NodeReuse != null)
             {
@@ -196,24 +195,6 @@ namespace Cake.Common.Tools.MSBuild
                 default:
                     throw new ArgumentOutOfRangeException(nameof(platform), platform, "Invalid platform");
             }
-        }
-
-        private static string GetVerbosityName(Verbosity verbosity)
-        {
-            switch (verbosity)
-            {
-                case Verbosity.Quiet:
-                    return "quiet";
-                case Verbosity.Minimal:
-                    return "minimal";
-                case Verbosity.Normal:
-                    return "normal";
-                case Verbosity.Verbose:
-                    return "detailed";
-                case Verbosity.Diagnostic:
-                    return "diagnostic";
-            }
-            throw new CakeException("Encountered unknown MSBuild build log verbosity.");
         }
 
         private static IEnumerable<string> GetPropertyArguments(IDictionary<string, IList<string>> properties)
