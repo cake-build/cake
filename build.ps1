@@ -77,7 +77,10 @@ if($FoundDotNetCliVersion -ne $DotNetVersion) {
     if (!(Test-Path $InstallPath)) {
         mkdir -Force $InstallPath | Out-Null;
     }
-    (New-Object System.Net.WebClient).DownloadFile($DotNetInstallerUri, "$InstallPath\dotnet-install.ps1");
+    $wc = New-Object System.Net.WebClient;
+    $wc.UseDefaultCredentials = true;
+
+    $wc.DownloadFile($DotNetInstallerUri, "$InstallPath\dotnet-install.ps1");
     & $InstallPath\dotnet-install.ps1 -Channel $DotNetChannel -Version $DotNetVersion -InstallDir $InstallPath;
 
     Remove-PathVariable "$InstallPath"
@@ -94,7 +97,13 @@ if($FoundDotNetCliVersion -ne $DotNetVersion) {
 $NugetPath = Join-Path $ToolPath "nuget.exe"
 if (!(Test-Path $NugetPath)) {
     Write-Host "Downloading NuGet.exe..."
-    (New-Object System.Net.WebClient).DownloadFile($NugetUrl, $NugetPath);
+    $wc = New-Object System.Net.WebClient;
+    $proxy = [System.Net.WebRequest]::GetSystemWebProxy();
+    $proxy.Credentials = [System.Net.CredentialCache]::DefaultCredentials;
+
+    $wc.Proxy = $proxy;
+
+    $wc.DownloadFile($NugetUrl, $NugetPath);
 }
 
 ###########################################################################
