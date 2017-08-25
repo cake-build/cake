@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
@@ -109,31 +110,10 @@ namespace Cake.Common.Tools.NUnit
         public bool Full { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the XML result file.
+        /// Gets or sets the results that should be saved.
         /// </summary>
-        /// <value>
-        /// The name of the XML result file. Defaults to <c>TestResult.xml</c>.
-        /// </value>
-        public FilePath Results { get; set; }
-
-        /// <summary>
-        /// Gets or sets the format that the results should be in. Results must be set to
-        /// have any effect. Specify nunit2 to output the results in NUnit 2 xml format.
-        /// nunit3 may be specified for NUnit 3 format, however this is the default. Additional
-        /// formats may be supported in the future, check the NUnit documentation.
-        /// </summary>
-        /// <value>
-        /// The format of the result file. Defaults to <c>nunit3</c>.
-        /// </value>
-        public string ResultFormat { get; set; }
-
-        /// <summary>
-        /// Gets or sets the file name of an XSL transform that will be applied to the results.
-        /// </summary>
-        /// <value>
-        /// The name of an XSLT file that will be applied to the results.
-        /// </value>
-        public FilePath ResultTransform { get; set; }
+        /// <value>The package owners.</value>
+        public ICollection<NUnit3Result> Results { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to generate the XML result file.
@@ -250,5 +230,13 @@ namespace Cake.Common.Tools.NUnit
         /// The maximum number of test assembly agents to run at one time.
         /// </value>
         public int? Agents { get; set; }
+
+        /// <summary>
+        /// Gets or sets the params that should be passed to the runner.
+        /// </summary>
+        /// <value>
+        /// List of parametes (key/value) which are passed to the runner.
+        /// </value>
+        public IDictionary<string, string> Params { get; set; }
     }
 }

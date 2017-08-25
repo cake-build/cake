@@ -14,8 +14,8 @@
     <tags>Cake Script Build</tags>
   </metadata>
   <files>
-    <file src="Cake.exe" target="lib/net45" />
-    <file src="Cake.xml" target="lib/net45" />
-    <file src="Cake.pdb" target="lib/net45" />
+    <file src="Cake.exe" target="lib/net46" />
+    <file src="Cake.pdb" target="lib/net46" />
+    <file src="Cake.xml" target="lib/net46" />
   </files>
 </package>

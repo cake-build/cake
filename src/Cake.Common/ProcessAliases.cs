@@ -83,26 +83,31 @@ namespace Cake.Common
         /// <param name="context">The context.</param>
         /// <param name="fileName">Name of the file.</param>
         /// <param name="settings">The settings.</param>
-        /// <param name="redirectedOutput">outputs process output <see cref="ProcessSettings.RedirectStandardOutput">RedirectStandardOutput</see> is true</param>
+        /// <param name="redirectedStandardOutput">Returns process output if <see cref="ProcessSettings.RedirectStandardOutput"/> is true.
+        /// Otherwise <c>null</c> is returned.</param>
         /// <returns>The exit code that the started process specified when it terminated.</returns>
         /// <example>
         /// <code>
-        /// IEnumerable&lt;string&gt; redirectedOutput;
-        /// var exitCodeWithArgument = StartProcess("ping", new ProcessSettings{
-        /// Arguments = "localhost",
-        /// RedirectStandardOutput = true
-        /// },
-        /// out redirectedOutput
-        /// );
-        /// //Output last line of process output
-        /// Information("Last line of output: {0}", redirectedOutput.LastOrDefault());
+        /// IEnumerable&lt;string&gt; redirectedStandardOutput;
+        /// var exitCodeWithArgument =
+        ///     StartProcess(
+        ///         "ping",
+        ///         new ProcessSettings {
+        ///             Arguments = "localhost",
+        ///             RedirectStandardOutput = true
+        ///         },
+        ///         out redirectedStandardOutput
+        ///     );
+        ///
+        /// // Output last line of process output.
+        /// Information("Last line of output: {0}", redirectedStandardOutput.LastOrDefault());
         ///
         /// // This should output 0 as valid arguments supplied
         /// Information("Exit code: {0}", exitCodeWithArgument);
         /// </code>
         /// </example>
         [CakeMethodAlias]
-        public static int StartProcess(this ICakeContext context, FilePath fileName, ProcessSettings settings, out IEnumerable<string> redirectedOutput)
+        public static int StartProcess(this ICakeContext context, FilePath fileName, ProcessSettings settings, out IEnumerable<string> redirectedStandardOutput)
         {
             var process = StartAndReturnProcess(context, fileName, settings);
 
@@ -124,8 +129,90 @@ namespace Cake.Common
                 process.WaitForExit();
             }
 
-            redirectedOutput = settings.RedirectStandardOutput
+            redirectedStandardOutput = settings.RedirectStandardOutput
                 ? process.GetStandardOutput()
+                : null;
+
+            // Return the exit code.
+            return process.GetExitCode();
+        }
+
+        /// <summary>
+        /// Starts the process resource that is specified by the filename and settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="settings">The settings.</param>
+        /// <param name="redirectedStandardOutput">Returns process output if <see cref="ProcessSettings.RedirectStandardOutput"/> is true.
+        /// Otherwise <c>null</c> is returned.</param>
+        /// <param name="redirectedErrorOutput">Returns process error output if <see cref="ProcessSettings.RedirectStandardError"/> is true.
+        /// Otherwise <c>null</c> is returned.</param>
+        /// <returns>The exit code that the started process specified when it terminated.</returns>
+        /// <example>
+        /// <code>
+        /// IEnumerable&lt;string&gt; redirectedStandardOutput;
+        /// IEnumerable&lt;string&gt; redirectedErrorOutput;
+        /// var exitCodeWithArgument =
+        ///     StartProcess(
+        ///         "ping",
+        ///         new ProcessSettings {
+        ///             Arguments = "localhost",
+        ///             RedirectStandardOutput = true
+        ///         },
+        ///         out redirectedStandardOutput,
+        ///         out redirectedErrorOutput
+        ///     );
+        ///
+        /// // Output last line of process output.
+        /// Information("Last line of output: {0}", redirectedStandardOutput.LastOrDefault());
+        ///
+        /// // Throw exception if anything was written to the standard error.
+        /// if (redirectedErrorOutput.Any())
+        /// {
+        ///     throw new Exception(
+        ///         string.Format(
+        ///             "Errors ocurred: {0}",
+        ///             string.Join(", ", redirectedErrorOutput));
+        /// }
+        ///
+        /// // This should output 0 as valid arguments supplied
+        /// Information("Exit code: {0}", exitCodeWithArgument);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        public static int StartProcess(
+            this ICakeContext context,
+            FilePath fileName,
+            ProcessSettings settings,
+            out IEnumerable<string> redirectedStandardOutput,
+            out IEnumerable<string> redirectedErrorOutput)
+        {
+            var process = StartAndReturnProcess(context, fileName, settings);
+
+            // Wait for the process to stop.
+            if (settings.Timeout.HasValue)
+            {
+                if (!process.WaitForExit(settings.Timeout.Value))
+                {
+                    throw new TimeoutException(
+                        string.Format(
+                            CultureInfo.InvariantCulture,
+                            "Process TimeOut ({0}): {1}",
+                            settings.Timeout.Value,
+                            fileName));
+                }
+            }
+            else
+            {
+                process.WaitForExit();
+            }
+
+            redirectedStandardOutput = settings.RedirectStandardOutput
+                ? process.GetStandardOutput()
+                : null;
+
+            redirectedErrorOutput = settings.RedirectStandardError
+                ? process.GetStandardError()
                 : null;
 
             // Return the exit code.

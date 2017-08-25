@@ -86,6 +86,12 @@ namespace Cake.Common.Tools.Chocolatey.Download
             {
                 builder.Append("--internalize");
 
+                // Internalize All
+                if (settings.InternalizeAllUrls)
+                {
+                    builder.Append("--internalize-all-urls");
+                }
+
                 // Resources Location
                 if (!string.IsNullOrWhiteSpace(settings.ResourcesLocation))
                 {

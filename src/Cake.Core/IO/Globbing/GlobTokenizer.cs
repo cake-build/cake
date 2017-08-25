@@ -2,128 +2,151 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-///////////////////////////////////////////////////////////////////////
-// Portions of this code was ported from glob-js by Kevin Thompson.
-// https://github.com/kthompson/glob-js
-///////////////////////////////////////////////////////////////////////
-
 using System;
-using System.Text.RegularExpressions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Cake.Core.IO.Globbing
 {
     internal sealed class GlobTokenizer
     {
-        private readonly string _pattern;
-        private readonly Regex _identifierRegex;
-        private int _sourceIndex;
-        private char _currentCharacter;
+        private readonly Dictionary<string, Func<GlobTokenKind>> _tokenKindChars = new Dictionary<string, Func<GlobTokenKind>>();
+        private readonly Lazy<Queue<GlobToken>> _tokens;
+        private string _remainingPattern;
         private string _currentContent;
-        private GlobTokenKind _currentKind;
 
         public GlobTokenizer(string pattern)
         {
-            _pattern = pattern;
-            _sourceIndex = 0;
-            _currentContent = string.Empty;
-            _currentCharacter = _pattern[_sourceIndex];
-            _identifierRegex = new Regex("^[0-9a-zA-Z\\+&%!@(). _-]$", RegexOptions.Compiled);
+            _remainingPattern = pattern;
+            _tokens = new Lazy<Queue<GlobToken>>(QueueTokens);
+
+            _tokenKindChars.Add("?",  () => GlobTokenKind.CharacterWildcard);
+            _tokenKindChars.Add("*",  () => GlobTokenKind.Wildcard);
+            _tokenKindChars.Add("**", () => GlobTokenKind.DirectoryWildcard);
+            _tokenKindChars.Add("/",  () => GlobTokenKind.PathSeparator);
+            _tokenKindChars.Add(@"\", () => GlobTokenKind.PathSeparator);
+            _tokenKindChars.Add(":",  () => GlobTokenKind.WindowsRoot);
+            _tokenKindChars.Add(".", HandlePeriod);
+            _tokenKindChars.Add("..", () => GlobTokenKind.Parent);
+            _tokenKindChars.Add("\0", () => GlobTokenKind.EndOfText);
         }
 
+        /// <summary>
+        /// Gets the next token from the pattern.
+        /// </summary>
+        /// <returns>The next GlobToken.</returns>
         public GlobToken Scan()
         {
-            _currentContent = string.Empty;
-            _currentKind = ScanToken();
+            if (_tokens.Value.Count == 0)
+            {
+                return null;
+            }
 
-            return new GlobToken(_currentKind, _currentContent);
+            return _tokens.Value.Dequeue();
         }
 
+        /// <summary>
+        /// Peeks the next token from the pattern.
+        /// </summary>
+        /// <returns>The peek'd GlobToken.</returns>
         public GlobToken Peek()
         {
-            var index = _sourceIndex;
-            var token = Scan();
-            _sourceIndex = index;
-            _currentCharacter = _pattern[_sourceIndex];
-            return token;
+            return _tokens.Value.Peek();
         }
 
-        private GlobTokenKind ScanToken()
+        /// <summary>
+        /// Loads the tokens into the token queue.
+        /// </summary>
+        /// <returns>A queue of tokens representing the pattern.</returns>
+        private Queue<GlobToken> QueueTokens()
         {
-            if (IsAlphaNumeric(_currentCharacter))
+            var tokenQueue = new Queue<GlobToken>();
+
+            while (_remainingPattern.Length > 0)
             {
-                if (_currentCharacter == '.')
+                GlobTokenKind tokenKind = GetGlobTokenKindAndTrimRemainingPattern();
+
+                if (tokenKind != GlobTokenKind.Identifier)
                 {
-                    TakeCharacter();
-                    if (_currentCharacter == '.')
+                    tokenQueue.Enqueue(new GlobToken(tokenKind, string.Empty));
+                    continue;
+                }
+
+                while (tokenKind == GlobTokenKind.Identifier)
+                {
+                    if (!string.IsNullOrEmpty(_remainingPattern))
                     {
-                        TakeCharacter();
-                        return GlobTokenKind.Parent;
+                        tokenKind = GetGlobTokenKindAndTrimRemainingPattern();
                     }
-                    if (_currentCharacter == '/')
+                    else
                     {
-                        return GlobTokenKind.Current;
+                        break;
                     }
                 }
-                while (IsAlphaNumeric(_currentCharacter))
+
+                // We know we've got at least one Identifer, so queue it with the contents read
+                tokenQueue.Enqueue(new GlobToken(GlobTokenKind.Identifier, _currentContent));
+                _currentContent = string.Empty;
+
+                // If we quit the while loop due to hitting a new token (rather than end of string), queue it.
+                if (tokenKind != GlobTokenKind.Identifier)
                 {
-                    TakeCharacter();
+                    tokenQueue.Enqueue(new GlobToken(tokenKind, string.Empty));
                 }
-                return GlobTokenKind.Identifier;
             }
 
-            if (_currentCharacter == '*')
-            {
-                TakeCharacter();
-                if (_currentCharacter == '*')
-                {
-                    TakeCharacter();
-                    return GlobTokenKind.DirectoryWildcard;
-                }
-                return GlobTokenKind.Wildcard;
-            }
-            if (_currentCharacter == '?')
-            {
-                TakeCharacter();
-                return GlobTokenKind.CharacterWildcard;
-            }
-            if (_currentCharacter == '/' || _currentCharacter == '\\')
-            {
-                TakeCharacter();
-                return GlobTokenKind.PathSeparator;
-            }
-            if (_currentCharacter == ':')
-            {
-                TakeCharacter();
-                return GlobTokenKind.WindowsRoot;
-            }
-            if (_currentCharacter == '\0')
-            {
-                return GlobTokenKind.EndOfText;
-            }
-
-            throw new NotSupportedException("Unknown token");
+            return tokenQueue;
         }
 
-        private bool IsAlphaNumeric(char character)
+        /// <summary>
+        /// Searches the private dictionary for a set of tokens matching the current (and future) character position(s).
+        /// Performs a greedy match of the keys in the dictionary against the remaining pattern.
+        /// </summary>
+        /// <returns>The GlobTokenKind associated with the mathing entry, or GlobTokenKind.Identifier if none were found. </returns>
+        private GlobTokenKind GetGlobTokenKindAndTrimRemainingPattern()
         {
-            return _identifierRegex.IsMatch(character.ToString());
+            int numberOfCharsToRemove;
+            GlobTokenKind tokenKind;
+
+            var matches = _tokenKindChars.Where(pair => _remainingPattern.IndexOf(pair.Key, StringComparison.Ordinal) == 0);
+            var greediestMatch = matches.OrderByDescending(pair => pair.Key.Length).FirstOrDefault();
+
+            if (greediestMatch.Key == null)
+            {
+                tokenKind = GlobTokenKind.Identifier;
+                numberOfCharsToRemove = 1;
+            }
+            else
+            {
+                tokenKind = greediestMatch.Value();
+                numberOfCharsToRemove = greediestMatch.Key.Length;
+            }
+
+            if (tokenKind == GlobTokenKind.Identifier)
+            {
+                _currentContent += _remainingPattern.Substring(0, numberOfCharsToRemove);
+            }
+
+            _remainingPattern = _remainingPattern.Substring(numberOfCharsToRemove);
+            return tokenKind;
         }
 
-        private void TakeCharacter()
+        /// <summary>
+        /// Determine what GlobTokenKind a period represents given the context
+        /// </summary>
+        /// <returns>The appropriate GlobTokenKind depending on the next character</returns>
+        private GlobTokenKind HandlePeriod()
         {
-            if (_currentCharacter == '\0')
+            if (_remainingPattern.Length > 1)
             {
-                return;
+                var nextCharacter = _remainingPattern[1];
+                if (nextCharacter == '\\' || nextCharacter == '/')
+                {
+                    return GlobTokenKind.Current;
+                }
             }
 
-            _currentContent += _currentCharacter;
-            if (_sourceIndex == _pattern.Length - 1)
-            {
-                _currentCharacter = '\0';
-                return;
-            }
-
-            _currentCharacter = _pattern[++_sourceIndex];
+            return GlobTokenKind.Identifier;
         }
     }
 }

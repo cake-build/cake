@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Cake.Common.Build.AppVeyor;
 using Cake.Core;
 
 namespace Cake.Common.Build.TeamCity.Data
@@ -10,7 +9,7 @@ namespace Cake.Common.Build.TeamCity.Data
     /// <summary>
     /// Provides TeamCity environment information for current build
     /// </summary>
-    public class TeamCityEnvironmentInfo : AppVeyorInfo
+    public class TeamCityEnvironmentInfo : TeamCityInfo
     {
         /// <summary>
         /// Gets TeamCity project information.

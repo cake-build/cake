@@ -138,10 +138,9 @@ export MyEnvironmentVariable="Hello World"
 # RUN TESTS
 #####################################################################
 
-mono $CAKE_EXE --version
-echo "Running Mono integration tests..."
-mono $CAKE_EXE "$SCRIPT" "--target=$TARGET" "--verbosity=quiet" "--platform=posix" "--customarg=hello"
-
-dotnet $CAKE_DLL --version
-echo "Running CoreCLR integration tests..."
-dotnet $CAKE_DLL "$SCRIPT" "--target=$TARGET" "--verbosity=quiet" "--platform=posix" "--customarg=hello"
+mono $CAKE_EXE --version \
+    && echo "Running Mono integration tests..." \
+    && mono $CAKE_EXE "$MONO_SCRIPT" "--target=$TARGET" "--verbosity=quiet" "--platform=posix" "--customarg=hello" \
+    && dotnet $CAKE_DLL --version \
+    && echo "Running CoreCLR integration tests..." \
+    && dotnet $CAKE_DLL "$SCRIPT" "--target=$TARGET" "--verbosity=quiet" "--platform=posix" "--customarg=hello"

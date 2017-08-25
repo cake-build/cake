@@ -119,24 +119,27 @@ namespace Cake.Common.Tools.NUnit
                 builder.Append("--full");
             }
 
-            if (settings.Results != null && settings.NoResults)
+            if (HasResults(settings) && settings.NoResults)
             {
                 throw new ArgumentException(
                     GetToolName() + ": You can't specify both a results file and set NoResults to true.");
             }
 
-            if (settings.Results != null)
+            if (HasResults(settings))
             {
-                var results = new StringBuilder(settings.Results.MakeAbsolute(_environment).FullPath);
-                if (settings.ResultFormat != null)
+                foreach (var result in settings.Results)
                 {
-                    results.AppendFormat(";format={0}", settings.ResultFormat);
+                    var resultString = new StringBuilder(result.FileName.MakeAbsolute(_environment).FullPath);
+                    if (result.Format != null)
+                    {
+                        resultString.AppendFormat(";format={0}", result.Format);
+                    }
+                    if (result.Transform != null)
+                    {
+                        resultString.AppendFormat(";transform={0}", result.Transform.MakeAbsolute(_environment).FullPath);
+                    }
+                    builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "--result={0}", resultString));
                 }
-                if (settings.ResultTransform != null)
-                {
-                    results.AppendFormat(";transform={0}", settings.ResultTransform.MakeAbsolute(_environment).FullPath);
-                }
-                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "--result={0}", results));
             }
             else if (settings.NoResults)
             {
@@ -209,7 +212,20 @@ namespace Cake.Common.Tools.NUnit
                 builder.Append("--domain=" + settings.AppDomainUsage);
             }
 
+            if (settings.Params != null && settings.Params.Count > 0)
+            {
+                foreach (var param in settings.Params)
+                {
+                    builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "--params={0}={1}", param.Key, param.Value));
+                }
+            }
+
             return builder;
+        }
+
+        private bool HasResults(NUnit3Settings settings)
+        {
+            return settings.Results != null && settings.Results.Count > 0;
         }
 
         /// <summary>

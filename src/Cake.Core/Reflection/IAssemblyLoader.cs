@@ -13,14 +13,14 @@ namespace Cake.Core.Reflection
     public interface IAssemblyLoader
     {
         /// <summary>
-        /// Loads the specified assembly from its assembly name.
+        /// Loads an assembly from its assembly name.
         /// </summary>
         /// <param name="assemblyName">The assembly name.</param>
         /// <returns>The loaded assembly.</returns>
         Assembly Load(AssemblyName assemblyName);
 
         /// <summary>
-        /// Loads the specified assembly from the specified path.
+        /// Loads an assembly from the specified path.
         /// </summary>
         /// <param name="path">The assembly path to load.</param>
         /// <param name="verify">If the assembly should be verified whether or not it will work properly with Cake or not.</param>

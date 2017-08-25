@@ -37,8 +37,16 @@ namespace Cake.Core.Scripting.Processors
                         var uri = ParseUriFromTokens(tokens);
                         if (uri != null)
                         {
-                            // Add the URI to the context.
-                            AddToContext(context, uri);
+                            try
+                            {
+                                // Add the URI to the context.
+                                AddToContext(context, uri);
+                            }
+                            catch (Exception e)
+                            {
+                                // Add any errors to context
+                                context.AddScriptError(e.Message);
+                            }
 
                             // Return success.
                             return true;

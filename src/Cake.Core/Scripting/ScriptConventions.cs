@@ -6,11 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime;
-using System.Text;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Core.Polyfill;
 using Cake.Core.Reflection;
 
 namespace Cake.Core.Scripting
@@ -22,19 +18,16 @@ namespace Cake.Core.Scripting
     {
         private readonly IFileSystem _fileSystem;
         private readonly IAssemblyLoader _loader;
-        private readonly ICakeLog _log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptConventions"/> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="loader">The assembly loader.</param>
-        /// <param name="log">The log.</param>
-        public ScriptConventions(IFileSystem fileSystem, IAssemblyLoader loader, ICakeLog log)
+        public ScriptConventions(IFileSystem fileSystem, IAssemblyLoader loader)
         {
             _fileSystem = fileSystem;
             _loader = loader;
-            _log = log;
         }
 
         /// <summary>
@@ -88,6 +81,9 @@ namespace Cake.Core.Scripting
             result.Add(typeof(System.Xml.XmlReader).GetTypeInfo().Assembly); // System.Xml
             result.Add(typeof(System.Xml.Linq.XDocument).GetTypeInfo().Assembly); // System.Xml.Linq
             result.Add(typeof(System.Data.DataTable).GetTypeInfo().Assembly); // System.Data
+
+            // This is just to please Roslyn when running under Mono. See issue https://github.com/dotnet/roslyn/issues/19364
+            result.Add(_loader.Load(new AssemblyName("System.Runtime, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"))); // System.Runtime
 #endif
 
             // Return the assemblies.

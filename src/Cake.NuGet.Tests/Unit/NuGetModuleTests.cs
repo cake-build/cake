@@ -4,13 +4,8 @@
 
 using Cake.Core.Composition;
 using Cake.Core.Packaging;
-using Cake.NuGet.Tests.Fixtures;
-#if NETCORE
-using Cake.NuGet.V3;
-#else
 using Cake.Core.Scripting.Processors.Loading;
-using Cake.NuGet.V2;
-#endif
+using Cake.NuGet.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
 
@@ -20,39 +15,23 @@ namespace Cake.NuGet.Tests.Unit
     {
         public sealed class TheRegisterMethod
         {
-#if NETCORE
             [Fact]
             public void Should_Register_The_NuGet_Content_Resolver()
             {
                 // Given
-                var fixture = new NuGetModuleFixture<NuGetV3ContentResolver>();
+                var fixture = new NuGetModuleFixture<NuGetContentResolver>();
                 var module = new NuGetModule();
 
                 // When
                 module.Register(fixture.Registrar);
 
                 // Then
-                fixture.Registrar.Received(1).RegisterType<NuGetV3ContentResolver>();
-                fixture.Builder.Received(1).As<INuGetContentResolver>();
-                fixture.Builder.Received(1).Singleton();
-            }
-#else
-            [Fact]
-            public void Should_Register_The_NuGet_Content_Resolver()
-            {
-                // Given
-                var fixture = new NuGetModuleFixture<NuGetV2ContentResolver>();
-                var module = new NuGetModule();
-
-                // When
-                module.Register(fixture.Registrar);
-
-                // Then
-                fixture.Registrar.Received(1).RegisterType<NuGetV2ContentResolver>();
+                fixture.Registrar.Received(1).RegisterType<NuGetContentResolver>();
                 fixture.Builder.Received(1).As<INuGetContentResolver>();
                 fixture.Builder.Received(1).Singleton();
             }
 
+#if !NETCORE
             [Fact]
             public void Should_Register_The_NuGet_Load_Directive_Provider()
             {

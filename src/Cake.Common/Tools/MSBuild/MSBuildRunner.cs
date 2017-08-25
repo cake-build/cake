@@ -141,7 +141,7 @@ namespace Cake.Common.Tools.MSBuild
             return builder;
         }
 
-        private static string GetLoggerArgument(int index, MSBuildFileLogger logger)
+        private string GetLoggerArgument(int index, MSBuildFileLogger logger)
         {
             if (index >= 10)
             {
@@ -151,7 +151,7 @@ namespace Cake.Common.Tools.MSBuild
             var counter = index == 0 ? string.Empty : index.ToString();
             var argument = $"/fl{counter}";
 
-            var parameters = logger.GetParameters();
+            var parameters = logger.GetParameters(_environment);
             if (!string.IsNullOrWhiteSpace(parameters))
             {
                 argument = $"{argument} /flp{counter}:{parameters}";

@@ -154,6 +154,11 @@ namespace Cake.Testing
                 throw new FileNotFoundException("File does not exist.", file.Path.FullPath);
             }
 
+            if (file.Attributes.HasFlag(FileAttributes.ReadOnly))
+            {
+                throw new IOException($"Cannot delete readonly file '{file.Path.FullPath}'.");
+            }
+
             // Find the directory.
             var directory = FindDirectory(file.Path.GetDirectory());
 

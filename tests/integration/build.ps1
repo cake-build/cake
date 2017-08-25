@@ -52,7 +52,6 @@ Function GetCakeCoreCLRPath([string]$ScriptRoot)
 
 $PSScriptRoot = split-path -parent $MyInvocation.MyCommand.Definition
 $Script = (Join-Path $PSScriptRoot "windows.cake")
-$MonoScript = (Join-Path $PSScriptRoot "build.cake")
 $ToolsPath = Join-Path $PSScriptRoot "tools"
 $NuGetPath = Join-Path $ToolsPath "nuget.exe"
 $DotNetChannel = "preview"
@@ -182,13 +181,6 @@ $Env:MyEnvironmentVariable = "Hello World"
 &$CakeExePath "--version"
 Write-Output "Running integration tests..."
 &$CakeExePath "$Script" "--target=$Target" "--verbosity=quiet" "--platform=windows" "--customarg=hello"
-$TestResult+=$LASTEXITCODE
-Write-Output ""
-
-# Run tests using new Cake.
-&$CakeExePath "--version"
-Write-Output "Running integration tests mono scripting..."
-&$CakeExePath "$MonoScript" --mono "--target=$Target" "--verbosity=quiet" "--platform=windows" "--customarg=hello"
 $TestResult+=$LASTEXITCODE
 Write-Output ""
 

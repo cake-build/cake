@@ -377,6 +377,40 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Download
             }
 
             [Theory]
+            [InlineData(true, "download \"MyPackage\" -y --internalize --internalize-all-urls")]
+            [InlineData(false, "download \"MyPackage\" -y --internalize")]
+            public void Should_Add_InternalizeAllUrls_Flag_To_Arguments_If_Set(bool internalizeAllUrls, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyDownloadFixture();
+                fixture.Settings.Internalize = true;
+                fixture.Settings.InternalizeAllUrls = internalizeAllUrls;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public void Should_Not_Add_InternalizeAllUrls_Flag_To_Arguments_If_Internalize_Is_Not_Set(bool internalizeAllUrls)
+            {
+                // Given
+                var fixture = new ChocolateyDownloadFixture();
+                fixture.Settings.Internalize = false;
+                fixture.Settings.InternalizeAllUrls = internalizeAllUrls;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("download \"MyPackage\" -y", result.Args);
+            }
+
+            [Theory]
             [InlineData(@"\\foo", "download \"MyPackage\" -y --internalize --resources-location=\"\\\\foo\"")]
             [InlineData("https://foo.local", "download \"MyPackage\" -y --internalize --resources-location=\"https://foo.local\"")]
             [InlineData(null, "download \"MyPackage\" -y --internalize")]
