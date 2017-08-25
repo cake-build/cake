@@ -44,7 +44,7 @@ namespace Cake.Common.Tools.DotNetCore.Test
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            Run(settings, GetArguments(project, settings));
+            RunCommand(settings, GetArguments(project, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(string project, DotNetCoreTestSettings settings)
@@ -59,25 +59,39 @@ namespace Cake.Common.Tools.DotNetCore.Test
                 builder.AppendQuoted(project);
             }
 
+            // Settings
+            if (settings.Settings != null)
+            {
+                builder.Append("--settings");
+                builder.AppendQuoted(settings.Settings.MakeAbsolute(_environment).FullPath);
+            }
+
+            // Filter
+            if (!string.IsNullOrWhiteSpace(settings.Filter))
+            {
+                builder.Append("--filter");
+                builder.AppendQuoted(settings.Filter);
+            }
+
+            // Settings
+            if (settings.TestAdapterPath != null)
+            {
+                builder.Append("--test-adapter-path");
+                builder.AppendQuoted(settings.TestAdapterPath.MakeAbsolute(_environment).FullPath);
+            }
+
+            // Filter
+            if (!string.IsNullOrWhiteSpace(settings.Logger))
+            {
+                builder.Append("--logger");
+                builder.AppendQuoted(settings.Logger);
+            }
+
             // Output directory
             if (settings.OutputDirectory != null)
             {
                 builder.Append("--output");
                 builder.AppendQuoted(settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
-            }
-
-            // Temporary output directory
-            if (settings.BuildBasePath != null)
-            {
-                builder.Append("--build-base-path");
-                builder.AppendQuoted(settings.BuildBasePath.MakeAbsolute(_environment).FullPath);
-            }
-
-            // Runtime
-            if (!string.IsNullOrEmpty(settings.Runtime))
-            {
-                builder.Append("--runtime");
-                builder.Append(settings.Runtime);
             }
 
             // Frameworks
@@ -92,6 +106,13 @@ namespace Cake.Common.Tools.DotNetCore.Test
             {
                 builder.Append("--configuration");
                 builder.Append(settings.Configuration);
+            }
+
+            // Output directory
+            if (settings.DiagnosticFile != null)
+            {
+                builder.Append("--diag");
+                builder.AppendQuoted(settings.DiagnosticFile.MakeAbsolute(_environment).FullPath);
             }
 
             if (settings.NoBuild)

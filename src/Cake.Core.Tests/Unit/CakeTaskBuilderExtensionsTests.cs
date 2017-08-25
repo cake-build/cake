@@ -72,7 +72,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => builder.IsDependentOn(childTaskBuilder));
 
                 // Then
-                Assert.IsArgumentNullException(result, "builder");
+                AssertEx.IsArgumentNullException(result, "builder");
             }
 
             [Fact]
@@ -87,7 +87,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => builder.IsDependentOn(childTaskBuilder));
 
                 // Then
-                Assert.IsArgumentNullException(result, "other");
+                AssertEx.IsArgumentNullException(result, "other");
             }
         }
 
@@ -160,7 +160,7 @@ namespace Cake.Core.Tests.Unit
                     var result = Record.Exception(() => builder.Does((Action)null));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "action");
+                    AssertEx.IsArgumentNullException(result, "action");
                 }
 
                 [Fact]
@@ -239,7 +239,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => CakeTaskBuilderExtensions.Finally<ActionTask>(null, () => { }));
 
                 // Then
-                Assert.IsArgumentNullException(result, "builder");
+                AssertEx.IsArgumentNullException(result, "builder");
             }
 
             [Fact]
@@ -253,7 +253,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => CakeTaskBuilderExtensions.Finally(builder, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "finallyHandler");
+                AssertEx.IsArgumentNullException(result, "finallyHandler");
             }
 
             [Fact]
@@ -280,7 +280,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => CakeTaskBuilderExtensions.ReportError<ActionTask>(null, exception => { }));
 
                 // Then
-                Assert.IsArgumentNullException(result, "builder");
+                AssertEx.IsArgumentNullException(result, "builder");
             }
 
             [Fact]
@@ -294,7 +294,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => CakeTaskBuilderExtensions.ReportError(builder, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "errorReporter");
+                AssertEx.IsArgumentNullException(result, "errorReporter");
             }
 
             [Fact]

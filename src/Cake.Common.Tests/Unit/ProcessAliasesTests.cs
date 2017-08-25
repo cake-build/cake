@@ -27,7 +27,7 @@ namespace Cake.Common.Tests.Unit
                         ProcessAliases.StartProcess(null, fileName));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "context");
+                    AssertEx.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -41,7 +41,7 @@ namespace Cake.Common.Tests.Unit
                         context.StartProcess(null));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "fileName");
+                    AssertEx.IsArgumentNullException(result, "fileName");
                 }
 
                 [Fact]
@@ -104,7 +104,7 @@ namespace Cake.Common.Tests.Unit
                         ProcessAliases.StartProcess(null, fileName, settings));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "context");
+                    AssertEx.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -119,7 +119,7 @@ namespace Cake.Common.Tests.Unit
                         context.StartProcess(null, settings));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "fileName");
+                    AssertEx.IsArgumentNullException(result, "fileName");
                 }
 
                 [Fact]
@@ -134,7 +134,7 @@ namespace Cake.Common.Tests.Unit
                         context.StartProcess(fileName, (ProcessSettings)null));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "settings");
+                    AssertEx.IsArgumentNullException(result, "settings");
                 }
 
                 [Fact]
@@ -284,7 +284,7 @@ namespace Cake.Common.Tests.Unit
                         ProcessAliases.StartAndReturnProcess(null, fileName));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "context");
+                    AssertEx.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -298,7 +298,7 @@ namespace Cake.Common.Tests.Unit
                         context.StartAndReturnProcess(null));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "fileName");
+                    AssertEx.IsArgumentNullException(result, "fileName");
                 }
 
                 [Fact]
@@ -364,7 +364,7 @@ namespace Cake.Common.Tests.Unit
                         ProcessAliases.StartAndReturnProcess(null, fileName, settings));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "context");
+                    AssertEx.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -379,7 +379,7 @@ namespace Cake.Common.Tests.Unit
                         context.StartAndReturnProcess(null, settings));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "fileName");
+                    AssertEx.IsArgumentNullException(result, "fileName");
                 }
 
                 [Fact]
@@ -394,7 +394,7 @@ namespace Cake.Common.Tests.Unit
                         context.StartAndReturnProcess(fileName, null));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "settings");
+                    AssertEx.IsArgumentNullException(result, "settings");
                 }
 
                 [Fact]

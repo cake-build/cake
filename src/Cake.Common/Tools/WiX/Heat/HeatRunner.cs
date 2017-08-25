@@ -67,15 +67,15 @@ namespace Cake.Common.Tools.WiX.Heat
         /// <summary>
         /// Runs the Wix Heat runner for the specified directory path.
         /// </summary>
-        /// <param name="objectFiles">The object files.</param>
+        /// <param name="objectFile">The object file.</param>
         /// <param name="outputFile">The output file.</param>
         /// <param name="harvestType">The WiX harvest type.</param>
         /// <param name="settings">The settings.</param>
-        public void Run(IEnumerable<FilePath> objectFiles, FilePath outputFile, WiXHarvestType harvestType, HeatSettings settings)
+        public void Run(FilePath objectFile, FilePath outputFile, WiXHarvestType harvestType, HeatSettings settings)
         {
-            if (objectFiles == null)
+            if (objectFile == null)
             {
-                throw new ArgumentNullException(nameof(objectFiles));
+                throw new ArgumentNullException(nameof(objectFile));
             }
 
             if (outputFile == null)
@@ -88,13 +88,7 @@ namespace Cake.Common.Tools.WiX.Heat
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            var objectFilesArray = objectFiles as FilePath[] ?? objectFiles.ToArray();
-            if (!objectFilesArray.Any())
-            {
-                throw new ArgumentException("No object files provided.", nameof(objectFiles));
-            }
-
-            Run(settings, GetArguments(objectFilesArray, outputFile, harvestType, settings));
+            Run(settings, GetArguments(objectFile, outputFile, harvestType, settings));
         }
 
         /// <summary>
@@ -124,17 +118,13 @@ namespace Cake.Common.Tools.WiX.Heat
             Run(settings, GetArguments(harvestTarget, outputFile, harvestType, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(IEnumerable<FilePath> objectFiles, FilePath outputFile, WiXHarvestType harvestType, HeatSettings settings)
+        private ProcessArgumentBuilder GetArguments(FilePath objectFile, FilePath outputFile, WiXHarvestType harvestType, HeatSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
 
             builder.Append(GetHarvestType(harvestType));
 
-            // Object files
-            foreach (var objectFile in objectFiles.Select(file => file.MakeAbsolute(_environment).FullPath))
-            {
-                builder.AppendQuoted(objectFile);
-            }
+            builder.AppendQuoted(objectFile.MakeAbsolute(_environment).FullPath);
 
             var args = GetArguments(outputFile, settings);
 
@@ -274,26 +264,26 @@ namespace Cake.Common.Tools.WiX.Heat
 
             if (settings.OutputGroup != null)
             {
-                builder.Append("-pog:");
+                builder.Append("-pog");
                 switch (settings.OutputGroup)
                 {
                     case WiXOutputGroupType.Binaries:
-                        builder.Append("binaries");
+                        builder.Append("Binaries");
                         break;
                     case WiXOutputGroupType.Symbols:
-                        builder.Append("symbols");
+                        builder.Append("Symbols");
                         break;
                     case WiXOutputGroupType.Documents:
-                        builder.Append("documents");
+                        builder.Append("Documents");
                         break;
-                    case WiXOutputGroupType.Satallites:
-                        builder.Append("satallites");
+                    case WiXOutputGroupType.Satellites:
+                        builder.Append("Satellites");
                         break;
                     case WiXOutputGroupType.Sources:
-                        builder.Append("sources");
+                        builder.Append("Sources");
                         break;
                     case WiXOutputGroupType.Content:
-                        builder.Append("content");
+                        builder.Append("Content");
                         break;
                 }
             }

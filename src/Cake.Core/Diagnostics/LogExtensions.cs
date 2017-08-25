@@ -56,6 +56,26 @@ namespace Cake.Core.Diagnostics
         }
 
         /// <summary>
+        /// Writes an error message to the log using the specified value.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="value">The value.</param>
+        public static void Error(this ICakeLog log, object value)
+        {
+            log.Error("{0}", value);
+        }
+
+        /// <summary>
+        /// Writes an error message to the log using the specified string value.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="value">The value.</param>
+        public static void Error(this ICakeLog log, string value)
+        {
+            log.Error("{0}", value);
+        }
+
+        /// <summary>
         /// Writes a warning message to the log using the specified format information.
         /// </summary>
         /// <param name="log">The log.</param>
@@ -99,6 +119,26 @@ namespace Cake.Core.Diagnostics
         public static void Warning(this ICakeLog log, Verbosity verbosity, LogAction logAction)
         {
             Write(log, verbosity, LogLevel.Warning, logAction);
+        }
+
+        /// <summary>
+        /// Writes an warning message to the log using the specified value.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="value">The value.</param>
+        public static void Warning(this ICakeLog log, object value)
+        {
+            log.Warning("{0}", value);
+        }
+
+        /// <summary>
+        /// Writes an warning message to the log using the specified string value.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="value">The value.</param>
+        public static void Warning(this ICakeLog log, string value)
+        {
+            log.Warning("{0}", value);
         }
 
         /// <summary>
@@ -148,6 +188,26 @@ namespace Cake.Core.Diagnostics
         }
 
         /// <summary>
+        /// Writes an informational message to the log using the specified value.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="value">The value.</param>
+        public static void Information(this ICakeLog log, object value)
+        {
+            log.Information("{0}", value);
+        }
+
+        /// <summary>
+        /// Writes an informational message to the log using the specified string value.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="value">The value.</param>
+        public static void Information(this ICakeLog log, string value)
+        {
+            log.Information("{0}", value);
+        }
+
+        /// <summary>
         /// Writes a verbose message to the log using the specified format information.
         /// </summary>
         /// <param name="log">The log.</param>
@@ -194,6 +254,26 @@ namespace Cake.Core.Diagnostics
         }
 
         /// <summary>
+        /// Writes a verbose message to the log using the specified value.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="value">The value.</param>
+        public static void Verbose(this ICakeLog log, object value)
+        {
+            log.Verbose("{0}", value);
+        }
+
+        /// <summary>
+        /// Writes a verbose message to the log using the specified string value.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="value">The value.</param>
+        public static void Verbose(this ICakeLog log, string value)
+        {
+            log.Verbose("{0}", value);
+        }
+
+        /// <summary>
         /// Writes a debug message to the log using the specified format information.
         /// </summary>
         /// <param name="log">The log.</param>
@@ -237,6 +317,26 @@ namespace Cake.Core.Diagnostics
         public static void Debug(this ICakeLog log, Verbosity verbosity, LogAction logAction)
         {
             Write(log, verbosity, LogLevel.Debug, logAction);
+        }
+
+        /// <summary>
+        /// Writes a debug message to the log using the specified value.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="value">The value.</param>
+        public static void Debug(this ICakeLog log, object value)
+        {
+            log.Debug("{0}", value);
+        }
+
+        /// <summary>
+        /// Writes a debug message to the log using the specified string value.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="value">The value.</param>
+        public static void Debug(this ICakeLog log, string value)
+        {
+            log.Debug("{0}", value);
         }
 
         /// <summary>

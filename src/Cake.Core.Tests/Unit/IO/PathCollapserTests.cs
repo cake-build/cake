@@ -19,7 +19,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => PathCollapser.Collapse(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "path");
             }
 
             [Fact]

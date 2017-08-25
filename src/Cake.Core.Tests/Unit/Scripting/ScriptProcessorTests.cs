@@ -25,7 +25,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => fixture.CreateProcessor());
 
                 // Then
-                Assert.IsArgumentNullException(result, "fileSystem");
+                AssertEx.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -39,7 +39,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => fixture.CreateProcessor());
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -53,24 +53,24 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => fixture.CreateProcessor());
 
                 // Then
-                Assert.IsArgumentNullException(result, "log");
+                AssertEx.IsArgumentNullException(result, "log");
             }
         }
 
         public sealed class TheInstallAddinsMethod
         {
             [Fact]
-            public void Should_Throw_If_Analyzer_Result_Is_Null()
+            public void Should_Throw_If_Addins_Is_Null()
             {
                 // Given
                 var fixture = new ScriptProcessorFixture();
-                fixture.Result = null;
+                fixture.Addins = null;
 
                 // When
                 var result = Record.Exception(() => fixture.InstallAddins());
 
                 // Then
-                Assert.IsArgumentNullException(result, "analyzerResult");
+                AssertEx.IsArgumentNullException(result, "addins");
             }
 
             [Fact]
@@ -84,7 +84,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => fixture.InstallAddins());
 
                 // Then
-                Assert.IsArgumentNullException(result, "installPath");
+                AssertEx.IsArgumentNullException(result, "installPath");
             }
 
             [Fact]
@@ -97,7 +97,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => fixture.InstallAddins());
 
                 // Then
-                Assert.IsCakeException(result, "Failed to install addin 'addin'.");
+                AssertEx.IsCakeException(result, "Failed to install addin 'addin'.");
             }
 
             [Fact]
@@ -111,7 +111,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => fixture.InstallAddins());
 
                 // Then
-                Assert.IsCakeException(result, "Could not find an installer for the 'custom' scheme.");
+                AssertEx.IsCakeException(result, "Could not find an installer for the 'custom' scheme.");
             }
 
             [Fact]
@@ -135,17 +135,17 @@ namespace Cake.Core.Tests.Unit.Scripting
         public sealed class TheInstallToolsMethod
         {
             [Fact]
-            public void Should_Throw_If_Analyzer_Result_Is_Null()
+            public void Should_Throw_If_Tools_Is_Null()
             {
                 // Given
                 var fixture = new ScriptProcessorFixture();
-                fixture.Result = null;
+                fixture.Tools = null;
 
                 // When
                 var result = Record.Exception(() => fixture.InstallTools());
 
                 // Then
-                Assert.IsArgumentNullException(result, "analyzerResult");
+                AssertEx.IsArgumentNullException(result, "tools");
             }
 
             [Fact]
@@ -159,7 +159,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => fixture.InstallTools());
 
                 // Then
-                Assert.IsArgumentNullException(result, "installPath");
+                AssertEx.IsArgumentNullException(result, "installPath");
             }
 
             [Fact]
@@ -172,7 +172,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => fixture.InstallTools());
 
                 // Then
-                Assert.IsCakeException(result, "Failed to install tool 'tool'.");
+                AssertEx.IsCakeException(result, "Failed to install tool 'tool'.");
             }
 
             [Fact]
@@ -186,7 +186,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => fixture.InstallTools());
 
                 // Then
-                Assert.IsCakeException(result, "Could not find an installer for the 'custom' scheme.");
+                AssertEx.IsCakeException(result, "Could not find an installer for the 'custom' scheme.");
             }
 
             [Fact]
@@ -217,7 +217,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 fixture.InstallTools();
 
                 // Then
-                fixture.Tools.Received(1).RegisterFile(
+                fixture.ToolLocator.Received(1).RegisterFile(
                     Arg.Is<FilePath>(path => path.FullPath == "/Working/Bin/Temp.dll"));
             }
         }

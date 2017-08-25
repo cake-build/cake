@@ -27,7 +27,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "name");
+                AssertEx.IsArgumentNullException(result, "name");
             }
 
             [Theory]
@@ -43,7 +43,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentException(result, "name", "Source name cannot be empty.");
+                AssertEx.IsArgumentException(result, "name", "Source name cannot be empty.");
             }
 
             [Fact]
@@ -57,7 +57,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "source");
+                AssertEx.IsArgumentNullException(result, "source");
             }
 
             [Theory]
@@ -73,7 +73,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentException(result, "source", "Source cannot be empty.");
+                AssertEx.IsArgumentException(result, "source", "Source cannot be empty.");
             }
 
             [Fact]
@@ -87,7 +87,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -286,7 +286,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "name");
+                AssertEx.IsArgumentNullException(result, "name");
             }
 
             [Theory]
@@ -302,7 +302,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentException(result, "name", "Source name cannot be empty.");
+                AssertEx.IsArgumentException(result, "name", "Source name cannot be empty.");
             }
 
             [Fact]
@@ -316,7 +316,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "source");
+                AssertEx.IsArgumentNullException(result, "source");
             }
 
             [Theory]
@@ -332,7 +332,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentException(result, "source", "Source cannot be empty.");
+                AssertEx.IsArgumentException(result, "source", "Source cannot be empty.");
             }
 
             [Fact]
@@ -346,7 +346,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -521,7 +521,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "source");
+                AssertEx.IsArgumentNullException(result, "source");
             }
 
             [Theory]
@@ -537,7 +537,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentException(result, "source", "Source cannot be empty.");
+                AssertEx.IsArgumentException(result, "source", "Source cannot be empty.");
             }
 
             [Fact]
@@ -551,7 +551,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
         }
     }

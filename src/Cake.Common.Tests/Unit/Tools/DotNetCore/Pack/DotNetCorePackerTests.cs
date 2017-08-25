@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Tools.DotNetCore.Pack;
+using Cake.Common.Tools.DotNetCore;
 using Cake.Testing;
 using Xunit;
 
@@ -24,7 +25,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Pack
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -38,7 +39,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Pack
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, ".NET Core CLI: Process was not started.");
+                AssertEx.IsCakeException(result, ".NET Core CLI: Process was not started.");
             }
 
             [Fact]
@@ -52,7 +53,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Pack
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, ".NET Core CLI: Process returned an error (exit code 1).");
+                AssertEx.IsCakeException(result, ".NET Core CLI: Process returned an error (exit code 1).");
             }
 
             [Fact]
@@ -104,17 +105,34 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Pack
             {
                 // Given
                 var fixture = new DotNetCorePackFixture();
-                fixture.Settings.BuildBasePath = "./temp/";
                 fixture.Settings.NoBuild = true;
                 fixture.Settings.Configuration = "Release";
                 fixture.Settings.OutputDirectory = "./artifacts/";
                 fixture.Settings.VersionSuffix = "rc1";
+                fixture.Settings.IncludeSource = true;
+                fixture.Settings.IncludeSymbols = true;
+                fixture.Settings.Serviceable = true;
+                fixture.Settings.Verbosity = DotNetCoreVerbosity.Minimal;
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("pack --output \"/Working/artifacts\" --build-base-path \"/Working/temp\" --no-build --configuration Release --version-suffix rc1", result.Args);
+                Assert.Equal("pack --output \"/Working/artifacts\" --no-build --include-symbols --include-source --configuration Release --version-suffix rc1 --serviceable --verbosity Minimal", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Host_Arguments()
+            {
+                // Given
+                var fixture = new DotNetCorePackFixture();
+                fixture.Settings.DiagnosticOutput = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("--diagnostics pack", result.Args);
             }
         }
     }

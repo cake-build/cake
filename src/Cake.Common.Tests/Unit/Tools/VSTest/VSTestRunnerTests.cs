@@ -25,7 +25,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSTest
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsArgumentNullException(result, "assemblyPaths");
+            AssertEx.IsArgumentNullException(result, "assemblyPaths");
         }
 
         [Fact]
@@ -39,7 +39,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSTest
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsArgumentNullException(result, "settings");
+            AssertEx.IsArgumentNullException(result, "settings");
         }
 
         [Fact]

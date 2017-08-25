@@ -6,8 +6,10 @@ using System;
 using System.Collections.Generic;
 using Cake.Common.Tools.Chocolatey.ApiKey;
 using Cake.Common.Tools.Chocolatey.Config;
+using Cake.Common.Tools.Chocolatey.Download;
 using Cake.Common.Tools.Chocolatey.Features;
 using Cake.Common.Tools.Chocolatey.Install;
+using Cake.Common.Tools.Chocolatey.New;
 using Cake.Common.Tools.Chocolatey.Pack;
 using Cake.Common.Tools.Chocolatey.Pin;
 using Cake.Common.Tools.Chocolatey.Push;
@@ -88,6 +90,67 @@ namespace Cake.Common.Tools.Chocolatey
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var packer = new ChocolateyPacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Log, context.Tools, resolver);
             packer.Pack(nuspecFilePath, settings);
+        }
+
+        /// <summary>
+        /// Creates Chocolatey packages using the specified Nuspec files.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="filePaths">The nuspec file paths.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        ///     var chocolateyPackSettings   = new ChocolateyPackSettings {
+        ///                                     Id                      = "TestChocolatey",
+        ///                                     Title                   = "The tile of the package",
+        ///                                     Version                 = "0.0.0.1",
+        ///                                     Authors                 = new[] {"John Doe"},
+        ///                                     Owners                  = new[] {"Contoso"},
+        ///                                     Summary                 = "Excellent summary of what the package does",
+        ///                                     Description             = "The description of the package",
+        ///                                     ProjectUrl              = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     PackageSourceUrl        = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     ProjectSourceUrl        = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     DocsUrl                 = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     MailingListUrl          = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     BugTrackerUrl           = new Uri("https://github.com/SomeUser/TestChocolatey/"),
+        ///                                     Tags                    = new [] {"Cake", "Script", "Build"},
+        ///                                     Copyright               = "Some company 2015",
+        ///                                     LicenseUrl              = new Uri("https://github.com/SomeUser/TestChocolatey/blob/master/LICENSE.md"),
+        ///                                     RequireLicenseAcceptance= false,
+        ///                                     IconUrl                 = new Uri("http://cdn.rawgit.com/SomeUser/TestChocolatey/master/icons/testchocolatey.png"),
+        ///                                     ReleaseNotes            = new [] {"Bug fixes", "Issue fixes", "Typos"},
+        ///                                     Files                   = new [] {
+        ///                                                                          new ChocolateyNuSpecContent {Source = "bin/TestChocolatey.dll", Target = "bin"},
+        ///                                                                       },
+        ///                                     Debug                   = false,
+        ///                                     Verbose                 = false,
+        ///                                     Force                   = false,
+        ///                                     Noop                    = false,
+        ///                                     LimitOutput             = false,
+        ///                                     ExecutionTimeout        = 13,
+        ///                                     CacheLocation           = @"C:\temp",
+        ///                                     AllowUnofficial          = false
+        ///                                 };
+        ///
+        ///     var nuspecFiles = GetFiles("./**/*.nuspec");
+        ///     ChocolateyPack(nuspecFiles, chocolateyPackSettings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Pack")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Pack")]
+        public static void ChocolateyPack(this ICakeContext context, IEnumerable<FilePath> filePaths, ChocolateyPackSettings settings)
+        {
+            if (filePaths == null)
+            {
+                throw new ArgumentNullException(nameof(filePaths));
+            }
+
+            foreach (var filePath in filePaths)
+            {
+                ChocolateyPack(context, filePath, settings);
+            }
         }
 
         /// <summary>
@@ -905,6 +968,49 @@ namespace Cake.Common.Tools.Chocolatey
         }
 
         /// <summary>
+        /// Pushes Chocolatey packages to a Chocolatey server and publishes them.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageFilePaths">The <c>.nupkg</c> file paths.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// // Get the paths to the packages.
+        /// var packages = GetFiles("./**/*.nupkg");
+        ///
+        /// // Push the package.
+        /// ChocolateyPush(packages, new ChocolateyPushSettings {
+        ///     Source                = "http://example.com/chocolateyfeed",
+        ///     ApiKey                = "4003d786-cc37-4004-bfdf-c4f3e8ef9b3a"
+        ///     Timeout               = 300
+        ///     Debug                 = false,
+        ///     Verbose               = false,
+        ///     Force                 = false,
+        ///     Noop                  = false,
+        ///     LimitOutput           = false,
+        ///     ExecutionTimeout      = 13,
+        ///     CacheLocation         = @"C:\temp",
+        ///     AllowUnofficial        = false
+        /// });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Push")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Push")]
+        public static void ChocolateyPush(this ICakeContext context, IEnumerable<FilePath> packageFilePaths, ChocolateyPushSettings settings)
+        {
+            if (packageFilePaths == null)
+            {
+                throw new ArgumentNullException(nameof(packageFilePaths));
+            }
+
+            foreach (var packageFilePath in packageFilePaths)
+            {
+                ChocolateyPush(context, packageFilePath, settings);
+            }
+        }
+
+        /// <summary>
         /// Upgrades Chocolatey package.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -979,6 +1085,121 @@ namespace Cake.Common.Tools.Chocolatey
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateyUpgrader(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             runner.Upgrade(packageId, settings);
+        }
+
+        /// <summary>
+        /// Generate package specification files for a new package using the default settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageId">The id of the package to create.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyNew("MyChocolateyPackage");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("New")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.New")]
+        public static void ChocolateyNew(this ICakeContext context, string packageId)
+        {
+            ChocolateyNew(context, packageId, new ChocolateyNewSettings());
+        }
+
+        /// <summary>
+        /// Generate package specification files for a new package using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageId">The id of the package to create.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyNew("MyChocolateyPackage", new ChocolateyNewSettings {
+        ///     PackageVersion = "1.2.3",
+        ///     MaintainerName = "John Doe",
+        ///     MaintainerRepo = "johndoe"
+        /// });
+        /// </code>
+        /// </example>
+        /// <example>
+        /// <code>
+        /// var settings = new ChocolateyNewSettings {
+        ///     MaintainerName = "John Doe"
+        /// }
+        /// settings.AdditionalPropertyValues("Tags", "CustomPackage");
+        /// ChocolateyNew("MyChocolateyPackage", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("New")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.New")]
+        public static void ChocolateyNew(this ICakeContext context, string packageId, ChocolateyNewSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
+            var runner = new ChocolateyScaffolder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
+            runner.CreatePackage(packageId, settings);
+        }
+
+        /// <summary>
+        /// Downloads a Chocolatey package to the current working directory.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageId">The id of the package to download.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyDownload("MyChocolateyPackage");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Download")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Download")]
+        public static void ChocolateyDownload(this ICakeContext context, string packageId)
+        {
+            var settings = new ChocolateyDownloadSettings();
+            ChocolateyDownload(context, packageId, settings);
+        }
+
+        /// <summary>
+        /// Downloads a Chocolatey package using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageId">The id of the package to install.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <para>Download a package to a specific folder:</para>
+        /// <code>
+        /// ChocolateyDownload(
+        ///     "MyChocolateyPackage",
+        ///     new ChocolateyDownloadSettings {
+        ///         OutputDirectory = @"C:\download\"
+        ///     });
+        /// </code>
+        /// <para>Download and internalize a package:</para>
+        /// <code>
+        /// ChocolateyDownload(
+        ///     "MyChocolateyPackage",
+        ///     new ChocolateyDownloadSettings {
+        ///         Internalize = true
+        ///     });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Download")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Download")]
+        public static void ChocolateyDownload(this ICakeContext context, string packageId, ChocolateyDownloadSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
+            var runner = new ChocolateyDownloader(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
+            runner.Download(packageId, settings);
         }
     }
 }

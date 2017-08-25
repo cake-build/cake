@@ -22,7 +22,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.StepDefinitionReport
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "projectFile");
+                AssertEx.IsArgumentNullException(result, "projectFile");
             }
 
             [Fact]
@@ -36,7 +36,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.StepDefinitionReport
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]

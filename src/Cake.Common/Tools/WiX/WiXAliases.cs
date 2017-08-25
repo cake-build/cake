@@ -219,13 +219,13 @@ namespace Cake.Common.Tools.WiX
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
-        /// <param name="objectFiles">The object files.</param>
+        /// <param name="objectFile">The object file.</param>
         /// <param name="outputFile">The output file.</param>
         /// <param name="harvestType">The WiX harvest type.</param>
         [CakeMethodAlias]
         [CakeAliasCategory("Heat")]
         [CakeNamespaceImport("Cake.Common.Tools.WiX.Heat")]
-        public static void WiXHeat(this ICakeContext context, IEnumerable<FilePath> objectFiles, FilePath outputFile, WiXHarvestType harvestType)
+        public static void WiXHeat(this ICakeContext context, FilePath objectFile, FilePath outputFile, WiXHarvestType harvestType)
         {
             if (context == null)
             {
@@ -233,7 +233,7 @@ namespace Cake.Common.Tools.WiX
             }
 
             var runner = new HeatRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            runner.Run(objectFiles, outputFile, harvestType, new HeatSettings());
+            runner.Run(objectFile, outputFile, harvestType, new HeatSettings());
         }
 
         /// <summary>
@@ -247,14 +247,14 @@ namespace Cake.Common.Tools.WiX
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
-        /// <param name="objectFiles">The object files.</param>
+        /// <param name="objectFile">The object file.</param>
         /// <param name="outputFile">The output file.</param>
         /// <param name="harvestType">The WiX harvest type.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
         [CakeAliasCategory("Heat")]
         [CakeNamespaceImport("Cake.Common.Tools.WiX.Heat")]
-        public static void WiXHeat(this ICakeContext context, IEnumerable<FilePath> objectFiles, FilePath outputFile, WiXHarvestType harvestType, HeatSettings settings)
+        public static void WiXHeat(this ICakeContext context, FilePath objectFile, FilePath outputFile, WiXHarvestType harvestType, HeatSettings settings)
         {
             if (context == null)
             {
@@ -262,7 +262,7 @@ namespace Cake.Common.Tools.WiX
             }
 
             var runner = new HeatRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            runner.Run(objectFiles, outputFile, harvestType, settings ?? new HeatSettings());
+            runner.Run(objectFile, outputFile, harvestType, settings ?? new HeatSettings());
         }
 
         /// <summary>

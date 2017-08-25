@@ -30,7 +30,7 @@ namespace Cake.Common.Tests.Unit.Tools
                 var result = Record.Exception(() => new DotNetBuildSettings(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "solution");
+                AssertEx.IsArgumentNullException(result, "solution");
             }
         }
 

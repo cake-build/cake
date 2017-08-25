@@ -26,7 +26,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = Record.Exception(() => fixture.Peek("gibblygook"));
 
                 // Then
-                Assert.IsArgumentNullException(result, "filePath");
+                AssertEx.IsArgumentNullException(result, "filePath");
             }
 
             [Fact]
@@ -53,7 +53,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = Record.Exception(() => fixture.Peek(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "xpath");
+                AssertEx.IsArgumentNullException(result, "xpath");
             }
 
             [Fact]
@@ -93,6 +93,34 @@ namespace Cake.Common.Tests.Unit.XML
 
                 // Then
                 Assert.Equal("test value", result);
+            }
+
+            [Fact]
+            public void Should_Get_Element_Value()
+            {
+                // Given
+                var fixture = new XmlPeekAliasesFixture();
+
+                // When
+                var result = fixture.Peek("/configuration/test");
+
+                // Then
+                Assert.Equal("test value", result);
+            }
+
+            [Fact]
+            public void Should_Get_Element_Value_With_Namespace()
+            {
+                // Given
+                var fixture = new XmlPeekAliasesFixture();
+                fixture.SetContent(Properties.Resources.XmlPeek_Xml_With_Namespace);
+                fixture.Settings.Namespaces.Add("msbuild", "http://schemas.microsoft.com/developer/msbuild/2003");
+
+                // When
+                var result = fixture.Peek("/msbuild:Project/msbuild:PropertyGroup/msbuild:publishUrl");
+
+                // Then
+                Assert.Equal("C:\\Deployment\\DeploymentTemplate\\WebApi", result);
             }
 
             [Fact]

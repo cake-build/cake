@@ -29,7 +29,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILRepack
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "outputAssemblyPath");
+                AssertEx.IsArgumentNullException(result, "outputAssemblyPath");
             }
 
             [Fact]
@@ -43,7 +43,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILRepack
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "primaryAssemblyPath");
+                AssertEx.IsArgumentNullException(result, "primaryAssemblyPath");
             }
 
             [Fact]
@@ -57,7 +57,7 @@ namespace Cake.Common.Tests.Unit.Tools.ILRepack
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "assemblyPaths");
+                AssertEx.IsArgumentNullException(result, "assemblyPaths");
             }
 
             [Fact]
@@ -368,13 +368,13 @@ namespace Cake.Common.Tests.Unit.Tools.ILRepack
             {
                 // Given
                 var fixture = new ILRepackRunnerFixture();
-                fixture.Settings.Libs = new List<FilePath> { "/lib1.dll", "/lib2.dll" };
+                fixture.Settings.Libs = new List<DirectoryPath> { "/path1", "/path2" };
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/lib:\"/lib1.dll\" /lib:\"/lib2.dll\" /out:\"/Working/output.exe\" " +
+                Assert.Equal("/lib:\"/path1\" /lib:\"/path2\" /out:\"/Working/output.exe\" " +
                              "\"/Working/input.exe\"", result.Args);
             }
 

@@ -27,7 +27,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Execute
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -44,7 +44,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Execute
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, ".NET Core CLI: Process was not started.");
+                AssertEx.IsCakeException(result, ".NET Core CLI: Process was not started.");
             }
 
             [Fact]
@@ -61,7 +61,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Execute
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, ".NET Core CLI: Process returned an error (exit code 1).");
+                AssertEx.IsCakeException(result, ".NET Core CLI: Process returned an error (exit code 1).");
             }
 
             [Fact]
@@ -80,18 +80,33 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Execute
             }
 
             [Fact]
-            public void Should_Add_Verbose()
+            public void Should_Add_Famework_Version()
             {
                 // Given
                 var fixture = new DotNetCoreExecutorFixture();
                 fixture.AssemblyPath = "./bin/Debug/app.dll";
-                fixture.Settings.Verbose = true;
+                fixture.Settings.FrameworkVersion = "1.0.3";
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("--verbose /Working/bin/Debug/app.dll", result.Args);
+                Assert.Equal("--fx-version 1.0.3 /Working/bin/Debug/app.dll", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Host_Arguments()
+            {
+                // Given
+                var fixture = new DotNetCoreExecutorFixture();
+                fixture.AssemblyPath = "./bin/Debug/app.dll";
+                fixture.Settings.DiagnosticOutput = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("--diagnostics /Working/bin/Debug/app.dll", result.Args);
             }
         }
     }

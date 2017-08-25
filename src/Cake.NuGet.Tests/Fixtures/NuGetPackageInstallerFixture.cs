@@ -5,6 +5,7 @@
 #if !NETCORE
 using System.Collections.Generic;
 using Cake.Core;
+using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
@@ -14,12 +15,10 @@ using NSubstitute;
 
 namespace Cake.NuGet.Tests.Fixtures
 {
-    using Cake.Core.Configuration;
-
     internal sealed class NuGetPackageInstallerFixture
     {
         public ICakeEnvironment Environment { get; set; }
-        public IFileSystem FileSystem { get; set; }
+        public FakeFileSystem FileSystem { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
         public INuGetToolResolver ToolResolver { get; set; }
         public INuGetContentResolver ContentResolver { get; set; }
@@ -35,7 +34,6 @@ namespace Cake.NuGet.Tests.Fixtures
         {
             Environment = FakeEnvironment.CreateUnixEnvironment();
             FileSystem = new FakeFileSystem(Environment);
-            ProcessRunner = Substitute.For<IProcessRunner>();
             ContentResolver = Substitute.For<INuGetContentResolver>();
             Log = Substitute.For<ICakeLog>();
             Config = Substitute.For<ICakeConfiguration>();
@@ -46,6 +44,16 @@ namespace Cake.NuGet.Tests.Fixtures
             Package = new PackageReference("nuget:https://myget.org/temp/?package=Cake.Foo&prerelease&version=1.2.3");
             PackageType = PackageType.Addin;
             InstallPath = new DirectoryPath("./nuget");
+
+            ProcessRunner = Substitute.For<IProcessRunner>();
+            ProcessRunner.When(p => p.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()))
+                .Do(info => FileSystem.CreateDirectory(InstallPath.Combine(Package.Package.ToLowerInvariant()).Combine(Package.Package)));
+        }
+
+        public void InstallPackageAtSpecifiedPath(DirectoryPath path)
+        {
+            ProcessRunner.When(p => p.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()))
+                .Do(info => FileSystem.CreateDirectory(path));
         }
 
         public NuGetPackageInstaller CreateInstaller()

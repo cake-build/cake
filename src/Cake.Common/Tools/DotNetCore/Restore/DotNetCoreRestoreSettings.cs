@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections.Generic;
+using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotNetCore.Restore
@@ -29,22 +29,6 @@ namespace Cake.Common.Tools.DotNetCore.Restore
         public DirectoryPath PackagesDirectory { get; set; }
 
         /// <summary>
-        /// Gets or sets a temporary option to allow NuGet to infer RIDs for legacy repositories.
-        /// </summary>
-        public ICollection<string> InferRuntimes { get; set; }
-
-        /// <summary>
-        /// Gets or sets the list of packages sources to use as a fallback.
-        /// </summary>
-        public ICollection<string> FallbackSources { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to display any output.
-        /// </summary>
-        [Obsolete(".NET CLI does not support this option anymore. Please use DotNetCoreRestoreSettings.Verbosity instead.")]
-        public bool Quiet { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether to do not cache packages and http requests.
         /// </summary>
         public bool NoCache { get; set; }
@@ -55,18 +39,23 @@ namespace Cake.Common.Tools.DotNetCore.Restore
         public bool DisableParallel { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to force the application to run using an invariant, English-based culture.
-        /// </summary>
-        public bool ForceEnglishOutput { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether to only warning failed sources if there are packages meeting version requirement.
         /// </summary>
         public bool IgnoreFailedSources { get; set; }
 
         /// <summary>
-        /// Gets or sets the verbosity of logging to use.
+        /// Gets or sets the target runtime to restore packages for.
         /// </summary>
-        public DotNetCoreRestoreVerbosity? Verbosity { get; set; }
+        public string Runtime { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to ignore project to project references and restore only the root project.
+        /// </summary>
+        public bool NoDependencies { get; set; }
+
+        /// <summary>
+        /// Gets or sets additional arguments to be passed to MSBuild.
+        /// </summary>
+        public DotNetCoreMSBuildSettings MSBuildSettings { get; set; }
     }
 }

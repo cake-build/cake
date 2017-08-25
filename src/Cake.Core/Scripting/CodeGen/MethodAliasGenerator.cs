@@ -50,6 +50,13 @@ namespace Cake.Core.Scripting.CodeGen
             builder.Append("(");
             builder.Append(string.Concat(GetProxyParameters(parameters, true)));
             builder.Append(")");
+
+            // if the method is generic, emit any constraints that might exist.
+            if (method.IsGenericMethod)
+            {
+                GenericParameterConstraintEmitter.BuildGenericConstraints(method, builder);
+            }
+
             builder.AppendLine();
             builder.Append("{");
             builder.AppendLine();

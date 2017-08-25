@@ -8,19 +8,19 @@ using Cake.Core;
 // ReSharper disable once CheckNamespace
 namespace Xunit
 {
-    public partial class Assert
+    public partial class AssertEx
     {
         public static void IsArgumentNullException(Exception exception, string parameterName)
         {
-            IsType<ArgumentNullException>(exception);
-            Equal(parameterName, ((ArgumentNullException)exception).ParamName);
+            Assert.IsType<ArgumentNullException>(exception);
+            Assert.Equal(parameterName, ((ArgumentNullException)exception).ParamName);
         }
 
         public static void IsArgumentException(Exception exception, string parameterName, string message)
         {
-            IsType<ArgumentException>(exception);
-            Equal(parameterName, ((ArgumentException)exception).ParamName);
-            Equal(new ArgumentException(message, parameterName).Message, exception.Message);
+            Assert.IsType<ArgumentException>(exception);
+            Assert.Equal(parameterName, ((ArgumentException)exception).ParamName);
+            Assert.Equal(new ArgumentException(message, parameterName).Message, exception.Message);
         }
 
         public static void IsCakeException(Exception exception, string message)
@@ -31,8 +31,8 @@ namespace Xunit
         public static void IsExceptionWithMessage<T>(Exception exception, string message)
             where T : Exception
         {
-            IsType<T>(exception);
-            Equal(message, exception.Message);
+            Assert.IsType<T>(exception);
+            Assert.Equal(message, exception.Message);
         }
     }
 }

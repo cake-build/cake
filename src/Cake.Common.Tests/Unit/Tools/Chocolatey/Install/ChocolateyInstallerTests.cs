@@ -24,7 +24,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "packageId");
+                AssertEx.IsArgumentNullException(result, "packageId");
             }
 
             [Fact]
@@ -38,7 +38,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -52,7 +52,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "Chocolatey: Could not locate executable.");
+                AssertEx.IsCakeException(result, "Chocolatey: Could not locate executable.");
             }
 
             [Theory]
@@ -99,7 +99,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "Chocolatey: Process was not started.");
+                AssertEx.IsCakeException(result, "Chocolatey: Process was not started.");
             }
 
             [Fact]
@@ -113,7 +113,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "Chocolatey: Process returned an error (exit code 1).");
+                AssertEx.IsCakeException(result, "Chocolatey: Process returned an error (exit code 1).");
             }
 
             [Fact]
@@ -552,7 +552,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "packageConfigPath");
+                AssertEx.IsArgumentNullException(result, "packageConfigPath");
             }
 
             [Fact]
@@ -566,7 +566,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -580,7 +580,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "Chocolatey: Could not locate executable.");
+                AssertEx.IsCakeException(result, "Chocolatey: Could not locate executable.");
             }
 
             [Theory]
@@ -627,7 +627,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "Chocolatey: Process was not started.");
+                AssertEx.IsCakeException(result, "Chocolatey: Process was not started.");
             }
 
             [Fact]
@@ -641,7 +641,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Install
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "Chocolatey: Process returned an error (exit code 1).");
+                AssertEx.IsCakeException(result, "Chocolatey: Process returned an error (exit code 1).");
             }
 
             [Fact]

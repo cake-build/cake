@@ -22,7 +22,7 @@ namespace Cake.Common.Tests.Unit.Tools.NSIS
                 var result = Record.Exception(() => NSISAliases.MakeNSIS(null, "some file.nsi"));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -35,7 +35,7 @@ namespace Cake.Common.Tests.Unit.Tools.NSIS
                 var result = Record.Exception(() => NSISAliases.MakeNSIS(context, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "scriptFile");
+                AssertEx.IsArgumentNullException(result, "scriptFile");
             }
         }
     }

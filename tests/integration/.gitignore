@@ -1,6 +1,10 @@
 # Misc folders
 tools/
 temp/
+.dotnet/
+
+# Dotnet
+.dotnet
 
 # Windows
 Thumbs.db

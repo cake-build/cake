@@ -28,21 +28,27 @@ namespace Cake.Core.IO.Globbing
             }
         }
 
+        /// <summary>
+        /// Gets the next GlobToken from the context
+        /// </summary>
+        /// <returns>The Peek'd token</returns>
         public GlobToken Peek()
         {
             return _tokenizer.Peek();
         }
 
+        /// <summary>
+        /// Accepts the current GlobToken and loads the next into CurrentToken
+        /// </summary>
         public void Accept()
         {
             CurrentToken = _tokenizer.Scan();
         }
 
-        public void Accept(GlobTokenKind kind)
-        {
-            Accept(new[] { kind });
-        }
-
+        /// <summary>
+        /// Accepts the CurrentToken if it is of the specified TokenKind(s), and fetches the next token.
+        /// </summary>
+        /// <param name="kind">The types of acceptable <see cref="GlobTokenKind"/></param>
         public void Accept(params GlobTokenKind[] kind)
         {
             if (kind.Any(k => k == CurrentToken.Kind))
@@ -50,6 +56,7 @@ namespace Cake.Core.IO.Globbing
                 Accept();
                 return;
             }
+
             throw new InvalidOperationException("Unexpected token kind.");
         }
     }

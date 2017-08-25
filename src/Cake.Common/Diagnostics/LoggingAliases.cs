@@ -27,6 +27,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Error")]
         public static void Error(this ICakeContext context, string format, params object[] args)
         {
             if (context == null)
@@ -48,6 +49,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Error")]
         public static void Error(this ICakeContext context, LogAction logAction)
         {
             if (context == null)
@@ -55,6 +57,48 @@ namespace Cake.Common.Diagnostics
                 throw new ArgumentNullException(nameof(context));
             }
             context.Log.Error(logAction);
+        }
+
+        /// <summary>
+        /// Writes an error message to the log using the specified value.
+        /// </summary>
+        /// <param name="context">the context.</param>
+        /// <param name="value">The value.</param>
+        /// <example>
+        /// <code>
+        /// Error(new {FirstName = "John", LastName="Doe"});
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Error")]
+        public static void Error(this ICakeContext context, object value)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            context.Log.Error(value);
+        }
+
+        /// <summary>
+        /// Writes an error message to the log using the specified string value.
+        /// </summary>
+        /// <param name="context">the context.</param>
+        /// <param name="value">The value.</param>
+        /// <example>
+        /// <code>
+        /// Error("{string}");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Error")]
+        public static void Error(this ICakeContext context, string value)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            context.Log.Error(value);
         }
 
         /// <summary>
@@ -69,6 +113,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Warning")]
         public static void Warning(this ICakeContext context, string format, params object[] args)
         {
             if (context == null)
@@ -90,6 +135,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Warning")]
         public static void Warning(this ICakeContext context, LogAction logAction)
         {
             if (context == null)
@@ -97,6 +143,48 @@ namespace Cake.Common.Diagnostics
                 throw new ArgumentNullException(nameof(context));
             }
             context.Log.Warning(logAction);
+        }
+
+        /// <summary>
+        /// Writes an warning message to the log using the specified value.
+        /// </summary>
+        /// <param name="context">the context.</param>
+        /// <param name="value">The value.</param>
+        /// <example>
+        /// <code>
+        /// Warning(new {FirstName = "John", LastName="Doe"});
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Warning")]
+        public static void Warning(this ICakeContext context, object value)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            context.Log.Warning(value);
+        }
+
+        /// <summary>
+        /// Writes an warning message to the log using the specified string value.
+        /// </summary>
+        /// <param name="context">the context.</param>
+        /// <param name="value">The value.</param>
+        /// <example>
+        /// <code>
+        /// Warning("{string}");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Warning")]
+        public static void Warning(this ICakeContext context, string value)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            context.Log.Warning(value);
         }
 
         /// <summary>
@@ -111,6 +199,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Information")]
         public static void Information(this ICakeContext context, string format, params object[] args)
         {
             if (context == null)
@@ -132,6 +221,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Information")]
         public static void Information(this ICakeContext context, LogAction logAction)
         {
             if (context == null)
@@ -139,6 +229,48 @@ namespace Cake.Common.Diagnostics
                 throw new ArgumentNullException(nameof(context));
             }
             context.Log.Information(logAction);
+        }
+
+        /// <summary>
+        /// Writes an informational message to the log using the specified value.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="value">The value.</param>
+        /// <example>
+        /// <code>
+        /// Information(new {FirstName = "John", LastName="Doe"});
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Information")]
+        public static void Information(this ICakeContext context, object value)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            context.Log.Information(value);
+        }
+
+        /// <summary>
+        /// Writes an informational message to the log using the specified string value.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="value">The value.</param>
+        /// <example>
+        /// <code>
+        /// Information("{string}");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Information")]
+        public static void Information(this ICakeContext context, string value)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            context.Log.Information(value);
         }
 
         /// <summary>
@@ -153,6 +285,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Verbose")]
         public static void Verbose(this ICakeContext context, string format, params object[] args)
         {
             if (context == null)
@@ -174,6 +307,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Verbose")]
         public static void Verbose(this ICakeContext context, LogAction logAction)
         {
             if (context == null)
@@ -181,6 +315,48 @@ namespace Cake.Common.Diagnostics
                 throw new ArgumentNullException(nameof(context));
             }
             context.Log.Verbose(logAction);
+        }
+
+        /// <summary>
+        /// Writes a verbose message to the log using the specified value.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="value">The value.</param>
+        /// <example>
+        /// <code>
+        /// Verbose(new {FirstName = "John", LastName="Doe"});
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Verbose")]
+        public static void Verbose(this ICakeContext context, object value)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            context.Log.Verbose(value);
+        }
+
+        /// <summary>
+        /// Writes a verbose message to the log using the specified string value.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="value">The value.</param>
+        /// <example>
+        /// <code>
+        /// Verbose("{string}");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Verbose")]
+        public static void Verbose(this ICakeContext context, string value)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            context.Log.Verbose(value);
         }
 
         /// <summary>
@@ -195,6 +371,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Debug")]
         public static void Debug(this ICakeContext context, string format, params object[] args)
         {
             if (context == null)
@@ -216,6 +393,7 @@ namespace Cake.Common.Diagnostics
         /// </code>
         /// </example>
         [CakeMethodAlias]
+        [CakeAliasCategory("Debug")]
         public static void Debug(this ICakeContext context, LogAction logAction)
         {
             if (context == null)
@@ -223,6 +401,48 @@ namespace Cake.Common.Diagnostics
                 throw new ArgumentNullException(nameof(context));
             }
             context.Log.Debug(logAction);
+        }
+
+        /// <summary>
+        /// Writes a debug message to the log using the specified value.
+        /// </summary>
+        /// <param name="context">the context.</param>
+        /// <param name="value">The value.</param>
+        /// <example>
+        /// <code>
+        /// Debug(new {FirstName = "John", LastName="Doe"});
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Debug")]
+        public static void Debug(this ICakeContext context, object value)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            context.Log.Debug(value);
+        }
+
+        /// <summary>
+        /// Writes a debug message to the log using the specified string value.
+        /// </summary>
+        /// <param name="context">the context.</param>
+        /// <param name="value">The value.</param>
+        /// <example>
+        /// <code>
+        /// Debug("{string}");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Debug")]
+        public static void Debug(this ICakeContext context, string value)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            context.Log.Debug(value);
         }
     }
 }

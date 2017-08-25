@@ -9,7 +9,6 @@ using System.Linq;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
-using Cake.Core.Scripting.Analysis;
 using Cake.Core.Tooling;
 
 namespace Cake.Core.Scripting
@@ -65,16 +64,16 @@ namespace Cake.Core.Scripting
         /// <summary>
         /// Installs the addins.
         /// </summary>
-        /// <param name="analyzerResult">The analyzer result.</param>
+        /// <param name="addins">The addins to install.</param>
         /// <param name="installPath">The install path.</param>
         /// <returns>A list containing file paths to installed addin assemblies.</returns>
         public IReadOnlyList<FilePath> InstallAddins(
-            ScriptAnalyzerResult analyzerResult,
+            IReadOnlyCollection<PackageReference> addins,
             DirectoryPath installPath)
         {
-            if (analyzerResult == null)
+            if (addins == null)
             {
-                throw new ArgumentNullException(nameof(analyzerResult));
+                throw new ArgumentNullException(nameof(addins));
             }
             if (installPath == null)
             {
@@ -85,10 +84,10 @@ namespace Cake.Core.Scripting
             installPath = installPath.MakeAbsolute(_environment);
 
             var result = new HashSet<FilePath>(PathComparer.Default);
-            if (analyzerResult.Addins.Count > 0)
+            if (addins.Count > 0)
             {
                 _log.Verbose("Installing addins...");
-                foreach (var addin in analyzerResult.Addins)
+                foreach (var addin in addins)
                 {
                     // Get the installer.
                     var installer = GetInstaller(addin, PackageType.Addin);
@@ -119,17 +118,17 @@ namespace Cake.Core.Scripting
         }
 
         /// <summary>
-        /// Installs the tools specified in the build scripts.
+        /// Installs the tools.
         /// </summary>
-        /// <param name="analyzerResult">The analyzer result.</param>
+        /// <param name="tools">The tools to install.</param>
         /// <param name="installPath">The install path.</param>
         public void InstallTools(
-            ScriptAnalyzerResult analyzerResult,
+            IReadOnlyCollection<PackageReference> tools,
             DirectoryPath installPath)
         {
-            if (analyzerResult == null)
+            if (tools == null)
             {
-                throw new ArgumentNullException(nameof(analyzerResult));
+                throw new ArgumentNullException(nameof(tools));
             }
             if (installPath == null)
             {
@@ -139,10 +138,10 @@ namespace Cake.Core.Scripting
             // Make the installation root absolute.
             installPath = installPath.MakeAbsolute(_environment);
 
-            if (analyzerResult.Tools.Count > 0)
+            if (tools.Count > 0)
             {
                 _log.Verbose("Installing tools...");
-                foreach (var tool in analyzerResult.Tools)
+                foreach (var tool in tools)
                 {
                     // Get the installer.
                     var installer = GetInstaller(tool, PackageType.Tool);

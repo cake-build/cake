@@ -25,7 +25,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "outputFile");
+                AssertEx.IsArgumentNullException(result, "outputFile");
             }
 
             [Fact]
@@ -39,7 +39,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseNotes
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]

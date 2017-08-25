@@ -25,7 +25,7 @@ namespace Cake.Common.Tests.Unit.Text
                         TextTransformationAliases.TransformText(null, "Hello World"));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "context");
+                    AssertEx.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -39,7 +39,7 @@ namespace Cake.Common.Tests.Unit.Text
                         TextTransformationAliases.TransformText(context, null));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "template");
+                    AssertEx.IsArgumentNullException(result, "template");
                 }
 
                 [Fact]
@@ -81,7 +81,7 @@ namespace Cake.Common.Tests.Unit.Text
                         TextTransformationAliases.TransformText(null, "Hello World", "{", "}"));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "context");
+                    AssertEx.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -95,7 +95,7 @@ namespace Cake.Common.Tests.Unit.Text
                         TextTransformationAliases.TransformText(context, null, "{", "}"));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "template");
+                    AssertEx.IsArgumentNullException(result, "template");
                 }
 
                 [Fact]
@@ -109,7 +109,7 @@ namespace Cake.Common.Tests.Unit.Text
                         TextTransformationAliases.TransformText(context, null, null, "}"));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "leftPlaceholder");
+                    AssertEx.IsArgumentNullException(result, "leftPlaceholder");
                 }
 
                 [Fact]
@@ -123,7 +123,7 @@ namespace Cake.Common.Tests.Unit.Text
                         TextTransformationAliases.TransformText(context, null, "{", null));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "rightPlaceholder");
+                    AssertEx.IsArgumentNullException(result, "rightPlaceholder");
                 }
 
                 [Fact]
@@ -169,7 +169,7 @@ namespace Cake.Common.Tests.Unit.Text
                             null, new FilePath("./template.txt")));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "context");
+                    AssertEx.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -184,7 +184,7 @@ namespace Cake.Common.Tests.Unit.Text
                             context, null));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "path");
+                    AssertEx.IsArgumentNullException(result, "path");
                 }
 
                 [Fact]
@@ -241,7 +241,7 @@ namespace Cake.Common.Tests.Unit.Text
                             null, new FilePath("./template.txt"), "{", "}"));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "context");
+                    AssertEx.IsArgumentNullException(result, "context");
                 }
 
                 [Fact]
@@ -256,7 +256,7 @@ namespace Cake.Common.Tests.Unit.Text
                             context, null, "{", "}"));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "path");
+                    AssertEx.IsArgumentNullException(result, "path");
                 }
 
                 [Fact]
@@ -271,7 +271,7 @@ namespace Cake.Common.Tests.Unit.Text
                             context, new FilePath("./template.txt"), null, "}"));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "leftPlaceholder");
+                    AssertEx.IsArgumentNullException(result, "leftPlaceholder");
                 }
 
                 [Fact]
@@ -286,7 +286,7 @@ namespace Cake.Common.Tests.Unit.Text
                             context, new FilePath("./template.txt"), "{", null));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "rightPlaceholder");
+                    AssertEx.IsArgumentNullException(result, "rightPlaceholder");
                 }
 
                 [Fact]

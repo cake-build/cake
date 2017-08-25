@@ -22,7 +22,7 @@ namespace Cake.Common.Tools.GitVersion
     public static class GitVersionAliases
     {
         /// <summary>
-        /// Retrives the GitVersion output.
+        /// Retrieves the GitVersion output.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns>The git version info.</returns>
@@ -71,7 +71,7 @@ namespace Cake.Common.Tools.GitVersion
         }
 
         /// <summary>
-        /// Retrives the GitVersion output.
+        /// Retrieves the GitVersion output.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="settings">The GitVersion settings.</param>

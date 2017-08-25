@@ -17,7 +17,7 @@ namespace Cake.Common.Tools.XUnit
     /// In order to use the commands for this alias, include the following in your build.cake file to download and
     /// install from NuGet.org, or specify the ToolPath within the <see cref="XUnitSettings" /> class:
     /// <code>
-    /// #tool "nuget:?package=xunit.runners&amp;version=1.9.2"
+    /// #tool "nuget:?package=xunit.runner.console&amp;version=2.2.0"
     /// </code>
     /// </para>
     /// </summary>

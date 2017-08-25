@@ -26,7 +26,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
                 var result = Record.Exception(() => MethodAliasGenerator.Generate(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "method");
+                AssertEx.IsArgumentNullException(result, "method");
             }
 
             [Theory]
@@ -51,6 +51,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             [InlineData("NonGeneric_ExtensionMethodWithOptionalNullableDecimalParameter")]
             [InlineData("NonGeneric_ExtensionMethodWithOptionalNullableLongParameter")]
             [InlineData("NonGeneric_ExtensionMethodWithOptionalNullableDoubleParameter")]
+            [InlineData("NonGeneric_ExtensionMethodWithReservedKeywordParameter")]
             public void Should_Return_Correct_Generated_Code_For_Non_Generic_Methods(string name)
             {
                 // Given
@@ -67,6 +68,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             [InlineData("Generic_ExtensionMethod")]
             [InlineData("Generic_ExtensionMethodWithParameter")]
             [InlineData("Generic_ExtensionMethodWithGenericReturnValue")]
+            [InlineData("Generic_ExtensionMethodWithGenericReturnValueAndTypeParamConstraints")]
             public void Should_Return_Correct_Generated_Code_For_Generic_Methods(string name)
             {
                 // Given

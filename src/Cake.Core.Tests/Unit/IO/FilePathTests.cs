@@ -99,7 +99,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => path.AppendExtension(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "extension");
+                AssertEx.IsArgumentNullException(result, "extension");
             }
 
             [Theory]
@@ -166,7 +166,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var result = Record.Exception(() => path.MakeAbsolute((ICakeEnvironment)null));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "environment");
+                    AssertEx.IsArgumentNullException(result, "environment");
                 }
 
                 [Fact]
@@ -212,7 +212,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var result = Record.Exception(() => path.MakeAbsolute((DirectoryPath)null));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "path");
+                    AssertEx.IsArgumentNullException(result, "path");
                 }
 
                 [Fact]
@@ -312,7 +312,7 @@ namespace Cake.Core.Tests.Unit.IO
                         var result = Record.Exception(() => path.GetRelativePath((DirectoryPath)null));
 
                         // Then
-                        Assert.IsArgumentNullException(result, "to");
+                        AssertEx.IsArgumentNullException(result, "to");
                     }
 
                     [WindowsFact]
@@ -392,7 +392,7 @@ namespace Cake.Core.Tests.Unit.IO
                         var result = Record.Exception(() => path.GetRelativePath((DirectoryPath)null));
 
                         // Then
-                        Assert.IsArgumentNullException(result, "to");
+                        AssertEx.IsArgumentNullException(result, "to");
                     }
 
                     [Fact]
@@ -476,7 +476,7 @@ namespace Cake.Core.Tests.Unit.IO
                         var result = Record.Exception(() => path.GetRelativePath((FilePath)null));
 
                         // Then
-                        Assert.IsArgumentNullException(result, "to");
+                        AssertEx.IsArgumentNullException(result, "to");
                     }
 
                     [WindowsFact]
@@ -557,7 +557,7 @@ namespace Cake.Core.Tests.Unit.IO
                         var result = Record.Exception(() => path.GetRelativePath((FilePath)null));
 
                         // Then
-                        Assert.IsArgumentNullException(result, "to");
+                        AssertEx.IsArgumentNullException(result, "to");
                     }
 
                     [Fact]

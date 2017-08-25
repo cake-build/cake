@@ -5,7 +5,10 @@
 using System;
 using System.Reflection;
 using Cake.Core.IO;
+
+#if NETCORE
 using Cake.Core.Reflection;
+#endif
 
 namespace Cake.Core.Polyfill
 {
@@ -20,7 +23,16 @@ namespace Cake.Core.Polyfill
 #endif
         }
 
-        public static Assembly LoadAssembly(IFileSystem fileSystem, FilePath path)
+        public static Assembly LoadAssembly(AssemblyName assemblyName)
+        {
+            if (assemblyName == null)
+            {
+                throw new ArgumentNullException(nameof(assemblyName));
+            }
+            return Assembly.Load(assemblyName);
+        }
+
+        public static Assembly LoadAssembly(ICakeEnvironment environment, IFileSystem fileSystem, FilePath path)
         {
 #if NETCORE
             if (path == null)
@@ -33,6 +45,9 @@ namespace Cake.Core.Polyfill
                 // Not a valid path. Try loading it by its name.
                 return Assembly.Load(new AssemblyName(path.FullPath));
             }
+
+            // Make the path absolute.
+            path = path.MakeAbsolute(environment);
 
             var loader = new CakeAssemblyLoadContext(fileSystem, path.GetDirectory());
             return loader.LoadFromAssemblyPath(path.FullPath);

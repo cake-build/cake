@@ -14,6 +14,10 @@ namespace Cake.Core.Polyfill
 {
     internal class EnvironmentHelper
     {
+#if !NETCORE
+        private static bool? _isRunningOnMac;
+#endif
+
         public static bool Is64BitOperativeSystem()
         {
 #if NETCORE
@@ -41,17 +45,21 @@ namespace Cake.Core.Polyfill
             }
 #else
             var platform = (int)Environment.OSVersion.Platform;
-            if (platform == (int)PlatformID.MacOSX)
+            if (platform <= 3 || platform == 5)
+            {
+                return PlatformFamily.Windows;
+            }
+            if (!_isRunningOnMac.HasValue)
+            {
+                _isRunningOnMac = Native.MacOSX.IsRunningOnMac();
+            }
+            if (_isRunningOnMac ?? false || platform == (int)PlatformID.MacOSX)
             {
                 return PlatformFamily.OSX;
             }
             if (platform == 4 || platform == 6 || platform == 128)
             {
                 return PlatformFamily.Linux;
-            }
-            if (platform <= 3 || platform == 5)
-            {
-                return PlatformFamily.Windows;
             }
 #endif
             return PlatformFamily.Unknown;
@@ -82,7 +90,7 @@ namespace Cake.Core.Polyfill
 #if NETCORE
             return new FrameworkName(".NETStandard,Version=v1.6");
 #else
-            return new FrameworkName(".NETFramework,Version=v4.5");
+            return new FrameworkName(".NETFramework,Version=v4.6");
 #endif
         }
     }

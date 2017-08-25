@@ -24,7 +24,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Merge
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "sourceFiles");
+                AssertEx.IsArgumentNullException(result, "sourceFiles");
             }
 
             [Fact]
@@ -38,7 +38,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Merge
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "sourceFiles");
+                AssertEx.IsArgumentNullException(result, "sourceFiles");
             }
 
             [Fact]
@@ -52,7 +52,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Merge
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "outputFile");
+                AssertEx.IsArgumentNullException(result, "outputFile");
             }
 
             [Fact]
@@ -66,7 +66,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Merge
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]

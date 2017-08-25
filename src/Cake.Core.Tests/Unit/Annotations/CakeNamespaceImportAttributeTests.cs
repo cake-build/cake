@@ -20,7 +20,7 @@ namespace Cake.Core.Tests.Unit.Annotations
                 var result = Record.Exception(() => new CakeNamespaceImportAttribute(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "namespace");
+                AssertEx.IsArgumentNullException(result, "namespace");
             }
         }
 

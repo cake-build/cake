@@ -26,13 +26,16 @@ namespace Cake.NuGet
                 throw new ArgumentNullException(nameof(registrar));
             }
 
-#if NETCORE
-            // NuGet V3
-            registrar.RegisterType<V3.NuGetV3ContentResolver>().As<INuGetContentResolver>().Singleton();
-#else
-            // NuGet V2
-            registrar.RegisterType<V2.NuGetV2ContentResolver>().As<INuGetContentResolver>().Singleton();
-            registrar.RegisterType<NuGetLoadDirectiveProvider>().As<ILoadDirectiveProvider>().Singleton();
+            // NuGet content resolver.
+            registrar.RegisterType<NuGetContentResolver>()
+                .As<INuGetContentResolver>()
+                .Singleton();
+
+#if !NETCORE
+            // Load directive not available for .NET Core
+            registrar.RegisterType<NuGetLoadDirectiveProvider>()
+                .As<ILoadDirectiveProvider>()
+                .Singleton();
 #endif
 
             // URI resource support.

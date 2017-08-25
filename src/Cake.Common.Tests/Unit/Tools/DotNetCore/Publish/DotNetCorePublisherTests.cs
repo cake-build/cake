@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Tools.DotNetCore.Publish;
+using Cake.Common.Tools.DotNetCore;
 using Cake.Testing;
 using Xunit;
 
@@ -24,7 +25,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Publish
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -38,7 +39,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Publish
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, ".NET Core CLI: Process was not started.");
+                AssertEx.IsCakeException(result, ".NET Core CLI: Process was not started.");
             }
 
             [Fact]
@@ -52,7 +53,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Publish
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, ".NET Core CLI: Process returned an error (exit code 1).");
+                AssertEx.IsCakeException(result, ".NET Core CLI: Process returned an error (exit code 1).");
             }
 
             [Fact]
@@ -107,17 +108,29 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Publish
                 fixture.Settings.Framework = "dnxcore50";
                 fixture.Settings.Configuration = "Release";
                 fixture.Settings.Runtime = "runtime1";
-                fixture.Settings.BuildBasePath = "./temp/";
                 fixture.Settings.OutputDirectory = "./artifacts/";
-                fixture.Settings.NoBuild = true;
-                fixture.Settings.NativeSubDirectory = true;
                 fixture.Settings.VersionSuffix = "rc1";
+                fixture.Settings.Verbosity = DotNetCoreVerbosity.Minimal;
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("publish --output \"/Working/artifacts\" --build-base-path \"/Working/temp\" --runtime runtime1 --framework dnxcore50 --configuration Release --version-suffix rc1 --native-subdirectory --no-build", result.Args);
+                Assert.Equal("publish --output \"/Working/artifacts\" --runtime runtime1 --framework dnxcore50 --configuration Release --version-suffix rc1 --verbosity Minimal", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Host_Arguments()
+            {
+                // Given
+                var fixture = new DotNetCorePublisherFixture();
+                fixture.Settings.DiagnosticOutput = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("--diagnostics publish", result.Args);
             }
         }
     }

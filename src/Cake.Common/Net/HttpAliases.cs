@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -122,7 +123,8 @@ namespace Cake.Common.Net
         /// </summary>
         /// <example>
         /// <code>
-        /// DownloadFile("http://www.example.org/index.html", "./outputdir");
+        /// var outputPath = File("./index.html");
+        /// DownloadFile("http://www.example.org/index.html", outputPath);
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
@@ -140,7 +142,8 @@ namespace Cake.Common.Net
         /// </summary>
         /// <example>
         /// <code>
-        /// DownloadFile("http://www.example.org/index.html", "./outputdir", new DownloadFileSettings()
+        /// var outputPath = File("./index.html");
+        /// DownloadFile("http://www.example.org/index.html", outputPath, new DownloadFileSettings()
         /// {
         ///     Username = "bob",
         ///     Password = "builder"
@@ -164,7 +167,8 @@ namespace Cake.Common.Net
         /// <example>
         /// <code>
         /// var address = new Uri("http://www.example.org/index.html");
-        /// DownloadFile(address, "./outputdir", new DownloadFileSettings()
+        /// var outputPath = File("./index.html");
+        /// DownloadFile(address, outputPath, new DownloadFileSettings()
         /// {
         ///     Username = "bob",
         ///     Password = "builder"
@@ -348,7 +352,12 @@ namespace Cake.Common.Net
         /// <returns>A <see cref="HttpClient"/> instance.</returns>
         private static HttpClient GetHttpClient(ICakeContext context, bool useDefaultCredentials)
         {
-            var client = useDefaultCredentials ? new HttpClient(new HttpClientHandler { UseDefaultCredentials = true }) : new HttpClient();
+            var clientHandler = new HttpClientHandler
+            {
+                UseDefaultCredentials = useDefaultCredentials,
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
+            var client = new HttpClient(clientHandler);
             client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Cake", context.Environment.Runtime.CakeVersion.ToString()));
             return client;
         }

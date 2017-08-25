@@ -24,7 +24,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => fixture.CreateEngine());
 
                 // Then
-                Assert.IsArgumentNullException(result, "log");
+                AssertEx.IsArgumentNullException(result, "log");
             }
         }
 
@@ -104,7 +104,7 @@ namespace Cake.Core.Tests.Unit
                         engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, null));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "target");
+                    AssertEx.IsArgumentNullException(result, "target");
                 }
             }
 
@@ -122,7 +122,7 @@ namespace Cake.Core.Tests.Unit
                         engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, null));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "target");
+                    AssertEx.IsArgumentNullException(result, "target");
                 }
 
                 [Fact]
@@ -136,7 +136,7 @@ namespace Cake.Core.Tests.Unit
                     var result = Record.Exception(() => engine.RunTarget(fixture.Context, null, "A"));
 
                     // Then
-                    Assert.IsArgumentNullException(result, "strategy");
+                    AssertEx.IsArgumentNullException(result, "strategy");
                 }
             }
 

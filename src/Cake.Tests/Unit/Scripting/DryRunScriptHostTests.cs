@@ -25,7 +25,7 @@ namespace Cake.Tests.Unit.Scripting
                 var result = Record.Exception(() => new DryRunScriptHost(null, context, log));
 
                 // Then
-                Assert.IsArgumentNullException(result, "engine");
+                AssertEx.IsArgumentNullException(result, "engine");
             }
 
             [Fact]
@@ -39,7 +39,7 @@ namespace Cake.Tests.Unit.Scripting
                 var result = Record.Exception(() => new DryRunScriptHost(engine, null, log));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -53,7 +53,7 @@ namespace Cake.Tests.Unit.Scripting
                 var result = Record.Exception(() => new DryRunScriptHost(engine, context, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "log");
+                AssertEx.IsArgumentNullException(result, "log");
             }
         }
 

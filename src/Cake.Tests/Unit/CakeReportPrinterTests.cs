@@ -27,7 +27,7 @@ namespace Cake.Tests.Unit
                 var result = Record.Exception(() => printer.Write(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "report");
+                AssertEx.IsArgumentNullException(result, "report");
             }
 
             [Fact]

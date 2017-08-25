@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Cake.NuGet</AssemblyName>
+    <TargetFrameworks>net46;netstandard1.6</TargetFrameworks>
+    <OutputType>Library</OutputType>
+    <PlatformTarget>AnyCpu</PlatformTarget>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <!-- Package specific metadata -->
+  <PropertyGroup>
+    <Description>Cake Module providing NuGet install capabilities for i.e. preprocessor directives like #addin, #tool and #load</Description>
+  </PropertyGroup>
+
+  <!-- Import shared functionality -->
+  <Import Project="..\Shared.msbuild" />
+
+  <!-- Project references -->
+  <ItemGroup>
+    <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
+  </ItemGroup>
+
+  <!-- Global packages -->
+  <ItemGroup>
+    <PackageReference Include="NuGet.Client" Version="4.0.0" />
+  </ItemGroup>
+
+  <!-- .NET Framework packages -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+</Project>

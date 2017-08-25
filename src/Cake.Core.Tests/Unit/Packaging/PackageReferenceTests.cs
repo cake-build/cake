@@ -19,7 +19,7 @@ namespace Cake.Core.Tests.Unit.Packaging
                 var result = Record.Exception(() => new PackageReference("nuget:?version=1.2.3"));
 
                 // Then
-                Assert.IsArgumentException(result, "uri", "Query string parameter 'package' is missing in package reference.");
+                AssertEx.IsArgumentException(result, "uri", "Query string parameter 'package' is missing in package reference.");
             }
         }
 

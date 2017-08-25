@@ -19,7 +19,7 @@ namespace Cake.Common.Tests.Unit.Build.ContinuaCI
                 var result = Record.Exception(() => new ContinuaCIProvider(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
         }
 

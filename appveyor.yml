@@ -18,7 +18,9 @@ branches:
     - /r/.*/
     - /release/.*/
     - /hotfix/.*/
+    - /feature/.*/
 
 # Build cache
 cache:
 - tools -> build.cake
+- packages -> build.cake

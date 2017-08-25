@@ -47,8 +47,8 @@ public class BuildVersion
 
         if (string.IsNullOrEmpty(version) || string.IsNullOrEmpty(semVersion))
         {
-            context.Information("Fetching verson from first project.json...");
-            version = ReadProjectJsonVersion(context);
+            context.Information("Fetching verson from first SolutionInfo...");
+            version = ReadSolutionInfoVersion(context);
             semVersion = version;
             milestone = string.Concat("v", version);
         }
@@ -65,32 +65,13 @@ public class BuildVersion
         };
     }
 
-    public static string ReadProjectJsonVersion(ICakeContext context)
+    public static string ReadSolutionInfoVersion(ICakeContext context)
     {
-        var projects = context.GetFiles("./**/project.json");
-        foreach(var project in projects)
+        var solutionInfo = context.ParseAssemblyInfo("./src/SolutionInfo.cs");
+        if (!string.IsNullOrEmpty(solutionInfo.AssemblyVersion))
         {
-            var content = System.IO.File.ReadAllText(project.FullPath, Encoding.UTF8);
-            var node = Newtonsoft.Json.Linq.JObject.Parse(content);
-            if(node["version"] != null)
-            {
-                var version = node["version"].ToString();
-                return version.Replace("-*", "");
-            }
+            return solutionInfo.AssemblyVersion;
         }
         throw new CakeException("Could not parse version.");
-    }
-
-    public bool PatchProjectJson(FilePath project)
-    {
-        var content = System.IO.File.ReadAllText(project.FullPath, Encoding.UTF8);
-        var node = Newtonsoft.Json.Linq.JObject.Parse(content);
-        if(node["version"] != null)
-        {
-            node["version"].Replace(string.Concat(Version, "-*"));
-            System.IO.File.WriteAllText(project.FullPath, node.ToString(), Encoding.UTF8);
-            return true;
-        };
-        return false;
     }
 }

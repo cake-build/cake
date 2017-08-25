@@ -28,7 +28,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "assemblyPaths");
+                AssertEx.IsArgumentNullException(result, "assemblyPaths");
             }
 
             [Fact]
@@ -90,6 +90,20 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
 
                 // Then
                 Assert.Equal("/Working/tools/nunit-console.exe", result.Path.FullPath);
+            }
+
+            [Fact]
+            public void Should_Find_X86NUnit_Runner_If_Tool_Path_Not_Provided()
+            {
+                // Given
+                var fixture = new NUnitRunnerFixture(@"nunit-console-x86.exe");
+                fixture.Settings.X86 = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/Working/tools/nunit-console-x86.exe", result.Path.FullPath);
             }
 
             [Fact]

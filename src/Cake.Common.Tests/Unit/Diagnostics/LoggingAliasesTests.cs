@@ -44,6 +44,36 @@ namespace Cake.Common.Tests.Unit.Diagnostics
                 fixture.Context.Log.Received(1).Write(Verbosity.Quiet, LogLevel.Error, fixture.Format, fixture.Args);
                 Assert.True(fixture.Evaluated);
             }
+
+            [Fact]
+            public void Should_Write_Error_String_Value_To_Log()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                context.Log.Returns(Substitute.For<ICakeLog>());
+                const string value = "Hello {0}";
+
+                // When
+                context.Error(value);
+
+                // Then
+                context.Log.Received(1).Write(Verbosity.Quiet, LogLevel.Error, "{0}", value);
+            }
+
+            [Fact]
+            public void Should_Write_Error_Object_Value_To_Log()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                context.Log.Returns(Substitute.For<ICakeLog>());
+                var value = new { FirstName = "John", LastName="Doe" };
+
+                // When
+                context.Error(value);
+
+                // Then
+                context.Log.Received(1).Write(Verbosity.Quiet, LogLevel.Error, "{0}", value);
+            }
         }
 
         public sealed class TheWarningMethod
@@ -90,6 +120,36 @@ namespace Cake.Common.Tests.Unit.Diagnostics
                 // Then
                 fixture.Context.Log.DidNotReceive().Write(Verbosity.Minimal, LogLevel.Warning, fixture.Format, fixture.Args);
                 Assert.False(fixture.Evaluated);
+            }
+
+            [Fact]
+            public void Should_Write_Warning_String_Value_To_Log()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                context.Log.Returns(Substitute.For<ICakeLog>());
+                const string value = "Hello {0}";
+
+                // When
+                context.Warning(value);
+
+                // Then
+                context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", value);
+            }
+
+            [Fact]
+            public void Should_Write_Warning_Object_Value_To_Log()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                context.Log.Returns(Substitute.For<ICakeLog>());
+                var value = new { FirstName = "John", LastName="Doe" };
+
+                // When
+                context.Warning(value);
+
+                // Then
+                context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", value);
             }
         }
 
@@ -138,6 +198,36 @@ namespace Cake.Common.Tests.Unit.Diagnostics
                 fixture.Context.Log.DidNotReceive().Write(Verbosity.Normal, LogLevel.Information, fixture.Format, fixture.Args);
                 Assert.False(fixture.Evaluated);
             }
+
+            [Fact]
+            public void Should_Write_Information_String_Value_To_Log()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                context.Log.Returns(Substitute.For<ICakeLog>());
+                const string value = "Hello {0}";
+
+                // When
+                context.Information(value);
+
+                // Then
+                context.Log.Received(1).Write(Verbosity.Normal, LogLevel.Information, "{0}", value);
+            }
+
+            [Fact]
+            public void Should_Write_Information_Object_Value_To_Log()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                context.Log.Returns(Substitute.For<ICakeLog>());
+                var value = new { FirstName = "John", LastName="Doe" };
+
+                // When
+                context.Information(value);
+
+                // Then
+                context.Log.Received(1).Write(Verbosity.Normal, LogLevel.Information, "{0}", value);
+            }
         }
 
         public sealed class TheVerboseMethod
@@ -185,6 +275,36 @@ namespace Cake.Common.Tests.Unit.Diagnostics
                 fixture.Context.Log.DidNotReceive().Write(Verbosity.Verbose, LogLevel.Verbose, fixture.Format, fixture.Args);
                 Assert.False(fixture.Evaluated);
             }
+
+            [Fact]
+            public void Should_Write_Verbose_String_Value_To_Log()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                context.Log.Returns(Substitute.For<ICakeLog>());
+                const string value = "Hello {0}";
+
+                // When
+                context.Verbose(value);
+
+                // Then
+                context.Log.Received(1).Write(Verbosity.Verbose, LogLevel.Verbose, "{0}", value);
+            }
+
+            [Fact]
+            public void Should_Write_Verbose_Object_Value_To_Log()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                context.Log.Returns(Substitute.For<ICakeLog>());
+                var value = new { FirstName = "John", LastName="Doe" };
+
+                // When
+                context.Verbose(value);
+
+                // Then
+                context.Log.Received(1).Write(Verbosity.Verbose, LogLevel.Verbose, "{0}", value);
+            }
         }
 
         public sealed class TheDebugMethod
@@ -231,6 +351,36 @@ namespace Cake.Common.Tests.Unit.Diagnostics
                 // Then
                 fixture.Context.Log.DidNotReceive().Write(Verbosity.Diagnostic, LogLevel.Debug, fixture.Format, fixture.Args);
                 Assert.False(fixture.Evaluated);
+            }
+
+            [Fact]
+            public void Should_Write_Debug_String_Value_To_Log()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                context.Log.Returns(Substitute.For<ICakeLog>());
+                const string value = "Hello {0}";
+
+                // When
+                context.Debug(value);
+
+                // Then
+                context.Log.Received(1).Write(Verbosity.Diagnostic, LogLevel.Debug, "{0}", value);
+            }
+
+            [Fact]
+            public void Should_Write_Debug_Object_Value_To_Log()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                context.Log.Returns(Substitute.For<ICakeLog>());
+                var value = new { FirstName = "John", LastName="Doe" };
+
+                // When
+                context.Debug(value);
+
+                // Then
+                context.Log.Received(1).Write(Verbosity.Diagnostic, LogLevel.Debug, "{0}", value);
             }
         }
     }

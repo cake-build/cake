@@ -1,3 +1,129 @@
+### New on 0.21.1 (Released 2017/07/15)
+
+* 1685 Add DotNetCoreTool alias overload that takes DotNetCoreToolSettings parameter
+* 1686 AssemblyLoadContext root path is relative
+
+### New on 0.21.0 (Released 2017/07/14)
+
+* 1533 Update DotNetCore Aliases to match tooling 1.0
+* 1554 Updated DotNetCoreTest inline with Tooling v1.0
+* 1553 Updated DotNetCorePack inline with Tooling v1.0
+* 1552 Updated DotNetCorePublish inline with Tooling v1.0
+* 1551 Updated DotNetCoreExecute inline with Tooling v1.0
+* 1550 Updated DotNetCoreBuild inline with Tooling v1.0
+* 1534 Updated DotNetCoreRestore inline with Tooling v1.0
+* 1599 Added support for dotnet msbuild inline with Tooling v1.0
+* 1591 Add support for choco download
+* 1581 Added support for dotnet nuget push inline with Tooling v1.0
+* 1577 .NET Core CLI tools - Surfacing additional commands with a new alias: DotNetCoreTool
+* 1565 Added support for dotnet nuget delete inline with Tooling v1.0
+* 1555 Added support for dotnet clean inline with Tooling v1.0
+* 1549 Common changes for DotNetCore Alias
+* 1679 Cake on dotnet core doesn't load reference dll correctly if referenced from a subdirectory
+* 1673 The xunit.runners package was deprecated
+* 1654 Broken Documentation link for ReportUnit
+
+### New on 0.20.0 (Released 2017/06/12)
+
+* 1539 Update solution to Visual Studio 2017
+* 1640 Fetch version from solutioninfo & remove newtonsoft dependency
+* 1638 Unix Integration tests fail post new SDK
+* 1635 Non Nuspec assemblies not packaged after VS2017 upgrade
+* 1603 Push Cake.NuGet to MyGet/NuGet
+* 1538 Update DotNetInstallerUri to https://dot.net/v1/dotnet-install.ps1
+* 1620 Improve documentation for RedirectStandardError and RedirectStandardOutput
+* 1613 Added documentation link to NUnit3Settings.Where
+* 1605 Fix the contribution-guidelines link again
+* 1604 Fix the contribution guidelines link in the README
+* 1595 Add Alistair and Martin names to all required places
+
+### New on 0.19.5 (Released 2017/05/04)
+
+* 1587 Arguments missing for Octopus Deploy tool
+
+### New on 0.19.4 (Released 2017/04/19)
+
+* 1556 TeamCity BuildNumber is a string
+* 1566 Generic alias methods with type constraints fail compilation
+
+### New on 0.19.3 (Released 2017/04/03)
+
+* 1544 Windows 10 SDK path is not being resolved
+
+### New on 0.19.2 (Released 2017/04/01)
+
+* 1546 MSBuild Logger Path are not correctly quoted
+
+### New on 0.19.1 (Released 2017/03/24)
+
+* 1543 VSWhere aliases should return Directory Paths and not File Paths
+
+### New on 0.19.0 (Released 2017/03/23)
+
+* Add VSWhere support
+* Error: SignTool SIGN: Password is required with Certificate path but not specified.
+* MSBuild on Mac/Linux
+* Categorize logging aliases by level
+
+### New on 0.18.0 (Released 2017/03/07)
+
+* Remove obsoleted DNU aliases
+* WiXHeat misleading signature- no mode operates on file list
+* Add "build tools" path for MSBuild 2017 to MSBuildResolver
+* Add ChocolateyNew Alias
+* Add support for NuGet Init and Add commands
+* NUnitSettings does not have X86 property
+* Enhance TeamCity provider
+* Support for TF Build Commands
+* Provide ability to add Custom attributes when creating AssemblyInfo
+* Support for uninstall packages using Chocolatey
+* Provide ability to specify name for xunit report
+* MSBuild support for Visual Studio 2017 (aka "15")
+* Add support for importing namespaces at the assembly level
+* Add DotCover Merge
+* Proposal: Allow modules to listen for script lifecycle events
+* Support optional parameters on alias methods
+* Support downloadable .cake script directive
+* Extending the Sign command
+* Fix ParseAssemblyInfo does not work .vb
+* Duplicate depedencies references in project.json for Cake.Testing.XUnit
+* Cake.Testing package depends on xunit.core package
+* Optional parameter codegen not invariant
+* XBuildRunner#GetToolExecutableNames returning wrong executables
+* Space in Reference Preprocessor Directive Throws Illegal characters in path
+* Spaces in #load path will cause an Illegal characters in path error.
+* Add CakeNamespaceImport for BuildSystem Aliases
+* HeatSettings.OutputGroup is unusable
+* OctoPack not passing --format to octo.exe
+* Error: Unknown Token when directory contains @ character.
+* Using reserved name for parameter name causes a parser failure
+* signtool.exe should be called only once when signing multiple files
+* Missing MSBuild15 on enum NuGetMSBuildVersion for VS 2017
+* Add ChocoPush alias for an IEnumerable<FilePath>
+* Add ChocoPack alias for an IEnumerable<FilePath>
+* Usage of -NoCache on installing tools and addins
+* Mac OSX is not properly detected when running on Mono
+* NuGet Tool Locator system paths on mac need updating
+* Logging throws exception when there are curly braces in the string
+* CopyDirectory - Missing Log information
+* Teach XmlPeek to silence warnings, if needed
+* Http call in unit test
+* Add optional Go.CD Server URL Parameter to GetHistory
+* Add RedirectStandardError to ProcessRunner
+* Cake's default tools / addins / modules paths are not so default as they seem.
+* ArgumentException with illegal character information
+* Add mechanism to validate addins
+* Support XUnit's x86 .exe runner
+* Add Gitter and Twitter Notifications
+* DownloadFile typo in docs
+* Typo in SignTool docs
+* Fix typos in GitVersion documentation
+* Correct issue with GitLink Alias Category
+* Fix commented example for DotNetCoreTest
+* Fix doc comments in InnoSetupAliases
+* Fix typo in comment
+* Fixed Spelling Mistake.
+
 ### New on 0.17.0 (Released 2016/11/09)
 
 * Allow custom loggers in the VSTestSettings

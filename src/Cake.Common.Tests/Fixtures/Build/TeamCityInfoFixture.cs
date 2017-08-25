@@ -17,7 +17,7 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment = Substitute.For<ICakeEnvironment>();
 
             Environment.GetEnvironmentVariable("TEAMCITY_BUILDCONF_NAME").Returns(@"Cake Build");
-            Environment.GetEnvironmentVariable("BUILD_NUMBER").Returns("10");
+            Environment.GetEnvironmentVariable("BUILD_NUMBER").Returns("10-Foo");
 
             Environment.GetEnvironmentVariable("TEAMCITY_PROJECT_NAME").Returns("Cake");
 

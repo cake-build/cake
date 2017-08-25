@@ -14,7 +14,7 @@ public class BuildParameters
     public bool IsPullRequest { get; private set; }
     public bool IsMainCakeRepo { get; private set; }
     public bool IsMainCakeBranch { get; private set; }
-    public bool IsCoreClrBranch { get; private set; }
+    public bool IsDevelopCakeBranch { get; private set; }
     public bool IsTagged { get; private set; }
     public bool IsPublishBuild { get; private set; }
     public bool IsReleaseBuild { get; private set; }
@@ -43,8 +43,8 @@ public class BuildParameters
     {
         get
         {
-            return !IsLocalBuild && !IsPullRequest && !IsCoreClrBranch
-                && IsMainCakeRepo && (IsTagged || !IsMainCakeBranch);
+            return !IsLocalBuild && !IsPullRequest && IsMainCakeRepo
+                && (IsTagged || IsDevelopCakeBranch);
         }
     }
 
@@ -76,7 +76,7 @@ public class BuildParameters
         Packages = BuildPackages.GetPackages(
             Paths.Directories.NugetRoot,
             Version.SemVersion,
-            new [] { "Cake", "Cake.Core", "Cake.Common", "Cake.Testing", "Cake.CoreCLR" },
+            new [] { "Cake", "Cake.Core", "Cake.Common", "Cake.Testing", "Cake.CoreCLR", "Cake.NuGet" },
             new [] { "cake.portable" });
     }
 
@@ -100,7 +100,7 @@ public class BuildParameters
             IsPullRequest = buildSystem.AppVeyor.Environment.PullRequest.IsPullRequest,
             IsMainCakeRepo = StringComparer.OrdinalIgnoreCase.Equals("cake-build/cake", buildSystem.AppVeyor.Environment.Repository.Name),
             IsMainCakeBranch = StringComparer.OrdinalIgnoreCase.Equals("main", buildSystem.AppVeyor.Environment.Repository.Branch),
-            IsCoreClrBranch = StringComparer.OrdinalIgnoreCase.Equals("coreclr", buildSystem.AppVeyor.Environment.Repository.Branch),
+            IsDevelopCakeBranch = StringComparer.OrdinalIgnoreCase.Equals("develop", buildSystem.AppVeyor.Environment.Repository.Branch),
             IsTagged = IsBuildTagged(buildSystem),
             GitHub = BuildCredentials.GetGitHubCredentials(context),
             Coveralls = CoverallsCredentials.GetCoverallsCredentials(context),
@@ -111,7 +111,7 @@ public class BuildParameters
             IsReleaseBuild = IsReleasing(target),
             SkipSigning = StringComparer.OrdinalIgnoreCase.Equals("True", context.Argument("skipsigning", "False")),
             SkipGitVersion = StringComparer.OrdinalIgnoreCase.Equals("True", context.EnvironmentVariable("CAKE_SKIP_GITVERSION")),
-            SkipOpenCover = StringComparer.OrdinalIgnoreCase.Equals("True", context.EnvironmentVariable("CAKE_SKIP_OPENCOVER"))
+            SkipOpenCover = true//StringComparer.OrdinalIgnoreCase.Equals("True", context.EnvironmentVariable("CAKE_SKIP_OPENCOVER"))
         };
     }
 

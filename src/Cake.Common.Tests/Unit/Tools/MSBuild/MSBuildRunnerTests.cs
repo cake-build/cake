@@ -538,7 +538,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "MSBuild: Could not locate executable.");
+                AssertEx.IsCakeException(result, "MSBuild: Could not locate executable.");
             }
 
             [Fact]
@@ -783,7 +783,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "MSBuild: Process was not started.");
+                AssertEx.IsCakeException(result, "MSBuild: Process was not started.");
             }
 
             [Fact]
@@ -797,7 +797,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "MSBuild: Process returned an error (exit code 1).");
+                AssertEx.IsCakeException(result, "MSBuild: Process returned an error (exit code 1).");
             }
 
             [Theory]
@@ -830,7 +830,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "Encountered unknown MSBuild build log verbosity.");
+                AssertEx.IsCakeException(result, "Encountered unknown MSBuild build log verbosity.");
             }
 
             [Fact]
@@ -846,7 +846,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal /target:Build /logger:B,A;C /logger:E,D /logger:F " +
+                Assert.Equal("/v:normal /target:Build /logger:B,\"A\";C /logger:E,\"D\" /logger:\"F\" " +
                              "\"/Working/src/Solution.sln\"", result.Args);
             }
 
@@ -866,7 +866,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // When
                 var result = fixture.Run();
                 // Then
-                Assert.Equal(@"/v:normal /target:Build /fl /flp:logfile=A;Encoding=E;Verbosity=Diagnostic /fl1 /flp1:Append;PerformanceSummary;NoSummary;ErrorsOnly;NoItemAndPropertyList;ShowCommandLine;ShowTimestamp;ShowEventId;Verbosity=Minimal /fl2 /flp2:WarningsOnly;Verbosity=Normal /fl3 /flp3:Verbosity=Quiet /fl4 /flp4:Verbosity=Verbose /fl5 /fl6 ""/Working/src/Solution.sln""", result.Args);
+                Assert.Equal(@"/v:normal /target:Build /fl /flp:logfile=""/Working/A"";Encoding=E;Verbosity=Diagnostic /fl1 /flp1:Append;PerformanceSummary;NoSummary;ErrorsOnly;NoItemAndPropertyList;ShowCommandLine;ShowTimestamp;ShowEventId;Verbosity=Minimal /fl2 /flp2:WarningsOnly;Verbosity=Normal /fl3 /flp3:Verbosity=Quiet /fl4 /flp4:Verbosity=Verbose /fl5 /fl6 ""/Working/src/Solution.sln""", result.Args);
             }
 
             [Fact]

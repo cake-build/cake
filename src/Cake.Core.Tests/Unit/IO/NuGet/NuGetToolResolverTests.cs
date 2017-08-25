@@ -24,7 +24,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                 var result = Record.Exception(() => fixture.Resolve());
 
                 // Then
-                Assert.IsArgumentNullException(result, "fileSystem");
+                AssertEx.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -38,7 +38,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                 var result = Record.Exception(() => fixture.Resolve());
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
         }
 
@@ -54,7 +54,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
                 var result = Record.Exception(() => fixture.Resolve());
 
                 // Assert
-                Assert.IsCakeException(result, "Could not locate nuget.exe.");
+                AssertEx.IsCakeException(result, "Could not locate nuget.exe.");
             }
 
             [Fact]
@@ -117,6 +117,7 @@ namespace Cake.Core.Tests.Unit.IO.NuGet
             }
 
             [Theory]
+            [InlineData("/Library/Frameworks/Mono.framework/Versions/Current/Commands/nuget")]
             [InlineData("/usr/local/bin/nuget")]
             [InlineData("/usr/bin/nuget")]
             public void Should_Be_Able_To_Resolve_Path_Via_Special_Unix_Paths(string path)

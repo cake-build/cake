@@ -25,7 +25,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Run
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -40,7 +40,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Run
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, ".NET Core CLI: Process was not started.");
+                AssertEx.IsCakeException(result, ".NET Core CLI: Process was not started.");
             }
 
             [Fact]
@@ -55,7 +55,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Run
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, ".NET Core CLI: Process returned an error (exit code 1).");
+                AssertEx.IsCakeException(result, ".NET Core CLI: Process returned an error (exit code 1).");
             }
 
             [Fact]
@@ -97,6 +97,20 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Run
 
                 // Then
                 Assert.Equal("run --framework dnxcore50 --configuration Release", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Host_Arguments()
+            {
+                // Given
+                var fixture = new DotNetCoreRunnerFixture();
+                fixture.Settings.DiagnosticOutput = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("--diagnostics run", result.Args);
             }
         }
     }

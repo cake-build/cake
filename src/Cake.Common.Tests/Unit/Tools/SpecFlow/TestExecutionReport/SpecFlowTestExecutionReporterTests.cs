@@ -28,7 +28,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -42,7 +42,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "action");
+                AssertEx.IsArgumentNullException(result, "action");
             }
 
             [Fact]
@@ -56,7 +56,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "projectFile");
+                AssertEx.IsArgumentNullException(result, "projectFile");
             }
 
             [Fact]
@@ -70,7 +70,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -84,7 +84,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "No tool was started.");
+                AssertEx.IsCakeException(result, "No tool was started.");
             }
 
             [Fact]
@@ -120,7 +120,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "Unsupported tool /Working/tools/Test.exe.");
+                AssertEx.IsCakeException(result, "Unsupported tool /Working/tools/Test.exe.");
             }
 
             [Theory]
@@ -144,7 +144,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "No arguments were found for tool.");
+                AssertEx.IsCakeException(result, "No arguments were found for tool.");
             }
 
             [Fact]
@@ -212,7 +212,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, exception.Message);
+                AssertEx.IsCakeException(result, exception.Message);
             }
 
             [Fact]
@@ -291,7 +291,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "XUnit2 must contain argument \"-nunit <filename>\"");
+                AssertEx.IsCakeException(result, "XUnit2 must contain argument \"-nunit <filename>\"");
             }
 
             [Fact]
@@ -304,8 +304,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
                 var nUnit3Settings = new NUnit3Settings
                 {
                     ShadowCopy = false,
-                    Results = "/Working/TestResult.xml",
-                    ResultFormat = "nunit2",
+                    Results = new[] { new NUnit3Result { FileName = "/Working/TestResult.xml", Format = "nunit2" } },
                     Labels = NUnit3Labels.All,
                     OutputFile = "/Working/TestResult.txt"
                 };
@@ -347,7 +346,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "NUnit3 must contain argument \"--result=<filename>;format=nunit2\"");
+                AssertEx.IsCakeException(result, "NUnit3 must contain argument \"--result=<filename>;format=nunit2\"");
             }
 
             [Fact]
@@ -360,8 +359,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
                 var nUnit3Settings = new NUnit3Settings
                 {
                     ShadowCopy = false,
-                    Results = "/Working/TestResult.xml",
-                    ResultFormat = "nunit2"
+                    Results = new[] { new NUnit3Result { FileName = "/Working/TestResult.xml", Format = "nunit2" } },
                 };
 
                 fixture.Action = context =>
@@ -373,7 +371,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "NUnit3 must contain argument \"--out=<filename>\"");
+                AssertEx.IsCakeException(result, "NUnit3 must contain argument \"--out=<filename>\"");
             }
 
             [Fact]
@@ -386,8 +384,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
                 var nUnit3Settings = new NUnit3Settings
                 {
                     ShadowCopy = false,
-                    Results = "/Working/TestResult.xml",
-                    ResultFormat = "nunit2",
+                    Results = new[] { new NUnit3Result { FileName = "/Working/TestResult.xml", Format = "nunit2" } },
                     OutputFile = "/Working/TestResult.txt"
                 };
 
@@ -400,7 +397,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "NUnit3 must contain argument \"--labels=All\"");
+                AssertEx.IsCakeException(result, "NUnit3 must contain argument \"--labels=All\"");
             }
 
             [Fact]
@@ -452,7 +449,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, "MSTest must contain argument \"/resultsfile:<filename>\"");
+                AssertEx.IsCakeException(result, "MSTest must contain argument \"/resultsfile:<filename>\"");
             }
         }
     }

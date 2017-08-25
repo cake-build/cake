@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Tools.DotNetCore.Build;
+using Cake.Common.Tools.DotNetCore;
 using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Testing;
 using Xunit;
@@ -26,7 +27,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Build
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -41,7 +42,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Build
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "project");
+                AssertEx.IsArgumentNullException(result, "project");
             }
 
             [Fact]
@@ -56,7 +57,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Build
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, ".NET Core CLI: Process was not started.");
+                AssertEx.IsCakeException(result, ".NET Core CLI: Process was not started.");
             }
 
             [Fact]
@@ -71,7 +72,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Build
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, ".NET Core CLI: Process returned an error (exit code 1).");
+                AssertEx.IsCakeException(result, ".NET Core CLI: Process returned an error (exit code 1).");
             }
 
             [Fact]
@@ -98,12 +99,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Build
                 fixture.Settings.Configuration = "Release";
                 fixture.Settings.VersionSuffix = "rc1";
                 fixture.Project = "./src/*";
+                fixture.Settings.Verbosity = DotNetCoreVerbosity.Minimal;
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("build \"./src/*\" --runtime runtime1 --framework net451 --configuration Release --version-suffix rc1", result.Args);
+                Assert.Equal("build \"./src/*\" --runtime runtime1 --framework net451 --configuration Release --version-suffix rc1 --verbosity Minimal", result.Args);
             }
 
             [Fact]
@@ -143,8 +145,6 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Build
             {
                 // Given
                 var fixture = new DotNetCoreBuilderFixture();
-                fixture.Settings.BuildBasePath = "./temp/";
-                fixture.Settings.BuildProfile = true;
                 fixture.Settings.NoIncremental = true;
                 fixture.Settings.NoDependencies = true;
                 fixture.Project = "./src/*";
@@ -153,7 +153,22 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Build
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("build \"./src/*\" --build-base-path \"/Working/temp\" --build-profile --no-incremental --no-dependencies", result.Args);
+                Assert.Equal("build \"./src/*\" --no-incremental --no-dependencies", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Host_Arguments()
+            {
+                // Given
+                var fixture = new DotNetCoreBuilderFixture();
+                fixture.Project = "./src/*";
+                fixture.Settings.DiagnosticOutput = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("--diagnostics build \"./src/*\"", result.Args);
             }
         }
     }

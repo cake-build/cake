@@ -45,7 +45,7 @@ namespace Cake.Core.Tests.Unit.Configuration.Parser
                 var result = Record.Exception(() => parser.Read("./cake.config"));
 
                 // Then
-                Assert.IsExceptionWithMessage<InvalidOperationException>(result, "Sections cannot contain whitespace.");
+                AssertEx.IsExceptionWithMessage<InvalidOperationException>(result, "Sections cannot contain whitespace.");
             }
 
             [Fact]
@@ -61,7 +61,7 @@ namespace Cake.Core.Tests.Unit.Configuration.Parser
                 var result = Record.Exception(() => parser.Read("./cake.config"));
 
                 // Then
-                Assert.IsExceptionWithMessage<InvalidOperationException>(result, "Expected to find '=' token.");
+                AssertEx.IsExceptionWithMessage<InvalidOperationException>(result, "Expected to find '=' token.");
             }
 
             [Fact]
@@ -77,7 +77,7 @@ namespace Cake.Core.Tests.Unit.Configuration.Parser
                 var result = Record.Exception(() => parser.Read("./cake.config"));
 
                 // Then
-                Assert.IsExceptionWithMessage<InvalidOperationException>(result, "The key 'Hello World' contains whitespace.");
+                AssertEx.IsExceptionWithMessage<InvalidOperationException>(result, "The key 'Hello World' contains whitespace.");
             }
 
             [Fact]
@@ -93,7 +93,7 @@ namespace Cake.Core.Tests.Unit.Configuration.Parser
                 var result = Record.Exception(() => parser.Read("./cake.config"));
 
                 // Then
-                Assert.IsExceptionWithMessage<InvalidOperationException>(result, "Encountered unexpected token.");
+                AssertEx.IsExceptionWithMessage<InvalidOperationException>(result, "Encountered unexpected token.");
             }
 
             [Fact]

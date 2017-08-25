@@ -21,7 +21,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = Record.Exception(() => new ScriptAlias(null, ScriptAliasType.Method, new HashSet<string>()));
 
                 // Then
-                Assert.IsArgumentNullException(result, "method");
+                AssertEx.IsArgumentNullException(result, "method");
             }
 
             [Fact]

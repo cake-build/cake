@@ -101,5 +101,10 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// Gets or sets a tenant tags used to match tenants that the deployment will be performed for; specify this argument multiple times to add multiple tenant tags.
         /// </summary>
         public string[] TenantTags { get; set; }
+
+        /// <summary>
+        /// Gets or sets the channel to use when getting the release to deploy.
+        /// </summary>
+        public string Channel { get; set; }
     }
 }

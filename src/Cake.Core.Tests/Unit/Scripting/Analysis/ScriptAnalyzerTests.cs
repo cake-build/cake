@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Linq;
+using Cake.Core.Scripting.Processors.Loading;
 using Cake.Core.Tests.Fixtures;
 using Xunit;
 
@@ -23,7 +24,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 var result = Record.Exception(() => fixture.CreateAnalyzer());
 
                 // Then
-                Assert.IsArgumentNullException(result, "fileSystem");
+                AssertEx.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -37,7 +38,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 var result = Record.Exception(() => fixture.CreateAnalyzer());
 
                 // Then
-                Assert.IsArgumentNullException(result, "environment");
+                AssertEx.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
@@ -51,7 +52,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 var result = Record.Exception(() => fixture.CreateAnalyzer());
 
                 // Then
-                Assert.IsArgumentNullException(result, "log");
+                AssertEx.IsArgumentNullException(result, "log");
             }
         }
 
@@ -67,21 +68,22 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 var result = Record.Exception(() => fixture.Analyze(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "path");
             }
 
             [Fact]
-            public void Should_Throw_If_Script_Was_Not_Found()
+            public void Should_Return_Error_If_Script_Was_Not_Found()
             {
                 // Given
                 var fixture = new ScriptAnalyzerFixture();
 
                 // When
-                var result = Record.Exception(() => fixture.Analyze("/Working/notfound.cake"));
+                var result = fixture.Analyze("/Working/notfound.cake");
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("Could not find script '/Working/notfound.cake'.", result?.Message);
+                Assert.False(result.Succeeded);
+                Assert.Equal(1, result.Errors.Count);
+                Assert.Equal("Could not find script '/Working/notfound.cake'.", result.Errors[0].Message);
             }
 
             [Fact]
@@ -323,6 +325,49 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 Assert.Equal(2, result.Lines.Count);
                 Assert.Equal(result.Lines[0], "#line 1 \"/Working/script.cake\"");
                 Assert.Equal(result.Lines[1], @"if (System.Diagnostics.Debugger.IsAttached) { System.Diagnostics.Debugger.Break(); }");
+            }
+
+            [Fact]
+            public void Should_Log_Error_Location()
+            {
+                // Given
+                var fixture = new ScriptAnalyzerFixture();
+                fixture.Providers.Add(new FileLoadDirectiveProvider());
+                fixture.GivenScriptExist("/Working/script.cake", "#load \"local:?pat\"");
+
+                // When
+                var result = fixture.Analyze("/Working/script.cake");
+
+                // Then
+                Assert.Equal(2, result.Lines.Count);
+                Assert.Equal("#line 1 \"/Working/script.cake\"", result.Lines[0]);
+                Assert.Equal("// #load \"local:?pat\"", result.Lines[1]);
+                Assert.False(result.Succeeded);
+                Assert.Equal(1, result.Errors.Count);
+                Assert.Equal("/Working/script.cake", result.Errors[0].File.FullPath);
+                Assert.Equal(1, result.Errors[0].Line);
+                Assert.Equal("Query string for #load is missing parameter 'path'.", result.Errors[0].Message);
+            }
+
+            [Fact]
+            public void Should_Log_Error_Location_In_Loaded_Script()
+            {
+                // Given
+                var fixture = new ScriptAnalyzerFixture();
+                fixture.Providers.Add(new FileLoadDirectiveProvider());
+                fixture.GivenScriptExist("/Working/script.cake", "#load \"local:?path=script2.cake\"");
+                fixture.GivenScriptExist("/Working/script2.cake", "\n#load \"local:?path=1&path=2\"");
+
+                // When
+                var result = fixture.Analyze("/Working/script.cake");
+
+                // Then
+                Assert.Equal(6, result.Lines.Count);
+                Assert.False(result.Succeeded);
+                Assert.Equal(1, result.Errors.Count);
+                Assert.Equal("/Working/script2.cake", result.Errors[0].File.FullPath);
+                Assert.Equal(2, result.Errors[0].Line);
+                Assert.Equal("Query string for #load contains more than one parameter 'path'.", result.Errors[0].Message);
             }
         }
     }

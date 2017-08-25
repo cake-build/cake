@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Tools.DotNetCore.Restore;
+using Cake.Common.Tools.DotNetCore;
 using Cake.Common.Tools.DotNetCore.Restore;
 using Cake.Testing;
 using Xunit;
@@ -25,7 +26,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsArgumentNullException(result, "settings");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -40,7 +41,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, ".NET Core CLI: Process was not started.");
+                AssertEx.IsCakeException(result, ".NET Core CLI: Process was not started.");
             }
 
             [Fact]
@@ -54,7 +55,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                Assert.IsCakeException(result, ".NET Core CLI: Process returned an error (exit code 1).");
+                AssertEx.IsCakeException(result, ".NET Core CLI: Process returned an error (exit code 1).");
             }
 
             [Fact]
@@ -107,53 +108,41 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                 // Given
                 var fixture = new DotNetCoreRestorerFixture();
                 fixture.Settings.Sources = new[] { "https://www.example.com/source1", "https://www.example.com/source2" };
-                fixture.Settings.FallbackSources = new[] { "https://www.example.com/fallback1", "https://www.example.com/fallback2" };
-#pragma warning disable 0618
-                fixture.Settings.Quiet = true;
-#pragma warning restore 0618
                 fixture.Settings.NoCache = true;
                 fixture.Settings.DisableParallel = true;
-                fixture.Settings.ForceEnglishOutput = true;
                 fixture.Settings.IgnoreFailedSources = true;
-                fixture.Settings.InferRuntimes = new[] { "runtime1", "runtime2" };
                 fixture.Settings.ConfigFile = "./NuGet.config";
                 fixture.Settings.PackagesDirectory = "./packages/";
-                fixture.Settings.Verbosity = DotNetCoreRestoreVerbosity.Information;
+                fixture.Settings.Runtime = "runtime1";
+                fixture.Settings.NoDependencies = true;
+                fixture.Settings.Verbosity = DotNetCoreVerbosity.Minimal;
 
                 // When
                 var result = fixture.Run();
 
                 // Then
                 Assert.Equal("restore" +
+                             " --runtime runtime1" +
                              " --packages \"/Working/packages\"" +
                              " --source \"https://www.example.com/source1\"" +
                              " --source \"https://www.example.com/source2\"" +
-                             " --fallbacksource \"https://www.example.com/fallback1\"" +
-                             " --fallbacksource \"https://www.example.com/fallback2\"" +
                              " --configfile \"/Working/NuGet.config\"" +
-                             " --infer-runtimes \"runtime1\"" +
-                             " --infer-runtimes \"runtime2\"" +
-                             " --no-cache --disable-parallel --ignore-failed-sources --force-english-output" +
-                             " --verbosity Information", result.Args);
+                             " --no-cache --disable-parallel --ignore-failed-sources --no-dependencies" +
+                             " --verbosity Minimal", result.Args);
             }
 
             [Fact]
-            public void Quiet_Does_Not_Set_Verbosity()
+            public void Should_Add_Host_Arguments()
             {
                 // Given
                 var fixture = new DotNetCoreRestorerFixture();
-                fixture.Settings.Sources = new[] { "https://www.example.com/source1", "https://www.example.com/source2" };
-#pragma warning disable 0618
-                fixture.Settings.Quiet = true;
-#pragma warning restore 0618
+                fixture.Settings.DiagnosticOutput = true;
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("restore" +
-                             " --source \"https://www.example.com/source1\"" +
-                             " --source \"https://www.example.com/source2\"", result.Args);
+                Assert.Equal("--diagnostics restore", result.Args);
             }
         }
     }

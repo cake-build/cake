@@ -25,7 +25,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = Record.Exception(() => fixture.Poke("gibblygook", ""));
 
                 // Then
-                Assert.IsArgumentNullException(result, "filePath");
+                AssertEx.IsArgumentNullException(result, "filePath");
             }
 
             [Fact]
@@ -52,7 +52,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = Record.Exception(() => fixture.Poke(null, ""));
 
                 // Then
-                Assert.IsArgumentNullException(result, "xpath");
+                AssertEx.IsArgumentNullException(result, "xpath");
             }
 
             [Fact]
@@ -140,7 +140,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = Record.Exception(() => fixture.Poke("/plist/dict/string", "Cake Version"));
 
                 // Then
-                Assert.IsCakeException(result, "DtdProcessing is not available on .NET Core.");
+                AssertEx.IsCakeException(result, "DtdProcessing is not available on .NET Core.");
             }
         }
     }

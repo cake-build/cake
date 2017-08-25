@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -126,10 +127,7 @@ namespace Cake.Common.Tools.MSBuild
             // Got any file loggers?
             if (settings.FileLoggers.Count > 0)
             {
-                var arguments = settings.FileLoggers.Select((logger, index) =>
-                {
-                    return GetLoggerArgument(index, logger);
-                });
+                var arguments = settings.FileLoggers.Select((logger, index) => GetLoggerArgument(index, logger));
 
                 foreach (var argument in arguments)
                 {
@@ -143,7 +141,7 @@ namespace Cake.Common.Tools.MSBuild
             return builder;
         }
 
-        private static string GetLoggerArgument(int index, MSBuildFileLogger logger)
+        private string GetLoggerArgument(int index, MSBuildFileLogger logger)
         {
             if (index >= 10)
             {
@@ -153,7 +151,7 @@ namespace Cake.Common.Tools.MSBuild
             var counter = index == 0 ? string.Empty : index.ToString();
             var argument = $"/fl{counter}";
 
-            var parameters = logger.GetParameters();
+            var parameters = logger.GetParameters(_environment);
             if (!string.IsNullOrWhiteSpace(parameters))
             {
                 argument = $"{argument} /flp{counter}:{parameters}";
@@ -163,20 +161,21 @@ namespace Cake.Common.Tools.MSBuild
 
         private static string GetLoggerArgument(MSBuildLogger logger)
         {
-            string argument = "/logger:";
+            var argumentBuilder = new StringBuilder("/logger:");
             if (!string.IsNullOrWhiteSpace(logger.Class))
             {
-                argument += string.Format("{0},{1}", logger.Class, logger.Assembly);
+                argumentBuilder.Append(logger.Class);
+                argumentBuilder.Append(",");
             }
-            else
-            {
-                argument += logger.Assembly;
-            }
+
+            argumentBuilder.Append(logger.Assembly.Quote());
+
             if (!string.IsNullOrWhiteSpace(logger.Parameters))
             {
-                argument += string.Concat(";", logger.Parameters);
+                argumentBuilder.Append(";");
+                argumentBuilder.Append(logger.Parameters);
             }
-            return argument;
+            return argumentBuilder.ToString();
         }
 
         private static string GetPlatformName(PlatformTarget platform, bool isSolution)

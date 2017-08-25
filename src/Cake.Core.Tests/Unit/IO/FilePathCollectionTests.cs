@@ -19,7 +19,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => new FilePathCollection(Enumerable.Empty<FilePath>(), null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "comparer");
+                AssertEx.IsArgumentNullException(result, "comparer");
             }
         }
 

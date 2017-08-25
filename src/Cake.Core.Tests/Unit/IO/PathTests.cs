@@ -32,7 +32,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = Record.Exception(() => new TestingPath(null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "path");
             }
 
             [Theory]
@@ -46,7 +46,7 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.IsType<ArgumentException>(result);
                 Assert.Equal("path", ((ArgumentException)result)?.ParamName);
-                Assert.Equal($"Path cannot be empty.{Environment.NewLine}Parameter name: path", result?.Message);
+                Assert.Equal($"Path cannot be empty.", result.Message?.SplitLines()[0]);
             }
 
             [Fact]
@@ -98,7 +98,7 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.IsType<ArgumentException>(result);
                 Assert.Equal("path", ((ArgumentException)result)?.ParamName);
-                Assert.Equal($"Illegal characters in path (*).{Environment.NewLine}Parameter name: path", result?.Message);
+                Assert.Equal($"Illegal characters in path (*).", result.Message?.SplitLines()[0]);
             }
 
             [WindowsFact]
@@ -110,7 +110,7 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.IsType<ArgumentException>(result);
                 Assert.Equal("path", ((ArgumentException)result)?.ParamName);
-                Assert.Equal($"Illegal characters in path (|).{Environment.NewLine}Parameter name: path", result?.Message);
+                Assert.Equal($"Illegal characters in path (|).", result.Message?.SplitLines()[0]);
             }
 
             [Theory]

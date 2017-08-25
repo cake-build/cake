@@ -20,7 +20,7 @@ namespace Cake.Common.Tests.Unit.Tools.InnoSetup
                 var result = Record.Exception(() => InnoSetupAliases.InnoSetup(null, "some file.iss"));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
@@ -33,7 +33,7 @@ namespace Cake.Common.Tests.Unit.Tools.InnoSetup
                 var result = Record.Exception(() => InnoSetupAliases.InnoSetup(context, null));
 
                 // Then
-                Assert.IsArgumentNullException(result, "scriptFile");
+                AssertEx.IsArgumentNullException(result, "scriptFile");
             }
         }
     }
