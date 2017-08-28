@@ -1,4 +1,6 @@
-var cakeCoreCakeAliasesDoesForEachTestFiles = Paths.Resources.Combine("./Cake.Core/testfile*.txt");
+var cakeCoreCakeAliasesDoesForEachTestFiles = GetFiles($"{Paths.Resources}/Cake.Core/testfile*.txt")
+                                                .Select(file=>System.IO.File.ReadAllText(file.FullPath))
+                                                .ToArray();
 
 var cakeCoreCakeAliasesDoesForEachOkCount = 0;
 Task("Cake.Core.CakeAliases.DoesForEach.Ok")
@@ -8,7 +10,7 @@ Task("Cake.Core.CakeAliases.DoesForEach.Ok")
     cakeCoreCakeAliasesDoesForEachOkCount++;
 
     // When
-    Assert.StartsWith(file, "Test core file");
+    Assert.StartsWith("Test core file", file);
 })
 .Finally(() => {
     // Then
@@ -17,7 +19,7 @@ Task("Cake.Core.CakeAliases.DoesForEach.Ok")
 
 var cakeCoreCakeAliasesDoesForEachNotOkCount = 0;
 Task("Cake.Core.CakeAliases.DoesForEach.NotOk")
-    .DeferExceptions()
+    .DeferOnError()
     .DoesForEach(cakeCoreCakeAliasesDoesForEachTestFiles, (file) =>
 {
     // Given
@@ -25,6 +27,10 @@ Task("Cake.Core.CakeAliases.DoesForEach.NotOk")
 
     // When
     throw new Exception(file);
+})
+.OnError(exception =>
+{
+    Assert.Equal(3, (exception as AggregateException)?.InnerExceptions?.Count);
 })
 .Finally(() => {
     // Then
@@ -39,7 +45,7 @@ Task("Cake.Core.CakeAliases.DoesForEach.Func.Ok")
     cakeCoreCakeAliasesDoesForEachFuncOkCount++;
 
     // When
-    Assert.StartsWith(file, "Test core file");
+    Assert.StartsWith("Test core file", file);
 })
 .Finally(() => {
     // Then
@@ -55,6 +61,10 @@ Task("Cake.Core.CakeAliases.DoesForEach.Func.NotOk")
 
     // When
     throw new Exception(file);
+})
+.OnError(exception =>
+{
+    Assert.Null(exception as AggregateException);
 })
 .Finally(() => {
     // Then
