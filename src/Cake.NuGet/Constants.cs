@@ -12,6 +12,21 @@ namespace Cake.NuGet
             /// The config key name for overriding the default nuget package source
             /// </summary>
             public const string Source = "NuGet_Source";
+
+            /// <summary>
+            /// The config key name for using the in process client for installing packages
+            /// </summary>
+            public const string UseInProcessClient = "NuGet_UseInProcessClient";
+
+            /// <summary>
+            /// The config key name for enabling loading of nuget package dependencies
+            /// </summary>
+            public const string LoadDependencies = "NuGet_LoadDependencies";
+        }
+
+        public static class Paths
+        {
+            public const string Tools = "Paths_Tools";
         }
     }
 }
