@@ -142,6 +142,32 @@ namespace Cake.Common.Tests.Unit.XML
                 // Then
                 AssertEx.IsCakeException(result, "DtdProcessing is not available on .NET Core.");
             }
+
+            [Fact]
+            public void Should_Have_Declaration()
+            {
+                // Given
+                var fixture = new XmlPokeFixture();
+
+                // When
+                var resultXml = fixture.PokeString(Resources.XmlPoke_Xml, "/configuration/appSettings/add[@key = 'server']", null);
+
+                // Then
+                Assert.Contains("<?xml", resultXml);
+            }
+
+            [Fact]
+            public void Should_Not_Have_Declaration()
+            {
+                // Given
+                var fixture = new XmlPokeFixture();
+
+                // When
+                var resultXml = fixture.PokeString(Resources.XmlPoke_Xml_Without_Declaration, "/configuration/appSettings/add[@key = 'server']", null);
+
+                // Then
+                Assert.DoesNotContain("<?xml", resultXml);
+            }
         }
     }
 }
