@@ -169,6 +169,20 @@ namespace Cake.Common.Tests.Unit.Tools.VSWhere.Legacy
                 // Then
                 Assert.Equal("-legacy -latest -property installationPath -nologo", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_Prerelease_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new VSWhereLegacyFixture();
+                fixture.Settings.IncludePrerelease = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-legacy -property installationPath -prerelease -nologo", result.Args);
+            }
         }
     }
 }

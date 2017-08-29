@@ -183,6 +183,20 @@ namespace Cake.Common.Tests.Unit.Tools.VSWhere.Product
                 // Then
                 Assert.Equal("-property installationPath -nologo", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_Prerelease_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new VSWhereProductFixture();
+                fixture.Settings.IncludePrerelease = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-products \"Microsoft.VisualStudio.Product.BuildTools\" -property installationPath -prerelease -nologo", result.Args);
+            }
         }
     }
 }
