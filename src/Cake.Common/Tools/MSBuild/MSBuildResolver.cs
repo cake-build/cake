@@ -25,7 +25,7 @@ namespace Cake.Common.Tools.MSBuild
             }
             else if (environment.Platform.Family == PlatformFamily.Linux)
             {
-				var linuxMSBuildPath = new FilePath("/usr/bin/msbuild");
+                var linuxMSBuildPath = new FilePath("/usr/bin/msbuild");
 
                 if (fileSystem.Exist(linuxMSBuildPath))
                 {
@@ -33,7 +33,7 @@ namespace Cake.Common.Tools.MSBuild
                 }
 
                 throw new CakeException("Could not resolve MSBuild.");
-			}
+            }
 
             var binPath = version == MSBuildToolVersion.Default
                 ? GetHighestAvailableMSBuildVersion(fileSystem, environment, buildPlatform)
