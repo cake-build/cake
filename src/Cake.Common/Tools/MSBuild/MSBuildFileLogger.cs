@@ -98,7 +98,7 @@ namespace Cake.Common.Tools.MSBuild
             parameters.Add(ShowCommandLine ? "ShowCommandLine" : null);
             parameters.Add(ShowTimestamp ? "ShowTimestamp" : null);
             parameters.Add(ShowEventId ? "ShowEventId" : null);
-            parameters.Add(Verbosity != null ? $"Verbosity={Verbosity.Value.ToString()}" : null);
+            parameters.Add(Verbosity != null ? $"Verbosity={Verbosity.Value.GetMSBuildVerbosityName()}" : null);
 
             return string.Join(";", parameters.Where(p => p != null));
         }
