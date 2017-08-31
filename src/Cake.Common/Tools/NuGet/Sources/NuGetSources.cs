@@ -133,16 +133,33 @@ namespace Cake.Common.Tools.NuGet.Sources
 
             var processSettings = new ProcessSettings
             {
-                Arguments = "sources List",
                 RedirectStandardOutput = true
             };
 
             var result = false;
-            Run(settings, null,  processSettings,
+
+            Run(settings, GetHasArguments(settings),  processSettings,
                 process => result = process.GetStandardOutput().Any(line => line.TrimStart() == source));
 
             // Return whether or not the source exist.
             return result;
+        }
+
+        private static ProcessArgumentBuilder GetHasArguments(NuGetSourcesSettings settings)
+        {
+            var builder = new ProcessArgumentBuilder();
+
+            builder.Append("sources List");
+
+            if (settings.ConfigFile != null)
+            {
+                builder.Append("-ConfigFile");
+                builder.AppendQuoted(settings.ConfigFile.FullPath);
+            }
+
+            builder.Append("-NonInteractive");
+
+            return builder;
         }
 
         private static ProcessArgumentBuilder GetAddArguments(string name, string source, NuGetSourcesSettings settings)
@@ -208,6 +225,12 @@ namespace Cake.Common.Tools.NuGet.Sources
             {
                 builder.Append("-Verbosity");
                 builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
+            }
+
+            if (settings.ConfigFile != null)
+            {
+                builder.Append("-ConfigFile");
+                builder.AppendQuoted(settings.ConfigFile.FullPath);
             }
 
             builder.Append("-NonInteractive");

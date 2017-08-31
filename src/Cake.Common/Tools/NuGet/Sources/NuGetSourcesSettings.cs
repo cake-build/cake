@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Core.IO;
 using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.NuGet.Sources
@@ -44,5 +45,10 @@ namespace Cake.Common.Tools.NuGet.Sources
         /// <c>true</c> if password is stored as unencrypted; otherwise, <c>false</c>.
         /// </value>
         public bool StorePasswordInClearText { get; set; }
+
+        /// <summary>
+        /// Gets or sets the location of the NuGet configuration file. If not specified, file %AppData%\NuGet\NuGet.config is used as configuration file.
+        /// </summary>
+        public FilePath ConfigFile { get; set; }
     }
 }
