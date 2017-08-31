@@ -15,7 +15,7 @@ namespace Cake.Common.Tools.GitLink
     /// In order to use the commands for this alias, include the following in your build.cake file to download and
     /// install from NuGet.org, or specify the ToolPath within the <see cref="GitLinkSettings" /> class:
     /// <code>
-    /// #tool "nuget:?package=gitlink"
+    /// #tool "nuget:?package=gitlink&amp;version=2.4.0"
     /// </code>
     /// </para>
     /// </summary>
@@ -34,7 +34,6 @@ namespace Cake.Common.Tools.GitLink
         /// </code>
         /// </example>
         [CakeMethodAlias]
-        [CakeAliasCategory("GitLink")]
         public static void GitLink(this ICakeContext context, DirectoryPath repositoryRootPath)
         {
             GitLink(context, repositoryRootPath, new GitLinkSettings());
@@ -57,7 +56,6 @@ namespace Cake.Common.Tools.GitLink
         /// </code>
         /// </example>
         [CakeMethodAlias]
-        [CakeAliasCategory("GitLink")]
         public static void GitLink(this ICakeContext context, DirectoryPath repositoryRootPath, GitLinkSettings settings)
         {
             if (context == null)
