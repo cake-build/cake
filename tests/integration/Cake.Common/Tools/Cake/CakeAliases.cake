@@ -9,7 +9,7 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript")
     var file = path.CombineWithFilePath("./build.cake");
 
     // When
-     CakeExecuteScript(file, GetCakeSettings(Context));
+     CakeExecuteScript(file);
 });
 
 Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.Settings.Ok")
@@ -20,7 +20,7 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.Settings.Ok")
     var file = path.CombineWithFilePath("./test.cake");
 
     // When
-    CakeExecuteScript(file, GetCakeSettings(Context, new Dictionary<string, string> {{ "ok", "yes" }}));
+    CakeExecuteScript(file, new CakeSettings{ Arguments = new Dictionary<string, string> {{ "ok", "yes" }}});
 });
 
 Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.Settings.NotOk")
@@ -29,16 +29,19 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.Settings.NotOk")
     // Given
     var path = Paths.Resources.Combine("./Cake.Common/Tools/Cake");
     var file = path.CombineWithFilePath("./test.cake");
+    var expect = Context.Environment.Runtime.IsCoreClr
+                    ? ".NET Core CLI: Process returned an error (exit code 1)."
+                    : "Cake: Process returned an error (exit code 1).";
 
     // When
     var exception = Record.Exception(
-        () => CakeExecuteScript(file, GetCakeSettings(Context, new Dictionary<string, string> {{ "ok", "no" }}))
+        () => CakeExecuteScript(file, new CakeSettings{ Arguments = new Dictionary<string, string> {{ "ok", "no" }}})
     );
 
     // Then
     Assert.NotNull(exception);
     Assert.IsType<CakeException>(exception);
-    Assert.Equal(exception.Message, "Cake: Process returned an error (exit code 1).");
+    Assert.Equal(expect, exception.Message);
 });
 
 Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression")
@@ -47,7 +50,7 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression")
     // Given
     var script = "System.Environment.Exit(0);";
     // When
-     CakeExecuteExpression(script, GetCakeSettings(Context));
+     CakeExecuteExpression(script);
 });
 
 Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.Ok")
@@ -57,7 +60,7 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.Ok")
     var script = "System.Environment.Exit((Argument<string>(\"ok\", \"no\")==\"yes\") ? 0 : 1);";
 
     // When
-    CakeExecuteExpression(script, GetCakeSettings(Context, new Dictionary<string, string> {{ "ok", "yes" }}));
+    CakeExecuteExpression(script, new CakeSettings{ Arguments = new Dictionary<string, string> {{ "ok", "yes" }}});
 });
 
 Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.NotOk")
@@ -65,16 +68,19 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.NotOk")
 {
     // Given
     var script = "System.Environment.Exit((Argument<string>(\"ok\", \"no\")==\"yes\") ? 0 : 1);";
+    var expect = Context.Environment.Runtime.IsCoreClr
+                    ? ".NET Core CLI: Process returned an error (exit code 1)."
+                    : "Cake: Process returned an error (exit code 1).";
 
     // When
     var exception = Record.Exception(
-        () => CakeExecuteExpression(script, GetCakeSettings(Context, new Dictionary<string, string> {{ "ok", "no" }}))
+        () => CakeExecuteExpression(script, new CakeSettings{ Arguments = new Dictionary<string, string> {{ "ok", "no" }}})
     );
 
     // Then
     Assert.NotNull(exception);
     Assert.IsType<CakeException>(exception);
-    Assert.Equal(exception.Message, "Cake: Process returned an error (exit code 1).");
+    Assert.Equal(expect, exception.Message);
 });
 
 Task("Cake.Common.Tools.Cake.CakeAliases")
@@ -84,28 +90,3 @@ Task("Cake.Common.Tools.Cake.CakeAliases")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.Ok")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.NotOk");
-
-public static FilePath FindToolInPath(ICakeContext context, string tool)
-{
-    var pathEnv = context.EnvironmentVariable("PATH");
-    if (string.IsNullOrEmpty(pathEnv)||string.IsNullOrEmpty(tool))
-    {
-        return tool;
-    }
-    var paths = pathEnv.Split(new []{context.IsRunningOnUnix() ? ':' : ';'},  StringSplitOptions.RemoveEmptyEntries);
-    return paths.Select(
-            path=>new DirectoryPath(path).CombineWithFilePath(tool)
-        ).FirstOrDefault(filePath=>System.IO.File.Exists(filePath.FullPath));
-}
-
-public static CakeSettings GetCakeSettings(ICakeContext context, IDictionary<string, string> arguments = null)
-{
-    var settings = new CakeSettings { Arguments = arguments };
-    if (context.Environment.Runtime.IsCoreClr)
-    {
-        settings.ToolPath = FindToolInPath(context, context.IsRunningOnUnix() ? "dotnet" : "dotnet.exe");
-        settings.ArgumentCustomization = args => "./tools/Cake.CoreCLR/Cake.dll " + args.Render();
-
-    }
-    return settings;
-}
