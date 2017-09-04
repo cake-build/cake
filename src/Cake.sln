@@ -18,11 +18,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{A01118B7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuspec", "nuspec", "{B38B35F5-812A-4E4C-B267-71254A7EEF17}"
 	ProjectSection(SolutionItems) = preProject
-		..\nuspec\Cake.Common.nuspec = ..\nuspec\Cake.Common.nuspec
-		..\nuspec\Cake.Core.nuspec = ..\nuspec\Cake.Core.nuspec
+		..\nuspec\Cake.CoreCLR.nuspec = ..\nuspec\Cake.CoreCLR.nuspec
+		..\nuspec\Cake.CoreCLR.symbols.nuspec = ..\nuspec\Cake.CoreCLR.symbols.nuspec
 		..\nuspec\Cake.nuspec = ..\nuspec\Cake.nuspec
 		..\nuspec\Cake.Portable.nuspec = ..\nuspec\Cake.Portable.nuspec
-		..\nuspec\Cake.Testing.nuspec = ..\nuspec\Cake.Testing.nuspec
+		..\nuspec\Cake.symbols.nuspec = ..\nuspec\Cake.symbols.nuspec
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8615F41E-65C7-4BE5-AFD4-C9C78912AF80}"
