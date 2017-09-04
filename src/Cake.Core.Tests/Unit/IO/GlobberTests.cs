@@ -55,7 +55,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var result = fixture.Match("/Working/Foo/Bar/Qux.c");
 
                     // Then
-                    Assert.Equal(1, result.Length);
+                    Assert.Single(result);
                     AssertEx.ContainsFilePath(result, "C:/Working/Foo/Bar/Qux.c");
                 }
 
@@ -83,7 +83,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var result = fixture.Match("C:/Working/**/qux.c");
 
                     // Then
-                    Assert.Equal(1, result.Length);
+                    Assert.Single(result);
                     Assert.IsType<FilePath>(result[0]);
                     AssertEx.ContainsFilePath(result, "C:/Working/Foo/Bar/Qux.c");
                 }
@@ -98,7 +98,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var result = fixture.Match("C:/Program Files (x86)/Foo.*");
 
                     // Then
-                    Assert.Equal(1, result.Length);
+                    Assert.Single(result);
                     AssertEx.ContainsFilePath(result, "C:/Program Files (x86)/Foo.c");
                 }
 
@@ -112,7 +112,7 @@ namespace Cake.Core.Tests.Unit.IO
                   var result = fixture.Match("C:/Tools & Services/*.dll");
 
                   // Then
-                  Assert.Equal(1, result.Length);
+                  Assert.Single(result);
                   AssertEx.ContainsFilePath(result, "C:/Tools & Services/MyTool.dll");
                 }
 
@@ -126,7 +126,7 @@ namespace Cake.Core.Tests.Unit.IO
                   var result = fixture.Match("C:/Tools + Services/*.dll");
 
                   // Then
-                  Assert.Equal(1, result.Length);
+                  Assert.Single(result);
                   AssertEx.ContainsFilePath(result, "C:/Tools + Services/MyTool.dll");
                 }
 
@@ -140,7 +140,7 @@ namespace Cake.Core.Tests.Unit.IO
                   var result = fixture.Match("C:/Some %2F Directory/*.dll");
 
                   // Then
-                  Assert.Equal(1, result.Length);
+                  Assert.Single(result);
                   AssertEx.ContainsFilePath(result, "C:/Some %2F Directory/MyTool.dll");
                 }
 
@@ -154,7 +154,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var result = fixture.Match("C:/Some ! Directory/*.dll");
 
                     // Then
-                    Assert.Equal(1, result.Length);
+                    Assert.Single(result);
                     AssertEx.ContainsFilePath(result, "C:/Some ! Directory/MyTool.dll");
                 }
 
@@ -168,7 +168,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var result = fixture.Match("C:/Some@Directory/*.dll");
 
                     // Then
-                    Assert.Equal(1, result.Length);
+                    Assert.Single(result);
                     AssertEx.ContainsFilePath(result, "C:/Some@Directory/MyTool.dll");
                 }
             }
@@ -187,7 +187,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var result = fixture.Match("./**/Qux.h", predicate);
 
                     // Then
-                    Assert.Equal(1, result.Length);
+                    Assert.Single(result);
                     AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.h");
                 }
 
@@ -203,7 +203,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var result = fixture.Match("/Working/Bar/Qux.h", predicate);
 
                     // Then
-                    Assert.Equal(0, result.Length);
+                    Assert.Empty(result);
                 }
 
                 [Fact]
@@ -218,7 +218,7 @@ namespace Cake.Core.Tests.Unit.IO
                     var result = fixture.Match("/Working/Bar", predicate);
 
                     // Then
-                    Assert.Equal(0, result.Length);
+                    Assert.Empty(result);
                 }
             }
 
@@ -245,7 +245,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = fixture.Match(string.Empty);
 
                 // Then
-                Assert.Equal(0, result.Length);
+                Assert.Empty(result);
             }
 
             [Fact]
@@ -276,7 +276,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = fixture.Match("Foo/Bar/Qux.c");
 
                 // Then
-                Assert.Equal(1, result.Length);
+                Assert.Single(result);
                 AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
             }
 
@@ -290,7 +290,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = fixture.Match("/Working/Foo/../Foo/Bar/Qux.c");
 
                 // Then
-                Assert.Equal(1, result.Length);
+                Assert.Single(result);
                 Assert.IsType<FilePath>(result[0]);
                 AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
             }
@@ -320,7 +320,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = fixture.Match("/Working/Foo/Bar/Qux.c");
 
                 // Then
-                Assert.Equal(1, result.Length);
+                Assert.Single(result);
                 Assert.IsType<FilePath>(result[0]);
                 AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
             }
@@ -335,7 +335,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = fixture.Match("/Working/Foo/Bar");
 
                 // Then
-                Assert.Equal(1, result.Length);
+                Assert.Single(result);
                 AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar");
             }
 
@@ -350,7 +350,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = fixture.Match("./Bar/Qux.c");
 
                 // Then
-                Assert.Equal(1, result.Length);
+                Assert.Single(result);
                 AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
             }
 
@@ -365,7 +365,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = fixture.Match("./Bar");
 
                 // Then
-                Assert.Equal(1, result.Length);
+                Assert.Single(result);
                 AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar");
             }
 
@@ -519,7 +519,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = fixture.Match("/Foo/**/Bar.baz");
 
                 // Then
-                Assert.Equal(1, result.Length);
+                Assert.Single(result);
                 AssertEx.ContainsFilePath(result, "/Foo/Bar.baz");
             }
 
@@ -533,7 +533,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = fixture.Match("/Foo/**/Bar");
 
                 // Then
-                Assert.Equal(1, result.Length);
+                Assert.Single(result);
                 AssertEx.ContainsDirectoryPath(result, "/Foo/Bar");
             }
 
@@ -547,7 +547,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = fixture.Match("/Foo (Bar)/Baz.*");
 
                 // Then
-                Assert.Equal(1, result.Length);
+                Assert.Single(result);
                 AssertEx.ContainsFilePath(result, "/Foo (Bar)/Baz.c");
             }
 
@@ -561,7 +561,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = fixture.Match("/Foo@Bar/Baz.*");
 
                 // Then
-                Assert.Equal(1, result.Length);
+                Assert.Single(result);
                 AssertEx.ContainsFilePath(result, "/Foo@Bar/Baz.c");
             }
 
@@ -590,7 +590,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = fixture.Match("/嵌套/**/文件.延期");
 
                 // Then
-                Assert.Equal(1, result.Length);
+                Assert.Single(result);
                 AssertEx.ContainsFilePath(result, "/嵌套/目录/文件.延期");
             }
 
@@ -604,7 +604,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = fixture.Match("/嵌套/**/文件.*");
 
                 // Then
-                Assert.Equal(1, result.Length);
+                Assert.Single(result);
                 AssertEx.ContainsFilePath(result, "/嵌套/目录/文件.延期");
             }
         }

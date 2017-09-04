@@ -147,7 +147,7 @@ namespace Cake.Tests.Unit.Arguments
                     // Then
                     Assert.NotNull(result);
                     Assert.True(result.HasError);
-                    Assert.True(fixture.Log.Entries.Any(x => x.Message == "Multiple arguments with the same name (unknown)."));
+                    Assert.Contains(fixture.Log.Entries, x => x.Message == "Multiple arguments with the same name (unknown).");
                 }
 
                 [Theory]
@@ -200,7 +200,7 @@ namespace Cake.Tests.Unit.Arguments
 
                     // Then
                     Assert.True(result.HasError);
-                    Assert.True(fixture.Log.Entries.Any(e => e.Message == expected));
+                    Assert.Contains(fixture.Log.Entries, e => e.Message == expected);
                 }
 
                 [Theory]
@@ -386,7 +386,7 @@ namespace Cake.Tests.Unit.Arguments
                     // Then
                     Assert.NotNull(result);
                     Assert.True(result.HasError);
-                    Assert.True(fixture.Log.Entries.Any(x => x.Message == "Multiple arguments with the same name (unknown)."));
+                    Assert.Contains(fixture.Log.Entries, x => x.Message == "Multiple arguments with the same name (unknown).");
                 }
 
                 [Theory]
@@ -432,7 +432,7 @@ namespace Cake.Tests.Unit.Arguments
 
                     // Then
                     Assert.True(result.HasError);
-                    Assert.True(fixture.Log.Entries.Any(e => e.Message == expected));
+                    Assert.Contains(fixture.Log.Entries, e => e.Message == expected);
                 }
 
                 [Theory]

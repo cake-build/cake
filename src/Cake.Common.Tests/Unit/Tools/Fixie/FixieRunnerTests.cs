@@ -195,9 +195,9 @@ namespace Cake.Common.Tests.Unit.Tools.Fixie
             }
 
             [Theory]
-            [InlineData(true, "on", "\"/Working/Test1.dll\" --TeamCity on")]
-            [InlineData(false, "off", "\"/Working/Test1.dll\" --TeamCity off")]
-            public void Should_Set_TeamCity_Value(bool teamCityOutput, string teamCityValue, string expected)
+            [InlineData(true, "\"/Working/Test1.dll\" --TeamCity on")]
+            [InlineData(false, "\"/Working/Test1.dll\" --TeamCity off")]
+            public void Should_Set_TeamCity_Value(bool teamCityOutput, string expected)
             {
                 // Given
                 var fixture = new FixieRunnerFixture();

@@ -222,7 +222,7 @@ namespace Cake.Core.Tests.Unit.Graph
                 var result = graph.Traverse("E").ToArray();
 
                 // Then
-                Assert.Equal(0, result.Length);
+                Assert.Empty(result);
             }
 
             [Fact]

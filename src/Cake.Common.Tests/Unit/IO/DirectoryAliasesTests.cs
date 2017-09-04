@@ -158,7 +158,7 @@ namespace Cake.Common.Tests.Unit.IO
                 DirectoryAliases.CleanDirectory(context, directory.Path, info => !info.Hidden);
 
                 // Then
-                Assert.Equal(1, directory.GetDirectories("*", SearchScope.Recursive).Count());
+                Assert.Single(directory.GetDirectories("*", SearchScope.Recursive));
                 Assert.True(fixture.FileSystem.GetDirectory("/Temp/Hello/Hidden").Exists);
             }
 
@@ -226,7 +226,7 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 Assert.True(context.FileSystem.GetDirectory("/Temp").Exists);
-                Assert.Equal(1, directory.GetDirectories("*", SearchScope.Recursive).Count());
+                Assert.Single(directory.GetDirectories("*", SearchScope.Recursive));
                 Assert.True(context.FileSystem.GetDirectory("/Temp/Goodbye").Exists);
             }
         }
@@ -1486,9 +1486,9 @@ namespace Cake.Common.Tests.Unit.IO
                 var directories = DirectoryAliases.GetSubDirectories(context, directoryPath);
 
                 // Then
-                Assert.True(directories.Any(d => d.GetDirectoryName() == "Stuff"));
-                Assert.True(directories.Any(d => d.GetDirectoryName() == "Things"));
-                Assert.False(directories.Any(d => d.GetDirectoryName() == "file1.txt"));
+                Assert.Contains(directories, d => d.GetDirectoryName() == "Stuff");
+                Assert.Contains(directories, d => d.GetDirectoryName() == "Things");
+                Assert.DoesNotContain(directories, d => d.GetDirectoryName() == "file1.txt");
             }
 
             private static void CreateFileStructure(FakeFileSystem ffs)
