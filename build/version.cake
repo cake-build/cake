@@ -47,7 +47,7 @@ public class BuildVersion
 
         if (string.IsNullOrEmpty(version) || string.IsNullOrEmpty(semVersion))
         {
-            context.Information("Fetching verson from first SolutionInfo...");
+            context.Information("Fetching version from first SolutionInfo...");
             version = ReadSolutionInfoVersion(context);
             semVersion = version;
             milestone = string.Concat("v", version);
