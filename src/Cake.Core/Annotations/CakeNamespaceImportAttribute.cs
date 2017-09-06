@@ -24,11 +24,7 @@ namespace Cake.Core.Annotations
         /// <param name="namespace">The namespace to import into scripts.</param>
         public CakeNamespaceImportAttribute(string @namespace)
         {
-            if (@namespace == null)
-            {
-                throw new ArgumentNullException(nameof(@namespace));
-            }
-            Namespace = @namespace;
+            Namespace = @namespace ?? throw new ArgumentNullException(nameof(@namespace));
         }
     }
 }
