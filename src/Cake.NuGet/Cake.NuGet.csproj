@@ -23,7 +23,8 @@
 
   <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="NuGet.Client" Version="4.0.0" />
+    <PackageReference Include="NuGet.Frameworks" Version="4.3.0" />
+    <PackageReference Include="NuGet.Versioning" Version="4.3.0" />
   </ItemGroup>
 
   <!-- .NET Framework packages -->

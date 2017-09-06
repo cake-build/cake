@@ -90,7 +90,7 @@ namespace Cake.Core.Polyfill
 #if NETCORE
             return new FrameworkName(".NETStandard,Version=v1.6");
 #else
-            return new FrameworkName(".NETFramework,Version=v4.6");
+            return new FrameworkName(".NETFramework,Version=v4.6.1");
 #endif
         }
     }
