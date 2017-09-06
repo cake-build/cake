@@ -17,7 +17,7 @@ namespace Cake.Core.Tests.Unit.Annotations
             public void Should_Throw_If_Namespace_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => new CakeNamespaceImportAttribute(null));
+                var result = Record.Exception(() => new CakeNamespaceImportAttribute((string)null));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "namespace");

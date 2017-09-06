@@ -26,5 +26,14 @@ namespace Cake.Core.Annotations
         {
             Namespace = @namespace ?? throw new ArgumentNullException(nameof(@namespace));
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CakeNamespaceImportAttribute"/> class.
+        /// </summary>
+        /// <param name="namespaceOfType">A type whose namespace to import into scripts.</param>
+        public CakeNamespaceImportAttribute(Type namespaceOfType)
+            : this((namespaceOfType ?? throw new ArgumentNullException(nameof(namespaceOfType))).Namespace)
+        {
+        }
     }
 }

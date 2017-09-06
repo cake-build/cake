@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Reflection;
 
 namespace Cake.Core.Annotations
 {
@@ -14,7 +15,7 @@ namespace Cake.Core.Annotations
     public sealed class CakeAssemblyReferenceAttribute : Attribute
     {
         /// <summary>
-        /// Gets the namespace.
+        /// Gets the assembly name.
         /// </summary>
         public string AssemblyName { get; }
 
@@ -25,6 +26,15 @@ namespace Cake.Core.Annotations
         public CakeAssemblyReferenceAttribute(string assemblyName)
         {
             AssemblyName = assemblyName ?? throw new ArgumentNullException(nameof(assemblyName));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CakeAssemblyReferenceAttribute"/> class.
+        /// </summary>
+        /// <param name="assemblyOfType">A type whose assembly to reference in scripts.</param>
+        public CakeAssemblyReferenceAttribute(Type assemblyOfType)
+            : this((assemblyOfType ?? throw new ArgumentNullException(nameof(assemblyOfType))).GetTypeInfo().Assembly.FullName)
+        {
         }
     }
 }
