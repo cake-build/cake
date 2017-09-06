@@ -7,9 +7,8 @@ using System;
 namespace Cake.Core.Annotations
 {
     /// <summary>
-    /// An attribute used to hint Cake about additional namespaces that need
-    /// to be imported for an alias to work. This attribute can mark an
-    /// extension method, the extension method class, or the assembly to provide a global set of imports
+    /// Causes a namespace to be imported by scripts.
+    /// Can be applied to addin and module assemblies, as well as alias methods and classes in addin assemblies.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method | AttributeTargets.Assembly, AllowMultiple = true, Inherited = false)]
     public sealed class CakeNamespaceImportAttribute : Attribute
@@ -17,13 +16,12 @@ namespace Cake.Core.Annotations
         /// <summary>
         /// Gets the namespace.
         /// </summary>
-        /// <value>The namespace.</value>
         public string Namespace { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeNamespaceImportAttribute"/> class.
         /// </summary>
-        /// <param name="namespace">The namespace.</param>
+        /// <param name="namespace">The namespace to import into scripts.</param>
         public CakeNamespaceImportAttribute(string @namespace)
         {
             if (@namespace == null)
