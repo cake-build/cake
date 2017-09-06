@@ -4,25 +4,55 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Autofac;
+using Cake.Core.Annotations;
 using Cake.Core.Composition;
 using Cake.Core.Diagnostics;
+using Cake.Core.Scripting;
 
 namespace Cake.Composition
 {
-    internal sealed class ModuleLoader
+    /// <summary>
+    /// Loads module types by applying them to a container and script configuration.
+    /// </summary>
+    public sealed class ModuleLoader
     {
         private readonly ICakeLog _log;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModuleLoader"/> class.
+        /// </summary>
+        /// <param name="log">The log.</param>
         public ModuleLoader(ICakeLog log)
         {
             _log = log;
         }
 
-        public void LoadModules(IContainer container, IReadOnlyList<Type> moduleTypes)
+        /// <summary>
+        /// Loads module types by applying them to a container and script configuration.
+        /// </summary>
+        /// <param name="moduleTypes">A list of types implementing <see cref="ICakeModule"/>.</param>
+        /// <param name="container">Access to modify the registrations in the container.</param>
+        /// <param name="scriptConfiguration">Access to modify the script configuration.</param>
+        public void LoadModules(IReadOnlyList<Type> moduleTypes, IContainer container, ScriptConfiguration scriptConfiguration)
         {
             if (moduleTypes.Count > 0)
             {
+                foreach (var moduleAssembly in moduleTypes.Select(_ => _.GetTypeInfo().Assembly).Distinct())
+                {
+                    foreach (var namespaceImport in moduleAssembly.GetCustomAttributes<CakeNamespaceImportAttribute>())
+                    {
+                        scriptConfiguration.AddScriptNamespace(namespaceImport.Namespace);
+                    }
+
+                    foreach (var assemblyReference in moduleAssembly.GetCustomAttributes<CakeAssemblyReferenceAttribute>())
+                    {
+                        scriptConfiguration.AddScriptAssembly(assemblyReference.AssemblyName);
+                    }
+                }
+
                 using (var temporaryContainer = container.BeginLifetimeScope())
                 {
                     // Register modules in the temporary container.

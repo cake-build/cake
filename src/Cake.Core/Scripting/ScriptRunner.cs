@@ -27,6 +27,7 @@ namespace Cake.Core.Scripting
         private readonly IScriptAnalyzer _analyzer;
         private readonly IScriptProcessor _processor;
         private readonly IScriptConventions _conventions;
+        private readonly IScriptConfiguration _scriptConfiguration;
         private readonly IAssemblyLoader _assemblyLoader;
 
         /// <summary>
@@ -40,6 +41,7 @@ namespace Cake.Core.Scripting
         /// <param name="analyzer">The script analyzer.</param>
         /// <param name="processor">The script processor.</param>
         /// <param name="conventions">The script conventions.</param>
+        /// <param name="scriptConfiguration">The script configuration.</param>
         /// <param name="assemblyLoader">The assembly loader.</param>
         public ScriptRunner(
             ICakeEnvironment environment,
@@ -50,54 +52,19 @@ namespace Cake.Core.Scripting
             IScriptAnalyzer analyzer,
             IScriptProcessor processor,
             IScriptConventions conventions,
+            IScriptConfiguration scriptConfiguration,
             IAssemblyLoader assemblyLoader)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
-            if (configuration == null)
-            {
-                throw new ArgumentNullException(nameof(configuration));
-            }
-            if (engine == null)
-            {
-                throw new ArgumentNullException(nameof(engine));
-            }
-            if (aliasFinder == null)
-            {
-                throw new ArgumentNullException(nameof(aliasFinder));
-            }
-            if (analyzer == null)
-            {
-                throw new ArgumentNullException(nameof(analyzer));
-            }
-            if (processor == null)
-            {
-                throw new ArgumentNullException(nameof(processor));
-            }
-            if (conventions == null)
-            {
-                throw new ArgumentNullException(nameof(conventions));
-            }
-            if (assemblyLoader == null)
-            {
-                throw new ArgumentNullException(nameof(assemblyLoader));
-            }
-
-            _environment = environment;
-            _log = log;
-            _configuration = configuration;
-            _engine = engine;
-            _aliasFinder = aliasFinder;
-            _analyzer = analyzer;
-            _processor = processor;
-            _conventions = conventions;
-            _assemblyLoader = assemblyLoader;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _log = log ?? throw new ArgumentNullException(nameof(log));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _engine = engine ?? throw new ArgumentNullException(nameof(engine));
+            _aliasFinder = aliasFinder ?? throw new ArgumentNullException(nameof(aliasFinder));
+            _analyzer = analyzer ?? throw new ArgumentNullException(nameof(analyzer));
+            _processor = processor ?? throw new ArgumentNullException(nameof(processor));
+            _conventions = conventions ?? throw new ArgumentNullException(nameof(conventions));
+            _scriptConfiguration = scriptConfiguration ?? throw new ArgumentNullException(nameof(scriptConfiguration));
+            _assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
         }
 
         /// <summary>
@@ -163,6 +130,11 @@ namespace Cake.Core.Scripting
             var assemblies = new HashSet<Assembly>();
             assemblies.AddRange(_conventions.GetDefaultAssemblies(applicationRoot));
 
+            foreach (var assemblyName in _scriptConfiguration.AssemblyNames)
+            {
+                session.AddReference(_assemblyLoader.Load(new AssemblyName(assemblyName)));
+            }
+
             foreach (var reference in result.References)
             {
                 var referencePath = new FilePath(reference);
@@ -200,6 +172,7 @@ namespace Cake.Core.Scripting
             // Import all namespaces.
             var namespaces = new HashSet<string>(result.Namespaces, StringComparer.Ordinal);
             namespaces.AddRange(_conventions.GetDefaultNamespaces());
+            namespaces.AddRange(_scriptConfiguration.Namespaces);
             namespaces.AddRange(aliases.SelectMany(alias => alias.Namespaces));
             foreach (var @namespace in namespaces.OrderBy(ns => ns))
             {

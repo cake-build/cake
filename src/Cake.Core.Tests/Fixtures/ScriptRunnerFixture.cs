@@ -27,6 +27,7 @@ namespace Cake.Core.Tests.Fixtures
         public IScriptAnalyzer ScriptAnalyzer { get; set; }
         public IScriptProcessor ScriptProcessor { get; set; }
         public IScriptConventions ScriptConventions { get; set; }
+        public IScriptConfiguration ScriptConfiguration { get; set; }
         public IScriptAliasFinder AliasFinder { get; set; }
         public FakeLog Log { get; set; }
 
@@ -60,6 +61,7 @@ namespace Cake.Core.Tests.Fixtures
             ScriptAnalyzer = new ScriptAnalyzer(FileSystem, Environment, Log, new[] { new FileLoadDirectiveProvider() });
             ScriptProcessor = Substitute.For<IScriptProcessor>();
             ScriptConventions = new ScriptConventions(FileSystem, AssemblyLoader);
+            ScriptConfiguration = new ScriptConfiguration();
 
             var context = Substitute.For<ICakeContext>();
             context.Environment.Returns(c => Environment);
@@ -72,7 +74,7 @@ namespace Cake.Core.Tests.Fixtures
         {
             return new ScriptRunner(Environment, Log, Configuration, Engine,
                 AliasFinder, ScriptAnalyzer, ScriptProcessor,
-                ScriptConventions, AssemblyLoader);
+                ScriptConventions, ScriptConfiguration, AssemblyLoader);
         }
     }
 }

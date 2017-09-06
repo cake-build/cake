@@ -12,6 +12,7 @@ using Cake.Core;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.Modules;
+using Cake.Core.Scripting;
 using Cake.Core.Text;
 using Cake.Modules;
 using Cake.NuGet;
@@ -70,7 +71,7 @@ namespace Cake
                     // Load all modules.
                     var moduleSearcher = container.Resolve<ModuleSearcher>();
                     var moduleLoader = container.Resolve<ModuleLoader>();
-                    moduleLoader.LoadModules(container, moduleSearcher.Search(options));
+                    moduleLoader.LoadModules(moduleSearcher.Search(options), container, container.Resolve<ScriptConfiguration>());
 
                     // Resolve and run the application.
                     var application = container.Resolve<CakeApplication>();

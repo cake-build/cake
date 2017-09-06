@@ -10,6 +10,7 @@ using Cake.Core;
 using Cake.Core.Composition;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
+using Cake.Core.Scripting;
 using Cake.Diagnostics;
 using Cake.Scripting;
 
@@ -31,6 +32,7 @@ namespace Cake.Modules
             // Modules
             registrar.RegisterType<ModuleSearcher>().Singleton();
             registrar.RegisterType<ModuleLoader>().Singleton();
+            registrar.RegisterType<ScriptConfiguration>().AsSelf().As<IScriptConfiguration>().Singleton();
 
             // Configuration
             registrar.RegisterType<CakeConfigurationProvider>().Singleton();
