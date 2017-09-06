@@ -68,8 +68,9 @@ namespace Cake
                     builder.Update(container);
 
                     // Load all modules.
-                    var loader = container.Resolve<ModuleLoader>();
-                    loader.LoadModules(container, options);
+                    var moduleSearcher = container.Resolve<ModuleSearcher>();
+                    var moduleLoader = container.Resolve<ModuleLoader>();
+                    moduleLoader.LoadModules(container, moduleSearcher.Search(options));
 
                     // Resolve and run the application.
                     var application = container.Resolve<CakeApplication>();

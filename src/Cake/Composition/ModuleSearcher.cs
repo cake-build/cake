@@ -9,6 +9,7 @@ using System.Reflection;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.Composition;
+using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Reflection;
@@ -21,17 +22,20 @@ namespace Cake.Composition
         private readonly ICakeEnvironment _environment;
         private readonly IAssemblyLoader _assemblyLoader;
         private readonly ICakeLog _log;
+        private readonly ICakeConfiguration _configuration;
 
         public ModuleSearcher(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             IAssemblyLoader assemblyLoader,
-            ICakeLog log)
+            ICakeLog log,
+            ICakeConfiguration configuration)
         {
             _fileSystem = fileSystem;
             _environment = environment;
             _assemblyLoader = assemblyLoader;
             _log = log;
+            _configuration = configuration;
         }
 
         public IReadOnlyList<Type> Search(DirectoryPath path)
@@ -56,6 +60,34 @@ namespace Cake.Composition
             }
 
             return result;
+        }
+
+        public IReadOnlyList<Type> Search(CakeOptions options)
+        {
+            return Search(GetModulePath(options.Script.GetDirectory()));
+        }
+
+        private DirectoryPath GetToolPath(DirectoryPath root)
+        {
+            var toolPath = _configuration.GetValue(Constants.Paths.Tools);
+            if (!string.IsNullOrWhiteSpace(toolPath))
+            {
+                return new DirectoryPath(toolPath).MakeAbsolute(_environment);
+            }
+
+            return root.Combine("tools");
+        }
+
+        private DirectoryPath GetModulePath(DirectoryPath root)
+        {
+            var modulePath = _configuration.GetValue(Constants.Paths.Modules);
+            if (!string.IsNullOrWhiteSpace(modulePath))
+            {
+                return new DirectoryPath(modulePath).MakeAbsolute(_environment);
+            }
+
+            var toolPath = GetToolPath(root);
+            return toolPath.Combine("Modules").Collapse();
         }
 
         private Type LoadModule(FilePath path)
