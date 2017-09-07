@@ -22,7 +22,7 @@ namespace Cake.Core.Tests.Unit
                 var framework = runtime.TargetFramework;
 
                 // Then
-                Assert.Equal(".NETFramework,Version=v4.6", framework.FullName);
+                Assert.Equal(".NETFramework,Version=v4.6.1", framework.FullName);
             }
 
             [RuntimeFact(TestRuntime.CoreClr)]

@@ -129,7 +129,7 @@ namespace Cake.NuGet.Tests.Unit
 
             [Theory]
             [InlineData(".NETStandard,Version=v1.6", "netstandard1.6")]
-            [InlineData(".NETFramework,Version=v4.6", "net46")]
+            [InlineData(".NETFramework,Version=v4.6.1", "net461")]
             public void Should_Return_Exact_Framework_If_Possible(string framework, string expected)
             {
                 // Given
@@ -139,6 +139,7 @@ namespace Cake.NuGet.Tests.Unit
                 fixture.CreateCLRAssembly("/Working/lib/net452/file.dll");
                 fixture.CreateCLRAssembly("/Working/lib/net46/file.dll");
                 fixture.CreateCLRAssembly("/Working/lib/net461/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/net462/file.dll");
                 fixture.CreateCLRAssembly("/Working/lib/netstandard1.5/file.dll");
                 fixture.CreateCLRAssembly("/Working/lib/netstandard1.6/file.dll");
 
@@ -152,7 +153,7 @@ namespace Cake.NuGet.Tests.Unit
 
             [Theory]
             [InlineData(".NETStandard,Version=v1.6", "netstandard1.5")]
-            [InlineData(".NETFramework,Version=v4.6", "net452")]
+            [InlineData(".NETFramework,Version=v4.6.1", "net452")]
             public void Should_Return_Nearest_Compatible_Framework_If_An_Exact_Match_Is_Not_Possible(string framework, string expected)
             {
                 // Given
@@ -160,7 +161,7 @@ namespace Cake.NuGet.Tests.Unit
                 fixture.CreateCLRAssembly("/Working/lib/net45/file.dll");
                 fixture.CreateCLRAssembly("/Working/lib/net451/file.dll");
                 fixture.CreateCLRAssembly("/Working/lib/net452/file.dll");
-                fixture.CreateCLRAssembly("/Working/lib/net461/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/net462/file.dll");
                 fixture.CreateCLRAssembly("/Working/lib/netstandard1.5/file.dll");
 
                 // When
@@ -173,15 +174,14 @@ namespace Cake.NuGet.Tests.Unit
 
             [Theory]
             [InlineData(".NETStandard,Version=v1.6")]
-            [InlineData(".NETFramework,Version=v4.6")]
+            [InlineData(".NETFramework,Version=v4.6.1")]
             public void Should_Return_Empty_Result_If_Any_Match_Is_Not_Possible(string framework)
             {
                 // Given
                 var fixture = new NuGetAddinContentResolverFixture(framework);
 
-                fixture.CreateCLRAssembly("/Working/lib/net461/file.dll");
                 fixture.CreateCLRAssembly("/Working/lib/net462/file.dll");
-                fixture.CreateCLRAssembly("/Working/lib/netstandard2.0/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/netstandard2.2/file.dll");
 
                 // When
                 var result = fixture.GetFiles();
@@ -194,18 +194,19 @@ namespace Cake.NuGet.Tests.Unit
             public void Should_Return_Compatible_Netstandard_If_An_Exact_Match_Is_Not_Possible()
             {
                 // Given
-                var fixture = new NuGetAddinContentResolverFixture(".NETFramework,Version=v4.6");
+                var fixture = new NuGetAddinContentResolverFixture(".NETFramework,Version=v4.6.1");
 
                 fixture.CreateCLRAssembly("/Working/lib/netstandard1.0/file.dll");
                 fixture.CreateCLRAssembly("/Working/lib/netstandard1.3/file.dll");
-                fixture.CreateCLRAssembly("/Working/lib/netstandard2.0/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/netstandard1.6/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/netstandard2.1/file.dll");
 
                 // When
                 var result = fixture.GetFiles();
 
                 // Then
                 Assert.Equal(1, result.Count);
-                Assert.Equal($"/Working/lib/netstandard1.3/file.dll", result.ElementAt(0).Path.FullPath);
+                Assert.Equal($"/Working/lib/netstandard1.6/file.dll", result.ElementAt(0).Path.FullPath);
             }
 
             [Fact]
@@ -227,7 +228,7 @@ namespace Cake.NuGet.Tests.Unit
 
             [Theory]
             [InlineData(".NETStandard,Version=v1.6")]
-            [InlineData(".NETFramework,Version=v4.6")]
+            [InlineData(".NETFramework,Version=v4.6.1")]
             public void Should_Return_Files_When_Located_In_Root(string framework)
             {
                 // Given
@@ -249,13 +250,13 @@ namespace Cake.NuGet.Tests.Unit
 
             [Theory]
             [InlineData(".NETStandard,Version=v1.6", "netstandard1.6")]
-            [InlineData(".NETFramework,Version=v4.6", "net46")]
+            [InlineData(".NETFramework,Version=v4.6.1", "net461")]
             public void Should_Return_Exact_Framework_Even_Though_Files_Located_In_Root(string framework, string expected)
             {
                 // Given
                 var fixture = new NuGetAddinContentResolverFixture(framework);
 
-                fixture.CreateCLRAssembly("/Working/lib/net46/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/net461/file.dll");
                 fixture.CreateCLRAssembly("/Working/lib/netstandard1.6/file.dll");
                 fixture.CreateCLRAssembly("/Working/file.dll");
 
@@ -269,14 +270,13 @@ namespace Cake.NuGet.Tests.Unit
 
             [Theory]
             [InlineData(".NETStandard,Version=v1.6")]
-            [InlineData(".NETFramework,Version=v4.6")]
+            [InlineData(".NETFramework,Version=v4.6.1")]
             public void Should_Return_From_Root_If_No_Compatible_Framework_Found(string framework)
             {
                 // Given
                 var fixture = new NuGetAddinContentResolverFixture(framework);
 
-                fixture.CreateCLRAssembly("/Working/lib/net461/file.dll");
-                fixture.CreateCLRAssembly("/Working/lib/netstandard2.0/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/net462/file.dll");
                 fixture.CreateCLRAssembly("/Working/file.dll");
 
                 // When
@@ -289,7 +289,7 @@ namespace Cake.NuGet.Tests.Unit
 
             [Theory]
             [InlineData(".NETStandard,Version=v1.6")]
-            [InlineData(".NETFramework,Version=v4.6")]
+            [InlineData(".NETFramework,Version=v4.6.1")]
             public void Should_Log_Warning_For_Files_Located_In_Root(string framework)
             {
                 // Given

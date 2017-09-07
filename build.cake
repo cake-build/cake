@@ -159,7 +159,7 @@ Task("Copy-Files")
     // .NET 4.6
     DotNetCorePublish("./src/Cake", new DotNetCorePublishSettings
     {
-        Framework = "net46",
+        Framework = "net461",
         VersionSuffix = parameters.Version.DotNetAsterix,
         Configuration = parameters.Configuration,
         OutputDirectory = parameters.Paths.Directories.ArtifactsBinFullFx,
@@ -180,7 +180,7 @@ Task("Copy-Files")
     CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinNetCore);
 
     // Copy Cake.XML (since publish does not do this anymore)
-    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/net46/Cake.xml", parameters.Paths.Directories.ArtifactsBinFullFx);
+    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/net461/Cake.xml", parameters.Paths.Directories.ArtifactsBinFullFx);
     CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/netcoreapp1.0/Cake.xml", parameters.Paths.Directories.ArtifactsBinNetCore);
 });
 
