@@ -9,6 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Cake.Common.Tools.DotNetCore.Execute;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Polyfill;
@@ -24,6 +25,7 @@ namespace Cake.Common.Tools.Cake
         private readonly ICakeEnvironment _environment;
         private readonly IFileSystem _fileSystem;
         private readonly IGlobber _globber;
+        private readonly DotNetCoreExecutor _coreExecutor;
         private static readonly IEnumerable<FilePath> _executingAssemblyToolPaths;
 
         /// <summary>
@@ -32,8 +34,15 @@ namespace Cake.Common.Tools.Cake
         static CakeRunner()
         {
             var entryAssembly = AssemblyHelper.GetExecutingAssembly();
-            var executingAssemblyToolPath = entryAssembly.Location;
-            _executingAssemblyToolPaths = new FilePath[] { executingAssemblyToolPath };
+            var executingAssemblyToolPath = ((FilePath)entryAssembly.Location).GetDirectory();
+            _executingAssemblyToolPaths = new[]
+            {
+#if NETCORE
+                executingAssemblyToolPath.CombineWithFilePath("Cake.dll")
+#else
+                executingAssemblyToolPath.CombineWithFilePath("Cake.exe")
+#endif
+            };
         }
 
         /// <summary>
@@ -50,6 +59,7 @@ namespace Cake.Common.Tools.Cake
             _environment = environment;
             _fileSystem = fileSystem;
             _globber = globber;
+            _coreExecutor = new DotNetCoreExecutor(fileSystem, environment, processRunner, tools);
         }
 
         /// <summary>
@@ -71,8 +81,24 @@ namespace Cake.Common.Tools.Cake
             }
 
             settings = settings ?? new CakeSettings();
-
-            Run(settings, GetArguments(scriptPath, settings));
+            var toolPath = GetToolPath(settings);
+            if (toolPath?.GetFilename().FullPath == "Cake.dll")
+            {
+                _coreExecutor.Execute(
+                    toolPath,
+                    GetArguments(scriptPath, settings),
+                    new DotNetCoreExecuteSettings
+                    {
+                        ArgumentCustomization = settings.ArgumentCustomization,
+                        EnvironmentVariables = settings.EnvironmentVariables,
+                        ToolTimeout = settings.ToolTimeout,
+                        WorkingDirectory = settings.WorkingDirectory
+                    });
+            }
+            else
+            {
+                Run(settings, GetArguments(scriptPath, settings));
+            }
         }
 
         /// <summary>
@@ -150,7 +176,20 @@ namespace Cake.Common.Tools.Cake
         /// <returns>The tool executable name.</returns>
         protected override IEnumerable<string> GetToolExecutableNames()
         {
-            return new[] { "Cake.exe" };
+            return new[]
+            {
+#if NETCORE
+                "Cake.dll",
+                "cake",
+                "Cake",
+                "Cake.exe"
+#else
+                "Cake.exe",
+                "cake",
+                "Cake",
+                "Cake.dll"
+#endif
+            };
         }
 
         /// <summary>

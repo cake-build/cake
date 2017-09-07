@@ -266,7 +266,12 @@ namespace Cake.Core.Tooling
             return settings.EnvironmentVariables;
         }
 
-        private FilePath GetToolPath(TSettings settings)
+        /// <summary>
+        /// Gets the resolved tool path.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The resolved tool path.</returns>
+        protected FilePath GetToolPath(TSettings settings)
         {
             if (_tools != null)
             {
