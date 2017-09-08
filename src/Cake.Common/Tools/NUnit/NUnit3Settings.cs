@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
+using System;
 
 namespace Cake.Common.Tools.NUnit
 {
@@ -107,6 +108,7 @@ namespace Cake.Common.Tools.NUnit
         /// <c>true</c> if a full report of test results should be printed;
         /// otherwise, <c>false</c>.
         /// </value>
+        [Obsolete("This argument was removed from NUnit3", false)]
         public bool Full { get; set; }
 
         /// <summary>
@@ -162,6 +164,7 @@ namespace Cake.Common.Tools.NUnit
         /// <value>
         /// <c>true</c> shows additional information as the tests run; otherwise, <c>false</c>.
         /// </value>
+        [Obsolete("This argument was removed from NUnit3", false)]
         public bool Verbose { get; set; }
 
         /// <summary>
