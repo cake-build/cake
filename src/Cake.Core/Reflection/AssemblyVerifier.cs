@@ -23,11 +23,7 @@ namespace Cake.Core.Reflection
 
         public void Verify(Assembly assembly)
         {
-            if (_skipVerification)
-            {
-                _log.Debug("Skipping verification of assembly '{0}'.", assembly.FullName);
-                return;
-            }
+            _log.Debug(_skipVerification ? "Skipping verification of assembly '{0}'." : "Verifying assembly '{0}'.", assembly.FullName);
 
             // Verify that the assembly is valid.
             // We're still pre 1.0, so there are breaking changes from time to time.
@@ -38,9 +34,32 @@ namespace Cake.Core.Reflection
                 if (reference.Name.Equals("Cake.Core") && reference.Version < Constants.LatestBreakingChange)
                 {
                     // The assembly is referencing a version of Cake that contains breaking changes.
-                    throw new CakeException($"The assembly '{assembly.FullName}' is referencing an older version of Cake.Core ({reference.Version.ToString(3)}). " +
-                        $"This assembly need to reference at least Cake.Core version {Constants.LatestBreakingChange.ToString(3)}. " +
-                        "Another option is to downgrade Cake to an earlier version.");
+                    const string message = "The assembly '{0}' \r\n" +
+                                           "is referencing an older version of Cake.Core ({1}). \r\n" +
+                                           "This assembly need to reference at least Cake.Core version {2}. \r\n" +
+                                           "Another option is to downgrade Cake to an earlier version. \r\n" +
+                                           "It's not recommended, but you can explicitly opt-out of assembly verification \r\n" +
+                                           "by configuring the Skip Verification setting to true\r\n" +
+                                           "(i.e. command line parameter \"--settings_skipverification=true\", \r\n" +
+                                           "envrionment variable \"CAKE_SETTINGS_SKIPVERIFICATION=true\", \r\n" +
+                                           "read more about configuration at https://cakebuild.net/docs/fundamentals/configuration)";
+
+                    var args = new object[]
+                    {
+                        assembly.FullName,
+                        reference.Version.ToString(3),
+                        Constants.LatestBreakingChange.ToString(3)
+                    };
+
+                    if (_skipVerification)
+                    {
+                        _log.Debug(
+                            message,
+                            args);
+                        return;
+                    }
+
+                    throw new CakeException(string.Format(message, args));
                 }
             }
         }
