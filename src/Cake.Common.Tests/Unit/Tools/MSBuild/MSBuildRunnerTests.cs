@@ -909,6 +909,25 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Then
                 Assert.Equal(@"Too Many FileLoggers", ex.Message);
             }
+
+            [Fact]
+            public void Should_Use_Binary_Logging_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.BinaryLogger = new MSBuildBinaryLogSettings()
+                {
+                    Enabled = true,
+                    FileName = "mylog.binlog",
+                    Imports = MSBuildBinaryLogImports.ZipFile
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:Build /bl:mylog.binlog;ProjectImports=ZipFile \"C:/Working/src/Solution.sln\"", result.Args);
+            }
         }
     }
 }
