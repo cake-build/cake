@@ -134,6 +134,35 @@ namespace Cake.Common.Tools.MSBuild
                 }
             }
 
+            // Use binary logging?
+            if (settings.BinaryLogger != null && settings.BinaryLogger.Enabled)
+            {
+                string binaryOptions = null;
+                if (!string.IsNullOrEmpty(settings.BinaryLogger.FileName))
+                {
+                    binaryOptions = settings.BinaryLogger.FileName;
+                }
+
+                if (settings.BinaryLogger.Imports != MSBuildBinaryLogImports.Unspecified)
+                {
+                    if (!string.IsNullOrEmpty(binaryOptions))
+                    {
+                        binaryOptions = binaryOptions + ";";
+                    }
+
+                    binaryOptions = binaryOptions + "ProjectImports=" + settings.BinaryLogger.Imports;
+                }
+
+                if (string.IsNullOrEmpty(binaryOptions))
+                {
+                    builder.Append("/bl");
+                }
+                else
+                {
+                    builder.Append("/bl:" + binaryOptions);
+                }
+            }
+
             // Add the solution as the last parameter.
             builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
 
