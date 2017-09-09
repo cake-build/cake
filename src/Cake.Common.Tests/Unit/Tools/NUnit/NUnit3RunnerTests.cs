@@ -218,7 +218,9 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 fixture.Settings.Work = "out";
                 fixture.Settings.OutputFile = "stdout.txt";
                 fixture.Settings.ErrorOutputFile = "stderr.txt";
+                #pragma warning disable 0618
                 fixture.Settings.Full = true;
+                #pragma warning restore 0618
                 fixture.Settings.Results = new[]
                 {
                     new NUnit3Result { FileName = "NewTestResult.xml", Format = "nunit2", Transform = "nunit2.xslt" },
@@ -228,7 +230,9 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 fixture.Settings.TeamCity = true;
                 fixture.Settings.NoHeader = true;
                 fixture.Settings.NoColor = true;
+                #pragma warning disable 0618
                 fixture.Settings.Verbose = true;
+                #pragma warning restore 0618
                 fixture.Settings.Configuration = "Debug";
                 fixture.Settings.Process = NUnit3ProcessOption.InProcess;
                 fixture.Settings.AppDomainUsage = NUnit3AppDomainUsage.Single;
