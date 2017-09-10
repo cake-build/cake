@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -94,7 +95,7 @@ namespace Cake.Common.Tools.OpenCover
             var builder = new ProcessArgumentBuilder();
 
             // The target application to call.
-            builder.AppendSwitch("-target", ":", context.FilePath.FullPath.Quote());
+            builder.AppendSwitch("-target", ":", context.FilePath.MakeAbsolute(_environment).FullPath.Quote());
 
             // The arguments to the target application.
             var arguments = context.Settings?.Arguments?.Render();
@@ -150,6 +151,50 @@ namespace Cake.Common.Tools.OpenCover
             // Set the output file.
             outputPath = outputPath.MakeAbsolute(_environment);
             builder.AppendSwitch("-output", ":", outputPath.FullPath.Quote());
+
+            // Exclude directories
+            if (settings.ExcludeDirectories.Count > 0)
+            {
+                var excludeDirs = string.Join(";", settings.ExcludeDirectories.Select(d => d.MakeAbsolute(_environment).FullPath));
+                builder.AppendSwitch("-excludedirs", ":", excludeDirs.Quote());
+            }
+
+            // Log level
+            if (settings.LogLevel != OpenCoverLogLevel.Info)
+            {
+                builder.AppendSwitch("-log", ":", settings.LogLevel.ToString());
+            }
+
+            // Merge by hash
+            if (settings.MergeByHash)
+            {
+                builder.Append("-mergebyhash");
+            }
+
+            // No default filters
+            if (settings.NoDefaultFilters)
+            {
+                builder.Append("-nodefaultfilters");
+            }
+
+            // Search directories
+            if (settings.SearchDirectories.Count > 0)
+            {
+                var excludeDirs = string.Join(";", settings.SearchDirectories.Select(d => d.MakeAbsolute(_environment).FullPath));
+                builder.AppendSwitch("-searchdirs", ":", excludeDirs.Quote());
+            }
+
+            // No default filters
+            if (settings.IsService)
+            {
+                builder.Append("-service");
+            }
+
+            // Target directory
+            if (settings.TargetDirectory != null)
+            {
+                builder.AppendSwitch("-targetdir", ":", settings.TargetDirectory.MakeAbsolute(_environment).FullPath.Quote());
+            }
 
             return builder;
         }
