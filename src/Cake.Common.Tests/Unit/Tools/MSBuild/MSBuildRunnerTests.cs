@@ -928,6 +928,22 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Then
                 Assert.Equal("/v:normal /target:Build /bl:mylog.binlog;ProjectImports=ZipFile \"C:/Working/src/Solution.sln\"", result.Args);
             }
+
+            [Theory]
+            [InlineData("Value1,Value2", "/v:normal /p:Property=Value1%2CValue2 /target:Build \"C:/Working/src/Solution.sln\"")]
+            [InlineData("Value1;Value2", "/v:normal /p:Property=Value1%3BValue2 /target:Build \"C:/Working/src/Solution.sln\"")]
+            public void Should_Escape_Special_Characters_In_Property_Value(string propertyValue, string expected)
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.WithProperty("Property", propertyValue);
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
         }
     }
 }

@@ -232,9 +232,15 @@ namespace Cake.Common.Tools.MSBuild
             {
                 foreach (var propertyValue in properties[propertyKey])
                 {
-                    yield return string.Concat("/p:", propertyKey, "=", propertyValue);
+                    yield return string.Concat("/p:", propertyKey, "=", EscapeSpecialCharacters(propertyValue));
                 }
             }
+        }
+
+        private static string EscapeSpecialCharacters(string value)
+        {
+            return value.Replace(",", "%2C")
+                .Replace(";", "%3B");
         }
 
         /// <summary>
