@@ -44,36 +44,28 @@ namespace Cake.Common.Build.Jenkins.Data
         public JenkinsNodeInfo Node { get; }
 
         /// <summary>
-        /// Gets the jenkins home.
+        /// Gets the change.
         /// </summary>
         /// <value>
-        /// The jenkins home.
+        /// The change.
+        /// </value>
+        public JenkinsChangeInfo Change { get; }
+
+        /// <summary>
+        /// Gets the absolute path of the directory assigned on the master node for Jenkins to store data.
+        /// </summary>
+        /// <value>
+        /// The absolute path of the directory assigned on the master node for Jenkins to store data.
         /// </value>
         public string JenkinsHome => GetEnvironmentString("JENKINS_HOME");
 
         /// <summary>
-        /// Gets the jenkins URL.
+        /// Gets the full URL of Jenkins (note: only available if Jenkins URL is set in system configuration).
         /// </summary>
         /// <value>
-        /// The jenkins URL.
+        /// The full URL of Jenkins.
         /// </value>
         public string JenkinsUrl => GetEnvironmentString("JENKINS_URL");
-
-        /// <summary>
-        /// Gets the executor number.
-        /// </summary>
-        /// <value>
-        /// The executor number.
-        /// </value>
-        public int ExecutorNumber => GetEnvironmentInteger("EXECUTOR_NUMBER");
-
-        /// <summary>
-        /// Gets the workspace.
-        /// </summary>
-        /// <value>
-        /// The workspace.
-        /// </value>
-        public string Workspace => GetEnvironmentString("WORKSPACE");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JenkinsEnvironmentInfo" /> class.
@@ -85,6 +77,7 @@ namespace Cake.Common.Build.Jenkins.Data
             Repository = new JenkinsRepositoryInfo(environment);
             Node = new JenkinsNodeInfo(environment);
             Job = new JenkinsJobInfo(environment);
+            Change = new JenkinsChangeInfo(environment);
         }
     }
 }

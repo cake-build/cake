@@ -7,88 +7,9 @@ using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build.Jenkins.Data
 {
-    public sealed class JenkinsBuildInfoTests
+    public sealed class JenkinsChangeInfoTests
     {
-        public sealed class TheBuildNumberProperty
-        {
-             [Fact]
-             public void Should_Return_Correct_Value()
-             {
-                 // Given
-                 var info = new JenkinsInfoFixture().CreateBuildInfo();
-
-                // When
-                 var result = info.BuildNumber;
-
-                // Then
-                 Assert.Equal(456, result);
-             }
-        }
-
-        public sealed class TheBuildIdProperty
-        {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateBuildInfo();
-
-                // When
-                var result = info.BuildId;
-
-                // Then
-                Assert.Equal("456", result);
-            }
-        }
-
-        public sealed class TheBuildDisplayNameProperty
-        {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateBuildInfo();
-
-                // When
-                var result = info.BuildDisplayName;
-
-                // Then
-                Assert.Equal("#456", result);
-            }
-        }
-
-        public sealed class TheBuildTagProperty
-        {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateBuildInfo();
-
-                // When
-                var result = info.BuildTag;
-
-                // Then
-                Assert.Equal("jenkins-JOB1-456", result);
-            }
-        }
-
-        public sealed class TheBuildUrlProperty
-        {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateBuildInfo();
-
-                // When
-                var result = info.BuildUrl;
-
-                // Then
-                Assert.Equal("http://localhost:8080/jenkins/job/cake/456/", result);
-            }
-        }
-        public sealed class TheExecutorNumberProperty
+        public sealed class TheChangeIdProperty
         {
             [Fact]
             public void Should_Return_Correct_Value()
@@ -97,14 +18,14 @@ namespace Cake.Common.Tests.Unit.Build.Jenkins.Data
                 var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
 
                 // When
-                var result = info.Build.ExecutorNumber;
+                var result = info.Change.Id;
 
                 // Then
-                Assert.Equal(2112, result);
+                Assert.Equal("42178", result);
             }
         }
 
-        public sealed class TheWorkspaceProperty
+        public sealed class TheChangeUrlProperty
         {
             [Fact]
             public void Should_Return_Correct_Value()
@@ -113,10 +34,90 @@ namespace Cake.Common.Tests.Unit.Build.Jenkins.Data
                 var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
 
                 // When
-                var result = info.Build.Workspace;
+                var result = info.Change.Url;
 
                 // Then
-                Assert.Equal("C:\\Jenkins\\build\\456", result);
+                Assert.Equal("http://changeurl", result);
+            }
+        }
+
+        public sealed class TheChangeTitleProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+
+                // When
+                var result = info.Change.Title;
+
+                // Then
+                Assert.Equal("Modified x", result);
+            }
+        }
+
+        public sealed class TheChangeAuthorProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+
+                // When
+                var result = info.Change.Author;
+
+                // Then
+                Assert.Equal("cu", result);
+            }
+        }
+
+        public sealed class TheChangeAuthorDisplayNameProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+
+                // When
+                var result = info.Change.AuthorDisplayName;
+
+                // Then
+                Assert.Equal("Cake User", result);
+            }
+        }
+
+        public sealed class TheChangeAuthorEmailroperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+
+                // When
+                var result = info.Change.AuthorEmail;
+
+                // Then
+                Assert.Equal("cake@cakebuild.net", result);
+            }
+        }
+
+        public sealed class TheChangeTargetProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+
+                // When
+                var result = info.Change.Target;
+
+                // Then
+                Assert.Equal("develop", result);
             }
         }
     }

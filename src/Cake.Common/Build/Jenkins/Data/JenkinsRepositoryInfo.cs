@@ -12,6 +12,14 @@ namespace Cake.Common.Build.Jenkins.Data
     public sealed class JenkinsRepositoryInfo : JenkinsInfo
     {
         /// <summary>
+        /// Gets the branch name which will be build in a multibranch project.
+        /// </summary>
+        /// <value>
+        /// The branch name.
+        /// </value>
+        public string BranchName => GetEnvironmentString("BRANCH_NAME");
+
+        /// <summary>
         /// Gets the git commit sha.
         /// </summary>
         /// <value>

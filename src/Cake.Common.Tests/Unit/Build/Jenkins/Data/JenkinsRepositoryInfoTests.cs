@@ -9,6 +9,22 @@ namespace Cake.Common.Tests.Unit.Build.Jenkins.Data
 {
     public sealed class JenkinsRepositoryInfoTests
     {
+        public sealed class TheBranchNameProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new JenkinsInfoFixture().CreateRepositoryInfo();
+
+                // When
+                var result = info.BranchName;
+
+                // Then
+                Assert.Equal("CAKE-BRANCH", result);
+            }
+        }
+
         public sealed class TheGitBranchProperty
         {
             [Fact]

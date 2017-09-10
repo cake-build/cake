@@ -37,7 +37,7 @@ namespace Cake.Common.Tests.Unit.Build.Jenkins.Data
                 var result = info.NodeLabels;
 
                 // Then
-                Assert.Equal("cake development build", result);
+                Assert.Equal(new[] { "cake", "development", "build" }, result);
             }
         }
     }
