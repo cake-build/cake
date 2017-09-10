@@ -114,10 +114,12 @@ namespace Cake.Common.Tools.NUnit
                 builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "--err={0}", settings.ErrorOutputFile.MakeAbsolute(_environment).FullPath));
             }
 
+            #pragma warning disable 0618
             if (settings.Full)
             {
                 builder.Append("--full");
             }
+            #pragma warning restore 0618
 
             if (HasResults(settings) && settings.NoResults)
             {
@@ -166,10 +168,12 @@ namespace Cake.Common.Tools.NUnit
                 builder.Append("--nocolor");
             }
 
+            #pragma warning disable 0618
             if (settings.Verbose)
             {
                 builder.Append("--verbose");
             }
+            #pragma warning restore 0618
 
             if (settings.Configuration != null)
             {
