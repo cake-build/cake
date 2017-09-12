@@ -9,6 +9,7 @@ using Cake.Arguments;
 using Cake.Common.Modules;
 using Cake.Composition;
 using Cake.Core;
+using Cake.Core.Composition;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.Modules;
@@ -44,7 +45,6 @@ namespace Cake
                 builder.RegisterModule(new CakeModule());
                 builder.RegisterModule(new CoreModule());
                 builder.RegisterModule(new CommonModule());
-                builder.RegisterModule(new NuGetModule());
 
                 // Build the container.
                 using (var container = builder.Build())
@@ -65,6 +65,12 @@ namespace Cake
                     builder.RegisterModule(new ConfigurationModule(provider, options));
                     builder.RegisterModule(new ArgumentsModule(options));
                     builder.RegisterModule(new ScriptingModule(options, log));
+                    builder.Update(container);
+
+                    // Register the NuGetModule
+                    builder = new ContainerRegistrar();
+                    var configuration = container.Resolve<ICakeConfiguration>();
+                    builder.RegisterModule(new NuGetModule(configuration));
                     builder.Update(container);
 
                     // Load all modules.

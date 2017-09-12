@@ -39,9 +39,6 @@ namespace Cake.NuGet
 
         public void Load(IScriptAnalyzerContext context, LoadReference reference)
         {
-#if NETCORE
-            throw new NotSupportedException("The NuGet provider for #load is not supported on .NET Core.");
-#else
             // Create a package reference from our load reference.
             // The package should contain the necessary include parameters to make sure
             // that .cake files are included as part of the result.
@@ -69,7 +66,6 @@ namespace Cake.NuGet
                     context.Analyze(file.Path);
                 }
             }
-#endif
         }
 
         private DirectoryPath GetToolPath(DirectoryPath root)
