@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Core;
 
 namespace Cake.Common.Build.Jenkins.Data
@@ -25,7 +26,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The node labels.
         /// </value>
-        public string NodeLabels => GetEnvironmentString("NODE_LABELS");
+        public string[] NodeLabels => GetEnvironmentString("NODE_LABELS").Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JenkinsNodeInfo"/> class.

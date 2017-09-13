@@ -60,17 +60,17 @@ namespace Cake.Core.Tests.Unit.Scripting
         public sealed class TheInstallAddinsMethod
         {
             [Fact]
-            public void Should_Throw_If_Analyzer_Result_Is_Null()
+            public void Should_Throw_If_Addins_Is_Null()
             {
                 // Given
                 var fixture = new ScriptProcessorFixture();
-                fixture.Result = null;
+                fixture.Addins = null;
 
                 // When
                 var result = Record.Exception(() => fixture.InstallAddins());
 
                 // Then
-                AssertEx.IsArgumentNullException(result, "analyzerResult");
+                AssertEx.IsArgumentNullException(result, "addins");
             }
 
             [Fact]
@@ -135,17 +135,17 @@ namespace Cake.Core.Tests.Unit.Scripting
         public sealed class TheInstallToolsMethod
         {
             [Fact]
-            public void Should_Throw_If_Analyzer_Result_Is_Null()
+            public void Should_Throw_If_Tools_Is_Null()
             {
                 // Given
                 var fixture = new ScriptProcessorFixture();
-                fixture.Result = null;
+                fixture.Tools = null;
 
                 // When
                 var result = Record.Exception(() => fixture.InstallTools());
 
                 // Then
-                AssertEx.IsArgumentNullException(result, "analyzerResult");
+                AssertEx.IsArgumentNullException(result, "tools");
             }
 
             [Fact]
@@ -217,7 +217,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 fixture.InstallTools();
 
                 // Then
-                fixture.Tools.Received(1).RegisterFile(
+                fixture.ToolLocator.Received(1).RegisterFile(
                     Arg.Is<FilePath>(path => path.FullPath == "/Working/Bin/Temp.dll"));
             }
         }

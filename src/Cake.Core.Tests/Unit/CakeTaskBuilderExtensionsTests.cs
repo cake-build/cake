@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Core.Tests.Fixtures;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit
@@ -309,6 +310,180 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.NotNull(builder.Task.ErrorReporter);
+            }
+        }
+
+        public sealed class TheDoesForEachMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Builder_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => CakeTaskBuilderExtensions.DoesForEach(null, new string[0], exception => { }));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "builder");
+            }
+
+            [Fact]
+            public void Should_Add_Actions_Foreach_Item()
+            {
+                // Given
+                var task = new ActionTask("task");
+                var builder = new CakeTaskBuilder<ActionTask>(task);
+
+                // When
+                CakeTaskBuilderExtensions.DoesForEach(builder, new[] { "a", "b", "c" }, item => { });
+
+                // Then
+                Assert.Equal(3, builder.Task.Actions.Count);
+            }
+
+            [Fact]
+            public void Should_Support_Item_And_Context_Action()
+            {
+                // Given
+                var task = new ActionTask("task");
+                var builder = new CakeTaskBuilder<ActionTask>(task);
+
+                // When
+                CakeTaskBuilderExtensions.DoesForEach(builder, new[] { "a", "b", "c" }, (item, context) => { });
+
+                // Then
+                Assert.Equal(3, builder.Task.Actions.Count);
+            }
+
+            [Fact]
+            public void Should_Defer_Delegate_Items_Until_Execution()
+            {
+                // Given
+                var task = new ActionTask("task");
+                var builder = new CakeTaskBuilder<ActionTask>(task);
+                var context = new CakeContextFixture().CreateContext();
+
+                // When
+                CakeTaskBuilderExtensions.DoesForEach(builder, () => new[] { "a", "b", "c" }, (item) => { });
+
+                // Then
+                Assert.Equal(0, builder.Task.Actions.Count);
+                Assert.Equal(1, builder.Task.DelayedActions.Count);
+
+                // When
+                builder.Task.Execute(context);
+
+                // Then
+                Assert.Equal(0, builder.Task.DelayedActions.Count);
+                Assert.Equal(3, builder.Task.Actions.Count);
+            }
+
+            [Fact]
+            public void Should_Support_Defered_Item_And_Context_Action()
+            {
+                // Given
+                var task = new ActionTask("task");
+                var builder = new CakeTaskBuilder<ActionTask>(task);
+                var context = new CakeContextFixture().CreateContext();
+
+                // When
+                CakeTaskBuilderExtensions.DoesForEach(builder, () => new[] { "a", "b", "c" }, (item, c) => { });
+
+                // Then
+                Assert.Equal(0, builder.Task.Actions.Count);
+                Assert.Equal(1, builder.Task.DelayedActions.Count);
+
+                // When
+                builder.Task.Execute(context);
+
+                // Then
+                Assert.Equal(0, builder.Task.DelayedActions.Count);
+                Assert.Equal(3, builder.Task.Actions.Count);
+            }
+
+            [Fact]
+            public void Should_Throw_On_First_Failed_Action()
+            {
+                // Given
+                var task = new ActionTask("task");
+                var builder = new CakeTaskBuilder<ActionTask>(task);
+                var context = new CakeContextFixture().CreateContext();
+
+                // When
+                CakeTaskBuilderExtensions.DoesForEach(builder, () => new[] { "a", "b", "c" }, (item, c) => throw new NotImplementedException());
+                var result = Record.Exception(() => builder.Task.Execute(context));
+
+                // Then
+                Assert.IsType<NotImplementedException>(result);
+            }
+        }
+
+        public sealed class TheDeferOnErrorMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Builder_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => CakeTaskBuilderExtensions.DeferOnError(null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "builder");
+            }
+
+            [Fact]
+            public void Should_Throw_On_First_Failed_Action()
+            {
+                // Given
+                var task = new ActionTask("task");
+                var builder = new CakeTaskBuilder<ActionTask>(task);
+                var context = new CakeContextFixture().CreateContext();
+
+                // When
+                builder.Does(() => throw new NotImplementedException());
+                builder.Does(() => throw new NotSupportedException());
+                builder.Does(() => throw new OutOfMemoryException());
+                var result = Record.Exception(() => builder.Task.Execute(context));
+
+                // Then
+                Assert.IsType<NotImplementedException>(result);
+            }
+
+            [Fact]
+            public void Should_Aggregate_Exceptions_From_Actions()
+            {
+                // Given
+                var task = new ActionTask("task");
+                var builder = new CakeTaskBuilder<ActionTask>(task);
+                var context = new CakeContextFixture().CreateContext();
+
+                // When
+                builder.Does(() => throw new NotImplementedException());
+                builder.Does(() => throw new NotSupportedException());
+                builder.Does(() => throw new OutOfMemoryException());
+                builder.DeferOnError();
+                var result = Record.Exception(() => builder.Task.Execute(context));
+
+                // Then
+                Assert.IsType<AggregateException>(result);
+                var ex = result as AggregateException;
+                Assert.Contains(ex.InnerExceptions, x => x.GetType() == typeof(NotImplementedException));
+                Assert.Contains(ex.InnerExceptions, x => x.GetType() == typeof(NotSupportedException));
+                Assert.Contains(ex.InnerExceptions, x => x.GetType() == typeof(OutOfMemoryException));
+            }
+
+            [Fact]
+            public void Should_Only_Aggregate_Exceptions_When_There_Are_Many()
+            {
+                // Given
+                var task = new ActionTask("task");
+                var builder = new CakeTaskBuilder<ActionTask>(task);
+                var context = new CakeContextFixture().CreateContext();
+
+                // When
+                builder.Does(() => throw new NotImplementedException());
+                builder.DeferOnError();
+                var result = Record.Exception(() => builder.Task.Execute(context));
+
+                // Then
+                Assert.IsType<NotImplementedException>(result);
             }
         }
     }

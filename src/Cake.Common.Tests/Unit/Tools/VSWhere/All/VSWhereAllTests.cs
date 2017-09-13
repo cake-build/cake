@@ -169,6 +169,20 @@ namespace Cake.Common.Tests.Unit.Tools.VSWhere.All
                 // Then
                 Assert.Equal("-all -nologo", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_Prerelease_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new VSWhereAllFixture();
+                fixture.Settings.IncludePrerelease = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-all -property installationPath -prerelease -nologo", result.Args);
+            }
         }
     }
 }

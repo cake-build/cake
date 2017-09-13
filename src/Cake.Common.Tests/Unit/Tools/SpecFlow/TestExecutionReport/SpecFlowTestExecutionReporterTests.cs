@@ -304,8 +304,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
                 var nUnit3Settings = new NUnit3Settings
                 {
                     ShadowCopy = false,
-                    Results = "/Working/TestResult.xml",
-                    ResultFormat = "nunit2",
+                    Results = new[] { new NUnit3Result { FileName = "/Working/TestResult.xml", Format = "nunit2" } },
                     Labels = NUnit3Labels.All,
                     OutputFile = "/Working/TestResult.txt"
                 };
@@ -360,8 +359,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
                 var nUnit3Settings = new NUnit3Settings
                 {
                     ShadowCopy = false,
-                    Results = "/Working/TestResult.xml",
-                    ResultFormat = "nunit2"
+                    Results = new[] { new NUnit3Result { FileName = "/Working/TestResult.xml", Format = "nunit2" } },
                 };
 
                 fixture.Action = context =>
@@ -386,8 +384,7 @@ namespace Cake.Common.Tests.Unit.Tools.SpecFlow.TestExecutionReport
                 var nUnit3Settings = new NUnit3Settings
                 {
                     ShadowCopy = false,
-                    Results = "/Working/TestResult.xml",
-                    ResultFormat = "nunit2",
+                    Results = new[] { new NUnit3Result { FileName = "/Working/TestResult.xml", Format = "nunit2" } },
                     OutputFile = "/Working/TestResult.txt"
                 };
 

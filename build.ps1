@@ -16,7 +16,7 @@ No tasks will be executed.
 .PARAMETER ScriptArgs
 Remaining arguments are added here.
 .LINK
-http://cakebuild.net
+https://cakebuild.net
 #>
 
 [CmdletBinding()]
@@ -31,7 +31,7 @@ Param(
     [string[]]$ScriptArgs
 )
 
-$CakeVersion = "0.21.0"
+$CakeVersion = "0.21.1"
 $DotNetChannel = "preview";
 $DotNetVersion = "1.0.4";
 $DotNetInstallerUri = "https://dot.net/v1/dotnet-install.ps1";

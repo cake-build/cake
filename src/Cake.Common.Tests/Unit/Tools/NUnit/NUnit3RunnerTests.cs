@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.NUnit;
 using Cake.Core;
@@ -175,7 +176,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
             {
                 // Given
                 var fixture = new NUnit3RunnerFixture();
-                fixture.Settings.Results = "NewResults.xml";
+                fixture.Settings.Results = new[] { new NUnit3Result { FileName = "NewResults.xml" } };
                 fixture.Settings.NoResults = true;
 
                 // When
@@ -191,7 +192,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
             {
                 // Given
                 var fixture = new NUnit3RunnerFixture();
-                fixture.Settings.Results = "NewTestResult.xml";
+                fixture.Settings.Results = new[] { new NUnit3Result { FileName = "NewTestResult.xml" } };
 
                 // When
                 var result = fixture.Run();
@@ -217,15 +218,21 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 fixture.Settings.Work = "out";
                 fixture.Settings.OutputFile = "stdout.txt";
                 fixture.Settings.ErrorOutputFile = "stderr.txt";
+                #pragma warning disable 0618
                 fixture.Settings.Full = true;
-                fixture.Settings.Results = "NewTestResult.xml";
-                fixture.Settings.ResultFormat = "nunit2";
-                fixture.Settings.ResultTransform = "nunit2.xslt";
+                #pragma warning restore 0618
+                fixture.Settings.Results = new[]
+                {
+                    new NUnit3Result { FileName = "NewTestResult.xml", Format = "nunit2", Transform = "nunit2.xslt" },
+                    new NUnit3Result { FileName = "NewTestResult2.xml", Format = "nunit3" }
+                };
                 fixture.Settings.Labels = NUnit3Labels.All;
                 fixture.Settings.TeamCity = true;
                 fixture.Settings.NoHeader = true;
                 fixture.Settings.NoColor = true;
+                #pragma warning disable 0618
                 fixture.Settings.Verbose = true;
+                #pragma warning restore 0618
                 fixture.Settings.Configuration = "Debug";
                 fixture.Settings.Process = NUnit3ProcessOption.InProcess;
                 fixture.Settings.AppDomainUsage = NUnit3AppDomainUsage.Single;
@@ -234,6 +241,12 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 fixture.Settings.DisposeRunners = true;
                 fixture.Settings.ShadowCopy = true;
                 fixture.Settings.Agents = 3;
+                fixture.Settings.Params = new Dictionary<string, string>
+                {
+                    ["one"] = "1",
+                    ["two"] = "2",
+                    ["three"] = "3"
+                };
 
                 // When
                 var result = fixture.Run();
@@ -244,10 +257,14 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                         "--stoponerror \"--work=/Working/out\" \"--out=/Working/stdout.txt\" " +
                         "\"--err=/Working/stderr.txt\" --full " +
                         "\"--result=/Working/NewTestResult.xml;format=nunit2;transform=/Working/nunit2.xslt\" " +
+                        "\"--result=/Working/NewTestResult2.xml;format=nunit3\" " +
                         "--labels=All --teamcity --noheader --nocolor --verbose " +
                         "\"--config=Debug\" \"--framework=net3.5\" --x86 " +
                         "--dispose-runners --shadowcopy --agents=3 " +
-                        "--process=InProcess --domain=Single", result.Args);
+                        "--process=InProcess --domain=Single " +
+                        "\"--params=one=1\" " +
+                        "\"--params=two=2\" " +
+                        "\"--params=three=3\"", result.Args);
             }
 
             [Fact]

@@ -43,10 +43,22 @@ Setup(context =>
         parameters.Version.CakeVersion,
         parameters.IsTagged);
 
+    var releaseNotes = string.Join("\n", parameters.ReleaseNotes.Notes.ToArray()).Replace("\"", "\"\"");
+
     msBuildSettings = new DotNetCoreMSBuildSettings()
                             .WithProperty("Version", parameters.Version.SemVersion)
                             .WithProperty("AssemblyVersion", parameters.Version.Version)
-                            .WithProperty("FileVersion", parameters.Version.Version);
+                            .WithProperty("FileVersion", parameters.Version.Version)
+                            .WithProperty("PackageReleaseNotes", string.Concat("\"", releaseNotes, "\""));
+
+    if(!parameters.IsRunningOnWindows)
+    {
+        var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
+        
+        // Use FrameworkPathOverride when not running on Windows.
+        Information("Build will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
+        msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
+    }
 });
 
 Teardown(context =>
@@ -144,14 +156,14 @@ Task("Copy-Files")
     .IsDependentOn("Run-Unit-Tests")
     .Does(() =>
 {
-    // .NET 4.5
+    // .NET 4.6
     DotNetCorePublish("./src/Cake", new DotNetCorePublishSettings
     {
-        Framework = "net45",
+        Framework = "net461",
         VersionSuffix = parameters.Version.DotNetAsterix,
         Configuration = parameters.Configuration,
-        OutputDirectory = parameters.Paths.Directories.ArtifactsBinNet45,
-        Verbosity = DotNetCoreVerbosity.Minimal
+        OutputDirectory = parameters.Paths.Directories.ArtifactsBinFullFx,
+        MSBuildSettings = msBuildSettings
     });
 
     // .NET Core
@@ -159,30 +171,30 @@ Task("Copy-Files")
     {
         Framework = "netcoreapp1.0",
         Configuration = parameters.Configuration,
-        OutputDirectory = parameters.Paths.Directories.ArtifactsBinNetCoreApp10,
-        Verbosity = DotNetCoreVerbosity.Minimal
+        OutputDirectory = parameters.Paths.Directories.ArtifactsBinNetCore,
+        MSBuildSettings = msBuildSettings
     });
 
     // Copy license
-    CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinNet45);
-    CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinNetCoreApp10);
+    CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinFullFx);
+    CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinNetCore);
 
     // Copy Cake.XML (since publish does not do this anymore)
-    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/net45/Cake.xml", parameters.Paths.Directories.ArtifactsBinNet45);
-    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/netcoreapp1.0/netcoreapp1.0/Cake.xml", parameters.Paths.Directories.ArtifactsBinNetCoreApp10);
+    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/net461/Cake.xml", parameters.Paths.Directories.ArtifactsBinFullFx);
+    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/netcoreapp1.0/Cake.xml", parameters.Paths.Directories.ArtifactsBinNetCore);
 });
 
 Task("Zip-Files")
     .IsDependentOn("Copy-Files")
     .Does(() =>
 {
-    // .NET 4.5
-    var homebrewFiles = GetFiles( parameters.Paths.Directories.ArtifactsBinNet45.FullPath + "/**/*");
-    Zip(parameters.Paths.Directories.ArtifactsBinNet45, parameters.Paths.Files.ZipArtifactPathDesktop, homebrewFiles);
+    // .NET 4.6
+    var homebrewFiles = GetFiles( parameters.Paths.Directories.ArtifactsBinFullFx.FullPath + "/**/*");
+    Zip(parameters.Paths.Directories.ArtifactsBinFullFx, parameters.Paths.Files.ZipArtifactPathDesktop, homebrewFiles);
 
     // .NET Core
-    var coreclrFiles = GetFiles( parameters.Paths.Directories.ArtifactsBinNetCoreApp10.FullPath + "/**/*");
-    Zip(parameters.Paths.Directories.ArtifactsBinNetCoreApp10, parameters.Paths.Files.ZipArtifactPathCoreClr, coreclrFiles);
+    var coreclrFiles = GetFiles( parameters.Paths.Directories.ArtifactsBinNetCore.FullPath + "/**/*");
+    Zip(parameters.Paths.Directories.ArtifactsBinNetCore, parameters.Paths.Files.ZipArtifactPathCoreClr, coreclrFiles);
 });
 
 Task("Create-Chocolatey-Packages")
@@ -193,12 +205,19 @@ Task("Create-Chocolatey-Packages")
 {
     foreach(var package in parameters.Packages.Chocolatey)
     {
+        var netFxFullArtifactPath = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinFullFx).FullPath;
+        var curDirLength =  MakeAbsolute(Directory("./")).FullPath.Length + 1;
+
         // Create package.
         ChocolateyPack(package.NuspecPath, new ChocolateyPackSettings {
             Version = parameters.Version.SemVersion,
             ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
             OutputDirectory = parameters.Paths.Directories.NugetRoot,
-            Files = parameters.Paths.ChocolateyFiles
+            Files = GetFiles(netFxFullArtifactPath + "/**/*")
+                                    .Where(file => file.FullPath.IndexOf("/runtimes/", StringComparison.OrdinalIgnoreCase) < 0)
+                                    .Select(file=>"../" + file.FullPath.Substring(curDirLength))
+                                    .Select(file=> new ChocolateyNuSpecContent { Source = file })
+                                    .ToArray()
         });
     }
 });
@@ -221,41 +240,50 @@ Task("Create-NuGet-Packages")
             Configuration = parameters.Configuration,
             OutputDirectory = parameters.Paths.Directories.NugetRoot,
             NoBuild = true,
+            IncludeSymbols = true,
             MSBuildSettings = msBuildSettings
         });
     }
 
-    // Cake - Symbols - .NET 4.5
+    // Cake - Symbols - .NET 4.6
     NuGetPack("./nuspec/Cake.symbols.nuspec", new NuGetPackSettings {
         Version = parameters.Version.SemVersion,
         ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
-        BasePath = parameters.Paths.Directories.ArtifactsBinNet45,
+        BasePath = parameters.Paths.Directories.ArtifactsBinFullFx,
         OutputDirectory = parameters.Paths.Directories.NugetRoot,
         Symbols = true,
         NoPackageAnalysis = true
     });
 
-    // Cake - .NET 4.5
+    var netFxFullArtifactPath = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinFullFx).FullPath;
+    var netFxFullArtifactPathLength = netFxFullArtifactPath.Length+1;
+
+    // Cake - .NET 4.6
     NuGetPack("./nuspec/Cake.nuspec", new NuGetPackSettings {
         Version = parameters.Version.SemVersion,
         ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
-        BasePath = parameters.Paths.Directories.ArtifactsBinNet45,
+        BasePath = netFxFullArtifactPath,
         OutputDirectory = parameters.Paths.Directories.NugetRoot,
         Symbols = false,
-        NoPackageAnalysis = true
+        NoPackageAnalysis = true,
+        Files = GetFiles(netFxFullArtifactPath + "/**/*")
+                                .Where(file => file.FullPath.IndexOf("/runtimes/", StringComparison.OrdinalIgnoreCase) < 0)
+                                .Select(file=>file.FullPath.Substring(netFxFullArtifactPathLength))
+                                .Select(file=> new NuSpecContent { Source = file, Target = file })
+                                .ToArray()
     });
 
     // Cake Symbols - .NET Core
     NuGetPack("./nuspec/Cake.CoreCLR.symbols.nuspec", new NuGetPackSettings {
         Version = parameters.Version.SemVersion,
         ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
-        BasePath = parameters.Paths.Directories.ArtifactsBinNetCoreApp10,
+        BasePath = parameters.Paths.Directories.ArtifactsBinNetCore,
         OutputDirectory = parameters.Paths.Directories.NugetRoot,
         Symbols = true,
         NoPackageAnalysis = true
     });
 
-    var netCoreFullArtifactPath = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinNetCoreApp10).FullPath;
+    var netCoreFullArtifactPath = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinNetCore).FullPath;
     var netCoreFullArtifactPathLength = netCoreFullArtifactPath.Length+1;
 
     // Cake - .NET Core
@@ -309,7 +337,7 @@ Task("Sign-Binaries")
             .AppendSwitchQuotedSecret("-s", secret)
             .AppendSwitchQuoted("-n", "Cake")
             .AppendSwitchQuoted("-d", "Cake (C# Make) is a cross platform build automation system.")
-            .AppendSwitchQuoted("-u", "http://cakebuild.net");
+            .AppendSwitchQuoted("-u", "https://cakebuild.net");
 
         // Sign the binary.
         var result = StartProcess("dotnet", new ProcessSettings {  Arguments = arguments });

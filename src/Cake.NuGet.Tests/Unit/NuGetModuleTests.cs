@@ -4,13 +4,9 @@
 
 using Cake.Core.Composition;
 using Cake.Core.Packaging;
-using Cake.NuGet.Tests.Fixtures;
-#if NETCORE
-using Cake.NuGet.V3;
-#else
 using Cake.Core.Scripting.Processors.Loading;
-using Cake.NuGet.V2;
-#endif
+using Cake.NuGet.Tests.Fixtures;
+using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
 
@@ -20,45 +16,28 @@ namespace Cake.NuGet.Tests.Unit
     {
         public sealed class TheRegisterMethod
         {
-#if NETCORE
             [Fact]
             public void Should_Register_The_NuGet_Content_Resolver()
             {
                 // Given
-                var fixture = new NuGetModuleFixture<NuGetV3ContentResolver>();
-                var module = new NuGetModule();
+                var fixture = new NuGetModuleFixture<NuGetContentResolver>();
+                var module = fixture.CreateModule();
 
                 // When
                 module.Register(fixture.Registrar);
 
                 // Then
-                fixture.Registrar.Received(1).RegisterType<NuGetV3ContentResolver>();
-                fixture.Builder.Received(1).As<INuGetContentResolver>();
-                fixture.Builder.Received(1).Singleton();
-            }
-#else
-            [Fact]
-            public void Should_Register_The_NuGet_Content_Resolver()
-            {
-                // Given
-                var fixture = new NuGetModuleFixture<NuGetV2ContentResolver>();
-                var module = new NuGetModule();
-
-                // When
-                module.Register(fixture.Registrar);
-
-                // Then
-                fixture.Registrar.Received(1).RegisterType<NuGetV2ContentResolver>();
+                fixture.Registrar.Received(1).RegisterType<NuGetContentResolver>();
                 fixture.Builder.Received(1).As<INuGetContentResolver>();
                 fixture.Builder.Received(1).Singleton();
             }
 
-            [Fact]
+            [RuntimeFact(TestRuntime.Clr)]
             public void Should_Register_The_NuGet_Load_Directive_Provider()
             {
                 // Given
                 var fixture = new NuGetModuleFixture<NuGetLoadDirectiveProvider>();
-                var module = new NuGetModule();
+                var module = fixture.CreateModule();
 
                 // When
                 module.Register(fixture.Registrar);
@@ -68,20 +47,71 @@ namespace Cake.NuGet.Tests.Unit
                 fixture.Builder.Received(1).As<ILoadDirectiveProvider>();
                 fixture.Builder.Received(1).Singleton();
             }
-#endif
+
+            [RuntimeFact(TestRuntime.CoreClr)]
+            public void Should_Register_The_NuGet_Load_Directive_Provider_When_Using_In_Process_Client()
+            {
+                // Given
+                var fixture = new NuGetModuleFixture<NuGetLoadDirectiveProvider>();
+                fixture.Configuration.SetValue(Constants.NuGet.UseInProcessClient, bool.TrueString);
+                var module = fixture.CreateModule();
+
+                // When
+                module.Register(fixture.Registrar);
+
+                // Then
+                fixture.Registrar.Received(1).RegisterType<NuGetLoadDirectiveProvider>();
+                fixture.Builder.Received(1).As<ILoadDirectiveProvider>();
+                fixture.Builder.Received(1).Singleton();
+            }
+
+            [RuntimeFact(TestRuntime.CoreClr)]
+            public void Should_Not_Register_The_NuGet_Load_Directive_Provider_When_Not_Using_In_Process_Client()
+            {
+                // Given
+                var fixture = new NuGetModuleFixture<NuGetLoadDirectiveProvider>();
+                fixture.Configuration.SetValue(Constants.NuGet.UseInProcessClient, bool.FalseString);
+                var module = fixture.CreateModule();
+
+                // When
+                module.Register(fixture.Registrar);
+
+                // Then
+                fixture.Registrar.Received(0).RegisterType<NuGetLoadDirectiveProvider>();
+                fixture.Builder.Received(0).As<ILoadDirectiveProvider>();
+                fixture.Builder.Received(0).Singleton();
+            }
 
             [Fact]
-            public void Shouls_Register_The_NuGet_Package_Installer()
+            public void Should_Register_The_NuGet_Package_Installer()
             {
                 // Given
                 var fixture = new NuGetModuleFixture<NuGetPackageInstaller>();
-                var module = new NuGetModule();
+                var module = fixture.CreateModule();
 
                 // When
                 module.Register(fixture.Registrar);
 
                 // Then
                 fixture.Registrar.Received(1).RegisterType<NuGetPackageInstaller>();
+                fixture.Builder.Received(1).As<INuGetPackageInstaller>();
+                fixture.Builder.Received(1).As<IPackageInstaller>();
+                fixture.Builder.Received(1).Singleton();
+            }
+
+            [Fact]
+            public void Should_Register_The_In_Process_NuGet_Package_Installer_If_Set_In_Configuration()
+            {
+                // Given
+                var fixture = new NuGetModuleFixture<Install.NuGetPackageInstaller>();
+                fixture.Configuration.SetValue(Constants.NuGet.UseInProcessClient, bool.TrueString);
+                var module = fixture.CreateModule();
+
+                // When
+                module.Register(fixture.Registrar);
+
+                // Then
+                fixture.Registrar.Received(1).RegisterType<Install.NuGetPackageInstaller>();
                 fixture.Builder.Received(1).As<INuGetPackageInstaller>();
                 fixture.Builder.Received(1).As<IPackageInstaller>();
                 fixture.Builder.Received(1).Singleton();

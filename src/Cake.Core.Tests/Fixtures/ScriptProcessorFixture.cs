@@ -19,10 +19,11 @@ namespace Cake.Core.Tests.Fixtures
         public FakeFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
         public ICakeLog Log { get; set; }
-        public IToolLocator Tools { get; set; }
+        public IToolLocator ToolLocator { get; set; }
         public IPackageInstaller Installer { get; set; }
 
-        public ScriptAnalyzerResult Result { get; set; }
+        public List<PackageReference> Addins { get; set; }
+        public List<PackageReference> Tools { get; set; }
         public DirectoryPath InstallPath { get; set; }
 
         public ScriptProcessorFixture()
@@ -30,17 +31,14 @@ namespace Cake.Core.Tests.Fixtures
             Environment = FakeEnvironment.CreateUnixEnvironment();
             FileSystem = new FakeFileSystem(Environment);
             Log = Substitute.For<ICakeLog>();
-            Tools = Substitute.For<IToolLocator>();
+            ToolLocator = Substitute.For<IToolLocator>();
 
             Installer = Substitute.For<IPackageInstaller>();
             Installer.CanInstall(Arg.Any<PackageReference>(), Arg.Any<PackageType>()).Returns(true);
             InstallPath = new DirectoryPath("/Working/Bin");
 
-            // Create the script analyzer result.
-            var script = new ScriptInformation("/Working/build.cake");
-            script.Addins.Add(new PackageReference("custom:?package=addin"));
-            script.Tools.Add(new PackageReference("custom:?package=tool"));
-            Result = new ScriptAnalyzerResult(script, new List<string>());
+            Addins = new List<PackageReference> { new PackageReference("custom:?package=addin") };
+            Tools = new List<PackageReference> { new PackageReference("custom:?package=tool") };
         }
 
         public void GivenFilesWillBeInstalled()
@@ -62,17 +60,17 @@ namespace Cake.Core.Tests.Fixtures
             {
                 installers.Add(Installer);
             }
-            return new ScriptProcessor(FileSystem, Environment, Log, Tools, installers);
+            return new ScriptProcessor(FileSystem, Environment, Log, ToolLocator, installers);
         }
 
         public void InstallAddins()
         {
-            CreateProcessor().InstallAddins(Result, InstallPath);
+            CreateProcessor().InstallAddins(Addins, InstallPath);
         }
 
         public void InstallTools()
         {
-            CreateProcessor().InstallTools(Result, InstallPath);
+            CreateProcessor().InstallTools(Tools, InstallPath);
         }
     }
 }

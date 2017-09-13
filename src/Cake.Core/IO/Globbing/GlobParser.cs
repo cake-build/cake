@@ -40,16 +40,10 @@ namespace Cake.Core.IO.Globbing
             }
 
             // Parse all path segments.
-            while (context.CurrentToken.Kind == GlobTokenKind.PathSeparator)
+            while (context.CurrentToken?.Kind == GlobTokenKind.PathSeparator)
             {
                 context.Accept();
                 items.Add(ParseSegment(context));
-            }
-
-            // Not an end of text token?
-            if (context.CurrentToken.Kind != GlobTokenKind.EndOfText)
-            {
-                throw new InvalidOperationException("Expected EOT");
             }
 
             // Rewrite the items into a linked list.
@@ -134,7 +128,7 @@ namespace Cake.Core.IO.Globbing
             var items = new List<GlobToken>();
             while (true)
             {
-                switch (context.CurrentToken.Kind)
+                switch (context.CurrentToken?.Kind)
                 {
                     case GlobTokenKind.Identifier:
                     case GlobTokenKind.CharacterWildcard:
@@ -144,6 +138,7 @@ namespace Cake.Core.IO.Globbing
                 }
                 break;
             }
+
             return new PathSegment(items, context.Options);
         }
 

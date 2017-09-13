@@ -4,6 +4,7 @@
 
 using System;
 using Cake.Core.Composition;
+using Cake.Core.Configuration;
 using Cake.Core.Packaging;
 using Cake.Core.Scripting.Processors.Loading;
 
@@ -15,6 +16,17 @@ namespace Cake.NuGet
     /// </summary>
     public sealed class NuGetModule : ICakeModule
     {
+        private readonly ICakeConfiguration _config;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NuGetModule"/> class.
+        /// </summary>
+        /// <param name="config">The config.</param>
+        public NuGetModule(ICakeConfiguration config)
+        {
+            _config = config ?? throw new ArgumentNullException(nameof(config));
+        }
+
         /// <summary>
         /// Performs custom registrations in the provided registrar.
         /// </summary>
@@ -26,20 +38,40 @@ namespace Cake.NuGet
                 throw new ArgumentNullException(nameof(registrar));
             }
 
-#if NETCORE
-            // NuGet V3
-            registrar.RegisterType<V3.NuGetV3ContentResolver>().As<INuGetContentResolver>().Singleton();
-#else
-            // NuGet V2
-            registrar.RegisterType<V2.NuGetV2ContentResolver>().As<INuGetContentResolver>().Singleton();
-            registrar.RegisterType<NuGetLoadDirectiveProvider>().As<ILoadDirectiveProvider>().Singleton();
+            // NuGet content resolver.
+            registrar.RegisterType<NuGetContentResolver>()
+                .As<INuGetContentResolver>()
+                .Singleton();
+
+#if !NETCORE
+            // Load directive provider.
+            registrar.RegisterType<NuGetLoadDirectiveProvider>()
+                .As<ILoadDirectiveProvider>()
+                .Singleton();
 #endif
 
             // URI resource support.
-            registrar.RegisterType<NuGetPackageInstaller>()
-                .As<INuGetPackageInstaller>()
-                .As<IPackageInstaller>()
-                .Singleton();
+            bool.TryParse(_config.GetValue(Constants.NuGet.UseInProcessClient) ?? bool.FalseString, out bool useInProcessClient);
+            if (useInProcessClient)
+            {
+#if NETCORE
+                // Load directive provider.
+                registrar.RegisterType<NuGetLoadDirectiveProvider>()
+                    .As<ILoadDirectiveProvider>()
+                    .Singleton();
+#endif
+                registrar.RegisterType<Install.NuGetPackageInstaller>()
+                    .As<INuGetPackageInstaller>()
+                    .As<IPackageInstaller>()
+                    .Singleton();
+            }
+            else
+            {
+                registrar.RegisterType<NuGetPackageInstaller>()
+                    .As<INuGetPackageInstaller>()
+                    .As<IPackageInstaller>()
+                    .Singleton();
+            }
         }
     }
 }

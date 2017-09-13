@@ -25,22 +25,6 @@ namespace Cake.Common.Tests.Unit.Build.Jenkins.Data
              }
         }
 
-        public sealed class TheBuildDisplayNameProperty
-        {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateBuildInfo();
-
-                // When
-                var result = info.BuildDisplayName;
-
-                // Then
-                Assert.Equal("#456", result);
-            }
-        }
-
         public sealed class TheBuildIdProperty
         {
             [Fact]
@@ -54,6 +38,22 @@ namespace Cake.Common.Tests.Unit.Build.Jenkins.Data
 
                 // Then
                 Assert.Equal("456", result);
+            }
+        }
+
+        public sealed class TheBuildDisplayNameProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new JenkinsInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.BuildDisplayName;
+
+                // Then
+                Assert.Equal("#456", result);
             }
         }
 
@@ -86,6 +86,37 @@ namespace Cake.Common.Tests.Unit.Build.Jenkins.Data
 
                 // Then
                 Assert.Equal("http://localhost:8080/jenkins/job/cake/456/", result);
+            }
+        }
+        public sealed class TheExecutorNumberProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+
+                // When
+                var result = info.Build.ExecutorNumber;
+
+                // Then
+                Assert.Equal(2112, result);
+            }
+        }
+
+        public sealed class TheWorkspaceProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+
+                // When
+                var result = info.Build.Workspace;
+
+                // Then
+                Assert.Equal("C:\\Jenkins\\build\\456", result);
             }
         }
     }

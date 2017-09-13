@@ -240,19 +240,16 @@ namespace Cake.Common.Xml
                 throw new FileNotFoundException("Source File not found.", file.Path.FullPath);
             }
 
-            using (var memoryStream = new MemoryStream())
+            using (var resultStream = new MemoryStream())
             {
                 using (var fileStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None))
-                using (var xmlReader = XmlReader.Create(fileStream, GetXmlReaderSettings(settings)))
-                using (var xmlWriter = XmlWriter.Create(memoryStream))
                 {
-                    XmlPoke(xmlReader, xmlWriter, xpath, value, settings);
+                    XmlPoke(fileStream, resultStream, xpath, value, settings);
                 }
-
                 using (var fileStream = file.Open(FileMode.Create, FileAccess.Write, FileShare.None))
                 {
-                    memoryStream.Position = 0;
-                    memoryStream.CopyTo(fileStream);
+                    resultStream.Position = 0;
+                    resultStream.CopyTo(fileStream);
                 }
             }
         }
@@ -465,11 +462,11 @@ namespace Cake.Common.Xml
             }
 
             using (var resultStream = new MemoryStream())
-            using (var fileReader = new StringReader(sourceXml))
-            using (var xmlReader = XmlReader.Create(fileReader, GetXmlReaderSettings(settings)))
-            using (var xmlWriter = XmlWriter.Create(resultStream))
             {
-                XmlPoke(xmlReader, xmlWriter, xpath, value, settings);
+                using (var sourceStream = new MemoryStream(settings.Encoding.GetBytes(sourceXml)))
+                {
+                    XmlPoke(sourceStream, resultStream, xpath, value, settings);
+                }
                 resultStream.Position = 0;
                 return settings.Encoding.GetString(resultStream.ToArray());
             }
@@ -483,7 +480,7 @@ namespace Cake.Common.Xml
         /// <param name="xpath">The xpath of the nodes to set.</param>
         /// <param name="value">The value to set too. Leave blank to remove the selected nodes.</param>
         /// <param name="settings">Additional settings to tweak Xml Poke behavior.</param>
-        private static void XmlPoke(XmlReader source, XmlWriter destination, string xpath, string value, XmlPokeSettings settings)
+        private static void XmlPoke(Stream source, Stream destination, string xpath, string value, XmlPokeSettings settings)
         {
             if (source == null)
             {
@@ -505,42 +502,61 @@ namespace Cake.Common.Xml
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            var document = new XmlDocument();
-            document.PreserveWhitespace = settings.PreserveWhitespace;
-            document.Load(source);
-
-            var namespaceManager = new XmlNamespaceManager(document.NameTable);
-            foreach (var xmlNamespace in settings.Namespaces)
+            using (var xmlReader = XmlReader.Create(source, GetXmlReaderSettings(settings)))
             {
-                namespaceManager.AddNamespace(xmlNamespace.Key /* Prefix */, xmlNamespace.Value /* URI */);
-            }
-
-            var nodes = document.SelectNodes(xpath, namespaceManager);
-            if (nodes == null || nodes.Count == 0)
-            {
-                const string format = "Failed to find nodes matching the XPath '{0}'";
-                var message = string.Format(CultureInfo.InvariantCulture, format, xpath);
-                throw new CakeException(message);
-            }
-
-            if (value == null)
-            {
-                foreach (XmlNode node in nodes)
+                // Load the document from the reader
+                var document = new XmlDocument();
+                document.PreserveWhitespace = settings.PreserveWhitespace;
+                document.Load(xmlReader);
+                // Add namespaces
+                var namespaceManager = new XmlNamespaceManager(document.NameTable);
+                foreach (var xmlNamespace in settings.Namespaces)
                 {
-                    // ReSharper disable once PossibleNullReferenceException
-                    // Pretty sure we should never be working with orphaned nodes.
-                    node.ParentNode.RemoveChild(node);
+                    namespaceManager.AddNamespace(xmlNamespace.Key /* Prefix */, xmlNamespace.Value /* URI */);
+                }
+                // Select the desired nodes
+                var nodes = document.SelectNodes(xpath, namespaceManager);
+                if (nodes == null || nodes.Count == 0)
+                {
+                    const string format = "Failed to find nodes matching the XPath '{0}'";
+                    var message = string.Format(CultureInfo.InvariantCulture, format, xpath);
+                    throw new CakeException(message);
+                }
+
+                // Adjust the nodes / values
+                if (value == null)
+                {
+                    // Remove the nodes
+                    foreach (XmlNode node in nodes)
+                    {
+                        // ReSharper disable once PossibleNullReferenceException
+                        // Pretty sure we should never be working with orphaned nodes.
+                        node.ParentNode.RemoveChild(node);
+                    }
+                }
+                else
+                {
+                    // Set the value
+                    foreach (XmlNode node in nodes)
+                    {
+                        node.InnerXml = value;
+                    }
+                }
+
+                // Get the writer settings
+                var writerSettings = GetXmlWriterSettings(settings);
+                // Adjust the writer settings according to the declaration
+                var hasDeclaration = document.FirstChild.NodeType == XmlNodeType.XmlDeclaration;
+                if (!hasDeclaration)
+                {
+                    writerSettings.OmitXmlDeclaration = true;
+                }
+                // Write the document
+                using (var xmlWriter = XmlWriter.Create(destination, writerSettings))
+                {
+                    document.Save(xmlWriter);
                 }
             }
-            else
-            {
-                foreach (XmlNode node in nodes)
-                {
-                    node.InnerXml = value;
-                }
-            }
-
-            document.Save(destination);
         }
 
         /// <summary>
@@ -561,6 +577,18 @@ namespace Cake.Common.Xml
 
             xmlReaderSettings.DtdProcessing = (DtdProcessing)settings.DtdProcessing;
             return xmlReaderSettings;
+        }
+
+        /// <summary>
+        /// Gets a XmlWriterSettings from a XmlPokeSettings
+        /// </summary>
+        /// <param name="settings">Additional settings to tweak Xml Poke behavior.</param>
+        /// <returns>The xml writer settings.</returns>
+        private static XmlWriterSettings GetXmlWriterSettings(XmlPokeSettings settings)
+        {
+            var writerSettings = new XmlWriterSettings();
+            // Currently only returns the default settings
+            return writerSettings;
         }
     }
 }

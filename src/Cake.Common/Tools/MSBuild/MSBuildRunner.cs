@@ -8,7 +8,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
@@ -72,7 +71,7 @@ namespace Cake.Common.Tools.MSBuild
             }
 
             // Set the verbosity.
-            builder.Append(string.Format(CultureInfo.InvariantCulture, "/v:{0}", GetVerbosityName(settings.Verbosity)));
+            builder.Append(string.Format(CultureInfo.InvariantCulture, "/v:{0}", settings.Verbosity.GetMSBuildVerbosityName()));
 
             if (settings.NodeReuse != null)
             {
@@ -135,13 +134,42 @@ namespace Cake.Common.Tools.MSBuild
                 }
             }
 
+            // Use binary logging?
+            if (settings.BinaryLogger != null && settings.BinaryLogger.Enabled)
+            {
+                string binaryOptions = null;
+                if (!string.IsNullOrEmpty(settings.BinaryLogger.FileName))
+                {
+                    binaryOptions = settings.BinaryLogger.FileName;
+                }
+
+                if (settings.BinaryLogger.Imports != MSBuildBinaryLogImports.Unspecified)
+                {
+                    if (!string.IsNullOrEmpty(binaryOptions))
+                    {
+                        binaryOptions = binaryOptions + ";";
+                    }
+
+                    binaryOptions = binaryOptions + "ProjectImports=" + settings.BinaryLogger.Imports;
+                }
+
+                if (string.IsNullOrEmpty(binaryOptions))
+                {
+                    builder.Append("/bl");
+                }
+                else
+                {
+                    builder.Append("/bl:" + binaryOptions);
+                }
+            }
+
             // Add the solution as the last parameter.
             builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
 
             return builder;
         }
 
-        private static string GetLoggerArgument(int index, MSBuildFileLogger logger)
+        private string GetLoggerArgument(int index, MSBuildFileLogger logger)
         {
             if (index >= 10)
             {
@@ -151,7 +179,7 @@ namespace Cake.Common.Tools.MSBuild
             var counter = index == 0 ? string.Empty : index.ToString();
             var argument = $"/fl{counter}";
 
-            var parameters = logger.GetParameters();
+            var parameters = logger.GetParameters(_environment);
             if (!string.IsNullOrWhiteSpace(parameters))
             {
                 argument = $"{argument} /flp{counter}:{parameters}";
@@ -198,33 +226,21 @@ namespace Cake.Common.Tools.MSBuild
             }
         }
 
-        private static string GetVerbosityName(Verbosity verbosity)
-        {
-            switch (verbosity)
-            {
-                case Verbosity.Quiet:
-                    return "quiet";
-                case Verbosity.Minimal:
-                    return "minimal";
-                case Verbosity.Normal:
-                    return "normal";
-                case Verbosity.Verbose:
-                    return "detailed";
-                case Verbosity.Diagnostic:
-                    return "diagnostic";
-            }
-            throw new CakeException("Encountered unknown MSBuild build log verbosity.");
-        }
-
         private static IEnumerable<string> GetPropertyArguments(IDictionary<string, IList<string>> properties)
         {
             foreach (var propertyKey in properties.Keys)
             {
                 foreach (var propertyValue in properties[propertyKey])
                 {
-                    yield return string.Concat("/p:", propertyKey, "=", propertyValue);
+                    yield return string.Concat("/p:", propertyKey, "=", EscapeSpecialCharacters(propertyValue));
                 }
             }
+        }
+
+        private static string EscapeSpecialCharacters(string value)
+        {
+            return value.Replace(",", "%2C")
+                .Replace(";", "%3B");
         }
 
         /// <summary>

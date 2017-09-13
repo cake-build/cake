@@ -15,8 +15,6 @@ namespace Cake.Common.Polyfill
         {
 #if NETCORE
             throw new NotSupportedException("Not supported on .NET Core.");
-#elif __MonoCS__
-            throw new NotSupportedException("Not supported on Mono.");
 #else
             return settings.DoNotEscapeUriAttributes;
 #endif
@@ -26,8 +24,6 @@ namespace Cake.Common.Polyfill
         {
 #if NETCORE
             throw new NotSupportedException("Not supported on .NET Core.");
-#elif __MonoCS__
-            throw new NotSupportedException("Not supported on Mono.");
 #else
             settings.DoNotEscapeUriAttributes = value;
 #endif

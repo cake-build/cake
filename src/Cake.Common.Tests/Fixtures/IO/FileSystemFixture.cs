@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.IO;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
@@ -32,6 +33,7 @@ namespace Cake.Common.Tests.Fixtures.IO
             fileSystem.CreateDirectory("/Temp/Hello/World");
             fileSystem.CreateDirectory("/Temp/Goodbye");
             fileSystem.CreateDirectory("/Temp/Hello/Hidden").Hide();
+            fileSystem.CreateDirectory("/HasReadonly");
             fileSystem.CreateFile("/Presentation.ppt");
             fileSystem.CreateFile("/Budget.xlsx");
             fileSystem.CreateFile("/Text.txt");
@@ -43,6 +45,8 @@ namespace Cake.Common.Tests.Fixtures.IO
             fileSystem.CreateFile("/Temp/Goodbye/OtherText.txt");
             fileSystem.CreateFile("/Temp/Goodbye/OtherPicture.png");
             fileSystem.CreateFile("/Temp/HasFiles/A.txt");
+            fileSystem.CreateFile("/HasReadonly/Readonly.txt", FileAttributes.ReadOnly);
+            fileSystem.CreateFile("/HasReadonly/Not-Readonly.txt");
             return fileSystem;
         }
     }

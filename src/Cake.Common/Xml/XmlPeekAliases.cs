@@ -49,8 +49,8 @@ namespace Cake.Common.Xml
         /// <para>XML document:</para>
         /// <![CDATA[
         /// <?xml version="1.0" encoding="UTF-8"?>
-        /// <pastery xmlns = "http://cakebuild.net/pastery" >
-        ///     < cake price="1.62" />
+        /// <pastery xmlns = "https://cakebuild.net/pastery" >
+        ///     <cake price="1.62" />
         /// </pastery>
         /// ]]>
         /// </code>
@@ -58,12 +58,12 @@ namespace Cake.Common.Xml
         /// <code>
         /// string version = XmlPeek("./pastery.xml", "/pastery:pastery/pastery:cake/@price",
         ///     new XmlPeekSettings {
-        ///         Namespaces = new Dictionary&lt;string, string&gt; {{ "pastery", "http://cakebuild.net/pastery" }}
+        ///         Namespaces = new Dictionary&lt;string, string&gt; {{ "pastery", "https://cakebuild.net/pastery" }}
         ///     });
         /// string unknown = XmlPeek("./pastery.xml", "/pastery:pastery/pastery:cake/@recipe",
         ///     new XmlPeekSettings {
-        ///         Namespaces = new Dictionary&lt;string, string&gt; {{ "pastery", "http://cakebuild.net/pastery" }},
-        ///         SuppressWarnings = true
+        ///         Namespaces = new Dictionary&lt;string, string&gt; {{ "pastery", "https://cakebuild.net/pastery" }},
+        ///         SuppressWarning = true
         ///     });
         /// </code>
         /// </example>
@@ -132,14 +132,15 @@ namespace Cake.Common.Xml
             document.PreserveWhitespace = settings.PreserveWhitespace;
             document.Load(source);
 
-            var namespaceManager = new XmlNamespaceManager(document.NameTable);
+            var navigator = document.CreateNavigator();
+            var namespaceManager = new XmlNamespaceManager(navigator.NameTable);
+
             foreach (var xmlNamespace in settings.Namespaces)
             {
                 namespaceManager.AddNamespace(xmlNamespace.Key /* Prefix */, xmlNamespace.Value /* URI */);
             }
 
-            var node = document.SelectSingleNode(xpath, namespaceManager);
-
+            var node = navigator.SelectSingleNode(xpath, namespaceManager);
             return node?.Value;
         }
 

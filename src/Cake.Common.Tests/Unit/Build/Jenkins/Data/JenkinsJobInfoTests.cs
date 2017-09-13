@@ -25,6 +25,22 @@ namespace Cake.Common.Tests.Unit.Build.Jenkins.Data
             }
         }
 
+        public sealed class TheJobBaseNameProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new JenkinsInfoFixture().CreateJobInfo();
+
+                // When
+                var result = info.JobBaseName;
+
+                // Then
+                Assert.Equal("JOB1BASE", result);
+            }
+        }
+
         public sealed class TheJobUrlProperty
         {
             [Fact]

@@ -18,8 +18,10 @@
 #load "./Cake.Common/Text/TextTransformationAliases.cake"
 #load "./Cake.Common/Tools/Cake/CakeAliases.cake"
 #load "./Cake.Common/Tools/DotNetCore/DotNetCoreAliases.cake"
+#load "./Cake.Common/Tools/NuGet/NuGetAliases.cake"
 #load "./Cake.Core/Scripting/LoadDirective.cake"
 #load "./Cake.Core/Tooling/ToolLocator.cake"
+#load "./Cake.Core/CakeAliases.cake"
 
 //////////////////////////////////////////////////
 // ARGUMENTS
@@ -42,7 +44,8 @@ Setup(ctx =>
 
 Task("Cake.Core")
     .IsDependentOn("Cake.Core.Scripting.LoadDirective")
-    .IsDependentOn("Cake.Core.Tooling.ToolLocator");
+    .IsDependentOn("Cake.Core.Tooling.ToolLocator")
+    .IsDependentOn("Cake.Core.CakeAliases");
 
 Task("Cake.Common")
     .IsDependentOn("Cake.Common.ArgumentAliases")
@@ -59,7 +62,8 @@ Task("Cake.Common")
     .IsDependentOn("Cake.Common.Solution.Project.XmlDoc.XmlDocAliases")
     .IsDependentOn("Cake.Common.Text.TextTransformationAliases")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases");
+    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases")
+    .IsDependentOn("Cake.Common.Tools.NuGet.NuGetAliases");
 
 Task("Run-All-Tests")
     .IsDependentOn("Cake.Core")

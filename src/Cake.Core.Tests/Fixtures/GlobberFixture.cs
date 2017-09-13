@@ -64,6 +64,8 @@ namespace Cake.Core.Tests.Fixtures
             FileSystem.CreateDirectory("/Foo/Bar");
             FileSystem.CreateDirectory("/Foo (Bar)");
             FileSystem.CreateDirectory("/Foo@Bar/");
+            FileSystem.CreateDirectory("/嵌套");
+            FileSystem.CreateDirectory("/嵌套/目录");
 
             // Files
             FileSystem.CreateFile("/Working/Foo/Bar/Qux.c");
@@ -79,6 +81,7 @@ namespace Cake.Core.Tests.Fixtures
             FileSystem.CreateFile("/Foo/Bar.baz");
             FileSystem.CreateFile("/Foo (Bar)/Baz.c");
             FileSystem.CreateFile("/Foo@Bar/Baz.c");
+            FileSystem.CreateFile("/嵌套/目录/文件.延期");
         }
 
         public void SetWorkingDirectory(DirectoryPath path)

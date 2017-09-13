@@ -92,7 +92,8 @@ namespace Cake.Core.Scripting.Analysis
             // Create and return the results.
             return new ScriptAnalyzerResult(
                 context.Current,
-                context.Lines);
+                context.Lines,
+                context.Errors);
         }
 
         [SuppressMessage("ReSharper", "ConvertIfStatementToConditionalTernaryExpression")]

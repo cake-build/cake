@@ -55,7 +55,7 @@ namespace Cake.Common.Tests.Fixtures
 
         public bool TestIsValue(string xpath, string value)
         {
-            var xmlString = new StreamReader(FileSystem.GetFile(XmlPath).OpenRead()).ReadToEnd();
+            var xmlString = GetFullXml();
             return TestIsValue(xmlString, xpath, value);
         }
 
@@ -81,7 +81,7 @@ namespace Cake.Common.Tests.Fixtures
 
         public bool TestIsRemoved(string xpath)
         {
-            var xmlString = new StreamReader(FileSystem.GetFile(XmlPath).OpenRead()).ReadToEnd();
+            var xmlString = GetFullXml();
             return TestIsRemoved(xmlString, xpath);
         }
 
@@ -103,6 +103,11 @@ namespace Cake.Common.Tests.Fixtures
                 var nodes = document.SelectNodes(xpath, namespaceManager);
                 return nodes != null && nodes.Count == 0;
             }
+        }
+
+        private string GetFullXml()
+        {
+            return new StreamReader(FileSystem.GetFile(XmlPath).OpenRead()).ReadToEnd();
         }
 
         /// <summary>

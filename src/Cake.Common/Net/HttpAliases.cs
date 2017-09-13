@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -351,7 +352,12 @@ namespace Cake.Common.Net
         /// <returns>A <see cref="HttpClient"/> instance.</returns>
         private static HttpClient GetHttpClient(ICakeContext context, bool useDefaultCredentials)
         {
-            var client = useDefaultCredentials ? new HttpClient(new HttpClientHandler { UseDefaultCredentials = true }) : new HttpClient();
+            var clientHandler = new HttpClientHandler
+            {
+                UseDefaultCredentials = useDefaultCredentials,
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
+            var client = new HttpClient(clientHandler);
             client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Cake", context.Environment.Runtime.CakeVersion.ToString()));
             return client;
         }

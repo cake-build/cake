@@ -1,3 +1,52 @@
+### New on 0.22.0 (Released 2017/09/13)
+
+* 1785 Bump LatestBreakingChange to 0.22.0
+* 1745 Change parameter for InstallTools and InstallAddins in IScriptProcessor
+* 1720 ILRepackSettings.Libs should be List of DirectoryPath
+* 1719 Jenkins BRANCH_NAME is missing
+* 1714 Updated CakeRuntime.TargetVersion to net462.
+* 1674 MSBuildFileLogger LogFile is a string and not a FilePath
+* 1665 NUnit3Settings: Params and multiple results
+* 1651 NUnit3Settings Verbose flag obsoleted by NUnit console runner
+* 1614 Correct the class that TeamCityEnvironmentInfo inherits from
+* 1597 CommitsSinceVersionSource and PreReleaseNumber as Integer
+* 1564 DeleteDirectory cannot delete read-only files
+* 1540 Upgrade to Roslyn 2.0
+* 1791 Add option to enable MSBuild binary logging
+* 1771 Look for msbuild in default install path on Linux
+* 1761 DoesForEach() extension method
+* 1754 VSWhere not returning prerelease versions
+* 1743 Implement functionality in Cake.NuGet for downloading packages
+* 1734 Add GitLink 3 compatible aliases
+* 1710 Add alias for simple sub-directory listing
+* 1699 NuGetPackSettings missing language/locale ID for the package
+* 1670 OpenCover is missing some commandline parameter (for example mergebyhash)
+* 1667 Add support for choco download internalize-all-urls
+* 1621 Add overload for StartProcess which also returns redircted error output
+* 1775 Strange usage of Cake.Core.dll when executing cake sub process
+* 1773 NuGetHasSource call do not take care of ArgumentCustomization in NuGetSourcesSettings
+* 1759 XmlPoke always writes the xmldeclaration even if the original file didn't have one
+* 1742 Some unit tests are locale-sensitive
+* 1739 NuGetContentResolver can't find assemblies if located in root
+* 1738 NuGetInstaller can't resolve files if package contains dependencies
+* 1697 CakeContextAdapter do not implement ICakeContext
+* 1694 Addin directive shouldn't attempt to load native assemblies
+* 1693 Possible bug when setting process environment variable
+* 1625 Comma in msbuild commands are not escaped
+* 1602 MSBuildFileLogger Verbosity does not accept Verbosity.Verbose
+* 1537 XmlPeek not working correctly for element nodes
+* 1422 Error: Unkown token when directory contains multibyte characters
+* 1752 Extend DownloadFile to allow AcceptEncoding gzip
+* 1746 ScriptAnalyzer.Analyze() should not throw - instead return list of errors
+* 1704 Move CakeConsole & CakeBuildLog to Cake.Core and made CakeConfiguration public
+* 1512 Please support C*  7 and Roslyn v2
+* 753 Tool Versioning
+* 1787 Add opt-out config information to assembly version verification error message
+* 1780 Fix typo in version.cake
+* 1727 Incorrect documentation for XmlPeek Alias
+* 1700 Update nuget license url
+* 1525 Updated examples for DotNetCoreTest
+
 ### New on 0.21.1 (Released 2017/07/15)
 
 * 1685 Add DotNetCoreTool alias overload that takes DotNetCoreToolSettings parameter
