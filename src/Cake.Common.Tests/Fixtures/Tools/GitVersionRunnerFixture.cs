@@ -17,38 +17,46 @@ namespace Cake.Common.Tests.Fixtures.Tools
         public ICakeLog Log { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
-        public GitVersionRunnerFixture()
+        public GitVersionRunnerFixture(ICollection<string> standardOutput = null)
              : base("GitVersion.exe")
         {
-            var resultJson = new GitVersion
+            if (standardOutput == null)
             {
-                Major = 1,
-                Minor = 0,
-                Patch = 0
-            };
-
-            var serializer = new DataContractJsonSerializer(typeof(GitVersion));
-            using (var memoryStream = new MemoryStream())
-            using (var reader = new StreamReader(memoryStream))
-            {
-                serializer.WriteObject(memoryStream, resultJson);
-                memoryStream.Position = 0;
-                var output = new List<string>();
-                while (!reader.EndOfStream)
+                var resultJson = new GitVersion
                 {
-                    output.Add(reader.ReadLine());
-                }
+                    Major = 1,
+                    Minor = 0,
+                    Patch = 0
+                };
 
-                ProcessRunner.Process.SetStandardOutput(output);
+                var serializer = new DataContractJsonSerializer(typeof(GitVersion));
+                using (var memoryStream = new MemoryStream())
+                using (var reader = new StreamReader(memoryStream))
+                {
+                    serializer.WriteObject(memoryStream, resultJson);
+                    memoryStream.Position = 0;
+                    var output = new List<string>();
+                    while (!reader.EndOfStream)
+                    {
+                        output.Add(reader.ReadLine());
+                    }
+                    standardOutput = output;
+                }
             }
 
+            ProcessRunner.Process.SetStandardOutput(standardOutput);
             Log = Substitute.For<ICakeLog>();
         }
 
         protected override void RunTool()
         {
+            RunGitVersion();
+        }
+
+        public GitVersion RunGitVersion()
+        {
             var tool = new GitVersionRunner(FileSystem, Environment, ProcessRunner, Tools, Log);
-            tool.Run(Settings);
+            return tool.Run(Settings);
         }
     }
 }
