@@ -58,11 +58,11 @@ namespace Cake.Common.Tools.GitVersion
                 Run(settings, GetArguments(settings), new ProcessSettings { RedirectStandardOutput = true },
                 process => jsonString = string.Join("\n", process.GetStandardOutput()));
 
-                var jsonSerializer = new DataContractJsonSerializer(typeof(GitVersion));
+                var jsonSerializer = new DataContractJsonSerializer(typeof(GitVersionInternal));
 
                 using (var jsonStream = new MemoryStream(Encoding.UTF8.GetBytes(jsonString)))
                 {
-                    return jsonSerializer.ReadObject(jsonStream) as GitVersion;
+                    return (jsonSerializer.ReadObject(jsonStream) as GitVersionInternal)?.GitVersion;
                 }
             }
 

@@ -1,3 +1,7 @@
+### New on 0.22.1 (Released 2017/09/15)
+
+* 1798 GitVersion error on build on master branch with version 0.22.0
+
 ### New on 0.22.0 (Released 2017/09/13)
 
 * 1785 Bump LatestBreakingChange to 0.22.0
