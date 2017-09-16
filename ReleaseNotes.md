@@ -1,3 +1,7 @@
+### New on 0.22.2 (Released 2017/09/17)
+
+* 1807 NuGetVersion and CommitDate are null with 0.22.1
+
 ### New on 0.22.1 (Released 2017/09/15)
 
 * 1798 GitVersion error on build on master branch with version 0.22.0
