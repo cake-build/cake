@@ -220,6 +220,34 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
             public void Should_Tolerate_Bad_Json_Set()
             {
                 // Given
+                var expect = new Common.Tools.GitVersion.GitVersion
+                    {
+                        Major = 0,
+                        Minor = 1,
+                        Patch = 1,
+                        PreReleaseTag = "PreReleaseTag",
+                        PreReleaseTagWithDash = "PreReleaseTagWithDash",
+                        PreReleaseLabel = "PreReleaseLabel",
+                        PreReleaseNumber = -1,
+                        BuildMetaData = "BuildMetaData",
+                        BuildMetaDataPadded = "BuildMetaDataPadded",
+                        FullBuildMetaData = "Branch.master.Sha.f2467748c78b3c8b37972ad0b30df2e15dfbf2cb",
+                        MajorMinorPatch = "0.1.1",
+                        SemVer = "0.1.1",
+                        LegacySemVer = "0.1.1",
+                        LegacySemVerPadded = "0.1.1",
+                        AssemblySemVer = "0.1.1.0",
+                        FullSemVer = "0.1.1",
+                        InformationalVersion = "0.1.1+Branch.master.Sha.f2467748c78b3c8b37972ad0b30df2e15dfbf2cb",
+                        BranchName = "master",
+                        Sha = "f2467748c78b3c8b37972ad0b30df2e15dfbf2cb",
+                        NuGetVersionV2 = "0.1.1",
+                        NuGetVersion = "0.1.1",
+                        CommitsSinceVersionSource = -1,
+                        CommitsSinceVersionSourcePadded = "0002",
+                        CommitDate = "2017-09-13",
+                    }
+                    ;
                 var fixture = new GitVersionRunnerFixture(
                     new[]
                     {
@@ -227,12 +255,12 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                         "  \"Major\":0,",
                         "  \"Minor\":1,",
                         "  \"Patch\":1,",
-                        "  \"PreReleaseTag\":\"\",",
-                        "  \"PreReleaseTagWithDash\":\"\",",
-                        "  \"PreReleaseLabel\":\"\",",
+                        "  \"PreReleaseTag\":\"PreReleaseTag\",",
+                        "  \"PreReleaseTagWithDash\":\"PreReleaseTagWithDash\",",
+                        "  \"PreReleaseLabel\":\"PreReleaseLabel\",",
                         "  \"PreReleaseNumber\":\"\",",
-                        "  \"BuildMetaData\":\"\",",
-                        "  \"BuildMetaDataPadded\":\"\",",
+                        "  \"BuildMetaData\":\"BuildMetaData\",",
+                        "  \"BuildMetaDataPadded\":\"BuildMetaDataPadded\",",
                         "  \"FullBuildMetaData\":\"Branch.master.Sha.f2467748c78b3c8b37972ad0b30df2e15dfbf2cb\",",
                         "  \"MajorMinorPatch\":\"0.1.1\",",
                         "  \"SemVer\":\"0.1.1\",",
@@ -256,11 +284,30 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                 var result = fixture.RunGitVersion();
 
                 // Then
-                Assert.Equal(0, result.Major);
-                Assert.Equal(1, result.Minor);
-                Assert.Equal(1, result.Minor);
-                Assert.Equal(-1, result.PreReleaseNumber);
-                Assert.Equal(-1, result.CommitsSinceVersionSource);
+                Assert.Equal(expect.Major, result.Major);
+                Assert.Equal(expect.Minor, result.Minor);
+                Assert.Equal(expect.Patch, result.Patch);
+                Assert.Equal(expect.PreReleaseTag, result.PreReleaseTag);
+                Assert.Equal(expect.PreReleaseTagWithDash, result.PreReleaseTagWithDash);
+                Assert.Equal(expect.PreReleaseLabel, result.PreReleaseLabel);
+                Assert.Equal(expect.PreReleaseNumber, result.PreReleaseNumber);
+                Assert.Equal(expect.BuildMetaData, result.BuildMetaData);
+                Assert.Equal(expect.BuildMetaDataPadded, result.BuildMetaDataPadded);
+                Assert.Equal(expect.FullBuildMetaData, result.FullBuildMetaData);
+                Assert.Equal(expect.MajorMinorPatch, result.MajorMinorPatch);
+                Assert.Equal(expect.SemVer, result.SemVer);
+                Assert.Equal(expect.LegacySemVer, result.LegacySemVer);
+                Assert.Equal(expect.LegacySemVerPadded, result.LegacySemVerPadded);
+                Assert.Equal(expect.AssemblySemVer, result.AssemblySemVer);
+                Assert.Equal(expect.FullSemVer, result.FullSemVer);
+                Assert.Equal(expect.InformationalVersion, result.InformationalVersion);
+                Assert.Equal(expect.BranchName, result.BranchName);
+                Assert.Equal(expect.Sha, result.Sha);
+                Assert.Equal(expect.NuGetVersionV2, result.NuGetVersionV2);
+                Assert.Equal(expect.NuGetVersion, result.NuGetVersion);
+                Assert.Equal(expect.CommitsSinceVersionSource, result.CommitsSinceVersionSource);
+                Assert.Equal(expect.CommitsSinceVersionSourcePadded, result.CommitsSinceVersionSourcePadded);
+                Assert.Equal(expect.CommitDate, result.CommitDate);
             }
         }
     }
