@@ -215,6 +215,53 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                 // Then
                 Assert.Equal(args, result.Args);
             }
+
+            [Fact]
+            public void Should_Tolerate_Bad_Json_Set()
+            {
+                // Given
+                var fixture = new GitVersionRunnerFixture(
+                    new[]
+                    {
+                        "{",
+                        "  \"Major\":0,",
+                        "  \"Minor\":1,",
+                        "  \"Patch\":1,",
+                        "  \"PreReleaseTag\":\"\",",
+                        "  \"PreReleaseTagWithDash\":\"\",",
+                        "  \"PreReleaseLabel\":\"\",",
+                        "  \"PreReleaseNumber\":\"\",",
+                        "  \"BuildMetaData\":\"\",",
+                        "  \"BuildMetaDataPadded\":\"\",",
+                        "  \"FullBuildMetaData\":\"Branch.master.Sha.f2467748c78b3c8b37972ad0b30df2e15dfbf2cb\",",
+                        "  \"MajorMinorPatch\":\"0.1.1\",",
+                        "  \"SemVer\":\"0.1.1\",",
+                        "  \"LegacySemVer\":\"0.1.1\",",
+                        "  \"LegacySemVerPadded\":\"0.1.1\",",
+                        "  \"AssemblySemVer\":\"0.1.1.0\",",
+                        "  \"FullSemVer\":\"0.1.1\",",
+                        "  \"InformationalVersion\":\"0.1.1+Branch.master.Sha.f2467748c78b3c8b37972ad0b30df2e15dfbf2cb\",",
+                        "  \"BranchName\":\"master\",",
+                        "  \"Sha\":\"f2467748c78b3c8b37972ad0b30df2e15dfbf2cb\",",
+                        "  \"NuGetVersionV2\":\"0.1.1\",",
+                        "  \"NuGetVersion\":\"0.1.1\",",
+                        "  \"CommitsSinceVersionSource\":\"\",",
+                        "  \"CommitsSinceVersionSourcePadded\":\"0002\",",
+                        "  \"CommitDate\":\"2017-09-13\"",
+                        "}"
+                    });
+                fixture.Settings.OutputType = GitVersionOutput.Json;
+
+                // When
+                var result = fixture.RunGitVersion();
+
+                // Then
+                Assert.Equal(0, result.Major);
+                Assert.Equal(1, result.Minor);
+                Assert.Equal(1, result.Minor);
+                Assert.Equal(-1, result.PreReleaseNumber);
+                Assert.Equal(-1, result.CommitsSinceVersionSource);
+            }
         }
     }
 }
