@@ -153,8 +153,8 @@ namespace Cake.Common.Tools.GitVersion
         [DataMember]
         public string NuGetVersion
         {
-            get => GitVersion.NuGetVersionV2;
-            set => GitVersion.NuGetVersionV2 = value;
+            get => GitVersion.NuGetVersion;
+            set => GitVersion.NuGetVersion = value;
         }
 
         [DataMember]
@@ -174,8 +174,8 @@ namespace Cake.Common.Tools.GitVersion
         [DataMember]
         public string CommitDate
         {
-            get => GitVersion.CommitsSinceVersionSourcePadded;
-            set => GitVersion.CommitsSinceVersionSourcePadded = value;
+            get => GitVersion.CommitDate;
+            set => GitVersion.CommitDate = value;
         }
 
         private static int ToInt(string value) => int.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture,
