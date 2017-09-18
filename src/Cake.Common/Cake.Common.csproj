@@ -1,46 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <AssemblyName>Cake.Common</AssemblyName>
-    <TargetFrameworks>net46;netstandard1.6</TargetFrameworks>
+    <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
     <OutputType>Library</OutputType>
     <PlatformTarget>AnyCpu</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-
   <!-- Package specific metadata -->
   <PropertyGroup>
     <Description>Provides aliases (extension methods on Cake context) that support CI, build, unit tests, zip, signing, etc. for Cake.</Description>
   </PropertyGroup>
-
   <!-- Import shared functionality -->
   <Import Project="..\Shared.msbuild" />
-
   <!-- Project references -->
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
   </ItemGroup>
-
-  <!-- .NET Core packages -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
-    <PackageReference Include="System.Xml.XPath" Version="4.3.0" />
-    <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.Serialization.Json" Version="4.3.0" />
-    <PackageReference Include="System.Xml.ReaderWriter" Version="4.3.0" />
-    <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
-  </ItemGroup>
-
-  <!-- .NET Framework packages -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">
-    <Reference Include="System" />
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Runtime.Serialization.Json" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-
+  <!-- .NET Framework packages -->		
+   <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">		
+     <Reference Include="System" />		
+     <Reference Include="System.IO.Compression" />		
+     <Reference Include="System.IO.Compression.FileSystem" />		
+     <Reference Include="System.Net.Http" />		
+     <Reference Include="System.Runtime.Serialization" />		
+     <Reference Include="System.Runtime.Serialization.Json" />		
+     <Reference Include="System.Xml" />		
+     <Reference Include="Microsoft.CSharp" />		
+   </ItemGroup>
 </Project>

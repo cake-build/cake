@@ -175,12 +175,12 @@ namespace Cake.Testing
         }
 
         /// <summary>
-        /// Sets the target framework.
+        /// Sets the built framework.
         /// </summary>
-        /// <param name="targetFramework">The target framework.</param>
-        public void SetTargetFramework(FrameworkName targetFramework)
+        /// <param name="builtFramework">The target framework.</param>
+        public void SetBuiltFramework(FrameworkName builtFramework)
         {
-            Runtime.TargetFramework = targetFramework;
+            Runtime.BuiltFramework = builtFramework;
         }
 
         /// <summary>
@@ -220,9 +220,9 @@ namespace Cake.Testing
         /// </summary>
         /// <returns>The target framework.</returns>
         [Obsolete("Please use FakeEnvironment.Runtime.TargetFramework instead.")]
-        public FrameworkName GetTargetFramework()
+        public FrameworkName GetBuiltFramework()
         {
-            return Runtime.TargetFramework;
+            return Runtime.BuiltFramework;
         }
     }
 }

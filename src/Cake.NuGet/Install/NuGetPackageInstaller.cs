@@ -64,7 +64,7 @@ namespace Cake.NuGet.Install
             _contentResolver = contentResolver ?? throw new ArgumentNullException(nameof(contentResolver));
             _log = log ?? throw new ArgumentNullException(nameof(log));
             _config = config ?? throw new ArgumentNullException(nameof(config));
-            _currentFramework = NuGetFramework.Parse(_environment.Runtime.TargetFramework.FullName, DefaultFrameworkNameProvider.Instance);
+            _currentFramework = NuGetFramework.Parse(_environment.Runtime.GetExecutingFramework().FullName, DefaultFrameworkNameProvider.Instance);
             _nugetLogger = new NuGetLogger(_log);
 
             var nugetConfig = GetNuGetConfigPath(_environment, _config);
