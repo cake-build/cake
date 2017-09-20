@@ -41,7 +41,7 @@ namespace Cake.Core.Reflection
                                            "It's not recommended, but you can explicitly opt-out of assembly verification \r\n" +
                                            "by configuring the Skip Verification setting to true\r\n" +
                                            "(i.e. command line parameter \"--settings_skipverification=true\", \r\n" +
-                                           "envrionment variable \"CAKE_SETTINGS_SKIPVERIFICATION=true\", \r\n" +
+                                           "environment variable \"CAKE_SETTINGS_SKIPVERIFICATION=true\", \r\n" +
                                            "read more about configuration at https://cakebuild.net/docs/fundamentals/configuration)";
 
                     var args = new object[]
