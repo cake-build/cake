@@ -51,7 +51,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.Equal(1, task.Dependencies.Count);
-                Assert.Equal("other", task.Dependencies[0]);
+                Assert.Equal("other", task.Dependencies[0].Name);
             }
 
             [Fact]
@@ -67,6 +67,38 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.IsType<CakeException>(result);
                 Assert.Equal("The task 'task' already have a dependency on 'other'.", result?.Message);
+            }
+        }
+
+        public sealed class TheAddReverseDependencyMethod
+        {
+            [Fact]
+            public void Should_Add_Dependency_If_Not_Already_Present()
+            {
+                // Given
+                var task = new ActionTask("task");
+
+                // When
+                task.AddReverseDependency("other");
+
+                // Then
+                Assert.Equal(1, task.Dependees.Count);
+                Assert.Equal("other", task.Dependees[0].Name);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Dependency_Already_Exist()
+            {
+                // Given
+                var task = new ActionTask("task");
+                task.AddReverseDependency("other");
+
+                // When
+                var result = Record.Exception(() => task.AddReverseDependency("other"));
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("The task 'task' already is a dependee of 'other'.", result?.Message);
             }
         }
 
@@ -247,7 +279,7 @@ namespace Cake.Core.Tests.Unit
             Assert.IsAssignableFrom<ICakeTaskInfo>(task);
             Assert.Equal("task", result.Name);
             Assert.Equal("my description", result.Description);
-            Assert.Equal(new[] { "dependency1", "dependency2" }, result.Dependencies.ToArray());
+            Assert.Equal(new[] { "dependency1", "dependency2" }, result.Dependencies.Select(x => x.Name).ToArray());
         }
     }
 }

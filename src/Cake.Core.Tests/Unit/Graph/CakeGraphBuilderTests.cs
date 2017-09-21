@@ -39,14 +39,38 @@ namespace Cake.Core.Tests.Unit.Graph
                 var graph = CakeGraphBuilder.Build(tasks);
 
                 // When
-                var result = graph.Edges.SingleOrDefault(x => x.Start == "A" && x.End == "B");
+                var result = graph.Edges.SingleOrDefault();
 
                 // Then
                 Assert.NotNull(result);
+                Assert.Equal("A", result.Start);
+                Assert.Equal("B", result.End);
             }
 
             [Fact]
-            public void Should_Throw_Exception_When_Depending_On_Task_That_Does_Not_Exist()
+            public void Should_Create_Edges_Between_Reversed_Dependencies()
+            {
+                // Given
+                var task1 = new ActionTask("A");
+                var task2 = new ActionTask("B");
+                task2.AddReverseDependency("A");
+
+                var graph = CakeGraphBuilder.Build(new List<CakeTask>
+                {
+                    task1, task2
+                });
+
+                // When
+                var result = graph.Edges.SingleOrDefault();
+
+                // Then
+                Assert.NotNull(result);
+                Assert.Equal("B", result.Start);
+                Assert.Equal("A", result.End);
+            }
+
+            [Fact]
+            public void Should_Throw_When_Depending_On_Task_That_Does_Not_Exist()
             {
                 // Given
                 var task = new ActionTask("A");
@@ -54,10 +78,57 @@ namespace Cake.Core.Tests.Unit.Graph
                 var tasks = new List<CakeTask> { task };
 
                 // When
-                var result = Assert.Throws<CakeException>(() => CakeGraphBuilder.Build(tasks));
+                var result = Record.Exception(() => CakeGraphBuilder.Build(tasks));
 
                 // Then
-                Assert.Equal("Task 'A' is dependent on task 'C' which does not exist.", result?.Message);
+                Assert.NotNull(result);
+                Assert.Equal("Task 'A' is dependent on task 'C' which does not exist.", result.Message);
+            }
+
+            [Fact]
+            public void Should_Not_Throw_When_Depending_On_Optional_Task_That_Does_Not_Exist()
+            {
+                // Given
+                var task = new ActionTask("A");
+                task.AddDependency("C", false);
+                var tasks = new List<CakeTask> { task };
+
+                // When
+                var result = Record.Exception(() => CakeGraphBuilder.Build(tasks));
+
+                // Then
+                Assert.Null(result);
+            }
+
+            [Fact]
+            public void Should_Throw_When_Reverse_Dependency_Is_Depending_On_Task_That_Does_Not_Exist()
+            {
+                // Given
+                var task = new ActionTask("A");
+                task.AddReverseDependency("C");
+                var tasks = new List<CakeTask> { task };
+
+                // When
+                var result = Record.Exception(() => CakeGraphBuilder.Build(tasks));
+
+                // Then
+                Assert.NotNull(result);
+                Assert.Equal("Task 'A' has specified that it's a dependency for task 'C' which does not exist.", result.Message);
+            }
+
+            [Fact]
+            public void Should_Not_Throw_When_An_Reverse_Dependency_Is_Depending_On_An_Optional_Task_That_Does_Not_Exist()
+            {
+                // Given
+                var task = new ActionTask("A");
+                task.AddReverseDependency("C", required: false);
+                var tasks = new List<CakeTask> { task };
+
+                // When
+                var result = Record.Exception(() => CakeGraphBuilder.Build(tasks));
+
+                // Then
+                Assert.Null(result);
             }
         }
     }

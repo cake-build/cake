@@ -25,70 +25,88 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.Equal(1, task.Dependencies.Count);
             }
+
+            public sealed class OnMethodTaskBuilder
+            {
+                [Fact]
+                public void Should_Add_Dependency_To_Task()
+                {
+                    // Given
+                    var parentTask = new ActionTask("parent");
+                    var childTask = new ActionTask("child");
+                    var builder = new CakeTaskBuilder<ActionTask>(parentTask);
+                    var cakeTaskBuilder = new CakeTaskBuilder<ActionTask>(childTask);
+
+                    // When
+                    builder.IsDependentOn(cakeTaskBuilder);
+
+                    // Then
+                    Assert.Equal(1, parentTask.Dependencies.Count);
+                }
+
+                [Fact]
+                public void Should_Add_Dependency_To_Task_With_Correct_Name()
+                {
+                    // Given
+                    var parentTask = new ActionTask("parent");
+                    var childTask = new ActionTask("child");
+                    var builder = new CakeTaskBuilder<ActionTask>(parentTask);
+                    var childTaskBuilder = new CakeTaskBuilder<ActionTask>(childTask);
+
+                    // When
+                    builder.IsDependentOn(childTaskBuilder);
+
+                    // Then
+                    Assert.Equal(parentTask.Dependencies[0].Name, childTaskBuilder.Task.Name);
+                }
+
+                [Fact]
+                public void Should_Throw_If_Builder_Is_Null()
+                {
+                    // Given
+                    var childTask = new ActionTask("child");
+                    CakeTaskBuilder<ActionTask> builder = null;
+                    var childTaskBuilder = new CakeTaskBuilder<ActionTask>(childTask);
+
+                    // When
+                    var result = Record.Exception(() => builder.IsDependentOn(childTaskBuilder));
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "builder");
+                }
+
+                [Fact]
+                public void Should_Throw_If_OtherBuilder_Is_Null()
+                {
+                    // Given
+                    var parentTask = new ActionTask("parent");
+                    var builder = new CakeTaskBuilder<ActionTask>(parentTask);
+                    CakeTaskBuilder<ActionTask> childTaskBuilder = null;
+
+                    // When
+                    var result = Record.Exception(() => builder.IsDependentOn(childTaskBuilder));
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "other");
+                }
+            }
         }
 
-        public sealed class TheIsDependentOnMethodTaskBuilder
+        public sealed class TheIsDependeeOfMethod
         {
             [Fact]
-            public void Should_Add_Dependency_To_Task()
+            public void Should_Add_Dependee_To_Task()
             {
                 // Given
-                var parentTask = new ActionTask("parent");
-                var childTask = new ActionTask("child");
-                var builder = new CakeTaskBuilder<ActionTask>(parentTask);
-                var cakeTaskBuilder = new CakeTaskBuilder<ActionTask>(childTask);
+                var task = new ActionTask("task");
+                var builder = new CakeTaskBuilder<ActionTask>(task);
 
                 // When
-                builder.IsDependentOn(cakeTaskBuilder);
+                builder.IsDependeeOf("other");
 
                 // Then
-                Assert.Equal(1, parentTask.Dependencies.Count);
-            }
-
-            [Fact]
-            public void Should_Add_Dependency_To_Task_With_Correct_Name()
-            {
-                // Given
-                var parentTask = new ActionTask("parent");
-                var childTask = new ActionTask("child");
-                var builder = new CakeTaskBuilder<ActionTask>(parentTask);
-                var childTaskBuilder = new CakeTaskBuilder<ActionTask>(childTask);
-
-                // When
-                builder.IsDependentOn(childTaskBuilder);
-
-                // Then
-                Assert.Equal(parentTask.Dependencies[0], childTaskBuilder.Task.Name);
-            }
-
-            [Fact]
-            public void Should_Throw_If_Builder_Is_Null()
-            {
-                // Given
-                var childTask = new ActionTask("child");
-                CakeTaskBuilder<ActionTask> builder = null;
-                var childTaskBuilder = new CakeTaskBuilder<ActionTask>(childTask);
-
-                // When
-                var result = Record.Exception(() => builder.IsDependentOn(childTaskBuilder));
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "builder");
-            }
-
-            [Fact]
-            public void Should_Throw_If_OtherBuilder_Is_Null()
-            {
-                // Given
-                var parentTask = new ActionTask("parent");
-                var builder = new CakeTaskBuilder<ActionTask>(parentTask);
-                CakeTaskBuilder<ActionTask> childTaskBuilder = null;
-
-                // When
-                var result = Record.Exception(() => builder.IsDependentOn(childTaskBuilder));
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "other");
+                Assert.Equal(1, task.Dependees.Count);
+                Assert.Equal("other", task.Dependees[0].Name);
             }
         }
 
@@ -278,7 +296,8 @@ namespace Cake.Core.Tests.Unit
             public void Should_Throw_If_Builder_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => CakeTaskBuilderExtensions.ReportError<ActionTask>(null, exception => { }));
+                var result = Record.Exception(() =>
+                    CakeTaskBuilderExtensions.ReportError<ActionTask>(null, exception => { }));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "builder");
@@ -319,7 +338,8 @@ namespace Cake.Core.Tests.Unit
             public void Should_Throw_If_Builder_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => CakeTaskBuilderExtensions.DoesForEach(null, new string[0], exception => { }));
+                var result = Record.Exception(() =>
+                    CakeTaskBuilderExtensions.DoesForEach(null, new string[0], exception => { }));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "builder");
@@ -408,7 +428,8 @@ namespace Cake.Core.Tests.Unit
                 var context = new CakeContextFixture().CreateContext();
 
                 // When
-                CakeTaskBuilderExtensions.DoesForEach(builder, () => new[] { "a", "b", "c" }, (item, c) => throw new NotImplementedException());
+                CakeTaskBuilderExtensions.DoesForEach(builder, () => new[] { "a", "b", "c" },
+                    (item, c) => throw new NotImplementedException());
                 var result = Record.Exception(() => builder.Task.Execute(context));
 
                 // Then
