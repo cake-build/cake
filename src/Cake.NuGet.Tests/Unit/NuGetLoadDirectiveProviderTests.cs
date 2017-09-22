@@ -96,7 +96,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = fixture.Load();
 
                 // Then
-                Assert.Equal(1, result.AnalyzedFiles.Count);
+                Assert.Single(result.AnalyzedFiles);
                 Assert.Equal("/Working/tools/Cake.Recipe/file.cake", result.AnalyzedFiles[0].FullPath);
             }
 

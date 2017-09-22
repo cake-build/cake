@@ -35,7 +35,7 @@ namespace Cake.Core.Tests.Unit
                 task.AddAction(c => { });
 
                 // Then
-                Assert.Equal(1, task.Actions.Count);
+                Assert.Single(task.Actions);
             }
 
             [Fact]

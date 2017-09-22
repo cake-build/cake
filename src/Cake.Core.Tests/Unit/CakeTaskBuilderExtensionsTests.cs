@@ -175,7 +175,7 @@ namespace Cake.Core.Tests.Unit
                     builder.Does(() => { });
 
                     // Then
-                    Assert.Equal(1, task.Actions.Count);
+                    Assert.Single(task.Actions);
                 }
             }
 
@@ -192,7 +192,7 @@ namespace Cake.Core.Tests.Unit
                     builder.Does(c => { });
 
                     // Then
-                    Assert.Equal(1, task.Actions.Count);
+                    Assert.Single(task.Actions);
                 }
             }
         }
@@ -365,14 +365,14 @@ namespace Cake.Core.Tests.Unit
                 CakeTaskBuilderExtensions.DoesForEach(builder, () => new[] { "a", "b", "c" }, (item) => { });
 
                 // Then
-                Assert.Equal(0, builder.Task.Actions.Count);
-                Assert.Equal(1, builder.Task.DelayedActions.Count);
+                Assert.Empty(builder.Task.Actions);
+                Assert.Single(builder.Task.DelayedActions);
 
                 // When
                 builder.Task.Execute(context);
 
                 // Then
-                Assert.Equal(0, builder.Task.DelayedActions.Count);
+                Assert.Empty(builder.Task.DelayedActions);
                 Assert.Equal(3, builder.Task.Actions.Count);
             }
 
@@ -388,14 +388,14 @@ namespace Cake.Core.Tests.Unit
                 CakeTaskBuilderExtensions.DoesForEach(builder, () => new[] { "a", "b", "c" }, (item, c) => { });
 
                 // Then
-                Assert.Equal(0, builder.Task.Actions.Count);
-                Assert.Equal(1, builder.Task.DelayedActions.Count);
+                Assert.Empty(builder.Task.Actions);
+                Assert.Single(builder.Task.DelayedActions);
 
                 // When
                 builder.Task.Execute(context);
 
                 // Then
-                Assert.Equal(0, builder.Task.DelayedActions.Count);
+                Assert.Empty(builder.Task.DelayedActions);
                 Assert.Equal(3, builder.Task.Actions.Count);
             }
 

@@ -27,7 +27,7 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 log.Write(messageVerbosity, LogLevel.Information, "Hello World");
 
                 // Then
-                Assert.Equal(0, console.Messages.Count);
+                Assert.Empty(console.Messages);
             }
 
             [Theory]
@@ -45,7 +45,7 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 log.Write(messageVerbosity, LogLevel.Information, "Hello World");
 
                 // Then
-                Assert.Equal(1, console.Messages.Count);
+                Assert.Single(console.Messages);
             }
 
             [Theory]
@@ -63,7 +63,7 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 log.Write(Verbosity.Diagnostic, logLevel, "Hello World");
 
                 // Then
-                Assert.Equal(1, console.Messages.Count);
+                Assert.Single(console.Messages);
             }
 
             [Theory]
@@ -79,7 +79,7 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 log.Write(Verbosity.Diagnostic, logLevel, "Hello World");
 
                 // Then
-                Assert.Equal(1, console.ErrorMessages.Count);
+                Assert.Single(console.ErrorMessages);
             }
         }
     }

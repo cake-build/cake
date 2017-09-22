@@ -106,7 +106,7 @@ namespace Cake.Common.Tests.Unit.Solution
                 Assert.NotNull(result.Projects);
                 var folders = result.Projects.OfType<SolutionFolder>().ToList();
                 var srcFolder = folders.First(x => x.Name == "src");
-                Assert.Equal(1, srcFolder.Items.Count);
+                Assert.Single(srcFolder.Items);
                 var dummyProject = result.Projects.First(x => x.Name == "dummy");
                 Assert.Contains(dummyProject, srcFolder.Items);
                 Assert.Equal(srcFolder, dummyProject.Parent);

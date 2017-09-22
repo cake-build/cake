@@ -21,8 +21,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             var result = fixture.CreateAndReturnContent();
 
             // Then
-            Assert.True(result.Contains("using Test.NameSpace;"));
-            Assert.True(result.Contains("[assembly: TestAttribute(\"TestValue\")]"));
+            Assert.Contains("using Test.NameSpace;", result);
+            Assert.Contains("[assembly: TestAttribute(\"TestValue\")]", result);
         }
     }
 }

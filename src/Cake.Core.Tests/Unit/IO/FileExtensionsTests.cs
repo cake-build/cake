@@ -157,7 +157,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = file.ReadLines(Encoding.UTF8).ToList();
 
                 // Then
-                Assert.Equal(0, result.Count);
+                Assert.Empty(result);
             }
 
             [Fact]
@@ -172,7 +172,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = file.ReadLines(Encoding.UTF8).ToList();
 
                 // Then
-                Assert.Equal(1, result.Count);
+                Assert.Single(result);
             }
 
             [Fact]

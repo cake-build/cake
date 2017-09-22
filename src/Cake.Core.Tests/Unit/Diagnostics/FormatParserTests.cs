@@ -20,7 +20,7 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 var result = FormatParser.Parse(string.Empty).ToArray();
 
                 // Then
-                Assert.Equal(0, result.Length);
+                Assert.Empty(result);
             }
 
             [Fact]
@@ -30,7 +30,7 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 var result = FormatParser.Parse("Hello World!").ToArray();
 
                 // Then
-                Assert.Equal(1, result.Length);
+                Assert.Single(result);
                 Assert.IsType<LiteralToken>(result[0]);
                 Assert.Equal("Hello World!", ((LiteralToken)result[0]).Text);
             }
@@ -42,7 +42,7 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 var result = FormatParser.Parse("{0}").ToArray();
 
                 // Then
-                Assert.Equal(1, result.Length);
+                Assert.Single(result);
                 Assert.IsType<PropertyToken>(result[0]);
                 Assert.Equal(0, ((PropertyToken)result[0]).Position);
             }
@@ -67,7 +67,7 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 var result = FormatParser.Parse("{0:yyyy-MM-dd}").ToArray();
 
                 // Then
-                Assert.Equal(1, result.Length);
+                Assert.Single(result);
                 Assert.IsType<PropertyToken>(result[0]);
                 Assert.Equal(0, ((PropertyToken)result[0]).Position);
                 Assert.Equal("yyyy-MM-dd", ((PropertyToken)result[0]).Format);
