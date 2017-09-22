@@ -69,7 +69,7 @@ namespace Cake.Scripting.Roslyn
 
         public void ImportNamespace(string @namespace)
         {
-            if (!Namespaces.Contains(@namespace))
+            if (!string.IsNullOrWhiteSpace(@namespace) && !Namespaces.Contains(@namespace))
             {
                 _log.Debug("Importing namespace {0}...", @namespace);
                 Namespaces.Add(@namespace);
