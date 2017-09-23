@@ -27,6 +27,6 @@ namespace Cake.Core
         /// Gets the task's dependencies.
         /// </summary>
         /// <value>The task's dependencies.</value>
-        IReadOnlyList<string> Dependencies { get; }
+        IReadOnlyList<CakeTaskDependency> Dependencies { get; }
     }
 }

@@ -14,7 +14,7 @@ namespace Cake.Core
     /// </summary>
     public abstract class CakeTask : ICakeTaskInfo
     {
-        private readonly List<string> _dependencies;
+        private readonly List<CakeTaskDependency> _dependencies;
         private readonly List<Func<ICakeContext, bool>> _criterias;
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Cake.Core
         /// Gets the task's dependencies.
         /// </summary>
         /// <value>The task's dependencies.</value>
-        public IReadOnlyList<string> Dependencies => _dependencies;
+        public IReadOnlyList<CakeTaskDependency> Dependencies => _dependencies;
 
         /// <summary>
         /// Gets the task's criterias.
@@ -72,7 +72,7 @@ namespace Cake.Core
                 throw new ArgumentException("Task name cannot be empty.");
             }
             Name = name;
-            _dependencies = new List<string>();
+            _dependencies = new List<CakeTaskDependency>();
             _criterias = new List<Func<ICakeContext, bool>>();
         }
 
@@ -82,13 +82,24 @@ namespace Cake.Core
         /// <param name="name">The name of the dependency.</param>
         public void AddDependency(string name)
         {
-            if (_dependencies.Any(x => x == name))
+            AddDependency(name, false);
+        }
+
+        /// <summary>
+        /// Adds a dependency to the task.
+        /// </summary>
+        /// <param name="name">The name of the dependency.</param>
+        /// <param name="ignoreIfNotExists">True if the dependency should only taken into account if the task exists.
+        /// False if the task needs to exist.</param>
+        public void AddDependency(string name, bool ignoreIfNotExists)
+        {
+            if (_dependencies.Any(x => x.TargetTaskName == name))
             {
                 const string format = "The task '{0}' already have a dependency on '{1}'.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, Name, name);
                 throw new CakeException(message);
             }
-            _dependencies.Add(name);
+            _dependencies.Add(new CakeTaskDependency(name, ignoreIfNotExists));
         }
 
         /// <summary>

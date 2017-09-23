@@ -51,7 +51,8 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.Equal(1, task.Dependencies.Count);
-                Assert.Equal("other", task.Dependencies[0]);
+                Assert.Equal("other", task.Dependencies[0].TargetTaskName);
+                Assert.Equal(false, task.Dependencies[0].IgnoreIfNotExists);
             }
 
             [Fact]
@@ -67,6 +68,23 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.IsType<CakeException>(result);
                 Assert.Equal("The task 'task' already have a dependency on 'other'.", result?.Message);
+            }
+
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public void Should_Correctly_Set_IgnoreIfNotExists_Flag(bool value)
+            {
+                // Given
+                var task = new ActionTask("task");
+
+                // When
+                task.AddDependency("other", value);
+
+                // Then
+                Assert.Equal(1, task.Dependencies.Count);
+                Assert.Equal("other", task.Dependencies[0].TargetTaskName);
+                Assert.Equal(value, task.Dependencies[0].IgnoreIfNotExists);
             }
         }
 
@@ -247,7 +265,11 @@ namespace Cake.Core.Tests.Unit
             Assert.IsAssignableFrom<ICakeTaskInfo>(task);
             Assert.Equal("task", result.Name);
             Assert.Equal("my description", result.Description);
-            Assert.Equal(new[] { "dependency1", "dependency2" }, result.Dependencies.ToArray());
+            Assert.Equal(2, result.Dependencies.Count());
+            Assert.Equal("dependency1", result.Dependencies[0].TargetTaskName);
+            Assert.Equal(false, result.Dependencies[0].IgnoreIfNotExists);
+            Assert.Equal("dependency2", result.Dependencies[1].TargetTaskName);
+            Assert.Equal(false, result.Dependencies[1].IgnoreIfNotExists);
         }
     }
 }

@@ -58,7 +58,7 @@ namespace Cake.Core.Tests.Unit
                 builder.IsDependentOn(childTaskBuilder);
 
                 // Then
-                Assert.Equal(parentTask.Dependencies[0], childTaskBuilder.Task.Name);
+                Assert.Equal(parentTask.Dependencies[0].TargetTaskName, childTaskBuilder.Task.Name);
             }
 
             [Fact]
