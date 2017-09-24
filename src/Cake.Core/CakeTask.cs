@@ -14,7 +14,8 @@ namespace Cake.Core
     /// </summary>
     public abstract class CakeTask : ICakeTaskInfo
     {
-        private readonly List<string> _dependencies;
+        private readonly List<CakeTaskDependency> _dependencies;
+        private readonly List<CakeTaskDependency> _reverseDependencies;
         private readonly List<Func<ICakeContext, bool>> _criterias;
 
         /// <summary>
@@ -33,7 +34,13 @@ namespace Cake.Core
         /// Gets the task's dependencies.
         /// </summary>
         /// <value>The task's dependencies.</value>
-        public IReadOnlyList<string> Dependencies => _dependencies;
+        public IReadOnlyList<CakeTaskDependency> Dependencies => _dependencies;
+
+        /// <summary>
+        /// Gets the tasks that the task want to be a dependency of.
+        /// </summary>
+        /// <value>The tasks that the task want to be a dependency of.</value>
+        public IReadOnlyList<CakeTaskDependency> Dependees => _reverseDependencies;
 
         /// <summary>
         /// Gets the task's criterias.
@@ -71,24 +78,44 @@ namespace Cake.Core
             {
                 throw new ArgumentException("Task name cannot be empty.");
             }
-            Name = name;
-            _dependencies = new List<string>();
+
+            _dependencies = new List<CakeTaskDependency>();
+            _reverseDependencies = new List<CakeTaskDependency>();
             _criterias = new List<Func<ICakeContext, bool>>();
+
+            Name = name;
         }
 
         /// <summary>
         /// Adds a dependency to the task.
         /// </summary>
         /// <param name="name">The name of the dependency.</param>
-        public void AddDependency(string name)
+        /// <param name="required">Whether or not the dependency is required.</param>
+        public void AddDependency(string name, bool required = true)
         {
-            if (_dependencies.Any(x => x == name))
+            if (_dependencies.Any(x => x.Name == name))
             {
                 const string format = "The task '{0}' already have a dependency on '{1}'.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, Name, name);
                 throw new CakeException(message);
             }
-            _dependencies.Add(name);
+            _dependencies.Add(new CakeTaskDependency(name, required));
+        }
+
+        /// <summary>
+        /// Makes this task a dependency of some other task.
+        /// </summary>
+        /// <param name="name">The name of the task that this task want to be a dependency of.</param>
+        /// <param name="required">Whether or not the dependency is required.</param>
+        public void AddReverseDependency(string name, bool required = true)
+        {
+            if (_reverseDependencies.Any(x => x.Name == name))
+            {
+                const string format = "The task '{0}' already is a dependee of '{1}'.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, Name, name);
+                throw new CakeException(message);
+            }
+            _reverseDependencies.Add(new CakeTaskDependency(name, required));
         }
 
         /// <summary>

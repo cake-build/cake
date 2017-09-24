@@ -46,15 +46,33 @@ namespace Cake.Core
         {
             if (builder == null)
             {
-                throw new ArgumentNullException("builder");
+                throw new ArgumentNullException(nameof(builder));
             }
-
             if (other == null)
             {
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
             }
 
             builder.Task.AddDependency(other.Task.Name);
+            return builder;
+        }
+
+        /// <summary>
+        /// Makes the task a dependency of another task.
+        /// </summary>
+        /// <typeparam name="T">The task type.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="name">The name of the task the current task will be a dependency of.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{T}"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder<T> IsDependeeOf<T>(this CakeTaskBuilder<T> builder, string name)
+            where T : CakeTask
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            builder.Task.AddReverseDependency(name);
             return builder;
         }
 

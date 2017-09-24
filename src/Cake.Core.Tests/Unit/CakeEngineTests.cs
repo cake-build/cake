@@ -150,15 +150,19 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("A").Does(() => result.Add("A"));
                 engine.RegisterTask("B").IsDependentOn("A").Does(() => result.Add("B"));
                 engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
+                engine.RegisterTask("D").IsDependentOn("C").IsDependeeOf("E").Does(() => { result.Add("D"); });
+                engine.RegisterTask("E").Does(() => { result.Add("E"); });
 
                 // When
-                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "C");
+                engine.RunTarget(fixture.Context, fixture.ExecutionStrategy, "E");
 
                 // Then
-                Assert.Equal(3, result.Count);
+                Assert.Equal(5, result.Count);
                 Assert.Equal("A", result[0]);
                 Assert.Equal("B", result[1]);
                 Assert.Equal("C", result[2]);
+                Assert.Equal("D", result[3]);
+                Assert.Equal("E", result[4]);
             }
 
             [Fact]
