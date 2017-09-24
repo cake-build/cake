@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Threading.Tasks;
 using Cake.Core.Tests.Fixtures;
 using Xunit;
 
@@ -420,7 +421,7 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
-            public void Should_Throw_On_First_Failed_Action()
+            public async Task Should_Throw_On_First_Failed_Action()
             {
                 // Given
                 var task = new ActionTask("task");
@@ -428,9 +429,8 @@ namespace Cake.Core.Tests.Unit
                 var context = new CakeContextFixture().CreateContext();
 
                 // When
-                CakeTaskBuilderExtensions.DoesForEach(builder, () => new[] { "a", "b", "c" },
-                    (item, c) => throw new NotImplementedException());
-                var result = Record.Exception(() => builder.Task.Execute(context));
+                CakeTaskBuilderExtensions.DoesForEach(builder, () => new[] { "a", "b", "c" }, (item, c) => throw new NotImplementedException());
+                var result = await Record.ExceptionAsync(() => builder.Task.Execute(context));
 
                 // Then
                 Assert.IsType<NotImplementedException>(result);
@@ -450,7 +450,7 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
-            public void Should_Throw_On_First_Failed_Action()
+            public async Task Should_Throw_On_First_Failed_Action()
             {
                 // Given
                 var task = new ActionTask("task");
@@ -461,14 +461,14 @@ namespace Cake.Core.Tests.Unit
                 builder.Does(() => throw new NotImplementedException());
                 builder.Does(() => throw new NotSupportedException());
                 builder.Does(() => throw new OutOfMemoryException());
-                var result = Record.Exception(() => builder.Task.Execute(context));
+                var result = await Record.ExceptionAsync(() => builder.Task.Execute(context));
 
                 // Then
                 Assert.IsType<NotImplementedException>(result);
             }
 
             [Fact]
-            public void Should_Aggregate_Exceptions_From_Actions()
+            public async Task Should_Aggregate_Exceptions_From_Actions()
             {
                 // Given
                 var task = new ActionTask("task");
@@ -480,7 +480,7 @@ namespace Cake.Core.Tests.Unit
                 builder.Does(() => throw new NotSupportedException());
                 builder.Does(() => throw new OutOfMemoryException());
                 builder.DeferOnError();
-                var result = Record.Exception(() => builder.Task.Execute(context));
+                var result = await Record.ExceptionAsync(() => builder.Task.Execute(context));
 
                 // Then
                 Assert.IsType<AggregateException>(result);
@@ -491,7 +491,7 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
-            public void Should_Only_Aggregate_Exceptions_When_There_Are_Many()
+            public async Task Should_Only_Aggregate_Exceptions_When_There_Are_Many()
             {
                 // Given
                 var task = new ActionTask("task");
@@ -501,7 +501,7 @@ namespace Cake.Core.Tests.Unit
                 // When
                 builder.Does(() => throw new NotImplementedException());
                 builder.DeferOnError();
-                var result = Record.Exception(() => builder.Task.Execute(context));
+                var result = await Record.ExceptionAsync(() => builder.Task.Execute(context));
 
                 // Then
                 Assert.IsType<NotImplementedException>(result);

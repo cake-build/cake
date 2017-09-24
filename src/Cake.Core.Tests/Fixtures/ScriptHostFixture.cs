@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Threading.Tasks;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting;
@@ -18,9 +19,9 @@ namespace Cake.Core.Tests.Fixtures
             {
             }
 
-            public override CakeReport RunTarget(string target)
+            public override Task<CakeReport> RunTargetAsync(string target)
             {
-                return new CakeReport();
+                return System.Threading.Tasks.Task.FromResult(new CakeReport());
             }
         }
 
@@ -48,7 +49,7 @@ namespace Cake.Core.Tests.Fixtures
             Context.Log.Returns(Log);
 
             Engine = Substitute.For<ICakeEngine>();
-            Engine.RunTarget(Context, Arg.Any<IExecutionStrategy>(), Arg.Any<string>())
+            Engine.RunTargetAsync(Context, Arg.Any<IExecutionStrategy>(), Arg.Any<string>())
                 .Returns(new CakeReport());
         }
 

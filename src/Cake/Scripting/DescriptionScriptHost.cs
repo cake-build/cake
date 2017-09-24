@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Scripting;
 
@@ -40,7 +41,7 @@ namespace Cake.Scripting
         /// </summary>
         /// <param name="target">The target to run.</param>
         /// <returns>The resulting report.</returns>
-        public override CakeReport RunTarget(string target)
+        public override Task<CakeReport> RunTargetAsync(string target)
         {
             foreach (var task in Tasks)
             {
@@ -55,7 +56,7 @@ namespace Cake.Scripting
                 _console.WriteLine("{0,-30}{1}", key, _descriptions[key]);
             }
 
-            return null;
+            return System.Threading.Tasks.Task.FromResult<CakeReport>(null);
         }
     }
 }

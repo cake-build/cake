@@ -36,8 +36,8 @@ namespace Cake.Tests.Unit.Scripting
                 var strategy = new DryRunExecutionStrategy(log);
 
                 // When
-                strategy.Execute(new ActionTask("First"), context);
-                strategy.Execute(new ActionTask("Second"), context);
+                strategy.ExecuteAsync(new ActionTask("First"), context);
+                strategy.ExecuteAsync(new ActionTask("Second"), context);
 
                 // Then
                 Assert.Equal(2, log.Entries.Count);
