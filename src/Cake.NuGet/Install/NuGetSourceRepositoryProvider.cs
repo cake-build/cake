@@ -25,21 +25,21 @@ namespace Cake.NuGet.Install
             // Add repositories
             _repositories = new List<SourceRepository>();
 
-            if (package.Address != null)
-            {
-                CreateRepository(package.Address.AbsoluteUri);
-            }
-            var nugetSource = config.GetValue(Constants.NuGet.Source);
-            if (!string.IsNullOrWhiteSpace(nugetSource))
-            {
-                CreateRepository(nugetSource);
-            }
             foreach (var source in PackageSourceProvider.LoadPackageSources())
             {
                 if (source.IsEnabled)
                 {
                     CreateRepository(source);
                 }
+            }
+            var nugetSource = config.GetValue(Constants.NuGet.Source);
+            if (!string.IsNullOrWhiteSpace(nugetSource))
+            {
+                CreateRepository(nugetSource);
+            }
+            if (package.Address != null)
+            {
+                CreateRepository(package.Address.AbsoluteUri);
             }
         }
 
@@ -52,7 +52,9 @@ namespace Cake.NuGet.Install
         public SourceRepository CreateRepository(PackageSource source, FeedType type)
         {
             var repository = new SourceRepository(source, _resourceProviders);
-            _repositories.Add(repository);
+
+            // Always add new repo as primary
+            _repositories.Insert(0, repository);
             return repository;
         }
 
