@@ -3,9 +3,11 @@ Cake.dll
 Cake.Core.dll
 Cake.Common.dll
 Cake.NuGet.dll
-lib/net45/Cake.Core.dll
+lib/net46/Cake.Core.dll
 lib/netstandard1.6/Cake.Core.dll
-lib/net45/Cake.Common.dll
+lib/net46/Cake.Common.dll
 lib/netstandard1.6/Cake.Common.dll
-lib/net45/Cake.Testing.dll
+lib/net46/Cake.Testing.dll
 lib/netstandard1.6/Cake.Testing.dll
+lib/net46/Cake.NuGet.dll
+lib/netstandard1.6/Cake.NuGet.dll
