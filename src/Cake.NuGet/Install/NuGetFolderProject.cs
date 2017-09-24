@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using NuGet.Frameworks;
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
 using NuGet.ProjectManagement;
@@ -36,7 +37,8 @@ namespace Cake.NuGet.Install
             ICakeConfiguration config,
             ICakeLog log,
             PackagePathResolver pathResolver,
-            string root) : base(root, pathResolver)
+            string root,
+            NuGetFramework targetFramework) : base(root, pathResolver)
         {
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
             _contentResolver = contentResolver ?? throw new ArgumentNullException(nameof(contentResolver));
@@ -44,6 +46,7 @@ namespace Cake.NuGet.Install
             _log = log ?? throw new ArgumentNullException(nameof(log));
             _pathResolver = pathResolver ?? throw new ArgumentNullException(nameof(pathResolver));
             _installedPackages = new HashSet<PackageIdentity>();
+            InternalMetadata[NuGetProjectMetadataKeys.TargetFramework] = targetFramework ?? throw new ArgumentNullException(nameof(targetFramework));
         }
 
         public override Task<bool> InstallPackageAsync(PackageIdentity packageIdentity, DownloadResourceResult downloadResourceResult,
