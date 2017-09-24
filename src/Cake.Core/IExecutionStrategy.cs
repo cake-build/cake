@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Threading.Tasks;
 
 namespace Cake.Core
 {
@@ -30,7 +31,8 @@ namespace Cake.Core
         /// </summary>
         /// <param name="task">The task to execute.</param>
         /// <param name="context">The context.</param>
-        void Execute(CakeTask task, ICakeContext context);
+        /// <returns>Returned Task</returns>
+        Task ExecuteAsync(CakeTask task, ICakeContext context);
 
         /// <summary>
         /// Skips the specified task.

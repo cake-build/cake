@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Cake.Core
 {
@@ -192,6 +193,7 @@ namespace Cake.Core
         /// Executes the task using the specified context.
         /// </summary>
         /// <param name="context">The context.</param>
-        public abstract void Execute(ICakeContext context);
+        /// <returns>Returned Task</returns>
+        public abstract Task Execute(ICakeContext context);
     }
 }

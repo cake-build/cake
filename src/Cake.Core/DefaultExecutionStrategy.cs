@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Threading.Tasks;
 using Cake.Core.Diagnostics;
 
 namespace Cake.Core
@@ -70,7 +71,8 @@ namespace Cake.Core
         /// </summary>
         /// <param name="task">The task to execute.</param>
         /// <param name="context">The context.</param>
-        public void Execute(CakeTask task, ICakeContext context)
+        /// <returns>Returned Task</returns>
+        public async Task ExecuteAsync(CakeTask task, ICakeContext context)
         {
             if (task != null)
             {
@@ -80,7 +82,7 @@ namespace Cake.Core
                 _log.Information("========================================");
                 _log.Verbose("Executing task: {0}", task.Name);
 
-                task.Execute(context);
+                await task.Execute(context).ConfigureAwait(false);
 
                 _log.Verbose("Finished executing task: {0}", task.Name);
             }

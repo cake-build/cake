@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Cake.Core.Diagnostics;
 
 namespace Cake.Core.Scripting
@@ -167,6 +168,16 @@ namespace Cake.Core.Scripting
         /// </summary>
         /// <param name="target">The target to run.</param>
         /// <returns>The resulting report.</returns>
-        public abstract CakeReport RunTarget(string target);
+        public CakeReport RunTarget(string target)
+        {
+            return RunTargetAsync(target).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Runs the specified target.
+        /// </summary>
+        /// <param name="target">The target to run.</param>
+        /// <returns>The resulting report.</returns>
+        public abstract Task<CakeReport> RunTargetAsync(string target);
     }
 }

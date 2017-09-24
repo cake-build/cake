@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Cake.Core
 {
@@ -56,7 +57,7 @@ namespace Cake.Core
         /// <param name="strategy">The execution strategy.</param>
         /// <param name="target">The target to run.</param>
         /// <returns>The resulting report.</returns>
-        CakeReport RunTarget(ICakeContext context, IExecutionStrategy strategy, string target);
+        Task<CakeReport> RunTargetAsync(ICakeContext context, IExecutionStrategy strategy, string target);
 
         /// <summary>
         /// Allows registration of an action that's executed before each task is run.

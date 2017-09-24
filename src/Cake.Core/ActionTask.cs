@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Cake.Core
 {
@@ -17,7 +18,7 @@ namespace Cake.Core
         /// Gets the task's actions.
         /// </summary>
         /// <value>The task's actions.</value>
-        public List<Action<ICakeContext>> Actions { get; }
+        public List<Func<ICakeContext, Task>> Actions { get; }
 
         /// <summary>
         /// Gets the task's actions that are run at execution time to additionally populate <see cref="Actions"/>.
@@ -38,7 +39,7 @@ namespace Cake.Core
         public ActionTask(string name)
             : base(name)
         {
-            Actions = new List<Action<ICakeContext>>();
+            Actions = new List<Func<ICakeContext, Task>>();
             DelayedActions = new Queue<Action>();
         }
 
@@ -46,7 +47,7 @@ namespace Cake.Core
         /// Adds an action to the task.
         /// </summary>
         /// <param name="action">The action.</param>
-        public void AddAction(Action<ICakeContext> action)
+        public void AddAction(Func<ICakeContext, Task> action)
         {
             if (action == null)
             {
@@ -82,7 +83,8 @@ namespace Cake.Core
         /// Executes the task using the specified context.
         /// </summary>
         /// <param name="context">The context.</param>
-        public override void Execute(ICakeContext context)
+        /// <returns>Returned Task</returns>
+        public override async Task Execute(ICakeContext context)
         {
             while (DelayedActions.Count > 0)
             {
@@ -95,7 +97,7 @@ namespace Cake.Core
             {
                 try
                 {
-                    action(context);
+                    await action(context).ConfigureAwait(false);
                 }
                 catch (Exception e) when (DeferExceptions)
                 {

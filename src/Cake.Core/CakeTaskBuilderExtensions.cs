@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Cake.Core
 {
@@ -156,8 +157,44 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="action">The action.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{ActionTask}"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder<ActionTask> Does(this CakeTaskBuilder<ActionTask> builder, Func<Task> action)
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+            return Does(builder, context => action());
+        }
+
+        /// <summary>
+        /// Adds an action to be executed when the task is invoked.
+        /// </summary>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{ActionTask}"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder<ActionTask> Does(this CakeTaskBuilder<ActionTask> builder, Action<ICakeContext> action)
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            builder.Task.AddAction(x =>
+            {
+                action(x);
+                return Task.CompletedTask;
+            });
+            return builder;
+        }
+
+        /// <summary>
+        /// Adds an action to be executed when the task is invoked.
+        /// </summary>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{ActionTask}"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder<ActionTask> Does(this CakeTaskBuilder<ActionTask> builder,
-            Action<ICakeContext> action)
+            Func<ICakeContext, Task> action)
         {
             if (builder == null)
             {
@@ -198,7 +235,11 @@ namespace Cake.Core
 
             foreach (var item in items)
             {
-                builder.Task.AddAction(context => action(item, context));
+                builder.Task.AddAction(context =>
+                {
+                    action(item, context);
+                    return Task.CompletedTask;
+                });
             }
             return builder;
         }
@@ -237,7 +278,11 @@ namespace Cake.Core
             {
                 foreach (var item in itemsFunc())
                 {
-                    builder.Task.AddAction(context => action(item, context));
+                    builder.Task.AddAction(context =>
+                    {
+                        action(item, context);
+                        return Task.CompletedTask;
+                    });
                 }
             });
             return builder;
