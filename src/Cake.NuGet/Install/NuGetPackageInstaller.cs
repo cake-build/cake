@@ -80,8 +80,9 @@ namespace Cake.NuGet.Install
                 throw new ArgumentNullException(nameof(path));
             }
 
+            var targetFramework = type == PackageType.Addin ? _currentFramework : NuGetFramework.AnyFramework;
             var sourceRepositoryProvider = new NuGetSourceRepositoryProvider(_nugetSettings, _config, package);
-            var packageIdentity = GetPackageId(package, sourceRepositoryProvider);
+            var packageIdentity = GetPackageId(package, sourceRepositoryProvider, targetFramework, _nugetLogger);
             if (packageIdentity == null)
             {
                 return Array.Empty<IFile>();
@@ -89,7 +90,7 @@ namespace Cake.NuGet.Install
 
             var packageRoot = path.MakeAbsolute(_environment).FullPath;
             var pathResolver = new PackagePathResolver(packageRoot);
-            var nuGetProject = new NugetFolderProject(_fileSystem, _contentResolver, _config, _log, pathResolver, packageRoot);
+            var nuGetProject = new NugetFolderProject(_fileSystem, _contentResolver, _config, _log, pathResolver, packageRoot, targetFramework);
             var packageManager = new NuGetPackageManager(sourceRepositoryProvider, _nugetSettings, packageRoot)
             {
                 PackagesFolderNuGetProject = nuGetProject
@@ -118,13 +119,13 @@ namespace Cake.NuGet.Install
                 _environment.WorkingDirectory.Combine("tools").MakeAbsolute(_environment).FullPath;
         }
 
-        private PackageIdentity GetPackageId(PackageReference package, NuGetSourceRepositoryProvider sourceRepositoryProvider)
+        private static PackageIdentity GetPackageId(PackageReference package, NuGetSourceRepositoryProvider sourceRepositoryProvider, NuGetFramework targetFramework, ILogger logger)
         {
-            var version = GetNuGetVersion(package, sourceRepositoryProvider);
+            var version = GetNuGetVersion(package, sourceRepositoryProvider, targetFramework, logger);
             return version == null ? null : new PackageIdentity(package.Package, version);
         }
 
-        private NuGetVersion GetNuGetVersion(PackageReference package, NuGetSourceRepositoryProvider sourceRepositoryProvider)
+        private static NuGetVersion GetNuGetVersion(PackageReference package, NuGetSourceRepositoryProvider sourceRepositoryProvider, NuGetFramework targetFramework, ILogger logger)
         {
             if (package.Parameters.ContainsKey("version"))
             {
@@ -140,7 +141,7 @@ namespace Cake.NuGet.Install
             foreach (var sourceRepository in sourceRepositoryProvider.GetRepositories())
             {
                 var dependencyInfoResource = sourceRepository.GetResourceAsync<DependencyInfoResource>().Result;
-                var dependencyInfo = dependencyInfoResource.ResolvePackages(package.Package, _currentFramework, _nugetLogger, CancellationToken.None).Result;
+                var dependencyInfo = dependencyInfoResource.ResolvePackages(package.Package, targetFramework, logger, CancellationToken.None).Result;
                 var version = dependencyInfo
                     .Where(p => p.Listed && (includePrerelease || !p.Version.IsPrerelease))
                     .OrderByDescending(p => p.Version, VersionComparer.Default)
