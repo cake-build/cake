@@ -249,6 +249,19 @@ namespace Cake.Core.Tests.Unit.IO
             }
 
             [Fact]
+            public void Should_Return_Empty_Result_If_Pattern_Is_Invalid()
+            {
+                // Given
+                var fixture = new GlobberFixture();
+
+                // When
+                var result = fixture.Match("pattern/");
+
+                // Then
+                Assert.Empty(result);
+            }
+
+            [Fact]
             public void Can_Traverse_Recursively()
             {
                 // Given

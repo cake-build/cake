@@ -109,17 +109,17 @@ namespace Cake.Core.IO.Globbing
 
         private static GlobNode ParseSegment(GlobParserContext context)
         {
-            if (context.CurrentToken.Kind == GlobTokenKind.DirectoryWildcard)
+            if (context.CurrentToken?.Kind == GlobTokenKind.DirectoryWildcard)
             {
                 context.Accept();
                 return new RecursiveWildcardSegment();
             }
-            if (context.CurrentToken.Kind == GlobTokenKind.Parent)
+            if (context.CurrentToken?.Kind == GlobTokenKind.Parent)
             {
                 context.Accept();
                 return new ParentSegment();
             }
-            if (context.CurrentToken.Kind == GlobTokenKind.Current)
+            if (context.CurrentToken?.Kind == GlobTokenKind.Current)
             {
                 context.Accept();
                 return new CurrentSegment();
