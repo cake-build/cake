@@ -111,7 +111,7 @@ if (!(Test-Path $CakePath)) {
     Write-Host "Installing Cake..."
     Invoke-Expression "&`"$NugetPath`" install Cake -Version $CakeVersion -OutputDirectory `"$ToolPath`"" | Out-Null;
     if ($LASTEXITCODE -ne 0) {
-        Throw "An error occured while restoring Cake from NuGet."
+        Throw "An error occurred while restoring Cake from NuGet."
     }
 }
 

@@ -65,7 +65,7 @@ if [ ! -f "$NUGET_EXE" ]; then
     echo "Downloading NuGet..."
     curl -Lsfo "$NUGET_EXE" $NUGET_URL
     if [ $? -ne 0 ]; then
-        echo "An error occured while downloading nuget.exe."
+        echo "An error occurred while downloading nuget.exe."
         exit 1
     fi
 fi
