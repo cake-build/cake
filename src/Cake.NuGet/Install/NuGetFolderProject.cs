@@ -105,7 +105,7 @@ namespace Cake.NuGet.Install
                         continue;
                     }
 
-                    var dependencyInstallPath = new DirectoryPath(_pathResolver.GetInstallPath(package));
+                    var dependencyInstallPath = new DirectoryPath(_pathResolver.GetInstallPath(dependency));
 
                     if (!_fileSystem.Exist(dependencyInstallPath))
                     {
