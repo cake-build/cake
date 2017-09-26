@@ -7,6 +7,7 @@ using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using NuGet.Frameworks;
+using NuGet.PackageManagement;
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
 using NuGet.ProjectManagement;
@@ -31,6 +32,10 @@ namespace Cake.NuGet.Install
             "Cake.Core"
         }, StringComparer.OrdinalIgnoreCase);
 
+        public NuGetFramework TargetFramework { get; }
+
+        public GatherCache GatherCache { get; }
+
         public NugetFolderProject(
             IFileSystem fileSystem,
             INuGetContentResolver contentResolver,
@@ -46,7 +51,9 @@ namespace Cake.NuGet.Install
             _log = log ?? throw new ArgumentNullException(nameof(log));
             _pathResolver = pathResolver ?? throw new ArgumentNullException(nameof(pathResolver));
             _installedPackages = new HashSet<PackageIdentity>();
-            InternalMetadata[NuGetProjectMetadataKeys.TargetFramework] = targetFramework ?? throw new ArgumentNullException(nameof(targetFramework));
+            TargetFramework = targetFramework ?? throw new ArgumentNullException(nameof(targetFramework));
+            InternalMetadata[NuGetProjectMetadataKeys.TargetFramework] = TargetFramework;
+            GatherCache = new GatherCache();
         }
 
         public override Task<bool> InstallPackageAsync(PackageIdentity packageIdentity, DownloadResourceResult downloadResourceResult,

@@ -15,7 +15,7 @@ namespace Cake.NuGet.Install
             _log = log ?? throw new ArgumentNullException(nameof(log));
             PackageExtractionContext = new PackageExtractionContext(new NuGetLogger(_log))
             {
-                PackageSaveMode = PackageSaveMode.Nuspec | PackageSaveMode.Files
+                PackageSaveMode = PackageSaveMode.Nuspec | PackageSaveMode.Files | PackageSaveMode.Nupkg
             };
         }
 
