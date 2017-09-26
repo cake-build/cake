@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <AssemblyName>Cake.Core</AssemblyName>
     <TargetFrameworks>net46;netstandard1.6</TargetFrameworks>
@@ -6,12 +7,15 @@
     <PlatformTarget>AnyCpu</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
+
   <!-- Package specific metadata -->
   <PropertyGroup>
     <Description>The Cake core library.</Description>
   </PropertyGroup>
+  
   <!-- Import shared functionality -->
   <Import Project="..\Shared.msbuild" />
+
   <!-- .NET Core packages -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
     <PackageReference Include="Microsoft.Win32.Registry" Version="4.3.0" />
@@ -20,6 +24,7 @@
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="1.1.1" />
   </ItemGroup>
+
   <!-- .NET Framework packages -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">
     <Reference Include="System" />
@@ -28,7 +33,9 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
+
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+
 </Project>
