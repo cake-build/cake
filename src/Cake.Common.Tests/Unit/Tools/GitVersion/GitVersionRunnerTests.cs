@@ -228,7 +228,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                         PreReleaseTag = "PreReleaseTag",
                         PreReleaseTagWithDash = "PreReleaseTagWithDash",
                         PreReleaseLabel = "PreReleaseLabel",
-                        PreReleaseNumber = -1,
+                        PreReleaseNumber = null,
                         BuildMetaData = "BuildMetaData",
                         BuildMetaDataPadded = "BuildMetaDataPadded",
                         FullBuildMetaData = "Branch.master.Sha.f2467748c78b3c8b37972ad0b30df2e15dfbf2cb",
@@ -243,7 +243,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                         Sha = "f2467748c78b3c8b37972ad0b30df2e15dfbf2cb",
                         NuGetVersionV2 = "0.1.1",
                         NuGetVersion = "0.1.1",
-                        CommitsSinceVersionSource = -1,
+                        CommitsSinceVersionSource = null,
                         CommitsSinceVersionSourcePadded = "0002",
                         CommitDate = "2017-09-13",
                     }
