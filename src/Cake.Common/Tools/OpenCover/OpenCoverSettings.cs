@@ -67,7 +67,7 @@ namespace Cake.Common.Tools.OpenCover
         public bool MergeOutput { get; set; }
 
         /// <summary>
-        /// Gets or sets a list of directories where assemblies being loaded from will be ignored.
+        /// Gets a list of directories where assemblies being loaded from will be ignored.
         /// </summary>
         public ISet<DirectoryPath> ExcludeDirectories => _excludeDirectories;
 
@@ -77,23 +77,23 @@ namespace Cake.Common.Tools.OpenCover
         public OpenCoverLogLevel LogLevel { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating to merge the coverage results for an assembly
+        /// Gets or sets a value indicating whether to merge the coverage results for an assembly
         /// regardless of where it was loaded assuming it has the same file-hash in each location.
         /// </summary>
         public bool MergeByHash { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating if the default filters should be applied or not.
+        /// Gets or sets a value indicating whether the default filters should be applied or not.
         /// </summary>
         public bool NoDefaultFilters { get; set; }
 
         /// <summary>
-        /// Gets or sets a list of directories with alternative locations to look for PDBs.
+        /// Gets a list of directories with alternative locations to look for PDBs.
         /// </summary>
         public ISet<DirectoryPath> SearchDirectories => _searchDirectories;
 
         /// <summary>
-        /// Gets or sets a value indicating if the value provided in the target parameter
+        /// Gets or sets a value indicating whether if the value provided in the target parameter
         /// is the name of a service rather than a name of a process.
         /// </summary>
         public bool IsService { get; set; }
