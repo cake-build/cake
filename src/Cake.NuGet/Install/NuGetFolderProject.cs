@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.NuGet.Install.Extensions;
 using NuGet.Frameworks;
 using NuGet.PackageManagement;
 using NuGet.Packaging;
@@ -38,8 +39,6 @@ namespace Cake.NuGet.Install
 
         public NuGetFramework TargetFramework { get; }
 
-        public GatherCache GatherCache { get; }
-
         public NugetFolderProject(
             IFileSystem fileSystem,
             INuGetContentResolver contentResolver,
@@ -57,7 +56,6 @@ namespace Cake.NuGet.Install
             _installedPackages = new HashSet<PackageIdentity>();
             TargetFramework = targetFramework ?? throw new ArgumentNullException(nameof(targetFramework));
             InternalMetadata[NuGetProjectMetadataKeys.TargetFramework] = TargetFramework;
-            GatherCache = new GatherCache();
         }
 
         public override Task<bool> InstallPackageAsync(PackageIdentity packageIdentity, DownloadResourceResult downloadResourceResult,
@@ -75,15 +73,7 @@ namespace Cake.NuGet.Install
 
         public IReadOnlyCollection<IFile> GetFiles(DirectoryPath directoryPath, PackageReference packageReference, PackageType type)
         {
-            bool loadDependencies;
-            if (packageReference.Parameters.ContainsKey("LoadDependencies"))
-            {
-                bool.TryParse(packageReference.Parameters["LoadDependencies"].FirstOrDefault() ?? bool.TrueString, out loadDependencies);
-            }
-            else
-            {
-                bool.TryParse(_config.GetValue(Constants.NuGet.LoadDependencies) ?? bool.FalseString, out loadDependencies);
-            }
+            var loadDependencies = packageReference.ShouldLoadDependencies(_config);
 
             var files = new List<IFile>();
             var package = _installedPackages.First(p => p.Id.Equals(packageReference.Package, StringComparison.OrdinalIgnoreCase));

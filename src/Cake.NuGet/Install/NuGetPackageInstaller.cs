@@ -10,6 +10,7 @@ using Cake.Core;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.NuGet.Install.Extensions;
 using NuGet.Common;
 using NuGet.Configuration;
 using NuGet.Frameworks;
@@ -32,9 +33,9 @@ namespace Cake.NuGet.Install
         private readonly ICakeLog _log;
         private readonly ICakeConfiguration _config;
         private readonly ISettings _nugetSettings;
-        private readonly NuGetFramework _currentFramework;
         private readonly ILogger _nugetLogger;
-        private readonly IDictionary<PackageType, NugetFolderProject> _projects;
+        private readonly NuGetFramework _currentFramework;
+        private readonly GatherCache _gatherCache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetPackageInstaller"/> class.
@@ -62,7 +63,7 @@ namespace Cake.NuGet.Install
                 GetToolPath(),
                 null,
                 new XPlatMachineWideSetting());
-            _projects = new Dictionary<PackageType, NugetFolderProject>();
+            _gatherCache = new GatherCache();
         }
 
         public bool CanInstall(PackageReference package, PackageType type)
@@ -95,36 +96,34 @@ namespace Cake.NuGet.Install
                 return Array.Empty<IFile>();
             }
 
-            if (!_projects.TryGetValue(type, out var project))
-            {
-                var pathResolver = new PackagePathResolver(packageRoot);
-                project = new NugetFolderProject(_fileSystem, _contentResolver, _config, _log, pathResolver, packageRoot, targetFramework);
-                _projects.Add(type, project);
-
-                if (!project.Root.Equals(packageRoot))
-                {
-                    // This should not happen since all addins/tools are installed to same directory.
-                    throw new ArgumentException($"Path is not same as previous package of type: {type}", nameof(path));
-                }
-            }
+            var pathResolver = new PackagePathResolver(packageRoot);
+            var project = new NugetFolderProject(_fileSystem, _contentResolver, _config, _log, pathResolver, packageRoot, targetFramework);
             var packageManager = new NuGetPackageManager(sourceRepositoryProvider, _nugetSettings, project.Root)
             {
                 PackagesFolderNuGetProject = project
             };
-
             var sourceRepositories = sourceRepositoryProvider.GetRepositories();
-            var includePrerelease = false;
-            if (package.Parameters.ContainsKey("prerelease"))
-            {
-                bool.TryParse(package.Parameters["prerelease"].FirstOrDefault() ?? bool.TrueString, out includePrerelease);
-            }
-            var resolutionContext = new ResolutionContext(DependencyBehavior.Lowest, includePrerelease, false, VersionConstraints.None, project.GatherCache);
+            var includePrerelease = package.IsPrerelease();
+            var dependencyBehavior = GetDependencyBehavior(type, package);
+            var resolutionContext = new ResolutionContext(dependencyBehavior, includePrerelease, false, VersionConstraints.None, _gatherCache);
             var projectContext = new NuGetProjectContext(_log);
+
             packageManager.InstallPackageAsync(project, packageIdentity, resolutionContext, projectContext,
                 sourceRepositories, Array.Empty<SourceRepository>(),
                 CancellationToken.None).Wait();
 
             return project.GetFiles(path, package, type);
+        }
+
+        private DependencyBehavior GetDependencyBehavior(PackageType type, PackageReference package)
+        {
+            if (type == PackageType.Addin)
+            {
+                return package.ShouldLoadDependencies(_config) ?
+                    DependencyBehavior.Lowest :
+                    DependencyBehavior.Ignore;
+            }
+            return DependencyBehavior.Ignore;
         }
 
         private string GetToolPath()
@@ -148,12 +147,7 @@ namespace Cake.NuGet.Install
                 return new NuGetVersion(package.Parameters["version"].First());
             }
 
-            var includePrerelease = false;
-            if (package.Parameters.ContainsKey("prerelease"))
-            {
-                bool.TryParse(package.Parameters["prerelease"].FirstOrDefault() ?? bool.TrueString, out includePrerelease);
-            }
-
+            var includePrerelease = package.IsPrerelease();
             foreach (var sourceRepository in sourceRepositoryProvider.GetRepositories())
             {
                 var dependencyInfoResource = sourceRepository.GetResourceAsync<DependencyInfoResource>().Result;
