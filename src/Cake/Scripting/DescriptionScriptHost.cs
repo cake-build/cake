@@ -43,17 +43,27 @@ namespace Cake.Scripting
         /// <returns>The resulting report.</returns>
         public override Task<CakeReport> RunTargetAsync(string target)
         {
+            var maxTaskNameLength = 29;
+
             foreach (var task in Tasks)
             {
+                if (task.Name.Length > maxTaskNameLength)
+                {
+                    maxTaskNameLength = task.Name.Length;
+                }
+
                 _descriptions.Add(task.Name, task.Description);
             }
 
+            maxTaskNameLength++;
+            string lineFormat = "{0,-" + maxTaskNameLength + "}{1}";
+
             _console.WriteLine();
-            _console.WriteLine("{0,-30}{1}", "Task", "Description");
-            _console.WriteLine(string.Concat(Enumerable.Range(0, 79).Select(s => "=")));
+            _console.WriteLine(lineFormat, "Task", "Description");
+            _console.WriteLine(new String('=', maxTaskNameLength + 50));
             foreach (var key in _descriptions.Keys)
             {
-                _console.WriteLine("{0,-30}{1}", key, _descriptions[key]);
+                _console.WriteLine(lineFormat, key, _descriptions[key]);
             }
 
             return System.Threading.Tasks.Task.FromResult<CakeReport>(null);
