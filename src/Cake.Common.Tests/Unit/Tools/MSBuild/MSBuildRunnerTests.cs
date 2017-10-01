@@ -934,6 +934,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             [Theory]
             [InlineData("Value1,Value2", "/v:normal /p:Property=Value1%2CValue2 /target:Build \"C:/Working/src/Solution.sln\"")]
             [InlineData("Value1;Value2", "/v:normal /p:Property=Value1%3BValue2 /target:Build \"C:/Working/src/Solution.sln\"")]
+            [InlineData("Value1 Value2", "/v:normal /p:Property=Value1%20Value2 /target:Build \"C:/Working/src/Solution.sln\"")]
             public void Should_Escape_Special_Characters_In_Property_Value(string propertyValue, string expected)
             {
                 // Given
