@@ -14,6 +14,7 @@ namespace Cake.Core.Scripting.Analysis
         private readonly List<string> _references;
         private readonly List<string> _usingAliases;
         private readonly List<string> _namespaces;
+        private readonly List<string> _usingStaticDirectives;
         private readonly List<PackageReference> _addins;
         private readonly List<PackageReference> _tools;
         private readonly List<string> _lines;
@@ -28,6 +29,8 @@ namespace Cake.Core.Scripting.Analysis
 
         public IList<string> Namespaces => _namespaces;
 
+        public IList<string> UsingStaticDirectives => _usingStaticDirectives;
+
         public IList<PackageReference> Addins => _addins;
 
         public IList<PackageReference> Tools => _tools;
@@ -41,6 +44,7 @@ namespace Cake.Core.Scripting.Analysis
             _references = new List<string>();
             _namespaces = new List<string>();
             _usingAliases = new List<string>();
+            _usingStaticDirectives = new List<string>();
             _addins = new List<PackageReference>();
             _tools = new List<PackageReference>();
             _lines = new List<string>();
