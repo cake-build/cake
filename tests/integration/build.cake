@@ -20,6 +20,7 @@
 #load "./Cake.Common/Tools/Cake/CakeAliases.cake"
 #load "./Cake.Common/Tools/DotNetCore/DotNetCoreAliases.cake"
 #load "./Cake.Common/Tools/NuGet/NuGetAliases.cake"
+#load "./Cake.Core/Scripting/DefineDirective.cake"
 #load "./Cake.Core/Scripting/LoadDirective.cake"
 #load "./Cake.Core/Scripting/UsingDirective.cake"
 #load "./Cake.Core/Tooling/ToolLocator.cake"
@@ -45,6 +46,7 @@ Setup(ctx =>
 //////////////////////////////////////////////////
 
 Task("Cake.Core")
+    .IsDependentOn("Cake.Core.Scripting.DefineDirective")
     .IsDependentOn("Cake.Core.Scripting.LoadDirective")
     .IsDependentOn("Cake.Core.Scripting.UsingDirective")
     .IsDependentOn("Cake.Core.Tooling.ToolLocator")

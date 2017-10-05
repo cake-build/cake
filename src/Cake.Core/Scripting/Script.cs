@@ -17,6 +17,7 @@ namespace Cake.Core.Scripting
         private readonly List<ScriptAlias> _aliases;
         private readonly List<string> _usingAliasDirectives;
         private readonly List<string> _usingStaticDirectives;
+        private readonly List<string> _defines;
 
         /// <summary>
         /// Gets the namespaces imported via the <c>using</c> statement.
@@ -51,6 +52,12 @@ namespace Cake.Core.Scripting
         public IReadOnlyList<string> UsingStaticDirectives => _usingStaticDirectives;
 
         /// <summary>
+        /// Gets the defines.
+        /// </summary>
+        /// <value>The defines.</value>
+        public IReadOnlyList<string> Defines => _defines;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Script" /> class.
         /// </summary>
         /// <param name="namespaces">The namespaces.</param>
@@ -58,18 +65,21 @@ namespace Cake.Core.Scripting
         /// <param name="aliases">The script aliases.</param>
         /// <param name="usingAliasDirectives">The using alias directives.</param>
         /// <param name="usingStaticDirectives">The using static directives.</param>
+        /// <param name="defines">The defines.</param>
         public Script(
             IEnumerable<string> namespaces,
             IEnumerable<string> lines,
             IEnumerable<ScriptAlias> aliases,
             IEnumerable<string> usingAliasDirectives,
-            IEnumerable<string> usingStaticDirectives)
+            IEnumerable<string> usingStaticDirectives,
+            IEnumerable<string> defines)
         {
             _namespaces = new List<string>(namespaces ?? Enumerable.Empty<string>());
             _lines = new List<string>(lines ?? Enumerable.Empty<string>());
             _aliases = new List<ScriptAlias>(aliases ?? Enumerable.Empty<ScriptAlias>());
             _usingAliasDirectives = new List<string>(usingAliasDirectives ?? Enumerable.Empty<string>());
             _usingStaticDirectives = new List<string>(usingStaticDirectives ?? Enumerable.Empty<string>());
+            _defines = new List<string>(defines ?? Enumerable.Empty<string>());
         }
     }
 }

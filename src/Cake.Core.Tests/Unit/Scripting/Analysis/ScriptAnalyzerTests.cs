@@ -384,6 +384,21 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 Assert.Equal(1, result.Script.UsingStaticDirectives.Count);
                 Assert.Equal("using static System.Math;", result.Script.UsingStaticDirectives.ElementAt(0));
             }
+
+            [Fact]
+            public void Should_Process_Define_Directives()
+            {
+                // Given
+                var fixture = new ScriptAnalyzerFixture();
+                fixture.GivenScriptExist("/Working/script.cake", "#define FOO");
+
+                // When
+                var result = fixture.Analyze("/Working/script.cake");
+
+                // Then
+                Assert.Equal(1, result.Script.Defines.Count);
+                Assert.Equal("#define FOO", result.Script.Defines.ElementAt(0));
+            }
         }
     }
 }

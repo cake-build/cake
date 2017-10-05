@@ -17,6 +17,7 @@ namespace Cake.Core.Scripting.Analysis
         private readonly HashSet<string> _namespaces;
         private readonly HashSet<string> _usingAliases;
         private readonly HashSet<string> _usingStaticDirectives;
+        private readonly HashSet<string> _defines;
 
         /// <summary>
         /// Gets the analyzed script.
@@ -54,6 +55,12 @@ namespace Cake.Core.Scripting.Analysis
         public ISet<string> UsingStaticDirectives => _usingStaticDirectives;
 
         /// <summary>
+        /// Gets the defines.
+        /// </summary>
+        /// <value>The defines.</value>
+        public ISet<string> Defines => _defines;
+
+        /// <summary>
         /// Gets the addins.
         /// </summary>
         /// <value>The addins.</value>
@@ -89,6 +96,7 @@ namespace Cake.Core.Scripting.Analysis
             _namespaces = new HashSet<string>(Collect(script, i => i.Namespaces));
             _usingAliases = new HashSet<string>(Collect(script, i => i.UsingAliases));
             _usingStaticDirectives = new HashSet<string>(Collect(script, i => i.UsingStaticDirectives));
+            _defines = new HashSet<string>(Collect(script, i => i.Defines));
             Tools = new HashSet<PackageReference>(Collect(script, i => i.Tools));
             Addins = new HashSet<PackageReference>(Collect(script, i => i.Addins));
             Errors = errors ?? new List<ScriptAnalyzerError>(0);
