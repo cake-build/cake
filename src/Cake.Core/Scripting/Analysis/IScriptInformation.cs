@@ -50,6 +50,12 @@ namespace Cake.Core.Scripting.Analysis
         IList<string> UsingStaticDirectives { get; }
 
         /// <summary>
+        /// Gets the defines directives defined by the scripts.
+        /// </summary>
+        /// <value>The defines.</value>
+        IList<string> Defines { get; }
+
+        /// <summary>
         /// Gets the tools.
         /// </summary>
         /// <value>The tools.</value>

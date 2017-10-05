@@ -207,7 +207,7 @@ namespace Cake.Core.Scripting
             }
 
             // Execute the script.
-            var script = new Script(result.Namespaces, result.Lines, aliases, result.UsingAliases, result.UsingStaticDirectives);
+            var script = new Script(result.Namespaces, result.Lines, aliases, result.UsingAliases, result.UsingStaticDirectives, result.Defines);
             session.Execute(script);
         }
 
