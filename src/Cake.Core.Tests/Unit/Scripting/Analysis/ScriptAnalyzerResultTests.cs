@@ -134,6 +134,25 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 // Then
                 Assert.True(result.Succeeded);
             }
+
+            [Fact]
+            public void Should_Populate_Using_Static_From_Provided_Script()
+            {
+                // Given
+                var script = new ScriptInformation("./build.cake");
+                script.UsingStaticDirectives.Add("using static System.Math;");
+                var other = new ScriptInformation("./other.cake");
+                other.UsingStaticDirectives.Add("using static System.Console;");
+                script.Includes.Add(other);
+
+                // When
+                var result = new ScriptAnalyzerResult(script, new List<string>());
+
+                // Then
+                Assert.Equal(2, result.UsingStaticDirectives.Count);
+                Assert.Contains("using static System.Math;", result.UsingStaticDirectives);
+                Assert.Contains("using static System.Console;", result.UsingStaticDirectives);
+            }
         }
     }
 }

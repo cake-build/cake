@@ -16,6 +16,7 @@ namespace Cake.Core.Scripting
         private readonly List<string> _lines;
         private readonly List<ScriptAlias> _aliases;
         private readonly List<string> _usingAliasDirectives;
+        private readonly List<string> _usingStaticDirectives;
 
         /// <summary>
         /// Gets the namespaces imported via the <c>using</c> statement.
@@ -44,22 +45,31 @@ namespace Cake.Core.Scripting
         public IReadOnlyList<string> UsingAliasDirectives => _usingAliasDirectives;
 
         /// <summary>
+        /// Gets the using static directives.
+        /// </summary>
+        /// <value>The using static directives.</value>
+        public IReadOnlyList<string> UsingStaticDirectives => _usingStaticDirectives;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Script" /> class.
         /// </summary>
         /// <param name="namespaces">The namespaces.</param>
         /// <param name="lines">The scrip lines.</param>
         /// <param name="aliases">The script aliases.</param>
         /// <param name="usingAliasDirectives">The using alias directives.</param>
+        /// <param name="usingStaticDirectives">The using static directives.</param>
         public Script(
             IEnumerable<string> namespaces,
             IEnumerable<string> lines,
             IEnumerable<ScriptAlias> aliases,
-            IEnumerable<string> usingAliasDirectives)
+            IEnumerable<string> usingAliasDirectives,
+            IEnumerable<string> usingStaticDirectives)
         {
             _namespaces = new List<string>(namespaces ?? Enumerable.Empty<string>());
             _lines = new List<string>(lines ?? Enumerable.Empty<string>());
             _aliases = new List<ScriptAlias>(aliases ?? Enumerable.Empty<ScriptAlias>());
             _usingAliasDirectives = new List<string>(usingAliasDirectives ?? Enumerable.Empty<string>());
+            _usingStaticDirectives = new List<string>(usingStaticDirectives ?? Enumerable.Empty<string>());
         }
     }
 }

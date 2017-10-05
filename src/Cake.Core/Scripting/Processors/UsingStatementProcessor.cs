@@ -44,6 +44,13 @@ namespace Cake.Core.Scripting.Processors
                 return true;
             }
 
+            // Using static directive?
+            if (tokens.Length == 3 && tokens[1].Equals("static", StringComparison.Ordinal))
+            {
+                context.Current.UsingStaticDirectives.Add(string.Join(" ", tokens));
+                return true;
+            }
+
             // Namespace
             context.Current.Namespaces.Add(@namespace);
             return true;
