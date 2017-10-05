@@ -275,5 +275,49 @@ namespace Cake.Common.Tools.MSBuild
             settings.FileLoggers.Add(new MSBuildFileLogger());
             return settings;
         }
+
+        /// <summary>
+        /// Treat warnnings as errors, if no codes specified all errors will be treated as errors.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="codes">Only treat specified warning codes as errors.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings WithWarningsAsError(this MSBuildSettings settings, params string[] codes)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.WarningsAsError = true;
+
+            foreach (var code in codes)
+            {
+                settings.WarningsAsErrorCodes.Add(code);
+            }
+
+            return settings;
+        }
+
+        /// <summary>
+        /// Warnings to not treat as errors.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="codes">Warning codes to not treat as errors.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings WithWarningsAsMessage(this MSBuildSettings settings, params string[] codes)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            foreach (var code in codes)
+            {
+                settings.WarningsAsMessageCodes.Add(code);
+            }
+
+            return settings;
+        }
     }
 }
