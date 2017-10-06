@@ -399,5 +399,80 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.Equal(settings, result1);
             }
         }
+
+        public sealed class TheWithWarningsAsErrorMethod
+        {
+            [Fact]
+            public void Should_Set_WarningsAsError()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                settings.WithWarningsAsError();
+
+                // Then
+                Assert.True(settings.WarningsAsError);
+                Assert.Equal(0, settings.WarningsAsErrorCodes.Count);
+            }
+
+            [Fact]
+            public void Should_Add_Codes()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                settings.WithWarningsAsError("12345");
+
+                // Then
+                Assert.True(settings.WarningsAsError);
+                Assert.Equal(1, settings.WarningsAsErrorCodes.Count);
+                Assert.Equal("12345", settings.WarningsAsErrorCodes.First());
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.WithWarningsAsError("12345");
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
+        public sealed class TheWithWarningsAsMessageMethod
+        {
+            [Fact]
+            public void Should_Add_Codes()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                settings.WithWarningsAsMessage("12345");
+
+                // Then
+                Assert.Equal(1, settings.WarningsAsMessageCodes.Count);
+                Assert.Equal("12345", settings.WarningsAsMessageCodes.First());
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.WithWarningsAsMessage("12345");
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
     }
 }

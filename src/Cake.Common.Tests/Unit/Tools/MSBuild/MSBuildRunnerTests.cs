@@ -946,6 +946,66 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Then
                 Assert.Equal(expected, result.Args);
             }
+
+            [Fact]
+            public void Should_Use_WarnAsError_If_Specified()
+            {
+                // Given
+                var expected = "/v:normal /target:Build /warnaserror \"C:/Working/src/Solution.sln\"";
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.WithWarningsAsError();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Fact]
+            public void Should_Use_WarnAsError_Codes_If_Specified()
+            {
+                // Given
+                const string expected = "/v:normal /target:Build /warnaserror:\"12345\" \"C:/Working/src/Solution.sln\"";
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.WithWarningsAsError("12345");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Fact]
+            public void Should_Use_WarnAsMessage_Codes_If_Specified()
+            {
+                // Given
+                const string expected = "/v:normal /target:Build /warnasmessage:\"12345\" \"C:/Working/src/Solution.sln\"";
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.WithWarningsAsMessage("12345");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Fact]
+            public void Should_Use_WarnAsError_And_WarnAsMessage_Codes_If_Specified()
+            {
+                // Given
+                var expected = "/v:normal /target:Build /warnaserror /warnasmessage:\"12345\" \"C:/Working/src/Solution.sln\"";
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.WithWarningsAsError().WithWarningsAsMessage("12345");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
         }
     }
 }

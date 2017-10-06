@@ -163,6 +163,24 @@ namespace Cake.Common.Tools.MSBuild
                 }
             }
 
+            // Treat errors as warníngs?
+            if (settings.WarningsAsErrorCodes.Any())
+            {
+                var codes = string.Join(";", settings.WarningsAsErrorCodes);
+                builder.Append($"/warnaserror:{codes.Quote()}");
+            }
+            else if (settings.WarningsAsError)
+            {
+                builder.Append("/warnaserror");
+            }
+
+            // Any warnings to NOT treat as errors?
+            if (settings.WarningsAsMessageCodes.Any())
+            {
+                var codes = string.Join(";", settings.WarningsAsMessageCodes);
+                builder.Append($"/warnasmessage:{codes.Quote()}");
+            }
+
             // Add the solution as the last parameter.
             builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
 
