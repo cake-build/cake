@@ -24,6 +24,19 @@ namespace Cake.Common.Tests.Unit.Build.GitLabCI.Data
                 // Then
                 Assert.Equal(50, result);
             }
+
+            [Fact]
+            public void Should_Return_Correct_Value_Version_Nine_Or_Newer()
+            {
+                // Given
+                var info = new GitLabCIInfoFixture(true).CreateBuildInfo();
+
+                // When
+                var result = info.Id;
+
+                // Then
+                Assert.Equal(50, result);
+            }
         }
 
         public sealed class TheManualProperty
@@ -40,6 +53,19 @@ namespace Cake.Common.Tests.Unit.Build.GitLabCI.Data
                 // Then
                 Assert.Equal(true, result);
             }
+
+            [Fact]
+            public void Should_Return_Correct_Value_Version_Nine_Or_Newer()
+            {
+                // Given
+                var info = new GitLabCIInfoFixture(true).CreateBuildInfo();
+
+                // When
+                var result = info.Manual;
+
+                // Then
+                Assert.Equal(true, result);
+            }
         }
 
         public sealed class TheNameProperty
@@ -49,6 +75,19 @@ namespace Cake.Common.Tests.Unit.Build.GitLabCI.Data
             {
                 // Given
                 var info = new GitLabCIInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.Name;
+
+                // Then
+                Assert.Equal("spec:other", result);
+            }
+
+            [Fact]
+            public void Should_Return_Correct_Value_Version_Nine_Or_Newer()
+            {
+                // Given
+                var info = new GitLabCIInfoFixture(true).CreateBuildInfo();
 
                 // When
                 var result = info.Name;
@@ -88,6 +127,19 @@ namespace Cake.Common.Tests.Unit.Build.GitLabCI.Data
                 // Then
                 Assert.Equal("1ecfd275763eff1d6b4844ea3168962458c9f27a", result);
             }
+
+            [Fact]
+            public void Should_Return_Correct_Value_Version_Nine_Or_Newer()
+            {
+                // Given
+                var info = new GitLabCIInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.Reference;
+
+                // Then
+                Assert.Equal("1ecfd275763eff1d6b4844ea3168962458c9f27a", result);
+            }
         }
 
         public sealed class TheRefNameProperty
@@ -97,6 +149,19 @@ namespace Cake.Common.Tests.Unit.Build.GitLabCI.Data
             {
                 // Given
                 var info = new GitLabCIInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.RefName;
+
+                // Then
+                Assert.Equal("master", result);
+            }
+
+            [Fact]
+            public void Should_Return_Correct_Value_Version_Nine_Or_Newer()
+            {
+                // Given
+                var info = new GitLabCIInfoFixture(true).CreateBuildInfo();
 
                 // When
                 var result = info.RefName;
@@ -120,6 +185,19 @@ namespace Cake.Common.Tests.Unit.Build.GitLabCI.Data
                 // Then
                 Assert.Equal("https://gitab-ci-token:abcde-1234ABCD5678ef@gitlab.com/gitlab-org/gitlab-ce.git", result);
             }
+
+            [Fact]
+            public void Should_Return_Correct_Value_Version_Nine_Or_Newer()
+            {
+                // Given
+                var info = new GitLabCIInfoFixture(true).CreateBuildInfo();
+
+                // When
+                var result = info.RepoUrl;
+
+                // Then
+                Assert.Equal("https://gitab-ci-token:abcde-1234ABCD5678ef@gitlab.com/gitlab-org/gitlab-ce.git", result);
+            }
         }
 
         public sealed class TheStageProperty
@@ -129,6 +207,19 @@ namespace Cake.Common.Tests.Unit.Build.GitLabCI.Data
             {
                 // Given
                 var info = new GitLabCIInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.Stage;
+
+                // Then
+                Assert.Equal("test", result);
+            }
+
+            [Fact]
+            public void Should_Return_Correct_Value_Version_Nine_Or_Newer()
+            {
+                // Given
+                var info = new GitLabCIInfoFixture(true).CreateBuildInfo();
 
                 // When
                 var result = info.Stage;
@@ -152,6 +243,19 @@ namespace Cake.Common.Tests.Unit.Build.GitLabCI.Data
                 // Then
                 Assert.Equal("1.0.0", result);
             }
+
+            [Fact]
+            public void Should_Return_Correct_Value_Version_Nine_Or_Newer()
+            {
+                // Given
+                var info = new GitLabCIInfoFixture(true).CreateBuildInfo();
+
+                // When
+                var result = info.Tag;
+
+                // Then
+                Assert.Equal("1.0.0", result);
+            }
         }
 
         public sealed class TheTokenProperty
@@ -168,6 +272,19 @@ namespace Cake.Common.Tests.Unit.Build.GitLabCI.Data
                 // Then
                 Assert.Equal("abcde-1234ABCD5678ef", result);
             }
+
+            [Fact]
+            public void Should_Return_Correct_Value_Version_Nine_Or_Newer()
+            {
+                // Given
+                var info = new GitLabCIInfoFixture(true).CreateBuildInfo();
+
+                // When
+                var result = info.Token;
+
+                // Then
+                Assert.Equal("abcde-1234ABCD5678ef", result);
+            }
         }
 
         public sealed class TheTriggeredProperty
@@ -177,6 +294,19 @@ namespace Cake.Common.Tests.Unit.Build.GitLabCI.Data
             {
                 // Given
                 var info = new GitLabCIInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.Triggered;
+
+                // Then
+                Assert.Equal(true, result);
+            }
+
+            [Fact]
+            public void Should_Return_Correct_Value_Version_Nine_Or_Newer()
+            {
+                // Given
+                var info = new GitLabCIInfoFixture(true).CreateBuildInfo();
 
                 // When
                 var result = info.Triggered;
