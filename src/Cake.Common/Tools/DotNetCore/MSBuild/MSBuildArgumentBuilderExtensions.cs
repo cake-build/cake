@@ -52,7 +52,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
                         continue;
                     }
 
-                    builder.AppendMSBuildSwitch("property", $"{property.Key}={value}");
+                    builder.AppendMSBuildSwitch("property", $"{property.Key}={value.EscapeMSBuildPropertySpecialCharacters()}");
                 }
             }
 
