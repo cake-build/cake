@@ -2,8 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Core.Diagnostics;
 using Cake.Testing;
+using NSubstitute;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit.Diagnostics
@@ -80,6 +82,40 @@ namespace Cake.Core.Tests.Unit.Diagnostics
 
                 // Then
                 Assert.Single(console.ErrorMessages);
+            }
+
+            [Fact]
+            public void Should_Not_Colorize_A_Log_Message_Containg_A_Single_Token()
+            {
+                // Given
+                var console = Substitute.For<IConsole>();
+                var log = new CakeBuildLog(console, Verbosity.Diagnostic);
+
+                // When
+                log.Write(Verbosity.Diagnostic, LogLevel.Information, "{0}", "Hello World");
+
+                // Then
+                console.Received().Write("{0}", "Hello World");
+                console.DidNotReceive().BackgroundColor = ConsoleColor.DarkBlue;
+            }
+
+            [Fact]
+            public void Should_Colorize_Tokens_Correctly()
+            {
+                // Given
+                var console = Substitute.For<IConsole>();
+                var log = new CakeBuildLog(console, Verbosity.Diagnostic);
+
+                // When
+                log.Write(Verbosity.Diagnostic, LogLevel.Information, "Hello, {0}", "World");
+
+                // Then
+                console.Received().Write("{0}", "Hello, ");
+                console.Received().Write("{0}", "World");
+
+                // console would have been set to fore/back color for the "World" argument.
+                console.Received().BackgroundColor = ConsoleColor.DarkBlue;
+                console.Received().ForegroundColor = ConsoleColor.White;
             }
         }
     }
