@@ -42,6 +42,42 @@ namespace Cake.Common.Tests.Fixtures.Tools
             }
         }
 
+        public void GivenThatToolExistInKnownPathWindows10()
+        {
+            if (_is64Bit)
+            {
+                FileSystem.Exist(Arg.Is<FilePath>(p => p.FullPath == "/ProgramFilesX86/Windows Kits/10/bin/x64/signtool.exe")).Returns(true);
+            }
+            else
+            {
+                FileSystem.Exist(Arg.Is<FilePath>(p => p.FullPath == "/ProgramFiles/Windows Kits/10/bin/x86/signtool.exe")).Returns(true);
+            }
+        }
+
+        public void GivenThatToolExistInKnownPathWindows10SpecificSDK()
+        {
+            if (_is64Bit)
+            {
+                FileSystem.Exist(Arg.Is<FilePath>(p => p.FullPath == "/ProgramFilesX86/Windows Kits/10/bin/10.0.15063.0/x64/signtool.exe")).Returns(true);
+            }
+            else
+            {
+                FileSystem.Exist(Arg.Is<FilePath>(p => p.FullPath == "/ProgramFiles/Windows Kits/10/bin/10.0.15063.0/x86/signtool.exe")).Returns(true);
+            }
+        }
+
+        public void GivenThatToolExistInKnownPathAppCertificationKit()
+        {
+            if (_is64Bit)
+            {
+                FileSystem.Exist(Arg.Is<FilePath>(p => p.FullPath == "/ProgramFilesX86/Windows Kits10/App Certification Kit/signtool.exe")).Returns(true);
+            }
+            else
+            {
+                FileSystem.Exist(Arg.Is<FilePath>(p => p.FullPath == "/ProgramFiles/Windows Kits10/App Certification Kit/signtool.exe")).Returns(true);
+            }
+        }
+
         public void GivenThatToolHasRegistryKeyMicrosoftSdks()
         {
             var signToolKey = Substitute.For<IRegistryKey>();
