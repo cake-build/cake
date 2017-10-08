@@ -22,6 +22,16 @@ namespace Cake.Common.Tools.NUnit
         /// <summary>
         /// Outputs labels for all tests.
         /// </summary>
-        All
+        All,
+
+        /// <summary>
+        /// Outputs labels at the start of every test.
+        /// </summary>
+        Before,
+
+        /// <summary>
+        /// Outputs labels at the end of every test.
+        /// </summary>
+        After
     }
 }
