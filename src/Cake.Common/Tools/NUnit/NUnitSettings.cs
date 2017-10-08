@@ -145,5 +145,13 @@ namespace Cake.Common.Tools.NUnit
         /// <c>true</c> to run tests in an x86 process on 64 bit systems; otherwise, <c>false</c>.
         /// </value>
         public bool X86 { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to cause an identifying label to be displayed at the start of each test case.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> to cause an identifying label to be displayed at the start of each test case; otherwise, <c>false</c>.
+        /// </value>
+        public bool Labels { get; set; }
     }
 }
