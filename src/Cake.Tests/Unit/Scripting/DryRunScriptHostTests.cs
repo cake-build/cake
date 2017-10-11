@@ -72,7 +72,7 @@ namespace Cake.Tests.Unit.Scripting
                 host.RunTarget("TheTarget");
 
                 // Then
-                engine.Received(1).RunTarget(context, Arg.Any<DryRunExecutionStrategy>(), "TheTarget");
+                engine.Received(1).RunTargetAsync(context, Arg.Any<DryRunExecutionStrategy>(), "TheTarget");
             }
         }
     }

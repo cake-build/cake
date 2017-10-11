@@ -77,6 +77,7 @@ namespace Cake.Core.Tests.Unit.Packaging
         {
             [Theory]
             [InlineData("nuget:?package=Cake.Foo&version=1.2.3")]
+            [InlineData("nuget:?PacKagE=Cake.Foo&VerSIon=1.2.3")]
             [InlineData("nuget:https://nuget.org/?package=Cake.Foo&version=1.2.3")]
             [InlineData("nuget:https://user:pass@myget.org/f/Cake?package=Cake.Foo&version=1.2.3")]
             public void Should_Return_Correct_Address(string uri)

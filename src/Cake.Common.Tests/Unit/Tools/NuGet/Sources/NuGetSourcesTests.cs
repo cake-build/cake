@@ -37,7 +37,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             {
                 // Given
                 var fixture = new NuGetAddSourceFixture();
-                fixture.Name = string.Empty;
+                fixture.Name = name;
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
@@ -67,7 +67,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             {
                 // Given
                 var fixture = new NuGetAddSourceFixture();
-                fixture.Source = string.Empty;
+                fixture.Source = source;
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
@@ -311,7 +311,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             {
                 // Given
                 var fixture = new NuGetRemoveSourceFixture();
-                fixture.Name = string.Empty;
+                fixture.Name = name;
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
@@ -341,7 +341,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             {
                 // Given
                 var fixture = new NuGetRemoveSourceFixture();
-                fixture.Source = string.Empty;
+                fixture.Source = source;
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
@@ -562,7 +562,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             {
                 // Given
                 var fixture = new NuGetHasSourceFixture();
-                fixture.Source = string.Empty;
+                fixture.Source = source;
 
                 // When
                 var result = Record.Exception(() => fixture.Run());

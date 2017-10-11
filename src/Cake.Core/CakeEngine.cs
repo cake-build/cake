@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Cake.Core.Diagnostics;
 using Cake.Core.Graph;
 
@@ -101,7 +102,7 @@ namespace Cake.Core
         /// <param name="strategy">The execution strategy.</param>
         /// <param name="target">The target to run.</param>
         /// <returns>The resulting report.</returns>
-        public CakeReport RunTarget(ICakeContext context, IExecutionStrategy strategy, string target)
+        public async Task<CakeReport> RunTargetAsync(ICakeContext context, IExecutionStrategy strategy, string target)
         {
             if (target == null)
             {
@@ -146,7 +147,7 @@ namespace Cake.Core
                     // Should we execute the task?
                     if (ShouldTaskExecute(context, task, isTarget))
                     {
-                        ExecuteTask(context, strategy, stopWatch, task, report);
+                        await ExecuteTaskAsync(context, strategy, stopWatch, task, report).ConfigureAwait(false);
                     }
                     else
                     {
@@ -227,7 +228,7 @@ namespace Cake.Core
             return true;
         }
 
-        private void ExecuteTask(ICakeContext context, IExecutionStrategy strategy, Stopwatch stopWatch, CakeTask task, CakeReport report)
+        private async Task ExecuteTaskAsync(ICakeContext context, IExecutionStrategy strategy, Stopwatch stopWatch, CakeTask task, CakeReport report)
         {
             // Reset the stop watch.
             stopWatch.Reset();
@@ -239,7 +240,7 @@ namespace Cake.Core
             try
             {
                 // Execute the task.
-                strategy.Execute(task, context);
+                await strategy.ExecuteAsync(task, context).ConfigureAwait(false);
             }
             catch (Exception exception)
             {

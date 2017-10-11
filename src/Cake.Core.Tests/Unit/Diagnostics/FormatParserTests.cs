@@ -20,7 +20,7 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 var result = FormatParser.Parse(string.Empty).ToArray();
 
                 // Then
-                Assert.Equal(0, result.Length);
+                Assert.Empty(result);
             }
 
             [Fact]
@@ -30,7 +30,7 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 var result = FormatParser.Parse("Hello World!").ToArray();
 
                 // Then
-                Assert.Equal(1, result.Length);
+                Assert.Single(result);
                 Assert.IsType<LiteralToken>(result[0]);
                 Assert.Equal("Hello World!", ((LiteralToken)result[0]).Text);
             }
@@ -42,9 +42,93 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 var result = FormatParser.Parse("{0}").ToArray();
 
                 // Then
-                Assert.Equal(1, result.Length);
+                Assert.Single(result);
                 Assert.IsType<PropertyToken>(result[0]);
                 Assert.Equal(0, ((PropertyToken)result[0]).Position);
+            }
+
+            [Fact]
+            public void Should_Return_Literal_Tokens_For_Message_With_Nothing_But_Escaped_Braces()
+            {
+                // Given, When
+                var result = FormatParser.Parse("{{}}").ToArray();
+
+                // Then
+                Assert.Equal(2, result.Length);
+                Assert.IsType<LiteralToken>(result[0]);
+                Assert.Equal("{", ((LiteralToken)result[0]).Text);
+                Assert.Equal("}", ((LiteralToken)result[1]).Text);
+            }
+
+            [Fact]
+            public void Should_Return_Literal_Tokens_For_Message_With_Escaped_Braces_And_Properties()
+            {
+                // Given, When
+                var result = FormatParser.Parse("{{}} {0}").ToArray();
+
+                // Then
+                Assert.Equal(3, result.Length);
+                Assert.IsType<LiteralToken>(result[0]);
+                Assert.Equal("{", ((LiteralToken)result[0]).Text);
+                Assert.Equal("} ", ((LiteralToken)result[1]).Text);
+
+                Assert.IsType<PropertyToken>(result[2]);
+                Assert.Equal(0, ((PropertyToken)result[2]).Position);
+                Assert.Equal(null, ((PropertyToken)result[2]).Format);
+            }
+
+            [Fact]
+            public void Should_Return_Literal_Token_For_Unbalanced_Escaped_Opening_Curly_Braces()
+            {
+                // Given, When
+                var result = FormatParser.Parse("{{ test {0}").ToArray();
+
+                // Then
+                Assert.Equal(3, result.Length);
+                Assert.IsType<LiteralToken>(result[0]);
+                Assert.Equal("{", ((LiteralToken)result[0]).Text);
+                Assert.Equal(" test ", ((LiteralToken)result[1]).Text);
+
+                Assert.IsType<PropertyToken>(result[2]);
+                Assert.Equal(0, ((PropertyToken)result[2]).Position);
+                Assert.Equal(null, ((PropertyToken)result[2]).Format);
+            }
+
+            [Fact]
+            public void Should_Return_Literal_Tokens_For_Multiple_Unbalanced_Escaped_Opening_Curly_Braces()
+            {
+                // Given, When
+                var result = FormatParser.Parse("{{{{ test {0}").ToArray();
+
+                // Then
+                Assert.Equal(4, result.Length);
+                Assert.IsType<LiteralToken>(result[0]);
+                Assert.Equal("{", ((LiteralToken)result[0]).Text);
+                Assert.Equal("{", ((LiteralToken)result[1]).Text);
+                Assert.Equal(" test ", ((LiteralToken)result[2]).Text);
+
+                Assert.IsType<PropertyToken>(result[3]);
+                Assert.Equal(0, ((PropertyToken)result[3]).Position);
+                Assert.Equal(null, ((PropertyToken)result[3]).Format);
+            }
+
+            [Fact]
+            public void Should_Return_Literal_Token_For_Unbalanced_Escaped_Closing_Curly_Braces()
+            {
+                // Given, When
+                var result = FormatParser.Parse("test {0:d} }}").ToArray();
+
+                // Then
+                Assert.Equal(3, result.Length);
+                Assert.IsType<LiteralToken>(result[0]);
+                Assert.Equal("test ", ((LiteralToken)result[0]).Text);
+
+                Assert.IsType<PropertyToken>(result[1]);
+                Assert.Equal(0, ((PropertyToken)result[1]).Position);
+                Assert.Equal("d", ((PropertyToken)result[1]).Format);
+
+                Assert.IsType<LiteralToken>(result[2]);
+                Assert.Equal(" }", ((LiteralToken)result[2]).Text);
             }
 
             [Fact]
@@ -56,8 +140,8 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 // Then
                 Assert.Equal(2, result.Length);
                 Assert.IsType<LiteralToken>(result[0]);
-                Assert.Equal("{{", ((LiteralToken)result[0]).Text);
-                Assert.Equal("0}}", ((LiteralToken)result[1]).Text);
+                Assert.Equal("{", ((LiteralToken)result[0]).Text);
+                Assert.Equal("0}", ((LiteralToken)result[1]).Text);
             }
 
             [Fact]
@@ -67,7 +151,7 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 var result = FormatParser.Parse("{0:yyyy-MM-dd}").ToArray();
 
                 // Then
-                Assert.Equal(1, result.Length);
+                Assert.Single(result);
                 Assert.IsType<PropertyToken>(result[0]);
                 Assert.Equal(0, ((PropertyToken)result[0]).Position);
                 Assert.Equal("yyyy-MM-dd", ((PropertyToken)result[0]).Format);
@@ -78,6 +162,17 @@ namespace Cake.Core.Tests.Unit.Diagnostics
             {
                 // Given, When
                 var result = Record.Exception(() => FormatParser.Parse("{Hello}").ToArray());
+
+                // Then
+                Assert.IsType<FormatException>(result);
+                Assert.Equal("Input string was not in a correct format.", result?.Message);
+            }
+
+            [Fact]
+            public void Should_Throw_If_A_Format_Item_Is_Not_Positional_Even_If_Other_Valid_Tokens_Are_Present()
+            {
+                // Given, When
+                var result = Record.Exception(() => FormatParser.Parse("{} {0}").ToArray());
 
                 // Then
                 Assert.IsType<FormatException>(result);
@@ -103,10 +198,17 @@ namespace Cake.Core.Tests.Unit.Diagnostics
 
                 // Then
                 Assert.Equal(5, result.Length);
+
                 Assert.IsType<LiteralToken>(result[0]);
+
                 Assert.IsType<PropertyToken>(result[1]);
+                Assert.Equal(0, ((PropertyToken)result[1]).Position);
+
                 Assert.IsType<LiteralToken>(result[2]);
+
                 Assert.IsType<PropertyToken>(result[3]);
+                Assert.Equal(1, ((PropertyToken)result[3]).Position);
+
                 Assert.IsType<LiteralToken>(result[4]);
             }
         }

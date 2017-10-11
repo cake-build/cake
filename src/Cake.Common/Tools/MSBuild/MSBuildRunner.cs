@@ -163,6 +163,24 @@ namespace Cake.Common.Tools.MSBuild
                 }
             }
 
+            // Treat errors as warníngs?
+            if (settings.WarningsAsErrorCodes.Any())
+            {
+                var codes = string.Join(";", settings.WarningsAsErrorCodes);
+                builder.Append($"/warnaserror:{codes.Quote()}");
+            }
+            else if (settings.WarningsAsError)
+            {
+                builder.Append("/warnaserror");
+            }
+
+            // Any warnings to NOT treat as errors?
+            if (settings.WarningsAsMessageCodes.Any())
+            {
+                var codes = string.Join(";", settings.WarningsAsMessageCodes);
+                builder.Append($"/warnasmessage:{codes.Quote()}");
+            }
+
             // Add the solution as the last parameter.
             builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
 
@@ -232,15 +250,9 @@ namespace Cake.Common.Tools.MSBuild
             {
                 foreach (var propertyValue in properties[propertyKey])
                 {
-                    yield return string.Concat("/p:", propertyKey, "=", EscapeSpecialCharacters(propertyValue));
+                    yield return string.Concat("/p:", propertyKey, "=", propertyValue.EscapeMSBuildPropertySpecialCharacters());
                 }
             }
-        }
-
-        private static string EscapeSpecialCharacters(string value)
-        {
-            return value.Replace(",", "%2C")
-                .Replace(";", "%3B");
         }
 
         /// <summary>

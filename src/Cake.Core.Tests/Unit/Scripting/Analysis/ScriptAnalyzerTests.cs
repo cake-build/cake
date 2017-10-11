@@ -369,6 +369,36 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 Assert.Equal(2, result.Errors[0].Line);
                 Assert.Equal("Query string for #load contains more than one parameter 'path'.", result.Errors[0].Message);
             }
+
+            [Fact]
+            public void Should_Process_Using_Static_Directives()
+            {
+                // Given
+                var fixture = new ScriptAnalyzerFixture();
+                fixture.GivenScriptExist("/Working/script.cake", "using static System.Math;");
+
+                // When
+                var result = fixture.Analyze("/Working/script.cake");
+
+                // Then
+                Assert.Equal(1, result.Script.UsingStaticDirectives.Count);
+                Assert.Equal("using static System.Math;", result.Script.UsingStaticDirectives.ElementAt(0));
+            }
+
+            [Fact]
+            public void Should_Process_Define_Directives()
+            {
+                // Given
+                var fixture = new ScriptAnalyzerFixture();
+                fixture.GivenScriptExist("/Working/script.cake", "#define FOO");
+
+                // When
+                var result = fixture.Analyze("/Working/script.cake");
+
+                // Then
+                Assert.Equal(1, result.Script.Defines.Count);
+                Assert.Equal("#define FOO", result.Script.Defines.ElementAt(0));
+            }
         }
     }
 }

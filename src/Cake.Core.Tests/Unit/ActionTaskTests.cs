@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Threading.Tasks;
 using Cake.Core.Tests.Fixtures;
 using Xunit;
 
@@ -32,10 +33,10 @@ namespace Cake.Core.Tests.Unit
                 var task = new ActionTask("task");
 
                 // When
-                task.AddAction(c => { });
+                task.AddAction(c => Task.CompletedTask);
 
                 // Then
-                Assert.Equal(1, task.Actions.Count);
+                Assert.Single(task.Actions);
             }
 
             [Fact]
@@ -49,7 +50,7 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
-            public void Should_Throw_On_First_Failed_Action()
+            public async Task Should_Throw_On_First_Failed_Action()
             {
                 // Given
                 var task = new ActionTask("task");
@@ -59,14 +60,14 @@ namespace Cake.Core.Tests.Unit
                 task.Actions.Add((c) => throw new NotImplementedException());
                 task.Actions.Add((c) => throw new NotSupportedException());
                 task.Actions.Add((c) => throw new OutOfMemoryException());
-                var result = Record.Exception(() => task.Execute(context));
+                var result = await Record.ExceptionAsync(() => task.Execute(context));
 
                 // Then
                 Assert.IsType<NotImplementedException>(result);
             }
 
             [Fact]
-            public void Should_Aggregate_Exceptions_From_Actions()
+            public async Task Should_Aggregate_Exceptions_From_Actions()
             {
                 // Given
                 var task = new ActionTask("task");
@@ -77,7 +78,7 @@ namespace Cake.Core.Tests.Unit
                 task.Actions.Add((c) => throw new NotSupportedException());
                 task.Actions.Add((c) => throw new OutOfMemoryException());
                 task.SetDeferExceptions(true);
-                var result = Record.Exception(() => task.Execute(context));
+                var result = await Record.ExceptionAsync(() => task.Execute(context));
 
                 // Then
                 Assert.IsType<AggregateException>(result);
@@ -88,7 +89,7 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
-            public void Should_Only_Aggregate_Exceptions_When_There_Are_Many()
+            public async Task Should_Only_Aggregate_Exceptions_When_There_Are_Many()
             {
                 // Given
                 var task = new ActionTask("task");
@@ -97,7 +98,7 @@ namespace Cake.Core.Tests.Unit
                 // When
                 task.Actions.Add((c) => throw new NotImplementedException());
                 task.SetDeferExceptions(true);
-                var result = Record.Exception(() => task.Execute(context));
+                var result = await Record.ExceptionAsync(() => task.Execute(context));
 
                 // Then
                 Assert.IsType<NotImplementedException>(result);

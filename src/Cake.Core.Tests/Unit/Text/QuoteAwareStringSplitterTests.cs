@@ -22,7 +22,7 @@ namespace Cake.Core.Tests.Unit.Text
                 var result = QuoteAwareStringSplitter.Split(input).ToArray();
 
                 // Then
-                Assert.Equal(0, result.Length);
+                Assert.Empty(result);
             }
 
             [Fact]
@@ -35,7 +35,7 @@ namespace Cake.Core.Tests.Unit.Text
                 var result = QuoteAwareStringSplitter.Split(input).ToArray();
 
                 // Then
-                Assert.Equal(1, result.Length);
+                Assert.Single(result);
                 Assert.Equal("\"C:\\cake-walk\\cake.exe\"", result[0]);
             }
 
@@ -49,7 +49,7 @@ namespace Cake.Core.Tests.Unit.Text
                 var result = QuoteAwareStringSplitter.Split(input).ToArray();
 
                 // Then
-                Assert.Equal(1, result.Length);
+                Assert.Single(result);
                 Assert.Equal("\"C:\\cake walk\\cake.exe\"", result[0]);
             }
 

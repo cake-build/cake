@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 
@@ -31,13 +32,14 @@ namespace Cake.Scripting
         {
         }
 
-        public void Execute(CakeTask task, ICakeContext context)
+        public Task ExecuteAsync(CakeTask task, ICakeContext context)
         {
             if (task != null)
             {
                 _log.Information("{0}. {1}", _counter, task.Name);
                 _counter++;
             }
+            return Task.CompletedTask;
         }
 
         public void Skip(CakeTask task)

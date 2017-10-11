@@ -34,6 +34,17 @@ namespace Cake.Common.Build.GitLabCI
         }
 
         /// <summary>
+        /// Gets an environment variable as a <see cref="System.String"/>.
+        /// </summary>
+        /// <param name="primaryVariable">The primary environment variable name.</param>
+        /// <param name="secondaryVariable">The secondary environment variable name.</param>
+        /// <returns>The environment variable.</returns>
+        protected string GetEnvironmentString(string primaryVariable, string secondaryVariable)
+        {
+            return !string.IsNullOrEmpty(GetEnvironmentString(primaryVariable)) ? GetEnvironmentString(primaryVariable) : GetEnvironmentString(secondaryVariable);
+        }
+
+        /// <summary>
         /// Gets an environment variable as a <see cref="System.Int32"/>.
         /// </summary>
         /// <param name="variable">The environment variable name.</param>
@@ -53,6 +64,17 @@ namespace Cake.Common.Build.GitLabCI
         }
 
         /// <summary>
+        /// Gets an environment variable as a <see cref="System.Int32"/>.
+        /// </summary>
+        /// <param name="primaryVariable">The primary environment variable name.</param>
+        /// <param name="secondaryVariable">The secondary environment variable name.</param>
+        /// <returns>The environment variable.</returns>
+        protected int GetEnvironmentInteger(string primaryVariable, string secondaryVariable)
+        {
+            return GetEnvironmentInteger(primaryVariable) != 0 ? GetEnvironmentInteger(primaryVariable) : GetEnvironmentInteger(secondaryVariable);
+        }
+
+        /// <summary>
         /// Gets an environment variable as a <see cref="System.Boolean"/>.
         /// </summary>
         /// <param name="variable">The environment variable name.</param>
@@ -65,6 +87,17 @@ namespace Cake.Common.Build.GitLabCI
                 return value.Equals("true", StringComparison.OrdinalIgnoreCase);
             }
             return false;
+        }
+
+        /// <summary>
+        /// Gets an environment variable as a <see cref="System.Boolean"/>.
+        /// </summary>
+        /// <param name="primaryVariable">The primary environment variable name.</param>
+        /// <param name="secondaryVariable">The secondary environment variable name.</param>
+        /// <returns>The environment variable.</returns>
+        protected bool GetEnvironmentBoolean(string primaryVariable, string secondaryVariable)
+        {
+            return GetEnvironmentBoolean(primaryVariable) ? GetEnvironmentBoolean(primaryVariable) : GetEnvironmentBoolean(secondaryVariable);
         }
     }
 }

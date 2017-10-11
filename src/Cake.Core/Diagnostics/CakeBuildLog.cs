@@ -56,9 +56,14 @@ namespace Cake.Core.Diagnostics
                 {
                     var palette = _palettes[level];
                     var tokens = FormatParser.Parse(format);
+
+                    // if the entirety of the formatting string is a single token, as is coming from
+                    // the LogExtensions implementation of (string) and (object), don't attempt to colorize the output.
+                    var colorize = !"{0}".Equals(format, StringComparison.OrdinalIgnoreCase);
+
                     foreach (var token in tokens)
                     {
-                        SetPalette(token, palette);
+                        SetPalette(token, palette, colorize);
                         if (level > LogLevel.Error)
                         {
                             _console.Write("{0}", token.Render(args));
@@ -84,10 +89,9 @@ namespace Cake.Core.Diagnostics
             }
         }
 
-        private void SetPalette(FormatToken token, ConsolePalette palette)
+        private void SetPalette(FormatToken token, ConsolePalette palette, bool colorize)
         {
-            var property = token as PropertyToken;
-            if (property != null)
+            if (colorize && token is PropertyToken)
             {
                 _console.BackgroundColor = palette.ArgumentBackground;
                 _console.ForegroundColor = palette.ArgumentForeground;

@@ -377,8 +377,8 @@ namespace Cake.Core.Tests.Unit.Scripting
 
                 // Then
                 AssertEx.IsCakeException(exception, "Errors occured while analyzing script.");
-                Assert.True(fixture.Log.Entries.Any(x => x.Level == LogLevel.Error && x.Message == "/Working/script1.cake:2: Error in script 1"));
-                Assert.True(fixture.Log.Entries.Any(x => x.Level == LogLevel.Error && x.Message == "/Working/script2.cake:7: Error in script 2"));
+                Assert.Contains(fixture.Log.Entries, x => x.Level == LogLevel.Error && x.Message == "/Working/script1.cake:2: Error in script 1");
+                Assert.Contains(fixture.Log.Entries, x => x.Level == LogLevel.Error && x.Message == "/Working/script2.cake:7: Error in script 2");
             }
         }
     }

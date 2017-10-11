@@ -472,10 +472,10 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             }
 
             [Theory]
-            [InlineData(NuGetVerbosity.Detailed, "detailed", "install \"/Working/packages.config\" -Verbosity detailed -NonInteractive")]
-            [InlineData(NuGetVerbosity.Normal, "normal", "install \"/Working/packages.config\" -Verbosity normal -NonInteractive")]
-            [InlineData(NuGetVerbosity.Quiet, "quiet", "install \"/Working/packages.config\" -Verbosity quiet -NonInteractive")]
-            public void Should_Add_Verbosity_To_Arguments_If_Set(NuGetVerbosity verbosity, string name, string expected)
+            [InlineData(NuGetVerbosity.Detailed, "install \"/Working/packages.config\" -Verbosity detailed -NonInteractive")]
+            [InlineData(NuGetVerbosity.Normal, "install \"/Working/packages.config\" -Verbosity normal -NonInteractive")]
+            [InlineData(NuGetVerbosity.Quiet, "install \"/Working/packages.config\" -Verbosity quiet -NonInteractive")]
+            public void Should_Add_Verbosity_To_Arguments_If_Set(NuGetVerbosity verbosity, string expected)
             {
                 // Given
                 var fixture = new NuGetInstallerFromConfigFixture();

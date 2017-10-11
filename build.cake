@@ -1,7 +1,7 @@
 // Install addins.
-#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Coveralls&version=0.4.0"
-#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Twitter&version=0.4.0"
-#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Gitter&version=0.5.0"
+#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Coveralls&version=0.7.0"
+#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Twitter&version=0.6.0"
+#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Gitter&version=0.7.0"
 
 // Install tools.
 #tool "nuget:https://www.nuget.org/api/v2?package=gitreleasemanager&version=0.5.0"
@@ -54,7 +54,7 @@ Setup(context =>
     if(!parameters.IsRunningOnWindows)
     {
         var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
-        
+
         // Use FrameworkPathOverride when not running on Windows.
         Information("Build will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
         msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
@@ -213,7 +213,7 @@ Task("Create-Chocolatey-Packages")
             Version = parameters.Version.SemVersion,
             ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
             OutputDirectory = parameters.Paths.Directories.NugetRoot,
-            Files = GetFiles(netFxFullArtifactPath + "/**/*")
+            Files = (GetFiles(netFxFullArtifactPath + "/**/*") + GetFiles("./nuspec/*.txt"))
                                     .Where(file => file.FullPath.IndexOf("/runtimes/", StringComparison.OrdinalIgnoreCase) < 0)
                                     .Select(file=>"../" + file.FullPath.Substring(curDirLength))
                                     .Select(file=> new ChocolateyNuSpecContent { Source = file })

@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System;
 using System.Xml.Linq;
 using Cake.Core.Diagnostics;
 using NuGet.Packaging;
@@ -15,7 +19,7 @@ namespace Cake.NuGet.Install
             _log = log ?? throw new ArgumentNullException(nameof(log));
             PackageExtractionContext = new PackageExtractionContext(new NuGetLogger(_log))
             {
-                PackageSaveMode = PackageSaveMode.Nuspec | PackageSaveMode.Files
+                PackageSaveMode = PackageSaveMode.Nuspec | PackageSaveMode.Files | PackageSaveMode.Nupkg
             };
         }
 

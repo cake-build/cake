@@ -84,17 +84,30 @@ namespace Cake
             }
             catch (Exception ex)
             {
-                log = log ?? new CakeBuildLog(new CakeConsole());
-                if (log.Verbosity == Verbosity.Diagnostic)
-                {
-                    log.Error("Error: {0}", ex);
-                }
-                else
-                {
-                    log.Error("Error: {0}", ex.Message);
-                }
-                return 1;
+                return LogException(log, ex);
             }
+        }
+
+        private static int LogException<T>(ICakeLog log, T ex) where T : Exception
+        {
+            log = log ?? new CakeBuildLog(new CakeConsole());
+            if (log.Verbosity == Verbosity.Diagnostic)
+            {
+                log.Error("Error: {0}", ex);
+            }
+            else
+            {
+                log.Error("Error: {0}", ex.Message);
+                var aex = ex as AggregateException;
+                if (aex != null)
+                {
+                    foreach (var exception in aex.InnerExceptions)
+                    {
+                        log.Error("\t{0}", exception.Message);
+                    }
+                }
+            }
+            return 1;
         }
     }
 }

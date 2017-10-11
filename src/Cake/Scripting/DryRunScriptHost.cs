@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.Scripting;
@@ -37,14 +38,14 @@ namespace Cake.Scripting
         /// </summary>
         /// <param name="target">The target to run.</param>
         /// <returns>The resulting report.</returns>
-        public override CakeReport RunTarget(string target)
+        public override async Task<CakeReport> RunTargetAsync(string target)
         {
             _log.Information("Performing dry run...");
             _log.Information("Target is: {0}", target);
             _log.Information(string.Empty);
 
             var strategy = new DryRunExecutionStrategy(_log);
-            var result = Engine.RunTarget(Context, strategy, target);
+            var result = await Engine.RunTargetAsync(Context, strategy, target).ConfigureAwait(false);
 
             _log.Information(string.Empty);
             _log.Information("This was a dry run.");

@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -6,7 +10,7 @@ using Cake.Core;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Core.Packaging;
+using Cake.NuGet.Install.Extensions;
 using NuGet.Common;
 using NuGet.Configuration;
 using NuGet.Frameworks;
@@ -29,8 +33,9 @@ namespace Cake.NuGet.Install
         private readonly ICakeLog _log;
         private readonly ICakeConfiguration _config;
         private readonly ISettings _nugetSettings;
-        private readonly NuGetFramework _currentFramework;
         private readonly ILogger _nugetLogger;
+        private readonly NuGetFramework _currentFramework;
+        private readonly GatherCache _gatherCache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetPackageInstaller"/> class.
@@ -58,6 +63,7 @@ namespace Cake.NuGet.Install
                 GetToolPath(),
                 null,
                 new XPlatMachineWideSetting());
+            _gatherCache = new GatherCache();
         }
 
         public bool CanInstall(PackageReference package, PackageType type)
@@ -80,34 +86,44 @@ namespace Cake.NuGet.Install
                 throw new ArgumentNullException(nameof(path));
             }
 
+            var packageRoot = path.MakeAbsolute(_environment).FullPath;
+            var targetFramework = type == PackageType.Addin ? _currentFramework : NuGetFramework.AnyFramework;
             var sourceRepositoryProvider = new NuGetSourceRepositoryProvider(_nugetSettings, _config, package);
-            var packageIdentity = GetPackageId(package, sourceRepositoryProvider);
+            sourceRepositoryProvider.CreateRepository(packageRoot);
+            var packageIdentity = GetPackageId(package, sourceRepositoryProvider, targetFramework, _nugetLogger);
             if (packageIdentity == null)
             {
                 return Array.Empty<IFile>();
             }
 
-            var packageRoot = path.MakeAbsolute(_environment).FullPath;
             var pathResolver = new PackagePathResolver(packageRoot);
-            var nuGetProject = new NugetFolderProject(_fileSystem, _contentResolver, _config, _log, pathResolver, packageRoot);
-            var packageManager = new NuGetPackageManager(sourceRepositoryProvider, _nugetSettings, packageRoot)
+            var project = new NugetFolderProject(_fileSystem, _contentResolver, _config, _log, pathResolver, packageRoot, targetFramework);
+            var packageManager = new NuGetPackageManager(sourceRepositoryProvider, _nugetSettings, project.Root)
             {
-                PackagesFolderNuGetProject = nuGetProject
+                PackagesFolderNuGetProject = project
             };
-
             var sourceRepositories = sourceRepositoryProvider.GetRepositories();
-            var includePrerelease = false;
-            if (package.Parameters.ContainsKey("prerelease"))
-            {
-                bool.TryParse(package.Parameters["prerelease"].FirstOrDefault() ?? bool.TrueString, out includePrerelease);
-            }
-            var resolutionContext = new ResolutionContext(DependencyBehavior.Lowest, includePrerelease, false, VersionConstraints.None);
+            var includePrerelease = package.IsPrerelease();
+            var dependencyBehavior = GetDependencyBehavior(type, package);
+            var resolutionContext = new ResolutionContext(dependencyBehavior, includePrerelease, false, VersionConstraints.None, _gatherCache);
             var projectContext = new NuGetProjectContext(_log);
-            packageManager.InstallPackageAsync(nuGetProject, packageIdentity, resolutionContext, projectContext,
+
+            packageManager.InstallPackageAsync(project, packageIdentity, resolutionContext, projectContext,
                 sourceRepositories, Array.Empty<SourceRepository>(),
                 CancellationToken.None).Wait();
 
-            return nuGetProject.GetFiles(path, package, type);
+            return project.GetFiles(path, package, type);
+        }
+
+        private DependencyBehavior GetDependencyBehavior(PackageType type, PackageReference package)
+        {
+            if (type == PackageType.Addin)
+            {
+                return package.ShouldLoadDependencies(_config) ?
+                    DependencyBehavior.Lowest :
+                    DependencyBehavior.Ignore;
+            }
+            return DependencyBehavior.Ignore;
         }
 
         private string GetToolPath()
@@ -118,29 +134,24 @@ namespace Cake.NuGet.Install
                 _environment.WorkingDirectory.Combine("tools").MakeAbsolute(_environment).FullPath;
         }
 
-        private PackageIdentity GetPackageId(PackageReference package, NuGetSourceRepositoryProvider sourceRepositoryProvider)
+        private static PackageIdentity GetPackageId(PackageReference package, NuGetSourceRepositoryProvider sourceRepositoryProvider, NuGetFramework targetFramework, ILogger logger)
         {
-            var version = GetNuGetVersion(package, sourceRepositoryProvider);
+            var version = GetNuGetVersion(package, sourceRepositoryProvider, targetFramework, logger);
             return version == null ? null : new PackageIdentity(package.Package, version);
         }
 
-        private NuGetVersion GetNuGetVersion(PackageReference package, NuGetSourceRepositoryProvider sourceRepositoryProvider)
+        private static NuGetVersion GetNuGetVersion(PackageReference package, NuGetSourceRepositoryProvider sourceRepositoryProvider, NuGetFramework targetFramework, ILogger logger)
         {
             if (package.Parameters.ContainsKey("version"))
             {
                 return new NuGetVersion(package.Parameters["version"].First());
             }
 
-            var includePrerelease = false;
-            if (package.Parameters.ContainsKey("prerelease"))
-            {
-                bool.TryParse(package.Parameters["prerelease"].FirstOrDefault() ?? bool.TrueString, out includePrerelease);
-            }
-
+            var includePrerelease = package.IsPrerelease();
             foreach (var sourceRepository in sourceRepositoryProvider.GetRepositories())
             {
                 var dependencyInfoResource = sourceRepository.GetResourceAsync<DependencyInfoResource>().Result;
-                var dependencyInfo = dependencyInfoResource.ResolvePackages(package.Package, _currentFramework, _nugetLogger, CancellationToken.None).Result;
+                var dependencyInfo = dependencyInfoResource.ResolvePackages(package.Package, targetFramework, logger, CancellationToken.None).Result;
                 var version = dependencyInfo
                     .Where(p => p.Listed && (includePrerelease || !p.Version.IsPrerelease))
                     .OrderByDescending(p => p.Version, VersionComparer.Default)

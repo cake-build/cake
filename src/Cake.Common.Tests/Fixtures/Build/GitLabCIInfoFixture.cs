@@ -12,22 +12,38 @@ namespace Cake.Common.Tests.Fixtures.Build
     {
         public ICakeEnvironment Environment { get; set; }
 
-        public GitLabCIInfoFixture()
+        public GitLabCIInfoFixture(bool versionNineOrNewer = false)
         {
             Environment = Substitute.For<ICakeEnvironment>();
 
             // Example values taken from https://docs.gitlab.com/ce/ci/variables/README.html
             Environment.GetEnvironmentVariable("CI_SERVER").Returns("yes");
-            Environment.GetEnvironmentVariable("CI_BUILD_ID").Returns("50");
-            Environment.GetEnvironmentVariable("CI_BUILD_REF").Returns("1ecfd275763eff1d6b4844ea3168962458c9f27a");
-            Environment.GetEnvironmentVariable("CI_BUILD_REF_NAME").Returns("master");
-            Environment.GetEnvironmentVariable("CI_BUILD_REPO").Returns("https://gitab-ci-token:abcde-1234ABCD5678ef@gitlab.com/gitlab-org/gitlab-ce.git");
-            Environment.GetEnvironmentVariable("CI_BUILD_TAG").Returns("1.0.0");
-            Environment.GetEnvironmentVariable("CI_BUILD_NAME").Returns("spec:other");
-            Environment.GetEnvironmentVariable("CI_BUILD_STAGE").Returns("test");
-            Environment.GetEnvironmentVariable("CI_BUILD_MANUAL").Returns("true");
-            Environment.GetEnvironmentVariable("CI_BUILD_TRIGGERED").Returns("true");
-            Environment.GetEnvironmentVariable("CI_BUILD_TOKEN").Returns("abcde-1234ABCD5678ef");
+            if (versionNineOrNewer)
+            {
+                Environment.GetEnvironmentVariable("CI_JOB_ID").Returns("50");
+                Environment.GetEnvironmentVariable("CI_COMMIT_SHA").Returns("1ecfd275763eff1d6b4844ea3168962458c9f27a");
+                Environment.GetEnvironmentVariable("CI_COMMIT_REF_NAME").Returns("master");
+                Environment.GetEnvironmentVariable("CI_REPOSITORY_URL").Returns("https://gitab-ci-token:abcde-1234ABCD5678ef@gitlab.com/gitlab-org/gitlab-ce.git");
+                Environment.GetEnvironmentVariable("CI_COMMIT_TAG").Returns("1.0.0");
+                Environment.GetEnvironmentVariable("CI_JOB_NAME").Returns("spec:other");
+                Environment.GetEnvironmentVariable("CI_JOB_STAGE").Returns("test");
+                Environment.GetEnvironmentVariable("CI_JOB_MANUAL").Returns("true");
+                Environment.GetEnvironmentVariable("CI_PIPELINE_TRIGGERED").Returns("true");
+                Environment.GetEnvironmentVariable("CI_JOB_TOKEN").Returns("abcde-1234ABCD5678ef");
+            }
+            else
+            {
+                Environment.GetEnvironmentVariable("CI_BUILD_ID").Returns("50");
+                Environment.GetEnvironmentVariable("CI_BUILD_REF").Returns("1ecfd275763eff1d6b4844ea3168962458c9f27a");
+                Environment.GetEnvironmentVariable("CI_BUILD_REF_NAME").Returns("master");
+                Environment.GetEnvironmentVariable("CI_BUILD_REPO").Returns("https://gitab-ci-token:abcde-1234ABCD5678ef@gitlab.com/gitlab-org/gitlab-ce.git");
+                Environment.GetEnvironmentVariable("CI_BUILD_TAG").Returns("1.0.0");
+                Environment.GetEnvironmentVariable("CI_BUILD_NAME").Returns("spec:other");
+                Environment.GetEnvironmentVariable("CI_BUILD_STAGE").Returns("test");
+                Environment.GetEnvironmentVariable("CI_BUILD_MANUAL").Returns("true");
+                Environment.GetEnvironmentVariable("CI_BUILD_TRIGGERED").Returns("true");
+                Environment.GetEnvironmentVariable("CI_BUILD_TOKEN").Returns("abcde-1234ABCD5678ef");
+            }
             Environment.GetEnvironmentVariable("CI_PIPELINE_ID").Returns("1000");
             Environment.GetEnvironmentVariable("CI_PROJECT_ID").Returns("34");
             Environment.GetEnvironmentVariable("CI_PROJECT_DIR").Returns("/builds/gitlab-org/gitlab-ce");

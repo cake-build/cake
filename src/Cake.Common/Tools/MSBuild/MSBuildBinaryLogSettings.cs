@@ -16,17 +16,17 @@ namespace Cake.Common.Tools.MSBuild
     public class MSBuildBinaryLogSettings
     {
         /// <summary>
-        /// Should binary logging be enabled
+        /// Gets or sets a value indicating whether binary logging should be enabled.
         /// </summary>
         public bool Enabled { get; set; }
 
         /// <summary>
-        /// Output filename (optional)
+        /// Gets or sets the output filename.
         /// </summary>
         public string FileName { get; set; }
 
         /// <summary>
-        /// What source files should be included in the log
+        /// Gets or sets what source files should be included in the log.
         /// </summary>
         public MSBuildBinaryLogImports Imports { get; set; }
     }

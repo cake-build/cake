@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Cake.Core.Scripting
 {
@@ -97,5 +98,12 @@ namespace Cake.Core.Scripting
         /// <param name="target">The target to run.</param>
         /// <returns>The resulting report.</returns>
         CakeReport RunTarget(string target);
+
+        /// <summary>
+        /// Runs the specified target.
+        /// </summary>
+        /// <param name="target">The target to run.</param>
+        /// <returns>The resulting report.</returns>
+        Task<CakeReport> RunTargetAsync(string target);
     }
 }

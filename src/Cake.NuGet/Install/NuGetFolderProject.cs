@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -6,6 +10,9 @@ using System.Threading.Tasks;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.NuGet.Install.Extensions;
+using NuGet.Frameworks;
+using NuGet.PackageManagement;
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
 using NuGet.ProjectManagement;
@@ -30,13 +37,16 @@ namespace Cake.NuGet.Install
             "Cake.Core"
         }, StringComparer.OrdinalIgnoreCase);
 
+        public NuGetFramework TargetFramework { get; }
+
         public NugetFolderProject(
             IFileSystem fileSystem,
             INuGetContentResolver contentResolver,
             ICakeConfiguration config,
             ICakeLog log,
             PackagePathResolver pathResolver,
-            string root) : base(root, pathResolver)
+            string root,
+            NuGetFramework targetFramework) : base(root, pathResolver)
         {
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
             _contentResolver = contentResolver ?? throw new ArgumentNullException(nameof(contentResolver));
@@ -44,6 +54,8 @@ namespace Cake.NuGet.Install
             _log = log ?? throw new ArgumentNullException(nameof(log));
             _pathResolver = pathResolver ?? throw new ArgumentNullException(nameof(pathResolver));
             _installedPackages = new HashSet<PackageIdentity>();
+            TargetFramework = targetFramework ?? throw new ArgumentNullException(nameof(targetFramework));
+            InternalMetadata[NuGetProjectMetadataKeys.TargetFramework] = TargetFramework;
         }
 
         public override Task<bool> InstallPackageAsync(PackageIdentity packageIdentity, DownloadResourceResult downloadResourceResult,
@@ -61,15 +73,7 @@ namespace Cake.NuGet.Install
 
         public IReadOnlyCollection<IFile> GetFiles(DirectoryPath directoryPath, PackageReference packageReference, PackageType type)
         {
-            bool loadDependencies;
-            if (packageReference.Parameters.ContainsKey("LoadDependencies"))
-            {
-                bool.TryParse(packageReference.Parameters["LoadDependencies"].FirstOrDefault() ?? bool.TrueString, out loadDependencies);
-            }
-            else
-            {
-                bool.TryParse(_config.GetValue(Constants.NuGet.LoadDependencies) ?? bool.FalseString, out loadDependencies);
-            }
+            var loadDependencies = packageReference.ShouldLoadDependencies(_config);
 
             var files = new List<IFile>();
             var package = _installedPackages.First(p => p.Id.Equals(packageReference.Package, StringComparison.OrdinalIgnoreCase));
@@ -95,7 +99,7 @@ namespace Cake.NuGet.Install
                         continue;
                     }
 
-                    var dependencyInstallPath = new DirectoryPath(_pathResolver.GetInstallPath(package));
+                    var dependencyInstallPath = new DirectoryPath(_pathResolver.GetInstallPath(dependency));
 
                     if (!_fileSystem.Exist(dependencyInstallPath))
                     {

@@ -1,3 +1,7 @@
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
 using System.Globalization;
 using System.Runtime.Serialization;
 
@@ -56,7 +60,7 @@ namespace Cake.Common.Tools.GitVersion
         public string PreReleaseNumber
         {
             get => ToString(GitVersion.PreReleaseNumber);
-            set => GitVersion.PreReleaseNumber = ToInt(value);
+            set => GitVersion.PreReleaseNumber = ToNullableInt(value);
         }
 
         [DataMember]
@@ -161,7 +165,7 @@ namespace Cake.Common.Tools.GitVersion
         public string CommitsSinceVersionSource
         {
             get => ToString(GitVersion.CommitsSinceVersionSource);
-            set => GitVersion.CommitsSinceVersionSource = ToInt(value);
+            set => GitVersion.CommitsSinceVersionSource = ToNullableInt(value);
         }
 
         [DataMember]
@@ -178,11 +182,20 @@ namespace Cake.Common.Tools.GitVersion
             set => GitVersion.CommitDate = value;
         }
 
+        private static int? ToNullableInt(string value) => int.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture,
+            out int numericValue)
+            ? numericValue
+            : null as int?;
+
         private static int ToInt(string value) => int.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture,
             out int numericValue)
             ? numericValue
             : -1;
 
         private static string ToString(int value) => value.ToString(CultureInfo.InvariantCulture);
+
+        private static string ToString(int? value) => value.HasValue
+            ? ToString(value.Value)
+            : null;
     }
 }

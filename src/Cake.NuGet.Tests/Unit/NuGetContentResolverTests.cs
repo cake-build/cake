@@ -105,9 +105,9 @@ namespace Cake.NuGet.Tests.Unit
 
                 // Then
                 Assert.Equal(3, files.Count);
-                Assert.True(files.Any(p => p.Path.FullPath == "/Working/tools/Foo/Foo.exe"));
-                Assert.True(files.Any(p => p.Path.FullPath == "/Working/tools/Foo/Bar/Qux.pdb"));
-                Assert.True(files.Any(p => p.Path.FullPath == "/Working/tools/Foo/Foo.XML"));
+                Assert.Contains(files, p => p.Path.FullPath == "/Working/tools/Foo/Foo.exe");
+                Assert.Contains(files, p => p.Path.FullPath == "/Working/tools/Foo/Bar/Qux.pdb");
+                Assert.Contains(files, p => p.Path.FullPath == "/Working/tools/Foo/Foo.XML");
             }
         }
 
@@ -308,7 +308,27 @@ namespace Cake.NuGet.Tests.Unit
                                      "Falling back to using root folder of NuGet package."))
                     .ToList();
 
-                Assert.Equal(1, entries.Count);
+                Assert.Single(entries);
+            }
+
+            [Theory]
+            [InlineData(".NETStandard,Version=v1.6")]
+            [InlineData(".NETFramework,Version=v4.6.1")]
+            public void Should_Not_Return_Ref_Assemblies(string framework)
+            {
+                // Given
+                var fixture = new NuGetAddinContentResolverFixture(framework);
+
+                fixture.CreateCLRAssembly("/Working/ref/netstandard1.6/file.dll");
+                fixture.CreateCLRAssembly("/Working/ref/net46/file.dll");
+                fixture.FileSystem.CreateFile("/Working/lib/netstandard1.6/_._");
+                fixture.FileSystem.CreateFile("/Working/lib/net46/_._");
+
+                // When
+                var result = fixture.GetFiles();
+
+                // Then
+                Assert.Equal(0, result.Count);
             }
         }
     }
