@@ -25,12 +25,17 @@ namespace Cake.NuGet.Tests.Fixtures
         public List<FilePath> InstallResult { get; set; }
 
         public NuGetLoadDirectiveProviderFixture()
+            : this("nuget:?package=Cake.Recipe")
+        {
+        }
+
+        public NuGetLoadDirectiveProviderFixture(string uri)
         {
             Environment = FakeEnvironment.CreateUnixEnvironment();
             Installer = Substitute.For<INuGetPackageInstaller>();
             Configuration = new FakeConfiguration();
             Log = new FakeLog();
-            Reference = new LoadReference(new Uri("nuget:?package=Cake.Recipe"));
+            Reference = new LoadReference(new Uri(uri));
             InstallResult = new List<FilePath>();
 
             Context = Substitute.For<IScriptAnalyzerContext>();

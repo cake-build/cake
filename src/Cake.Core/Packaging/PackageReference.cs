@@ -58,7 +58,7 @@ namespace Cake.Core.Packaging
         /// </summary>
         /// <param name="uri">The URI.</param>
         /// <exception cref="System.ArgumentException">Package query string parameter is missing.;uri</exception>
-        internal PackageReference(Uri uri)
+        public PackageReference(Uri uri)
         {
             OriginalString = uri.OriginalString;
             Scheme = uri.Scheme;

@@ -9,8 +9,16 @@ using System.Linq;
 // ReSharper disable once CheckNamespace
 namespace Cake.Core
 {
-    internal static class UriExtensions
+    /// <summary>
+    /// Extensions for <see cref="System.Uri"/>
+    /// </summary>
+    public static class UriExtensions
     {
+        /// <summary>
+        /// Extracts query string of <see cref="System.Uri"/>
+        /// </summary>
+        /// <param name="uri">The URI</param>
+        /// <returns>Collection of parameters and it's values</returns>
         public static IReadOnlyDictionary<string, IReadOnlyList<string>> GetQueryString(this Uri uri)
         {
             var result = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
