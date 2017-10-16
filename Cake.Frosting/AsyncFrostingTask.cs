@@ -11,27 +11,28 @@ using Cake.Frosting.Internal;
 namespace Cake.Frosting
 {
     /// <summary>
-    /// Base class for a Frosting task using the standard context.
+    /// Base class for an asynchronous Frosting task using the standard context.
     /// </summary>
     /// <seealso cref="ICakeContext" />
-    public abstract class FrostingTask : FrostingTask<ICakeContext>
+    public abstract class AsyncFrostingTask : AsyncFrostingTask<ICakeContext>
     {
     }
 
     /// <summary>
-    /// Base class for a Frosting task using a custom context.
+    /// Base class for an asynchronous Frosting task using a custom context.
     /// </summary>
     /// <typeparam name="T">The context type.</typeparam>
     /// <seealso cref="IFrostingTask" />
-    public abstract class FrostingTask<T> : IFrostingTask
+    public abstract class AsyncFrostingTask<T> : IFrostingTask
         where T : ICakeContext
     {
         /// <summary>
         /// Runs the task using the specified context.
         /// </summary>
         /// <param name="context">The context.</param>
-        public virtual void Run(T context)
+        public virtual Task RunAsync(T context)
         {
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -68,8 +69,7 @@ namespace Cake.Frosting
         {
             Guard.ArgumentNotNull(context, nameof(context));
 
-            Run((T)context);
-            return Task.CompletedTask;
+            return RunAsync((T)context);
         }
 
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", Justification = "Explicit implementation.")]

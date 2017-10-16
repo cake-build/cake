@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Threading.Tasks;
 using Cake.Core;
 
 // ReSharper disable once CheckNamespace
@@ -17,7 +18,7 @@ namespace Cake.Frosting
         /// Runs the task using the specified context.
         /// </summary>
         /// <param name="context">The context.</param>
-        void Run(ICakeContext context);
+        Task RunAsync(ICakeContext context);
 
         /// <summary>
         /// Gets whether or not the task should be run.

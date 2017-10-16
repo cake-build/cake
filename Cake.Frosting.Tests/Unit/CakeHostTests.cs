@@ -346,6 +346,21 @@ namespace Cake.Frosting.Tests.Unit
         }
 
         [Fact]
+        public void Should_Execute_OnError_Method_If_RunAsync_Failed()
+        {
+            // Given
+            var fixture = new CakeHostBuilderFixture();
+            fixture.RegisterTask<OnErrorRunAsyncFailedTask>();
+            fixture.Options.Target = "On-Error-RunAsync-Failed";
+
+            // When
+            fixture.Run();
+
+            // Then
+            fixture.Log.Received(1).Error("An error has occurred. {0}", "On test exception");
+        }
+
+        [Fact]
         public void Should_Not_Execute_OnError_Method_If_Run_Completed()
         {
             // Given

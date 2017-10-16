@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 
@@ -12,8 +13,15 @@ namespace Cake.Frosting.Example
     }
 
     [Dependency(typeof(Hello))]
-    public sealed class World : FrostingTask<Settings>
+    public sealed class World : AsyncFrostingTask<Settings>
     {
+        // Tasks can be asynchronous
+        public override async Task RunAsync(Settings context)
+        {
+            context.Log.Information("About to do something expensive");
+            await Task.Delay(1500);
+            context.Log.Information("Done");
+        }
     }
 
     [Dependency(typeof(World))]

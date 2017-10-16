@@ -13,7 +13,17 @@ namespace Cake.Frosting.Internal
     {
         public static bool IsRunOverridden(this IFrostingTask task, IFrostingContext context)
         {
-            return task.GetType().GetMethod(nameof(IFrostingTask.Run), new[] { context.GetType() }).IsOverriden();
+            if (task.IsFrostingTask())
+            {
+                return task.GetType().GetMethod(nameof(FrostingTask.Run), new[] { context.GetType() }).IsOverriden();
+            }
+
+            if (task.IsAsyncFrostingTask())
+            {
+                return task.GetType().GetMethod(nameof(AsyncFrostingTask.RunAsync), new[] { context.GetType() }).IsOverriden();
+            }
+
+            throw new InvalidOperationException($"This method expects all {nameof(IFrostingTask)} to be instances of {nameof(FrostingTask)} or {nameof(AsyncFrostingTask)}.");
         }
 
         public static bool IsShouldRunOverridden(this IFrostingTask task, IFrostingContext context)
@@ -46,7 +56,7 @@ namespace Cake.Frosting.Internal
             var baseType = task.GetType().GetTypeInfo().BaseType;
             if (baseType.IsConstructedGenericType)
             {
-                if (baseType.GetGenericTypeDefinition() == typeof(FrostingTask<>))
+                if (baseType.GetGenericTypeDefinition() == typeof(FrostingTask<>) || baseType.GetGenericTypeDefinition() == typeof(AsyncFrostingTask<>))
                 {
                     return baseType.GenericTypeArguments[0];
                 }
@@ -57,6 +67,40 @@ namespace Cake.Frosting.Internal
         private static bool IsConvertableTo(this Type type, Type other)
         {
             return other == type || other.IsAssignableFrom(type);
+        }
+
+        private static bool IsAsyncFrostingTask(this IFrostingTask task)
+        {
+            var taskType = task.GetType();
+
+            do
+            {
+                if (taskType.IsGenericType && taskType.GetGenericTypeDefinition() == typeof(AsyncFrostingTask<>))
+                {
+                    return true;
+                }
+
+                taskType = taskType.BaseType;
+            } while (taskType != null);
+
+            return false;
+        }
+
+        private static bool IsFrostingTask(this IFrostingTask task)
+        {
+            var taskType = task.GetType();
+
+            do
+            {
+                if (taskType.IsGenericType && taskType.GetGenericTypeDefinition() == typeof(FrostingTask<>))
+                {
+                    return true;
+                }
+
+                taskType = taskType.BaseType;
+            } while (taskType != null);
+
+            return false;
         }
     }
 }

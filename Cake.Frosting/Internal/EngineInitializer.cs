@@ -42,7 +42,7 @@ namespace Cake.Frosting.Internal
                         // Is the run method overridden?
                         if (task.IsRunOverridden(context))
                         {
-                            cakeTask.Does(c => task.Run(c));
+                            cakeTask.Does(task.RunAsync);
                         }
 
                         // Is the criteria method overridden?

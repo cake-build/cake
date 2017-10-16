@@ -4,6 +4,7 @@
 
 using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using Cake.Core;
 
 namespace Cake.Frosting.Internal.Commands
@@ -17,7 +18,7 @@ namespace Cake.Frosting.Internal.Commands
             _console = console;
         }
 
-        public override bool Execute(ICakeEngine engine, CakeHostOptions options)
+        public override Task<bool> ExecuteAsync(ICakeEngine engine, CakeHostOptions options)
         {
             _console.Write("Cake.Frosting (");
             _console.ForegroundColor = ConsoleColor.Yellow;
@@ -37,7 +38,7 @@ namespace Cake.Frosting.Internal.Commands
             _console.WriteLine("  --help|-h                     Show help");
             _console.WriteLine();
 
-            return true;
+            return Task.FromResult(true);
         }
     }
 }

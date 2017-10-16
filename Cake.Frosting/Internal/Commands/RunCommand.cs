@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Threading.Tasks;
 using Cake.Core;
 
 namespace Cake.Frosting.Internal.Commands
@@ -25,10 +26,10 @@ namespace Cake.Frosting.Internal.Commands
             _executionSettings = new ExecutionSettings();
         }
 
-        public override bool Execute(ICakeEngine engine, CakeHostOptions options)
+        public override async Task<bool> ExecuteAsync(ICakeEngine engine, CakeHostOptions options)
         {
             _executionSettings.SetTarget(options.Target);
-            var report = engine.RunTargetAsync(_context, _strategy, _executionSettings).GetAwaiter().GetResult();
+            var report = await engine.RunTargetAsync(_context, _strategy, _executionSettings).ConfigureAwait(false);
             if (report != null && !report.IsEmpty)
             {
                 _printer.Write(report);

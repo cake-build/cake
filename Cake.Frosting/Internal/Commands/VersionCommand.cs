@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Reflection;
+using System.Threading.Tasks;
 using Cake.Core;
 
 namespace Cake.Frosting.Internal.Commands
@@ -16,10 +17,10 @@ namespace Cake.Frosting.Internal.Commands
             _console = console;
         }
 
-        public override bool Execute(ICakeEngine engine, CakeHostOptions options)
+        public override Task<bool> ExecuteAsync(ICakeEngine engine, CakeHostOptions options)
         {
             _console.Write(typeof(HelpCommand).GetTypeInfo().Assembly.GetName().Version.ToString(3));
-            return true;
+            return Task.FromResult(true);
         }
     }
 }

@@ -98,7 +98,7 @@ namespace Cake.Frosting
 
                 // Get the command and execute.
                 var command = _commandFactory.GetCommand(_options);
-                var result = command.Execute(_engine, _options);
+                var result = command.ExecuteAsync(_engine, _options).GetAwaiter().GetResult();
 
                 // Return success.
                 return result ? 0 : 1;

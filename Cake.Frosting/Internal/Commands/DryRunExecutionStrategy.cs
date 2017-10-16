@@ -35,6 +35,7 @@ namespace Cake.Frosting.Internal.Commands
                 _log.Information("{0}. {1}", _counter, task.Name);
                 _counter++;
             }
+
             return Task.CompletedTask;
         }
 
