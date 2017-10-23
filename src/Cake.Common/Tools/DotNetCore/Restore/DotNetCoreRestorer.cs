@@ -120,6 +120,12 @@ namespace Cake.Common.Tools.DotNetCore.Restore
                 builder.Append("--no-dependencies");
             }
 
+            // Force restore
+            if (settings.Force)
+            {
+                builder.Append("--force");
+            }
+
             if (settings.MSBuildSettings != null)
             {
                 builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);
