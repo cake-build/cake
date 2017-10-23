@@ -32,8 +32,8 @@ Param(
 )
 
 $CakeVersion = "0.23.0"
-$DotNetChannel = "preview";
-$DotNetVersion = "1.0.4";
+$DotNetChannel = "Current";
+$DotNetVersion = "1.1.4";
 $DotNetInstallerUri = "https://dot.net/v1/dotnet-install.ps1";
 $NugetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
 
