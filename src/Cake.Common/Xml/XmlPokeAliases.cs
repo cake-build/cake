@@ -586,7 +586,10 @@ namespace Cake.Common.Xml
         /// <returns>The xml writer settings.</returns>
         private static XmlWriterSettings GetXmlWriterSettings(XmlPokeSettings settings)
         {
-            var writerSettings = new XmlWriterSettings();
+            var writerSettings = new XmlWriterSettings
+            {
+                Encoding = settings.Encoding
+            };
             // Currently only returns the default settings
             return writerSettings;
         }
