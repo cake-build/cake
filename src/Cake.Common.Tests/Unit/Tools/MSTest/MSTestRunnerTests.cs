@@ -94,6 +94,9 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         [InlineData("/ProgramFilesX86/Microsoft Visual Studio 12.0/Common7/IDE/mstest.exe")]
         [InlineData("/ProgramFilesX86/Microsoft Visual Studio 11.0/Common7/IDE/mstest.exe")]
         [InlineData("/ProgramFilesX86/Microsoft Visual Studio 10.0/Common7/IDE/mstest.exe")]
+        [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2017/Enterprise/Common7/IDE/mstest.exe")]
+        [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2017/Professional/Common7/IDE/mstest.exe")]
+        [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2017/Community/Common7/IDE/mstest.exe")]
         public void Should_Use_Available_Tool_Path(string existingToolPath)
         {
             // Given
