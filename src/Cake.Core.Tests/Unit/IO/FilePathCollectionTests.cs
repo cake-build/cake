@@ -211,6 +211,119 @@ namespace Cake.Core.Tests.Unit.IO
             }
         }
 
+        public sealed class TheDivideOperator
+        {
+            public sealed class WithSinglePath
+            {
+                [Fact]
+                public void Should_Throw_If_Collection_Is_Null()
+                {
+                    // Given
+                    FilePathCollection collection = null;
+
+                    // When
+                    // ReSharper disable once ExpressionIsAlwaysNull
+                    var result = Record.Exception(() => collection / new FilePath("A.txt"));
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "collection");
+                }
+
+                [Fact]
+                public void Should_Add_Null_If_Path_Is_Null()
+                {
+                    // Given
+                    var collection = new FilePathCollection(new PathComparer(false));
+
+                    // When
+                    var result = collection / (FilePath)null;
+
+                    // Then
+                    Assert.Contains(null, result);
+                }
+
+                [Fact]
+                public void Should_Respect_File_System_Case_Sensitivity_When_Adding_Path()
+                {
+                    // Given
+                    var collection = new FilePathCollection(new PathComparer(false));
+                    collection.Add("B.txt");
+
+                    // When
+                    var result = collection / new FilePath("A.txt");
+
+                    // Then
+                    Assert.Equal(2, result.Count);
+                }
+
+                [Fact]
+                public void Should_Return_New_Collection()
+                {
+                    // Given
+                    var collection = new FilePathCollection(new PathComparer(false));
+
+                    // When
+                    var result = collection / new FilePath("A.txt");
+
+                    // Then
+                    Assert.NotSame(collection, result);
+                }
+            }
+
+            public sealed class WithMultiplePaths
+            {
+                [Fact]
+                public void Should_Throw_If_Collection_Is_Null()
+                {
+                    // Given
+                    FilePathCollection collection = null;
+                    var paths = new FilePathCollection(new PathComparer(false));
+                    paths.Add("A.txt");
+                    paths.Add("B.txt");
+
+                    // When
+                    var result = Record.Exception(() => collection / paths);
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "collection");
+                }
+
+                [Fact]
+                public void Should_Respect_File_System_Case_Sensitivity_When_Adding_Paths()
+                {
+                    // Given
+                    var comparer = new PathComparer(false);
+                    var collection = new FilePathCollection(comparer);
+                    var paths = new FilePathCollection(comparer);
+                    paths.Add("A.txt");
+                    paths.Add("B.txt");
+
+                    // When
+                    var result = collection / paths;
+
+                    // Then
+                    Assert.Equal(2, result.Count);
+                }
+
+                [Fact]
+                public void Should_Return_New_Collection()
+                {
+                    // Given
+                    var comparer = new PathComparer(false);
+                    var collection = new FilePathCollection(comparer);
+                    var paths = new FilePathCollection(comparer);
+                    paths.Add("A.txt");
+                    paths.Add("B.txt");
+
+                    // When
+                    var result = collection / paths;
+
+                    // Then
+                    Assert.NotSame(collection, result);
+                }
+            }
+        }
+
         public sealed class TheMinusOperator
         {
             public sealed class WithSinglePath

@@ -47,7 +47,7 @@ namespace Cake.Common.IO.Paths
         }
 
         /// <summary>
-        /// Operator that combines A <see cref="ConvertableDirectoryPath"/> instance
+        /// Operator that combines a <see cref="ConvertableDirectoryPath"/> instance
         /// with another <see cref="ConvertableDirectoryPath"/> instance.
         /// </summary>
         /// <param name="left">The left directory path operand.</param>
@@ -67,7 +67,7 @@ namespace Cake.Common.IO.Paths
         }
 
         /// <summary>
-        /// Operator that combines A <see cref="ConvertableDirectoryPath"/> instance
+        /// Operator that combines a <see cref="ConvertableDirectoryPath"/> instance
         /// with a <see cref="DirectoryPath"/> instance.
         /// </summary>
         /// <param name="left">The left directory path operand.</param>
@@ -87,7 +87,7 @@ namespace Cake.Common.IO.Paths
         }
 
         /// <summary>
-        /// Operator that combines A <see cref="ConvertableDirectoryPath"/> instance
+        /// Operator that combines a <see cref="ConvertableDirectoryPath"/> instance
         /// with a <see cref="ConvertableFilePath"/> instance.
         /// </summary>
         /// <param name="directory">The left directory path operand.</param>
@@ -107,13 +107,93 @@ namespace Cake.Common.IO.Paths
         }
 
         /// <summary>
-        /// Operator that combines A <see cref="ConvertableDirectoryPath"/> instance
+        /// Operator that combines a <see cref="ConvertableDirectoryPath"/> instance
         /// with a <see cref="FilePath"/> instance.
         /// </summary>
         /// <param name="directory">The left directory path operand.</param>
         /// <param name="file">The right file path operand.</param>
         /// <returns>A new file path representing a combination of the two provided paths.</returns>
         public static ConvertableFilePath operator +(ConvertableDirectoryPath directory, FilePath file)
+        {
+            if (directory == null)
+            {
+                throw new ArgumentNullException(nameof(directory));
+            }
+            if (file == null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+            return new ConvertableFilePath(directory.Path.CombineWithFilePath(file));
+        }
+
+        /// <summary>
+        /// Operator that combines a <see cref="ConvertableDirectoryPath"/> instance
+        /// with another <see cref="ConvertableDirectoryPath"/> instance.
+        /// </summary>
+        /// <param name="left">The left directory path operand.</param>
+        /// <param name="right">The right directory path operand.</param>
+        /// <returns>A new directory path representing a combination of the two provided paths.</returns>
+        public static ConvertableDirectoryPath operator /(ConvertableDirectoryPath left, ConvertableDirectoryPath right)
+        {
+            if (left == null)
+            {
+                throw new ArgumentNullException(nameof(left));
+            }
+            if (right == null)
+            {
+                throw new ArgumentNullException(nameof(right));
+            }
+            return new ConvertableDirectoryPath(left.Path.Combine(right.Path));
+        }
+
+        /// <summary>
+        /// Operator that combines a <see cref="ConvertableDirectoryPath"/> instance
+        /// with a <see cref="DirectoryPath"/> instance.
+        /// </summary>
+        /// <param name="left">The left directory path operand.</param>
+        /// <param name="right">The right directory path operand.</param>
+        /// <returns>A new directory path representing a combination of the two provided paths.</returns>
+        public static ConvertableDirectoryPath operator /(ConvertableDirectoryPath left, DirectoryPath right)
+        {
+            if (left == null)
+            {
+                throw new ArgumentNullException(nameof(left));
+            }
+            if (right == null)
+            {
+                throw new ArgumentNullException(nameof(right));
+            }
+            return new ConvertableDirectoryPath(left.Path.Combine(right));
+        }
+
+        /// <summary>
+        /// Operator that combines a <see cref="ConvertableDirectoryPath"/> instance
+        /// with a <see cref="ConvertableFilePath"/> instance.
+        /// </summary>
+        /// <param name="directory">The left directory path operand.</param>
+        /// <param name="file">The right file path operand.</param>
+        /// <returns>A new file path representing a combination of the two provided paths.</returns>
+        public static ConvertableFilePath operator /(ConvertableDirectoryPath directory, ConvertableFilePath file)
+        {
+            if (directory == null)
+            {
+                throw new ArgumentNullException(nameof(directory));
+            }
+            if (file == null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+            return new ConvertableFilePath(directory.Path.CombineWithFilePath(file.Path));
+        }
+
+        /// <summary>
+        /// Operator that combines a <see cref="ConvertableDirectoryPath"/> instance
+        /// with a <see cref="FilePath"/> instance.
+        /// </summary>
+        /// <param name="directory">The left directory path operand.</param>
+        /// <param name="file">The right file path operand.</param>
+        /// <returns>A new file path representing a combination of the two provided paths.</returns>
+        public static ConvertableFilePath operator /(ConvertableDirectoryPath directory, FilePath file)
         {
             if (directory == null)
             {

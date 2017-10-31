@@ -132,6 +132,33 @@ namespace Cake.Core.IO
             return new DirectoryPathCollection(collection, collection.Comparer) { paths };
         }
 
+        /// <summary>Adds a path to the collection.</summary>
+        /// <param name="collection">The collection.</param>
+        /// <param name="path">The path to add.</param>
+        /// <returns>A new <see cref="DirectoryPathCollection"/> that contains the provided path as
+        /// well as the paths in the original collection.</returns>
+        public static DirectoryPathCollection operator /(DirectoryPathCollection collection, DirectoryPath path)
+        {
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+            return new DirectoryPathCollection(collection, collection.Comparer) { path };
+        }
+
+        /// <summary>Adds multiple paths to the collection.</summary>
+        /// <param name="collection">The collection.</param>
+        /// <param name="paths">The paths to add.</param>
+        /// <returns>A new <see cref="DirectoryPathCollection"/> with the content of both collections.</returns>
+        public static DirectoryPathCollection operator /(DirectoryPathCollection collection, IEnumerable<DirectoryPath> paths)
+        {
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+            return new DirectoryPathCollection(collection, collection.Comparer) { paths };
+        }
+
         /// <summary>
         /// Removes a path from the collection.
         /// </summary>

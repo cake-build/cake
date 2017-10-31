@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Linq;
 using Cake.Core.IO;
 using Xunit;
@@ -207,6 +208,120 @@ namespace Cake.Core.Tests.Unit.IO
 
                     // Then
                     Assert.False(ReferenceEquals(result, collection));
+                }
+            }
+        }
+
+        public sealed class TheDivisionOperator
+        {
+            public sealed class WithSinglePath
+            {
+                [Fact]
+                public void Should_Throw_If_Collection_Is_Null()
+                {
+                    // Given
+                    DirectoryPathCollection collection = null;
+
+                    // When
+                    // ReSharper disable once ExpressionIsAlwaysNull
+                    var result = Record.Exception(() => collection / new DirectoryPath("A"));
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "collection");
+                }
+
+                [Fact]
+                public void Should_Add_Null_If_Path_Is_Null()
+                {
+                    // Given
+                    var collection = new DirectoryPathCollection(new PathComparer(false));
+
+                    // When
+                    var result = collection / (DirectoryPath)null;
+
+                    // Then
+                    Assert.Contains(null, result);
+                }
+
+                [Fact]
+                public void Should_Respect_File_System_Case_Sensitivity_When_Adding_Path()
+                {
+                    // Given
+                    var collection = new DirectoryPathCollection(new PathComparer(false));
+                    collection.Add("B");
+
+                    // When
+                    var result = collection / new DirectoryPath("A");
+
+                    // Then
+                    Assert.Equal(2, result.Count);
+                }
+
+                [Fact]
+                public void Should_Return_New_Collection()
+                {
+                    // Given
+                    var collection = new DirectoryPathCollection(new PathComparer(false));
+
+                    // When
+                    var result = collection / new DirectoryPath("A");
+
+                    // Then
+                    Assert.NotSame(collection, result);
+                }
+            }
+
+            public sealed class WithMultiplePaths
+            {
+                [Fact]
+                public void Should_Throw_If_Collection_Is_Null()
+                {
+                    // Given
+                    DirectoryPathCollection collection = null;
+                    var paths = new DirectoryPathCollection(new PathComparer(false));
+                    paths.Add("A");
+                    paths.Add("B");
+
+                    // When
+                    // ReSharper disable once ExpressionIsAlwaysNull
+                    var result = Record.Exception(() => collection / paths);
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "collection");
+                }
+
+                [Fact]
+                public void Should_Respect_File_System_Case_Sensitivity_When_Adding_Paths()
+                {
+                    // Given
+                    var comparer = new PathComparer(false);
+                    var collection = new DirectoryPathCollection(comparer);
+                    var paths = new DirectoryPathCollection(comparer);
+                    paths.Add("A");
+                    paths.Add("B");
+
+                    // When
+                    var result = collection / paths;
+
+                    // Then
+                    Assert.Equal(2, result.Count);
+                }
+
+                [Fact]
+                public void Should_Return_New_Collection()
+                {
+                    // Given
+                    var comparer = new PathComparer(false);
+                    var collection = new DirectoryPathCollection(comparer);
+                    var paths = new DirectoryPathCollection(comparer);
+                    paths.Add("A");
+                    paths.Add("B");
+
+                    // When
+                    var result = collection / paths;
+
+                    // Then
+                    Assert.NotSame(collection, result);
                 }
             }
         }

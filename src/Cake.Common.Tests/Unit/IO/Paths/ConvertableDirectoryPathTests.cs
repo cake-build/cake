@@ -247,6 +247,265 @@ namespace Cake.Common.Tests.Unit.IO.Paths
             }
         }
 
+        public sealed class TheDivideOperator
+        {
+            public sealed class AddingConvertableDirectoryPath
+            {
+                [Fact]
+                public void Should_Combine_The_Two_Paths()
+                {
+                    // Given
+                    var path = new ConvertableDirectoryPath("./root");
+
+                    // When
+                    var result = path / new ConvertableDirectoryPath("other");
+
+                    // Then
+                    Assert.Equal("root/other", result.Path.FullPath);
+                }
+
+                [Fact]
+                public void Should_Return_A_Convertable_Directory_Path()
+                {
+                    // Given
+                    var path = new ConvertableDirectoryPath("./root");
+
+                    // When
+                    var result = path / new ConvertableDirectoryPath("other");
+
+                    // Then
+                    Assert.IsType<ConvertableDirectoryPath>(result);
+                }
+
+                [Fact]
+                public void Should_Return_A_New_Convertable_Directory_Path()
+                {
+                    // Given
+                    var path = new ConvertableDirectoryPath("./root");
+
+                    // When
+                    var result = path / new ConvertableDirectoryPath("other");
+
+                    // Then
+                    Assert.NotSame(path, result);
+                }
+
+                [Fact]
+                public void Should_Throw_If_Left_Operand_Is_Null()
+                {
+                    // Given, When
+                    var result = Record.Exception(() =>
+                        (ConvertableDirectoryPath)null / new ConvertableDirectoryPath("other"));
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "left");
+                }
+
+                [Fact]
+                public void Should_Throw_If_Right_Operand_Is_Null()
+                {
+                    // Given, When
+                    var result = Record.Exception(() =>
+                        new ConvertableDirectoryPath("./root") / (ConvertableDirectoryPath)null);
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "right");
+                }
+            }
+
+            public sealed class AddingDirectoryPath
+            {
+                [Fact]
+                public void Should_Combine_The_Two_Paths()
+                {
+                    // Given
+                    var path = new ConvertableDirectoryPath("./root");
+
+                    // When
+                    var result = path / new DirectoryPath("other");
+
+                    // Then
+                    Assert.Equal("root/other", result.Path.FullPath);
+                }
+
+                [Fact]
+                public void Should_Return_A_Convertable_Directory_Path()
+                {
+                    // Given
+                    var path = new ConvertableDirectoryPath("./root");
+
+                    // When
+                    var result = path / new DirectoryPath("other");
+
+                    // Then
+                    Assert.IsType<ConvertableDirectoryPath>(result);
+                }
+
+                [Fact]
+                public void Should_Return_A_New_Convertable_Directory_Path()
+                {
+                    // Given
+                    var path = new ConvertableDirectoryPath("./root");
+
+                    // When
+                    var result = path / new ConvertableDirectoryPath("other");
+
+                    // Then
+                    Assert.NotSame(path, result);
+                }
+
+                [Fact]
+                public void Should_Throw_If_Left_Operand_Is_Null()
+                {
+                    // Given, When
+                    var result = Record.Exception(() =>
+                        (ConvertableDirectoryPath)null / new DirectoryPath("other"));
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "left");
+                }
+
+                [Fact]
+                public void Should_Throw_If_Right_Operand_Is_Null()
+                {
+                    // Given, When
+                    var result = Record.Exception(() =>
+                        new ConvertableDirectoryPath("./root") / (DirectoryPath)null);
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "right");
+                }
+            }
+
+            public sealed class AddingConvertableFilePath
+            {
+                [Fact]
+                public void Should_Combine_The_Two_Paths()
+                {
+                    // Given
+                    var path = new ConvertableDirectoryPath("./root");
+
+                    // When
+                    var result = path / new ConvertableFilePath("other.txt");
+
+                    // Then
+                    Assert.Equal("root/other.txt", result.Path.FullPath);
+                }
+
+                [Fact]
+                public void Should_Return_A_Convertable_File_Path()
+                {
+                    // Given
+                    var path = new ConvertableDirectoryPath("./root");
+
+                    // When
+                    var result = path / new ConvertableFilePath("other.txt");
+
+                    // Then
+                    Assert.IsType<ConvertableFilePath>(result);
+                }
+
+                [Fact]
+                public void Should_Return_A_New_Convertable_File_Path()
+                {
+                    // Given
+                    var path = new ConvertableDirectoryPath("./root");
+
+                    // When
+                    var result = path / new ConvertableFilePath("other.txt");
+
+                    // Then
+                    Assert.NotSame(path, result);
+                }
+
+                [Fact]
+                public void Should_Throw_If_Left_Operand_Is_Null()
+                {
+                    // Given, When
+                    var result = Record.Exception(() =>
+                        (ConvertableDirectoryPath)null / new ConvertableFilePath("other.txt"));
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "directory");
+                }
+
+                [Fact]
+                public void Should_Throw_If_Right_Operand_Is_Null()
+                {
+                    // Given, When
+                    var result = Record.Exception(() =>
+                        new ConvertableDirectoryPath("./root") / (ConvertableFilePath)null);
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "file");
+                }
+            }
+
+            public sealed class AddingFilePath
+            {
+                [Fact]
+                public void Should_Combine_The_Two_Paths()
+                {
+                    // Given
+                    var path = new ConvertableDirectoryPath("./root");
+
+                    // When
+                    var result = path / new FilePath("other.txt");
+
+                    // Then
+                    Assert.Equal("root/other.txt", result.Path.FullPath);
+                }
+
+                [Fact]
+                public void Should_Return_A_Convertable_File_Path()
+                {
+                    // Given
+                    var path = new ConvertableDirectoryPath("./root");
+
+                    // When
+                    var result = path / new FilePath("other.txt");
+
+                    // Then
+                    Assert.IsType<ConvertableFilePath>(result);
+                }
+
+                [Fact]
+                public void Should_Return_A_New_Convertable_File_Path()
+                {
+                    // Given
+                    var path = new ConvertableDirectoryPath("./root");
+
+                    // When
+                    var result = path / new ConvertableFilePath("other.txt");
+
+                    // Then
+                    Assert.NotSame(path, result);
+                }
+
+                [Fact]
+                public void Should_Throw_If_Left_Operand_Is_Null()
+                {
+                    // Given, When
+                    var result = Record.Exception(() =>
+                        (ConvertableDirectoryPath)null / new FilePath("other.txt"));
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "directory");
+                }
+
+                [Fact]
+                public void Should_Throw_If_Right_Operand_Is_Null()
+                {
+                    // Given, When
+                    var result = Record.Exception(() =>
+                        new ConvertableDirectoryPath("./root") / (FilePath)null);
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "file");
+                }
+            }
+        }
+
         public sealed class TheImplicitConversionOperator
         {
             public sealed class ConvertToDirectoryPath
