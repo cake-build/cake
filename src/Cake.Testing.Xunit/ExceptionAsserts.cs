@@ -16,6 +16,12 @@ namespace Xunit
             Assert.Equal(parameterName, ((ArgumentNullException)exception).ParamName);
         }
 
+        public static void IsArgumentOutOfRangeException(Exception exception, string parameterName)
+        {
+            Assert.IsType<ArgumentOutOfRangeException>(exception);
+            Assert.Equal(parameterName, ((ArgumentOutOfRangeException)exception).ParamName);
+        }
+
         public static void IsArgumentException(Exception exception, string parameterName, string message)
         {
             Assert.IsType<ArgumentException>(exception);
