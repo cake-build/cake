@@ -215,6 +215,24 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
             }
 
             [Fact]
+            public void Should_Append_ProcessFilters()
+            {
+                // Given
+                var fixture = new DotCoverCovererFixture();
+                fixture.Settings.WithProcessFilter("+:test.exe")
+                    .WithProcessFilter("-:sqlservr.exe");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("Cover /TargetExecutable=\"/Working/tools/Test.exe\" " +
+                             "/TargetArguments=\"-argument\" " +
+                             "/Output=\"/Working/result.dcvr\" " +
+                             "/ProcessFilters=\"+:test.exe;-:sqlservr.exe\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Capture_XUnit()
             {
                 // Given
