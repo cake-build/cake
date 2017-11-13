@@ -69,17 +69,18 @@ namespace Cake.Core.IO
 
             // Get the working directory.
             var workingDirectory = settings.WorkingDirectory ?? _environment.WorkingDirectory;
-            settings.WorkingDirectory = workingDirectory.MakeAbsolute(_environment);
 
             // Create the process start info.
             var info = new ProcessStartInfo(fileName)
             {
                 Arguments = arguments.Render(),
-                WorkingDirectory = workingDirectory.FullPath,
+                WorkingDirectory = settings.WorkingDirectory != null ? workingDirectory.FullPath : null,
                 UseShellExecute = false,
                 RedirectStandardError = settings.RedirectStandardError,
                 RedirectStandardOutput = settings.RedirectStandardOutput
             };
+
+            settings.WorkingDirectory = workingDirectory.MakeAbsolute(_environment);
 
             // Add environment variables
             ProcessHelper.SetEnvironmentVariable(info, "CAKE", "True");
