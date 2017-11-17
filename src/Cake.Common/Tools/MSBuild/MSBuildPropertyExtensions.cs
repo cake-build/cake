@@ -16,7 +16,9 @@ namespace Cake.Common.Tools.MSBuild
         {
             { ';', "%3B" },
             { ',', "%2C" },
-            { ' ', "%20" }
+            { ' ', "%20" },
+            { '\r', "%0D" },
+            { '\n', "%0A" }
         };
 
         internal static string EscapeMSBuildPropertySpecialCharacters(this string value)
