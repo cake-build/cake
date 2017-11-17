@@ -25,7 +25,7 @@ namespace Cake.Frosting.Internal.Commands
             _log.Information(string.Empty);
 
             var strategy = new DryRunExecutionStrategy(_log);
-            engine.RunTarget(_context, strategy, options.Target);
+            engine.RunTargetAsync(_context, strategy, options.Target).GetAwaiter().GetResult();
 
             _log.Information(string.Empty);
             _log.Information("This was a dry run.");

@@ -9,7 +9,6 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/cake-build/frosting</RepositoryUrl>
     <TargetFrameworks>net461;netcoreapp1.1</TargetFrameworks>
-    <OutputType>exe</OutputType>
     <LangVersion>7</LangVersion>
   </PropertyGroup>
 
@@ -23,11 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
-    <PackageReference Include="xunit" Version="2.2.0" />
-    <PackageReference Include="NSubstitute" Version="2.0.2" />
-    <PackageReference Include="Cake.Testing" Version="0.21.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="NSubstitute" Version="3.1.0" />
+    <PackageReference Include="Cake.Testing" Version="0.23.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -241,7 +241,7 @@ namespace Cake.Frosting.Tests.Unit
             fixture.Run();
 
             // Then
-            fixture.Strategy.Received(1).Execute(Arg.Is<CakeTask>(t => t.Name == "DummyTask"), Arg.Any<ICakeContext>());
+            fixture.Strategy.Received(1).ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == "DummyTask"), Arg.Any<ICakeContext>());
         }
 
         [Fact]
@@ -291,9 +291,9 @@ namespace Cake.Frosting.Tests.Unit
             // Then
             Received.InOrder(() =>
             {
-                fixture.Strategy.Execute(Arg.Is<CakeTask>(t => t.Name == "Clean"), Arg.Any<ICakeContext>());
-                fixture.Strategy.Execute(Arg.Is<CakeTask>(t => t.Name == "Build"), Arg.Any<ICakeContext>());
-                fixture.Strategy.Execute(Arg.Is<CakeTask>(t => t.Name == "Run-Unit-Tests"), Arg.Any<ICakeContext>());
+                fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == "Clean"), Arg.Any<ICakeContext>());
+                fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == "Build"), Arg.Any<ICakeContext>());
+                fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == "Run-Unit-Tests"), Arg.Any<ICakeContext>());
             });
         }
 

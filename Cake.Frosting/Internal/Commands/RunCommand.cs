@@ -24,7 +24,7 @@ namespace Cake.Frosting.Internal.Commands
 
         public override bool Execute(ICakeEngine engine, CakeHostOptions options)
         {
-            var report = engine.RunTarget(_context, _strategy, options.Target);
+            var report = engine.RunTargetAsync(_context, _strategy, options.Target).GetAwaiter().GetResult();
             if (report != null && !report.IsEmpty)
             {
                 _printer.Write(report);
