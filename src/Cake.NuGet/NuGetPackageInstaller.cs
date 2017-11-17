@@ -46,7 +46,7 @@ namespace Cake.NuGet
         /// <param name="toolResolver">The NuGet tool resolver.</param>
         /// <param name="contentResolver">The content resolver.</param>
         /// <param name="log">The log.</param>
-        /// <param name="config">the configuration</param>
+        /// <param name="config">The configuration.</param>
         public NuGetPackageInstaller(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
@@ -56,38 +56,13 @@ namespace Cake.NuGet
             ICakeLog log,
             ICakeConfiguration config)
         {
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (processRunner == null)
-            {
-                throw new ArgumentNullException(nameof(processRunner));
-            }
-            if (toolResolver == null)
-            {
-                throw new ArgumentNullException(nameof(toolResolver));
-            }
-            if (contentResolver == null)
-            {
-                throw new ArgumentNullException(nameof(contentResolver));
-            }
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
-
-            _fileSystem = fileSystem;
-            _environment = environment;
-            _processRunner = processRunner;
-            _toolResolver = toolResolver;
-            _contentResolver = contentResolver;
-            _log = log;
-            _config = config;
+            _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _processRunner = processRunner ?? throw new ArgumentNullException(nameof(processRunner));
+            _toolResolver = toolResolver ?? throw new ArgumentNullException(nameof(toolResolver));
+            _contentResolver = contentResolver ?? throw new ArgumentNullException(nameof(contentResolver));
+            _log = log ?? throw new ArgumentNullException(nameof(log));
+            _config = config ?? throw new ArgumentNullException(nameof(config));
         }
 
         /// <summary>
@@ -129,10 +104,12 @@ namespace Cake.NuGet
             // Create the addin directory if it doesn't exist.
             path = GetPackagePath(path.MakeAbsolute(_environment), package);
             var root = _fileSystem.GetDirectory(path);
+            var createdDirectory = false;
             if (!root.Exists)
             {
-                _log.Debug("Creating directory {0}", path);
+                _log.Debug("Creating package directory {0}...", path);
                 root.Create();
+                createdDirectory = true;
             }
 
             // Package already exist?
@@ -149,7 +126,16 @@ namespace Cake.NuGet
             }
 
             // Install the package.
-            InstallPackage(package, path);
+            if (!InstallPackage(package, path))
+            {
+                _log.Warning("An error occured while installing package {0}.", package.Package);
+                if (createdDirectory)
+                {
+                    _log.Debug("Deleting package directory {0}...", path);
+                    root.Delete(true);
+                    return Array.Empty<IFile>();
+                }
+            }
 
             // Try locating the install folder again.
             packagePath = GetPackagePath(root, package.Package);
@@ -189,7 +175,7 @@ namespace Cake.NuGet
             return root.Combine(package.Package.ToLowerInvariant());
         }
 
-        private void InstallPackage(PackageReference package, DirectoryPath path)
+        private bool InstallPackage(PackageReference package, DirectoryPath path)
         {
             _log.Debug("Installing NuGet package {0}...", package.Package);
 
@@ -208,7 +194,10 @@ namespace Cake.NuGet
                 _log.Warning("NuGet exited with {0}", exitCode);
                 var output = string.Join(Environment.NewLine, process.GetStandardOutput());
                 _log.Verbose(Verbosity.Diagnostic, "Output:\r\n{0}", output);
+                return false;
             }
+
+            return true;
         }
 
         private FilePath GetNuGetPath()

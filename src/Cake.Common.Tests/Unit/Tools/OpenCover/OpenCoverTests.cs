@@ -4,6 +4,7 @@
 
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.NUnit;
+using Cake.Common.Tools.OpenCover;
 using Cake.Common.Tools.XUnit;
 using Cake.Core.IO;
 using Cake.Testing;
@@ -306,6 +307,127 @@ namespace Cake.Common.Tests.Unit.Tools.OpenCover
                              "-targetargs:\"-argument\" " +
                              "-mergeoutput " +
                              "-register:user -output:\"/Working/result.xml\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_Exclude_Directories()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+                fixture.Settings.ExcludeDirectories.Add("dir1");
+                fixture.Settings.ExcludeDirectories.Add("dir2");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"-argument\" " +
+                             "-register:user -output:\"/Working/result.xml\" " +
+                             "-excludedirs:\"/Working/dir1;/Working/dir2\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_LogLevel()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+                fixture.Settings.LogLevel = OpenCoverLogLevel.All;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"-argument\" " +
+                             "-register:user -output:\"/Working/result.xml\" " +
+                             "-log:All", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_MergeByHash()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+                fixture.Settings.MergeByHash = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"-argument\" " +
+                             "-register:user -output:\"/Working/result.xml\" " +
+                             "-mergebyhash", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_NoDefaultFilters()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+                fixture.Settings.NoDefaultFilters = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"-argument\" " +
+                             "-register:user -output:\"/Working/result.xml\" " +
+                             "-nodefaultfilters", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_Search_Directories()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+                fixture.Settings.SearchDirectories.Add("dir1");
+                fixture.Settings.SearchDirectories.Add("dir2");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"-argument\" " +
+                             "-register:user -output:\"/Working/result.xml\" " +
+                             "-searchdirs:\"/Working/dir1;/Working/dir2\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_Service()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+                fixture.Settings.IsService = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"-argument\" " +
+                             "-register:user -output:\"/Working/result.xml\" " +
+                             "-service", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_TargetDir()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+                fixture.Settings.TargetDirectory = "TarDir";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"-argument\" " +
+                             "-register:user -output:\"/Working/result.xml\" " +
+                             "-targetdir:\"/Working/TarDir\"", result.Args);
             }
         }
     }

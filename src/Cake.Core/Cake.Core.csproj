@@ -12,7 +12,7 @@
   <PropertyGroup>
     <Description>The Cake core library.</Description>
   </PropertyGroup>
-
+  
   <!-- Import shared functionality -->
   <Import Project="..\Shared.msbuild" />
 

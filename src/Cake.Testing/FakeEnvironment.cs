@@ -146,6 +146,15 @@ namespace Cake.Testing
         }
 
         /// <summary>
+        /// Change the operating system platform family.
+        /// </summary>
+        /// <param name="family">The platform family.</param>
+        public void ChangeOperatingSystemFamily(PlatformFamily family)
+        {
+            Platform.Family = family;
+        }
+
+        /// <summary>
         /// Sets a special path.
         /// </summary>
         /// <param name="kind">The special path kind.</param>

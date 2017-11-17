@@ -3,6 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Cake.Core
 {
@@ -44,15 +47,33 @@ namespace Cake.Core
         {
             if (builder == null)
             {
-                throw new ArgumentNullException("builder");
+                throw new ArgumentNullException(nameof(builder));
             }
-
             if (other == null)
             {
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
             }
 
             builder.Task.AddDependency(other.Task.Name);
+            return builder;
+        }
+
+        /// <summary>
+        /// Makes the task a dependency of another task.
+        /// </summary>
+        /// <typeparam name="T">The task type.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="name">The name of the task the current task will be a dependency of.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{T}"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder<T> IsDependeeOf<T>(this CakeTaskBuilder<T> builder, string name)
+            where T : CakeTask
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            builder.Task.AddReverseDependency(name);
             return builder;
         }
 
@@ -136,8 +157,44 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="action">The action.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{ActionTask}"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder<ActionTask> Does(this CakeTaskBuilder<ActionTask> builder, Func<Task> action)
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+            return Does(builder, context => action());
+        }
+
+        /// <summary>
+        /// Adds an action to be executed when the task is invoked.
+        /// </summary>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{ActionTask}"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder<ActionTask> Does(this CakeTaskBuilder<ActionTask> builder, Action<ICakeContext> action)
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            builder.Task.AddAction(x =>
+            {
+                action(x);
+                return Task.CompletedTask;
+            });
+            return builder;
+        }
+
+        /// <summary>
+        /// Adds an action to be executed when the task is invoked.
+        /// </summary>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{ActionTask}"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder<ActionTask> Does(this CakeTaskBuilder<ActionTask> builder,
-            Action<ICakeContext> action)
+            Func<ICakeContext, Task> action)
         {
             if (builder == null)
             {
@@ -145,6 +202,105 @@ namespace Cake.Core
             }
 
             builder.Task.AddAction(action);
+            return builder;
+        }
+
+        /// <summary>
+        /// Adds an action to be executed foreach item in the list.
+        /// </summary>
+        /// <typeparam name="TItem">The item type.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="items">The items.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{ActionTask}"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder<ActionTask> DoesForEach<TItem>(this CakeTaskBuilder<ActionTask> builder, IEnumerable<TItem> items, Action<TItem> action)
+        {
+            return DoesForEach(builder, items, (item, context) => action(item));
+        }
+
+        /// <summary>
+        /// Adds an action to be executed foreach item in the list.
+        /// </summary>
+        /// <typeparam name="TItem">The item type.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="items">The items.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{ActionTask}"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder<ActionTask> DoesForEach<TItem>(this CakeTaskBuilder<ActionTask> builder, IEnumerable<TItem> items, Action<TItem, ICakeContext> action)
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            foreach (var item in items)
+            {
+                builder.Task.AddAction(context =>
+                {
+                    action(item, context);
+                    return Task.CompletedTask;
+                });
+            }
+            return builder;
+        }
+
+        /// <summary>
+        /// Adds an action to be executed foreach item returned by the items function.
+        /// This method will be executed the first time the task is executed.
+        /// </summary>
+        /// <typeparam name="TItem">The item type.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="itemsFunc">The items.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{ActionTask}"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder<ActionTask> DoesForEach<TItem>(this CakeTaskBuilder<ActionTask> builder, Func<IEnumerable<TItem>> itemsFunc, Action<TItem> action)
+        {
+            return DoesForEach(builder, itemsFunc, (i, c) => action(i));
+        }
+
+        /// <summary>
+        /// Adds an action to be executed foreach item returned by the items function.
+        /// This method will be executed the first time the task is executed.
+        /// </summary>
+        /// <typeparam name="TItem">The item type.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="itemsFunc">The items.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{ActionTask}"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder<ActionTask> DoesForEach<TItem>(this CakeTaskBuilder<ActionTask> builder, Func<IEnumerable<TItem>> itemsFunc, Action<TItem, ICakeContext> action)
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            builder.Task.AddDelayedAction(() =>
+            {
+                foreach (var item in itemsFunc())
+                {
+                    builder.Task.AddAction(context =>
+                    {
+                        action(item, context);
+                        return Task.CompletedTask;
+                    });
+                }
+            });
+            return builder;
+        }
+
+        /// <summary>
+        /// Defers all exceptions until after all actions for this task have completed
+        /// </summary>
+        /// <param name="builder">The task builder.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{ActionTask}"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder<ActionTask> DeferOnError(this CakeTaskBuilder<ActionTask> builder)
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            builder.Task.SetDeferExceptions(true);
             return builder;
         }
 

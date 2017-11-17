@@ -26,7 +26,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// The build ID.
         /// </value>
-        public int Id => GetEnvironmentInteger("CI_BUILD_ID");
+        public int Id => GetEnvironmentInteger("CI_JOB_ID", "CI_BUILD_ID");
 
         /// <summary>
         /// Gets the commit revision for which project is built.
@@ -34,7 +34,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// The commit revision hash.
         /// </value>
-        public string Reference => GetEnvironmentString("CI_BUILD_REF");
+        public string Reference => GetEnvironmentString("CI_COMMIT_SHA", "CI_BUILD_REF");
 
         /// <summary>
         /// Gets the commit tag name. Present only when building tags.
@@ -42,7 +42,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// The build tag name.
         /// </value>
-        public string Tag => GetEnvironmentString("CI_BUILD_TAG");
+        public string Tag => GetEnvironmentString("CI_COMMIT_TAG", "CI_BUILD_TAG");
 
         /// <summary>
         /// Gets the name of the build as defined in .gitlab-ci.yml.
@@ -50,7 +50,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// The name of the build.
         /// </value>
-        public string Name => GetEnvironmentString("CI_BUILD_NAME");
+        public string Name => GetEnvironmentString("CI_JOB_NAME", "CI_BUILD_NAME");
 
         /// <summary>
         /// Gets the name of the stage as defined in .gitlab-ci.yml.
@@ -58,7 +58,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// The name of the current stage.
         /// </value>
-        public string Stage => GetEnvironmentString("CI_BUILD_STAGE");
+        public string Stage => GetEnvironmentString("CI_JOB_STAGE", "CI_BUILD_STAGE");
 
         /// <summary>
         /// Gets the branch or tag name for which project is built.
@@ -66,7 +66,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// The branch or tag for this build.
         /// </value>
-        public string RefName => GetEnvironmentString("CI_BUILD_REF_NAME");
+        public string RefName => GetEnvironmentString("CI_COMMIT_REF_NAME", "CI_BUILD_REF_NAME");
 
         /// <summary>
         /// Gets the URL to clone the Git repository.
@@ -74,7 +74,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// The repository URL.
         /// </value>
-        public string RepoUrl => GetEnvironmentString("CI_BUILD_REPO");
+        public string RepoUrl => GetEnvironmentString("CI_REPOSITORY_URL", "CI_BUILD_REPO");
 
         /// <summary>
         /// Gets a value indicating whether the build was triggered.
@@ -82,7 +82,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// <c>True</c> if the build was triggered, otherwise <c>false</c>.
         /// </value>
-        public bool Triggered => GetEnvironmentBoolean("CI_BUILD_TRIGGERED");
+        public bool Triggered => GetEnvironmentBoolean("CI_PIPELINE_TRIGGERED", "CI_BUILD_TRIGGERED");
 
         /// <summary>
         /// Gets a value indicating whether the build was manually started.
@@ -90,7 +90,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// <c>True</c> if the build was started manually, otherwise <c>false</c>.
         /// </value>
-        public bool Manual => GetEnvironmentBoolean("CI_BUILD_MANUAL");
+        public bool Manual => GetEnvironmentBoolean("CI_JOB_MANUAL", "CI_BUILD_MANUAL");
 
         /// <summary>
         /// Gets the token used for authenticating with the GitLab Container Registry.
@@ -98,7 +98,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// The build authorisation token.
         /// </value>
-        public string Token => GetEnvironmentString("CI_BUILD_TOKEN");
+        public string Token => GetEnvironmentString("CI_JOB_TOKEN", "CI_BUILD_TOKEN");
 
         /// <summary>
         /// Gets the unique id of the current pipeline that GitLab CI uses internally.

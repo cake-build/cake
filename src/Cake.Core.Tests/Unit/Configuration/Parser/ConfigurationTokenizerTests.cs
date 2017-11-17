@@ -20,7 +20,7 @@ namespace Cake.Core.Tests.Unit.Configuration.Parser
                 var result = ConfigurationTokenizer.Tokenize("; Hello World");
 
                 // Then
-                Assert.Equal(0, result.Count);
+                Assert.Empty(result);
             }
 
             [Fact]
@@ -30,7 +30,7 @@ namespace Cake.Core.Tests.Unit.Configuration.Parser
                 var result = ConfigurationTokenizer.Tokenize("[TheSection]");
 
                 // Then
-                Assert.Equal(1, result.Count);
+                Assert.Single(result);
                 Assert.Equal(ConfigurationTokenKind.Section, result[0].Kind);
                 Assert.Equal("TheSection", result[0].Value);
             }

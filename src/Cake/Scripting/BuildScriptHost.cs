@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.Scripting;
@@ -38,10 +39,10 @@ namespace Cake.Scripting
         /// </summary>
         /// <param name="target">The target to run.</param>
         /// <returns>The resulting report.</returns>
-        public override CakeReport RunTarget(string target)
+        public override async Task<CakeReport> RunTargetAsync(string target)
         {
             var strategy = new DefaultExecutionStrategy(_log);
-            var report = Engine.RunTarget(Context, strategy, target);
+            var report = await Engine.RunTargetAsync(Context, strategy, target).ConfigureAwait(false);
             if (report != null && !report.IsEmpty)
             {
                 _reportPrinter.Write(report);

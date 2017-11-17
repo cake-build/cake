@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -107,6 +108,7 @@ namespace Cake.Common.Tools.NUnit
         /// <c>true</c> if a full report of test results should be printed;
         /// otherwise, <c>false</c>.
         /// </value>
+        [Obsolete("This argument was removed from NUnit3", false)]
         public bool Full { get; set; }
 
         /// <summary>
@@ -127,8 +129,9 @@ namespace Cake.Common.Tools.NUnit
         /// Gets or sets a value specifying whether to write test case names to the output.
         /// </summary>
         /// <value>
-        /// <c>On</c> to write labels for tests that are run or <c>All</c> to write labels
-        /// for all tests.
+        /// <c>On</c> to write labels for tests that are run,<c>All</c> to write labels
+        /// for all tests,<c>Before</c> to write labels at the start of every test
+        /// ,or <c>After</c> to write labels at the end of every test.
         /// </value>
         public NUnit3Labels Labels { get; set; }
 
@@ -162,6 +165,7 @@ namespace Cake.Common.Tools.NUnit
         /// <value>
         /// <c>true</c> shows additional information as the tests run; otherwise, <c>false</c>.
         /// </value>
+        [Obsolete("This argument was removed from NUnit3", false)]
         public bool Verbose { get; set; }
 
         /// <summary>

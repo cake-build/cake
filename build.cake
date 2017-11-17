@@ -1,7 +1,7 @@
 // Install addins.
-#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Coveralls&version=0.4.0"
-#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Twitter&version=0.4.0"
-#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Gitter&version=0.5.0"
+#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Coveralls&version=0.7.0"
+#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Twitter&version=0.6.0"
+#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Gitter&version=0.7.0"
 
 // Install tools.
 #tool "nuget:https://www.nuget.org/api/v2?package=gitreleasemanager&version=0.5.0"
@@ -54,7 +54,7 @@ Setup(context =>
     if(!parameters.IsRunningOnWindows)
     {
         var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
-        
+
         // Use FrameworkPathOverride when not running on Windows.
         Information("Build will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
         msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
@@ -159,7 +159,7 @@ Task("Copy-Files")
     // .NET 4.6
     DotNetCorePublish("./src/Cake", new DotNetCorePublishSettings
     {
-        Framework = "net46",
+        Framework = "net461",
         VersionSuffix = parameters.Version.DotNetAsterix,
         Configuration = parameters.Configuration,
         OutputDirectory = parameters.Paths.Directories.ArtifactsBinFullFx,
@@ -180,7 +180,7 @@ Task("Copy-Files")
     CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinNetCore);
 
     // Copy Cake.XML (since publish does not do this anymore)
-    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/net46/Cake.xml", parameters.Paths.Directories.ArtifactsBinFullFx);
+    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/net461/Cake.xml", parameters.Paths.Directories.ArtifactsBinFullFx);
     CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/netcoreapp1.0/Cake.xml", parameters.Paths.Directories.ArtifactsBinNetCore);
 });
 
@@ -213,7 +213,7 @@ Task("Create-Chocolatey-Packages")
             Version = parameters.Version.SemVersion,
             ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
             OutputDirectory = parameters.Paths.Directories.NugetRoot,
-            Files = GetFiles(netFxFullArtifactPath + "/**/*")
+            Files = (GetFiles(netFxFullArtifactPath + "/**/*") + GetFiles("./nuspec/*.txt"))
                                     .Where(file => file.FullPath.IndexOf("/runtimes/", StringComparison.OrdinalIgnoreCase) < 0)
                                     .Select(file=>"../" + file.FullPath.Substring(curDirLength))
                                     .Select(file=> new ChocolateyNuSpecContent { Source = file })

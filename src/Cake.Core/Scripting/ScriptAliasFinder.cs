@@ -107,7 +107,10 @@ namespace Cake.Core.Scripting
 
                 // Import the method's namespace to the session.
                 var methodNamespace = method.GetNamespace();
-                namespaces.Add(methodNamespace);
+                if (!string.IsNullOrWhiteSpace(methodNamespace))
+                {
+                    namespaces.Add(methodNamespace);
+                }
 
                 // Find out if the method want us to import more namespaces.
                 var namespaceAttributes = method.GetCustomAttributes<CakeNamespaceImportAttribute>();

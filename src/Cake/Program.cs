@@ -9,6 +9,7 @@ using Cake.Arguments;
 using Cake.Common.Modules;
 using Cake.Composition;
 using Cake.Core;
+using Cake.Core.Composition;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.Modules;
@@ -44,7 +45,6 @@ namespace Cake
                 builder.RegisterModule(new CakeModule());
                 builder.RegisterModule(new CoreModule());
                 builder.RegisterModule(new CommonModule());
-                builder.RegisterModule(new NuGetModule());
 
                 // Build the container.
                 using (var container = builder.Build())
@@ -67,6 +67,12 @@ namespace Cake
                     builder.RegisterModule(new ScriptingModule(options, log));
                     builder.Update(container);
 
+                    // Register the NuGetModule
+                    builder = new ContainerRegistrar();
+                    var configuration = container.Resolve<ICakeConfiguration>();
+                    builder.RegisterModule(new NuGetModule(configuration));
+                    builder.Update(container);
+
                     // Load all modules.
                     var loader = container.Resolve<ModuleLoader>();
                     loader.LoadModules(container, options);
@@ -78,17 +84,30 @@ namespace Cake
             }
             catch (Exception ex)
             {
-                log = log ?? new CakeBuildLog(new CakeConsole());
-                if (log.Verbosity == Verbosity.Diagnostic)
-                {
-                    log.Error("Error: {0}", ex);
-                }
-                else
-                {
-                    log.Error("Error: {0}", ex.Message);
-                }
-                return 1;
+                return LogException(log, ex);
             }
+        }
+
+        private static int LogException<T>(ICakeLog log, T ex) where T : Exception
+        {
+            log = log ?? new CakeBuildLog(new CakeConsole());
+            if (log.Verbosity == Verbosity.Diagnostic)
+            {
+                log.Error("Error: {0}", ex);
+            }
+            else
+            {
+                log.Error("Error: {0}", ex.Message);
+                var aex = ex as AggregateException;
+                if (aex != null)
+                {
+                    foreach (var exception in aex.InnerExceptions)
+                    {
+                        log.Error("\t{0}", exception.Message);
+                    }
+                }
+            }
+            return 1;
         }
     }
 }

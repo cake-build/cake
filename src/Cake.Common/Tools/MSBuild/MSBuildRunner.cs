@@ -8,7 +8,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
@@ -72,7 +71,7 @@ namespace Cake.Common.Tools.MSBuild
             }
 
             // Set the verbosity.
-            builder.Append(string.Format(CultureInfo.InvariantCulture, "/v:{0}", GetVerbosityName(settings.Verbosity)));
+            builder.Append(string.Format(CultureInfo.InvariantCulture, "/v:{0}", settings.Verbosity.GetMSBuildVerbosityName()));
 
             if (settings.NodeReuse != null)
             {
@@ -133,6 +132,53 @@ namespace Cake.Common.Tools.MSBuild
                 {
                     builder.Append(argument);
                 }
+            }
+
+            // Use binary logging?
+            if (settings.BinaryLogger != null && settings.BinaryLogger.Enabled)
+            {
+                string binaryOptions = null;
+                if (!string.IsNullOrEmpty(settings.BinaryLogger.FileName))
+                {
+                    binaryOptions = settings.BinaryLogger.FileName;
+                }
+
+                if (settings.BinaryLogger.Imports != MSBuildBinaryLogImports.Unspecified)
+                {
+                    if (!string.IsNullOrEmpty(binaryOptions))
+                    {
+                        binaryOptions = binaryOptions + ";";
+                    }
+
+                    binaryOptions = binaryOptions + "ProjectImports=" + settings.BinaryLogger.Imports;
+                }
+
+                if (string.IsNullOrEmpty(binaryOptions))
+                {
+                    builder.Append("/bl");
+                }
+                else
+                {
+                    builder.Append("/bl:" + binaryOptions);
+                }
+            }
+
+            // Treat errors as warníngs?
+            if (settings.WarningsAsErrorCodes.Any())
+            {
+                var codes = string.Join(";", settings.WarningsAsErrorCodes);
+                builder.Append($"/warnaserror:{codes.Quote()}");
+            }
+            else if (settings.WarningsAsError)
+            {
+                builder.Append("/warnaserror");
+            }
+
+            // Any warnings to NOT treat as errors?
+            if (settings.WarningsAsMessageCodes.Any())
+            {
+                var codes = string.Join(";", settings.WarningsAsMessageCodes);
+                builder.Append($"/warnasmessage:{codes.Quote()}");
             }
 
             // Add the solution as the last parameter.
@@ -198,31 +244,13 @@ namespace Cake.Common.Tools.MSBuild
             }
         }
 
-        private static string GetVerbosityName(Verbosity verbosity)
-        {
-            switch (verbosity)
-            {
-                case Verbosity.Quiet:
-                    return "quiet";
-                case Verbosity.Minimal:
-                    return "minimal";
-                case Verbosity.Normal:
-                    return "normal";
-                case Verbosity.Verbose:
-                    return "detailed";
-                case Verbosity.Diagnostic:
-                    return "diagnostic";
-            }
-            throw new CakeException("Encountered unknown MSBuild build log verbosity.");
-        }
-
         private static IEnumerable<string> GetPropertyArguments(IDictionary<string, IList<string>> properties)
         {
             foreach (var propertyKey in properties.Keys)
             {
                 foreach (var propertyValue in properties[propertyKey])
                 {
-                    yield return string.Concat("/p:", propertyKey, "=", propertyValue);
+                    yield return string.Concat("/p:", propertyKey, "=", propertyValue.EscapeMSBuildPropertySpecialCharacters());
                 }
             }
         }

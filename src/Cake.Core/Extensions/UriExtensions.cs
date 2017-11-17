@@ -43,7 +43,7 @@ namespace Cake.Core
                     }
                 }
             }
-            return result.ToDictionary(kv => kv.Key, kv => kv.Value as IReadOnlyList<string>);
+            return result.ToDictionary(kv => kv.Key, kv => kv.Value as IReadOnlyList<string>, StringComparer.OrdinalIgnoreCase);
         }
     }
 }

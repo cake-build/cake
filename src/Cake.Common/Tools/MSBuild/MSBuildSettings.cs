@@ -18,6 +18,8 @@ namespace Cake.Common.Tools.MSBuild
         private readonly Dictionary<string, IList<string>> _properties;
         private readonly List<MSBuildLogger> _loggers;
         private readonly List<MSBuildFileLogger> _fileLoggers;
+        private readonly HashSet<string> _warningsAsErrorCodes;
+        private readonly HashSet<string> _warningsAsMessageCodes;
 
         /// <summary>
         /// Gets the targets.
@@ -104,6 +106,29 @@ namespace Cake.Common.Tools.MSBuild
         public ICollection<MSBuildFileLogger> FileLoggers => _fileLoggers;
 
         /// <summary>
+        /// Gets or sets the binary logging options
+        /// </summary>
+        public MSBuildBinaryLogSettings BinaryLogger { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether warnings should be treated as errors.
+        /// Treats all warnings as errors unless <see cref="WarningsAsErrorCodes"/> has specific codes specified.
+        /// </summary>
+        public bool WarningsAsError { get; set; }
+
+        /// <summary>
+        /// Gets the warning codes to treat as errors.
+        /// If any specified <seealso cref="WarningsAsError"/> will implicitly be treated as true.
+        /// </summary>
+        public ISet<string> WarningsAsErrorCodes => _warningsAsErrorCodes;
+
+        /// <summary>
+        /// Gets the warning codes to NOT treat as errors.
+        /// </summary>
+        /// <remarks>Only available MSBuild version 15 (VS2017) and newer.</remarks>
+        public ISet<string> WarningsAsMessageCodes => _warningsAsMessageCodes;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MSBuildSettings"/> class.
         /// </summary>
         public MSBuildSettings()
@@ -112,6 +137,8 @@ namespace Cake.Common.Tools.MSBuild
             _properties = new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
             _loggers = new List<MSBuildLogger>();
             _fileLoggers = new List<MSBuildFileLogger>();
+            _warningsAsErrorCodes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            _warningsAsMessageCodes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             ToolVersion = MSBuildToolVersion.Default;
             Configuration = string.Empty;

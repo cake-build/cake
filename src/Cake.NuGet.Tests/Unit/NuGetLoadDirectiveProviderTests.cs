@@ -31,20 +31,7 @@ namespace Cake.NuGet.Tests.Unit
 
         public sealed class TheLoadMethod
         {
-            [RuntimeFact(TestRuntime.CoreClr)]
-            public void Should_Throw_On_NET_Core()
-            {
-                // Given
-                var fixture = new NuGetLoadDirectiveProviderFixture();
-
-                // When
-                var result = Record.Exception(() => fixture.Load());
-
-                // Then
-                AssertEx.IsExceptionWithMessage<NotSupportedException>(result, "The NuGet provider for #load is not supported on .NET Core.");
-            }
-
-            [RuntimeFact(TestRuntime.Clr)]
+            [Fact]
             public void Should_Install_Package()
             {
                 // Given
@@ -57,7 +44,7 @@ namespace Cake.NuGet.Tests.Unit
                 Assert.Equal("nuget:?package=Cake.Recipe&include=./**/*.cake", result.Package.OriginalString);
             }
 
-            [RuntimeFact(TestRuntime.Clr)]
+            [Fact]
             public void Should_Install_Correct_Package_Type()
             {
                 // Given
@@ -70,7 +57,7 @@ namespace Cake.NuGet.Tests.Unit
                 Assert.Equal(PackageType.Tool, result.PackageType);
             }
 
-            [RuntimeFact(TestRuntime.Clr)]
+            [Fact]
             public void Should_Install_Package_In_The_Tools_Directory()
             {
                 // Given
@@ -83,7 +70,7 @@ namespace Cake.NuGet.Tests.Unit
                 Assert.Equal("/Working/tools", result.InstallPath.FullPath);
             }
 
-            [RuntimeFact(TestRuntime.Clr)]
+            [Fact]
             public void Should_Install_Package_In_Custom_Tools_Directory_If_Specified_In_Configuration()
             {
                 // Given
@@ -97,7 +84,7 @@ namespace Cake.NuGet.Tests.Unit
                 Assert.Equal("/Working/Bar", result.InstallPath.FullPath);
             }
 
-            [RuntimeFact(TestRuntime.Clr)]
+            [Fact]
             public void Should_Analyze_Installed_Cake_Scripts()
             {
                 // Given
@@ -109,11 +96,11 @@ namespace Cake.NuGet.Tests.Unit
                 var result = fixture.Load();
 
                 // Then
-                Assert.Equal(1, result.AnalyzedFiles.Count);
+                Assert.Single(result.AnalyzedFiles);
                 Assert.Equal("/Working/tools/Cake.Recipe/file.cake", result.AnalyzedFiles[0].FullPath);
             }
 
-            [RuntimeFact(TestRuntime.Clr)]
+            [Fact]
             public void Should_Write_To_Log_If_No_Scripts_Were_Found()
             {
                 // Given

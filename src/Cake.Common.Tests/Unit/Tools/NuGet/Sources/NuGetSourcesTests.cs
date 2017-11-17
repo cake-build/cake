@@ -37,7 +37,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             {
                 // Given
                 var fixture = new NuGetAddSourceFixture();
-                fixture.Name = string.Empty;
+                fixture.Name = name;
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
@@ -67,7 +67,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             {
                 // Given
                 var fixture = new NuGetAddSourceFixture();
-                fixture.Source = string.Empty;
+                fixture.Source = source;
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
@@ -271,6 +271,21 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 Assert.Equal("sources Add -Name \"name\" -Source \"source\" " +
                              "-NonInteractive -StorePasswordInClearText", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_ConfigFile_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new NuGetAddSourceFixture();
+                fixture.Settings.ConfigFile = "./src/NuGet.config";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("sources Add -Name \"name\" -Source \"source\" " +
+                             "-ConfigFile \"src/NuGet.config\" -NonInteractive", result.Args);
+            }
         }
 
         public sealed class TheRemoveSourceMethod
@@ -296,7 +311,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             {
                 // Given
                 var fixture = new NuGetRemoveSourceFixture();
-                fixture.Name = string.Empty;
+                fixture.Name = name;
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
@@ -326,7 +341,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             {
                 // Given
                 var fixture = new NuGetRemoveSourceFixture();
-                fixture.Source = string.Empty;
+                fixture.Source = source;
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
@@ -506,6 +521,22 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
                 Assert.Equal("sources Remove -Name \"name\" " +
                              "-Source \"source\" -NonInteractive", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_ConfigFile_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new NuGetRemoveSourceFixture();
+                fixture.GivenExistingSource();
+                fixture.Settings.ConfigFile = "./src/NuGet.config";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("sources Remove -Name \"name\" -Source \"source\" " +
+                             "-ConfigFile \"src/NuGet.config\" -NonInteractive", result.Args);
+            }
         }
 
         public sealed class TheHasSourceMethod
@@ -531,7 +562,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
             {
                 // Given
                 var fixture = new NuGetHasSourceFixture();
-                fixture.Source = string.Empty;
+                fixture.Source = source;
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
@@ -552,6 +583,47 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "settings");
+            }
+
+            [Fact]
+            public void Should_Add_Mandatory_Arguments()
+            {
+                // Given
+                var fixture = new NuGetHasSourceFixture();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("sources List -NonInteractive", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_ConfigFile_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new NuGetHasSourceFixture();
+                fixture.Settings.ConfigFile = "./src/NuGet.config";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("sources List -ConfigFile \"src/NuGet.config\" -NonInteractive", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Argument_Customization()
+            {
+                // Given
+                var fixture = new NuGetHasSourceFixture();
+                fixture.Settings.ArgumentCustomization = arg => arg.Append("-Foo");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("sources List -NonInteractive -Foo", result.Args);
             }
         }
     }

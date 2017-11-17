@@ -71,8 +71,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = fixture.CreateAndReturnContent();
 
                 // Then
-                Assert.True(result.Contains("Imports System.Reflection"));
-                Assert.True(result.Contains("<Assembly: AssemblyTitle(\"TheTitle\")>"));
+                Assert.Contains("Imports System.Reflection", result);
+                Assert.Contains("<Assembly: AssemblyTitle(\"TheTitle\")>", result);
             }
 
             [Fact]
@@ -86,8 +86,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = fixture.CreateAndReturnContent();
 
                 // Then
-                Assert.True(result.Contains("Imports System.Reflection"));
-                Assert.True(result.Contains("<Assembly: AssemblyDescription(\"TheDescription\")>"));
+                Assert.Contains("Imports System.Reflection", result);
+                Assert.Contains("<Assembly: AssemblyDescription(\"TheDescription\")>", result);
             }
 
             [Fact]
@@ -101,8 +101,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = fixture.CreateAndReturnContent();
 
                 // Then
-                Assert.True(result.Contains("Imports System.Runtime.InteropServices"));
-                Assert.True(result.Contains("<Assembly: Guid(\"TheGuid\")>"));
+                Assert.Contains("Imports System.Runtime.InteropServices", result);
+                Assert.Contains("<Assembly: Guid(\"TheGuid\")>", result);
             }
 
             [Fact]
@@ -116,8 +116,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = fixture.CreateAndReturnContent();
 
                 // Then
-                Assert.True(result.Contains("Imports System.Reflection"));
-                Assert.True(result.Contains("<Assembly: AssemblyCompany(\"TheCompany\")>"));
+                Assert.Contains("Imports System.Reflection", result);
+                Assert.Contains("<Assembly: AssemblyCompany(\"TheCompany\")>", result);
             }
 
             [Fact]
@@ -131,8 +131,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = fixture.CreateAndReturnContent();
 
                 // Then
-                Assert.True(result.Contains("Imports System.Reflection"));
-                Assert.True(result.Contains("<Assembly: AssemblyProduct(\"TheProduct\")>"));
+                Assert.Contains("Imports System.Reflection", result);
+                Assert.Contains("<Assembly: AssemblyProduct(\"TheProduct\")>", result);
             }
 
             [Fact]
@@ -146,8 +146,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = fixture.CreateAndReturnContent();
 
                 // Then
-                Assert.True(result.Contains("Imports System.Reflection"));
-                Assert.True(result.Contains("<Assembly: AssemblyCopyright(\"TheCopyright\")>"));
+                Assert.Contains("Imports System.Reflection", result);
+                Assert.Contains("<Assembly: AssemblyCopyright(\"TheCopyright\")>", result);
             }
 
             [Fact]
@@ -161,8 +161,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = fixture.CreateAndReturnContent();
 
                 // Then
-                Assert.True(result.Contains("Imports System.Reflection"));
-                Assert.True(result.Contains("<Assembly: AssemblyTrademark(\"TheTrademark\")>"));
+                Assert.Contains("Imports System.Reflection", result);
+                Assert.Contains("<Assembly: AssemblyTrademark(\"TheTrademark\")>", result);
             }
 
             [Fact]
@@ -176,8 +176,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = fixture.CreateAndReturnContent();
 
                 // Then
-                Assert.True(result.Contains("Imports System.Reflection"));
-                Assert.True(result.Contains("<Assembly: AssemblyVersion(\"TheVersion\")>"));
+                Assert.Contains("Imports System.Reflection", result);
+                Assert.Contains("<Assembly: AssemblyVersion(\"TheVersion\")>", result);
             }
 
             [Fact]
@@ -191,8 +191,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = fixture.CreateAndReturnContent();
 
                 // Then
-                Assert.True(result.Contains("Imports System.Reflection"));
-                Assert.True(result.Contains("<Assembly: AssemblyFileVersion(\"TheFileVersion\")>"));
+                Assert.Contains("Imports System.Reflection", result);
+                Assert.Contains("<Assembly: AssemblyFileVersion(\"TheFileVersion\")>", result);
             }
 
             [Fact]
@@ -206,8 +206,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = fixture.CreateAndReturnContent();
 
                 // Then
-                Assert.True(result.Contains("Imports System.Reflection"));
-                Assert.True(result.Contains("<Assembly: AssemblyInformationalVersion(\"TheInformationalVersion\")>"));
+                Assert.Contains("Imports System.Reflection", result);
+                Assert.Contains("<Assembly: AssemblyInformationalVersion(\"TheInformationalVersion\")>", result);
             }
 
             [Fact]
@@ -221,8 +221,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = fixture.CreateAndReturnContent();
 
                 // Then
-                Assert.True(result.Contains("Imports System.Runtime.InteropServices"));
-                Assert.True(result.Contains("<Assembly: ComVisible(true)>"));
+                Assert.Contains("Imports System.Runtime.InteropServices", result);
+                Assert.Contains("<Assembly: ComVisible(true)>", result);
             }
 
             [Fact]
@@ -236,8 +236,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = fixture.CreateAndReturnContent();
 
                 // Then
-                Assert.True(result.Contains("Imports System"));
-                Assert.True(result.Contains("<Assembly: CLSCompliant(true)>"));
+                Assert.Contains("Imports System", result);
+                Assert.Contains("<Assembly: CLSCompliant(true)>", result);
             }
 
             [Fact]
@@ -251,8 +251,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = fixture.CreateAndReturnContent();
 
                 // Then
-                Assert.True(result.Contains("Imports System.Runtime.CompilerServices"));
-                Assert.True(result.Contains("<Assembly: InternalsVisibleTo(\"Assembly1.Tests\")>"));
+                Assert.Contains("Imports System.Runtime.CompilerServices", result);
+                Assert.Contains("<Assembly: InternalsVisibleTo(\"Assembly1.Tests\")>", result);
             }
 
             [Fact]
@@ -266,10 +266,10 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = fixture.CreateAndReturnContent();
 
                 // Then
-                Assert.True(result.Contains("Imports System.Runtime.CompilerServices"));
-                Assert.True(result.Contains("<Assembly: InternalsVisibleTo(\"Assembly1.Tests\")>"));
-                Assert.True(result.Contains("<Assembly: InternalsVisibleTo(\"Assembly2.Tests\")>"));
-                Assert.True(result.Contains("<Assembly: InternalsVisibleTo(\"Assembly3.Tests\")>"));
+                Assert.Contains("Imports System.Runtime.CompilerServices", result);
+                Assert.Contains("<Assembly: InternalsVisibleTo(\"Assembly1.Tests\")>", result);
+                Assert.Contains("<Assembly: InternalsVisibleTo(\"Assembly2.Tests\")>", result);
+                Assert.Contains("<Assembly: InternalsVisibleTo(\"Assembly3.Tests\")>", result);
             }
 
             [Fact]
@@ -283,8 +283,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = fixture.CreateAndReturnContent();
 
                 // Then
-                Assert.True(result.Contains("Imports System.Reflection"));
-                Assert.True(result.Contains("<Assembly: AssemblyConfiguration(\"TheConfiguration\")>"));
+                Assert.Contains("Imports System.Reflection", result);
+                Assert.Contains("<Assembly: AssemblyConfiguration(\"TheConfiguration\")>", result);
             }
 
             [Fact]
@@ -298,8 +298,8 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 var result = fixture.CreateAndReturnContent();
 
                 // Then
-                Assert.True(result.Contains("Imports Test.NameSpace"));
-                Assert.True(result.Contains("<Assembly: TestAttribute(\"TestValue\")>"));
+                Assert.Contains("Imports Test.NameSpace", result);
+                Assert.Contains("<Assembly: TestAttribute(\"TestValue\")>", result);
             }
         }
     }

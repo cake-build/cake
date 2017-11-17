@@ -1,9 +1,92 @@
-### New on 0.21.1 (Released 2017/07/15)
+### New in 0.23.0 (Released 2017/10/11)
+
+* 1805 Change GitVersion settings to use nullable integer
+* 1856 Support MSBuild warnaserror and warnasmessage arguments
+* 1821 Missing Cake method for nuget list
+* 1818 Support task dependees (reverse dependencies)
+* 1766 Support for #define
+* 1032 Support async callbacks
+* 1853 The "using static" directive doesn't compile
+* 1843 NuGetContentResolver should not return ref assemblies.
+* 1842 Params in URI pre-processor directives are case sensitive
+* 1838 Dependencies are installed but have no references added when using LoadDependencies=true with in process nuget client
+* 1831 CleanDirectories Throws NullReferenceException When Token Is Null
+* 1815 Exception Message should be shown rather than "One or more errors occurred."
+* 1404 MsBuildSettings.WithProperty does not escape values
+* 1840 Fix Chocolatey Package
+* 1804 Unable to execute when namespace-less assembly with CakeMethodAlias is referenced
+* 1731 GitLabCI variable changes.
+* 1632 Tasks with long names do not display nicely with showdescription
+* 1607 ToolResolutionStrategy fails unexpectedly with Cake.LongPath.Module
+* 1548 LogExtension colorizes output incorrectly
+* 1547 Escaping curly braces in log messages
+* 787 Reference NuGet dependencies installed via the #addin directive
+* 1835 Fixed typo in installer scripts
+* 1814 Fix typo: envrionment
+
+### New in 0.22.2 (Released 2017/09/17)
+
+* 1807 NuGetVersion and CommitDate are null with 0.22.1
+
+### New in 0.22.1 (Released 2017/09/15)
+
+* 1798 GitVersion error on build on master branch with version 0.22.0
+
+### New in 0.22.0 (Released 2017/09/13)
+
+* 1785 Bump LatestBreakingChange to 0.22.0
+* 1745 Change parameter for InstallTools and InstallAddins in IScriptProcessor
+* 1720 ILRepackSettings.Libs should be List of DirectoryPath
+* 1719 Jenkins BRANCH_NAME is missing
+* 1714 Updated CakeRuntime.TargetVersion to net462.
+* 1674 MSBuildFileLogger LogFile is a string and not a FilePath
+* 1665 NUnit3Settings: Params and multiple results
+* 1651 NUnit3Settings Verbose flag obsoleted by NUnit console runner
+* 1614 Correct the class that TeamCityEnvironmentInfo inherits from
+* 1597 CommitsSinceVersionSource and PreReleaseNumber as Integer
+* 1564 DeleteDirectory cannot delete read-only files
+* 1540 Upgrade to Roslyn 2.0
+* 1791 Add option to enable MSBuild binary logging
+* 1771 Look for msbuild in default install path on Linux
+* 1761 DoesForEach() extension method
+* 1754 VSWhere not returning prerelease versions
+* 1743 Implement functionality in Cake.NuGet for downloading packages
+* 1734 Add GitLink 3 compatible aliases
+* 1710 Add alias for simple sub-directory listing
+* 1699 NuGetPackSettings missing language/locale ID for the package
+* 1670 OpenCover is missing some commandline parameter (for example mergebyhash)
+* 1667 Add support for choco download internalize-all-urls
+* 1621 Add overload for StartProcess which also returns redircted error output
+* 1775 Strange usage of Cake.Core.dll when executing cake sub process
+* 1773 NuGetHasSource call do not take care of ArgumentCustomization in NuGetSourcesSettings
+* 1759 XmlPoke always writes the xmldeclaration even if the original file didn't have one
+* 1742 Some unit tests are locale-sensitive
+* 1739 NuGetContentResolver can't find assemblies if located in root
+* 1738 NuGetInstaller can't resolve files if package contains dependencies
+* 1697 CakeContextAdapter do not implement ICakeContext
+* 1694 Addin directive shouldn't attempt to load native assemblies
+* 1693 Possible bug when setting process environment variable
+* 1625 Comma in msbuild commands are not escaped
+* 1602 MSBuildFileLogger Verbosity does not accept Verbosity.Verbose
+* 1537 XmlPeek not working correctly for element nodes
+* 1422 Error: Unkown token when directory contains multibyte characters
+* 1752 Extend DownloadFile to allow AcceptEncoding gzip
+* 1746 ScriptAnalyzer.Analyze() should not throw - instead return list of errors
+* 1704 Move CakeConsole & CakeBuildLog to Cake.Core and made CakeConfiguration public
+* 1512 Please support C*  7 and Roslyn v2
+* 753 Tool Versioning
+* 1787 Add opt-out config information to assembly version verification error message
+* 1780 Fix typo in version.cake
+* 1727 Incorrect documentation for XmlPeek Alias
+* 1700 Update nuget license url
+* 1525 Updated examples for DotNetCoreTest
+
+### New in 0.21.1 (Released 2017/07/15)
 
 * 1685 Add DotNetCoreTool alias overload that takes DotNetCoreToolSettings parameter
 * 1686 AssemblyLoadContext root path is relative
 
-### New on 0.21.0 (Released 2017/07/14)
+### New in 0.21.0 (Released 2017/07/14)
 
 * 1533 Update DotNetCore Aliases to match tooling 1.0
 * 1554 Updated DotNetCoreTest inline with Tooling v1.0
@@ -23,7 +106,7 @@
 * 1673 The xunit.runners package was deprecated
 * 1654 Broken Documentation link for ReportUnit
 
-### New on 0.20.0 (Released 2017/06/12)
+### New in 0.20.0 (Released 2017/06/12)
 
 * 1539 Update solution to Visual Studio 2017
 * 1640 Fetch version from solutioninfo & remove newtonsoft dependency
@@ -37,35 +120,35 @@
 * 1604 Fix the contribution guidelines link in the README
 * 1595 Add Alistair and Martin names to all required places
 
-### New on 0.19.5 (Released 2017/05/04)
+### New in 0.19.5 (Released 2017/05/04)
 
 * 1587 Arguments missing for Octopus Deploy tool
 
-### New on 0.19.4 (Released 2017/04/19)
+### New in 0.19.4 (Released 2017/04/19)
 
 * 1556 TeamCity BuildNumber is a string
 * 1566 Generic alias methods with type constraints fail compilation
 
-### New on 0.19.3 (Released 2017/04/03)
+### New in 0.19.3 (Released 2017/04/03)
 
 * 1544 Windows 10 SDK path is not being resolved
 
-### New on 0.19.2 (Released 2017/04/01)
+### New in 0.19.2 (Released 2017/04/01)
 
 * 1546 MSBuild Logger Path are not correctly quoted
 
-### New on 0.19.1 (Released 2017/03/24)
+### New in 0.19.1 (Released 2017/03/24)
 
 * 1543 VSWhere aliases should return Directory Paths and not File Paths
 
-### New on 0.19.0 (Released 2017/03/23)
+### New in 0.19.0 (Released 2017/03/23)
 
 * Add VSWhere support
 * Error: SignTool SIGN: Password is required with Certificate path but not specified.
 * MSBuild on Mac/Linux
 * Categorize logging aliases by level
 
-### New on 0.18.0 (Released 2017/03/07)
+### New in 0.18.0 (Released 2017/03/07)
 
 * Remove obsoleted DNU aliases
 * WiXHeat misleading signature- no mode operates on file list
@@ -124,7 +207,7 @@
 * Fix typo in comment
 * Fixed Spelling Mistake.
 
-### New on 0.17.0 (Released 2016/11/09)
+### New in 0.17.0 (Released 2016/11/09)
 
 * Allow custom loggers in the VSTestSettings
 * Add support for InnoSetup
@@ -169,16 +252,16 @@
 * Corrects the grammar "do/does" in exception messages and tests
 * Adds default CPU count behavior to MSBuild settings documentation
 
-### New on 0.16.2 (Released 2016/10/11)
+### New in 0.16.2 (Released 2016/10/11)
 
 * Fixed CakeExecuteScript getting access denied errors on mono/m
 
-### New on 0.16.1 (Released 2016/09/25)
+### New in 0.16.1 (Released 2016/09/25)
 
 * Issue with debugging in v0.16.0 (.NET Core)
 * Add missing assembly properties
 
-### New on 0.16.0 (Released 2016/09/15)
+### New in 0.16.0 (Released 2016/09/15)
 
 * Change API for registering dependencies with Cake
 * Add include & exlude parameters to #tool directive
@@ -191,16 +274,16 @@
 * Implement custom logger support for MSBuild
 * Support MSBuild logger switches
 
-### New on 0.15.2 (Released 2016/07/29)
+### New in 0.15.2 (Released 2016/07/29)
 
 * Ensured that WiX candle definitions are enclosed in quotes
 * Corrected issue with WixHeat HarvestType Out parameter
 
-### New on 0.15.1 (Released 2016/07/28)
+### New in 0.15.1 (Released 2016/07/28)
 
 * Corrected Issues found with 0.15.0 AppVeyor updates
 
-### New on 0.15.0 (Released 2016/07/26)
+### New in 0.15.0 (Released 2016/07/26)
 
 * Add support for adding messages to the AppVeyor build log
 * Add environment variable support for Process & Tool
@@ -236,7 +319,7 @@
 * Corrected code example for DotNetCorePackSettings
 * Add example documentation to aliases
 
-### New on 0.14.0 (Released 2016/07/11)
+### New in 0.14.0 (Released 2016/07/11)
 
 * Remove obsoleted XmlPoke Aliases
 * ToolSettings should allow should support of exit codes other than 0
@@ -257,7 +340,7 @@
 * Corrected documentation for DotNetBuild Alias
 
 
-### New on 0.13.0 (Released 2016/06/07)
+### New in 0.13.0 (Released 2016/06/07)
 
 * DotNetCoreTest() alias calls DotNetCoreRun()
 * Fix DotNet CLI multi-arguments
@@ -282,7 +365,7 @@
 * Add Summary Documentation for all aliases
 
 
-### New on 0.12.0 (Released 2016/05/25)
+### New in 0.12.0 (Released 2016/05/25)
 
 * Fix globalization & white space issue
 * New Setup(Action<ICakeContext>)  fails on mono
@@ -309,7 +392,7 @@
 * How to get ILRepack executable?
 
 
-### New on 0.11.0 (Released 2016/05/01)
+### New in 0.11.0 (Released 2016/05/01)
 
 * Regression: ProcessArgumentListExtensions was renamed
 * DNU usage of multi arguments changed
@@ -339,7 +422,7 @@
 * Added Chocolatey Package Badge
 
 
-### New on 0.10.1 (Released 2016/04/07)
+### New in 0.10.1 (Released 2016/04/07)
 
 * Exception running InspectCode and then directly after TeamCity.ImportData
 * Ensure Cake Assemblies are stamped with current version number

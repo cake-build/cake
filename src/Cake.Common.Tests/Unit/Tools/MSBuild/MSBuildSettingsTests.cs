@@ -165,5 +165,31 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.Empty(settings.FileLoggers);
             }
         }
+
+        public sealed class TheWarningsAsErrorCodesProperty
+        {
+            [Fact]
+            public void Should_Be_Empty_By_Default()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Empty(settings.WarningsAsErrorCodes);
+            }
+        }
+
+        public sealed class TheWarningsAsMessageCodesProperty
+        {
+            [Fact]
+            public void Should_Be_Empty_By_Default()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Empty(settings.WarningsAsMessageCodes);
+            }
+        }
     }
 }

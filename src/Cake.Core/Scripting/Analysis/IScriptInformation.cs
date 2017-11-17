@@ -44,6 +44,18 @@ namespace Cake.Core.Scripting.Analysis
         IList<string> UsingAliases { get; }
 
         /// <summary>
+        /// Gets all types referenced with the using static directive.
+        /// </summary>
+        /// <value>The fully qualified type names referenced by using static in the script.</value>
+        IList<string> UsingStaticDirectives { get; }
+
+        /// <summary>
+        /// Gets the defines directives defined by the scripts.
+        /// </summary>
+        /// <value>The defines.</value>
+        IList<string> Defines { get; }
+
+        /// <summary>
         /// Gets the tools.
         /// </summary>
         /// <value>The tools.</value>

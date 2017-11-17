@@ -52,8 +52,8 @@ namespace Cake.Tests.Unit.Composition
 
                 // Then
                 Assert.Equal(2, result.Count);
-                Assert.True(result.Any(instance => instance == instance1));
-                Assert.True(result.Any(instance => instance == instance2));
+                Assert.Contains(result, instance => instance == instance1);
+                Assert.Contains(result, instance => instance == instance2);
             }
 
             [Fact]
@@ -107,8 +107,8 @@ namespace Cake.Tests.Unit.Composition
 
                 // Then
                 Assert.Equal(2, result.Count);
-                Assert.True(result.Any(instance => instance is CakeConsole));
-                Assert.True(result.Any(instance => instance is FakeConsole));
+                Assert.Contains(result, instance => instance is CakeConsole);
+                Assert.Contains(result, instance => instance is FakeConsole);
             }
 
             [Fact]

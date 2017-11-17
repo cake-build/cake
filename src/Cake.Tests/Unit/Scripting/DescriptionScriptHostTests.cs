@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Scripting;
 using NSubstitute;
@@ -59,7 +60,7 @@ namespace Cake.Tests.Unit.Scripting
         public sealed class TheRunTargetMethod
         {
             [Fact]
-            public void Should_Not_Call_To_Engine()
+            public async Task Should_Not_Call_To_Engine()
             {
                 // Given
                 var engine = Substitute.For<ICakeEngine>();
@@ -68,10 +69,10 @@ namespace Cake.Tests.Unit.Scripting
                 var host = new DescriptionScriptHost(engine, context, console);
 
                 // When
-                host.RunTarget("Target");
+                await host.RunTargetAsync("Target");
 
                 // Then
-                engine.Received(0).RunTarget(
+                await engine.Received(0).RunTargetAsync(
                     context,
                     Arg.Any<DefaultExecutionStrategy>(),
                     "Target");

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Cake.Common.Tools.NuGet.Add;
 using Cake.Common.Tools.NuGet.Init;
 using Cake.Common.Tools.NuGet.Install;
+using Cake.Common.Tools.NuGet.List;
 using Cake.Common.Tools.NuGet.Pack;
 using Cake.Common.Tools.NuGet.Push;
 using Cake.Common.Tools.NuGet.Restore;
@@ -1099,6 +1100,100 @@ namespace Cake.Common.Tools.NuGet
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
             var runner = new NuGetIniter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             runner.Init(source, destination, settings);
+        }
+
+        /// <summary>
+        /// List packages on available from source using specified settings
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageId">The package Id</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns>List of packages with their version</returns>
+        /// <example>
+        /// <code>
+        /// var packageList = NuGetList("Cake", new NuGetListSettings {
+        ///     AllVersions = false,
+        ///     Prerelease = false
+        ///     });
+        /// foreach(var package in packageList)
+        /// {
+        ///     Information("Found package {0}, version {1}", package.Name, package.Version);
+        /// }
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("List")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.List")]
+        public static IEnumerable<NuGetListItem> NuGetList(this ICakeContext context, string packageId, NuGetListSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
+            var runner = new NuGetList(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
+            return runner.List(packageId, settings);
+        }
+
+        /// <summary>
+        /// List packages on available from source using specified settings
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageId">The package Id</param>
+        /// <returns>List of packages with their version</returns>
+        /// <example>
+        /// <code>
+        /// var packageList = NuGetList("Cake");
+        /// foreach(var package in packageList)
+        /// {
+        ///     Information("Found package {0}, version {1}", package.Name, package.Version);
+        /// }
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("List")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.List")]
+        public static IEnumerable<NuGetListItem> NuGetList(this ICakeContext context, string packageId)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
+            var runner = new NuGetList(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
+            return runner.List(packageId, new NuGetListSettings());
+        }
+
+        /// <summary>
+        /// List packages on available from source using specified settings
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns>List of packages with their version</returns>
+        /// <example>
+        /// <code>
+        /// var packageList = NuGetList(new NuGetListSettings {
+        ///     AllVersions = false,
+        ///     Prerelease = false
+        ///     });
+        /// foreach(var package in packageList)
+        /// {
+        ///     Information("Found package {0}, version {1}", package.Name, package.Version);
+        /// }
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("List")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.List")]
+        public static IEnumerable<NuGetListItem> NuGetList(this ICakeContext context, NuGetListSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
+            var runner = new NuGetList(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
+            return runner.List(settings);
         }
     }
 }

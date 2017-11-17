@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.IO;
+using System.Text;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tests.Properties;
 using Cake.Common.Xml;
@@ -113,6 +114,34 @@ namespace Cake.Common.Tests.Unit.XML
                     "/configuration/appSettings/add[@key = 'server']"));
             }
 
+            [Fact]
+            public void Should_Have_Encoding_UTF8_With_BOM()
+            {
+                // Given
+                var fixture = new XmlPokeFixture();
+                fixture.Settings.Encoding = new UTF8Encoding(true);
+
+                // When
+                fixture.Poke("/configuration/appSettings/add[@key = 'server']", null);
+
+                // Then
+                Assert.True(fixture.TestIsUTF8WithBOM());
+            }
+
+            [Fact]
+            public void Should_Have_Encoding_UTF8_Without_BOM()
+            {
+                // Given
+                var fixture = new XmlPokeFixture();
+                fixture.Settings.Encoding = new UTF8Encoding(false);
+
+                // When
+                fixture.Poke("/configuration/appSettings/add[@key = 'server']", null);
+
+                // Then
+                Assert.False(fixture.TestIsUTF8WithBOM());
+            }
+
             [RuntimeFact(TestRuntime.Clr)]
             public void Should_Change_Attribute_From_Xml_File_With_Dtd()
             {
@@ -141,6 +170,32 @@ namespace Cake.Common.Tests.Unit.XML
 
                 // Then
                 AssertEx.IsCakeException(result, "DtdProcessing is not available on .NET Core.");
+            }
+
+            [Fact]
+            public void Should_Have_Declaration()
+            {
+                // Given
+                var fixture = new XmlPokeFixture();
+
+                // When
+                var resultXml = fixture.PokeString(Resources.XmlPoke_Xml, "/configuration/appSettings/add[@key = 'server']", null);
+
+                // Then
+                Assert.Contains("<?xml", resultXml);
+            }
+
+            [Fact]
+            public void Should_Not_Have_Declaration()
+            {
+                // Given
+                var fixture = new XmlPokeFixture();
+
+                // When
+                var resultXml = fixture.PokeString(Resources.XmlPoke_Xml_Without_Declaration, "/configuration/appSettings/add[@key = 'server']", null);
+
+                // Then
+                Assert.DoesNotContain("<?xml", resultXml);
             }
         }
     }
