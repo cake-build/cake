@@ -85,6 +85,11 @@ namespace Cake.Common.Tools.GitVersion
         public string AssemblySemVer { get; set; }
 
         /// <summary>
+        /// Gets or sets the assembly semantic file version.
+        /// </summary>
+        public string AssemblySemFileVer { get; set; }
+
+        /// <summary>
         /// Gets or sets the full Semantic Version.
         /// </summary>
         public string FullSemVer { get; set; }

@@ -120,6 +120,13 @@ namespace Cake.Common.Tools.GitVersion
         }
 
         [DataMember]
+        public string AssemblySemFileVer
+        {
+            get => GitVersion.AssemblySemFileVer;
+            set => GitVersion.AssemblySemFileVer = value;
+        }
+
+        [DataMember]
         public string FullSemVer
         {
             get => GitVersion.FullSemVer;
