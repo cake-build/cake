@@ -1007,6 +1007,24 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Then
                 Assert.Equal(expected, result.Args);
             }
+
+            [Theory]
+            [InlineData("\r", "%0D")]
+            [InlineData("\n", "%0A")]
+            [InlineData("\r\n", "%0D%0A")]
+            public void Should_URL_Convert_NewLine_Characters_In_Properties(string input, string expected)
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.WithProperty("Foo", input);
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal($"/v:normal /p:Foo={expected} /target:Build " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
         }
     }
 }
