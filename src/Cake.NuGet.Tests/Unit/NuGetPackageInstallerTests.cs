@@ -395,6 +395,29 @@ namespace Cake.NuGet.Tests.Unit
                 // Then
                 Assert.False(fixture.FileSystem.GetDirectory("/Working/nuget/cake.foo.1.2.3").Exists);
             }
+
+            // the case where Config is not set is covered by Should_Install_Resource and many of the other tests
+            [Fact]
+            public void Should_Use_Explicit_NuGet_Config_If_Set()
+            {
+                var fixture = new NuGetPackageInstallerFixture();
+                fixture.Config.GetValue(Arg.Is(Constants.NuGet.ConfigFile)).Returns("/Working/nuget.config");
+
+                fixture.Install();
+
+                fixture.ProcessRunner.Received(1).Start(
+                    Arg.Is<FilePath>(path => path.FullPath == "/Working/tools/nuget.exe"),
+                    Arg.Is<ProcessSettings>(settings =>
+                        settings.Arguments.Render() ==
+                            "install \"Cake.Foo\" " +
+                            "-OutputDirectory \"/Working/nuget/cake.foo.1.2.3\" " +
+                            "-Source \"https://myget.org/temp/\" " +
+                            "-ConfigFile \"/Working/nuget.config\" " +
+                            "-Version \"1.2.3\" " +
+                            "-Prerelease " +
+                            "-ExcludeVersion " +
+                            "-NonInteractive"));
+            }
         }
     }
 }

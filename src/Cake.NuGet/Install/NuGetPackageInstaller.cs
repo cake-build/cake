@@ -65,9 +65,17 @@ namespace Cake.NuGet.Install
             _config = config ?? throw new ArgumentNullException(nameof(config));
             _currentFramework = NuGetFramework.Parse(_environment.Runtime.TargetFramework.FullName, DefaultFrameworkNameProvider.Instance);
             _nugetLogger = new NuGetLogger(_log);
+
+            var nugetConfig = GetNuGetConfigPath(_environment, _config);
+
+            var nugetConfigDirectoryPath = nugetConfig.Item1;
+            var nugetConfigFilePath = nugetConfig.Item2;
+
+            _log.Debug($"Found NuGet.config at: {nugetConfigFilePath}");
+
             _nugetSettings = Settings.LoadDefaultSettings(
-                GetToolPath(),
-                null,
+                nugetConfigDirectoryPath.FullPath,
+                nugetConfigFilePath.GetFilename().ToString(),
                 new XPlatMachineWideSetting());
             _gatherCache = new GatherCache();
         }
@@ -132,12 +140,12 @@ namespace Cake.NuGet.Install
             return DependencyBehavior.Ignore;
         }
 
-        private string GetToolPath()
+        private static string GetToolPath(ICakeEnvironment environment, ICakeConfiguration config)
         {
-            var toolPath = _config.GetValue(Constants.Paths.Tools);
+            var toolPath = config.GetValue(Constants.Paths.Tools);
             return !string.IsNullOrWhiteSpace(toolPath) ?
-                new DirectoryPath(toolPath).MakeAbsolute(_environment).FullPath :
-                _environment.WorkingDirectory.Combine("tools").MakeAbsolute(_environment).FullPath;
+                new DirectoryPath(toolPath).MakeAbsolute(environment).FullPath :
+                environment.WorkingDirectory.Combine("tools").MakeAbsolute(environment).FullPath;
         }
 
         private static PackageIdentity GetPackageId(PackageReference package, NuGetSourceRepositoryProvider sourceRepositoryProvider, NuGetFramework targetFramework, ILogger logger)
@@ -170,6 +178,28 @@ namespace Cake.NuGet.Install
                 }
             }
             return null;
+        }
+
+        private static Tuple<DirectoryPath, FilePath> GetNuGetConfigPath(ICakeEnvironment environment, ICakeConfiguration config)
+        {
+            DirectoryPath rootPath;
+            FilePath filePath;
+
+            var nugetConfigFile = config.GetValue(Constants.NuGet.ConfigFile);
+            if (!string.IsNullOrEmpty(nugetConfigFile))
+            {
+                var configFilePath = new FilePath(nugetConfigFile);
+
+                rootPath = configFilePath.GetDirectory();
+                filePath = configFilePath.GetFilename();
+            }
+            else
+            {
+                rootPath = GetToolPath(environment, config);
+                filePath = null;
+            }
+
+            return Tuple.Create(rootPath, filePath);
         }
     }
 }

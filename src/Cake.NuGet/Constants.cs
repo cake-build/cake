@@ -22,6 +22,11 @@ namespace Cake.NuGet
             /// The config key name for enabling loading of nuget package dependencies
             /// </summary>
             public const string LoadDependencies = "NuGet_LoadDependencies";
+
+            /// <summary>
+            /// The config key name for overriding the default nuget config file
+            /// </summary>
+            public const string ConfigFile = "NuGet_ConfigFile";
         }
 
         public static class Paths
