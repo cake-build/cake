@@ -5,6 +5,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Resources;
 using Cake.Core.Scripting.CodeGen;
 using Xunit;
 // ReSharper disable UnusedMember.Local
@@ -357,6 +358,16 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             public static void OptionalNullableIntKeywordWithNullDefault(int? @new = null)
             {
             }
+
+            public static void OutputParameterInterface(out IDisposable arg)
+            {
+                arg = null;
+            }
+
+            public static void OutputParameterInt32(out int arg)
+            {
+                arg = 0;
+            }
         }
 
         [Theory]
@@ -444,6 +455,8 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
         [InlineData("RequiredNullableIntKeyword", "System.Nullable<System.Int32> @new")]
         [InlineData("OptionalIntKeywordWithNonNullDefault", "System.Int32 @new = (System.Int32)1")]
         [InlineData("OptionalNullableIntKeywordWithNullDefault", "System.Nullable<System.Int32> @new = null")]
+        [InlineData("OutputParameterInterface", "out System.IDisposable arg")]
+        [InlineData("OutputParameterInt32", "out System.Int32 arg")]
         public void Should_Return_Correct_Generated_Code_For_Method_Parameters(string methodName, string expected)
         {
             // Given
