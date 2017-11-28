@@ -72,6 +72,54 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 Assert.NotNull(result);
             }
 
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public void Should_Return_From_Disc_If_Found_Windows_10(bool is64Bit)
+            {
+                // Given
+                var fixture = new SignToolResolverFixture(is64Bit);
+                fixture.GivenThatToolExistInKnownPathWindows10();
+
+                // When
+                var result = fixture.Resolve();
+
+                // Then
+                Assert.NotNull(result);
+            }
+
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public void Should_Return_From_Disc_If_Found_Windows_10_Specific_SDK(bool is64Bit)
+            {
+                // Given
+                var fixture = new SignToolResolverFixture(is64Bit);
+                fixture.GivenThatToolExistInKnownPathWindows10SpecificSDK();
+
+                // When
+                var result = fixture.Resolve();
+
+                // Then
+                Assert.NotNull(result);
+            }
+
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public void Should_Return_From_Disc_If_Found_App_Certification_Kit(bool is64Bit)
+            {
+                // Given
+                var fixture = new SignToolResolverFixture(is64Bit);
+                fixture.GivenThatToolExistInKnownPathAppCertificationKit();
+
+                // When
+                var result = fixture.Resolve();
+
+                // Then
+                Assert.NotNull(result);
+            }
+
             [Fact]
             public void Should_Return_From_Registry_If_Found()
             {

@@ -68,6 +68,8 @@ namespace Cake.Common.Tools.SignTool
             {
                 // 64-bit specific paths.
                 files.Add(programFilesPath.Combine(@"Windows Kits\10\bin\x64").CombineWithFilePath("signtool.exe"));
+                files.Add(programFilesPath.Combine(@"Windows Kits\10\bin\10.0.15063.0\x64").CombineWithFilePath("signtool.exe"));
+                files.Add(programFilesPath.Combine(@"Windows Kits\10\bin\10.0.14393.0\x64").CombineWithFilePath("signtool.exe"));
                 files.Add(programFilesPath.Combine(@"Windows Kits\8.1\bin\x64").CombineWithFilePath("signtool.exe"));
                 files.Add(programFilesPath.Combine(@"Windows Kits\8.0\bin\x64").CombineWithFilePath("signtool.exe"));
                 files.Add(programFilesPath.Combine(@"Microsoft SDKs\Windows\v7.1A\Bin").CombineWithFilePath("signtool.exe"));
@@ -76,10 +78,13 @@ namespace Cake.Common.Tools.SignTool
             {
                 // 32-bit specific paths.
                 files.Add(programFilesPath.Combine(@"Windows Kits\10\bin\x86").CombineWithFilePath("signtool.exe"));
+                files.Add(programFilesPath.Combine(@"Windows Kits\10\bin\10.0.15063.0\x86").CombineWithFilePath("signtool.exe"));
+                files.Add(programFilesPath.Combine(@"Windows Kits\10\bin\10.0.14393.0\x86").CombineWithFilePath("signtool.exe"));
                 files.Add(programFilesPath.Combine(@"Windows Kits\8.1\bin\x86").CombineWithFilePath("signtool.exe"));
                 files.Add(programFilesPath.Combine(@"Windows Kits\8.0\bin\x86").CombineWithFilePath("signtool.exe"));
                 files.Add(programFilesPath.Combine(@"Microsoft SDKs\Windows\v7.1A\Bin").CombineWithFilePath("signtool.exe"));
             }
+            files.Add(programFilesPath.Combine(@"Windows Kits10\App Certification Kit").CombineWithFilePath("signtool.exe"));
 
             // Return the first path that exists.
             return files.FirstOrDefault(file => _fileSystem.Exist(file));
