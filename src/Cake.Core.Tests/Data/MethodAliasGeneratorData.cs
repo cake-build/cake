@@ -40,6 +40,12 @@ namespace Cake.Core.Tests.Data
         }
 
         [CakeMethodAlias]
+        public static void NonGeneric_ExtensionMethodWithOutputParameter(this ICakeContext context, out IDisposable arg)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
         public static void NonGeneric_ExtensionMethodWithGenericParameter(this ICakeContext context, Action<int> value)
         {
             throw new NotImplementedException();

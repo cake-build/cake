@@ -38,7 +38,16 @@ namespace Cake.Core.Scripting.CodeGen
                 {
                     yield return "params ";
                 }
-                yield return parameter.ParameterType.GetFullName();
+                // if the parameter is 'out' (or implicitly, by ref),
+                // use GetElementType to get the correct value for codegen (instead of IDisposable& or similar)
+                if (parameter.ParameterType.IsByRef)
+                {
+                    yield return parameter.ParameterType.GetElementType().GetFullName();
+                }
+                else
+                {
+                    yield return parameter.ParameterType.GetFullName();
+                }
                 yield return " ";
             }
 
