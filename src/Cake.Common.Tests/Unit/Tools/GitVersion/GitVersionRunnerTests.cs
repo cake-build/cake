@@ -237,6 +237,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                         LegacySemVer = "0.1.1",
                         LegacySemVerPadded = "0.1.1",
                         AssemblySemVer = "0.1.1.0",
+                        AssemblySemFileVer = "0.1.1.0",
                         FullSemVer = "0.1.1",
                         InformationalVersion = "0.1.1+Branch.master.Sha.f2467748c78b3c8b37972ad0b30df2e15dfbf2cb",
                         BranchName = "master",
@@ -267,6 +268,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                         "  \"LegacySemVer\":\"0.1.1\",",
                         "  \"LegacySemVerPadded\":\"0.1.1\",",
                         "  \"AssemblySemVer\":\"0.1.1.0\",",
+                        "  \"AssemblySemFileVer\":\"0.1.1.0\",",
                         "  \"FullSemVer\":\"0.1.1\",",
                         "  \"InformationalVersion\":\"0.1.1+Branch.master.Sha.f2467748c78b3c8b37972ad0b30df2e15dfbf2cb\",",
                         "  \"BranchName\":\"master\",",
@@ -299,6 +301,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                 Assert.Equal(expect.LegacySemVer, result.LegacySemVer);
                 Assert.Equal(expect.LegacySemVerPadded, result.LegacySemVerPadded);
                 Assert.Equal(expect.AssemblySemVer, result.AssemblySemVer);
+                Assert.Equal(expect.AssemblySemFileVer, result.AssemblySemFileVer);
                 Assert.Equal(expect.FullSemVer, result.FullSemVer);
                 Assert.Equal(expect.InformationalVersion, result.InformationalVersion);
                 Assert.Equal(expect.BranchName, result.BranchName);
