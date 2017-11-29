@@ -61,9 +61,20 @@ namespace Cake.NuGet.Tests.Fixtures
             return new NuGetPackageInstaller(FileSystem, Environment, ProcessRunner, ToolResolver, ContentResolver, Log, Config);
         }
 
+        public Install.NuGetPackageInstaller CreateInProcessInstaller()
+        {
+            return new Install.NuGetPackageInstaller(FileSystem, Environment, ContentResolver, Log, Config);
+        }
+
         public IReadOnlyCollection<IFile> Install()
         {
             var installer = CreateInstaller();
+            return installer.Install(Package, PackageType, InstallPath);
+        }
+
+        public IReadOnlyCollection<IFile> InProcessInstall()
+        {
+            var installer = CreateInProcessInstaller();
             return installer.Install(Package, PackageType, InstallPath);
         }
 
