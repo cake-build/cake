@@ -54,27 +54,15 @@ namespace Cake.Common.Tests.Fixtures.Tools
             }
         }
 
-        public void GivenThatToolExistInKnownPathWindows10SpecificSDK()
-        {
-            if (_is64Bit)
-            {
-                FileSystem.Exist(Arg.Is<FilePath>(p => p.FullPath == "/ProgramFilesX86/Windows Kits/10/bin/10.0.15063.0/x64/signtool.exe")).Returns(true);
-            }
-            else
-            {
-                FileSystem.Exist(Arg.Is<FilePath>(p => p.FullPath == "/ProgramFiles/Windows Kits/10/bin/10.0.15063.0/x86/signtool.exe")).Returns(true);
-            }
-        }
-
         public void GivenThatToolExistInKnownPathAppCertificationKit()
         {
             if (_is64Bit)
             {
-                FileSystem.Exist(Arg.Is<FilePath>(p => p.FullPath == "/ProgramFilesX86/Windows Kits10/App Certification Kit/signtool.exe")).Returns(true);
+                FileSystem.Exist(Arg.Is<FilePath>(p => p.FullPath == "/ProgramFilesX86/Windows Kits/10/App Certification Kit/signtool.exe")).Returns(true);
             }
             else
             {
-                FileSystem.Exist(Arg.Is<FilePath>(p => p.FullPath == "/ProgramFiles/Windows Kits10/App Certification Kit/signtool.exe")).Returns(true);
+                FileSystem.Exist(Arg.Is<FilePath>(p => p.FullPath == "/ProgramFiles/Windows Kits/10/App Certification Kit/signtool.exe")).Returns(true);
             }
         }
 
@@ -97,7 +85,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         public void GivenThatToolHasRegistryKeyWindowsKits()
         {
             var signToolKey = Substitute.For<IRegistryKey>();
-            signToolKey.GetValue("KitsRoot10").Returns("/SignTool");
+            signToolKey.GetValue("KitsRoot").Returns("/SignTool");
 
             var localMachine = Substitute.For<IRegistryKey>();
             localMachine.OpenKey("Software\\Microsoft\\Windows Kits\\Installed Roots").Returns(signToolKey);
@@ -109,6 +97,34 @@ namespace Cake.Common.Tests.Fixtures.Tools
             else
             {
                 FileSystem.Exist(Arg.Is<FilePath>(p => p.FullPath == "/SignTool/bin/x86/signtool.exe")).Returns(true);
+            }
+
+            Registry.LocalMachine.Returns(localMachine);
+        }
+
+        public void GivenThatToolHasRegistryKeyWindows10Kits()
+        {
+            var versions = new[] { "10.0.15063.0", "10.0.16299.0" };
+
+            var signToolKey = Substitute.For<IRegistryKey>();
+            signToolKey.GetValue("KitsRoot10").Returns("/SignTool");
+            signToolKey.GetSubKeyNames().Returns(versions);
+
+            var localMachine = Substitute.For<IRegistryKey>();
+            localMachine.OpenKey("Software\\Microsoft\\Windows Kits\\Installed Roots").Returns(signToolKey);
+
+            foreach (string version in versions)
+            {
+                if (_is64Bit)
+                {
+                    FileSystem.Exist(Arg.Is<FilePath>(p => p.FullPath == $"/SignTool/bin/{version}/x64/signtool.exe"))
+                        .Returns(true);
+                }
+                else
+                {
+                    FileSystem.Exist(Arg.Is<FilePath>(p => p.FullPath == $"/SignTool/bin/{version}/x86/signtool.exe"))
+                        .Returns(true);
+                }
             }
 
             Registry.LocalMachine.Returns(localMachine);
