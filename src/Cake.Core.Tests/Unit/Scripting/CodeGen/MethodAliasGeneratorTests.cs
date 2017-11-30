@@ -53,6 +53,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             [InlineData("NonGeneric_ExtensionMethodWithOptionalNullableDoubleParameter")]
             [InlineData("NonGeneric_ExtensionMethodWithReservedKeywordParameter")]
             [InlineData("NonGeneric_ExtensionMethodWithOutputParameter")]
+            [InlineData("NonGeneric_ExtensionMethodWithGenericCollectionOfNestedType")]
             public void Should_Return_Correct_Generated_Code_For_Non_Generic_Methods(string name)
             {
                 // Given
