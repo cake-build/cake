@@ -66,5 +66,11 @@ namespace Cake.Core.Scripting.Analysis
         /// </summary>
         /// <value>The addins.</value>
         IList<PackageReference> Addins { get; }
+
+        /// <summary>
+        /// Gets the modules.
+        /// </summary>
+        /// <value>The modules.</value>
+        IList<PackageReference> Modules { get; }
     }
 }

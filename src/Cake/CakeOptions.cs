@@ -91,6 +91,11 @@ namespace Cake
         public bool Mono { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to bootstrap Cake modules.
+        /// </summary>
+        public bool Bootstrap { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CakeOptions"/> class.
         /// </summary>
         public CakeOptions()

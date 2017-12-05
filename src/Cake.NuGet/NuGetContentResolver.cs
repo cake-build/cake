@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -39,7 +40,7 @@ namespace Cake.NuGet
                 throw new ArgumentNullException(nameof(path));
             }
 
-            if (type == PackageType.Addin)
+            if (type == PackageType.Addin || type == PackageType.Module)
             {
                 return GetAddinAssemblies(path, package);
             }
