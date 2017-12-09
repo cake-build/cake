@@ -40,6 +40,16 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 // Then
                 Assert.False(settings.Symbols);
             }
+
+            [Fact]
+            public void Should_Set_OutputToToolFolder_To_False_By_Default()
+            {
+                // Given, When
+                var settings = new NuGetPackSettings();
+
+                // Then
+                Assert.False(settings.OutputToToolFolder);
+            }
         }
     }
 }
