@@ -841,7 +841,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     var result = fixture.Run();
 
                     // Then
-                    Assert.Equal("pack \"/Working/existing.csproj\" -Properties Configuration=Release", result.Args);
+                    Assert.Equal("pack \"/Working/existing.csproj\" -Properties \"Configuration=Release\"", result.Args);
                 }
 
                 [Fact]
@@ -859,7 +859,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     var result = fixture.Run();
 
                     // Then
-                    Assert.Equal("pack \"/Working/existing.csproj\" -Properties Configuration=Release;Foo=Bar", result.Args);
+                    Assert.Equal("pack \"/Working/existing.csproj\" -Properties \"Configuration=Release;Foo=Bar\"", result.Args);
                 }
 
                 [Theory]
