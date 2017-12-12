@@ -7,7 +7,7 @@
     <OutputType>Exe</OutputType>
     <PackageId>hwapp</PackageId>
     <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
-    <RuntimeFrameworkVersion>1.0.7</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>1.0.8</RuntimeFrameworkVersion>
   </PropertyGroup>
 
   <ItemGroup>
