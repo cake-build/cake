@@ -75,11 +75,15 @@ namespace Cake.Core.IO
             var info = new ProcessStartInfo(fileName)
             {
                 Arguments = arguments.Render(),
-                WorkingDirectory = workingDirectory.FullPath,
                 UseShellExecute = false,
                 RedirectStandardError = settings.RedirectStandardError,
                 RedirectStandardOutput = settings.RedirectStandardOutput
             };
+
+            if (settings.WorkingDirectory != null)
+            {
+                info.WorkingDirectory = settings.WorkingDirectory.FullPath;
+            }
 
             // Add environment variables
             ProcessHelper.SetEnvironmentVariable(info, "CAKE", "True");
