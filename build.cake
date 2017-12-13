@@ -9,7 +9,7 @@
 #tool "nuget:https://api.nuget.org/v3/index.json?package=coveralls.io&version=1.3.4"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=OpenCover&version=4.6.519"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=ReportGenerator&version=2.4.5"
-#tool "nuget:https://api.nuget.org/v3/index.json?package=SignClient&version=0.9.0"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=SignClient&version=0.9.1&exclude=/tools/netcoreapp2*/**/*"
 
 // Load other scripts.
 #load "./build/parameters.cake"
@@ -61,7 +61,7 @@ Setup(context =>
         msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
     }
 
-    signClientPath = MakeAbsolute(GetFiles("./tools/SignClient*/tools/netcoreapp1.1/SignClient.dll").FirstOrDefault() ?? throw new Exception("Failed to locate sign tool"));
+      signClientPath = Context.Tools.Resolve("SignClient.dll") ?? throw new Exception("Failed to locate sign tool");
 });
 
 Teardown(context =>
