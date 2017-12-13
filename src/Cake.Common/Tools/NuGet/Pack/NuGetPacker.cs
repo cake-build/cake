@@ -197,6 +197,12 @@ namespace Cake.Common.Tools.NuGet.Pack
                 builder.Append(settings.MSBuildVersion.Value.ToString("D"));
             }
 
+            // Use the tool folder
+            if (settings.OutputToToolFolder)
+            {
+                builder.Append("-Tool");
+            }
+
             // Properties
             if (settings.Properties != null && settings.Properties.Count > 0)
             {

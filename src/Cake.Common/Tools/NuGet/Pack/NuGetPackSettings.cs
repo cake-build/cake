@@ -195,5 +195,14 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// </summary>
         /// <value>The package language.</value>
         public string Language { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the files should be packed into the tool folder.
+        /// Defaults to <c>false</c>.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the output should be placed in the tool folder inside the nuget package; otherwise <c>false</c>.
+        /// </value>
+        public bool OutputToToolFolder { get; set; }
     }
 }
