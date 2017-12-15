@@ -133,6 +133,36 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             }
 
             [Fact]
+            public void Should_Set_NamespacesToInclude_To_Empty_By_Default()
+            {
+                // Given, When
+                var settings = new XUnit2Settings();
+
+                // Then
+                Assert.Empty(settings.NamespacesToInclude);
+            }
+
+            [Fact]
+            public void Should_Set_ClassesToInclude_To_Empty_By_Default()
+            {
+                // Given, When
+                var settings = new XUnit2Settings();
+
+                // Then
+                Assert.Empty(settings.ClassesToInclude);
+            }
+
+            [Fact]
+            public void Should_Set_MethodsToInclude_To_Empty_By_Default()
+            {
+                // Given, When
+                var settings = new XUnit2Settings();
+
+                // Then
+                Assert.Empty(settings.MethodsToInclude);
+            }
+
+            [Fact]
             public void Should_Set_UseX86_To_False_By_Default()
             {
                 // Given, When

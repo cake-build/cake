@@ -92,5 +92,74 @@ namespace Cake.Common.Tools.XUnit
 
             return settings;
         }
+
+        /// <summary>
+        /// Adds a namespace to the settings, to include in test execution.  Namespace should be fully qualified; i.e., MyNameSpace.MySubNamespace
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="namespaceToInclude">The namespace to include.</param>
+        /// <returns>The same <see cref="XUnit2Settings"/> instance so that multiple calls can be chained.</returns>
+        public static XUnit2Settings IncludeNamespace(this XUnit2Settings settings, string namespaceToInclude)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            if (string.IsNullOrEmpty(namespaceToInclude))
+            {
+                throw new ArgumentException("Value cannot be null or empty.", nameof(namespaceToInclude));
+            }
+
+            settings.NamespacesToInclude.Add(namespaceToInclude);
+
+            return settings;
+        }
+
+        /// <summary>
+        /// Adds a class name to the settings, to include in test execution. Class name should be fully qualified; i.e., MyNameSpace.MyClassName
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="classNameToInclude">The class name to include.</param>
+        /// <returns>The same <see cref="XUnit2Settings"/> instance so that multiple calls can be chained.</returns>
+        public static XUnit2Settings IncludeClass(this XUnit2Settings settings, string classNameToInclude)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            if (string.IsNullOrEmpty(classNameToInclude))
+            {
+                throw new ArgumentException("Value cannot be null or empty.", nameof(classNameToInclude));
+            }
+
+            settings.ClassesToInclude.Add(classNameToInclude);
+
+            return settings;
+        }
+
+        /// <summary>
+        /// Adds a method name to the settings, to include in test execution. Method name should be fully qualified; i.e., MyNameSpace.MyClassName.MyMethod
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="methodNameToInclude">The method name to include.</param>
+        /// <returns>The same <see cref="XUnit2Settings"/> instance so that multiple calls can be chained.</returns>
+        public static XUnit2Settings IncludeMethod(this XUnit2Settings settings, string methodNameToInclude)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            if (string.IsNullOrEmpty(methodNameToInclude))
+            {
+                throw new ArgumentException("Value cannot be null or empty.", nameof(methodNameToInclude));
+            }
+
+            settings.MethodsToInclude.Add(methodNameToInclude);
+
+            return settings;
+        }
     }
 }

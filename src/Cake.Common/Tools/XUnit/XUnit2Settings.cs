@@ -142,6 +142,42 @@ namespace Cake.Common.Tools.XUnit
         public IDictionary<string, IList<string>> TraitsToExclude { get; private set; }
 
         /// <summary>
+        /// Gets the namespaces to include.
+        /// </summary>
+        /// <remarks>
+        /// Runs all methods in a given namespace (i.e., 'MyNamespace.MySubNamespace')
+        /// If more than one is specified, it acts as an OR operation.
+        /// </remarks>
+        /// <value>
+        /// The namespaces to include
+        /// </value>
+        public ICollection<string> NamespacesToInclude { get; }
+
+        /// <summary>
+        /// Gets the class names to include.
+        /// </summary>
+        /// <remarks>
+        /// Runs all methods in a given test class (should be fully specified; i.e., 'MyNamespace.MyClass')
+        /// If more than one is specified, it acts as an OR operation.
+        /// </remarks>
+        /// <value>
+        /// The class names to include
+        /// </value>
+        public ICollection<string> ClassesToInclude { get; }
+
+        /// <summary>
+        /// Gets the test methods to include.
+        /// </summary>
+        /// <remarks>
+        /// Runs the given test methods (should be fully specified; i.e., 'MyNamespace.MyClass.MyTestMethod')
+        /// If more than one is specified, it acts as an OR operation.
+        /// </remarks>
+        /// <value>
+        /// The namespaces to include
+        /// </value>
+        public ICollection<string> MethodsToInclude { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="XUnit2Settings"/> class.
         /// </summary>
         public XUnit2Settings()
@@ -149,6 +185,9 @@ namespace Cake.Common.Tools.XUnit
             TraitsToInclude = new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
             TraitsToExclude = new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
             ShadowCopy = true;
+            NamespacesToInclude = new List<string>();
+            ClassesToInclude = new List<string>();
+            MethodsToInclude = new List<string>();
         }
     }
 }
