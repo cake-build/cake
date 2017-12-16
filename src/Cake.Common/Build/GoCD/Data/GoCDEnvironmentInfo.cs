@@ -17,6 +17,48 @@ namespace Cake.Common.Build.GoCD.Data
         /// <value>
         /// The GoCD pipeline information.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GoCD.IsRunningOnGoCD)
+        /// {
+        ///     Information(
+        ///         @"Pipeline:
+        ///         Name: {0}
+        ///         Counter: {1}
+        ///         Label: {2}",
+        ///         BuildSystem.GoCD.Environment.Pipeline.Name,
+        ///         BuildSystem.GoCD.Environment.Pipeline.Counter,
+        ///         BuildSystem.GoCD.Environment.Pipeline.Label
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GoCD");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GoCD</para>
+        /// <example>
+        /// <code>
+        /// if (GoCD.IsRunningOnGoCD)
+        /// {
+        ///     Information(
+        ///         @"Pipeline:
+        ///         Name: {0}
+        ///         Counter: {1}
+        ///         Label: {2}",
+        ///         GoCD.Environment.Pipeline.Name,
+        ///         GoCD.Environment.Pipeline.Counter,
+        ///         GoCD.Environment.Pipeline.Label
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GoCD");
+        /// }
+        /// </code>
+        /// </example>
         public GoCDPipelineInfo Pipeline { get; }
 
         /// <summary>
@@ -25,6 +67,44 @@ namespace Cake.Common.Build.GoCD.Data
         /// <value>
         ///   The GoCD stage information.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GoCD.IsRunningOnGoCD)
+        /// {
+        ///     Information(
+        ///         @"Stage:
+        ///         Name: {0}
+        ///         Counter: {1}",
+        ///         BuildSystem.GoCD.Environment.Stage.Name,
+        ///         BuildSystem.GoCD.Environment.Stage.Counter
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GoCD");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GoCD</para>
+        /// <example>
+        /// <code>
+        /// if (GoCD.IsRunningOnGoCD)
+        /// {
+        ///     Information(
+        ///         @"Stage:
+        ///         Name: {0}
+        ///         Counter: {1}",
+        ///         GoCD.Environment.Stage.Name,
+        ///         GoCD.Environment.Stage.Counter
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GoCD");
+        /// }
+        /// </code>
+        /// </example>
         public GoCDStageInfo Stage { get; }
 
         /// <summary>
@@ -33,6 +113,48 @@ namespace Cake.Common.Build.GoCD.Data
         /// <value>
         ///   The GoCD repository information.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GoCD.IsRunningOnGoCD)
+        /// {
+        ///     Information(
+        ///         @"Repository:
+        ///         Revision: {0}
+        ///         ToRevision: {1}
+        ///         FromRevision: {2}",
+        ///         BuildSystem.GoCD.Environment.Repository.Revision,
+        ///         BuildSystem.GoCD.Environment.Repository.ToRevision,
+        ///         BuildSystem.GoCD.Environment.Repository.FromRevision
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GoCD");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GoCD</para>
+        /// <example>
+        /// <code>
+        /// if (GoCD.IsRunningOnGoCD)
+        /// {
+        ///     Information(
+        ///         @"Repository:
+        ///         Revision: {0}
+        ///         ToRevision: {1}
+        ///         FromRevision: {2}",
+        ///         GoCD.Environment.Repository.Revision,
+        ///         GoCD.Environment.Repository.ToRevision,
+        ///         GoCD.Environment.Repository.FromRevision
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GoCD");
+        /// }
+        /// </code>
+        /// </example>
         public GoCDRepositoryInfo Repository { get; }
 
         /// <summary>
@@ -41,6 +163,38 @@ namespace Cake.Common.Build.GoCD.Data
         /// <value>
         /// The Go.CD URL.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GoCD.IsRunningOnGoCD)
+        /// {
+        ///     Information(
+        ///         @"GoCDUrl: {0}",
+        ///         BuildSystem.GoCD.Environment.GoCDUrl
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GoCD");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GoCD</para>
+        /// <example>
+        /// <code>
+        /// if (GoCD.IsRunningOnGoCD)
+        /// {
+        ///     Information(
+        ///         @"GoCDUrl: {0}",
+        ///         GoCD.Environment.GoCDUrl
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GoCD");
+        /// }
+        /// </code>
+        /// </example>
         public string GoCDUrl => GetEnvironmentString("GO_SERVER_URL");
 
         /// <summary>
@@ -49,6 +203,38 @@ namespace Cake.Common.Build.GoCD.Data
         /// <value>
         /// The environment name.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GoCD.IsRunningOnGoCD)
+        /// {
+        ///     Information(
+        ///         @"EnvironmentName: {0}",
+        ///         BuildSystem.GoCD.Environment.EnvironmentName
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GoCD");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GoCD</para>
+        /// <example>
+        /// <code>
+        /// if (GoCD.IsRunningOnGoCD)
+        /// {
+        ///     Information(
+        ///         @"EnvironmentName: {0}",
+        ///         GoCD.Environment.EnvironmentName
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GoCD");
+        /// }
+        /// </code>
+        /// </example>
         public string EnvironmentName => GetEnvironmentString("GO_ENVIRONMENT_NAME");
 
         /// <summary>
@@ -57,6 +243,38 @@ namespace Cake.Common.Build.GoCD.Data
         /// <value>
         /// The job name.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GoCD.IsRunningOnGoCD)
+        /// {
+        ///     Information(
+        ///         @"JobName: {0}",
+        ///         BuildSystem.GoCD.Environment.JobName
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GoCD");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GoCD</para>
+        /// <example>
+        /// <code>
+        /// if (GoCD.IsRunningOnGoCD)
+        /// {
+        ///     Information(
+        ///         @"JobName: {0}",
+        ///         GoCD.Environment.JobName
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GoCD");
+        /// }
+        /// </code>
+        /// </example>
         public string JobName => GetEnvironmentString("GO_JOB_NAME");
 
         /// <summary>
@@ -69,6 +287,38 @@ namespace Cake.Common.Build.GoCD.Data
         /// <value>
         /// The username of the user that triggered the build.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GoCD.IsRunningOnGoCD)
+        /// {
+        ///     Information(
+        ///         @"User: {0}",
+        ///         BuildSystem.GoCD.Environment.User
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GoCD");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GoCD</para>
+        /// <example>
+        /// <code>
+        /// if (GoCD.IsRunningOnGoCD)
+        /// {
+        ///     Information(
+        ///         @"User: {0}",
+        ///         GoCD.Environment.User
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GoCD");
+        /// }
+        /// </code>
+        /// </example>
         public string User => GetEnvironmentString("GO_TRIGGER_USER");
 
         /// <summary>

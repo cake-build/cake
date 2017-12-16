@@ -17,6 +17,48 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The build.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TravisCI.IsRunningOnTravisCI)
+        /// {
+        ///     Information(
+        ///         @"Build:
+        ///         Branch: {0}
+        ///         BuildDirectory: {1}
+        ///         BuildId: {2}",
+        ///         BuildSystem.TravisCI.Environment.Build.Branch,
+        ///         BuildSystem.TravisCI.Environment.Build.BuildDirectory,
+        ///         BuildSystem.TravisCI.Environment.Build.BuildId
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TravisCI");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TravisCI</para>
+        /// <example>
+        /// <code>
+        /// if (TravisCI.IsRunningOnTravisCI)
+        /// {
+        ///     Information(
+        ///         @"Build:
+        ///         Branch: {0}
+        ///         BuildDirectory: {1}
+        ///         BuildId: {2}",
+        ///         TravisCI.Environment.Build.Branch,
+        ///         TravisCI.Environment.Build.BuildDirectory,
+        ///         TravisCI.Environment.Build.BuildId
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TravisCI");
+        /// }
+        /// </code>
+        /// </example>
         public TravisCIBuildInfo Build { get; }
 
         /// <summary>
@@ -25,6 +67,48 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The job.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TravisCI.IsRunningOnTravisCI)
+        /// {
+        ///     Information(
+        ///         @"Job:
+        ///         JobId: {0}
+        ///         JobNumber: {1}
+        ///         OSName: {2}",
+        ///         BuildSystem.TravisCI.Environment.Job.JobId,
+        ///         BuildSystem.TravisCI.Environment.Job.JobNumber,
+        ///         BuildSystem.TravisCI.Environment.Job.OSName
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TravisCI");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TravisCI</para>
+        /// <example>
+        /// <code>
+        /// if (TravisCI.IsRunningOnTravisCI)
+        /// {
+        ///     Information(
+        ///         @"Job:
+        ///         JobId: {0}
+        ///         JobNumber: {1}
+        ///         OSName: {2}",
+        ///         TravisCI.Environment.Job.JobId,
+        ///         TravisCI.Environment.Job.JobNumber,
+        ///         TravisCI.Environment.Job.OSName
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TravisCI");
+        /// }
+        /// </code>
+        /// </example>
         public TravisCIJobInfo Job { get; }
 
         /// <summary>
@@ -33,6 +117,48 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The repository.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TravisCI.IsRunningOnTravisCI)
+        /// {
+        ///     Information(
+        ///         @"Repository:
+        ///         Commit: {0}
+        ///         CommitRange: {1}
+        ///         PullRequest: {2}",
+        ///         BuildSystem.TravisCI.Environment.Repository.Commit,
+        ///         BuildSystem.TravisCI.Environment.Repository.CommitRange,
+        ///         BuildSystem.TravisCI.Environment.Repository.PullRequest
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TravisCI");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TravisCI</para>
+        /// <example>
+        /// <code>
+        /// if (TravisCI.IsRunningOnTravisCI)
+        /// {
+        ///     Information(
+        ///         @"Repository:
+        ///         Commit: {0}
+        ///         CommitRange: {1}
+        ///         PullRequest: {2}",
+        ///         TravisCI.Environment.Repository.Commit,
+        ///         TravisCI.Environment.Repository.CommitRange,
+        ///         TravisCI.Environment.Repository.PullRequest
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TravisCI");
+        /// }
+        /// </code>
+        /// </example>
         public TravisCIRepositoryInfo Repository { get; }
 
         /// <summary>
@@ -41,6 +167,38 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// <c>true</c> if ci; otherwise, <c>false</c>.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TravisCI.IsRunningOnTravisCI)
+        /// {
+        ///     Information(
+        ///         @"CI: {0}",
+        ///         BuildSystem.TravisCI.Environment.CI
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TravisCI");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TravisCI</para>
+        /// <example>
+        /// <code>
+        /// if (TravisCI.IsRunningOnTravisCI)
+        /// {
+        ///     Information(
+        ///         @"CI: {0}",
+        ///         TravisCI.Environment.CI
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TravisCI");
+        /// }
+        /// </code>
+        /// </example>
         public bool CI => GetEnvironmentBoolean("CI");
 
         /// <summary>
@@ -49,6 +207,38 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The home.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TravisCI.IsRunningOnTravisCI)
+        /// {
+        ///     Information(
+        ///         @"Home: {0}",
+        ///         BuildSystem.TravisCI.Environment.Home
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TravisCI");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TravisCI</para>
+        /// <example>
+        /// <code>
+        /// if (TravisCI.IsRunningOnTravisCI)
+        /// {
+        ///     Information(
+        ///         @"Home: {0}",
+        ///         TravisCI.Environment.Home
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TravisCI");
+        /// }
+        /// </code>
+        /// </example>
         public string Home => GetEnvironmentString("HOME");
 
         /// <summary>
@@ -57,6 +247,38 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         ///   <c>true</c> if Travis; otherwise, <c>false</c>.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TravisCI.IsRunningOnTravisCI)
+        /// {
+        ///     Information(
+        ///         @"Travis: {0}",
+        ///         BuildSystem.TravisCI.Environment.Travis
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TravisCI");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TravisCI</para>
+        /// <example>
+        /// <code>
+        /// if (TravisCI.IsRunningOnTravisCI)
+        /// {
+        ///     Information(
+        ///         @"Travis: {0}",
+        ///         TravisCI.Environment.Travis
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TravisCI");
+        /// }
+        /// </code>
+        /// </example>
         public bool Travis => GetEnvironmentBoolean("TRAVIS");
 
         /// <summary>

@@ -17,6 +17,56 @@ namespace Cake.Common.Build.BitbucketPipelines.Data
         /// <value>
         /// The repository.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.BitbucketPipelines.IsRunningOnBitbucketPipelines)
+        /// {
+        ///     Information(
+        ///         @"Repository:
+        ///         Branch: {0}
+        ///         Tag: {1}
+        ///         Commit: {2}
+        ///         Repo Owner: {3}
+        ///         Repo Slug: {4}",
+        ///         BuildSystem.BitbucketPipelines.Environment.Repository.Branch,
+        ///         BuildSystem.BitbucketPipelines.Environment.Repository.Tag,
+        ///         BuildSystem.BitbucketPipelines.Environment.Repository.Commit,
+        ///         BuildSystem.BitbucketPipelines.Environment.Repository.RepoOwner,
+        ///         BuildSystem.BitbucketPipelines.Environment.Repository.RepoSlug
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on BitbucketPipelines");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via BitbucketPipelines</para>
+        /// <example>
+        /// <code>
+        /// if (BitbucketPipelines.IsRunningOnBitbucketPipelines)
+        /// {
+        ///     Information(
+        ///         @"Repository:
+        ///         Branch: {0}
+        ///         Tag: {1}
+        ///         Commit: {2}
+        ///         Repo Owner: {3}
+        ///         Repo Slug: {4}",
+        ///         BitbucketPipelines.Environment.Repository.Branch,
+        ///         BitbucketPipelines.Environment.Repository.Tag,
+        ///         BitbucketPipelines.Environment.Repository.Commit,
+        ///         BitbucketPipelines.Environment.Repository.RepoOwner,
+        ///         BitbucketPipelines.Environment.Repository.RepoSlug
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on BitbucketPipelines");
+        /// }
+        /// </code>
+        /// </example>
         public BitbucketPipelinesRepositoryInfo Repository { get; }
 
         /// <summary>

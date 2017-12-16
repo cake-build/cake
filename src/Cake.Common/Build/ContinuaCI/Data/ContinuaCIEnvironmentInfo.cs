@@ -33,6 +33,40 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// <value>
         ///   The Continua CI configuration information.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.ContinuaCI.IsRunningOnContinuaCI)
+        /// {
+        ///     Information(
+        ///         @"Configuration:
+        ///         Name: {0}",
+        ///         BuildSystem.ContinuaCI.Environment.Configuration.Name
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on ContinuaCI");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via ContinuaCI</para>
+        /// <example>
+        /// <code>
+        /// if (ContinuaCI.IsRunningOnContinuaCI)
+        /// {
+        ///     Information(
+        ///         @"Configuration:
+        ///         Name: {0}",
+        ///         ContinuaCI.Environment.Configuration.Name
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on ContinuaCI");
+        /// }
+        /// </code>
+        /// </example>
         public ContinuaCIConfigurationInfo Configuration { get; }
 
         /// <summary>
@@ -41,6 +75,40 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// <value>
         ///   The Continua CI project information.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.ContinuaCI.IsRunningOnContinuaCI)
+        /// {
+        ///     Information(
+        ///         @"Project:
+        ///         Name: {0}",
+        ///         BuildSystem.ContinuaCI.Environment.Project.Name
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on ContinuaCI");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via ContinuaCI</para>
+        /// <example>
+        /// <code>
+        /// if (ContinuaCI.IsRunningOnContinuaCI)
+        /// {
+        ///     Information(
+        ///         @"Project:
+        ///         Name: {0}",
+        ///         ContinuaCI.Environment.Project.Name
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on ContinuaCI");
+        /// }
+        /// </code>
+        /// </example>
         public ContinuaCIProjectInfo Project { get; }
 
         /// <summary>
@@ -49,6 +117,60 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// <value>
         ///   The Continua CI build information.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.ContinuaCI.IsRunningOnContinuaCI)
+        /// {
+        ///     Information(
+        ///         @"Build:
+        ///         Id: {0}
+        ///         Version: {1}
+        ///         Started By: {2}
+        ///         Is Feature Branch Build: {3}
+        ///         Build Number: {4}
+        ///         Started: {5}",
+        ///         BuildSystem.ContinuaCI.Environment.Build.Id,
+        ///         BuildSystem.ContinuaCI.Environment.Build.Version,
+        ///         BuildSystem.ContinuaCI.Environment.Build.StartedBy,
+        ///         BuildSystem.ContinuaCI.Environment.Build.IsFeatureBranchBuild,
+        ///         BuildSystem.ContinuaCI.Environment.Build.BuildNumber,
+        ///         BuildSystem.ContinuaCI.Environment.Build.Started
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on ContinuaCI");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via ContinuaCI</para>
+        /// <example>
+        /// <code>
+        /// if (ContinuaCI.IsRunningOnContinuaCI)
+        /// {
+        ///     Information(
+        ///         @"Build:
+        ///         Id: {0}
+        ///         Version: {1}
+        ///         Started By: {2}
+        ///         Is Feature Branch Build: {3}
+        ///         Build Number: {4}
+        ///         Started: {5}",
+        ///         ContinuaCI.Environment.Build.Id,
+        ///         ContinuaCI.Environment.Build.Version,
+        ///         ContinuaCI.Environment.Build.StartedBy,
+        ///         ContinuaCI.Environment.Build.IsFeatureBranchBuild,
+        ///         ContinuaCI.Environment.Build.BuildNumber,
+        ///         ContinuaCI.Environment.Build.Started
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on ContinuaCI");
+        /// }
+        /// </code>
+        /// </example>
         public ContinuaCIBuildInfo Build { get; }
 
         /// <summary>
@@ -57,6 +179,46 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// <value>
         ///   The Continua CI build variables.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.ContinuaCI.IsRunningOnContinuaCI)
+        /// {
+        ///     Information(
+        ///         @"Variables:
+        ///         {0}",
+        ///         BuildSystem.ContinuaCI.Environment.Variable.Aggregate(
+        ///         new StringBuilder(),(builder, pair) => builder.AppendLine(
+        ///         string.Format(":", pair.Key, pair.Value)),
+        ///         builder => builder.ToString())
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on ContinuaCI");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via ContinuaCI</para>
+        /// <example>
+        /// <code>
+        /// if (ContinuaCI.IsRunningOnContinuaCI)
+        /// {
+        ///     Information(
+        ///         @"Variables:
+        ///         {0}",
+        ///         ContinuaCI.Environment.Variable.Aggregate(
+        ///         new StringBuilder(),(builder, pair) => builder.AppendLine(
+        ///         string.Format(":", pair.Key, pair.Value)),
+        ///         builder => builder.ToString())
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on ContinuaCI");
+        /// }
+        /// </code>
+        /// </example>
         public IDictionary<string, string> Variable
         {
             get
@@ -72,6 +234,46 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// <value>
         ///   The Continua CI build agent properties.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.ContinuaCI.IsRunningOnContinuaCI)
+        /// {
+        ///     Information(
+        ///         @"Agent Property:
+        ///         {0}",
+        ///         BuildSystem.ContinuaCI.Environment.AgentProperty.Aggregate(
+        ///         new StringBuilder(),(builder, pair) => builder.AppendLine(
+        ///         string.Format(":", pair.Key, pair.Value)),
+        ///         builder => builder.ToString())
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on ContinuaCI");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via ContinuaCI</para>
+        /// <example>
+        /// <code>
+        /// if (ContinuaCI.IsRunningOnContinuaCI)
+        /// {
+        ///     Information(
+        ///         @"Variables:
+        ///         {0}",
+        ///         ContinuaCI.Environment.AgentProperty.Aggregate(
+        ///         new StringBuilder(),(builder, pair) => builder.AppendLine(
+        ///         string.Format(":", pair.Key, pair.Value)),
+        ///         builder => builder.ToString())
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on ContinuaCI");
+        /// }
+        /// </code>
+        /// </example>
         public IDictionary<string, string> AgentProperty
         {
             get
@@ -87,6 +289,38 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// <value>
         ///   The Continua CI product version.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.ContinuaCI.IsRunningOnContinuaCI)
+        /// {
+        ///     Information(
+        ///         @"Version: {0}",
+        ///         BuildSystem.ContinuaCI.Environment.Version
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on ContinuaCI");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via ContinuaCI</para>
+        /// <example>
+        /// <code>
+        /// if (ContinuaCI.IsRunningOnContinuaCI)
+        /// {
+        ///     Information(
+        ///         @"Version: {0}",
+        ///         ContinuaCI.Environment.Version
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on ContinuaCI");
+        /// }
+        /// </code>
+        /// </example>
         public string Version
         {
             get
