@@ -116,12 +116,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
                 fixture.Settings.TestAdapterPath = @"/Working/custom-test-adapter";
                 fixture.Settings.Logger = @"trx;LogFileName=/Working/logfile.trx";
                 fixture.Settings.DiagnosticFile = "./artifacts/logging/diagnostics.txt";
+                fixture.Settings.ResultsDirectory = "./tests/";
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("test --settings \"/Working/demo.runsettings\" --filter \"Priority = 1\" --test-adapter-path \"/Working/custom-test-adapter\" --logger \"trx;LogFileName=/Working/logfile.trx\" --output \"/Working/artifacts\" --framework dnxcore50 --configuration Release --diag \"/Working/artifacts/logging/diagnostics.txt\" --no-build", result.Args);
+                Assert.Equal("test --settings \"/Working/demo.runsettings\" --filter \"Priority = 1\" --test-adapter-path \"/Working/custom-test-adapter\" --logger \"trx;LogFileName=/Working/logfile.trx\" --output \"/Working/artifacts\" --framework dnxcore50 --configuration Release --diag \"/Working/artifacts/logging/diagnostics.txt\" --no-build --results-directory \"/Working/tests\"", result.Args);
             }
 
             [Fact]
