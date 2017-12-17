@@ -37,6 +37,12 @@ namespace Cake.NuGet.Install
         private readonly NuGetFramework _currentFramework;
         private readonly GatherCache _gatherCache;
 
+        static NuGetPackageInstaller()
+        {
+            // Set User Agent string
+            UserAgent.SetUserAgentString(new UserAgentStringBuilder("Cake NuGet Client"));
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetPackageInstaller"/> class.
         /// </summary>
