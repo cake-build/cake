@@ -96,10 +96,30 @@ namespace Cake.Scripting.Roslyn
             var compilation = roslynScript.GetCompilation();
             var diagnostics = compilation.GetDiagnostics();
 
-            if (diagnostics.Any(d => d.Severity == DiagnosticSeverity.Error))
+            var errors = new List<Diagnostic>();
+
+            foreach (var diagnostic in diagnostics)
             {
-                var errors = string.Join(Environment.NewLine, diagnostics.Select(x => x.ToString()));
-                var message = string.Format(CultureInfo.InvariantCulture, "Error occurred when compiling build script: {0}", errors);
+                switch (diagnostic.Severity)
+                {
+                    case DiagnosticSeverity.Info:
+                        _log.Information(diagnostic.ToString());
+                        break;
+                    case DiagnosticSeverity.Warning:
+                        _log.Warning(diagnostic.ToString());
+                        break;
+                    case DiagnosticSeverity.Error:
+                        _log.Error(diagnostic.ToString());
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (errors.Any())
+            {
+                var errorMessages = string.Join(Environment.NewLine, errors.Select(x => x.ToString()));
+                var message = string.Format(CultureInfo.InvariantCulture, "Error(s) occurred when compiling build script:{0}{1}", Environment.NewLine, errorMessages);
                 throw new CakeException(message);
             }
 
