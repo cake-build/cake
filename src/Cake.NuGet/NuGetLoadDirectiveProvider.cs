@@ -53,7 +53,7 @@ namespace Cake.NuGet
             var package = new PackageReference(uri);
 
             // Find the tool folder.
-            var toolPath = GetToolPath(context.Root.GetDirectory());
+            var toolPath = GetToolPath(_environment.WorkingDirectory);
 
             // Install the NuGet package.
             var files = _installer.Install(package, PackageType.Tool, toolPath);
