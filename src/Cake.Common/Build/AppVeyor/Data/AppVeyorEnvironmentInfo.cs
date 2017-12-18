@@ -17,14 +17,78 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The AppVeyor build agent API URL.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     Information(
+        ///         @"API URL:{0},
+        ///         BuildSystem.AppVeyor.Environment.ApiUrl
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via AppVeyor</para>
+        /// <example>
+        /// <code>
+        /// if (AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     Information(
+        ///         @"API URL:{0},
+        ///         AppVeyor.Environment.ApiUrl
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
         public string ApiUrl => GetEnvironmentString("APPVEYOR_API_URL");
 
         /// <summary>
         /// Gets the AppVeyor unique job ID.
         /// </summary>
         /// <value>
-        ///   The AppVeyor unique job ID.
+        ///  The AppVeyor unique job ID.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     Information(
+        ///         @"Job Id:{0},
+        ///         BuildSystem.AppVeyor.Environment.JobId
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via AppVeyor</para>
+        /// <example>
+        /// <code>
+        /// if (AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     Information(
+        ///         @"Job Id:{0},
+        ///         AppVeyor.Environment.JobId
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
         public string JobId => GetEnvironmentString("APPVEYOR_JOB_ID");
 
         /// <summary>
@@ -33,6 +97,38 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The AppVeyor Job Name.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     Information(
+        ///         @"Job Name:{0},
+        ///         BuildSystem.AppVeyor.Environment.JobName
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via AppVeyor</para>
+        /// <example>
+        /// <code>
+        /// if (AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     Information(
+        ///         @"Job Name:{0},
+        ///         AppVeyor.Environment.JobName
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
         public string JobName => GetEnvironmentString("APPVEYOR_JOB_NAME");
 
         /// <summary>
@@ -41,6 +137,38 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   <c>true</c> if the build runs by scheduler; otherwise, <c>false</c>.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     Information(
+        ///         @"Scheduled Build:{0},
+        ///         BuildSystem.AppVeyor.Environment.ScheduledBuild
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via AppVeyor</para>
+        /// <example>
+        /// <code>
+        /// if (AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     Information(
+        ///         @"Scheduled Build:{0},
+        ///         AppVeyor.Environment.ScheduledBuild
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
         public bool ScheduledBuild => GetEnvironmentBoolean("APPVEYOR_SCHEDULED_BUILD");
 
         /// <summary>
@@ -49,6 +177,38 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The platform name set on build tab of project settings (or through platform parameter in appveyor.yml).
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     Information(
+        ///         @"Platform:{0},
+        ///         BuildSystem.AppVeyor.Environment.Platform
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via AppVeyor</para>
+        /// <example>
+        /// <code>
+        /// if (AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     Information(
+        ///         @"Platform:{0},
+        ///         AppVeyor.Environment.Platform
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
         public string Platform => GetEnvironmentString("PLATFORM");
 
         /// <summary>
@@ -57,6 +217,38 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The configuration name set on build tab of project settings (or through configuration parameter in appveyor.yml).
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     Information(
+        ///         @"Configuration:{0},
+        ///         BuildSystem.AppVeyor.Environment.Configuration
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via AppVeyor</para>
+        /// <example>
+        /// <code>
+        /// if (AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     Information(
+        ///         @"Configuration:{0},
+        ///         AppVeyor.Environment.Configuration
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
         public string Configuration => GetEnvironmentString("CONFIGURATION");
 
         /// <summary>

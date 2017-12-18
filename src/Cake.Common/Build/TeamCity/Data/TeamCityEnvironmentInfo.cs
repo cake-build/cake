@@ -17,6 +17,40 @@ namespace Cake.Common.Build.TeamCity.Data
         /// <value>
         /// The TeamCity project information.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TeamCity.IsRunningOnTeamCity)
+        /// {
+        ///     Information(
+        ///         @"Project:
+        ///         Name: {0}",
+        ///         BuildSystem.TeamCity.Environment.Project.Name
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TeamCity");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TeamCity</para>
+        /// <example>
+        /// <code>
+        /// if (TeamCity.IsRunningOnTeamCity)
+        /// {
+        ///     Information(
+        ///         @"Project:
+        ///         Name: {0}",
+        ///         TeamCity.Environment.Project.Name
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TeamCity");
+        /// }
+        /// </code>
+        /// </example>
         public TeamCityProjectInfo Project { get; }
 
         /// <summary>
@@ -25,6 +59,44 @@ namespace Cake.Common.Build.TeamCity.Data
         /// <value>
         /// The TeamCity build information.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TeamCity.IsRunningOnTeamCity)
+        /// {
+        ///     Information(
+        ///         @"Build:
+        ///         BuildConfName: {0}
+        ///         Number: {1}",
+        ///         BuildSystem.TeamCity.Environment.Build.BuildConfName,
+        ///         BuildSystem.TeamCity.Environment.Build.Number
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TeamCity");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TeamCity</para>
+        /// <example>
+        /// <code>
+        /// if (TeamCity.IsRunningOnTeamCity)
+        /// {
+        ///     Information(
+        ///         @"Build:
+        ///         BuildConfName: {0}
+        ///         Number: {1}",
+        ///         TeamCity.Environment.Build.BuildConfName,
+        ///         TeamCity.Environment.Build.Number
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TeamCity");
+        /// }
+        /// </code>
+        /// </example>
         public TeamCityBuildInfo Build { get; }
 
         /// <summary>
@@ -33,6 +105,44 @@ namespace Cake.Common.Build.TeamCity.Data
         /// <value>
         /// The TeamCity pull-request information.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TeamCity.IsRunningOnTeamCity)
+        /// {
+        ///     Information(
+        ///         @"PullRequest:
+        ///         IsPullRequest: {0}
+        ///         Number: {1}",
+        ///         BuildSystem.TeamCity.Environment.PullRequest.IsPullRequest,
+        ///         BuildSystem.TeamCity.Environment.PullRequest.Number
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TeamCity");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TeamCity</para>
+        /// <example>
+        /// <code>
+        /// if (TeamCity.IsRunningOnTeamCity)
+        /// {
+        ///     Information(
+        ///         @"PullRequest:
+        ///         IsPullRequest: {0}
+        ///         Number: {1}",
+        ///         TeamCity.Environment.PullRequest.IsPullRequest,
+        ///         TeamCity.Environment.PullRequest.Number
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TeamCity");
+        /// }
+        /// </code>
+        /// </example>
         public TeamCityPullRequestInfo PullRequest { get; }
 
         /// <summary>
