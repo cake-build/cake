@@ -50,7 +50,7 @@ namespace Cake.Core.Modules
 
             // Reflection
             registrar.RegisterType<AssemblyLoader>().As<IAssemblyLoader>().Singleton();
-            registrar.RegisterType<AssemblyVerifier>().AsSelf().Singleton();
+            registrar.RegisterType<AssemblyVerifier>().As<IAssemblyVerifier>().Singleton();
 
             // Tooling
             registrar.RegisterType<ToolRepository>().As<IToolRepository>().Singleton();
