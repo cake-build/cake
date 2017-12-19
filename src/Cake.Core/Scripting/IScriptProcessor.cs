@@ -28,5 +28,12 @@ namespace Cake.Core.Scripting
         /// <param name="tools">The tools to install.</param>
         /// <param name="installPath">The install path.</param>
         void InstallTools(IReadOnlyCollection<PackageReference> tools, DirectoryPath installPath);
+
+        /// <summary>
+        /// Installs the modules.
+        /// </summary>
+        /// <param name="modules">The modules to install.</param>
+        /// <param name="installPath">The install path.</param>
+        void InstallModules(IReadOnlyCollection<PackageReference> modules, DirectoryPath installPath);
     }
 }

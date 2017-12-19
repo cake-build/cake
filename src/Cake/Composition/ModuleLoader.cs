@@ -30,7 +30,7 @@ namespace Cake.Composition
 
         public void LoadModules(IContainer container, CakeOptions options)
         {
-            var root = GetModulePath(options.Script.GetDirectory());
+            var root = _configuration.GetModulePath(options.Script.GetDirectory(), _environment);
             var moduleTypes = _searcher.Search(root);
             if (moduleTypes.Count > 0)
             {
@@ -48,29 +48,6 @@ namespace Cake.Composition
                     builder.Update(container);
                 }
             }
-        }
-
-        private DirectoryPath GetToolPath(DirectoryPath root)
-        {
-            var toolPath = _configuration.GetValue(Constants.Paths.Tools);
-            if (!string.IsNullOrWhiteSpace(toolPath))
-            {
-                return new DirectoryPath(toolPath).MakeAbsolute(_environment);
-            }
-
-            return root.Combine("tools");
-        }
-
-        private DirectoryPath GetModulePath(DirectoryPath root)
-        {
-            var modulePath = _configuration.GetValue(Constants.Paths.Modules);
-            if (!string.IsNullOrWhiteSpace(modulePath))
-            {
-                return new DirectoryPath(modulePath).MakeAbsolute(_environment);
-            }
-
-            var toolPath = GetToolPath(root);
-            return toolPath.Combine("Modules").Collapse();
         }
 
         private void RegisterExternalModules(IEnumerable<Type> moduleTypes, ILifetimeScope scope)

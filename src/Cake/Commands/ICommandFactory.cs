@@ -10,6 +10,12 @@ namespace Cake.Commands
     public interface ICommandFactory
     {
         /// <summary>
+        /// Creates the bootstrap command.
+        /// </summary>
+        /// <returns>The bootstrap command.</returns>
+        ICommand CreateBootstrapCommand();
+
+        /// <summary>
         /// Creates the build command.
         /// </summary>
         /// <returns>The build command.</returns>
