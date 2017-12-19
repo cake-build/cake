@@ -158,6 +158,21 @@ namespace Cake.Common.Tools.XUnit
                 builder.Append("-notrait \"{0}={1}\"", trait.Name, trait.Value);
             }
 
+            foreach (var ns in settings.NamespacesToInclude)
+            {
+                builder.Append("-namespace \"{0}\"", ns);
+            }
+
+            foreach (var cn in settings.ClassesToInclude)
+            {
+                builder.Append("-class \"{0}\"", cn);
+            }
+
+            foreach (var mn in settings.MethodsToInclude)
+            {
+                builder.Append("-method \"{0}\"", mn);
+            }
+
             return builder;
         }
 

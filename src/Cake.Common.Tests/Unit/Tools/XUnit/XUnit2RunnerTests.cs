@@ -605,6 +605,48 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
                 // Then
                 Assert.Equal("\"/Working/Test1.dll\" -notrait \"Trait1=value1A\" -notrait \"Trait1=value1B\" -notrait \"Trait2=value2\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Set_Switches_For_NamespacesToInclude_Defined_In_Settings()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.Settings.IncludeNamespace("Company.Product.Feature");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" -namespace \"Company.Product.Feature\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Set_Switches_For_ClassNameToInclude_Defined_In_Settings()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.Settings.IncludeClass("Company.Product.Feature.ClassName");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" -class \"Company.Product.Feature.ClassName\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Set_Switches_For_MethodNameToInclude_Defined_In_Settings()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.Settings.IncludeMethod("Company.Product.Feature.ClassName.MethodName");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" -method \"Company.Product.Feature.ClassName.MethodName\"", result.Args);
+            }
         }
     }
 }
