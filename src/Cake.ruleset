@@ -1,8 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RuleSet Name="Cake Ruleset" ToolsVersion="12.0">
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
-    <Rule Id="AD0001" Action="None" /> <!-- Remove later -->
-    <Rule Id="SA0001" Action="None" /> <!-- Remove later -->
     <Rule Id="SA1100" Action="None" />
     <Rule Id="SA1101" Action="None" />
     <Rule Id="SA1116" Action="None" />
@@ -22,16 +20,10 @@
     <Rule Id="SA1309" Action="None" />
     <Rule Id="SA1403" Action="None" />
     <Rule Id="SA1404" Action="None" />
-    <Rule Id="SA1413" Action="None" /> <!-- Remove later -->
     <Rule Id="SA1513" Action="None" />
     <Rule Id="SA1515" Action="None" />
     <Rule Id="SA1516" Action="None" />
-    <Rule Id="SA1600" Action="None" /> <!-- Remove later -->
-    <Rule Id="SA1601" Action="None" /> <!-- Remove later -->
-    <Rule Id="SA1602" Action="None" /> <!-- Remove later -->
-    <Rule Id="SA1612" Action="None" /> <!-- Remove later -->
     <Rule Id="SA1625" Action="None" />
-    <Rule Id="SA1633" Action="None" /> <!-- Remove later -->
     <Rule Id="SA1649" Action="None" />
   </Rules>
 </RuleSet>
