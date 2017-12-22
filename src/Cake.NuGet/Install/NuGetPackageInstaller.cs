@@ -71,11 +71,18 @@ namespace Cake.NuGet.Install
             var nugetConfigDirectoryPath = nugetConfig.Item1;
             var nugetConfigFilePath = nugetConfig.Item2;
 
-            _log.Debug($"Found NuGet.config at: {nugetConfigFilePath}");
+            if (nugetConfigFilePath != null)
+            {
+                _log.Debug($"Found NuGet.config at: {nugetConfigFilePath}");
+            }
+            else
+            {
+                _log.Debug("NuGet.config not found.");
+            }
 
             _nugetSettings = Settings.LoadDefaultSettings(
                 nugetConfigDirectoryPath.FullPath,
-                nugetConfigFilePath.GetFilename().ToString(),
+                nugetConfigFilePath?.GetFilename().ToString(),
                 new XPlatMachineWideSetting());
             _gatherCache = new GatherCache();
         }
