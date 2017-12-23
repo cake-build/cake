@@ -110,6 +110,7 @@ namespace Cake.Scripting.Roslyn
                         break;
                     case DiagnosticSeverity.Error:
                         _log.Error(diagnostic.ToString());
+                        errors.Add(diagnostic);
                         break;
                     default:
                         break;
