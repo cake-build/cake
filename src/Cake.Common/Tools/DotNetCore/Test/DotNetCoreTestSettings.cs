@@ -58,5 +58,10 @@ namespace Cake.Common.Tools.DotNetCore.Test
         /// Gets or sets a file to write diagnostic messages to.
         /// </summary>
         public FilePath DiagnosticFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets the results directory. This setting is only available from 2.0.0 upward.
+        /// </summary>
+        public DirectoryPath ResultsDirectory { get; set; }
     }
 }
