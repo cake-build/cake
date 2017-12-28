@@ -114,9 +114,18 @@ namespace Cake.Common.Tools.MSTest
         /// <returns>The default tool path.</returns>
         protected override IEnumerable<FilePath> GetAlternativeToolPaths(MSTestSettings settings)
         {
+            foreach (var yearAndEdition in new[] { "2017/Enterprise", "2017/Professional", "2017/Community" })
+            {
+                var path = GetYearAndEditionToolPath(yearAndEdition);
+                if (_fileSystem.Exist(path))
+                {
+                    yield return path;
+                }
+            }
+
             foreach (var version in new[] { "14.0", "12.0", "11.0", "10.0" })
             {
-                var path = GetToolPath(version);
+                var path = GetVersionNumberToolPath(version);
                 if (_fileSystem.Exist(path))
                 {
                     yield return path;
@@ -133,10 +142,17 @@ namespace Cake.Common.Tools.MSTest
             }
         }
 
-        private FilePath GetToolPath(string version)
+        private FilePath GetVersionNumberToolPath(string version)
         {
             var programFiles = _environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
             var root = programFiles.Combine(string.Concat("Microsoft Visual Studio ", version, "/Common7/IDE"));
+            return root.CombineWithFilePath("mstest.exe");
+        }
+
+        private FilePath GetYearAndEditionToolPath(string yearAndEdition)
+        {
+            var programFiles = _environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
+            var root = programFiles.Combine(string.Concat("Microsoft Visual Studio/", yearAndEdition, "/Common7/IDE"));
             return root.CombineWithFilePath("mstest.exe");
         }
 
