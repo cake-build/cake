@@ -129,8 +129,9 @@ namespace Cake.Common.Tools.NUnit
         /// Gets or sets a value specifying whether to write test case names to the output.
         /// </summary>
         /// <value>
-        /// <c>On</c> to write labels for tests that are run or <c>All</c> to write labels
-        /// for all tests.
+        /// <c>On</c> to write labels for tests that are run,<c>All</c> to write labels
+        /// for all tests,<c>Before</c> to write labels at the start of every test
+        /// ,or <c>After</c> to write labels at the end of every test.
         /// </value>
         public NUnit3Labels Labels { get; set; }
 

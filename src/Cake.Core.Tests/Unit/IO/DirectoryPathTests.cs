@@ -47,12 +47,10 @@ namespace Cake.Core.Tests.Unit.IO
             }
 
             [Theory]
-#if !UNIX
             [InlineData("c:/assets/shaders/", "simple.frag", "c:/assets/shaders/simple.frag")]
             [InlineData("c:/", "simple.frag", "c:/simple.frag")]
             [InlineData("c:/assets/shaders/", "test/simple.frag", "c:/assets/shaders/simple.frag")]
             [InlineData("c:/", "test/simple.frag", "c:/simple.frag")]
-#endif
             [InlineData("assets/shaders", "simple.frag", "assets/shaders/simple.frag")]
             [InlineData("assets/shaders/", "simple.frag", "assets/shaders/simple.frag")]
             [InlineData("/assets/shaders/", "simple.frag", "/assets/shaders/simple.frag")]
@@ -88,12 +86,10 @@ namespace Cake.Core.Tests.Unit.IO
             }
 
             [Theory]
-#if !UNIX
             [InlineData("c:/assets/shaders/", "simple.frag", "c:/assets/shaders/simple.frag")]
             [InlineData("c:/", "simple.frag", "c:/simple.frag")]
             [InlineData("c:/assets/shaders/", "test/simple.frag", "c:/assets/shaders/test/simple.frag")]
             [InlineData("c:/", "test/simple.frag", "c:/test/simple.frag")]
-#endif
             [InlineData("assets/shaders", "simple.frag", "assets/shaders/simple.frag")]
             [InlineData("assets/shaders/", "simple.frag", "assets/shaders/simple.frag")]
             [InlineData("/assets/shaders/", "simple.frag", "/assets/shaders/simple.frag")]
@@ -130,10 +126,8 @@ namespace Cake.Core.Tests.Unit.IO
         public sealed class TheCombineWithDirectoryPathMethod
         {
             [Theory]
-#if !UNIX
             [InlineData("c:/assets/shaders/", "simple", "c:/assets/shaders/simple")]
             [InlineData("c:/", "simple", "c:/simple")]
-#endif
             [InlineData("assets/shaders", "simple", "assets/shaders/simple")]
             [InlineData("assets/shaders/", "simple", "assets/shaders/simple")]
             [InlineData("/assets/shaders/", "simple", "/assets/shaders/simple")]

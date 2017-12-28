@@ -144,6 +144,12 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         public ICollection<ChocolateyNuSpecContent> Files { get; set; }
 
         /// <summary>
+        /// Gets or sets the package dependencies.
+        /// </summary>
+        /// <value>The package files.</value>
+        public ICollection<ChocolateyNuSpecDependency> Dependencies { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to run in debug mode.
         /// </summary>
         /// <value>The debug flag</value>

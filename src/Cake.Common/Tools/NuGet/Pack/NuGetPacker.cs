@@ -197,6 +197,12 @@ namespace Cake.Common.Tools.NuGet.Pack
                 builder.Append(settings.MSBuildVersion.Value.ToString("D"));
             }
 
+            // Use the tool folder
+            if (settings.OutputToToolFolder)
+            {
+                builder.Append("-Tool");
+            }
+
             // Properties
             if (settings.Properties != null && settings.Properties.Count > 0)
             {
@@ -210,7 +216,7 @@ namespace Cake.Common.Tools.NuGet.Pack
                     throw new CakeException("Properties keys can not be null or empty.");
                 }
                 builder.Append("-Properties");
-                builder.Append(string.Join(";",
+                builder.AppendQuoted(string.Join(";",
                     settings.Properties.Select(property => string.Concat(property.Key, "=", property.Value))));
             }
 

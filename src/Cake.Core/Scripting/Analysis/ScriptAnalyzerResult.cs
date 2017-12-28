@@ -73,6 +73,12 @@ namespace Cake.Core.Scripting.Analysis
         public HashSet<PackageReference> Tools { get; }
 
         /// <summary>
+        /// Gets the modules.
+        /// </summary>
+        /// <value>The modules.</value>
+        public HashSet<PackageReference> Modules { get; }
+
+        /// <summary>
         /// Gets a value indicating whether to analysis succeded without errors.
         /// </summary>
         public bool Succeeded { get; }
@@ -99,6 +105,7 @@ namespace Cake.Core.Scripting.Analysis
             _defines = new HashSet<string>(Collect(script, i => i.Defines));
             Tools = new HashSet<PackageReference>(Collect(script, i => i.Tools));
             Addins = new HashSet<PackageReference>(Collect(script, i => i.Addins));
+            Modules = new HashSet<PackageReference>(Collect(script, i => i.Modules));
             Errors = errors ?? new List<ScriptAnalyzerError>(0);
             Succeeded = Errors.Count == 0;
         }

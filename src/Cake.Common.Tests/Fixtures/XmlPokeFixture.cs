@@ -4,6 +4,7 @@
 
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using Cake.Common.Tests.Properties;
 using Cake.Common.Xml;
@@ -102,6 +103,20 @@ namespace Cake.Common.Tests.Fixtures
 
                 var nodes = document.SelectNodes(xpath, namespaceManager);
                 return nodes != null && nodes.Count == 0;
+            }
+        }
+
+        public bool TestIsUTF8WithBOM()
+        {
+            var reader = new StreamReader(FileSystem.GetFile(XmlPath).OpenRead());
+
+            using (var memstream = new MemoryStream())
+            {
+                reader.BaseStream.CopyTo(memstream);
+                var bytes = memstream.ToArray();
+                var encoding = new UTF8Encoding(true);
+                var preamble = encoding.GetPreamble();
+                return preamble.Where((p, i) => p == bytes[i]).Any();
             }
         }
 

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using Cake.Core.Annotations;
@@ -11,6 +12,13 @@ namespace Cake.Core.Tests.Data
 {
     internal static class MethodAliasGeneratorData
     {
+        internal enum TestNestedEnum
+        {
+            Unknown,
+            One,
+            Two
+        }
+
         public static void NotAnExtensionMethod()
         {
             throw new NotImplementedException();
@@ -35,6 +43,12 @@ namespace Cake.Core.Tests.Data
 
         [CakeMethodAlias]
         public static void NonGeneric_ExtensionMethodWithParameter(this ICakeContext context, int value)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+        public static void NonGeneric_ExtensionMethodWithOutputParameter(this ICakeContext context, out IDisposable arg)
         {
             throw new NotImplementedException();
         }
@@ -210,6 +224,12 @@ namespace Cake.Core.Tests.Data
 
         [CakeMethodAlias]
         public static void NonGeneric_ExtensionMethodWithReservedKeywordParameter(this ICakeContext context, int @new)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+        public static void NonGeneric_ExtensionMethodWithGenericCollectionOfNestedType(this ICakeContext context, ICollection<Cake.Core.Tests.Data.MethodAliasGeneratorData.TestNestedEnum> items)
         {
             throw new NotImplementedException();
         }

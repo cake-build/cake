@@ -92,11 +92,18 @@ namespace Cake.Common.Tools.DotCover
                 builder.AppendSwitch("/Filters", "=", filters.Quote());
             }
 
-            // Filters
+            // AttributeFilters
             if (settings.AttributeFilters.Count > 0)
             {
                 var attributeFilters = string.Join(";", settings.AttributeFilters);
                 builder.AppendSwitch("/AttributeFilters", "=", attributeFilters.Quote());
+            }
+
+            // Filters
+            if (settings.ProcessFilters.Count > 0)
+            {
+                var processFilters = string.Join(";", settings.ProcessFilters);
+                builder.AppendSwitch("/ProcessFilters", "=", processFilters.Quote());
             }
 
             // DisableDefaultFilters

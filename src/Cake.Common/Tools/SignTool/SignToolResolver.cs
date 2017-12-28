@@ -45,7 +45,7 @@ namespace Cake.Common.Tools.SignTool
             }
 
             // Try look for the path.
-            _signToolPath = GetFromDisc() ?? GetFromRegistry();
+            _signToolPath = GetFromRegistry() ?? GetFromDisc();
             if (_signToolPath == null)
             {
                 throw new CakeException("Failed to find signtool.exe.");
@@ -80,6 +80,7 @@ namespace Cake.Common.Tools.SignTool
                 files.Add(programFilesPath.Combine(@"Windows Kits\8.0\bin\x86").CombineWithFilePath("signtool.exe"));
                 files.Add(programFilesPath.Combine(@"Microsoft SDKs\Windows\v7.1A\Bin").CombineWithFilePath("signtool.exe"));
             }
+            files.Add(programFilesPath.Combine(@"Windows Kits\10\App Certification Kit").CombineWithFilePath("signtool.exe"));
 
             // Return the first path that exists.
             return files.FirstOrDefault(file => _fileSystem.Exist(file));
@@ -89,6 +90,45 @@ namespace Cake.Common.Tools.SignTool
         {
             // Gets a list of the files we should check.
             var files = new List<FilePath>();
+
+            using (var root = _registry.LocalMachine.OpenKey("Software\\Microsoft\\Windows Kits\\Installed Roots"))
+            {
+                string kitsRoot = root?.GetValue("KitsRoot10") as string;
+                if (!string.IsNullOrWhiteSpace(kitsRoot))
+                {
+                    var kitsPath = new DirectoryPath(kitsRoot);
+                    string[] versions = root.GetSubKeyNames();
+
+                    foreach (string version in versions.OrderByDescending(x => x))
+                    {
+                        var versionPath = kitsPath.Combine($"bin\\{version}");
+
+                        files.Add(_environment.Platform.Is64Bit
+                            ? versionPath.CombineWithFilePath("x64\\signtool.exe")
+                            : versionPath.CombineWithFilePath("x86\\signtool.exe"));
+                    }
+                }
+            }
+
+            using (var root = _registry.LocalMachine.OpenKey("Software\\Microsoft\\Windows Kits\\Installed Roots"))
+            {
+                if (root != null)
+                {
+                    var windowsKits = new[] { "KitsRoot10", "KitsRoot81", "KitsRoot" };
+                    foreach (var kit in windowsKits)
+                    {
+                        var kitsRoot = root.GetValue(kit) as string;
+                        if (!string.IsNullOrWhiteSpace(kitsRoot))
+                        {
+                            var kitsPath = new DirectoryPath(kitsRoot);
+
+                            files.Add(_environment.Platform.Is64Bit
+                                ? kitsPath.CombineWithFilePath("bin\\x64\\signtool.exe")
+                                : kitsPath.CombineWithFilePath("bin\\x86\\signtool.exe"));
+                        }
+                    }
+                }
+            }
 
             using (var root = _registry.LocalMachine.OpenKey("Software\\Microsoft\\Microsoft SDKs\\Windows"))
             {
@@ -103,26 +143,6 @@ namespace Cake.Common.Tools.SignTool
                         {
                             var installationPath = new DirectoryPath(installationFolder);
                             files.Add(installationPath.CombineWithFilePath("bin\\signtool.exe"));
-                        }
-                    }
-                }
-            }
-
-            using (var root = _registry.LocalMachine.OpenKey("Software\\Microsoft\\Windows Kits\\Installed Roots"))
-            {
-                if (root != null)
-                {
-                    var windowsKits = new[] { "KitsRoot", "KitsRoot81", "KitsRoot10" };
-                    foreach (var kit in windowsKits)
-                    {
-                        var kitsRoot = root.GetValue(kit) as string;
-                        if (!string.IsNullOrWhiteSpace(kitsRoot))
-                        {
-                            var kitsPath = new DirectoryPath(kitsRoot);
-
-                            files.Add(_environment.Platform.Is64Bit
-                                ? kitsPath.CombineWithFilePath("bin\\x64\\signtool.exe")
-                                : kitsPath.CombineWithFilePath("bin\\x86\\signtool.exe"));
                         }
                     }
                 }

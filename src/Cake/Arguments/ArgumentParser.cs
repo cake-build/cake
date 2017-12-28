@@ -171,6 +171,11 @@ namespace Cake.Arguments
                 options.Mono = ParseBooleanValue(value);
             }
 
+            if (name.Equals("bootstrap", StringComparison.OrdinalIgnoreCase))
+            {
+                options.Bootstrap = ParseBooleanValue(value);
+            }
+
             if (options.Arguments.ContainsKey(name))
             {
                 _log.Error("Multiple arguments with the same name ({0}).", name);

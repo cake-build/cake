@@ -62,6 +62,10 @@ namespace Cake
                 {
                     return _commandFactory.CreateVersionCommand();
                 }
+                if (options.Bootstrap)
+                {
+                    return _commandFactory.CreateBootstrapCommand();
+                }
                 if (options.PerformDryRun)
                 {
                     return _commandFactory.CreateDryRunCommand();

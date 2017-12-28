@@ -344,6 +344,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
                 fixture.Settings.RequireLicenseAcceptance = true;
                 fixture.Settings.IconUrl = new Uri("https://icon.com");
                 fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
+                fixture.Settings.Dependencies = new[]
+                {
+                    new ChocolateyNuSpecDependency { Id = "Dependency1", Version = "1.0.0" },
+                    new ChocolateyNuSpecDependency { Id = "Dependency2", Version = "[2.0.0]" }
+                };
 
                 // When
                 var result = fixture.Run();
@@ -379,6 +384,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
                 fixture.Settings.RequireLicenseAcceptance = true;
                 fixture.Settings.IconUrl = new Uri("https://icon.com");
                 fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
+                fixture.Settings.Dependencies = new[]
+                {
+                    new ChocolateyNuSpecDependency { Id = "Dependency1", Version = "1.0.0" },
+                    new ChocolateyNuSpecDependency { Id = "Dependency2", Version = "[2.0.0]" }
+                };
 
                 // When
                 var result = fixture.Run();
@@ -415,6 +425,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
                 fixture.Settings.RequireLicenseAcceptance = true;
                 fixture.Settings.IconUrl = new Uri("https://icon.com");
                 fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
+                fixture.Settings.Dependencies = new[]
+                {
+                    new ChocolateyNuSpecDependency { Id = "Dependency1", Version = "1.0.0" },
+                    new ChocolateyNuSpecDependency { Id = "Dependency2", Version = "[2.0.0]" }
+                };
 
                 // When
                 var result = fixture.Run();
@@ -455,6 +470,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             {
                 new ChocolateyNuSpecContent { Source = @"tools\**", Target = "tools" },
             };
+            fixture.Settings.Dependencies = new[]
+            {
+                new ChocolateyNuSpecDependency { Id = "Dependency1", Version = "1.0.0" },
+                new ChocolateyNuSpecDependency { Id = "Dependency2", Version = "[2.0.0]" }
+            };
 
             // When
             var result = fixture.Run();
@@ -494,6 +514,11 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             fixture.Settings.Files = new[]
             {
                 new ChocolateyNuSpecContent { Source = @"tools\**", Target = "tools" },
+            };
+            fixture.Settings.Dependencies = new[]
+            {
+                new ChocolateyNuSpecDependency { Id = "Dependency1", Version = "1.0.0" },
+                new ChocolateyNuSpecDependency { Id = "Dependency2", Version = "[2.0.0]" }
             };
 
             // When

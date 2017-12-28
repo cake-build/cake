@@ -22,9 +22,9 @@ namespace Cake.Common.Tools.NuGet.Pack
         public string Version { get; set; }
 
         /// <summary>
-        /// Gets or sets the dependency's version.
+        /// Gets or sets the target framework for the dependency.
         /// </summary>
-        /// <value>The dependency's version.</value>
+        /// <value>The target framework for the dependency.</value>
         public string TargetFramework { get; set; }
     }
 }

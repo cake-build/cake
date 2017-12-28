@@ -120,6 +120,12 @@ namespace Cake.Common.Tools.DotNetCore.Test
                 builder.Append("--no-build");
             }
 
+            if (settings.ResultsDirectory != null)
+            {
+                builder.Append("--results-directory");
+                builder.AppendQuoted(settings.ResultsDirectory.MakeAbsolute(_environment).FullPath);
+            }
+
             return builder;
         }
     }

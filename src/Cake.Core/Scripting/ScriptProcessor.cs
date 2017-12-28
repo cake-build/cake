@@ -134,40 +134,27 @@ namespace Cake.Core.Scripting
             {
                 throw new ArgumentNullException(nameof(installPath));
             }
+            InstallPackages(tools, installPath, PackageType.Tool);
+        }
 
-            // Make the installation root absolute.
-            installPath = installPath.MakeAbsolute(_environment);
-
-            if (tools.Count > 0)
+        /// <summary>
+        /// Installs the modules.
+        /// </summary>
+        /// <param name="modules">The modules to install.</param>
+        /// <param name="installPath">The install path.</param>
+        public void InstallModules(
+            IReadOnlyCollection<PackageReference> modules,
+            DirectoryPath installPath)
+        {
+            if (modules == null)
             {
-                _log.Verbose("Installing tools...");
-                foreach (var tool in tools)
-                {
-                    // Get the installer.
-                    var installer = GetInstaller(tool, PackageType.Tool);
-                    if (installer == null)
-                    {
-                        const string format = "Could not find an installer for the '{0}' scheme.";
-                        var message = string.Format(CultureInfo.InvariantCulture, format, tool.Scheme);
-                        throw new CakeException(message);
-                    }
-
-                    // Install the tool.
-                    var result = installer.Install(tool, PackageType.Tool, installPath);
-                    if (result.Count == 0)
-                    {
-                        const string format = "Failed to install tool '{0}'.";
-                        var message = string.Format(CultureInfo.InvariantCulture, format, tool.Package);
-                        throw new CakeException(message);
-                    }
-
-                    // Register the tools.
-                    foreach (var item in result)
-                    {
-                        _tools.RegisterFile(item.Path);
-                    }
-                }
+                throw new ArgumentNullException(nameof(modules));
             }
+            if (installPath == null)
+            {
+                throw new ArgumentNullException(nameof(installPath));
+            }
+            InstallPackages(modules, installPath, PackageType.Module);
         }
 
         private IPackageInstaller GetInstaller(PackageReference package, PackageType type)
@@ -180,6 +167,56 @@ namespace Cake.Core.Scripting
                 }
             }
             return null;
+        }
+
+        private void InstallPackages(
+            IReadOnlyCollection<PackageReference> modules,
+            DirectoryPath installPath,
+            PackageType packageType)
+        {
+            if (packageType != PackageType.Tool && packageType != PackageType.Module)
+            {
+                throw new ArgumentException("Package is not a tool or a module.", nameof(packageType));
+            }
+
+            // Make the installation root absolute.
+            installPath = installPath.MakeAbsolute(_environment);
+
+            if (modules.Count > 0)
+            {
+                var packageTypeName = packageType == PackageType.Tool ? "tool" : "module";
+
+                _log.Verbose($"Installing {packageTypeName}s...");
+                foreach (var tool in modules)
+                {
+                    // Get the installer.
+                    var installer = GetInstaller(tool, packageType);
+                    if (installer == null)
+                    {
+                        const string format = "Could not find an installer for the '{0}' scheme.";
+                        var message = string.Format(CultureInfo.InvariantCulture, format, tool.Scheme);
+                        throw new CakeException(message);
+                    }
+
+                    // Install the module.
+                    var result = installer.Install(tool, packageType, installPath);
+                    if (result.Count == 0)
+                    {
+                        var format = $"Failed to install {packageTypeName} '{{0}}'.";
+                        var message = string.Format(CultureInfo.InvariantCulture, format, tool.Package);
+                        throw new CakeException(message);
+                    }
+
+                    if (packageType == PackageType.Tool)
+                    {
+                        // Register the tools.
+                        foreach (var item in result)
+                        {
+                            _tools.RegisterFile(item.Path);
+                        }
+                    }
+                }
+            }
         }
     }
 }

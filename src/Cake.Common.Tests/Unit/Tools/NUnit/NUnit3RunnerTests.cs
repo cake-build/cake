@@ -282,6 +282,34 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
             }
 
             [Fact]
+            public void Should_Set_Switch_For_After_Labels()
+            {
+                // Given
+                var fixture = new NUnit3RunnerFixture();
+                fixture.Settings.Labels = NUnit3Labels.After;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" --labels=After", result.Args);
+            }
+
+            [Fact]
+            public void Should_Set_Switch_For_Before_Labels()
+            {
+                // Given
+                var fixture = new NUnit3RunnerFixture();
+                fixture.Settings.Labels = NUnit3Labels.Before;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" --labels=Before", result.Args);
+            }
+
+            [Fact]
             public void Should_Not_Set_Process_Switch_For_DefaultMultipleValue()
             {
                 // Given

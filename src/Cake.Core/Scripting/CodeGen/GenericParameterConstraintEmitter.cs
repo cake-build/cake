@@ -61,8 +61,7 @@ namespace Cake.Core.Scripting.CodeGen
                             continue;
                         }
 
-                        // fix any nested type names
-                        tokens.Add(constraint.GetFullName().Replace('+', '.'));
+                        tokens.Add(constraint.GetFullName());
                     }
                 }
                 else
@@ -78,8 +77,7 @@ namespace Cake.Core.Scripting.CodeGen
                     // iterate type constraints
                     foreach (var constraint in argument.GetTypeInfo().GetGenericParameterConstraints())
                     {
-                        // fix any nested type names
-                        tokens.Add(constraint.GetFullName().Replace('+', '.'));
+                        tokens.Add(constraint.GetFullName());
                     }
 
                     // default constructor has to come last, can't be used in conjunction w/ struct

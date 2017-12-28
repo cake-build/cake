@@ -1,15 +1,15 @@
 // Install addins.
-#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Coveralls&version=0.7.0"
-#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Twitter&version=0.6.0"
-#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Gitter&version=0.7.0"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Coveralls&version=0.7.0"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=0.6.0"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Gitter&version=0.7.0"
 
 // Install tools.
-#tool "nuget:https://www.nuget.org/api/v2?package=gitreleasemanager&version=0.5.0"
-#tool "nuget:https://www.nuget.org/api/v2?package=GitVersion.CommandLine&version=3.6.2"
-#tool "nuget:https://www.nuget.org/api/v2?package=coveralls.io&version=1.3.4"
-#tool "nuget:https://www.nuget.org/api/v2?package=OpenCover&version=4.6.519"
-#tool "nuget:https://www.nuget.org/api/v2?package=ReportGenerator&version=2.4.5"
-#tool "nuget:https://www.nuget.org/api/v2?package=SignClient&version=0.5.0-beta4&prerelease"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=gitreleasemanager&version=0.5.0"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=GitVersion.CommandLine&version=3.6.2"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=coveralls.io&version=1.3.4"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=OpenCover&version=4.6.519"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=ReportGenerator&version=2.4.5"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=SignClient&version=0.9.1&exclude=/tools/netcoreapp2*/**/*"
 
 // Load other scripts.
 #load "./build/parameters.cake"
@@ -21,6 +21,7 @@
 BuildParameters parameters = BuildParameters.GetParameters(Context);
 bool publishingError = false;
 DotNetCoreMSBuildSettings msBuildSettings = null;
+FilePath signClientPath;
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -59,6 +60,8 @@ Setup(context =>
         Information("Build will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
         msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
     }
+
+      signClientPath = Context.Tools.Resolve("SignClient.dll") ?? throw new Exception("Failed to locate sign tool");
 });
 
 Teardown(context =>
@@ -305,7 +308,9 @@ Task("Sign-Binaries")
     .IsDependentOn("Zip-Files")
     .IsDependentOn("Create-Chocolatey-Packages")
     .IsDependentOn("Create-NuGet-Packages")
-    .WithCriteria(() => parameters.ShouldPublish && !parameters.SkipSigning)
+    .WithCriteria(() => 
+        (parameters.ShouldPublish && !parameters.SkipSigning) ||
+        StringComparer.OrdinalIgnoreCase.Equals(EnvironmentVariable("SIGNING_TEST"), "True"))
     .Does(() =>
 {
     // Get the secret.
@@ -313,8 +318,12 @@ Task("Sign-Binaries")
     if(string.IsNullOrWhiteSpace(secret)) {
         throw new InvalidOperationException("Could not resolve signing secret.");
     }
+    // Get the user.
+    var user = EnvironmentVariable("SIGNING_USER");
+    if(string.IsNullOrWhiteSpace(user)) {
+        throw new InvalidOperationException("Could not resolve signing user.");
+    }
 
-    var client = File("./tools/SignClient/tools/SignClient.dll");
     var settings = File("./signclient.json");
     var filter = File("./signclient.filter");
 
@@ -329,12 +338,13 @@ Task("Sign-Binaries")
 
         // Build the argument list.
         var arguments = new ProcessArgumentBuilder()
-            .AppendQuoted(MakeAbsolute(client.Path).FullPath)
-            .Append("zip")
+            .AppendQuoted(signClientPath.FullPath)
+            .Append("sign")
             .AppendSwitchQuoted("-c", MakeAbsolute(settings.Path).FullPath)
             .AppendSwitchQuoted("-i", MakeAbsolute(file).FullPath)
             .AppendSwitchQuoted("-f", MakeAbsolute(filter).FullPath)
             .AppendSwitchQuotedSecret("-s", secret)
+            .AppendSwitchQuotedSecret("-r", user)
             .AppendSwitchQuoted("-n", "Cake")
             .AppendSwitchQuoted("-d", "Cake (C# Make) is a cross platform build automation system.")
             .AppendSwitchQuoted("-u", "https://cakebuild.net");

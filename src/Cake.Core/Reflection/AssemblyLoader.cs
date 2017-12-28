@@ -12,9 +12,9 @@ namespace Cake.Core.Reflection
     {
         private readonly ICakeEnvironment _environment;
         private readonly IFileSystem _fileSystem;
-        private readonly AssemblyVerifier _verifier;
+        private readonly IAssemblyVerifier _verifier;
 
-        public AssemblyLoader(ICakeEnvironment environment, IFileSystem fileSystem, AssemblyVerifier verifier)
+        public AssemblyLoader(ICakeEnvironment environment, IFileSystem fileSystem, IAssemblyVerifier verifier)
         {
             _environment = environment;
             _fileSystem = fileSystem;

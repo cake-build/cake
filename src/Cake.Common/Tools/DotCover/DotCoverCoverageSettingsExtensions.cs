@@ -63,5 +63,22 @@ namespace Cake.Common.Tools.DotCover
             settings.AttributeFilters.Add(attributeFilter);
             return settings;
         }
+
+        /// <summary>
+        /// Adds the filter
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="filter">The processfilter.</param>
+        /// <typeparam name="T">The settings type, derived from <see cref="DotCoverCoverageSettings"/></typeparam>
+        /// <returns>The same <see cref="DotCoverCoverageSettings"/> instance so that multiple calls can be chained.</returns>
+        public static T WithProcessFilter<T>(this T settings, string filter) where T : DotCoverCoverageSettings
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+            settings.ProcessFilters.Add(filter);
+            return settings;
+        }
     }
 }

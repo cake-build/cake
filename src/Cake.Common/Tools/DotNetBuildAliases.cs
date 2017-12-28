@@ -28,6 +28,7 @@ namespace Cake.Common.Tools
         /// <param name="context">The context.</param>
         /// <param name="solution">The solution.</param>
         [CakeMethodAlias]
+        [Obsolete("Use MSBuild or XBuild instead.")]
         public static void DotNetBuild(this ICakeContext context, FilePath solution)
         {
             DotNetBuild(context, solution, settings => { });
@@ -49,6 +50,7 @@ namespace Cake.Common.Tools
         /// <param name="solution">The solution.</param>
         /// <param name="configurator">The configurator.</param>
         [CakeMethodAlias]
+        [Obsolete("Use MSBuild or XBuild instead.")]
         public static void DotNetBuild(this ICakeContext context, FilePath solution, Action<DotNetBuildSettings> configurator)
         {
             if (context == null)

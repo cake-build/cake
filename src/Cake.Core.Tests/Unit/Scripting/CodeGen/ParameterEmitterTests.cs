@@ -5,6 +5,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Resources;
 using Cake.Core.Scripting.CodeGen;
 using Xunit;
 // ReSharper disable UnusedMember.Local
@@ -357,6 +358,16 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             public static void OptionalNullableIntKeywordWithNullDefault(int? @new = null)
             {
             }
+
+            public static void OutputParameterInterface(out IDisposable arg)
+            {
+                arg = null;
+            }
+
+            public static void OutputParameterInt32(out int arg)
+            {
+                arg = 0;
+            }
         }
 
         [Theory]
@@ -371,7 +382,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
         [InlineData("RequiredUShort", "System.UInt16 arg")]
         [InlineData("RequiredUInt", "System.UInt32 arg")]
         [InlineData("RequiredFloat", "System.Single arg")]
-        [InlineData("RequiredEnum", "Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests+TestEnum arg")]
+        [InlineData("RequiredEnum", "Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestEnum arg")]
         [InlineData("RequiredBool", "System.Boolean arg")]
         [InlineData("RequiredString", "System.String arg")]
         [InlineData("RequiredObject", "System.Object arg")]
@@ -391,7 +402,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
         [InlineData("OptionalUShort", "System.UInt16 arg = (System.UInt16)1")]
         [InlineData("OptionalUInt", "System.UInt32 arg = (System.UInt32)1")]
         [InlineData("OptionalFloat", "System.Single arg = (System.Single)1")]
-        [InlineData("OptionalEnum", "Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests+TestEnum arg = (Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests+TestEnum)2")]
+        [InlineData("OptionalEnum", "Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestEnum arg = (Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestEnum)2")]
         [InlineData("OptionalBool", "System.Boolean arg = true")]
         [InlineData("OptionalString", "System.String arg = \"value\"")]
         [InlineData("OptionalObject", "System.Object arg = null")]
@@ -410,7 +421,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
         [InlineData("RequiredNullableUShort", "System.Nullable<System.UInt16> arg")]
         [InlineData("RequiredNullableUInt", "System.Nullable<System.UInt32> arg")]
         [InlineData("RequiredNullableFloat", "System.Nullable<System.Single> arg")]
-        [InlineData("RequiredNullableEnum", "System.Nullable<Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests+TestEnum> arg")]
+        [InlineData("RequiredNullableEnum", "System.Nullable<Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestEnum> arg")]
         [InlineData("RequiredNullableBool", "System.Nullable<System.Boolean> arg")]
         [InlineData("RequiredNullableDateTime", "System.Nullable<System.DateTime> arg")]
         [InlineData("OptionalNullableIntWithNullDefault", "System.Nullable<System.Int32> arg = null")]
@@ -424,7 +435,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
         [InlineData("OptionalNullableUShortWithNullDefault", "System.Nullable<System.UInt16> arg = null")]
         [InlineData("OptionalNullableUIntWithNullDefault", "System.Nullable<System.UInt32> arg = null")]
         [InlineData("OptionalNullableFloatWithNullDefault", "System.Nullable<System.Single> arg = null")]
-        [InlineData("OptionalNullableEnumWithNullDefault", "System.Nullable<Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests+TestEnum> arg = null")]
+        [InlineData("OptionalNullableEnumWithNullDefault", "System.Nullable<Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestEnum> arg = null")]
         [InlineData("OptionalNullableBoolWithNullDefault", "System.Nullable<System.Boolean> arg = null")]
         [InlineData("OptionalNullableDateTimeWithNullDefault", "System.Nullable<System.DateTime> arg = null")]
         [InlineData("OptionalNullableIntWithNonNullDefault", "System.Nullable<System.Int32> arg = (System.Int32)1")]
@@ -438,12 +449,14 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
         [InlineData("OptionalNullableUShortWithNonNullDefault", "System.Nullable<System.UInt16> arg = (System.UInt16)1")]
         [InlineData("OptionalNullableUIntWithNonNullDefault", "System.Nullable<System.UInt32> arg = (System.UInt32)1")]
         [InlineData("OptionalNullableFloatWithNonNullDefault", "System.Nullable<System.Single> arg = (System.Single)1")]
-        [InlineData("OptionalNullableEnumWithNonNullDefault", "System.Nullable<Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests+TestEnum> arg = (Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests+TestEnum)1")]
+        [InlineData("OptionalNullableEnumWithNonNullDefault", "System.Nullable<Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestEnum> arg = (Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestEnum)1")]
         [InlineData("OptionalNullableBoolWithNonNullDefault", "System.Nullable<System.Boolean> arg = (System.Boolean)true")]
         [InlineData("RequiredIntKeyword", "System.Int32 @new")]
         [InlineData("RequiredNullableIntKeyword", "System.Nullable<System.Int32> @new")]
         [InlineData("OptionalIntKeywordWithNonNullDefault", "System.Int32 @new = (System.Int32)1")]
         [InlineData("OptionalNullableIntKeywordWithNullDefault", "System.Nullable<System.Int32> @new = null")]
+        [InlineData("OutputParameterInterface", "out System.IDisposable arg")]
+        [InlineData("OutputParameterInt32", "out System.Int32 arg")]
         public void Should_Return_Correct_Generated_Code_For_Method_Parameters(string methodName, string expected)
         {
             // Given

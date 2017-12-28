@@ -19,6 +19,7 @@ namespace Cake.Core
         {
             public const string Tools = "Paths_Tools";
             public const string Addins = "Paths_Addins";
+            public const string Modules = "Paths_Modules";
         }
     }
 }

@@ -54,10 +54,11 @@ namespace Cake.Core
                 return type.GetElementType().GetFullName(includeNamespace) + "[]";
             }
 
+            // fix any nested types by a simple replacement + will become .
             Type genericType;
-            return type.IsGenericType(out genericType)
+            return (type.IsGenericType(out genericType)
                 ? GetGenericTypeName(genericType, includeNamespace)
-                : includeNamespace ? type.FullName : type.Name;
+                : includeNamespace ? type.FullName : type.Name).Replace('+', '.');
         }
 
         /// <summary>

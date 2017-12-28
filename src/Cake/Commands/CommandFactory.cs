@@ -6,6 +6,7 @@ namespace Cake.Commands
 {
     internal sealed class CommandFactory : ICommandFactory
     {
+        private readonly BootstrapCommand.Factory _bootstrapCommandFactory;
         private readonly BuildCommand.Factory _buildCommandFactory;
         private readonly DebugCommand.Factory _debugCommandFactory;
         private readonly DescriptionCommand.Factory _descriptionCommandFactory;
@@ -14,6 +15,7 @@ namespace Cake.Commands
         private readonly VersionCommand.Factory _versionCommandFactory;
 
         public CommandFactory(
+            BootstrapCommand.Factory bootstrapCommandFactory,
             BuildCommand.Factory buildCommandFactory,
             DebugCommand.Factory debugCommandFactory,
             DescriptionCommand.Factory descriptionCommandFactory,
@@ -21,12 +23,18 @@ namespace Cake.Commands
             HelpCommand.Factory helpCommandFactory,
             VersionCommand.Factory versionCommandFactory)
         {
+            _bootstrapCommandFactory = bootstrapCommandFactory;
             _buildCommandFactory = buildCommandFactory;
             _debugCommandFactory = debugCommandFactory;
             _descriptionCommandFactory = descriptionCommandFactory;
             _dryRunCommandFactory = dryRunCommandFactory;
             _helpCommandFactory = helpCommandFactory;
             _versionCommandFactory = versionCommandFactory;
+        }
+
+        public ICommand CreateBootstrapCommand()
+        {
+            return _bootstrapCommandFactory();
         }
 
         public ICommand CreateBuildCommand()
