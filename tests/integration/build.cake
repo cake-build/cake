@@ -22,6 +22,7 @@
 #load "./Cake.Common/Tools/NuGet/NuGetAliases.cake"
 #load "./Cake.Core/Scripting/DefineDirective.cake"
 #load "./Cake.Core/Scripting/LoadDirective.cake"
+#load "./Cake.Core/Scripting/SystemCollections.cake"
 #load "./Cake.Core/Scripting/UsingDirective.cake"
 #load "./Cake.Core/Tooling/ToolLocator.cake"
 #load "./Cake.Core/CakeAliases.cake"
@@ -48,6 +49,7 @@ Setup(ctx =>
 Task("Cake.Core")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective")
     .IsDependentOn("Cake.Core.Scripting.LoadDirective")
+    .IsDependentOn("Cake.Core.Scripting.SystemCollections")
     .IsDependentOn("Cake.Core.Scripting.UsingDirective")
     .IsDependentOn("Cake.Core.Tooling.ToolLocator")
     .IsDependentOn("Cake.Core.CakeAliases");
