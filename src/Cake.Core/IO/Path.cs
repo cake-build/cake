@@ -71,7 +71,7 @@ namespace Cake.Core.IO
             }
 
             // Remove trailing slashes.
-            FullPath = FullPath.TrimEnd('/', '\\');
+            FullPath = FullPath.TrimEnd('/');
 
             if (FullPath.EndsWith(":", StringComparison.OrdinalIgnoreCase))
             {
