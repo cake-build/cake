@@ -21,6 +21,11 @@ namespace Cake.Core.Diagnostics.Formatting
 
         public override string Render(object[] args)
         {
+            if (Position < 0 || Position >= args.Length)
+            {
+                throw new FormatException("Index (zero based) must be greater than or equal to zero and less than the size of the argument list.");
+            }
+
             var value = args[Position];
             if (!string.IsNullOrWhiteSpace(Format))
             {
