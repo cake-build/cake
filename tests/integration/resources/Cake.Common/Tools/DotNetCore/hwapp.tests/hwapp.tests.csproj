@@ -7,7 +7,7 @@
     <PackageId>hwapp.tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <PackageTargetFallback>$(PackageTargetFallback);dotnet5.4;portable-net451+win8</PackageTargetFallback>
-    <RuntimeFrameworkVersion>1.0.8</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>1.0.9</RuntimeFrameworkVersion>
   </PropertyGroup>
 
   <ItemGroup>
