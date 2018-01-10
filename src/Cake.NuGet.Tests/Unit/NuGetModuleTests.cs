@@ -87,6 +87,7 @@ namespace Cake.NuGet.Tests.Unit
             {
                 // Given
                 var fixture = new NuGetModuleFixture<NuGetPackageInstaller>();
+                fixture.Configuration.SetValue(Constants.NuGet.UseInProcessClient, bool.FalseString);
                 var module = fixture.CreateModule();
 
                 // When
@@ -99,12 +100,17 @@ namespace Cake.NuGet.Tests.Unit
                 fixture.Builder.Received(1).Singleton();
             }
 
-            [Fact]
-            public void Should_Register_The_In_Process_NuGet_Package_Installer_If_Set_In_Configuration()
+            [Theory]
+            [InlineData(true)]
+            [InlineData(null)]
+            public void Should_Register_The_In_Process_NuGet_Package_Installer_If_Set_In_Configuration(bool? config)
             {
                 // Given
                 var fixture = new NuGetModuleFixture<Install.NuGetPackageInstaller>();
-                fixture.Configuration.SetValue(Constants.NuGet.UseInProcessClient, bool.TrueString);
+                if (config.HasValue)
+                {
+                    fixture.Configuration.SetValue(Constants.NuGet.UseInProcessClient, config.Value ? bool.TrueString : bool.FalseString);
+                }
                 var module = fixture.CreateModule();
 
                 // When
