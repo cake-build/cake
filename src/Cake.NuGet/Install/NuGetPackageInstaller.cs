@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
@@ -110,7 +111,6 @@ namespace Cake.NuGet.Install
             var packageRoot = path.MakeAbsolute(_environment).FullPath;
             var targetFramework = type == PackageType.Addin ? _currentFramework : NuGetFramework.AnyFramework;
             var sourceRepositoryProvider = new NuGetSourceRepositoryProvider(_nugetSettings, _config, package);
-            sourceRepositoryProvider.CreateRepository(packageRoot);
             var packageIdentity = GetPackageId(package, sourceRepositoryProvider, targetFramework, _nugetLogger);
             if (packageIdentity == null)
             {
@@ -123,15 +123,33 @@ namespace Cake.NuGet.Install
             {
                 PackagesFolderNuGetProject = project
             };
-            var sourceRepositories = sourceRepositoryProvider.GetRepositories();
             var includePrerelease = package.IsPrerelease();
             var dependencyBehavior = GetDependencyBehavior(type, package);
             var resolutionContext = new ResolutionContext(dependencyBehavior, includePrerelease, false, VersionConstraints.None, _gatherCache);
             var projectContext = new NuGetProjectContext(_log);
 
-            packageManager.InstallPackageAsync(project, packageIdentity, resolutionContext, projectContext,
-                sourceRepositories, Array.Empty<SourceRepository>(),
-                CancellationToken.None).Wait();
+            using (var sourceCacheContext = new SourceCacheContext())
+            {
+                var downloadContext = new PackageDownloadContext(sourceCacheContext);
+
+                // First get the install actions.
+                // This will give us the list of packages to install, and which feed should be used.
+                var actions = packageManager.GetInstallProjectActionsAsync(
+                    project,
+                    packageIdentity,
+                    resolutionContext,
+                    projectContext,
+                    sourceRepositoryProvider.GetRepositories(),
+                    CancellationToken.None).Result;
+
+                // Then install the packages.
+                packageManager.ExecuteNuGetProjectActionsAsync(
+                    project,
+                    actions,
+                    projectContext,
+                    downloadContext,
+                    CancellationToken.None).Wait();
+            }
 
             return project.GetFiles(path, package, type);
         }
