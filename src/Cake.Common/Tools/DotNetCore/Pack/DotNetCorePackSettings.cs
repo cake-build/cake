@@ -33,6 +33,23 @@ namespace Cake.Common.Tools.DotNetCore.Pack
         public bool NoBuild { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to ignore project to project references and only build the root project.
+        /// </summary>
+        /// <remarks>
+        /// Requires .NET Core 2.x or newer.
+        /// </remarks>
+        public bool NoDependencies { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to not do implicit NuGet package restore.
+        /// This makes build faster, but requires restore to be done before build is executed.
+        /// </summary>
+        /// <remarks>
+        /// Requires .NET Core 2.x or newer.
+        /// </remarks>
+        public bool NoRestore { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to generate the symbols nupkg.
         /// </summary>
         public bool IncludeSymbols { get; set; }
