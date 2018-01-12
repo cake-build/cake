@@ -241,6 +241,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 fixture.Settings.DisposeRunners = true;
                 fixture.Settings.ShadowCopy = true;
                 fixture.Settings.Agents = 3;
+                fixture.Settings.TraceLevel = NUnitInternalTraceLevel.Debug;
                 fixture.Settings.Params = new Dictionary<string, string>
                 {
                     ["one"] = "1",
@@ -262,6 +263,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                         "\"--config=Debug\" \"--framework=net3.5\" --x86 " +
                         "--dispose-runners --shadowcopy --agents=3 " +
                         "--process=InProcess --domain=Single " +
+                        "--trace=verbose " +
                         "\"--params=one=1\" " +
                         "\"--params=two=2\" " +
                         "\"--params=three=3\"", result.Args);
@@ -329,6 +331,20 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 // Given
                 var fixture = new NUnit3RunnerFixture();
                 fixture.Settings.AppDomainUsage = NUnit3AppDomainUsage.Default;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Not_Set_Switch_For_Default_TraceLevel()
+            {
+                // Given
+                var fixture = new NUnit3RunnerFixture();
+                fixture.Settings.TraceLevel = null;
 
                 // When
                 var result = fixture.Run();

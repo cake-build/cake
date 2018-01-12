@@ -216,6 +216,11 @@ namespace Cake.Common.Tools.NUnit
                 builder.Append("--domain=" + settings.AppDomainUsage);
             }
 
+            if (settings.TraceLevel.HasValue)
+            {
+                builder.Append("--trace=" + settings.TraceLevel.Value.GetArgumentValue());
+            }
+
             if (settings.Params != null && settings.Params.Count > 0)
             {
                 foreach (var param in settings.Params)
