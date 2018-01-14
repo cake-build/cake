@@ -55,6 +55,15 @@ namespace Cake.Common.Tools.DotNetCore.Test
         public bool NoBuild { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to not do implicit NuGet package restore.
+        /// This makes build faster, but requires restore to be done before build is executed.
+        /// </summary>
+        /// <remarks>
+        /// Requires .NET Core 2.x or newer.
+        /// </remarks>
+        public bool NoRestore { get; set; }
+
+        /// <summary>
         /// Gets or sets a file to write diagnostic messages to.
         /// </summary>
         public FilePath DiagnosticFile { get; set; }

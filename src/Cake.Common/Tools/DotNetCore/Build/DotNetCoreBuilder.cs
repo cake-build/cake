@@ -105,10 +105,16 @@ namespace Cake.Common.Tools.DotNetCore.Build
                 builder.Append("--no-incremental");
             }
 
-            // No Incremental
+            // No Dependencies
             if (settings.NoDependencies)
             {
                 builder.Append("--no-dependencies");
+            }
+
+            // No Restore
+            if (settings.NoRestore)
+            {
+                builder.Append("--no-restore");
             }
 
             if (settings.MSBuildSettings != null)

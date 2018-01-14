@@ -49,6 +49,15 @@ namespace Cake.Common.Tools.DotNetCore.Build
         public bool NoDependencies { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to not do implicit NuGet package restore.
+        /// This makes build faster, but requires restore to be done before build is executed.
+        /// </summary>
+        /// <remarks>
+        /// Requires .NET Core 2.x or newer.
+        /// </remarks>
+        public bool NoRestore { get; set; }
+
+        /// <summary>
         /// Gets or sets additional arguments to be passed to MSBuild.
         /// </summary>
         public DotNetCoreMSBuildSettings MSBuildSettings { get; set; }

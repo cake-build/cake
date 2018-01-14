@@ -147,13 +147,14 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Build
                 var fixture = new DotNetCoreBuilderFixture();
                 fixture.Settings.NoIncremental = true;
                 fixture.Settings.NoDependencies = true;
+                fixture.Settings.NoRestore = true;
                 fixture.Project = "./src/*";
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("build \"./src/*\" --no-incremental --no-dependencies", result.Args);
+                Assert.Equal("build \"./src/*\" --no-incremental --no-dependencies --no-restore", result.Args);
             }
 
             [Fact]

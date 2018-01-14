@@ -73,6 +73,18 @@ namespace Cake.Common.Tools.DotNetCore.Pack
                 builder.Append("--no-build");
             }
 
+            // No Dependencies
+            if (settings.NoDependencies)
+            {
+                builder.Append("--no-dependencies");
+            }
+
+            // No Restore
+            if (settings.NoRestore)
+            {
+                builder.Append("--no-restore");
+            }
+
             // Include symbols
             if (settings.IncludeSymbols)
             {

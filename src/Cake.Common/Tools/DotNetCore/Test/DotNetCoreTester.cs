@@ -115,9 +115,16 @@ namespace Cake.Common.Tools.DotNetCore.Test
                 builder.AppendQuoted(settings.DiagnosticFile.MakeAbsolute(_environment).FullPath);
             }
 
+            // No Build
             if (settings.NoBuild)
             {
                 builder.Append("--no-build");
+            }
+
+            // No Restore
+            if (settings.NoRestore)
+            {
+                builder.Append("--no-restore");
             }
 
             if (settings.ResultsDirectory != null)
