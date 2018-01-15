@@ -100,5 +100,11 @@ namespace Cake.Common.Solution.Project.Properties
         /// </summary>
         /// <value>The namespace(s).</value>
         public ICollection<AssemblyInfoCustomAttribute> CustomAttributes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meta data attribute(s) that should be added to the assembly info file.
+        /// </summary>
+        /// <value>The meta data.</value>
+        public ICollection<AssemblyInfoMetadataAttribute> MetaDataAttributes { get; set; }
     }
 }

@@ -20,10 +20,12 @@ namespace Cake.Common.Solution.Project.Properties
         private const string CSharpUsingFormat = "using {0};";
         private const string CSharpAttributeFormat = "[assembly: {0}]";
         private const string CSharpAttributeWithValueFormat = "[assembly: {0}({1})]";
+        private const string CSharpAttributeWithKeyValueFormat = "[assembly: {0}({1}, {2})]";
         private const string VBComment = "'";
         private const string VBUsingFormat = "Imports {0}";
         private const string VBAttributeFormat = "<Assembly: {0}>";
         private const string VBAttributeWithValueFormat = "<Assembly: {0}({1})>";
+        private const string VBAttributeWithKeyValueFormat = "<Assembly: {0}({1}, {2})>";
 
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
@@ -74,6 +76,7 @@ namespace Cake.Common.Solution.Project.Properties
             string usingFormat = CSharpUsingFormat;
             string attributeFormat = CSharpAttributeFormat;
             string attributeWithValueFormat = CSharpAttributeWithValueFormat;
+            string attributeWithKeyValueFormat = CSharpAttributeWithKeyValueFormat;
 
             if (outputPath.GetExtension() == ".vb")
             {
@@ -81,6 +84,7 @@ namespace Cake.Common.Solution.Project.Properties
                 usingFormat = VBUsingFormat;
                 attributeFormat = VBAttributeFormat;
                 attributeWithValueFormat = VBAttributeWithValueFormat;
+                attributeWithKeyValueFormat = VBAttributeWithKeyValueFormat;
             }
             var data = new AssemblyInfoCreatorData(settings);
 
@@ -130,6 +134,16 @@ namespace Cake.Common.Solution.Project.Properties
                     foreach (var attribute in data.CustomAttributes)
                     {
                         writer.WriteLine(string.Format(attributeWithValueFormat, attribute.Key, attribute.Value));
+                    }
+                }
+
+                if (data.MetadataAttributes.Count > 0)
+                {
+                    writer.WriteLine(comment + " Metadata Attributes");
+                    var mdAttribute = new AssemblyInfoMetadataAttribute();
+                    foreach (var attribute in data.MetadataAttributes)
+                    {
+                        writer.WriteLine(string.Format(attributeWithKeyValueFormat, mdAttribute.Name, attribute.Key, attribute.Value));
                     }
                 }
             }
