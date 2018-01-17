@@ -36,6 +36,9 @@ namespace Cake.Common.Tools.Chocolatey.Download
 
         /// <summary>
         /// Downloads Chocolatey packages using the specified package id and settings.
+        /// Requires Chocolatey licensed edition.
+        /// Features requiring Chocolatey for Business or a minimum version are documented
+        /// in <see cref="ChocolateyDownloadSettings"/>.
         /// </summary>
         /// <param name="packageId">The source package id.</param>
         /// <param name="settings">The settings.</param>

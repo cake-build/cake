@@ -1146,6 +1146,7 @@ namespace Cake.Common.Tools.Chocolatey
 
         /// <summary>
         /// Downloads a Chocolatey package to the current working directory.
+        /// Requires Chocolatey licensed edition.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="packageId">The id of the package to download.</param>
@@ -1165,6 +1166,9 @@ namespace Cake.Common.Tools.Chocolatey
 
         /// <summary>
         /// Downloads a Chocolatey package using the specified settings.
+        /// Requires Chocolatey licensed edition.
+        /// Features requiring Chocolatey for Business or a minimum version are documented
+        /// in <see cref="ChocolateyDownloadSettings"/>.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="packageId">The id of the package to install.</param>

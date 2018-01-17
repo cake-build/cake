@@ -1,3 +1,18 @@
+### New in 0.25.0 (Released 2018/01/17)
+
+* 1995 Make In-proc NuGet addin/tool installation default
+* 1994 Get MSBuild Verbosity enum from string
+* 1988 TeamCity writing start and end progress contains invalid messages property
+* 1974 ToDictionary on Mono causes "The type 'Dictionary<,>' is defined in an assembly that is not referenced"
+* 1998 Some .NET Core commands missing no dependencies/restore
+* 1997 Add the --trace option to the NUnit3Settings class.
+* 1992 Update to .NET Runtime 1.0.9 because security issues
+* 1989 Path unnecessarily trims backslash in already normalized string
+* 1987 Confusing Error from Bad Format String to Information()
+* 1937 UseInProcessClient=true is slow
+* 1982 CodeTriage - Get more Open Source Helpers
+* 1689 ChocolateyDownload should be documented to only work in paid edition
+
 ### New in 0.24.0 (Released 2017/12/29)
 
 * 1950 Allow Cake modules to be bootstrapped by Cake in a pre-processing phase

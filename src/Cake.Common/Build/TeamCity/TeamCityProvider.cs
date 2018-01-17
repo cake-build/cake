@@ -134,7 +134,7 @@ namespace Cake.Common.Build.TeamCity
         /// <param name="message">Build log message.</param>
         public void WriteStartProgress(string message)
         {
-            WriteServiceMessage("progressStart", "message", message);
+            WriteServiceMessage("progressStart", message);
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace Cake.Common.Build.TeamCity
         /// <param name="message">Build log message.</param>
         public void WriteEndProgress(string message)
         {
-            WriteServiceMessage("progressFinish", "message", message);
+            WriteServiceMessage("progressFinish", message);
         }
 
         /// <summary>

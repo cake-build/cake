@@ -35,5 +35,30 @@ namespace Cake.Common.Tools.MSBuild
                     throw new CakeException("Encountered unknown MSBuild build log verbosity.");
             }
         }
+
+        /// <summary>
+        /// Gets the MSBuild <see cref="Verbosity"/> from string value.
+        /// </summary>
+        /// <param name="verbosity">The verbosity string value.</param>
+        /// <returns>MSBuild <see cref="Verbosity"/> enumeration.</returns>
+        /// <remarks>Valid values are 'quiet', 'minimal', 'normal', 'detailed' and 'diagnostic'.</remarks>
+        public static Verbosity GetMSBuildVerbosity(this string verbosity)
+        {
+            switch (verbosity?.ToLower())
+            {
+                case "quiet":
+                    return Verbosity.Quiet;
+                case "minimal":
+                    return Verbosity.Minimal;
+                case "normal":
+                    return Verbosity.Normal;
+                case "detailed":
+                    return Verbosity.Verbose;
+                case "diagnostic":
+                    return Verbosity.Diagnostic;
+                default:
+                    throw new CakeException($"Encountered unknown MSBuild build log verbosity '{verbosity}'. Valid values are 'quiet', 'minimal', 'normal', 'detailed' and 'diagnostic'.");
+            }
+        }
     }
 }

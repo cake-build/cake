@@ -108,6 +108,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
                 // Given
                 var fixture = new DotNetCoreTesterFixture();
                 fixture.Settings.NoBuild = true;
+                fixture.Settings.NoRestore = true;
                 fixture.Settings.Framework = "dnxcore50";
                 fixture.Settings.Configuration = "Release";
                 fixture.Settings.OutputDirectory = "./artifacts/";
@@ -122,7 +123,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("test --settings \"/Working/demo.runsettings\" --filter \"Priority = 1\" --test-adapter-path \"/Working/custom-test-adapter\" --logger \"trx;LogFileName=/Working/logfile.trx\" --output \"/Working/artifacts\" --framework dnxcore50 --configuration Release --diag \"/Working/artifacts/logging/diagnostics.txt\" --no-build --results-directory \"/Working/tests\"", result.Args);
+                Assert.Equal("test --settings \"/Working/demo.runsettings\" --filter \"Priority = 1\" --test-adapter-path \"/Working/custom-test-adapter\" --logger \"trx;LogFileName=/Working/logfile.trx\" --output \"/Working/artifacts\" --framework dnxcore50 --configuration Release --diag \"/Working/artifacts/logging/diagnostics.txt\" --no-build --no-restore --results-directory \"/Working/tests\"", result.Args);
             }
 
             [Fact]

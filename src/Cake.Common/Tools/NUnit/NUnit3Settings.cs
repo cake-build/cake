@@ -242,5 +242,15 @@ namespace Cake.Common.Tools.NUnit
         /// List of parametes (key/value) which are passed to the runner.
         /// </value>
         public IDictionary<string, string> Params { get; set; }
+
+        /// <summary>
+        /// Gets or sets the level of detail at which the runner should write to its internal trace log.
+        /// Corresponds to the -trace=LEVEL command line argument.
+        /// If <c>null</c>, no argument will be specified
+        /// </summary>
+        /// <value>
+        /// The trace level.
+        /// </value>
+        public NUnitInternalTraceLevel? TraceLevel { get; set; }
     }
 }
