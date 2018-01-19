@@ -163,16 +163,6 @@ namespace Cake.Core
             return ApplicationRoot;
         }
 
-        /// <summary>
-        /// Gets the target .Net framework version that the current AppDomain is targeting.
-        /// </summary>
-        /// <returns>The target framework.</returns>
-        [Obsolete("Please use CakeEnvironment.Runtime.TargetFramework instead.")]
-        public FrameworkName GetTargetFramework()
-        {
-            return Runtime.TargetFramework;
-        }
-
         private static void SetWorkingDirectory(DirectoryPath path)
         {
             if (path.IsRelative)

@@ -25,7 +25,7 @@ public class BuildPaths
         var artifactsDir = (DirectoryPath)(context.Directory("./artifacts") + context.Directory("v" + semVersion));
         var artifactsBinDir = artifactsDir.Combine("bin");
         var artifactsBinFullFx = artifactsBinDir.Combine("net461");
-        var artifactsBinNetCore = artifactsBinDir.Combine("netcoreapp1.0");
+        var artifactsBinNetCore = artifactsBinDir.Combine("netcoreapp2.0");
         var testResultsDir = artifactsDir.Combine("test-results");
         var nugetRoot = artifactsDir.Combine("nuget");
 

@@ -34,7 +34,6 @@ namespace Cake.Core.Polyfill
 
         public static Assembly LoadAssembly(ICakeEnvironment environment, IFileSystem fileSystem, FilePath path)
         {
-#if NETCORE
             if (path == null)
             {
                 throw new ArgumentNullException(nameof(path));
@@ -42,18 +41,13 @@ namespace Cake.Core.Polyfill
 
             if (path.Segments.Length == 1 && !fileSystem.Exist(path))
             {
-                // Not a valid path. Try loading it by its name.
-                return Assembly.Load(new AssemblyName(path.FullPath));
+               // Not a valid path. Try loading it by its name.
+               return Assembly.Load(new AssemblyName(path.FullPath));
             }
 
             // Make the path absolute.
             path = path.MakeAbsolute(environment);
-
-            var loader = new CakeAssemblyLoadContext(fileSystem, path.GetDirectory());
-            return loader.LoadFromAssemblyPath(path.FullPath);
-#else
             return Assembly.LoadFrom(path.FullPath);
-#endif
         }
     }
 }

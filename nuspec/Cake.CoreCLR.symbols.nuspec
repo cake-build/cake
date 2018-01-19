@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+<package 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata 
+    xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <id>Cake.CoreCLR</id>
     <version>0.0.0</version>
     <authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström and contributors</authors>
@@ -14,8 +17,8 @@
     <tags>Cake Script Build</tags>
   </metadata>
   <files>
-    <file src="Cake.dll" target="lib/netstandard1.6" />
-    <file src="Cake.pdb" target="lib/netstandard1.6" />
-    <file src="Cake.xml" target="lib/netstandard1.6" />
+    <file src="Cake.dll" target="lib/netcoreapp2.0" />
+    <file src="Cake.pdb" target="lib/netcoreapp2.0" />
+    <file src="Cake.xml" target="lib/netcoreapp2.0" />
   </files>
 </package>

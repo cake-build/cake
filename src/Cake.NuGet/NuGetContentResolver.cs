@@ -61,7 +61,7 @@ namespace Cake.NuGet
 
             // Get current framework.
             var provider = DefaultFrameworkNameProvider.Instance;
-            var current = NuGetFramework.Parse(_environment.Runtime.TargetFramework.FullName, provider);
+            var current = NuGetFramework.Parse(_environment.Runtime.GetExecutingFramework().FullName, provider);
 
             // Get all ref assemblies.
             var refAssemblies = _globber.GetFiles(path.FullPath + "/ref/**/*.dll");
@@ -99,7 +99,7 @@ namespace Cake.NuGet
 
             if (nearest == NuGetFramework.AnyFramework)
             {
-                var framework = _environment.Runtime.TargetFramework;
+                var framework = _environment.Runtime.BuiltFramework;
                 _log.Warning("Could not find any assemblies compatible with {0} in NuGet package {1}. " +
                              "Falling back to using root folder of NuGet package.", framework.FullName, package.Package);
             }
