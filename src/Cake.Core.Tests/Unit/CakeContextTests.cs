@@ -96,6 +96,20 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
+            public void Should_Throw_If_Registry_Is_Null()
+            {
+                // Given
+                var fixture = new CakeContextFixture();
+                fixture.Registry = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateContext());
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "registry");
+            }
+
+            [Fact]
             public void Should_Throw_If_Tools_Are_Null()
             {
                 // Given

@@ -18,6 +18,7 @@ namespace Cake.Core.Tests.Fixtures
         public IProcessRunner ProcessRunner { get; set; }
         public ICakeContext Context { get; set; }
         public IExecutionStrategy ExecutionStrategy { get; set; }
+        public ICakeDataService DataService { get; set; }
 
         public CakeEngineFixture()
         {
@@ -28,6 +29,7 @@ namespace Cake.Core.Tests.Fixtures
             Arguments = Substitute.For<ICakeArguments>();
             ProcessRunner = Substitute.For<IProcessRunner>();
             ExecutionStrategy = new DefaultExecutionStrategy(Log);
+            DataService = Substitute.For<ICakeDataService>();
 
             Context = Substitute.For<ICakeContext>();
             Context.Arguments.Returns(Arguments);
@@ -40,7 +42,7 @@ namespace Cake.Core.Tests.Fixtures
 
         public CakeEngine CreateEngine()
         {
-            return new CakeEngine(Log);
+            return new CakeEngine(DataService, Log);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Cake.Core.Tests.Unit
             public void Should_Throw_Is_Provided_Task_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => new CakeTaskBuilder<ActionTask>(null));
+                var result = Record.Exception(() => new CakeTaskBuilder(null));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "task");
@@ -27,11 +27,11 @@ namespace Cake.Core.Tests.Unit
             public void Should_Return_The_Task_Provided_To_The_Constructor()
             {
                 // Given, When
-                var task = new ActionTask("task");
-                var builder = new CakeTaskBuilder<ActionTask>(task);
+                var task = new CakeTask("task");
+                var builder = new CakeTaskBuilder(task);
 
                 // Then
-                Assert.Equal(task, builder.Task);
+                Assert.Equal(task, builder.Target);
             }
         }
     }

@@ -21,48 +21,68 @@ namespace Cake.Core
     {
         private readonly ICakeLog _log;
         private readonly List<CakeTask> _tasks;
-        private Action<ICakeContext> _setupAction;
-        private Action<ITeardownContext> _teardownAction;
-        private Action<ITaskSetupContext> _taskSetupAction;
-        private Action<ITaskTeardownContext> _taskTeardownAction;
+        private readonly CakeEngineActions _actions;
 
         /// <summary>
         /// Gets all registered tasks.
         /// </summary>
         /// <value>The registered tasks.</value>
-        public IReadOnlyList<CakeTask> Tasks => _tasks;
+        public IReadOnlyList<ICakeTaskInfo> Tasks => _tasks;
+
+        /// <summary>
+        /// Raised during setup before any tasks are run.
+        /// </summary>
+        public event EventHandler<SetupEventArgs> Setup;
+
+        /// <summary>
+        /// Raised during teardown after all other tasks have been run.
+        /// </summary>
+        public event EventHandler<TeardownEventArgs> Teardown;
+
+        /// <summary>
+        /// Raised before each task is run.
+        /// </summary>
+        public event EventHandler<TaskSetupEventArgs> TaskSetup;
+
+        /// <summary>
+        /// Raised after each task has been run.
+        /// </summary>
+        public event EventHandler<TaskTeardownEventArgs> TaskTeardown;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeEngine"/> class.
         /// </summary>
+        /// <param name="data">The data service.</param>
         /// <param name="log">The log.</param>
-        public CakeEngine(ICakeLog log)
+        public CakeEngine(ICakeDataService data, ICakeLog log)
         {
-            if (log == null)
+            if (data == null)
             {
-                throw new ArgumentNullException(nameof(log));
+                throw new ArgumentNullException(nameof(data));
             }
-            _log = log;
+
+            _log = log ?? throw new ArgumentNullException(nameof(log));
             _tasks = new List<CakeTask>();
+            _actions = new CakeEngineActions(data);
         }
 
         /// <summary>
-        /// Creates and registers a new <see cref="ActionTask"/>.
+        /// Creates and registers a new Cake task.
         /// </summary>
         /// <param name="name">The name of the task.</param>
         /// <returns>
-        /// A <see cref="CakeTaskBuilder{T}"/> used to configure the task.
+        /// A <see cref="CakeTaskBuilder"/> used to configure the task.
         /// </returns>
-        public CakeTaskBuilder<ActionTask> RegisterTask(string name)
+        public CakeTaskBuilder RegisterTask(string name)
         {
             if (_tasks.Any(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
                 const string format = "Another task with the name '{0}' has already been added.";
                 throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, name));
             }
-            var task = new ActionTask(name);
+            var task = new CakeTask(name);
             _tasks.Add(task);
-            return new CakeTaskBuilder<ActionTask>(task);
+            return new CakeTaskBuilder(task);
         }
 
         /// <summary>
@@ -72,13 +92,20 @@ namespace Cake.Core
         /// <param name="action">The action to be executed.</param>
         public void RegisterSetupAction(Action<ICakeContext> action)
         {
-            _setupAction = action;
+            _actions.RegisterSetup(action);
         }
 
         /// <summary>
-        /// Raised during setup before any tasks are run.
+        /// Allows registration of an action that's executed before any tasks are run.
+        /// If setup fails, no tasks will be executed but teardown will be performed.
         /// </summary>
-        public event EventHandler<SetupEventArgs> Setup;
+        /// <typeparam name="TData">The data type.</typeparam>
+        /// <param name="action">The action to be executed.</param>
+        public void RegisterSetupAction<TData>(Func<ICakeContext, TData> action)
+            where TData : class
+        {
+            _actions.RegisterSetup(action);
+        }
 
         /// <summary>
         /// Allows registration of an action that's executed after all other tasks have been run.
@@ -87,13 +114,64 @@ namespace Cake.Core
         /// <param name="action">The action to be executed.</param>
         public void RegisterTeardownAction(Action<ITeardownContext> action)
         {
-            _teardownAction = action;
+            _actions.RegisterTeardown(action);
         }
 
         /// <summary>
-        /// Raised during teardown after all other tasks have been run.
+        /// Allows registration of an action that's executed after all other tasks have been run.
+        /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
         /// </summary>
-        public event EventHandler<TeardownEventArgs> Teardown;
+        /// <typeparam name="TData">The data type.</typeparam>
+        /// <param name="action">The action to be executed.</param>
+        public void RegisterTeardownAction<TData>(Action<ITeardownContext, TData> action)
+            where TData : class
+        {
+            _actions.RegisterTeardown(action);
+        }
+
+        /// <summary>
+        /// Allows registration of an action that's executed before each task is run.
+        /// If the task setup fails, the task will not be executed but the task's teardown will be performed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        public void RegisterTaskSetupAction(Action<ITaskSetupContext> action)
+        {
+            _actions.RegisterTaskSetup(action);
+        }
+
+        /// <summary>
+        /// Allows registration of an action that's executed before each task is run.
+        /// If the task setup fails, the task will not be executed but the task's teardown will be performed.
+        /// </summary>
+        /// <typeparam name="TData">The data type.</typeparam>
+        /// <param name="action">The action to be executed.</param>
+        public void RegisterTaskSetupAction<TData>(Action<ITaskSetupContext, TData> action)
+            where TData : class
+        {
+            _actions.RegisterTaskSetup(action);
+        }
+
+        /// <summary>
+        /// Allows registration of an action that's executed after each task has been run.
+        /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
+        /// </summary>
+        /// <param name="action">The action to be executed.</param>
+        public void RegisterTaskTeardownAction(Action<ITaskTeardownContext> action)
+        {
+            _actions.RegisterTaskTeardown(action);
+        }
+
+        /// <summary>
+        /// Allows registration of an action that's executed after each task has been run.
+        /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
+        /// </summary>
+        /// <typeparam name="TData">The data type.</typeparam>
+        /// <param name="action">The action to be executed.</param>
+        public void RegisterTaskTeardownAction<TData>(Action<ITaskTeardownContext, TData> action)
+            where TData : class
+        {
+            _actions.RegisterTaskTeardown(action);
+        }
 
         /// <summary>
         /// Runs the specified target.
@@ -113,6 +191,10 @@ namespace Cake.Core
                 throw new ArgumentNullException(nameof(strategy));
             }
 
+            // Ensure that registered actions are valid.
+            _actions.Validate();
+
+            // Create a graph out of the tasks.
             var graph = CakeGraphBuilder.Build(_tasks);
 
             // Make sure target exist.
@@ -133,25 +215,32 @@ namespace Cake.Core
 
             try
             {
-                PerformSetup(strategy, context, stopWatch, report);
+                // Get all nodes to traverse in the correct order.
+                var orderedTasks = graph.Traverse(target)
+                    .Select(y => _tasks.FirstOrDefault(x =>
+                        x.Name.Equals(y, StringComparison.OrdinalIgnoreCase))).ToArray();
 
-                foreach (var taskNode in graph.Traverse(target))
+                PerformSetup(strategy, context, orderedTasks, stopWatch, report);
+
+                foreach (var task in orderedTasks)
                 {
-                    // Get the task.
-                    var task = _tasks.FirstOrDefault(x => x.Name.Equals(taskNode, StringComparison.OrdinalIgnoreCase));
-                    Debug.Assert(task != null, "Node should not be null.");
-
                     // Is this the current target?
                     var isTarget = task.Name.Equals(target, StringComparison.OrdinalIgnoreCase);
 
                     // Should we execute the task?
-                    if (ShouldTaskExecute(context, task, isTarget))
+                    var skipped = false;
+                    foreach (var criteria in task.Criterias)
+                    {
+                        if (!ShouldTaskExecute(context, task, criteria, isTarget))
+                        {
+                            SkipTask(context, strategy, task, report, criteria);
+                            skipped = true;
+                        }
+                    }
+
+                    if (!skipped)
                     {
                         await ExecuteTaskAsync(context, strategy, stopWatch, task, report).ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        SkipTask(context, strategy, task, report);
                     }
                 }
 
@@ -169,64 +258,31 @@ namespace Cake.Core
             }
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed before each task is run.
-        /// If the task setup fails, the task will not be executed but the task's teardown will be performed.
-        /// </summary>
-        /// <param name="action">The action to be executed.</param>
-        public void RegisterTaskSetupAction(Action<ITaskSetupContext> action)
-        {
-            _taskSetupAction = action;
-        }
-
-        /// <summary>
-        /// Raised before each task is run.
-        /// </summary>
-        public event EventHandler<TaskSetupEventArgs> TaskSetup;
-
-        /// <summary>
-        /// Allows registration of an action that's executed after each task has been run.
-        /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
-        /// </summary>
-        /// <param name="action">The action to be executed.</param>
-        public void RegisterTaskTeardownAction(Action<ITaskTeardownContext> action)
-        {
-            _taskTeardownAction = action;
-        }
-
-        /// <summary>
-        /// Raised after each task has been run.
-        /// </summary>
-        public event EventHandler<TaskTeardownEventArgs> TaskTeardown;
-
-        private void PerformSetup(IExecutionStrategy strategy, ICakeContext context, Stopwatch stopWatch, CakeReport report)
+        private void PerformSetup(IExecutionStrategy strategy, ICakeContext context, IEnumerable<CakeTask> tasks, Stopwatch stopWatch, CakeReport report)
         {
             stopWatch.Restart();
 
             PublishEvent(Setup, new SetupEventArgs(context));
-            if (_setupAction != null)
+            if (_actions.Setup != null)
             {
-                strategy.PerformSetup(_setupAction, context);
+                strategy.PerformSetup(_actions.Setup, new SetupContext(context, tasks));
                 report.Add("**Setup**", stopWatch.Elapsed);
             }
         }
 
-        private static bool ShouldTaskExecute(ICakeContext context, CakeTask task, bool isTarget)
+        private static bool ShouldTaskExecute(ICakeContext context, CakeTask task, CakeTaskCriteria criteria, bool isTarget)
         {
-            foreach (var criteria in task.Criterias)
+            if (!criteria.Predicate(context))
             {
-                if (!criteria(context))
+                if (isTarget)
                 {
-                    if (isTarget)
-                    {
-                        // It's not OK to skip the target task.
-                        // See issue #106 (https://github.com/cake-build/cake/issues/106)
-                        const string format = "Could not reach target '{0}' since it was skipped due to a criteria.";
-                        var message = string.Format(CultureInfo.InvariantCulture, format, task.Name);
-                        throw new CakeException(message);
-                    }
-                    return false;
+                    // It's not OK to skip the target task.
+                    // See issue #106 (https://github.com/cake-build/cake/issues/106)
+                    const string format = "Could not reach target '{0}' since it was skipped due to a criteria.";
+                    var message = string.Format(CultureInfo.InvariantCulture, format, task.Name);
+                    throw new CakeException(message);
                 }
+                return false;
             }
             return true;
         }
@@ -237,7 +293,7 @@ namespace Cake.Core
 
             PerformTaskSetup(context, strategy, task, false);
 
-            bool exceptionWasThrown = false;
+            var exceptionWasThrown = false;
             try
             {
                 // Execute the task.
@@ -293,11 +349,11 @@ namespace Cake.Core
             var taskSetupContext = new TaskSetupContext(context, task);
             PublishEvent(TaskSetup, new TaskSetupEventArgs(taskSetupContext));
             // Trying to stay consistent with the behavior of script-level Setup & Teardown (if setup fails, don't run the task, but still run the teardown)
-            if (_taskSetupAction != null)
+            if (_actions.TaskSetup != null)
             {
                 try
                 {
-                    strategy.PerformTaskSetup(_taskSetupAction, taskSetupContext);
+                    strategy.PerformTaskSetup(_actions.TaskSetup, taskSetupContext);
                 }
                 catch
                 {
@@ -311,11 +367,11 @@ namespace Cake.Core
         {
             var taskTeardownContext = new TaskTeardownContext(context, task, duration, skipped);
             PublishEvent(TaskTeardown, new TaskTeardownEventArgs(taskTeardownContext));
-            if (_taskTeardownAction != null)
+            if (_actions.TaskTeardown != null)
             {
                 try
                 {
-                    strategy.PerformTaskTeardown(_taskTeardownAction, taskTeardownContext);
+                    strategy.PerformTaskTeardown(_actions.TaskTeardown, taskTeardownContext);
                 }
                 catch (Exception ex)
                 {
@@ -330,10 +386,10 @@ namespace Cake.Core
             }
         }
 
-        private void SkipTask(ICakeContext context, IExecutionStrategy strategy, CakeTask task, CakeReport report)
+        private void SkipTask(ICakeContext context, IExecutionStrategy strategy, CakeTask task, CakeReport report, CakeTaskCriteria criteria)
         {
             PerformTaskSetup(context, strategy, task, true);
-            strategy.Skip(task);
+            strategy.Skip(task, criteria);
             PerformTaskTeardown(context, strategy, task, TimeSpan.Zero, true, false);
 
             // Add the skipped task to the report.
@@ -342,9 +398,7 @@ namespace Cake.Core
 
         private static bool IsDelegatedTask(CakeTask task)
         {
-            var actionTask = task as ActionTask;
-
-            return actionTask != null && !actionTask.Actions.Any();
+            return task != null && !task.Actions.Any();
         }
 
         private static void ReportErrors(IExecutionStrategy strategy, Action<Exception> errorReporter, Exception taskException)
@@ -382,11 +436,11 @@ namespace Cake.Core
 
             var teardownContext = new TeardownContext(context, thrownException);
             PublishEvent(Teardown, new TeardownEventArgs(teardownContext));
-            if (_teardownAction != null)
+            if (_actions.Teardown != null)
             {
                 try
                 {
-                    strategy.PerformTeardown(_teardownAction, teardownContext);
+                    strategy.PerformTeardown(_actions.Teardown, teardownContext);
                 }
                 catch (Exception ex)
                 {

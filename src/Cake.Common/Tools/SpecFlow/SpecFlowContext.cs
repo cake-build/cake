@@ -30,6 +30,8 @@ namespace Cake.Common.Tools.SpecFlow
 
         public IToolLocator Tools => _context.Tools;
 
+        public ICakeDataResolver Data => _context.Data;
+
         public FilePath FilePath => _runner.FilePath;
 
         public ProcessSettings Settings => _runner.ProcessSettings;

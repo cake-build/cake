@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace Cake.Core
 {
     /// <summary>
-    /// Provides descriptive properties about a cake task
+    /// Provides descriptive properties about a cake task.
     /// </summary>
     public interface ICakeTaskInfo
     {
