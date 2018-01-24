@@ -69,10 +69,9 @@ namespace Cake.Tests.Unit.Arguments
                 // Given
                 var fixture = new ArgumentParserFixture();
                 var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
-                var arguments = input.Split(new[] { ' ' }, StringSplitOptions.None);
 
                 // When
-                var result = parser.Parse(arguments);
+                var result = parser.Parse(new[] { input });
 
                 // Then
                 Assert.NotNull(result);
