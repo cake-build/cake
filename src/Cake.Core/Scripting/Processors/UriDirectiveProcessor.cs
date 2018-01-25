@@ -60,14 +60,17 @@ namespace Cake.Core.Scripting.Processors
         private Uri ParseUriFromTokens(string[] tokens)
         {
             Uri uri;
-            if (!Uri.TryCreate(tokens[1].UnQuote(), UriKind.Absolute, out uri))
+
+            var expandedTokens = tokens.Select(t => Environment.ExpandEnvironmentVariables(t));
+
+            if (!Uri.TryCreate(expandedTokens.Skip(1).First().UnQuote(), UriKind.Absolute, out uri))
             {
-                uri = CreateUriFromLegacyFormat(tokens);
+                uri = CreateUriFromLegacyFormat(expandedTokens);
             }
             return uri;
         }
 
-        protected virtual Uri CreateUriFromLegacyFormat(string[] tokens)
+        protected virtual Uri CreateUriFromLegacyFormat(IEnumerable<string> tokens)
         {
             var builder = new StringBuilder();
             builder.Append("nuget:");
