@@ -50,7 +50,6 @@ Function GetCakeCoreCLRPath([string]$ScriptRoot)
 # PREPARATION
 #####################################################################
 
-$Env:CAKE_INTEGRATION_TEST_ROOT = "../.."
 $PSScriptRoot = split-path -parent $MyInvocation.MyCommand.Definition
 $Script = (Join-Path $PSScriptRoot "windows.cake")
 $ToolsPath = Join-Path $PSScriptRoot "tools"
