@@ -69,6 +69,45 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
             Assert.Equal("/Working/other.cake", result.Script.Includes[1].Path.FullPath);
         }
 
+        [Theory]
+        [InlineData("#l \"%CAKE_TEST_SCRIPT_PATH%/utils.cake\"")]
+        public void Should_Process_Environment_Variable_Found_In_Source(string source)
+        {
+            // Given
+            var fixture = new ScriptAnalyzerFixture();
+            fixture.Environment.SetEnvironmentVariable("CAKE_TEST_SCRIPT_PATH", "test");
+            fixture.Providers.Add(new FileLoadDirectiveProvider());
+            fixture.GivenScriptExist("/Working/script.cake", source);
+            fixture.GivenScriptExist("/Working/test/utils.cake", "Console.WriteLine();");
+
+            // When
+            var result = fixture.Analyze("/Working/script.cake");
+
+            // Then
+            Assert.Equal(1, result.Script.Includes.Count);
+            Assert.Equal("/Working/test/utils.cake", result.Script.Includes[0].Path.FullPath);
+        }
+
+        [Theory]
+        [InlineData("#l \"%CAKE_TEST_SCRIPT_BASE_PATH%/%CAKE_TEST_SCRIPT_PATH%/utils.cake\"")]
+        public void Should_Process_Multiple_Environment_Variable_Found_In_Source(string source)
+        {
+            // Given
+            var fixture = new ScriptAnalyzerFixture();
+            fixture.Environment.SetEnvironmentVariable("CAKE_TEST_SCRIPT_BASE_PATH", "test");
+            fixture.Environment.SetEnvironmentVariable("CAKE_TEST_SCRIPT_PATH", "scripts");
+            fixture.Providers.Add(new FileLoadDirectiveProvider());
+            fixture.GivenScriptExist("/Working/script.cake", source);
+            fixture.GivenScriptExist("/Working/test/scripts/utils.cake", "Console.WriteLine();");
+
+            // When
+            var result = fixture.Analyze("/Working/script.cake");
+
+            // Then
+            Assert.Equal(1, result.Script.Includes.Count);
+            Assert.Equal("/Working/test/scripts/utils.cake", result.Script.Includes[0].Path.FullPath);
+        }
+
         [Fact]
         public void Should_Insert_Line_Directives_When_Processing_Load_Directives()
         {
