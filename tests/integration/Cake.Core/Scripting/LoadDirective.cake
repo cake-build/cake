@@ -1,4 +1,5 @@
 #load "../../resources/Cake.Core/Scripting/file with spaces.cake"
+#load "%CAKE_INTEGRATION_TEST_ROOT%/resources/Cake.Core/Scripting/file with spaces.cake"
 
 Task("Cake.Core.Scripting.LoadDirective.WithSpaces")
     .Does(() =>

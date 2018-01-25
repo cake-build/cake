@@ -25,7 +25,7 @@ namespace Cake.Core.Scripting.Processors
             return new[] { "#l", "#load" };
         }
 
-        protected override Uri CreateUriFromLegacyFormat(string[] tokens)
+        protected override Uri CreateUriFromLegacyFormat(IEnumerable<string> tokens)
         {
             var builder = new StringBuilder();
             builder.Append("local:");
