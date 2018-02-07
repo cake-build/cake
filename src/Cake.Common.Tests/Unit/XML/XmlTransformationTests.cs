@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if !NETCORE
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,6 +10,7 @@ using Cake.Common.Tests.Properties;
 using Cake.Common.Xml;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Testing.Xunit;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.XML
@@ -182,7 +182,8 @@ namespace Cake.Common.Tests.Unit.XML
                 Assert.Equal(htm, result, ignoreLineEndingDifferences: true);
             }
 
-            [Fact]
+            // this feels wrong to be CLR only
+            [RuntimeFact(TestRuntime.Clr)]
             public void Should_Transform_Xml_String_And_Xsl_String_To_Result_String_With_Utf32Xml_Declaration()
             {
                 // Given
@@ -242,4 +243,3 @@ namespace Cake.Common.Tests.Unit.XML
         }
     }
 }
-#endif

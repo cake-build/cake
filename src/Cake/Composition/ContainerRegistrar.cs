@@ -43,7 +43,9 @@ namespace Cake.Composition
 
         public void Update(IContainer container)
         {
+#pragma warning disable CS0618
             _builder.Update(container);
+#pragma warning restore CS0618
         }
     }
 }

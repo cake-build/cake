@@ -14,9 +14,15 @@ namespace Cake.Core
     public sealed class CakeRuntime : ICakeRuntime
     {
         /// <summary>
-        /// Gets the target .NET framework version that the current AppDomain is targeting.
+        /// Gets the build-time .NET framework version that is being used.
         /// </summary>
-        public FrameworkName TargetFramework { get; }
+        public FrameworkName BuiltFramework { get; }
+
+        /// <summary>
+        /// Gets the current executing .NET Runtime.
+        /// </summary>
+        /// <returns>The target framework.</returns>
+        public Runtime Runtime { get; }
 
         /// <summary>
         /// Gets the version of Cake executing the script.
@@ -36,7 +42,8 @@ namespace Cake.Core
         /// </summary>
         public CakeRuntime()
         {
-            TargetFramework = EnvironmentHelper.GetFramework();
+            BuiltFramework = EnvironmentHelper.GetBuiltFramework();
+            Runtime = EnvironmentHelper.GetRuntime();
             CakeVersion = AssemblyHelper.GetExecutingAssembly().GetName().Version;
             IsCoreClr = EnvironmentHelper.IsCoreClr();
         }
