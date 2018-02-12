@@ -841,7 +841,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     var result = fixture.Run();
 
                     // Then
-                    Assert.Equal("pack \"/Working/existing.csproj\" -Properties Configuration=Release", result.Args);
+                    Assert.Equal("pack \"/Working/existing.csproj\" -Properties \"Configuration=Release\"", result.Args);
                 }
 
                 [Fact]
@@ -859,7 +859,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     var result = fixture.Run();
 
                     // Then
-                    Assert.Equal("pack \"/Working/existing.csproj\" -Properties Configuration=Release;Foo=Bar", result.Args);
+                    Assert.Equal("pack \"/Working/existing.csproj\" -Properties \"Configuration=Release;Foo=Bar\"", result.Args);
                 }
 
                 [Theory]
@@ -1089,6 +1089,20 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     Assert.Equal(
                         Resources.Nuspec_Metadata_WithTargetFrameworkDependencies.NormalizeLineEndings(),
                         result.NuspecContent.NormalizeLineEndings());
+                }
+
+                [Fact]
+                public void Should_Add_Tool_Flag_To_Arguments_If_Set()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithNuSpecFixture();
+                    fixture.Settings.OutputToToolFolder = true;
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal("pack \"/Working/existing.temp.nuspec\" -Tool", result.Args);
                 }
             }
         }

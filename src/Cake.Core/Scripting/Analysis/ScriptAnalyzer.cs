@@ -64,7 +64,8 @@ namespace Cake.Core.Scripting.Analysis
                 new ToolDirectiveProcessor(),
                 new ShebangProcessor(),
                 new BreakDirectiveProcessor(),
-                new DefineDirectiveProcessor()
+                new DefineDirectiveProcessor(),
+                new ModuleDirectiveProcessor()
             };
         }
 

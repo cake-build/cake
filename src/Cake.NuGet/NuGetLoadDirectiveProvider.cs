@@ -40,14 +40,20 @@ namespace Cake.NuGet
         public void Load(IScriptAnalyzerContext context, LoadReference reference)
         {
             // Create a package reference from our load reference.
-            // The package should contain the necessary include parameters to make sure
-            // that .cake files are included as part of the result.
-            var separator = reference.OriginalString.Contains("?") ? "&" : "?";
-            var uri = string.Concat(reference.OriginalString, $"{separator}include=./**/*.cake");
+            // If not specified in script, the package should contain the necessary include
+            // parameters to make sure that .cake files are included as part of the result.
+            var uri = new Uri(reference.OriginalString);
+            var parameters = uri.GetQueryString();
+            const string includeParameterName = "include";
+            if (!parameters.ContainsKey(includeParameterName))
+            {
+                var separator = parameters.Count > 0 ? "&" : "?";
+                uri = new Uri(string.Concat(reference.OriginalString, $"{separator}include=./**/*.cake"));
+            }
             var package = new PackageReference(uri);
 
             // Find the tool folder.
-            var toolPath = GetToolPath(context.Root.GetDirectory());
+            var toolPath = GetToolPath(_environment.WorkingDirectory);
 
             // Install the NuGet package.
             var files = _installer.Install(package, PackageType.Tool, toolPath);

@@ -12,7 +12,6 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.NuGet.Install.Extensions;
 using NuGet.Frameworks;
-using NuGet.PackageManagement;
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
 using NuGet.ProjectManagement;

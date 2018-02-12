@@ -244,6 +244,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 fixture.Settings.Include = "Database";
                 fixture.Settings.Exclude = "Database_Users";
                 fixture.Settings.Framework = "net1_1";
+                fixture.Settings.Labels = true;
                 fixture.Settings.OutputFile = "stdout.txt";
                 fixture.Settings.ErrorOutputFile = "stderr.txt";
                 fixture.Settings.Process = NUnitProcessOption.Multiple;
@@ -257,7 +258,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 Assert.Equal("\"/Working/Test1.dll\" \"-framework:net1_1\" " +
                         "\"-include:Database\" \"-exclude:Database_Users\" " +
                         "-timeout:5 -nologo -nothread -stoponerror " +
-                        "-trace:Debug \"-output:/Working/stdout.txt\" " +
+                        "-trace:Debug -labels \"-output:/Working/stdout.txt\" " +
                         "\"-err:/Working/stderr.txt\" " +
                         "\"-result:/Working/NewTestResult.xml\" " +
                         "\"-process:Multiple\" \"-apartment:STA\" " +

@@ -50,6 +50,16 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 // Then
                 Assert.Equal(settings.AppDomainUsage, NUnit3AppDomainUsage.Default);
             }
+
+            [Fact]
+            public void Should_Use_No_Internal_Trace_By_Default()
+            {
+                // Given, When
+                var settings = new NUnit3Settings();
+
+                // Then
+                Assert.Equal(settings.TraceLevel, null);
+            }
         }
     }
 }

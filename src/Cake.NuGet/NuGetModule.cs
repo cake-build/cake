@@ -51,8 +51,7 @@ namespace Cake.NuGet
 #endif
 
             // URI resource support.
-            bool.TryParse(_config.GetValue(Constants.NuGet.UseInProcessClient) ?? bool.FalseString, out bool useInProcessClient);
-            if (useInProcessClient)
+            if (!bool.TryParse(_config.GetValue(Constants.NuGet.UseInProcessClient) ?? bool.TrueString, out bool useInProcessClient) || useInProcessClient)
             {
 #if NETCORE
                 // Load directive provider.

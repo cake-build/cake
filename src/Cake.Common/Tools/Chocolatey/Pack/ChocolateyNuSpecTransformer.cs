@@ -95,6 +95,20 @@ namespace Cake.Common.Tools.Chocolatey.Pack
                     fileElement.AddAttributeIfSpecified(file.Target, "target");
                 }
             }
+
+            if (settings.Dependencies != null && settings.Dependencies.Count > 0)
+            {
+                var dependenciesElement = FindOrCreateElement(document, namespaceManager, "dependencies");
+
+                // Add or update the dependency references
+                dependenciesElement.RemoveAll();
+                foreach (var dependency in settings.Dependencies)
+                {
+                    var dependencyElement = document.CreateAndAppendElement(dependenciesElement, "dependency");
+                    dependencyElement.AddAttributeIfSpecified(dependency.Id, "id");
+                    dependencyElement.AddAttributeIfSpecified(dependency.Version, "version");
+                }
+            }
         }
 
         private static XmlNode GetPackageElement(XmlDocument document)

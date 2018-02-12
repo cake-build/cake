@@ -143,6 +143,10 @@
     &lt;releaseNotes&gt;&lt;![CDATA[Line #1
 Line #2
 Line #3]]&gt;&lt;/releaseNotes&gt;
+    &lt;dependencies&gt;
+      &lt;dependency id="Dependency1" version="1.0.0" /&gt;
+      &lt;dependency id="Dependency2" version="[2.0.0]" /&gt;
+    &lt;/dependencies&gt;
   &lt;/metadata&gt;
   &lt;files&gt;
     &lt;file src="tools\**" target="tools" /&gt;
@@ -175,6 +179,10 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;releaseNotes&gt;&lt;![CDATA[Line #1
 Line #2
 Line #3]]&gt;&lt;/releaseNotes&gt;
+    &lt;dependencies&gt;
+      &lt;dependency id="Dependency1" version="1.0.0" /&gt;
+      &lt;dependency id="Dependency2" version="[2.0.0]" /&gt;
+    &lt;/dependencies&gt;
   &lt;/metadata&gt;
   &lt;files&gt;
     &lt;file src="tools\**" target="tools" /&gt;

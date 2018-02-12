@@ -112,6 +112,11 @@ namespace Cake.Common.Tools.NUnit
                 builder.Append("-trace:" + settings.Trace);
             }
 
+            if (settings.Labels)
+            {
+                builder.Append("-labels");
+            }
+
             if (settings.OutputFile != null)
             {
                 builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "-output:{0}", settings.OutputFile.MakeAbsolute(_environment).FullPath));

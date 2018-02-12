@@ -1,3 +1,49 @@
+### New in 0.25.0 (Released 2018/01/17)
+
+* 1995 Make In-proc NuGet addin/tool installation default
+* 1994 Get MSBuild Verbosity enum from string
+* 1988 TeamCity writing start and end progress contains invalid messages property
+* 1974 ToDictionary on Mono causes "The type 'Dictionary<,>' is defined in an assembly that is not referenced"
+* 1998 Some .NET Core commands missing no dependencies/restore
+* 1997 Add the --trace option to the NUnit3Settings class.
+* 1992 Update to .NET Runtime 1.0.9 because security issues
+* 1989 Path unnecessarily trims backslash in already normalized string
+* 1987 Confusing Error from Bad Format String to Information()
+* 1937 UseInProcessClient=true is slow
+* 1982 CodeTriage - Get more Open Source Helpers
+* 1689 ChocolateyDownload should be documented to only work in paid edition
+
+### New in 0.24.0 (Released 2017/12/29)
+
+* 1950 Allow Cake modules to be bootstrapped by Cake in a pre-processing phase
+* 1833 NUnit: Add support for /labels
+* 1653 Add Before and After options to NUnit3Labels enum
+* 74 MSpec support
+* 1957 Use working directory instead if initial script path for resolving tools directory in NuGetLoadDirectiveProvider
+* 1939 Bug - TypeExtensions.GetFullName doesn't handle nested types correctly
+* 1933 NuGetPackSettings.Properties does not support whitespaces.
+* 1930 The "out" parameters are not compiled properly.
+* 1915 Only set working directory on process runner if set in settings
+* 1889 XmlPoke ignores BOM encoding settings
+* 1874 NuGet script load: Do not add include for all cake scripts when include already specified
+* 1968 Add interface for AssemblyVerifier so that it can be mocked
+* 1960 Update Roslyn to 2.6.1
+* 1955 ResultsDirectory is missing from DotNetCoreTestSettings
+* 1952 Add support for class/namespace/method arguments for XUnit2
+* 1946 Add option to pack files into the NuGet tool directory
+* 1943 Chocolatey package dependencies cannot be set using the ChocolateyPackSettings
+* 1936 Move to signing service v2
+* 1931 Allow passing a nuget.config as environment variable or in cake.config
+* 1924 Set UserAgent for in process nuget
+* 1922 GitVersion is missing AssemblySemFileVer
+* 1912 Support for DotCover Process Filter
+* 1910 MSBuild property values should escape carriage return and line feed
+* 1855 SignTool is not found with latest windows 10 SDK
+* 1796 Obsolete DotNetBuild and ultimately remove it
+* 1692 Log script compilation warnings and other diagnostics
+* 1522 The MSTest tool doesn't pick up the mstest.exe from Visual Studio 2017
+* 1811 Add code sample to build system properties
+
 ### New in 0.23.0 (Released 2017/10/11)
 
 * 1805 Change GitVersion settings to use nullable integer

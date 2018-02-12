@@ -71,14 +71,12 @@ namespace Cake.Core.IO
             }
 
             // Remove trailing slashes.
-            FullPath = FullPath.TrimEnd('/', '\\');
+            FullPath = FullPath.TrimEnd('/');
 
-#if !UNIX
             if (FullPath.EndsWith(":", StringComparison.OrdinalIgnoreCase))
             {
                 FullPath = string.Concat(FullPath, "/");
             }
-#endif
 
             // Relative path?
             IsRelative = !System.IO.Path.IsPathRooted(FullPath);

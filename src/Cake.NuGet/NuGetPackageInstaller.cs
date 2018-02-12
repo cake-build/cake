@@ -240,6 +240,14 @@ namespace Cake.NuGet
                 }
             }
 
+            // Config
+            var nugetConfig = config.GetValue(Constants.NuGet.ConfigFile);
+            if (!string.IsNullOrWhiteSpace(nugetConfig))
+            {
+                arguments.Append("-ConfigFile");
+                arguments.AppendQuoted(nugetConfig);
+            }
+
             // Version
             if (definition.Parameters.ContainsKey("version"))
             {

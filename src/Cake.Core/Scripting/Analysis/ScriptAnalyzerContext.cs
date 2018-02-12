@@ -64,7 +64,7 @@ namespace Cake.Core.Scripting.Analysis
             {
                 const string format = "Could not find script '{0}'.";
                 var message = string.Format(CultureInfo.InvariantCulture, format, path.FullPath);
-                _errors.Add(new ScriptAnalyzerError(path, 0, message));
+                _errors.Add(new ScriptAnalyzerError(_current?.Path ?? _script ?? path, 0, message));
                 _current = new ScriptInformation(path);
                 return;
             }

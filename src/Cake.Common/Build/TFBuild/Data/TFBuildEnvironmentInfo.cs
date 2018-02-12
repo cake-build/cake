@@ -31,6 +31,48 @@ namespace Cake.Common.Build.TFBuild.Data
         /// <value>
         /// The TF Build repository information.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TFBuild.IsRunningOnTFBuild)
+        /// {
+        ///     Information(
+        ///         @"Repository:
+        ///         Branch: {0}
+        ///         SourceVersion: {1}
+        ///         Shelveset: {2}",
+        ///         BuildSystem.TFBuild.Environment.Repository.Branch,
+        ///         BuildSystem.TFBuild.Environment.Repository.SourceVersion,
+        ///         BuildSystem.TFBuild.Environment.Repository.Shelveset
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TFBuild");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TFBuild</para>
+        /// <example>
+        /// <code>
+        /// if (TFBuild.IsRunningOnTFBuild)
+        /// {
+        ///     Information(
+        ///         @"Repository:
+        ///         Branch: {0}
+        ///         SourceVersion: {1}
+        ///         Shelveset: {2}",
+        ///         TFBuild.Environment.Repository.Branch,
+        ///         TFBuild.Environment.Repository.SourceVersion,
+        ///         TFBuild.Environment.Repository.Shelveset
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TFBuild");
+        /// }
+        /// </code>
+        /// </example>
         public TFBuildRepositoryInfo Repository { get; }
 
         /// <summary>
@@ -39,6 +81,48 @@ namespace Cake.Common.Build.TFBuild.Data
         /// <value>
         /// The TF Build Definition.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TFBuild.IsRunningOnTFBuild)
+        /// {
+        ///     Information(
+        ///         @"BuildDefinition:
+        ///         Id: {0}
+        ///         Name: {1}
+        ///         Version: {2}",
+        ///         BuildSystem.TFBuild.Environment.BuildDefinition.Id,
+        ///         BuildSystem.TFBuild.Environment.BuildDefinition.Name,
+        ///         BuildSystem.TFBuild.Environment.BuildDefinition.Version
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TFBuild");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TFBuild</para>
+        /// <example>
+        /// <code>
+        /// if (TFBuild.IsRunningOnTFBuild)
+        /// {
+        ///     Information(
+        ///         @"BuildDefinition:
+        ///         Id: {0}
+        ///         Name: {1}
+        ///         Version: {2}",
+        ///         TFBuild.Environment.BuildDefinition.Id,
+        ///         TFBuild.Environment.BuildDefinition.Name,
+        ///         TFBuild.Environment.BuildDefinition.Version
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TFBuild");
+        /// }
+        /// </code>
+        /// </example>
         public TFBuildDefinitionInfo BuildDefinition { get; }
 
         /// <summary>
@@ -47,6 +131,48 @@ namespace Cake.Common.Build.TFBuild.Data
         /// <value>
         /// The TF Build.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TFBuild.IsRunningOnTFBuild)
+        /// {
+        ///     Information(
+        ///         @"Build:
+        ///         Id: {0}
+        ///         Number: {1}
+        ///         QueuedBy: {2}",
+        ///         BuildSystem.TFBuild.Environment.Build.Id,
+        ///         BuildSystem.TFBuild.Environment.Build.Number,
+        ///         BuildSystem.TFBuild.Environment.Build.QueuedBy
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TFBuild");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TFBuild</para>
+        /// <example>
+        /// <code>
+        /// if (TFBuild.IsRunningOnTFBuild)
+        /// {
+        ///     Information(
+        ///         @"Build:
+        ///         Id: {0}
+        ///         Number: {1}
+        ///         QueuedBy: {2}",
+        ///         TFBuild.Environment.Build.Id,
+        ///         TFBuild.Environment.Build.Number,
+        ///         TFBuild.Environment.Build.QueuedBy
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TFBuild");
+        /// }
+        /// </code>
+        /// </example>
         public TFBuildInfo Build { get; }
 
         /// <summary>
@@ -55,6 +181,44 @@ namespace Cake.Common.Build.TFBuild.Data
         /// <value>
         /// The TF Team Project.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TFBuild.IsRunningOnTFBuild)
+        /// {
+        ///     Information(
+        ///         @"TeamProject:
+        ///         Id: {0}
+        ///         Name: {1}",
+        ///         BuildSystem.TFBuild.Environment.TeamProject.Id,
+        ///         BuildSystem.TFBuild.Environment.TeamProject.Name
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TFBuild");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TFBuild</para>
+        /// <example>
+        /// <code>
+        /// if (TFBuild.IsRunningOnTFBuild)
+        /// {
+        ///     Information(
+        ///         @"TeamProject:
+        ///         Id: {0}
+        ///         Name: {1}",
+        ///         TFBuild.Environment.TeamProject.Id,
+        ///         TFBuild.Environment.TeamProject.Name
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TFBuild");
+        /// }
+        /// </code>
+        /// </example>
         public TFBuildTeamProjectInfo TeamProject { get; }
 
         /// <summary>
@@ -63,6 +227,44 @@ namespace Cake.Common.Build.TFBuild.Data
         /// <value>
         /// The TF Build agent.
         /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TFBuild.IsRunningOnTFBuild)
+        /// {
+        ///     Information(
+        ///         @"Agent:
+        ///         Id: {0}
+        ///         Name: {1}",
+        ///         BuildSystem.TFBuild.Environment.Agent.Id,
+        ///         BuildSystem.TFBuild.Environment.Agent.Name
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TFBuild");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TFBuild</para>
+        /// <example>
+        /// <code>
+        /// if (TFBuild.IsRunningOnTFBuild)
+        /// {
+        ///     Information(
+        ///         @"Agent:
+        ///         Id: {0}
+        ///         Name: {1}",
+        ///         TFBuild.Environment.Agent.Id,
+        ///         TFBuild.Environment.Agent.Name
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TFBuild");
+        /// }
+        /// </code>
+        /// </example>
         public TFBuildAgentInfo Agent { get; }
     }
 }

@@ -32,7 +32,7 @@ namespace Cake.NuGet.Tests.Unit
         public sealed class TheLoadMethod
         {
             [Fact]
-            public void Should_Install_Package()
+            public void Should_Install_Package_Without_Include_Query()
             {
                 // Given
                 var fixture = new NuGetLoadDirectiveProviderFixture();
@@ -42,6 +42,45 @@ namespace Cake.NuGet.Tests.Unit
 
                 // Then
                 Assert.Equal("nuget:?package=Cake.Recipe&include=./**/*.cake", result.Package.OriginalString);
+            }
+
+            [Fact]
+            public void Should_Install_Package_With_Include_Query()
+            {
+                // Given
+                var fixture = new NuGetLoadDirectiveProviderFixture("nuget:?package=Cake.Recipe&include=test/main.cake");
+
+                // When
+                var result = fixture.Load();
+
+                // Then
+                Assert.Equal("nuget:?package=Cake.Recipe&include=test/main.cake", result.Package.OriginalString);
+            }
+
+            [Fact]
+            public void Should_Install_Package_With_Other_Query()
+            {
+                // Given
+                var fixture = new NuGetLoadDirectiveProviderFixture("nuget:?package=Cake.Recipe&exclude=test/main.cake");
+
+                // When
+                var result = fixture.Load();
+
+                // Then
+                Assert.Equal("nuget:?package=Cake.Recipe&exclude=test/main.cake&include=./**/*.cake", result.Package.OriginalString);
+            }
+
+            [Fact]
+            public void Should_Install_Package_With_Other_And_Include_Query()
+            {
+                // Given
+                var fixture = new NuGetLoadDirectiveProviderFixture("nuget:?package=Cake.Recipe&exclude=test/no.cake&include=test/main.cake");
+
+                // When
+                var result = fixture.Load();
+
+                // Then
+                Assert.Equal("nuget:?package=Cake.Recipe&exclude=test/no.cake&include=test/main.cake", result.Package.OriginalString);
             }
 
             [Fact]

@@ -9,7 +9,7 @@ using Cake.Core.Diagnostics;
 
 namespace Cake.Core.Reflection
 {
-    internal sealed class AssemblyVerifier
+    internal sealed class AssemblyVerifier : IAssemblyVerifier
     {
         private readonly ICakeLog _log;
         private readonly bool _skipVerification;

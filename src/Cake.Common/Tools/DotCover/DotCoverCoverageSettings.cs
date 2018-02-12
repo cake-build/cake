@@ -16,6 +16,7 @@ namespace Cake.Common.Tools.DotCover
     {
         private readonly HashSet<string> _scope;
         private readonly HashSet<string> _filters;
+        private readonly HashSet<string> _processFilters;
         private readonly HashSet<string> _attributeFilters;
 
         /// <summary>
@@ -56,6 +57,16 @@ namespace Cake.Common.Tools.DotCover
         }
 
         /// <summary>
+        /// Gets the coverage process filters using the following syntax: +:test.exe;program.exe*;
+        /// Use -:anexe to exclude an assembly from code coverage.
+        /// This represents the <c>/ProcessFilters</c> option.
+        /// </summary>
+        public ISet<string> ProcessFilters
+        {
+            get { return _processFilters; }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the default (automatically added) filters should be disabled
         /// This represents the <c>/DisableDefaultFilters</c> option.
         /// </summary>
@@ -69,6 +80,7 @@ namespace Cake.Common.Tools.DotCover
             _scope = new HashSet<string>(StringComparer.Ordinal);
             _filters = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _attributeFilters = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            _processFilters = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         }
     }
 }

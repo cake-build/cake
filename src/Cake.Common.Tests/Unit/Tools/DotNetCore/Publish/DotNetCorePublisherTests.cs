@@ -105,6 +105,8 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Publish
             {
                 // Given
                 var fixture = new DotNetCorePublisherFixture();
+                fixture.Settings.NoDependencies = true;
+                fixture.Settings.NoRestore = true;
                 fixture.Settings.Framework = "dnxcore50";
                 fixture.Settings.Configuration = "Release";
                 fixture.Settings.Runtime = "runtime1";
@@ -116,7 +118,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Publish
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("publish --output \"/Working/artifacts\" --runtime runtime1 --framework dnxcore50 --configuration Release --version-suffix rc1 --verbosity Minimal", result.Args);
+                Assert.Equal("publish --output \"/Working/artifacts\" --runtime runtime1 --framework dnxcore50 --configuration Release --version-suffix rc1 --no-dependencies --no-restore --verbosity Minimal", result.Args);
             }
 
             [Fact]

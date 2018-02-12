@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
@@ -37,6 +38,12 @@ namespace Cake.NuGet.Install
         private readonly NuGetFramework _currentFramework;
         private readonly GatherCache _gatherCache;
 
+        static NuGetPackageInstaller()
+        {
+            // Set User Agent string
+            UserAgent.SetUserAgentString(new UserAgentStringBuilder("Cake NuGet Client"));
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetPackageInstaller"/> class.
         /// </summary>
@@ -59,9 +66,24 @@ namespace Cake.NuGet.Install
             _config = config ?? throw new ArgumentNullException(nameof(config));
             _currentFramework = NuGetFramework.Parse(_environment.Runtime.TargetFramework.FullName, DefaultFrameworkNameProvider.Instance);
             _nugetLogger = new NuGetLogger(_log);
+
+            var nugetConfig = GetNuGetConfigPath(_environment, _config);
+
+            var nugetConfigDirectoryPath = nugetConfig.Item1;
+            var nugetConfigFilePath = nugetConfig.Item2;
+
+            if (nugetConfigFilePath != null)
+            {
+                _log.Debug($"Found NuGet.config at: {nugetConfigFilePath}");
+            }
+            else
+            {
+                _log.Debug("NuGet.config not found.");
+            }
+
             _nugetSettings = Settings.LoadDefaultSettings(
-                GetToolPath(),
-                null,
+                nugetConfigDirectoryPath.FullPath,
+                nugetConfigFilePath?.GetFilename().ToString(),
                 new XPlatMachineWideSetting());
             _gatherCache = new GatherCache();
         }
@@ -89,7 +111,6 @@ namespace Cake.NuGet.Install
             var packageRoot = path.MakeAbsolute(_environment).FullPath;
             var targetFramework = type == PackageType.Addin ? _currentFramework : NuGetFramework.AnyFramework;
             var sourceRepositoryProvider = new NuGetSourceRepositoryProvider(_nugetSettings, _config, package);
-            sourceRepositoryProvider.CreateRepository(packageRoot);
             var packageIdentity = GetPackageId(package, sourceRepositoryProvider, targetFramework, _nugetLogger);
             if (packageIdentity == null)
             {
@@ -102,15 +123,33 @@ namespace Cake.NuGet.Install
             {
                 PackagesFolderNuGetProject = project
             };
-            var sourceRepositories = sourceRepositoryProvider.GetRepositories();
             var includePrerelease = package.IsPrerelease();
             var dependencyBehavior = GetDependencyBehavior(type, package);
             var resolutionContext = new ResolutionContext(dependencyBehavior, includePrerelease, false, VersionConstraints.None, _gatherCache);
             var projectContext = new NuGetProjectContext(_log);
 
-            packageManager.InstallPackageAsync(project, packageIdentity, resolutionContext, projectContext,
-                sourceRepositories, Array.Empty<SourceRepository>(),
-                CancellationToken.None).Wait();
+            using (var sourceCacheContext = new SourceCacheContext())
+            {
+                var downloadContext = new PackageDownloadContext(sourceCacheContext);
+
+                // First get the install actions.
+                // This will give us the list of packages to install, and which feed should be used.
+                var actions = packageManager.GetInstallProjectActionsAsync(
+                    project,
+                    packageIdentity,
+                    resolutionContext,
+                    projectContext,
+                    sourceRepositoryProvider.GetRepositories(),
+                    CancellationToken.None).Result;
+
+                // Then install the packages.
+                packageManager.ExecuteNuGetProjectActionsAsync(
+                    project,
+                    actions,
+                    projectContext,
+                    downloadContext,
+                    CancellationToken.None).Wait();
+            }
 
             return project.GetFiles(path, package, type);
         }
@@ -126,12 +165,12 @@ namespace Cake.NuGet.Install
             return DependencyBehavior.Ignore;
         }
 
-        private string GetToolPath()
+        private static string GetToolPath(ICakeEnvironment environment, ICakeConfiguration config)
         {
-            var toolPath = _config.GetValue(Constants.Paths.Tools);
+            var toolPath = config.GetValue(Constants.Paths.Tools);
             return !string.IsNullOrWhiteSpace(toolPath) ?
-                new DirectoryPath(toolPath).MakeAbsolute(_environment).FullPath :
-                _environment.WorkingDirectory.Combine("tools").MakeAbsolute(_environment).FullPath;
+                new DirectoryPath(toolPath).MakeAbsolute(environment).FullPath :
+                environment.WorkingDirectory.Combine("tools").MakeAbsolute(environment).FullPath;
         }
 
         private static PackageIdentity GetPackageId(PackageReference package, NuGetSourceRepositoryProvider sourceRepositoryProvider, NuGetFramework targetFramework, ILogger logger)
@@ -164,6 +203,28 @@ namespace Cake.NuGet.Install
                 }
             }
             return null;
+        }
+
+        private static Tuple<DirectoryPath, FilePath> GetNuGetConfigPath(ICakeEnvironment environment, ICakeConfiguration config)
+        {
+            DirectoryPath rootPath;
+            FilePath filePath;
+
+            var nugetConfigFile = config.GetValue(Constants.NuGet.ConfigFile);
+            if (!string.IsNullOrEmpty(nugetConfigFile))
+            {
+                var configFilePath = new FilePath(nugetConfigFile);
+
+                rootPath = configFilePath.GetDirectory();
+                filePath = configFilePath.GetFilename();
+            }
+            else
+            {
+                rootPath = GetToolPath(environment, config);
+                filePath = null;
+            }
+
+            return Tuple.Create(rootPath, filePath);
         }
     }
 }

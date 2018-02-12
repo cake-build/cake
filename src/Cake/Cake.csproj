@@ -19,7 +19,7 @@
 
   <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="2.4.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="2.6.1" />
   </ItemGroup>
 
   <!-- .NET Core packages -->
