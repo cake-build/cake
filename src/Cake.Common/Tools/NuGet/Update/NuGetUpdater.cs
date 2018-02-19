@@ -99,6 +99,13 @@ namespace Cake.Common.Tools.NuGet.Update
                 builder.Append(settings.MSBuildVersion.Value.ToString("D"));
             }
 
+            // Version
+            if (!string.IsNullOrWhiteSpace(settings.Version))
+            {
+                builder.Append("-Version");
+                builder.Append(settings.Version);
+            }
+
             builder.Append("-NonInteractive");
 
             return builder;
