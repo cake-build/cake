@@ -7,6 +7,7 @@ using System.Runtime.Versioning;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
+using Cake.Core.Polyfill;
 using Cake.Testing;
 
 namespace Cake.NuGet.Tests.Fixtures
@@ -22,10 +23,11 @@ namespace Cake.NuGet.Tests.Fixtures
         public PackageType PackageType { get; set; }
         public PackageReference Package { get; set; }
 
-        protected NuGetContentResolverFixture(string framework)
+        protected NuGetContentResolverFixture(string framework, Runtime runtime)
         {
             Environment = FakeEnvironment.CreateUnixEnvironment();
-            Environment.Runtime.TargetFramework = new FrameworkName(framework);
+            Environment.Runtime.BuiltFramework = new FrameworkName(framework);
+            Environment.Runtime.Runtime = runtime;
 
             FileSystem = new FakeFileSystem(Environment);
             Globber = new Globber(FileSystem, Environment);

@@ -1,31 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <AssemblyName>Cake.Testing.Xunit</AssemblyName>
-    <TargetFrameworks>net46;netstandard1.6</TargetFrameworks>
+    <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
     <OutputType>Library</OutputType>
     <PlatformTarget>AnyCpu</PlatformTarget>
   </PropertyGroup>
-
   <!-- Import shared functionality -->
   <Import Project="..\Shared.msbuild" />
-
   <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-    <PackageReference Include="xunit" Version="2.3.0-beta5-build3769" />
+    <PackageReference Include="xunit" Version="2.3.1" />
   </ItemGroup>
-
   <!-- Project references -->
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
   </ItemGroup>
-
-  <!-- .NET Framework packages -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">
-    <Reference Include="System" />
-    <Reference Include="System.Runtime" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-
 </Project>

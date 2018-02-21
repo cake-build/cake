@@ -782,7 +782,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
 
         public sealed class TheSetTargetFrameworkMethod
         {
-            private const string TargetFramework = "netstandard1.6";
+            private const string TargetFramework = "netstandard2.0";
 
             [Fact]
             public void Should_Set_Target_Framework()

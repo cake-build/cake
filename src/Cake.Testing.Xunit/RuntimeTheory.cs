@@ -10,13 +10,13 @@ namespace Cake.Testing.Xunit
     {
         public RuntimeTheory(TestRuntime runtime)
         {
-            if (runtime == TestRuntime.Clr)
+            if (runtime.HasFlag(TestRuntime.Clr))
             {
 #if NETCORE
                 Skip = "Full framework test.";
 #endif
             }
-            else if (runtime == TestRuntime.CoreClr)
+            else if (runtime.HasFlag(TestRuntime.CoreClr))
             {
 #if !NETCORE
                 Skip = ".NET Core test.";

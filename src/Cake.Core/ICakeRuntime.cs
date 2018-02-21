@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.Versioning;
+using Cake.Core.Polyfill;
 
 namespace Cake.Core
 {
@@ -13,10 +14,15 @@ namespace Cake.Core
     public interface ICakeRuntime
     {
         /// <summary>
-        /// Gets the target .NET framework version that the current AppDomain is targeting.
+        /// Gets the build-time .NET framework version that is being used.
+        /// </summary>
+        FrameworkName BuiltFramework { get; }
+
+        /// <summary>
+        /// Gets the current executing .NET Runtime.
         /// </summary>
         /// <returns>The target framework.</returns>
-        FrameworkName TargetFramework { get; }
+        Runtime Runtime { get; }
 
         /// <summary>
         /// Gets the version of Cake executing the script.

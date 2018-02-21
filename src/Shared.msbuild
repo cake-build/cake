@@ -1,6 +1,5 @@
 <Project>
-
-   <!-- General package metadata -->
+  <!-- General package metadata -->
   <PropertyGroup>
     <PackageId>$(AssemblyName)</PackageId>
     <Copyright>Copyright (c) .NET Foundation and contributors</Copyright>
@@ -12,34 +11,27 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>Cake;Script;Build</PackageTags>
   </PropertyGroup>
-
   <!-- Misc -->
   <PropertyGroup>
-    <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
-    <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.6' ">$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
-    <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">1.0.9</RuntimeFrameworkVersion>
-    <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">1.6.0</NetStandardImplicitPackageVersion>
+    <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">2.0.0</NetStandardImplicitPackageVersion>
   </PropertyGroup>
-
   <!-- Global solution information -->
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)SolutionInfo.cs" />
   </ItemGroup>
-
   <!-- Warnings as errors -->
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
-
   <!-- Define .NET Core constants -->
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
     <DebugType>portable</DebugType>
   </PropertyGroup>
-
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
+    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
   <!-- Attribute generation -->
   <PropertyGroup>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
@@ -50,17 +42,20 @@
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
   </PropertyGroup>
-
   <!-- StyleCop -->
   <PropertyGroup>
     <CodeAnalysisRuleSet Condition="$(IsCakeTestProject) == ''">$(MSBuildThisFileDirectory)Cake.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRuleSet Condition="$(IsCakeTestProject) == 'true'">$(MSBuildThisFileDirectory)Test.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <ItemGroup Condition="$(IsCakeTestProject) == 'true'">
+    <Content Include="$(MSBuildThisFileDirectory)xunit.runner.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta004">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-
-</Project>
+</Project>  

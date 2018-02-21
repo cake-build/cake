@@ -139,6 +139,7 @@ Task("Build")
     DotNetCoreBuild(path.FullPath, new DotNetCoreBuildSettings()
     {
         Configuration = parameters.Configuration,
+        NoRestore = true,
         MSBuildSettings = msBuildSettings
     });
 });
@@ -150,8 +151,23 @@ Task("Run-Unit-Tests")
     var projects = GetFiles("./src/**/*.Tests.csproj");
     foreach(var project in projects)
     {
-        DotNetCoreTool(project,
-            "xunit",  "--no-build -noshadow -configuration " + parameters.Configuration);
+        // .NET Core
+        DotNetCoreTest(project.ToString(), new DotNetCoreTestSettings
+        {
+            Framework = "netcoreapp2.0",
+            NoBuild = true,
+            NoRestore = true,
+            Configuration = parameters.Configuration
+        });
+
+        // .NET Framework/Mono
+        DotNetCoreTest(project.ToString(), new DotNetCoreTestSettings
+        {
+            Framework = "net46",
+            NoBuild = true,
+            NoRestore = true,
+            Configuration = parameters.Configuration
+        });
     }
 });
 
@@ -162,7 +178,8 @@ Task("Copy-Files")
     // .NET 4.6
     DotNetCorePublish("./src/Cake", new DotNetCorePublishSettings
     {
-        Framework = "net461",
+        Framework = "net46",
+        NoRestore = true,
         VersionSuffix = parameters.Version.DotNetAsterix,
         Configuration = parameters.Configuration,
         OutputDirectory = parameters.Paths.Directories.ArtifactsBinFullFx,
@@ -172,19 +189,20 @@ Task("Copy-Files")
     // .NET Core
     DotNetCorePublish("./src/Cake", new DotNetCorePublishSettings
     {
-        Framework = "netcoreapp1.0",
+        Framework = "netcoreapp2.0",
+        NoRestore = true,
         Configuration = parameters.Configuration,
         OutputDirectory = parameters.Paths.Directories.ArtifactsBinNetCore,
         MSBuildSettings = msBuildSettings
     });
 
     // Copy license
-    CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinFullFx);
-    CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinNetCore);
+    CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinFullFx); 
+    CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinNetCore); 
 
     // Copy Cake.XML (since publish does not do this anymore)
-    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/net461/Cake.xml", parameters.Paths.Directories.ArtifactsBinFullFx);
-    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/netcoreapp1.0/Cake.xml", parameters.Paths.Directories.ArtifactsBinNetCore);
+    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/net46/Cake.xml", parameters.Paths.Directories.ArtifactsBinFullFx);
+    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/netcoreapp2.0/Cake.xml", parameters.Paths.Directories.ArtifactsBinNetCore);
 });
 
 Task("Zip-Files")
@@ -243,6 +261,7 @@ Task("Create-NuGet-Packages")
             Configuration = parameters.Configuration,
             OutputDirectory = parameters.Paths.Directories.NugetRoot,
             NoBuild = true,
+            NoRestore = true,
             IncludeSymbols = true,
             MSBuildSettings = msBuildSettings
         });

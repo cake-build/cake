@@ -1,42 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <AssemblyName>Cake.Core.Tests</AssemblyName>
-    <TargetFrameworks>net46;netcoreapp1.0</TargetFrameworks>
-    <PlatformTarget>AnyCpu</PlatformTarget>
+    <TargetFrameworks>net46;netcoreapp2.0</TargetFrameworks>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <IsCakeTestProject>true</IsCakeTestProject>
   </PropertyGroup>
-
   <!-- Import shared functionality -->
   <Import Project="..\Shared.msbuild" />
-
   <!-- Project references -->
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
     <ProjectReference Include="..\Cake.Testing\Cake.Testing.csproj" />
     <ProjectReference Include="..\Cake.Testing.Xunit\Cake.Testing.Xunit.csproj" />
   </ItemGroup>
-
   <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-    <PackageReference Include="xunit" Version="2.3.0-beta5-build3769" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.0-beta5-build3769" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
     <PackageReference Include="NSubstitute" Version="3.1.0" />
-    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.0-beta5-build3769" />
+    <PackageReference Include="Castle.Core" Version="4.2.1" />
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
-
-  <!-- .NET Framework packages -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">
-    <Reference Include="System" />
-    <Reference Include="System.Threading.Tasks" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Methods\*;Unit\Scripting\CodeGen\Expected\Properties\*" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
-
 </Project>
