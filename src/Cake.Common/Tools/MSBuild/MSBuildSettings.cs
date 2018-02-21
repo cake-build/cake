@@ -129,6 +129,13 @@ namespace Cake.Common.Tools.MSBuild
         public ISet<string> WarningsAsMessageCodes => _warningsAsMessageCodes;
 
         /// <summary>
+        /// Gets or sets a value indicating whether the Restore target should be run before any other targets.
+        /// This setting will pass the /restore option down to MSBuild.
+        /// Use this setting when working with the new csproj format.
+        /// </summary>
+        public bool Restore { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MSBuildSettings"/> class.
         /// </summary>
         public MSBuildSettings()
