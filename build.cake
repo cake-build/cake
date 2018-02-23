@@ -161,9 +161,15 @@ Task("Run-Unit-Tests")
         });
 
         // .NET Framework/Mono
+        // Total hack, but gets the work done.
+        var framework = "net46";
+        if(project.ToString().EndsWith("Cake.Tests.csproj")) {
+            framework = "net461";
+        }
+
         DotNetCoreTest(project.ToString(), new DotNetCoreTestSettings
         {
-            Framework = "net46",
+            Framework = framework,
             NoBuild = true,
             NoRestore = true,
             Configuration = parameters.Configuration
@@ -178,7 +184,7 @@ Task("Copy-Files")
     // .NET 4.6
     DotNetCorePublish("./src/Cake", new DotNetCorePublishSettings
     {
-        Framework = "net46",
+        Framework = "net461",
         NoRestore = true,
         VersionSuffix = parameters.Version.DotNetAsterix,
         Configuration = parameters.Configuration,
@@ -201,7 +207,7 @@ Task("Copy-Files")
     CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinNetCore); 
 
     // Copy Cake.XML (since publish does not do this anymore)
-    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/net46/Cake.xml", parameters.Paths.Directories.ArtifactsBinFullFx);
+    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/net461/Cake.xml", parameters.Paths.Directories.ArtifactsBinFullFx);
     CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/netcoreapp2.0/Cake.xml", parameters.Paths.Directories.ArtifactsBinNetCore);
 });
 

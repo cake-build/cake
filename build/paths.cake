@@ -24,13 +24,13 @@ public class BuildPaths
 
         var artifactsDir = (DirectoryPath)(context.Directory("./artifacts") + context.Directory("v" + semVersion));
         var artifactsBinDir = artifactsDir.Combine("bin");
-        var artifactsBinFullFx = artifactsBinDir.Combine("net46");
+        var artifactsBinFullFx = artifactsBinDir.Combine("net461");
         var artifactsBinNetCore = artifactsBinDir.Combine("netcoreapp2.0");
         var testResultsDir = artifactsDir.Combine("test-results");
         var nugetRoot = artifactsDir.Combine("nuget");
 
         var zipArtifactPathCoreClr = artifactsDir.CombineWithFilePath("Cake-bin-coreclr-v" + semVersion + ".zip");
-        var zipArtifactPathDesktop = artifactsDir.CombineWithFilePath("Cake-bin-net46-v" + semVersion + ".zip");
+        var zipArtifactPathDesktop = artifactsDir.CombineWithFilePath("Cake-bin-net461-v" + semVersion + ".zip");
 
         var testCoverageOutputFilePath = testResultsDir.CombineWithFilePath("OpenCover.xml");
 
