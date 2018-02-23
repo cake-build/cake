@@ -5,7 +5,6 @@ stages:
 build_job:
   stage: build
   script:
-  - ln -s /usr/share/dotnet .dotnet
   - mkdir tools
   - ln -s /opt/nuget/nuget.exe ./tools
   - cake  build.cake --target="Run-Unit-Tests"
