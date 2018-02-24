@@ -359,6 +359,27 @@ namespace Cake.NuGet.Tests.Unit
             }
 
             [Fact]
+            public void Should_Not_Install_InProcess_If_Resource_Already_Is_Installed()
+            {
+                // Given
+                var fixture = new NuGetPackageInstallerFixture();
+                fixture.Config.GetValue(Constants.NuGet.UseInProcessClient).Returns(bool.TrueString);
+                fixture.FileSystem.CreateDirectory("/Working/nuget/cake.foo.1.2.3/Cake.Foo");
+                fixture.ContentResolver.GetFiles(
+                    Arg.Any<DirectoryPath>(), Arg.Any<PackageReference>(), Arg.Any<PackageType>())
+                    .Returns(new List<IFile> { Substitute.For<IFile>() });
+
+                // When
+                fixture.InProcessInstall();
+
+                // Then
+                fixture.Log.Received(1).Write(
+                    Verbosity.Diagnostic, LogLevel.Debug,
+                    "Package {0} has already been installed.",
+                    "Cake.Foo");
+            }
+
+            [Fact]
             public void Should_Return_Correct_Files_When_Resource_Has_Dependencies()
             {
                 // Given

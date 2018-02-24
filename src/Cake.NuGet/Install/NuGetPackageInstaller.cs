@@ -109,12 +109,28 @@ namespace Cake.NuGet.Install
             }
 
             var packageRoot = path.MakeAbsolute(_environment).FullPath;
+
+            path = GetPackagePath(path.MakeAbsolute(_environment), package);
+            var root = _fileSystem.GetDirectory(path);
+
             var targetFramework = type == PackageType.Addin ? _currentFramework : NuGetFramework.AnyFramework;
             var sourceRepositoryProvider = new NuGetSourceRepositoryProvider(_nugetSettings, _config, package);
             var packageIdentity = GetPackageId(package, sourceRepositoryProvider, targetFramework, _nugetLogger);
             if (packageIdentity == null)
             {
                 return Array.Empty<IFile>();
+            }
+
+            var packagePath = GetPackagePath(root, package.Package);
+            if (packagePath != null)
+            {
+                // Fetch available content from disc.
+                var content = _contentResolver.GetFiles(packagePath, package, type);
+                if (content.Any())
+                {
+                    _log.Debug("Package {0} has already been installed.", package.Package);
+                    return content;
+                }
             }
 
             var pathResolver = new PackagePathResolver(packageRoot);
@@ -152,6 +168,22 @@ namespace Cake.NuGet.Install
             }
 
             return project.GetFiles(path, package, type);
+        }
+
+        private static DirectoryPath GetPackagePath(IDirectory root, string package)
+        {
+            var directories = root.GetDirectories("*", SearchScope.Current).ToArray();
+            return directories.FirstOrDefault(p => p.Path.GetDirectoryName().Equals(package, StringComparison.OrdinalIgnoreCase))?.Path;
+        }
+
+        private static DirectoryPath GetPackagePath(DirectoryPath root, PackageReference package)
+        {
+            if (package.Parameters.ContainsKey("version"))
+            {
+                var version = package.Parameters["version"].First();
+                return root.Combine($"{package.Package}.{version}".ToLowerInvariant());
+            }
+            return root.Combine(package.Package.ToLowerInvariant());
         }
 
         private DependencyBehavior GetDependencyBehavior(PackageType type, PackageReference package)
