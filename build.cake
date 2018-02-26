@@ -4,7 +4,7 @@
 #addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Gitter&version=0.7.0"
 
 // Install tools.
-#tool "nuget:https://api.nuget.org/v3/index.json?package=gitreleasemanager&version=0.5.0"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=gitreleasemanager&version=0.7.0"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=GitVersion.CommandLine&version=3.6.2"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=coveralls.io&version=1.3.4"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=OpenCover&version=4.6.519"
