@@ -7,13 +7,14 @@ using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
+using Cake.Core.Polyfill;
 
 namespace Cake.NuGet.Tests.Fixtures
 {
     internal sealed class NuGetAddinContentResolverFixture : NuGetContentResolverFixture
     {
-        public NuGetAddinContentResolverFixture(string framework)
-            : base(framework)
+        public NuGetAddinContentResolverFixture(string framework, Runtime runtime)
+            : base(framework, runtime)
         {
         }
     }

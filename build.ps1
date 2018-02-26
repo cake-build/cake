@@ -31,14 +31,11 @@ Param(
     [string[]]$ScriptArgs
 )
 
-$CakeVersion = "0.24.0"
+$CakeVersion = "0.25.0"
 $DotNetChannel = "Current";
-$DotNetVersion = "1.1.7";
+$DotNetVersion = "2.1.4";
 $DotNetInstallerUri = "https://dot.net/v1/dotnet-install.ps1";
 $NugetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
-
-# Temporarily skip verification and opt-in to new in-proc NuGet
-$ENV:CAKE_NUGET_USEINPROCESSCLIENT='true'
 
 # Make sure tools folder exists
 $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent

@@ -2,27 +2,27 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 #if NETCORE
 using System.Runtime.InteropServices;
-#else
-using System;
 #endif
-
 using System.Runtime.Versioning;
 
 namespace Cake.Core.Polyfill
 {
-    internal class EnvironmentHelper
+    internal static class EnvironmentHelper
     {
 #if !NETCORE
         private static bool? _isRunningOnMac;
+#else
+        private static bool? _isCoreClr;
 #endif
 
         public static bool Is64BitOperativeSystem()
         {
 #if NETCORE
             return RuntimeInformation.OSArchitecture == Architecture.X64
-                || RuntimeInformation.OSArchitecture == Architecture.Arm64;
+                   || RuntimeInformation.OSArchitecture == Architecture.Arm64;
 #else
             return Environment.Is64BitOperatingSystem;
 #endif
@@ -31,17 +31,35 @@ namespace Cake.Core.Polyfill
         public static PlatformFamily GetPlatformFamily()
         {
 #if NETCORE
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            try
             {
-                return PlatformFamily.OSX;
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    return PlatformFamily.OSX;
+                }
             }
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            catch (PlatformNotSupportedException)
             {
-                return PlatformFamily.Linux;
             }
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            try
             {
-                return PlatformFamily.Windows;
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    return PlatformFamily.Linux;
+                }
+            }
+            catch (PlatformNotSupportedException)
+            {
+            }
+            try
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return PlatformFamily.Windows;
+                }
+            }
+            catch (PlatformNotSupportedException)
+            {
             }
 #else
             var platform = (int)Environment.OSVersion.Platform;
@@ -68,7 +86,11 @@ namespace Cake.Core.Polyfill
         public static bool IsCoreClr()
         {
 #if NETCORE
-            return true;
+            if (_isCoreClr == null)
+            {
+                _isCoreClr = RuntimeInformation.FrameworkDescription.StartsWith(".NET Core");
+            }
+            return _isCoreClr.Value;
 #else
             return false;
 #endif
@@ -82,13 +104,22 @@ namespace Cake.Core.Polyfill
         public static bool IsUnix(PlatformFamily family)
         {
             return family == PlatformFamily.Linux
-                || family == PlatformFamily.OSX;
+                   || family == PlatformFamily.OSX;
         }
 
-        public static FrameworkName GetFramework()
+        public static Runtime GetRuntime()
+        {
+            if (IsCoreClr())
+            {
+                return Runtime.CoreClr;
+            }
+            return Runtime.Clr;
+        }
+
+        public static FrameworkName GetBuiltFramework()
         {
 #if NETCORE
-            return new FrameworkName(".NETStandard,Version=v1.6");
+            return new FrameworkName(".NETStandard,Version=v2.0");
 #else
             return new FrameworkName(".NETFramework,Version=v4.6.1");
 #endif

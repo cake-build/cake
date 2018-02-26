@@ -14,7 +14,23 @@ namespace Cake.Core.Tests.Unit
 {
     public sealed class CakeRuntimeTests
     {
-        public sealed class TheTargetFrameworkProperty
+        public sealed class TheBuiltFrameworkroperty
+        {
+            [RuntimeFact(TestRuntime.CoreClr)]
+            public void Should_Return_Correct_Result_For_CoreClr()
+            {
+                // Given
+                var runtime = new CakeRuntime();
+
+                // When
+                var framework = runtime.BuiltFramework;
+
+                // Then
+                Assert.Equal(".NETStandard,Version=v2.0", framework.FullName);
+            }
+        }
+
+        public sealed class TheExecutingFrameworkProperty
         {
             [RuntimeFact(TestRuntime.Clr)]
             public void Should_Return_Correct_Result_For_Clr()
@@ -23,23 +39,10 @@ namespace Cake.Core.Tests.Unit
                 var runtime = new CakeRuntime();
 
                 // When
-                var framework = runtime.TargetFramework;
+                var framework = runtime.BuiltFramework;
 
                 // Then
                 Assert.Equal(".NETFramework,Version=v4.6.1", framework.FullName);
-            }
-
-            [RuntimeFact(TestRuntime.CoreClr)]
-            public void Should_Return_Correct_Result_For_CoreClr()
-            {
-                // Given
-                var runtime = new CakeRuntime();
-
-                // When
-                var framework = runtime.TargetFramework;
-
-                // Then
-                Assert.Equal(".NETStandard,Version=v1.6", framework.FullName);
             }
         }
     }

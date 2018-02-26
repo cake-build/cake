@@ -5,6 +5,7 @@
 using System;
 using System.Runtime.Versioning;
 using Cake.Core;
+using Cake.Core.Polyfill;
 
 namespace Cake.Testing
 {
@@ -14,9 +15,15 @@ namespace Cake.Testing
     public sealed class FakeRuntime : ICakeRuntime
     {
         /// <summary>
-        /// Gets or sets the target .NET framework version that the current AppDomain is targeting.
+        /// Gets or sets the build-time .NET framework version that is being used.
         /// </summary>
-        public FrameworkName TargetFramework { get; set; }
+        public FrameworkName BuiltFramework { get; set; }
+
+        /// <summary>
+        /// Gets or sets the current executing .NET Runtime.
+        /// </summary>
+        /// <returns>The target framework.</returns>
+        public Runtime Runtime { get; set; }
 
         /// <summary>
         /// Gets or sets the version of Cake executing the script.
@@ -36,7 +43,8 @@ namespace Cake.Testing
         /// </summary>
         public FakeRuntime()
         {
-            TargetFramework = new FrameworkName(".NETFramework,Version=v4.5");
+            BuiltFramework = new FrameworkName(".NETFramework,Version=v4.6.2");
+            Runtime = Runtime.Clr;
             CakeVersion = new Version(0, 1, 2);
             IsCoreClr = false;
         }

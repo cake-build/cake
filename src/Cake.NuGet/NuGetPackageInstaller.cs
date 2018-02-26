@@ -146,7 +146,7 @@ namespace Cake.NuGet
             {
                 if (type == PackageType.Addin)
                 {
-                    var framework = _environment.Runtime.TargetFramework;
+                    var framework = _environment.Runtime.BuiltFramework;
                     _log.Warning("Could not find any assemblies compatible with {0}.", framework.FullName);
                 }
                 else if (type == PackageType.Tool)

@@ -78,12 +78,5 @@ namespace Cake.Core
         /// <returns>The application root path.</returns>
         [Obsolete("Please use ICakeEnvironment.ApplicationRoot instead.")]
         DirectoryPath GetApplicationRoot();
-
-        /// <summary>
-        /// Gets the target .Net framework version that the current AppDomain is targeting.
-        /// </summary>
-        /// <returns>The target framework.</returns>
-        [Obsolete("Please use ICakeEnvironment.Runtime.TargetFramework instead.")]
-        FrameworkName GetTargetFramework();
     }
 }
