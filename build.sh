@@ -10,8 +10,11 @@ SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 TOOLS_DIR=$SCRIPT_DIR/tools
 NUGET_EXE=$TOOLS_DIR/nuget.exe
 NUGET_URL=https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
-CAKE_VERSION=0.25.0
+CAKE_VERSION=0.26.0
 CAKE_EXE=$TOOLS_DIR/Cake.$CAKE_VERSION/Cake.exe
+
+# Temporarily skip verification of addins.
+export CAKE_SETTINGS_SKIPVERIFICATION='true'
 
 # Define default arguments.
 TARGET="Travis"
