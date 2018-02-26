@@ -1,3 +1,7 @@
+### New in 0.26.0 (Released 2018/02/26)
+
+* 1781 Update to .NET Core 2
+
 ### New in 0.25.0 (Released 2018/01/17)
 
 * 1995 Make In-proc NuGet addin/tool installation default
