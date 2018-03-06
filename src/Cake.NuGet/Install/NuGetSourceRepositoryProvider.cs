@@ -19,6 +19,21 @@ namespace Cake.NuGet.Install
 
         public NuGetSourceRepositoryProvider(ISettings settings, ICakeConfiguration config, PackageReference package)
         {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            if (config == null)
+            {
+                throw new ArgumentNullException(nameof(config));
+            }
+
+            if (package == null)
+            {
+                throw new ArgumentNullException(nameof(package));
+            }
+
             // Create the package source provider (needed primarily to get default sources)
             PackageSourceProvider = new PackageSourceProvider(settings);
 
@@ -34,10 +49,18 @@ namespace Cake.NuGet.Install
                 CreateRepository(package.Address.AbsoluteUri);
             }
 
-            var nugetSource = config.GetValue(Constants.NuGet.Source);
-            if (!string.IsNullOrWhiteSpace(nugetSource))
+            var nugetSources = config.GetValue(Constants.NuGet.Source);
+            if (string.IsNullOrEmpty(nugetSources))
             {
-                CreateRepository(nugetSource);
+                return;
+            }
+
+            foreach (var nugetSource in nugetSources.Split(';'))
+            {
+                if (!string.IsNullOrWhiteSpace(nugetSource))
+                {
+                    CreateRepository(nugetSource);
+                }
             }
 
             foreach (var source in PackageSourceProvider.LoadPackageSources())
