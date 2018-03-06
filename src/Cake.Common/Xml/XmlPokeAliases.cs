@@ -568,13 +568,6 @@ namespace Cake.Common.Xml
         {
             var xmlReaderSettings = new XmlReaderSettings();
 
-#if NETCORE
-            if (settings.DtdProcessing == XmlDtdProcessing.Parse)
-            {
-                throw new CakeException("DtdProcessing is not available on .NET Core.");
-            }
-#endif
-
             xmlReaderSettings.DtdProcessing = (DtdProcessing)settings.DtdProcessing;
             return xmlReaderSettings;
         }

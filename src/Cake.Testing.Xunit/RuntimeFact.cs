@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Core.Polyfill;
 using Xunit;
 
 namespace Cake.Testing.Xunit
@@ -10,17 +11,15 @@ namespace Cake.Testing.Xunit
     {
         public RuntimeFact(TestRuntime runtime)
         {
-            if (runtime == TestRuntime.Clr)
+            if (runtime.HasFlag(TestRuntime.Clr)
+            && EnvironmentHelper.GetRuntime() != Runtime.Clr)
             {
-#if NETCORE
                 Skip = "Full framework test.";
-#endif
             }
-            else if (runtime == TestRuntime.CoreClr)
+            else if (runtime.HasFlag(TestRuntime.CoreClr)
+            && EnvironmentHelper.GetRuntime() != Runtime.CoreClr)
             {
-#if !NETCORE
-                Skip = ".NET Core test.";
-#endif
+                Skip = ".NET Core 2 test.";
             }
         }
     }

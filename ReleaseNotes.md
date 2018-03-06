@@ -1,3 +1,11 @@
+### New in 0.26.1 (Released 2018/03/03)
+
+* 2063 Cake running on Mono can't load netstandard 2.0 assembly
+
+### New in 0.26.0 (Released 2018/02/26)
+
+* 1781 Update to .NET Core 2
+
 ### New in 0.25.0 (Released 2018/01/17)
 
 * 1995 Make In-proc NuGet addin/tool installation default

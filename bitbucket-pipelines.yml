@@ -5,7 +5,6 @@ pipelines:
   default:
     - step:
         script:
-          - ln -s /opt/dotnet .dotnet
           - mkdir tools
           - ln -s /opt/nuget/nuget.exe ./tools
           - cake --target="Run-Unit-Tests"

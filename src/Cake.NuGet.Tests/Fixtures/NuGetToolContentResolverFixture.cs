@@ -7,13 +7,14 @@ using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
+using Cake.Core.Polyfill;
 
 namespace Cake.NuGet.Tests.Fixtures
 {
     internal sealed class NuGetToolContentResolverFixture : NuGetContentResolverFixture
     {
         public NuGetToolContentResolverFixture(string uri)
-            : base(".NETFramework,Version=v4.5")
+            : base(".NETFramework,Version=v4.5", Runtime.Clr)
         {
             Package = new PackageReference(uri);
             PackageType = PackageType.Tool;

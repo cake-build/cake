@@ -34,7 +34,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreBuild")
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
-    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/netcoreapp1.0/hwapp.dll");
+    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/netcoreapp2.0/hwapp.dll");
 
     // When
     DotNetCoreBuild(project.FullPath);
@@ -122,7 +122,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreExecute")
 {
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
-    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/netcoreapp1.0/hwapp.dll");
+    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/netcoreapp2.0/hwapp.dll");
 
     // When
     DotNetCoreExecute(assembly);

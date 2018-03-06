@@ -10,8 +10,11 @@ SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 TOOLS_DIR=$SCRIPT_DIR/tools
 NUGET_EXE=$TOOLS_DIR/nuget.exe
 NUGET_URL=https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
-CAKE_VERSION=0.25.0
+CAKE_VERSION=0.26.1
 CAKE_EXE=$TOOLS_DIR/Cake.$CAKE_VERSION/Cake.exe
+
+# Temporarily skip verification of addins.
+export CAKE_SETTINGS_SKIPVERIFICATION='true'
 
 # Define default arguments.
 TARGET="Travis"
@@ -47,7 +50,7 @@ if [ ! -d "$SCRIPT_DIR/.dotnet" ]; then
   mkdir "$SCRIPT_DIR/.dotnet"
 fi
 curl -Lsfo "$SCRIPT_DIR/.dotnet/dotnet-install.sh" https://dot.net/v1/dotnet-install.sh
-sudo bash "$SCRIPT_DIR/.dotnet/dotnet-install.sh" --version 1.1.7 --install-dir .dotnet --no-path
+sudo bash "$SCRIPT_DIR/.dotnet/dotnet-install.sh" --version 2.1.4 --install-dir .dotnet --no-path
 export PATH="$SCRIPT_DIR/.dotnet":$PATH
 export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
 export DOTNET_CLI_TELEMETRY_OPTOUT=1

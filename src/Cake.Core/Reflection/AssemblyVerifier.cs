@@ -36,9 +36,9 @@ namespace Cake.Core.Reflection
                     // The assembly is referencing a version of Cake that contains breaking changes.
                     const string message = "The assembly '{0}' \r\n" +
                                            "is referencing an older version of Cake.Core ({1}). \r\n" +
-                                           "This assembly need to reference at least Cake.Core version {2}. \r\n" +
+                                           "This assembly must reference at least Cake.Core version {2}. \r\n" +
                                            "Another option is to downgrade Cake to an earlier version. \r\n" +
-                                           "It's not recommended, but you can explicitly opt-out of assembly verification \r\n" +
+                                           "It's not recommended, but you can explicitly opt out of assembly verification \r\n" +
                                            "by configuring the Skip Verification setting to true\r\n" +
                                            "(i.e. command line parameter \"--settings_skipverification=true\", \r\n" +
                                            "environment variable \"CAKE_SETTINGS_SKIPVERIFICATION=true\", \r\n" +

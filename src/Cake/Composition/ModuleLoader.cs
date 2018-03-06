@@ -58,7 +58,10 @@ namespace Cake.Composition
                 _log.Debug("Registering module {0}...", moduleType.FullName);
                 builder.RegisterType(moduleType).As<ICakeModule>().SingleInstance();
             }
+
+#pragma warning disable CS0618
             builder.Update(scope.ComponentRegistry);
+#pragma warning restore CS0618
         }
     }
 }
