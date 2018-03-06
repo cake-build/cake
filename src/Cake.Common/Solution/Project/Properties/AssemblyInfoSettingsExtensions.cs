@@ -28,5 +28,22 @@ namespace Cake.Common.Solution.Project.Properties
             settings.CustomAttributes.Add(new AssemblyInfoCustomAttribute() { Name = name, NameSpace = @namespace, Value = value });
             return settings;
         }
+
+        /// <summary>
+        /// Adds a meta data attribute to the AssemblyInfo settings.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="key">The key of the meta data attribute.</param>
+        /// <param name="value">The value for the attribute.</param>
+        /// <returns>The same <see cref="AssemblyInfoSettings"/> instance so that multiple calls can be chained.</returns>
+        public static AssemblyInfoSettings AddMetadataAttribute(this AssemblyInfoSettings settings, string key, string value)
+        {
+            if (settings.MetaDataAttributes == null)
+            {
+                settings.MetaDataAttributes = new List<AssemblyInfoMetadataAttribute>();
+            }
+            settings.MetaDataAttributes.Add(new AssemblyInfoMetadataAttribute { Key = key, Value = value });
+            return settings;
+        }
     }
 }

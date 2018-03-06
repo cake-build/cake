@@ -13,12 +13,15 @@ namespace Cake.Common.Solution.Project.Properties
     {
         private readonly Dictionary<string, string> _dictionary;
         private readonly Dictionary<string, string> _customAttributes;
+        private readonly Dictionary<string, string> _metadatattributes;
         private readonly HashSet<string> _namespaces;
         private readonly HashSet<string> _internalVisibleTo;
 
         public IDictionary<string, string> Attributes => _dictionary;
 
         public IDictionary<string, string> CustomAttributes => _customAttributes;
+
+        public IDictionary<string, string> MetadataAttributes => _metadatattributes;
 
         public ISet<string> Namespaces => _namespaces;
 
@@ -28,6 +31,7 @@ namespace Cake.Common.Solution.Project.Properties
         {
             _dictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _customAttributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            _metadatattributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _namespaces = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _internalVisibleTo = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
@@ -65,6 +69,13 @@ namespace Cake.Common.Solution.Project.Properties
                     AddCustomAttribute(item.Name, item.NameSpace, item.Value);
                 }
             }
+            if (settings.MetaDataAttributes != null)
+            {
+                foreach (var item in settings.MetaDataAttributes.Where(item => item != null))
+                {
+                    AddMetadataAttribute(item.Name, item.NameSpace, item.Key, item.Value);
+                }
+            }
         }
 
         private void AddAttribute(string name, string @namespace, bool? value)
@@ -88,6 +99,14 @@ namespace Cake.Common.Solution.Project.Properties
             if (value != null)
             {
                 AddAttributeCore(CustomAttributes, name, @namespace, string.Concat("\"", value, "\""));
+            }
+        }
+
+        private void AddMetadataAttribute(string name, string @namespace, string key, string value)
+        {
+            if (key != null && value != null)
+            {
+                AddAttributeCore(MetadataAttributes, string.Concat("\"", key, "\""), @namespace, string.Concat("\"", value, "\""));
             }
         }
 
