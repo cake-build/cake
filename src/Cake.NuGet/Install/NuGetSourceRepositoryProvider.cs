@@ -37,7 +37,18 @@ namespace Cake.NuGet.Install
             var nugetSource = config.GetValue(Constants.NuGet.Source);
             if (!string.IsNullOrWhiteSpace(nugetSource))
             {
-                CreateRepository(nugetSource);
+                if (nugetSource.Contains(";"))
+                {
+                    var splits = nugetSource.Split(';');
+                    foreach (var split in splits)
+                    {
+                        CreateRepository(split);
+                    }
+                }
+                else
+                {
+                    CreateRepository(nugetSource);
+                }
             }
 
             foreach (var source in PackageSourceProvider.LoadPackageSources())
