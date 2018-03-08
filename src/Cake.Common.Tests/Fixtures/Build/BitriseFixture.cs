@@ -27,7 +27,7 @@ namespace Cake.Common.Tests.Fixtures.Build
 
         public BitriseProvider CreateBitriseService()
         {
-            return new BitriseProvider(Environment);
+            return new BitriseProvider(Environment, ProcessRunner);
         }
     }
 }
