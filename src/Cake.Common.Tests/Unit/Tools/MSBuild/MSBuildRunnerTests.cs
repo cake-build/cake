@@ -1025,6 +1025,21 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.Equal($"/v:normal /p:Foo={expected} /target:Build " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Use_Restore_If_Specified()
+            {
+                // Given
+                var expected = "/v:normal /target:Build /restore \"C:/Working/src/Solution.sln\"";
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.WithRestore();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
         }
     }
 }

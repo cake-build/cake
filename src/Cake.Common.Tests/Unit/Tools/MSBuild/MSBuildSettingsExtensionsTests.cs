@@ -474,5 +474,34 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.Equal(settings, result);
             }
         }
+
+        public sealed class TheWithRestoreMethod
+        {
+            [Fact]
+            public void Should_Set_Restore_To_True()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                settings.WithRestore();
+
+                // Then
+                Assert.Equal(true, settings.Restore);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.WithRestore();
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
     }
 }
