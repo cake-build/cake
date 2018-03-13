@@ -128,7 +128,7 @@ namespace Cake.Common.Tools.XUnit
             }
 
             // parallelize test execution?
-            if (settings.Parallelism != ParallelismOption.None)
+            if (settings.Parallelism.HasValue)
             {
                 builder.Append("-parallel " + settings.Parallelism.ToString().ToLowerInvariant());
             }
