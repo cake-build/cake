@@ -21,7 +21,7 @@ before_install:
   - git fetch origin
 
 script:
-  - ./build.sh --target=Travis --verbosity=diagnostic
+  - ./build.sh --target Travis --verbosity diagnostic
 
 cache:
   directories:
