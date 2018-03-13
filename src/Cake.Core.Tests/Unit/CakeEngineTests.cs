@@ -978,6 +978,42 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
+            public async Task Should_Return_Report_That_Contains_Entry_For_Setup_First()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterSetupAction(x => { });
+                engine.RegisterTask("A");
+
+                // When
+                var report = await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A");
+
+                // Then
+                Assert.Equal(2, report.Count());
+                Assert.Equal("**Setup**", report.ElementAt(0).TaskName);
+                Assert.Equal("A", report.ElementAt(1).TaskName);
+            }
+
+            [Fact]
+            public async Task Should_Return_Report_That_Contains_Entry_For_Teardown_Last()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTeardownAction(x => { });
+                engine.RegisterTask("A");
+
+                // When
+                var report = await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A");
+
+                // Then
+                Assert.Equal(2, report.Count());
+                Assert.Equal("A", report.ElementAt(0).TaskName);
+                Assert.Equal("**Teardown**", report.ElementAt(1).TaskName);
+            }
+
+            [Fact]
             public async Task Should_Return_Report_That_Contains_Executed_Tasks_In_Order()
             {
                 // Given
