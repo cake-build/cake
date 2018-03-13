@@ -26,5 +26,12 @@ namespace Cake.Common.Build.Bitrise
         /// The Bitrise environment.
         /// </value>
         BitriseEnvironmentInfo Environment { get; }
+
+        /// <summary>
+        /// Sets and environment variable that can be used in next steps on Bitrise
+        /// </summary>
+        /// <param name="variable">The variable.</param>
+        /// <param name="value">The value.</param>
+        void SetEnvironmentString(string variable, string value);
     }
 }
