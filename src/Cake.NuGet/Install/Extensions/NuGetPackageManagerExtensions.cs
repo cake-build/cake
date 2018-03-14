@@ -63,11 +63,11 @@ namespace Cake.NuGet.Install.Extensions
                 var logger = new ProjectContextLogger(nuGetProjectContext);
 
                 // First, check only local sources.
-                var sourceRepository = await GetSourceRepositoryAsync(packageIdentity, localSources, logger, token);
+                var sourceRepository = await GetSourceRepositoryAsync(packageIdentity, localSources, resolutionContext.SourceCacheContext, logger, token);
                 if (sourceRepository == null)
                 {
                     // Else, check provided sources.
-                    sourceRepository = await GetSourceRepositoryAsync(packageIdentity, sources, logger, token);
+                    sourceRepository = await GetSourceRepositoryAsync(packageIdentity, sources, resolutionContext.SourceCacheContext, logger, token);
                 }
 
                 // If still not found, we just throw an exception.
@@ -126,6 +126,7 @@ namespace Cake.NuGet.Install.Extensions
         private static async Task<SourceRepository> GetSourceRepositoryAsync(
             PackageIdentity packageIdentity,
             IEnumerable<SourceRepository> sourceRepositories,
+            SourceCacheContext sourceCacheContext,
             ILogger logger,
             CancellationToken token)
         {
@@ -134,7 +135,7 @@ namespace Cake.NuGet.Install.Extensions
                 var metadataResource = await sourceRepository.GetResourceAsync<MetadataResource>(token);
                 if (metadataResource != null)
                 {
-                    if (await metadataResource.Exists(packageIdentity, logger, token))
+                    if (await metadataResource.Exists(packageIdentity, sourceCacheContext, logger, token))
                     {
                         return sourceRepository;
                     }

@@ -124,7 +124,7 @@ Task("Restore-NuGet-Packages")
             "https://www.myget.org/F/xunit/api/v3/index.json",
             "https://dotnet.myget.org/F/dotnet-core/api/v3/index.json",
             "https://dotnet.myget.org/F/cli-deps/api/v3/index.json",
-            "https://api.nuget.org/v3/index.json",
+            "https://api.nuget.org/v3/index.json"
         },
         MSBuildSettings = msBuildSettings
     });
