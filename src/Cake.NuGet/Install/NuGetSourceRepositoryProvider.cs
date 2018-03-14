@@ -50,16 +50,14 @@ namespace Cake.NuGet.Install
             }
 
             var nugetSources = config.GetValue(Constants.NuGet.Source);
-            if (string.IsNullOrEmpty(nugetSources))
+            if (!string.IsNullOrEmpty(nugetSources))
             {
-                return;
-            }
-
-            foreach (var nugetSource in nugetSources.Split(';'))
-            {
-                if (!string.IsNullOrWhiteSpace(nugetSource))
+                foreach (var nugetSource in nugetSources.Split(';'))
                 {
-                    CreateRepository(nugetSource);
+                    if (!string.IsNullOrWhiteSpace(nugetSource))
+                    {
+                        CreateRepository(nugetSource);
+                    }
                 }
             }
 
