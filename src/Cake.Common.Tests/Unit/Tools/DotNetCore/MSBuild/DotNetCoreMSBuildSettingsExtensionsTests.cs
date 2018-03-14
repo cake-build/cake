@@ -714,6 +714,103 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
         }
 
+        public sealed class TheSetFileVersionMethod
+        {
+            private const string FileVersion = "1.0.0-test";
+
+            [Fact]
+            public void Should_Set_FileVersion()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+                const string key = "FileVersion";
+
+                // When
+                settings.SetFileVersion(FileVersion);
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey(key));
+                Assert.Equal(FileVersion, settings.Properties[key].FirstOrDefault());
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                var result = settings.SetFileVersion(FileVersion);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
+        public sealed class TheSetInformationalVersionMethod
+        {
+            private const string InformationalVersion = "1.0.0-test";
+
+            [Fact]
+            public void Should_Set_InformationalVersion()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+                const string key = "InformationalVersion";
+
+                // When
+                settings.SetInformationalVersion(InformationalVersion);
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey(key));
+                Assert.Equal(InformationalVersion, settings.Properties[key].FirstOrDefault());
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                var result = settings.SetInformationalVersion(InformationalVersion);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
+        public sealed class TheSuppressVersionRecommendedFormatWarningMethod
+        {
+            [Fact]
+            public void Should_Set_NoWarn7035()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+                const string key = "nowarn";
+
+                // When
+                settings.SuppressVersionRecommendedFormatWarning();
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey(key));
+                Assert.Equal("7035", settings.Properties[key].FirstOrDefault());
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                var result = settings.SuppressVersionRecommendedFormatWarning();
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
         public sealed class TheSetVersionPrefixMethod
         {
             private const string VersionPrefix = "1.0.0";
