@@ -4,9 +4,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cake.Core.Configuration;
 using Cake.Core.Packaging;
 using NuGet.Configuration;
+using NuGet.PackageManagement;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
 
@@ -15,7 +17,7 @@ namespace Cake.NuGet.Install
     internal sealed class NuGetSourceRepositoryProvider : ISourceRepositoryProvider
     {
         private readonly List<Lazy<INuGetResourceProvider>> _resourceProviders;
-        private readonly List<SourceRepository> _repositories;
+        private readonly ISet<SourceRepository> _repositories;
 
         public NuGetSourceRepositoryProvider(ISettings settings, ICakeConfiguration config, PackageReference package)
         {
@@ -42,7 +44,7 @@ namespace Cake.NuGet.Install
             _resourceProviders.AddRange(Repository.Provider.GetCoreV3());
 
             // Add repositories
-            _repositories = new List<SourceRepository>();
+            _repositories = new HashSet<SourceRepository>(new SourceRepositoryComparer());
 
             if (package.Address != null)
             {
@@ -78,7 +80,13 @@ namespace Cake.NuGet.Install
 
         public SourceRepository CreateRepository(PackageSource source, FeedType type)
         {
-            var repository = new SourceRepository(source, _resourceProviders);
+            var repository = new SourceRepository(source, _resourceProviders, type);
+            var comparer = new SourceRepositoryComparer();
+
+            if (_repositories.Contains(repository))
+            {
+                return _repositories.First(x => comparer.Equals(x, repository));
+            }
 
             _repositories.Add(repository);
             return repository;

@@ -26,7 +26,7 @@ using PackageType = Cake.Core.Packaging.PackageType;
 
 namespace Cake.NuGet.Install
 {
-    internal sealed class NuGetPackageInstaller : INuGetPackageInstaller
+    internal sealed class NuGetPackageInstaller : INuGetPackageInstaller, IDisposable
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
@@ -37,6 +37,7 @@ namespace Cake.NuGet.Install
         private readonly ILogger _nugetLogger;
         private readonly NuGetFramework _currentFramework;
         private readonly GatherCache _gatherCache;
+        private readonly SourceCacheContext _sourceCacheContext;
 
         static NuGetPackageInstaller()
         {
@@ -86,6 +87,7 @@ namespace Cake.NuGet.Install
                 nugetConfigFilePath?.GetFilename().ToString(),
                 new XPlatMachineWideSetting());
             _gatherCache = new GatherCache();
+            _sourceCacheContext = new SourceCacheContext();
         }
 
         public bool CanInstall(PackageReference package, PackageType type)
@@ -111,7 +113,7 @@ namespace Cake.NuGet.Install
             var packageRoot = path.MakeAbsolute(_environment).FullPath;
             var targetFramework = type == PackageType.Addin ? _currentFramework : NuGetFramework.AnyFramework;
             var sourceRepositoryProvider = new NuGetSourceRepositoryProvider(_nugetSettings, _config, package);
-            var packageIdentity = GetPackageId(package, sourceRepositoryProvider, targetFramework, _nugetLogger);
+            var packageIdentity = GetPackageId(package, sourceRepositoryProvider, targetFramework, _sourceCacheContext, _nugetLogger);
             if (packageIdentity == null)
             {
                 return Array.Empty<IFile>();
@@ -125,31 +127,28 @@ namespace Cake.NuGet.Install
             };
             var includePrerelease = package.IsPrerelease();
             var dependencyBehavior = GetDependencyBehavior(type, package);
-            var resolutionContext = new ResolutionContext(dependencyBehavior, includePrerelease, false, VersionConstraints.None, _gatherCache);
             var projectContext = new NuGetProjectContext(_log);
 
-            using (var sourceCacheContext = new SourceCacheContext())
-            {
-                var downloadContext = new PackageDownloadContext(sourceCacheContext);
+            var resolutionContext = new ResolutionContext(dependencyBehavior, includePrerelease, false, VersionConstraints.None, _gatherCache, _sourceCacheContext);
+            var downloadContext = new PackageDownloadContext(_sourceCacheContext);
 
-                // First get the install actions.
-                // This will give us the list of packages to install, and which feed should be used.
-                var actions = packageManager.GetInstallProjectActionsAsync(
-                    project,
-                    packageIdentity,
-                    resolutionContext,
-                    projectContext,
-                    sourceRepositoryProvider.GetRepositories(),
-                    CancellationToken.None).Result;
+            // First get the install actions.
+            // This will give us the list of packages to install, and which feed should be used.
+            var actions = packageManager.GetInstallProjectActionsAsync(
+                project,
+                packageIdentity,
+                resolutionContext,
+                projectContext,
+                sourceRepositoryProvider.GetRepositories(),
+                CancellationToken.None).Result;
 
-                // Then install the packages.
-                packageManager.ExecuteNuGetProjectActionsAsync(
-                    project,
-                    actions,
-                    projectContext,
-                    downloadContext,
-                    CancellationToken.None).Wait();
-            }
+            // Then install the packages.
+            packageManager.ExecuteNuGetProjectActionsAsync(
+                project,
+                actions,
+                projectContext,
+                downloadContext,
+                CancellationToken.None).Wait();
 
             return project.GetFiles(path, package, type);
         }
@@ -173,13 +172,13 @@ namespace Cake.NuGet.Install
                 environment.WorkingDirectory.Combine("tools").MakeAbsolute(environment).FullPath;
         }
 
-        private static PackageIdentity GetPackageId(PackageReference package, NuGetSourceRepositoryProvider sourceRepositoryProvider, NuGetFramework targetFramework, ILogger logger)
+        private static PackageIdentity GetPackageId(PackageReference package, NuGetSourceRepositoryProvider sourceRepositoryProvider, NuGetFramework targetFramework, SourceCacheContext sourceCacheContext, ILogger logger)
         {
-            var version = GetNuGetVersion(package, sourceRepositoryProvider, targetFramework, logger);
+            var version = GetNuGetVersion(package, sourceRepositoryProvider, targetFramework, sourceCacheContext, logger);
             return version == null ? null : new PackageIdentity(package.Package, version);
         }
 
-        private static NuGetVersion GetNuGetVersion(PackageReference package, NuGetSourceRepositoryProvider sourceRepositoryProvider, NuGetFramework targetFramework, ILogger logger)
+        private static NuGetVersion GetNuGetVersion(PackageReference package, NuGetSourceRepositoryProvider sourceRepositoryProvider, NuGetFramework targetFramework, SourceCacheContext sourceCacheContext, ILogger logger)
         {
             if (package.Parameters.ContainsKey("version"))
             {
@@ -190,7 +189,7 @@ namespace Cake.NuGet.Install
             foreach (var sourceRepository in sourceRepositoryProvider.GetRepositories())
             {
                 var dependencyInfoResource = sourceRepository.GetResourceAsync<DependencyInfoResource>().Result;
-                var dependencyInfo = dependencyInfoResource.ResolvePackages(package.Package, targetFramework, logger, CancellationToken.None).Result;
+                var dependencyInfo = dependencyInfoResource.ResolvePackages(package.Package, targetFramework, sourceCacheContext, logger, CancellationToken.None).Result;
                 var version = dependencyInfo
                     .Where(p => p.Listed && (includePrerelease || !p.Version.IsPrerelease))
                     .OrderByDescending(p => p.Version, VersionComparer.Default)
@@ -225,6 +224,11 @@ namespace Cake.NuGet.Install
             }
 
             return Tuple.Create(rootPath, filePath);
+        }
+
+        public void Dispose()
+        {
+            _sourceCacheContext?.Dispose();
         }
     }
 }
