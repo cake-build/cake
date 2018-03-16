@@ -84,7 +84,7 @@ namespace Cake.Common.Tools.VSWhere
             if (!string.IsNullOrWhiteSpace(settings.Requires))
             {
                 builder.Append("-requires");
-                builder.AppendQuoted(settings.Requires);
+                builder.Append(settings.Requires);
             }
 
             if (!string.IsNullOrWhiteSpace(settings.ReturnProperty))
