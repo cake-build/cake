@@ -18,5 +18,17 @@ namespace Cake.Common.Tools.DotNetCore.Run
         /// Gets or sets the configuration under which to build.
         /// </summary>
         public string Configuration { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to not do implicit NuGet package restore.
+        /// This makes run faster, but requires restore to be done before run is executed.
+        /// </summary>
+        public bool NoRestore { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to not do implicit build.
+        /// This makes run faster, but requires build to be done before run is executed.
+        /// </summary>
+        public bool NoBuild { get; set; }
     }
 }
