@@ -13,7 +13,7 @@ using Cake.Core.Tooling;
 namespace Cake.Common.Tools.NUnit
 {
     /// <summary>
-    /// The NUnit unit test runner.
+    /// The NUnit3 unit test runner.
     /// </summary>
     public sealed class NUnit3Runner : Tool<NUnit3Settings>
     {
@@ -97,6 +97,11 @@ namespace Cake.Common.Tools.NUnit
             if (settings.StopOnError)
             {
                 builder.Append("--stoponerror");
+            }
+
+            if (settings.SkipNonTestAssemblies)
+            {
+                builder.Append("--skipnontestassemblies");
             }
 
             if (settings.Work != null)
@@ -256,7 +261,7 @@ namespace Cake.Common.Tools.NUnit
         }
 
         /// <summary>
-        /// Customized exit code handling.
+        /// Customized Nunit3 exit code handling.
         /// Throws <see cref="CakeException"/> on non-zero exit code
         /// </summary>
         /// <param name="exitCode">The process exit code</param>
@@ -278,6 +283,9 @@ namespace Cake.Common.Tools.NUnit
                         break;
                     case -4:
                         error = "Invalid test fixture";
+                        break;
+                    case -5:
+                        error = "Unload error";
                         break;
                     case -100:
                         error = "Unexpected error";
