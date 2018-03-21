@@ -215,6 +215,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 fixture.Settings.Seed = 6;
                 fixture.Settings.Workers = 7;
                 fixture.Settings.StopOnError = true;
+                fixture.Settings.SkipNonTestAssemblies = true;
                 fixture.Settings.Work = "out";
                 fixture.Settings.OutputFile = "stdout.txt";
                 fixture.Settings.ErrorOutputFile = "stderr.txt";
@@ -255,7 +256,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 // Then
                 Assert.Equal("\"/Working/Test1.dll\" --test=Test1,Test2 \"--testlist=/Working/Testlist.txt\" " +
                         "--where \"cat==Data\" --timeout=5 --seed=6 --workers=7 " +
-                        "--stoponerror \"--work=/Working/out\" \"--out=/Working/stdout.txt\" " +
+                        "--stoponerror --skipnontestassemblies \"--work=/Working/out\" \"--out=/Working/stdout.txt\" " +
                         "\"--err=/Working/stderr.txt\" --full " +
                         "\"--result=/Working/NewTestResult.xml;format=nunit2;transform=/Working/nunit2.xslt\" " +
                         "\"--result=/Working/NewTestResult2.xml;format=nunit3\" " +

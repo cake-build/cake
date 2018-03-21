@@ -99,6 +99,11 @@ namespace Cake.Common.Tools.NUnit
                 builder.Append("--stoponerror");
             }
 
+            if (settings.SkipNonTestAssemblies)
+            {
+                builder.Append("--skipnontestassemblies");
+            }
+
             if (settings.Work != null)
             {
                 builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "--work={0}", settings.Work.MakeAbsolute(_environment).FullPath));
