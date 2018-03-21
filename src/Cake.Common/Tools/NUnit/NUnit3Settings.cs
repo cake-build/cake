@@ -89,7 +89,7 @@ namespace Cake.Common.Tools.NUnit
         /// otherwise, <c>false</c>.
         /// </value>
         public bool SkipNonTestAssemblies { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the directory to use for output files. If
         /// not specified, defaults to the current directory.
