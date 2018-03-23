@@ -106,7 +106,7 @@ namespace Cake.Core.Tests.Unit
         public sealed class TheRunTargetAsyncMethod
         {
             [Fact]
-            public async Task Should_Throw_If_Target_Is_Null()
+            public async Task Should_Throw_If_Execution_Settings_Is_Null()
             {
                 // Given
                 var fixture = new CakeEngineFixture();
@@ -117,7 +117,7 @@ namespace Cake.Core.Tests.Unit
                     engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, null));
 
                 // Then
-                AssertEx.IsArgumentNullException(result, "target");
+                AssertEx.IsArgumentNullException(result, "settings");
             }
 
             [Fact]
@@ -126,12 +126,32 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
+                var settings = new ExecutionSettings().SetTarget("A");
 
                 // When
-                var result = await Record.ExceptionAsync(() => engine.RunTargetAsync(fixture.Context, null, "A"));
+                var result = await Record.ExceptionAsync(() => engine.RunTargetAsync(fixture.Context, null, settings));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "strategy");
+            }
+
+            [Theory]
+            [InlineData(null)]
+            [InlineData("")]
+            [InlineData("\t ")]
+            public async Task Should_Throw_If_Target_Is_Not_Specified(string target)
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                var settings = new ExecutionSettings().SetTarget(target);
+
+                // When
+                var result = await Record.ExceptionAsync(() =>
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
+
+                // Then
+                AssertEx.IsArgumentException(result, "settings", "No target specified.");
             }
 
             [Fact]
@@ -140,6 +160,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("E");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A").Does(() => result.Add("A"));
                 engine.RegisterTask("B").IsDependentOn("A").Does(() => result.Add("B"));
@@ -148,7 +169,7 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("E").Does(() => { result.Add("E"); });
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "E");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(5, result.Count);
@@ -160,18 +181,41 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
+            public async Task Should_Only_Execute_Target_Task_In_Exclusive_Mode()
+            {
+                // Given
+                var result = new List<string>();
+                var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("C").UseExclusiveTarget();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A").Does(() => result.Add("A"));
+                engine.RegisterTask("B").IsDependentOn("A").Does(() => result.Add("B"));
+                engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
+                engine.RegisterTask("D").IsDependentOn("C").IsDependeeOf("E").Does(() => { result.Add("D"); });
+                engine.RegisterTask("E").Does(() => { result.Add("E"); });
+
+                // When
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
+
+                // Then
+                Assert.Single(result);
+                Assert.Equal("C", result[0]);
+            }
+
+            [Fact]
             public async Task Should_Skip_Tasks_Where_Boolean_Criterias_Are_Not_Fulfilled()
             {
                 // Given
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("C");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A").Does(() => result.Add("A"));
                 engine.RegisterTask("B").IsDependentOn("A").WithCriteria(() => false).Does(() => result.Add("B"));
                 engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "C");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(2, result.Count);
@@ -186,6 +230,8 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
+                var settings = new ExecutionSettings().SetTarget("Default");
+
                 engine.RegisterTask("Default").IsDependentOn("A");
                 engine.RegisterTask("A")
                     .WithCriteria(() => false)
@@ -196,7 +242,7 @@ namespace Cake.Core.Tests.Unit
                     .WithCriteria<string>((context, data) => false, "Baz");
 
                 // When
-                var result = await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "Default");
+                var result = await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
                 var entries = result.ToList();
 
                 // Then
@@ -214,12 +260,14 @@ namespace Cake.Core.Tests.Unit
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
+                var settings = new ExecutionSettings().SetTarget("C");
+
                 engine.RegisterTask("A").Does(() => result.Add("A"));
                 engine.RegisterTask("B").IsDependentOn("A").WithCriteria(() => false, "Foo").Does(() => result.Add("B"));
                 engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "C");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(2, result.Count);
@@ -234,6 +282,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("C");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A").Does(() =>
                 {
@@ -244,7 +293,7 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "C");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(2, result.Count);
@@ -259,13 +308,14 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("C");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A").Does(() => result.Add("A"));
                 engine.RegisterTask("B").IsDependentOn("A").WithCriteria(() => true).Does(() => result.Add("B"));
                 engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "C");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(3, result.Count);
@@ -280,6 +330,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("C");
 
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A").Does(() => result.Add("A"));
@@ -287,7 +338,7 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "C");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(2, result.Count);
@@ -302,14 +353,15 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
-
                 var engine = fixture.CreateEngine();
+                var settings = new ExecutionSettings().SetTarget("C");
+
                 engine.RegisterTask("A").Does(() => result.Add("A"));
                 engine.RegisterTask("B").IsDependentOn("A").WithCriteria(context => false, "Foo").Does(() => result.Add("B"));
                 engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "C");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(2, result.Count);
@@ -324,6 +376,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("C");
 
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A").Does(() => result.Add("A"));
@@ -331,7 +384,7 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "C");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(3, result.Count);
@@ -345,11 +398,12 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("Run-Some-Tests");
                 var engine = fixture.CreateEngine();
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "Run-Some-Tests"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -361,12 +415,13 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A").Does(() => { throw new InvalidOperationException("Whoopsie"); });
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.IsType<InvalidOperationException>(result);
@@ -378,11 +433,12 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A").ContinueOnError().Does(() => { throw new InvalidOperationException(); });
 
                 // When, Then
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
             }
 
             [Fact]
@@ -453,13 +509,15 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
+                var settings = new ExecutionSettings().SetTarget("A");
+
                 engine.RegisterTask("A").Does(() => { });
                 engine.RegisterSetupAction(context => { });
                 engine.RegisterTeardownAction<string>((context, data) => { });
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -473,13 +531,15 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
+                var settings = new ExecutionSettings().SetTarget("A");
+
                 engine.RegisterTask("A").Does(() => { });
                 engine.RegisterSetupAction(context => { });
                 engine.RegisterTaskSetupAction<string>((context, data) => { });
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -493,13 +553,15 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
+                var settings = new ExecutionSettings().SetTarget("A");
+
                 engine.RegisterTask("A").Does(() => { });
                 engine.RegisterSetupAction(context => { });
                 engine.RegisterTaskTeardownAction<string>((context, data) => { });
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -513,13 +575,15 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
+                var settings = new ExecutionSettings().SetTarget("A");
+
                 engine.RegisterTask("A").Does(() => { });
                 engine.RegisterSetupAction(context => string.Empty);
                 engine.RegisterTeardownAction<CakeTask>((context, data) => { });
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -534,13 +598,15 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
+                var settings = new ExecutionSettings().SetTarget("A");
+
                 engine.RegisterTask("A").Does(() => { });
                 engine.RegisterSetupAction(context => string.Empty);
                 engine.RegisterTaskSetupAction<CakeTask>((context, data) => { });
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -554,13 +620,15 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
+                var settings = new ExecutionSettings().SetTarget("A");
+
                 engine.RegisterTask("A").Does(() => { });
                 engine.RegisterSetupAction(context => string.Empty);
                 engine.RegisterTaskTeardownAction<CakeTask>((context, data) => { });
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -590,13 +658,14 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var invoked = false;
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A")
                     .Does(() => { throw new InvalidOperationException("Whoopsie"); })
                     .OnError(exception => { invoked = true; });
 
                 // When
-                await Record.ExceptionAsync(() => engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                await Record.ExceptionAsync(() => engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.True(invoked);
@@ -607,6 +676,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A")
                     .Does(() => { throw new InvalidOperationException("Whoopsie"); })
@@ -614,7 +684,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.IsType<InvalidOperationException>(result);
@@ -626,6 +696,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A")
                     .Does(() => { throw new InvalidOperationException("Whoops"); })
@@ -633,7 +704,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.Contains(fixture.Log.Entries, x => x.Message == "Error: Whoops");
@@ -644,13 +715,14 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("B");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
                 engine.RegisterTask("B").IsDependentOn("A").WithCriteria(false);
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "B"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.IsType<CakeException>(result);
@@ -662,13 +734,14 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var result = new List<string>();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
                 engine.RegisterSetupAction(context => result.Add("Setup"));
                 engine.RegisterTask("A").Does(() => result.Add("A"));
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(2, result.Count);
@@ -681,6 +754,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var runTask = false;
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
 
                 engine.RegisterSetupAction(context => { throw new InvalidOperationException("Fail"); });
@@ -688,7 +762,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.False(runTask, "Task A was executed although it shouldn't have been.");
@@ -701,6 +775,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
 
                 engine.RegisterSetupAction(context => result.Add("Setup"));
@@ -708,7 +783,7 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("A").Does(() => result.Add("A"));
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(3, result.Count);
@@ -720,6 +795,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
 
                 engine.RegisterSetupAction(context => { });
@@ -728,7 +804,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.NotNull(result);
@@ -742,6 +818,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
 
                 engine.RegisterSetupAction(context => { throw new InvalidOperationException("Fail"); });
@@ -750,7 +827,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.NotNull(result);
@@ -764,6 +841,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
 
                 engine.RegisterSetupAction(context => { throw new InvalidOperationException("Setup"); });
@@ -772,7 +850,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.NotNull(result);
@@ -785,6 +863,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 var expected = new InvalidOperationException("Teardown");
 
@@ -793,7 +872,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.Equal(expected, result);
@@ -806,6 +885,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
+                var settings = new ExecutionSettings().SetTarget("A");
 
                 engine.RegisterTeardownAction(context => throw new InvalidOperationException("Foo"));
                 engine.RegisterTeardownAction(context => throw new InvalidOperationException("Bar"));
@@ -813,7 +893,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 var ex = Assert.IsType<AggregateException>(result);
@@ -829,6 +909,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
+                var settings = new ExecutionSettings().SetTarget("A");
 
                 engine.RegisterTeardownAction(context => { });
                 engine.RegisterTeardownAction(context => throw new InvalidOperationException("Foo"));
@@ -837,7 +918,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 var ex = Assert.IsType<InvalidOperationException>(result);
@@ -852,6 +933,7 @@ namespace Cake.Core.Tests.Unit
                 var captured = new List<string>();
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
+                var settings = new ExecutionSettings().SetTarget("A");
 
                 engine.RegisterTeardownAction(context => { captured.Add("First"); });
                 engine.RegisterTeardownAction(context => throw new InvalidOperationException("Foo"));
@@ -861,7 +943,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.NotNull(result);
@@ -875,6 +957,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
 
                 engine.RegisterSetupAction(context => throw new InvalidOperationException("Setup"));
@@ -884,7 +967,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.IsType<InvalidOperationException>(result);
@@ -897,6 +980,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
 
                 engine.RegisterTeardownAction(context => { throw new InvalidOperationException("Teardown"); });
@@ -904,7 +988,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.NotNull(result);
@@ -919,6 +1003,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
+                var settings = new ExecutionSettings().SetTarget("A");
 
                 engine.RegisterTask("A").Does(() => throw new InvalidOperationException("Task"));
                 engine.RegisterTeardownAction(context => throw new CakeException("Teardown #1"));
@@ -926,7 +1011,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.IsType<InvalidOperationException>(result);
@@ -940,12 +1025,13 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var invoked = false;
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A")
                     .Finally(() => invoked = true);
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.True(invoked);
@@ -957,6 +1043,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var invoked = false;
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
 
                 engine.RegisterTask("A")
@@ -965,7 +1052,7 @@ namespace Cake.Core.Tests.Unit
                     .Finally(() => invoked = true);
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.True(invoked);
@@ -977,6 +1064,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A")
                     .Does(() => { throw new InvalidOperationException("Whoopsie"); })
@@ -984,7 +1072,7 @@ namespace Cake.Core.Tests.Unit
                     .Finally(() => result.Add("Finally"));
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(2, result.Count);
@@ -997,6 +1085,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A")
                     .Does(() => { throw new InvalidOperationException("Whoopsie"); })
@@ -1004,7 +1093,7 @@ namespace Cake.Core.Tests.Unit
                     .ReportError(ex => result.Add("Report"));
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(2, result.Count);
@@ -1016,6 +1105,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A")
                     .Does(() => { throw new InvalidOperationException("Task"); })
@@ -1023,7 +1113,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.Equal("Task", result?.Message);
@@ -1034,6 +1124,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A")
                     .Does(() => { throw new InvalidOperationException("Task"); })
@@ -1042,7 +1133,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.Equal("Error", result?.Message);
@@ -1054,13 +1145,14 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("B");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTaskSetupAction(context => result.Add("TASK_SETUP:" + context.Task.Name));
                 engine.RegisterTask("A").Does(() => result.Add("Executing A"));
                 engine.RegisterTask("B").Does(() => result.Add("Executing B")).IsDependentOn("A");
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "B");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(new List<string> { "TASK_SETUP:A", "Executing A", "TASK_SETUP:B", "Executing B" }, result);
@@ -1072,13 +1164,14 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("B");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTaskSetupAction(context => { throw new Exception("fake exception"); });
                 engine.RegisterTask("A").Does(() => result.Add("Executing A"));
                 engine.RegisterTask("B").Does(() => result.Add("Executing B")).IsDependentOn("A");
 
                 // When
-                await Record.ExceptionAsync(() => engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "B"));
+                await Record.ExceptionAsync(() => engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.Equal(new List<string>(), result);
@@ -1093,6 +1186,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("B");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTaskSetupAction(context => result.Add("TASK_SETUP:" + context.Task.Name));
                 engine.RegisterTaskTeardownAction(context => result.Add("TASK_TEARDOWN:" + context.Task.Name));
@@ -1100,7 +1194,7 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("B").Does(() => result.Add("Executing B")).IsDependentOn("A");
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "B");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(
@@ -1121,6 +1215,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("C");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTaskSetupAction(context => result.Add("TASK_SETUP:" + context.Task.Name));
                 engine.RegisterTaskTeardownAction(context => result.Add("TASK_TEARDOWN:" + context.Task.Name));
@@ -1132,7 +1227,7 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("C").Does(() => result.Add("Executing C")).IsDependentOn("B");
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "C");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(
@@ -1155,6 +1250,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTaskSetupAction(context => result.Add("TASK_SETUP:" + context.Task.Name));
                 engine.RegisterTaskTeardownAction(context => result.Add("TASK_TEARDOWN:" + context.Task.Name));
@@ -1166,7 +1262,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var exception = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.NotNull(exception);
@@ -1187,6 +1283,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var result = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTaskSetupAction(context =>
                 {
@@ -1200,7 +1297,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var exception = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.NotNull(exception);
@@ -1218,6 +1315,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
 
                 engine.RegisterTaskSetupAction(
@@ -1228,7 +1326,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.NotNull(result);
@@ -1241,6 +1339,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
 
                 engine.RegisterTaskTeardownAction(
@@ -1249,7 +1348,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.NotNull(result);
@@ -1262,6 +1361,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
 
                 engine.RegisterTaskSetupAction(
@@ -1272,7 +1372,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.NotNull(result);
@@ -1286,6 +1386,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
 
                 engine.RegisterTaskTeardownAction(
@@ -1294,7 +1395,7 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 var result = await Record.ExceptionAsync(() =>
-                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.NotNull(result);
@@ -1307,6 +1408,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
 
                 engine.RegisterTaskTeardownAction(
@@ -1314,7 +1416,7 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("A").Does(() => { throw new InvalidOperationException("Task: A"); });
 
                 // When
-                await Record.ExceptionAsync(() => engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+                await Record.ExceptionAsync(() => engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.Contains(fixture.Log.Entries, x => x.Message.StartsWith("Task Teardown error (A):"));
@@ -1325,13 +1427,14 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterSetupAction(x => { });
                 engine.RegisterSetupAction(x => { });
                 engine.RegisterTask("A");
 
                 // When
-                var report = await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A");
+                var report = await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(2, report.Count());
@@ -1346,13 +1449,14 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTeardownAction(x => { });
                 engine.RegisterTeardownAction(x => { });
                 engine.RegisterTask("A");
 
                 // When
-                var report = await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A");
+                var report = await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(2, report.Count());
@@ -1367,13 +1471,14 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("C");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
                 engine.RegisterTask("B").IsDependentOn("A");
                 engine.RegisterTask("C").IsDependentOn("B");
 
                 // When
-                var report = await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "C");
+                var report = await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(3, report.Count());
@@ -1387,13 +1492,14 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A").IsDependentOn("B").Does(() => { });
                 engine.RegisterTask("B").IsDependentOn("C");
                 engine.RegisterTask("C").WithCriteria(() => false).Does(() => { });
 
                 // When
-                var report = await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A");
+                var report = await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(CakeTaskExecutionStatus.Executed, report.First(e => e.TaskName == "A").ExecutionStatus);
@@ -1404,13 +1510,14 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A").IsDependentOn("B");
                 engine.RegisterTask("B").IsDependentOn("C");
                 engine.RegisterTask("C").WithCriteria(() => false);
 
                 // When
-                var report = await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A");
+                var report = await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(CakeTaskExecutionStatus.Skipped, report.First(e => e.TaskName == "C").ExecutionStatus);
@@ -1421,13 +1528,14 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A").IsDependentOn("B");
                 engine.RegisterTask("B").IsDependentOn("C");
                 engine.RegisterTask("C").WithCriteria(() => false);
 
                 // When
-                var report = await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A");
+                var report = await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(CakeTaskExecutionStatus.Delegated, report.First(e => e.TaskName == "B").ExecutionStatus);
@@ -1441,6 +1549,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
 
@@ -1448,7 +1557,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Assert.Raises<SetupEventArgs>(
                     handler => engine.Setup += handler,
                     handler => engine.Setup -= handler,
-                    () => engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A").GetAwaiter().GetResult());
+                    async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.NotNull(result);
@@ -1462,6 +1571,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var list = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
                 engine.Setup += (sender, args) =>
@@ -1474,7 +1584,7 @@ namespace Cake.Core.Tests.Unit
                 };
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(2, list.Count);
@@ -1488,6 +1598,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var list = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("C");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
                 engine.RegisterTask("B").IsDependentOn("A");
@@ -1498,7 +1609,7 @@ namespace Cake.Core.Tests.Unit
                 };
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "C");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(
@@ -1516,6 +1627,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
 
@@ -1523,7 +1635,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Assert.Raises<TaskSetupEventArgs>(
                     handler => engine.TaskSetup += handler,
                     handler => engine.TaskSetup -= handler,
-                    () => engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A").GetAwaiter().GetResult());
+                    async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.NotNull(result);
@@ -1535,6 +1647,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
 
@@ -1542,7 +1655,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Assert.Raises<TaskSetupEventArgs>(
                     handler => engine.TaskSetup += handler,
                     handler => engine.TaskSetup -= handler,
-                    () => engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A").GetAwaiter().GetResult());
+                    async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.IsType<TaskSetupEventArgs>(result.Arguments);
@@ -1556,6 +1669,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var list = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
                 engine.Setup += (sender, args) =>
@@ -1572,7 +1686,7 @@ namespace Cake.Core.Tests.Unit
                 };
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(
@@ -1590,6 +1704,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var list = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("B");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
                 engine.RegisterTask("B").IsDependentOn("A");
@@ -1599,7 +1714,7 @@ namespace Cake.Core.Tests.Unit
                 };
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "B");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(
@@ -1618,6 +1733,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
 
@@ -1625,7 +1741,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Assert.Raises<TaskTeardownEventArgs>(
                     handler => engine.TaskTeardown += handler,
                     handler => engine.TaskTeardown -= handler,
-                    () => engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A").GetAwaiter().GetResult());
+                    async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.NotNull(result);
@@ -1637,6 +1753,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
 
@@ -1644,7 +1761,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Assert.Raises<TaskTeardownEventArgs>(
                     handler => engine.TaskTeardown += handler,
                     handler => engine.TaskTeardown -= handler,
-                    () => engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A").GetAwaiter().GetResult());
+                    async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.IsType<TaskTeardownEventArgs>(result.Arguments);
@@ -1658,6 +1775,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var list = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
                 engine.TaskSetup += (sender, args) =>
@@ -1670,7 +1788,7 @@ namespace Cake.Core.Tests.Unit
                 };
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(
@@ -1687,6 +1805,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var list = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("B");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
                 engine.RegisterTask("B").IsDependentOn("A");
@@ -1696,7 +1815,7 @@ namespace Cake.Core.Tests.Unit
                 };
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "B");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(
@@ -1715,6 +1834,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
 
@@ -1722,7 +1842,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Assert.Raises<TeardownEventArgs>(
                     handler => engine.Teardown += handler,
                     handler => engine.Teardown -= handler,
-                    () => engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A").GetAwaiter().GetResult());
+                    async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.NotNull(result);
@@ -1733,6 +1853,7 @@ namespace Cake.Core.Tests.Unit
             public void Should_Raise_Teardown_Event_With_Teardown_Context()
             {
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
 
@@ -1740,7 +1861,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Assert.Raises<TeardownEventArgs>(
                     handler => engine.Teardown += handler,
                     handler => engine.Teardown -= handler,
-                    () => engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A").GetAwaiter().GetResult());
+                    async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
                 Assert.NotNull(result);
@@ -1754,6 +1875,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var list = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
                 engine.Teardown += (sender, args) =>
@@ -1766,7 +1888,7 @@ namespace Cake.Core.Tests.Unit
                 };
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(2, list.Count);
@@ -1780,6 +1902,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var list = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("C");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
                 engine.RegisterTask("B").IsDependentOn("A");
@@ -1790,7 +1913,7 @@ namespace Cake.Core.Tests.Unit
                 };
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "C");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(
@@ -1806,6 +1929,7 @@ namespace Cake.Core.Tests.Unit
                 // Given
                 var list = new List<string>();
                 var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
                 engine.TaskTeardown += (sender, args) =>
@@ -1818,7 +1942,7 @@ namespace Cake.Core.Tests.Unit
                 };
 
                 // When
-                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A");
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
 
                 // Then
                 Assert.Equal(

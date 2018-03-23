@@ -30,7 +30,9 @@ namespace Cake.Tests.Unit.Scripting
                 host.RunTarget("Target");
 
                 // Then
-                await engine.Received(1).RunTargetAsync(context, Arg.Any<DefaultExecutionStrategy>(), "Target");
+                await engine.Received(1).RunTargetAsync(context,
+                    Arg.Any<DefaultExecutionStrategy>(),
+                    Arg.Is<ExecutionSettings>(e => e.Target == "Target"));
             }
 
             [Fact]
@@ -38,13 +40,15 @@ namespace Cake.Tests.Unit.Scripting
             {
                 // Given
                 var report = new CakeReport();
-                report.Add("Target", TimeSpan.FromSeconds(1));
                 var engine = Substitute.For<ICakeEngine>();
                 var context = Substitute.For<ICakeContext>();
-                engine.RunTargetAsync(context, Arg.Any<DefaultExecutionStrategy>(), "Target").Returns(Task.FromResult(report));
                 var printer = Substitute.For<ICakeReportPrinter>();
                 var log = Substitute.For<ICakeLog>();
                 var host = new BuildScriptHost(engine, context, printer, log);
+
+                report.Add("Target", TimeSpan.FromSeconds(1));
+                engine.RunTargetAsync(context, Arg.Any<DefaultExecutionStrategy>(), Arg.Any<ExecutionSettings>())
+                    .Returns(Task.FromResult(report));
 
                 // When
                 await host.RunTargetAsync("Target");
@@ -59,10 +63,12 @@ namespace Cake.Tests.Unit.Scripting
                 // Given
                 var engine = Substitute.For<ICakeEngine>();
                 var context = Substitute.For<ICakeContext>();
-                engine.RunTargetAsync(context, Arg.Any<DefaultExecutionStrategy>(), Arg.Any<string>()).Returns(Task.FromResult((CakeReport)null));
                 var printer = Substitute.For<ICakeReportPrinter>();
                 var log = Substitute.For<ICakeLog>();
                 var host = new BuildScriptHost(engine, context, printer, log);
+
+                engine.RunTargetAsync(context, Arg.Any<DefaultExecutionStrategy>(), Arg.Any<ExecutionSettings>())
+                    .Returns(Task.FromResult((CakeReport)null));
 
                 // When
                 await host.RunTargetAsync("Target");
@@ -77,10 +83,12 @@ namespace Cake.Tests.Unit.Scripting
                 // Given
                 var engine = Substitute.For<ICakeEngine>();
                 var context = Substitute.For<ICakeContext>();
-                engine.RunTargetAsync(context, Arg.Any<DefaultExecutionStrategy>(), Arg.Any<string>()).Returns(Task.FromResult(new CakeReport()));
                 var printer = Substitute.For<ICakeReportPrinter>();
                 var log = Substitute.For<ICakeLog>();
                 var host = new BuildScriptHost(engine, context, printer, log);
+
+                engine.RunTargetAsync(context, Arg.Any<DefaultExecutionStrategy>(), Arg.Any<ExecutionSettings>())
+                    .Returns(Task.FromResult(new CakeReport()));
 
                 // When
                 await host.RunTargetAsync("Target");

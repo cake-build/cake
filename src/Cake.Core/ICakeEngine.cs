@@ -81,9 +81,9 @@ namespace Cake.Core
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="strategy">The execution strategy.</param>
-        /// <param name="target">The target to run.</param>
+        /// <param name="settings">The execution settings.</param>
         /// <returns>The resulting report.</returns>
-        Task<CakeReport> RunTargetAsync(ICakeContext context, IExecutionStrategy strategy, string target);
+        Task<CakeReport> RunTargetAsync(ICakeContext context, IExecutionStrategy strategy, ExecutionSettings settings);
 
         /// <summary>
         /// Allows registration of an action that's executed before each task is run.
