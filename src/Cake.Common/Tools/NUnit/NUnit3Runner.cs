@@ -284,6 +284,9 @@ namespace Cake.Common.Tools.NUnit
                     case -4:
                         error = "Invalid test fixture";
                         break;
+                    case -5:
+                        error = "Unload error";
+                        break;
                     case -100:
                         error = "Unexpected error";
                         break;

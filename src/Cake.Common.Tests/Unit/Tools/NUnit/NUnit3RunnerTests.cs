@@ -155,6 +155,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
             [InlineData(-1, "NUnit3: Invalid argument (exit code -1).")]
             [InlineData(-2, "NUnit3: Invalid assembly (exit code -2).")]
             [InlineData(-4, "NUnit3: Invalid test fixture (exit code -4).")]
+            [InlineData(-5, "NUnit3: Unload error (exit code -5).")]
             [InlineData(-100, "NUnit3: Unexpected error (exit code -100).")]
             [InlineData(-10, "NUnit3: Unrecognised error (exit code -10).")]
             public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code(int exitCode, string expectedMessage)
