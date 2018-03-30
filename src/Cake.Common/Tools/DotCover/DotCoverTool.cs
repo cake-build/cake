@@ -70,5 +70,22 @@ namespace Cake.Common.Tools.DotCover
 
             return builder;
         }
+
+        /// <summary>
+        /// Get configuration full path from coverage settings
+        /// </summary>
+        /// <param name="settings">The settings</param>
+        /// <returns>The process arguments</returns>
+        protected ProcessArgumentBuilder GetConfigurationFileArgument(DotCoverSettings settings)
+        {
+            var builder = new ProcessArgumentBuilder();
+
+            if (settings.ConfigFile != null)
+            {
+                builder.AppendQuoted(settings.ConfigFile.Collapse().FullPath);
+            }
+
+            return builder;
+        }
     }
 }

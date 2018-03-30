@@ -295,6 +295,22 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Analyse
                              "/TargetArguments=\"\\\"/Working/Test.dll\\\" -noshadow\" " +
                              "/Output=\"/Working/result.xml\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Append_ConfigurationFile()
+            {
+                // Given
+                var fixture = new DotCoverAnalyserFixture();
+                fixture.Settings.WithConfigFile(new FilePath("./config.xml"));
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("Analyse \"config.xml\" /TargetExecutable=\"/Working/tools/Test.exe\" " +
+                             "/TargetArguments=\"-argument\" " +
+                             "/Output=\"/Working/result.xml\"", result.Args);
+            }
         }
     }
 }

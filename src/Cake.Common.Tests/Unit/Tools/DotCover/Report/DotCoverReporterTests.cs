@@ -95,6 +95,22 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Report
                              "/Output=\"/Working/result.xml\" " +
                              "/LogFile=\"/Working/logfile.log\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Append_ConfigurationFile()
+            {
+                // Given
+                var fixture = new DotCoverReporterFixture();
+                fixture.Settings.WithConfigFile(new FilePath("./config.xml"));
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("Report \"config.xml\" " +
+                             "/Source=\"/Working/result.dcvr\" " +
+                             "/Output=\"/Working/result.xml\"", result.Args);
+            }
         }
     }
 }
