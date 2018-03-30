@@ -217,8 +217,8 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 fixture.Settings.StopOnError = true;
                 fixture.Settings.Work = "out";
                 fixture.Settings.OutputFile = "stdout.txt";
-                fixture.Settings.ErrorOutputFile = "stderr.txt";
                 #pragma warning disable 0618
+                fixture.Settings.ErrorOutputFile = "stderr.txt";
                 fixture.Settings.Full = true;
                 #pragma warning restore 0618
                 fixture.Settings.Results = new[]
