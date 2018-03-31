@@ -277,7 +277,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
             }
 
             [Fact]
-            public void Should_Append_ConfigurationFile()
+            public void Should_Append_ConfigurationFile_RelativePath()
             {
                 // Given
                 var fixture = new DotCoverCovererFixture();
@@ -287,7 +287,23 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("Cover \"config.xml\" /TargetExecutable=\"/Working/tools/Test.exe\" " +
+                Assert.Equal("Cover \"/Working/config.xml\" /TargetExecutable=\"/Working/tools/Test.exe\" " +
+                             "/TargetArguments=\"-argument\" " +
+                             "/Output=\"/Working/result.dcvr\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_ConfigurationFile_AbsolutePath()
+            {
+                // Given
+                var fixture = new DotCoverCovererFixture();
+                fixture.Settings.WithConfigFile(new FilePath("C:/config.xml"));
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("Cover \"C:/config.xml\" /TargetExecutable=\"/Working/tools/Test.exe\" " +
                              "/TargetArguments=\"-argument\" " +
                              "/Output=\"/Working/result.dcvr\"", result.Args);
             }

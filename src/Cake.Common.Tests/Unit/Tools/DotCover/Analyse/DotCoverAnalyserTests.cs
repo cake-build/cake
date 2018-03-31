@@ -297,7 +297,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Analyse
             }
 
             [Fact]
-            public void Should_Append_ConfigurationFile()
+            public void Should_Append_ConfigurationFile_RelativePath()
             {
                 // Given
                 var fixture = new DotCoverAnalyserFixture();
@@ -307,7 +307,23 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Analyse
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("Analyse \"config.xml\" /TargetExecutable=\"/Working/tools/Test.exe\" " +
+                Assert.Equal("Analyse \"/Working/config.xml\" /TargetExecutable=\"/Working/tools/Test.exe\" " +
+                             "/TargetArguments=\"-argument\" " +
+                             "/Output=\"/Working/result.xml\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_ConfigurationFile_AbsolutePath()
+            {
+                // Given
+                var fixture = new DotCoverAnalyserFixture();
+                fixture.Settings.WithConfigFile(new FilePath("C:/config.xml"));
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("Analyse \"C:/config.xml\" /TargetExecutable=\"/Working/tools/Test.exe\" " +
                              "/TargetArguments=\"-argument\" " +
                              "/Output=\"/Working/result.xml\"", result.Args);
             }

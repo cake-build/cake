@@ -89,7 +89,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Merge
             }
 
             [Fact]
-            public void Should_Append_ConfigurationFile()
+            public void Should_Append_ConfigurationFile_RelativePath()
             {
                 // Given
                 var fixture = new DotCoverMergerFixture();
@@ -99,7 +99,23 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Merge
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("Merge \"config.xml\" " +
+                Assert.Equal("Merge \"/Working/config.xml\" " +
+                             "/Source=\"/Working/result1.dcvr;/Working/result2.dcvr\" " +
+                             "/Output=\"/Working/result.dcvr\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_ConfigurationFile_AbsolutePath()
+            {
+                // Given
+                var fixture = new DotCoverMergerFixture();
+                fixture.Settings.WithConfigFile(new FilePath("C:/config.xml"));
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("Merge \"C:/config.xml\" " +
                              "/Source=\"/Working/result1.dcvr;/Working/result2.dcvr\" " +
                              "/Output=\"/Working/result.dcvr\"", result.Args);
             }

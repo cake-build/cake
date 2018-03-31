@@ -82,7 +82,7 @@ namespace Cake.Common.Tools.DotCover
 
             if (settings.ConfigFile != null)
             {
-                builder.AppendQuoted(settings.ConfigFile.Collapse().FullPath);
+                builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
             }
 
             return builder;
