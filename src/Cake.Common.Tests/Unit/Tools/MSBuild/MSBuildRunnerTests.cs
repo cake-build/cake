@@ -763,7 +763,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal /p:A=B /p:A=E /p:C=D /target:Build " +
+                Assert.Equal("/v:normal /p:A=\"B,E\" /p:C=D /target:Build " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
 

@@ -298,9 +298,14 @@ namespace Cake.Common.Tools.MSBuild
         {
             foreach (var propertyKey in properties.Keys)
             {
-                foreach (var propertyValue in properties[propertyKey])
+                if (properties[propertyKey].Count > 1)
                 {
-                    yield return string.Concat("/p:", propertyKey, "=", propertyValue.EscapeMSBuildPropertySpecialCharacters());
+                    var commaSeparatedValues = string.Join(",", properties[propertyKey].Select(x => x.EscapeMSBuildPropertySpecialCharacters()));
+                    yield return string.Concat("/p:", propertyKey, "=", '"', commaSeparatedValues, '"');
+                }
+                else if (properties[propertyKey].Count == 1)
+                {
+                    yield return string.Concat("/p:", propertyKey, "=", properties[propertyKey].First().EscapeMSBuildPropertySpecialCharacters());
                 }
             }
         }
