@@ -170,6 +170,7 @@ if (!(Test-Path $NuGetPath)) {
 #####################################################################
 
 $Env:MyEnvironmentVariable = "Hello World"
+$Env:CAKE_INTEGRATION_TEST_ROOT = "../.."
 
 #####################################################################
 # RUN TESTS

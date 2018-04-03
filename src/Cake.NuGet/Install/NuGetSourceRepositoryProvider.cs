@@ -18,6 +18,7 @@ namespace Cake.NuGet.Install
     {
         private readonly List<Lazy<INuGetResourceProvider>> _resourceProviders;
         private readonly ISet<SourceRepository> _repositories;
+        private readonly ISet<SourceRepository> _primaryRepositories;
 
         public NuGetSourceRepositoryProvider(ISettings settings, ICakeConfiguration config, PackageReference package)
         {
@@ -45,10 +46,14 @@ namespace Cake.NuGet.Install
 
             // Add repositories
             _repositories = new HashSet<SourceRepository>(new SourceRepositoryComparer());
+            _primaryRepositories = new HashSet<SourceRepository>(new SourceRepositoryComparer());
 
             if (package.Address != null)
             {
-                CreateRepository(package.Address.AbsoluteUri);
+                var repository = CreateRepository(package.Address.AbsoluteUri);
+
+                // Sources specified in directive is always primary.
+                _primaryRepositories.Add(repository);
             }
 
             var nugetSources = config.GetValue(Constants.NuGet.Source);
@@ -58,19 +63,36 @@ namespace Cake.NuGet.Install
                 {
                     if (!string.IsNullOrWhiteSpace(nugetSource))
                     {
-                        CreateRepository(nugetSource);
+                        var repository = CreateRepository(nugetSource);
+
+                        // If source is not specified in directive, add it as primary source.
+                        if (package.Address == null)
+                        {
+                            _primaryRepositories.Add(repository);
+                        }
                     }
                 }
             }
-
-            foreach (var source in PackageSourceProvider.LoadPackageSources())
+            else
             {
-                if (source.IsEnabled)
+                // Only add sources added via NuGet.Config's if nuget_source configuration value is not specified.
+                foreach (var source in PackageSourceProvider.LoadPackageSources())
                 {
-                    CreateRepository(source);
+                    if (source.IsEnabled)
+                    {
+                        var repository = CreateRepository(source);
+
+                        // If source is not specified in directive, add it as primary source.
+                        if (package.Address == null)
+                        {
+                            _primaryRepositories.Add(repository);
+                        }
+                    }
                 }
             }
         }
+
+        public IEnumerable<SourceRepository> GetPrimaryRepositories() => _primaryRepositories;
 
         public IEnumerable<SourceRepository> GetRepositories() => _repositories;
 
