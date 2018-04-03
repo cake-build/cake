@@ -133,6 +133,7 @@ fi
 #####################################################################
 
 export MyEnvironmentVariable="Hello World"
+export CAKE_INTEGRATION_TEST_ROOT="../.."
 
 #####################################################################
 # RUN TESTS

@@ -117,7 +117,7 @@ namespace Cake.Core.Scripting.Analysis
             {
                 string replacement = null;
 
-                if (!_lineProcessors.Any(p => p.Process(context, line, out replacement)))
+                if (!_lineProcessors.Any(p => p.Process(context, _environment.ExpandEnvironmentVariables(line), out replacement)))
                 {
                     context.AddScriptLine(line);
                 }
