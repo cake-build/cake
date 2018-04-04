@@ -204,5 +204,18 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.False(settings.Restore);
             }
         }
+
+        public sealed class TheConsoleLoggerParametersProperty
+        {
+            [Fact]
+            public void Should_Be_Empty_By_Default()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Empty(settings.ConsoleLoggerParameters);
+            }
+        }
     }
 }

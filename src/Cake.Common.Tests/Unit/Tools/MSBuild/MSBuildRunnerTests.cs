@@ -1040,6 +1040,26 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Then
                 Assert.Equal(expected, result.Args);
             }
+
+            [Theory]
+            [InlineData(new string[] { }, @"/v:normal /target:Build ""C:/Working/src/Solution.sln""")]
+            [InlineData(new string[] { "ForceConsoleColor" }, @"/v:normal /target:Build /clp:ForceConsoleColor ""C:/Working/src/Solution.sln""")]
+            [InlineData(new string[] { "ForceConsoleColor", "ShowCommandLine" }, @"/v:normal /target:Build /clp:ForceConsoleColor;ShowCommandLine ""C:/Working/src/Solution.sln""")]
+            public void Should_Append_ConsoleLoggerParameters(string[] parameters, string expected)
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                foreach (var parameter in parameters)
+                {
+                    fixture.Settings.ConsoleLoggerParameters.Add(parameter);
+                }
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
         }
     }
 }

@@ -139,6 +139,7 @@ namespace Cake.NuGet.Install
                 packageIdentity,
                 resolutionContext,
                 projectContext,
+                sourceRepositoryProvider.GetPrimaryRepositories(),
                 sourceRepositoryProvider.GetRepositories(),
                 CancellationToken.None).Result;
 
