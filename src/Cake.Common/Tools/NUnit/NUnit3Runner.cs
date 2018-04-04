@@ -109,12 +109,12 @@ namespace Cake.Common.Tools.NUnit
                 builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "--out={0}", settings.OutputFile.MakeAbsolute(_environment).FullPath));
             }
 
+            #pragma warning disable 0618
             if (settings.ErrorOutputFile != null)
             {
                 builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "--err={0}", settings.ErrorOutputFile.MakeAbsolute(_environment).FullPath));
             }
 
-            #pragma warning disable 0618
             if (settings.Full)
             {
                 builder.Append("--full");
