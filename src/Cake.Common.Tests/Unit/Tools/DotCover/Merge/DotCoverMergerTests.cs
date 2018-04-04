@@ -4,13 +4,12 @@
 
 using System.Collections.Generic;
 using Cake.Common.Tests.Fixtures.Tools.DotCover.Merge;
+using Cake.Common.Tools.DotCover;
 using Cake.Core.IO;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.DotCover.Merge
 {
-    using Common.Tools.DotCover;
-
     public sealed class DotCoverMergerTests
     {
         public sealed class TheMergeMethod
