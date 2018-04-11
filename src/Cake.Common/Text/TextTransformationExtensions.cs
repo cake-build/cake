@@ -6,6 +6,9 @@ using Cake.Core.Text;
 
 namespace Cake.Common.Text
 {
+    using System;
+    using System.Collections.Generic;
+
     /// <summary>
     /// Contains extension methods for <see cref="TextTransformation{TTemplate}"/>.
     /// </summary>
@@ -27,6 +30,32 @@ namespace Cake.Common.Text
             where TTemplate : class, ITextTransformationTemplate
         {
             transformation?.Template.Register(key, value);
+            return transformation;
+        }
+
+        /// <summary>
+        /// Registers all keys and values in the dictionary for text transformation.
+        /// </summary>
+        /// <typeparam name="TTemplate">The text transformation template.</typeparam>
+        /// <param name="transformation">The text transformation.</param>
+        /// <param name="tokens">The tokens.</param>
+        /// <returns>
+        /// The same <see cref="TextTransformation{TTemplate}" /> instance so that multiple calls can be chained.
+        /// </returns>
+        public static TextTransformation<TTemplate> WithTokens<TTemplate>(
+            this TextTransformation<TTemplate> transformation, IDictionary<string, object> tokens)
+            where TTemplate : class, ITextTransformationTemplate
+        {
+            if (tokens == null)
+            {
+                throw new ArgumentNullException(nameof(tokens));
+            }
+
+            foreach (var kvp in tokens)
+            {
+                transformation?.Template.Register(kvp.Key, kvp.Value);
+            }
+
             return transformation;
         }
     }
