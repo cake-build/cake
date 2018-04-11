@@ -9,6 +9,8 @@ using Xunit;
 
 namespace Cake.Common.Tests.Unit.Text
 {
+    using System.Collections.Generic;
+
     public sealed class TextTransformationExtensionsTests
     {
         public sealed class TheWithTokenMethod
@@ -41,6 +43,26 @@ namespace Cake.Common.Tests.Unit.Text
 
                 // Then
                 Assert.Same(transformation, result);
+            }
+
+            [Fact]
+            public void Should_Register_The_Provided_Tokens_With_The_Template()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var transformation = TextTransformationAliases.TransformText(
+                    context, "<%greeting%> World and <%name%>!");
+
+                // When
+                var tokens = new Dictionary<string, object>
+                {
+                    { "greeting", "Hello" },
+                    { "name", "Tim" }
+                };
+                transformation.WithTokens(tokens);
+
+                // Then
+                Assert.Equal("Hello World and Tim!", transformation.ToString());
             }
         }
     }
