@@ -122,28 +122,47 @@ namespace Cake.Common.Tools.MSBuild
                 "BuildTools"
             };
 
-            var visualStudio2017Path = environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
+            var visualStudio2017Path = environment.GetSpecialPath(SpecialPath.ProgramFilesX86).Combine("Microsoft Visual Studio");
 
-            foreach (var edition in vsEditions)
+            DirectoryPath SearchVsPath(string vsInstallType)
             {
-                // Get the bin path.
-                var binPath = visualStudio2017Path.Combine(string.Concat("Microsoft Visual Studio/2017/", edition, "/MSBuild/15.0/Bin"));
-                if (fileSystem.Exist(binPath))
+                foreach (var edition in vsEditions)
                 {
-                    if (buildPlatform == MSBuildPlatform.Automatic)
+                    // Get the bin path.
+                    var binPath = visualStudio2017Path.Combine(string.Concat($"{vsInstallType}/", edition, "/MSBuild/15.0/Bin"));
+                    if (fileSystem.Exist(binPath))
                     {
-                        if (environment.Platform.Is64Bit)
+                        if (buildPlatform == MSBuildPlatform.Automatic)
+                        {
+                            if (environment.Platform.Is64Bit)
+                            {
+                                binPath = binPath.Combine("amd64");
+                            }
+                        }
+                        if (buildPlatform == MSBuildPlatform.x64)
                         {
                             binPath = binPath.Combine("amd64");
                         }
+                        return binPath;
                     }
-                    if (buildPlatform == MSBuildPlatform.x64)
-                    {
-                        binPath = binPath.Combine("amd64");
-                    }
-                    return binPath;
                 }
+
+                return null;
             }
+
+            // search for regular VS
+            var vsPath = SearchVsPath("2017");
+            if (vsPath != null)
+            {
+                return vsPath;
+            }
+
+            var previewPath = SearchVsPath("Preview");
+            if (previewPath != null)
+            {
+                return previewPath;
+            }
+
             return visualStudio2017Path.Combine("Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin");
         }
 
