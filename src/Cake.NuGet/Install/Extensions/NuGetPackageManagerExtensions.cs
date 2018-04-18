@@ -85,13 +85,116 @@ namespace Cake.NuGet.Install.Extensions
             }
 
             var primarySources = new HashSet<SourceRepository>(new SourceRepositoryComparer());
-            primarySources.AddRange(localSources);
-            primarySources.AddRange(primarySourceRepositories);
-
             var allSources = new HashSet<SourceRepository>(new SourceRepositoryComparer());
-            allSources.AddRange(primarySources);
-            allSources.AddRange(secondarySourceRepositories);
 
+            Tuple<IReadOnlyCollection<PackageIdentity>, IReadOnlyCollection<SourcePackageDependencyInfo>> packageAndDependencies = null;
+            var allDependenciesResolved = false;
+
+            // If target package is already installed, there's a slight chance that all packages are already installed.
+            if (await PackageExistsInSourceRepository(
+                packageIdentity,
+                packageManager.PackagesFolderSourceRepository,
+                resolutionContext.SourceCacheContext,
+                new ProjectContextLogger(nuGetProjectContext),
+                token))
+            {
+                primarySources.Add(packageManager.PackagesFolderSourceRepository);
+                allSources.Add(packageManager.PackagesFolderSourceRepository);
+
+                try
+                {
+                    // Try get all dependencies from local sources only.
+                    packageAndDependencies = await GetPackageAndDependenciesToInstall(
+                        packageManager,
+                        nuGetProject,
+                        packageIdentity,
+                        resolutionContext,
+                        nuGetProjectContext,
+                        primarySources,
+                        allSources,
+                        token);
+
+                    allDependenciesResolved = true;
+                }
+                catch (NuGetResolverConstraintException)
+                {
+                    // We didn't manage to find all dependencies in the local packages folder.
+                    allDependenciesResolved = false;
+                }
+            }
+
+            // If we didn't manage to resolve all dependencies from the local sources, check in all sources.
+            if (!allDependenciesResolved)
+            {
+                primarySources.AddRange(localSources);
+                primarySources.AddRange(primarySourceRepositories);
+                allSources.AddRange(primarySources);
+                allSources.AddRange(secondarySourceRepositories);
+
+                packageAndDependencies = await GetPackageAndDependenciesToInstall(
+                        packageManager,
+                        nuGetProject,
+                        packageIdentity,
+                        resolutionContext,
+                        nuGetProjectContext,
+                        primarySources,
+                        allSources,
+                        token);
+            }
+
+            // Create the install actions.
+            return GetProjectActions(
+                packageIdentity,
+                packageAndDependencies.Item1,
+                packageAndDependencies.Item2,
+                nuGetProject);
+        }
+
+        private static async Task<SourceRepository> GetSourceRepositoryAsync(
+            PackageIdentity packageIdentity,
+            IEnumerable<SourceRepository> sourceRepositories,
+            SourceCacheContext sourceCacheContext,
+            ILogger logger,
+            CancellationToken token)
+        {
+            foreach (var sourceRepository in sourceRepositories)
+            {
+                if (await PackageExistsInSourceRepository(packageIdentity, sourceRepository, sourceCacheContext, logger, token))
+                {
+                    return sourceRepository;
+                }
+            }
+
+            return null;
+        }
+
+        private static async Task<bool> PackageExistsInSourceRepository(
+            PackageIdentity packageIdentity,
+            SourceRepository sourceRepository,
+            SourceCacheContext sourceCacheContext,
+            ILogger logger,
+            CancellationToken token)
+        {
+            var metadataResource = await sourceRepository.GetResourceAsync<MetadataResource>(token);
+
+            if (metadataResource == null)
+            {
+                return false;
+            }
+
+            return await metadataResource.Exists(packageIdentity, sourceCacheContext, logger, token);
+        }
+
+        private static async Task<Tuple<IReadOnlyCollection<PackageIdentity>, IReadOnlyCollection<SourcePackageDependencyInfo>>> GetPackageAndDependenciesToInstall(
+            NuGetPackageManager packageManager,
+            NugetFolderProject nuGetProject,
+            PackageIdentity packageIdentity,
+            ResolutionContext resolutionContext,
+            INuGetProjectContext nuGetProjectContext,
+            ISet<SourceRepository> primarySources,
+            ISet<SourceRepository> allSources,
+            CancellationToken token)
+        {
             // Get the available package dependencies.
             var packageDependencies = await GetAvailablePackageDependencies(
                 packageManager,
@@ -125,34 +228,7 @@ namespace Cake.NuGet.Install.Extensions
                 throw new InvalidOperationException($"Unable to resolve dependencies for package '{packageIdentity}' with DependencyBehavior '{resolutionContext.DependencyBehavior}'");
             }
 
-            // Create the install actions.
-            return GetProjectActions(
-                packageIdentity,
-                packagesToInstall,
-                packageDependencies,
-                nuGetProject);
-        }
-
-        private static async Task<SourceRepository> GetSourceRepositoryAsync(
-            PackageIdentity packageIdentity,
-            IEnumerable<SourceRepository> sourceRepositories,
-            SourceCacheContext sourceCacheContext,
-            ILogger logger,
-            CancellationToken token)
-        {
-            foreach (var sourceRepository in sourceRepositories)
-            {
-                var metadataResource = await sourceRepository.GetResourceAsync<MetadataResource>(token);
-                if (metadataResource != null)
-                {
-                    if (await metadataResource.Exists(packageIdentity, sourceCacheContext, logger, token))
-                    {
-                        return sourceRepository;
-                    }
-                }
-            }
-
-            return null;
+            return Tuple.Create(packagesToInstall, packageDependencies);
         }
 
         private static async Task<IReadOnlyCollection<SourcePackageDependencyInfo>> GetAvailablePackageDependencies(
