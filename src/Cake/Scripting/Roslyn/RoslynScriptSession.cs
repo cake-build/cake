@@ -124,7 +124,10 @@ namespace Cake.Scripting.Roslyn
                 throw new CakeException(message);
             }
 
-            roslynScript.RunAsync(_host).Wait();
+            using (new ScriptAssemblyResolver(_log))
+            {
+                roslynScript.RunAsync(_host).Wait();
+            }
         }
     }
 }
