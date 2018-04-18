@@ -110,7 +110,16 @@ namespace Cake.NuGet
 
         private NuGetFramework ParseFromDirectoryPath(NuGetFramework current, DirectoryPath path)
         {
-            var queue = new Queue<string>(path.Segments);
+            var segments = path.Segments;
+
+            if (segments.Length == 1 &&
+                segments[0].Equals("lib", StringComparison.OrdinalIgnoreCase))
+            {
+                // Treat as AnyFramework if lib folder
+                return NuGetFramework.AnyFramework;
+            }
+
+            var queue = new Queue<string>(segments);
             while (queue.Count > 0)
             {
                 var other = NuGetFramework.Parse(queue.Dequeue(), DefaultFrameworkNameProvider.Instance);
