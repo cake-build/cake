@@ -11,7 +11,13 @@ Task("Cake.Core.Scripting.AddinDirective.LoadNetStandardAddin")
         Information(""The answer to life: {0}"", TheAnswerToLife);
     ";
 
-    CakeExecuteExpression(script);
+    CakeExecuteExpression(script,
+    	new CakeSettings {
+    		EnvironmentVariables = new Dictionary<string, string>{
+    			{"CAKE_PATHS_ADDINS", $"{Paths.Temp}/tools/Addins"},
+    			{"CAKE_PATHS_TOOLS", $"{Paths.Temp}/tools"},
+    			{"CAKE_PATHS_MODULES", $"{Paths.Temp}/tools/Modules"}
+    		}});
 });
 
 //////////////////////////////////////////////////////////////////////////////
