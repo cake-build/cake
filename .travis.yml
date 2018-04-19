@@ -3,32 +3,25 @@ os:
   - osx
   - linux
 
-# .NET CLI require Ubuntu 14.04
+# Ubuntu 14.04
 sudo: required
 dist: trusty
-addons:
-  apt:
-    sources:
-    - sourceline: 'deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-trusty-prod trusty main'
-      key_url: 'https://packages.microsoft.com/keys/microsoft.asc'
-    packages:
-    - gettext
-    - libcurl4-openssl-dev
-    - libicu-dev
-    - libssl-dev
-    - libunwind8
-    - dotnet-dev-1.1.4
 
-# .NET CLI require OSX 10.10
-osx_image: xcode8.3
+# OS X 10.12
+osx_image: xcode9.2
 
 mono:
   - 4.4.2
 
-dotnet: 1.0.4
+dotnet: 2.1.4
+
+before_install:
+  - git fetch --unshallow # Travis always does a shallow clone, but GitVersion needs the full history including branches and tags
+  - git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+  - git fetch origin
 
 script:
-  - ./build.sh --verbosity diagnostic
+  - ./build.sh --target Travis --verbosity diagnostic
 
 cache:
   directories:

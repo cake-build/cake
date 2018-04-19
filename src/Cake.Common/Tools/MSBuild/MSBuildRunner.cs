@@ -181,6 +181,19 @@ namespace Cake.Common.Tools.MSBuild
                 builder.Append($"/warnasmessage:{codes.Quote()}");
             }
 
+            // Invoke restore target before any other target?
+            if (settings.Restore)
+            {
+                builder.Append("/restore");
+            }
+
+            // Got any console logger parameters?
+            if (settings.ConsoleLoggerParameters.Count > 0)
+            {
+                var argument = "/clp:" + string.Join(";", settings.ConsoleLoggerParameters);
+                builder.Append(argument);
+            }
+
             // Add the solution as the last parameter.
             builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
 

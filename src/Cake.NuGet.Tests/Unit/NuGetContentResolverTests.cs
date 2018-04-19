@@ -237,7 +237,7 @@ namespace Cake.NuGet.Tests.Unit
 
                 fixture.CreateCLRAssembly("/Working/file1.dll");
                 fixture.CreateCLRAssembly("/Working/file2.dll");
-                fixture.CreateCLRAssembly("/Working/file3.dll");
+                fixture.CreateCLRAssembly("/Working/lib/file3.dll");
 
                 // When
                 var result = fixture.GetFiles();
@@ -246,7 +246,7 @@ namespace Cake.NuGet.Tests.Unit
                 Assert.Equal(3, result.Count);
                 Assert.Equal("/Working/file1.dll", result.ElementAt(0).Path.FullPath);
                 Assert.Equal("/Working/file2.dll", result.ElementAt(1).Path.FullPath);
-                Assert.Equal("/Working/file3.dll", result.ElementAt(2).Path.FullPath);
+                Assert.Equal("/Working/lib/file3.dll", result.ElementAt(2).Path.FullPath);
             }
 
             [Theory]
@@ -259,6 +259,7 @@ namespace Cake.NuGet.Tests.Unit
 
                 fixture.CreateCLRAssembly("/Working/lib/net461/file.dll");
                 fixture.CreateCLRAssembly("/Working/lib/netstandard1.6/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/file.dll");
                 fixture.CreateCLRAssembly("/Working/file.dll");
 
                 // When

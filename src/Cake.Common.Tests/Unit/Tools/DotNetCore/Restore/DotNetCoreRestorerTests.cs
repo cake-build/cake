@@ -115,6 +115,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                 fixture.Settings.PackagesDirectory = "./packages/";
                 fixture.Settings.Runtime = "runtime1";
                 fixture.Settings.NoDependencies = true;
+                fixture.Settings.Force = true;
                 fixture.Settings.Verbosity = DotNetCoreVerbosity.Minimal;
 
                 // When
@@ -127,7 +128,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                              " --source \"https://www.example.com/source1\"" +
                              " --source \"https://www.example.com/source2\"" +
                              " --configfile \"/Working/NuGet.config\"" +
-                             " --no-cache --disable-parallel --ignore-failed-sources --no-dependencies" +
+                             " --no-cache --disable-parallel --ignore-failed-sources --no-dependencies --force" +
                              " --verbosity Minimal", result.Args);
             }
 

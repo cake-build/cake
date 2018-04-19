@@ -382,6 +382,36 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             => settings.WithProperty("Version", version);
 
         /// <summary>
+        /// Sets the file version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="fileVersion">The file version.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetCoreMSBuildSettings SetFileVersion(this DotNetCoreMSBuildSettings settings, string fileVersion)
+            => settings.WithProperty("FileVersion", fileVersion);
+
+        /// <summary>
+        /// Sets the informational version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="informationalVersion">The informational version.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetCoreMSBuildSettings SetInformationalVersion(this DotNetCoreMSBuildSettings settings, string informationalVersion)
+            => settings.WithProperty("InformationalVersion", informationalVersion);
+
+        /// <summary>
+        /// Suppress warning CS7035.
+        /// This is useful when using semantic versioning and either the file or informational version
+        /// doesn't match the recommended format.
+        /// The recommended format is: major.minor.build.revision where
+        /// each is an integer between 0 and 65534 (inclusive).
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetCoreMSBuildSettings SuppressVersionRecommendedFormatWarning(this DotNetCoreMSBuildSettings settings)
+            => settings.WithProperty("nowarn", "7035");
+
+        /// <summary>
         /// Sets the version prefix.
         /// </summary>
         /// <param name="settings">The settings.</param>

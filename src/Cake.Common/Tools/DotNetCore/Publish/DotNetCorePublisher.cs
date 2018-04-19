@@ -107,6 +107,28 @@ namespace Cake.Common.Tools.DotNetCore.Publish
                 builder.Append("--no-restore");
             }
 
+            // Force
+            if (settings.Force)
+            {
+                builder.Append("--force");
+            }
+
+            // Self contained
+            if (settings.SelfContained)
+            {
+                builder.Append("--self-contained");
+            }
+
+            // Sources
+            if (settings.Sources != null)
+            {
+                foreach (var source in settings.Sources)
+                {
+                    builder.Append("--source");
+                    builder.AppendQuoted(source);
+                }
+            }
+
             if (settings.MSBuildSettings != null)
             {
                 builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);

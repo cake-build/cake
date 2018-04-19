@@ -542,11 +542,12 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             }
 
             [Theory]
+            [InlineData(null, "\"/Working/Test1.dll\"")]
             [InlineData(ParallelismOption.All, "\"/Working/Test1.dll\" -parallel all")]
             [InlineData(ParallelismOption.Assemblies, "\"/Working/Test1.dll\" -parallel assemblies")]
             [InlineData(ParallelismOption.Collections, "\"/Working/Test1.dll\" -parallel collections")]
-            [InlineData(ParallelismOption.None, "\"/Working/Test1.dll\"")]
-            public void Should_Use_Parallel_Switch_If_Settings_Value_Is_Not_None(ParallelismOption option, string expected)
+            [InlineData(ParallelismOption.None, "\"/Working/Test1.dll\" -parallel none")]
+            public void Should_Use_Parallel_Switch_If_Settings_Value_Is_Specified(ParallelismOption? option, string expected)
             {
                 // Given
                 var fixture = new XUnit2RunnerFixture();

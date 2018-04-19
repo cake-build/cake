@@ -3,9 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Cake.Core.Diagnostics;
 using NuGet.Packaging;
+using NuGet.Packaging.Signing;
 using NuGet.ProjectManagement;
 
 namespace Cake.NuGet.Install
@@ -14,13 +17,23 @@ namespace Cake.NuGet.Install
     {
         private readonly ICakeLog _log;
 
+        // TODO: Use the implementation in NuGet libs
+        private class PackageSignatureVerifier : IPackageSignatureVerifier
+        {
+            public Task<VerifySignaturesResult> VerifySignaturesAsync(ISignedPackageReader package, CancellationToken token, Guid parentId)
+            {
+                return Task.FromResult(new VerifySignaturesResult(valid: true));
+            }
+        }
+
         public NuGetProjectContext(ICakeLog log)
         {
             _log = log ?? throw new ArgumentNullException(nameof(log));
-            PackageExtractionContext = new PackageExtractionContext(new NuGetLogger(_log))
-            {
-                PackageSaveMode = PackageSaveMode.Nuspec | PackageSaveMode.Files | PackageSaveMode.Nupkg
-            };
+            PackageExtractionContext = new PackageExtractionContext(
+                PackageSaveMode.Nuspec | PackageSaveMode.Files | PackageSaveMode.Nupkg,
+                XmlDocFileSaveMode.None,
+                new NuGetLogger(_log),
+                new PackageSignatureVerifier());
         }
 
         public void Log(MessageLevel level, string message, params object[] args)
@@ -54,12 +67,12 @@ namespace Cake.NuGet.Install
 
         public ISourceControlManagerProvider SourceControlManagerProvider => null;
 
-        public ExecutionContext ExecutionContext => null;
+        public global::NuGet.ProjectManagement.ExecutionContext ExecutionContext => null;
 
         public XDocument OriginalPackagesConfig { get; set; }
 
         public NuGetActionType ActionType { get; set; }
 
-        public TelemetryServiceHelper TelemetryService { get; set; }
+        public Guid OperationId { get; set; }
     }
 }

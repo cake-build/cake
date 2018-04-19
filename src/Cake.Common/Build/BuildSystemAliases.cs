@@ -50,7 +50,7 @@ namespace Cake.Common.Build
             var bambooProvider = new BambooProvider(context.Environment);
             var continuaCIProvider = new ContinuaCIProvider(context.Environment);
             var jenkinsProvider = new JenkinsProvider(context.Environment);
-            var bitriseProvider = new BitriseProvider(context.Environment);
+            var bitriseProvider = new BitriseProvider(context.Environment, context.ProcessRunner);
             var travisCIProvider = new TravisCIProvider(context.Environment, context.Log);
             var bitbucketPipelinesProvider = new BitbucketPipelinesProvider(context.Environment);
             var goCDProvider = new GoCDProvider(context.Environment, context.Log);

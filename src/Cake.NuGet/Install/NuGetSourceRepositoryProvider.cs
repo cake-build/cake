@@ -4,9 +4,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cake.Core.Configuration;
 using Cake.Core.Packaging;
 using NuGet.Configuration;
+using NuGet.PackageManagement;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
 
@@ -15,10 +17,26 @@ namespace Cake.NuGet.Install
     internal sealed class NuGetSourceRepositoryProvider : ISourceRepositoryProvider
     {
         private readonly List<Lazy<INuGetResourceProvider>> _resourceProviders;
-        private readonly List<SourceRepository> _repositories;
+        private readonly ISet<SourceRepository> _repositories;
+        private readonly ISet<SourceRepository> _primaryRepositories;
 
         public NuGetSourceRepositoryProvider(ISettings settings, ICakeConfiguration config, PackageReference package)
         {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            if (config == null)
+            {
+                throw new ArgumentNullException(nameof(config));
+            }
+
+            if (package == null)
+            {
+                throw new ArgumentNullException(nameof(package));
+            }
+
             // Create the package source provider (needed primarily to get default sources)
             PackageSourceProvider = new PackageSourceProvider(settings);
 
@@ -27,27 +45,54 @@ namespace Cake.NuGet.Install
             _resourceProviders.AddRange(Repository.Provider.GetCoreV3());
 
             // Add repositories
-            _repositories = new List<SourceRepository>();
+            _repositories = new HashSet<SourceRepository>(new SourceRepositoryComparer());
+            _primaryRepositories = new HashSet<SourceRepository>(new SourceRepositoryComparer());
 
             if (package.Address != null)
             {
-                CreateRepository(package.Address.AbsoluteUri);
+                var repository = CreateRepository(package.Address.AbsoluteUri);
+
+                // Sources specified in directive is always primary.
+                _primaryRepositories.Add(repository);
             }
 
-            var nugetSource = config.GetValue(Constants.NuGet.Source);
-            if (!string.IsNullOrWhiteSpace(nugetSource))
+            var nugetSources = config.GetValue(Constants.NuGet.Source);
+            if (!string.IsNullOrEmpty(nugetSources))
             {
-                CreateRepository(nugetSource);
-            }
-
-            foreach (var source in PackageSourceProvider.LoadPackageSources())
-            {
-                if (source.IsEnabled)
+                foreach (var nugetSource in nugetSources.Split(';'))
                 {
-                    CreateRepository(source);
+                    if (!string.IsNullOrWhiteSpace(nugetSource))
+                    {
+                        var repository = CreateRepository(nugetSource);
+
+                        // If source is not specified in directive, add it as primary source.
+                        if (package.Address == null)
+                        {
+                            _primaryRepositories.Add(repository);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // Only add sources added via NuGet.Config's if nuget_source configuration value is not specified.
+                foreach (var source in PackageSourceProvider.LoadPackageSources())
+                {
+                    if (source.IsEnabled)
+                    {
+                        var repository = CreateRepository(source);
+
+                        // If source is not specified in directive, add it as primary source.
+                        if (package.Address == null)
+                        {
+                            _primaryRepositories.Add(repository);
+                        }
+                    }
                 }
             }
         }
+
+        public IEnumerable<SourceRepository> GetPrimaryRepositories() => _primaryRepositories;
 
         public IEnumerable<SourceRepository> GetRepositories() => _repositories;
 
@@ -57,7 +102,13 @@ namespace Cake.NuGet.Install
 
         public SourceRepository CreateRepository(PackageSource source, FeedType type)
         {
-            var repository = new SourceRepository(source, _resourceProviders);
+            var repository = new SourceRepository(source, _resourceProviders, type);
+            var comparer = new SourceRepositoryComparer();
+
+            if (_repositories.Contains(repository))
+            {
+                return _repositories.First(x => comparer.Equals(x, repository));
+            }
 
             _repositories.Add(repository);
             return repository;

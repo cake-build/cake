@@ -81,7 +81,7 @@ namespace Cake.Common.Tools.XUnit
         /// <value>
         /// The parallelism option.
         /// </value>
-        public ParallelismOption Parallelism { get; set; }
+        public ParallelismOption? Parallelism { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to run tests in using x86 test runner.

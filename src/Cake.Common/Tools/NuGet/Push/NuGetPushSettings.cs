@@ -14,12 +14,21 @@ namespace Cake.Common.Tools.NuGet.Push
     public sealed class NuGetPushSettings : ToolSettings
     {
         /// <summary>
-        /// Gets or sets the server URL. If not specified, nuget.org is used unless
-        /// DefaultPushSource config value is set in the NuGet config file.
+        /// Gets or sets the server URL.
+        /// When using NuGet pre 3.4.2, this value is optional
+        /// and nuget.org is used if omitted (unless DefaultPushSource
+        /// config value is set in the NuGet config file.
+        /// When using Nuget 3.4.2 (or more recent), this value is mandatory.
         /// Starting with NuGet 2.5, if NuGet.exe identifies a UNC/folder source,
         /// it will perform the file copy to the source.
         /// </summary>
         /// <value>The server URL.</value>
+        /// <remarks>
+        /// For your convenience, here is the URL for some of the most popular
+        /// public nuget servers:
+        /// - Nuget: https://nuget.org/api/v2/package
+        /// - MyGet: https://www.myget.org/F/&lt;your_username&gt;/api/v2/package
+        /// </remarks>
         public string Source { get; set; }
 
         /// <summary>

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 using Cake.Common.Tests.Fixtures.Tools.NuGet.Update;
 using Cake.Common.Tools.NuGet;
@@ -240,6 +241,20 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Update
 
                 // Then
                 Assert.Equal(expected, result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Version_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new NuGetUpdateFixture();
+                fixture.Settings.Version = "1.0.0.0";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("update \"/Working/packages.config\" -Version 1.0.0.0 -NonInteractive", result.Args);
             }
         }
     }

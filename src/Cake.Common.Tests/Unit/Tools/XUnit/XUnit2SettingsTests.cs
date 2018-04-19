@@ -83,13 +83,13 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             }
 
             [Fact]
-            public void Should_Set_Parallelism_Option_To_None_By_Default()
+            public void Should_Set_Parallelism_Option_To_Null_By_Default()
             {
                 // Given, When
                 var settings = new XUnit2Settings();
 
                 // Then
-                Assert.Equal(settings.Parallelism, ParallelismOption.None);
+                Assert.Null(settings.Parallelism);
             }
 
             [Fact]

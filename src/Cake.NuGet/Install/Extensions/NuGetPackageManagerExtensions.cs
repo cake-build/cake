@@ -22,7 +22,8 @@ namespace Cake.NuGet.Install.Extensions
             PackageIdentity packageIdentity,
             ResolutionContext resolutionContext,
             INuGetProjectContext nuGetProjectContext,
-            IEnumerable<SourceRepository> sources,
+            IEnumerable<SourceRepository> primarySourceRepositories,
+            IEnumerable<SourceRepository> secondarySourceRepositories,
             CancellationToken token)
         {
             if (nuGetProject == null)
@@ -41,13 +42,17 @@ namespace Cake.NuGet.Install.Extensions
             {
                 throw new ArgumentNullException(nameof(nuGetProjectContext));
             }
-            if (sources == null)
+            if (primarySourceRepositories == null)
             {
-                throw new ArgumentNullException(nameof(sources));
+                throw new ArgumentNullException(nameof(primarySourceRepositories));
             }
-            if (!sources.Any())
+            if (!primarySourceRepositories.Any())
             {
-                throw new ArgumentException(nameof(sources));
+                throw new ArgumentException(nameof(primarySourceRepositories));
+            }
+            if (secondarySourceRepositories == null)
+            {
+                throw new ArgumentNullException(nameof(secondarySourceRepositories));
             }
             if (packageIdentity.Version == null)
             {
@@ -63,11 +68,11 @@ namespace Cake.NuGet.Install.Extensions
                 var logger = new ProjectContextLogger(nuGetProjectContext);
 
                 // First, check only local sources.
-                var sourceRepository = await GetSourceRepositoryAsync(packageIdentity, localSources, logger, token);
+                var sourceRepository = await GetSourceRepositoryAsync(packageIdentity, localSources, resolutionContext.SourceCacheContext, logger, token);
                 if (sourceRepository == null)
                 {
-                    // Else, check provided sources.
-                    sourceRepository = await GetSourceRepositoryAsync(packageIdentity, sources, logger, token);
+                    // Else, check provided sources. We use only primary sources when we don't care about dependencies.
+                    sourceRepository = await GetSourceRepositoryAsync(packageIdentity, primarySourceRepositories, resolutionContext.SourceCacheContext, logger, token);
                 }
 
                 // If still not found, we just throw an exception.
@@ -79,10 +84,117 @@ namespace Cake.NuGet.Install.Extensions
                 return new[] { NuGetProjectAction.CreateInstallProjectAction(packageIdentity, sourceRepository, nuGetProject) };
             }
 
+            var primarySources = new HashSet<SourceRepository>(new SourceRepositoryComparer());
             var allSources = new HashSet<SourceRepository>(new SourceRepositoryComparer());
-            allSources.AddRange(localSources);
-            allSources.AddRange(sources);
 
+            Tuple<IReadOnlyCollection<PackageIdentity>, IReadOnlyCollection<SourcePackageDependencyInfo>> packageAndDependencies = null;
+            var allDependenciesResolved = false;
+
+            // If target package is already installed, there's a slight chance that all packages are already installed.
+            if (await PackageExistsInSourceRepository(
+                packageIdentity,
+                packageManager.PackagesFolderSourceRepository,
+                resolutionContext.SourceCacheContext,
+                new ProjectContextLogger(nuGetProjectContext),
+                token))
+            {
+                primarySources.Add(packageManager.PackagesFolderSourceRepository);
+                allSources.Add(packageManager.PackagesFolderSourceRepository);
+
+                try
+                {
+                    // Try get all dependencies from local sources only.
+                    packageAndDependencies = await GetPackageAndDependenciesToInstall(
+                        packageManager,
+                        nuGetProject,
+                        packageIdentity,
+                        resolutionContext,
+                        nuGetProjectContext,
+                        primarySources,
+                        allSources,
+                        token);
+
+                    allDependenciesResolved = true;
+                }
+                catch (NuGetResolverConstraintException)
+                {
+                    // We didn't manage to find all dependencies in the local packages folder.
+                    allDependenciesResolved = false;
+                }
+            }
+
+            // If we didn't manage to resolve all dependencies from the local sources, check in all sources.
+            if (!allDependenciesResolved)
+            {
+                primarySources.AddRange(localSources);
+                primarySources.AddRange(primarySourceRepositories);
+                allSources.AddRange(primarySources);
+                allSources.AddRange(secondarySourceRepositories);
+
+                packageAndDependencies = await GetPackageAndDependenciesToInstall(
+                        packageManager,
+                        nuGetProject,
+                        packageIdentity,
+                        resolutionContext,
+                        nuGetProjectContext,
+                        primarySources,
+                        allSources,
+                        token);
+            }
+
+            // Create the install actions.
+            return GetProjectActions(
+                packageIdentity,
+                packageAndDependencies.Item1,
+                packageAndDependencies.Item2,
+                nuGetProject);
+        }
+
+        private static async Task<SourceRepository> GetSourceRepositoryAsync(
+            PackageIdentity packageIdentity,
+            IEnumerable<SourceRepository> sourceRepositories,
+            SourceCacheContext sourceCacheContext,
+            ILogger logger,
+            CancellationToken token)
+        {
+            foreach (var sourceRepository in sourceRepositories)
+            {
+                if (await PackageExistsInSourceRepository(packageIdentity, sourceRepository, sourceCacheContext, logger, token))
+                {
+                    return sourceRepository;
+                }
+            }
+
+            return null;
+        }
+
+        private static async Task<bool> PackageExistsInSourceRepository(
+            PackageIdentity packageIdentity,
+            SourceRepository sourceRepository,
+            SourceCacheContext sourceCacheContext,
+            ILogger logger,
+            CancellationToken token)
+        {
+            var metadataResource = await sourceRepository.GetResourceAsync<MetadataResource>(token);
+
+            if (metadataResource == null)
+            {
+                return false;
+            }
+
+            return await metadataResource.Exists(packageIdentity, sourceCacheContext, logger, token);
+        }
+
+        private static async Task<Tuple<IReadOnlyCollection<PackageIdentity>, IReadOnlyCollection<SourcePackageDependencyInfo>>> GetPackageAndDependenciesToInstall(
+            NuGetPackageManager packageManager,
+            NugetFolderProject nuGetProject,
+            PackageIdentity packageIdentity,
+            ResolutionContext resolutionContext,
+            INuGetProjectContext nuGetProjectContext,
+            ISet<SourceRepository> primarySources,
+            ISet<SourceRepository> allSources,
+            CancellationToken token)
+        {
             // Get the available package dependencies.
             var packageDependencies = await GetAvailablePackageDependencies(
                 packageManager,
@@ -90,6 +202,7 @@ namespace Cake.NuGet.Install.Extensions
                 packageIdentity,
                 resolutionContext,
                 nuGetProjectContext,
+                primarySources,
                 allSources,
                 token);
 
@@ -115,33 +228,7 @@ namespace Cake.NuGet.Install.Extensions
                 throw new InvalidOperationException($"Unable to resolve dependencies for package '{packageIdentity}' with DependencyBehavior '{resolutionContext.DependencyBehavior}'");
             }
 
-            // Create the install actions.
-            return GetProjectActions(
-                packageIdentity,
-                packagesToInstall,
-                packageDependencies,
-                nuGetProject);
-        }
-
-        private static async Task<SourceRepository> GetSourceRepositoryAsync(
-            PackageIdentity packageIdentity,
-            IEnumerable<SourceRepository> sourceRepositories,
-            ILogger logger,
-            CancellationToken token)
-        {
-            foreach (var sourceRepository in sourceRepositories)
-            {
-                var metadataResource = await sourceRepository.GetResourceAsync<MetadataResource>(token);
-                if (metadataResource != null)
-                {
-                    if (await metadataResource.Exists(packageIdentity, logger, token))
-                    {
-                        return sourceRepository;
-                    }
-                }
-            }
-
-            return null;
+            return Tuple.Create(packagesToInstall, packageDependencies);
         }
 
         private static async Task<IReadOnlyCollection<SourcePackageDependencyInfo>> GetAvailablePackageDependencies(
@@ -150,7 +237,8 @@ namespace Cake.NuGet.Install.Extensions
             PackageIdentity packageIdentity,
             ResolutionContext resolutionContext,
             INuGetProjectContext nuGetProjectContext,
-            ISet<SourceRepository> sources,
+            ISet<SourceRepository> primarySources,
+            ISet<SourceRepository> allSources,
             CancellationToken token)
         {
             var targetFramework = nuGetProject.GetMetadata<NuGetFramework>(NuGetProjectMetadataKeys.TargetFramework);
@@ -160,8 +248,8 @@ namespace Cake.NuGet.Install.Extensions
                 InstalledPackages = Array.Empty<PackageIdentity>(),
                 PrimaryTargets = primaryPackages,
                 TargetFramework = targetFramework,
-                PrimarySources = sources.ToList(),
-                AllSources = sources.ToList(),
+                PrimarySources = primarySources.ToList(),
+                AllSources = allSources.ToList(),
                 PackagesFolderSource = packageManager.PackagesFolderSourceRepository,
                 ResolutionContext = resolutionContext,
                 AllowDowngrades = false,

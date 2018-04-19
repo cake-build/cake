@@ -474,5 +474,67 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.Equal(settings, result);
             }
         }
+
+        public sealed class TheWithRestoreMethod
+        {
+            [Fact]
+            public void Should_Set_Restore_To_True()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                settings.WithRestore();
+
+                // Then
+                Assert.Equal(true, settings.Restore);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.WithRestore();
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
+        public sealed class TheWithConsoleLoggerParameterMethod
+        {
+            [Fact]
+            public void Should_Add_Console_Logger_Parameter()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+               // When
+                settings.WithConsoleLoggerParameter("ForceConsoleColor");
+                settings.WithConsoleLoggerParameter("ShowCommandLine");
+
+               // Then
+                Assert.Contains("ForceConsoleColor", settings.ConsoleLoggerParameters);
+                Assert.Contains("ShowCommandLine", settings.ConsoleLoggerParameters);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+               // When
+                var result = settings.WithConsoleLoggerParameter("ForceConsoleColor");
+                var result1 = settings.WithConsoleLoggerParameter("ShowCommandLine");
+
+               // Then
+                Assert.Equal(settings, result);
+                Assert.Equal(settings, result1);
+            }
+        }
     }
 }

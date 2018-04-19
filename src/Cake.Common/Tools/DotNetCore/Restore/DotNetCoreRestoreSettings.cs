@@ -54,6 +54,14 @@ namespace Cake.Common.Tools.DotNetCore.Restore
         public bool NoDependencies { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to force all dependencies to be resolved even if the last restore was successful.
+        /// This is equivalent to deleting the project.assets.json file.
+        ///
+        /// Note: This flag was introduced with the .NET Core 2.x release.
+        /// </summary>
+        public bool Force { get; set; }
+
+        /// <summary>
         /// Gets or sets additional arguments to be passed to MSBuild.
         /// </summary>
         public DotNetCoreMSBuildSettings MSBuildSettings { get; set; }

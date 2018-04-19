@@ -99,6 +99,7 @@ namespace Cake.Common.Tools.NUnit
         /// Gets or sets the location that NUnit should write test error output.
         /// </summary>
         /// <value>The location that NUnit should write test error output.</value>
+        [Obsolete("This argument was removed from NUnit3", false)]
         public FilePath ErrorOutputFile { get; set; }
 
         /// <summary>

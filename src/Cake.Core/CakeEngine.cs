@@ -128,12 +128,12 @@ namespace Cake.Core
             var exceptionWasThrown = false;
             Exception thrownException = null;
 
+            var stopWatch = new Stopwatch();
+            var report = new CakeReport();
+
             try
             {
-                PerformSetup(strategy, context);
-
-                var stopWatch = new Stopwatch();
-                var report = new CakeReport();
+                PerformSetup(strategy, context, stopWatch, report);
 
                 foreach (var taskNode in graph.Traverse(target))
                 {
@@ -165,7 +165,7 @@ namespace Cake.Core
             }
             finally
             {
-                PerformTeardown(strategy, context, exceptionWasThrown, thrownException);
+                PerformTeardown(strategy, context, stopWatch, report, exceptionWasThrown, thrownException);
             }
         }
 
@@ -199,12 +199,15 @@ namespace Cake.Core
         /// </summary>
         public event EventHandler<TaskTeardownEventArgs> TaskTeardown;
 
-        private void PerformSetup(IExecutionStrategy strategy, ICakeContext context)
+        private void PerformSetup(IExecutionStrategy strategy, ICakeContext context, Stopwatch stopWatch, CakeReport report)
         {
+            stopWatch.Restart();
+
             PublishEvent(Setup, new SetupEventArgs(context));
             if (_setupAction != null)
             {
                 strategy.PerformSetup(_setupAction, context);
+                report.Add("**Setup**", stopWatch.Elapsed);
             }
         }
 
@@ -230,9 +233,7 @@ namespace Cake.Core
 
         private async Task ExecuteTaskAsync(ICakeContext context, IExecutionStrategy strategy, Stopwatch stopWatch, CakeTask task, CakeReport report)
         {
-            // Reset the stop watch.
-            stopWatch.Reset();
-            stopWatch.Start();
+            stopWatch.Restart();
 
             PerformTaskSetup(context, strategy, task, false);
 
@@ -375,8 +376,10 @@ namespace Cake.Core
             }
         }
 
-        private void PerformTeardown(IExecutionStrategy strategy, ICakeContext context, bool exceptionWasThrown, Exception thrownException)
+        private void PerformTeardown(IExecutionStrategy strategy, ICakeContext context, Stopwatch stopWatch, CakeReport report, bool exceptionWasThrown, Exception thrownException)
         {
+            stopWatch.Restart();
+
             var teardownContext = new TeardownContext(context, thrownException);
             PublishEvent(Teardown, new TeardownEventArgs(teardownContext));
             if (_teardownAction != null)
@@ -393,7 +396,12 @@ namespace Cake.Core
                         // If no other exception was thrown, we throw this one.
                         throw;
                     }
+
                     _log.Error("Teardown error: {0}", ex.ToString());
+                }
+                finally
+                {
+                    report.Add("**Teardown**", stopWatch.Elapsed);
                 }
             }
         }

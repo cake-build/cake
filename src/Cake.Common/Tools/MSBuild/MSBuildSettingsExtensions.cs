@@ -319,5 +319,39 @@ namespace Cake.Common.Tools.MSBuild
 
             return settings;
         }
+
+        /// <summary>
+        /// Invoke the Restore target before any other target.
+        /// </summary>
+        /// <param name="settings">The setting</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings WithRestore(this MSBuildSettings settings)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.Restore = true;
+
+            return settings;
+        }
+
+        /// <summary>
+        /// Adds a console logger parameter.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="parameter">The console logger parameter.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings WithConsoleLoggerParameter(this MSBuildSettings settings, string parameter)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.ConsoleLoggerParameters.Add(parameter);
+            return settings;
+        }
     }
 }

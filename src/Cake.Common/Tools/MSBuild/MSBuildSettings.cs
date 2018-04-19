@@ -20,6 +20,7 @@ namespace Cake.Common.Tools.MSBuild
         private readonly List<MSBuildFileLogger> _fileLoggers;
         private readonly HashSet<string> _warningsAsErrorCodes;
         private readonly HashSet<string> _warningsAsMessageCodes;
+        private readonly HashSet<string> _consoleLoggerParameters;
 
         /// <summary>
         /// Gets the targets.
@@ -129,6 +130,18 @@ namespace Cake.Common.Tools.MSBuild
         public ISet<string> WarningsAsMessageCodes => _warningsAsMessageCodes;
 
         /// <summary>
+        /// Gets or sets a value indicating whether the Restore target should be run before any other targets.
+        /// This setting will pass the /restore option down to MSBuild.
+        /// Use this setting when working with the new csproj format.
+        /// </summary>
+        public bool Restore { get; set; }
+
+        /// <summary>
+        /// Gets the console logger parameters.
+        /// </summary>
+        public ISet<string> ConsoleLoggerParameters => _consoleLoggerParameters;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MSBuildSettings"/> class.
         /// </summary>
         public MSBuildSettings()
@@ -139,6 +152,7 @@ namespace Cake.Common.Tools.MSBuild
             _fileLoggers = new List<MSBuildFileLogger>();
             _warningsAsErrorCodes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _warningsAsMessageCodes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            _consoleLoggerParameters = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             ToolVersion = MSBuildToolVersion.Default;
             Configuration = string.Empty;

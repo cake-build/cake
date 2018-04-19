@@ -72,6 +72,18 @@ namespace Cake.Common.Tools.DotNetCore.Run
                 builder.Append(settings.Configuration);
             }
 
+            // No Restore
+            if (settings.NoRestore)
+            {
+                builder.Append("--no-restore");
+            }
+
+            // No Build
+            if (settings.NoBuild)
+            {
+                builder.Append("--no-build");
+            }
+
             // Arguments
             if (!arguments.IsNullOrEmpty())
             {
