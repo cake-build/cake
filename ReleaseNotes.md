@@ -1,3 +1,31 @@
+### New in 0.27.0 (Released 2018/04/19)
+
+* 2078 Support expand environment variables in script pre-processor directives
+* 2047 Specify version during Nuget Updating
+* 2005 Add entries for Setup/Teardown in report
+* 1908 Octopus Deploy tool does not support list-deployments call for octo.exe
+* 2116 Loading Newtonsoft.Json in Cake.CoreCLR throws during assembly loading
+* 2084 Cake does not load dependencies in correct order
+* 2082 Investigate NuGet local V3 cache
+* 2081 Possibility to override default nuget sources
+* 2079 Default sources not loaded if nuget_source is empty
+* 2119 DotNetCore Publish misses Force / Self contained / Sources settings
+* 2113 Error when loading tools without internet connection
+* 2106 Remove NUnit3Settings.ErrorOutputFile property
+* 2092 Unable to set 'no-build' and 'no-restore' when executing DotNetCoreRun
+* 2051 Add support for msbuild.exe /restore option
+* 2039 XUnit2Runner doesn't respect ParallelismOption.None
+* 2036 Don't output usage when an error occured.
+* 2031 Simplify setting FileVersion and InformationalVersion
+* 2029 Investigate in-process NuGet dependency resolution
+* 2014 In-process NuGet don’t support multiple feeds through config
+* 2003 Add possibility for AssemblyMetadata collection in CreateAssemblyInfo
+* 1887 DotNetCoreRestoreSettings: support option --force
+* 1557 Add support for MSBuild /consoleloggerparameters
+* 2062 Fixed typo 'need to'
+* 2035 Fix typo in README
+* 1213 NuGetPushSettings.Source: incorrect documentation
+
 ### New in 0.26.1 (Released 2018/03/03)
 
 * 2063 Cake running on Mono can't load netstandard 2.0 assembly
