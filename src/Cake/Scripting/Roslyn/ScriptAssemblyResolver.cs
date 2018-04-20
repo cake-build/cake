@@ -1,0 +1,45 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System;
+using System.Linq;
+using System.Reflection;
+using Cake.Core.Diagnostics;
+
+namespace Cake.Scripting.Roslyn
+{
+    internal sealed class ScriptAssemblyResolver : IDisposable
+    {
+        private readonly ICakeLog _log;
+
+        public ScriptAssemblyResolver(ICakeLog log)
+        {
+            _log = log;
+            AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolve;
+        }
+
+        public void Dispose()
+        {
+            AppDomain.CurrentDomain.AssemblyResolve -= AssemblyResolve;
+        }
+
+        private Assembly AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            var name = new AssemblyName(args.Name);
+            _log.Verbose($"Resolving assembly {args.Name}");
+            var assembly = AppDomain.CurrentDomain.GetAssemblies()
+                .FirstOrDefault(x => !x.IsDynamic && x.GetName().Name == name.Name)
+                ?? Assembly.Load(name.Name);
+            if (assembly != null)
+            {
+                _log.Verbose($"Resolved by assembly {assembly.FullName}");
+            }
+            else
+            {
+                _log.Verbose($"Assembly not resolved");
+            }
+            return assembly;
+        }
+    }
+}

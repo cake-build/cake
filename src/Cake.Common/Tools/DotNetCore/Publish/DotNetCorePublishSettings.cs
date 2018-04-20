@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Core.IO;
 
@@ -53,6 +54,30 @@ namespace Cake.Common.Tools.DotNetCore.Publish
         /// Requires .NET Core 2.x or newer.
         /// </remarks>
         public bool NoRestore { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to force all dependencies to be resolved even if the last restore was successful. This is equivalent to deleting project.assets.json.
+        /// </summary>
+        /// <remarks>
+        /// Requires .NET Core 2.x or newer.
+        /// </remarks>
+        public bool Force { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether Publish the .NET Core runtime with your application so the runtime doesn't need to be installed on the target machine. Defaults to 'true' if a runtime identifier is specified.
+        /// </summary>
+        /// <remarks>
+        /// Requires .NET Core 2.x or newer.
+        /// </remarks>
+        public bool SelfContained { get; set; }
+
+        /// <summary>
+        /// Gets or sets the specified NuGet package sources to use during the restore.
+        /// </summary>
+        /// <remarks>
+        /// Requires .NET Core 2.x or newer.
+        /// </remarks>
+        public ICollection<string> Sources { get; set; }
 
         /// <summary>
         /// Gets or sets additional arguments to be passed to MSBuild.
