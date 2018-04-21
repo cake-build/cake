@@ -1,4 +1,9 @@
+### New in 0.27.1 (Released 2018/04/21)
+
+* 2132 Problems with loading certain assemblies (0.27.0)
+
 ### New in 0.27.0 (Released 2018/04/19)
+
 
 * 2078 Support expand environment variables in script pre-processor directives
 * 2047 Specify version during Nuget Updating
