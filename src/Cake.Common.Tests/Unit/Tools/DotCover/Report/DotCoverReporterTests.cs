@@ -4,10 +4,7 @@
 
 using Cake.Common.Tests.Fixtures.Tools.DotCover.Report;
 using Cake.Common.Tools.DotCover;
-using Cake.Common.Tools.NUnit;
-using Cake.Common.Tools.XUnit;
 using Cake.Core.IO;
-using Cake.Testing;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.DotCover.Report
@@ -94,6 +91,22 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Report
                              "/Source=\"/Working/result.dcvr\" " +
                              "/Output=\"/Working/result.xml\" " +
                              "/LogFile=\"/Working/logfile.log\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_ConfigurationFile()
+            {
+                // Given
+                var fixture = new DotCoverReporterFixture();
+                fixture.Settings.WithConfigFile(new FilePath("./config.xml"));
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("Report \"/Working/config.xml\" " +
+                             "/Source=\"/Working/result.dcvr\" " +
+                             "/Output=\"/Working/result.xml\"", result.Args);
             }
         }
     }
