@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Cake.Core.Diagnostics;
@@ -12,6 +13,7 @@ namespace Cake.Scripting.Roslyn
     internal sealed class ScriptAssemblyResolver : IDisposable
     {
         private readonly ICakeLog _log;
+        private readonly HashSet<string> _resolvedNames = new HashSet<string>();
 
         public ScriptAssemblyResolver(ICakeLog log)
         {
@@ -27,19 +29,25 @@ namespace Cake.Scripting.Roslyn
         private Assembly AssemblyResolve(object sender, ResolveEventArgs args)
         {
             var name = new AssemblyName(args.Name);
-            _log.Verbose($"Resolving assembly {args.Name}");
-            var assembly = AppDomain.CurrentDomain.GetAssemblies()
-                .FirstOrDefault(x => !x.IsDynamic && x.GetName().Name == name.Name)
-                ?? Assembly.Load(name.Name);
-            if (assembly != null)
+
+            // Prevent recursion from the Assembly.Load() call inside
+            if (_resolvedNames.Add(name.Name))
             {
-                _log.Verbose($"Resolved by assembly {assembly.FullName}");
+                _log.Verbose($"Resolving assembly {args.Name}");
+                var assembly = AppDomain.CurrentDomain.GetAssemblies()
+                    .FirstOrDefault(x => !x.IsDynamic && x.GetName().Name == name.Name)
+                    ?? Assembly.Load(name.Name);
+                if (assembly != null)
+                {
+                    _log.Verbose($"Resolved by assembly {assembly.FullName}");
+                }
+                else
+                {
+                    _log.Verbose($"Assembly not resolved");
+                }
+                return assembly;
             }
-            else
-            {
-                _log.Verbose($"Assembly not resolved");
-            }
-            return assembly;
+            return null;
         }
     }
 }
