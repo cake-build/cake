@@ -77,5 +77,10 @@ namespace Cake.Common.Tools.GitVersion
         /// Gets or sets the path to the log file.
         /// </summary>
         public FilePath LogFilePath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the logging verbosity.
+        /// </summary>
+        public GitVersionVerbosity? Verbosity { get; set; }
     }
 }
