@@ -118,7 +118,7 @@ namespace Cake.Common.Tools.ILRepack
         /// Gets or sets the paths to search directories for referenced assemblies (can be specified multiple times)
         /// </summary>
         /// <value>The libs.</value>
-        public List<DirectoryPath> Libs { get; set; }
+        public List<DirectoryPath> Libs { get; set; } = new List<DirectoryPath>();
 
         /// <summary>
         /// Gets or sets a value indicating whether to set all types but the ones from the first assembly 'internal'

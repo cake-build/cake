@@ -176,7 +176,7 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <value>
         /// The properties.
         /// </value>
-        public IDictionary<string, string> Properties { get; set; }
+        public IDictionary<string, string> Properties { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Gets or sets the version of MSBuild to be used with this command.

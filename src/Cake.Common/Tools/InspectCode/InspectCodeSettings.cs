@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -56,7 +57,7 @@ namespace Cake.Common.Tools.InspectCode
         /// Gets or sets MSBuild properties.
         /// </summary>
         /// <value>The MSBuild properties to override</value>
-        public Dictionary<string, string> MsBuildProperties { get; set; }
+        public Dictionary<string, string> MsBuildProperties { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Gets or sets a list of Resharper extensions which will be used.
