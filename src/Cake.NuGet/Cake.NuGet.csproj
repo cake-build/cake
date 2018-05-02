@@ -22,6 +22,7 @@
     <PackageReference Include="NuGet.Frameworks" Version="4.6.0" />
     <PackageReference Include="NuGet.Versioning" Version="4.6.0" />
     <PackageReference Include="NuGet.ProjectModel" Version="4.6.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
   <!-- .NET Core packages -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
