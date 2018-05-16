@@ -34,18 +34,25 @@ namespace Cake.Scripting.Roslyn
             if (_resolvedNames.Add(name.Name))
             {
                 _log.Verbose($"Resolving assembly {args.Name}");
-                var assembly = AppDomain.CurrentDomain.GetAssemblies()
-                    .FirstOrDefault(x => !x.IsDynamic && x.GetName().Name == name.Name)
-                    ?? Assembly.Load(name.Name);
-                if (assembly != null)
+                try
                 {
-                    _log.Verbose($"Resolved by assembly {assembly.FullName}");
+                    var assembly = AppDomain.CurrentDomain.GetAssemblies()
+                        .FirstOrDefault(x => !x.IsDynamic && x.GetName().Name == name.Name)
+                        ?? Assembly.Load(name.Name);
+                    if (assembly != null)
+                    {
+                        _log.Verbose($"Resolved {name.Name} by assembly {assembly.FullName}");
+                    }
+                    else
+                    {
+                        _log.Verbose($"Assembly {name.Name} not resolved");
+                    }
+                    return assembly;
                 }
-                else
+                catch (Exception ex)
                 {
-                    _log.Verbose($"Assembly not resolved");
+                    _log.Verbose($"Exception while resolving assembly {name.Name}: {ex.Message}");
                 }
-                return assembly;
             }
             return null;
         }
