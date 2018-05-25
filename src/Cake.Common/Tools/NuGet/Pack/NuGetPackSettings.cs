@@ -132,6 +132,11 @@ namespace Cake.Common.Tools.NuGet.Pack
         public ICollection<string> Tags { get; set; }
 
         /// <summary>
+        /// Gets or sets the package repository data
+        /// </summary>
+        public NuGetRepository Repository { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this package should be marked as a development dependency.
         /// </summary>
         /// <value>
