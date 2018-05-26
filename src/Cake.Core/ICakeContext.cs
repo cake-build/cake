@@ -60,5 +60,10 @@ namespace Cake.Core
         /// </summary>
         /// <value>The tool locator.</value>
         IToolLocator Tools { get; }
+
+        /// <summary>
+        /// Gets the data context resolver.
+        /// </summary>
+        ICakeDataResolver Data { get; }
     }
 }

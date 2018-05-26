@@ -49,28 +49,16 @@ namespace Cake.Core.Scripting
         /// Gets all registered tasks.
         /// </summary>
         /// <value>The registered tasks.</value>
-        public IReadOnlyList<CakeTask> Tasks => Engine.Tasks;
+        public IReadOnlyList<ICakeTaskInfo> Tasks => Engine.Tasks;
 
         /// <summary>
         /// Registers a new task.
         /// </summary>
         /// <param name="name">The name of the task.</param>
-        /// <returns>A <see cref="CakeTaskBuilder{ActionTask}"/>.</returns>
-        public CakeTaskBuilder<ActionTask> Task(string name)
+        /// <returns>A <see cref="CakeTaskBuilder"/>.</returns>
+        public CakeTaskBuilder Task(string name)
         {
             return Engine.RegisterTask(name);
-        }
-
-        /// <summary>
-        /// Allows registration of an action that's executed before any tasks are run.
-        /// If setup fails, no tasks will be executed but teardown will be performed.
-        /// </summary>
-        /// <param name="action">The action to be executed.</param>
-        [Obsolete("Please use Setup(Action<ICakeContext>) instead.", false)]
-        public void Setup(Action action)
-        {
-            Context?.Log?.Warning("Please use Setup(Action<ICakeContext>) instead.");
-            Setup(context => action());
         }
 
         /// <summary>
@@ -91,15 +79,22 @@ namespace Cake.Core.Scripting
         }
 
         /// <summary>
-        /// Allows registration of an action that's executed after all other tasks have been run.
-        /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
+        /// Allows registration of an action that's executed before any tasks are run.
+        /// If setup fails, no tasks will be executed but teardown will be performed.
         /// </summary>
+        /// <typeparam name="TData">The data type.</typeparam>
         /// <param name="action">The action to be executed.</param>
-        [Obsolete("Please use Teardown(Action<ITeardownContext>) instead.", false)]
-        public void Teardown(Action action)
+        /// <example>
+        /// <code>
+        /// Setup&lt;Foo&gt;(context => {
+        ///   return new Foo();
+        /// });
+        /// </code>
+        /// </example>
+        public void Setup<TData>(Func<ICakeContext, TData> action)
+            where TData : class
         {
-            Context?.Log?.Warning("Please use Teardown(Action<ITeardownContext>) instead.");
-            Teardown(context => action());
+            Engine.RegisterSetupAction(action);
         }
 
         /// <summary>
@@ -120,15 +115,21 @@ namespace Cake.Core.Scripting
         }
 
         /// <summary>
-        /// Allows registration of an action that's executed before each task is run.
-        /// If the task setup fails, its task will not be executed but the task teardown will be performed.
+        /// Allows registration of an action that's executed after all other tasks have been run.
+        /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
         /// </summary>
+        /// <typeparam name="TData">The data type.</typeparam>
         /// <param name="action">The action to be executed.</param>
-        [Obsolete("Please use TaskSetup(Action<ITaskSetupContext>) instead.", false)]
-        public void TaskSetup(Action<ICakeContext, ITaskSetupContext> action)
+        /// <example>
+        /// <code>
+        /// Teardown((context, data) => {
+        ///   context.Log.Information("Goodbye {0}!", data.Place);
+        /// });
+        /// </code>
+        /// </example>
+        public void Teardown<TData>(Action<ITeardownContext, TData> action) where TData : class
         {
-            Context?.Log?.Warning("Please use TaskSetup(Action<ITaskSetupContext>) instead.");
-            TaskSetup(context => action(context, context));
+            Engine.RegisterTeardownAction(action);
         }
 
         /// <summary>
@@ -142,15 +143,14 @@ namespace Cake.Core.Scripting
         }
 
         /// <summary>
-        /// Allows registration of an action that's executed after each task has been run.
-        /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
+        /// Allows registration of an action that's executed before each task is run.
+        /// If the task setup fails, its task will not be executed but the task teardown will be performed.
         /// </summary>
+        /// <typeparam name="TData">The data type.</typeparam>
         /// <param name="action">The action to be executed.</param>
-        [Obsolete("Please use TaskTeardown(Action<ITaskTeardownContext>) instead.", false)]
-        public void TaskTeardown(Action<ICakeContext, ITaskTeardownContext> action)
+        public void TaskSetup<TData>(Action<ITaskSetupContext, TData> action) where TData : class
         {
-            Context?.Log?.Warning("Please use TaskTeardown(Action<ITaskTeardownContext>) instead.");
-            TaskTeardown(context => action(context, context));
+            Engine.RegisterTaskSetupAction(action);
         }
 
         /// <summary>
@@ -159,6 +159,17 @@ namespace Cake.Core.Scripting
         /// </summary>
         /// <param name="action">The action to be executed.</param>
         public void TaskTeardown(Action<ITaskTeardownContext> action)
+        {
+            Engine.RegisterTaskTeardownAction(action);
+        }
+
+        /// <summary>
+        /// Allows registration of an action that's executed after each task has been run.
+        /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
+        /// </summary>
+        /// <typeparam name="TData">The data type.</typeparam>
+        /// <param name="action">The action to be executed.</param>
+        public void TaskTeardown<TData>(Action<ITaskTeardownContext, TData> action) where TData : class
         {
             Engine.RegisterTaskTeardownAction(action);
         }
