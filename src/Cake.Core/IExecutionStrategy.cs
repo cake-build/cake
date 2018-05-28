@@ -17,7 +17,7 @@ namespace Cake.Core
         /// </summary>
         /// <param name="action">The action.</param>
         /// <param name="context">The context.</param>
-        void PerformSetup(Action<ICakeContext> action, ISetupContext context);
+        void PerformSetup(Action<ISetupContext> action, ISetupContext context);
 
         /// <summary>
         /// Performs the teardown.

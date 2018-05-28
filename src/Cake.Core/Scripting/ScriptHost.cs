@@ -73,7 +73,7 @@ namespace Cake.Core.Scripting
         /// });
         /// </code>
         /// </example>
-        public void Setup(Action<ICakeContext> action)
+        public void Setup(Action<ISetupContext> action)
         {
             Engine.RegisterSetupAction(action);
         }
@@ -91,7 +91,7 @@ namespace Cake.Core.Scripting
         /// });
         /// </code>
         /// </example>
-        public void Setup<TData>(Func<ICakeContext, TData> action)
+        public void Setup<TData>(Func<ISetupContext, TData> action)
             where TData : class
         {
             Engine.RegisterSetupAction(action);

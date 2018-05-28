@@ -51,7 +51,7 @@ namespace Cake.Core
         /// If setup fails, no tasks will be executed but teardown will be performed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        void RegisterSetupAction(Action<ICakeContext> action);
+        void RegisterSetupAction(Action<ISetupContext> action);
 
         /// <summary>
         /// Allows registration of an action that's executed before any tasks are run.
@@ -59,7 +59,7 @@ namespace Cake.Core
         /// </summary>
         /// <typeparam name="TData">The data type.</typeparam>
         /// <param name="action">The action to be executed.</param>
-        void RegisterSetupAction<TData>(Func<ICakeContext, TData> action) where TData : class;
+        void RegisterSetupAction<TData>(Func<ISetupContext, TData> action) where TData : class;
 
         /// <summary>
         /// Allows registration of an action that's executed after all other tasks have been run.

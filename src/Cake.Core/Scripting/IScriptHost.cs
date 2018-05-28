@@ -37,7 +37,7 @@ namespace Cake.Core.Scripting
         /// If setup fails, no tasks will be executed but teardown will be performed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        void Setup(Action<ICakeContext> action);
+        void Setup(Action<ISetupContext> action);
 
         /// <summary>
         /// Allows registration of an action that's executed before any tasks are run.
@@ -45,7 +45,7 @@ namespace Cake.Core.Scripting
         /// </summary>
         /// <param name="action">The action to be executed.</param>
         /// <typeparam name="TData">The data type.</typeparam>
-        void Setup<TData>(Func<ICakeContext, TData> action) where TData : class;
+        void Setup<TData>(Func<ISetupContext, TData> action) where TData : class;
 
         /// <summary>
         /// Allows registration of an action that's executed after all other tasks have been run.

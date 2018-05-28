@@ -12,7 +12,7 @@ namespace Cake.Core
         private readonly ICakeDataService _data;
         private readonly List<Action> _validations;
 
-        public Action<ICakeContext> Setup { get; private set; }
+        public Action<ISetupContext> Setup { get; private set; }
         public Action<ITeardownContext> Teardown { get; private set; }
         public Action<ITaskSetupContext> TaskSetup { get; private set; }
         public Action<ITaskTeardownContext> TaskTeardown { get; private set; }
@@ -24,14 +24,14 @@ namespace Cake.Core
             _validations = new List<Action>();
         }
 
-        public void RegisterSetup(Action<ICakeContext> action)
+        public void RegisterSetup(Action<ISetupContext> action)
         {
             EnsureNotRegistered(Setup, "Setup");
             Setup = action;
             DataType = null;
         }
 
-        public void RegisterSetup<TData>(Func<ICakeContext, TData> action)
+        public void RegisterSetup<TData>(Func<ISetupContext, TData> action)
             where TData : class
         {
             EnsureNotRegistered(Setup, "Setup");
