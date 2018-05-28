@@ -8,6 +8,11 @@ namespace Cake.Core
     public interface ISetupContext : ICakeContext
     {
         /// <summary>
+        /// Gets target / initating task.
+        /// </summary>
+        ICakeTaskInfo TargetTask { get; }
+
+        /// <summary>
         /// Gets all registered tasks that are going to be executed.
         /// </summary>
         IReadOnlyCollection<ICakeTaskInfo> TasksToExecute { get; }

@@ -29,7 +29,7 @@ namespace Cake.Core
         /// </summary>
         /// <param name="action">The action.</param>
         /// <param name="context">The context.</param>
-        public void PerformSetup(Action<ICakeContext> action, ISetupContext context)
+        public void PerformSetup(Action<ISetupContext> action, ISetupContext context)
         {
             if (action != null)
             {

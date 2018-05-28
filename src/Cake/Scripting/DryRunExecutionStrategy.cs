@@ -20,7 +20,7 @@ namespace Cake.Scripting
             _counter = 1;
         }
 
-        public void PerformSetup(Action<ICakeContext> action, ISetupContext context)
+        public void PerformSetup(Action<ISetupContext> action, ISetupContext context)
         {
         }
 

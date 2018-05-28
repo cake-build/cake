@@ -90,7 +90,7 @@ namespace Cake.Core
         /// If setup fails, no tasks will be executed but teardown will be performed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
-        public void RegisterSetupAction(Action<ICakeContext> action)
+        public void RegisterSetupAction(Action<ISetupContext> action)
         {
             _actions.RegisterSetup(action);
         }
@@ -101,7 +101,7 @@ namespace Cake.Core
         /// </summary>
         /// <typeparam name="TData">The data type.</typeparam>
         /// <param name="action">The action to be executed.</param>
-        public void RegisterSetupAction<TData>(Func<ICakeContext, TData> action)
+        public void RegisterSetupAction<TData>(Func<ISetupContext, TData> action)
             where TData : class
         {
             _actions.RegisterSetup(action);
@@ -220,7 +220,11 @@ namespace Cake.Core
                     .Select(y => _tasks.FirstOrDefault(x =>
                         x.Name.Equals(y, StringComparison.OrdinalIgnoreCase))).ToArray();
 
-                PerformSetup(strategy, context, orderedTasks, stopWatch, report);
+                // Get target node
+                var targetNode = orderedTasks
+                                    .FirstOrDefault(node => node.Name.Equals(target, StringComparison.OrdinalIgnoreCase));
+
+                PerformSetup(strategy, context, targetNode, orderedTasks, stopWatch, report);
 
                 foreach (var task in orderedTasks)
                 {
@@ -258,14 +262,14 @@ namespace Cake.Core
             }
         }
 
-        private void PerformSetup(IExecutionStrategy strategy, ICakeContext context, IEnumerable<CakeTask> tasks, Stopwatch stopWatch, CakeReport report)
+        private void PerformSetup(IExecutionStrategy strategy, ICakeContext context, CakeTask targetTask, IEnumerable<CakeTask> tasks, Stopwatch stopWatch, CakeReport report)
         {
             stopWatch.Restart();
 
             PublishEvent(Setup, new SetupEventArgs(context));
             if (_actions.Setup != null)
             {
-                strategy.PerformSetup(_actions.Setup, new SetupContext(context, tasks));
+                strategy.PerformSetup(_actions.Setup, new SetupContext(context, targetTask, tasks));
                 report.Add("**Setup**", stopWatch.Elapsed);
             }
         }
