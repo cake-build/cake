@@ -31,35 +31,52 @@ namespace Cake.Core.Reflection
             var references = assembly.GetReferencedAssemblies();
             foreach (var reference in references)
             {
-                if (reference.Name.Equals("Cake.Core") && reference.Version < Constants.LatestBreakingChange)
+                if (reference.Name.Equals("Cake.Core"))
                 {
-                    // The assembly is referencing a version of Cake that contains breaking changes.
-                    const string message = "The assembly '{0}' \r\n" +
-                                           "is referencing an older version of Cake.Core ({1}). \r\n" +
-                                           "This assembly must reference at least Cake.Core version {2}. \r\n" +
-                                           "Another option is to downgrade Cake to an earlier version. \r\n" +
-                                           "It's not recommended, but you can explicitly opt out of assembly verification \r\n" +
-                                           "by configuring the Skip Verification setting to true\r\n" +
-                                           "(i.e. command line parameter \"--settings_skipverification=true\", \r\n" +
-                                           "environment variable \"CAKE_SETTINGS_SKIPVERIFICATION=true\", \r\n" +
-                                           "read more about configuration at https://cakebuild.net/docs/fundamentals/configuration)";
-
-                    var args = new object[]
+                    if (reference.Version < Constants.LatestBreakingChange)
                     {
-                        assembly.FullName,
-                        reference.Version.ToString(3),
-                        Constants.LatestBreakingChange.ToString(3)
-                    };
+                        // The assembly is referencing a version of Cake that contains breaking changes.
+                        const string message = "The assembly '{0}' \r\n" +
+                                               "is referencing an older version of Cake.Core ({1}). \r\n" +
+                                               "This assembly must reference at least Cake.Core version {2}. \r\n" +
+                                               "Another option is to downgrade Cake to an earlier version. \r\n" +
+                                               "It's not recommended, but you can explicitly opt out of assembly verification \r\n" +
+                                               "by configuring the Skip Verification setting to true\r\n" +
+                                               "(i.e. command line parameter \"--settings_skipverification=true\", \r\n" +
+                                               "environment variable \"CAKE_SETTINGS_SKIPVERIFICATION=true\", \r\n" +
+                                               "read more about configuration at https://cakebuild.net/docs/fundamentals/configuration)";
 
-                    if (_skipVerification)
-                    {
-                        _log.Debug(
-                            message,
-                            args);
-                        return;
+                        var args = new object[]
+                        {
+                            assembly.FullName,
+                            reference.Version.ToString(3),
+                            Constants.LatestBreakingChange.ToString(3)
+                        };
+
+                        if (_skipVerification)
+                        {
+                            _log.Debug(
+                                message,
+                                args);
+                            return;
+                        }
+
+                        throw new CakeException(string.Format(message, args));
                     }
 
-                    throw new CakeException(string.Format(message, args));
+                    if (reference.Version < Constants.LatestPotentialBreakingChange)
+                    {
+                        // The assembly is referencing a version of Cake that might contain breaking changes.
+                        const string message = "The assembly '{0}' \r\n" +
+                                               "is referencing an older version of Cake.Core ({1}). \r\n" +
+                                               "For best compatibility it should target Cake.Core version {2}.";
+                        _log.Warning(
+                            _skipVerification ? Verbosity.Verbose : Verbosity.Minimal,
+                            message,
+                            assembly.FullName,
+                            reference.Version.ToString(3),
+                            Constants.LatestPotentialBreakingChange.ToString(3));
+                    }
                 }
             }
         }
