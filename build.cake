@@ -9,7 +9,7 @@
 #tool "nuget:https://api.nuget.org/v3/index.json?package=coveralls.io&version=1.3.4"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=OpenCover&version=4.6.519"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=ReportGenerator&version=2.4.5"
-#tool "nuget:https://api.nuget.org/v3/index.json?package=SignClient&version=0.9.1&exclude=/tools/netcoreapp2*/**/*"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=SignClient&version=0.9.1&include=/tools/netcoreapp2.0/SignClient.dll"
 
 // Load other scripts.
 #load "./build/parameters.cake"
@@ -201,8 +201,8 @@ Task("Copy-Files")
     });
 
     // Copy license
-    CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinFullFx); 
-    CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinNetCore); 
+    CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinFullFx);
+    CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinNetCore);
 
     // Copy Cake.XML (since publish does not do this anymore)
     CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/net461/Cake.xml", parameters.Paths.Directories.ArtifactsBinFullFx);
@@ -331,7 +331,7 @@ Task("Sign-Binaries")
     .IsDependentOn("Zip-Files")
     .IsDependentOn("Create-Chocolatey-Packages")
     .IsDependentOn("Create-NuGet-Packages")
-    .WithCriteria(() => 
+    .WithCriteria(() =>
         (parameters.ShouldPublish && !parameters.SkipSigning) ||
         StringComparer.OrdinalIgnoreCase.Equals(EnvironmentVariable("SIGNING_TEST"), "True"))
     .Does(() =>
