@@ -7,6 +7,11 @@
 // SETUP
 //////////////////////////////////////////////////
 
+Setup(setupContext => 
+{
+    setupContext.Log.Information("Running regular setup.");
+});
+
 Setup<ScriptContext>(setupContext =>
 {
     // Output information from setup task
@@ -25,6 +30,12 @@ Setup<ScriptContext>(setupContext =>
     return new ScriptContext(true);
 });
 
+Setup<AlternativeScriptContext>(setupContext =>
+{
+    setupContext.Log.Information("Running setup with alternative context.");
+    return new AlternativeScriptContext(true);
+});
+
 //////////////////////////////////////////////////
 // TESTS
 //////////////////////////////////////////////////
@@ -33,6 +44,12 @@ Task("Can-Access-Typed-Data")
     .Does<ScriptContext>(data => 
 {
     Assert.True(data.Initialized);
+});
+
+Task("Can-Access-Typed-Data-On-Alternative-Context")
+    .Does<AlternativeScriptContext>(data => 
+{
+    Assert.True(data.EnginesStarted);
 });
 
 Task("Can-Access-Typed-Data-Async")

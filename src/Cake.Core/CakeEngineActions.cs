@@ -10,53 +10,59 @@ namespace Cake.Core
     internal sealed class CakeEngineActions
     {
         private readonly ICakeDataService _data;
+        private readonly HashSet<Type> _dataTypes;
         private readonly List<Action> _validations;
 
-        public Action<ISetupContext> Setup { get; private set; }
-        public Action<ITeardownContext> Teardown { get; private set; }
+        public List<Action<ISetupContext>> Setups { get; }
+        public List<Action<ITeardownContext>> Teardowns { get; }
         public Action<ITaskSetupContext> TaskSetup { get; private set; }
         public Action<ITaskTeardownContext> TaskTeardown { get; private set; }
-        public Type DataType { get; private set; }
 
         public CakeEngineActions(ICakeDataService data)
         {
             _data = data ?? throw new ArgumentNullException(nameof(data));
+            _dataTypes = new HashSet<Type>();
             _validations = new List<Action>();
+
+            Setups = new List<Action<ISetupContext>>();
+            Teardowns = new List<Action<ITeardownContext>>();
         }
 
         public void RegisterSetup(Action<ISetupContext> action)
         {
-            EnsureNotRegistered(Setup, "Setup");
-            Setup = action;
-            DataType = null;
+            Setups.Add(action);
         }
 
         public void RegisterSetup<TData>(Func<ISetupContext, TData> action)
             where TData : class
         {
-            EnsureNotRegistered(Setup, "Setup");
-            DataType = typeof(TData);
-            Setup = context =>
+            var dataType = typeof(TData);
+            if (_dataTypes.Contains(dataType))
             {
-                _data.Set(action(context));
-            };
+                var message = $"More than one setup action have been registered that accepts data of type '{dataType.FullName}'.";
+                throw new CakeException(message);
+            }
+
+            _dataTypes.Add(dataType);
+            Setups.Add(context =>
+            {
+                _data.Add(action(context));
+            });
         }
 
         public void RegisterTeardown(Action<ITeardownContext> action)
         {
-            EnsureNotRegistered(Teardown, "Teardown");
-            Teardown = action;
+            Teardowns.Add(action);
         }
 
         public void RegisterTeardown<TData>(Action<ITeardownContext, TData> action)
             where TData : class
         {
-            EnsureNotRegistered(Teardown, "Teardown");
             RegisterValidationOfDataType<TData>("Teardown");
-            Teardown = context =>
+            Teardowns.Add(context =>
             {
                 action(context, _data.Get<TData>());
-            };
+            });
         }
 
         public void RegisterTaskSetup(Action<ITaskSetupContext> action)
@@ -121,20 +127,11 @@ namespace Cake.Core
             // in an action and not directly.
             _validations.Add(() =>
             {
-                // No data?
-                if (DataType == null)
+                // Does the data type collection not contain
+                if (!_dataTypes.Contains(typeof(TData)))
                 {
                     throw new CakeException($"Trying to register a {type.ToLowerInvariant()} action that accepts data of type " +
-                                            $"{typeof(TData).FullName}, but no such data has been setup.");
-                }
-
-                // Got data but of the wrong type?
-                if (!DataType.IsAssignableFrom(typeof(TData)))
-                {
-                    throw new CakeException($"Trying to register a {type.ToLowerInvariant()} action that accepts data of type " +
-                                            $"'{typeof(TData).FullName}', but no such data has been setup. " +
-                                            $"There is available data registered of type '{DataType.FullName}' though, " +
-                                            $"but it's not assignable from '{typeof(TData).FullName}'.");
+                                            $"'{typeof(TData).FullName}', but no such data has been setup.");
                 }
             });
         }

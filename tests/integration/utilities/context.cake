@@ -7,3 +7,13 @@ public sealed class ScriptContext
         Initialized = initialized;
     }
 }
+
+public sealed class AlternativeScriptContext
+{
+    public bool EnginesStarted { get; }
+
+    public AlternativeScriptContext(bool initialized)
+    {
+        EnginesStarted = initialized;
+    }
+}

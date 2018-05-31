@@ -103,6 +103,10 @@ namespace Cake.Core
 
         private static ConsoleColor GetItemForegroundColor(CakeReportEntry item)
         {
+            if (item.Category == CakeReportEntryCategory.Setup || item.Category == CakeReportEntryCategory.Teardown)
+            {
+                return ConsoleColor.Cyan;
+            }
             return item.ExecutionStatus == CakeTaskExecutionStatus.Executed ? ConsoleColor.Green : ConsoleColor.Gray;
         }
 

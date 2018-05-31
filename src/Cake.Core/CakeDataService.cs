@@ -32,7 +32,7 @@ namespace Cake.Core
             throw new InvalidOperationException("The context data has not been setup.");
         }
 
-        public void Set<TData>(TData value)
+        public void Add<TData>(TData value)
             where TData : class
         {
             if (_data.ContainsKey(typeof(TData)))
