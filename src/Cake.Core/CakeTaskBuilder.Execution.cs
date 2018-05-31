@@ -41,7 +41,7 @@ namespace Cake.Core
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return Does<TData>(builder, (data, context) => action(data));
+            return Does<TData>(builder, (context, data) => action(data));
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Cake.Core
                 throw new ArgumentNullException(nameof(func));
             }
 
-            return Does<TData>(builder, (data, context) => func(data));
+            return Does<TData>(builder, (context, data) => func(data));
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="action">The action.</param>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        public static CakeTaskBuilder Does<TData>(this CakeTaskBuilder builder, Action<TData, ICakeContext> action)
+        public static CakeTaskBuilder Does<TData>(this CakeTaskBuilder builder, Action<ICakeContext, TData> action)
             where TData : class
         {
             if (action == null)
@@ -144,7 +144,7 @@ namespace Cake.Core
             return Does(builder, context =>
             {
                 var data = context.Data.Get<TData>();
-                action(data, context);
+                action(context, data);
             });
         }
 
@@ -155,7 +155,7 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="func">The action.</param>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        public static CakeTaskBuilder Does<TData>(this CakeTaskBuilder builder, Func<TData, ICakeContext, Task> func)
+        public static CakeTaskBuilder Does<TData>(this CakeTaskBuilder builder, Func<ICakeContext, TData, Task> func)
             where TData : class
         {
             if (func == null)
@@ -166,7 +166,7 @@ namespace Cake.Core
             return Does(builder, context =>
             {
                 var data = context.Data.Get<TData>();
-                return func(data, context);
+                return func(context, data);
             });
         }
 
