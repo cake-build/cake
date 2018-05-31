@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Cake.Core.Tests.Fixtures;
@@ -358,7 +359,7 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
-            public void Should_Throw_If_More_Than_One_Setup_Action_Is_Registered()
+            public void Should_Not_Throw_If_More_Than_One_Setup_Action_Is_Registered()
             {
                 // Given
                 var fixture = new CakeEngineFixture();
@@ -369,12 +370,27 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => engine.RegisterSetupAction(context => { }));
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("More than one setup action have been registered.", result.Message);
+                Assert.Null(result);
             }
 
             [Fact]
-            public void Should_Throw_If_More_Than_One_Teardown_Action_Is_Registered()
+            public void Should_Throw_If_More_Than_One_Setup_Action_With_Same_Data_Type_Is_Registered()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterSetupAction(context => "foo");
+
+                // When
+                var result = Record.Exception(() => engine.RegisterSetupAction(context => "bar"));
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("More than one setup action have been registered that accepts data of type 'System.String'.", result.Message);
+            }
+
+            [Fact]
+            public void Should_Not_Throw_If_More_Than_One_Teardown_Action_Is_Registered()
             {
                 // Given
                 var fixture = new CakeEngineFixture();
@@ -385,8 +401,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => engine.RegisterTeardownAction(context => { }));
 
                 // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("More than one teardown action have been registered.", result.Message);
+                Assert.Null(result);
             }
 
             [Fact]
@@ -422,7 +437,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.IsType<CakeException>(result);
                 Assert.Equal("Trying to register a teardown action that accepts data of " +
-                             "type System.String, but no such data has been setup.", result.Message);
+                             "type 'System.String', but no such data has been setup.", result.Message);
             }
 
             [Fact]
@@ -442,7 +457,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.IsType<CakeException>(result);
                 Assert.Equal("Trying to register a task setup action that accepts data of " +
-                             "type System.String, but no such data has been setup.", result.Message);
+                             "type 'System.String', but no such data has been setup.", result.Message);
             }
 
             [Fact]
@@ -462,7 +477,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.IsType<CakeException>(result);
                 Assert.Equal("Trying to register a task teardown action that accepts data of " +
-                             "type System.String, but no such data has been setup.", result.Message);
+                             "type 'System.String', but no such data has been setup.", result.Message);
             }
 
             [Fact]
@@ -481,10 +496,9 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.IsType<CakeException>(result);
+                Assert.IsType<CakeException>(result);
                 Assert.Equal("Trying to register a teardown action that accepts data of " +
-                             "type 'Cake.Core.CakeTask', but no such data has been setup. " +
-                             "There is available data registered of type 'System.String' though, " +
-                             "but it's not assignable from 'Cake.Core.CakeTask'.", result.Message);
+                             "type 'Cake.Core.CakeTask', but no such data has been setup.", result.Message);
             }
 
             [Fact]
@@ -504,9 +518,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.IsType<CakeException>(result);
                 Assert.Equal("Trying to register a task setup action that accepts data of " +
-                             "type 'Cake.Core.CakeTask', but no such data has been setup. " +
-                             "There is available data registered of type 'System.String' though, " +
-                             "but it's not assignable from 'Cake.Core.CakeTask'.", result.Message);
+                             "type 'Cake.Core.CakeTask', but no such data has been setup.", result.Message);
             }
 
             [Fact]
@@ -526,9 +538,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.IsType<CakeException>(result);
                 Assert.Equal("Trying to register a task teardown action that accepts data of " +
-                             "type 'Cake.Core.CakeTask', but no such data has been setup. " +
-                             "There is available data registered of type 'System.String' though, " +
-                             "but it's not assignable from 'Cake.Core.CakeTask'.", result.Message);
+                             "type 'Cake.Core.CakeTask', but no such data has been setup.", result.Message);
             }
 
             [Fact]
@@ -763,26 +773,100 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
+            [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
+            public async Task Should_Throw_Aggregated_Exception_If_Multiple_Teardown_Methods_Throw_And_If_No_Previous_Exception_Was_Thrown()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+
+                engine.RegisterTeardownAction(context => throw new InvalidOperationException("Foo"));
+                engine.RegisterTeardownAction(context => throw new InvalidOperationException("Bar"));
+                engine.RegisterTask("A").Does(() => { });
+
+                // When
+                var result = await Record.ExceptionAsync(() =>
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+
+                // Then
+                var ex = Assert.IsType<AggregateException>(result);
+                Assert.Equal(2, ex.InnerExceptions.Count);
+                Assert.Equal("Foo", ex.InnerExceptions[0].Message);
+                Assert.Equal("Bar", ex.InnerExceptions[1].Message);
+            }
+
+            [Fact]
+            [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
+            public async Task Should_Throw_Single_Exception_If_Only_One_Of_Multiple_Teardown_Methods_Throw_And_If_No_Previous_Exception_Was_Thrown()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+
+                engine.RegisterTeardownAction(context => { });
+                engine.RegisterTeardownAction(context => throw new InvalidOperationException("Foo"));
+                engine.RegisterTeardownAction(context => { });
+                engine.RegisterTask("A").Does(() => { });
+
+                // When
+                var result = await Record.ExceptionAsync(() =>
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+
+                // Then
+                var ex = Assert.IsType<InvalidOperationException>(result);
+                Assert.Equal("Foo", ex.Message);
+            }
+
+            [Fact]
+            [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
+            public async Task Should_Execute_All_Teardown_Methods_Even_If_One_Or_More_Throws()
+            {
+                // Given
+                var captured = new List<string>();
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+
+                engine.RegisterTeardownAction(context => { captured.Add("First"); });
+                engine.RegisterTeardownAction(context => throw new InvalidOperationException("Foo"));
+                engine.RegisterTeardownAction(context => { captured.Add("Third"); });
+                engine.RegisterTeardownAction(context => throw new InvalidOperationException("Bar"));
+                engine.RegisterTask("A").Does(() => { });
+
+                // When
+                var result = await Record.ExceptionAsync(() =>
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
+
+                // Then
+                Assert.NotNull(result);
+                Assert.Contains("First", captured);
+                Assert.Contains("Third", captured);
+            }
+
+            [Fact]
+            [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
             public async Task Should_Log_Teardown_Exception_If_Both_Setup_And_Teardown_Actions_Throw()
             {
                 // Given
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
 
-                engine.RegisterSetupAction(context => { throw new InvalidOperationException("Setup"); });
-                engine.RegisterTeardownAction(context => { throw new InvalidOperationException("Teardown"); });
+                engine.RegisterSetupAction(context => throw new InvalidOperationException("Setup"));
+                engine.RegisterTeardownAction(context => throw new CakeException("Teardown #1"));
+                engine.RegisterTeardownAction(context => throw new CakeException("Teardown #2"));
                 engine.RegisterTask("A").Does(() => { });
 
                 // When
-                await Record.ExceptionAsync(() =>
+                var result = await Record.ExceptionAsync(() =>
                     engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
-                Assert.Contains(fixture.Log.Entries, x => x.Message.StartsWith("Teardown error:"));
+                Assert.IsType<InvalidOperationException>(result);
+                Assert.Contains(fixture.Log.Entries, x => x.Message.StartsWith("Teardown error: Teardown #1"));
+                Assert.Contains(fixture.Log.Entries, x => x.Message.StartsWith("Teardown error: Teardown #2"));
             }
 
             [Fact]
-            public async Task Should_Exception_Thrown_From_Task_If_Both_Task_And_Teardown_Actions_Throw()
+            public async Task Should_Throw_Exception_Thrown_From_Task_If_Both_Task_And_Teardown_Actions_Throw()
             {
                 // Given
                 var fixture = new CakeEngineFixture();
@@ -802,21 +886,25 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
+            [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
             public async Task Should_Log_Teardown_Exception_If_Both_Task_And_Teardown_Actions_Throw()
             {
                 // Given
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
 
-                engine.RegisterTeardownAction(context => { throw new InvalidOperationException("Teardown"); });
-                engine.RegisterTask("A").Does(() => { throw new InvalidOperationException("Task"); });
+                engine.RegisterTask("A").Does(() => throw new InvalidOperationException("Task"));
+                engine.RegisterTeardownAction(context => throw new CakeException("Teardown #1"));
+                engine.RegisterTeardownAction(context => throw new CakeException("Teardown #2"));
 
                 // When
-                await Record.ExceptionAsync(() =>
+                var result = await Record.ExceptionAsync(() =>
                     engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "A"));
 
                 // Then
-                Assert.Contains(fixture.Log.Entries, x => x.Message.StartsWith("Teardown error:"));
+                Assert.IsType<InvalidOperationException>(result);
+                Assert.Contains(fixture.Log.Entries, x => x.Message.StartsWith("Teardown error: Teardown #1"));
+                Assert.Contains(fixture.Log.Entries, x => x.Message.StartsWith("Teardown error: Teardown #2"));
             }
 
             [Fact]
@@ -1212,6 +1300,7 @@ namespace Cake.Core.Tests.Unit
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
                 engine.RegisterSetupAction(x => { });
+                engine.RegisterSetupAction(x => { });
                 engine.RegisterTask("A");
 
                 // When
@@ -1219,8 +1308,10 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.Equal(2, report.Count());
-                Assert.Equal("**Setup**", report.ElementAt(0).TaskName);
+                Assert.Equal("Setup", report.ElementAt(0).TaskName);
+                Assert.Equal(CakeReportEntryCategory.Setup, report.ElementAt(0).Category);
                 Assert.Equal("A", report.ElementAt(1).TaskName);
+                Assert.Equal(CakeReportEntryCategory.Task, report.ElementAt(1).Category);
             }
 
             [Fact]
@@ -1230,6 +1321,7 @@ namespace Cake.Core.Tests.Unit
                 var fixture = new CakeEngineFixture();
                 var engine = fixture.CreateEngine();
                 engine.RegisterTeardownAction(x => { });
+                engine.RegisterTeardownAction(x => { });
                 engine.RegisterTask("A");
 
                 // When
@@ -1238,7 +1330,9 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.Equal(2, report.Count());
                 Assert.Equal("A", report.ElementAt(0).TaskName);
-                Assert.Equal("**Teardown**", report.ElementAt(1).TaskName);
+                Assert.Equal(CakeReportEntryCategory.Task, report.ElementAt(0).Category);
+                Assert.Equal("Teardown", report.ElementAt(1).TaskName);
+                Assert.Equal(CakeReportEntryCategory.Teardown, report.ElementAt(1).Category);
             }
 
             [Fact]

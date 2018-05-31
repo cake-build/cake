@@ -80,6 +80,7 @@ namespace Cake.Core
                 const string format = "Another task with the name '{0}' has already been added.";
                 throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, name));
             }
+
             var task = new CakeTask(name);
             _tasks.Add(task);
             return new CakeTaskBuilder(task);
@@ -186,6 +187,7 @@ namespace Cake.Core
             {
                 throw new ArgumentNullException(nameof(target));
             }
+
             if (strategy == null)
             {
                 throw new ArgumentNullException(nameof(strategy));
@@ -222,7 +224,7 @@ namespace Cake.Core
 
                 // Get target node
                 var targetNode = orderedTasks
-                                    .FirstOrDefault(node => node.Name.Equals(target, StringComparison.OrdinalIgnoreCase));
+                    .FirstOrDefault(node => node.Name.Equals(target, StringComparison.OrdinalIgnoreCase));
 
                 PerformSetup(strategy, context, targetNode, orderedTasks, stopWatch, report);
 
@@ -262,19 +264,26 @@ namespace Cake.Core
             }
         }
 
-        private void PerformSetup(IExecutionStrategy strategy, ICakeContext context, CakeTask targetTask, IEnumerable<CakeTask> tasks, Stopwatch stopWatch, CakeReport report)
+        private void PerformSetup(IExecutionStrategy strategy, ICakeContext context, CakeTask targetTask,
+            CakeTask[] tasks, Stopwatch stopWatch, CakeReport report)
         {
             stopWatch.Restart();
 
             PublishEvent(Setup, new SetupEventArgs(context));
-            if (_actions.Setup != null)
+
+            if (_actions.Setups.Count > 0)
             {
-                strategy.PerformSetup(_actions.Setup, new SetupContext(context, targetTask, tasks));
-                report.Add("**Setup**", stopWatch.Elapsed);
+                foreach (var setup in _actions.Setups)
+                {
+                    strategy.PerformSetup(setup, new SetupContext(context, targetTask, tasks));
+                }
+
+                report.Add("Setup", CakeReportEntryCategory.Setup, stopWatch.Elapsed);
             }
         }
 
-        private static bool ShouldTaskExecute(ICakeContext context, CakeTask task, CakeTaskCriteria criteria, bool isTarget)
+        private static bool ShouldTaskExecute(ICakeContext context, CakeTask task, CakeTaskCriteria criteria,
+            bool isTarget)
         {
             if (!criteria.Predicate(context))
             {
@@ -286,12 +295,15 @@ namespace Cake.Core
                     var message = string.Format(CultureInfo.InvariantCulture, format, task.Name);
                     throw new CakeException(message);
                 }
+
                 return false;
             }
+
             return true;
         }
 
-        private async Task ExecuteTaskAsync(ICakeContext context, IExecutionStrategy strategy, Stopwatch stopWatch, CakeTask task, CakeReport report)
+        private async Task ExecuteTaskAsync(ICakeContext context, IExecutionStrategy strategy, Stopwatch stopWatch,
+            CakeTask task, CakeReport report)
         {
             stopWatch.Restart();
 
@@ -344,11 +356,12 @@ namespace Cake.Core
             }
             else
             {
-                report.Add(task.Name, stopWatch.Elapsed);
+                report.Add(task.Name, CakeReportEntryCategory.Task, stopWatch.Elapsed);
             }
         }
 
-        private void PerformTaskSetup(ICakeContext context, IExecutionStrategy strategy, ICakeTaskInfo task, bool skipped)
+        private void PerformTaskSetup(ICakeContext context, IExecutionStrategy strategy, ICakeTaskInfo task,
+            bool skipped)
         {
             var taskSetupContext = new TaskSetupContext(context, task);
             PublishEvent(TaskSetup, new TaskSetupEventArgs(taskSetupContext));
@@ -367,7 +380,8 @@ namespace Cake.Core
             }
         }
 
-        private void PerformTaskTeardown(ICakeContext context, IExecutionStrategy strategy, ICakeTaskInfo task, TimeSpan duration, bool skipped, bool exceptionWasThrown)
+        private void PerformTaskTeardown(ICakeContext context, IExecutionStrategy strategy, ICakeTaskInfo task,
+            TimeSpan duration, bool skipped, bool exceptionWasThrown)
         {
             var taskTeardownContext = new TaskTeardownContext(context, task, duration, skipped);
             PublishEvent(TaskTeardown, new TaskTeardownEventArgs(taskTeardownContext));
@@ -385,12 +399,14 @@ namespace Cake.Core
                         // If no other exception was thrown, we throw this one.
                         throw;
                     }
+
                     _log.Error("Task Teardown error ({0}): {1}", task.Name, ex.ToString());
                 }
             }
         }
 
-        private void SkipTask(ICakeContext context, IExecutionStrategy strategy, CakeTask task, CakeReport report, CakeTaskCriteria criteria)
+        private void SkipTask(ICakeContext context, IExecutionStrategy strategy, CakeTask task, CakeReport report,
+            CakeTaskCriteria criteria)
         {
             PerformTaskSetup(context, strategy, task, true);
             strategy.Skip(task, criteria);
@@ -405,7 +421,8 @@ namespace Cake.Core
             return task != null && !task.Actions.Any();
         }
 
-        private static void ReportErrors(IExecutionStrategy strategy, Action<Exception> errorReporter, Exception taskException)
+        private static void ReportErrors(IExecutionStrategy strategy, Action<Exception> errorReporter,
+            Exception taskException)
         {
             try
             {
@@ -430,36 +447,93 @@ namespace Cake.Core
                 {
                     _log.Error("Error: {0}", exception.Message);
                 }
+
                 throw;
             }
         }
 
-        private void PerformTeardown(IExecutionStrategy strategy, ICakeContext context, Stopwatch stopWatch, CakeReport report, bool exceptionWasThrown, Exception thrownException)
+        private void PerformTeardown(IExecutionStrategy strategy, ICakeContext context, Stopwatch stopWatch,
+            CakeReport report, bool exceptionWasThrown, Exception thrownException)
         {
             stopWatch.Restart();
 
             var teardownContext = new TeardownContext(context, thrownException);
             PublishEvent(Teardown, new TeardownEventArgs(teardownContext));
-            if (_actions.Teardown != null)
+
+            if (_actions.Teardowns.Count > 0)
             {
+                var exceptions = new List<Exception>();
+
                 try
                 {
-                    strategy.PerformTeardown(_actions.Teardown, teardownContext);
-                }
-                catch (Exception ex)
-                {
-                    _log.Error("An error occurred in the custom teardown action.");
-                    if (!exceptionWasThrown)
+                    foreach (var teardown in _actions.Teardowns)
                     {
-                        // If no other exception was thrown, we throw this one.
-                        throw;
-                    }
+                        try
+                        {
+                            strategy.PerformTeardown(teardown, teardownContext);
+                        }
+                        catch (Exception ex)
+                        {
+                            // No other exceptions were thrown and this is the only teardown?
+                            if (!exceptionWasThrown && _actions.Teardowns.Count == 1)
+                            {
+                                // If no other exception was thrown, we throw this one.
+                                // By doing this we preserve the original stack trace which is always nice.
+                                _log.Error("An error occurred in a custom teardown action.");
+                                throw;
+                            }
 
-                    _log.Error("Teardown error: {0}", ex.ToString());
+                            // Add this exception to the list.
+                            exceptions.Add(ex);
+                        }
+                    }
                 }
                 finally
                 {
-                    report.Add("**Teardown**", stopWatch.Elapsed);
+                    report.Add("Teardown", CakeReportEntryCategory.Teardown, stopWatch.Elapsed);
+                }
+
+                // If, any exceptions occured, process them now.
+                if (exceptions.Count > 0)
+                {
+                    ProcessTeardownExceptions(exceptions, exceptionWasThrown);
+                }
+            }
+        }
+
+        private void ProcessTeardownExceptions(List<Exception> exceptions, bool exceptionWasThrown)
+        {
+            if (exceptions.Count > 0)
+            {
+                _log.Error("An error occurred in a custom teardown action.");
+
+                if (exceptionWasThrown)
+                {
+                    // Since an earlier exception was thrown, from either a setup method
+                    // or a task, we just log all exceptions.
+                    foreach (var ex in exceptions)
+                    {
+                        if (exceptions.Count > 0)
+                        {
+                            // Output whole stack trace if there's only one exception,
+                            // but output the message when there's several.
+                            _log.Error("Teardown error: {0}", exceptions.Count == 1 ? ex.ToString() : ex.Message);
+                        }
+                    }
+                }
+                else
+                {
+                    if (exceptions.Count == 1)
+                    {
+                        // Only a single exception occured, so lets throw it.
+                        // Sadly this won't keep our original stack trace.
+                        var ex = exceptions.First();
+                        _log.Error("Teardown error: {0}", ex.ToString());
+                        throw ex;
+                    }
+
+                    // Multiple exceptions occured, so let's wrap them in an aggregate and throw that one.
+                    throw new AggregateException("Multiple teardown methods threw exceptions.", exceptions);
                 }
             }
         }
@@ -477,7 +551,8 @@ namespace Cake.Core
                     }
                     catch (Exception e)
                     {
-                        _log.Error("An error occurred in the event handler {0}: {1}", handler.GetMethodInfo().Name, e.Message);
+                        _log.Error("An error occurred in the event handler {0}: {1}", handler.GetMethodInfo().Name,
+                            e.Message);
                     }
                 }
             }

@@ -7,8 +7,19 @@
 // TEARDOWN
 //////////////////////////////////////////////////
 
-Teardown<ScriptContext>((context, data) => 
+Teardown(teardownContext => 
+{
+    teardownContext.Log.Information("Running regular teardown.");
+});
+
+Teardown<ScriptContext>((teardownContext, data) => 
 {
     Assert.NotNull(data);
     Assert.True(data.Initialized);
+});
+
+Teardown<AlternativeScriptContext>((teardownContext, data) => 
+{
+    Assert.NotNull(data);
+    Assert.True(data.EnginesStarted);
 });

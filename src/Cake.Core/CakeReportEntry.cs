@@ -18,6 +18,12 @@ namespace Cake.Core
         public string TaskName { get; }
 
         /// <summary>
+        /// Gets the task category.
+        /// </summary>
+        /// <value>The category.</value>
+        public CakeReportEntryCategory Category { get; }
+
+        /// <summary>
         /// Gets the duration the task ran for.
         /// </summary>
         /// <value>The duration the task ran for.</value>
@@ -33,9 +39,10 @@ namespace Cake.Core
         /// Initializes a new instance of the <see cref="CakeReportEntry"/> class.
         /// </summary>
         /// <param name="taskName">The name of the task.</param>
+        /// <param name="category">The task category.</param>
         /// <param name="duration">The duration.</param>
-        public CakeReportEntry(string taskName, TimeSpan duration)
-            : this(taskName, duration, CakeTaskExecutionStatus.Executed)
+        public CakeReportEntry(string taskName, CakeReportEntryCategory category, TimeSpan duration)
+            : this(taskName, category, duration, CakeTaskExecutionStatus.Executed)
         {
         }
 
@@ -43,11 +50,13 @@ namespace Cake.Core
         /// Initializes a new instance of the <see cref="CakeReportEntry"/> class.
         /// </summary>
         /// <param name="taskName">The name of the task.</param>
+        /// <param name="category">The task category.</param>
         /// <param name="duration">The duration.</param>
         /// <param name="executionStatus">The execution status.</param>
-        public CakeReportEntry(string taskName, TimeSpan duration, CakeTaskExecutionStatus executionStatus)
+        public CakeReportEntry(string taskName, CakeReportEntryCategory category, TimeSpan duration, CakeTaskExecutionStatus executionStatus)
         {
             TaskName = taskName;
+            Category = category;
             Duration = duration;
             ExecutionStatus = executionStatus;
         }

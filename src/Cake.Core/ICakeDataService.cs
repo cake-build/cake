@@ -10,10 +10,10 @@ namespace Cake.Core
     public interface ICakeDataService : ICakeDataResolver
     {
         /// <summary>
-        /// Sets the data of the specified type.
+        /// Adds the data of the specified type.
         /// </summary>
         /// <typeparam name="TData">The data type.</typeparam>
         /// <param name="value">The value of the data.</param>
-        void Set<TData>(TData value) where TData : class;
+        void Add<TData>(TData value) where TData : class;
     }
 }
