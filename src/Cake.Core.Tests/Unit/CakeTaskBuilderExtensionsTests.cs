@@ -226,7 +226,7 @@ namespace Cake.Core.Tests.Unit
                             var builder = new CakeTaskBuilder(task);
 
                             // When
-                            var result = Record.Exception(() => builder.Does((Func<string, ICakeContext, Task>)null));
+                            var result = Record.Exception(() => builder.Does((Func<ICakeContext, string, Task>)null));
 
                             // Then
                             AssertEx.IsArgumentNullException(result, "func");
@@ -359,7 +359,7 @@ namespace Cake.Core.Tests.Unit
                             var builder = new CakeTaskBuilder(task);
 
                             // When
-                            var result = Record.Exception(() => builder.Does((Action<string, ICakeContext>)null));
+                            var result = Record.Exception(() => builder.Does((Action<ICakeContext, string>)null));
 
                             // Then
                             AssertEx.IsArgumentNullException(result, "action");

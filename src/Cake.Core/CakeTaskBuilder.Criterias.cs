@@ -125,7 +125,8 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="criteria">The criteria.</param>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        public static CakeTaskBuilder WithCriteria<TData>(this CakeTaskBuilder builder, Func<TData, ICakeContext, bool> criteria) where TData : class
+        public static CakeTaskBuilder WithCriteria<TData>(this CakeTaskBuilder builder, Func<ICakeContext, TData, bool> criteria)
+            where TData : class
         {
             if (builder == null)
             {
@@ -133,7 +134,7 @@ namespace Cake.Core
             }
 
             builder.Target.AddCriteria(
-                context => criteria(context.Data.Get<TData>(), context));
+                context => criteria(context, context.Data.Get<TData>()));
 
             return builder;
         }
@@ -147,7 +148,7 @@ namespace Cake.Core
         /// <param name="criteria">The criteria.</param>
         /// <param name="message">The message to display if the task was skipped due to the provided criteria.</param>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        public static CakeTaskBuilder WithCriteria<TData>(this CakeTaskBuilder builder, Func<TData, ICakeContext, bool> criteria, string message) where TData : class
+        public static CakeTaskBuilder WithCriteria<TData>(this CakeTaskBuilder builder, Func<ICakeContext, TData, bool> criteria, string message) where TData : class
         {
             if (builder == null)
             {
@@ -155,7 +156,7 @@ namespace Cake.Core
             }
 
             builder.Target.AddCriteria(
-                context => criteria(context.Data.Get<TData>(), context),
+                context => criteria(context, context.Data.Get<TData>()),
                 message);
 
             return builder;

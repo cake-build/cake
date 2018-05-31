@@ -59,26 +59,26 @@ Task("Can-Access-Typed-Data-Async")
 });
 
 Task("Can-Access-Typed-Data-With-Context")
-    .Does<ScriptContext>((data, context) => 
+    .Does<ScriptContext>((context, data) => 
 {
     Assert.True(data.Initialized);
 });
 
 Task("Can-Access-Typed-Data-With-Context-Async")
-    .Does<ScriptContext>(async (data, context) => 
+    .Does<ScriptContext>(async (context, data) => 
 {
     await System.Threading.Tasks.Task.Delay(0);
 });
 
 Task("Can-Access-Typed-Data-WithCriteria-True")
-    .WithCriteria<ScriptContext>((data, context) => data.Initialized)
+    .WithCriteria<ScriptContext>((context, data) => data.Initialized)
     .Does<ScriptContext>(data => 
 {
     Assert.True(data.Initialized);
 });
 
 Task("Can-Access-Typed-Data-WithCriteria-False-Message")
-    .WithCriteria<ScriptContext>((data, context) => !data.Initialized, "Should only run if not initialized.")
+    .WithCriteria<ScriptContext>((context, data) => !data.Initialized, "Should only run if not initialized.")
     .Does<ScriptContext>(data => 
 {
     Assert.False(data.Initialized);
