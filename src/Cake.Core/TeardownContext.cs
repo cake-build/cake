@@ -11,17 +11,6 @@ namespace Cake.Core
     public sealed class TeardownContext : CakeContextAdapter, ITeardownContext
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TeardownContext"/> class.
-        /// </summary>
-        /// <param name="context">The Cake Context</param>
-        /// <param name="throwException">The exception that was thrown by the target.</param>
-        public TeardownContext(ICakeContext context, Exception throwException)
-            : base(context)
-        {
-            ThrownException = throwException;
-        }
-
-        /// <summary>
         /// Gets a value indicating whether this build was successful
         /// </summary>
         /// <value>
@@ -33,5 +22,16 @@ namespace Cake.Core
         /// Gets the exception that was thrown by the target.
         /// </summary>
         public Exception ThrownException { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TeardownContext"/> class.
+        /// </summary>
+        /// <param name="context">The Cake context.</param>
+        /// <param name="throwException">The exception that was thrown by the target.</param>
+        public TeardownContext(ICakeContext context, Exception throwException)
+            : base(context)
+        {
+            ThrownException = throwException;
+        }
     }
 }

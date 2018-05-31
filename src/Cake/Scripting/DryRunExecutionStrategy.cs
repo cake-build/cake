@@ -16,15 +16,11 @@ namespace Cake.Scripting
 
         public DryRunExecutionStrategy(ICakeLog log)
         {
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
-            _log = log;
+            _log = log ?? throw new ArgumentNullException(nameof(log));
             _counter = 1;
         }
 
-        public void PerformSetup(Action<ICakeContext> action, ICakeContext context)
+        public void PerformSetup(Action<ISetupContext> action, ISetupContext context)
         {
         }
 
@@ -42,7 +38,7 @@ namespace Cake.Scripting
             return Task.CompletedTask;
         }
 
-        public void Skip(CakeTask task)
+        public void Skip(CakeTask task, CakeTaskCriteria critera)
         {
         }
 

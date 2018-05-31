@@ -80,6 +80,7 @@ namespace Cake.Common.Xml
         /// });
         ///     ]]>
         ///   </code>
+        /// </example>
         /// <example>
         ///   <para>
         ///   Remove an app setting from a config file.
@@ -112,7 +113,6 @@ namespace Cake.Common.Xml
         /// Credit to NAnt for the original example.
         /// http://nant.sourceforge.net/release/latest/help/tasks/xmlpoke.html
         /// </para>
-        /// </example>
         [CakeMethodAlias]
         public static void XmlPoke(this ICakeContext context, FilePath filePath, string xpath, string value)
         {
@@ -182,6 +182,7 @@ namespace Cake.Common.Xml
         /// });
         ///     ]]>
         ///   </code>
+        /// </example>
         /// <example>
         ///   <para>
         ///   Remove an app setting from a config file.
@@ -214,7 +215,6 @@ namespace Cake.Common.Xml
         /// Credit to NAnt for the original example.
         /// http://nant.sourceforge.net/release/latest/help/tasks/xmlpoke.html
         /// </para>
-        /// </example>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         [CakeMethodAlias]
         public static void XmlPoke(this ICakeContext context, FilePath filePath, string xpath, string value, XmlPokeSettings settings)
@@ -315,6 +315,7 @@ namespace Cake.Common.Xml
         /// });
         ///     ]]>
         ///   </code>
+        /// </example>
         /// <example>
         ///   <para>
         ///   Remove an app setting from a config file.
@@ -346,7 +347,6 @@ namespace Cake.Common.Xml
         /// Credit to NAnt for the original example.
         /// http://nant.sourceforge.net/release/latest/help/tasks/xmlpoke.html
         /// </para>
-        /// </example>
         [CakeMethodAlias]
         public static string XmlPokeString(this ICakeContext context, string sourceXml, string xpath, string value)
         {
@@ -415,6 +415,7 @@ namespace Cake.Common.Xml
         /// });
         ///     ]]>
         ///   </code>
+        /// </example>
         /// <example>
         ///   <para>
         ///   Remove an app setting from a config file.
@@ -446,7 +447,6 @@ namespace Cake.Common.Xml
         /// Credit to NAnt for the original example.
         /// http://nant.sourceforge.net/release/latest/help/tasks/xmlpoke.html
         /// </para>
-        /// </example>
         [CakeMethodAlias]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public static string XmlPokeString(this ICakeContext context, string sourceXml, string xpath, string value, XmlPokeSettings settings)

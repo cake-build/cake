@@ -38,7 +38,18 @@ namespace Cake.Core
         /// <param name="span">The span.</param>
         public void Add(string task, TimeSpan span)
         {
-            Add(task, span, CakeTaskExecutionStatus.Executed);
+            Add(task, CakeReportEntryCategory.Task, span, CakeTaskExecutionStatus.Executed);
+        }
+
+        /// <summary>
+        /// Adds a task result to the report with a specific category.
+        /// </summary>
+        /// <param name="task">The task.</param>
+        /// <param name="category">The category.</param>
+        /// <param name="span">The span.</param>
+        public void Add(string task, CakeReportEntryCategory category, TimeSpan span)
+        {
+            Add(task, category, span, CakeTaskExecutionStatus.Executed);
         }
 
         /// <summary>
@@ -47,7 +58,7 @@ namespace Cake.Core
         /// <param name="task">The task.</param>
         public void AddSkipped(string task)
         {
-            Add(task, TimeSpan.Zero, CakeTaskExecutionStatus.Skipped);
+            Add(task, CakeReportEntryCategory.Task, TimeSpan.Zero, CakeTaskExecutionStatus.Skipped);
         }
 
         /// <summary>
@@ -57,18 +68,19 @@ namespace Cake.Core
         /// <param name="span">The span.</param>
         public void AddDelegated(string task, TimeSpan span)
         {
-            Add(task, span, CakeTaskExecutionStatus.Delegated);
+            Add(task, CakeReportEntryCategory.Task, span, CakeTaskExecutionStatus.Delegated);
         }
 
         /// <summary>
         /// Adds a task result to the report.
         /// </summary>
         /// <param name="task">The task.</param>
+        /// <param name="category">The category.</param>
         /// <param name="span">The span.</param>
         /// <param name="executionStatus">The execution status.</param>
-        public void Add(string task, TimeSpan span, CakeTaskExecutionStatus executionStatus)
+        public void Add(string task, CakeReportEntryCategory category, TimeSpan span, CakeTaskExecutionStatus executionStatus)
         {
-            _report.Add(new CakeReportEntry(task, span, executionStatus));
+            _report.Add(new CakeReportEntry(task, category, span, executionStatus));
         }
 
         /// <summary>
