@@ -17,7 +17,7 @@ namespace Cake.Core
         /// </summary>
         /// <param name="action">The action.</param>
         /// <param name="context">The context.</param>
-        void PerformSetup(Action<ICakeContext> action, ICakeContext context);
+        void PerformSetup(Action<ISetupContext> action, ISetupContext context);
 
         /// <summary>
         /// Performs the teardown.
@@ -38,7 +38,8 @@ namespace Cake.Core
         /// Skips the specified task.
         /// </summary>
         /// <param name="task">The task to skip.</param>
-        void Skip(CakeTask task);
+        /// <param name="criteria">The criteria that caused the task to be skipped.</param>
+        void Skip(CakeTask task, CakeTaskCriteria criteria);
 
         /// <summary>
         /// Executes the error reporter.

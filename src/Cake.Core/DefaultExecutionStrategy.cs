@@ -29,7 +29,7 @@ namespace Cake.Core
         /// </summary>
         /// <param name="action">The action.</param>
         /// <param name="context">The context.</param>
-        public void PerformSetup(Action<ICakeContext> action, ICakeContext context)
+        public void PerformSetup(Action<ISetupContext> action, ISetupContext context)
         {
             if (action != null)
             {
@@ -92,7 +92,8 @@ namespace Cake.Core
         /// Skips the specified task.
         /// </summary>
         /// <param name="task">The task to skip.</param>
-        public void Skip(CakeTask task)
+        /// <param name="criteria">The criteria that caused the task to be skipped.</param>
+        public void Skip(CakeTask task, CakeTaskCriteria criteria)
         {
             if (task != null)
             {
@@ -100,7 +101,11 @@ namespace Cake.Core
                 _log.Verbose("========================================");
                 _log.Verbose(task.Name);
                 _log.Verbose("========================================");
-                _log.Verbose("Skipping task: {0}", task.Name);
+
+                var message = string.IsNullOrWhiteSpace(criteria.Message)
+                    ? task.Name : criteria.Message;
+
+                _log.Verbose("Skipping task: {0}", message);
             }
         }
 

@@ -1,9 +1,22 @@
+### New in 0.28.0 (Released 2018/05/31)
+
+* 2008 Allow defining a typed context to be used throughout a Cake script.
+* 1772 Provide access to the run target and ordered list of tasks
+* 1594 Add overload to WithCriteria which prints a message
+* 2174 Support multiple Support / Teardown
+* 2171 Add potential breaking change warning
+* 2163 Update to Roslyn 2.8.x packages, adding support for C# 7.3
+
+### New in 0.27.2 (Released 2018/05/15)
+
+* 2137 Dependency loading errors with Cake 0.27.1 and Cake.Powershell 0.4.5
+* 2134 Assembly conflicts during compilation
+
 ### New in 0.27.1 (Released 2018/04/21)
 
 * 2132 Problems with loading certain assemblies (0.27.0)
 
 ### New in 0.27.0 (Released 2018/04/19)
-
 
 * 2078 Support expand environment variables in script pre-processor directives
 * 2047 Specify version during Nuget Updating

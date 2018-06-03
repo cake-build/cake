@@ -1,8 +1,11 @@
 // Utilities
 #load "./utilities/paths.cake"
 #load "./utilities/xunit.cake"
+#load "./utilities/context.cake"
 
 // Tests
+#load "setup.cake"
+#load "teardown.cake"
 #load "./Cake.Common/ArgumentAliases.cake"
 #load "./Cake.Common/EnvironmentAliases.cake"
 #load "./Cake.Common/Diagnostics/LoggingAliases.cake"
@@ -33,15 +36,6 @@
 //////////////////////////////////////////////////
 
 var target = Argument<string>("target", "Run-All-Tests");
-
-//////////////////////////////////////////////////
-// SETUP / TEARDOWN
-//////////////////////////////////////////////////
-
-Setup(ctx =>
-{
-    CleanDirectory(Paths.Temp);
-});
 
 //////////////////////////////////////////////////
 // TARGETS
@@ -76,6 +70,7 @@ Task("Cake.Common")
     .IsDependentOn("Cake.Common.Tools.NuGet.NuGetAliases");
 
 Task("Run-All-Tests")
+    .IsDependentOn("Setup-Tests")
     .IsDependentOn("Cake.Core")
     .IsDependentOn("Cake.Common");
 

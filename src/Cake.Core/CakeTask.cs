@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,12 +12,8 @@ namespace Cake.Core
     /// <summary>
     /// A <see cref="CakeTask"/> represents a unit of work.
     /// </summary>
-    public abstract class CakeTask : ICakeTaskInfo
+    public sealed class CakeTask : ICakeTaskInfo
     {
-        private readonly List<CakeTaskDependency> _dependencies;
-        private readonly List<CakeTaskDependency> _reverseDependencies;
-        private readonly List<Func<ICakeContext, bool>> _criterias;
-
         /// <summary>
         /// Gets the name of the task.
         /// </summary>
@@ -35,41 +30,62 @@ namespace Cake.Core
         /// Gets the task's dependencies.
         /// </summary>
         /// <value>The task's dependencies.</value>
-        public IReadOnlyList<CakeTaskDependency> Dependencies => _dependencies;
+        public List<CakeTaskDependency> Dependencies { get; }
 
         /// <summary>
         /// Gets the tasks that the task want to be a dependency of.
         /// </summary>
         /// <value>The tasks that the task want to be a dependency of.</value>
-        public IReadOnlyList<CakeTaskDependency> Dependees => _reverseDependencies;
+        public List<CakeTaskDependency> Dependees { get; }
 
         /// <summary>
         /// Gets the task's criterias.
         /// </summary>
         /// <value>The task's criterias.</value>
-        public IReadOnlyList<Func<ICakeContext, bool>> Criterias => _criterias;
+        public List<CakeTaskCriteria> Criterias { get; }
 
         /// <summary>
-        /// Gets the error handler.
+        /// Gets or sets the error handler.
         /// </summary>
         /// <value>The error handler.</value>
-        public Action<Exception> ErrorHandler { get; private set; }
+        public Action<Exception> ErrorHandler { get; set; }
 
         /// <summary>
-        /// Gets the error reporter.
+        /// Gets or sets the error reporter.
         /// </summary>
-        public Action<Exception> ErrorReporter { get; private set; }
+        public Action<Exception> ErrorReporter { get; set; }
 
         /// <summary>
-        /// Gets the finally handler.
+        /// Gets or sets the finally handler.
         /// </summary>
-        public Action FinallyHandler { get; private set; }
+        public Action FinallyHandler { get; set; }
+
+        /// <summary>
+        /// Gets the task's actions.
+        /// </summary>
+        /// <value>The task's actions.</value>
+        public List<Func<ICakeContext, Task>> Actions { get; }
+
+        /// <summary>
+        /// Gets the task's actions that are run at execution time to additionally populate <see cref="Actions"/>.
+        /// </summary>
+        /// <value>The task's delayed actions actions.</value>
+        public Queue<Action> DelayedActions { get; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether gets the task's state if it will defer exceptions until the end of the task.
+        /// </summary>
+        /// <value>The task's defer exceptions state.</value>
+        public bool DeferExceptions { get; set; }
+
+        IReadOnlyList<CakeTaskDependency> ICakeTaskInfo.Dependencies => Dependencies;
+        IReadOnlyList<CakeTaskDependency> ICakeTaskInfo.Dependees => Dependees;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeTask"/> class.
         /// </summary>
         /// <param name="name">The name of the task.</param>
-        protected CakeTask(string name)
+        public CakeTask(string name)
         {
             if (name == null)
             {
@@ -80,113 +96,12 @@ namespace Cake.Core
                 throw new ArgumentException("Task name cannot be empty.");
             }
 
-            _dependencies = new List<CakeTaskDependency>();
-            _reverseDependencies = new List<CakeTaskDependency>();
-            _criterias = new List<Func<ICakeContext, bool>>();
-
             Name = name;
-        }
-
-        /// <summary>
-        /// Adds a dependency to the task.
-        /// </summary>
-        /// <param name="name">The name of the dependency.</param>
-        /// <param name="required">Whether or not the dependency is required.</param>
-        public void AddDependency(string name, bool required = true)
-        {
-            if (_dependencies.Any(x => x.Name == name))
-            {
-                const string format = "The task '{0}' already have a dependency on '{1}'.";
-                var message = string.Format(CultureInfo.InvariantCulture, format, Name, name);
-                throw new CakeException(message);
-            }
-            _dependencies.Add(new CakeTaskDependency(name, required));
-        }
-
-        /// <summary>
-        /// Makes this task a dependency of some other task.
-        /// </summary>
-        /// <param name="name">The name of the task that this task want to be a dependency of.</param>
-        /// <param name="required">Whether or not the dependency is required.</param>
-        public void AddReverseDependency(string name, bool required = true)
-        {
-            if (_reverseDependencies.Any(x => x.Name == name))
-            {
-                const string format = "The task '{0}' already is a dependee of '{1}'.";
-                var message = string.Format(CultureInfo.InvariantCulture, format, Name, name);
-                throw new CakeException(message);
-            }
-            _reverseDependencies.Add(new CakeTaskDependency(name, required));
-        }
-
-        /// <summary>
-        /// Adds a criteria to the task that is invoked when the task is invoked.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        public void AddCriteria(Func<ICakeContext, bool> criteria)
-        {
-            if (criteria == null)
-            {
-                throw new ArgumentNullException(nameof(criteria));
-            }
-            _criterias.Add(criteria);
-        }
-
-        /// <summary>
-        /// Sets the error handler for the task.
-        /// The error handler is invoked when an exception is thrown from the task.
-        /// </summary>
-        /// <param name="errorHandler">The error handler.</param>
-        public void SetErrorHandler(Action<Exception> errorHandler)
-        {
-            if (errorHandler == null)
-            {
-                throw new ArgumentNullException(nameof(errorHandler));
-            }
-            if (ErrorHandler != null)
-            {
-                throw new CakeException("There can only be one error handler per task.");
-            }
-            ErrorHandler = errorHandler;
-        }
-
-        /// <summary>
-        /// Sets the error reporter for the task.
-        /// The error reporter is invoked when an exception is thrown from the task.
-        /// This action is invoked before the error handler, but gives no opportunity to recover from the error.
-        /// </summary>
-        /// <param name="errorReporter">The error reporter.</param>
-        /// <exception cref="System.ArgumentNullException"><paramref name="errorReporter"/> is <c>null</c>.</exception>
-        /// <exception cref="CakeException">There can only be one error reporter per task.</exception>
-        public void SetErrorReporter(Action<Exception> errorReporter)
-        {
-            if (errorReporter == null)
-            {
-                throw new ArgumentNullException(nameof(errorReporter));
-            }
-            if (ErrorReporter != null)
-            {
-                throw new CakeException("There can only be one error reporter per task.");
-            }
-            ErrorReporter = errorReporter;
-        }
-
-        /// <summary>
-        /// Sets the finally handler for the task.
-        /// The finally handler is always invoked when a task have finished running.
-        /// </summary>
-        /// <param name="finallyHandler">The finally handler.</param>
-        public void SetFinallyHandler(Action finallyHandler)
-        {
-            if (finallyHandler == null)
-            {
-                throw new ArgumentNullException(nameof(finallyHandler));
-            }
-            if (FinallyHandler != null)
-            {
-                throw new CakeException("There can only be one finally handler per task.");
-            }
-            FinallyHandler = finallyHandler;
+            Dependencies = new List<CakeTaskDependency>();
+            Dependees = new List<CakeTaskDependency>();
+            Criterias = new List<CakeTaskCriteria>();
+            Actions = new List<Func<ICakeContext, Task>>();
+            DelayedActions = new Queue<Action>();
         }
 
         /// <summary>
@@ -194,6 +109,35 @@ namespace Cake.Core
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns>Returned Task</returns>
-        public abstract Task Execute(ICakeContext context);
+        public async Task Execute(ICakeContext context)
+        {
+            while (DelayedActions.Count > 0)
+            {
+                var delayedDelegate = DelayedActions.Dequeue();
+                delayedDelegate();
+            }
+
+            var exceptions = new List<Exception>();
+            foreach (var action in Actions)
+            {
+                try
+                {
+                    await action(context).ConfigureAwait(false);
+                }
+                catch (Exception e) when (DeferExceptions)
+                {
+                    exceptions.Add(e);
+                }
+            }
+
+            if (exceptions.Any())
+            {
+                if (exceptions.Count == 1)
+                {
+                    throw exceptions.Single();
+                }
+                throw new AggregateException("Task failed with following exceptions", exceptions);
+            }
+        }
     }
 }

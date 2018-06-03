@@ -35,9 +35,12 @@ namespace Cake.Tests.Unit.Scripting
                 var context = Substitute.For<ICakeContext>();
                 var strategy = new DryRunExecutionStrategy(log);
 
+                var first = new CakeTask("First");
+                var second = new CakeTask("Second");
+
                 // When
-                strategy.ExecuteAsync(new ActionTask("First"), context);
-                strategy.ExecuteAsync(new ActionTask("Second"), context);
+                strategy.ExecuteAsync(first, context);
+                strategy.ExecuteAsync(second, context);
 
                 // Then
                 Assert.Equal(2, log.Entries.Count);
