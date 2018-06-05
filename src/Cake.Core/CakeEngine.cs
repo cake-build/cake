@@ -241,6 +241,7 @@ namespace Cake.Core
                         {
                             SkipTask(context, strategy, task, report, criteria);
                             skipped = true;
+                            break;
                         }
                     }
 
