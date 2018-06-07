@@ -21,6 +21,7 @@ namespace Cake.Frosting.Tests.Fixtures
         public ICakeEnvironment Environment { get; set; }
         public ICakeEngine Engine { get; set; }
         public ICakeLog Log { get; set; }
+        public ICakeDataService Data { get; set; }
         public IExecutionStrategy Strategy { get; set; }
         public IToolInstaller Installer { get; set; }
         public CakeHostOptions Options { get; set; }
@@ -34,7 +35,8 @@ namespace Cake.Frosting.Tests.Fixtures
             FileSystem.CreateDirectory("/Working");
 
             Log = Substitute.For<ICakeLog>();
-            Engine = new CakeEngine(Log);
+            Data = Substitute.For<ICakeDataService>();
+            Engine = new CakeEngine(Data, Log);
             Installer = Substitute.For<IToolInstaller>();
             Options = new CakeHostOptions();
         }

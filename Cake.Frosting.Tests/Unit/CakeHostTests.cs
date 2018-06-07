@@ -127,7 +127,7 @@ namespace Cake.Frosting.Tests.Unit
             // Then
             fixture.Strategy.Received(0).PerformSetup(
                 Arg.Any<Action<ICakeContext>>(),
-                Arg.Any<ICakeContext>());
+                Arg.Any<ISetupContext>());
         }
 
         [Fact]
