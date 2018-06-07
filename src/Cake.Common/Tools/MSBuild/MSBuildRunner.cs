@@ -18,6 +18,7 @@ namespace Cake.Common.Tools.MSBuild
     /// </summary>
     public sealed class MSBuildRunner : Tool<MSBuildSettings>
     {
+        private const string MSBuildExecutableName = "msbuild.exe";
         private readonly ICakeEnvironment _environment;
         private readonly IFileSystem _fileSystem;
 
@@ -281,10 +282,7 @@ namespace Cake.Common.Tools.MSBuild
         /// Gets the possible names of the tool executable.
         /// </summary>
         /// <returns>The tool executable name.</returns>
-        protected override IEnumerable<string> GetToolExecutableNames()
-        {
-            return Enumerable.Empty<string>();
-        }
+        protected override IEnumerable<string> GetToolExecutableNames() => new[] { MSBuildExecutableName };
 
         /// <summary>
         /// Gets alternative file paths which the tool may exist in

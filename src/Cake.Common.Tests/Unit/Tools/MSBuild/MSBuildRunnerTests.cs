@@ -529,6 +529,22 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Fact]
+            public void Should_Return_The_Registered_MSBuild_If_MSBuild_Is_Registered()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(true, PlatformFamily.Windows);
+
+                var registeredMSBuild = fixture.FileSystem.CreateFile("/Registered/MSBuild.exe");
+                fixture.Tools.RegisterFile(registeredMSBuild.Path);
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(registeredMSBuild.Path.FullPath, result.Path.FullPath);
+            }
+
+            [Fact]
             public void Should_Throw_If_MSBuild_Executable_Did_Not_Exist()
             {
                 // Given
