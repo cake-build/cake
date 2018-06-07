@@ -80,7 +80,7 @@ namespace Cake.Testing.Fixtures
             Configuration = new FakeConfiguration();
             Tools = new ToolLocator(Environment, new ToolRepository(Environment), new ToolResolutionStrategy(FileSystem, Environment, Globber, Configuration));
 
-            // ReSharper disable once VirtualMemberCallInContructor
+            // ReSharper disable once VirtualMemberCallInConstructor
             DefaultToolPath = GetDefaultToolPath(toolFilename);
             FileSystem.CreateFile(DefaultToolPath);
         }

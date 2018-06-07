@@ -18,19 +18,23 @@ namespace Cake.Common.Tools.VSWhere
     public abstract class VSWhereTool<TSettings> : Tool<TSettings>
         where TSettings : ToolSettings
     {
+        private const string VSWhereExecutableName = "vswhere.exe";
+        private readonly ICakeEnvironment _environment;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="VSWhereTool{TSettings}"/> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="toolLocator">The tool servce.</param>
+        /// <param name="toolLocator">The tool locator service.</param>
         protected VSWhereTool(IFileSystem fileSystem,
             ICakeEnvironment environment,
             IProcessRunner processRunner,
             IToolLocator toolLocator)
             : base(fileSystem, environment, processRunner, toolLocator)
         {
+            _environment = environment;
         }
 
         /// <summary>
@@ -48,7 +52,27 @@ namespace Cake.Common.Tools.VSWhere
         /// <returns>The tool executable name.</returns>
         protected override IEnumerable<string> GetToolExecutableNames()
         {
-            return new[] { "vswhere.exe" };
+            return new[] { VSWhereExecutableName };
+        }
+
+        /// <summary>
+        /// Gets alternative file paths which the tool may exist in
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The default tool path.</returns>
+        protected override IEnumerable<FilePath> GetAlternativeToolPaths(TSettings settings)
+        {
+            /*
+             * According to https://blogs.msdn.microsoft.com/heaths/2017/04/21/vswhere-is-now-installed-with-visual-studio-2017/,
+             * Starting in the latest preview release of Visual Studio version 15.2 (26418.1-Preview), you can now find vswhere installed in
+             * “%ProgramFiles(x86)%\Microsoft Visual Studio\Installer” (on 32-bit operating systems before Windows 10, you should use
+             * “%ProgramFiles%\Microsoft Visual Studio\Installer”).
+             */
+
+            return new FilePath[]
+                {
+                    _environment.GetSpecialPath(_environment.Platform.Is64Bit ? SpecialPath.ProgramFilesX86 : SpecialPath.ProgramFiles).CombineWithFilePath("Microsoft Visual Studio/Installer/" + VSWhereExecutableName),
+                };
         }
 
         /// <summary>
