@@ -6,14 +6,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
+
 using Cake.Core;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.NuGet.Install.Extensions;
+
 using NuGet.Common;
 using NuGet.Configuration;
+using NuGet.Credentials;
 using NuGet.Frameworks;
 using NuGet.PackageManagement;
 using NuGet.Packaging;
@@ -21,6 +23,7 @@ using NuGet.Packaging.Core;
 using NuGet.Protocol.Core.Types;
 using NuGet.Resolver;
 using NuGet.Versioning;
+
 using PackageReference = Cake.Core.Packaging.PackageReference;
 using PackageType = Cake.Core.Packaging.PackageType;
 
@@ -131,6 +134,10 @@ namespace Cake.NuGet.Install
             var projectContext = new NuGetProjectContext(_log);
             var resolutionContext = new ResolutionContext(dependencyBehavior, includePrerelease, false, VersionConstraints.None, _gatherCache, _sourceCacheContext);
             var downloadContext = new PackageDownloadContext(_sourceCacheContext);
+            // WIP
+            var extensionLocator = new NuGetExtensionLocator(_environment, _config);
+            var pluginCredentialProviderBuilder = new PluginCredentialProviderBuilder(extensionLocator, _nugetSettings, _nugetLogger);
+            var credentialProviders = pluginCredentialProviderBuilder.BuildAll("verbose");
 
             // First get the install actions.
             // This will give us the list of packages to install, and which feed should be used.
