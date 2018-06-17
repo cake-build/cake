@@ -5,7 +5,7 @@
     <id>cake.portable</id>
     <title>Cake.Portable</title>
     <version>0.0.0</version>
-    <authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström and contributors</authors>
+    <authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger and contributors</authors>
     <summary>Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.</summary>
     <description>The Cake script runner.</description>
     <projectUrl>https://cakebuild.net/</projectUrl>
