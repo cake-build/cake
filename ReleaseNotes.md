@@ -1,3 +1,8 @@
+### New in 0.28.1 (Released 2018/06/18)
+
+* 2176 Skipped tasks show up multiple times in report
+* 2190 Suppress NuGet dependency warnings related to Cake.Core
+
 ### New in 0.28.0 (Released 2018/05/31)
 
 * 2008 Allow defining a typed context to be used throughout a Cake script.
