@@ -181,6 +181,33 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
+            public async Task Should_Only_Write_Single_Skipped_Entry_To_Report_If_Multiple_Boolean_Criterias_Evaluated_To_False()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("Default").IsDependentOn("A");
+                engine.RegisterTask("A")
+                    .WithCriteria(() => false)
+                    .WithCriteria(() => false, "Foo")
+                    .WithCriteria(context => false)
+                    .WithCriteria(context => false, "Bar")
+                    .WithCriteria<string>((context, data) => false)
+                    .WithCriteria<string>((context, data) => false, "Baz");
+
+                // When
+                var result = await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, "Default");
+                var entries = result.ToList();
+
+                // Then
+                Assert.Equal(2, entries.Count);
+                Assert.Equal("A", entries[0].TaskName);
+                Assert.Equal(CakeTaskExecutionStatus.Skipped, entries[0].ExecutionStatus);
+                Assert.Equal("Default", entries[1].TaskName);
+                Assert.Equal(CakeTaskExecutionStatus.Delegated, entries[1].ExecutionStatus);
+            }
+
+            [Fact]
             public async Task Should_Skip_Tasks_Where_Boolean_Criterias_Are_Not_Fulfilled_And_Write_Reason_To_Log()
             {
                 // Given

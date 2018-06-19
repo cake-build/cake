@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
@@ -69,18 +68,12 @@ namespace Cake.NuGet.Install
             _nugetLogger = new NuGetLogger(_log);
 
             var nugetConfig = GetNuGetConfigPath(_environment, _config);
-
             var nugetConfigDirectoryPath = nugetConfig.Item1;
             var nugetConfigFilePath = nugetConfig.Item2;
 
-            if (nugetConfigFilePath != null)
-            {
-                _log.Debug($"Found NuGet.config at: {nugetConfigFilePath}");
-            }
-            else
-            {
-                _log.Debug("NuGet.config not found.");
-            }
+            _log.Debug(nugetConfigFilePath != null
+                ? $"Found NuGet.config at: {nugetConfigFilePath}"
+                : "NuGet.config not found.");
 
             _nugetSettings = Settings.LoadDefaultSettings(
                 nugetConfigDirectoryPath.FullPath,
@@ -114,7 +107,7 @@ namespace Cake.NuGet.Install
             var targetFramework = type == PackageType.Addin ? _currentFramework : NuGetFramework.AnyFramework;
             var sourceRepositoryProvider = new NuGetSourceRepositoryProvider(_nugetSettings, _config, package);
             var pathResolver = new PackagePathResolver(packageRoot);
-            var project = new NugetFolderProject(_fileSystem, _contentResolver, _config, _log, pathResolver, packageRoot, targetFramework);
+            var project = new NugetFolderProject(_fileSystem, _contentResolver, _log, pathResolver, packageRoot, targetFramework);
             var packageManager = new NuGetPackageManager(sourceRepositoryProvider, _nugetSettings, project.Root)
             {
                 PackagesFolderNuGetProject = project
@@ -208,9 +201,7 @@ namespace Cake.NuGet.Install
 
                     // Find the highest possible version
                     version = version ?? foundVersion;
-                    if (foundVersion != null &&
-                        version != null &&
-                        foundVersion > version)
+                    if (foundVersion != null && foundVersion > version)
                     {
                         version = foundVersion;
                     }

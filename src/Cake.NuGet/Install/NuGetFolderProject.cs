@@ -4,13 +4,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.NuGet.Install.Extensions;
 using NuGet.Frameworks;
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
@@ -26,7 +23,6 @@ namespace Cake.NuGet.Install
         private readonly ISet<PackageIdentity> _installedPackages;
         private readonly IFileSystem _fileSystem;
         private readonly INuGetContentResolver _contentResolver;
-        private readonly ICakeConfiguration _config;
         private readonly ICakeLog _log;
         private readonly PackagePathResolver _pathResolver;
 
@@ -41,7 +37,6 @@ namespace Cake.NuGet.Install
         public NugetFolderProject(
             IFileSystem fileSystem,
             INuGetContentResolver contentResolver,
-            ICakeConfiguration config,
             ICakeLog log,
             PackagePathResolver pathResolver,
             string root,
@@ -49,10 +44,10 @@ namespace Cake.NuGet.Install
         {
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
             _contentResolver = contentResolver ?? throw new ArgumentNullException(nameof(contentResolver));
-            _config = config ?? throw new ArgumentNullException(nameof(config));
             _log = log ?? throw new ArgumentNullException(nameof(log));
             _pathResolver = pathResolver ?? throw new ArgumentNullException(nameof(pathResolver));
             _installedPackages = new HashSet<PackageIdentity>();
+
             TargetFramework = targetFramework ?? throw new ArgumentNullException(nameof(targetFramework));
             InternalMetadata[NuGetProjectMetadataKeys.TargetFramework] = TargetFramework;
         }
@@ -67,6 +62,7 @@ namespace Cake.NuGet.Install
                 _log.Debug("Package {0} has already been installed.", packageIdentity.ToString());
                 return Task.FromResult(true);
             }
+
             return base.InstallPackageAsync(packageIdentity, downloadResourceResult, nuGetProjectContext, token);
         }
 
@@ -78,22 +74,20 @@ namespace Cake.NuGet.Install
             {
                 if (_blackListedPackages.Contains(installedPackage.Id))
                 {
-                    _log.Warning("Package {0} depends on package {1}. Will not load this dependency...",
-                        packageReference.Package, installedPackage.ToString());
+                    const string format = "Package {0} depends on package {1}. This dependency won't be loaded.";
+                    _log.Debug(format, packageReference.Package, installedPackage.ToString());
                     continue;
                 }
 
                 var installPath = new DirectoryPath(_pathResolver.GetInstallPath(installedPackage));
-
                 if (!_fileSystem.Exist(installPath))
                 {
                     _log.Warning("Package {0} is not installed.", installedPackage.Id);
                     continue;
                 }
 
-                // If the installed package is not the target package,
-                // create a new PackageReference which is passed to the content resolver.
-                // This makes logging make more sense.
+                // If the installed package is not the target package, create a new PackageReference
+                // which is passed to the content resolver. This makes logging make more sense.
                 var installedPackageReference = installedPackage.Id.Equals(packageReference.Package, StringComparison.OrdinalIgnoreCase) ?
                     packageReference :
                     new PackageReference($"nuget:?package={installedPackage.Id}");
