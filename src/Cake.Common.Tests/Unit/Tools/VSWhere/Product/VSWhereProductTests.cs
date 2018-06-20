@@ -112,7 +112,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSWhere.Product
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/Working/tools/vswhere.exe", result.Path.FullPath);
+                Assert.Equal("/Program86/Microsoft Visual Studio/Installer/vswhere.exe", result.Path.FullPath);
             }
 
             [Fact]
