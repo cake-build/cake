@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
@@ -18,6 +17,7 @@ namespace Cake.Common.Tools.VSTest
     /// </summary>
     public sealed class VSTestRunner : Tool<VSTestSettings>
     {
+        private const string VSTestConsoleExecutableName = "vstest.console.exe";
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
 
@@ -27,7 +27,7 @@ namespace Cake.Common.Tools.VSTest
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="toolLocator">The tool servce.</param>
+        /// <param name="toolLocator">The tool locator.</param>
         public VSTestRunner(IFileSystem fileSystem,
             ICakeEnvironment environment,
             IProcessRunner processRunner,
@@ -138,10 +138,7 @@ namespace Cake.Common.Tools.VSTest
         /// Gets the possible names of the tool executable.
         /// </summary>
         /// <returns>The tool executable name.</returns>
-        protected override IEnumerable<string> GetToolExecutableNames()
-        {
-            return Enumerable.Empty<string>();
-        }
+        protected override IEnumerable<string> GetToolExecutableNames() => new[] { VSTestConsoleExecutableName };
 
         /// <summary>
         /// Gets alternative file paths which the tool may exist in
@@ -164,7 +161,7 @@ namespace Cake.Common.Tools.VSTest
         {
             var programFiles = _environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
             var root = programFiles.Combine(string.Concat("Microsoft Visual Studio ", version, "/Common7/IDE/CommonExtensions/Microsoft/TestWindow"));
-            return root.CombineWithFilePath("vstest.console.exe");
+            return root.CombineWithFilePath(VSTestConsoleExecutableName);
         }
     }
 }
