@@ -69,7 +69,7 @@ namespace Cake.Common.Tools.DotNetCore.Publish
         /// <remarks>
         /// Requires .NET Core 2.x or newer.
         /// </remarks>
-        public bool SelfContained { get; set; }
+        public bool? SelfContained { get; set; }
 
         /// <summary>
         /// Gets or sets the specified NuGet package sources to use during the restore.
