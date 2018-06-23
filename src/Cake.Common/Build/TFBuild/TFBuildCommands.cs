@@ -313,6 +313,26 @@ namespace Cake.Common.Build.TFBuild
             WriteLoggingCommand("build.addbuildtag", tag);
         }
 
+        /// <summary>
+        /// Publishes and uploads tests results
+        /// </summary>
+        /// <param name="data">The publish test results data</param>
+        public void PublishTestResults(TFBuildPublishTestResultsData data)
+        {
+            var properties = data.GetProperties(_environment);
+            WriteLoggingCommand("results.publish", properties, string.Empty);
+        }
+
+        /// <summary>
+        /// Publishes and uploads code coverage results
+        /// </summary>
+        /// <param name="data">The code coverage data</param>
+        public void PublishCodeCoverage(TFBuildPublishCodeCoverageData data)
+        {
+            var properties = data.GetProperties(_environment);
+            WriteLoggingCommand("codecoverage.publish", properties, string.Empty);
+        }
+
         private void WriteLoggingCommand(string actionName, string value)
         {
             WriteLoggingCommand(actionName, new Dictionary<string, string>(), value);

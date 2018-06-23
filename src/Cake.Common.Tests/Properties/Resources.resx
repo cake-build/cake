@@ -1044,4 +1044,36 @@ Imports System.Runtime.CompilerServices;
     &lt;test&gt;test value&lt;/test&gt;
 &lt;/configuration&gt;</value>
   </data>
+  <data name="Nuspec_Repository" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"&gt;
+    &lt;id&gt;The ID&lt;/id&gt;
+    &lt;version&gt;The version&lt;/version&gt;
+    &lt;title&gt;The title&lt;/title&gt;
+    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+    &lt;description&gt;The description&lt;/description&gt;
+    &lt;summary&gt;The summary&lt;/summary&gt;
+    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
+    &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
+    &lt;copyright&gt;The copyright&lt;/copyright&gt;
+    &lt;releaseNotes&gt;&lt;![CDATA[Line #1
+Line #2
+Line #3]]&gt;&lt;/releaseNotes&gt;
+    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
+    &lt;language&gt;en-us&lt;/language&gt;
+    &lt;repository type="git" url="https://test" commit="0000000000000000000000000000000000000000" branch="master" /&gt;
+  &lt;/metadata&gt;
+  &lt;files&gt;
+    &lt;file src="Cake.Core.dll" target="lib/net45" /&gt;
+    &lt;file src="Cake.Core.xml" target="lib/net45" /&gt;
+    &lt;file src="Cake.Core.pdb" target="lib/net45" /&gt;
+    &lt;file src="LICENSE" /&gt;
+  &lt;/files&gt;
+&lt;/package&gt;</value>
+  </data>
 </root>

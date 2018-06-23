@@ -68,6 +68,15 @@ namespace Cake.Common.Tools.NuGet.Pack
                 }
             }
 
+            if (settings.Repository != null)
+            {
+                var repositoryNode = FindOrCreateElement(document, namespaceManager, "repository");
+                repositoryNode.AddAttributeIfSpecified(settings.Repository.Type, "type");
+                repositoryNode.AddAttributeIfSpecified(settings.Repository.Url, "url");
+                repositoryNode.AddAttributeIfSpecified(settings.Repository.Commit, "commit");
+                repositoryNode.AddAttributeIfSpecified(settings.Repository.Branch, "branch");
+            }
+
             if (settings.Files != null && settings.Files.Count > 0)
             {
                 var filesPath = string.Format(CultureInfo.InvariantCulture, "//*[local-name()='package']//*[local-name()='files']");
