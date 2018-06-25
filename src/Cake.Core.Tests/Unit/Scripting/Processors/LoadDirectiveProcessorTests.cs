@@ -4,6 +4,7 @@
 
 using Cake.Core.Scripting.Processors.Loading;
 using Cake.Core.Tests.Fixtures;
+using Cake.Testing.Xunit;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit.Scripting.Processors
@@ -136,6 +137,82 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
             Assert.Equal(result.Lines[10], "#line 2 \"/Working/a.cake\"");
             Assert.Equal(result.Lines[11], "// #l b.cake");
             Assert.Equal(result.Lines[12], "int y=2;");
+        }
+
+        [Theory]
+        [InlineData("#load \"/utils.cake\"")]
+        [InlineData("#load \"local:?path=/utils.cake\"")]
+        public void Should_Process_AbsolutePath_Script_Reference_Found_In_Source(string source)
+        {
+            // Given
+            var fixture = new ScriptAnalyzerFixture();
+            fixture.Providers.Add(new FileLoadDirectiveProvider());
+            fixture.GivenScriptExist("/Working/script.cake", source);
+            fixture.GivenScriptExist("/utils.cake", "Console.WriteLine();");
+
+            // When
+            var result = fixture.Analyze("/Working/script.cake");
+
+            // Then
+            Assert.Equal(1, result.Script.Includes.Count);
+            Assert.Equal("/utils.cake", result.Script.Includes[0].Path.FullPath);
+        }
+
+        [Theory]
+        [InlineData("#load \"test/utils.cake\"")]
+        [InlineData("#load \"local:?path=test/utils.cake\"")]
+        public void Should_Process_RelativePath_Script_Reference_Found_In_Source(string source)
+        {
+            // Given
+            var fixture = new ScriptAnalyzerFixture();
+            fixture.Providers.Add(new FileLoadDirectiveProvider());
+            fixture.GivenScriptExist("/Working/script.cake", source);
+            fixture.GivenScriptExist("/Working/test/utils.cake", "Console.WriteLine();");
+
+            // When
+            var result = fixture.Analyze("/Working/script.cake");
+
+            // Then
+            Assert.Equal(1, result.Script.Includes.Count);
+            Assert.Equal("/Working/test/utils.cake", result.Script.Includes[0].Path.FullPath);
+        }
+
+        [WindowsTheory]
+        [InlineData("#load \"c:/utils.cake\"")]
+        [InlineData("#load \"local:?path=c:/utils.cake\"")]
+        public void Should_Process_WindowsAbsolutePath_Script_Reference_Found_In_Source(string source)
+        {
+            // Given
+            var fixture = new ScriptAnalyzerFixture();
+            fixture.Providers.Add(new FileLoadDirectiveProvider());
+            fixture.GivenScriptExist("/Working/script.cake", source);
+            fixture.GivenScriptExist("c:/utils.cake", "Console.WriteLine();");
+
+            // When
+            var result = fixture.Analyze("/Working/script.cake");
+
+            // Then
+            Assert.Equal(1, result.Script.Includes.Count);
+            Assert.Equal("c:/utils.cake", result.Script.Includes[0].Path.FullPath);
+        }
+
+        [WindowsTheory]
+        [InlineData("#load \"test/utils.cake\"")]
+        [InlineData("#load \"local:?path=test/utils.cake\"")]
+        public void Should_Process_WindowsRelativePath_Script_Reference_Found_In_Source(string source)
+        {
+            // Given
+            var fixture = new ScriptAnalyzerFixture();
+            fixture.Providers.Add(new FileLoadDirectiveProvider());
+            fixture.GivenScriptExist("/Working/script.cake", source);
+            fixture.GivenScriptExist("/Working/test/utils.cake", "Console.WriteLine();");
+
+            // When
+            var result = fixture.Analyze("/Working/script.cake");
+
+            // Then
+            Assert.Equal(1, result.Script.Includes.Count);
+            Assert.Equal("/Working/test/utils.cake", result.Script.Includes[0].Path.FullPath);
         }
     }
 }
