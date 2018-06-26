@@ -27,6 +27,12 @@ namespace Cake.Core.Scripting
         public ICakeContext Context { get; }
 
         /// <summary>
+        /// Gets the settings.
+        /// </summary>
+        /// <value>The settings.</value>
+        public ExecutionSettings Settings { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ScriptHost"/> class.
         /// </summary>
         /// <param name="engine">The engine.</param>
@@ -43,6 +49,7 @@ namespace Cake.Core.Scripting
             }
             Engine = engine;
             Context = context;
+            Settings = new ExecutionSettings();
         }
 
         /// <summary>

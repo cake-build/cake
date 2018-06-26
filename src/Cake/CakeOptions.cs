@@ -96,6 +96,11 @@ namespace Cake
         public bool Bootstrap { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether or not to use the target exclusively.
+        /// </summary>
+        public bool Exclusive { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CakeOptions"/> class.
         /// </summary>
         public CakeOptions()

@@ -75,7 +75,7 @@ namespace Cake.Tests.Unit.Scripting
                 await engine.Received(0).RunTargetAsync(
                     context,
                     Arg.Any<DefaultExecutionStrategy>(),
-                    "Target");
+                    Arg.Is<ExecutionSettings>(e => e.Target == "Target"));
             }
         }
     }

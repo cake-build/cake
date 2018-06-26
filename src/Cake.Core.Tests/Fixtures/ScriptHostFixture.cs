@@ -49,7 +49,7 @@ namespace Cake.Core.Tests.Fixtures
             Context.Log.Returns(Log);
 
             Engine = Substitute.For<ICakeEngine>();
-            Engine.RunTargetAsync(Context, Arg.Any<IExecutionStrategy>(), Arg.Any<string>())
+            Engine.RunTargetAsync(Context, Arg.Any<IExecutionStrategy>(), Arg.Any<ExecutionSettings>())
                 .Returns(new CakeReport());
         }
 

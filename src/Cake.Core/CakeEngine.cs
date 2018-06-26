@@ -179,13 +179,17 @@ namespace Cake.Core
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="strategy">The execution strategy.</param>
-        /// <param name="target">The target to run.</param>
+        /// <param name="settings">The execution settings.</param>
         /// <returns>The resulting report.</returns>
-        public async Task<CakeReport> RunTargetAsync(ICakeContext context, IExecutionStrategy strategy, string target)
+        public async Task<CakeReport> RunTargetAsync(ICakeContext context, IExecutionStrategy strategy, ExecutionSettings settings)
         {
-            if (target == null)
+            if (settings == null)
             {
-                throw new ArgumentNullException(nameof(target));
+                throw new ArgumentNullException(nameof(settings));
+            }
+            if (string.IsNullOrWhiteSpace(settings.Target))
+            {
+                throw new ArgumentException("No target specified.", nameof(settings));
             }
 
             if (strategy == null)
@@ -200,6 +204,7 @@ namespace Cake.Core
             var graph = CakeGraphBuilder.Build(_tasks);
 
             // Make sure target exist.
+            var target = settings.Target;
             if (!graph.Exist(target))
             {
                 const string format = "The target '{0}' was not found.";
@@ -228,26 +233,18 @@ namespace Cake.Core
 
                 PerformSetup(strategy, context, targetNode, orderedTasks, stopWatch, report);
 
-                foreach (var task in orderedTasks)
+                if (settings.Exclusive)
                 {
-                    // Is this the current target?
-                    var isTarget = task.Name.Equals(target, StringComparison.OrdinalIgnoreCase);
-
-                    // Should we execute the task?
-                    var skipped = false;
-                    foreach (var criteria in task.Criterias)
+                    // Execute only the target task.
+                    var task = _tasks.FirstOrDefault(x => x.Name.Equals(settings.Target, StringComparison.OrdinalIgnoreCase));
+                    await RunTask(context, strategy, task, target, stopWatch, report);
+                }
+                else
+                {
+                    // Execute all scheduled tasks.
+                    foreach (var task in orderedTasks)
                     {
-                        if (!ShouldTaskExecute(context, task, criteria, isTarget))
-                        {
-                            SkipTask(context, strategy, task, report, criteria);
-                            skipped = true;
-                            break;
-                        }
-                    }
-
-                    if (!skipped)
-                    {
-                        await ExecuteTaskAsync(context, strategy, stopWatch, task, report).ConfigureAwait(false);
+                        await RunTask(context, strategy, task, target, stopWatch, report);
                     }
                 }
 
@@ -262,6 +259,29 @@ namespace Cake.Core
             finally
             {
                 PerformTeardown(strategy, context, stopWatch, report, exceptionWasThrown, thrownException);
+            }
+        }
+
+        private async Task RunTask(ICakeContext context, IExecutionStrategy strategy, CakeTask task, string target, Stopwatch stopWatch, CakeReport report)
+        {
+            // Is this the current target?
+            var isTarget = task.Name.Equals(target, StringComparison.OrdinalIgnoreCase);
+
+            // Should we execute the task?
+            var skipped = false;
+            foreach (var criteria in task.Criterias)
+            {
+                if (!ShouldTaskExecute(context, task, criteria, isTarget))
+                {
+                    SkipTask(context, strategy, task, report, criteria);
+                    skipped = true;
+                    break;
+                }
+            }
+
+            if (!skipped)
+            {
+                await ExecuteTaskAsync(context, strategy, stopWatch, task, report).ConfigureAwait(false);
             }
         }
 
@@ -283,8 +303,7 @@ namespace Cake.Core
             }
         }
 
-        private static bool ShouldTaskExecute(ICakeContext context, CakeTask task, CakeTaskCriteria criteria,
-            bool isTarget)
+        private static bool ShouldTaskExecute(ICakeContext context, CakeTask task, CakeTaskCriteria criteria, bool isTarget)
         {
             if (!criteria.Predicate(context))
             {
