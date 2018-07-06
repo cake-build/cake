@@ -1,3 +1,18 @@
+### New in 0.29.0 (Released 2018/07/06)
+
+* 2140 DotNetCorePublish does not respect SelfContained DotNetCorePublishSettings property.
+* 2203 Add Octopus Deploy Promote release support.
+* 2095 Add "--skipnontestassemblies" funcionality to CAKE's NUnit3Settings as it exists in original nunit3 test runner.
+* 2094 Add support for executing a single task without dependencies.
+* 2196 NuGet Repository information not settable in NuGet Pack.
+* 2185 Try to find vswhere.exe on the system if the tool is not registered.
+* 2154 Problem with loading abolute path scripts with #load preprocessor.
+* 2152 try resolve vstest.console.exe before guessing it.
+* 1609 Add additional VSTS actions.
+* 2195 Updated the WiX tool documentation.
+* 2193 Add Pascal and Dave to all required places.
+* 2188 The CLA link in readme seems invalid or broken.
+
 ### New in 0.28.1 (Released 2018/06/18)
 
 * 2176 Skipped tasks show up multiple times in report
