@@ -172,5 +172,17 @@ namespace Cake.Common.Build.TFBuild
         /// </remarks>
         /// <param name="tag">The tag.</param>
         void AddBuildTag(string tag);
+
+        /// <summary>
+        /// Publishes and uploads tests results
+        /// </summary>
+        /// <param name="data">The publish test results data</param>
+        void PublishTestResults(TFBuildPublishTestResultsData data);
+
+        /// <summary>
+        /// Publishes and uploads code coverage results
+        /// </summary>
+        /// <param name="data">The code coverage data</param>
+        void PublishCodeCoverage(TFBuildPublishCodeCoverageData data);
     }
 }

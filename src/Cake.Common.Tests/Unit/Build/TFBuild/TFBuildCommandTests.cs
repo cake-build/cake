@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Linq;
 using Cake.Common.Build.TFBuild;
 using Cake.Common.Build.TFBuild.Data;
 using Cake.Common.Tests.Fixtures.Build;
@@ -374,6 +375,58 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild
 
                 // Then
                 Assert.Contains(fixture.Log.Entries, m => m.Message == "##vso[build.addbuildtag ]Stable");
+            }
+
+            [Fact]
+            public void Should_Publish_Test_Results()
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                var service = fixture.CreateTFBuildService();
+                var data = new TFBuildPublishTestResultsData
+                {
+                    Configuration = "Debug",
+                    MergeTestResults = true,
+                    Platform = "x86",
+                    PublishRunAttachments = true,
+                    TestRunner = TFTestRunnerType.XUnit,
+                    TestRunTitle = "Cake Test Run 1 [master]",
+                    TestResultsFiles = new string[]
+                     {
+                         FilePath.FromString("./artifacts/resultsXUnit.trx").ToString(),
+                         FilePath.FromString("./artifacts/resultsJs.trx").ToString()
+                     }
+                };
+
+                // When
+                service.Commands.PublishTestResults(data);
+
+                // Then
+                const string expected = @"##vso[results.publish type=XUnit;mergeResults=true;platform=x86;config=Debug;runTitle='Cake Test Run 1 [master]';publishRunAttachments=true;resultFiles=C:\build\CAKE-CAKE-JOB1\artifacts\resultsXUnit.trx,C:\build\CAKE-CAKE-JOB1\artifacts\resultsJs.trx;]";
+                var actual = fixture.Log.Entries.FirstOrDefault();
+                Assert.Equal(expected, actual?.Message);
+            }
+
+            [Fact]
+            public void Should_Publish_Code_Coverage()
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                var service = fixture.CreateTFBuildService();
+                var data = new TFBuildPublishCodeCoverageData
+                {
+                    CodeCoverageTool = TFCodeCoverageToolType.Cobertura,
+                    SummaryFileLocation = FilePath.FromString("./coverage/cobertura-coverage.xml").ToString(),
+                    ReportDirectory = DirectoryPath.FromString("./coverage/report").ToString()
+                };
+
+                // When
+                service.Commands.PublishCodeCoverage(data);
+
+                // Then
+                const string expected = @"##vso[codecoverage.publish codecoveragetool=Cobertura;summaryfile=C:\build\CAKE-CAKE-JOB1\coverage\cobertura-coverage.xml;reportdirectory=C:\build\CAKE-CAKE-JOB1\coverage\report;]";
+                var actual = fixture.Log.Entries.FirstOrDefault();
+                Assert.Equal(expected, actual?.Message);
             }
         }
     }

@@ -41,12 +41,15 @@ namespace Cake.Scripting
         /// <returns>The resulting report.</returns>
         public override async Task<CakeReport> RunTargetAsync(string target)
         {
+            Settings.SetTarget(target);
+
             var strategy = new DefaultExecutionStrategy(_log);
-            var report = await Engine.RunTargetAsync(Context, strategy, target).ConfigureAwait(false);
+            var report = await Engine.RunTargetAsync(Context, strategy, Settings).ConfigureAwait(false);
             if (report != null && !report.IsEmpty)
             {
                 _reportPrinter.Write(report);
             }
+
             return report;
         }
     }

@@ -31,6 +31,12 @@ namespace Cake.Commands
             {
                 throw new ArgumentNullException(nameof(options));
             }
+
+            if (options.Exclusive)
+            {
+                _host.Settings.UseExclusiveTarget();
+            }
+
             _scriptRunner.Run(_host, options.Script, options.Arguments);
             return true;
         }

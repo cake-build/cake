@@ -490,6 +490,25 @@ namespace Cake.Common.Tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
+        ///    &lt;id&gt;The ID&lt;/id&gt;
+        ///    &lt;version&gt;The version&lt;/version&gt;
+        ///    &lt;title&gt;The title&lt;/title&gt;
+        ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+        ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+        ///    &lt;description&gt;The description&lt;/description&gt;
+        ///    &lt;summary&gt;The summary&lt;/summary&gt;
+        ///    &lt;licenseUrl&gt;https://lic [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string Nuspec_Repository {
+            get {
+                return ResourceManager.GetString("Nuspec_Repository", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Microsoft Visual Studio Solution File, Format Version 12.00
         ///# Visual Studio 14
         ///VisualStudioVersion = 14.0.25123.0

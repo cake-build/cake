@@ -176,6 +176,11 @@ namespace Cake.Arguments
                 options.Bootstrap = ParseBooleanValue(value);
             }
 
+            if (name.Equals("exclusive", StringComparison.OrdinalIgnoreCase))
+            {
+                options.Exclusive = ParseBooleanValue(value);
+            }
+
             if (options.Arguments.ContainsKey(name))
             {
                 _log.Error("Multiple arguments with the same name ({0}).", name);
