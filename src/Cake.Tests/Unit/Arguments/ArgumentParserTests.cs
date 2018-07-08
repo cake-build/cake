@@ -580,6 +580,23 @@ namespace Cake.Tests.Unit.Arguments
                     // Then
                     Assert.Equal(expected, result.Bootstrap);
                 }
+
+                [Theory]
+                [InlineData("--exclusive", true)]
+                [InlineData("--exclusive=true", true)]
+                [InlineData("--exclusive=false", false)]
+                public void Can_Parse_Exclusive(string input, bool expected)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.cake", input });
+
+                    // Then
+                    Assert.Equal(expected, result.Exclusive);
+                }
             }
         }
     }

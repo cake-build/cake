@@ -81,6 +81,16 @@ namespace Cake.Common.Tools.NUnit
         public bool StopOnError { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether execution of the test run should
+        /// skip any non-test assemblies specified, without error.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if execution of the test run should skip any non-test assemblies specified, without error;
+        /// otherwise, <c>false</c>.
+        /// </value>
+        public bool SkipNonTestAssemblies { get; set; }
+
+        /// <summary>
         /// Gets or sets the directory to use for output files. If
         /// not specified, defaults to the current directory.
         /// </summary>

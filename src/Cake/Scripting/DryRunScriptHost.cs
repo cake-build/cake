@@ -44,8 +44,10 @@ namespace Cake.Scripting
             _log.Information("Target is: {0}", target);
             _log.Information(string.Empty);
 
+            Settings.SetTarget(target);
+
             var strategy = new DryRunExecutionStrategy(_log);
-            var result = await Engine.RunTargetAsync(Context, strategy, target).ConfigureAwait(false);
+            var result = await Engine.RunTargetAsync(Context, strategy, Settings).ConfigureAwait(false);
 
             _log.Information(string.Empty);
             _log.Information("This was a dry run.");

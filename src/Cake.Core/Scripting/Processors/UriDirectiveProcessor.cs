@@ -6,15 +6,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Cake.Core.Scripting.Analysis;
 
 namespace Cake.Core.Scripting.Processors
 {
     internal abstract class UriDirectiveProcessor : LineProcessor
     {
+        private readonly Regex _uriPrefixPattern;
+
         protected abstract IEnumerable<string> GetDirectiveNames();
 
         protected abstract void AddToContext(IScriptAnalyzerContext context, Uri uri);
+
+        protected UriDirectiveProcessor()
+        {
+            _uriPrefixPattern = new Regex("^([a-zA-Z]{2,}:)");
+        }
 
         public sealed override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
         {
@@ -60,11 +68,20 @@ namespace Cake.Core.Scripting.Processors
         private Uri ParseUriFromTokens(string[] tokens)
         {
             Uri uri;
-            if (!Uri.TryCreate(tokens[1].UnQuote(), UriKind.Absolute, out uri))
+            if (IsUriFromLegacyPattern(tokens))
             {
                 uri = CreateUriFromLegacyFormat(tokens);
             }
+            else
+            {
+                uri = new Uri(tokens[1].UnQuote(), UriKind.Absolute);
+            }
             return uri;
+        }
+
+        private bool IsUriFromLegacyPattern(string[] tokens)
+        {
+            return !_uriPrefixPattern.IsMatch(tokens[1].UnQuote());
         }
 
         protected virtual Uri CreateUriFromLegacyFormat(string[] tokens)

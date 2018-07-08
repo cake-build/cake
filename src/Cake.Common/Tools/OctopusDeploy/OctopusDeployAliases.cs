@@ -204,5 +204,53 @@ namespace Cake.Common.Tools.OctopusDeploy
             var releaseDeployer = new OctopusDeployReleaseDeployer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             releaseDeployer.DeployRelease(server, apiKey, projectName, deployTo, releaseNumber, settings);
         }
+
+        /// <summary>
+        /// Promotes the specified already existing release into a specified environment
+        /// See <see href="https://octopus.com/docs/api-and-integration/octo.exe-command-line/promoting-releases">Octopus Documentation</see> for more details.
+        /// </summary>
+        /// <param name="context">The cake context</param>
+        /// <param name="server">The Octopus server URL</param>
+        /// <param name="apiKey">The user's API key</param>
+        /// <param name="projectName">Name of the target project</param>
+        /// <param name="deployFrom">Source environment name</param>
+        /// <param name="deployTo">Target environment name</param>
+        /// <param name="settings">Deployment settings</param>
+        /// <example>
+        /// <code>
+        ///     // bare minimum
+        ///     OctoPromoteRelease("http://octopus-deploy.example", "API-XXXXXXXXXXXXXXXXXXXX", "MyGreatProject", "Testing", "Staging", new OctopusDeployPromoteReleaseSettings());
+        ///
+        ///     // All of deployment arguments
+        ///     OctoPromoteRelease("http://octopus-deploy.example", "API-XXXXXXXXXXXXXXXXXXXX", "MyGreatProject", "Testing", "Staging", new OctopusDeployPromoteReleaseSettings {
+        ///         ShowProgress = true,
+        ///         ForcePackageDownload = true,
+        ///         WaitForDeployment = true,
+        ///         DeploymentTimeout = TimeSpan.FromMinutes(1),
+        ///         CancelOnTimeout = true,
+        ///         DeploymentChecksLeepCycle = TimeSpan.FromMinutes(77),
+        ///         GuidedFailure = true,
+        ///         SpecificMachines = new string[] { "Machine1", "Machine2" },
+        ///         Force = true,
+        ///         SkipSteps = new[] { "Step1", "Step2" },
+        ///         NoRawLog = true,
+        ///         RawLogFile = "someFile.txt",
+        ///         DeployAt = new DateTime(2010, 6, 15).AddMinutes(1),
+        ///         Tenant = new[] { "Tenant1", "Tenant2" },
+        ///         TenantTags = new[] { "Tag1", "Tag2" },
+        ///     });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        public static void OctoPromoteRelease(this ICakeContext context, string server, string apiKey, string projectName, string deployFrom, string deployTo, OctopusDeployPromoteReleaseSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var releasePromoter = new OctopusDeployReleasePromoter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            releasePromoter.PromoteRelease(server, apiKey, projectName, deployFrom, deployTo, settings);
+        }
     }
 }
