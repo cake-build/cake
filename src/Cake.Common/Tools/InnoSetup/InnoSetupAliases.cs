@@ -45,7 +45,7 @@ namespace Cake.Common.Tools.InnoSetup
         /// <example>
         /// <code>
         /// InnoSetup("./src/Cake.iss", new InnoSetupSettings {
-        ///     OutputDir = outputDirectory
+        ///     OutputDirectory = outputDirectory
         ///     });
         /// </code>
         /// </example>
