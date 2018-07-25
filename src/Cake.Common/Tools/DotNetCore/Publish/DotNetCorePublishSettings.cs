@@ -39,7 +39,7 @@ namespace Cake.Common.Tools.DotNetCore.Publish
         public string VersionSuffix { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to not do build the project before publishing.
+        /// Gets or sets a value indicating whether to not to build the project before publishing.
         /// This makes build faster, but requires build to be done before publish is executed.
         /// </summary>
         /// <remarks>
