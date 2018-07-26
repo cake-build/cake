@@ -95,6 +95,12 @@ namespace Cake.Common.Tools.DotNetCore.Publish
                 builder.Append(settings.VersionSuffix);
             }
 
+            // No Build
+            if (settings.NoBuild)
+            {
+                builder.Append("--no-build");
+            }
+
             // No Dependencies
             if (settings.NoDependencies)
             {

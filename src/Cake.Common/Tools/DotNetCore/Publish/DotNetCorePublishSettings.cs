@@ -39,6 +39,15 @@ namespace Cake.Common.Tools.DotNetCore.Publish
         public string VersionSuffix { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to not to build the project before publishing.
+        /// This makes build faster, but requires build to be done before publish is executed.
+        /// </summary>
+        /// <remarks>
+        /// Requires .NET Core 2.1 or newer.
+        /// </remarks>
+        public bool NoBuild { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to ignore project to project references and only build the root project.
         /// </summary>
         /// <remarks>
