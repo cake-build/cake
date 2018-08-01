@@ -312,8 +312,8 @@ namespace Cake.Common.Tests.Unit
 
                     // Then
                     fixture.ProcessRunner.Received(1).Start(
-                        Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(info =>
-                            info.WorkingDirectory.FullPath == "/Working"));
+                        Arg.Any<FilePath>(), Arg.Is<ProcessSettings>(
+                            info => info.WorkingDirectory.FullPath == "/Working"));
                 }
 
                 [Fact]
