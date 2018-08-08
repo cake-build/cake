@@ -17,15 +17,6 @@ namespace Cake.NuGet.Install
     {
         private readonly ICakeLog _log;
 
-        // TODO: Use the implementation in NuGet libs
-        private class PackageSignatureVerifier : IPackageSignatureVerifier
-        {
-            public Task<VerifySignaturesResult> VerifySignaturesAsync(ISignedPackageReader package, CancellationToken token, Guid parentId)
-            {
-                return Task.FromResult(new VerifySignaturesResult(valid: true));
-            }
-        }
-
         public NuGetProjectContext(ICakeLog log)
         {
             _log = log ?? throw new ArgumentNullException(nameof(log));
@@ -33,7 +24,8 @@ namespace Cake.NuGet.Install
                 PackageSaveMode.Nuspec | PackageSaveMode.Files | PackageSaveMode.Nupkg,
                 XmlDocFileSaveMode.None,
                 new NuGetLogger(_log),
-                new PackageSignatureVerifier());
+                new PackageSignatureVerifier(SignatureVerificationProviderFactory.GetSignatureVerificationProviders()),
+                SignedPackageVerifierSettings.GetDefault());
         }
 
         public void Log(MessageLevel level, string message, params object[] args)
