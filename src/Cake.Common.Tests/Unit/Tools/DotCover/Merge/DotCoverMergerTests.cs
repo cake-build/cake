@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using Cake.Common.Tests.Fixtures.Tools.DotCover.Merge;
+using Cake.Common.Tools.DotCover;
 using Cake.Core.IO;
 using Xunit;
 
@@ -84,6 +85,22 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Merge
                              "/Source=\"/Working/result1.dcvr;/Working/result2.dcvr\" " +
                              "/Output=\"/Working/result.dcvr\" " +
                              "/LogFile=\"/Working/logfile.log\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_ConfigurationFile()
+            {
+                // Given
+                var fixture = new DotCoverMergerFixture();
+                fixture.Settings.WithConfigFile(new FilePath("./config.xml"));
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("Merge \"/Working/config.xml\" " +
+                             "/Source=\"/Working/result1.dcvr;/Working/result2.dcvr\" " +
+                             "/Output=\"/Working/result.dcvr\"", result.Args);
             }
         }
     }
