@@ -180,7 +180,7 @@ Task("Copy-Files")
     .Does(() =>
 {
     // .NET 4.6
-    DotNetCorePublish("./src/Cake", new DotNetCorePublishSettings
+    DotNetCorePublish("./src/Cake/Cake.csproj", new DotNetCorePublishSettings
     {
         Framework = "net461",
         NoRestore = true,
@@ -191,7 +191,7 @@ Task("Copy-Files")
     });
 
     // .NET Core
-    DotNetCorePublish("./src/Cake", new DotNetCorePublishSettings
+    DotNetCorePublish("./src/Cake/Cake.csproj", new DotNetCorePublishSettings
     {
         Framework = "netcoreapp2.0",
         NoRestore = true,
@@ -256,7 +256,7 @@ Task("Create-NuGet-Packages")
     foreach(var project in projects)
     {
         var name = project.GetDirectory().FullPath;
-        if(name.EndsWith("Cake") || name.EndsWith("Tests") || name.EndsWith("Xunit"))
+        if(project.FullPath.EndsWith("Cake.csproj") || name.EndsWith("Tests") || name.EndsWith("Xunit"))
         {
             continue;
         }

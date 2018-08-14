@@ -32,6 +32,10 @@
     <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
     <DebugType>portable</DebugType>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.1' ">
+    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
   <!-- Attribute generation -->
   <PropertyGroup>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
