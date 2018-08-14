@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 using Cake.Core.Diagnostics;
 using Cake.Core.Tooling;
@@ -23,6 +24,6 @@ namespace Cake.Common.Tools.Cake
         /// Gets or sets cake additional arguments.
         /// </summary>
         /// <value>The properties.</value>
-        public IDictionary<string, string> Arguments { get; set; }
+        public IDictionary<string, string> Arguments { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
     }
 }

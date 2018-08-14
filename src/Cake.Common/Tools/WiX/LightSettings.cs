@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -16,7 +17,9 @@ namespace Cake.Common.Tools.WiX
         /// <summary>
         /// Gets or sets the defined WiX variables.
         /// </summary>
-        public IDictionary<string, string> Defines { get; set; }
+        public IDictionary<string, string> Defines { get; set; } =
+            // “Variable names are case-sensitive.” http://wixtoolset.org/documentation/manual/v3/overview/preprocessor.html#custom-variables-define
+            new Dictionary<string, string>(StringComparer.Ordinal);
 
         /// <summary>
         /// Gets or sets the WiX extensions to use.

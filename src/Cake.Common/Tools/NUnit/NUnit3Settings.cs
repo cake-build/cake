@@ -247,12 +247,14 @@ namespace Cake.Common.Tools.NUnit
         public int? Agents { get; set; }
 
         /// <summary>
-        /// Gets or sets the params that should be passed to the runner.
+        /// Gets or sets the parameters that should be passed to the runner.
         /// </summary>
         /// <value>
-        /// List of parametes (key/value) which are passed to the runner.
+        /// List of parameters (key/value) which are passed to the runner.
         /// </value>
-        public IDictionary<string, string> Params { get; set; }
+        public IDictionary<string, string> Params { get; set; } =
+            // “Case-sensitive.” https://github.com/nunit/docs/wiki/Console-Command-Line#options
+            new Dictionary<string, string>(StringComparer.Ordinal);
 
         /// <summary>
         /// Gets or sets the level of detail at which the runner should write to its internal trace log.

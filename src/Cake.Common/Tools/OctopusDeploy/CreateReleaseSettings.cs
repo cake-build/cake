@@ -35,7 +35,7 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// <summary>
         /// Gets or sets the version number to use for a package in the release.
         /// </summary>
-        public Dictionary<string, string> Packages { get; set; }
+        public Dictionary<string, string> Packages { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Gets or sets the folder containing NuGet packages.
