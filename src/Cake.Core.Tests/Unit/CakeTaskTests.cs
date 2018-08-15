@@ -116,7 +116,7 @@ namespace Cake.Core.Tests.Unit
                 var result = Record.Exception(() => task.AddCriteria(null));
 
                 // Then
-                AssertEx.IsArgumentNullException(result, "criteria");
+                AssertEx.IsArgumentNullException(result, "predicate");
             }
 
             [Fact]

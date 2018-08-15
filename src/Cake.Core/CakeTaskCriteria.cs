@@ -28,6 +28,7 @@ namespace Cake.Core
         /// </summary>
         /// <param name="predicate">The criteria's predicate.</param>
         /// <param name="message">The criteria's message if skipped.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="predicate"/> is null.</exception>
         public CakeTaskCriteria(Func<ICakeContext, bool> predicate, string message = null)
         {
             Predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
