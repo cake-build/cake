@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Cake.Core
 {
-    internal static class CakeTaskExtensions
+    public static class CakeTaskExtensions
     {
         public static void AddDependency(this CakeTask task, string name, bool required = true)
         {
