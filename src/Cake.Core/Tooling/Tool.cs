@@ -208,6 +208,9 @@ namespace Cake.Core.Tooling
                 info.EnvironmentVariables = GetEnvironmentVariables(settings);
             }
 
+            // Want to opt out of using a working directory?
+            info.NoWorkingDirectory = settings.NoWorkingDirectory;
+
             // Run the process.
             var process = _processRunner.Start(toolPath, info);
             if (process == null)
@@ -215,6 +218,7 @@ namespace Cake.Core.Tooling
                 const string message = "{0}: Process was not started.";
                 throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, toolName));
             }
+
             return process;
         }
 

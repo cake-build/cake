@@ -25,16 +25,8 @@ namespace Cake.Core.IO
         /// <param name="log">The log.</param>
         public ProcessRunner(ICakeEnvironment environment, ICakeLog log)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
-            _environment = environment;
-            _log = log;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _log = log ?? throw new ArgumentNullException(nameof(log));
         }
 
         /// <summary>
@@ -67,10 +59,6 @@ namespace Cake.Core.IO
                 _log.Verbose(Verbosity.Diagnostic, "Executing: {0}", message);
             }
 
-            // Get the working directory.
-            var workingDirectory = settings.WorkingDirectory ?? _environment.WorkingDirectory;
-            settings.WorkingDirectory = workingDirectory.MakeAbsolute(_environment);
-
             // Create the process start info.
             var info = new ProcessStartInfo(fileName)
             {
@@ -80,9 +68,11 @@ namespace Cake.Core.IO
                 RedirectStandardOutput = settings.RedirectStandardOutput
             };
 
-            if (settings.WorkingDirectory != null)
+            // Allow working directory?
+            if (!settings.NoWorkingDirectory)
             {
-                info.WorkingDirectory = settings.WorkingDirectory.FullPath;
+                var workingDirectory = settings.WorkingDirectory ?? _environment.WorkingDirectory;
+                info.WorkingDirectory = workingDirectory.MakeAbsolute(_environment).FullPath;
             }
 
             // Add environment variables
@@ -98,7 +88,6 @@ namespace Cake.Core.IO
 
             // Start and return the process.
             var process = Process.Start(info);
-
             if (process == null)
             {
                 return null;
@@ -112,7 +101,8 @@ namespace Cake.Core.IO
                 ? SubscribeStandardConsoleErrorQueue(process)
                 : null;
 
-            return new ProcessWrapper(process, _log, arguments.FilterUnsafe, consoleOutputQueue, arguments.FilterUnsafe, consoleErrorQueue);
+            return new ProcessWrapper(process, _log, arguments.FilterUnsafe,
+                consoleOutputQueue, arguments.FilterUnsafe, consoleErrorQueue);
         }
 
         private static ConcurrentQueue<string> SubscribeStandardConsoleErrorQueue(Process process)

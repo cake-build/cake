@@ -73,8 +73,7 @@ namespace Cake.Common
         [CakeMethodAlias]
         public static int StartProcess(this ICakeContext context, FilePath fileName, ProcessSettings settings)
         {
-            IEnumerable<string> redirectedOutput;
-            return StartProcess(context, fileName, settings, out redirectedOutput);
+            return StartProcess(context, fileName, settings, out var redirectedOutput);
         }
 
         /// <summary>
@@ -253,9 +252,12 @@ namespace Cake.Common
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            // Get the working directory.
-            var workingDirectory = settings.WorkingDirectory ?? context.Environment.WorkingDirectory;
-            settings.WorkingDirectory = workingDirectory.MakeAbsolute(context.Environment);
+            if (!settings.NoWorkingDirectory)
+            {
+                // Set the working directory.
+                var workingDirectory = settings.WorkingDirectory ?? context.Environment.WorkingDirectory;
+                settings.WorkingDirectory = workingDirectory.MakeAbsolute(context.Environment);
+            }
 
             // Start the process.
             var process = context.ProcessRunner.Start(fileName, settings);
