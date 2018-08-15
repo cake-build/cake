@@ -256,7 +256,7 @@ Task("Create-NuGet-Packages")
     foreach(var project in projects)
     {
         var name = project.GetDirectory().FullPath;
-        if(project.FullPath.EndsWith("Cake.csproj") || name.EndsWith("Tests") || name.EndsWith("Xunit"))
+        if(name.EndsWith("Cake") || name.EndsWith("Tests") || name.EndsWith("Xunit"))
         {
             continue;
         }
@@ -324,6 +324,12 @@ Task("Create-NuGet-Packages")
                                 .Select(file=>file.FullPath.Substring(netCoreFullArtifactPathLength))
                                 .Select(file=> new NuSpecContent { Source = file, Target = file })
                                 .ToArray()
+    });
+
+    DotNetCorePack("./src/Cake/Cake.Tool.csproj", new DotNetCorePackSettings {
+        Configuration = parameters.Configuration,
+        OutputDirectory = parameters.Paths.Directories.NugetRoot,
+        MSBuildSettings = msBuildSettings
     });
 });
 

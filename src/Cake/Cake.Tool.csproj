@@ -1,8 +1,8 @@
 <Project>
   <PropertyGroup>
     <PackAsTool>true</PackAsTool>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <ToolCommandName>Cake</ToolCommandName>
+    <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
+    <ToolCommandName>dotnet-cake</ToolCommandName>
   </PropertyGroup>
 
   <Import Project="Cake.csproj" />
