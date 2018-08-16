@@ -47,6 +47,7 @@ namespace Cake.Commands
                 _console.WriteLine("    --showdescription    Shows description about tasks.");
                 _console.WriteLine("    --dryrun             Performs a dry run.");
                 _console.WriteLine("    --exclusive          Execute a single task without any dependencies.");
+                _console.WriteLine("    --bootstrap          Download/install modules defined by #module directives");
                 _console.WriteLine("    --version            Displays version information.");
                 _console.WriteLine("    --help               Displays usage information.");
                 _console.WriteLine();
