@@ -83,14 +83,6 @@ namespace Cake
         public bool HasError { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to use the Mono compiler or not.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if the mono compiler should be used; otherwise, <c>false</c>.
-        /// </value>
-        public bool Mono { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether to bootstrap Cake modules.
         /// </summary>
         public bool Bootstrap { get; set; }

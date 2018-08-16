@@ -166,11 +166,6 @@ namespace Cake.Arguments
                 options.PerformDebug = ParseBooleanValue(value);
             }
 
-            if (name.Equals("mono", StringComparison.OrdinalIgnoreCase))
-            {
-                options.Mono = ParseBooleanValue(value);
-            }
-
             if (name.Equals("bootstrap", StringComparison.OrdinalIgnoreCase))
             {
                 options.Bootstrap = ParseBooleanValue(value);
