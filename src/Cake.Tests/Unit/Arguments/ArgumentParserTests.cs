@@ -242,6 +242,26 @@ namespace Cake.Tests.Unit.Arguments
                 }
 
                 [Theory]
+                [InlineData("-showtree", true)]
+                [InlineData("-showtree=true", true)]
+                [InlineData("-showtree=false", false)]
+                [InlineData("-tree", true)]
+                [InlineData("-tree=true", true)]
+                [InlineData("-tree=false", false)]
+                public void Can_Parse_ShowTree(string input, bool expected)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.cake", input });
+
+                    // Then
+                    Assert.Equal(expected, result.ShowTree);
+                }
+
+                [Theory]
                 [InlineData("-dryrun", true)]
                 [InlineData("-dryrun=true", true)]
                 [InlineData("-dryrun=false", false)]
@@ -451,6 +471,23 @@ namespace Cake.Tests.Unit.Arguments
 
                     // Then
                     Assert.Equal(expected, result.ShowDescription);
+                }
+
+                [Theory]
+                [InlineData("--showtree", true)]
+                [InlineData("--showtree=true", true)]
+                [InlineData("--showtree=false", false)]
+                public void Can_Parse_ShowTree(string input, bool expected)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.cake", input });
+
+                    // Then
+                    Assert.Equal(expected, result.ShowTree);
                 }
 
                 [Theory]

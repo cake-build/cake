@@ -9,7 +9,7 @@ namespace Cake.Core.Graph
 {
     internal static class CakeGraphBuilder
     {
-        public static CakeGraph Build(List<CakeTask> tasks)
+        public static CakeGraph Build(IReadOnlyCollection<ICakeTaskInfo> tasks)
         {
             var graph = new CakeGraph();
             foreach (var task in tasks)

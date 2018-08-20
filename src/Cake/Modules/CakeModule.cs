@@ -46,6 +46,7 @@ namespace Cake.Modules
             // Scripting
             registrar.RegisterType<BuildScriptHost>().Singleton();
             registrar.RegisterType<DescriptionScriptHost>().Singleton();
+            registrar.RegisterType<TaskTreeScriptHost>().Singleton();
             registrar.RegisterType<DryRunScriptHost>().Singleton();
 
             // Register commands.
@@ -53,6 +54,7 @@ namespace Cake.Modules
             registrar.RegisterType<BuildCommand>().AsSelf().Transient();
             registrar.RegisterType<DebugCommand>().AsSelf().Transient();
             registrar.RegisterType<DescriptionCommand>().AsSelf().Transient();
+            registrar.RegisterType<TaskTreeCommand>().AsSelf().Transient();
             registrar.RegisterType<DryRunCommand>().AsSelf().Transient();
             registrar.RegisterType<HelpCommand>().AsSelf().Transient();
             registrar.RegisterType<VersionCommand>().AsSelf().Transient();

@@ -43,6 +43,14 @@ namespace Cake
         public bool ShowDescription { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to show the task dependency tree
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> to show task tree; otherwise, <c>false</c>.
+        /// </value>
+        public bool ShowTree { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to perform a dry run.
         /// </summary>
         /// <value>
@@ -101,6 +109,7 @@ namespace Cake
 
             Verbosity = Verbosity.Normal;
             ShowDescription = false;
+            ShowTree = false;
             ShowHelp = false;
         }
     }

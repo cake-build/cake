@@ -74,6 +74,10 @@ namespace Cake
                 {
                     return _commandFactory.CreateDescriptionCommand();
                 }
+                if (options.ShowTree)
+                {
+                    return _commandFactory.CreateTaskTreeCommand();
+                }
                 if (options.PerformDebug)
                 {
                     return _commandFactory.CreateDebugCommand();
