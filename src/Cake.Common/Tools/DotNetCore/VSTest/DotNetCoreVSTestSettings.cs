@@ -79,6 +79,11 @@ namespace Cake.Common.Tools.DotNetCore.VSTest
         public FilePath DiagnosticFile { get; set; }
 
         /// <summary>
+        /// Gets or sets the path to put the test results in.
+        /// </summary>
+        public DirectoryPath ResultsDirectory { get; set; }
+
+        /// <summary>
         /// Gets or sets a list of extra arguments that should be passed to adapter.
         /// </summary>
         public IDictionary<string, string> Arguments { get; set; }
