@@ -1,3 +1,20 @@
+### New in 0.30.0 (Released 2018/08/22)
+
+* 2067 Publish as .NET Core Global Tool.
+* 2238 Add repository metadata to NuGet packages.
+* 2234 Remove mono argument from Argument Parser.
+* 2211 DotNetCorePublishSettings doesn't contain --no-build flag support introduced in .NET Core SDK 2.1.
+* 2146 Enabling initializer syntax for all collection properties.
+* 1401 Support for dotCover configuration file.
+* 2233 Add bootstrap argument to Help Command.
+* 2232 Add exclusive argument to Help Command.
+* 2220 Incorrect documentation for InnoSetup Alias.
+* 2228 CakeTaskExtensions are no longer accessible.
+* 2224 Add option for ProcessSettings to opt out of working directory magic.
+* 2214 Cake.CoreCLR can't handle whitespace in path.
+* 2208 WithCriteria does not work with 'DryRun' (WhatIf flag).
+* 2207 NuGet hang due to bug in NuGet 4.6.0.
+
 ### New in 0.29.0 (Released 2018/07/06)
 
 * 2140 DotNetCorePublish does not respect SelfContained DotNetCorePublishSettings property.
