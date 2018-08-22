@@ -75,6 +75,9 @@ namespace Cake.Common.Tools.DotCover.Analyse
 
             builder.Append("Analyse");
 
+            // Set configuration file if exists.
+            GetConfigurationFileArgument(settings).CopyTo(builder);
+
             // Get Target executable arguments
             GetTargetArguments(context, action).CopyTo(builder);
 

@@ -17,5 +17,12 @@ namespace Cake.Common.Tools.DotCover
         /// This represents the <c>/LogFile</c> option.
         /// </summary>
         public FilePath LogFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value that enables DotCover configuration file.
+        /// A configuration file is a reasonable alternative
+        /// to specifying all parameters in-line or having them in a batch file.
+        /// </summary>
+        public FilePath ConfigFile { get; set; }
     }
 }

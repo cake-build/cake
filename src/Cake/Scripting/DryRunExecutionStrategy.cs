@@ -22,10 +22,12 @@ namespace Cake.Scripting
 
         public void PerformSetup(Action<ISetupContext> action, ISetupContext context)
         {
+            action(context);
         }
 
         public void PerformTeardown(Action<ITeardownContext> action, ITeardownContext teardownContext)
         {
+            action(teardownContext);
         }
 
         public Task ExecuteAsync(CakeTask task, ICakeContext context)
@@ -35,6 +37,7 @@ namespace Cake.Scripting
                 _log.Information("{0}. {1}", _counter, task.Name);
                 _counter++;
             }
+
             return Task.CompletedTask;
         }
 

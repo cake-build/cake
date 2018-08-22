@@ -31,6 +31,12 @@ namespace Cake.Core.Tooling
         public DirectoryPath WorkingDirectory { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether or not to opt out of using
+        /// an explicit working directory for the process.
+        /// </summary>
+        public bool NoWorkingDirectory { get; set; }
+
+        /// <summary>
         /// Gets or sets the argument customization.
         /// Argument customization is a way that lets you add, replace or reuse arguments passed to a tool.
         /// This allows you to support new tool arguments, customize arguments or address potential argument issues.
@@ -66,6 +72,6 @@ namespace Cake.Core.Tooling
         ///     }});
         /// </code>
         /// </example>
-        public IDictionary<string, string> EnvironmentVariables { get; set; }
+        public IDictionary<string, string> EnvironmentVariables { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
     }
 }

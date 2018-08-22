@@ -31,11 +31,14 @@ Param(
     [string[]]$ScriptArgs
 )
 
-$CakeVersion = "0.28.1"
+$CakeVersion = "0.29.0"
 $DotNetChannel = "Current";
-$DotNetVersion = "2.1.101";
+$DotNetVersion = "2.1.400";
 $DotNetInstallerUri = "https://dot.net/v1/dotnet-install.ps1";
 $NugetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
+
+# SSL FIX
+[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
 
 # Temporarily skip verification of addins.
 $ENV:CAKE_SETTINGS_SKIPVERIFICATION='true'

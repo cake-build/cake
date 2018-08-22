@@ -275,6 +275,22 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                              "/TargetArguments=\"\\\"/Working/Test.dll\\\" -noshadow\" " +
                              "/Output=\"/Working/result.dcvr\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Append_ConfigurationFile()
+            {
+                // Given
+                var fixture = new DotCoverCovererFixture();
+                fixture.Settings.WithConfigFile(new FilePath("./config.xml"));
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("Cover \"/Working/config.xml\" /TargetExecutable=\"/Working/tools/Test.exe\" " +
+                             "/TargetArguments=\"-argument\" " +
+                             "/Output=\"/Working/result.dcvr\"", result.Args);
+            }
         }
     }
 }

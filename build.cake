@@ -180,7 +180,7 @@ Task("Copy-Files")
     .Does(() =>
 {
     // .NET 4.6
-    DotNetCorePublish("./src/Cake", new DotNetCorePublishSettings
+    DotNetCorePublish("./src/Cake/Cake.csproj", new DotNetCorePublishSettings
     {
         Framework = "net461",
         NoRestore = true,
@@ -191,7 +191,7 @@ Task("Copy-Files")
     });
 
     // .NET Core
-    DotNetCorePublish("./src/Cake", new DotNetCorePublishSettings
+    DotNetCorePublish("./src/Cake/Cake.csproj", new DotNetCorePublishSettings
     {
         Framework = "netcoreapp2.0",
         NoRestore = true,
@@ -324,6 +324,12 @@ Task("Create-NuGet-Packages")
                                 .Select(file=>file.FullPath.Substring(netCoreFullArtifactPathLength))
                                 .Select(file=> new NuSpecContent { Source = file, Target = file })
                                 .ToArray()
+    });
+
+    DotNetCorePack("./src/Cake/Cake.Tool.csproj", new DotNetCorePackSettings {
+        Configuration = parameters.Configuration,
+        OutputDirectory = parameters.Paths.Directories.NugetRoot,
+        MSBuildSettings = msBuildSettings
     });
 });
 

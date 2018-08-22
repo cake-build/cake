@@ -69,6 +69,9 @@ namespace Cake.Common.Tools.DotCover.Report
 
             builder.Append("Report");
 
+            // Set configuration file if exists.
+            GetConfigurationFileArgument(settings).CopyTo(builder);
+
             // Set the Source file.
             sourceFile = sourceFile.MakeAbsolute(_environment);
             builder.AppendSwitch("/Source", "=", sourceFile.FullPath.Quote());

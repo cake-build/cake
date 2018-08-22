@@ -28,12 +28,6 @@ namespace Cake.Modules
                 throw new ArgumentNullException(nameof(registrar));
             }
 
-            if (_options.Mono)
-            {
-                _log.Warning("The Mono script engine has been removed so the expected behavior might differ. " +
-                    "See Release Notes for Cake 0.22.0 for more information.");
-            }
-
             registrar.RegisterType<RoslynScriptEngine>().As<IScriptEngine>().Singleton();
         }
     }

@@ -26,6 +26,7 @@ namespace Cake.Core
         /// </summary>
         /// <param name="name">The name of the task.</param>
         /// <param name="required">Whether or not the dependency is required.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="name"/> is null.</exception>
         public CakeTaskDependency(string name, bool required)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));

@@ -24,6 +24,12 @@ namespace Cake.Core.IO
         public DirectoryPath WorkingDirectory { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether or not to opt out of using
+        /// an explicit working directory for the process.
+        /// </summary>
+        public bool NoWorkingDirectory { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the error output of an application is written to the standard error stream.
         /// </summary>
         /// <value>true if error output should be redirected; false if error output should be written to the standard error stream. The default is false.</value>
