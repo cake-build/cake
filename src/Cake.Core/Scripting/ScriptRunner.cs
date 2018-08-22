@@ -139,7 +139,7 @@ namespace Cake.Core.Scripting
                     var format = $"{error.File.MakeAbsolute(_environment).FullPath}:{error.Line}: {{0}}";
                     _log.Error(format, error.Message);
                 }
-                throw new CakeException("Errors occured while analyzing script.");
+                throw new CakeException("Errors occurred while analyzing script.");
             }
 
             // Install tools.
