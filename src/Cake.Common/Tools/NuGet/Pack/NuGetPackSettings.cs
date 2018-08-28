@@ -66,6 +66,12 @@ namespace Cake.Common.Tools.NuGet.Pack
         public string Version { get; set; }
 
         /// <summary>
+        /// Gets or sets the Nuspec version suffix.
+        /// </summary>
+        /// <value>The Nuspec version suffix.</value>
+        public string Suffix { get; set; }
+
+        /// <summary>
         /// Gets or sets the package title.
         /// </summary>
         /// <value>The package title.</value>
