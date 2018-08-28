@@ -7,7 +7,8 @@ using Cake.Core.IO;
 
 namespace Cake.Common.Tools.OctopusDeploy
 {
-    internal abstract class OctopusDeployArgumentBuilder<T> where T : OctopusDeploySettings
+    internal abstract class OctopusDeployArgumentBuilder<T>
+        where T : OctopusDeployCommonToolSettings
     {
         private readonly string _serverUrl;
         private readonly string _apiKey;

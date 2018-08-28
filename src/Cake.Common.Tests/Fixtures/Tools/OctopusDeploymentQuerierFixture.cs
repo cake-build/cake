@@ -2,21 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using Cake.Common.Tools.OctopusDeploy;
-using Cake.Core.IO;
 using Cake.Testing.Fixtures;
 
 namespace Cake.Common.Tests.Fixtures.Tools
 {
-    internal sealed class OctopusDeploymentQueryierFixture : ToolFixture<OctopusDeploymentQuerySettings>
+    internal sealed class OctopusDeploymentQuerierFixture : ToolFixture<OctopusDeploymentQuerySettings>
     {
         internal string Server { get; set; }
 
         internal string ApiKey { get; set; }
 
-        public OctopusDeploymentQueryierFixture()
-            : base("Octo.exe")
+        public OctopusDeploymentQuerierFixture()
+            : base("octo.exe")
         {
             Server = "http://octopus";
             ApiKey = "API-12345";
