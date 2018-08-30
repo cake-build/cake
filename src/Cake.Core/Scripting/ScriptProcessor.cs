@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
@@ -22,6 +23,7 @@ namespace Cake.Core.Scripting
         private readonly ICakeLog _log;
         private readonly IToolLocator _tools;
         private readonly List<IPackageInstaller> _installers;
+        private readonly bool _skipPackageVersionCheck;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptProcessor"/> class.
@@ -31,12 +33,14 @@ namespace Cake.Core.Scripting
         /// <param name="log">The log.</param>
         /// <param name="tools">The tool locator.</param>
         /// <param name="installers">The available package installers.</param>
+        /// <param name="configuration">The configuration.</param>
         public ScriptProcessor(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             ICakeLog log,
             IToolLocator tools,
-            IEnumerable<IPackageInstaller> installers)
+            IEnumerable<IPackageInstaller> installers,
+            ICakeConfiguration configuration)
         {
             if (fileSystem == null)
             {
@@ -59,6 +63,8 @@ namespace Cake.Core.Scripting
             _log = log;
             _tools = tools;
             _installers = new List<IPackageInstaller>(installers);
+            var skip = configuration.GetValue(Constants.Settings.SkipPackageVersionCheck);
+            _skipPackageVersionCheck = skip != null && skip.Equals("true", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -89,6 +95,8 @@ namespace Cake.Core.Scripting
                 _log.Verbose("Installing addins...");
                 foreach (var addin in addins)
                 {
+                    CheckPackageVersion(addin, "addin");
+
                     // Get the installer.
                     var installer = GetInstaller(addin, PackageType.Addin);
                     if (installer == null)
@@ -189,6 +197,8 @@ namespace Cake.Core.Scripting
                 _log.Verbose($"Installing {packageTypeName}s...");
                 foreach (var tool in modules)
                 {
+                    CheckPackageVersion(tool, packageTypeName);
+
                     // Get the installer.
                     var installer = GetInstaller(tool, packageType);
                     if (installer == null)
@@ -216,6 +226,28 @@ namespace Cake.Core.Scripting
                         }
                     }
                 }
+            }
+        }
+
+        private void CheckPackageVersion(PackageReference packageReference, string directiveName)
+        {
+            bool existsVersionParameter = packageReference.Parameters.Any(x => x.Key.Equals("version", StringComparison.OrdinalIgnoreCase));
+            if (!existsVersionParameter)
+            {
+                const string message = "The '{0}' directive is attempting to install the '{1}' package \r\n" +
+                                       "without specifying a package version number.  \r\n" +
+                                       "More information on this can be found at https://cakebuild.net/docs/tutorials/pinning-cake-version \r\n" +
+                                       "It's not recommended, but you can explicitly override this warning \r\n" +
+                                       "by configuring the Skip Package Version Check setting to true \r\n" +
+                                       "(i.e. command line parameter \"--settings_skippackageversioncheck=true\", \r\n" +
+                                       "environment variable \"CAKE_SETTINGS_SKIPPACKAGEVERSIONCHECK=true\", \r\n" +
+                                       "read more about configuration at https://cakebuild.net/docs/fundamentals/configuration)";
+
+                _log.Warning(
+                    _skipPackageVersionCheck ? Verbosity.Verbose : Verbosity.Minimal,
+                    message,
+                    directiveName,
+                    packageReference.Package);
             }
         }
     }
