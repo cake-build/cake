@@ -195,6 +195,20 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 }
 
                 [Fact]
+                public void Should_Add_Suffix_To_Arguments_If_Not_Null()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithNuSpecFixture();
+                    fixture.Settings.Suffix = "beta1";
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal("pack -Suffix \"beta1\" \"/Working/existing.temp.nuspec\"", result.Args);
+                }
+
+                [Fact]
                 public void Should_Add_Base_Path_To_Arguments_If_Not_Null()
                 {
                     // Given
