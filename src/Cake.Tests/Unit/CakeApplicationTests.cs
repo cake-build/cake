@@ -105,6 +105,21 @@ namespace Cake.Tests.Unit
             }
 
             [Fact]
+            public void Should_Create_Task_Tree_Command_If_Specified_In_Options()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.Options.ShowTree = true;
+                fixture.Options.Script = "./build.cake";
+
+                // When
+                fixture.RunApplication();
+
+                // Then
+                fixture.CommandFactory.Received(1).CreateTaskTreeCommand();
+            }
+
+            [Fact]
             public void Should_Create_Build_Command_If_Options_Contain_Script()
             {
                 // Given

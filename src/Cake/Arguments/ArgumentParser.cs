@@ -141,6 +141,12 @@ namespace Cake.Arguments
                 options.ShowDescription = ParseBooleanValue(value);
             }
 
+            if (name.Equals("showtree", StringComparison.OrdinalIgnoreCase) ||
+                name.Equals("tree", StringComparison.OrdinalIgnoreCase))
+            {
+                options.ShowTree = ParseBooleanValue(value);
+            }
+
             if (name.Equals("dryrun", StringComparison.OrdinalIgnoreCase) ||
                 name.Equals("noop", StringComparison.OrdinalIgnoreCase) ||
                 name.Equals("whatif", StringComparison.OrdinalIgnoreCase))

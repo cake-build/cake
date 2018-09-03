@@ -10,6 +10,7 @@ namespace Cake.Commands
         private readonly BuildCommand.Factory _buildCommandFactory;
         private readonly DebugCommand.Factory _debugCommandFactory;
         private readonly DescriptionCommand.Factory _descriptionCommandFactory;
+        private readonly TaskTreeCommand.Factory _taskTreeCommandFactory;
         private readonly DryRunCommand.Factory _dryRunCommandFactory;
         private readonly HelpCommand.Factory _helpCommandFactory;
         private readonly VersionCommand.Factory _versionCommandFactory;
@@ -19,6 +20,7 @@ namespace Cake.Commands
             BuildCommand.Factory buildCommandFactory,
             DebugCommand.Factory debugCommandFactory,
             DescriptionCommand.Factory descriptionCommandFactory,
+            TaskTreeCommand.Factory taskTreeCommandFactory,
             DryRunCommand.Factory dryRunCommandFactory,
             HelpCommand.Factory helpCommandFactory,
             VersionCommand.Factory versionCommandFactory)
@@ -27,6 +29,7 @@ namespace Cake.Commands
             _buildCommandFactory = buildCommandFactory;
             _debugCommandFactory = debugCommandFactory;
             _descriptionCommandFactory = descriptionCommandFactory;
+            _taskTreeCommandFactory = taskTreeCommandFactory;
             _dryRunCommandFactory = dryRunCommandFactory;
             _helpCommandFactory = helpCommandFactory;
             _versionCommandFactory = versionCommandFactory;
@@ -50,6 +53,11 @@ namespace Cake.Commands
         public ICommand CreateDescriptionCommand()
         {
             return _descriptionCommandFactory();
+        }
+
+        public ICommand CreateTaskTreeCommand()
+        {
+            return _taskTreeCommandFactory();
         }
 
         public ICommand CreateDryRunCommand()
