@@ -110,6 +110,8 @@ Teardown(context =>
 Task("Clean")
     .Does(() =>
 {
+    CleanDirectories("./src/**/bin/" + parameters.Configuration);
+    CleanDirectories("./src/**/obj");
     CleanDirectories(parameters.Paths.Directories.ToClean);
 });
 
@@ -120,10 +122,7 @@ Task("Restore-NuGet-Packages")
     DotNetCoreRestore("./src/Cake.sln", new DotNetCoreRestoreSettings
     {
         Verbosity = DotNetCoreVerbosity.Minimal,
-        Sources = new [] {
-            "https://www.myget.org/F/xunit/api/v3/index.json",
-            "https://api.nuget.org/v3/index.json"
-        },
+        Sources = new [] { "https://api.nuget.org/v3/index.json" },
         MSBuildSettings = msBuildSettings
     });
 });
@@ -238,8 +237,7 @@ Task("Create-Chocolatey-Packages")
             Version = parameters.Version.SemVersion,
             ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
             OutputDirectory = parameters.Paths.Directories.NugetRoot,
-            Files = (GetFiles(netFxFullArtifactPath + "/**/*") + GetFiles("./nuspec/*.txt"))
-                                    .Where(file => file.FullPath.IndexOf("/runtimes/", StringComparison.OrdinalIgnoreCase) < 0)
+            Files = (GetFiles(netFxFullArtifactPath + "/*.*") + GetFiles("./nuspec/*.txt"))
                                     .Select(file=>"../" + file.FullPath.Substring(curDirLength))
                                     .Select(file=> new ChocolateyNuSpecContent { Source = file })
                                     .ToArray()
@@ -292,8 +290,7 @@ Task("Create-NuGet-Packages")
         OutputDirectory = parameters.Paths.Directories.NugetRoot,
         Symbols = false,
         NoPackageAnalysis = true,
-        Files = GetFiles(netFxFullArtifactPath + "/**/*")
-                                .Where(file => file.FullPath.IndexOf("/runtimes/", StringComparison.OrdinalIgnoreCase) < 0)
+        Files = GetFiles(netFxFullArtifactPath + "/*.*")
                                 .Select(file=>file.FullPath.Substring(netFxFullArtifactPathLength))
                                 .Select(file=> new NuSpecContent { Source = file, Target = file })
                                 .ToArray()
