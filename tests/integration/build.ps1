@@ -28,7 +28,7 @@ Function BuildCake([string]$ScriptRoot)
         Set-Location $RootDirectory
         Invoke-Expression "./build.ps1 -Target Copy-Files" | Out-Null
         if($LASTEXITCODE -ne 0) {
-            Throw "An error occured while building Cake."
+            Throw "An error occurred while building Cake."
         }
     }
     finally {

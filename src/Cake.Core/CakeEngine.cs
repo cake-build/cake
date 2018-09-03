@@ -513,7 +513,7 @@ namespace Cake.Core
                     report.Add("Teardown", CakeReportEntryCategory.Teardown, stopWatch.Elapsed);
                 }
 
-                // If, any exceptions occured, process them now.
+                // If, any exceptions occurred, process them now.
                 if (exceptions.Count > 0)
                 {
                     ProcessTeardownExceptions(exceptions, exceptionWasThrown);
@@ -545,14 +545,14 @@ namespace Cake.Core
                 {
                     if (exceptions.Count == 1)
                     {
-                        // Only a single exception occured, so lets throw it.
+                        // Only a single exception occurred, so lets throw it.
                         // Sadly this won't keep our original stack trace.
                         var ex = exceptions.First();
                         _log.Error("Teardown error: {0}", ex.ToString());
                         throw ex;
                     }
 
-                    // Multiple exceptions occured, so let's wrap them in an aggregate and throw that one.
+                    // Multiple exceptions occurred, so let's wrap them in an aggregate and throw that one.
                     throw new AggregateException("Multiple teardown methods threw exceptions.", exceptions);
                 }
             }

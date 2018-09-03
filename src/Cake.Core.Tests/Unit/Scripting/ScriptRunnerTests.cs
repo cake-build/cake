@@ -376,7 +376,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var exception = Record.Exception(() => runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary));
 
                 // Then
-                AssertEx.IsCakeException(exception, "Errors occured while analyzing script.");
+                AssertEx.IsCakeException(exception, "Errors occurred while analyzing script.");
                 Assert.Contains(fixture.Log.Entries, x => x.Level == LogLevel.Error && x.Message == "/Working/script1.cake:2: Error in script 1");
                 Assert.Contains(fixture.Log.Entries, x => x.Level == LogLevel.Error && x.Message == "/Working/script2.cake:7: Error in script 2");
             }

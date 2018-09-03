@@ -128,7 +128,7 @@ namespace Cake.NuGet
             // Install the package.
             if (!InstallPackage(package, path))
             {
-                _log.Warning("An error occured while installing package {0}.", package.Package);
+                _log.Warning("An error occurred while installing package {0}.", package.Package);
                 if (createdDirectory)
                 {
                     _log.Debug("Deleting package directory {0}...", path);
