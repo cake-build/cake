@@ -11,7 +11,7 @@ namespace Cake.Common.Tools.OctopusDeploy
     /// <summary>
     /// Possible arguments to pass to Octo.exe for promoting a release. See <see href="https://octopus.com/docs/api-and-integration/octo.exe-command-line/promoting-releases">Octopus Deploy documentation</see>
     /// </summary>
-    public sealed class OctopusDeployPromoteReleaseSettings : OctopusDeploySettings
+    public sealed class OctopusDeployPromoteReleaseSettings : OctopusDeployCommonToolSettings
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="OctopusDeployPromoteReleaseSettings"/> class.

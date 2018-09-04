@@ -8,9 +8,16 @@ using Cake.Core.Tooling;
 namespace Cake.Common.Tools.OctopusDeploy
 {
     /// <summary>
-    /// Contains the common settings used by all commands in <see cref="OctopusDeployReleaseCreator"/>.
+    /// Base class for tool settings used by all commands in <see cref="OctopusDeployTool{TSettings}"/>.
     /// </summary>
-    public abstract class OctopusDeploySettings : ToolSettings
+    public abstract class OctopusDeployToolSettings : ToolSettings
+    {
+    }
+
+    /// <summary>
+    /// Contains the common settings used by all commands in <see cref="OctopusDeployTool{TSettings}"/>.
+    /// </summary>
+    public abstract class OctopusDeployCommonToolSettings : OctopusDeployToolSettings
     {
         /// <summary>
         /// Gets or sets the username to use when authenticating with the server
