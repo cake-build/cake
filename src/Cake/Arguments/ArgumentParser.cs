@@ -166,6 +166,11 @@ namespace Cake.Arguments
                 options.ShowVersion = ParseBooleanValue(value);
             }
 
+            if (name.Equals("info", StringComparison.OrdinalIgnoreCase))
+            {
+                options.ShowInfo = ParseBooleanValue(value);
+            }
+
             if (name.Equals("debug", StringComparison.OrdinalIgnoreCase) ||
                 name.Equals("d", StringComparison.OrdinalIgnoreCase))
             {

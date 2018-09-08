@@ -90,6 +90,20 @@ namespace Cake.Tests.Unit
             }
 
             [Fact]
+            public void Should_Create_Info_Command_If_Specified_In_Options()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.Options.ShowInfo = true;
+
+                // When
+                fixture.RunApplication();
+
+                // Then
+                fixture.CommandFactory.Received(1).CreateInfoCommand();
+            }
+
+            [Fact]
             public void Should_Create_Description_Command_If_Specified_In_Options()
             {
                 // Given
@@ -163,6 +177,22 @@ namespace Cake.Tests.Unit
                 // Then
                 fixture.CommandFactory.Received(0).CreateBuildCommand();
                 fixture.CommandFactory.Received(1).CreateVersionCommand();
+            }
+
+            [Fact]
+            public void Should_Create_Info_Command_Even_If_Script_Is_Specified()
+            {
+                // Given
+                var fixture = new CakeApplicationFixture();
+                fixture.Options.Script = "./build.cake";
+                fixture.Options.ShowInfo = true;
+
+                // When
+                fixture.RunApplication();
+
+                // Then
+                fixture.CommandFactory.Received(0).CreateBuildCommand();
+                fixture.CommandFactory.Received(1).CreateInfoCommand();
             }
 
             [Fact]

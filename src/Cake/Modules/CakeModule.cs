@@ -58,6 +58,7 @@ namespace Cake.Modules
             registrar.RegisterType<DryRunCommand>().AsSelf().Transient();
             registrar.RegisterType<HelpCommand>().AsSelf().Transient();
             registrar.RegisterType<VersionCommand>().AsSelf().Transient();
+            registrar.RegisterType<InfoCommand>().AsSelf().Transient();
         }
     }
 }
