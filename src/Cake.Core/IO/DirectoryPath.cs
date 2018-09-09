@@ -47,8 +47,8 @@ namespace Cake.Core.IO
             {
                 throw new ArgumentNullException(nameof(path));
             }
-            var combinedPath = System.IO.Path.Combine(FullPath, path.GetFilename().FullPath);
-            return new FilePath(combinedPath);
+
+            return new FilePath(PathHelper.Combine(FullPath, path.GetFilename().FullPath));
         }
 
         /// <summary>
@@ -67,8 +67,8 @@ namespace Cake.Core.IO
             {
                 throw new InvalidOperationException("Cannot combine a directory path with an absolute file path.");
             }
-            var combinedPath = System.IO.Path.Combine(FullPath, path.FullPath);
-            return new FilePath(combinedPath);
+
+            return new FilePath(PathHelper.Combine(FullPath, path.FullPath));
         }
 
         /// <summary>
@@ -87,8 +87,8 @@ namespace Cake.Core.IO
             {
                 throw new InvalidOperationException("Cannot combine a directory path with an absolute directory path.");
             }
-            var combinedPath = System.IO.Path.Combine(FullPath, path.FullPath);
-            return new DirectoryPath(combinedPath);
+
+            return new DirectoryPath(PathHelper.Combine(FullPath, path.FullPath));
         }
 
         /// <summary>

@@ -17,7 +17,7 @@ namespace Cake.Core.IO
         /// <value>
         /// <c>true</c> if this file path has a file extension; otherwise, <c>false</c>.
         /// </value>
-        public bool HasExtension => System.IO.Path.HasExtension(FullPath);
+        public bool HasExtension => PathHelper.HasExtension(this);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FilePath"/> class.
@@ -34,7 +34,7 @@ namespace Cake.Core.IO
         /// <returns>The directory part of the path.</returns>
         public DirectoryPath GetDirectory()
         {
-            var directory = System.IO.Path.GetDirectoryName(FullPath);
+            var directory = PathHelper.GetDirectoryName(FullPath);
             if (string.IsNullOrWhiteSpace(directory))
             {
                 directory = "./";
@@ -48,7 +48,7 @@ namespace Cake.Core.IO
         /// <returns>The filename.</returns>
         public FilePath GetFilename()
         {
-            var filename = System.IO.Path.GetFileName(FullPath);
+            var filename = PathHelper.GetFileName(this) ?? "./";
             return new FilePath(filename);
         }
 
@@ -58,7 +58,12 @@ namespace Cake.Core.IO
         /// <returns>The filename without its extension.</returns>
         public FilePath GetFilenameWithoutExtension()
         {
-            var filename = System.IO.Path.GetFileNameWithoutExtension(FullPath);
+            var filename = PathHelper.GetFileNameWithoutExtension(this);
+            if (filename == null)
+            {
+                return new FilePath("./");
+            }
+
             return new FilePath(filename);
         }
 
@@ -68,8 +73,14 @@ namespace Cake.Core.IO
         /// <returns>The file extension.</returns>
         public string GetExtension()
         {
-            var extension = System.IO.Path.GetExtension(FullPath);
-            return string.IsNullOrWhiteSpace(extension) ? null : extension;
+            var filename = PathHelper.GetFileName(this);
+            var index = filename.LastIndexOf('.');
+            if (index != -1)
+            {
+                return filename.Substring(index, filename.Length - index);
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -79,7 +90,13 @@ namespace Cake.Core.IO
         /// <returns>A new <see cref="FilePath"/> with a new extension.</returns>
         public FilePath ChangeExtension(string extension)
         {
-            return new FilePath(System.IO.Path.ChangeExtension(FullPath, extension));
+            var filename = PathHelper.ChangeExtension(this, extension);
+            if (filename == null)
+            {
+                return new FilePath("./");
+            }
+
+            return new FilePath(filename);
         }
 
         /// <summary>

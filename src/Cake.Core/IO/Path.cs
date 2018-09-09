@@ -79,7 +79,7 @@ namespace Cake.Core.IO
             }
 
             // Relative path?
-            IsRelative = !System.IO.Path.IsPathRooted(FullPath);
+            IsRelative = !PathHelper.IsPathRooted(FullPath);
 
             // Extract path segments.
             Segments = FullPath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
