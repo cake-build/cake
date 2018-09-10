@@ -104,10 +104,11 @@ namespace Cake.Core.Tooling
             var pattern = string.Concat(GetToolsDirectory().FullPath, "/**/", tool);
             var toolPaths = _globber.GetFiles(pattern).ToList();
 
-            if (toolPaths.Count() > 1) {
+            if (toolPaths.Count() > 1)
+            {
                 throw new CakeException($"Found multiple versions of {tool}");
             }
-            
+
             return toolPaths.SingleOrDefault()?.MakeAbsolute(_environment);
         }
 
