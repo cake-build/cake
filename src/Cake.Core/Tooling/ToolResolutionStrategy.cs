@@ -105,7 +105,7 @@ namespace Cake.Core.Tooling
             var toolPaths = _globber.GetFiles(pattern).ToList();
 
             if (toolPaths.Count() > 1) {
-                throw new CakeException("Multiple tools of the same name is detected");
+                throw new CakeException($"Found multiple versions of {tool}");
             }
             
             return toolPaths.SingleOrDefault()?.MakeAbsolute(_environment);

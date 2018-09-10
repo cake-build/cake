@@ -149,7 +149,7 @@ namespace Cake.Core.Tests.Unit.Tooling
                 var result = Record.Exception(() => fixture.Resolve("tool.exe"));
 
                 // Then
-                AssertEx.IsCakeException(result, "Multiple tools of the same name is detected");
+                AssertEx.IsCakeException(result, "Found multiple versions of tool.exe");
             }
 
             [Fact]
