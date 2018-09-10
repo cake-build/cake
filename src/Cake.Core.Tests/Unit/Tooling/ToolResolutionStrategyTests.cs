@@ -138,6 +138,21 @@ namespace Cake.Core.Tests.Unit.Tooling
             }
 
             [Fact]
+            public void Should_Throw_If_Multiple_Tools_With_Same_Name_Is_Detected()
+            {
+                // Given
+                var fixture = new ToolResolutionStrategyFixture();
+                fixture.FileSystem.CreateFile("/Working/tools/Tool.1.0.0/tool.exe");
+                fixture.FileSystem.CreateFile("/Working/tools/Tool.2.0.0/tool.exe");
+
+                // When
+                var result = Record.Exception(() => fixture.Resolve("tool.exe"));
+
+                // Then
+                AssertEx.IsCakeException(result, "Multiple tools of the same name is detected");
+            }
+
+            [Fact]
             public void Should_Resolve_Tool_From_Tools_Directory_Specified_In_Configuration_If_Not_Present_In_Repository()
             {
                 // Given

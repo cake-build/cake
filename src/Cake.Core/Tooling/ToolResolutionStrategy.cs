@@ -102,8 +102,13 @@ namespace Cake.Core.Tooling
         private FilePath LookInToolsDirectory(string tool)
         {
             var pattern = string.Concat(GetToolsDirectory().FullPath, "/**/", tool);
-            var toolPath = _globber.GetFiles(pattern).FirstOrDefault();
-            return toolPath?.MakeAbsolute(_environment);
+            var toolPaths = _globber.GetFiles(pattern).ToList();
+
+            if (toolPaths.Count() > 1) {
+                throw new CakeException("Multiple tools of the same name is detected");
+            }
+            
+            return toolPaths.SingleOrDefault()?.MakeAbsolute(_environment);
         }
 
         private FilePath LookInPath(string tool)
