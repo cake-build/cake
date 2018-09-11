@@ -56,5 +56,11 @@ namespace Cake.Commands
         /// </summary>
         /// <returns>The version command.</returns>
         ICommand CreateVersionCommand();
+
+        /// <summary>
+        /// Create the info command.
+        /// </summary>
+        /// <returns>The info command.</returns>
+        ICommand CreateInfoCommand();
     }
 }

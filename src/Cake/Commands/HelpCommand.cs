@@ -50,6 +50,7 @@ namespace Cake.Commands
                 _console.WriteLine("    --exclusive          Execute a single task without any dependencies.");
                 _console.WriteLine("    --bootstrap          Download/install modules defined by #module directives");
                 _console.WriteLine("    --version            Displays version information.");
+                _console.WriteLine("    --info               Displays additional information about Cake execution.");
                 _console.WriteLine("    --help               Displays usage information.");
                 _console.WriteLine();
             }

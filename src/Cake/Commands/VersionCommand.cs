@@ -25,39 +25,7 @@ namespace Cake.Commands
 
         public bool Execute(CakeOptions options)
         {
-            _console.WriteLine();
-            _console.WriteLine(@"             +##   #;;'");
-            _console.WriteLine(@"             #;;#  .+;;;;+,");
-            _console.WriteLine(@"             '+;;#;,+';;;;;'#.");
-            _console.WriteLine(@"             ++'''';;;;;;;;;;# ;#;");
-            _console.WriteLine(@"            ##';;;;++'+#;;;;;'.   `#:");
-            _console.WriteLine(@"         ;#   '+'';;;;;;;;;'#`       #.");
-            _console.WriteLine(@"      `#,        .'++;;;;;':..........#");
-            _console.WriteLine(@"    '+      `.........';;;;':.........#");
-            _console.WriteLine(@"   #..................+;;;;;':........#");
-            _console.WriteLine(@"   #..................#';;;;;'+''''''.#");
-            _console.WriteLine(@"   #.......,:;''''''''##';;;;;'+'''''#,");
-            _console.WriteLine(@"   #''''''''''''''''''###';;;;;;+''''#");
-            _console.WriteLine(@"   #''''''''''''''''''####';;;;;;#'''#");
-            _console.WriteLine(@"   #''''''''''''''''''#####';;;;;;#''#");
-            _console.WriteLine(@"   #''''''''''''''''''######';;;;;;#'#");
-            _console.WriteLine(@"   #''''''''''''''''''#######';;;;;;##");
-            _console.WriteLine(@"   #''''''''''''''''''########';;;;;;#");
-            _console.WriteLine(@"   #''''''''''''++####+;#######';;;;;;#");
-            _console.WriteLine(@"   #+####':,`             ,#####';;;;;;'");
-            _console.WriteLine(@"                              +##'''''+.");
-            _console.WriteLine(@"   ___      _          ___       _ _     _ ");
-            _console.WriteLine(@"  / __\__ _| | _____  / __\_   _(_) | __| |");
-            _console.WriteLine(@" / /  / _` | |/ / _ \/__\// | | | | |/ _` |");
-            _console.WriteLine(@"/ /___ (_| |   <  __/ \/  \ |_| | | | (_| |");
-            _console.WriteLine(@"\____/\__,_|_|\_\___\_____/\__,_|_|_|\__,_|");
-            _console.WriteLine();
-            _console.WriteLine(@"                             Version {0}", GetVersion());
-#if NETCORE
-            _console.WriteLine(@"                       Running on .NET Core", GetVersion());
-#endif
-            _console.WriteLine();
-
+            _console.WriteLine(@"{0}", GetVersion());
             return true;
         }
 

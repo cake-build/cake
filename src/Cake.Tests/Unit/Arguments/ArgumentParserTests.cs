@@ -323,6 +323,23 @@ namespace Cake.Tests.Unit.Arguments
                 }
 
                 [Theory]
+                [InlineData("-info", true)]
+                [InlineData("-info=true", true)]
+                [InlineData("-info=false", false)]
+                public void Can_Parse_Info(string input, bool expected)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.cake", input });
+
+                    // Then
+                    Assert.Equal(expected, result.ShowInfo);
+                }
+
+                [Theory]
                 [InlineData("-debug", true)]
                 [InlineData("-debug=true", true)]
                 [InlineData("-debug=false", false)]
@@ -548,6 +565,23 @@ namespace Cake.Tests.Unit.Arguments
 
                     // Then
                     Assert.Equal(expected, result.ShowVersion);
+                }
+
+                [Theory]
+                [InlineData("--info", true)]
+                [InlineData("--info=true", true)]
+                [InlineData("--info=false", false)]
+                public void Can_Parse_Info(string input, bool expected)
+                {
+                    // Given
+                    var fixture = new ArgumentParserFixture();
+                    var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
+
+                    // When
+                    var result = parser.Parse(new[] { "build.cake", input });
+
+                    // Then
+                    Assert.Equal(expected, result.ShowInfo);
                 }
 
                 [Theory]
