@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Globalization;
-using System.Linq;
 
 namespace Cake.Core.IO
 {
@@ -14,8 +12,6 @@ namespace Cake.Core.IO
     /// </summary>
     public abstract class Path
     {
-        private static readonly char[] _invalidPathCharacters;
-
         /// <summary>
         /// Gets the full path.
         /// </summary>
@@ -51,16 +47,6 @@ namespace Cake.Core.IO
                 throw new ArgumentException("Path cannot be empty.", nameof(path));
             }
 
-            // Validate the path.
-            foreach (var character in path)
-            {
-                if (_invalidPathCharacters.Contains(character))
-                {
-                    const string format = "Illegal characters in path ({0}).";
-                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, format, character), nameof(path));
-                }
-            }
-
             FullPath = path.Replace('\\', '/').Trim();
             FullPath = FullPath == "./" ? string.Empty : FullPath;
 
@@ -71,7 +57,10 @@ namespace Cake.Core.IO
             }
 
             // Remove trailing slashes.
-            FullPath = FullPath.TrimEnd('/');
+            if (FullPath.Length > 1)
+            {
+                FullPath = FullPath.TrimEnd('/');
+            }
 
             if (FullPath.EndsWith(":", StringComparison.OrdinalIgnoreCase))
             {
@@ -87,11 +76,6 @@ namespace Cake.Core.IO
             {
                 Segments[0] = "/" + Segments[0];
             }
-        }
-
-        static Path()
-        {
-            _invalidPathCharacters = System.IO.Path.GetInvalidPathChars().Concat(new[] { '*', '?' }).ToArray();
         }
 
         /// <summary>

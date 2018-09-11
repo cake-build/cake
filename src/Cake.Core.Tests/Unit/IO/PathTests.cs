@@ -89,30 +89,6 @@ namespace Cake.Core.Tests.Unit.IO
                 Assert.Equal("my awesome shaders/basic", path.FullPath);
             }
 
-            [Fact]
-            public void Should_Throw_If_Path_Contains_Illegal_Characters()
-            {
-                // Given
-                var result = Record.Exception(() => new TestingPath("hello/**/world.txt"));
-
-                // Then
-                Assert.IsType<ArgumentException>(result);
-                Assert.Equal("path", ((ArgumentException)result)?.ParamName);
-                Assert.Equal($"Illegal characters in path (*).", result.Message?.SplitLines()[0]);
-            }
-
-            [WindowsFact]
-            public void Should_Throw_If_Path_Contains_Illegal_Characters_Non_GlobberSymbol()
-            {
-                // Given
-                var result = Record.Exception(() => new TestingPath("hello/A|B/world.txt"));
-
-                // Then
-                Assert.IsType<ArgumentException>(result);
-                Assert.Equal("path", ((ArgumentException)result)?.ParamName);
-                Assert.Equal($"Illegal characters in path (|).", result.Message?.SplitLines()[0]);
-            }
-
             [Theory]
             [InlineData("/Hello/World/", "/Hello/World")]
             [InlineData("\\Hello\\World\\", "/Hello/World")]
@@ -127,6 +103,16 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(expected, path.FullPath);
+            }
+
+            [Fact]
+            public void Should_Not_Remove_Trailing_Slash_For_Root()
+            {
+                // Given, When
+                var path = new TestingPath("/");
+
+                // Then
+                Assert.Equal("/", path.FullPath);
             }
         }
 

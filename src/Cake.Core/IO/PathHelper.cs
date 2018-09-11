@@ -87,6 +87,13 @@ namespace Cake.Core.IO
             {
                 throw new ArgumentNullException(nameof(path));
             }
+            if (path.Segments.Length == 1)
+            {
+                if (path.Segments[0].Length >= 1 && path.Segments[0][0] == '/')
+                {
+                    return "/";
+                }
+            }
             if (path.Segments.Length <= 1)
             {
                 return string.Empty;

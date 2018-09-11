@@ -63,7 +63,7 @@ namespace Cake.Core.Tests.Unit.IO
             }
 
             [Fact]
-            public void Can_Get_Directory_For_File_Path_In_Root()
+            public void Can_Get_Directory_For_Relative_File_Path_In_Root()
             {
                 // Given, When
                 var path = new FilePath("hello.txt");
@@ -71,6 +71,28 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(string.Empty, directory.FullPath);
+            }
+
+            [Fact]
+            public void Can_Get_Directory_For_Absolute_File_Path_In_Root()
+            {
+                // Given, When
+                var path = new FilePath("/hello.txt");
+                var directory = path.GetDirectory();
+
+                // Then
+                Assert.Equal("/", directory.FullPath);
+            }
+
+            [WindowsFact]
+            public void Can_Get_Directory_For_Absolute_File_Path_In_Windows_Root()
+            {
+                // Given, When
+                var path = new FilePath("C:/hello.txt");
+                var directory = path.GetDirectory();
+
+                // Then
+                Assert.Equal("C:/", directory.FullPath);
             }
         }
 
@@ -138,6 +160,7 @@ namespace Cake.Core.Tests.Unit.IO
             [InlineData("./test.txt", "test.txt")]
             [InlineData("./test.foo.txt", "test.foo.txt")]
             [InlineData("./", "")]
+            [InlineData("/", "")]
             public void Can_Get_Filename_From_Path(string input, string expected)
             {
                 // Given
