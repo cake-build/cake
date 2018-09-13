@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using Cake.Common.IO;
 using Cake.Common.Tools.DotNetCore.Build;
+using Cake.Common.Tools.DotNetCore.BuildServer;
 using Cake.Common.Tools.DotNetCore.Clean;
 using Cake.Common.Tools.DotNetCore.Execute;
 using Cake.Common.Tools.DotNetCore.MSBuild;
@@ -1135,6 +1136,51 @@ namespace Cake.Common.Tools.DotNetCore
             var runner = new DotNetCoreToolRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
 
             runner.Execute(projectPath, command, arguments, settings);
+        }
+
+        /// <summary>
+        /// Shuts down build servers that are started from dotnet.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <example>
+        /// <code>
+        ///     DotNetCoreBuildServerShutdown();
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Build Server")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.BuildServer")]
+        public static void DotNetCoreBuildServerShutdown(this ICakeContext context)
+        {
+            context.DotNetCoreBuildServerShutdown(null);
+        }
+
+        /// <summary>
+        /// Shuts down build servers that are started from dotnet.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        ///     DotNetCoreBuildServerShutdown(
+        ///         new DotNetCoreBuildServerSettings {
+        ///             MSBuild = true
+        ///         });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Build Server")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.BuildServer")]
+        public static void DotNetCoreBuildServerShutdown(this ICakeContext context, DotNetCoreBuildServerSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var buildServer = new DotNetCoreBuildServer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+
+            buildServer.Shutdown(settings ?? new DotNetCoreBuildServerSettings());
         }
     }
 }
