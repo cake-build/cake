@@ -32,7 +32,7 @@ namespace Cake.Commands
         private static string GetVersion()
         {
             var assembly = typeof(CakeApplication).GetTypeInfo().Assembly;
-            return FileVersionInfo.GetVersionInfo(assembly.Location).ProductVersion;
+            return FileVersionInfo.GetVersionInfo(assembly.Location).Comments;
         }
     }
 }
