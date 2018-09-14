@@ -54,7 +54,7 @@ namespace Cake.Common.Tools.Chocolatey
             var chocolateyInstallationFolder = _environment.GetEnvironmentVariable("ChocolateyInstall");
             if (!string.IsNullOrWhiteSpace(chocolateyInstallationFolder))
             {
-                var envFile = _fileSystem.GetFile(System.IO.Path.Combine(chocolateyInstallationFolder, "choco.exe"));
+                var envFile = _fileSystem.GetFile(PathHelper.Combine(chocolateyInstallationFolder, "choco.exe"));
                 if (envFile.Exists)
                 {
                     _cachedPath = envFile;

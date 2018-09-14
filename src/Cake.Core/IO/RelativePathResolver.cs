@@ -53,7 +53,7 @@ namespace Cake.Core.IO
             var fromSegments = Enumerable.Repeat("..", from.Segments.Length - numberOfSharedSegments);
             var toSegments = to.Segments.Skip(numberOfSharedSegments);
 
-            var relativePath = System.IO.Path.Combine(fromSegments.Concat(toSegments).ToArray());
+            var relativePath = PathHelper.Combine(fromSegments.Concat(toSegments).ToArray());
 
             return new DirectoryPath(relativePath);
         }

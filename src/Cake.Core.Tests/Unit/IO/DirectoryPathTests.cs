@@ -123,7 +123,7 @@ namespace Cake.Core.Tests.Unit.IO
             }
         }
 
-        public sealed class TheCombineWithDirectoryPathMethod
+        public sealed class TheCombineMethod
         {
             [Theory]
             [InlineData("c:/assets/shaders/", "simple", "c:/assets/shaders/simple")]

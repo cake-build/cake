@@ -17,7 +17,9 @@ namespace Cake.Core.Tests.Unit.IO
             [Theory]
             [InlineData("assets/shaders/basic.txt", true)]
             [InlineData("assets/shaders/basic", false)]
+            [InlineData("assets/shad.ers/basic", false)]
             [InlineData("assets/shaders/basic/", false)]
+            [InlineData("assets/shad.ers/basic/", false)]
             public void Can_See_If_A_Path_Has_An_Extension(string fullPath, bool expected)
             {
                 // Given, When
@@ -33,6 +35,7 @@ namespace Cake.Core.Tests.Unit.IO
             [Theory]
             [InlineData("assets/shaders/basic.frag", ".frag")]
             [InlineData("assets/shaders/basic.frag/test.vert", ".vert")]
+            [InlineData("assets/shaders/basic.frag/test.foo.vert", ".vert")]
             [InlineData("assets/shaders/basic", null)]
             [InlineData("assets/shaders/basic.frag/test", null)]
             public void Can_Get_Extension(string fullPath, string expected)
@@ -60,7 +63,7 @@ namespace Cake.Core.Tests.Unit.IO
             }
 
             [Fact]
-            public void Can_Get_Directory_For_File_Path_In_Root()
+            public void Can_Get_Directory_For_Relative_File_Path_In_Root()
             {
                 // Given, When
                 var path = new FilePath("hello.txt");
@@ -69,21 +72,49 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.Equal(string.Empty, directory.FullPath);
             }
+
+            [Fact]
+            public void Can_Get_Directory_For_Absolute_File_Path_In_Root()
+            {
+                // Given, When
+                var path = new FilePath("/hello.txt");
+                var directory = path.GetDirectory();
+
+                // Then
+                Assert.Equal("/", directory.FullPath);
+            }
+
+            [WindowsFact]
+            public void Can_Get_Directory_For_Absolute_File_Path_In_Windows_Root()
+            {
+                // Given, When
+                var path = new FilePath("C:/hello.txt");
+                var directory = path.GetDirectory();
+
+                // Then
+                Assert.Equal("C:/", directory.FullPath);
+            }
         }
 
         public sealed class TheChangeExtensionMethod
         {
-            [Fact]
-            public void Can_Change_Extension_Of_Path()
+            [Theory]
+            [InlineData("temp/hello.txt", ".dat", "temp/hello.dat")]
+            [InlineData("temp/hello", ".dat", "temp/hello.dat")]
+            [InlineData("./", ".dat", "")]
+            [InlineData("temp/hello.txt", null, "temp/hello.txt")]
+            [InlineData("temp/hello.txt", "", "temp/hello.")]
+            [InlineData("temp/hello.txt", ".", "temp/hello.")]
+            public void Can_Change_Extension_Of_Path(string input, string extension, string expected)
             {
                 // Given
-                var path = new FilePath("temp/hello.txt");
+                var path = new FilePath(input);
 
                 // When
-                path = path.ChangeExtension(".dat");
+                path = path.ChangeExtension(extension);
 
                 // Then
-                Assert.Equal("temp/hello.dat", path.ToString());
+                Assert.Equal(expected, path.ToString());
             }
         }
 
@@ -120,17 +151,26 @@ namespace Cake.Core.Tests.Unit.IO
 
         public sealed class TheGetFilenameMethod
         {
-            [Fact]
-            public void Can_Get_Filename_From_Path()
+            [Theory]
+            [InlineData("/input/test.txt", "test.txt")]
+            [InlineData("/input/test.foo.txt", "test.foo.txt")]
+            [InlineData("/input/test", "test")]
+            [InlineData("/test.txt", "test.txt")]
+            [InlineData("/test.foo.txt", "test.foo.txt")]
+            [InlineData("./test.txt", "test.txt")]
+            [InlineData("./test.foo.txt", "test.foo.txt")]
+            [InlineData("./", "")]
+            [InlineData("/", "")]
+            public void Can_Get_Filename_From_Path(string input, string expected)
             {
                 // Given
-                var path = new FilePath("/input/test.txt");
+                var path = new FilePath(input);
 
                 // When
                 var result = path.GetFilename();
 
                 // Then
-                Assert.Equal("test.txt", result.FullPath);
+                Assert.Equal(expected, result.FullPath);
             }
         }
 
@@ -138,7 +178,13 @@ namespace Cake.Core.Tests.Unit.IO
         {
             [Theory]
             [InlineData("/input/test.txt", "test")]
+            [InlineData("/input/test.foo.txt", "test.foo")]
             [InlineData("/input/test", "test")]
+            [InlineData("/test.txt", "test")]
+            [InlineData("/test.foo.txt", "test.foo")]
+            [InlineData("./test.txt", "test")]
+            [InlineData("./test.foo.txt", "test.foo")]
+            [InlineData("./", "")]
             public void Should_Return_Filename_Without_Extension_From_Path(string fullPath, string expected)
             {
                 // Given
