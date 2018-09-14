@@ -1057,7 +1057,62 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
-        /// /// Execute an .NET Core Extensibility Tool.
+        /// Execute an .NET Core Extensibility Tool.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="command">The command to execute.</param>
+        /// <example>
+        /// <code>
+        ///     DotNetCoreTool("cake");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Tool")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Tool")]
+        public static void DotNetCoreTool(this ICakeContext context, string command)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var arguments = new ProcessArgumentBuilder();
+            var settings = new DotNetCoreToolSettings();
+
+            context.DotNetCoreTool(null, command, arguments, settings);
+        }
+
+        /// <summary>
+        /// Execute an .NET Core Extensibility Tool.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="command">The command to execute.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        ///     DotNetCoreTool("cake"
+        ///             new DotNetCoreToolSettings {
+        ///                 DiagnosticOutput = true
+        ///             });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Tool")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Tool")]
+        public static void DotNetCoreTool(this ICakeContext context, string command, DotNetCoreToolSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var arguments = new ProcessArgumentBuilder();
+
+            context.DotNetCoreTool(null, command, arguments, settings);
+        }
+
+        /// <summary>
+        /// Execute an .NET Core Extensibility Tool.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="projectPath">The project path.</param>
