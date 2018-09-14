@@ -6,23 +6,24 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
+using Cake.Core.IO.Globbing.Nodes.Segments;
 
 namespace Cake.Core.IO.Globbing.Nodes
 {
     [DebuggerDisplay("{GetPath(),nq}")]
-    internal sealed class PathSegment : MatchableNode
+    internal sealed class PathNode : MatchableNode
     {
-        private readonly List<GlobToken> _tokens;
+        private readonly List<PathSegment> _tokens;
         private readonly Regex _regex;
 
-        public IReadOnlyList<GlobToken> Tokens => _tokens;
+        public IReadOnlyList<PathSegment> Tokens => _tokens;
 
         public bool IsIdentifier { get; }
 
-        public PathSegment(List<GlobToken> tokens, RegexOptions options)
+        public PathNode(List<PathSegment> tokens, RegexOptions options)
         {
             _tokens = tokens;
-            IsIdentifier = _tokens.Count == 1 && _tokens[0].Kind == GlobTokenKind.Identifier;
+            IsIdentifier = _tokens.Count == 1 && _tokens[0] is TextSegment;
             _regex = CreateRegex(tokens, options);
         }
 
@@ -47,23 +48,12 @@ namespace Cake.Core.IO.Globbing.Nodes
             globber.VisitSegment(this, context);
         }
 
-        private static Regex CreateRegex(List<GlobToken> tokens, RegexOptions options)
+        private static Regex CreateRegex(List<PathSegment> tokens, RegexOptions options)
         {
             var builder = new StringBuilder();
             foreach (var token in tokens)
             {
-                if (token.Kind == GlobTokenKind.Identifier)
-                {
-                    builder.Append(token.Value.Replace("+", "\\+").Replace(".", "\\."));
-                }
-                if (token.Kind == GlobTokenKind.Wildcard)
-                {
-                    builder.Append(".*");
-                }
-                if (token.Kind == GlobTokenKind.CharacterWildcard)
-                {
-                    builder.Append(".{1}");
-                }
+                builder.Append(token.Regex);
             }
             return new Regex(string.Concat("^", builder.ToString(), "$"), options);
         }

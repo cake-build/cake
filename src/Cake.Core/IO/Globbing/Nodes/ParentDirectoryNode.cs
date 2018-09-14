@@ -6,13 +6,13 @@ using System.Diagnostics;
 
 namespace Cake.Core.IO.Globbing.Nodes
 {
-    [DebuggerDisplay("./")]
-    internal sealed class RelativeRoot : GlobNode
+    [DebuggerDisplay("..")]
+    internal sealed class ParentDirectoryNode : GlobNode
     {
         [DebuggerStepThrough]
-        public override void Accept(GlobVisitor globber, GlobVisitorContext context)
+        public override void Accept(GlobVisitor visitor, GlobVisitorContext context)
         {
-            globber.VisitRelativeRoot(this, context);
+            visitor.VisitParent(this, context);
         }
     }
 }

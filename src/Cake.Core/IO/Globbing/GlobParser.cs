@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core.IO.Globbing.Nodes;
+using Cake.Core.IO.Globbing.Nodes.Segments;
 
 namespace Cake.Core.IO.Globbing
 {
@@ -25,7 +26,8 @@ namespace Cake.Core.IO.Globbing
 
         public GlobNode Parse(string pattern, bool caseSensitive)
         {
-            return Parse(new GlobParserContext(pattern, caseSensitive));
+            var buffer = GlobTokenizer.Tokenize(pattern);
+            return Parse(new GlobParserContext(buffer, caseSensitive));
         }
 
         private GlobNode Parse(GlobParserContext context)
@@ -34,16 +36,16 @@ namespace Cake.Core.IO.Globbing
 
             // Parse the root.
             var items = new List<GlobNode> { ParseRoot(context) };
-            if (items.Count == 1 && items[0] is RelativeRoot)
+            if (items.Count == 1 && items[0] is RelativeRootNode)
             {
-                items.Add(ParseSegment(context));
+                items.Add(ParseNode(context));
             }
 
             // Parse all path segments.
             while (context.CurrentToken?.Kind == GlobTokenKind.PathSeparator)
             {
                 context.Accept();
-                items.Add(ParseSegment(context));
+                items.Add(ParseNode(context));
             }
 
             // Rewrite the items into a linked list.
@@ -59,7 +61,7 @@ namespace Cake.Core.IO.Globbing
                 // Starts with a separator?
                 if (context.CurrentToken.Kind == GlobTokenKind.PathSeparator)
                 {
-                    return new UnixRoot();
+                    return new UnixRootNode();
                 }
             }
             else
@@ -75,99 +77,122 @@ namespace Cake.Core.IO.Globbing
                     // Get the drive from the working directory.
                     var workingDirectory = _environment.WorkingDirectory;
                     var root = workingDirectory.FullPath.Split(':').First();
-                    return new WindowsRoot(root);
+                    return new WindowsRootNode(root);
                 }
 
                 // Is this a drive?
-                if (context.CurrentToken.Kind == GlobTokenKind.Identifier &&
+                if (context.CurrentToken.Kind == GlobTokenKind.Text &&
                     context.CurrentToken.Value.Length == 1 &&
                     context.Peek().Kind == GlobTokenKind.WindowsRoot)
                 {
-                    var identifier = ParseIdentifier(context);
+                    var identifier = ParseText(context);
                     context.Accept(GlobTokenKind.WindowsRoot);
-                    return new WindowsRoot(identifier.Value);
+                    return new WindowsRootNode(identifier.Value);
                 }
             }
 
             // Starts with an identifier?
-            if (context.CurrentToken.Kind == GlobTokenKind.Identifier)
+            if (context.CurrentToken.Kind == GlobTokenKind.Text)
             {
                 // Is the identifier indicating a current directory?
                 if (context.CurrentToken.Value == ".")
                 {
-                    context.Accept();
+                    context.Accept(GlobTokenKind.Text);
                     if (context.CurrentToken.Kind != GlobTokenKind.PathSeparator)
                     {
                         throw new InvalidOperationException();
                     }
-                    context.Accept();
+                    context.Accept(GlobTokenKind.PathSeparator);
                 }
             }
 
-            return new RelativeRoot();
+            return new RelativeRootNode();
         }
 
-        private static GlobNode ParseSegment(GlobParserContext context)
+        private static GlobNode ParseNode(GlobParserContext context)
         {
-            if (context.CurrentToken?.Kind == GlobTokenKind.DirectoryWildcard)
+            if (context.CurrentToken?.Kind == GlobTokenKind.Wildcard)
             {
-                context.Accept();
-                return new RecursiveWildcardSegment();
+                var next = context.Peek();
+                if (next != null && next.Kind == GlobTokenKind.Wildcard)
+                {
+                    context.Accept(GlobTokenKind.Wildcard);
+                    context.Accept(GlobTokenKind.Wildcard);
+                    return new RecursiveWildcardNode();
+                }
             }
-            if (context.CurrentToken?.Kind == GlobTokenKind.Parent)
+            else if (context.CurrentToken?.Kind == GlobTokenKind.Parent)
             {
-                context.Accept();
-                return new ParentSegment();
+                context.Accept(GlobTokenKind.Parent);
+                return new ParentDirectoryNode();
             }
-            if (context.CurrentToken?.Kind == GlobTokenKind.Current)
+            else if (context.CurrentToken?.Kind == GlobTokenKind.Current)
             {
-                context.Accept();
-                return new CurrentSegment();
+                context.Accept(GlobTokenKind.Current);
+                return new CurrentDirectoryNode();
             }
 
-            var items = new List<GlobToken>();
+            var items = new List<PathSegment>();
             while (true)
             {
                 switch (context.CurrentToken?.Kind)
                 {
-                    case GlobTokenKind.Identifier:
+                    case GlobTokenKind.Text:
                     case GlobTokenKind.CharacterWildcard:
                     case GlobTokenKind.Wildcard:
-                        items.Add(ParseSubSegment(context));
+                    case GlobTokenKind.BracketWildcard:
+                    case GlobTokenKind.BraceExpansion:
+                        items.Add(ParsePathSegment(context));
                         continue;
                 }
                 break;
             }
 
-            return new PathSegment(items, context.Options);
+            return new PathNode(items, context.Options);
         }
 
-        private static GlobToken ParseSubSegment(GlobParserContext context)
+        private static PathSegment ParsePathSegment(GlobParserContext context)
         {
             switch (context.CurrentToken.Kind)
             {
-                case GlobTokenKind.Identifier:
-                    return ParseIdentifier(context);
+                case GlobTokenKind.Text:
+                    return ParseText(context);
                 case GlobTokenKind.CharacterWildcard:
                 case GlobTokenKind.Wildcard:
                     return ParseWildcard(context);
+                case GlobTokenKind.BracketWildcard:
+                    return ParseBracketWildcard(context);
+                case GlobTokenKind.BraceExpansion:
+                    return ParseBraceExpansion(context);
             }
 
             throw new NotSupportedException("Unable to parse sub segment.");
         }
 
-        private static GlobToken ParseIdentifier(GlobParserContext context)
+        private static PathSegment ParseText(GlobParserContext context)
         {
-            var token = context.CurrentToken;
-            context.Accept(GlobTokenKind.Identifier);
-            return token;
+            var token = context.Accept(GlobTokenKind.Text);
+            return new TextSegment(token.Value);
         }
 
-        private static GlobToken ParseWildcard(GlobParserContext context)
+        private static PathSegment ParseWildcard(GlobParserContext context)
         {
-            var token = context.CurrentToken;
-            context.Accept(GlobTokenKind.Wildcard, GlobTokenKind.CharacterWildcard);
-            return token;
+            var token = context.Accept(GlobTokenKind.Wildcard, GlobTokenKind.CharacterWildcard);
+            return token.Kind == GlobTokenKind.Wildcard
+                ? (PathSegment)new WildcardSegment()
+                : new CharacterWildcardSegment();
+        }
+
+        private static PathSegment ParseBracketWildcard(GlobParserContext context)
+        {
+            var token = context.Accept(GlobTokenKind.BracketWildcard);
+            return new BracketWildcardSegment(token.Value);
+        }
+
+        private static BraceExpansionSegment ParseBraceExpansion(GlobParserContext context)
+        {
+            var token = context.Accept(GlobTokenKind.BraceExpansion);
+            return new BraceExpansionSegment(token.Value);
         }
     }
 }

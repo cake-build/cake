@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using Cake.Core.IO.Globbing.Nodes;
+using Cake.Core.IO.Globbing.Nodes.Segments;
 
 namespace Cake.Core.IO.Globbing
 {
@@ -34,12 +35,12 @@ namespace Cake.Core.IO.Globbing
         {
             foreach (var node in nodes)
             {
-                var segmentNode = node as PathSegment;
+                var segmentNode = node as PathNode;
                 if (segmentNode?.Tokens.Count == 1)
                 {
-                    if (segmentNode.Tokens[0].Kind == GlobTokenKind.Wildcard)
+                    if (segmentNode.Tokens[0] is WildcardSegment)
                     {
-                        yield return new WildcardSegment();
+                        yield return new WildcardNode();
                         continue;
                     }
                 }

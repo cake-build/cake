@@ -1,9 +1,10 @@
-public void EnsureDirectoryExist(DirectoryPath path)
+public DirectoryPath EnsureDirectoryExist(DirectoryPath path)
 {
     if(!System.IO.Directory.Exists(path.FullPath))
     {
         System.IO.Directory.CreateDirectory(path.FullPath);
     }
+    return path;
 }
 
 public void EnsureDirectoriesExist(IEnumerable<DirectoryPath> paths)
@@ -14,15 +15,17 @@ public void EnsureDirectoriesExist(IEnumerable<DirectoryPath> paths)
     }
 }
 
-public void EnsureFileExist(FilePath path, string message = "Hello World!")
+public FilePath EnsureFileExist(FilePath path, string message = "Hello World!")
 {
     if(!System.IO.File.Exists(path.FullPath))
     {
+        EnsureDirectoryExist(path.GetDirectory());
         using (var writer = System.IO.File.CreateText(path.FullPath))
         {
             writer.WriteLine(message);
         }
     }
+    return path;
 }
 
 public void EnsureFilesExist(IEnumerable<FilePath> paths)

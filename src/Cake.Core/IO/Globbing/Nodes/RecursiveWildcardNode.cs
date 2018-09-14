@@ -6,13 +6,13 @@ using System.Diagnostics;
 
 namespace Cake.Core.IO.Globbing.Nodes
 {
-    [DebuggerDisplay("*")]
-    internal sealed class WildcardSegment : MatchableNode
+    [DebuggerDisplay("**")]
+    internal sealed class RecursiveWildcardNode : MatchableNode
     {
         [DebuggerStepThrough]
-        public override void Accept(GlobVisitor visitor, GlobVisitorContext context)
+        public override void Accept(GlobVisitor globber, GlobVisitorContext context)
         {
-            visitor.VisitWildcardSegmentNode(this, context);
+            globber.VisitRecursiveWildcardSegment(this, context);
         }
 
         public override bool IsMatch(string value)
