@@ -10,6 +10,7 @@
     <RepositoryUrl>https://github.com/cake-build/cake</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Cake;Script;Build</PackageTags>
+    <PackageProjectUrl>https://cakebuild.net</PackageProjectUrl>
   </PropertyGroup>
   <!-- Misc -->
   <PropertyGroup>
