@@ -147,7 +147,8 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest.Fail")
     Assert.Equal(exception.Message, ".NET Core CLI: Process returned an error (exit code 1).");
 });
 
-Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases")
+
+Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreRestore")
     .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreBuild")
     .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest")
@@ -155,4 +156,12 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases")
     .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCorePack")
     .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCorePublish")
     .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreExecute")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest.Fail");
+    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest.Fail")
+    .Does(() =>
+{
+    // When
+    DotNetCoreBuildServerShutdown();
+});;
+
+Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases")
+    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreBuildServerShutdown");
