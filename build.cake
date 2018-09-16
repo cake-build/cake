@@ -381,6 +381,7 @@ Task("Create-NuGet-Packages")
     DotNetCorePack("./src/Cake/Cake.Tool.csproj", new DotNetCorePackSettings {
         Configuration = parameters.Configuration,
         OutputDirectory = parameters.Paths.Directories.NugetRoot,
+        IncludeSymbols = true,
         MSBuildSettings = msBuildSettings
     });
 });
