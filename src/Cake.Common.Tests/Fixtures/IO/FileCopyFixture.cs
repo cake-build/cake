@@ -38,7 +38,7 @@ namespace Cake.Common.Tests.Fixtures.IO
 
             // Setup the globber to return all files for wild card.
             Globber = Substitute.For<IGlobber>();
-            Globber.Match("*").Returns(c => TargetFilePaths);
+            Globber.Match("*", Arg.Any<GlobberSettings>()).Returns(c => TargetFilePaths);
 
             // Setup the file system to return correct directories when asked for.
             FileSystem = Substitute.For<IFileSystem>();

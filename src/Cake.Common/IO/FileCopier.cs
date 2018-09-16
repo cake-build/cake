@@ -70,13 +70,14 @@ namespace Cake.Common.IO
             {
                 throw new ArgumentNullException("pattern");
             }
-            var files = context.GetFiles(pattern);
 
+            var files = context.GetFiles(pattern);
             if (files.Count == 0)
             {
                 context.Log.Verbose("The provided pattern did not match any files.");
                 return;
             }
+
             CopyFiles(context, files, targetDirectoryPath, preserverFolderStructure);
         }
 
@@ -108,10 +109,10 @@ namespace Cake.Common.IO
             if (preserverFolderStructure)
             {
                 var commonPath = string.Empty;
-                List<string> separatedPath = filePaths
-                .First(str => str.ToString().Length == filePaths.Max(st2 => st2.ToString().Length)).ToString()
-                .Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries)
-                .ToList();
+                var separatedPath = filePaths
+                    .First(str => str.ToString().Length == filePaths.Max(st2 => st2.ToString().Length)).ToString()
+                    .Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries)
+                    .ToList();
 
                 foreach (string pathSegment in separatedPath)
                 {
