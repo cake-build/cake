@@ -34,7 +34,7 @@ namespace Cake.Core.IO
         /// <returns>The directory part of the path.</returns>
         public DirectoryPath GetDirectory()
         {
-            var directory = PathHelper.GetDirectoryName(FullPath);
+            var directory = PathHelper.GetDirectoryName(this);
             if (string.IsNullOrWhiteSpace(directory))
             {
                 directory = "./";

@@ -129,7 +129,7 @@ namespace Cake.Core.IO.Globbing
             }
             else
             {
-                if (node.Tokens.Count > 1)
+                if (node.Segments.Count > 1)
                 {
                     var path = context.FileSystem.GetDirectory(context.Path);
                     if (path.Exists)
@@ -155,6 +155,13 @@ namespace Cake.Core.IO.Globbing
         public void VisitUnixRoot(UnixRootNode node, GlobVisitorContext context)
         {
             context.Push(string.Empty);
+            node.Next.Accept(this, context);
+            context.Pop();
+        }
+
+        public void VisitUncRoot(UncRootNode node, GlobVisitorContext context)
+        {
+            context.Push($@"\\{node.Server}");
             node.Next.Accept(this, context);
             context.Pop();
         }

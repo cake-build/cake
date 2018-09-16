@@ -27,6 +27,10 @@ namespace Cake.Core.IO
             {
                 throw new InvalidOperationException("Source path must be an absolute path.");
             }
+            if (from.Segments.Length == 0 && to.Segments.Length == 0)
+            {
+                return new DirectoryPath(".");
+            }
             if (from.Segments[0] != to.Segments[0])
             {
                 throw new InvalidOperationException("Paths must share a common prefix.");
@@ -54,6 +58,11 @@ namespace Cake.Core.IO
             var toSegments = to.Segments.Skip(numberOfSharedSegments);
 
             var relativePath = PathHelper.Combine(fromSegments.Concat(toSegments).ToArray());
+
+            if (string.IsNullOrWhiteSpace(relativePath))
+            {
+                relativePath = ".";
+            }
 
             return new DirectoryPath(relativePath);
         }

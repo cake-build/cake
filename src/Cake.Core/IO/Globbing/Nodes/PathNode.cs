@@ -13,18 +13,17 @@ namespace Cake.Core.IO.Globbing.Nodes
     [DebuggerDisplay("{GetPath(),nq}")]
     internal sealed class PathNode : MatchableNode
     {
-        private readonly List<PathSegment> _tokens;
         private readonly Regex _regex;
 
-        public IReadOnlyList<PathSegment> Tokens => _tokens;
-
+        public IReadOnlyList<PathSegment> Segments { get; }
         public bool IsIdentifier { get; }
 
         public PathNode(List<PathSegment> tokens, RegexOptions options)
         {
-            _tokens = tokens;
-            IsIdentifier = _tokens.Count == 1 && _tokens[0] is TextSegment;
             _regex = CreateRegex(tokens, options);
+
+            Segments = tokens;
+            IsIdentifier = Segments.Count == 1 && Segments[0] is TextSegment;
         }
 
         public override bool IsMatch(string value)
@@ -35,7 +34,7 @@ namespace Cake.Core.IO.Globbing.Nodes
         public string GetPath()
         {
             var builder = new StringBuilder();
-            foreach (var token in _tokens)
+            foreach (var token in Segments)
             {
                 builder.Append(token.Value);
             }
