@@ -52,6 +52,13 @@ Setup(context =>
                             .WithProperty("FileVersion", parameters.Version.Version)
                             .WithProperty("PackageReleaseNotes", string.Concat("\"", releaseNotes, "\""));
 
+    foreach(var assemblyInfo in GetFiles("./src/**/AssemblyInfo.cs"))
+    {
+        CreateAssemblyInfo(
+            assemblyInfo.ChangeExtension(".Generated.cs"),
+            new AssemblyInfoSettings { Description = parameters.Version.SemVersion });
+    }
+
     if(!parameters.IsRunningOnWindows)
     {
         var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
@@ -208,8 +215,56 @@ Task("Copy-Files")
     CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/netcoreapp2.0/Cake.xml", parameters.Paths.Directories.ArtifactsBinNetCore);
 });
 
-Task("Zip-Files")
+Task("Validate-Version")
     .IsDependentOn("Copy-Files")
+    .Does(() =>
+{
+    var fullFxExe = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinFullFx.CombineWithFilePath("Cake.exe"));
+    var coreFxExe = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinNetCore.CombineWithFilePath("Cake.dll"));
+
+    IEnumerable<string> fullFxOutput;
+    var fullFxResult = StartProcess(
+         fullFxExe,
+         new ProcessSettings {
+             Arguments = "--version",
+             RedirectStandardOutput = true
+         },
+         out fullFxOutput
+     );
+    var fullFxVersion = string.Concat(fullFxOutput);
+
+    IEnumerable<string> coreFxOutput;
+    var coreFxResult = StartProcess(
+         "dotnet",
+         new ProcessSettings {
+             Arguments = $"\"{coreFxExe}\" --version",
+             RedirectStandardOutput = true
+         },
+         out coreFxOutput
+     );
+    var coreFxVersion = string.Concat(coreFxOutput);
+
+    Information("{0}, ExitCode: {1}, Version: {2}",
+        fullFxExe,
+        fullFxResult,
+        string.Concat(fullFxVersion)
+        );
+
+    Information("{0}, ExitCode: {1}, Version: {2}",
+        coreFxExe,
+        coreFxResult,
+        string.Concat(coreFxVersion)
+        );
+
+    if (parameters.Version.SemVersion != fullFxVersion || parameters.Version.SemVersion != coreFxVersion)
+    {
+        throw new Exception(
+            $"Invalid version, expected \"{parameters.Version.SemVersion}\", got .NET \"{fullFxVersion}\" and .NET Core \"{coreFxVersion}\"");
+    }
+});
+
+Task("Zip-Files")
+    .IsDependentOn("Validate-Version")
     .Does(() =>
 {
     // .NET 4.6
@@ -222,7 +277,7 @@ Task("Zip-Files")
 });
 
 Task("Create-Chocolatey-Packages")
-    .IsDependentOn("Copy-Files")
+    .IsDependentOn("Validate-Version")
     .IsDependentOn("Package")
     .WithCriteria(() => parameters.IsRunningOnWindows)
     .Does(() =>
@@ -246,7 +301,7 @@ Task("Create-Chocolatey-Packages")
 });
 
 Task("Create-NuGet-Packages")
-    .IsDependentOn("Copy-Files")
+    .IsDependentOn("Validate-Version")
     .Does(() =>
 {
     // Build libraries
