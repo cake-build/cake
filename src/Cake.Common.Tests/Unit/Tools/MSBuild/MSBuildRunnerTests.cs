@@ -946,6 +946,20 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.Equal("/v:normal /target:Build /bl:mylog.binlog;ProjectImports=ZipFile \"C:/Working/src/Solution.sln\"", result.Args);
             }
 
+            [Fact]
+            public void Should_Use_Binary_Logging_If_Enabled()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.EnableBinaryLogger("mylog.binlog", MSBuildBinaryLogImports.ZipFile);
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:Build /bl:mylog.binlog;ProjectImports=ZipFile \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
             [Theory]
             [InlineData("Value1,Value2", "/v:normal /p:Property=Value1%2CValue2 /target:Build \"C:/Working/src/Solution.sln\"")]
             [InlineData("Value1;Value2", "/v:normal /p:Property=Value1%3BValue2 /target:Build \"C:/Working/src/Solution.sln\"")]
