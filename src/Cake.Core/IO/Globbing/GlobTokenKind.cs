@@ -8,12 +8,12 @@ namespace Cake.Core.IO.Globbing
     {
         Wildcard,
         CharacterWildcard,
-        DirectoryWildcard,
         PathSeparator,
-        Identifier,
+        Text,
         WindowsRoot,
         Parent,
         Current,
-        EndOfText
+        BracketWildcard,
+        BraceExpansion
     }
 }

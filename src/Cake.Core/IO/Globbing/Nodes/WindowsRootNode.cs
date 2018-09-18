@@ -8,17 +8,13 @@ using System.Diagnostics;
 namespace Cake.Core.IO.Globbing.Nodes
 {
     [DebuggerDisplay("{Drive,nq}:")]
-    internal sealed class WindowsRoot : GlobNode
+    internal sealed class WindowsRootNode : GlobNode
     {
         public string Drive { get; }
 
-        public WindowsRoot(string drive)
+        public WindowsRootNode(string drive)
         {
-            if (drive == null)
-            {
-                throw new ArgumentNullException(nameof(drive));
-            }
-            Drive = drive;
+            Drive = drive ?? throw new ArgumentNullException(nameof(drive));
         }
 
         [DebuggerStepThrough]

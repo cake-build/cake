@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace Cake.Core.IO.Globbing.Nodes
 {
     [DebuggerDisplay("$")]
-    internal sealed class UnixRoot : GlobNode
+    internal sealed class UnixRootNode : GlobNode
     {
         [DebuggerStepThrough]
         public override void Accept(GlobVisitor visitor, GlobVisitorContext context)

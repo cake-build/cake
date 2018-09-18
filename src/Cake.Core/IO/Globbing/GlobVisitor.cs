@@ -27,7 +27,7 @@ namespace Cake.Core.IO.Globbing
             return context.Results;
         }
 
-        public void VisitRecursiveWildcardSegment(RecursiveWildcardSegment node, GlobVisitorContext context)
+        public void VisitRecursiveWildcardSegment(RecursiveWildcardNode node, GlobVisitorContext context)
         {
             var path = context.FileSystem.GetDirectory(context.Path);
             if (context.FileSystem.Exist(path.Path))
@@ -63,7 +63,7 @@ namespace Cake.Core.IO.Globbing
             }
         }
 
-        public void VisitRelativeRoot(RelativeRoot node, GlobVisitorContext context)
+        public void VisitRelativeRoot(RelativeRootNode node, GlobVisitorContext context)
         {
             // Push each path to the context.
             var pushedSegmentCount = 0;
@@ -83,7 +83,7 @@ namespace Cake.Core.IO.Globbing
             }
         }
 
-        public void VisitSegment(PathSegment node, GlobVisitorContext context)
+        public void VisitSegment(PathNode node, GlobVisitorContext context)
         {
             if (node.IsIdentifier)
             {
@@ -153,14 +153,14 @@ namespace Cake.Core.IO.Globbing
             }
         }
 
-        public void VisitUnixRoot(UnixRoot node, GlobVisitorContext context)
+        public void VisitUnixRoot(UnixRootNode node, GlobVisitorContext context)
         {
             context.Push(string.Empty);
             node.Next.Accept(this, context);
             context.Pop();
         }
 
-        public void VisitWildcardSegmentNode(WildcardSegment node, GlobVisitorContext context)
+        public void VisitWildcardSegmentNode(WildcardNode node, GlobVisitorContext context)
         {
             var path = context.FileSystem.GetDirectory(context.Path);
             if (context.FileSystem.Exist(path.Path))
@@ -181,14 +181,14 @@ namespace Cake.Core.IO.Globbing
             }
         }
 
-        public void VisitWindowsRoot(WindowsRoot node, GlobVisitorContext context)
+        public void VisitWindowsRoot(WindowsRootNode node, GlobVisitorContext context)
         {
             context.Push(node.Drive + ":");
             node.Next.Accept(this, context);
             context.Pop();
         }
 
-        public void VisitParent(ParentSegment node, GlobVisitorContext context)
+        public void VisitParent(ParentDirectoryNode node, GlobVisitorContext context)
         {
             // Back up one level.
             var last = context.Pop();
@@ -199,7 +199,7 @@ namespace Cake.Core.IO.Globbing
             context.Push(last);
         }
 
-        public void VisitCurrent(CurrentSegment node, GlobVisitorContext context)
+        public void VisitCurrent(CurrentDirectoryNode node, GlobVisitorContext context)
         {
             node.Next.Accept(this, context);
         }

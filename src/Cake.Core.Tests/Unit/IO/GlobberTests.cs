@@ -5,6 +5,7 @@
 using System;
 using System.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.IO.Globbing;
 using Cake.Core.Tests.Fixtures;
 using Cake.Testing.Xunit;
 using NSubstitute;
@@ -392,7 +393,7 @@ namespace Cake.Core.Tests.Unit.IO
                 var result = fixture.Match("/Working/**/*");
 
                 // Then
-                Assert.Equal(15, result.Length);
+                Assert.Equal(18, result.Length);
                 AssertEx.ContainsDirectoryPath(result, "/Working/Foo");
                 AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar");
                 AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Baz");
@@ -408,6 +409,9 @@ namespace Cake.Core.Tests.Unit.IO
                 AssertEx.ContainsFilePath(result, "/Working/Quz.FooTest.dll");
                 AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.c");
                 AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.h");
+                AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
+                AssertEx.ContainsFilePath(result, "/Working/foobaz.rs");
+                AssertEx.ContainsFilePath(result, "/Working/foobax.rs");
             }
 
             [Fact]
@@ -619,6 +623,96 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.Single(result);
                 AssertEx.ContainsFilePath(result, "/嵌套/目录/文件.延期");
+            }
+
+            [Fact]
+            public void Should_Return_Files_And_Folders_For_Pattern_Containing_Bracket_Wildcard()
+            {
+                // Given
+                var fixture = new GlobberFixture();
+
+                // When
+                var result = fixture.Match("/Working/fooba[rz].rs");
+
+                // Then
+                Assert.Equal(2, result.Length);
+                AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
+                AssertEx.ContainsFilePath(result, "/Working/foobaz.rs");
+            }
+
+            [WindowsFact]
+            public void Should_Return_Files_And_Folders_For_Pattern_Containing_Bracket_Wildcard_On_Windows()
+            {
+                // Given
+                var fixture = new GlobberFixture(windows: true);
+
+                // When
+                var result = fixture.Match("C:/Working/fooba[rz].rs");
+
+                // Then
+                Assert.Equal(2, result.Length);
+                AssertEx.ContainsFilePath(result, "C:/Working/foobar.rs");
+                AssertEx.ContainsFilePath(result, "C:/Working/foobaz.rs");
+            }
+
+            [Fact]
+            public void Should_Return_Files_And_Folders_For_Pattern_Containing_Brace_Expansion()
+            {
+                // Given
+                var fixture = new GlobberFixture();
+
+                // When
+                var result = fixture.Match("/Working/foo{bar,bax}.rs");
+
+                // Then
+                Assert.Equal(2, result.Length);
+                AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
+                AssertEx.ContainsFilePath(result, "/Working/foobax.rs");
+            }
+
+            [WindowsFact]
+            public void Should_Return_Files_And_Folders_For_Pattern_Containing_Brace_Expansion_On_Windows()
+            {
+                // Given
+                var fixture = new GlobberFixture(windows: true);
+
+                // When
+                var result = fixture.Match("C:/Working/foo{bar,bax}.rs");
+
+                // Then
+                Assert.Equal(2, result.Length);
+                AssertEx.ContainsFilePath(result, "C:/Working/foobar.rs");
+                AssertEx.ContainsFilePath(result, "C:/Working/foobax.rs");
+            }
+
+            [Fact]
+            public void Should_Return_Files_And_Folders_For_Pattern_Containing_Negated_Bracket_Wildcard()
+            {
+                // Given
+                var fixture = new GlobberFixture();
+
+                // When
+                var result = fixture.Match("/Working/fooba[!x].rs");
+
+                // Then
+                Assert.Equal(2, result.Length);
+                AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
+                AssertEx.ContainsFilePath(result, "/Working/foobaz.rs");
+            }
+
+            [WindowsFact]
+            public void Should_Return_Files_And_Folders_For_Pattern_Containing_Negated_Bracket_Wildcard_On_Windows()
+            {
+                // Given
+                var fixture = new GlobberFixture(windows: true);
+
+                // When
+                var result = fixture.Match("C:/Working/fooba[!x].rs");
+
+                // Then
+                Assert.Equal(2, result.Length);
+                AssertEx.ContainsFilePath(result, "C:/Working/foobar.rs");
+                AssertEx.ContainsFilePath(result, "C:/Working/foobaz.rs");
             }
         }
     }

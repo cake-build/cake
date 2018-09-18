@@ -6,13 +6,18 @@ using System.Diagnostics;
 
 namespace Cake.Core.IO.Globbing.Nodes
 {
-    [DebuggerDisplay(".")]
-    internal sealed class CurrentSegment : GlobNode
+    [DebuggerDisplay("*")]
+    internal sealed class WildcardNode : MatchableNode
     {
         [DebuggerStepThrough]
         public override void Accept(GlobVisitor visitor, GlobVisitorContext context)
         {
-            visitor.VisitCurrent(this, context);
+            visitor.VisitWildcardSegmentNode(this, context);
+        }
+
+        public override bool IsMatch(string value)
+        {
+            return true;
         }
     }
 }

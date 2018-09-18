@@ -15,9 +15,9 @@ namespace Cake.Core.IO.Globbing
             var current = node;
             while (current != null)
             {
-                if (previous is RecursiveWildcardSegment)
+                if (previous is RecursiveWildcardNode)
                 {
-                    if (current is ParentSegment)
+                    if (current is ParentDirectoryNode)
                     {
                         throw new NotSupportedException("Visiting a parent that is a recursive wildcard is not supported.");
                     }
