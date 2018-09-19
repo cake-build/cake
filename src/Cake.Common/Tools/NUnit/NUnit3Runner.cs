@@ -226,6 +226,11 @@ namespace Cake.Common.Tools.NUnit
                 builder.Append("--trace=" + settings.TraceLevel.Value.GetArgumentValue());
             }
 
+            if (settings.ConfigFile != null)
+            {
+                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "--configfile={0}", settings.ConfigFile.MakeAbsolute(_environment).FullPath));
+            }
+
             if (settings.Params != null && settings.Params.Count > 0)
             {
                 foreach (var param in settings.Params)

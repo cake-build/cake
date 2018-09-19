@@ -247,6 +247,12 @@ namespace Cake.Common.Tools.NUnit
         public int? Agents { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating the path to an alternative app.config file to load.
+        /// </summary>
+        /// <value>The location that NUnit should load an alternative app.config file from.</value>
+        public FilePath ConfigFile { get; set; }
+
+        /// <summary>
         /// Gets or sets the parameters that should be passed to the runner.
         /// </summary>
         /// <value>
