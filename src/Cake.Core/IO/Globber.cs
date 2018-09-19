@@ -49,6 +49,7 @@ namespace Cake.Core.IO
         /// <returns>
         ///   <see cref="Path" /> instances matching the specified pattern.
         /// </returns>
+        [Obsolete("Please use the Match overload that accept globber settings instead.", false)]
         public IEnumerable<Path> Match(string pattern, Func<IDirectory, bool> predicate)
         {
             if (pattern == null)
@@ -60,11 +61,36 @@ namespace Cake.Core.IO
                 return Enumerable.Empty<Path>();
             }
 
+            return Match(pattern, new GlobberSettings
+            {
+                Predicate = predicate
+            });
+        }
+
+        /// <summary>
+        /// Returns <see cref="Path" /> instances matching the specified pattern.
+        /// </summary>
+        /// <param name="pattern">The pattern to match.</param>
+        /// <param name="settings">The globber settings.</param>
+        /// <returns>
+        ///   <see cref="Path" /> instances matching the specified pattern.
+        /// </returns>
+        public IEnumerable<Path> Match(string pattern, GlobberSettings settings)
+        {
+            if (pattern == null)
+            {
+                throw new ArgumentNullException(nameof(pattern));
+            }
+            if (string.IsNullOrWhiteSpace(pattern))
+            {
+                return Enumerable.Empty<Path>();
+            }
+
             // Parse the pattern into an AST.
-            var root = _parser.Parse(pattern, _environment.Platform.IsUnix());
+            var root = _parser.Parse(pattern, settings);
 
             // Visit all nodes in the parsed patterns and filter the result.
-            return _visitor.Walk(root, predicate)
+            return _visitor.Walk(root, settings)
                 .Select(x => x.Path)
                 .Distinct(_comparer);
         }

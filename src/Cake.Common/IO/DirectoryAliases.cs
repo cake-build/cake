@@ -252,7 +252,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Clean")]
         public static void CleanDirectories(this ICakeContext context, string pattern, Func<IFileSystemInfo, bool> predicate)
         {
-            var directories = context.GetDirectories(pattern, predicate);
+            var directories = context.GetDirectories(pattern, new GlobberSettings { Predicate = predicate });
             if (directories.Count == 0)
             {
                 context.Log.Verbose("The provided pattern did not match any directories.");

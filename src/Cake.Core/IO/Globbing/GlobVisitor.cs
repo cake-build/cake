@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core.IO.Globbing.Nodes;
@@ -20,9 +19,9 @@ namespace Cake.Core.IO.Globbing
             _environment = environment;
         }
 
-        public IEnumerable<IFileSystemInfo> Walk(GlobNode node, Func<IDirectory, bool> predicate)
+        public IEnumerable<IFileSystemInfo> Walk(GlobNode node, GlobberSettings settings)
         {
-            var context = new GlobVisitorContext(_fileSystem, _environment, predicate);
+            var context = new GlobVisitorContext(_fileSystem, _environment, settings.Predicate);
             node.Accept(this, context);
             return context.Results;
         }

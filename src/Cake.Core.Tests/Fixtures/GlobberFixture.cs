@@ -104,7 +104,7 @@ namespace Cake.Core.Tests.Fixtures
         public Path[] Match(string pattern, Func<IFileSystemInfo, bool> predicate)
         {
             return new Globber(FileSystem, Environment)
-                .Match(pattern, predicate)
+                .Match(pattern, new GlobberSettings { Predicate = predicate })
                 .ToArray();
         }
     }

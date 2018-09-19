@@ -24,10 +24,11 @@ namespace Cake.Core.IO.Globbing
             _environment = environment;
         }
 
-        public GlobNode Parse(string pattern, bool caseSensitive)
+        public GlobNode Parse(string pattern, GlobberSettings settings)
         {
             var buffer = GlobTokenizer.Tokenize(pattern);
-            return Parse(new GlobParserContext(buffer, caseSensitive));
+            var isCaseSensitive = settings.IsCaseSensitive ?? _environment.Platform.IsUnix();
+            return Parse(new GlobParserContext(buffer, isCaseSensitive));
         }
 
         private GlobNode Parse(GlobParserContext context)
