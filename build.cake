@@ -155,13 +155,20 @@ Task("Run-Unit-Tests")
     var projects = GetFiles("./src/**/*.Tests.csproj");
     foreach(var project in projects)
     {
+        var projectName = project.GetFilenameWithoutExtension().FullPath;
+
+        FilePath
+            testResultsCore = MakeAbsolute(parameters.Paths.Directories.TestResults.CombineWithFilePath($"{projectName}_core_TestResults.xml")),
+            testResultsFull = MakeAbsolute(parameters.Paths.Directories.TestResults.CombineWithFilePath($"{projectName}_full_TestResults.xml"));
+
         // .NET Core
-        DotNetCoreTest(project.ToString(), new DotNetCoreTestSettings
+        DotNetCoreTest(project.FullPath, new DotNetCoreTestSettings
         {
             Framework = "netcoreapp2.0",
             NoBuild = true,
             NoRestore = true,
-            Configuration = parameters.Configuration
+            Configuration = parameters.Configuration,
+            ArgumentCustomization = args=>args.Append($"--logger trx;LogFileName=\"{testResultsCore}\"")
         });
 
         // .NET Framework/Mono
@@ -171,12 +178,13 @@ Task("Run-Unit-Tests")
             framework = "net461";
         }
 
-        DotNetCoreTest(project.ToString(), new DotNetCoreTestSettings
+        DotNetCoreTest(project.FullPath, new DotNetCoreTestSettings
         {
             Framework = framework,
             NoBuild = true,
             NoRestore = true,
-            Configuration = parameters.Configuration
+            Configuration = parameters.Configuration,
+            ArgumentCustomization = args=>args.Append($"--logger trx;LogFileName=\"{testResultsFull}\"")
         });
     }
 });
