@@ -76,9 +76,12 @@ namespace Cake
                     var loader = container.Resolve<ModuleLoader>();
                     loader.LoadModules(container, options);
 
-                    // Resolve and run the application.
-                    var application = container.Resolve<CakeApplication>();
-                    return application.Run(options);
+                    using (new CakeAssemblyResolver(container.Resolve<ICakeLog>()))
+                    {
+                        // Resolve and run the application.
+                        var application = container.Resolve<CakeApplication>();
+                        return application.Run(options);
+                    }
                 }
             }
             catch (Exception ex)

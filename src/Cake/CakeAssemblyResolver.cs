@@ -8,14 +8,14 @@ using System.Linq;
 using System.Reflection;
 using Cake.Core.Diagnostics;
 
-namespace Cake.Scripting.Roslyn
+namespace Cake
 {
-    internal sealed class ScriptAssemblyResolver : IDisposable
+    internal sealed class CakeAssemblyResolver : IDisposable
     {
         private readonly ICakeLog _log;
         private readonly HashSet<string> _resolvedNames = new HashSet<string>();
 
-        public ScriptAssemblyResolver(ICakeLog log)
+        public CakeAssemblyResolver(ICakeLog log)
         {
             _log = log;
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolve;
@@ -29,6 +29,12 @@ namespace Cake.Scripting.Roslyn
         private Assembly AssemblyResolve(object sender, ResolveEventArgs args)
         {
             var name = new AssemblyName(args.Name);
+
+            // Omit resources
+            if (name.Name.EndsWith(".resources"))
+            {
+                return null;
+            }
 
             // Prevent recursion from the Assembly.Load() call inside
             if (_resolvedNames.Add(name.Name))
