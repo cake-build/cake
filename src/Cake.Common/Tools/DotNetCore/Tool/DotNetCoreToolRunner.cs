@@ -41,11 +41,6 @@ namespace Cake.Common.Tools.DotNetCore.Tool
         /// <param name="settings">The settings.</param>
         public void Execute(FilePath projectPath, string command, ProcessArgumentBuilder arguments, DotNetCoreToolSettings settings)
         {
-            if (projectPath == null)
-            {
-                throw new ArgumentNullException(nameof(projectPath));
-            }
-
             if (string.IsNullOrWhiteSpace(command))
             {
                 throw new ArgumentNullException(nameof(command));
@@ -57,7 +52,11 @@ namespace Cake.Common.Tools.DotNetCore.Tool
             }
 
             var processSettings = new ProcessSettings();
-            processSettings.WorkingDirectory = projectPath.GetDirectory();
+
+            if (projectPath != null)
+            {
+                processSettings.WorkingDirectory = projectPath.GetDirectory();
+            }
 
             RunCommand(settings, GetArguments(command, arguments, settings), processSettings);
         }
