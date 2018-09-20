@@ -119,7 +119,7 @@ namespace Cake.Core.Polyfill
         public static FrameworkName GetBuiltFramework()
         {
 #if NETCORE
-            return new FrameworkName(".NETStandard,Version=v2.0");
+            return new FrameworkName(".NETCoreApp,Version=v2.1");
 #else
             return new FrameworkName(".NETFramework,Version=v4.6.1");
 #endif

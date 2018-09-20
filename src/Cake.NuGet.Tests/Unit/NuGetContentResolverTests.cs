@@ -118,7 +118,7 @@ namespace Cake.NuGet.Tests.Unit
             public void Should_Throw_If_Path_Is_Null()
             {
                 // Given
-                var fixture = new NuGetAddinContentResolverFixture(".NETStandard,Version=v1.6", Runtime.CoreClr);
+                var fixture = new NuGetAddinContentResolverFixture(".NETCoreApp,Version=v2.1", Runtime.CoreClr);
                 fixture.Path = null;
 
                 // When
@@ -129,7 +129,7 @@ namespace Cake.NuGet.Tests.Unit
             }
 
             [Theory]
-            [InlineData(".NETStandard,Version=v1.6", Runtime.CoreClr, "netstandard1.6")]
+            [InlineData(".NETCoreApp,Version=v2.1", Runtime.CoreClr, "netstandard1.6")]
             [InlineData(".NETFramework,Version=v4.6.1", Runtime.Clr, "net461")]
             public void Should_Return_Exact_Framework_If_Possible(string framework, Runtime runtime, string expected)
             {
@@ -153,7 +153,7 @@ namespace Cake.NuGet.Tests.Unit
             }
 
             [Theory]
-            [InlineData(".NETStandard,Version=v2.0", Runtime.CoreClr, "netstandard1.5")]
+            [InlineData(".NETCoreApp,Version=v2.1", Runtime.CoreClr, "netstandard1.5")]
             [InlineData(".NETFramework,Version=v4.6.1", Runtime.Clr, "net452")]
             public void Should_Return_Nearest_Compatible_Framework_If_An_Exact_Match_Is_Not_Possible(string framework, Runtime runtime, string expected)
             {
@@ -174,7 +174,7 @@ namespace Cake.NuGet.Tests.Unit
             }
 
             [Theory]
-            [InlineData(".NETStandard,Version=v2.0", Runtime.CoreClr)]
+            [InlineData(".NETCoreApp,Version=v2.1", Runtime.CoreClr)]
             [InlineData(".NETFramework,Version=v4.6.1", Runtime.Clr)]
             public void Should_Return_Empty_Result_If_Any_Match_Is_Not_Possible(string framework, Runtime runtime)
             {
@@ -182,7 +182,7 @@ namespace Cake.NuGet.Tests.Unit
                 var fixture = new NuGetAddinContentResolverFixture(framework, runtime);
 
                 fixture.CreateCLRAssembly("/Working/lib/net462/file.dll");
-                fixture.CreateCLRAssembly("/Working/lib/netstandard2.2/file.dll");
+                fixture.CreateCLRAssembly("/Working/lib/netstandard3.0/file.dll");
 
                 // When
                 var result = fixture.GetFiles();
@@ -214,7 +214,7 @@ namespace Cake.NuGet.Tests.Unit
             public void Should_Return_Only_CLR_Assemblies()
             {
                 // Given
-                var fixture = new NuGetAddinContentResolverFixture(".NETStandard,Version=v1.6", Runtime.CoreClr);
+                var fixture = new NuGetAddinContentResolverFixture(".NETCoreApp,Version=v2.1", Runtime.CoreClr);
 
                 fixture.CreateCLRAssembly("/Working/lib/netstandard1.6/file.dll");
                 fixture.CreateNonCLRAssembly("/Working/lib/netstandard1.6/lib/native.dll");
@@ -228,7 +228,7 @@ namespace Cake.NuGet.Tests.Unit
             }
 
             [Theory]
-            [InlineData(".NETStandard,Version=v1.6", Runtime.CoreClr)]
+            [InlineData(".NETCoreApp,Version=v2.1", Runtime.CoreClr)]
             [InlineData(".NETFramework,Version=v4.6.1", Runtime.Clr)]
             public void Should_Return_Files_When_Located_In_Root(string framework, Runtime runtime)
             {
@@ -250,7 +250,7 @@ namespace Cake.NuGet.Tests.Unit
             }
 
             [Theory]
-            [InlineData(".NETStandard,Version=v1.6", Runtime.CoreClr, "netstandard1.6")]
+            [InlineData(".NETCoreApp,Version=v2.1", Runtime.CoreClr, "netstandard1.6")]
             [InlineData(".NETFramework,Version=v4.6.1", Runtime.Clr, "net461")]
             public void Should_Return_Exact_Framework_Even_Though_Files_Located_In_Root(string framework, Runtime runtime, string expected)
             {
@@ -271,7 +271,7 @@ namespace Cake.NuGet.Tests.Unit
             }
 
             [Theory]
-            [InlineData(".NETStandard,Version=v1.6", Runtime.CoreClr)]
+            [InlineData(".NETCoreApp,Version=v2.1", Runtime.CoreClr)]
             [InlineData(".NETFramework,Version=v4.6", Runtime.Clr)]
             public void Should_Return_From_Root_If_No_Compatible_Framework_Found(string framework, Runtime runtime)
             {
@@ -290,7 +290,7 @@ namespace Cake.NuGet.Tests.Unit
             }
 
             [Theory]
-            [InlineData(".NETStandard,Version=v1.6", Runtime.CoreClr)]
+            [InlineData(".NETCoreApp,Version=v2.1", Runtime.CoreClr)]
             [InlineData(".NETFramework,Version=v4.6.1", Runtime.Clr)]
             public void Should_Log_Warning_For_Files_Located_In_Root(string framework, Runtime runtime)
             {
@@ -314,7 +314,7 @@ namespace Cake.NuGet.Tests.Unit
             }
 
             [Theory]
-            [InlineData(".NETStandard,Version=v1.6", Runtime.CoreClr)]
+            [InlineData(".NETCoreApp,Version=v2.1", Runtime.CoreClr)]
             [InlineData(".NETFramework,Version=v4.6.1", Runtime.Clr)]
             public void Should_Not_Return_Ref_Assemblies(string framework, Runtime runtime)
             {

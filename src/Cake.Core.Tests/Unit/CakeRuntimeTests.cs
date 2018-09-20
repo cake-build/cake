@@ -26,7 +26,7 @@ namespace Cake.Core.Tests.Unit
                 var framework = runtime.BuiltFramework;
 
                 // Then
-                Assert.Equal(".NETStandard,Version=v2.0", framework.FullName);
+                Assert.Equal(".NETCoreApp,Version=v2.1", framework.FullName);
             }
         }
 
