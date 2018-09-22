@@ -15,6 +15,7 @@ namespace Cake.Core
         {
             public const string SkipVerification = "Settings_SkipVerification";
             public const string SkipPackageVersionCheck = "Settings_SkipPackageVersionCheck";
+            public const string NoMonoCoersion = "Settings_NoMonoCoersion";
         }
 
         public static class Paths
