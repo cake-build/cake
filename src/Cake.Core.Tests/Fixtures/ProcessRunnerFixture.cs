@@ -26,6 +26,8 @@ namespace Cake.Core.Tests.Fixtures
                 ? FakeEnvironment.CreateWindowsEnvironment()
                 : FakeEnvironment.CreateUnixEnvironment();
 
+            environment.WorkingDirectory = "/Working";
+
             Environment = environment;
             FileSystem = new FakeFileSystem(Environment);
             Log = Substitute.For<ICakeLog>();
@@ -34,6 +36,7 @@ namespace Cake.Core.Tests.Fixtures
             ProcessFilePath = "/Program Files/Cake.exe";
             ProcessSettings = new ProcessSettings();
 
+            FileSystem.CreateDirectory("/Working");
             FileSystem.CreateDirectory("/Program Files");
             FileSystem.CreateFile("/Program Files/Cake.exe", ClrAssemblyData);
             MonoFile = FileSystem.CreateFile("/Program Files/mono.exe", NonClrAssemblyData);
