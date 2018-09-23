@@ -14,6 +14,7 @@
 #load "./Cake.Common/IO/FileAsync.cake"
 #load "./Cake.Common/IO/GlobbingAliases.cake"
 #load "./Cake.Common/IO/ZipAliases.cake"
+#load "./Cake.Common/ProcessAliases.cake"
 #load "./Cake.Common/ReleaseNotesAliases.cake"
 #load "./Cake.Common/Security/SecurityAliases.cake"
 #load "./Cake.Common/Solution/SolutionAliases.cake"
@@ -60,6 +61,7 @@ Task("Cake.Common")
     .IsDependentOn("Cake.Common.IO.FileAsync")
     .IsDependentOn("Cake.Common.IO.GlobbingAliases")
     .IsDependentOn("Cake.Common.IO.ZipAliases")
+    .IsDependentOn("Cake.Common.ProcessAliases")
     .IsDependentOn("Cake.Common.ReleaseNotesAliases")
     .IsDependentOn("Cake.Common.Security.SecurityAliases")
     .IsDependentOn("Cake.Common.Solution.SolutionAliases")
