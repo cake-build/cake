@@ -6,9 +6,10 @@ using System;
 
 namespace Cake.Testing.Xunit
 {
+    [Flags]
     public enum TestRuntime
     {
-        Clr,
-        CoreClr
+        Clr = 1,
+        CoreClr = 2
     }
 }
