@@ -47,6 +47,7 @@ namespace Cake.Common.IO
             {
                 throw new ArgumentNullException(nameof(path));
             }
+
             return new ConvertableFilePath(new FilePath(path));
         }
 
@@ -368,7 +369,6 @@ namespace Cake.Common.IO
             {
                 throw new ArgumentNullException(nameof(context));
             }
-
             if (filePath == null)
             {
                 throw new ArgumentNullException(nameof(filePath));
@@ -381,7 +381,7 @@ namespace Cake.Common.IO
         /// Makes the path absolute (if relative) using the current working directory.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="path">The path.</param>
+        /// <param name="filePath">The path.</param>
         /// <returns>An absolute file path.</returns>
         /// <example>
         /// <code>
@@ -390,19 +390,18 @@ namespace Cake.Common.IO
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Path")]
-        public static FilePath MakeAbsolute(this ICakeContext context, FilePath path)
+        public static FilePath MakeAbsolute(this ICakeContext context, FilePath filePath)
         {
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
-
-            if (path == null)
+            if (filePath == null)
             {
-                throw new ArgumentNullException(nameof(path));
+                throw new ArgumentNullException(nameof(filePath));
             }
 
-            return path.MakeAbsolute(context.Environment);
+            return filePath.MakeAbsolute(context.Environment);
         }
 
         /// <summary>
@@ -424,20 +423,46 @@ namespace Cake.Common.IO
             {
                 throw new ArgumentNullException(nameof(context));
             }
-
             if (filePath == null)
             {
                 throw new ArgumentNullException(nameof(filePath));
             }
 
             var file = context.FileSystem.GetFile(filePath.MakeAbsolute(context.Environment));
-
             if (!file.Exists)
             {
                 throw new FileNotFoundException("Unable to find the specified file.", filePath.FullPath);
             }
 
             return file.Length;
+        }
+
+        /// <summary>
+        /// Expands all environment variables in the provided <see cref="FilePath"/>.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var path = new FilePath("%APPDATA%/foo.bar");
+        /// var expanded = path.ExpandEnvironmentVariables(environment);
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="filePath">The path.</param>
+        /// <returns>A new <see cref="FilePath"/> with each environment variable replaced by its value.</returns>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Path")]
+        public static FilePath ExpandEnvironmentVariables(this ICakeContext context, FilePath filePath)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            if (filePath == null)
+            {
+                throw new ArgumentNullException(nameof(filePath));
+            }
+
+            return filePath.ExpandEnvironmentVariables(context.Environment);
         }
     }
 }

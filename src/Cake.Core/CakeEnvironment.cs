@@ -106,8 +106,7 @@ namespace Cake.Core
                     {
                         var key = (string)entry.Key;
                         var value = entry.Value as string;
-                        string existingValue;
-                        if (dictionary.TryGetValue(key, out existingValue))
+                        if (dictionary.TryGetValue(key, out var existingValue))
                         {
                             if (!StringComparer.OrdinalIgnoreCase.Equals(value, existingValue))
                             {

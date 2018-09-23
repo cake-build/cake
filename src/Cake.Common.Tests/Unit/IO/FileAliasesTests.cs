@@ -1159,7 +1159,7 @@ namespace Cake.Common.Tests.Unit.IO
                 var result = Record.Exception(() => FileAliases.MakeAbsolute(context, null));
 
                 // Then
-                AssertEx.IsArgumentNullException(result, "path");
+                AssertEx.IsArgumentNullException(result, "filePath");
             }
 
             [Fact]
@@ -1235,6 +1235,48 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 Assert.Equal(result, 4);
+            }
+        }
+
+        public sealed class TheExpandEnvironmentVariablesMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => FileAliases.ExpandEnvironmentVariables(null, "some file"));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "context");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Path_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+
+                // When
+                var result = Record.Exception(() => FileAliases.ExpandEnvironmentVariables(context, null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "filePath");
+            }
+
+            [Fact]
+            public void Should_Expand_Existing_Environment_Variables()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var environment = FakeEnvironment.CreateWindowsEnvironment();
+                environment.SetEnvironmentVariable("FOO", "bar");
+                context.Environment.Returns(environment);
+
+                // When
+                var result = FileAliases.ExpandEnvironmentVariables(context, "/%FOO%/baz.qux");
+
+                // Then
+                Assert.Equal("/bar/baz.qux", result.FullPath);
             }
         }
     }
