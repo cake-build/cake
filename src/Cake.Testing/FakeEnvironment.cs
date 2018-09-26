@@ -184,6 +184,15 @@ namespace Cake.Testing
         }
 
         /// <summary>
+        /// Sets if is .NET Core CLR.
+        /// </summary>
+        /// <param name="isCoreClr">if set to <c>true</c> the runtime is .NET Core.</param>
+        public void SetIsCoreClr(bool isCoreClr)
+        {
+            Runtime.IsCoreClr = isCoreClr;
+        }
+
+        /// <summary>
         /// Gets whether or not the current operative system is 64 bit.
         /// </summary>
         /// <returns>Whether or not the current operative system is 64 bit.</returns>
